@@ -76,7 +76,6 @@ public:
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	WallObject* FindWall(const Ogre::Vector3 &point, bool convert = true);
 	WallObject* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
-	void RescaleVertices(float multiplier);
 	void AddVertex(Geometry &vertex_geom);
 	void AddTriangle(int submesh, Triangle &triangle);
 	void RemoveTriangle(int submesh, int index);

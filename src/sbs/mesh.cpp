@@ -805,15 +805,6 @@ WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre
 		return 0;
 }
 
-void MeshObject::RescaleVertices(float multiplier)
-{
-	//rescale all mesh vertices to the default SBS value (using ToRemote()), times the given multiplier
-
-	//multiply vertex data
-	for (int i = 0; i < (int)MeshGeometry.size(); i++)
-		MeshGeometry[i].vertex *= multiplier;
-}
-
 bool MeshObject::IsEnabled()
 {
 	return enabled;
@@ -881,9 +872,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 		th = 1;
 
 	//get autosize information
-	Ogre::Vector2 sizing;
-	sizing.x = tw;
-	sizing.y = th;
+	Ogre::Vector2 sizing (tw, th);
 
 	if (autosize == true)
 		sizing = sbs->CalculateSizing(texture, sbs->ToLocal(v1), sbs->ToLocal(v2), sbs->ToLocal(v3), direction, tw, th);
@@ -1078,7 +1067,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string &material, bool add)
 {
 	//processes submeshes for new or removed geometry
-	//the Prepare() function must be called when the mesh is ready to view, in order to upload data to graphics card
+	//the Prepare() function must be called when the mesh is ready to view
 
 	int index_count = (int)indices.size();
 	Triangle *indexarray = new Triangle[index_count];
@@ -1164,10 +1153,12 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 void MeshObject::Prepare(bool force)
 {
 	//prepare mesh object
-	//collects and uploads geometry and triangle data to graphics card, and prepares mesh for rendering
-	//arrays must be populated correctly before this function is called
 
-	//All submeshes share mesh vertex data, but triangle indices are stored in each submesh
+	//this function collects stored geometry and triangle data,
+	//uses those to build GPU vertex and index render buffers, and prepares the mesh for rendering
+	//geometry arrays must be populated correctly before this function is called
+
+	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
 
 	//exit if mesh has already been prepared
