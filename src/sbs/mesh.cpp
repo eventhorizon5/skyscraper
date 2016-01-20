@@ -536,6 +536,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	MeshGeometry.reserve(128); //reserve vertex space
 	collider_node = 0;
 	Filename = filename;
+	remove_on_disable = true;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -633,12 +634,21 @@ MeshObject::~MeshObject()
 	Movable = 0;
 }
 
-void MeshObject::Enable(bool value, bool remove)
+void MeshObject::Enable(bool value)
 {
 	//enables or disables the mesh
 
 	if (value == enabled)
+	{
+		if (remove_on_disable == false && sbs->camera->IsActive() == false && value == false)
+		{
+			//if camera is detached from this engine, and mesh is disabled, detach a persistent collider
+			remove_on_disable = true;
+			EnableCollider(false);
+			remove_on_disable = false;
+		}
 		return;
+	}
 
 	SBS_PROFILE("MeshObject::Enable");
 
@@ -648,30 +658,38 @@ void MeshObject::Enable(bool value, bool remove)
 	else
 		GetSceneNode()->AttachObject(Movable);
 
-	//enable or disable collision detection
-	if (mBody)
-	{
-		if (remove == false)
-		{
-			//if removed from world and 'remove' is false, add to world
-			if (mBody->isInWorld() == false)
-				mBody->addToWorld();
-
-			//disable collisions on object only (don't remove)
-			mBody->enableCollisions(value);
-		}
-		else
-		{
-			//completely remove object from dynamics world if disabled; re-add to enable
-			if (value == false)
-				mBody->removeFromWorld();
-			else
-				mBody->addToWorld();
-		}
-		sbs->camera->ResetCollisions();
-	}
+	EnableCollider(value);
 
 	enabled = value;
+}
+
+void MeshObject::EnableCollider(bool value)
+{
+	//enable or disable collision detection
+
+	if (!mBody)
+		return;
+
+	SBS_PROFILE("MeshObject::EnableCollider");
+
+	if (remove_on_disable == false && sbs->camera->IsActive() == true)
+	{
+		//if removed from world and 'remove_on_disable' is false, add to world
+		if (mBody->isInWorld() == false)
+			mBody->addToWorld();
+
+		//disable collisions on object only (don't remove)
+		mBody->enableCollisions(value);
+	}
+	else
+	{
+		//completely remove object from dynamics world if disabled; re-add to enable
+		if (value == false)
+			mBody->removeFromWorld();
+		else
+			mBody->addToWorld();
+	}
+	sbs->camera->ResetCollisions();
 }
 
 WallObject* MeshObject::CreateWallObject(const std::string &name)
@@ -1532,8 +1550,18 @@ void MeshObject::CreateCollider()
 
 		if (sbs->DeleteColliders == true)
 		{
-			Enable(false, false);
-			Enable(true, false);
+			bool revert = false;
+			if (remove_on_disable == false)
+			{
+				remove_on_disable = true;
+				revert = true;
+			}
+
+			Enable(false);
+			Enable(true);
+
+			if (revert == true)
+				remove_on_disable = false;
 		}
 	}
 	catch (Ogre::Exception &e)
