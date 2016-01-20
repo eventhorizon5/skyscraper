@@ -1108,10 +1108,6 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::stri
 	//finish doors
 	DoorWrapper *wrapper = FinishShaftDoor(floor);
 
-	//make doors invisible on start
-	if (ShaftDoors[index])
-		ShaftDoors[index]->Enable(false);
-
 	return wrapper;
 }
 
