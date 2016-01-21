@@ -97,7 +97,6 @@ public:
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
 	void Render();
-	void GetInput(EngineContext *engine);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
@@ -145,9 +144,6 @@ public:
 	void EnableSky(bool value);
 
 private:
-	//mouse status
-	bool MouseDown;
-
 	//sound data
 	FMOD::System *soundsys;
 	FMOD::Sound *sound;

@@ -43,8 +43,15 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
   EVT_ACTIVATE(MainScreen::OnActivate)
-  EVT_ENTER_WINDOW(MainScreen::OnEnterWindow)
-  EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
+  EVT_LEFT_DOWN(MainScreen::OnMouseButton)
+  EVT_LEFT_UP(MainScreen::OnMouseButton)
+  EVT_LEFT_DCLICK(MainScreen::OnMouseButton)
+  EVT_MIDDLE_DOWN(MainScreen::OnMouseButton)
+  EVT_MIDDLE_UP(MainScreen::OnMouseButton)
+  EVT_MIDDLE_DCLICK(MainScreen::OnMouseButton)
+  EVT_RIGHT_DOWN(MainScreen::OnMouseButton)
+  EVT_RIGHT_UP(MainScreen::OnMouseButton)
+  EVT_RIGHT_DCLICK(MainScreen::OnMouseButton)
 END_EVENT_TABLE()
 
 MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -143,6 +150,7 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 		if (frontend->Pause == false)
 		{
 			frontend->Loop(); //run simulator loop
+			HandleMouseMovement();
 			event.RequestMore(); //request more idles
 		}
 
@@ -162,16 +170,6 @@ void MainScreen::OnActivate(wxActivateEvent &event)
 {
 	Active = event.GetActive();
 	event.Skip();
-}
-
-void MainScreen::OnEnterWindow(wxMouseEvent& event)
-{
-
-}
-
-void MainScreen::OnLeaveWindow(wxMouseEvent& event)
-{
-
 }
 
 void MainScreen::OnKeyDown(wxKeyEvent& event)
@@ -542,6 +540,75 @@ void MainScreen::ProcessMovement(EngineContext *engine, wxKeyEvent& event)
 	camera->Turn(turn);
 	camera->Look(look);
 	camera->Step(step);
+}
+
+void MainScreen::OnMouseButton(wxMouseEvent& event)
+{
+	//this function is run when a mouse button is pressed
+
+	EngineContext *engine = frontend->GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = engine->GetSystem();
+
+	Camera *camera = Simcore->camera;
+
+	//check if the user clicked on an object, and process it
+	bool left = event.LeftDown();
+	bool left_dclick = event.LeftDClick();
+	bool right = event.RightDown();
+	bool right_dclick = event.RightDClick();
+
+	if (left == false && right == false && left_dclick == false && right_dclick == false)
+		camera->MouseDown = false;
+	else
+	{
+		camera->MouseDown = true;
+		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick));
+	}
+}
+
+void MainScreen::HandleMouseMovement()
+{
+	EngineContext *engine = frontend->GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = engine->GetSystem();
+
+	Camera *camera = Simcore->camera;
+
+	if (camera->Freelook == true)
+	{
+		//get old mouse coordinates
+		int old_mouse_x = Simcore->mouse_x;
+		int old_mouse_y = Simcore->mouse_y;
+
+		//get mouse pointer coordinates
+		Simcore->mouse_x = ScreenToClient(wxGetMousePosition()).x;
+		Simcore->mouse_y = ScreenToClient(wxGetMousePosition()).y;
+
+		//get window dimensions
+		float width = GetClientSize().GetWidth();
+		float height = GetClientSize().GetHeight();
+
+		//if mouse coordinates changed, and we're in freelook mode, rotate camera
+		if (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y)
+		{
+			WarpPointer(width / 2, height / 2);
+			Ogre::Vector3 rotational;
+			rotational.x = camera->Freelook_speed * -(((float)Simcore->mouse_y - (height / 2))) / (height * 2);
+			rotational.y = camera->Freelook_speed * -((width / 2) - (float)Simcore->mouse_x) / (width * 2);
+			rotational.z = 0;
+			camera->desired_angle_velocity = rotational;
+			camera->angle_velocity = rotational;
+		}
+	}
 }
 
 }

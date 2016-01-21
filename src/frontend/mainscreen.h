@@ -39,10 +39,9 @@ public:
 	void OnIdle(wxIdleEvent& event);
 	void OnPaint(wxPaintEvent& event);
 	void OnActivate(wxActivateEvent & event);
-	void OnEnterWindow(wxMouseEvent& event);
-	void OnLeaveWindow(wxMouseEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
+	void OnMouseButton(wxMouseEvent& event);
 
 	bool Active;
 	bool InLoop;
@@ -52,6 +51,7 @@ public:
 private:
 	void GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool down);
 	void ProcessMovement(EngineContext *engine, wxKeyEvent& event);
+	void HandleMouseMovement();
 
 	//input system states
 	bool boxes;

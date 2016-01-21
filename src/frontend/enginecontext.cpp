@@ -166,10 +166,6 @@ bool EngineContext::Run()
 		//run SBS main loop
 		Simcore->MainLoop();
 
-		//get input
-		if (IsCameraActive() == true)
-			frontend->GetInput(this);
-
 		//process camera loop
 		Simcore->CameraLoop();
 

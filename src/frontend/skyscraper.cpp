@@ -80,7 +80,6 @@ bool Skyscraper::OnInit(void)
 	version_rev = SVN_REVSTR;
 	version_state = "Alpha";
 	version_frontend = version + ".0." + version_rev;
-	MouseDown = false;
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
@@ -548,66 +547,6 @@ bool Skyscraper::Initialize()
 #endif
 
 	return true;
-}
-
-void Skyscraper::GetInput(EngineContext *engine)
-{
-	SBS_PROFILE_MAIN("GetInput");
-
-	if (!engine)
-		return;
-
-	//quit if main window isn't selected
-	if (window->Active == false)
-		return;
-
-	static int old_mouse_x, old_mouse_y;
-
-	//get SBS instance
-	::SBS::SBS *Simcore = engine->GetSystem();
-
-	Camera *camera = Simcore->camera;
-
-	//get old mouse coordinates
-	old_mouse_x = Simcore->mouse_x;
-	old_mouse_y = Simcore->mouse_y;
-
-	//get mouse pointer coordinates
-	Simcore->mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
-	Simcore->mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
-
-	//get window dimensions
-	float width = window->GetClientSize().GetWidth();
-	float height = window->GetClientSize().GetHeight();
-
-	//if mouse coordinates changed, and we're in freelook mode, rotate camera
-	if (camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
-	{
-		window->WarpPointer(width / 2, height / 2);
-		Ogre::Vector3 rotational;
-		rotational.x = camera->Freelook_speed * -((float)(Simcore->mouse_y - (height / 2))) / (height * 2);
-		rotational.y = camera->Freelook_speed * -((width / 2) - (float)Simcore->mouse_x) / (width * 2);
-		rotational.z = 0;
-		camera->desired_angle_velocity = rotational;
-		camera->angle_velocity = rotational;
-	}
-
-	//check if the user clicked on an object, and process it
-	bool left = wxGetMouseState().LeftIsDown();
-	bool right = wxGetMouseState().RightIsDown();
-	if ((left == true || right == true) && MouseDown == false)
-	{
-		MouseDown = true;
-		camera->MouseDown = MouseDown;
-		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), right);
-	}
-
-	//reset mouse state
-	if (left == false && right == false)
-	{
-		MouseDown = false;
-		camera->MouseDown = MouseDown;
-	}
 }
 
 void Skyscraper::Report(const std::string &message)
