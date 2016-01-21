@@ -87,6 +87,7 @@ namespace OgreBulletDynamics
         //only if init is true, otherwise you have to create mWorld manually later on
         if (init) {
             mWorld = new btDiscreteDynamicsWorld(mDispatcher, mBroadphase, mConstraintsolver, &mDefaultCollisionConfiguration);
+            mWorld->setForceUpdateAllAabbs(false);
 			static_cast <btDiscreteDynamicsWorld *> (mWorld)->setGravity(btVector3(gravity.x,gravity.y,gravity.z));
 
 			//btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher *>(mWorld->getDispatcher());

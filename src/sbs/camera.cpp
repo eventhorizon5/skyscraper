@@ -925,7 +925,7 @@ void Camera::Spin(float speed)
 void Camera::FreelookMove(const Ogre::Vector3 &rotation)
 {
 	desired_angle_velocity = rotation * Freelook_speed;
-	angle_velocity = rotation * Freelook_speed;
+	angle_velocity = desired_angle_velocity;
 }
 
 void Camera::InterpolateMovement(float delta)

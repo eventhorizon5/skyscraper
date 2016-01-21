@@ -102,6 +102,7 @@ namespace OgreBulletCollisions
 
         Object* getLastCollision();
         void resetLastCollision();
+        void updateBoundingBox();
 
     protected:
 

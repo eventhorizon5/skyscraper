@@ -64,6 +64,7 @@ mDebugDrawer(0)
 	if (init)
 	{
 		mWorld = new btCollisionWorld(mDispatcher, mBroadphase, &mDefaultCollisionConfiguration);
+		mWorld->setForceUpdateAllAabbs(false);
 
 		btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher *>(mWorld->getDispatcher());
 		btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
@@ -145,7 +146,7 @@ void CollisionsWorld::addObject(Object *obj, int filterGrp, short int collisionF
 	mObjects.push_back (obj);
 	mWorld->addCollisionObject(obj->getBulletObject(), filterGrp, collisionFilter);
 }
-//------------------------------------------------------------------------- 
+//-------------------------------------------------------------------------
 bool CollisionsWorld::removeObject(Object *obj)
 {
 	std::deque<Object*>::iterator it = find(mObjects.begin(),mObjects.end(), obj);
@@ -190,9 +191,9 @@ Object *CollisionsWorld::findObject(SceneNode *node) const
 // -------------------------------------------------------------------------
 void CollisionsWorld::discreteCollide()
 {
-	if (mDebugDrawer) 
+	if (mDebugDrawer)
 		mDebugDrawer->clear ();
-	if (mDebugContactPoints) 
+	if (mDebugContactPoints)
 		mDebugContactPoints->clear ();
 
 
@@ -227,9 +228,9 @@ void CollisionsWorld::discreteCollide()
 			}
 		}
 		//you can un-comment out this line, and then all points are removed
-		//contactManifold->clearManifold();	
+		//contactManifold->clearManifold();
 	}
-	if (mDebugContactPoints) 
+	if (mDebugContactPoints)
 		mDebugContactPoints->draw();
 
 
@@ -249,7 +250,7 @@ void CollisionsWorld::discreteCollide()
 	}
 	*/
 
-	if (mDebugDrawer) 
+	if (mDebugDrawer)
 	{
 		// draw lines that step Simulation sent.
 		//mDebugDrawer->draw();
@@ -268,7 +269,7 @@ void CollisionsWorld::discreteCollide()
 			}
 		}
 	}
-	if (mDebugContactPoints) 
+	if (mDebugContactPoints)
 	{
 		// draw lines that step Simulation sent.
 		mDebugContactPoints->draw();
@@ -279,8 +280,8 @@ void CollisionsWorld::discreteCollide()
 void CollisionsWorld::launchRay(CollisionRayResultCallback &rayresult, short int collisionFilterMask)
 {
 	mWorld->rayTest(
-		OgreBtConverter::to(rayresult.getRayStartPoint()), 
-		OgreBtConverter::to(rayresult.getRayEndPoint()), 
+		OgreBtConverter::to(rayresult.getRayStartPoint()),
+		OgreBtConverter::to(rayresult.getRayEndPoint()),
 		*rayresult.getBulletRay ()
 		//, collisionFilterMask
 		);
