@@ -170,6 +170,7 @@ public:
 	CameraState GetCameraState();
 	void SetCameraState(const CameraState &state, bool set_floor = true);
 	void RevertMovement();
+	void FreelookMove(const Ogre::Vector3 &rotation);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

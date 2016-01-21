@@ -598,16 +598,16 @@ void MainScreen::HandleMouseMovement()
 		if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
 		{
 			WarpPointer(width * 0.5, height * 0.5);
+
 			Ogre::Vector3 rotational;
-			rotational.x = camera->Freelook_speed * -(((float)camera->mouse_y - (height / 2))) / (height * 2);
-			rotational.y = camera->Freelook_speed * -((width / 2) - (float)camera->mouse_x) / (width * 2);
+			rotational.x = -(((float)camera->mouse_y - (height / 2))) / (height * 2);
+			rotational.y = -((width / 2) - (float)camera->mouse_x) / (width * 2);
 			rotational.z = 0;
 
 			float fps_adjust = Simcore->FPS / 60;
 			rotational *= fps_adjust;
 
-			camera->desired_angle_velocity = rotational;
-			camera->angle_velocity = rotational;
+			camera->FreelookMove(rotational);
 		}
 	}
 }
