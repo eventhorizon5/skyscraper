@@ -90,6 +90,9 @@ public:
 	float BinocularsFOV; //binoculars mode FOV
 	bool FirstAttach;
 
+	//mouse coordinates
+	int mouse_x, mouse_y;
+
 	//functions
 	Camera(Object *parent);
 	~Camera();

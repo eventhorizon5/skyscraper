@@ -175,9 +175,6 @@ public:
 	bool RandomActivity; //random activity is enabled
 	int InstanceNumber; //SBS engine instance number
 
-	//mouse coordinates
-	int mouse_x, mouse_y;
-
 	//public functions
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	~SBS();

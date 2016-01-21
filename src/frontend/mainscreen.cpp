@@ -411,10 +411,8 @@ void MainScreen::OnKeyUp(wxKeyEvent& event)
 
 void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool down)
 {
-	//get SBS instance
-	::SBS::SBS *Simcore = engine->GetSystem();
-
-	Camera *camera = Simcore->camera;
+	//get SBS camera
+	Camera *camera = engine->GetSystem()->camera;
 
 	int key = event.GetKeyCode();
 
@@ -491,7 +489,8 @@ void MainScreen::ProcessMovement(EngineContext *engine, wxKeyEvent& event)
 
 	float strafe = 0, floatval = 0, spin = 0, turn = 0, look = 0, step = 0;
 
-	::SBS::Camera *camera = engine->GetSystem()->camera;
+	//get SBS camera
+	Camera *camera = engine->GetSystem()->camera;
 
 	camera->speed = 1;
 	float speed_normal = camera->cfg_speed;
@@ -551,10 +550,8 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 	if (!engine)
 		return;
 
-	//get SBS instance
-	::SBS::SBS *Simcore = engine->GetSystem();
-
-	Camera *camera = Simcore->camera;
+	//get SBS camera
+	Camera *camera = engine->GetSystem()->camera;
 
 	//check if the user clicked on an object, and process it
 	bool left = event.LeftDown();
@@ -578,32 +575,30 @@ void MainScreen::HandleMouseMovement()
 	if (!engine)
 		return;
 
-	//get SBS instance
-	::SBS::SBS *Simcore = engine->GetSystem();
-
-	Camera *camera = Simcore->camera;
+	//get SBS camera
+	Camera *camera = engine->GetSystem()->camera;
 
 	if (camera->Freelook == true)
 	{
 		//get old mouse coordinates
-		int old_mouse_x = Simcore->mouse_x;
-		int old_mouse_y = Simcore->mouse_y;
+		int old_mouse_x = camera->mouse_x;
+		int old_mouse_y = camera->mouse_y;
 
 		//get mouse pointer coordinates
-		Simcore->mouse_x = ScreenToClient(wxGetMousePosition()).x;
-		Simcore->mouse_y = ScreenToClient(wxGetMousePosition()).y;
+		camera->mouse_x = ScreenToClient(wxGetMousePosition()).x;
+		camera->mouse_y = ScreenToClient(wxGetMousePosition()).y;
 
 		//get window dimensions
 		float width = GetClientSize().GetWidth();
 		float height = GetClientSize().GetHeight();
 
 		//if mouse coordinates changed, and we're in freelook mode, rotate camera
-		if (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y)
+		if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
 		{
 			WarpPointer(width / 2, height / 2);
 			Ogre::Vector3 rotational;
-			rotational.x = camera->Freelook_speed * -(((float)Simcore->mouse_y - (height / 2))) / (height * 2);
-			rotational.y = camera->Freelook_speed * -((width / 2) - (float)Simcore->mouse_x) / (width * 2);
+			rotational.x = camera->Freelook_speed * -(((float)camera->mouse_y - (height / 2))) / (height * 2);
+			rotational.y = camera->Freelook_speed * -((width / 2) - (float)camera->mouse_x) / (width * 2);
 			rotational.z = 0;
 			camera->desired_angle_velocity = rotational;
 			camera->angle_velocity = rotational;
