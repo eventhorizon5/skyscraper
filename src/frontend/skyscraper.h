@@ -36,6 +36,7 @@
 #include "fileio.h"
 #include "debugpanel.h"
 #include "enginecontext.h"
+#include "mainscreen.h"
 #include "loaddialog.h"
 #include "console.h"
 
@@ -210,46 +211,6 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
-};
-
-class MainScreen : public wxFrame
-{
-public:
-	MainScreen(Skyscraper *parent, int width, int height);
-	virtual ~MainScreen();
-	void OnIconize(wxIconizeEvent& event);
-	void OnSize(wxSizeEvent& event);
-	void OnClose(wxCloseEvent& event);
-	void ShowWindow();
-	void OnIdle(wxIdleEvent& event);
-	void OnPaint(wxPaintEvent& event);
-	void OnActivate(wxActivateEvent & event);
-	void OnEnterWindow(wxMouseEvent& event);
-	void OnLeaveWindow(wxMouseEvent& event);
-	void OnKeyDown(wxKeyEvent& event);
-	void OnKeyUp(wxKeyEvent& event);
-
-	bool Active;
-	bool InLoop;
-	Skyscraper *frontend;
-	wxPanel *panel;
-
-private:
-	void GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool down);
-	void ProcessMovement(EngineContext *engine, wxKeyEvent& event);
-
-	//input system states
-	bool boxes;
-	bool colliders;
-	int wireframe;
-	bool strafe_left, strafe_right;
-	bool float_up, float_down;
-	bool spin_up, spin_down;
-	bool turn_left, turn_right;
-	bool look_up, look_down;
-	bool step_forward, step_backward;
-
-	DECLARE_EVENT_TABLE()
 };
 
 DECLARE_APP(Skyscraper)
