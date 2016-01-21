@@ -408,6 +408,8 @@ void MainScreen::OnLeaveWindow(wxMouseEvent& event)
 
 void MainScreen::OnKeyDown(wxKeyEvent& event)
 {
+	//this function is run when a key is pressed
+
 	EngineContext *engine = frontend->GetActiveEngine();
 
 	if (!engine)
@@ -445,57 +447,9 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		//crash test
 		if (event.ControlDown() && key == (wxKeyCode)'C')
 			throw;
-
-		//strafe movement
-		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-			strafe_right = true;
-
-		else if (key == WXK_LEFT || key == (wxKeyCode)'A')
-			strafe_left = true;
-
-		else if (key == WXK_UP || key == (wxKeyCode)'W')
-			float_up = true;
-
-		else if (key == WXK_DOWN || key == (wxKeyCode)'S')
-			float_down = true;
-
-		else if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
-			spin_up = true;
-
-		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
-			spin_down = true;
 	}
 	else
 	{
-		if (camera->Freelook == false)
-		{
-			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-				turn_right = true;
-
-			if (key == WXK_LEFT || key == (wxKeyCode)'A')
-				turn_left = true;
-		}
-		else
-		{
-			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-				strafe_right = true;
-
-			if (key == WXK_LEFT || key == (wxKeyCode)'A')
-				strafe_left = true;
-		}
-
-		if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
-			look_up = true;
-
-		if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
-			look_down = true;
-
-		if (key == WXK_UP || key == (wxKeyCode)'W')
-			step_forward = true;
-
-		if (key == WXK_DOWN || key == (wxKeyCode)'S')
-			step_backward = true;
-
 		if (key == WXK_SPACE)
 		{
 			if (camera->IsOnGround() == true)
@@ -608,12 +562,6 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			camera->SetFOVAngle(angle);
 		}
 
-		//binoculars
-		if (key == (wxKeyCode)'B')
-		{
-			camera->Binoculars(true);
-		}
-
 		//model pick-up
 		if (key == (wxKeyCode)'C')
 		{
@@ -674,24 +622,29 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		{
 			frontend->SetActiveEngine(9);
 		}
-
-		//values from old version
-		if (key == WXK_HOME || key == (wxKeyCode)'O')
-			float_up = true;
-		if (key == WXK_END || key == (wxKeyCode)'K')
-			float_down = true;
 	}
+
+	GetKeyStates(engine, event, true);
 
 	ProcessMovement(engine, event);
 }
 
 void MainScreen::OnKeyUp(wxKeyEvent& event)
 {
+	//this function is run when a key is released
+
 	EngineContext *engine = frontend->GetActiveEngine();
 
 	if (!engine)
 		return;
 
+	GetKeyStates(engine, event, false);
+
+	ProcessMovement(engine, event);
+}
+
+void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool down)
+{
 	//get SBS instance
 	::SBS::SBS *Simcore = engine->GetSystem();
 
@@ -704,68 +657,66 @@ void MainScreen::OnKeyUp(wxKeyEvent& event)
 	{
 		//strafe movement
 		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-			strafe_right = false;
+			strafe_right = down;
 
 		else if (key == WXK_LEFT || key == (wxKeyCode)'A')
-			strafe_left = false;
+			strafe_left = down;
 
 		else if (key == WXK_UP || key == (wxKeyCode)'W')
-			float_up = false;
+			float_up = down;
 
 		else if (key == WXK_DOWN || key == (wxKeyCode)'S')
-			float_down = false;
+			float_down = down;
 
 		else if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
-			spin_up = false;
+			spin_up = down;
 
 		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
-			spin_down = false;
+			spin_down = down;
 	}
 	else
 	{
 		if (camera->Freelook == false)
 		{
 			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-				turn_right = false;
+				turn_right = down;
 
 			if (key == WXK_LEFT || key == (wxKeyCode)'A')
-				turn_left = false;
+				turn_left = down;
 		}
 		else
 		{
 			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-				strafe_right = false;
+				strafe_right = down;
 
 			if (key == WXK_LEFT || key == (wxKeyCode)'A')
-				strafe_left = false;
+				strafe_left = down;
 		}
 
 		if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
-			look_up = false;
+			look_up = down;
 
 		if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
-			look_down = false;
+			look_down = down;
 
 		if (key == WXK_UP || key == (wxKeyCode)'W')
-			step_forward = false;
+			step_forward = down;
 
 		if (key == WXK_DOWN || key == (wxKeyCode)'S')
-			step_backward = false;
+			step_backward = down;
 
 		//binoculars
 		if (key == (wxKeyCode)'B')
 		{
-			camera->Binoculars(false);
+			camera->Binoculars(down);
 		}
 
 		//values from old version
 		if (key == WXK_HOME || key == (wxKeyCode)'O')
-			float_up = false;
+			float_up = down;
 		if (key == WXK_END || key == (wxKeyCode)'K')
-			float_down = false;
+			float_down = down;
 	}
-
-	ProcessMovement(engine, event);
 }
 
 void MainScreen::ProcessMovement(EngineContext *engine, wxKeyEvent& event)

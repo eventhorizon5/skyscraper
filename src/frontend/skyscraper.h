@@ -228,7 +228,6 @@ public:
 	void OnLeaveWindow(wxMouseEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
-	void ProcessMovement(EngineContext *engine, wxKeyEvent& event);
 
 	bool Active;
 	bool InLoop;
@@ -236,6 +235,9 @@ public:
 	wxPanel *panel;
 
 private:
+	void GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool down);
+	void ProcessMovement(EngineContext *engine, wxKeyEvent& event);
+
 	//input system states
 	bool boxes;
 	bool colliders;
