@@ -228,6 +228,7 @@ public:
 	void OnLeaveWindow(wxMouseEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
+	void ProcessMovement(EngineContext *engine, wxKeyEvent& event);
 
 	bool Active;
 	bool InLoop;
@@ -235,9 +236,16 @@ public:
 	wxPanel *panel;
 
 private:
+	//input system states
 	bool boxes;
 	bool colliders;
 	int wireframe;
+	bool strafe_left, strafe_right;
+	bool float_up, float_down;
+	bool spin_up, spin_down;
+	bool turn_left, turn_right;
+	bool look_up, look_down;
+	bool step_forward, step_backward;
 
 	DECLARE_EVENT_TABLE()
 };

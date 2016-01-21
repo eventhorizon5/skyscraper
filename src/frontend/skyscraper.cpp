@@ -291,9 +291,23 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+
+	//reset input states
 	boxes = false;
 	colliders = false;
 	wireframe = 0;
+	strafe_left = false;
+	strafe_right = false;
+	float_up = false;
+	float_down = false;
+	spin_up = false;
+	spin_down = false;
+	turn_left = false;
+	turn_right = false;
+	look_up = false;
+	look_down = false;
+	step_forward = false;
+	step_backward = false;
 
 	//create panel, for keyboard events
 	panel = new wxPanel(this, wxID_ANY);
@@ -402,15 +416,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 	//get SBS instance
 	::SBS::SBS *Simcore = engine->GetSystem();
 
-	// First get elapsed time from the virtual clock.
-	unsigned int current_time = Simcore->GetRunTime();
-
 	Camera *camera = Simcore->camera;
-
-	camera->speed = 1;
-	float speed_normal = camera->cfg_speed;
-	float speed_fast = camera->cfg_speedfast;
-	float speed_slow = camera->cfg_speedslow;
 
 	int key = event.GetKeyCode();
 
@@ -433,18 +439,6 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		frontend->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Faces: " + ToString(faces) + " - Vertices: " + ToString(vertices));
 	}
 
-	if (event.ControlDown())
-	{
-		if (key == (wxKeyCode)'R')
-		{
-			engine->Reload = true;
-			return;
-		}
-		camera->speed = speed_slow;
-	}
-	else if (event.ShiftDown())
-		camera->speed = speed_fast;
-
 	//alt modifier
 	if (event.AltDown())
 	{
@@ -454,233 +448,241 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 		//strafe movement
 		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-			camera->Strafe(speed_normal);
-		if (key == WXK_LEFT || key == (wxKeyCode)'A')
-			camera->Strafe(-speed_normal);
-		if (key == WXK_UP || key == (wxKeyCode)'W')
-			camera->Float(speed_normal);
-		if (key == WXK_DOWN || key == (wxKeyCode)'S')
-			camera->Float(-speed_normal);
-		if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
-			camera->Spin(speed_normal);
-		if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
-			camera->Spin(-speed_normal);
+			strafe_right = true;
 
-		return;
-	}
+		else if (key == WXK_LEFT || key == (wxKeyCode)'A')
+			strafe_left = true;
 
-	if (camera->Freelook == false)
-	{
-		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-			camera->Turn(speed_normal);
-		if (key == WXK_LEFT || key == (wxKeyCode)'A')
-		{
-			camera->Turn(-speed_normal);
-		}
+		else if (key == WXK_UP || key == (wxKeyCode)'W')
+			float_up = true;
+
+		else if (key == WXK_DOWN || key == (wxKeyCode)'S')
+			float_down = true;
+
+		else if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
+			spin_up = true;
+
+		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
+			spin_down = true;
 	}
 	else
 	{
-		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-			camera->Strafe(speed_normal);
-		if (key == WXK_LEFT || key == (wxKeyCode)'A')
-			camera->Strafe(-speed_normal);
-	}
-
-	if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
-		camera->Look(speed_normal);
-	if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
-		camera->Look(-speed_normal);
-	if (key == WXK_UP || key == (wxKeyCode)'W')
-	{
-		camera->Step(speed_normal);
-	}
-	if (key == WXK_DOWN || key == (wxKeyCode)'S')
-		camera->Step(-speed_normal);
-
-	if (key == WXK_SPACE)
-	{
-		if (camera->IsOnGround() == true)
-			camera->Jump();
-	}
-
-	if (key == (wxKeyCode)'V')
-	{
-		bool status = camera->GetGravityStatus();
-
-		camera->EnableGravity(!status);
-		camera->EnableCollisions(!status);
-
-		if (status == false)
-			frontend->Report("Gravity and collision detection on");
-		else
-			frontend->Report("Gravity and collision detection off");
-	}
-
-	if (key == WXK_F3)
-	{
-		//reset rotation/direction and FOV of camera
-		camera->ResetView();
-		return;
-	}
-
-	if (key == WXK_F6)
-	{
-		//reset camera position and state
-		camera->ResetState();
-		return;
-	}
-
-	if (key == WXK_F7)
-	{
-		//show colliders
-		Simcore->ShowColliders(!colliders);
-		colliders = !colliders;
-	}
-
-	if (key == WXK_F4)
-	{
-		//toggle wireframe mode
-		if (wireframe == 0)
+		if (camera->Freelook == false)
 		{
-			frontend->EnableSky(false);
-			camera->SetViewMode(1);
-			wireframe = 1;
-		}
-		else if (wireframe == 1)
-		{
-			camera->SetViewMode(2);
-			wireframe = 2;
-		}
-		else if (wireframe == 2)
-		{
-			frontend->EnableSky(true);
-			camera->SetViewMode(0);
-			wireframe = 0;
-		}
-	}
+			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
+				turn_right = true;
 
-	if (key == WXK_F11)
-	{
-		frontend->mRenderWindow->writeContentsToTimestampedFile("screenshots/skyscraper-", ".jpg");
-	}
-
-	if (key == WXK_F12 && !frontend->dpanel)
-	{
-		//show control panel if closed
-		frontend->dpanel = new DebugPanel(frontend, NULL, -1);
-		frontend->dpanel->Show(true);
-		frontend->dpanel->SetPosition(wxPoint(frontend->GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), frontend->GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
-	}
-
-	if (key == WXK_F5)
-	{
-		//toggle freelook mode
-		camera->Freelook = !camera->Freelook;
-		if (camera->Freelook == true)
-			SetCursor(wxCURSOR_CROSS);
+			if (key == WXK_LEFT || key == (wxKeyCode)'A')
+				turn_left = true;
+		}
 		else
-			SetCursor(wxNullCursor);
+		{
+			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
+				strafe_right = true;
+
+			if (key == WXK_LEFT || key == (wxKeyCode)'A')
+				strafe_left = true;
+		}
+
+		if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
+			look_up = true;
+
+		if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
+			look_down = true;
+
+		if (key == WXK_UP || key == (wxKeyCode)'W')
+			step_forward = true;
+
+		if (key == WXK_DOWN || key == (wxKeyCode)'S')
+			step_backward = true;
+
+		if (key == WXK_SPACE)
+		{
+			if (camera->IsOnGround() == true)
+				camera->Jump();
+		}
+
+		if (key == (wxKeyCode)'V')
+		{
+			bool status = camera->GetGravityStatus();
+
+			camera->EnableGravity(!status);
+			camera->EnableCollisions(!status);
+
+			if (status == false)
+				frontend->Report("Gravity and collision detection on");
+			else
+				frontend->Report("Gravity and collision detection off");
+		}
+
+		if (key == WXK_F3)
+		{
+			//reset rotation/direction and FOV of camera
+			camera->ResetView();
+			return;
+		}
+
+		if (key == WXK_F6)
+		{
+			//reset camera position and state
+			camera->ResetState();
+			return;
+		}
+
+		if (key == WXK_F7)
+		{
+			//show colliders
+			Simcore->ShowColliders(!colliders);
+			colliders = !colliders;
+		}
+
+		if (key == WXK_F4)
+		{
+			//toggle wireframe mode
+			if (wireframe == 0)
+			{
+				frontend->EnableSky(false);
+				camera->SetViewMode(1);
+				wireframe = 1;
+			}
+			else if (wireframe == 1)
+			{
+				camera->SetViewMode(2);
+				wireframe = 2;
+			}
+			else if (wireframe == 2)
+			{
+				frontend->EnableSky(true);
+				camera->SetViewMode(0);
+				wireframe = 0;
+			}
+		}
+
+		if (key == WXK_F11)
+		{
+			frontend->mRenderWindow->writeContentsToTimestampedFile("screenshots/skyscraper-", ".jpg");
+		}
+
+		if (key == WXK_F12 && !frontend->dpanel)
+		{
+			//show control panel if closed
+			frontend->dpanel = new DebugPanel(frontend, NULL, -1);
+			frontend->dpanel->Show(true);
+			frontend->dpanel->SetPosition(wxPoint(frontend->GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), frontend->GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
+		}
+
+		if (key == WXK_F5)
+		{
+			//toggle freelook mode
+			camera->Freelook = !camera->Freelook;
+			if (camera->Freelook == true)
+				SetCursor(wxCURSOR_CROSS);
+			else
+				SetCursor(wxNullCursor);
+		}
+
+		if (key == WXK_F10)
+		{
+			//toggle fullscreen mode
+			frontend->SetFullScreen(!frontend->FullScreen);
+		}
+
+		if (key == WXK_F8)
+		{
+			//show mesh bounding boxes
+			Simcore->ShowBoundingBoxes(!boxes);
+			boxes = !boxes;
+		}
+
+		if (key == WXK_NUMPAD_SUBTRACT || key == (wxKeyCode)'[')
+		{
+			//increase FOV angle
+			float angle = camera->GetFOVAngle() + camera->cfg_zoomspeed;
+			camera->SetFOVAngle(angle);
+		}
+
+		if (key == WXK_NUMPAD_ADD || key == (wxKeyCode)']')
+		{
+			//decrease FOV angle
+			float angle = camera->GetFOVAngle() - camera->cfg_zoomspeed;
+			camera->SetFOVAngle(angle);
+		}
+
+		//binoculars
+		if (key == (wxKeyCode)'B')
+		{
+			camera->Binoculars(true);
+		}
+
+		//model pick-up
+		if (key == (wxKeyCode)'C')
+		{
+			if (camera->IsModelAttached() == false)
+				camera->PickUpModel();
+			else
+				camera->DropModel();
+		}
+
+		//load a new additional building
+		if (key == (wxKeyCode)';')
+		{
+			if (!frontend->loaddialog)
+				frontend->loaddialog = new LoadDialog(frontend->dpanel, this, -1);
+			frontend->loaddialog->CenterOnScreen();
+			frontend->loaddialog->Show();
+			return;
+		}
+
+		//engine selection
+		if (key == (wxKeyCode)'1')
+		{
+			frontend->SetActiveEngine(0);
+		}
+		else if (key == (wxKeyCode)'2')
+		{
+			frontend->SetActiveEngine(1);
+		}
+		else if (key == (wxKeyCode)'3')
+		{
+			frontend->SetActiveEngine(2);
+		}
+		else if (key == (wxKeyCode)'4')
+		{
+			frontend->SetActiveEngine(3);
+		}
+		else if (key == (wxKeyCode)'5')
+		{
+			frontend->SetActiveEngine(4);
+		}
+		else if (key == (wxKeyCode)'6')
+		{
+			frontend->SetActiveEngine(5);
+		}
+		else if (key == (wxKeyCode)'7')
+		{
+			frontend->SetActiveEngine(6);
+		}
+		else if (key == (wxKeyCode)'8')
+		{
+			frontend->SetActiveEngine(7);
+		}
+		else if (key == (wxKeyCode)'9')
+		{
+			frontend->SetActiveEngine(8);
+		}
+		else if (key == (wxKeyCode)'0')
+		{
+			frontend->SetActiveEngine(9);
+		}
+
+		//values from old version
+		if (key == WXK_HOME || key == (wxKeyCode)'O')
+			float_up = true;
+		if (key == WXK_END || key == (wxKeyCode)'K')
+			float_down = true;
 	}
 
-	if (key == WXK_F10)
-	{
-		//toggle fullscreen mode
-		frontend->SetFullScreen(!frontend->FullScreen);
-	}
-
-	if (key == WXK_F8)
-	{
-		//show mesh bounding boxes
-		Simcore->ShowBoundingBoxes(!boxes);
-		boxes = !boxes;
-	}
-
-	if (key == WXK_NUMPAD_SUBTRACT || key == (wxKeyCode)'[')
-	{
-		//increase FOV angle
-		float angle = camera->GetFOVAngle() + camera->cfg_zoomspeed;
-		camera->SetFOVAngle(angle);
-	}
-
-	if (key == WXK_NUMPAD_ADD || key == (wxKeyCode)']')
-	{
-		//decrease FOV angle
-		float angle = camera->GetFOVAngle() - camera->cfg_zoomspeed;
-		camera->SetFOVAngle(angle);
-	}
-
-	//binoculars
-	if (key == (wxKeyCode)'B')
-	{
-		camera->Binoculars(true);
-	}
-
-	//model pick-up
-	if (key == (wxKeyCode)'C')
-	{
-		if (camera->IsModelAttached() == false)
-			camera->PickUpModel();
-		else
-			camera->DropModel();
-	}
-
-	//load a new additional building
-	if (key == (wxKeyCode)';')
-	{
-		if (!frontend->loaddialog)
-			frontend->loaddialog = new LoadDialog(frontend->dpanel, this, -1);
-		frontend->loaddialog->CenterOnScreen();
-		frontend->loaddialog->Show();
-		return;
-	}
-
-	//engine selection
-	if (key == (wxKeyCode)'1')
-	{
-		frontend->SetActiveEngine(0);
-	}
-	else if (key == (wxKeyCode)'2')
-	{
-		frontend->SetActiveEngine(1);
-	}
-	else if (key == (wxKeyCode)'3')
-	{
-		frontend->SetActiveEngine(2);
-	}
-	else if (key == (wxKeyCode)'4')
-	{
-		frontend->SetActiveEngine(3);
-	}
-	else if (key == (wxKeyCode)'5')
-	{
-		frontend->SetActiveEngine(4);
-	}
-	else if (key == (wxKeyCode)'6')
-	{
-		frontend->SetActiveEngine(5);
-	}
-	else if (key == (wxKeyCode)'7')
-	{
-		frontend->SetActiveEngine(6);
-	}
-	else if (key == (wxKeyCode)'8')
-	{
-		frontend->SetActiveEngine(7);
-	}
-	else if (key == (wxKeyCode)'9')
-	{
-		frontend->SetActiveEngine(8);
-	}
-	else if (key == (wxKeyCode)'0')
-	{
-		frontend->SetActiveEngine(9);
-	}
-
-	//values from old version
-	if (key == WXK_HOME || key == (wxKeyCode)'O')
-		camera->Float(speed_normal);
-	if (key == WXK_END || key == (wxKeyCode)'K')
-		camera->Float(-speed_normal);
+	ProcessMovement(engine, event);
 }
 
 void MainScreen::OnKeyUp(wxKeyEvent& event)
@@ -702,60 +704,125 @@ void MainScreen::OnKeyUp(wxKeyEvent& event)
 	{
 		//strafe movement
 		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-			camera->Strafe(0);
-		if (key == WXK_LEFT || key == (wxKeyCode)'A')
-			camera->Strafe(0);
-		if (key == WXK_UP || key == (wxKeyCode)'W')
-			camera->Float(0);
-		if (key == WXK_DOWN || key == (wxKeyCode)'S')
-			camera->Float(0);
-		if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
-			camera->Spin(0);
-		if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
-			camera->Spin(0);
+			strafe_right = false;
 
-		return;
-	}
+		else if (key == WXK_LEFT || key == (wxKeyCode)'A')
+			strafe_left = false;
 
-	if (camera->Freelook == false)
-	{
-		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-			camera->Turn(0);
-		if (key == WXK_LEFT || key == (wxKeyCode)'A')
-		{
-			camera->Turn(0);
-		}
+		else if (key == WXK_UP || key == (wxKeyCode)'W')
+			float_up = false;
+
+		else if (key == WXK_DOWN || key == (wxKeyCode)'S')
+			float_down = false;
+
+		else if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
+			spin_up = false;
+
+		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
+			spin_down = false;
 	}
 	else
 	{
-		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
-			camera->Strafe(0);
-		if (key == WXK_LEFT || key == (wxKeyCode)'A')
-			camera->Strafe(0);
+		if (camera->Freelook == false)
+		{
+			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
+				turn_right = false;
+
+			if (key == WXK_LEFT || key == (wxKeyCode)'A')
+				turn_left = false;
+		}
+		else
+		{
+			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
+				strafe_right = false;
+
+			if (key == WXK_LEFT || key == (wxKeyCode)'A')
+				strafe_left = false;
+		}
+
+		if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
+			look_up = false;
+
+		if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
+			look_down = false;
+
+		if (key == WXK_UP || key == (wxKeyCode)'W')
+			step_forward = false;
+
+		if (key == WXK_DOWN || key == (wxKeyCode)'S')
+			step_backward = false;
+
+		//binoculars
+		if (key == (wxKeyCode)'B')
+		{
+			camera->Binoculars(false);
+		}
+
+		//values from old version
+		if (key == WXK_HOME || key == (wxKeyCode)'O')
+			float_up = false;
+		if (key == WXK_END || key == (wxKeyCode)'K')
+			float_down = false;
 	}
 
-	if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
-		camera->Look(0);
-	if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
-		camera->Look(0);
-	if (key == WXK_UP || key == (wxKeyCode)'W')
-	{
-		camera->Step(0);
-	}
-	if (key == WXK_DOWN || key == (wxKeyCode)'S')
-		camera->Step(0);
+	ProcessMovement(engine, event);
+}
 
-	//binoculars
-	if (key == (wxKeyCode)'B')
-	{
-		camera->Binoculars(false);
-	}
+void MainScreen::ProcessMovement(EngineContext *engine, wxKeyEvent& event)
+{
+	//process movement
 
-	//values from old version
-	if (key == WXK_HOME || key == (wxKeyCode)'O')
-		camera->Float(0);
-	if (key == WXK_END || key == (wxKeyCode)'K')
-		camera->Float(0);
+	float strafe = 0, floatval = 0, spin = 0, turn = 0, look = 0, step = 0;
+
+	::SBS::Camera *camera = engine->GetSystem()->camera;
+
+	camera->speed = 1;
+	float speed_normal = camera->cfg_speed;
+	float speed_fast = camera->cfg_speedfast;
+	float speed_slow = camera->cfg_speedslow;
+
+	if (event.ControlDown())
+		camera->speed = speed_slow;
+	else if (event.ShiftDown())
+		camera->speed = speed_fast;
+
+	if (strafe_left == true)
+		strafe -= speed_normal;
+	if (strafe_right == true)
+		strafe += speed_normal;
+
+	if (float_up == true)
+		floatval += speed_normal;
+	if (float_down == true)
+		floatval -= speed_normal;
+
+	if (spin_up == true)
+		spin += speed_normal;
+	if (spin_down == true)
+		spin -= speed_normal;
+
+	if (turn_left == true)
+		turn -= speed_normal;
+	if (turn_right == true)
+		turn += speed_normal;
+
+	if (look_up == true)
+		look += speed_normal;
+	if (look_down == true)
+		look -= speed_normal;
+
+	if (step_forward == true)
+		step += speed_normal;
+	if (step_backward == true)
+		step -= speed_normal;
+
+	//set camera values
+	camera->Strafe(strafe);
+	camera->Float(floatval);
+	camera->Spin(spin);
+	camera->Turn(turn);
+	camera->Look(look);
+	camera->Step(step);
 }
 
 void Skyscraper::Render()
@@ -1051,37 +1118,12 @@ void Skyscraper::GetInput(EngineContext *engine)
 	if (window->Active == false)
 		return;
 
-	//static int wireframe;
-	//static bool wait, waitcheck, colliders, b_down, boxes;
-	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 
 	//get SBS instance
 	::SBS::SBS *Simcore = engine->GetSystem();
 
-	// First get elapsed time from the virtual clock.
-	unsigned int current_time = Simcore->GetRunTime();
-
 	Camera *camera = Simcore->camera;
-
-	//speed limit certain keys
-	/*if (wait == true)
-	{
-		if (waitcheck == false)
-		{
-			old_time = current_time;
-			waitcheck = true;
-		}
-		if (current_time > old_time + 200)
-		{
-			waitcheck = false;
-			wait = false;
-		}
-	}*/
-
-	//fix for the camera velocities due to the non-event driven key system
-	//camera->desired_velocity = Ogre::Vector3(0, 0, 0);
-	//camera->desired_angle_velocity = Ogre::Vector3(0, 0, 0);
 
 	//get old mouse coordinates
 	old_mouse_x = Simcore->mouse_x;
@@ -1123,281 +1165,6 @@ void Skyscraper::GetInput(EngineContext *engine)
 		MouseDown = false;
 		camera->MouseDown = MouseDown;
 	}
-
-	/*if (wxGetKeyState(WXK_ESCAPE))
-	{
-		int result = wxMessageBox(wxT("Exit and return to the main menu?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
-		if (result == wxYES)
-			Shutdown = true;
-	}
-
-	if (wxGetKeyState(WXK_F2) && wait == false)
-	{
-		float fps = Simcore->FPS;
-		int batches = (int)mRoot->getRenderSystem()->_getBatchCount();
-		int faces = (int)mRoot->getRenderSystem()->_getFaceCount();
-		int vertices = (int)mRoot->getRenderSystem()->_getVertexCount();
-
-		Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Faces: " + ToString(faces) + " - Vertices: " + ToString(vertices));
-		wait = true;
-	}
-
-	camera->speed = 1;
-	float speed_normal = camera->cfg_speed;
-	float speed_fast = camera->cfg_speedfast;
-	float speed_slow = camera->cfg_speedslow;
-
-	//crash test
-	if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_ALT) && wxGetKeyState((wxKeyCode)'C'))
-		throw;
-
-	if (wxGetKeyState(WXK_CONTROL))
-	{
-		if (wxGetKeyState((wxKeyCode)'R'))
-		{
-			engine->Reload = true;
-			return;
-		}
-		camera->speed = speed_slow;
-	}
-	else if (wxGetKeyState(WXK_SHIFT))
-		camera->speed = speed_fast;
-
-	if (wxGetKeyState(WXK_ALT))
-	{
-		//strafe movement
-		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
-			camera->Strafe(speed_normal);
-		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
-			camera->Strafe(-speed_normal);
-		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
-			camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
-			camera->Float(-speed_normal);
-		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
-			camera->Spin(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
-			camera->Spin(-speed_normal);
-	}
-	else
-	{
-		if (wxGetKeyState((wxKeyCode)'V') && wait == false)
-		{
-			if (camera->GetGravityStatus() == false)
-			{
-				camera->EnableGravity(true);
-				camera->EnableCollisions(true);
-				Report("Gravity and collision detection on");
-			}
-			else
-			{
-				camera->EnableGravity(false);
-				camera->EnableCollisions(false);
-				Report("Gravity and collision detection off");
-			}
-			wait = true;
-		}
-		if (camera->Freelook == false)
-		{
-			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
-				camera->Turn(speed_normal);
-			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
-				camera->Turn(-speed_normal);
-		}
-		else
-		{
-			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
-				camera->Strafe(speed_normal);
-			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
-				camera->Strafe(-speed_normal);
-		}
-		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
-			camera->Look(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
-			camera->Look(-speed_normal);
-		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
-			camera->Step(speed_normal);
-		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
-			camera->Step(-speed_normal);
-		if (wxGetKeyState(WXK_SPACE) && wait == false)
-		{
-			if (camera->IsOnGround() == true)
-			{
-				camera->Jump();
-				wait = true;
-			}
-		}
-		if (wxGetKeyState(WXK_F3))
-		{
-			//reset rotation/direction and FOV of camera
-			camera->ResetView();
-		}
-		if (wxGetKeyState(WXK_F6))
-		{
-			//reset camera position and state
-			camera->ResetState();
-		}
-
-		if (wxGetKeyState(WXK_F7) && wait == false)
-		{
-			//show colliders
-			Simcore->ShowColliders(!colliders);
-			colliders = !colliders;
-			wait = true;
-		}
-
-		if (wxGetKeyState(WXK_F4) && wait == false)
-		{
-			//toggle wireframe mode
-			if (wireframe == 0)
-			{
-				EnableSky(false);
-				camera->SetViewMode(1);
-				wireframe = 1;
-			}
-			else if (wireframe == 1)
-			{
-				camera->SetViewMode(2);
-				wireframe = 2;
-			}
-			else if (wireframe == 2)
-			{
-				EnableSky(true);
-				camera->SetViewMode(0);
-				wireframe = 0;
-			}
-			wait = true;
-		}
-		if (wxGetKeyState(WXK_F11) && wait == false)
-		{
-			mRenderWindow->writeContentsToTimestampedFile("screenshots/skyscraper-", ".jpg");
-			wait = true;
-		}
-		if (wxGetKeyState(WXK_F12) && !dpanel)
-		{
-			//show control panel if closed
-			dpanel = new DebugPanel(this, NULL, -1);
-			dpanel->Show(true);
-			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
-		}
-		if (wxGetKeyState(WXK_F5) && wait == false)
-		{
-			//toggle freelook mode
-			camera->Freelook = !camera->Freelook;
-			if (camera->Freelook == true)
-				window->SetCursor(wxCURSOR_CROSS);
-			else
-				window->SetCursor(wxNullCursor);
-			wait = true;
-		}
-		if (wxGetKeyState(WXK_F10) && wait == false)
-		{
-			//toggle fullscreen mode
-			SetFullScreen(!FullScreen);
-			wait = true;
-		}
-		if (wxGetKeyState(WXK_F8) && wait == false)
-		{
-			//show mesh bounding boxes
-			Simcore->ShowBoundingBoxes(!boxes);
-			boxes = !boxes;
-			wait = true;
-		}
-
-		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT) || wxGetKeyState((wxKeyCode)'['))
-		{
-			//increase FOV angle
-			float angle = camera->GetFOVAngle() + camera->cfg_zoomspeed;
-			camera->SetFOVAngle(angle);
-		}
-		if (wxGetKeyState(WXK_NUMPAD_ADD) || wxGetKeyState((wxKeyCode)']'))
-		{
-			//decrease FOV angle
-			float angle = camera->GetFOVAngle() - camera->cfg_zoomspeed;
-			camera->SetFOVAngle(angle);
-		}
-
-		//binoculars
-		if (wxGetKeyState((wxKeyCode)'B') && b_down == false)
-		{
-			camera->Binoculars(true);
-			b_down = true;
-		}
-		else if (!wxGetKeyState((wxKeyCode)'B') && b_down == true)
-		{
-			camera->Binoculars(false);
-			b_down = false;
-		}
-
-		//model pick-up
-		if (wxGetKeyState((wxKeyCode)'C') && wait == false)
-		{
-			if (camera->IsModelAttached() == false)
-				camera->PickUpModel();
-			else
-				camera->DropModel();
-			wait = true;
-		}
-
-		//load a new additional building
-		if (wxGetKeyState((wxKeyCode)';') && wait == false)
-		{
-			if (!loaddialog)
-				loaddialog = new LoadDialog(dpanel, window, -1);
-			loaddialog->CenterOnScreen();
-			loaddialog->Show();
-			wait = true;
-			return;
-		}
-
-		//temporary engine selection test
-		if (wxGetKeyState((wxKeyCode)'1'))
-		{
-			SetActiveEngine(0);
-		}
-		if (wxGetKeyState((wxKeyCode)'2'))
-		{
-			SetActiveEngine(1);
-		}
-		if (wxGetKeyState((wxKeyCode)'3'))
-		{
-			SetActiveEngine(2);
-		}
-		if (wxGetKeyState((wxKeyCode)'4'))
-		{
-			SetActiveEngine(3);
-		}
-		if (wxGetKeyState((wxKeyCode)'5'))
-		{
-			SetActiveEngine(4);
-		}
-		if (wxGetKeyState((wxKeyCode)'6'))
-		{
-			SetActiveEngine(5);
-		}
-		if (wxGetKeyState((wxKeyCode)'7'))
-		{
-			SetActiveEngine(6);
-		}
-		if (wxGetKeyState((wxKeyCode)'8'))
-		{
-			SetActiveEngine(7);
-		}
-		if (wxGetKeyState((wxKeyCode)'9'))
-		{
-			SetActiveEngine(8);
-		}
-		if (wxGetKeyState((wxKeyCode)'0'))
-		{
-			SetActiveEngine(9);
-		}
-
-		//values from old version
-		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
-			camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'K'))
-			camera->Float(-speed_normal);
-	}*/
 }
 
 void Skyscraper::Report(const std::string &message)
