@@ -52,6 +52,8 @@ class MainScreen;
 
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
+	friend class MainScreen;
+
 public:
 
 	//OGRE engine data
@@ -224,9 +226,18 @@ public:
 	void OnActivate(wxActivateEvent & event);
 	void OnEnterWindow(wxMouseEvent& event);
 	void OnLeaveWindow(wxMouseEvent& event);
+	void OnKeyDown(wxKeyEvent& event);
+	void OnKeyUp(wxKeyEvent& event);
+
 	bool Active;
 	bool InLoop;
 	Skyscraper *frontend;
+	wxPanel *panel;
+
+private:
+	bool boxes;
+	bool colliders;
+	int wireframe;
 
 	DECLARE_EVENT_TABLE()
 };
