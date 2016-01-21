@@ -575,8 +575,10 @@ void MainScreen::HandleMouseMovement()
 	if (!engine)
 		return;
 
-	//get SBS camera
-	Camera *camera = engine->GetSystem()->camera;
+	//get SBS instance
+	::SBS::SBS *Simcore = engine->GetSystem();
+
+	Camera *camera = Simcore->camera;
 
 	if (camera->Freelook == true)
 	{
@@ -595,11 +597,15 @@ void MainScreen::HandleMouseMovement()
 		//if mouse coordinates changed, and we're in freelook mode, rotate camera
 		if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
 		{
-			WarpPointer(width / 2, height / 2);
+			WarpPointer(width * 0.5, height * 0.5);
 			Ogre::Vector3 rotational;
 			rotational.x = camera->Freelook_speed * -(((float)camera->mouse_y - (height / 2))) / (height * 2);
 			rotational.y = camera->Freelook_speed * -((width / 2) - (float)camera->mouse_x) / (width * 2);
 			rotational.z = 0;
+
+			float fps_adjust = Simcore->FPS / 60;
+			rotational *= fps_adjust;
+
 			camera->desired_angle_velocity = rotational;
 			camera->angle_velocity = rotational;
 		}
