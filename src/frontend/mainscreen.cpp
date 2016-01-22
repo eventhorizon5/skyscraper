@@ -580,6 +580,7 @@ void MainScreen::HandleMouseMovement()
 
 	Camera *camera = Simcore->camera;
 
+	//freelook mode
 	if (camera->Freelook == true)
 	{
 		//get old mouse coordinates
@@ -609,6 +610,8 @@ void MainScreen::HandleMouseMovement()
 
 			camera->FreelookMove(rotational);
 		}
+		else
+			camera->FreelookMove(Ogre::Vector3::ZERO);
 	}
 }
 
