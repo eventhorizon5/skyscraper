@@ -142,6 +142,7 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	void EnableSky(bool value);
+	void UnregisterDebugPanel() { dpanel = 0; }
 
 private:
 	//sound data
