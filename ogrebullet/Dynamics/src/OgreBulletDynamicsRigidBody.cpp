@@ -53,7 +53,6 @@ namespace OgreBulletDynamics
 		mCollisionGroup = collisionGroup;
 		mCollisionMask = collisionMask;
 		can_move = false;
-		in_world = false;
     }
     // -------------------------------------------------------------------------
     RigidBody::~RigidBody()
@@ -178,7 +177,7 @@ namespace OgreBulletDynamics
 
 	void RigidBody::addToWorld()
 	{
-		if (in_world == true)
+		if (isInWorld() == true)
 			return;
 
 		//add collider to world
@@ -187,11 +186,10 @@ namespace OgreBulletDynamics
 		//attach scene node
 		if (can_move == true)
 			mShapeNode->attachObject(this);
-		in_world = true;
 	}
 	void RigidBody::removeFromWorld()
 	{
-		if (in_world == false)
+		if (isInWorld() == false)
 			return;
 
 		//remove collider from world
@@ -200,11 +198,6 @@ namespace OgreBulletDynamics
 		//detach scene node
 		if (can_move == true)
 			mShapeNode->detachObject(this);
-		in_world = false;
-	}
-	bool RigidBody::isInWorld()
-	{
-		return in_world;
 	}
 
 	// -------------------------------------------------------------------------

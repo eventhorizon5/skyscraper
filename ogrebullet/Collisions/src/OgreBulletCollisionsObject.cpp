@@ -324,7 +324,7 @@ namespace OgreBulletCollisions
 	void Object::updateBoundingBox()
 	{
 		//update bounding box if a static object and in the world
-		if (mObject->isStaticOrKinematicObject() && mObject->getBroadphaseHandle())
+		if (mObject->isStaticOrKinematicObject() && isInWorld() == true)
 			mWorld->getBulletCollisionWorld()->updateSingleAabb(mObject);
 	}
 }
