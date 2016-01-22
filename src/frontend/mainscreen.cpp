@@ -580,17 +580,17 @@ void MainScreen::HandleMouseMovement()
 
 	Camera *camera = Simcore->camera;
 
+	//get old mouse coordinates
+	int old_mouse_x = camera->mouse_x;
+	int old_mouse_y = camera->mouse_y;
+
+	//get mouse pointer coordinates
+	camera->mouse_x = ScreenToClient(wxGetMousePosition()).x;
+	camera->mouse_y = ScreenToClient(wxGetMousePosition()).y;
+
 	//freelook mode
 	if (camera->Freelook == true)
 	{
-		//get old mouse coordinates
-		int old_mouse_x = camera->mouse_x;
-		int old_mouse_y = camera->mouse_y;
-
-		//get mouse pointer coordinates
-		camera->mouse_x = ScreenToClient(wxGetMousePosition()).x;
-		camera->mouse_y = ScreenToClient(wxGetMousePosition()).y;
-
 		//get window dimensions
 		float width = GetClientSize().GetWidth();
 		float height = GetClientSize().GetHeight();
