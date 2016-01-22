@@ -85,8 +85,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
 	ElevatorNumber = 1;
-	mouse_x = 0;
-	mouse_y = 0;
 	wall_orientation = 1;
 	floor_orientation = 2;
 	DrawMainN = true;

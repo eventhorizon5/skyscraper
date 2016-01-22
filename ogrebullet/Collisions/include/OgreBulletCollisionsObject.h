@@ -98,10 +98,12 @@ namespace OgreBulletCollisions
 
         void setCollisionMask(short CollisionGroup, short CollisionMask);
 
-        Ogre::SceneNode *getRootNode() { return mRootNode; }
+        inline Ogre::SceneNode *getRootNode() { return mRootNode; }
 
         Object* getLastCollision();
         void resetLastCollision();
+        void updateBoundingBox();
+        inline bool isInWorld() { return (mObject->getBroadphaseHandle() != 0); }
 
     protected:
 

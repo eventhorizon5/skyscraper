@@ -108,6 +108,8 @@ Camera::Camera(Object *parent) : Object(parent)
 	GravityStatus = false;
 	FirstAttach = false;
 	LastHitMeshNumber = -1;
+	mouse_x = 0;
+	mouse_y = 0;
 
 	//set up camera and scene nodes
 
@@ -521,8 +523,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	SBS_PROFILE("Camera::ClickedObject");
 	int width = MainCamera->getViewport()->getActualWidth();
 	int height = MainCamera->getViewport()->getActualHeight();
-	float x = (float)sbs->mouse_x / (float)width;
-	float y = (float)sbs->mouse_y / (float)height;
+	float x = (float)mouse_x / (float)width;
+	float y = (float)mouse_y / (float)height;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
@@ -918,6 +920,12 @@ void Camera::Spin(float speed)
 {
 	//spin camera by rotating on Z axis
 	desired_angle_velocity.z = cfg_spinspeed * speed * cfg_rotate_maxspeed;
+}
+
+void Camera::FreelookMove(const Ogre::Vector3 &rotation)
+{
+	desired_angle_velocity = rotation * Freelook_speed;
+	angle_velocity = desired_angle_velocity;
 }
 
 void Camera::InterpolateMovement(float delta)

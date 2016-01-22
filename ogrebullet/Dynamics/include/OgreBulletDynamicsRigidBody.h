@@ -49,7 +49,7 @@ namespace OgreBulletDynamics
     class _OgreBulletExport RigidBody : public OgreBulletCollisions::Object
     {
     public:
-	    RigidBody(const Ogre::String &name, 
+	    RigidBody(const Ogre::String &name,
 				  DynamicsWorld *world,
 				  const short collisionGroup = 0,
 				  const short collisionMask = 0);
@@ -121,27 +121,25 @@ namespace OgreBulletDynamics
         inline Ogre::Vector3 getCenterOfMassPosition() const;
 
         Ogre::Vector3       getCenterOfMassPivot (const Ogre::Vector3 &pivotPosition) const;
-        
+
         void setDamping( const Ogre::Real linearDamping, const Ogre::Real angularDamping );
-        bool isInWorld();
 	protected:
 		short mCollisionGroup;
 		short mCollisionMask;
 		bool can_move;
-		bool in_world;
     };
     // -------------------------------------------------------------------------
     // basic rigid body class
     class _OgreBulletExport WheeledRigidBody : public RigidBody
     {
     public:
-        WheeledRigidBody(const Ogre::String &name, DynamicsWorld *world): 
+        WheeledRigidBody(const Ogre::String &name, DynamicsWorld *world):
             RigidBody(name, world),
                 mVehicle(0)
         {
         };
 
-        
+
         void setVehicle(RaycastVehicle *v){mVehicle = v;};
 
        virtual void setPosition(const btVector3 &pos);
@@ -158,27 +156,27 @@ namespace OgreBulletDynamics
     // -------------------------------------------------------------------------
     // basic rigid body class inline methods
     // -------------------------------------------------------------------------
-    inline btRigidBody*  RigidBody::getBulletRigidBody() const 
+    inline btRigidBody*  RigidBody::getBulletRigidBody() const
     {
         return static_cast <btRigidBody* > (mObject);
     };
     // -------------------------------------------------------------------------
-    inline btDynamicsWorld*     RigidBody::getBulletDynamicsWorld() const 
-    { 
+    inline btDynamicsWorld*     RigidBody::getBulletDynamicsWorld() const
+    {
         return static_cast <btDynamicsWorld * > (mWorld->getBulletCollisionWorld ());
     };
     // -------------------------------------------------------------------------
-    inline DynamicsWorld*       RigidBody::getDynamicsWorld() 
-    { 
+    inline DynamicsWorld*       RigidBody::getDynamicsWorld()
+    {
         return static_cast <DynamicsWorld* > (mWorld);
     };
     // -------------------------------------------------------------------------
-    inline bool RigidBody::isStaticObject() const 
+    inline bool RigidBody::isStaticObject() const
     {
         return getBulletRigidBody()->isStaticObject();
     }
     // -------------------------------------------------------------------------
-    inline bool RigidBody::isKinematicObject() const 
+    inline bool RigidBody::isKinematicObject() const
     {
         return getBulletRigidBody()->isKinematicObject();
     };
@@ -213,8 +211,8 @@ namespace OgreBulletDynamics
     {
         return OgreBulletCollisions::BtOgreConverter::to(getBulletRigidBody()->getCenterOfMassPosition());
     }
-    // -------------------------------------------------------------------------   
-    
+    // -------------------------------------------------------------------------
+
 }
 #endif //_OGREBULLETDYNAMICS_RigidObject_H
 

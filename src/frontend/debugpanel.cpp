@@ -271,6 +271,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 
 DebugPanel::~DebugPanel()
 {
+	skyscraper->UnregisterDebugPanel();
+
 	//delete timer;
 	if (timer)
 	{

@@ -1108,10 +1108,6 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::stri
 	//finish doors
 	DoorWrapper *wrapper = FinishShaftDoor(floor);
 
-	//make doors invisible on start
-	if (ShaftDoors[index])
-		ShaftDoors[index]->Enable(false);
-
 	return wrapper;
 }
 
@@ -1398,6 +1394,9 @@ ElevatorDoor::DoorObject::DoorObject(const std::string &doorname, DoorWrapper *W
 	//create object mesh
 	mesh = new MeshObject(wrapper, doorname);
 
+	//keep colliders attached, to fix performance issues when moving in and out of an elevator
+	mesh->remove_on_disable = false;
+
 	std::string direction_check = Direction;
 	SetCase(direction_check, false);
 	TrimString(direction_check);
@@ -1495,7 +1494,7 @@ void ElevatorDoor::DoorWrapper::Enable(bool value)
 		return;
 
 	for (int i = 0; i < (int)doors.size(); i++)
-		doors[i]->mesh->Enable(value, false);
+		doors[i]->mesh->Enable(value);
 
 	Enabled = value;
 }

@@ -173,6 +173,8 @@ namespace OgreBulletCollisions
    		}
 
 		mRootNode->_setDerivedPosition(p);
+
+	    updateBoundingBox();
     }
     // -------------------------------------------------------------------------
     void Object::setOrientation(const btQuaternion &quat)
@@ -197,6 +199,7 @@ namespace OgreBulletCollisions
 		    mesh_node->_setDerivedOrientation(q);
 	    }
 
+	    updateBoundingBox();
 	    mRootNode->_setDerivedOrientation(q);
     }
     // -------------------------------------------------------------------------
@@ -281,6 +284,8 @@ namespace OgreBulletCollisions
 		mObject->setWorldTransform(transform);
 		if (set_interpolate == true)
 			mObject->setInterpolationWorldTransform(transform);
+
+		updateBoundingBox();
 	}
 
     //-----------------------------------------------------------------------
@@ -314,6 +319,13 @@ namespace OgreBulletCollisions
 	void Object::resetLastCollision()
 	{
 		last_collision = 0;
+	}
+
+	void Object::updateBoundingBox()
+	{
+		//update bounding box if a static object and in the world
+		if (mObject->isStaticOrKinematicObject() && isInWorld() == true)
+			mWorld->getBulletCollisionWorld()->updateSingleAabb(mObject);
 	}
 }
 

@@ -50,6 +50,7 @@ public:
 	std::string name; //mesh name
 	bool no_collider; //set to true if collider shouldn't be automatically generated
 	bool tricollider; //collider type; box if false, triangle if true
+	bool remove_on_disable; //if true (the default), remove the collider from world when disabling mesh
 
 	//define geometry type
 	struct Geometry
@@ -68,7 +69,8 @@ public:
 
 	MeshObject(Object* parent, const std::string &name, const std::string &filename = "", float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~MeshObject();
-	void Enable(bool value, bool remove = true);
+	void Enable(bool value);
+	void EnableCollider(bool value);
 	bool IsEnabled();
 	WallObject* CreateWallObject(const std::string &name);
 	WallObject* GetWallByName(std::string name);

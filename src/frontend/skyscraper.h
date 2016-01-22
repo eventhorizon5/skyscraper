@@ -36,6 +36,7 @@
 #include "fileio.h"
 #include "debugpanel.h"
 #include "enginecontext.h"
+#include "mainscreen.h"
 #include "loaddialog.h"
 #include "console.h"
 
@@ -52,6 +53,8 @@ class MainScreen;
 
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
+	friend class MainScreen;
+
 public:
 
 	//OGRE engine data
@@ -94,7 +97,6 @@ public:
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
 	void Render();
-	void GetInput(EngineContext *engine);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
@@ -140,11 +142,9 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	void EnableSky(bool value);
+	void UnregisterDebugPanel() { dpanel = 0; }
 
 private:
-	//mouse status
-	bool MouseDown;
-
 	//sound data
 	FMOD::System *soundsys;
 	FMOD::Sound *sound;
@@ -208,27 +208,6 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
-};
-
-class MainScreen : public wxFrame
-{
-public:
-	MainScreen(Skyscraper *parent, int width, int height);
-	virtual ~MainScreen();
-	void OnIconize(wxIconizeEvent& event);
-	void OnSize(wxSizeEvent& event);
-	void OnClose(wxCloseEvent& event);
-	void ShowWindow();
-	void OnIdle(wxIdleEvent& event);
-	void OnPaint(wxPaintEvent& event);
-	void OnActivate(wxActivateEvent & event);
-	void OnEnterWindow(wxMouseEvent& event);
-	void OnLeaveWindow(wxMouseEvent& event);
-	bool Active;
-	bool InLoop;
-	Skyscraper *frontend;
-
-	DECLARE_EVENT_TABLE()
 };
 
 DECLARE_APP(Skyscraper)
