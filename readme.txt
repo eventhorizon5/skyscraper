@@ -102,6 +102,7 @@ F4 - Enable/disable wireframe mode
 F5 - Freelook (mouse look) mode
 F6 - Full camera reset (respawn)
 F7 - Show colliders
+F8 - Show mesh bounding boxes
 F10 - Fullscreen mode
 F11 - Take screenshot
 F12 - Open control panel

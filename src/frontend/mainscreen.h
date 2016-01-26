@@ -31,7 +31,7 @@ class MainScreen : public wxFrame
 {
 public:
 	MainScreen(Skyscraper *parent, int width, int height);
-	virtual ~MainScreen();
+	virtual ~MainScreen() {}
 	void OnIconize(wxIconizeEvent& event);
 	void OnSize(wxSizeEvent& event);
 	void OnClose(wxCloseEvent& event);
@@ -50,7 +50,7 @@ public:
 
 private:
 	void GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool down);
-	void ProcessMovement(EngineContext *engine, wxKeyEvent& event);
+	void ProcessMovement(EngineContext *engine, bool control = false, bool shift = false, bool angle_only = false);
 	void HandleMouseMovement();
 
 	//input system states
