@@ -398,7 +398,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 	GetKeyStates(engine, event, true);
 
-	ProcessMovement(engine, event);
+	ProcessMovement(engine, event.ControlDown(), event.ShiftDown());
 }
 
 void MainScreen::OnKeyUp(wxKeyEvent& event)
@@ -412,7 +412,7 @@ void MainScreen::OnKeyUp(wxKeyEvent& event)
 
 	GetKeyStates(engine, event, false);
 
-	ProcessMovement(engine, event);
+	ProcessMovement(engine, event.ControlDown(), event.ShiftDown());
 }
 
 void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool down)
@@ -489,7 +489,7 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 	}
 }
 
-void MainScreen::ProcessMovement(EngineContext *engine, wxKeyEvent& event)
+void MainScreen::ProcessMovement(EngineContext *engine, bool control, bool shift, bool angle_only)
 {
 	//process movement
 
@@ -498,25 +498,39 @@ void MainScreen::ProcessMovement(EngineContext *engine, wxKeyEvent& event)
 	//get SBS camera
 	Camera *camera = engine->GetSystem()->camera;
 
-	camera->speed = 1;
 	float speed_normal = camera->cfg_speed;
 	float speed_fast = camera->cfg_speedfast;
 	float speed_slow = camera->cfg_speedslow;
 
-	if (event.ControlDown())
-		camera->speed = speed_slow;
-	else if (event.ShiftDown())
-		camera->speed = speed_fast;
+	if (angle_only == false)
+	{
+		camera->speed = 1;
 
-	if (strafe_left == true)
-		strafe -= speed_normal;
-	if (strafe_right == true)
-		strafe += speed_normal;
+		if (control == true)
+			camera->speed = speed_slow;
+		else if (shift == true)
+			camera->speed = speed_fast;
 
-	if (float_up == true)
-		floatval += speed_normal;
-	if (float_down == true)
-		floatval -= speed_normal;
+		if (step_forward == true)
+			step += speed_normal;
+		if (step_backward == true)
+			step -= speed_normal;
+
+		if (strafe_left == true)
+			strafe -= speed_normal;
+		if (strafe_right == true)
+			strafe += speed_normal;
+
+		if (float_up == true)
+			floatval += speed_normal;
+		if (float_down == true)
+			floatval -= speed_normal;
+
+		//set camera motion values
+		camera->Step(step);
+		camera->Strafe(strafe);
+		camera->Float(floatval);
+	}
 
 	if (spin_up == true)
 		spin += speed_normal;
@@ -533,18 +547,10 @@ void MainScreen::ProcessMovement(EngineContext *engine, wxKeyEvent& event)
 	if (look_down == true)
 		look -= speed_normal;
 
-	if (step_forward == true)
-		step += speed_normal;
-	if (step_backward == true)
-		step -= speed_normal;
-
-	//set camera values
-	camera->Strafe(strafe);
-	camera->Float(floatval);
+	//set camera rotation values
 	camera->Spin(spin);
 	camera->Turn(turn);
 	camera->Look(look);
-	camera->Step(step);
 }
 
 void MainScreen::OnMouseButton(wxMouseEvent& event)
@@ -617,7 +623,9 @@ void MainScreen::HandleMouseMovement()
 			camera->FreelookMove(rotational);
 		}
 		else
-			camera->FreelookMove(Ogre::Vector3::ZERO);
+		{
+			ProcessMovement(engine, false, false, true);
+		}
 	}
 }
 
