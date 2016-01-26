@@ -31,7 +31,7 @@ class MainScreen : public wxFrame
 {
 public:
 	MainScreen(Skyscraper *parent, int width, int height);
-	virtual ~MainScreen();
+	virtual ~MainScreen() {}
 	void OnIconize(wxIconizeEvent& event);
 	void OnSize(wxSizeEvent& event);
 	void OnClose(wxCloseEvent& event);

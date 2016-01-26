@@ -90,11 +90,6 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel->Connect(wxID_ANY, wxEVT_KEY_UP, wxKeyEventHandler(MainScreen::OnKeyUp), NULL, this);
 }
 
-MainScreen::~MainScreen()
-{
-
-}
-
 void MainScreen::OnIconize(wxIconizeEvent& event)
 {
 	//pause simulator while minimized
@@ -195,6 +190,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			frontend->Shutdown = true;
 		return;
 	}
+
 	if (key == WXK_F2)
 	{
 		float fps = Simcore->FPS;
@@ -620,10 +616,12 @@ void MainScreen::HandleMouseMovement()
 			float fps_adjust = Simcore->FPS / 60;
 			rotational *= fps_adjust;
 
+			//apply freelook rotation
 			camera->FreelookMove(rotational);
 		}
 		else
 		{
+			//reset rotation by reprocessing keyboard-based rotation
 			ProcessMovement(engine, false, false, true);
 		}
 	}
