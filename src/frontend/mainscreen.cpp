@@ -235,6 +235,12 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 				frontend->Report("Gravity and collision detection off");
 		}
 
+		if (event.ControlDown() == true && key == (wxKeyCode)'R')
+		{
+			engine->Reload = true;
+			return;
+		}
+
 		if (key == WXK_F3)
 		{
 			//reset rotation/direction and FOV of camera
