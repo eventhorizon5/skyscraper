@@ -526,7 +526,6 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	enabled = true;
 	mBody = 0;
 	mShape = 0;
-	Movable = 0;
 	prepared = false;
 	is_physical = enable_physics;
 	this->restitution = restitution;
@@ -623,15 +622,7 @@ MeshObject::~MeshObject()
 	if (sbs->FastDelete == false)
 		sbs->DeleteMeshHandle(this);
 
-	Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
-	MeshWrapper.setNull();
-
-	if (Movable)
-	{
-		GetSceneNode()->DetachObject(Movable);
-		sbs->mSceneManager->destroyEntity(Movable);
-	}
-	Movable = 0;
+	//delete meshwrapper
 }
 
 void MeshObject::Enable(bool value)
@@ -652,11 +643,7 @@ void MeshObject::Enable(bool value)
 
 	SBS_PROFILE("MeshObject::Enable");
 
-	//attach or detach from scenegraph
-	if (value == false)
-		GetSceneNode()->DetachObject(Movable);
-	else
-		GetSceneNode()->AttachObject(Movable);
+	MeshWrapper->Enable(value);
 
 	EnableCollider(value);
 
@@ -726,15 +713,13 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	std::string material = texture;
 	TrimString(material);
 
-	std::string full_name = ToString(sbs->InstanceNumber) + ":" + material;
-
-	if (MeshWrapper->getNumSubMeshes() == 0)
+	if (submesh < 0 || submesh > (int)Submeshes.size() - 1)
 		return false;
 
 	//exit if old and new materials are the same
 	if (matcheck == true)
 	{
-		if (MeshWrapper->getSubMesh(submesh)->getMaterialName() == full_name)
+		if (Submeshes[submesh].Name == material)
 			return false;
 	}
 
@@ -747,10 +732,8 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	}
 
 	//set material if valid
-	MeshWrapper->getSubMesh(submesh)->setMaterialName(full_name);
-
-	//apply changes (refresh mesh state)
-	MeshWrapper->_dirtyState();
+	MeshWrapper->ChangeTexture(Submeshes[submesh].Name, material);
+	Submeshes[submesh].Name = material;
 
 	return true;
 }
@@ -832,13 +815,14 @@ void MeshObject::AddVertex(Geometry &vertex_geom)
 {
 	//add a vertex to the mesh
 	MeshGeometry.push_back(vertex_geom);
+	Bounds.merge(vertex_geom.vertex);
 	prepared = false; //need to re-prepare mesh
 }
 
 void MeshObject::AddTriangle(int submesh, Triangle &triangle)
 {
 	//add a triangle to the mesh
-	Triangles[submesh].triangles.push_back(triangle);
+	Submeshes[submesh].Triangles.triangles.push_back(triangle);
 	prepared = false; //need to re-prepare mesh
 }
 
@@ -846,10 +830,10 @@ void MeshObject::RemoveTriangle(int submesh, int index)
 {
 	//remove a triangle from the mesh
 
-	if (index < 0 || index >= (int)Triangles[submesh].triangles.size())
+	if (index < 0 || index >= (int)Submeshes[submesh].Triangles.triangles.size())
 		return;
 
-	Triangles[submesh].triangles.erase(Triangles[submesh].triangles.begin() + index);
+	Submeshes[submesh].Triangles.triangles.erase(Submeshes[submesh].Triangles.triangles.begin() + index);
 	prepared = false; //need to re-prepare mesh
 }
 
@@ -1095,36 +1079,26 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
-	Ogre::SubMesh *submesh = 0;
 	bool createnew = false;
 
 	//exit if trying to remove indices from non-existing submesh
 	if (index == -1 && add == false)
 		return -1;
 
-	//get existing submesh pointer
+	//create a new submesh if needed
 	if (index == -1)
 	{
+		index = (int)Submeshes.size();
+		Submeshes.resize(Submeshes.size() + 1);
 		createnew = true;
-
-		//create submesh
-		submesh = MeshWrapper->createSubMesh(GetSceneNode()->GetFullName() + ":" + ToString((int)Submeshes.size()));
-		submesh->useSharedVertices = true;
-		Submeshes.push_back(submesh);
-		index = (int)Submeshes.size() - 1;
-		Triangles.resize(Triangles.size() + 1);
 	}
-	else
-		submesh = Submeshes[index];
 
 	//delete submesh and exit if it's going to be emptied
 	if (createnew == false && add == false)
 	{
-		if (Triangles[index].triangles.size() - index_count <= 0)
+		if (Submeshes[index].Triangles.triangles.size() - index_count <= 0)
 		{
-			MeshWrapper->destroySubMesh(index);
 			Submeshes.erase(Submeshes.begin() + index);
-			Triangles.erase(Triangles.begin() + index);
 			delete [] indexarray;
 			return -1;
 		}
@@ -1134,10 +1108,10 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 	if (add == true)
 	{
 		//reserve triangles
-		int size = (int)Triangles[index].triangles.size() + index_count;
-		int capacity = (int)Triangles[index].triangles.capacity();
+		int size = (int)Submeshes[index].Triangles.triangles.size() + index_count;
+		int capacity = (int)Submeshes[index].Triangles.triangles.capacity();
 		if (capacity < size)
-			Triangles[index].triangles.reserve(capacity * 2);
+			Submeshes[index].Triangles.triangles.reserve(capacity * 2);
 
 		for (int i = 0; i < index_count; i++)
 			AddTriangle(index, indexarray[i]);
@@ -1145,9 +1119,9 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 	else
 	{
 		//remove triangles
-		for (int i = 0; i < (int)Triangles[index].triangles.size(); i++)
+		for (int i = 0; i < (int)Submeshes[index].Triangles.triangles.size(); i++)
 		{
-			Triangle &triangle = Triangles[index].triangles[i];
+			Triangle &triangle = Submeshes[index].Triangles.triangles[i];
 			for (int j = 0; j < index_count; j++)
 			{
 				if (triangle == indexarray[j])
@@ -1162,7 +1136,7 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 	}
 
 	//bind material
-	submesh->setMaterialName(ToString(sbs->InstanceNumber) + ":" + material);
+	Submeshes[index].Name = ToString(sbs->InstanceNumber) + ":" + material;
 
 	delete [] indexarray;
 	return index;
@@ -1172,149 +1146,7 @@ void MeshObject::Prepare(bool force)
 {
 	//prepare mesh object
 
-	//this function collects stored geometry and triangle data,
-	//uses those to build GPU vertex and index render buffers, and prepares the mesh for rendering
-	//geometry arrays must be populated correctly before this function is called
-
-	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
-	//each submesh represents a portion of the mesh that uses the same material
-
-	//exit if mesh has already been prepared
-	if (prepared == true && force == false)
-		return;
-
-	//clear vertex data and exit if there's no associated submesh or geometry data
-	if (Submeshes.size() == 0 || MeshGeometry.size() == 0)
-	{
-		if (MeshWrapper->sharedVertexData)
-			delete MeshWrapper->sharedVertexData;
-		MeshWrapper->sharedVertexData = new Ogre::VertexData();
-		return;
-	}
-
-	Ogre::Real radius = 0;
-	Ogre::AxisAlignedBox box;
-
-	//set up vertex buffer
-	if (MeshWrapper->sharedVertexData)
-		delete MeshWrapper->sharedVertexData;
-	Ogre::VertexData* data = new Ogre::VertexData();
-	MeshWrapper->sharedVertexData = data;
-	data->vertexCount = MeshGeometry.size();
-	Ogre::VertexDeclaration* decl = data->vertexDeclaration;
-
-	//set up vertex data elements
-	size_t offset = 0;
-	decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION); //vertices
-	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
-	decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_NORMAL); //normals
-	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
-	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
-
-	//set up vertex data arrays
-	unsigned int vsize = (unsigned int)MeshGeometry.size();
-	float *mVertexElements = new float[vsize * 8];
-
-	//populate array with vertex geometry
-	unsigned int loc = 0;
-	for (size_t i = 0; i < MeshGeometry.size(); i++)
-	{
-		mVertexElements[loc] = MeshGeometry[i].vertex.x;
-		mVertexElements[loc + 1] = MeshGeometry[i].vertex.y;
-		mVertexElements[loc + 2] = MeshGeometry[i].vertex.z;
-		mVertexElements[loc + 3] = MeshGeometry[i].normal.x;
-		mVertexElements[loc + 4] = MeshGeometry[i].normal.y;
-		mVertexElements[loc + 5] = MeshGeometry[i].normal.z;
-		mVertexElements[loc + 6] = -MeshGeometry[i].texel.x;
-		mVertexElements[loc + 7] = MeshGeometry[i].texel.y;
-		box.merge(MeshGeometry[i].vertex);
-		radius = std::max(radius, MeshGeometry[i].vertex.length());
-		loc += 8;
-	}
-
-	//create vertex hardware buffer
-	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vsize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-	vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
-	delete [] mVertexElements;
-
-	//bind vertex data to mesh
-	data->vertexBufferBinding->setBinding(0, vbuffer);
-
-	//process index arrays for each submesh
-	for (int index = 0; index < (int)Submeshes.size(); index++)
-	{
-		//get submesh object
-		Ogre::SubMesh *submesh = MeshWrapper->getSubMesh(index);
-
-		//set up index data array
-		unsigned int isize = (unsigned int)Triangles[index].triangles.size() * 3;
-		Ogre::HardwareIndexBufferSharedPtr ibuffer;
-
-		//if the number of vertices is greater than what can fit in a 16-bit index, use 32-bit indexes instead
-		if (vsize > 65536)
-		{
-			//set up a 32-bit index buffer
-			unsigned int *mIndices = new unsigned int[isize];
-
-			//create array of triangle indices
-			loc = 0;
-			for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
-			{
-				mIndices[loc] = Triangles[index].triangles[i].a;
-				mIndices[loc + 1] = Triangles[index].triangles[i].b;
-				mIndices[loc + 2] = Triangles[index].triangles[i].c;
-				loc += 3;
-			}
-
-			//create index hardware buffer
-			ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-
-			//write data to index buffer
-			ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
-			delete [] mIndices;
-		}
-		else
-		{
-			//set up a 16-bit index buffer
-			unsigned short *mIndices = new unsigned short[isize];
-
-			//create array of triangle indices
-			loc = 0;
-			for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
-			{
-				mIndices[loc] = Triangles[index].triangles[i].a;
-				mIndices[loc + 1] = Triangles[index].triangles[i].b;
-				mIndices[loc + 2] = Triangles[index].triangles[i].c;
-				loc += 3;
-			}
-
-			//create index hardware buffer
-			ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-
-			//write data to index buffer
-			ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
-			delete [] mIndices;
-		}
-
-		//delete any old index data
-		if (submesh->indexData)
-		{
-			delete submesh->indexData;
-			submesh->indexData = new Ogre::IndexData();
-		}
-
-		//bind index data to submesh
-		submesh->indexData->indexCount = isize;
-		submesh->indexData->indexBuffer = ibuffer;
-		submesh->indexData->indexStart = 0;
-	}
-
-	//mark ogre mesh as dirty to update changes
-	MeshWrapper->_dirtyState();
-
-	prepared = true;
-	MeshWrapper->_setBounds(box);
-	MeshWrapper->_setBoundingSphereRadius(radius);
+	MeshWrapper->Prepare(force);
 }
 
 int MeshObject::FindMatchingSubMesh(const std::string &material)
@@ -1322,11 +1154,9 @@ int MeshObject::FindMatchingSubMesh(const std::string &material)
 	//find a submesh with a matching material
 	//returns array index
 
-	std::string full_name = ToString(sbs->InstanceNumber) + ":" + material;
-
 	for (int i = 0; i < (int)Submeshes.size(); i++)
 	{
-		if (Submeshes[i]->getMaterialName() == full_name)
+		if (Submeshes[i].Name == material)
 			return i;
 	}
 	return -1;
@@ -1367,9 +1197,9 @@ void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
 		MeshGeometry.erase(MeshGeometry.begin() + deleted[i]);
 
 	//reindex triangle indices in all submeshes
-	for (int submesh = 0; submesh < (int)Triangles.size(); submesh++)
+	for (int submesh = 0; submesh < (int)Submeshes.size(); submesh++)
 	{
-		TriangleIndices *indiceslist = &Triangles[submesh];
+		TriangleIndices *indiceslist = &Submeshes[submesh].Triangles;
 
 		int elements_size = (int)indiceslist->triangles.size() * 3;
 		int *elements = new int[elements_size];
@@ -1485,7 +1315,7 @@ void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
 void MeshObject::EnableDebugView(bool value)
 {
 	//enable or disable debug view of mesh
-	Movable->setDebugDisplayEnabled(value);
+	MeshWrapper->EnableDebugView(value);
 }
 
 void MeshObject::CreateCollider()
@@ -1500,12 +1330,12 @@ void MeshObject::CreateCollider()
 		return;
 
 	//exit if mesh is empty
-	if (MeshGeometry.size() == 0 || Triangles.size() == 0)
+	if (MeshGeometry.size() == 0 || Submeshes.size() == 0)
 		return;
 
 	int tricount = 0;
-	for (int i = 0; i < (int)Triangles.size(); i++)
-		tricount += (int)Triangles[i].triangles.size();
+	for (int i = 0; i < (int)Submeshes.size(); i++)
+		tricount += (int)Submeshes[i].Triangles.triangles.size();
 
 	try
 	{
@@ -1517,9 +1347,9 @@ void MeshObject::CreateCollider()
 		//add vertices to shape
 		for (int i = 0; i < (int)Submeshes.size(); i++)
 		{
-			for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
+			for (int j = 0; j < (int)Submeshes[i].Triangles.triangles.size(); j++)
 			{
-				const Triangle &tri = Triangles[i].triangles[j];
+				const Triangle &tri = Submeshes[i].Triangles.triangles[j];
 
 				Ogre::Vector3 a = MeshGeometry[tri.a].vertex;
 				Ogre::Vector3 b = MeshGeometry[tri.b].vertex;
@@ -1643,15 +1473,14 @@ void MeshObject::CreateBoxCollider()
 		//initialize collider shape
 		float scale = GetSceneNode()->GetScale();
 
-		Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-		if (box.isNull() == true)
+		if (Bounds.isNull() == true)
 			return;
 
-		Ogre::Vector3 bounds = box.getHalfSize() * scale;
+		Ogre::Vector3 bounds = sbs->ToRemote(Bounds.getHalfSize()) * scale;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 
 		//create a new scene node for this collider, and center the collider accordingly
-		Ogre::Vector3 collider_center = sbs->ToLocal(box.getCenter());
+		Ogre::Vector3 collider_center = Bounds.getCenter();
 		if (!collider_node)
 			collider_node = GetSceneNode()->CreateChild(GetName() + " collider", collider_center);
 
@@ -1679,11 +1508,11 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 	Ogre::Vector3 position = sbs->ToRemote(origin - GetPosition());
 	Ogre::Ray ray (position, sbs->ToRemote(direction, false));
 
-	for (int i = 0; i < (int)Triangles.size(); i++)
+	for (int i = 0; i < (int)Submeshes.size(); i++)
 	{
-		for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
+		for (int j = 0; j < (int)Submeshes[i].Triangles.triangles.size(); j++)
 		{
-			const Triangle &tri = Triangles[i].triangles[j];
+			const Triangle &tri = Submeshes[i].Triangles.triangles[j];
 			Ogre::Vector3 tri_a, tri_b, tri_c;
 			tri_a = MeshGeometry[tri.a].vertex;
 			tri_b = MeshGeometry[tri.b].vertex;
@@ -1704,14 +1533,13 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 {
 	//determine if position 'pos' is inside the mesh's bounding box
 
-	Ogre::Vector3 position = sbs->ToRemote(pos - GetPosition());
+	Ogre::Vector3 position = pos - GetPosition();
 
-	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-	if (box.isNull() == true)
+	if (Bounds.isNull() == true)
 		return false;
 
-	Ogre::Vector3 min = box.getMinimum();
-	Ogre::Vector3 max = box.getMaximum();
+	Ogre::Vector3 min = Bounds.getMinimum();
+	Ogre::Vector3 max = Bounds.getMaximum();
 
 	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
 	{
@@ -1991,7 +1819,7 @@ void MeshObject::OnRotate(bool parent)
 
 int MeshObject::GetSubmeshCount()
 {
-	return MeshWrapper->getNumSubMeshes();
+	return (int)Submeshes.size();
 }
 
 bool MeshObject::IsVisible(Ogre::Camera *camera)
@@ -2002,20 +1830,17 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 		return false;
 
 	//if beyond the max render distance
-	if (Movable->isVisible() == false)
+	if (MeshWrapper->IsVisible() == false)
 		return false;
 
 	if (GetSubmeshCount() == 0)
 		return false;
 
-	//generate a globally-positioned axis-aligned box
-	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-
-	if (box.isNull() == true)
+	if (Bounds.isNull() == true)
 		return false;
 
-	Ogre::Vector3 min = box.getMinimum();
-	Ogre::Vector3 max = box.getMaximum();
+	Ogre::Vector3 min = sbs->ToRemote(Bounds.getMinimum());
+	Ogre::Vector3 max = sbs->ToRemote(Bounds.getMaximum());
 	Ogre::Vector3 pos = sbs->ToRemote(GetPosition());
 	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
 
@@ -2031,16 +1856,15 @@ Ogre::Vector3 MeshObject::GetOffset()
 {
 	//for models, return bounding box offset value, used to center the mesh
 
-	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-	box.scale(GetSceneNode()->GetRawSceneNode()->getScale());
+	Bounds.scale(GetSceneNode()->GetRawSceneNode()->getScale());
 
-	if (box.isNull() == true)
+	if (Bounds.isNull() == true)
 		return Ogre::Vector3::ZERO;
 
-	Ogre::Vector3 vec = box.getCenter();
-	Ogre::Vector3 min = box.getMinimum();
-	Ogre::Vector3 offset (vec.x, -box.getMinimum().y, -vec.z);
-	return sbs->ToLocal(offset);
+	Ogre::Vector3 vec = Bounds.getCenter();
+	Ogre::Vector3 min = Bounds.getMinimum();
+	Ogre::Vector3 offset (vec.x, -Bounds.getMinimum().y, -vec.z);
+	return offset;
 }
 
 void MeshObject::Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)

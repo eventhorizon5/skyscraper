@@ -28,14 +28,46 @@
 
 namespace SBS {
 
-class SBSIMPEXP DynamicMesh
+class SBSIMPEXP DynamicMesh : public ObjectBase
 {
 public:
 
-	DynamicMesh();
+	DynamicMesh(Object *parent, const std::string &name, float max_render_distance = 0);
 	~DynamicMesh();
 
+	Ogre::Entity* GetMovable();
+	void AssignSceneNode(SceneNode *node);
+	void Build();
+	void Enable(bool value);
+	void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
+	void EnableDebugView(bool value);
+	bool IsVisible();
+	void Prepare(bool force);
+
 private:
+
+	//raw mesh wrapper
+	struct SBSIMPEXP Mesh
+	{
+		Mesh(const std::string &name, SceneNode *node, float max_render_distance);
+		~Mesh();
+		void Enable(bool value);
+		void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
+		int FindMatchingSubMesh(const std::string &material);
+		Ogre::SubMesh* CreateSubMesh(const std::string &material);
+		void Prepare(bool force = false);
+		void EnableDebugView(bool value);
+		bool IsVisible();
+
+		Ogre::MeshPtr MeshWrapper; //mesh
+		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
+		Ogre::Entity *Movable;
+		SceneNode *node;
+	};
+
+	std::vector<Mesh> meshes;
+	SceneNode *node;
+	float render_distance;
 
 };
 

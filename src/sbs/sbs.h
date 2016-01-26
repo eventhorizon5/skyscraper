@@ -563,6 +563,9 @@ private:
 	//meshes
 	std::vector<MeshObject*> meshes;
 
+	//dynamic meshes
+	std::vector<DynamicMesh*> dynamic_meshes;
+
 	//global models
 	std::vector<Model*> ModelArray;
 

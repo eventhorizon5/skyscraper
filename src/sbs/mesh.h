@@ -26,6 +26,7 @@
 #ifndef _SBS_MESH_H
 #define _SBS_MESH_H
 
+#include "dynamicmesh.h"
 #include "triangle.h"
 
 namespace SBS {
@@ -65,6 +66,11 @@ public:
 		//per-submesh triangle indices
 		std::vector<Triangle> triangles; //triangle data, in A B C values
 		Ogre::IndexData *databuffer; //used to find the related submesh
+	};
+	struct SubMesh
+	{
+		TriangleIndices Triangles; //per-submesh triangles
+		std::string Name;
 	};
 
 	MeshObject(Object* parent, const std::string &name, const std::string &filename = "", float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
@@ -112,15 +118,15 @@ public:
 	void Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	void CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors);
 
-	Ogre::MeshPtr MeshWrapper; //mesh
+	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
-	std::vector<TriangleIndices> Triangles; //per-submesh triangles
-	std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
+	std::vector<SubMesh> Submeshes; //submeshes
 	std::vector<WallObject*> Walls; //associated wall (polygon container) objects
 
 	SceneNode *collider_node; //collider scenenode for box collider offsets
 
-	Ogre::Entity *Movable;
+	Ogre::AxisAlignedBox Bounds; //mesh bounds
+
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;
 
