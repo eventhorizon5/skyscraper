@@ -1726,9 +1726,12 @@ void Elevator::MoveElevatorToFloor()
 		float tmppos = JerkPos * (AccelJerk / DecelJerk);
 		if ((Direction == -1 && ElevatorRate <= tmppos) || (Direction == 1 && ElevatorRate >= tmppos))
 		{
-			if (tmpDecelJerk == 0)
-				tmpDecelJerk = DecelJerk * (tmppos / ElevatorRate);
-			JerkRate -= tmpDecelJerk * sbs->delta;
+			if (ElevatorRate != 0)
+			{
+				if (tmpDecelJerk == 0)
+					tmpDecelJerk = DecelJerk * (tmppos / ElevatorRate);
+				JerkRate -= tmpDecelJerk * sbs->delta;
+			}
 		}
 		//prevent jerkrate from reaching 0
 		if (JerkRate < 0)

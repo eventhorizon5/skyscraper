@@ -523,6 +523,10 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	SBS_PROFILE("Camera::ClickedObject");
 	int width = MainCamera->getViewport()->getActualWidth();
 	int height = MainCamera->getViewport()->getActualHeight();
+
+	if (width == 0 || height == 0)
+		return;
+
 	float x = (float)mouse_x / (float)width;
 	float y = (float)mouse_y / (float)height;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
@@ -1018,7 +1022,8 @@ void Camera::SetFOVAngle(float angle)
 	if (angle > 0 && angle < 179.63)
 	{
 		float ratio = MainCamera->getAspectRatio();
-		MainCamera->setFOVy(Ogre::Degree(angle / ratio));
+		if (ratio > 0)
+			MainCamera->setFOVy(Ogre::Degree(angle / ratio));
 	}
 }
 
