@@ -713,7 +713,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	std::string material = texture;
 	TrimString(material);
 
-	if (submesh < 0 || submesh > (int)Submeshes.size() - 1)
+	if (submesh < 0 || submesh >= (int)Submeshes.size())
 		return false;
 
 	//exit if old and new materials are the same
@@ -815,7 +815,6 @@ void MeshObject::AddVertex(Geometry &vertex_geom)
 {
 	//add a vertex to the mesh
 	MeshGeometry.push_back(vertex_geom);
-	Bounds.merge(vertex_geom.vertex);
 	prepared = false; //need to re-prepare mesh
 }
 
@@ -1146,6 +1145,11 @@ void MeshObject::Prepare(bool force)
 {
 	//prepare mesh object
 
+	//set up bounding box
+	for (int i = 0; i < (int)MeshGeometry.size(); i++)
+		Bounds.merge(MeshGeometry[i].vertex);
+
+	//prepare dynamic mesh
 	MeshWrapper->Prepare(force);
 }
 
