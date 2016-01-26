@@ -360,7 +360,8 @@ float Sound::GetPlayPosition()
 	unsigned int position;
 	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
 
-	Percent = float(position / length);
+	if (length > 0)
+		Percent = float(position / length);
 	return Percent;
 }
 

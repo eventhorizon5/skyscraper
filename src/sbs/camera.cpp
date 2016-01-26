@@ -1018,7 +1018,8 @@ void Camera::SetFOVAngle(float angle)
 	if (angle > 0 && angle < 179.63)
 	{
 		float ratio = MainCamera->getAspectRatio();
-		MainCamera->setFOVy(Ogre::Degree(angle / ratio));
+		if (ratio > 0)
+			MainCamera->setFOVy(Ogre::Degree(angle / ratio));
 	}
 }
 
