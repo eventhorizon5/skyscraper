@@ -41,7 +41,9 @@ DynamicMesh::DynamicMesh(Object* parent, const std::string &name, float max_rend
 
 DynamicMesh::~DynamicMesh()
 {
-
+	for (int i = 0; i < (int)meshes.size(); i++)
+		delete meshes[i];
+	meshes.clear();
 }
 
 Ogre::Entity* DynamicMesh::GetMovable()
@@ -49,7 +51,7 @@ Ogre::Entity* DynamicMesh::GetMovable()
 	if (meshes.empty())
 		return 0;
 
-	return meshes[0].Movable;
+	return meshes[0]->Movable;
 }
 
 void DynamicMesh::AssignSceneNode(SceneNode* node)
@@ -72,19 +74,19 @@ void DynamicMesh::Build()
 void DynamicMesh::Enable(bool value)
 {
 	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i].Enable(value);
+		meshes[i]->Enable(value);
 }
 
 void DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)
 {
 	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i].ChangeTexture(old_texture, new_texture);
+		meshes[i]->ChangeTexture(old_texture, new_texture);
 }
 
 void DynamicMesh::EnableDebugView(bool value)
 {
 	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i].EnableDebugView(value);
+		meshes[i]->EnableDebugView(value);
 }
 
 bool DynamicMesh::IsVisible()
@@ -92,13 +94,13 @@ bool DynamicMesh::IsVisible()
 	if (meshes.empty() == true)
 		return false;
 
-	return meshes[0].IsVisible();
+	return meshes[0]->IsVisible();
 }
 
 void DynamicMesh::Prepare(bool force)
 {
 	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i].Prepare(force);
+		meshes[i]->Prepare(force);
 }
 
 DynamicMesh::Mesh::Mesh(const std::string &name, SceneNode *node, float max_render_distance)

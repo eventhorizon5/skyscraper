@@ -65,7 +65,7 @@ private:
 		SceneNode *node;
 	};
 
-	std::vector<Mesh> meshes;
+	std::vector<Mesh*> meshes;
 	SceneNode *node;
 	float render_distance;
 
