@@ -71,7 +71,7 @@ Shaft::Shaft(Object *parent, int number, float CenterX, float CenterZ, int start
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->Altitude, CenterZ);
 
-	dynamic_mesh = new DynamicMesh(this, name);
+	dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
 
 	ShaftArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);

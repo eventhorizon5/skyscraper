@@ -32,11 +32,10 @@ class SBSIMPEXP DynamicMesh : public ObjectBase
 {
 public:
 
-	DynamicMesh(Object *parent, const std::string &name, float max_render_distance = 0);
+	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, float max_render_distance = 0);
 	~DynamicMesh();
 
 	Ogre::Entity* GetMovable();
-	void AssignSceneNode(SceneNode *node);
 	void Build();
 	void Enable(bool value);
 	void ChangeTexture(const std::string &old_texture, const std::string &new_texture);

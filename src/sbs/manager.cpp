@@ -35,7 +35,7 @@ FloorManager::FloorManager(Object* parent) : ObjectBase(parent)
 {
 	get_result = 0;
 	get_number = 0;
-	dynamic_mesh = new DynamicMesh(this, "Floor Manager");
+	dynamic_mesh = new DynamicMesh(this, sbs->GetSceneNode(), "Floor Manager");
 }
 
 FloorManager::~FloorManager()

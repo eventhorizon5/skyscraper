@@ -518,7 +518,7 @@ Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
 	return Ogre::Plane(normal, det);
 }
 
-MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* dyn_mesh, const std::string &filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass) : Object(parent)
+MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Mesh", name, true);
@@ -536,6 +536,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* dyn
 	collider_node = 0;
 	Filename = filename;
 	remove_on_disable = true;
+	wrapper_selfcreate = false;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -548,28 +549,27 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* dyn
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
 
+	if (wrapper == 0)
+	{
+		wrapper_selfcreate = true;
+		MeshWrapper = new DynamicMesh(this, GetSceneNode(), Name, max_render_distance);
+	}
+	else
+		MeshWrapper = wrapper;
+
 	if (filename == "")
 	{
 		//create mesh
-		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(Name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		//MeshWrapper = Ogre::MeshManager::getSingleton().createManual(Name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	}
-	else
+	/*else
 	{
 		//load mesh from a file
 		bool result = LoadFromFile(filename, collidermesh);
 
 		if (result == false)
 			return;
-	}
-
-	//exit if mesh wrapper wasn't created
-	if (!MeshWrapper.get())
-		return;
-
-	//create and attach movable
-	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
-	//Movable->setCastShadows(true);
-	GetSceneNode()->AttachObject(Movable);
+	}*/
 
 	//rescale mesh
 	//file-loaded meshes need to be converted to a remote scale, since they're not pre-scaled
@@ -577,10 +577,6 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* dyn
 		GetSceneNode()->SetScale(scale_multiplier);
 	else
 		GetSceneNode()->SetScale(sbs->ToRemote(scale_multiplier));
-
-	//set maximum render distance
-	if (max_render_distance > 0)
-		Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
 
 	sbs->AddMeshHandle(this);
 
@@ -1003,18 +999,9 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	//create submesh and set material
 	ProcessSubMesh(triangles, material, true);
 
-	MeshWrapper->load();
-
 	//recreate colliders if specified
 	if (sbs->DeleteColliders == true)
 		DeleteCollider();
-
-	//if a mesh was attached and was empty, it needs to be reattached to be visible
-	if (count == 0 && IsEnabled() == true)
-	{
-		GetSceneNode()->DetachObject(Movable);
-		GetSceneNode()->AttachObject(Movable);
-	}
 
 	if (sbs->RenderOnStartup == true)
 		Prepare();
@@ -1957,7 +1944,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 	//load model
 	try
 	{
-		MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
+		//MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
 	}
 	catch (Ogre::Exception &e)
 	{

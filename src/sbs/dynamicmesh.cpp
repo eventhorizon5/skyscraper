@@ -32,10 +32,10 @@
 
 namespace SBS {
 
-DynamicMesh::DynamicMesh(Object* parent, const std::string &name, float max_render_distance) : ObjectBase(parent)
+DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &name, float max_render_distance) : ObjectBase(parent)
 {
 	SetName(name);
-	node = 0;
+	this->node = node;
 	render_distance = max_render_distance;
 }
 
@@ -54,21 +54,21 @@ Ogre::Entity* DynamicMesh::GetMovable()
 	return meshes[0]->Movable;
 }
 
-void DynamicMesh::AssignSceneNode(SceneNode* node)
-{
-	if (!node)
-		return;
-
-	if (!this->node)
-		this->node = node;
-}
-
 void DynamicMesh::Build()
 {
 	if (!node)
 		return;
 
+	//MeshWrapper->load();
+
 	//for (int i = 0; i < (int)meshes.size(); i++)
+
+	//if a mesh was attached and was empty, it needs to be reattached to be visible
+	/*if (count == 0 && IsEnabled() == true)
+	{
+		GetSceneNode()->DetachObject(Movable);
+		GetSceneNode()->AttachObject(Movable);
+	}*/
 }
 
 void DynamicMesh::Enable(bool value)
@@ -106,9 +106,14 @@ void DynamicMesh::Prepare(bool force)
 DynamicMesh::Mesh::Mesh(const std::string &name, SceneNode *node, float max_render_distance)
 {
 	MeshWrapper = Ogre::MeshManager::getSingleton().createManual(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
+	//create and attach movable
 	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
+	//Movable->setCastShadows(true);
 	node->AttachObject(Movable);
 	this->node = node;
+
+	//set maximum render distance
 	Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
 }
 
@@ -182,7 +187,7 @@ void DynamicMesh::Mesh::Prepare(bool force)
 
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
-
+/*
 	//exit if mesh has already been prepared
 	if (prepared == true && force == false)
 		return;
@@ -318,7 +323,7 @@ void DynamicMesh::Mesh::Prepare(bool force)
 
 	prepared = true;
 	MeshWrapper->_setBounds(box);
-	MeshWrapper->_setBoundingSphereRadius(radius);
+	MeshWrapper->_setBoundingSphereRadius(radius);*/
 }
 
 void DynamicMesh::Mesh::EnableDebugView(bool value)

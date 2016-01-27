@@ -73,7 +73,7 @@ public:
 		std::string Name;
 	};
 
-	MeshObject(Object* parent, const std::string &name, DynamicMesh* dyn_mesh = 0, const std::string &filename = "", float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
+	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~MeshObject();
 	void Enable(bool value);
 	void EnableCollider(bool value);
@@ -137,6 +137,7 @@ private:
 	bool is_physical;
 	float restitution, friction, mass;
 	bool prepared;
+	bool wrapper_selfcreate;
 	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2);
 	bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
 };

@@ -59,7 +59,7 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->GetBase(), CenterZ);
 
-	dynamic_mesh = new DynamicMesh(this, name);
+	dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
 
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
