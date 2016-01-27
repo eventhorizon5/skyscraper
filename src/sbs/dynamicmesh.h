@@ -47,10 +47,13 @@ public:
 	bool LoadFromFile(const std::string &filename, const std::string &path);
 	void AddClient(MeshObject *mesh);
 	void RemoveClient(MeshObject *mesh);
+	MeshObject* GetClient(int number);
 	int GetClientCount() { return (int)clients.size(); }
 	void NeedsUpdate();
-	int CalculateSubMeshCount();
-	int CalculateVertexCount();
+	int GetMaterials(std::vector<std::string> &materials);
+	unsigned int GetVertexCount();
+	unsigned int GetTriangleCount(const std::string &material);
+	unsigned int GetIndexOffset(MeshObject *client);
 
 private:
 

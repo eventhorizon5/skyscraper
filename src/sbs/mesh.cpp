@@ -1974,4 +1974,17 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 	return true;
 }
 
+unsigned int MeshObject::GetVertexCount()
+{
+	return (int)MeshGeometry.size();
+}
+
+unsigned int MeshObject::GetTriangleCount(int submesh)
+{
+	if (submesh < 0 || submesh >= (int)Submeshes.size())
+		return 0;
+
+	return Submeshes[submesh].Triangles.triangles.size();
+}
+
 }

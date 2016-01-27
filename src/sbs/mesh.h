@@ -117,6 +117,8 @@ public:
 	Ogre::Vector3 GetOffset();
 	void Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	void CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors);
+	unsigned int GetVertexCount();
+	unsigned int GetTriangleCount(int submesh);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container

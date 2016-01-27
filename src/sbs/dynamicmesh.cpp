@@ -164,6 +164,14 @@ void DynamicMesh::RemoveClient(MeshObject *mesh)
 	}
 }
 
+MeshObject* DynamicMesh::GetClient(int number)
+{
+	if (number < 0 || number >= (int)clients.size())
+		return 0;
+
+	return clients[number];
+}
+
 void DynamicMesh::NeedsUpdate()
 {
 	if (prepared == false)
@@ -173,11 +181,9 @@ void DynamicMesh::NeedsUpdate()
 	Prepare();
 }
 
-int DynamicMesh::CalculateSubMeshCount()
+int DynamicMesh::GetMaterials(std::vector<std::string> &materials)
 {
 	//calculate the total number of materials used by all clients
-
-	std::vector<std::string> materials;
 
 	//for each client
 	for (int i = 0; i < (int)clients.size(); i++)
@@ -206,18 +212,55 @@ int DynamicMesh::CalculateSubMeshCount()
 	return (int)materials.size();
 }
 
-int DynamicMesh::CalculateVertexCount()
+unsigned int DynamicMesh::GetVertexCount()
 {
 	//calculate combined vertex count for all clients
 
-	int total = 0;
+	unsigned int total = 0;
 
 	for (int i = 0; i < (int)clients.size(); i++)
 	{
-		total += (int)clients[i]->MeshGeometry.size();
+		total += clients[i]->GetVertexCount();
 	}
 
 	return total;
+}
+
+unsigned int DynamicMesh::GetTriangleCount(const std::string &material)
+{
+	//calculate combined triangle count for all clients
+
+	unsigned int total = 0;
+
+	for (int i = 0; i < (int)clients.size(); i++)
+	{
+		int index = clients[i]->FindMatchingSubMesh(material);
+
+		if (index >= 0)
+			total += clients[i]->GetTriangleCount(index);
+	}
+
+	return total;
+}
+
+unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
+{
+	//get vertex index offset of specific client mesh
+	//if multiple geometry sets are combined together, each set has a starting index number
+
+	unsigned int index = 0;
+
+	for (int i = 0; i < (int)clients.size(); i++)
+	{
+		//if found, return current index value
+		if (clients[i] == client)
+			return index;
+
+		//if not found, increment by client's vertex count
+		index += clients[i]->GetVertexCount();
+	}
+
+	return index;
 }
 
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
@@ -225,7 +268,6 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	Parent = parent;
 	sbs = Parent->GetRoot();
 	this->node = node;
-	prepared = false;
 
 	if (filename == "")
 	{
@@ -325,15 +367,20 @@ void DynamicMesh::Mesh::Prepare()
 {
 	//prepare mesh object
 
-	//this function collects stored geometry and triangle data,
-	//uses those to build GPU vertex and index render buffers, and prepares the mesh for rendering
+	//this function collects stored geometry and triangle data from all associated client meshes,
+	//uses those to build GPU vertex and index render buffers, and prepares the dynamic mesh for rendering
 	//geometry arrays must be populated correctly before this function is called
 
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
 
+	unsigned int vertex_count = Parent->GetVertexCount();
+
+	std::vector<std::string> materials;
+	int submesh_count = Parent->GetMaterials(materials);
+
 	//clear vertex data and exit if there's no associated submesh or geometry data
-	/*if (Submeshes.size() == 0 || MeshGeometry.size() == 0)
+	if (submesh_count == 0 || vertex_count == 0)
 	{
 		if (MeshWrapper->sharedVertexData)
 			delete MeshWrapper->sharedVertexData;
@@ -349,7 +396,7 @@ void DynamicMesh::Mesh::Prepare()
 		delete MeshWrapper->sharedVertexData;
 	Ogre::VertexData* data = new Ogre::VertexData();
 	MeshWrapper->sharedVertexData = data;
-	data->vertexCount = MeshGeometry.size();
+	data->vertexCount = vertex_count;
 	Ogre::VertexDeclaration* decl = data->vertexDeclaration;
 
 	//set up vertex data elements
@@ -361,24 +408,38 @@ void DynamicMesh::Mesh::Prepare()
 	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
 
 	//set up vertex data arrays
-	unsigned int vsize = (unsigned int)MeshGeometry.size();
+	unsigned int vsize = (unsigned int)vertex_count;
 	float *mVertexElements = new float[vsize * 8];
 
-	//populate array with vertex geometry
+	//populate array with vertex geometry from each client mesh
 	unsigned int loc = 0;
-	for (size_t i = 0; i < MeshGeometry.size(); i++)
+
+	for (int num = 0; num < Parent->GetClientCount(); num++)
 	{
-		mVertexElements[loc] = MeshGeometry[i].vertex.x;
-		mVertexElements[loc + 1] = MeshGeometry[i].vertex.y;
-		mVertexElements[loc + 2] = MeshGeometry[i].vertex.z;
-		mVertexElements[loc + 3] = MeshGeometry[i].normal.x;
-		mVertexElements[loc + 4] = MeshGeometry[i].normal.y;
-		mVertexElements[loc + 5] = MeshGeometry[i].normal.z;
-		mVertexElements[loc + 6] = -MeshGeometry[i].texel.x;
-		mVertexElements[loc + 7] = MeshGeometry[i].texel.y;
-		box.merge(MeshGeometry[i].vertex);
-		radius = std::max(radius, MeshGeometry[i].vertex.length());
-		loc += 8;
+		MeshObject *mesh = Parent->GetClient(num);
+
+		//get mesh's offset of associated scene node
+		Ogre::Vector3 offset = mesh->GetPosition() - node->GetPosition();
+
+		//fill array with mesh's geometry data
+		for (size_t i = 0; i < mesh->GetVertexCount(); i++)
+		{
+			//make mesh's vertex relative to this scene node
+			Ogre::Vector3 vertex = (node->GetOrientation().Inverse() * mesh->MeshGeometry[i].vertex) + offset;
+
+			//add elements to array
+			mVertexElements[loc] = vertex.x;
+			mVertexElements[loc + 1] = vertex.y;
+			mVertexElements[loc + 2] = vertex.z;
+			mVertexElements[loc + 3] = mesh->MeshGeometry[i].normal.x;
+			mVertexElements[loc + 4] = mesh->MeshGeometry[i].normal.y;
+			mVertexElements[loc + 5] = mesh->MeshGeometry[i].normal.z;
+			mVertexElements[loc + 6] = -mesh->MeshGeometry[i].texel.x;
+			mVertexElements[loc + 7] = mesh->MeshGeometry[i].texel.y;
+			box.merge(mesh->MeshGeometry[i].vertex);
+			radius = std::max(radius, mesh->MeshGeometry[i].vertex.length());
+			loc += 8;
+		}
 	}
 
 	//create vertex hardware buffer
@@ -390,13 +451,27 @@ void DynamicMesh::Mesh::Prepare()
 	data->vertexBufferBinding->setBinding(0, vbuffer);
 
 	//process index arrays for each submesh
-	for (int index = 0; index < (int)Submeshes.size(); index++)
+	for (int index = 0; index < submesh_count; index++)
 	{
-		//get submesh object
-		Ogre::SubMesh *submesh = MeshWrapper->getSubMesh(index);
+		std::string material = materials[index];
+		Ogre::SubMesh *submesh = 0;
+		unsigned int triangle_count = Parent->GetTriangleCount(material);
+
+		//skip if no triangles found
+		if (triangle_count == 0)
+			continue;
+
+		//get submesh index
+		int match = FindMatchingSubMesh(material);
+
+		//if a match is not found, create a new submesh
+		if (match == -1)
+			submesh = CreateSubMesh(material);
+		else
+			submesh = Submeshes[match];
 
 		//set up index data array
-		unsigned int isize = (unsigned int)Triangles[index].triangles.size() * 3;
+		unsigned int isize = triangle_count * 3;
 		Ogre::HardwareIndexBufferSharedPtr ibuffer;
 
 		//if the number of vertices is greater than what can fit in a 16-bit index, use 32-bit indexes instead
@@ -407,12 +482,25 @@ void DynamicMesh::Mesh::Prepare()
 
 			//create array of triangle indices
 			loc = 0;
-			for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
+			for (int num = 0; num < Parent->GetClientCount(); num++)
 			{
-				mIndices[loc] = Triangles[index].triangles[i].a;
-				mIndices[loc + 1] = Triangles[index].triangles[i].b;
-				mIndices[loc + 2] = Triangles[index].triangles[i].c;
-				loc += 3;
+				MeshObject *mesh = Parent->GetClient(num);
+				int index = mesh->FindMatchingSubMesh(material);
+
+				if (index >= 0)
+				{
+					//get index offset of mesh
+					unsigned int offset = Parent->GetIndexOffset(mesh);
+
+					//add mesh's triangles to array and adjust for offset
+					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
+					{
+						mIndices[loc] = mesh->Submeshes[index].Triangles.triangles[i].a + offset;
+						mIndices[loc + 1] = mesh->Submeshes[index].Triangles.triangles[i].b + offset;
+						mIndices[loc + 2] = mesh->Submeshes[index].Triangles.triangles[i].c + offset;
+						loc += 3;
+					}
+				}
 			}
 
 			//create index hardware buffer
@@ -429,12 +517,25 @@ void DynamicMesh::Mesh::Prepare()
 
 			//create array of triangle indices
 			loc = 0;
-			for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
+			for (int num = 0; num < Parent->GetClientCount(); num++)
 			{
-				mIndices[loc] = Triangles[index].triangles[i].a;
-				mIndices[loc + 1] = Triangles[index].triangles[i].b;
-				mIndices[loc + 2] = Triangles[index].triangles[i].c;
-				loc += 3;
+				MeshObject *mesh = Parent->GetClient(num);
+				int index = mesh->FindMatchingSubMesh(material);
+
+				if (index >= 0)
+				{
+					//get index offset of mesh
+					unsigned int offset = Parent->GetIndexOffset(mesh);
+
+					//add mesh's triangles to array and adjust for offset
+					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
+					{
+						mIndices[loc] = mesh->Submeshes[index].Triangles.triangles[i].a + offset;
+						mIndices[loc + 1] = mesh->Submeshes[index].Triangles.triangles[i].b + offset;
+						mIndices[loc + 2] = mesh->Submeshes[index].Triangles.triangles[i].c + offset;
+						loc += 3;
+					}
+				}
 			}
 
 			//create index hardware buffer
@@ -462,7 +563,7 @@ void DynamicMesh::Mesh::Prepare()
 	MeshWrapper->_dirtyState();
 
 	MeshWrapper->_setBounds(box);
-	MeshWrapper->_setBoundingSphereRadius(radius);*/
+	MeshWrapper->_setBoundingSphereRadius(radius);
 }
 
 void DynamicMesh::Mesh::EnableDebugView(bool value)
