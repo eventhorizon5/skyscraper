@@ -58,7 +58,7 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	Mesh* mesh = new Mesh(this, "", node, render_distance, filename, path);
 
 	//if load failed
-	if (!mesh->MeshWrapper)
+	if (mesh->MeshWrapper.isNull())
 	{
 		delete mesh;
 		return false;
@@ -166,7 +166,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 DynamicMesh::Mesh::~Mesh()
 {
-	if (MeshWrapper)
+	if (MeshWrapper.get())
 		Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
 	MeshWrapper.setNull();
 
