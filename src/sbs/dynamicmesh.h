@@ -58,6 +58,7 @@ private:
 		void Prepare(bool force = false);
 		void EnableDebugView(bool value);
 		bool IsVisible();
+		int GetSubMeshCount() { return (int)Submeshes.size(); }
 
 		Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)

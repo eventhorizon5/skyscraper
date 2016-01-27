@@ -175,6 +175,11 @@ Shaft::~Shaft()
 		ShaftArray[i] = 0;
 	}
 
+	//delete dynamic mesh
+	if (dynamic_mesh)
+		delete dynamic_mesh;
+	dynamic_mesh = 0;
+
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
 		sbs->RemoveShaft(this);

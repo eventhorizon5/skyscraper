@@ -133,6 +133,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 {
 	Parent = parent;
 	sbs = Parent->GetRoot();
+	this->node = node;
 
 	if (filename == "")
 	{
@@ -158,7 +159,6 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
 	//Movable->setCastShadows(true);
 	node->AttachObject(Movable);
-	this->node = node;
 
 	//set maximum render distance
 	Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
@@ -181,6 +181,7 @@ DynamicMesh::Mesh::~Mesh()
 void DynamicMesh::Mesh::Enable(bool value)
 {
 	//attach or detach from scenegraph
+
 	if (value == false)
 		node->DetachObject(Movable);
 	else
@@ -191,8 +192,10 @@ void DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 {
 	int submesh = FindMatchingSubMesh(old_texture);
 
-	if (submesh >= 0)
-		MeshWrapper->getSubMesh(submesh)->setMaterialName(new_texture);
+	if (submesh == -1)
+		return;
+
+	MeshWrapper->getSubMesh(submesh)->setMaterialName(new_texture);
 
 	//apply changes (refresh mesh state)
 	MeshWrapper->_dirtyState();
@@ -215,7 +218,8 @@ int DynamicMesh::Mesh::FindMatchingSubMesh(const std::string &material)
 
 Ogre::SubMesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &material)
 {
-	Ogre::SubMesh *submesh = MeshWrapper->createSubMesh(node->GetFullName() + ":" + ToString((int)Submeshes.size()));
+	//create and add submesh
+	Ogre::SubMesh *submesh = MeshWrapper->createSubMesh(node->GetFullName() + ":" + ToString(GetSubMeshCount()));
 	submesh->useSharedVertices = true;
 	Submeshes.push_back(submesh);
 
@@ -382,6 +386,7 @@ void DynamicMesh::Mesh::EnableDebugView(bool value)
 
 bool DynamicMesh::Mesh::IsVisible()
 {
+	//returns true if this mesh is currently visible
 	return Movable->isVisible();
 }
 

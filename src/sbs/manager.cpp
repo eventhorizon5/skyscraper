@@ -53,6 +53,11 @@ FloorManager::~FloorManager()
 		}
 		Array[i].object = 0;
 	}
+
+	//delete dynamic mesh
+	if (dynamic_mesh)
+		delete dynamic_mesh;
+	dynamic_mesh = 0;
 }
 
 Floor* FloorManager::Create(int number)
