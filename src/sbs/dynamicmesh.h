@@ -49,6 +49,8 @@ public:
 	void RemoveClient(MeshObject *mesh);
 	int GetClientCount() { return (int)clients.size(); }
 	void NeedsUpdate();
+	int CalculateSubMeshCount();
+	int CalculateVertexCount();
 
 private:
 

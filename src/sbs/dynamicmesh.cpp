@@ -132,6 +132,8 @@ void DynamicMesh::Prepare()
 
 	for (int i = 0; i < (int)meshes.size(); i++)
 		meshes[i]->Prepare();
+
+	prepared = true;
 }
 
 void DynamicMesh::AddClient(MeshObject *mesh)
@@ -139,6 +141,13 @@ void DynamicMesh::AddClient(MeshObject *mesh)
 	//add a client mesh object to this dynamic mesh
 
 	clients.push_back(mesh);
+
+	//for now, create a single mesh if not created yet
+	if (meshes.empty() == true)
+	{
+		Mesh *mesh = new Mesh(this, GetName(), node, render_distance);
+		meshes.push_back(mesh);
+	}
 }
 
 void DynamicMesh::RemoveClient(MeshObject *mesh)
@@ -162,6 +171,53 @@ void DynamicMesh::NeedsUpdate()
 
 	prepared = false;
 	Prepare();
+}
+
+int DynamicMesh::CalculateSubMeshCount()
+{
+	//calculate the total number of materials used by all clients
+
+	std::vector<std::string> materials;
+
+	//for each client
+	for (int i = 0; i < (int)clients.size(); i++)
+	{
+		//for each client submesh entry
+		for (int j = 0; j < (int)clients[i]->Submeshes.size(); j++)
+		{
+			std::string material = clients[i]->Submeshes[j].Name;
+
+			//find material in current list
+			bool found = false;
+			for (int k = 0; k < (int)materials.size(); k++)
+			{
+				if (materials[k] == material)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (found == false)
+				materials.push_back(material);
+		}
+	}
+
+	return (int)materials.size();
+}
+
+int DynamicMesh::CalculateVertexCount()
+{
+	//calculate combined vertex count for all clients
+
+	int total = 0;
+
+	for (int i = 0; i < (int)clients.size(); i++)
+	{
+		total += (int)clients[i]->MeshGeometry.size();
+	}
+
+	return total;
 }
 
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
