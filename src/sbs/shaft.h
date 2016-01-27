@@ -123,6 +123,9 @@ private:
 
 	//Triggers
 	//std::vector<std::vector<Trigger*> > TriggerArray;
+
+	//dynamic mesh object
+	DynamicMesh *dynamic_mesh;
 };
 
 }

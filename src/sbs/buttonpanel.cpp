@@ -61,7 +61,7 @@ ButtonPanel::ButtonPanel(Elevator *elevator, int index, const std::string &textu
 	std::string name = "Button Panel " + ToString(this->elevator) + ":" + ToString(index);
 	TrimString(name);
 	SetName(name);
-	ButtonPanelMesh = new MeshObject(this, name, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ButtonPanelMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//create panel back
 	sbs->ResetTextureMapping(true);

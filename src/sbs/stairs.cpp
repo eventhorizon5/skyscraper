@@ -59,6 +59,8 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->GetBase(), CenterZ);
 
+	dynamic_mesh = new DynamicMesh(this, name);
+
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
 	DoorArray.resize(endfloor - startfloor + 1);
@@ -69,7 +71,7 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create stairwell meshes
-		StairArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i));
+		StairArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i), dynamic_mesh);
 		StairArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->GetBase());
 		EnableArray[i - startfloor] = true;
 	}

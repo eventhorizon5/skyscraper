@@ -56,7 +56,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	sound = 0;
 
 	//create object mesh
-	ControlMesh = new MeshObject(this, name2, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(this, name2, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	sbs->TexelOverride = true;
 	WallObject *wall;

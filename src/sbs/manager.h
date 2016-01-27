@@ -28,34 +28,10 @@
 
 namespace SBS {
 
-struct SBSIMPEXP FloorMap
-{
-	int number; //floor number
-	Floor *object; //floor object reference
-};
-
-struct SBSIMPEXP ElevatorMap
-{
-	int number; //elevator number
-	Elevator *object; //elevator object reference
-};
-
-struct SBSIMPEXP ShaftMap
-{
-	int number; //shaft number
-	Shaft *object; //shaft object reference
-};
-
-struct SBSIMPEXP StairsMap
-{
-	int number; //stairs number
-	Stairs *object; //stairs object reference
-};
-
 class SBSIMPEXP FloorManager : public ObjectBase
 {
 public:
-	FloorManager();
+	FloorManager(Object* parent);
 	~FloorManager();
 	Floor* Create(int number);
 	int GetCount(); //all floors including basements
@@ -65,7 +41,15 @@ public:
 	void EnableAll(bool value);
 
 private:
-	std::vector<FloorMap> Array; //floor object array
+	struct Map
+	{
+		int number; //floor number
+		Floor* object; //floor object reference
+	};
+
+	std::vector<Map> Array; //floor object array
+
+	DynamicMesh* dynamic_mesh; //dynamic mesh object
 
 	//function caching
 	Floor* get_result;
@@ -75,7 +59,7 @@ private:
 class SBSIMPEXP ElevatorManager : public ObjectBase
 {
 public:
-	ElevatorManager();
+	ElevatorManager(Object* parent);
 	~ElevatorManager();
 	Elevator* Create(int number);
 	int GetCount();
@@ -85,7 +69,13 @@ public:
 	void EnableAll(bool value);
 
 private:
-	std::vector<ElevatorMap> Array; //elevator object array
+	struct Map
+	{
+		int number; //elevator number
+		Elevator* object; //elevator object reference
+	};
+
+	std::vector<Map> Array; //elevator object array
 
 	//function caching
 	Elevator* get_result;
@@ -95,7 +85,7 @@ private:
 class SBSIMPEXP ShaftManager : public ObjectBase
 {
 public:
-	ShaftManager();
+	ShaftManager(Object* parent);
 	~ShaftManager();
 	Shaft* Create(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	int GetCount();
@@ -105,7 +95,13 @@ public:
 	void EnableAll(bool value);
 
 private:
-	std::vector<ShaftMap> Array; //shaft object array
+	struct Map
+	{
+		int number; //shaft number
+		Shaft* object; //shaft object reference
+	};
+
+	std::vector<Map> Array; //shaft object array
 
 	//function caching
 	Shaft* get_result;
@@ -115,7 +111,7 @@ private:
 class SBSIMPEXP StairsManager : public ObjectBase
 {
 public:
-	StairsManager();
+	StairsManager(Object* parent);
 	~StairsManager();
 	Stairs* Create(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	int GetCount();
@@ -125,7 +121,13 @@ public:
 	void EnableAll(bool value);
 
 private:
-	std::vector<StairsMap> Array; //stairs object array
+	struct Map
+	{
+		int number; //stairwell number
+		Stairs* object; //stairwell object reference
+	};
+
+	std::vector<Map> Array; //stairs object array
 
 	//function caching
 	Stairs* get_result;

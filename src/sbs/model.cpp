@@ -48,7 +48,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 		custom = false;
 
 	load_error = false;
-	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	mesh = new MeshObject(this, name, 0, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (!mesh->Movable)
 	{
 		load_error = true;

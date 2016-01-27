@@ -71,6 +71,8 @@ Shaft::Shaft(Object *parent, int number, float CenterX, float CenterZ, int start
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->Altitude, CenterZ);
 
+	dynamic_mesh = new DynamicMesh(this, name);
+
 	ShaftArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
 	DoorArray.resize(endfloor - startfloor + 1);
@@ -82,7 +84,7 @@ Shaft::Shaft(Object *parent, int number, float CenterX, float CenterZ, int start
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create shaft meshes
-		ShaftArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i));
+		ShaftArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i), dynamic_mesh);
 		ShaftArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->Altitude);
 		EnableArray[i - startfloor] = true;
 	}

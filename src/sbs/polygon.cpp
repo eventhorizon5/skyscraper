@@ -52,11 +52,10 @@ void Polygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 	tv = t_vector;
 }
 
-Ogre::SubMesh* Polygon::GetSubMesh()
+int Polygon::GetSubMesh()
 {
 	//return the submesh this polygon is in
-	int index = mesh->FindMatchingSubMesh(material);
-	return mesh->Submeshes[index];
+	return  mesh->FindMatchingSubMesh(material);
 }
 
 void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)

@@ -26,14 +26,16 @@
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
+#include "dynamicmesh.h"
 #include "manager.h"
 
 namespace SBS {
 
-FloorManager::FloorManager()
+FloorManager::FloorManager(Object* parent) : ObjectBase(parent)
 {
 	get_result = 0;
 	get_number = 0;
+	dynamic_mesh = new DynamicMesh(this, "Floor Manager");
 }
 
 FloorManager::~FloorManager()
@@ -57,9 +59,9 @@ Floor* FloorManager::Create(int number)
 	if (Get(number))
 		return 0;
 
-	FloorMap floor;
+	Map floor;
 	floor.number = number;
-	floor.object = new Floor(this, number);
+	floor.object = new Floor(sbs, number, dynamic_mesh);
 	Array.push_back(floor);
 
 	if (number < 0)
@@ -88,7 +90,7 @@ Floor* FloorManager::Get(int number)
 		//quick prediction
 		if (sbs->Basements + number < (int)Array.size() && sbs->Basements + number >= 0)
 		{
-			FloorMap floor = Array[sbs->Basements + number];
+			Map floor = Array[sbs->Basements + number];
 			if (floor.number == number)
 			{
 				if (floor.object)
@@ -181,7 +183,7 @@ void FloorManager::EnableAll(bool value)
 		Array[i].object->Enabled(value);
 }
 
-ElevatorManager::ElevatorManager()
+ElevatorManager::ElevatorManager(Object* parent) : ObjectBase(parent)
 {
 	get_result = 0;
 	get_number = 0;
@@ -208,9 +210,9 @@ Elevator* ElevatorManager::Create(int number)
 	if (Get(number))
 		return 0;
 
-	ElevatorMap elev;
+	Map elev;
 	elev.number = number;
-	elev.object = new Elevator(this, number);
+	elev.object = new Elevator(sbs, number);
 	Array.push_back(elev);
 	return elev.object;
 }
@@ -306,7 +308,7 @@ void ElevatorManager::EnableAll(bool value)
 	}
 }
 
-ShaftManager::ShaftManager()
+ShaftManager::ShaftManager(Object* parent) : ObjectBase(parent)
 {
 	get_result = 0;
 	get_number = 0;
@@ -360,9 +362,9 @@ Shaft* ShaftManager::Create(int number, float CenterX, float CenterZ, int _start
 		return 0;
 	}
 
-	ShaftMap shaft;
+	Map shaft;
 	shaft.number = number;
-	shaft.object = new Shaft(this, number, CenterX, CenterZ, _startfloor, _endfloor);
+	shaft.object = new Shaft(sbs, number, CenterX, CenterZ, _startfloor, _endfloor);
 	Array.push_back(shaft);
 	return shaft.object;
 }
@@ -450,7 +452,7 @@ void ShaftManager::EnableAll(bool value)
 		Array[i].object->EnableWholeShaft(value, true, true);
 }
 
-StairsManager::StairsManager()
+StairsManager::StairsManager(Object* parent) : ObjectBase(parent)
 {
 	get_result = 0;
 	get_number = 0;
@@ -503,9 +505,9 @@ Stairs* StairsManager::Create(int number, float CenterX, float CenterZ, int _sta
 		return 0;
 	}
 
-	StairsMap stairs;
+	Map stairs;
 	stairs.number = number;
-	stairs.object = new Stairs(this, number, CenterX, CenterZ, _startfloor, _endfloor);
+	stairs.object = new Stairs(sbs, number, CenterX, CenterZ, _startfloor, _endfloor);
 	Array.push_back(stairs);
 	return stairs.object;
 }

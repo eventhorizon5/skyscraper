@@ -260,10 +260,10 @@ void SBS::Initialize()
 	//Landscape->tricollider = false;
 
 	//create manager objects
-	floor_manager = new FloorManager();
-	elevator_manager = new ElevatorManager();
-	shaft_manager = new ShaftManager();
-	stairs_manager = new StairsManager();
+	floor_manager = new FloorManager(this);
+	elevator_manager = new ElevatorManager(this);
+	shaft_manager = new ShaftManager(this);
+	stairs_manager = new StairsManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -3087,17 +3087,6 @@ void SBS::DeleteMeshHandle(MeshObject* handle)
 			return;
 		}
 	}
-}
-
-MeshObject* SBS::FindMeshObject(Ogre::MeshPtr meshwrapper)
-{
-	//find a mesh object by searching for matching wrapper
-	for (int i = 0; i < (int)meshes.size(); i++)
-	{
-		if (meshes[i]->MeshWrapper == meshwrapper)
-			return meshes[i];
-	}
-	return 0;
 }
 
 MeshObject* SBS::FindMeshObject(const std::string &name)

@@ -71,15 +71,15 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	//create object mesh
 	std::string base = "Directional Indicator " + ToString(elevator) + ":" + ToString(floor);
 	SetName(base);
-	DirectionalMeshBack = new MeshObject(this, base + ":Back", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	DirectionalMeshBack = new MeshObject(this, base + ":Back", 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Single == false)
 	{
-		DirectionalMeshUp = new MeshObject(this, base + ":Up", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
-		DirectionalMeshDown = new MeshObject(this, base + ":Down", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMeshUp = new MeshObject(this, base + ":Up", 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMeshDown = new MeshObject(this, base + ":Down", 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 	else
-		DirectionalMesh = new MeshObject(this, base + ":Arrow", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMesh = new MeshObject(this, base + ":Arrow", 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	sbs->ResetTextureMapping(true);
 

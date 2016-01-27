@@ -105,6 +105,9 @@ private:
 	//Triggers
 	//std::vector<std::vector<Trigger*> > TriggerArray;
 
+	//dynamic mesh object
+	DynamicMesh *dynamic_mesh;
+
 	//cache objects for IsInStairwell()
 	Ogre::Vector3 lastposition;
 	bool lastcheckresult;

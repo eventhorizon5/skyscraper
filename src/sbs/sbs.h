@@ -288,7 +288,6 @@ public:
 	void DeleteMeshHandle(MeshObject* handle);
 	void Prepare(bool report = true);
 	Light* AddLight(const std::string &name, int type, const Ogre::Vector3 &position, const Ogre::Vector3 &direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
-	MeshObject* FindMeshObject(Ogre::MeshPtr meshwrapper);
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	void AddModel(Model *model);
@@ -393,6 +392,10 @@ public:
 	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
 	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
 	Model* GetModel(std::string name);
+	inline FloorManager* GetFloorManager() { return floor_manager; }
+	inline ElevatorManager* GetElevatorManager() { return elevator_manager; }
+	inline ShaftManager* GetShaftManager() { return shaft_manager; }
+	inline StairsManager* GetStairsManager() { return stairs_manager; }
 
 	//Meshes
 	MeshObject* Buildings;
@@ -536,9 +539,6 @@ private:
 
 	//meshes
 	std::vector<MeshObject*> meshes;
-
-	//dynamic meshes
-	std::vector<DynamicMesh*> dynamic_meshes;
 
 	//global models
 	std::vector<Model*> ModelArray;
