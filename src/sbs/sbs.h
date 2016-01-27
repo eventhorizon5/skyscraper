@@ -70,37 +70,12 @@ namespace OgreBulletCollisions {
 #include "person.h"
 #include "route.h"
 #include "scenenode.h"
+#include "manager.h"
 
 namespace SBS {
 
 extern bool SBSIMPEXP enable_profiling; //enable general profiling
 extern bool SBSIMPEXP enable_advanced_profiling;
-
-//global functions
-
-struct SBSIMPEXP FloorMap
-{
-	int number; //floor number
-	Floor *object; //floor object reference
-};
-
-struct SBSIMPEXP ElevatorMap
-{
-	int number; //elevator number
-	Elevator *object; //elevator object reference
-};
-
-struct SBSIMPEXP ShaftMap
-{
-	int number; //shaft number
-	Shaft *object; //shaft object reference
-};
-
-struct SBSIMPEXP StairsMap
-{
-	int number; //stairs number
-	Stairs *object; //stairs object reference
-};
 
 //SBS class
 class SBSIMPEXP SBS : public Object
@@ -215,8 +190,8 @@ public:
 	void EnableSkybox(bool value);
 	int GetFloorNumber(float altitude, int lastfloor = 0, bool checklastfloor = false);
 	float GetDistance(float x1, float x2, float z1, float z2);
-	Shaft* CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	Stairs* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Shaft* CreateShaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor);
+	Stairs* CreateStairwell(int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	std::string GetTextureMaterial(const std::string &name, bool &result, bool report = true, const std::string &polygon_name = "");
 	Elevator* NewElevator(int number);
 	Floor* NewFloor(int number);
@@ -479,11 +454,11 @@ private:
 	//global object array (only pointers to actual objects)
 	std::vector<Object*> ObjectArray;
 
-	//object arrays
-	std::vector<FloorMap> FloorArray; //floor object array
-	std::vector<ElevatorMap> ElevatorArray; //elevator object array
-	std::vector<ShaftMap> ShaftArray; //shaft object array
-	std::vector<StairsMap> StairsArray; //stairs object array
+	//manager objects
+	FloorManager* floor_manager;
+	ElevatorManager* elevator_manager;
+	ShaftManager* shaft_manager;
+	StairsManager* stairs_manager;
 
 	//action array
 	std::vector<Action*> ActionArray;
@@ -621,14 +596,6 @@ private:
 	std::vector<Control*> control_index;
 
 	//function caching
-	Floor* getfloor_result;
-	int getfloor_number;
-	Elevator* getelevator_result;
-	int getelevator_number;
-	Shaft* getshaft_result;
-	int getshaft_number;
-	Stairs* getstairs_result;
-	int getstairs_number;
 	std::string prev_material;
 
 	//file listing cache
