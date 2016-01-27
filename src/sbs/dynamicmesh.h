@@ -43,11 +43,12 @@ public:
 	void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 	void EnableDebugView(bool value);
 	bool IsVisible();
-	void Prepare(bool force);
+	void Prepare();
 	bool LoadFromFile(const std::string &filename, const std::string &path);
 	void AddClient(MeshObject *mesh);
 	void RemoveClient(MeshObject *mesh);
 	int GetClientCount() { return (int)clients.size(); }
+	void NeedsUpdate();
 
 private:
 
@@ -60,7 +61,7 @@ private:
 		void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
 		Ogre::SubMesh* CreateSubMesh(const std::string &material);
-		void Prepare(bool force = false);
+		void Prepare();
 		void EnableDebugView(bool value);
 		bool IsVisible();
 		int GetSubMeshCount() { return (int)Submeshes.size(); }
@@ -71,7 +72,6 @@ private:
 		SceneNode *node;
 		DynamicMesh *Parent;
 		::SBS::SBS *sbs;
-		bool prepared;
 	};
 
 	std::vector<Mesh*> meshes;

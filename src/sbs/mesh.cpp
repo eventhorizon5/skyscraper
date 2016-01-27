@@ -1136,12 +1136,15 @@ void MeshObject::Prepare(bool force)
 {
 	//prepare mesh object
 
+	if (prepared == true && force == false)
+		return;
+
 	//set up bounding box
 	for (int i = 0; i < (int)MeshGeometry.size(); i++)
 		Bounds.merge(MeshGeometry[i].vertex);
 
-	//prepare dynamic mesh
-	MeshWrapper->Prepare(force);
+	//update dynamic mesh
+	MeshWrapper->NeedsUpdate();
 }
 
 int MeshObject::FindMatchingSubMesh(const std::string &material)

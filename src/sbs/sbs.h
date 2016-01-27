@@ -396,6 +396,8 @@ public:
 	inline ElevatorManager* GetElevatorManager() { return elevator_manager; }
 	inline ShaftManager* GetShaftManager() { return shaft_manager; }
 	inline StairsManager* GetStairsManager() { return stairs_manager; }
+	void RegisterDynamicMesh(DynamicMesh *dynmesh);
+	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -461,6 +463,9 @@ private:
 	ElevatorManager* elevator_manager;
 	ShaftManager* shaft_manager;
 	StairsManager* stairs_manager;
+
+	//dynamic meshes
+	std::vector<DynamicMesh*> dynamic_meshes;
 
 	//action array
 	std::vector<Action*> ActionArray;
@@ -537,7 +542,7 @@ private:
 	//sound system
 	SoundSystem *soundsystem;
 
-	//meshes
+	//mesh objects
 	std::vector<MeshObject*> meshes;
 
 	//global models

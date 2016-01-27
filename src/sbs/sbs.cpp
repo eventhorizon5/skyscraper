@@ -3043,9 +3043,16 @@ void SBS::Prepare(bool report)
 		Report("Processing geometry...");
 	}
 
+	//prepare mesh objects
 	for (int i = 0; i < (int)meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
+	}
+
+	//process dynamic meshes
+	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
+	{
+		dynamic_meshes[i]->Prepare();
 	}
 
 	if (report == true)
@@ -4120,6 +4127,27 @@ Model* SBS::GetModel(std::string name)
 	}
 
 	return 0;
+}
+
+void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
+{
+	//register a dynamic mesh with the system
+
+	dynamic_meshes.push_back(dynmesh);
+}
+
+void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
+{
+	//unregister a dynamic mesh from the system
+
+	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
+	{
+		if (dynamic_meshes[i] == dynmesh)
+		{
+			dynamic_meshes.erase(dynamic_meshes.begin() + i);
+			return;
+		}
+	}
 }
 
 }

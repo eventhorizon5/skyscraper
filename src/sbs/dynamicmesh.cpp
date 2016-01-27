@@ -42,6 +42,7 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 	render_distance = max_render_distance;
 	file_model = false;
 	prepared = false;
+	sbs->RegisterDynamicMesh(this);
 }
 
 DynamicMesh::~DynamicMesh()
@@ -49,6 +50,9 @@ DynamicMesh::~DynamicMesh()
 	for (int i = 0; i < (int)meshes.size(); i++)
 		delete meshes[i];
 	meshes.clear();
+
+	if (sbs->FastDelete == false)
+		sbs->UnregisterDynamicMesh(this);
 }
 
 bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &path)
@@ -121,13 +125,13 @@ bool DynamicMesh::IsVisible()
 	return meshes[0]->IsVisible();
 }
 
-void DynamicMesh::Prepare(bool force)
+void DynamicMesh::Prepare()
 {
-	if (file_model == true)
+	if (file_model == true || prepared == true)
 		return;
 
 	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i]->Prepare(force);
+		meshes[i]->Prepare();
 }
 
 void DynamicMesh::AddClient(MeshObject *mesh)
@@ -149,6 +153,15 @@ void DynamicMesh::RemoveClient(MeshObject *mesh)
 			return;
 		}
 	}
+}
+
+void DynamicMesh::NeedsUpdate()
+{
+	if (prepared == false)
+		return;
+
+	prepared = false;
+	Prepare();
 }
 
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
@@ -252,7 +265,7 @@ Ogre::SubMesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &material)
 	return submesh;
 }
 
-void DynamicMesh::Mesh::Prepare(bool force)
+void DynamicMesh::Mesh::Prepare()
 {
 	//prepare mesh object
 
@@ -263,12 +276,8 @@ void DynamicMesh::Mesh::Prepare(bool force)
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
 
-	//exit if mesh has already been prepared
-	/*if (prepared == true && force == false)
-		return;
-
 	//clear vertex data and exit if there's no associated submesh or geometry data
-	if (Submeshes.size() == 0 || MeshGeometry.size() == 0)
+	/*if (Submeshes.size() == 0 || MeshGeometry.size() == 0)
 	{
 		if (MeshWrapper->sharedVertexData)
 			delete MeshWrapper->sharedVertexData;
@@ -396,7 +405,6 @@ void DynamicMesh::Mesh::Prepare(bool force)
 	//mark ogre mesh as dirty to update changes
 	MeshWrapper->_dirtyState();
 
-	prepared = true;
 	MeshWrapper->_setBounds(box);
 	MeshWrapper->_setBoundingSphereRadius(radius);*/
 }
