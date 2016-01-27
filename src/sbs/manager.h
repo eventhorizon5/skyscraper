@@ -60,7 +60,9 @@ public:
 	Floor* Create(int number);
 	int GetCount(); //all floors including basements
 	Floor* Get(int number);
+	Floor* GetIndex(int index);
 	void Remove(Floor *floor);
+	void EnableAll(bool value);
 
 private:
 	std::vector<FloorMap> Array; //floor object array
@@ -78,7 +80,9 @@ public:
 	Elevator* Create(int number);
 	int GetCount();
 	Elevator* Get(int number);
+	Elevator* GetIndex(int index);
 	void Remove(Elevator *elevator);
+	void EnableAll(bool value);
 
 private:
 	std::vector<ElevatorMap> Array; //elevator object array
@@ -96,7 +100,9 @@ public:
 	Shaft* Create(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	int GetCount();
 	Shaft* Get(int number);
+	Shaft* GetIndex(int index);
 	void Remove(Shaft *shaft);
+	void EnableAll(bool value);
 
 private:
 	std::vector<ShaftMap> Array; //shaft object array
@@ -114,7 +120,9 @@ public:
 	Stairs* Create(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	int GetCount();
 	Stairs* Get(int number);
+	Stairs* GetIndex(int index);
 	void Remove(Stairs *stairs);
+	void EnableAll(bool value);
 
 private:
 	std::vector<StairsMap> Array; //stairs object array

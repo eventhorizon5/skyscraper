@@ -144,6 +144,14 @@ Floor* FloorManager::Get(int number)
 	return 0;
 }
 
+Floor* FloorManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index];
+}
+
 void FloorManager::Remove(Floor *floor)
 {
 	//remove a floor (does not delete the object)
@@ -164,6 +172,13 @@ void FloorManager::Remove(Floor *floor)
 			return;
 		}
 	}
+}
+
+void FloorManager::EnableAll(bool value)
+{
+	//enable or disable all floors
+	for (int i = 0; i < (int)Array.size(); i++)
+		Array[i].object->Enabled(value);
 }
 
 ElevatorManager::ElevatorManager()
@@ -251,6 +266,14 @@ Elevator* ElevatorManager::Get(int number)
 	return 0;
 }
 
+Elevator* ElevatorManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index];
+}
+
 void ElevatorManager::Remove(Elevator *elevator)
 {
 	//remove an elevator (does not delete the object)
@@ -265,6 +288,21 @@ void ElevatorManager::Remove(Elevator *elevator)
 			get_number = 0;
 			return;
 		}
+	}
+}
+
+void ElevatorManager::EnableAll(bool value)
+{
+	//turn off elevators, if the related shaft is only partially shown
+
+	for (int i = 0; i < (int)Array.size(); i++)
+	{
+		Shaft *shaft = Array[i].object->GetShaft();
+
+		if (value == false)
+			value = shaft->ShowFullShaft;
+
+		Array[i].object->Enabled(value);
 	}
 }
 
@@ -380,6 +418,14 @@ Shaft* ShaftManager::Get(int number)
 	return 0;
 }
 
+Shaft* ShaftManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index];
+}
+
 void ShaftManager::Remove(Shaft *shaft)
 {
 	//remove a shaft (does not delete the object)
@@ -395,6 +441,13 @@ void ShaftManager::Remove(Shaft *shaft)
 			return;
 		}
 	}
+}
+
+void ShaftManager::EnableAll(bool value)
+{
+	//enable or disable all shafts
+	for (int i = 0; i < (int)Array.size(); i++)
+		Array[i].object->EnableWholeShaft(value, true, true);
 }
 
 StairsManager::StairsManager()
@@ -508,6 +561,14 @@ Stairs* StairsManager::Get(int number)
 	return 0;
 }
 
+Stairs* StairsManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index];
+}
+
 void StairsManager::Remove(Stairs *stairs)
 {
 	//remove a stairs object (does not delete the object)
@@ -523,6 +584,13 @@ void StairsManager::Remove(Stairs *stairs)
 			return;
 		}
 	}
+}
+
+void StairsManager::EnableAll(bool value)
+{
+	//enable or disable all stairwells
+	for (int i = 0; i < (int)Array.size(); i++)
+		Array[i].object->EnableWholeStairwell(value, true);
 }
 
 }

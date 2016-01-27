@@ -393,7 +393,6 @@ public:
 	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
 	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
 	Model* GetModel(std::string name);
-	void EnableElevators(bool value);
 
 	//Meshes
 	MeshObject* Buildings;

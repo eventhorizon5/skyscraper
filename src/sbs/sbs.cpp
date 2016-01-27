@@ -2669,9 +2669,9 @@ bool SBS::DeleteObject(Object *object)
 		Floor *floor = static_cast<Floor*>(object);
 
 		//make sure no shaft is dependent on this floor
-		for (int i = 0; i < (int)ShaftArray.size(); i++)
+		for (int i = 0; i < shaft_manager->GetCount(); i++)
 		{
-			Shaft *shaft = ShaftArray[i].object;
+			Shaft *shaft = shaft_manager->GetIndex(i);
 			if (shaft)
 			{
 				if (shaft->IsValidFloor(floor->Number) == true)
@@ -2680,9 +2680,9 @@ bool SBS::DeleteObject(Object *object)
 		}
 
 		//make sure no stairwell is dependent on this floor
-		for (int i = 0; i < (int)StairsArray.size(); i++)
+		for (int i = 0; i < stairs_manager->GetCount(); i++)
 		{
-			Stairs *stairs = StairsArray[i].object;
+			Stairs *stairs = stairs_manager->GetIndex(i);
 			if (stairs)
 			{
 				if (stairs->IsValidFloor(floor->Number) == true)
@@ -2718,9 +2718,9 @@ bool SBS::DeleteObject(Object *object)
 		Shaft *shaft = static_cast<Shaft*>(object);
 
 		//make sure no elevator is dependent on this shaft
-		for (int i = 0; i < (int)ElevatorArray.size(); i++)
+		for (int i = 0; i < elevator_manager->GetCount(); i++)
 		{
-			Elevator *elev = ElevatorArray[i].object;
+			Elevator *elev = elevator_manager->GetIndex(i);
 			if (elev)
 			{
 				if (elev->AssignedShaft == shaft->ShaftNumber)
@@ -3840,33 +3840,33 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 
 	if (type == "Floor")
 	{
-		for (int i = 0; i < (int)FloorArray.size(); i++)
+		for (int i = 0; i < floor_manager->GetCount(); i++)
 		{
-			if (FloorArray[i].object == static_cast<Floor*>(object))
+			if (floor_manager->GetIndex(i) == static_cast<Floor*>(object))
 				return true;
 		}
 	}
 	else if (type == "Elevator")
 	{
-		for (int i = 0; i < (int)ElevatorArray.size(); i++)
+		for (int i = 0; i < elevator_manager->GetCount(); i++)
 		{
-			if (ElevatorArray[i].object == static_cast<Elevator*>(object))
+			if (elevator_manager->GetIndex(i) == static_cast<Elevator*>(object))
 				return true;
 		}
 	}
 	else if (type == "Shaft")
 	{
-		for (int i = 0; i < (int)ShaftArray.size(); i++)
+		for (int i = 0; i < shaft_manager->GetCount(); i++)
 		{
-			if (ShaftArray[i].object == static_cast<Shaft*>(object))
+			if (shaft_manager->GetIndex(i) == static_cast<Shaft*>(object))
 				return true;
 		}
 	}
 	else if (type == "Stairs")
 	{
-		for (int i = 0; i < (int)StairsArray.size(); i++)
+		for (int i = 0; i < stairs_manager->GetCount(); i++)
 		{
-			if (StairsArray[i].object == static_cast<Stairs*>(object))
+			if (stairs_manager->GetIndex(i) == static_cast<Stairs*>(object))
 				return true;
 		}
 	}
@@ -4035,8 +4035,8 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 
 	if (floors == true)
 	{
-		for (int i = 0; i < (int)FloorArray.size(); i++)
-			FloorArray[i].object->Level->CutOutsideBounds(min, max, true, true);
+		for (int i = 0; i < floor_manager->GetCount(); i++)
+			floor_manager->GetIndex(i)->Level->CutOutsideBounds(min, max, true, true);
 	}
 }
 
@@ -4054,8 +4054,8 @@ void SBS::CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max
 
 	if (floors == true)
 	{
-		for (int i = 0; i < (int)FloorArray.size(); i++)
-			FloorArray[i].object->Level->Cut(min, max, true, true);
+		for (int i = 0; i < floor_manager->GetCount(); i++)
+			floor_manager->GetIndex(i)->Level->Cut(min, max, true, true);
 	}
 }
 
@@ -4083,20 +4083,11 @@ void SBS::ResetBuilding()
 	EnableExternal(true);
 	EnableSkybox(true);
 
-	//turn off floors
-	for (int i = 0; i < GetTotalFloors(); i++)
-		FloorArray[i].object->Enabled(false);
-
-	//turn off shafts
-	for (int i = 0; i < (int)ShaftArray.size(); i++)
-		ShaftArray[i].object->EnableWholeShaft(false, true, true);
-
-	//turn off stairwells
-	for (int i = 0; i < (int)StairsArray.size(); i++)
-		StairsArray[i].object->EnableWholeStairwell(false, true);
-
-	//turn off elevators
-	EnableElevators(false);
+	//turn off interior objects
+	floor_manager->EnableAll(false);
+	shaft_manager->EnableAll(false);
+	stairs_manager->EnableAll(false);
+	elevator_manager->EnableAll(false);
 }
 
 Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)
@@ -4140,21 +4131,6 @@ Model* SBS::GetModel(std::string name)
 	}
 
 	return 0;
-}
-
-void SBS::EnableElevators(bool value)
-{
-	//turn off elevators, if the related shaft is only partially shown
-
-	for (int i = 0; i < (int)ElevatorArray.size(); i++)
-	{
-		Shaft *shaft = ElevatorArray[i].object->GetShaft();
-
-		if (value == false)
-			value = shaft->ShowFullShaft;
-
-		ElevatorArray[i].object->Enabled(value);
-	}
 }
 
 }
