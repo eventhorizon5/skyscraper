@@ -495,9 +495,9 @@ void DynamicMesh::Mesh::Prepare()
 					//add mesh's triangles to array and adjust for offset
 					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
 					{
-						mIndices[loc] = mesh->Submeshes[index].Triangles.triangles[i].a + offset;
-						mIndices[loc + 1] = mesh->Submeshes[index].Triangles.triangles[i].b + offset;
-						mIndices[loc + 2] = mesh->Submeshes[index].Triangles.triangles[i].c + offset;
+						mIndices[loc] = mesh->Submeshes[index].Triangles[i].a + offset;
+						mIndices[loc + 1] = mesh->Submeshes[index].Triangles[i].b + offset;
+						mIndices[loc + 2] = mesh->Submeshes[index].Triangles[i].c + offset;
 						loc += 3;
 					}
 				}
@@ -530,9 +530,9 @@ void DynamicMesh::Mesh::Prepare()
 					//add mesh's triangles to array and adjust for offset
 					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
 					{
-						mIndices[loc] = mesh->Submeshes[index].Triangles.triangles[i].a + offset;
-						mIndices[loc + 1] = mesh->Submeshes[index].Triangles.triangles[i].b + offset;
-						mIndices[loc + 2] = mesh->Submeshes[index].Triangles.triangles[i].c + offset;
+						mIndices[loc] = mesh->Submeshes[index].Triangles[i].a + offset;
+						mIndices[loc + 1] = mesh->Submeshes[index].Triangles[i].b + offset;
+						mIndices[loc + 2] = mesh->Submeshes[index].Triangles[i].c + offset;
 						loc += 3;
 					}
 				}

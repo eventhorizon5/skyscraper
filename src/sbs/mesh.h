@@ -65,11 +65,10 @@ public:
 	{
 		//per-submesh triangle indices
 		std::vector<Triangle> triangles; //triangle data, in A B C values
-		Ogre::IndexData *databuffer; //used to find the related submesh
 	};
 	struct SubMesh
 	{
-		TriangleIndices Triangles; //per-submesh triangles
+		std::vector<Triangle> Triangles; //per-submesh triangles
 		std::string Name;
 	};
 
