@@ -57,12 +57,16 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 
 	Mesh* mesh = new Mesh(this, "", node, render_distance, filename, path);
 
-	if (mesh->MeshWrapper)
+	//if load failed
+	if (!mesh->MeshWrapper)
 	{
-		file_model = true;
-		return true;
+		delete mesh;
+		return false;
 	}
-	return false;
+
+	meshes.push_back(mesh);
+	file_model = true;
+	return true;
 }
 
 Ogre::Entity* DynamicMesh::GetMovable()
@@ -118,6 +122,9 @@ bool DynamicMesh::IsVisible()
 
 void DynamicMesh::Prepare(bool force)
 {
+	if (file_model == true)
+		return;
+
 	for (int i = 0; i < (int)meshes.size(); i++)
 		meshes[i]->Prepare(force);
 }
@@ -159,7 +166,8 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 DynamicMesh::Mesh::~Mesh()
 {
-	Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
+	if (MeshWrapper)
+		Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
 	MeshWrapper.setNull();
 
 	if (Movable)
