@@ -28,6 +28,8 @@
 
 namespace SBS {
 
+class MeshObject;
+
 class SBSIMPEXP DynamicMesh : public ObjectBase
 {
 public:
@@ -43,6 +45,9 @@ public:
 	bool IsVisible();
 	void Prepare(bool force);
 	bool LoadFromFile(const std::string &filename, const std::string &path);
+	void AddClient(MeshObject *mesh);
+	void RemoveClient(MeshObject *mesh);
+	int GetClientCount() { return (int)clients.size(); }
 
 private:
 
@@ -66,13 +71,15 @@ private:
 		SceneNode *node;
 		DynamicMesh *Parent;
 		::SBS::SBS *sbs;
+		bool prepared;
 	};
 
 	std::vector<Mesh*> meshes;
 	SceneNode *node;
 	float render_distance;
 	bool file_model;
-
+	std::vector<MeshObject*> clients;
+	bool prepared;
 };
 
 }

@@ -556,6 +556,9 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	else
 		MeshWrapper = wrapper;
 
+	//add this mesh object as a client to the dynamic mesh wrapper
+	MeshWrapper->AddClient(this);
+
 	//load mesh from a file if specified
 	if (filename != "")
 	{
@@ -611,7 +614,10 @@ MeshObject::~MeshObject()
 	collider_node = 0;
 
 	if (sbs->FastDelete == false)
+	{
+		MeshWrapper->RemoveClient(this);
 		sbs->DeleteMeshHandle(this);
+	}
 
 	//delete dynamic mesh wrapper if needed
 	if (wrapper_selfcreate == true)

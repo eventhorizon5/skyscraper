@@ -41,6 +41,7 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 	this->node = node;
 	render_distance = max_render_distance;
 	file_model = false;
+	prepared = false;
 }
 
 DynamicMesh::~DynamicMesh()
@@ -129,11 +130,33 @@ void DynamicMesh::Prepare(bool force)
 		meshes[i]->Prepare(force);
 }
 
+void DynamicMesh::AddClient(MeshObject *mesh)
+{
+	//add a client mesh object to this dynamic mesh
+
+	clients.push_back(mesh);
+}
+
+void DynamicMesh::RemoveClient(MeshObject *mesh)
+{
+	//remove a client mesh from this dynamic mesh
+
+	for (int i = 0; i < (int)clients.size(); i++)
+	{
+		if (clients[i] == mesh)
+		{
+			clients.erase(clients.begin() + i);
+			return;
+		}
+	}
+}
+
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
 	sbs = Parent->GetRoot();
 	this->node = node;
+	prepared = false;
 
 	if (filename == "")
 	{
@@ -239,9 +262,9 @@ void DynamicMesh::Mesh::Prepare(bool force)
 
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
-/*
+
 	//exit if mesh has already been prepared
-	if (prepared == true && force == false)
+	/*if (prepared == true && force == false)
 		return;
 
 	//clear vertex data and exit if there's no associated submesh or geometry data
