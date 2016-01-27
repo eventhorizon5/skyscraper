@@ -31,8 +31,11 @@
 
 namespace SBS {
 
-FloorManager::FloorManager(Object* parent) : ObjectBase(parent)
+FloorManager::FloorManager(Object* parent) : Object(parent)
 {
+	//set up SBS object
+	SetValues("FloorManager", "Floor Manager", true, false);
+
 	get_result = 0;
 	get_number = 0;
 	dynamic_mesh = new DynamicMesh(this, sbs->GetSceneNode(), "Floor Manager");
@@ -61,7 +64,7 @@ Floor* FloorManager::Create(int number)
 
 	Map floor;
 	floor.number = number;
-	floor.object = new Floor(sbs, number, dynamic_mesh);
+	floor.object = new Floor(sbs, dynamic_mesh, number);
 	Array.push_back(floor);
 
 	if (number < 0)
@@ -151,7 +154,7 @@ Floor* FloorManager::GetIndex(int index)
 	if (index < 0 || index >= (int)Array.size())
 		return 0;
 
-	return Array[index];
+	return Array[index].object;
 }
 
 void FloorManager::Remove(Floor *floor)
@@ -183,8 +186,11 @@ void FloorManager::EnableAll(bool value)
 		Array[i].object->Enabled(value);
 }
 
-ElevatorManager::ElevatorManager(Object* parent) : ObjectBase(parent)
+ElevatorManager::ElevatorManager(Object* parent) : Object(parent)
 {
+	//set up SBS object
+	SetValues("ElevatorManager", "Elevator Manager", true, false);
+
 	get_result = 0;
 	get_number = 0;
 }
@@ -273,7 +279,7 @@ Elevator* ElevatorManager::GetIndex(int index)
 	if (index < 0 || index >= (int)Array.size())
 		return 0;
 
-	return Array[index];
+	return Array[index].object;
 }
 
 void ElevatorManager::Remove(Elevator *elevator)
@@ -308,8 +314,11 @@ void ElevatorManager::EnableAll(bool value)
 	}
 }
 
-ShaftManager::ShaftManager(Object* parent) : ObjectBase(parent)
+ShaftManager::ShaftManager(Object* parent) : Object(parent)
 {
+	//set up SBS object
+	SetValues("ShaftManager", "Shaft Manager", true, false);
+
 	get_result = 0;
 	get_number = 0;
 }
@@ -425,7 +434,7 @@ Shaft* ShaftManager::GetIndex(int index)
 	if (index < 0 || index >= (int)Array.size())
 		return 0;
 
-	return Array[index];
+	return Array[index].object;
 }
 
 void ShaftManager::Remove(Shaft *shaft)
@@ -452,8 +461,11 @@ void ShaftManager::EnableAll(bool value)
 		Array[i].object->EnableWholeShaft(value, true, true);
 }
 
-StairsManager::StairsManager(Object* parent) : ObjectBase(parent)
+StairsManager::StairsManager(Object* parent) : Object(parent)
 {
+	//set up SBS object
+	SetValues("StairsManager", "Stairs Manager", true, false);
+
 	get_result = 0;
 	get_number = 0;
 }
@@ -568,7 +580,7 @@ Stairs* StairsManager::GetIndex(int index)
 	if (index < 0 || index >= (int)Array.size())
 		return 0;
 
-	return Array[index];
+	return Array[index].object;
 }
 
 void StairsManager::Remove(Stairs *stairs)

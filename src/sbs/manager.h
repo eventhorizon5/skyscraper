@@ -28,7 +28,7 @@
 
 namespace SBS {
 
-class SBSIMPEXP FloorManager : public ObjectBase
+class SBSIMPEXP FloorManager : public Object
 {
 public:
 	FloorManager(Object* parent);
@@ -56,7 +56,7 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP ElevatorManager : public ObjectBase
+class SBSIMPEXP ElevatorManager : public Object
 {
 public:
 	ElevatorManager(Object* parent);
@@ -82,7 +82,7 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP ShaftManager : public ObjectBase
+class SBSIMPEXP ShaftManager : public Object
 {
 public:
 	ShaftManager(Object* parent);
@@ -108,7 +108,7 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP StairsManager : public ObjectBase
+class SBSIMPEXP StairsManager : public Object
 {
 public:
 	StairsManager(Object* parent);

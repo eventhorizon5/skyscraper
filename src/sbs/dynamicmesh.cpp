@@ -23,6 +23,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreSubMesh.h>
+#include <OgreMeshManager.h>
+#include <OgreEntity.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -103,8 +106,12 @@ void DynamicMesh::Prepare(bool force)
 		meshes[i]->Prepare(force);
 }
 
-DynamicMesh::Mesh::Mesh(const std::string &name, SceneNode *node, float max_render_distance)
+DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance)
 {
+	Parent = parent;
+	sbs = Parent->GetRoot();
+
+	//create mesh
 	MeshWrapper = Ogre::MeshManager::getSingleton().createManual(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 	//create and attach movable

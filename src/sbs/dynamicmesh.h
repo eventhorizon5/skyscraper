@@ -48,7 +48,7 @@ private:
 	//raw mesh wrapper
 	struct SBSIMPEXP Mesh
 	{
-		Mesh(const std::string &name, SceneNode *node, float max_render_distance);
+		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance);
 		~Mesh();
 		void Enable(bool value);
 		void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
@@ -62,6 +62,8 @@ private:
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
 		Ogre::Entity *Movable;
 		SceneNode *node;
+		DynamicMesh *Parent;
+		::SBS::SBS *sbs;
 	};
 
 	std::vector<Mesh*> meshes;
