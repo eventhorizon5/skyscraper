@@ -49,11 +49,11 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 
 	load_error = false;
 	mesh = new MeshObject(this, name, 0, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
-	/*if (!mesh->Movable)
+	if (mesh->model_loaded == false)
 	{
 		load_error = true;
 		return;
-	}*/
+	}
 
 	//move to position and specified offset
 	Move(position);

@@ -535,6 +535,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	Filename = filename;
 	remove_on_disable = true;
 	wrapper_selfcreate = false;
+	model_loaded = false;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -555,19 +556,14 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	else
 		MeshWrapper = wrapper;
 
-	if (filename == "")
+	//load mesh from a file if specified
+	if (filename != "")
 	{
-		//create mesh
-		//MeshWrapper = Ogre::MeshManager::getSingleton().createManual(Name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-	}
-	/*else
-	{
-		//load mesh from a file
 		bool result = LoadFromFile(filename, collidermesh);
 
 		if (result == false)
 			return;
-	}*/
+	}
 
 	//rescale mesh
 	//file-loaded meshes need to be converted to a remote scale, since they're not pre-scaled
@@ -616,7 +612,10 @@ MeshObject::~MeshObject()
 	if (sbs->FastDelete == false)
 		sbs->DeleteMeshHandle(this);
 
-	//delete meshwrapper
+	//delete dynamic mesh wrapper if needed
+	if (wrapper_selfcreate == true)
+		delete MeshWrapper;
+	MeshWrapper = 0;
 }
 
 void MeshObject::Enable(bool value)
@@ -1940,15 +1939,9 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 	}
 
 	//load model
-	try
-	{
-		//MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
-	}
-	catch (Ogre::Exception &e)
-	{
-		sbs->ReportError("Error loading model " + filename2 + "\n" + e.getDescription());
+	bool status = MeshWrapper->LoadFromFile(filename2, path);
+	if (status == false)
 		return false;
-	}
 
 	//load collider model if physics is disabled
 	if (is_physical == false)
@@ -1967,6 +1960,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 		}
 	}
 
+	model_loaded = true;
 	return true;
 }
 

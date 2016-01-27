@@ -42,13 +42,14 @@ public:
 	void EnableDebugView(bool value);
 	bool IsVisible();
 	void Prepare(bool force);
+	bool LoadFromFile(const std::string &filename, const std::string &path);
 
 private:
 
 	//raw mesh wrapper
 	struct SBSIMPEXP Mesh
 	{
-		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance);
+		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
 		~Mesh();
 		void Enable(bool value);
 		void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
@@ -69,6 +70,7 @@ private:
 	std::vector<Mesh*> meshes;
 	SceneNode *node;
 	float render_distance;
+	bool file_model;
 
 };
 

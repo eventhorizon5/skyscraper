@@ -131,6 +131,7 @@ public:
 	OgreBulletCollisions::CollisionShape* mShape;
 
 	std::string Filename; //filename, if a loaded model
+	bool model_loaded; //true if a model was loaded successfully
 
 private:
 	bool enabled;

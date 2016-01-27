@@ -40,6 +40,7 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 	SetName(name);
 	this->node = node;
 	render_distance = max_render_distance;
+	file_model = false;
 }
 
 DynamicMesh::~DynamicMesh()
@@ -47,6 +48,21 @@ DynamicMesh::~DynamicMesh()
 	for (int i = 0; i < (int)meshes.size(); i++)
 		delete meshes[i];
 	meshes.clear();
+}
+
+bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &path)
+{
+	if (meshes.empty() == false)
+		return false;
+
+	Mesh* mesh = new Mesh(this, "", node, render_distance, filename, path);
+
+	if (mesh->MeshWrapper)
+	{
+		file_model = true;
+		return true;
+	}
+	return false;
 }
 
 Ogre::Entity* DynamicMesh::GetMovable()
@@ -106,13 +122,30 @@ void DynamicMesh::Prepare(bool force)
 		meshes[i]->Prepare(force);
 }
 
-DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance)
+DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
 	sbs = Parent->GetRoot();
 
-	//create mesh
-	MeshWrapper = Ogre::MeshManager::getSingleton().createManual(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	if (filename == "")
+	{
+		//create mesh
+		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	}
+	else
+	{
+		//load model
+		try
+		{
+			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename, path);
+		}
+		catch (Ogre::Exception &e)
+		{
+			sbs->ReportError("Error loading model " + filename + "\n" + e.getDescription());
+			MeshWrapper.setNull();
+			return;
+		}
+	}
 
 	//create and attach movable
 	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
