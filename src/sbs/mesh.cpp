@@ -1126,7 +1126,7 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 	}
 
 	//bind material
-	Submeshes[index].Name = ToString(sbs->InstanceNumber) + ":" + material;
+	Submeshes[index].Name = material;
 
 	delete [] indexarray;
 	return index;
@@ -1976,7 +1976,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 
 unsigned int MeshObject::GetVertexCount()
 {
-	return (int)MeshGeometry.size();
+	return MeshGeometry.size();
 }
 
 unsigned int MeshObject::GetTriangleCount(int submesh)

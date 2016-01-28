@@ -36,9 +36,6 @@ public:
 
 	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, float max_render_distance = 0);
 	~DynamicMesh();
-
-	Ogre::Entity* GetMovable();
-	void Build();
 	void Enable(bool value);
 	void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 	void EnableDebugView(bool value);
@@ -77,6 +74,7 @@ private:
 		SceneNode *node;
 		DynamicMesh *Parent;
 		::SBS::SBS *sbs;
+		bool enabled;
 	};
 
 	std::vector<Mesh*> meshes;

@@ -245,7 +245,17 @@ void SceneNode::AttachObject(Ogre::MovableObject *object)
 	//attach a movable object to this node
 
 	if (node && object)
-		node->attachObject(object);
+	{
+		try
+		{
+			node->attachObject(object);
+		}
+		catch (Ogre::Exception &e)
+		{
+			sbs->ReportError("Error attaching object:\n" + e.getDescription());
+			printf("testing\n");
+		}
+	}
 }
 
 void SceneNode::DetachObject(Ogre::MovableObject *object)
@@ -253,7 +263,16 @@ void SceneNode::DetachObject(Ogre::MovableObject *object)
 	//detach a movable object from this node
 
 	if (node && object)
-		node->detachObject(object);
+	{
+		try
+		{
+			node->detachObject(object);
+		}
+		catch (Ogre::Exception &e)
+		{
+			sbs->ReportError("Error detaching object:\n" + e.getDescription());
+		}
+	}
 }
 
 float SceneNode::GetScale()

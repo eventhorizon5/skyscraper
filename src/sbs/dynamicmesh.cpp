@@ -74,30 +74,19 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	return true;
 }
 
-Ogre::Entity* DynamicMesh::GetMovable()
+/*void DynamicMesh::Build()
 {
-	if (meshes.empty())
-		return 0;
+	//extra code from previous system
 
-	return meshes[0]->Movable;
-}
-
-void DynamicMesh::Build()
-{
-	if (!node)
-		return;
-
-	//MeshWrapper->load();
-
-	//for (int i = 0; i < (int)meshes.size(); i++)
+	MeshWrapper->load();
 
 	//if a mesh was attached and was empty, it needs to be reattached to be visible
-	/*if (count == 0 && IsEnabled() == true)
+	if (count == 0 && IsEnabled() == true)
 	{
 		GetSceneNode()->DetachObject(Movable);
 		GetSceneNode()->AttachObject(Movable);
-	}*/
-}
+	}
+}*/
 
 void DynamicMesh::Enable(bool value)
 {
@@ -268,6 +257,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	Parent = parent;
 	sbs = Parent->GetRoot();
 	this->node = node;
+	enabled = false;
 
 	if (filename == "")
 	{
@@ -289,10 +279,10 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		}
 	}
 
-	//create and attach movable
+	//create and enable movable
 	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
 	//Movable->setCastShadows(true);
-	node->AttachObject(Movable);
+	Enable(true);
 
 	//set maximum render distance
 	Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
@@ -316,10 +306,15 @@ void DynamicMesh::Mesh::Enable(bool value)
 {
 	//attach or detach from scenegraph
 
+	if (enabled == value)
+		return;
+
 	if (value == false)
 		node->DetachObject(Movable);
 	else
 		node->AttachObject(Movable);
+
+	enabled = value;
 }
 
 void DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)
@@ -329,7 +324,7 @@ void DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	if (submesh == -1)
 		return;
 
-	MeshWrapper->getSubMesh(submesh)->setMaterialName(new_texture);
+	MeshWrapper->getSubMesh(submesh)->setMaterialName(ToString(sbs->InstanceNumber) + ":" + new_texture);
 
 	//apply changes (refresh mesh state)
 	MeshWrapper->_dirtyState();
@@ -408,8 +403,7 @@ void DynamicMesh::Mesh::Prepare()
 	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
 
 	//set up vertex data arrays
-	unsigned int vsize = (unsigned int)vertex_count;
-	float *mVertexElements = new float[vsize * 8];
+	float *mVertexElements = new float[vertex_count * 8];
 
 	//populate array with vertex geometry from each client mesh
 	unsigned int loc = 0;
@@ -419,7 +413,7 @@ void DynamicMesh::Mesh::Prepare()
 		MeshObject *mesh = Parent->GetClient(num);
 
 		//get mesh's offset of associated scene node
-		Ogre::Vector3 offset = mesh->GetPosition() - node->GetPosition();
+		Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
 		//fill array with mesh's geometry data
 		for (size_t i = 0; i < mesh->GetVertexCount(); i++)
@@ -436,14 +430,14 @@ void DynamicMesh::Mesh::Prepare()
 			mVertexElements[loc + 5] = mesh->MeshGeometry[i].normal.z;
 			mVertexElements[loc + 6] = -mesh->MeshGeometry[i].texel.x;
 			mVertexElements[loc + 7] = mesh->MeshGeometry[i].texel.y;
-			box.merge(mesh->MeshGeometry[i].vertex);
-			radius = std::max(radius, mesh->MeshGeometry[i].vertex.length());
+			box.merge(vertex);
+			radius = std::max(radius, vertex.length());
 			loc += 8;
 		}
 	}
 
 	//create vertex hardware buffer
-	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vsize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 	vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
 	delete [] mVertexElements;
 
@@ -475,7 +469,7 @@ void DynamicMesh::Mesh::Prepare()
 		Ogre::HardwareIndexBufferSharedPtr ibuffer;
 
 		//if the number of vertices is greater than what can fit in a 16-bit index, use 32-bit indexes instead
-		if (vsize > 65536)
+		if (vertex_count > 65536)
 		{
 			//set up a 32-bit index buffer
 			unsigned int *mIndices = new unsigned int[isize];
