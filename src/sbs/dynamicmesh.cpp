@@ -175,7 +175,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 			int total = GetMaterialCount();
 			int separate_total = 0;
 
-			int limit = 3; //limit up to 3 client meshes
+			int limit = 3; //compare against 3 client meshes totaled together
 
 			for (int i = 0; i < (int)clients.size(); i++)
 			{
@@ -191,8 +191,9 @@ void DynamicMesh::Prepare(MeshObject *client)
 			else
 				meshes_to_create = (int)clients.size(); //create separate meshes for each client
 
+			//print optimization report
 			//if (sbs->Verbose)
-				sbs->Report(this->GetName() + ": Combined: " + ToString(total) + "  - Separate: " + ToString(separate_total));
+				sbs->Report(this->GetName() + ": Combined: " + ToString(total) + "  - Separate (3): " + ToString(separate_total));
 		}
 		else
 			meshes_to_create = 1;
@@ -211,7 +212,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 		}
 	}
 
-	if (client == 0)
+	if (client == 0 || meshes.size() == 1)
 	{
 		for (int i = 0; i < (int)meshes.size(); i++)
 		{
@@ -238,13 +239,6 @@ void DynamicMesh::AddClient(MeshObject *mesh)
 	//add a client mesh object to this dynamic mesh
 
 	clients.push_back(mesh);
-
-	//for now, create a single mesh if not created yet
-	/*if (meshes.empty() == true)
-	{
-		Mesh *mesh = new Mesh(this, GetName(), node, render_distance);
-		meshes.push_back(mesh);
-	}*/
 }
 
 void DynamicMesh::RemoveClient(MeshObject *mesh)
