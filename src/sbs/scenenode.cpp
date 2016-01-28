@@ -253,7 +253,6 @@ void SceneNode::AttachObject(Ogre::MovableObject *object)
 		catch (Ogre::Exception &e)
 		{
 			sbs->ReportError("Error attaching object:\n" + e.getDescription());
-			printf("testing\n");
 		}
 	}
 }
