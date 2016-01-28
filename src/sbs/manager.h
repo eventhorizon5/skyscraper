@@ -28,6 +28,11 @@
 
 namespace SBS {
 
+class Floor;
+class Elevator;
+class Shaft;
+class Stairs;
+
 class SBSIMPEXP FloorManager : public Object
 {
 public:
@@ -39,6 +44,9 @@ public:
 	Floor* GetIndex(int index);
 	void Remove(Floor *floor);
 	void EnableAll(bool value);
+	DynamicMesh* GetFloorDynMesh() { return floors; }
+	DynamicMesh* GetIFloorDynMesh() { return interfloors; }
+	DynamicMesh* GetColumnDynMesh() { return columnframes; }
 
 private:
 	struct Map
@@ -49,7 +57,10 @@ private:
 
 	std::vector<Map> Array; //floor object array
 
-	DynamicMesh* dynamic_mesh; //dynamic mesh object
+	//dynamic mesh objects
+	DynamicMesh* floors;
+	DynamicMesh* interfloors;
+	DynamicMesh* columnframes;
 
 	//function caching
 	Floor* get_result;

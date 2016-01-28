@@ -38,7 +38,9 @@ FloorManager::FloorManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
-	dynamic_mesh = new DynamicMesh(this, sbs->GetSceneNode(), "Floor Manager");
+	floors = new DynamicMesh(this, sbs->GetSceneNode(), "Floor Container");
+	interfloors = new DynamicMesh(this, sbs->GetSceneNode(), "Interfloor Container");
+	columnframes = new DynamicMesh(this, sbs->GetSceneNode(), "Columnframe Container");
 }
 
 FloorManager::~FloorManager()
@@ -54,10 +56,16 @@ FloorManager::~FloorManager()
 		Array[i].object = 0;
 	}
 
-	//delete dynamic mesh
-	if (dynamic_mesh)
-		delete dynamic_mesh;
-	dynamic_mesh = 0;
+	//delete dynamic meshes
+	if (floors)
+		delete floors;
+	floors = 0;
+	if (interfloors)
+		delete interfloors;
+	interfloors = 0;
+	if (columnframes)
+		delete columnframes;
+	columnframes = 0;
 }
 
 Floor* FloorManager::Create(int number)
@@ -69,7 +77,7 @@ Floor* FloorManager::Create(int number)
 
 	Map floor;
 	floor.number = number;
-	floor.object = new Floor(sbs, dynamic_mesh, number);
+	floor.object = new Floor(sbs, this, number);
 	Array.push_back(floor);
 
 	if (number < 0)

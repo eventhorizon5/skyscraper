@@ -51,6 +51,7 @@ namespace OgreBulletCollisions {
 #include "object.h"
 #include "light.h"
 #include "mesh.h"
+#include "manager.h"
 #include "polygon.h"
 #include "model.h"
 #include "wall.h"
@@ -70,7 +71,6 @@ namespace OgreBulletCollisions {
 #include "person.h"
 #include "route.h"
 #include "scenenode.h"
-#include "manager.h"
 
 namespace SBS {
 

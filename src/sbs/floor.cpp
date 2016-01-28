@@ -31,7 +31,7 @@
 
 namespace SBS {
 
-Floor::Floor(Object *parent, DynamicMesh *dyn_mesh, int number) : Object(parent)
+Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Floor", "", false);
@@ -42,13 +42,13 @@ Floor::Floor(Object *parent, DynamicMesh *dyn_mesh, int number) : Object(parent)
 	SetName("Floor " + num);
 
 	//Create primary level mesh
-	Level = new MeshObject(this, "Level " + num, dyn_mesh);
+	Level = new MeshObject(this, "Level " + num, manager->GetFloorDynMesh());
 
 	//Create interfloor mesh
-	Interfloor = new MeshObject(this, "Interfloor " + num, dyn_mesh);
+	Interfloor = new MeshObject(this, "Interfloor " + num, manager->GetIFloorDynMesh());
 
 	//Create columnframe mesh
-	ColumnFrame = new MeshObject(this, "ColumnFrame " + num, dyn_mesh);
+	ColumnFrame = new MeshObject(this, "ColumnFrame " + num, manager->GetColumnDynMesh());
 
 	//set enabled flags
 	IsEnabled = true;
