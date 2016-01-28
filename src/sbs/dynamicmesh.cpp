@@ -434,7 +434,8 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	if (filename == "")
 	{
 		//create mesh
-		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		std::string Name = node->GetNameBase() + name;
+		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(Name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	}
 	else
 	{

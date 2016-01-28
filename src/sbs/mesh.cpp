@@ -551,7 +551,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	if (wrapper == 0)
 	{
 		wrapper_selfcreate = true;
-		MeshWrapper = new DynamicMesh(this, GetSceneNode(), Name, max_render_distance);
+		MeshWrapper = new DynamicMesh(this, GetSceneNode(), name, max_render_distance);
 	}
 	else
 		MeshWrapper = wrapper;
@@ -1145,6 +1145,8 @@ void MeshObject::Prepare(bool force)
 
 	//update dynamic mesh
 	MeshWrapper->NeedsUpdate(this);
+
+	prepared = true;
 }
 
 int MeshObject::FindMatchingSubMesh(const std::string &material)

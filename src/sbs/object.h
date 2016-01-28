@@ -44,6 +44,7 @@ public:
 	SBS* GetRoot() { return sbs; }
 	void SetName(const std::string &name);
 	const std::string& GetName();
+	std::string GetNameBase();
 
 protected:
 	SBS *sbs; //engine root

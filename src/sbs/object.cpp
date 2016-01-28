@@ -50,6 +50,19 @@ const std::string& ObjectBase::GetName()
 	return Name;
 }
 
+std::string ObjectBase::GetNameBase()
+{
+	//get base name of the scene node, which includes the instance and object ID
+
+	std::string number;
+	if (Parent)
+		number = ToString(Parent->GetNumber());
+	else
+		number = ToString(sbs->GetNumber());
+
+	return ToString(sbs->InstanceNumber) + ":(" + number + ")";
+}
+
 void ObjectBase::SetName(const std::string &name)
 {
 	//set object name
