@@ -88,39 +88,136 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	}
 }*/
 
-void DynamicMesh::Enable(bool value)
+void DynamicMesh::Enable(bool value, MeshObject *client)
 {
-	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i]->Enable(value);
+	if (client == 0 || meshes.size() == 1)
+	{
+		//enable all meshes if no client specified
+
+		for (int i = 0; i < (int)meshes.size(); i++)
+			meshes[i]->Enable(value);
+	}
+	else if (meshes.size() > 1)
+	{
+		//enable a per-client mesh if specified
+
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			meshes[index]->Enable(value);
+	}
 }
 
-void DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)
+void DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client)
 {
-	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i]->ChangeTexture(old_texture, new_texture);
+	if (client == 0 || meshes.size() == 1)
+	{
+		for (int i = 0; i < (int)meshes.size(); i++)
+			meshes[i]->ChangeTexture(old_texture, new_texture);
+	}
+	else if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			meshes[index]->ChangeTexture(old_texture, new_texture);
+	}
 }
 
-void DynamicMesh::EnableDebugView(bool value)
+void DynamicMesh::EnableDebugView(bool value, MeshObject *client)
 {
-	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i]->EnableDebugView(value);
+	if (client == 0 || meshes.size() == 1)
+	{
+		for (int i = 0; i < (int)meshes.size(); i++)
+			meshes[i]->EnableDebugView(value);
+	}
+	else if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			meshes[index]->EnableDebugView(value);
+	}
 }
 
-bool DynamicMesh::IsVisible()
+bool DynamicMesh::IsVisible(MeshObject *client)
 {
 	if (meshes.empty() == true)
 		return false;
 
-	return meshes[0]->IsVisible();
+	if (client == 0 || meshes.size() == 1)
+		return meshes[0]->IsVisible();
+	else if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			return meshes[index]->IsVisible();
+	}
+	return false;
 }
 
-void DynamicMesh::Prepare()
+void DynamicMesh::Prepare(MeshObject *client)
 {
 	if (file_model == true || prepared == true)
 		return;
 
-	for (int i = 0; i < (int)meshes.size(); i++)
-		meshes[i]->Prepare();
+	if (clients.empty() == true)
+		return;
+
+
+	//determine if meshes should be combined or separated
+	if (meshes.empty() == true && clients.size() > 1)
+	{
+		int meshes_to_create = 0;
+		int total = GetMaterialCount();
+		int separate_total = 0;
+
+		int limit = 3; //limit up to 3 client meshes
+
+		for (int i = 0; i < (int)clients.size(); i++)
+		{
+			if (i == limit)
+				break;
+
+			separate_total += clients[i]->GetSubmeshCount();
+		}
+
+		//if combined submesh/material count is less than three separate meshes
+		if (total < separate_total)
+			meshes_to_create = 1; //create a single combined mesh for all clients
+		else
+			meshes_to_create = (int)clients.size(); //create separate meshes for each client
+
+		//create mesh objects
+		for (int i = 0; i < meshes_to_create; i++)
+		{
+			Mesh *mesh = 0;
+
+			if (meshes_to_create == 1)
+				mesh = new Mesh(this, GetName(), node, render_distance);
+			else
+				mesh = new Mesh(this, GetName(), clients[i]->GetSceneNode(), render_distance);
+
+			meshes.push_back(mesh);
+		}
+	}
+
+	if (client == 0 || meshes.size() == 1)
+	{
+		for (int i = 0; i < (int)meshes.size(); i++)
+		{
+			meshes[i]->prepared = false;
+			meshes[i]->Prepare();
+		}
+	}
+	else if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			return meshes[index]->Prepare(index);
+	}
 
 	prepared = true;
 }
@@ -132,11 +229,11 @@ void DynamicMesh::AddClient(MeshObject *mesh)
 	clients.push_back(mesh);
 
 	//for now, create a single mesh if not created yet
-	if (meshes.empty() == true)
+	/*if (meshes.empty() == true)
 	{
 		Mesh *mesh = new Mesh(this, GetName(), node, render_distance);
 		meshes.push_back(mesh);
-	}
+	}*/
 }
 
 void DynamicMesh::RemoveClient(MeshObject *mesh)
@@ -161,21 +258,52 @@ MeshObject* DynamicMesh::GetClient(int number)
 	return clients[number];
 }
 
-void DynamicMesh::NeedsUpdate()
+int DynamicMesh::GetClientIndex(MeshObject *client)
+{
+	if (!client)
+		return -1;
+
+	for (int i = 0; i < (int)clients.size(); i++)
+	{
+		if (clients[i] == client)
+			return i;
+	}
+	return -1;
+}
+
+void DynamicMesh::NeedsUpdate(MeshObject *client)
 {
 	if (prepared == false)
 		return;
 
-	prepared = false;
-	Prepare();
+	if (client == 0 || meshes.size() == 1)
+		prepared = false;
+	else if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			meshes[index]->prepared = false;
+	}
+
+	Prepare(client);
 }
 
-int DynamicMesh::GetMaterials(std::vector<std::string> &materials)
+int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 {
 	//calculate the total number of materials used by all clients
 
+	int start = 0;
+	int end = (int)clients.size() - 1;
+
+	if (client >= 0)
+	{
+		start = client;
+		end = client;
+	}
+
 	//for each client
-	for (int i = 0; i < (int)clients.size(); i++)
+	for (int i = start; i <= end; i++)
 	{
 		//for each client submesh entry
 		for (int j = 0; j < (int)clients[i]->Submeshes.size(); j++)
@@ -201,13 +329,31 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials)
 	return (int)materials.size();
 }
 
-unsigned int DynamicMesh::GetVertexCount()
+int DynamicMesh::GetMaterialCount(int client)
+{
+	//calculate the number of materials needed for all clients or a specific client
+
+	std::vector<std::string> materials;
+	int total = GetMaterials(materials, client);
+	return total;
+}
+
+unsigned int DynamicMesh::GetVertexCount(int client)
 {
 	//calculate combined vertex count for all clients
 
+	int start = 0;
+	int end = (int)clients.size() - 1;
+
+	if (client >= 0)
+	{
+		start = client;
+		end = client;
+	}
+
 	unsigned int total = 0;
 
-	for (int i = 0; i < (int)clients.size(); i++)
+	for (int i = start; i <= end; i++)
 	{
 		total += clients[i]->GetVertexCount();
 	}
@@ -215,13 +361,22 @@ unsigned int DynamicMesh::GetVertexCount()
 	return total;
 }
 
-unsigned int DynamicMesh::GetTriangleCount(const std::string &material)
+unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int client)
 {
 	//calculate combined triangle count for all clients
 
+	int start = 0;
+	int end = (int)clients.size() - 1;
+
+	if (client >= 0)
+	{
+		start = client;
+		end = client;
+	}
+
 	unsigned int total = 0;
 
-	for (int i = 0; i < (int)clients.size(); i++)
+	for (int i = start; i <= end; i++)
 	{
 		int index = clients[i]->FindMatchingSubMesh(material);
 
@@ -258,6 +413,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	sbs = Parent->GetRoot();
 	this->node = node;
 	enabled = false;
+	prepared = false;
 
 	if (filename == "")
 	{
@@ -358,7 +514,7 @@ Ogre::SubMesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &material)
 	return submesh;
 }
 
-void DynamicMesh::Mesh::Prepare()
+void DynamicMesh::Mesh::Prepare(int client)
 {
 	//prepare mesh object
 
@@ -369,10 +525,13 @@ void DynamicMesh::Mesh::Prepare()
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
 
-	unsigned int vertex_count = Parent->GetVertexCount();
+	if (prepared == true)
+		return;
+
+	unsigned int vertex_count = Parent->GetVertexCount(client);
 
 	std::vector<std::string> materials;
-	int submesh_count = Parent->GetMaterials(materials);
+	int submesh_count = Parent->GetMaterials(materials, client);
 
 	//clear vertex data and exit if there's no associated submesh or geometry data
 	if (submesh_count == 0 || vertex_count == 0)
@@ -408,7 +567,16 @@ void DynamicMesh::Mesh::Prepare()
 	//populate array with vertex geometry from each client mesh
 	unsigned int loc = 0;
 
-	for (int num = 0; num < Parent->GetClientCount(); num++)
+	int start = 0;
+	int end = Parent->GetClientCount() - 1;
+
+	if (client > -1)
+	{
+		start = client;
+		end = client;
+	}
+
+	for (int num = start; num <= end; num++)
 	{
 		MeshObject *mesh = Parent->GetClient(num);
 
@@ -476,7 +644,16 @@ void DynamicMesh::Mesh::Prepare()
 
 			//create array of triangle indices
 			loc = 0;
-			for (int num = 0; num < Parent->GetClientCount(); num++)
+			start = 0;
+			end = Parent->GetClientCount() - 1;
+
+			if (client > -1)
+			{
+				start = client;
+				end = client;
+			}
+
+			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
 				int index = mesh->FindMatchingSubMesh(material);
@@ -558,6 +735,8 @@ void DynamicMesh::Mesh::Prepare()
 
 	MeshWrapper->_setBounds(box);
 	MeshWrapper->_setBoundingSphereRadius(radius);
+
+	prepared = true;
 }
 
 void DynamicMesh::Mesh::EnableDebugView(bool value)

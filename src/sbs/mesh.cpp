@@ -643,7 +643,7 @@ void MeshObject::Enable(bool value)
 
 	SBS_PROFILE("MeshObject::Enable");
 
-	MeshWrapper->Enable(value);
+	MeshWrapper->Enable(value, this);
 
 	EnableCollider(value);
 
@@ -732,7 +732,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	}
 
 	//set material if valid
-	MeshWrapper->ChangeTexture(Submeshes[submesh].Name, material);
+	MeshWrapper->ChangeTexture(Submeshes[submesh].Name, material, this);
 	Submeshes[submesh].Name = material;
 
 	return true;
@@ -1144,7 +1144,7 @@ void MeshObject::Prepare(bool force)
 		Bounds.merge(MeshGeometry[i].vertex);
 
 	//update dynamic mesh
-	MeshWrapper->NeedsUpdate();
+	MeshWrapper->NeedsUpdate(this);
 }
 
 int MeshObject::FindMatchingSubMesh(const std::string &material)
@@ -1313,7 +1313,7 @@ void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
 void MeshObject::EnableDebugView(bool value)
 {
 	//enable or disable debug view of mesh
-	MeshWrapper->EnableDebugView(value);
+	MeshWrapper->EnableDebugView(value, this);
 }
 
 void MeshObject::CreateCollider()
@@ -1828,7 +1828,7 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 		return false;
 
 	//if beyond the max render distance
-	if (MeshWrapper->IsVisible() == false)
+	if (MeshWrapper->IsVisible(this) == false)
 		return false;
 
 	if (GetSubmeshCount() == 0)

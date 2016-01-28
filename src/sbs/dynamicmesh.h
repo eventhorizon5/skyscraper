@@ -36,20 +36,22 @@ public:
 
 	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, float max_render_distance = 0);
 	~DynamicMesh();
-	void Enable(bool value);
-	void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
-	void EnableDebugView(bool value);
-	bool IsVisible();
-	void Prepare();
+	void Enable(bool value, MeshObject *client = 0);
+	void ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
+	void EnableDebugView(bool value, MeshObject *client = 0);
+	bool IsVisible(MeshObject *client = 0);
+	void Prepare(MeshObject *client = 0);
 	bool LoadFromFile(const std::string &filename, const std::string &path);
 	void AddClient(MeshObject *mesh);
 	void RemoveClient(MeshObject *mesh);
 	MeshObject* GetClient(int number);
+	int GetClientIndex(MeshObject *client);
 	int GetClientCount() { return (int)clients.size(); }
-	void NeedsUpdate();
-	int GetMaterials(std::vector<std::string> &materials);
-	unsigned int GetVertexCount();
-	unsigned int GetTriangleCount(const std::string &material);
+	void NeedsUpdate(MeshObject *client = 0);
+	int GetMaterials(std::vector<std::string> &materials, int client = -1);
+	int GetMaterialCount(int client = -1);
+	unsigned int GetVertexCount(int client = -1);
+	unsigned int GetTriangleCount(const std::string &material, int client = -1);
 	unsigned int GetIndexOffset(MeshObject *client);
 
 private:
@@ -63,7 +65,7 @@ private:
 		void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
 		Ogre::SubMesh* CreateSubMesh(const std::string &material);
-		void Prepare();
+		void Prepare(int client = -1);
 		void EnableDebugView(bool value);
 		bool IsVisible();
 		int GetSubMeshCount() { return (int)Submeshes.size(); }
@@ -75,6 +77,7 @@ private:
 		DynamicMesh *Parent;
 		::SBS::SBS *sbs;
 		bool enabled;
+		bool prepared;
 	};
 
 	std::vector<Mesh*> meshes;
