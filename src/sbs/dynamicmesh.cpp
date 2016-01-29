@@ -423,6 +423,19 @@ unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
 	return index;
 }
 
+void DynamicMesh::UpdateVertex(MeshObject *client, unsigned int vertex_index, const Ogre::Vector3 &vertex, const Ogre::Vector3 &normal, const Ogre::Vector2 &texel)
+{
+	int index = GetClientIndex(client);
+
+	if (index == -1 || meshes.empty())
+		return;
+
+	if (meshes.size() == 1)
+		meshes[0]->UpdateVertex(index, vertex_index, vertex, normal, texel);
+	else
+		meshes[index]->UpdateVertex(index, vertex_index, vertex, normal, texel);
+}
+
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
@@ -805,6 +818,7 @@ void DynamicMesh::Mesh::UpdateVertex(int client, unsigned int vertex_index, cons
 
 	//get client's offset from offset table
 	unsigned int loc = offset_table[client];
+	loc += vertex_index;
 
 	MeshObject *mesh = Parent->GetClient(client);
 

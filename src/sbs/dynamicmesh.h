@@ -54,6 +54,7 @@ public:
 	unsigned int GetTriangleCount(const std::string &material, int client = -1);
 	unsigned int GetIndexOffset(MeshObject *client);
 	bool UseDynamicBuffers() { return dynamic_buffers; }
+	void UpdateVertex(MeshObject *client, unsigned int vertex_index, const Ogre::Vector3 &vertex, const Ogre::Vector3 &normal, const Ogre::Vector2 &texel);
 
 private:
 
