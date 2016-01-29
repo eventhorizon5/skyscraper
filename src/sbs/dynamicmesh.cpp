@@ -659,7 +659,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 	if (Parent->UseDynamicBuffers() == false)
 		vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 	else
-		vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_DYNAMIC);
+		vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
 
 	vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
 	delete [] mVertexElements;
