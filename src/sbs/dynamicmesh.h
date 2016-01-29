@@ -54,7 +54,7 @@ public:
 	unsigned int GetTriangleCount(const std::string &material, int client = -1);
 	unsigned int GetIndexOffset(MeshObject *client);
 	bool UseDynamicBuffers() { return dynamic_buffers; }
-	void UpdateVertex(MeshObject *client, unsigned int vertex_index, const Ogre::Vector3 &vertex, const Ogre::Vector3 &normal, const Ogre::Vector2 &texel);
+	void UpdateVertices(MeshObject *client, unsigned int index = 0, bool single = false);
 
 private:
 
@@ -71,11 +71,12 @@ private:
 		void EnableDebugView(bool value);
 		bool IsVisible();
 		int GetSubMeshCount() { return (int)Submeshes.size(); }
-		void UpdateVertex(int client, unsigned int vertex_index, const Ogre::Vector3 &vertex, const Ogre::Vector3 &normal, const Ogre::Vector2 &texel);
+		void UpdateVertices(int client, unsigned int index = 0, bool single = false);
 
 		Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
 		std::vector<unsigned int> offset_table;
+		std::vector<unsigned int> vertex_counts;
 		Ogre::Entity *Movable;
 		SceneNode *node;
 		DynamicMesh *Parent;

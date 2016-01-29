@@ -423,17 +423,17 @@ unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
 	return index;
 }
 
-void DynamicMesh::UpdateVertex(MeshObject *client, unsigned int vertex_index, const Ogre::Vector3 &vertex, const Ogre::Vector3 &normal, const Ogre::Vector2 &texel)
+void DynamicMesh::UpdateVertices(MeshObject *client, unsigned int index, bool single)
 {
-	int index = GetClientIndex(client);
+	int client_index = GetClientIndex(client);
 
-	if (index == -1 || meshes.empty())
+	if (client_index == -1 || meshes.empty())
 		return;
 
 	if (meshes.size() == 1)
-		meshes[0]->UpdateVertex(index, vertex_index, vertex, normal, texel);
+		meshes[0]->UpdateVertices(client_index, index, single);
 	else
-		meshes[index]->UpdateVertex(index, vertex_index, vertex, normal, texel);
+		meshes[client_index]->UpdateVertices(client_index, index, single);
 }
 
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
@@ -607,8 +607,9 @@ void DynamicMesh::Mesh::Prepare(int client)
 		end = client;
 	}
 
-	//clear vertex offset table
+	//clear vertex offset and counts tables
 	offset_table.clear();
+	vertex_counts.clear();
 
 	for (int num = start; num <= end; num++)
 	{
@@ -623,10 +624,12 @@ void DynamicMesh::Mesh::Prepare(int client)
 		//fill array with mesh's geometry data
 		for (size_t i = 0; i < mesh->GetVertexCount(); i++)
 		{
+			MeshObject::Geometry &element = mesh->MeshGeometry[i];
+
 			//make mesh's vertex relative to this scene node
 			Ogre::Vector3 vertex;
 			if (client == -1)
-				vertex = (node->GetOrientation().Inverse() * mesh->MeshGeometry[i].vertex) + offset;
+				vertex = (node->GetOrientation().Inverse() * element.vertex) + offset;
 			else
 				vertex = mesh->MeshGeometry[i].vertex;
 
@@ -634,15 +637,18 @@ void DynamicMesh::Mesh::Prepare(int client)
 			mVertexElements[loc] = vertex.x;
 			mVertexElements[loc + 1] = vertex.y;
 			mVertexElements[loc + 2] = vertex.z;
-			mVertexElements[loc + 3] = mesh->MeshGeometry[i].normal.x;
-			mVertexElements[loc + 4] = mesh->MeshGeometry[i].normal.y;
-			mVertexElements[loc + 5] = mesh->MeshGeometry[i].normal.z;
-			mVertexElements[loc + 6] = -mesh->MeshGeometry[i].texel.x;
-			mVertexElements[loc + 7] = mesh->MeshGeometry[i].texel.y;
+			mVertexElements[loc + 3] = element.normal.x;
+			mVertexElements[loc + 4] = element.normal.y;
+			mVertexElements[loc + 5] = element.normal.z;
+			mVertexElements[loc + 6] = -element.texel.x;
+			mVertexElements[loc + 7] = element.texel.y;
 			box.merge(vertex);
 			radius = std::max(radius, vertex.length());
 			loc += 8;
 		}
+
+		//add client vertex count to list
+		vertex_counts.push_back(mesh->GetVertexCount());
 	}
 
 	//create vertex hardware buffer
@@ -712,9 +718,10 @@ void DynamicMesh::Mesh::Prepare(int client)
 					//add mesh's triangles to array and adjust for offset
 					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
 					{
-						mIndices[loc] = mesh->Submeshes[index].Triangles[i].a + offset;
-						mIndices[loc + 1] = mesh->Submeshes[index].Triangles[i].b + offset;
-						mIndices[loc + 2] = mesh->Submeshes[index].Triangles[i].c + offset;
+						Triangle &tri = mesh->Submeshes[index].Triangles[i];
+						mIndices[loc] = tri.a + offset;
+						mIndices[loc + 1] = tri.b + offset;
+						mIndices[loc + 2] = tri.c + offset;
 						loc += 3;
 					}
 				}
@@ -756,9 +763,10 @@ void DynamicMesh::Mesh::Prepare(int client)
 					//add mesh's triangles to array and adjust for offset
 					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
 					{
-						mIndices[loc] = mesh->Submeshes[index].Triangles[i].a + offset;
-						mIndices[loc + 1] = mesh->Submeshes[index].Triangles[i].b + offset;
-						mIndices[loc + 2] = mesh->Submeshes[index].Triangles[i].c + offset;
+						Triangle &tri = mesh->Submeshes[index].Triangles[i];
+						mIndices[loc] = tri.a + offset;
+						mIndices[loc + 1] = tri.b + offset;
+						mIndices[loc + 2] = tri.c + offset;
 						loc += 3;
 					}
 				}
@@ -806,9 +814,9 @@ bool DynamicMesh::Mesh::IsVisible()
 	return Movable->isVisible();
 }
 
-void DynamicMesh::Mesh::UpdateVertex(int client, unsigned int vertex_index, const Ogre::Vector3 &vertex, const Ogre::Vector3 &normal, const Ogre::Vector2 &texel)
+void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool single)
 {
-	//update/write a vertex to the render buffer, if a dynamic mesh
+	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
 	if (Parent->UseDynamicBuffers() == false)
 		return;
@@ -818,51 +826,82 @@ void DynamicMesh::Mesh::UpdateVertex(int client, unsigned int vertex_index, cons
 
 	//get client's offset from offset table
 	unsigned int loc = offset_table[client];
-	loc += vertex_index;
+
+	//adjust if using a single vertex
+	if (single == true)
+		loc += index;
 
 	MeshObject *mesh = Parent->GetClient(client);
 
 	//get mesh's offset of associated scene node
 	Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
+	std::vector<MeshObject::Geometry> &geometry = mesh->MeshGeometry;
+
 	//set up vertex data arrays
-	float *mVertexElements = new float[8];
+	float *mVertexElements;
+	if (single == true)
+		mVertexElements = new float[8];
+	else
+		mVertexElements = new float[geometry.size() * 8];
+
+	unsigned int start = 0;
+	unsigned int end = geometry.size() - 1;
+
+	if (single == true)
+	{
+		start = index;
+		end = index;
+	}
+	else if (vertex_counts[client] != geometry.size())
+		return; //make sure vertex count is the same
 
 	//fill array with vertex's data
+	unsigned int pos = 0;
+	unsigned int add = 0;
+	for (unsigned int i = start; i <= end; i++)
+	{
+		MeshObject::Geometry &element = geometry[i];
 
-	//make mesh's vertex relative to this scene node
-	Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * vertex) + offset;
+		//make mesh's vertex relative to this scene node
+		Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * element.vertex) + offset;
 
-	//add elements to array
-	mVertexElements[0] = vertex2.x;
-	mVertexElements[1] = vertex2.y;
-	mVertexElements[2] = vertex2.z;
-	mVertexElements[3] = normal.x;
-	mVertexElements[4] = normal.y;
-	mVertexElements[5] = normal.z;
-	mVertexElements[6] = texel.x;
-	mVertexElements[7] = texel.y;
+		//add elements to array
+		mVertexElements[pos] = vertex2.x;
+		mVertexElements[pos + 1] = vertex2.y;
+		mVertexElements[pos + 2] = vertex2.z;
+		mVertexElements[pos + 3] = element.normal.x;
+		mVertexElements[pos + 4] = element.normal.y;
+		mVertexElements[pos + 5] = element.normal.z;
+		mVertexElements[pos + 6] = element.texel.x;
+		mVertexElements[pos + 7] = element.texel.y;
+		pos += 8;
+		add += 1;
+	}
 
-	//get vertex hardware buffer
+	//get vertex data
 	Ogre::VertexData* data = MeshWrapper->sharedVertexData;
 
 	//get vertex buffer and size
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = data->vertexBufferBinding->getBuffer(0);
 	size_t vsize = data->vertexDeclaration->getVertexSize(0);
 
+	/*
 	//lock vertex buffer for writing
-	float *vdata = static_cast<float*>(vbuffer->lock(vsize * loc, vsize, Ogre::HardwareBuffer::HBL_NORMAL));
+	float *vdata = static_cast<float*>(vbuffer->lock(vsize * loc, vsize * add, Ogre::HardwareBuffer::HBL_NORMAL));
 
 	//write elements
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < add; i++)
 	{
 		vdata[i] = mVertexElements[i];
 	}
 
 	//unlock vertex buffer
 	vbuffer->unlock();
+	*/
 
-	//vbuffer->writeData(vsize * loc, vsize, mVertexElements, false);
+	//write data to buffer
+	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
 
 	delete [] mVertexElements;
 }

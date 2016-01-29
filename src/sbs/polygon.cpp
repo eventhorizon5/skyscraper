@@ -159,7 +159,7 @@ void Polygon::Move(const Ogre::Vector3 &position, float speed)
 
 			//update vertices in render buffer, if using dynamic buffers
 			if (dynamic == true)
-				mesh->MeshWrapper->UpdateVertex(mesh, index, data.vertex, data.normal, data.texel);
+				mesh->MeshWrapper->UpdateVertices(mesh, index, true);
 		}
 	}
 }
