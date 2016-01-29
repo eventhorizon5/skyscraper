@@ -35,13 +35,14 @@
 
 namespace SBS {
 
-DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &name, float max_render_distance) : ObjectBase(parent)
+DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &name, float max_render_distance, bool dynamic_buffers) : ObjectBase(parent)
 {
 	SetName(name);
 	this->node = node;
 	render_distance = max_render_distance;
 	file_model = false;
 	prepared = false;
+	this->dynamic_buffers = dynamic_buffers;
 	sbs->RegisterDynamicMesh(this);
 }
 
@@ -593,9 +594,15 @@ void DynamicMesh::Mesh::Prepare(int client)
 		end = client;
 	}
 
+	//clear vertex offset table
+	offset_table.clear();
+
 	for (int num = start; num <= end; num++)
 	{
 		MeshObject *mesh = Parent->GetClient(num);
+
+		//add current client's vertex index to offset table
+		offset_table.push_back(loc);
 
 		//get mesh's offset of associated scene node
 		Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
@@ -626,7 +633,12 @@ void DynamicMesh::Mesh::Prepare(int client)
 	}
 
 	//create vertex hardware buffer
-	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+	Ogre::HardwareVertexBufferSharedPtr vbuffer;
+	if (Parent->UseDynamicBuffers() == false)
+		vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+	else
+		vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_DYNAMIC);
+
 	vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
 	delete [] mVertexElements;
 
@@ -779,6 +791,66 @@ bool DynamicMesh::Mesh::IsVisible()
 {
 	//returns true if this mesh is currently visible
 	return Movable->isVisible();
+}
+
+void DynamicMesh::Mesh::UpdateVertex(int client, unsigned int vertex_index, const Ogre::Vector3 &vertex, const Ogre::Vector3 &normal, const Ogre::Vector2 &texel)
+{
+	//update/write a vertex to the render buffer, if a dynamic mesh
+
+	if (Parent->UseDynamicBuffers() == false)
+		return;
+
+	if (!Parent->GetClient(client))
+		return;
+
+	//get client's offset from offset table
+	unsigned int loc = offset_table[client];
+
+	MeshObject *mesh = Parent->GetClient(client);
+
+	//get mesh's offset of associated scene node
+	Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
+
+	//set up vertex data arrays
+	float *mVertexElements = new float[8];
+
+	//fill array with vertex's data
+
+	//make mesh's vertex relative to this scene node
+	Ogre::Vector3 v = (node->GetOrientation().Inverse() * vertex) + offset;
+
+	//add elements to array
+	mVertexElements[0] = vertex.x;
+	mVertexElements[1] = vertex.y;
+	mVertexElements[2] = vertex.z;
+	mVertexElements[3] = normal.x;
+	mVertexElements[4] = normal.y;
+	mVertexElements[5] = normal.z;
+	mVertexElements[6] = texel.x;
+	mVertexElements[7] = texel.y;
+
+	//get vertex hardware buffer
+	Ogre::VertexData* data = MeshWrapper->sharedVertexData;
+
+	//get vertex buffer and size
+	Ogre::HardwareVertexBufferSharedPtr vbuffer = data->vertexBufferBinding->getBuffer(0);
+	size_t vsize = data->vertexDeclaration->getVertexSize(0);
+
+	//lock vertex buffer for writing
+	float *vdata = static_cast<float*>(vbuffer->lock(vsize * loc, vsize, Ogre::HardwareBuffer::HBL_NORMAL));
+
+	//write elements
+	for (int i = 0; i < 8; i++)
+	{
+		vdata[i] = mVertexElements[i];
+	}
+
+	//unlock vertex buffer
+	vbuffer->unlock();
+
+	//vbuffer->writeData(vsize * loc, vsize, mVertexElements, false);
+
+	delete [] mVertexElements;
 }
 
 }

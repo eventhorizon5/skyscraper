@@ -34,7 +34,7 @@ class SBSIMPEXP DynamicMesh : public ObjectBase
 {
 public:
 
-	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, float max_render_distance = 0);
+	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, float max_render_distance = 0, bool dynamic_buffers = false);
 	~DynamicMesh();
 	void Enable(bool value, MeshObject *client = 0);
 	void ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
@@ -53,6 +53,7 @@ public:
 	unsigned int GetVertexCount(int client = -1);
 	unsigned int GetTriangleCount(const std::string &material, int client = -1);
 	unsigned int GetIndexOffset(MeshObject *client);
+	bool UseDynamicBuffers() { return dynamic_buffers; }
 
 private:
 
@@ -69,9 +70,11 @@ private:
 		void EnableDebugView(bool value);
 		bool IsVisible();
 		int GetSubMeshCount() { return (int)Submeshes.size(); }
+		void UpdateVertex(int client, unsigned int vertex_index, const Ogre::Vector3 &vertex, const Ogre::Vector3 &normal, const Ogre::Vector2 &texel);
 
 		Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
+		std::vector<unsigned int> offset_table;
 		Ogre::Entity *Movable;
 		SceneNode *node;
 		DynamicMesh *Parent;
@@ -86,6 +89,7 @@ private:
 	bool file_model;
 	std::vector<MeshObject*> clients;
 	bool prepared;
+	bool dynamic_buffers;
 };
 
 }
