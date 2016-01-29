@@ -157,7 +157,7 @@ void SceneNode::SetRotation(const Ogre::Vector3 &rotation)
 	if (Rotation.x < 0)
 		Rotation.x += 360;
 	if (Rotation.y < 0)
-		Rotation += 360;
+		Rotation.y += 360;
 	if (Rotation.z < 0)
 		Rotation.z += 360;
 
