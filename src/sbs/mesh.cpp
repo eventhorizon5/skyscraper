@@ -24,9 +24,7 @@
 */
 
 #include <OgreResourceGroupManager.h>
-#include <OgreSceneManager.h>
 #include <OgreMaterialManager.h>
-#include <OgreEntity.h>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreMath.h>
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
@@ -1141,7 +1139,7 @@ void MeshObject::Prepare(bool force)
 
 	//set up bounding box
 	for (int i = 0; i < (int)MeshGeometry.size(); i++)
-		Bounds.merge(MeshGeometry[i].vertex);
+		Bounds.merge(sbs->ToLocal(MeshGeometry[i].vertex));
 
 	//update dynamic mesh
 	MeshWrapper->NeedsUpdate(this);
