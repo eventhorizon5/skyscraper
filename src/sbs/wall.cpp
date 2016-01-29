@@ -271,7 +271,8 @@ void WallObject::Move(const Ogre::Vector3 &position, float speed)
 	}
 
 	//prepare mesh
-	meshwrapper->Prepare(true);
+	if (meshwrapper->UsingDynamicBuffers() == false)
+		meshwrapper->Prepare(true);
 	meshwrapper->DeleteCollider();
 	meshwrapper->CreateCollider();
 }

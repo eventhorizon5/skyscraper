@@ -145,12 +145,22 @@ bool Polygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool con
 
 void Polygon::Move(const Ogre::Vector3 &position, float speed)
 {
+	bool dynamic = mesh->UsingDynamicBuffers();
+
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
 		int min = index_extents[i].x;
 		int max = index_extents[i].y;
-		for (int j = min; j <= max; j++)
-			mesh->MeshGeometry[j].vertex += sbs->ToRemote(position);
+
+		for (int index = min; index <= max; index++)
+		{
+			MeshObject::Geometry &data = mesh->MeshGeometry[index];
+			data.vertex += sbs->ToRemote(position * speed);
+
+			//update vertices in render buffer, if using dynamic buffers
+			if (dynamic == true)
+				mesh->MeshWrapper->UpdateVertex(mesh, index, data.vertex, data.normal, data.texel);
+		}
 	}
 }
 
