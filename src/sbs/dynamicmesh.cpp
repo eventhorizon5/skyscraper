@@ -629,7 +629,10 @@ void DynamicMesh::Mesh::Prepare(int client)
 			//make mesh's vertex relative to this scene node
 			Ogre::Vector3 vertex;
 			if (client == -1)
-				vertex = (node->GetOrientation().Inverse() * element.vertex) + offset;
+			{
+				Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+				vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+			}
 			else
 				vertex = mesh->MeshGeometry[i].vertex;
 
@@ -864,7 +867,8 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 		MeshObject::Geometry &element = geometry[i];
 
 		//make mesh's vertex relative to this scene node
-		Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * element.vertex) + offset;
+		Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+		Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
 
 		//add elements to array
 		mVertexElements[pos] = vertex2.x;
