@@ -831,12 +831,12 @@ void DynamicMesh::Mesh::UpdateVertex(int client, unsigned int vertex_index, cons
 	//fill array with vertex's data
 
 	//make mesh's vertex relative to this scene node
-	Ogre::Vector3 v = (node->GetOrientation().Inverse() * vertex) + offset;
+	Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * vertex) + offset;
 
 	//add elements to array
-	mVertexElements[0] = vertex.x;
-	mVertexElements[1] = vertex.y;
-	mVertexElements[2] = vertex.z;
+	mVertexElements[0] = vertex2.x;
+	mVertexElements[1] = vertex2.y;
+	mVertexElements[2] = vertex2.z;
 	mVertexElements[3] = normal.x;
 	mVertexElements[4] = normal.y;
 	mVertexElements[5] = normal.z;
