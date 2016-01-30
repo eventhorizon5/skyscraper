@@ -580,7 +580,10 @@ void MainScreen::HandleMouseMovement()
 {
 	EngineContext *engine = frontend->GetActiveEngine();
 
-	if (!engine)
+	if (!engine || IsActive() == false)
+		return;
+
+	if (engine->IsRunning() == false)
 		return;
 
 	//get SBS instance
