@@ -597,6 +597,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 
 	//populate array with vertex geometry from each client mesh
 	unsigned int loc = 0;
+	unsigned int vindex = 0;
 
 	int start = 0;
 	int end = Parent->GetClientCount() - 1;
@@ -616,7 +617,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 		MeshObject *mesh = Parent->GetClient(num);
 
 		//add current client's vertex index to offset table
-		offset_table.push_back(loc);
+		offset_table.push_back(vindex);
 
 		//get mesh's offset of associated scene node
 		Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
@@ -652,6 +653,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 
 		//add client vertex count to list
 		vertex_counts.push_back(mesh->GetVertexCount());
+		vindex += mesh->GetVertexCount();
 	}
 
 	//create vertex hardware buffer
