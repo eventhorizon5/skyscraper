@@ -38,7 +38,7 @@ FloorManager::FloorManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
-	floors = new DynamicMesh(this, sbs->GetSceneNode(), "Floor Container", 0, true);
+	floors = new DynamicMesh(this, sbs->GetSceneNode(), "Floor Container");
 	interfloors = new DynamicMesh(this, sbs->GetSceneNode(), "Interfloor Container");
 	columnframes = new DynamicMesh(this, sbs->GetSceneNode(), "Columnframe Container");
 }
