@@ -66,6 +66,9 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	InterfloorHeight = 0;
 	EnabledGroup = false;
 	EnabledGroup_Floor = 0;
+
+	//create a dynamic mesh for doors
+	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 }
 
 Floor::~Floor()
@@ -159,6 +162,10 @@ Floor::~Floor()
 		}
 		DoorArray[i] = 0;
 	}
+
+	if (DoorWrapper)
+		delete DoorWrapper;
+	DoorWrapper = 0;
 
 	//delete floor indicators
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
@@ -651,7 +658,7 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
-	Door* door = new Door(this, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
 }

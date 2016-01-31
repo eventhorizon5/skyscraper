@@ -75,6 +75,9 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 		StairArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->GetBase());
 		EnableArray[i - startfloor] = true;
 	}
+
+	//create a dynamic mesh for doors
+	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 }
 
 Stairs::~Stairs()
@@ -148,6 +151,10 @@ Stairs::~Stairs()
 			DoorArray[i][j] = 0;
 		}
 	}
+
+	if (DoorWrapper)
+		delete DoorWrapper;
+	DoorWrapper = 0;
 
 	//delete mesh array objects
 	for (int i = 0; i < (int)StairArray.size(); i++)
@@ -502,7 +509,7 @@ Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::strin
 	std::string num = ToString((int)DoorArray[index].size());
 	std::string name = "Stairwell " + ToString(StairsNum) + ":Door " + ToString(floor) + ":" + num;
 
-	Door* door = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Door* door = new Door(GetMeshObject(floor), DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	DoorArray[index].push_back(door);
 
 	floorptr = 0;

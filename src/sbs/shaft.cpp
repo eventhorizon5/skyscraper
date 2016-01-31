@@ -88,6 +88,9 @@ Shaft::Shaft(Object *parent, int number, float CenterX, float CenterZ, int start
 		ShaftArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->Altitude);
 		EnableArray[i - startfloor] = true;
 	}
+
+	//create a dynamic mesh for doors
+	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 }
 
 Shaft::~Shaft()
@@ -163,6 +166,10 @@ Shaft::~Shaft()
 			DoorArray[i][j] = 0;
 		}
 	}
+
+	if (DoorWrapper)
+		delete DoorWrapper;
+	DoorWrapper = 0;
 
 	//delete mesh array objects
 	for (int i = 0; i < (int)ShaftArray.size(); i++)
@@ -883,7 +890,7 @@ Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string
 	std::string num = ToString((int)DoorArray[index].size());
 	std::string name = "Shaft " + ToString(ShaftNumber) + ":Door " + ToString(floor) + ":" + num;
 
-	Door* door = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
+	Door* door = new Door(GetMeshObject(floor), DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
 	DoorArray[index].push_back(door);
 
 	floorptr = 0;

@@ -92,6 +92,7 @@ private:
 
 	//Doors
 	std::vector<std::vector<Door*> > DoorArray;
+	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//Lights
 	std::vector<std::vector<Light*> > lights;

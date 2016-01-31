@@ -139,6 +139,7 @@ private:
 
 	//doors
 	std::vector<Door*> DoorArray; //pointer array to door objects
+	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//lights
 	std::vector<Light*> lights;
