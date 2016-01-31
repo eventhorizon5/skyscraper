@@ -644,7 +644,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 			mVertexElements[loc + 3] = element.normal.x;
 			mVertexElements[loc + 4] = element.normal.y;
 			mVertexElements[loc + 5] = element.normal.z;
-			mVertexElements[loc + 6] = -element.texel.x;
+			mVertexElements[loc + 6] = element.texel.x;
 			mVertexElements[loc + 7] = element.texel.y;
 			box.merge(vertex);
 			radius = std::max(radius, vertex.length());

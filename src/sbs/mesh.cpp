@@ -1031,7 +1031,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 			for (int j = 0; j < (int)vertices[i].size(); j++)
 			{
 				texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
-				texels[index].x = -texel_temp.x; //flip X for compatibility with right-hand coordinate system
+				texels[index].x = texel_temp.x;
 				texels[index].y = texel_temp.y;
 				index++;
 			}
@@ -1041,13 +1041,13 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	else
 	{
 		Ogre::Vector2 *texels = new Ogre::Vector2[4];
-		texels[0].x = tw;
+		texels[0].x = 0;
 		texels[0].y = 0;
-		texels[1].x = 0;
+		texels[1].x = tw;
 		texels[1].y = 0;
-		texels[2].x = 0;
+		texels[2].x = tw;
 		texels[2].y = th;
-		texels[3].x = tw;
+		texels[3].x = 0;
 		texels[3].y = th;
 		return texels;
 	}
