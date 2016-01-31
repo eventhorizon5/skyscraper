@@ -37,6 +37,12 @@ namespace SBS {
 
 DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &name, float max_render_distance, bool dynamic_buffers) : ObjectBase(parent)
 {
+	//creates a new Dynamic Mesh object, which manages multiple sets of geometry data for efficiency.
+	//A MeshObject is a client of this object, which submits it's geometry data to be handled automatically
+
+	//if "dynamic_buffers" is true, a MeshObject's geometry can be part of a larger combined mesh, yet still be movable
+	//and rotated independently like a regular mesh, by using dynamic (writable) render buffers, becoming a virtual mesh
+
 	SetName(name);
 	this->node = node;
 	render_distance = max_render_distance;

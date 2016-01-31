@@ -174,6 +174,7 @@ public:
 	std::string GetNumberText();
 	void ResetState();
 	void RemoveShaftDoor(DoorWrapper *door);
+	DynamicMesh* GetContainer() { return ShaftDoorContainer; }
 
 private:
 
@@ -184,6 +185,7 @@ private:
 	int WhichDoors; //which doors are in use; 1 for both, 2 for elevator doors, 3 for shaft doors
 	int ShaftDoorFloor; //floor the active shaft doors are on; only used if WhichDoors is 3
 	std::vector<DoorWrapper*> ShaftDoors; //shaft doors
+	DynamicMesh *ShaftDoorContainer; //shaft door dynamic mesh container
 	std::vector<int> ManualFloors; //list of floors that use manual shaft doors
 
 	void MoveDoors(bool open, bool manual);

@@ -91,6 +91,9 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
 	doorsound = new Sound(this, "Door Sound", true);
 	chime = new Sound(this, "Chime", true);
 	nudgesound = new Sound(this, "Nudge Sound", true);
+
+	//create a dynamic mesh for doors
+	ShaftDoorContainer = new DynamicMesh(this, GetSceneNode(), GetName() + " Shaft Door Container", 0, true);
 }
 
 ElevatorDoor::~ElevatorDoor()
@@ -105,6 +108,10 @@ ElevatorDoor::~ElevatorDoor()
 		}
 		ShaftDoors[i] = 0;
 	}
+
+	if (ShaftDoorContainer)
+		delete ShaftDoorContainer;
+	ShaftDoorContainer = 0;
 
 	//Destructor
 	if (timer)
@@ -1392,7 +1399,7 @@ ElevatorDoor::DoorObject::DoorObject(const std::string &doorname, DoorWrapper *W
 	parent = wrapper->parent;
 
 	//create object mesh
-	mesh = new MeshObject(wrapper, doorname);
+	mesh = new MeshObject(wrapper, doorname, parent->GetContainer());
 
 	//keep colliders attached, to fix performance issues when moving in and out of an elevator
 	mesh->remove_on_disable = false;
