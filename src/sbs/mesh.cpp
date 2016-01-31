@@ -1139,7 +1139,7 @@ void MeshObject::Prepare(bool force)
 
 	//set up bounding box
 	for (int i = 0; i < (int)MeshGeometry.size(); i++)
-		Bounds.merge(sbs->ToLocal(MeshGeometry[i].vertex));
+		Bounds.merge(MeshGeometry[i].vertex);
 
 	//update dynamic mesh
 	MeshWrapper->NeedsUpdate(this);
@@ -1474,11 +1474,11 @@ void MeshObject::CreateBoxCollider()
 		if (Bounds.isNull() == true)
 			return;
 
-		Ogre::Vector3 bounds = sbs->ToRemote(Bounds.getHalfSize()) * scale;
+		Ogre::Vector3 bounds = Bounds.getHalfSize() * scale;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 
 		//create a new scene node for this collider, and center the collider accordingly
-		Ogre::Vector3 collider_center = Bounds.getCenter();
+		Ogre::Vector3 collider_center = sbs->ToLocal(Bounds.getCenter());
 		if (!collider_node)
 			collider_node = GetSceneNode()->CreateChild(GetName() + " collider", collider_center);
 
@@ -1531,7 +1531,7 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 {
 	//determine if position 'pos' is inside the mesh's bounding box
 
-	Ogre::Vector3 position = pos - GetPosition();
+	Ogre::Vector3 position = sbs->ToRemote(pos - GetPosition());
 
 	if (Bounds.isNull() == true)
 		return false;
@@ -1843,8 +1843,8 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	if (Bounds.isNull() == true)
 		return false;
 
-	Ogre::Vector3 min = sbs->ToRemote(Bounds.getMinimum());
-	Ogre::Vector3 max = sbs->ToRemote(Bounds.getMaximum());
+	Ogre::Vector3 min = Bounds.getMinimum();
+	Ogre::Vector3 max = Bounds.getMaximum();
 	Ogre::Vector3 pos = sbs->ToRemote(GetPosition());
 	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
 
@@ -1868,7 +1868,7 @@ Ogre::Vector3 MeshObject::GetOffset()
 	Ogre::Vector3 vec = Bounds.getCenter();
 	Ogre::Vector3 min = Bounds.getMinimum();
 	Ogre::Vector3 offset (vec.x, -Bounds.getMinimum().y, -vec.z);
-	return offset;
+	return sbs->ToLocal(offset);
 }
 
 void MeshObject::Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
