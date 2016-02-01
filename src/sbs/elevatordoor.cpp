@@ -93,7 +93,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
 	nudgesound = new Sound(this, "Nudge Sound", true);
 
 	//create a dynamic mesh for doors
-	ShaftDoorContainer = new DynamicMesh(this, elev->GetShaft()->GetSceneNode(), GetName() + " Shaft Door Container", 0, true);
+	ShaftDoorContainer = new DynamicMesh(this, elev->GetShaft()->GetSceneNode(), elev->GetName() + ":" + ToString(Number) + " Container", 0, true);
 }
 
 ElevatorDoor::~ElevatorDoor()
