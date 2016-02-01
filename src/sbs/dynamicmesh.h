@@ -55,6 +55,7 @@ public:
 	unsigned int GetIndexOffset(MeshObject *client);
 	bool UseDynamicBuffers() { return dynamic_buffers; }
 	void UpdateVertices(MeshObject *client, unsigned int index = 0, bool single = false);
+	void DetachClient(MeshObject *client);
 
 private:
 
@@ -72,6 +73,7 @@ private:
 		bool IsVisible();
 		int GetSubMeshCount() { return (int)Submeshes.size(); }
 		void UpdateVertices(int client, unsigned int index = 0, bool single = false);
+		void Detach();
 
 		Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)

@@ -611,6 +611,8 @@ MeshObject::~MeshObject()
 		delete collider_node;
 	collider_node = 0;
 
+	MeshWrapper->DetachClient(this);
+
 	if (sbs->FastDelete == false)
 	{
 		MeshWrapper->RemoveClient(this);

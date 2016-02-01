@@ -442,6 +442,17 @@ void DynamicMesh::UpdateVertices(MeshObject *client, unsigned int index, bool si
 		meshes[client_index]->UpdateVertices(client_index, index, single);
 }
 
+void DynamicMesh::DetachClient(MeshObject *client)
+{
+	if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			meshes[index]->Detach();
+	}
+}
+
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
@@ -483,12 +494,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 DynamicMesh::Mesh::~Mesh()
 {
-	if (Movable)
-	{
-		node->DetachObject(Movable);
-		sbs->mSceneManager->destroyEntity(Movable);
-	}
-	Movable = 0;
+	Detach();
 
 	if (MeshWrapper.get())
 		Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
@@ -499,7 +505,7 @@ void DynamicMesh::Mesh::Enable(bool value)
 {
 	//attach or detach from scenegraph
 
-	if (enabled == value)
+	if (enabled == value || !node)
 		return;
 
 	if (value == false)
@@ -540,6 +546,9 @@ int DynamicMesh::Mesh::FindMatchingSubMesh(const std::string &material)
 
 Ogre::SubMesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &material)
 {
+	if (!node)
+		return 0;
+
 	//create and add submesh
 	Ogre::SubMesh *submesh = MeshWrapper->createSubMesh(node->GetFullName() + ":" + ToString(GetSubMeshCount()));
 	submesh->useSharedVertices = true;
@@ -562,7 +571,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
 
-	if (prepared == true)
+	if (prepared == true || !node)
 		return;
 
 	unsigned int vertex_count = Parent->GetVertexCount(client);
@@ -829,7 +838,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
-	if (Parent->UseDynamicBuffers() == false)
+	if (Parent->UseDynamicBuffers() == false || !node)
 		return;
 
 	if (!Parent->GetClient(client))
@@ -916,6 +925,19 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
 
 	delete [] mVertexElements;
+}
+
+void DynamicMesh::Mesh::Detach()
+{
+	//detach entity and scene node from this mesh object
+
+	if (Movable)
+	{
+		node->DetachObject(Movable);
+		sbs->mSceneManager->destroyEntity(Movable);
+	}
+	Movable = 0;
+	node = 0;
 }
 
 }
