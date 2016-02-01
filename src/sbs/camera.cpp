@@ -1219,14 +1219,12 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 	return mesh->IsVisible(MainCamera);
 }
 
-bool Camera::IsDynamicMeshVisible(DynamicMesh *mesh)
+bool Camera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
 {
-	//returns if a dynamic mesh is visible in the camera's view frustum or not
-
 	if (!mesh || !MainCamera)
 		return false;
 
-	return mesh->IsVisible(MainCamera);
+	return mesh->IsVisible(MainCamera, mesh_index);
 }
 
 void Camera::AttachModel(Model *model)

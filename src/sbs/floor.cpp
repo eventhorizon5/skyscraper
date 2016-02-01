@@ -42,7 +42,8 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	SetName("Floor " + num);
 
 	//Create primary level mesh
-	Level = new MeshObject(this, "Level " + num, manager->GetFloorDynMesh());
+	//Level = new MeshObject(this, "Level " + num, manager->GetFloorDynMesh());
+	Level = new MeshObject(this, "Level " + num);
 
 	//Create interfloor mesh
 	Interfloor = new MeshObject(this, "Interfloor " + num, manager->GetIFloorDynMesh());

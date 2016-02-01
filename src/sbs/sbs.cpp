@@ -3720,12 +3720,15 @@ void SBS::ListVisibleMeshes()
 
 	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
 	{
-		if (camera->IsDynamicMeshVisible(dynamic_meshes[i]) == true)
+		for (int j = 0; j < (int)dynamic_meshes[i]->GetMeshCount(); j++)
 		{
-			submeshes = dynamic_meshes[i]->GetSubMeshCount();
-			Report(dynamic_meshes[i]->GetName() + "\t-\t" + ToString(submeshes));
-			count++;
-			total += submeshes;
+			if (camera->IsDynamicMeshVisible(dynamic_meshes[i], j) == true)
+			{
+				submeshes = dynamic_meshes[i]->GetSubMeshCount(j);
+				Report(dynamic_meshes[i]->GetMeshName(j) + "\t-\t" + ToString(submeshes));
+				count++;
+				total += submeshes;
+			}
 		}
 	}
 	Report("Total: " + ToString(count) + " meshes, " + ToString(total) + " submeshes");

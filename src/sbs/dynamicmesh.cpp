@@ -170,15 +170,26 @@ bool DynamicMesh::IsVisible(Ogre::Camera *camera, MeshObject *client)
 		return false;
 
 	if (client == 0 || meshes.size() == 1)
-		return meshes[0]->IsVisible(camera);
+		return IsVisible(camera, 0);
 	else if (meshes.size() > 1)
 	{
 		int index = GetClientIndex(client);
 
 		if (index >= 0)
-			return meshes[index]->IsVisible(camera);
+			return IsVisible(camera, index);
 	}
 	return false;
+}
+
+bool DynamicMesh::IsVisible(Ogre::Camera *camera, int mesh_index)
+{
+	if (meshes.empty() == true)
+		return false;
+
+	if (mesh_index < 0 || mesh_index >= (int)meshes.size())
+		return false;
+
+	return meshes[mesh_index]->IsVisible(camera);
 }
 
 void DynamicMesh::Prepare(MeshObject *client)
@@ -470,21 +481,26 @@ void DynamicMesh::DetachClient(MeshObject *client)
 	}
 }
 
-int DynamicMesh::GetSubMeshCount(MeshObject *client)
+int DynamicMesh::GetSubMeshCount(int mesh_index)
 {
 	if (meshes.empty() == true)
-		return false;
+		return -1;
 
-	if (client == 0 || meshes.size() == 1)
-		return meshes[0]->GetSubMeshCount();
-	else if (meshes.size() > 1)
-	{
-		int index = GetClientIndex(client);
+	if (mesh_index < 0 || mesh_index >= (int)meshes.size())
+		return -1;
 
-		if (index >= 0)
-			return meshes[index]->GetSubMeshCount();
-	}
-	return false;
+	return meshes[mesh_index]->GetSubMeshCount();
+}
+
+std::string DynamicMesh::GetMeshName(int mesh_index)
+{
+	if (meshes.empty() == true)
+		return "";
+
+	if (mesh_index < 0 || mesh_index >= (int)meshes.size())
+		return "";
+
+	return meshes[mesh_index]->name;
 }
 
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
@@ -498,12 +514,15 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 	if (filename == "")
 	{
+		this->name = name;
+
 		//create mesh
-		std::string Name = node->GetNameBase() + name;
-		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(Name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	}
 	else
 	{
+		this->name = filename;
+
 		//load model
 		try
 		{
@@ -998,6 +1017,11 @@ void DynamicMesh::Mesh::Detach()
 	}
 	Movable = 0;
 	node = 0;
+}
+
+int DynamicMesh::Mesh::GetSubMeshCount()
+{
+	return MeshWrapper->getNumSubMeshes();
 }
 
 }

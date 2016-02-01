@@ -41,6 +41,7 @@ public:
 	void EnableDebugView(bool value, MeshObject *client = 0);
 	bool IsVisible(MeshObject *client = 0);
 	bool IsVisible(Ogre::Camera *camera, MeshObject *client = 0);
+	bool IsVisible(Ogre::Camera *camera, int mesh_index);
 	void Prepare(MeshObject *client = 0);
 	bool LoadFromFile(const std::string &filename, const std::string &path);
 	void AddClient(MeshObject *mesh);
@@ -57,7 +58,9 @@ public:
 	bool UseDynamicBuffers() { return dynamic_buffers; }
 	void UpdateVertices(MeshObject *client, unsigned int index = 0, bool single = false);
 	void DetachClient(MeshObject *client);
-	int GetSubMeshCount(MeshObject *client = 0);
+	int GetMeshCount() { return (int)meshes.size(); }
+	int GetSubMeshCount(int mesh_index);
+	std::string GetMeshName(int mesh_index);
 
 private:
 
@@ -74,10 +77,11 @@ private:
 		void EnableDebugView(bool value);
 		bool IsVisible();
 		bool IsVisible(Ogre::Camera *camera);
-		int GetSubMeshCount() { return (int)Submeshes.size(); }
+		int GetSubMeshCount();
 		void UpdateVertices(int client, unsigned int index = 0, bool single = false);
 		void Detach();
 
+		std::string name;
 		Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
 		std::vector<unsigned int> offset_table;
