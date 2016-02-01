@@ -91,6 +91,9 @@ Shaft::Shaft(Object *parent, int number, float CenterX, float CenterZ, int start
 
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
+
+	//create a dynamic mesh for doors
+	ShaftDoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Shaft Door Container", 0, true);
 }
 
 Shaft::~Shaft()
@@ -170,6 +173,10 @@ Shaft::~Shaft()
 	if (DoorWrapper)
 		delete DoorWrapper;
 	DoorWrapper = 0;
+
+	if (ShaftDoorContainer)
+		delete ShaftDoorContainer;
+	ShaftDoorContainer = 0;
 
 	//delete mesh array objects
 	for (int i = 0; i < (int)ShaftArray.size(); i++)
