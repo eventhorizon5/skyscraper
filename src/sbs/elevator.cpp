@@ -210,6 +210,9 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	SetName(name);
 	ElevatorMesh = new MeshObject(this, name);
 
+	//create a dynamic mesh for elevator doors
+	DoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Door Container", 0, true);
+
 	if (sbs->Verbose)
 		Report("elevator object created");
 }
@@ -315,6 +318,10 @@ Elevator::~Elevator()
 			DoorArray[i] = 0;
 		}
 	}
+
+	if (DoorContainer)
+		delete DoorContainer;
+	DoorContainer = 0;
 
 	//delete floor indicators
 	if (sbs->Verbose)

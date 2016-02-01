@@ -338,6 +338,7 @@ public:
 	bool IsManuallyStopped();
 	bool IsOnFloor(int floor);
 	Model* GetModel(std::string name);
+	DynamicMesh* GetDoorContainer() { return DoorContainer; }
 
 private:
 
@@ -428,6 +429,9 @@ private:
 
 	//doors and shaft doors
 	std::vector<ElevatorDoor*> DoorArray;
+
+	//mesh container for elevator doors (not shaft doors)
+	DynamicMesh *DoorContainer;
 
 	//floor indicators
 	std::vector<FloorIndicator*> FloorIndicatorArray;

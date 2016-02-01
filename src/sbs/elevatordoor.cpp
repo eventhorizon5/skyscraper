@@ -1393,7 +1393,7 @@ ElevatorDoor::DoorObject::DoorObject(const std::string &doorname, DoorWrapper *W
 
 	//create object mesh
 	if (wrapper->IsShaftDoor == false)
-		mesh = new MeshObject(wrapper, doorname);
+		mesh = new MeshObject(wrapper, doorname, parent->elev->GetDoorContainer());
 	else
 		mesh = new MeshObject(wrapper, doorname, parent->elev->GetShaft()->GetShaftDoorContainer());
 
