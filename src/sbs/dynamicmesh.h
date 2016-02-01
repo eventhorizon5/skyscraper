@@ -40,6 +40,7 @@ public:
 	void ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
 	void EnableDebugView(bool value, MeshObject *client = 0);
 	bool IsVisible(MeshObject *client = 0);
+	bool IsVisible(Ogre::Camera *camera, MeshObject *client = 0);
 	void Prepare(MeshObject *client = 0);
 	bool LoadFromFile(const std::string &filename, const std::string &path);
 	void AddClient(MeshObject *mesh);
@@ -56,6 +57,7 @@ public:
 	bool UseDynamicBuffers() { return dynamic_buffers; }
 	void UpdateVertices(MeshObject *client, unsigned int index = 0, bool single = false);
 	void DetachClient(MeshObject *client);
+	int GetSubMeshCount(MeshObject *client = 0);
 
 private:
 
@@ -71,6 +73,7 @@ private:
 		void Prepare(int client = -1);
 		void EnableDebugView(bool value);
 		bool IsVisible();
+		bool IsVisible(Ogre::Camera *camera);
 		int GetSubMeshCount() { return (int)Submeshes.size(); }
 		void UpdateVertices(int client, unsigned int index = 0, bool single = false);
 		void Detach();

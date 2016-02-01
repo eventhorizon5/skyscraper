@@ -164,6 +164,23 @@ bool DynamicMesh::IsVisible(MeshObject *client)
 	return false;
 }
 
+bool DynamicMesh::IsVisible(Ogre::Camera *camera, MeshObject *client)
+{
+	if (meshes.empty() == true)
+		return false;
+
+	if (client == 0 || meshes.size() == 1)
+		return meshes[0]->IsVisible(camera);
+	else if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			return meshes[index]->IsVisible(camera);
+	}
+	return false;
+}
+
 void DynamicMesh::Prepare(MeshObject *client)
 {
 	if (file_model == true || prepared == true)
@@ -451,6 +468,23 @@ void DynamicMesh::DetachClient(MeshObject *client)
 		if (index >= 0)
 			meshes[index]->Detach();
 	}
+}
+
+int DynamicMesh::GetSubMeshCount(MeshObject *client)
+{
+	if (meshes.empty() == true)
+		return false;
+
+	if (client == 0 || meshes.size() == 1)
+		return meshes[0]->GetSubMeshCount();
+	else if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			return meshes[index]->GetSubMeshCount();
+	}
+	return false;
 }
 
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
@@ -830,8 +864,34 @@ void DynamicMesh::Mesh::EnableDebugView(bool value)
 
 bool DynamicMesh::Mesh::IsVisible()
 {
-	//returns true if this mesh is currently visible
+	//returns true if this mesh is currently visible (enabled, and within the rendering distance)
 	return Movable->isVisible();
+}
+
+bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
+{
+	//returns if this mesh is visible in the provided camera's view frustom or not
+
+	if (enabled == false || !camera)
+		return false;
+
+	//if beyond the max render distance
+	if (IsVisible() == false)
+		return false;
+
+	if (GetSubMeshCount() == 0)
+		return false;
+
+	Ogre::AxisAlignedBox Bounds = MeshWrapper->getBounds();
+	if (Bounds.isNull() == true)
+		return false;
+
+	Ogre::Vector3 min = Bounds.getMinimum();
+	Ogre::Vector3 max = Bounds.getMaximum();
+	Ogre::Vector3 pos = sbs->ToRemote(node->GetPosition());
+	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
+
+	return camera->isVisible(global_box);
 }
 
 void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool single)

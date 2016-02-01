@@ -154,6 +154,7 @@ public:
 	void GotoFloor(int floor, bool disable_current = true);
 	void Binoculars(bool value);
 	bool IsMeshVisible(MeshObject *mesh);
+	bool IsDynamicMeshVisible(DynamicMesh *mesh);
 	void AttachModel(Model *model);
 	void DetachModel();
 	bool PickUpModel();
