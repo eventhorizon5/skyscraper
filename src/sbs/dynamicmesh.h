@@ -63,6 +63,7 @@ public:
 	int GetMeshCount() { return (int)meshes.size(); }
 	int GetSubMeshCount(int mesh_index);
 	std::string GetMeshName(int mesh_index);
+	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
 
 private:
 

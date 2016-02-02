@@ -594,6 +594,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 		else
 		{
 			//create generic box collider if separate mesh collider isn't available
+			Bounds = MeshWrapper->GetBounds(this);
 			CreateBoxCollider();
 		}
 	}
@@ -1140,8 +1141,11 @@ void MeshObject::Prepare(bool force)
 		return;
 
 	//set up bounding box
-	for (int i = 0; i < (int)MeshGeometry.size(); i++)
-		Bounds.merge(MeshGeometry[i].vertex);
+	if (model_loaded == false)
+	{
+		for (int i = 0; i < (int)MeshGeometry.size(); i++)
+			Bounds.merge(MeshGeometry[i].vertex);
+	}
 
 	//update dynamic mesh
 	MeshWrapper->NeedsUpdate(this);

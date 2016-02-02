@@ -49,7 +49,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 
 	load_error = false;
 	mesh = new MeshObject(this, name, 0, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
-	if (mesh->model_loaded == false)
+	if (mesh->model_loaded == false && filename != "")
 	{
 		load_error = true;
 		return;

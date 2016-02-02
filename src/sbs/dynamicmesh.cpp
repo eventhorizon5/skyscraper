@@ -504,6 +504,23 @@ std::string DynamicMesh::GetMeshName(int mesh_index)
 	return meshes[mesh_index]->name;
 }
 
+Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
+{
+	if (meshes.empty() == true)
+		return Ogre::AxisAlignedBox::BOX_NULL;
+
+	if (client == 0 || meshes.size() == 1)
+		return meshes[0]->MeshWrapper->getBounds();
+	else if (meshes.size() > 1)
+	{
+		int index = GetClientIndex(client);
+
+		if (index >= 0)
+			return meshes[index]->MeshWrapper->getBounds();
+	}
+	return Ogre::AxisAlignedBox::BOX_NULL;
+}
+
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
