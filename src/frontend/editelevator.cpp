@@ -1213,6 +1213,9 @@ void editelevator::Loop()
 		//set floor range slider
 		sFloor->SetScrollbar(0, 1, elevator->GetServicedFloorCount(), 1);
 
+		//set door range slider
+		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
+
 		SetMainValues();
 	}
 	if (door_num != last_door)
