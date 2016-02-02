@@ -34,6 +34,8 @@ class SBSIMPEXP DynamicMesh : public ObjectBase
 {
 public:
 
+	bool force_combine; //if set to true, forces combined meshes
+
 	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, float max_render_distance = 0, bool dynamic_buffers = false);
 	~DynamicMesh();
 	void Enable(bool value, MeshObject *client = 0);

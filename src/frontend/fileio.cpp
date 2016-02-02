@@ -2115,7 +2115,7 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
 
-		Simcore->GetShaft(shaftnum)->ShowFullShaft = ToBool(temp2);
+		Simcore->GetShaft(shaftnum)->SetShowFull(ToBool(temp2));
 		return sNextLine;
 	}
 

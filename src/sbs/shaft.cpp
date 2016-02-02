@@ -1097,4 +1097,13 @@ Model* Shaft::GetModel(int floor, std::string name)
 	return 0;
 }
 
+void Shaft::SetShowFull(bool value)
+{
+	ShowFullShaft = value;
+
+	//force the combining of dynamic meshes, since they'll be fully shown
+	DoorWrapper->force_combine = true;
+	ShaftDoorContainer->force_combine = true;
+}
+
 }

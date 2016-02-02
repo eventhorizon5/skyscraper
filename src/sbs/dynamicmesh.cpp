@@ -49,6 +49,7 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 	file_model = false;
 	prepared = false;
 	this->dynamic_buffers = dynamic_buffers;
+	force_combine = false;
 	sbs->RegisterDynamicMesh(this);
 }
 
@@ -221,7 +222,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 			}
 
 			//if combined submesh/material count is less than three separate meshes
-			if (total < separate_total || total <= 10)
+			if (total < separate_total || total <= 10 || force_combine == true)
 				meshes_to_create = 1; //create a single combined mesh for all clients
 			else
 				meshes_to_create = (int)clients.size(); //create separate meshes for each client

@@ -1130,7 +1130,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabled");
 
 	//exit if shaft's ShowFullShaft is set
-	if (elev->GetShaft()->ShowFullShaft == true && value == false)
+	if (elev->GetShaft()->GetShowFull() == true && value == false)
 		return;
 
 	//exit if elevator doesn't service the requested floor
@@ -1155,7 +1155,7 @@ void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
 	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabledRange");
 
 	//exit if shaft's ShowFullShaft is set
-	if (elev->GetShaft()->ShowFullShaft == true)
+	if (elev->GetShaft()->GetShowFull() == true)
 		return;
 
 	//range must be greater than 0

@@ -39,6 +39,7 @@ FloorManager::FloorManager(Object* parent) : Object(parent)
 	get_result = 0;
 	get_number = 0;
 	//floors = new DynamicMesh(this, sbs->GetSceneNode(), "Floor Container");
+	floors = 0;
 	interfloors = new DynamicMesh(this, sbs->GetSceneNode(), "Interfloor Container");
 	columnframes = new DynamicMesh(this, sbs->GetSceneNode(), "Columnframe Container");
 }
@@ -321,7 +322,7 @@ void ElevatorManager::EnableAll(bool value)
 		Shaft *shaft = Array[i].object->GetShaft();
 
 		if (value == false)
-			value = shaft->ShowFullShaft;
+			value = shaft->GetShowFull();
 
 		Array[i].object->Enabled(value);
 	}

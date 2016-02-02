@@ -47,7 +47,6 @@ public:
 	int ShowFloors; //determines if floors should be shown while inside the shaft/elevator; 0 is off, 1 shows a portion at a time, 2 shows all in list - floor list in ShowFloorsList
 	bool ShowOutside; //true if outside should be shown while inside the shaft/elevator; floor list in ShowOutsideList
 	bool ShowInterfloors; //true if interfloors should be shown while inside the shaft/elevator
-	bool ShowFullShaft; //if true, always show full shaft instead of only a selected range
 
 	Shaft(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	~Shaft();
@@ -94,6 +93,8 @@ public:
 	void Loop();
 	Model* GetModel(int floor, std::string name);
 	DynamicMesh* GetShaftDoorContainer() { return ShaftDoorContainer; }
+	void SetShowFull(bool value);
+	bool GetShowFull() { return ShowFullShaft; }
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array
@@ -102,6 +103,7 @@ private:
 	std::vector<int> ShowFloorsList; //list of floors to enable while inside the shaft/elevator
 	std::vector<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	std::vector<int> ShowInterfloorsList; //list of interfloors to enable while inside the shaft/elevator
+	bool ShowFullShaft; //if true, always show full shaft instead of only a selected range
 
 	//mesh container for shaf doors
 	DynamicMesh *ShaftDoorContainer; //shaft door dynamic mesh container
