@@ -116,20 +116,21 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 	}
 }
 
-void DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client)
+bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client)
 {
 	if (client == 0 || meshes.size() == 1)
 	{
 		for (int i = 0; i < (int)meshes.size(); i++)
-			meshes[i]->ChangeTexture(old_texture, new_texture);
+			return meshes[i]->ChangeTexture(old_texture, new_texture);
 	}
 	else if (meshes.size() > 1)
 	{
 		int index = GetClientIndex(client);
 
 		if (index >= 0)
-			meshes[index]->ChangeTexture(old_texture, new_texture);
+			return meshes[index]->ChangeTexture(old_texture, new_texture);
 	}
+	return false;
 }
 
 void DynamicMesh::EnableDebugView(bool value, MeshObject *client)
@@ -587,17 +588,26 @@ void DynamicMesh::Mesh::Enable(bool value)
 	enabled = value;
 }
 
-void DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)
+bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)
 {
+	//get new material
+	Ogre::MaterialPtr newmat = sbs->GetMaterialByName(new_texture, "General");
+
+	if (!newmat.get())
+		return sbs->ReportError("ChangeTexture: Invalid texture '" + new_texture + "'");
+
 	int submesh = FindMatchingSubMesh(old_texture);
 
 	if (submesh == -1)
-		return;
+		return false;
 
+	//set material if valid
 	MeshWrapper->getSubMesh(submesh)->setMaterialName(ToString(sbs->InstanceNumber) + ":" + new_texture);
 
 	//apply changes (refresh mesh state)
 	MeshWrapper->_dirtyState();
+
+	return true;
 }
 
 int DynamicMesh::Mesh::FindMatchingSubMesh(const std::string &material)

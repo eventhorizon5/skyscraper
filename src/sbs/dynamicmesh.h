@@ -39,7 +39,7 @@ public:
 	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, float max_render_distance = 0, bool dynamic_buffers = false);
 	~DynamicMesh();
 	void Enable(bool value, MeshObject *client = 0);
-	void ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
+	bool ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
 	void EnableDebugView(bool value, MeshObject *client = 0);
 	bool IsVisible(MeshObject *client = 0);
 	bool IsVisible(Ogre::Camera *camera, MeshObject *client = 0);
@@ -73,7 +73,7 @@ private:
 		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
 		~Mesh();
 		void Enable(bool value);
-		void ChangeTexture(const std::string &old_texture, const std::string &new_texture);
+		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
 		Ogre::SubMesh* CreateSubMesh(const std::string &material);
 		void Prepare(int client = -1);

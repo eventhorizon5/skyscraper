@@ -724,18 +724,12 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 			return false;
 	}
 
-	//get new material
-	Ogre::MaterialPtr newmat = sbs->GetMaterialByName(material, "General");
-	if (!newmat.get())
-	{
-		sbs->ReportError("ChangeTexture: Invalid texture '" + material + "'");
+	bool result = MeshWrapper->ChangeTexture(Submeshes[submesh].Name, material, this);
+
+	if (result == false)
 		return false;
-	}
 
-	//set material if valid
-	MeshWrapper->ChangeTexture(Submeshes[submesh].Name, material, this);
 	Submeshes[submesh].Name = material;
-
 	return true;
 }
 
