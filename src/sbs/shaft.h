@@ -93,6 +93,7 @@ public:
 	void Check(Ogre::Vector3 position, int current_floor);
 	void Loop();
 	Model* GetModel(int floor, std::string name);
+	DynamicMesh* GetShaftDoorContainer() { return ShaftDoorContainer; }
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array
@@ -101,6 +102,9 @@ private:
 	std::vector<int> ShowFloorsList; //list of floors to enable while inside the shaft/elevator
 	std::vector<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	std::vector<int> ShowInterfloorsList; //list of interfloors to enable while inside the shaft/elevator
+
+	//mesh container for shaf doors
+	DynamicMesh *ShaftDoorContainer; //shaft door dynamic mesh container
 
 	//cache objects for IsInShaft()
 	Ogre::Vector3 lastposition;
@@ -111,6 +115,7 @@ private:
 
 	//Doors
 	std::vector<std::vector<Door*> > DoorArray;
+	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//Lights
 	std::vector<std::vector<Light*> > lights;
@@ -123,6 +128,9 @@ private:
 
 	//Triggers
 	//std::vector<std::vector<Trigger*> > TriggerArray;
+
+	//dynamic mesh object
+	DynamicMesh *dynamic_mesh;
 };
 
 }

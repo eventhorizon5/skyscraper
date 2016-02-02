@@ -67,7 +67,7 @@ public:
 	int EnabledGroup_Floor; //number of floor that enabled this floor as part of it's own group
 
 	//functions
-	Floor(Object *parent, int number);
+	Floor(Object *parent, FloorManager *manager, int number);
 	~Floor();
 	WallObject* AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool isexternal, bool legacy_behavior = false);
 	WallObject* AddInterfloorFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
@@ -139,6 +139,7 @@ private:
 
 	//doors
 	std::vector<Door*> DoorArray; //pointer array to door objects
+	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//lights
 	std::vector<Light*> lights;

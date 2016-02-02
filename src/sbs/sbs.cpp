@@ -177,14 +177,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	TexelOverride = false;
 	enable_profiling = false;
 	enable_advanced_profiling = false;
-	getfloor_result = 0;
-	getfloor_number = 0;
-	getelevator_result = 0;
-	getelevator_number = 0;
-	getshaft_result = 0;
-	getshaft_number = 0;
-	getstairs_result = 0;
-	getstairs_number = 0;
 	texturecount = 0;
 	materialcount = 0;
 	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
@@ -267,6 +259,12 @@ void SBS::Initialize()
 	Landscape = new MeshObject(this, "Landscape");
 	//Landscape->tricollider = false;
 
+	//create manager objects
+	floor_manager = new FloorManager(this);
+	elevator_manager = new ElevatorManager(this);
+	shaft_manager = new ShaftManager(this);
+	stairs_manager = new StairsManager(this);
+
 	//create camera object
 	this->camera = new Camera(this);
 }
@@ -346,49 +344,22 @@ SBS::~SBS()
 	doorcallbacks.clear();
 	buttoncallbacks.clear();
 
-	//delete floors
-	for (int i = 0; i < (int)FloorArray.size(); i++)
-	{
-		if (FloorArray[i].object)
-		{
-			FloorArray[i].object->parent_deleting = true;
-			delete FloorArray[i].object;
-		}
-		FloorArray[i].object = 0;
-	}
+	//delete manager objects
+	if (floor_manager)
+		delete floor_manager;
+	floor_manager = 0;
 
-	//delete elevators
-	for (int i = 0; i < (int)ElevatorArray.size(); i++)
-	{
-		if (ElevatorArray[i].object)
-		{
-			ElevatorArray[i].object->parent_deleting = true;
-			delete ElevatorArray[i].object;
-		}
-		ElevatorArray[i].object = 0;
-	}
+	if (elevator_manager)
+		delete elevator_manager;
+	elevator_manager = 0;
 
-	//delete shafts
-	for (int i = 0; i < (int)ShaftArray.size(); i++)
-	{
-		if (ShaftArray[i].object)
-		{
-			ShaftArray[i].object->parent_deleting = true;
-			delete ShaftArray[i].object;
-		}
-		ShaftArray[i].object = 0;
-	}
+	if (shaft_manager)
+		delete shaft_manager;
+	shaft_manager = 0;
 
-	//delete stairs
-	for (int i = 0; i < (int)StairsArray.size(); i++)
-	{
-		if (StairsArray[i].object)
-		{
-			StairsArray[i].object->parent_deleting = true;
-			delete StairsArray[i].object;
-		}
-		StairsArray[i].object = 0;
-	}
+	if (stairs_manager)
+		delete stairs_manager;
+	stairs_manager = 0;
 
 	//delete sounds
 	for (int i = 0; i < (int)sounds.size(); i++)
@@ -1666,346 +1637,84 @@ float SBS::GetDistance(float x1, float x2, float z1, float z2)
 	return 0;
 }
 
-Shaft* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Shaft* SBS::CreateShaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
 {
 	//create a shaft object
 
-	for (size_t i = 0; i < ShaftArray.size(); i++)
-	{
-		if (ShaftArray[i].number == number)
-		{
-			std::string num = ToString(number);
-			ReportError("Shaft " + num + " already exists");
-			return 0;
-		}
-	}
-
-	//verify floor range
-	if (_startfloor > _endfloor)
-	{
-		ReportError("CreateShaft: starting floor is greater than ending floor");
-		return 0;
-	}
-
-	if (IsValidFloor(_startfloor) == false)
-	{
-		std::string num = ToString(_startfloor);
-		ReportError("CreateShaft: Invalid starting floor " + num);
-		return 0;
-	}
-	if (IsValidFloor(_endfloor) == false)
-	{
-		std::string num = ToString(_endfloor);
-		ReportError("CreateShaft: Invalid ending floor " + num);
-		return 0;
-	}
-
-	ShaftMap shaft;
-	shaft.number = number;
-	shaft.object = new Shaft(this, number, CenterX, CenterZ, _startfloor, _endfloor);
-	ShaftArray.push_back(shaft);
-	return shaft.object;
+	return shaft_manager->Create(number, CenterX, CenterZ, startfloor, endfloor);
 }
 
-Stairs* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Stairs* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
 {
 	//create a stairwell object
 
-	for (size_t i = 0; i < StairsArray.size(); i++)
-	{
-		if (StairsArray[i].number == number)
-		{
-			std::string num = ToString(number);
-			ReportError("Stairwell " + num + " already exists");
-			return 0;
-		}
-	}
-
-	//verify floor range
-	if (_startfloor > _endfloor)
-	{
-		ReportError("CreateStairwell: starting floor is greater than ending floor");
-		return 0;
-	}
-	if (IsValidFloor(_startfloor) == false)
-	{
-		std::string num = ToString(_startfloor);
-		ReportError("CreateStairwell: Invalid starting floor " + num);
-		return 0;
-	}
-	if (IsValidFloor(_endfloor) == false)
-	{
-		std::string num = ToString(_endfloor);
-		ReportError("CreateStairwell: Invalid ending floor " + num);
-		return 0;
-	}
-
-	StairsMap stairs;
-	stairs.number = number;
-	stairs.object = new Stairs(this, number, CenterX, CenterZ, _startfloor, _endfloor);
-	StairsArray.push_back(stairs);
-	return stairs.object;
+	return stairs_manager->Create(number, CenterX, CenterZ, startfloor, endfloor);
 }
 
 Elevator* SBS::NewElevator(int number)
 {
 	//create a new elevator object
 
-	if (GetElevator(number))
-		return 0;
-
-	ElevatorMap elev;
-	elev.number = number;
-	elev.object = new Elevator(this, number);
-	ElevatorArray.push_back(elev);
-	return elev.object;
+	return elevator_manager->Create(number);
 }
 
 Floor* SBS::NewFloor(int number)
 {
 	//create a new floor object
 
-	if (GetFloor(number))
-		return 0;
-
-	FloorMap floor;
-	floor.number = number;
-	floor.object = new Floor(this, number);
-	FloorArray.push_back(floor);
-
-	if (number < 0)
-		Basements++;
-	else
-		Floors++;
-	return floor.object;
+	return floor_manager->Create(number);
 }
 
 int SBS::GetElevatorCount()
 {
 	//return the number of elevators
-	return (int)ElevatorArray.size();
+	return elevator_manager->GetCount();
 }
 
 int SBS::GetTotalFloors()
 {
 	//return the number of floors, including basements
-	return (int)FloorArray.size();
+	return floor_manager->GetCount();
 }
 
 int SBS::GetShaftCount()
 {
 	//return the number of shafts
-	return (int)ShaftArray.size();
+	return shaft_manager->GetCount();
 }
 
 int SBS::GetStairsCount()
 {
 	//return the number of stairs
-	return (int)StairsArray.size();
+	return stairs_manager->GetCount();
 }
 
 Floor* SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
-	//return previous cached entry if the same
-	if (getfloor_number == number && getfloor_result)
-		return getfloor_result;
-
-	if (FloorArray.size() > 0)
-	{
-		//quick prediction
-		if (Basements + number < (int)FloorArray.size() && Basements + number >= 0)
-		{
-			FloorMap floor = FloorArray[Basements + number];
-			if (floor.number == number)
-			{
-				if (floor.object)
-				{
-					getfloor_number = number;
-					getfloor_result = floor.object;
-					return floor.object;
-				}
-				else
-				{
-					getfloor_number = 0;
-					getfloor_result = 0;
-					return 0;
-				}
-			}
-			else if (number < 0)
-			{
-				if (-(number + 1) < (int)FloorArray.size())
-				{
-					floor = FloorArray[-(number + 1)];
-					if (floor.number == number)
-					{
-						if (floor.object)
-						{
-							getfloor_number = number;
-							getfloor_result = floor.object;
-							return floor.object;
-						}
-						else
-						{
-							getfloor_number = 0;
-							getfloor_result = 0;
-							return 0;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	for (size_t i = 0; i < (int)FloorArray.size(); i++)
-	{
-		if (FloorArray[i].number == number)
-		{
-			getfloor_number = number;
-			getfloor_result = FloorArray[i].object;
-			return getfloor_result;
-		}
-	}
-
-	getfloor_number = 0;
-	getfloor_result = 0;
-	return 0;
+	return floor_manager->Get(number);
 }
 
 Elevator* SBS::GetElevator(int number)
 {
 	//return pointer to elevator object
 
-	if (number < 1 || number > GetElevatorCount())
-		return 0;
-
-	if (getelevator_number == number && getelevator_result)
-		return getelevator_result;
-
-	if ((int)ElevatorArray.size() > number - 1)
-	{
-		//quick prediction
-		if (ElevatorArray[number - 1].number == number)
-		{
-			if (ElevatorArray[number - 1].object)
-			{
-				getelevator_number = number;
-				getelevator_result = ElevatorArray[number - 1].object;
-				return getelevator_result;
-			}
-			else
-			{
-				getelevator_number = 0;
-				getelevator_result = 0;
-				return 0;
-			}
-		}
-	}
-
-	for (size_t i = 0; i < ElevatorArray.size(); i++)
-	{
-		if (ElevatorArray[i].number == number)
-		{
-			getelevator_number = number;
-			getelevator_result = ElevatorArray[i].object;
-			return getelevator_result;
-		}
-	}
-
-	getelevator_number = 0;
-	getelevator_result = 0;
-	return 0;
+	return elevator_manager->Get(number);
 }
 
 Shaft* SBS::GetShaft(int number)
 {
 	//return pointer to shaft object
 
-	if (number < 1 || number > GetShaftCount())
-		return 0;
-
-	if (getshaft_number == number && getshaft_result)
-		return getshaft_result;
-
-	if ((int)ShaftArray.size() > number - 1)
-	{
-		//quick prediction
-		if (ShaftArray[number - 1].number == number)
-		{
-			if (ShaftArray[number - 1].object)
-			{
-				getshaft_number = number;
-				getshaft_result = ShaftArray[number - 1].object;
-				return getshaft_result;
-			}
-			else
-			{
-				getshaft_number = 0;
-				getshaft_result = 0;
-				return 0;
-			}
-		}
-	}
-
-	for (size_t i = 0; i < ShaftArray.size(); i++)
-	{
-		if (ShaftArray[i].number == number)
-		{
-			getshaft_number = number;
-			getshaft_result = ShaftArray[i].object;
-			return getshaft_result;
-		}
-	}
-
-	getshaft_number = 0;
-	getshaft_result = 0;
-	return 0;
+	return shaft_manager->Get(number);
 }
 
 Stairs* SBS::GetStairs(int number)
 {
 	//return pointer to stairs object
 
-	if (number < 1 || number > GetStairsCount())
-		return 0;
-
-	if (getstairs_number == number && getstairs_result)
-		return getstairs_result;
-
-	if ((int)StairsArray.size() > number - 1)
-	{
-		//quick prediction
-		if (StairsArray[number - 1].number == number)
-		{
-			if (StairsArray[number - 1].object)
-			{
-				getstairs_number = number;
-				getstairs_result = StairsArray[number - 1].object;
-				return getstairs_result;
-			}
-			else
-			{
-				getstairs_number = 0;
-				getstairs_result = 0;
-				return 0;
-			}
-		}
-	}
-
-	for (size_t i = 0; i < StairsArray.size(); i++)
-	{
-		if (StairsArray[i].number == number)
-		{
-			getstairs_number = number;
-			getstairs_result = StairsArray[i].object;
-			return getstairs_result;
-		}
-	}
-
-	getstairs_number = 0;
-	getstairs_result = 0;
-	return 0;
+	return stairs_manager->Get(number);
 }
 
 bool SBS::SetWallOrientation(std::string direction)
@@ -2960,9 +2669,9 @@ bool SBS::DeleteObject(Object *object)
 		Floor *floor = static_cast<Floor*>(object);
 
 		//make sure no shaft is dependent on this floor
-		for (int i = 0; i < (int)ShaftArray.size(); i++)
+		for (int i = 0; i < shaft_manager->GetCount(); i++)
 		{
-			Shaft *shaft = ShaftArray[i].object;
+			Shaft *shaft = shaft_manager->GetIndex(i);
 			if (shaft)
 			{
 				if (shaft->IsValidFloor(floor->Number) == true)
@@ -2971,9 +2680,9 @@ bool SBS::DeleteObject(Object *object)
 		}
 
 		//make sure no stairwell is dependent on this floor
-		for (int i = 0; i < (int)StairsArray.size(); i++)
+		for (int i = 0; i < stairs_manager->GetCount(); i++)
 		{
-			Stairs *stairs = StairsArray[i].object;
+			Stairs *stairs = stairs_manager->GetIndex(i);
 			if (stairs)
 			{
 				if (stairs->IsValidFloor(floor->Number) == true)
@@ -3009,9 +2718,9 @@ bool SBS::DeleteObject(Object *object)
 		Shaft *shaft = static_cast<Shaft*>(object);
 
 		//make sure no elevator is dependent on this shaft
-		for (int i = 0; i < (int)ElevatorArray.size(); i++)
+		for (int i = 0; i < elevator_manager->GetCount(); i++)
 		{
-			Elevator *elev = ElevatorArray[i].object;
+			Elevator *elev = elevator_manager->GetIndex(i);
 			if (elev)
 			{
 				if (elev->AssignedShaft == shaft->ShaftNumber)
@@ -3117,74 +2826,29 @@ bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool
 void SBS::RemoveFloor(Floor *floor)
 {
 	//remove a floor (does not delete the object)
-	for (int i = 0; i < (int)FloorArray.size(); i++)
-	{
-		if (FloorArray[i].object == floor)
-		{
-			if (FloorArray[i].object->Number < 0)
-				Basements--;
-			else
-				Floors--;
 
-			FloorArray.erase(FloorArray.begin() + i);
-
-			//clear cached values
-			getfloor_result = 0;
-			getfloor_number = 0;
-			return;
-		}
-	}
+	floor_manager->Remove(floor);
 }
 
 void SBS::RemoveElevator(Elevator *elevator)
 {
 	//remove an elevator (does not delete the object)
-	for (int i = 0; i < (int)ElevatorArray.size(); i++)
-	{
-		if (ElevatorArray[i].object == elevator)
-		{
-			ElevatorArray.erase(ElevatorArray.begin() + i);
 
-			//clear cached values
-			getelevator_result = 0;
-			getelevator_number = 0;
-			return;
-		}
-	}
+	elevator_manager->Remove(elevator);
 }
 
 void SBS::RemoveShaft(Shaft *shaft)
 {
 	//remove a shaft (does not delete the object)
-	for (int i = 0; i < (int)ShaftArray.size(); i++)
-	{
-		if (ShaftArray[i].object == shaft)
-		{
-			ShaftArray.erase(ShaftArray.begin() + i);
 
-			//clear cached values
-			getshaft_result = 0;
-			getshaft_number = 0;
-			return;
-		}
-	}
+	shaft_manager->Remove(shaft);
 }
 
 void SBS::RemoveStairs(Stairs *stairs)
 {
 	//remove a stairs object (does not delete the object)
-	for (int i = 0; i < (int)StairsArray.size(); i++)
-	{
-		if (StairsArray[i].object == stairs)
-		{
-			StairsArray.erase(StairsArray.begin() + i);
 
-			//clear cached values
-			getstairs_result = 0;
-			getstairs_number = 0;
-			return;
-		}
-	}
+	stairs_manager->Remove(stairs);
 }
 
 void SBS::RemoveSound(Sound *sound)
@@ -3379,9 +3043,16 @@ void SBS::Prepare(bool report)
 		Report("Processing geometry...");
 	}
 
+	//prepare mesh objects
 	for (int i = 0; i < (int)meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
+	}
+
+	//process dynamic meshes
+	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
+	{
+		dynamic_meshes[i]->Prepare();
 	}
 
 	if (report == true)
@@ -3423,17 +3094,6 @@ void SBS::DeleteMeshHandle(MeshObject* handle)
 			return;
 		}
 	}
-}
-
-MeshObject* SBS::FindMeshObject(Ogre::MeshPtr meshwrapper)
-{
-	//find a mesh object by searching for matching wrapper
-	for (int i = 0; i < (int)meshes.size(); i++)
-	{
-		if (meshes[i]->MeshWrapper == meshwrapper)
-			return meshes[i];
-	}
-	return 0;
 }
 
 MeshObject* SBS::FindMeshObject(const std::string &name)
@@ -4052,20 +3712,23 @@ void SBS::ListVisibleMeshes()
 {
 	//list all meshes visible by the main camera
 
-	Report("\n--- Visible Meshes ---");
+	Report("\n--- Visible Dynamic Meshes ---");
 	Report("Name\t-\tSubmeshes\n");
 	int count = 0;
 	int submeshes = 0;
 	int total = 0;
 
-	for (int i = 0; i < (int)meshes.size(); i++)
+	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
 	{
-		if (camera->IsMeshVisible(meshes[i]) == true)
+		for (int j = 0; j < (int)dynamic_meshes[i]->GetMeshCount(); j++)
 		{
-			submeshes = meshes[i]->GetSubmeshCount();
-			Report(meshes[i]->name + "\t-\t" + ToString(submeshes));
-			count++;
-			total += submeshes;
+			if (camera->IsDynamicMeshVisible(dynamic_meshes[i], j) == true)
+			{
+				submeshes = dynamic_meshes[i]->GetSubMeshCount(j);
+				Report(dynamic_meshes[i]->GetMeshName(j) + "\t-\t" + ToString(submeshes));
+				count++;
+				total += submeshes;
+			}
 		}
 	}
 	Report("Total: " + ToString(count) + " meshes, " + ToString(total) + " submeshes");
@@ -4176,33 +3839,33 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 
 	if (type == "Floor")
 	{
-		for (int i = 0; i < (int)FloorArray.size(); i++)
+		for (int i = 0; i < floor_manager->GetCount(); i++)
 		{
-			if (FloorArray[i].object == static_cast<Floor*>(object))
+			if (floor_manager->GetIndex(i) == static_cast<Floor*>(object))
 				return true;
 		}
 	}
 	else if (type == "Elevator")
 	{
-		for (int i = 0; i < (int)ElevatorArray.size(); i++)
+		for (int i = 0; i < elevator_manager->GetCount(); i++)
 		{
-			if (ElevatorArray[i].object == static_cast<Elevator*>(object))
+			if (elevator_manager->GetIndex(i) == static_cast<Elevator*>(object))
 				return true;
 		}
 	}
 	else if (type == "Shaft")
 	{
-		for (int i = 0; i < (int)ShaftArray.size(); i++)
+		for (int i = 0; i < shaft_manager->GetCount(); i++)
 		{
-			if (ShaftArray[i].object == static_cast<Shaft*>(object))
+			if (shaft_manager->GetIndex(i) == static_cast<Shaft*>(object))
 				return true;
 		}
 	}
 	else if (type == "Stairs")
 	{
-		for (int i = 0; i < (int)StairsArray.size(); i++)
+		for (int i = 0; i < stairs_manager->GetCount(); i++)
 		{
-			if (StairsArray[i].object == static_cast<Stairs*>(object))
+			if (stairs_manager->GetIndex(i) == static_cast<Stairs*>(object))
 				return true;
 		}
 	}
@@ -4371,8 +4034,8 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 
 	if (floors == true)
 	{
-		for (int i = 0; i < (int)FloorArray.size(); i++)
-			FloorArray[i].object->Level->CutOutsideBounds(min, max, true, true);
+		for (int i = 0; i < floor_manager->GetCount(); i++)
+			floor_manager->GetIndex(i)->Level->CutOutsideBounds(min, max, true, true);
 	}
 }
 
@@ -4390,8 +4053,8 @@ void SBS::CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max
 
 	if (floors == true)
 	{
-		for (int i = 0; i < (int)FloorArray.size(); i++)
-			FloorArray[i].object->Level->Cut(min, max, true, true);
+		for (int i = 0; i < floor_manager->GetCount(); i++)
+			floor_manager->GetIndex(i)->Level->Cut(min, max, true, true);
 	}
 }
 
@@ -4419,20 +4082,11 @@ void SBS::ResetBuilding()
 	EnableExternal(true);
 	EnableSkybox(true);
 
-	//turn off floors
-	for (int i = 0; i < GetTotalFloors(); i++)
-		FloorArray[i].object->Enabled(false);
-
-	//turn off shafts
-	for (int i = 0; i < (int)ShaftArray.size(); i++)
-		ShaftArray[i].object->EnableWholeShaft(false, true, true);
-
-	//turn off stairwells
-	for (int i = 0; i < (int)StairsArray.size(); i++)
-		StairsArray[i].object->EnableWholeStairwell(false, true);
-
-	//turn off elevators
-	EnableElevators(false);
+	//turn off interior objects
+	floor_manager->EnableAll(false);
+	shaft_manager->EnableAll(false);
+	stairs_manager->EnableAll(false);
+	elevator_manager->EnableAll(false);
 }
 
 Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)
@@ -4478,18 +4132,24 @@ Model* SBS::GetModel(std::string name)
 	return 0;
 }
 
-void SBS::EnableElevators(bool value)
+void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
 {
-	//turn off elevators, if the related shaft is only partially shown
+	//register a dynamic mesh with the system
 
-	for (int i = 0; i < (int)ElevatorArray.size(); i++)
+	dynamic_meshes.push_back(dynmesh);
+}
+
+void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
+{
+	//unregister a dynamic mesh from the system
+
+	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
 	{
-		Shaft *shaft = ElevatorArray[i].object->GetShaft();
-
-		if (value == false)
-			value = shaft->ShowFullShaft;
-
-		ElevatorArray[i].object->Enabled(value);
+		if (dynamic_meshes[i] == dynmesh)
+		{
+			dynamic_meshes.erase(dynamic_meshes.begin() + i);
+			return;
+		}
 	}
 }
 

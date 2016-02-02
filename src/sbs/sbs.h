@@ -51,6 +51,7 @@ namespace OgreBulletCollisions {
 #include "object.h"
 #include "light.h"
 #include "mesh.h"
+#include "manager.h"
 #include "polygon.h"
 #include "model.h"
 #include "wall.h"
@@ -75,32 +76,6 @@ namespace SBS {
 
 extern bool SBSIMPEXP enable_profiling; //enable general profiling
 extern bool SBSIMPEXP enable_advanced_profiling;
-
-//global functions
-
-struct SBSIMPEXP FloorMap
-{
-	int number; //floor number
-	Floor *object; //floor object reference
-};
-
-struct SBSIMPEXP ElevatorMap
-{
-	int number; //elevator number
-	Elevator *object; //elevator object reference
-};
-
-struct SBSIMPEXP ShaftMap
-{
-	int number; //shaft number
-	Shaft *object; //shaft object reference
-};
-
-struct SBSIMPEXP StairsMap
-{
-	int number; //stairs number
-	Stairs *object; //stairs object reference
-};
 
 //SBS class
 class SBSIMPEXP SBS : public Object
@@ -215,8 +190,8 @@ public:
 	void EnableSkybox(bool value);
 	int GetFloorNumber(float altitude, int lastfloor = 0, bool checklastfloor = false);
 	float GetDistance(float x1, float x2, float z1, float z2);
-	Shaft* CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	Stairs* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Shaft* CreateShaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor);
+	Stairs* CreateStairwell(int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	std::string GetTextureMaterial(const std::string &name, bool &result, bool report = true, const std::string &polygon_name = "");
 	Elevator* NewElevator(int number);
 	Floor* NewFloor(int number);
@@ -313,7 +288,6 @@ public:
 	void DeleteMeshHandle(MeshObject* handle);
 	void Prepare(bool report = true);
 	Light* AddLight(const std::string &name, int type, const Ogre::Vector3 &position, const Ogre::Vector3 &direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
-	MeshObject* FindMeshObject(Ogre::MeshPtr meshwrapper);
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	void AddModel(Model *model);
@@ -418,7 +392,12 @@ public:
 	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
 	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
 	Model* GetModel(std::string name);
-	void EnableElevators(bool value);
+	inline FloorManager* GetFloorManager() { return floor_manager; }
+	inline ElevatorManager* GetElevatorManager() { return elevator_manager; }
+	inline ShaftManager* GetShaftManager() { return shaft_manager; }
+	inline StairsManager* GetStairsManager() { return stairs_manager; }
+	void RegisterDynamicMesh(DynamicMesh *dynmesh);
+	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -479,11 +458,14 @@ private:
 	//global object array (only pointers to actual objects)
 	std::vector<Object*> ObjectArray;
 
-	//object arrays
-	std::vector<FloorMap> FloorArray; //floor object array
-	std::vector<ElevatorMap> ElevatorArray; //elevator object array
-	std::vector<ShaftMap> ShaftArray; //shaft object array
-	std::vector<StairsMap> StairsArray; //stairs object array
+	//manager objects
+	FloorManager* floor_manager;
+	ElevatorManager* elevator_manager;
+	ShaftManager* shaft_manager;
+	StairsManager* stairs_manager;
+
+	//dynamic meshes
+	std::vector<DynamicMesh*> dynamic_meshes;
 
 	//action array
 	std::vector<Action*> ActionArray;
@@ -560,7 +542,7 @@ private:
 	//sound system
 	SoundSystem *soundsystem;
 
-	//meshes
+	//mesh objects
 	std::vector<MeshObject*> meshes;
 
 	//global models
@@ -618,14 +600,6 @@ private:
 	std::vector<Control*> control_index;
 
 	//function caching
-	Floor* getfloor_result;
-	int getfloor_number;
-	Elevator* getelevator_result;
-	int getelevator_number;
-	Shaft* getshaft_result;
-	int getshaft_number;
-	Stairs* getstairs_result;
-	int getstairs_number;
 	std::string prev_material;
 
 	//file listing cache

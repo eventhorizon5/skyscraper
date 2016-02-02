@@ -276,6 +276,7 @@
     <ClCompile Include="..\src\sbs\control.cpp" />
     <ClCompile Include="..\src\sbs\directional.cpp" />
     <ClCompile Include="..\src\sbs\door.cpp" />
+    <ClCompile Include="..\src\sbs\dynamicmesh.cpp" />
     <ClCompile Include="..\src\sbs\elevator.cpp" />
     <ClCompile Include="..\src\sbs\elevatordoor.cpp" />
     <ClCompile Include="..\src\sbs\escalator.cpp" />
@@ -283,6 +284,7 @@
     <ClCompile Include="..\src\sbs\floorindicator.cpp" />
     <ClCompile Include="..\src\sbs\globals.cpp" />
     <ClCompile Include="..\src\sbs\light.cpp" />
+    <ClCompile Include="..\src\sbs\manager.cpp" />
     <ClCompile Include="..\src\sbs\mesh.cpp" />
     <ClCompile Include="..\src\sbs\model.cpp" />
     <ClCompile Include="..\src\sbs\object.cpp" />
@@ -313,6 +315,7 @@
     <ClInclude Include="..\src\sbs\control.h" />
     <ClInclude Include="..\src\sbs\directional.h" />
     <ClInclude Include="..\src\sbs\door.h" />
+    <ClInclude Include="..\src\sbs\dynamicmesh.h" />
     <ClInclude Include="..\src\sbs\elevator.h" />
     <ClInclude Include="..\src\sbs\elevatordoor.h" />
     <ClInclude Include="..\src\sbs\escalator.h" />
@@ -320,6 +323,7 @@
     <ClInclude Include="..\src\sbs\floorindicator.h" />
     <ClInclude Include="..\src\sbs\globals.h" />
     <ClInclude Include="..\src\sbs\light.h" />
+    <ClInclude Include="..\src\sbs\manager.h" />
     <ClInclude Include="..\src\sbs\mesh.h" />
     <ClInclude Include="..\src\sbs\model.h" />
     <ClInclude Include="..\src\sbs\object.h" />

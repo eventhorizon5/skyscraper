@@ -26,6 +26,7 @@
 #ifndef _SBS_MESH_H
 #define _SBS_MESH_H
 
+#include "dynamicmesh.h"
 #include "triangle.h"
 
 namespace SBS {
@@ -64,10 +65,14 @@ public:
 	{
 		//per-submesh triangle indices
 		std::vector<Triangle> triangles; //triangle data, in A B C values
-		Ogre::IndexData *databuffer; //used to find the related submesh
+	};
+	struct SubMesh
+	{
+		std::vector<Triangle> Triangles; //per-submesh triangles
+		std::string Name;
 	};
 
-	MeshObject(Object* parent, const std::string &name, const std::string &filename = "", float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
+	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~MeshObject();
 	void Enable(bool value);
 	void EnableCollider(bool value);
@@ -111,26 +116,31 @@ public:
 	Ogre::Vector3 GetOffset();
 	void Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	void CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors);
+	unsigned int GetVertexCount();
+	unsigned int GetTriangleCount(int submesh);
+	bool UsingDynamicBuffers() { return MeshWrapper->UseDynamicBuffers(); }
 
-	Ogre::MeshPtr MeshWrapper; //mesh
+	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
-	std::vector<TriangleIndices> Triangles; //per-submesh triangles
-	std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
+	std::vector<SubMesh> Submeshes; //submeshes
 	std::vector<WallObject*> Walls; //associated wall (polygon container) objects
 
 	SceneNode *collider_node; //collider scenenode for box collider offsets
 
-	Ogre::Entity *Movable;
+	Ogre::AxisAlignedBox Bounds; //mesh bounds
+
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;
 
 	std::string Filename; //filename, if a loaded model
+	bool model_loaded; //true if a model was loaded successfully
 
 private:
 	bool enabled;
 	bool is_physical;
 	float restitution, friction, mass;
 	bool prepared;
+	bool wrapper_selfcreate;
 	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2);
 	bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
 };

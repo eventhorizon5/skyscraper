@@ -210,6 +210,9 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	SetName(name);
 	ElevatorMesh = new MeshObject(this, name);
 
+	//create a dynamic mesh for elevator doors
+	DoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Door Container", 0, true);
+
 	if (sbs->Verbose)
 		Report("elevator object created");
 }
@@ -315,6 +318,10 @@ Elevator::~Elevator()
 			DoorArray[i] = 0;
 		}
 	}
+
+	if (DoorContainer)
+		delete DoorContainer;
+	DoorContainer = 0;
 
 	//delete floor indicators
 	if (sbs->Verbose)
@@ -4403,7 +4410,7 @@ Door* Elevator::AddDoor(const std::string &open_sound, const std::string &close_
 	std::string elevnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
 	std::string name = "Elevator " + elevnum + ":Door " + num;
-	Door* door = new Door(this, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Door* door = new Door(this, 0, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door;
 }

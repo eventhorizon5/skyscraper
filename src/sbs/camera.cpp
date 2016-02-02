@@ -1219,6 +1219,14 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 	return mesh->IsVisible(MainCamera);
 }
 
+bool Camera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
+{
+	if (!mesh || !MainCamera)
+		return false;
+
+	return mesh->IsVisible(MainCamera, mesh_index);
+}
+
 void Camera::AttachModel(Model *model)
 {
 	//attach a model to the camera
@@ -1388,7 +1396,7 @@ bool Camera::Attach(Ogre::Camera *camera, bool init_state)
 	Sync();
 
 	//enable elevators
-	sbs->EnableElevators(true);
+	sbs->GetElevatorManager()->EnableAll(true);
 
 	return true;
 }

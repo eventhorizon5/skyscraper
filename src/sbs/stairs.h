@@ -92,6 +92,7 @@ private:
 
 	//Doors
 	std::vector<std::vector<Door*> > DoorArray;
+	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//Lights
 	std::vector<std::vector<Light*> > lights;
@@ -104,6 +105,9 @@ private:
 
 	//Triggers
 	//std::vector<std::vector<Trigger*> > TriggerArray;
+
+	//dynamic mesh object
+	DynamicMesh *dynamic_mesh;
 
 	//cache objects for IsInStairwell()
 	Ogre::Vector3 lastposition;

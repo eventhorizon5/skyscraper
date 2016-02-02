@@ -52,11 +52,10 @@ void Polygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 	tv = t_vector;
 }
 
-Ogre::SubMesh* Polygon::GetSubMesh()
+int Polygon::GetSubMesh()
 {
 	//return the submesh this polygon is in
-	int index = mesh->FindMatchingSubMesh(material);
-	return mesh->Submeshes[index];
+	return  mesh->FindMatchingSubMesh(material);
 }
 
 void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
@@ -146,12 +145,22 @@ bool Polygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool con
 
 void Polygon::Move(const Ogre::Vector3 &position, float speed)
 {
+	bool dynamic = mesh->UsingDynamicBuffers();
+
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
 		int min = index_extents[i].x;
 		int max = index_extents[i].y;
-		for (int j = min; j <= max; j++)
-			mesh->MeshGeometry[j].vertex += sbs->ToRemote(position);
+
+		for (int index = min; index <= max; index++)
+		{
+			MeshObject::Geometry &data = mesh->MeshGeometry[index];
+			data.vertex += sbs->ToRemote(position * speed);
+
+			//update vertices in render buffer, if using dynamic buffers
+			if (dynamic == true)
+				mesh->MeshWrapper->UpdateVertices(mesh, index, true);
+		}
 	}
 }
 

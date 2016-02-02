@@ -59,6 +59,8 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->GetBase(), CenterZ);
 
+	dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
+
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
 	DoorArray.resize(endfloor - startfloor + 1);
@@ -69,10 +71,13 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create stairwell meshes
-		StairArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i));
+		StairArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i), dynamic_mesh);
 		StairArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->GetBase());
 		EnableArray[i - startfloor] = true;
 	}
+
+	//create a dynamic mesh for doors
+	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 }
 
 Stairs::~Stairs()
@@ -147,6 +152,10 @@ Stairs::~Stairs()
 		}
 	}
 
+	if (DoorWrapper)
+		delete DoorWrapper;
+	DoorWrapper = 0;
+
 	//delete mesh array objects
 	for (int i = 0; i < (int)StairArray.size(); i++)
 	{
@@ -157,6 +166,11 @@ Stairs::~Stairs()
 		}
 		StairArray[i] = 0;
 	}
+
+	//delete dynamic mesh
+	if (dynamic_mesh)
+		delete dynamic_mesh;
+	dynamic_mesh = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
@@ -495,7 +509,7 @@ Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::strin
 	std::string num = ToString((int)DoorArray[index].size());
 	std::string name = "Stairwell " + ToString(StairsNum) + ":Door " + ToString(floor) + ":" + num;
 
-	Door* door = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Door* door = new Door(GetMeshObject(floor), DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	DoorArray[index].push_back(door);
 
 	floorptr = 0;

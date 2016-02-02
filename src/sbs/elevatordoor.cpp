@@ -1392,7 +1392,10 @@ ElevatorDoor::DoorObject::DoorObject(const std::string &doorname, DoorWrapper *W
 	parent = wrapper->parent;
 
 	//create object mesh
-	mesh = new MeshObject(wrapper, doorname);
+	if (wrapper->IsShaftDoor == false)
+		mesh = new MeshObject(wrapper, doorname, parent->elev->GetDoorContainer());
+	else
+		mesh = new MeshObject(wrapper, doorname, parent->elev->GetShaft()->GetShaftDoorContainer());
 
 	//keep colliders attached, to fix performance issues when moving in and out of an elevator
 	mesh->remove_on_disable = false;
