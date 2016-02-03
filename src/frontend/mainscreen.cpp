@@ -197,10 +197,10 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		Ogre::RenderSystem *rendersystem = frontend->mRoot->getRenderSystem();
 
 		int batches = (int)rendersystem->_getBatchCount();
-		int faces = (int)rendersystem->_getFaceCount();
+		int triangles = (int)rendersystem->_getFaceCount();
 		int vertices = (int)rendersystem->_getVertexCount();
 
-		frontend->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Faces: " + ToString(faces) + " - Vertices: " + ToString(vertices));
+		frontend->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Triangles: " + ToString(triangles) + " - Vertices: " + ToString(vertices));
 	}
 
 	//alt modifier
