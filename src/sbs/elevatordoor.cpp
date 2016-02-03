@@ -1454,7 +1454,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_ob
 
 	std::string name;
 	if (IsShaftDoor == true)
-		name = "Shaft Door " + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
+		name = "Shaft Door " + ToString(parent->elev->Number) + ":" + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
 	else
 		name = "Elevator Door " + ToString(parent->Number);
 
