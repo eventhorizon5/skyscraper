@@ -100,6 +100,10 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 {
 	if (client == 0 || meshes.size() == 1)
 	{
+		//don't disable mesh if other clients are associated
+		if (value == false && client != 0 && GetClientCount() > 1)
+			return;
+
 		//enable all meshes if no client specified
 
 		for (int i = 0; i < (int)meshes.size(); i++)
