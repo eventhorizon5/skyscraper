@@ -641,6 +641,12 @@ void DebugPanel::EnableTimer(bool value)
 		timer->Stop();
 }
 
+void DebugPanel::ShowControlReference()
+{
+	wxCommandEvent event;
+	On_bControlReference_Click(event);
+}
+
 wxString TruncateNumber(float value, int decimals)
 {
 	std::string number = SBS::TruncateNumber(value, decimals);

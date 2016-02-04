@@ -191,6 +191,12 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		return;
 	}
 
+	if (key == WXK_F1)
+	{
+		if (frontend->dpanel)
+			frontend->dpanel->ShowControlReference();
+	}
+
 	if (key == WXK_F2)
 	{
 		float fps = Simcore->FPS;

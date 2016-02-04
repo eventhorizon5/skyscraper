@@ -121,6 +121,7 @@ class DebugPanel: public wxFrame
 		void Loop();
 		Skyscraper* GetRoot() { return skyscraper; }
 		SBS::SBS* GetSystem() { return Simcore; }
+		void ShowControlReference();
 		class Timer : public wxTimer
 		{
 			public:
