@@ -197,6 +197,11 @@ void FloorManager::EnableAll(bool value)
 	//enable or disable all floors
 	for (int i = 0; i < (int)Array.size(); i++)
 		Array[i].object->Enabled(value);
+
+	//enable/disable dynamic meshes
+	floors->Enable(value);
+	interfloors->Enable(value);
+	columnframes->Enable(value);
 }
 
 ElevatorManager::ElevatorManager(Object* parent) : Object(parent)

@@ -401,6 +401,7 @@ void Floor::Enabled(bool value)
 		if (DoorArray[i])
 			DoorArray[i]->Enabled(value);
 	}
+	DoorWrapper->Enable(value);
 
 	//turn on/off directional indicators
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)

@@ -390,6 +390,11 @@ void Stairs::EnableWholeStairwell(bool value, bool force)
 			Enabled(i, value);
 		}
 	}
+
+	//enable/disable dynamic meshes
+	dynamic_mesh->Enable(value);
+	DoorWrapper->Enable(value);
+
 	IsEnabled = value;
 }
 

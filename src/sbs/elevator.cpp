@@ -3898,6 +3898,8 @@ void Elevator::EnableDoors(bool value)
 		if (door)
 			door->Enabled(value);
 	}
+
+	DoorContainer->Enable(value);
 }
 
 void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)

@@ -333,6 +333,12 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 			Enabled(i, value, EnableShaftDoors);
 		}
 	}
+
+	//enable/disable dynamic meshes
+	dynamic_mesh->Enable(value);
+	ShaftDoorContainer->Enable(value);
+	DoorWrapper->Enable(value);
+
 	IsEnabled = value;
 	if (ShowFullShaft == true)
 		EnableCheck = true;

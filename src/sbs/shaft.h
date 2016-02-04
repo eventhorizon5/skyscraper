@@ -105,7 +105,7 @@ private:
 	std::vector<int> ShowInterfloorsList; //list of interfloors to enable while inside the shaft/elevator
 	bool ShowFullShaft; //if true, always show full shaft instead of only a selected range
 
-	//mesh container for shaf doors
+	//mesh container for shaft doors
 	DynamicMesh *ShaftDoorContainer; //shaft door dynamic mesh container
 
 	//cache objects for IsInShaft()
