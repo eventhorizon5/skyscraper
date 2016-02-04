@@ -673,8 +673,6 @@ void DynamicMesh::Mesh::Prepare(int client)
 		return;
 	}
 
-	Ogre::Real radius = 0;
-
 	//set up vertex buffer
 	if (MeshWrapper->sharedVertexData)
 		delete MeshWrapper->sharedVertexData;
@@ -707,15 +705,17 @@ void DynamicMesh::Mesh::Prepare(int client)
 		end = client;
 	}
 
-	//clear vertex offset and counts tables
+	//clear vertex offset, counts, and bounds tables
 	offset_table.clear();
 	vertex_counts.clear();
 	client_bounds.clear();
+	client_radius.clear();
 
 	for (int num = start; num <= end; num++)
 	{
 		MeshObject *mesh = Parent->GetClient(num);
 		Ogre::AxisAlignedBox client_box;
+		Ogre::Real radius = 0;
 
 		//add current client's vertex index to offset table
 		offset_table.push_back(vindex);
@@ -752,8 +752,9 @@ void DynamicMesh::Mesh::Prepare(int client)
 			loc += 8;
 		}
 
-		//store client bounding box
+		//store client bounding box and radius
 		client_bounds.push_back(client_box);
+		client_radius.push_back(radius);
 
 		//add client vertex count to list
 		vertex_counts.push_back(mesh->GetVertexCount());
@@ -906,8 +907,6 @@ void DynamicMesh::Mesh::Prepare(int client)
 	MeshWrapper->_dirtyState();
 
 	UpdateBoundingBox();
-
-	MeshWrapper->_setBoundingSphereRadius(radius);
 
 	prepared = true;
 }
@@ -1074,24 +1073,30 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 {
 	//set mesh's bounding box
 
-	if (client_bounds.empty() == true)
+	if (client_bounds.empty() == true || client_radius.empty() == true)
 		return;
 
 	if (Parent->GetMeshCount() == 1)
 	{
 		Ogre::AxisAlignedBox box;
+		Ogre::Real radius;
 
 		if (Parent->GetClientCount() != (int)client_bounds.size())
 			return;
 
 		for (int i = 0; i < Parent->GetClientCount(); i++)
+		{
 			box.merge(client_bounds[i]);
+			radius = std::max(radius, client_radius[i]);
+		}
 
 		MeshWrapper->_setBounds(box);
+		MeshWrapper->_setBoundingSphereRadius(radius);
 	}
 	else if (Parent->GetMeshCount() > 1)
 	{
 		MeshWrapper->_setBounds(client_bounds[0]);
+		MeshWrapper->_setBoundingSphereRadius(client_radius[0]);
 	}
 }
 
