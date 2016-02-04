@@ -674,7 +674,6 @@ void DynamicMesh::Mesh::Prepare(int client)
 	}
 
 	Ogre::Real radius = 0;
-	Ogre::AxisAlignedBox box;
 
 	//set up vertex buffer
 	if (MeshWrapper->sharedVertexData)
@@ -711,10 +710,12 @@ void DynamicMesh::Mesh::Prepare(int client)
 	//clear vertex offset and counts tables
 	offset_table.clear();
 	vertex_counts.clear();
+	client_bounds.clear();
 
 	for (int num = start; num <= end; num++)
 	{
 		MeshObject *mesh = Parent->GetClient(num);
+		Ogre::AxisAlignedBox client_box;
 
 		//add current client's vertex index to offset table
 		offset_table.push_back(vindex);
@@ -746,10 +747,13 @@ void DynamicMesh::Mesh::Prepare(int client)
 			mVertexElements[loc + 5] = element.normal.z;
 			mVertexElements[loc + 6] = element.texel.x;
 			mVertexElements[loc + 7] = element.texel.y;
-			box.merge(vertex);
+			client_box.merge(vertex);
 			radius = std::max(radius, vertex.length());
 			loc += 8;
 		}
+
+		//store client bounding box
+		client_bounds.push_back(client_box);
 
 		//add client vertex count to list
 		vertex_counts.push_back(mesh->GetVertexCount());
@@ -901,7 +905,8 @@ void DynamicMesh::Mesh::Prepare(int client)
 	//mark ogre mesh as dirty to update changes
 	MeshWrapper->_dirtyState();
 
-	MeshWrapper->_setBounds(box);
+	UpdateBoundingBox();
+
 	MeshWrapper->_setBoundingSphereRadius(radius);
 
 	prepared = true;
@@ -987,6 +992,8 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 	else if (vertex_counts[client] != geometry.size())
 		return; //make sure vertex count is the same
 
+	Ogre::AxisAlignedBox box;
+
 	//fill array with vertex's data
 	unsigned int pos = 0;
 	unsigned int add = 0;
@@ -1007,9 +1014,13 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 		mVertexElements[pos + 5] = element.normal.z;
 		mVertexElements[pos + 6] = element.texel.x;
 		mVertexElements[pos + 7] = element.texel.y;
+		box.merge(vertex2);
 		pos += 8;
 		add += 1;
 	}
+
+	//store updated bounding box
+	client_bounds[client] = box;
 
 	//get vertex data
 	Ogre::VertexData* data = MeshWrapper->sharedVertexData;
@@ -1036,6 +1047,9 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
 
 	delete [] mVertexElements;
+
+	//update mesh bounding box
+	UpdateBoundingBox();
 }
 
 void DynamicMesh::Mesh::Detach()
@@ -1054,6 +1068,31 @@ void DynamicMesh::Mesh::Detach()
 int DynamicMesh::Mesh::GetSubMeshCount()
 {
 	return MeshWrapper->getNumSubMeshes();
+}
+
+void DynamicMesh::Mesh::UpdateBoundingBox()
+{
+	//set mesh's bounding box
+
+	if (client_bounds.empty() == true)
+		return;
+
+	if (Parent->GetMeshCount() == 1)
+	{
+		Ogre::AxisAlignedBox box;
+
+		if (Parent->GetClientCount() != (int)client_bounds.size())
+			return;
+
+		for (int i = 0; i < Parent->GetClientCount(); i++)
+			box.merge(client_bounds[i]);
+
+		MeshWrapper->_setBounds(box);
+	}
+	else if (Parent->GetMeshCount() > 1)
+	{
+		MeshWrapper->_setBounds(client_bounds[0]);
+	}
 }
 
 }

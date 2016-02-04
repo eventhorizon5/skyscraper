@@ -83,12 +83,14 @@ private:
 		int GetSubMeshCount();
 		void UpdateVertices(int client, unsigned int index = 0, bool single = false);
 		void Detach();
+		void UpdateBoundingBox();
 
 		std::string name;
 		Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
 		std::vector<unsigned int> offset_table;
 		std::vector<unsigned int> vertex_counts;
+		std::vector<Ogre::AxisAlignedBox> client_bounds;
 		Ogre::Entity *Movable;
 		SceneNode *node;
 		DynamicMesh *Parent;
