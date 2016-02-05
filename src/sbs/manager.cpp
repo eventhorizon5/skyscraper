@@ -34,13 +34,13 @@ namespace SBS {
 FloorManager::FloorManager(Object* parent) : Object(parent)
 {
 	//set up SBS object
-	SetValues("FloorManager", "Floor Manager", true, false);
+	SetValues("FloorManager", "Floor Manager", true);
 
 	get_result = 0;
 	get_number = 0;
-	floors = new DynamicMesh(this, sbs->GetSceneNode(), "Floor Container");
-	interfloors = new DynamicMesh(this, sbs->GetSceneNode(), "Interfloor Container");
-	columnframes = new DynamicMesh(this, sbs->GetSceneNode(), "Columnframe Container");
+	floors = new DynamicMesh(this, GetSceneNode(), "Floor Container");
+	interfloors = new DynamicMesh(this, GetSceneNode(), "Interfloor Container");
+	columnframes = new DynamicMesh(this, GetSceneNode(), "Columnframe Container");
 }
 
 FloorManager::~FloorManager()
@@ -77,7 +77,7 @@ Floor* FloorManager::Create(int number)
 
 	Map floor;
 	floor.number = number;
-	floor.object = new Floor(sbs, this, number);
+	floor.object = new Floor(this, this, number);
 	Array.push_back(floor);
 
 	if (number < 0)
@@ -207,7 +207,7 @@ void FloorManager::EnableAll(bool value)
 ElevatorManager::ElevatorManager(Object* parent) : Object(parent)
 {
 	//set up SBS object
-	SetValues("ElevatorManager", "Elevator Manager", true, false);
+	SetValues("ElevatorManager", "Elevator Manager", true);
 
 	get_result = 0;
 	get_number = 0;
@@ -236,7 +236,7 @@ Elevator* ElevatorManager::Create(int number)
 
 	Map elev;
 	elev.number = number;
-	elev.object = new Elevator(sbs, number);
+	elev.object = new Elevator(this, number);
 	Array.push_back(elev);
 	return elev.object;
 }
@@ -391,7 +391,7 @@ Shaft* ShaftManager::Create(int number, float CenterX, float CenterZ, int _start
 
 	Map shaft;
 	shaft.number = number;
-	shaft.object = new Shaft(sbs, number, CenterX, CenterZ, _startfloor, _endfloor);
+	shaft.object = new Shaft(this, number, CenterX, CenterZ, _startfloor, _endfloor);
 	Array.push_back(shaft);
 	return shaft.object;
 }
@@ -537,7 +537,7 @@ Stairs* StairsManager::Create(int number, float CenterX, float CenterZ, int _sta
 
 	Map stairs;
 	stairs.number = number;
-	stairs.object = new Stairs(sbs, number, CenterX, CenterZ, _startfloor, _endfloor);
+	stairs.object = new Stairs(this, number, CenterX, CenterZ, _startfloor, _endfloor);
 	Array.push_back(stairs);
 	return stairs.object;
 }
