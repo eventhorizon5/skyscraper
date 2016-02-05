@@ -100,9 +100,26 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 {
 	if (client == 0 || meshes.size() == 1)
 	{
-		//don't disable mesh if other clients are associated
-		if (value == false && client != 0 && GetClientCount() > 1)
-			return;
+		//manage client enabled status
+		if (client != 0)
+		{
+			int index = GetClientIndex(client);
+			if (index >= 0)
+				client_enable[index] = value;
+
+			//don't disable mesh if another client has it enabled
+			if (value == false && (int)client_enable.size() > 1)
+			{
+				for (int i = 0; i < (int)client_enable.size(); i++)
+				{
+					if (i == index)
+						continue;
+
+					if (client_enable[i] == true)
+						return;
+				}
+			}
+		}
 
 		//enable all meshes if no client specified
 
@@ -286,6 +303,7 @@ void DynamicMesh::AddClient(MeshObject *mesh)
 	//add a client mesh object to this dynamic mesh
 
 	clients.push_back(mesh);
+	client_enable.push_back(true);
 }
 
 void DynamicMesh::RemoveClient(MeshObject *mesh)
@@ -297,6 +315,7 @@ void DynamicMesh::RemoveClient(MeshObject *mesh)
 		if (clients[i] == mesh)
 		{
 			clients.erase(clients.begin() + i);
+			client_enable.erase(client_enable.begin() + i);
 			return;
 		}
 	}

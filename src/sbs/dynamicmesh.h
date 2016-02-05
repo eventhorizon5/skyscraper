@@ -105,6 +105,7 @@ private:
 	float render_distance;
 	bool file_model;
 	std::vector<MeshObject*> clients;
+	std::vector<bool> client_enable;
 	bool prepared;
 	bool dynamic_buffers;
 };
