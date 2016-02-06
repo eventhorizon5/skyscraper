@@ -27,6 +27,7 @@
 #include <wx/intl.h>
 //*)
 
+#include "Caelum.h"
 #include "debugpanel.h"
 #include "globals.h"
 #include "sbs.h"

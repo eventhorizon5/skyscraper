@@ -28,21 +28,26 @@
 #include <wx/app.h>
 #include <wx/frame.h>
 #include <wx/progdlg.h>
-#include <OgreRoot.h>
-#include <OgreRenderWindow.h>
-#include <OgreConfigFile.h>
-#include <fmod.hpp>
-#include "Caelum.h"
-#include "fileio.h"
-#include "debugpanel.h"
-#include "enginecontext.h"
-#include "mainscreen.h"
-#include "loaddialog.h"
-#include "console.h"
+#include <OgreLog.h>
 
 #if OGRE_VERSION >= 0x00010900
 #include <OgreOverlaySystem.h>
 #endif
+
+namespace Ogre {
+	class SceneNode;
+	class Rectangle2D;
+}
+
+namespace FMOD {
+	class System;
+	class Sound;
+	class Channel;
+}
+
+namespace Caelum {
+	class CaelumSystem;
+}
 
 int main (int argc, char* argv[]);
 
@@ -50,6 +55,10 @@ namespace Skyscraper {
 
 class DebugPanel;
 class MainScreen;
+class EngineContext;
+class Console;
+class LoadDialog;
+class ScriptProcessor;
 
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
@@ -184,7 +193,7 @@ private:
 	void HandleReload();
 	int GetFreeInstanceNumber();
 
-	Ogre::ConfigFile configfile;
+	Ogre::ConfigFile *configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
 	Ogre::LogManager* logger;
 	bool showconsole;

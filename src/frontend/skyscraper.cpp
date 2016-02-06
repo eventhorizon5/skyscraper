@@ -28,10 +28,19 @@
 #include "wx/dir.h"
 #endif
 #include <locale>
+#include <OgreRoot.h>
+#include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
+#include <fmod.hpp>
+#include "Caelum.h"
 #include "globals.h"
 #include "sbs.h"
+#include "camera.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "enginecontext.h"
+#include "console.h"
+#include "mainscreen.h"
 #include "profiler.h"
 #include "revmain.h"
 
@@ -135,7 +144,8 @@ bool Skyscraper::OnInit(void)
 	//load config file
 	try
 	{
-		configfile.load("skyscraper.ini");
+		configfile = new Ogre::ConfigFile();
+		configfile->load("skyscraper.ini");
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -217,6 +227,10 @@ int Skyscraper::OnExit()
 	if (window)
 		window->Destroy();
 	window = 0;
+
+	if (configfile)
+		delete configfile;
+	configfile = 0;
 
 #if OGRE_VERSION >= 0x00010900
 	delete mOverlaySystem;
@@ -1416,24 +1430,24 @@ const std::string Skyscraper::getOgreHandle() const
 
 int Skyscraper::GetConfigInt(const std::string &key, int default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
 	return ToInt(result);
 }
 
 std::string Skyscraper::GetConfigString(const std::string &key, const std::string &default_value)
 {
-	return configfile.getSetting(key, Ogre::StringUtil::BLANK, default_value);
+	return configfile->getSetting(key, Ogre::StringUtil::BLANK, default_value);
 }
 
 bool Skyscraper::GetConfigBool(const std::string &key, bool default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, BoolToString(default_value));
+	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, BoolToString(default_value));
 	return ToBool(result);
 }
 
 float Skyscraper::GetConfigFloat(const std::string &key, float default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
 	return ToFloat(result);
 }
 

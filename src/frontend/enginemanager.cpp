@@ -28,6 +28,7 @@
 //*)
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "enginecontext.h"
 #include "enginemanager.h"
 
 namespace Skyscraper {

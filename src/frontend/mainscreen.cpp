@@ -26,11 +26,14 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+#include <OgreRoot.h>
+#include <OgreRenderWindow.h>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "enginecontext.h"
 #include "mainscreen.h"
 
 using namespace SBS;

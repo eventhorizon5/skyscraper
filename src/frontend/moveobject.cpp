@@ -31,6 +31,7 @@
 #include "sbs.h"
 #include "camera.h"
 #include "skyscraper.h"
+#include "enginecontext.h"
 #include "moveobject.h"
 
 namespace Skyscraper {

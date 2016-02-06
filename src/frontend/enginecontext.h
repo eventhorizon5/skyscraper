@@ -25,11 +25,7 @@
 #ifndef ENGINECONTEXT_H
 #define ENGINECONTEXT_H
 
-#include "camera.h"
-
 namespace Skyscraper {
-
-class Skyscraper;
 
 class EngineContext
 {
@@ -98,7 +94,7 @@ private:
 	std::string InstancePrompt;
 
 	//override information
-	SBS::CameraState reload_state;
+	SBS::CameraState *reload_state;
 
 	Ogre::SceneManager* mSceneManager;
 	FMOD::System *fmodsystem;

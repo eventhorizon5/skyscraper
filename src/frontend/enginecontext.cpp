@@ -24,8 +24,10 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "camera.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "fileio.h"
 #include "enginecontext.h"
 
 using namespace SBS;
@@ -41,10 +43,11 @@ EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::
 	running = false;
 	reloading = false;
 	Reload = false;
-	reload_state.floor = 0;
-	reload_state.collisions = false;
-	reload_state.gravity = false;
-	reload_state.freelook = false;
+	reload_state = new CameraState;
+	reload_state->floor = 0;
+	reload_state->collisions = false;
+	reload_state->gravity = false;
+	reload_state->freelook = false;
 	this->mSceneManager = mSceneManager;
 	this->fmodsystem = fmodsystem;
 	this->position = position;
@@ -86,6 +89,10 @@ EngineContext::~EngineContext()
 	}
 
 	UnloadSim();
+
+	if (reload_state)
+		delete reload_state;
+	reload_state = 0;
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
@@ -231,7 +238,7 @@ void EngineContext::DoReload()
 
 	//store camera state information
 	std::string filename = Simcore->BuildingFilename;
-	reload_state = GetCameraState();
+	*reload_state = GetCameraState();
 
 	//unload current simulator
 	UnloadSim();
@@ -329,7 +336,7 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	if (reloading == true)
 	{
 		reloading = false;
-		SetCameraState(reload_state);
+		SetCameraState(*reload_state);
 	}
 
 	loading = false;

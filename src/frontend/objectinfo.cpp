@@ -31,7 +31,10 @@
 #include "debugpanel.h"
 #include "globals.h"
 #include "sbs.h"
+#include "camera.h"
 #include "skyscraper.h"
+#include "enginecontext.h"
+#include "fileio.h"
 #include "objectinfo.h"
 #include "textwindow.h"
 

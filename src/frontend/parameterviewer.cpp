@@ -35,6 +35,7 @@
 #include "fileio.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "enginecontext.h"
 #include "objectinfo.h"
 #include "textwindow.h"
 #include "parameterviewer.h"

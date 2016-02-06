@@ -27,6 +27,7 @@
 #include <wx/intl.h>
 //*)
 #include "debugpanel.h"
+#include "enginecontext.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
