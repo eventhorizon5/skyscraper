@@ -94,7 +94,7 @@ Polygon* WallObject::AddPolygon(const std::string &name, const std::string &text
 		return 0;
 
 	bool result;
-	std::string material = sbs->GetTextureMaterial(texture, result, true, name);
+	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 
 	//compute plane
 	Ogre::Plane plane = sbs->ComputePlane(vertices);

@@ -107,58 +107,16 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	wall1b = false;
 	wall2a = false;
 	wall2b = false;
-	AutoX = true;
-	AutoY = true;
-	TextureOverride = false;
 	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
-	FlipTexture = false;
-	mainnegflip = 0;
-	mainposflip = 0;
-	sidenegflip = 0;
-	sideposflip = 0;
-	topflip = 0;
-	bottomflip = 0;
-	widthscale.resize(6);
-	heightscale.resize(6);
 	remaining_delta = 0;
 	start_time = 0;
 	running_time = 0;
 	InShaft = false;
-	MapIndex.resize(3);
-	MapUV.resize(3);
-	OldMapIndex.resize(3);
-	OldMapUV.resize(3);
-	MapVerts1.resize(3);
-	MapVerts2.resize(3);
-	MapVerts3.resize(3);
-	OldMapVerts1.resize(3);
-	OldMapVerts2.resize(3);
-	OldMapVerts3.resize(3);
-	MapMethod = 0;
-	OldMapMethod = 0;
-	RevX = false;
-	RevY = false;
-	RevZ = false;
-	OldRevX = false;
-	OldRevY = false;
-	OldRevZ = false;
-	PlanarFlat = false;
-	OldPlanarFlat = false;
-	PlanarRotate = false;
-	OldPlanarRotate = false;
-	for (int i = 0; i <= 2; i++)
-	{
-		MapIndex[i] = 0;
-		OldMapIndex[i] = 0;
-		OldMapUV[i] = 0;
-		MapUV[i] = 0;
-	}
 	DeleteColliders = false;
 	soundcount = 0;
 	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
-	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	FastDelete = false;
 	WallCount = 0;
 	PolygonCount = 0;
@@ -180,8 +138,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	TexelOverride = false;
 	enable_profiling = false;
 	enable_advanced_profiling = false;
-	texturecount = 0;
-	materialcount = 0;
 	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
 	ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
 	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
@@ -200,6 +156,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	mWorld = 0;
 	soundsystem = 0;
 	area_trigger = 0;
+	texturemanager = 0;
 
 	if (UnitScale <= 0)
 		UnitScale = 1;
@@ -226,8 +183,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 
 void SBS::Initialize()
 {
-	//set default texture map values
-	ResetTextureMapping(true);
+	//create texture manager
+	texturemanager = new TextureManager(this);
 
 	//set up physics
 	Ogre::AxisAlignedBox box (Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
@@ -246,15 +203,6 @@ void SBS::Initialize()
 	Mount("signs-sans_bold.zip", "signs/sans_bold");
 	Mount("signs-sans_cond.zip", "signs/sans_cond");
 	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
-
-	//load default textures
-	Report("Loading default textures...");
-	SetLighting();
-	LoadTexture("data/default.png", "Default", 1, 1);
-	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
-	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
-	ResetLighting();
-	Report("Done");
 
 	//create object meshes
 	Buildings = new MeshObject(this, "Buildings");
@@ -417,6 +365,11 @@ SBS::~SBS()
 		delete soundsystem;
 	soundsystem = 0;
 
+	//delete texture manager
+	if (texturemanager)
+		delete texturemanager;
+	texturemanager = 0;
+
 	//delete main area trigger
 	if (area_trigger)
 		delete area_trigger;
@@ -430,10 +383,6 @@ SBS::~SBS()
 		delete mWorld;
 	}
 	mWorld = 0;
-
-	//delete materials
-	UnloadMaterials();
-	textureinfo.clear();
 
 	ObjectArray.clear();
 	verify_results.clear();
@@ -460,9 +409,7 @@ bool SBS::Start(Ogre::Camera *camera)
 	Prepare();
 
 	//free text texture memory
-	for (int i = 0; i < (int)textureboxes.size(); i++)
-		free(textureboxes[i].buffer);
-	textureboxes.clear();
+	texturemanager->FreeTextureBoxes();
 
 	//reset building state
 	ResetBuilding();
@@ -781,18 +728,21 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 	std::string NewName, texture2 = texture;
 	float tw2 = tw, th2 = th;
 
+	bool FlipTexture = texturemanager->FlipTexture;
+	bool TextureOverride = texturemanager->TextureOverride;
+
 	if (FlipTexture == true)
-		ProcessTextureFlip(tw, th);
+		texturemanager->ProcessTextureFlip(tw, th);
 
 	if (DrawMainN == true)
 	{
 		if (FlipTexture == true)
 		{
-			tw2 = widthscale[0];
-			th2 = heightscale[0];
+			tw2 = texturemanager->widthscale[0];
+			th2 = texturemanager->heightscale[0];
 		}
 		if (TextureOverride == true)
-			texture2 = mainnegtex;
+			texture2 = texturemanager->mainnegtex;
 
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
@@ -804,11 +754,11 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 	{
 		if (FlipTexture == true)
 		{
-			tw2 = widthscale[1];
-			th2 = heightscale[1];
+			tw2 = texturemanager->widthscale[1];
+			th2 = texturemanager->heightscale[1];
 		}
 		if (TextureOverride == true)
-			texture2 = mainpostex;
+			texture2 = texturemanager->mainpostex;
 
 		NewName = name;
 		NewName.append(":back");
@@ -821,11 +771,11 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 		{
 			if (FlipTexture == true)
 			{
-				tw2 = widthscale[2];
-				th2 = heightscale[2];
+				tw2 = texturemanager->widthscale[2];
+				th2 = texturemanager->heightscale[2];
 			}
 			if (TextureOverride == true)
-				texture2 = sidenegtex;
+				texture2 = texturemanager->sidenegtex;
 
 			NewName = name;
 			NewName.append(":left");
@@ -839,11 +789,11 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 		{
 			if (FlipTexture == true)
 			{
-				tw2 = widthscale[3];
-				th2 = heightscale[3];
+				tw2 = texturemanager->widthscale[3];
+				th2 = texturemanager->heightscale[3];
 			}
 			if (TextureOverride == true)
-				texture2 = sidepostex;
+				texture2 = texturemanager->sidepostex;
 
 			NewName = name;
 			NewName.append(":right");
@@ -857,11 +807,11 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 		{
 			if (FlipTexture == true)
 			{
-				tw2 = widthscale[4];
-				th2 = heightscale[4];
+				tw2 = texturemanager->widthscale[4];
+				th2 = texturemanager->heightscale[4];
 			}
 			if (TextureOverride == true)
-				texture2 = toptex;
+				texture2 = texturemanager->toptex;
 
 			NewName = name;
 			NewName.append(":top");
@@ -872,11 +822,11 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 		{
 			if (FlipTexture == true)
 			{
-				tw2 = widthscale[5];
-				th2 = heightscale[5];
+				tw2 = texturemanager->widthscale[5];
+				th2 = texturemanager->heightscale[5];
 			}
 			if (TextureOverride == true)
-				texture2 = bottomtex;
+				texture2 = texturemanager->bottomtex;
 
 			NewName = name;
 			NewName.append(":bottom");
@@ -1027,22 +977,25 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 	std::string NewName, texture2 = texture;
 	float tw2 = tw, th2 = th;
 
+	bool FlipTexture = texturemanager->FlipTexture;
+	bool TextureOverride = texturemanager->TextureOverride;
+
 	if (FlipTexture == true)
-		ProcessTextureFlip(tw, th);
+		texturemanager->ProcessTextureFlip(tw, th);
 
 	//turn on rotation if set
-	bool old_planarrotate = PlanarRotate;
-	PlanarRotate = texture_direction;
+	bool old_planarrotate = texturemanager->GetPlanarRotate();
+	texturemanager->SetPlanarRotate(texture_direction);
 
 	if (DrawMainN == true)
 	{
 		if (FlipTexture == true)
 		{
-			tw2 = widthscale[0];
-			th2 = heightscale[0];
+			tw2 = texturemanager->widthscale[0];
+			th2 = texturemanager->heightscale[0];
 		}
 		if (TextureOverride == true)
-			texture2 = mainnegtex;
+			texture2 = texturemanager->mainnegtex;
 
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
@@ -1054,11 +1007,11 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 	{
 		if (FlipTexture == true)
 		{
-			tw2 = widthscale[1];
-			th2 = heightscale[1];
+			tw2 = texturemanager->widthscale[1];
+			th2 = texturemanager->heightscale[1];
 		}
 		if (TextureOverride == true)
-			texture2 = mainpostex;
+			texture2 = texturemanager->mainpostex;
 
 		NewName = name;
 		NewName.append(":back");
@@ -1071,11 +1024,11 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 		{
 			if (FlipTexture == true)
 			{
-				tw2 = widthscale[2];
-				th2 = heightscale[2];
+				tw2 = texturemanager->widthscale[2];
+				th2 = texturemanager->heightscale[2];
 			}
 			if (TextureOverride == true)
-				texture2 = sidenegtex;
+				texture2 = texturemanager->sidenegtex;
 
 			NewName = name;
 			NewName.append(":left");
@@ -1086,11 +1039,11 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 		{
 			if (FlipTexture == true)
 			{
-				tw2 = widthscale[3];
-				th2 = heightscale[3];
+				tw2 = texturemanager->widthscale[3];
+				th2 = texturemanager->heightscale[3];
 			}
 			if (TextureOverride == true)
-				texture2 = sidepostex;
+				texture2 = texturemanager->sidepostex;
 
 			NewName = name;
 			NewName.append(":right");
@@ -1101,11 +1054,11 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 		{
 			if (FlipTexture == true)
 			{
-				tw2 = widthscale[4];
-				th2 = heightscale[4];
+				tw2 = texturemanager->widthscale[4];
+				th2 = texturemanager->heightscale[4];
 			}
 			if (TextureOverride == true)
-				texture2 = toptex;
+				texture2 = texturemanager->toptex;
 
 			NewName = name;
 			NewName.append(":top");
@@ -1116,11 +1069,11 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 		{
 			if (FlipTexture == true)
 			{
-				tw2 = widthscale[5];
-				th2 = heightscale[5];
+				tw2 = texturemanager->widthscale[5];
+				th2 = texturemanager->heightscale[5];
 			}
 			if (TextureOverride == true)
-				texture2 = bottomtex;
+				texture2 = texturemanager->bottomtex;
 
 			NewName = name;
 			NewName.append(":bottom");
@@ -1128,7 +1081,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 		}
 	}
 
-	PlanarRotate = old_planarrotate;
+	texturemanager->SetPlanarRotate(old_planarrotate);
 
 	return true;
 }
@@ -1178,6 +1131,8 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 	if (z1 > z2)
 		Swap(z1, z2);
 
+	bool TextureOverride = texturemanager->TextureOverride;
+
 	if (inside == true)
 	{
 		//generate a box visible from the inside
@@ -1188,7 +1143,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 		if (x_thickness == true)
 		{
 			if (TextureOverride == true)
-				texture2 = mainnegtex;
+				texture2 = texturemanager->mainnegtex;
 
 			wall->AddQuad( //front
 					NewName,
@@ -1199,7 +1154,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 					Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
 
 			if (TextureOverride == true)
-				texture2 = mainpostex;
+				texture2 = texturemanager->mainpostex;
 
 			wall->AddQuad( //back
 					NewName,
@@ -1212,7 +1167,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 		if (z_thickness == true)
 		{
 			if (TextureOverride == true)
-				texture2 = sidepostex;
+				texture2 = texturemanager->sidepostex;
 
 			wall->AddQuad( //right
 					NewName,
@@ -1223,7 +1178,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 					Ogre::Vector3(x2, voffset + height_in, z1), tw, th, autosize);
 
 			if (TextureOverride == true)
-				texture2 = sidenegtex;
+				texture2 = texturemanager->sidenegtex;
 
 			wall->AddQuad( //left
 					NewName,
@@ -1238,7 +1193,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 			if (bottom == true)
 			{
 				if (TextureOverride == true)
-					texture2 = bottomtex;
+					texture2 = texturemanager->bottomtex;
 
 				wall->AddQuad( //bottom
 						NewName,
@@ -1252,7 +1207,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 			if (top == true)
 			{
 				if (TextureOverride == true)
-					texture2 = toptex;
+					texture2 = texturemanager->toptex;
 
 				wall->AddQuad( //top
 						NewName,
@@ -1273,7 +1228,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 		if (x_thickness == true)
 		{
 			if (TextureOverride == true)
-				texture2 = mainnegtex;
+				texture2 = texturemanager->mainnegtex;
 
 			wall->AddQuad( //front
 					NewName,
@@ -1284,7 +1239,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 					Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
 
 			if (TextureOverride == true)
-				texture2 = mainpostex;
+				texture2 = texturemanager->mainpostex;
 
 			wall->AddQuad( //back
 					NewName,
@@ -1297,7 +1252,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 		if (z_thickness == true)
 		{
 			if (TextureOverride == true)
-				texture2 = sidepostex;
+				texture2 = texturemanager->sidepostex;
 
 			wall->AddQuad( //right
 					NewName,
@@ -1308,7 +1263,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 					Ogre::Vector3(x2, voffset, z1), tw, th, autosize);
 
 			if (TextureOverride == true)
-				texture2 = sidenegtex;
+				texture2 = texturemanager->sidenegtex;
 
 			wall->AddQuad( //left
 					NewName,
@@ -1323,7 +1278,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 			if (bottom == true)
 			{
 				if (TextureOverride == true)
-					texture2 = bottomtex;
+					texture2 = texturemanager->bottomtex;
 
 				wall->AddQuad( //bottom
 						NewName,
@@ -1336,7 +1291,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 			if (top == true)
 			{
 				if (TextureOverride == true)
-					texture2 = toptex;
+					texture2 = texturemanager->toptex;
 
 				wall->AddQuad( //top
 						NewName,
@@ -1507,12 +1462,12 @@ void SBS::CreateSky()
 
 	//load textures
 	SetLighting();
-	LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
-	LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
-	LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
-	LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
-	LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
-	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
 	ResetLighting();
 
 	SkyBox = new MeshObject(this, "SkyBox");
@@ -1520,7 +1475,7 @@ void SBS::CreateSky()
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0f;
-	ResetTextureMapping(true);
+	texturemanager->ResetTextureMapping(true);
 	WallObject *wall = new WallObject(SkyBox, SkyBox, true);
 
 	wall->AddQuad( //front
@@ -1566,7 +1521,7 @@ void SBS::CreateSky()
 		Ogre::Vector3(skysize, skysize, skysize),
 		Ogre::Vector3(-skysize, skysize, skysize), -1, -1, false);
 
-	ResetTextureMapping();
+	texturemanager->ResetTextureMapping();
 	delete wall;
 }
 
@@ -4193,6 +4148,11 @@ ShaftManager* SBS::GetShaftManager()
 StairsManager* SBS::GetStairsManager()
 {
 	return stairs_manager;
+}
+
+TextureManager* SBS::GetTextureManager()
+{
+	return texturemanager;
 }
 
 }

@@ -729,7 +729,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, c
 	if (side_th == 0)
 		side_th = 1;
 
-	sbs->ResetTextureMapping(true);
+	sbs->GetTextureManager()->ResetTextureMapping(true);
 
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
@@ -768,7 +768,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, c
 	door->extents_min.y = voffset;
 	door->extents_max.y = voffset + height;
 
-	sbs->ResetTextureMapping();
+	sbs->GetTextureManager()->ResetTextureMapping();
 
 	return door;
 }
@@ -927,16 +927,16 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 		//create doorway walls
 		if (DoorWalls == true)
 		{
-			sbs->ResetTextureMapping(true);
+			sbs->GetTextureManager()->ResetTextureMapping(true);
 			sbs->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
-			sbs->ResetTextureMapping();
+			sbs->GetTextureManager()->ResetTextureMapping();
 		}
 	}
 
 	//create connection track walls
 	if (TrackWalls == true)
 	{
-		sbs->ResetTextureMapping(true);
+		sbs->GetTextureManager()->ResetTextureMapping(true);
 		std::string name1, name2;
 
 		if (ShaftDoor == false)
@@ -956,7 +956,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 			sbs->CreateWallBox(shaft->GetMeshObject(floor), name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 
-		sbs->ResetTextureMapping();
+		sbs->GetTextureManager()->ResetTextureMapping();
 	}
 
 	Ogre::Vector3 center;

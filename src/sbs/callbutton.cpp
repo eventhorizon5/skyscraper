@@ -88,7 +88,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		sound->Load(sound_file);
 	}
 
-	sbs->ResetTextureMapping(true);
+	sbs->GetTextureManager()->ResetTextureMapping(true);
 
 	//create panel
 	if (ShowBack == true)
@@ -249,7 +249,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		}
 		sbs->ResetWalls();
 	}
-	sbs->ResetTextureMapping();
+	sbs->GetTextureManager()->ResetTextureMapping();
 	sbs->TexelOverride = false;
 
 	//set position of object

@@ -197,7 +197,7 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 	std::string Direction = direction;
 	SetCase(Direction, false);
 
-	sbs->ResetTextureMapping(true);
+	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
 		sbs->SetWallOrientation("right");
 	if (Direction == "left" || Direction == "front")
@@ -283,7 +283,7 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 		}
 	}
 	sbs->ResetWalls(true);
-	sbs->ResetTextureMapping();
+	sbs->GetTextureManager()->ResetTextureMapping();
 
 	return wall;
 }

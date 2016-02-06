@@ -64,7 +64,7 @@ ButtonPanel::ButtonPanel(Elevator *elevator, int index, const std::string &textu
 	ButtonPanelMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//create panel back
-	sbs->ResetTextureMapping(true);
+	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == "front")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
@@ -86,7 +86,7 @@ ButtonPanel::ButtonPanel(Elevator *elevator, int index, const std::string &textu
 		AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
 	}
 	sbs->ResetWalls();
-	sbs->ResetTextureMapping();
+	sbs->GetTextureManager()->ResetTextureMapping();
 
 	//set position of object
 	Move(CenterX, voffset - (Height / 2), CenterZ);

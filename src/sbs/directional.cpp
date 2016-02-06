@@ -80,7 +80,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	else
 		DirectionalMesh = new MeshObject(this, base + ":Arrow", 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	sbs->ResetTextureMapping(true);
+	sbs->GetTextureManager()->ResetTextureMapping(true);
 
 	//create panel
 	if (ShowBack == true)
@@ -253,7 +253,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 		}
 		sbs->ResetWalls();
 	}
-	sbs->ResetTextureMapping();
+	sbs->GetTextureManager()->ResetTextureMapping();
 }
 
 DirectionalIndicator::~DirectionalIndicator()

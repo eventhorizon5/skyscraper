@@ -614,7 +614,7 @@ void DynamicMesh::Mesh::Enable(bool value)
 bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)
 {
 	//get new material
-	Ogre::MaterialPtr newmat = sbs->GetMaterialByName(new_texture, "General");
+	Ogre::MaterialPtr newmat = sbs->GetTextureManager()->GetMaterialByName(new_texture, "General");
 
 	if (!newmat.get())
 		return sbs->ReportError("ChangeTexture: Invalid texture '" + new_texture + "'");

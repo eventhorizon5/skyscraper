@@ -33,7 +33,7 @@ namespace SBS {
 #undef SMALL_EPSILON
 #define SMALL_EPSILON 0.000001f
 
-bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
+bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3, float tw, float th)
 {
 	//this is modified code from the Crystal Space thingmesh system (SetTextureSpace function),
 	//from the "plugins/mesh/thing/object/polygon.cpp" file.
@@ -66,6 +66,15 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	// We have UV in this case and we need PL so we
 	// need to invert this equation:
 	//     (1/M) * (UV - UV1) = PL
+
+	//get stored UV mappings and adjust according to width and height
+	Ogre::Vector2 uv1, uv2, uv3;
+	uv1.x = MapUV[0].x * tw;
+	uv1.y = MapUV[0].y * th;
+	uv2.x = MapUV[1].x * tw;
+	uv2.y = MapUV[1].y * th;
+	uv3.x = MapUV[2].x * tw;
+	uv3.y = MapUV[2].y * th;
 
 	//set up 2D matrix
 	float m11, m12, m21, m22;
@@ -125,7 +134,7 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	return ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
 }
 
-bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
+bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
 {
 	//originally from Crystal Space's libs/csgeom/textrans.cpp file
 

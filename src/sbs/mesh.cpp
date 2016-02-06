@@ -842,7 +842,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 	//get texture material
 	std::string texname = texture;
 	bool result;
-	std::string material = sbs->GetTextureMaterial(texture, result, true, name);
+	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 	if (!result)
 		texname = "Default";
 
@@ -859,7 +859,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 	int direction;
 
 	//get texture mapping coordinates
-	if (!sbs->GetTextureMapping(vertices2[0], v1, v2, v3, direction))
+	if (!sbs->GetTextureManager()->GetTextureMapping(vertices2[0], v1, v2, v3, direction))
 		return sbs->ReportError("PolyMesh: Texture mapping error");
 
 	if (tw == 0)
@@ -871,12 +871,12 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 	Ogre::Vector2 sizing (tw, th);
 
 	if (autosize == true)
-		sizing = sbs->CalculateSizing(texture, sbs->ToLocal(v1), sbs->ToLocal(v2), sbs->ToLocal(v3), direction, tw, th);
+		sizing = sbs->GetTextureManager()->CalculateSizing(texture, sbs->ToLocal(v1), sbs->ToLocal(v2), sbs->ToLocal(v3), direction, tw, th);
 
 	//get texture tiling information
 	float tw2 = sizing.x, th2 = sizing.y;
 	float mw, mh;
-	if (sbs->GetTextureTiling(texname, mw, mh))
+	if (sbs->GetTextureManager()->GetTextureTiling(texname, mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
@@ -884,13 +884,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 		th2 = sizing.y * mh;
 	}
 
-	if (!ComputeTextureMap(t_matrix, t_vector, vertices2[0],
-			v1,
-			Ogre::Vector2 (sbs->MapUV[0].x * tw2, sbs->MapUV[0].y * th2),
-			v2,
-			Ogre::Vector2 (sbs->MapUV[1].x * tw2, sbs->MapUV[1].y * th2),
-			v3,
-			Ogre::Vector2 (sbs->MapUV[2].x * tw2, sbs->MapUV[2].y * th2)))
+	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, vertices2[0], v1, v2, v3, tw2, th2))
 		return false;
 
 	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, tw2, th2, false);

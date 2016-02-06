@@ -428,7 +428,7 @@ breakpoint:
 				ScriptError("Not in texture section");
 				goto Error;
 			}
-			Simcore->FreeTextureImages();
+			Simcore->GetTextureManager()->FreeTextureImages();
 			Section = 0;
 			Context = "None";
 			engine->Report("Finished textures");
@@ -769,8 +769,8 @@ recalc:
 			goto Nextline;
 
 		//reset temporary states
-		Simcore->TextureOverride = false;
-		Simcore->FlipTexture = false;
+		Simcore->GetTextureManager()->TextureOverride = false;
+		Simcore->GetTextureManager()->FlipTexture = false;
 
 Nextline:
 		if (InWhile == true && InFunction == 0)
@@ -1389,6 +1389,8 @@ int ScriptProcessor::ProcCommands()
 		if (FunctionProc() == true)
 			return sNextLine;
 	}
+
+	TextureManager *texturemanager = Simcore->GetTextureManager();
 
 	//AddTriangleWall command
 	if (linecheck.substr(0, 15) == "addtrianglewall")
@@ -2300,7 +2302,7 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Simcore->SetTextureMapping(ToInt(tempdata[0]), Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])),
+		texturemanager->SetTextureMapping(ToInt(tempdata[0]), Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])),
 									ToInt(tempdata[3]), Ogre::Vector2(ToFloat(tempdata[4]), ToFloat(tempdata[5])),
 									ToInt(tempdata[6]), Ogre::Vector2(ToFloat(tempdata[7]), ToFloat(tempdata[8])));
 		return sNextLine;
@@ -2326,7 +2328,7 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Simcore->SetTextureMapping2(tempdata[0], tempdata[1], tempdata[2], Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])),
+		texturemanager->SetTextureMapping2(tempdata[0], tempdata[1], tempdata[2], Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])),
 									tempdata[5], tempdata[6], tempdata[7], Ogre::Vector2(ToFloat(tempdata[8]), ToFloat(tempdata[9])),
 									tempdata[10], tempdata[11], tempdata[12], Ogre::Vector2(ToFloat(tempdata[13]), ToFloat(tempdata[14])));
 		return sNextLine;
@@ -2342,7 +2344,7 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
 
-		Simcore->ResetTextureMapping(ToBool(temp2));
+		texturemanager->ResetTextureMapping(ToBool(temp2));
 		return sNextLine;
 	}
 
@@ -2357,7 +2359,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (params == 4)
 		{
-			Simcore->SetPlanarMapping(ToBool(tempdata[0]),
+			texturemanager->SetPlanarMapping(ToBool(tempdata[0]),
 					ToBool(tempdata[1]),
 					ToBool(tempdata[2]),
 					ToBool(tempdata[3]), false);
@@ -2366,7 +2368,7 @@ int ScriptProcessor::ProcCommands()
 		}
 		else
 		{
-			Simcore->SetPlanarMapping(ToBool(tempdata[0]),
+			texturemanager->SetPlanarMapping(ToBool(tempdata[0]),
 					ToBool(tempdata[1]),
 					ToBool(tempdata[2]),
 					ToBool(tempdata[3]),
@@ -2506,7 +2508,7 @@ int ScriptProcessor::ProcCommands()
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->SetAutoSize(ToBool(tempdata[0]),
+		texturemanager->SetAutoSize(ToBool(tempdata[0]),
 					ToBool(tempdata[1]));
 		return sNextLine;
 	}
@@ -2519,7 +2521,7 @@ int ScriptProcessor::ProcCommands()
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
+		texturemanager->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
 		return sSkipReset;
 	}
 
@@ -2538,7 +2540,7 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Simcore->SetTextureFlip(ToInt(tempdata[0]), ToInt(tempdata[1]), ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]));
+		texturemanager->SetTextureFlip(ToInt(tempdata[0]), ToInt(tempdata[1]), ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]));
 		return sSkipReset;
 	}
 
@@ -3021,7 +3023,7 @@ int ScriptProcessor::ProcCommands()
 	//ListTextures command
 	if (linecheck.substr(0, 12) == "listtextures")
 	{
-		Simcore->Report(Simcore->ListTextures(true));
+		Simcore->Report(texturemanager->ListTextures(true));
 		return sNextLine;
 	}
 
@@ -7346,6 +7348,8 @@ int ScriptProcessor::ProcTextures()
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
 
+	TextureManager *texturemanager = Simcore->GetTextureManager();
+
 	//Load command
 	if (linecheck.substr(0, 5) == "load ")
 	{
@@ -7363,9 +7367,9 @@ int ScriptProcessor::ProcTextures()
 		}
 		CheckFile(tempdata[0]);
 		if (params == 4)
-			Simcore->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+			texturemanager->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		else
-			Simcore->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
+			texturemanager->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
 		return sNextLine;
 	}
 
@@ -7419,9 +7423,9 @@ int ScriptProcessor::ProcTextures()
 			CheckFile(filenames[i]);
 
 		if (force == false)
-			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 4], ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
+			texturemanager->LoadAnimatedTexture(filenames, tempdata[params - 4], ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 		else
-			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 5], ToFloat(tempdata[params - 4]), ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), true, ToBool(tempdata[params - 1]));
+			texturemanager->LoadAnimatedTexture(filenames, tempdata[params - 5], ToFloat(tempdata[params - 4]), ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), true, ToBool(tempdata[params - 1]));
 		return sNextLine;
 	}
 
@@ -7447,9 +7451,9 @@ int ScriptProcessor::ProcTextures()
 		CheckFile(tempdata[2]);
 
 		if (params == 7)
-			Simcore->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+			texturemanager->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		else
-			Simcore->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), true, ToBool(tempdata[7]));
+			texturemanager->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), true, ToBool(tempdata[7]));
 		return sNextLine;
 	}
 
@@ -7469,9 +7473,9 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		if (params == 4)
-			Simcore->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+			texturemanager->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		else
-			Simcore->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
+			texturemanager->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
 		return sNextLine;
 	}
 
@@ -7504,9 +7508,9 @@ int ScriptProcessor::ProcTextures()
 			ReplaceAll(temp6, "%number%", buffer);
 			CheckFile(temp2);
 			if (params == 6)
-				Simcore->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+				texturemanager->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 			else
-				Simcore->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]), true, ToBool(tempdata[6]));
+				texturemanager->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]), true, ToBool(tempdata[6]));
 		}
 		return sNextLine;
 	}
@@ -7536,9 +7540,9 @@ int ScriptProcessor::ProcTextures()
 		buffer.insert(0, "data/fonts/");
 		CheckFile(buffer);
 		if (params == 14)
-			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]));
+			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]));
 		else
-			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]), true, ToBool(tempdata[14]));
+			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]), true, ToBool(tempdata[14]));
 		return sNextLine;
 	}
 
@@ -7582,9 +7586,9 @@ int ScriptProcessor::ProcTextures()
 			buffer.insert(0, "data/fonts/");
 			CheckFile(buffer);
 			if (params == 16)
-				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]));
+				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]));
 			else
-				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, ToBool(tempdata[16]));
+				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, ToBool(tempdata[16]));
 		}
 		linecheck = SetCaseCopy(LineData, false);
 		return sNextLine;
@@ -7607,9 +7611,9 @@ int ScriptProcessor::ProcTextures()
 		}
 		CheckFile(tempdata[0]);
 		if (params == 8)
-			Simcore->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+			texturemanager->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		else
-			Simcore->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]));
+			texturemanager->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]));
 		return sNextLine;
 	}
 
@@ -7629,9 +7633,9 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		if (params == 9)
-			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			texturemanager->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 		else
-			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true, ToBool(tempdata[9]));
+			texturemanager->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true, ToBool(tempdata[9]));
 		return sNextLine;
 	}
 
@@ -7667,7 +7671,7 @@ int ScriptProcessor::ProcTextures()
 		if (!IsNumeric(tempdata[1]))
 			return ScriptError("Invalid value: " + tempdata[1]);
 
-		Simcore->RotateTexture(tempdata[0], ToFloat(tempdata[1]));
+		texturemanager->RotateTexture(tempdata[0], ToFloat(tempdata[1]));
 		return sNextLine;
 	}
 
@@ -7684,7 +7688,7 @@ int ScriptProcessor::ProcTextures()
 		if (!IsNumeric(tempdata[1]))
 			return ScriptError("Invalid value: " + tempdata[1]);
 
-		Simcore->RotateAnimTexture(tempdata[0], ToFloat(tempdata[1]));
+		texturemanager->RotateAnimTexture(tempdata[0], ToFloat(tempdata[1]));
 		return sNextLine;
 	}
 
@@ -7704,7 +7708,7 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Simcore->ScrollTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		texturemanager->ScrollTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -7724,7 +7728,7 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Simcore->ScrollAnimTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		texturemanager->ScrollAnimTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -7744,7 +7748,7 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Simcore->ScaleTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		texturemanager->ScaleTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -7764,7 +7768,7 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Simcore->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		texturemanager->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
 	}
 

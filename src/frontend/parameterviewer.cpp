@@ -2004,7 +2004,7 @@ void ParameterViewer::On_bTextures_Click(wxCommandEvent& event)
 	twindow->Center();
 	twindow->SetTitle(wxT("Loaded Textures"));
 	twindow->Show(true);
-	wxString message = wxString::FromAscii(Simcore->ListTextures().c_str());
+	wxString message = wxString::FromAscii(Simcore->GetTextureManager()->ListTextures().c_str());
 	twindow->tMain->WriteText(message);
 	twindow->tMain->SetInsertionPoint(0);
 }

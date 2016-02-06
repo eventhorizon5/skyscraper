@@ -121,17 +121,17 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);
-	sbs->ResetTextureMapping(true);
+	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == 1 || Direction == 2 || Direction == 5 || Direction == 6)
-		sbs->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
+		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
 	if (Direction == 3 || Direction == 4 || Direction == 7 || Direction == 8)
-		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
+		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	WallObject *wall;
 	wall = DoorMesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
-	sbs->ResetTextureMapping();
+	sbs->GetTextureManager()->ResetTextureMapping();
 
 	//open door on startup (without sound) if specified
 	if (open_state == true)

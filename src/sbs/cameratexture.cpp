@@ -55,7 +55,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		//create a new render texture
 		std::string texturename = ToString(sbs->InstanceNumber) + ":" + name;
 		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
-		sbs->IncrementTextureCount();
+		sbs->GetTextureManager()->IncrementTextureCount();
 		renderTexture = texture->getBuffer()->getRenderTarget();
 
 		//create and set up camera
@@ -81,11 +81,11 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		Enabled(true);
 
 		//create a new material
-		material = sbs->CreateMaterial(name, "General");
-		sbs->BindTextureToMaterial(material, texturename, false);
+		material = sbs->GetTextureManager()->CreateMaterial(name, "General");
+		sbs->GetTextureManager()->BindTextureToMaterial(material, texturename, false);
 
 		//add texture multipliers
-		sbs->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
+		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
 
 		if (sbs->Verbose)
 			sbs->Report("Created camera texture '" + GetName() + "'");
@@ -110,9 +110,9 @@ CameraTexture::~CameraTexture()
 
 	if (sbs->FastDelete == false)
 	{
-		sbs->UnregisterTextureInfo(GetName());
-		sbs->DecrementTextureCount();
-		sbs->DecrementMaterialCount();
+		sbs->GetTextureManager()->UnregisterTextureInfo(GetName());
+		sbs->GetTextureManager()->DecrementTextureCount();
+		sbs->GetTextureManager()->DecrementMaterialCount();
 	}
 }
 

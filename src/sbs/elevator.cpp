@@ -3943,8 +3943,8 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const std::string &
 	}
 
 	bool autosize_x, autosize_y;
-	sbs->GetAutoSize(autosize_x, autosize_y);
-	sbs->SetAutoSize(false, false);
+	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
+	sbs->GetTextureManager()->SetAutoSize(false, false);
 
 	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
@@ -3973,7 +3973,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const std::string &
 			sbs->ResetWalls();
 		}
 	}
-	sbs->SetAutoSize(autosize_x, autosize_y);
+	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
 	return true;
 }
 

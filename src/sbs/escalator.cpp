@@ -153,7 +153,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	SetCase(Direction, false);
 	int num_steps = (int)Steps.size();
 
-	sbs->ResetTextureMapping(true);
+	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
 		sbs->SetWallOrientation("right");
 	if (Direction == "left" || Direction == "front")
@@ -242,7 +242,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		}
 	}
 	sbs->ResetWalls(true);
-	sbs->ResetTextureMapping();
+	sbs->GetTextureManager()->ResetTextureMapping();
 }
 
 }
