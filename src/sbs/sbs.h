@@ -26,11 +26,7 @@
 #ifndef _SBS_H
 #define _SBS_H
 
-#include <OgreVector2.h>
-#include <OgreVector3.h>
-#include <OgreConfigFile.h>
 #include <OgreFont.h>
-#include <OgreTimer.h>
 #include <OgreSceneManager.h>
 
 //fix naming collision on Windows
@@ -45,6 +41,10 @@ namespace OgreBulletDynamics {
 namespace OgreBulletCollisions {
 	class DebugDrawer;
 	class CollisionShape;
+}
+
+namespace Ogre {
+	class ConfigFile;
 }
 
 #include "object.h"
@@ -359,7 +359,7 @@ public:
 	void DecrementEscalatorCount();
 	bool HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
-	SoundSystem* GetSoundSystem() { return soundsystem; }
+	SoundSystem* GetSoundSystem();
 	bool IsObjectValid(Object* object, std::string type = "");
 	bool IsActionValid(Action* action);
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
@@ -374,7 +374,7 @@ public:
 	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
 	std::string GetTextureName(Ogre::MaterialPtr mMat);
 	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
-	int GetPersonCount() { return (int)PersonArray.size(); }
+	int GetPersonCount();
 	Person* GetPerson(int number);
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination);
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
@@ -384,17 +384,17 @@ public:
 	void CutOutsideBoundaries(bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
 	void CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max, bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
 	void SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max);
-	bool HasBounds() { return (area_trigger != 0); }
+	bool HasBounds();
 	void ResetBuilding();
 	Ogre::Vector3 ToGlobal(const Ogre::Vector3 &position);
 	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
 	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
 	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
 	Model* GetModel(std::string name);
-	inline FloorManager* GetFloorManager() { return floor_manager; }
-	inline ElevatorManager* GetElevatorManager() { return elevator_manager; }
-	inline ShaftManager* GetShaftManager() { return shaft_manager; }
-	inline StairsManager* GetStairsManager() { return stairs_manager; }
+	FloorManager* GetFloorManager();
+	ElevatorManager* GetElevatorManager();
+	ShaftManager* GetShaftManager();
+	StairsManager* GetStairsManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 
@@ -569,7 +569,7 @@ private:
 	Ogre::Timer *timer;
 
 	//config file
-	Ogre::ConfigFile configfile;
+	Ogre::ConfigFile *configfile;
 
 	struct VerifyResult
 	{

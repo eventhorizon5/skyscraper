@@ -28,6 +28,8 @@
 #include <OgreFontManager.h>
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreStringConverter.h>
+#include <OgreConfigFile.h>
+#include <OgreTimer.h>
 #include <fmod.hpp>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletCollisionsRay.h>
@@ -58,7 +60,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	mRoot = Ogre::Root::getSingletonPtr();
 
 	//load config file
-	configfile.load("skyscraper.ini");
+	configfile = new Ogre::ConfigFile();
+	configfile->load("skyscraper.ini");
 
 	//initialize variables
 	BuildingName = "";
@@ -438,6 +441,10 @@ SBS::~SBS()
 	if (timer)
 		delete timer;
 	timer = 0;
+
+	if (configfile)
+		delete configfile;
+	configfile = 0;
 
 	//clear self reference
 	sbs = 0;
@@ -3138,24 +3145,24 @@ void SBS::AddModel(Model *model)
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
 	return ToInt(result);
 }
 
 std::string SBS::GetConfigString(const std::string &key, const std::string &default_value)
 {
-	return configfile.getSetting(key, Ogre::StringUtil::BLANK, default_value);
+	return configfile->getSetting(key, Ogre::StringUtil::BLANK, default_value);
 }
 
 bool SBS::GetConfigBool(const std::string &key, bool default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
 	return ToBool(result);
 }
 
 float SBS::GetConfigFloat(const std::string &key, float default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
 	return ToFloat(result);
 }
 
@@ -4151,6 +4158,41 @@ void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
 			return;
 		}
 	}
+}
+
+SoundSystem* SBS::GetSoundSystem()
+{
+	return soundsystem;
+}
+
+int SBS::GetPersonCount()
+{
+	return (int)PersonArray.size();
+}
+
+bool SBS::HasBounds()
+{
+	return (area_trigger != 0);
+}
+
+FloorManager* SBS::GetFloorManager()
+{
+	return floor_manager;
+}
+
+ElevatorManager* SBS::GetElevatorManager()
+{
+	return elevator_manager;
+}
+
+ShaftManager* SBS::GetShaftManager()
+{
+	return shaft_manager;
+}
+
+StairsManager* SBS::GetStairsManager()
+{
+	return stairs_manager;
 }
 
 }
