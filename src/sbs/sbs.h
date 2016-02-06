@@ -26,7 +26,7 @@
 #ifndef _SBS_H
 #define _SBS_H
 
-#include <OgreSceneManager.h>
+#include "OgreStringVector.h"
 
 //fix naming collision on Windows
 #undef GetObject

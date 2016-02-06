@@ -26,6 +26,7 @@
 #ifndef _SBS_TRIGGER_H
 #define _SBS_TRIGGER_H
 
+#include "OgreAxisAlignedBox.h"
 #include "globals.h"
 #include "action.h"
 

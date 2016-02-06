@@ -27,6 +27,7 @@
 #define _SBS_TEXTURE_H
 
 #include <OgreFont.h>
+#include <OgreResourceGroupManager.h>
 
 namespace SBS {
 

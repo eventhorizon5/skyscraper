@@ -24,6 +24,7 @@
 */
 
 #include <OgreRoot.h>
+#include <OgreSceneManager.h>
 #include <OgreFileSystem.h>
 #include <OgreFontManager.h>
 #include <OgreHardwarePixelBuffer.h>

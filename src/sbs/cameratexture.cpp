@@ -24,6 +24,7 @@
 */
 
 #include <OgreCamera.h>
+#include <OgreSceneManager.h>
 #include <OgreTextureManager.h>
 #include <OgreTechnique.h>
 #include <OgreMaterialManager.h>
