@@ -32,6 +32,7 @@
 #include "sbs.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "profiler.h"
 #include "unix.h"
 #include "revmain.h"
 

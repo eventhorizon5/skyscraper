@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "scenenode.h"
 #include "unix.h"
 
 namespace SBS {

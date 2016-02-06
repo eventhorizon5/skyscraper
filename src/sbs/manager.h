@@ -28,11 +28,6 @@
 
 namespace SBS {
 
-class Floor;
-class Elevator;
-class Shaft;
-class Stairs;
-
 class SBSIMPEXP FloorManager : public Object
 {
 public:

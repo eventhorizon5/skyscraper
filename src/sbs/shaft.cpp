@@ -34,6 +34,8 @@
 #include "light.h"
 #include "shaft.h"
 #include "camera.h"
+#include "control.h"
+#include "profiler.h"
 #include "unix.h"
 
 namespace SBS {

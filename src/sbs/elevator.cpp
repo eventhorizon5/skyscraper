@@ -33,6 +33,9 @@
 #include "elevator.h"
 #include "camera.h"
 #include "shaft.h"
+#include "control.h"
+#include "trigger.h"
+#include "profiler.h"
 #include "unix.h"
 
 #include <time.h>

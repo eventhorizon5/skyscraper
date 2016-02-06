@@ -28,8 +28,6 @@
 
 namespace SBS {
 
-class MeshObject;
-
 class SBSIMPEXP DynamicMesh : public ObjectBase
 {
 public:

@@ -30,6 +30,8 @@
 #include "mesh.h"
 #include "camera.h"
 #include "texture.h"
+#include "trigger.h"
+#include "profiler.h"
 #include "elevatordoor.h"
 #include "unix.h"
 

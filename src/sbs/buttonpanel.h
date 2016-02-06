@@ -26,11 +26,7 @@
 #ifndef _SBS_BUTTON_H
 #define _SBS_BUTTON_H
 
-#include "control.h"
-
 namespace SBS {
-
-class Elevator;
 
 class SBSIMPEXP ButtonPanel : public Object
 {

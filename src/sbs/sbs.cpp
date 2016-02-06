@@ -53,6 +53,7 @@
 #include "callbutton.h"
 #include "control.h"
 #include "trigger.h"
+#include "profiler.h"
 #include "unix.h"
 #include "revsbs.h"
 #include "model.h"

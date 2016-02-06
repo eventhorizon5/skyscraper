@@ -31,6 +31,7 @@
 #include "stairs.h"
 #include "camera.h"
 #include "sound.h"
+#include "action.h"
 #include "trigger.h"
 #include "unix.h"
 

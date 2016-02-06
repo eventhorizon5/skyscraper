@@ -39,6 +39,9 @@
 #include "escalator.h"
 #include "cameratexture.h"
 #include "callbutton.h"
+#include "control.h"
+#include "trigger.h"
+#include "profiler.h"
 #include "unix.h"
 
 namespace SBS {

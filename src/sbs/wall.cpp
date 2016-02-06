@@ -28,6 +28,7 @@
 #include "mesh.h"
 #include "triangle.h"
 #include "texture.h"
+#include "profiler.h"
 #include "wall.h"
 #include "unix.h"
 

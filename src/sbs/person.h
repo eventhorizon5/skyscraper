@@ -26,9 +26,6 @@
 #ifndef _SBS_PERSON_H
 #define _SBS_PERSON_H
 
-#include "route.h"
-#include "random.h"
-
 namespace SBS {
 
 class SBSIMPEXP Person : public Object

@@ -28,6 +28,9 @@
 #include "floor.h"
 #include "elevator.h"
 #include "callbutton.h"
+#include "control.h"
+#include "route.h"
+#include "random.h"
 #include "unix.h"
 #include "person.h"
 

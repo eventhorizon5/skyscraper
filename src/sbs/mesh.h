@@ -26,7 +26,7 @@
 #ifndef _SBS_MESH_H
 #define _SBS_MESH_H
 
-#include <OgreMesh.h>
+#include <OgreAxisAlignedBox.h>
 #include "dynamicmesh.h"
 #include "triangle.h"
 

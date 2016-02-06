@@ -32,6 +32,7 @@
 #include "mesh.h"
 #include "triangle.h"
 #include "texture.h"
+#include "scenenode.h"
 #include "unix.h"
 #include "dynamicmesh.h"
 

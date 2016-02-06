@@ -43,6 +43,9 @@
 #include "callbutton.h"
 #include "buttonpanel.h"
 #include "camera.h"
+#include "control.h"
+#include "profiler.h"
+#include "scenenode.h"
 #include "unix.h"
 
 namespace SBS {

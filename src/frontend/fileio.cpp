@@ -42,6 +42,8 @@
 #include "stairs.h"
 #include "callbutton.h"
 #include "cameratexture.h"
+#include "trigger.h"
+#include "control.h"
 #include "random.h"
 #include "unix.h"
 #include "textwindow.h"

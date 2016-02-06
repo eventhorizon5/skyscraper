@@ -28,8 +28,6 @@
 
 namespace SBS {
 
-class Floor;
-
 class SBSIMPEXP CallButton : public Object
 {
 public:

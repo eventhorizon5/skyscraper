@@ -52,7 +52,9 @@ namespace FMOD {
 
 namespace SBS {
 	//forward declarations
-	class Light;
+	class SBS;
+	class Object;
+	class ObjectBase;
 	class MeshObject;
 	class DynamicMesh;
 	class FloorManager;
@@ -83,14 +85,14 @@ namespace SBS {
 	class DirectionalIndicator;
 	class FloorIndicator;
 	class CameraTexture;
+	class Light;
 	class ElevatorRoute;
 	class SceneNode;
 	class TimerObject;
+	class RandomGen;
 }
 
 #include "object.h"
-#include "scenenode.h"
-#include "profiler.h"
 
 namespace SBS {
 

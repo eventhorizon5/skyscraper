@@ -26,8 +26,6 @@
 #ifndef _SBS_DOOR_H
 #define _SBS_DOOR_H
 
-#include "sound.h"
-
 namespace SBS {
 
 class SBSIMPEXP Door : public Object

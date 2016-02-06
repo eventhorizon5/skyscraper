@@ -23,6 +23,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreMesh.h>
 #include <OgreResourceGroupManager.h>
 #include <OgreMaterialManager.h>
 #include <OgreBulletDynamicsRigidBody.h>
@@ -36,6 +37,8 @@
 #include "polygon.h"
 #include "wall.h"
 #include "texture.h"
+#include "profiler.h"
+#include "scenenode.h"
 #include "mesh.h"
 #include "unix.h"
 

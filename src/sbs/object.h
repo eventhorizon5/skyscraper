@@ -28,10 +28,6 @@
 
 namespace SBS {
 
-class SBS;
-class Object;
-class SceneNode;
-
 //ObjectBase is used for lightweight objects, and core of Object
 class SBSIMPEXP ObjectBase
 {

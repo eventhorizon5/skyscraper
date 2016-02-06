@@ -28,6 +28,7 @@
 #include "mesh.h"
 #include "floorindicator.h"
 #include "elevator.h"
+#include "profiler.h"
 #include "floor.h"
 
 namespace SBS {
