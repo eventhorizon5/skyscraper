@@ -944,7 +944,7 @@ bool DynamicMesh::Mesh::IsVisible()
 
 bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 {
-	//returns if this mesh is visible in the provided camera's view frustom or not
+	//returns if this mesh is visible in the provided camera's view frustum or not
 
 	if (enabled == false || !camera)
 		return false;

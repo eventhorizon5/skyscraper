@@ -1828,7 +1828,7 @@ int MeshObject::GetSubmeshCount()
 
 bool MeshObject::IsVisible(Ogre::Camera *camera)
 {
-	//returns if this mesh object is visible in the provided camera's view frustom or not
+	//returns if this mesh object is visible in the provided camera's view frustum or not
 
 	if (IsEnabled() == false || !camera)
 		return false;

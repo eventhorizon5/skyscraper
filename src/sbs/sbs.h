@@ -28,7 +28,6 @@
 
 #include <OgreVector2.h>
 #include <OgreVector3.h>
-#include <OgreMesh.h>
 #include <OgreConfigFile.h>
 #include <OgreFont.h>
 #include <OgreTimer.h>
