@@ -28,6 +28,7 @@
 #include <OgreFileSystem.h>
 #include <OgreConfigFile.h>
 #include <OgreTimer.h>
+#include "OgreStringVector.h"
 #include <fmod.hpp>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletCollisionsRay.h>

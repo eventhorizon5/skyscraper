@@ -26,7 +26,7 @@
 #ifndef _SBS_H
 #define _SBS_H
 
-#include "OgreStringVector.h"
+#include "OgreSharedPtr.h"
 
 //fix naming collision on Windows
 #undef GetObject
@@ -44,6 +44,8 @@ namespace OgreBulletCollisions {
 
 namespace Ogre {
 	class ConfigFile;
+	typedef vector<String>::type StringVector;
+	typedef SharedPtr<StringVector> StringVectorPtr;
 }
 
 namespace FMOD {
