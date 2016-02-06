@@ -37,6 +37,8 @@ namespace SBS {
 
 TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 {
+	SetName("Texture Manager");
+
 	AutoX = true;
 	AutoY = true;
 	MapIndex.resize(3);

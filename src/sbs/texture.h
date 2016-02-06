@@ -26,6 +26,8 @@
 #ifndef _SBS_TEXTURE_H
 #define _SBS_TEXTURE_H
 
+#include <OgreFont.h>
+
 namespace SBS {
 
 class SBSIMPEXP TextureManager : public ObjectBase
@@ -157,8 +159,6 @@ private:
 
 	//function caching
 	std::string prev_material;
-
-
 };
 
 }

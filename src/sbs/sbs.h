@@ -26,7 +26,6 @@
 #ifndef _SBS_H
 #define _SBS_H
 
-#include <OgreFont.h>
 #include <OgreSceneManager.h>
 
 //fix naming collision on Windows
