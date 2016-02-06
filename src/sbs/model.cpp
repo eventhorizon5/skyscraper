@@ -28,9 +28,9 @@
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
+#include "shaft.h"
 #include "stairs.h"
 #include "camera.h"
-#include "unix.h"
 #include "model.h"
 
 namespace SBS {

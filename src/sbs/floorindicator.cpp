@@ -26,10 +26,10 @@
 #include "globals.h"
 #include "sbs.h"
 #include "mesh.h"
-#include "floorindicator.h"
 #include "elevator.h"
 #include "profiler.h"
 #include "floor.h"
+#include "floorindicator.h"
 
 namespace SBS {
 

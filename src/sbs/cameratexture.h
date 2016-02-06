@@ -23,8 +23,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_CameraTexture_H
-#define _SBS_CameraTexture_H
+#ifndef _SBS_CAMERATEXTURE_H
+#define _SBS_CAMERATEXTURE_H
 
 namespace SBS {
 

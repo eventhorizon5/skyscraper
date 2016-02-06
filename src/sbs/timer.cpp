@@ -25,7 +25,6 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "unix.h"
 #include "timer.h"
 
 namespace SBS {

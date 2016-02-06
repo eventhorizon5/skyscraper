@@ -35,7 +35,6 @@
 #include "sound.h"
 #include "mesh.h"
 #include "control.h"
-#include "unix.h"
 
 namespace SBS {
 

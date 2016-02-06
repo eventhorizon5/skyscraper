@@ -35,8 +35,13 @@
 #include "shaft.h"
 #include "control.h"
 #include "trigger.h"
+#include "sound.h"
+#include "model.h"
+#include "door.h"
+#include "buttonpanel.h"
+#include "directional.h"
+#include "floorindicator.h"
 #include "profiler.h"
-#include "unix.h"
 
 #include <time.h>
 

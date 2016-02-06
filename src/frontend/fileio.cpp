@@ -44,8 +44,12 @@
 #include "cameratexture.h"
 #include "trigger.h"
 #include "control.h"
+#include "door.h"
+#include "buttonpanel.h"
+#include "directional.h"
+#include "floorindicator.h"
+#include "sound.h"
 #include "random.h"
-#include "unix.h"
 #include "textwindow.h"
 
 #define sContinue 0

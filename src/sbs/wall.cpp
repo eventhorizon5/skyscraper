@@ -30,7 +30,6 @@
 #include "texture.h"
 #include "profiler.h"
 #include "wall.h"
-#include "unix.h"
 
 namespace SBS {
 

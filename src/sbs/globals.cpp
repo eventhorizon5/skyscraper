@@ -31,7 +31,6 @@
 #include <limits.h>
 #include <math.h>
 #include <OgreStringConverter.h>
-#include "unix.h"
 #include "globals.h"
 
 namespace SBS {

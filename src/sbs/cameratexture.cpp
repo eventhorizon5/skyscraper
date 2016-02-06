@@ -33,7 +33,6 @@
 #include "sbs.h"
 #include "texture.h"
 #include "scenenode.h"
-#include "unix.h"
 #include "cameratexture.h"
 
 namespace SBS {

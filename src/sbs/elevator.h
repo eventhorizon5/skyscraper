@@ -26,14 +26,7 @@
 #ifndef _SBS_ELEVATOR_H
 #define _SBS_ELEVATOR_H
 
-#include "shaft.h"
-#include "buttonpanel.h"
-#include "sound.h"
-#include "directional.h"
 #include "elevatordoor.h"
-#include "floorindicator.h"
-#include "door.h"
-#include "model.h"
 #include "timer.h"
 
 namespace SBS {

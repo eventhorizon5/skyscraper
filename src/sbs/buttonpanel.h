@@ -63,7 +63,6 @@ private:
 	Action* off_action;
 	std::vector<Control*> controls; //control objects
 	std::vector<Action*> action_list; //list used for action cleanup on delete
-
 };
 
 }

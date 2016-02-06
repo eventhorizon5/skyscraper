@@ -32,7 +32,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
-#include "unix.h"
 #include "fileio.h"
 #include "debugpanel.h"
 #include "skyscraper.h"

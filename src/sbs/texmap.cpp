@@ -28,7 +28,6 @@
 #include "polygon.h"
 #include "triangle.h"
 #include "texture.h"
-#include "unix.h"
 
 namespace SBS {
 

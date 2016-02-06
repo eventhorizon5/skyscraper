@@ -53,8 +53,6 @@ namespace FMOD {
 namespace SBS {
 	//forward declarations
 	class SBS;
-	class Object;
-	class ObjectBase;
 	class MeshObject;
 	class DynamicMesh;
 	class FloorManager;
@@ -82,11 +80,12 @@ namespace SBS {
 	class Escalator;
 	class Action;
 	class Person;
+	class ButtonPanel;
 	class DirectionalIndicator;
 	class FloorIndicator;
 	class CameraTexture;
 	class Light;
-	class ElevatorRoute;
+	struct ElevatorRoute;
 	class SceneNode;
 	class TimerObject;
 	class RandomGen;

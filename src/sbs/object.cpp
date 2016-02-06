@@ -26,7 +26,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "scenenode.h"
-#include "unix.h"
+#include "object.h"
 
 namespace SBS {
 
@@ -43,6 +43,11 @@ Object* ObjectBase::GetParent()
 {
 	//return parent object
 	return Parent;
+}
+
+SBS* ObjectBase::GetRoot()
+{
+	return sbs;
 }
 
 const std::string& ObjectBase::GetName()

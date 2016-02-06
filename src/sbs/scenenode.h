@@ -57,9 +57,9 @@ public:
 	bool IsRoot();
 
 private:
+
 	Ogre::SceneNode *node; //node in scene graph
 	Ogre::Vector3 Rotation; //rotation vector
-
 };
 
 }

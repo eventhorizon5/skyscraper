@@ -40,7 +40,6 @@
 #include "profiler.h"
 #include "scenenode.h"
 #include "mesh.h"
-#include "unix.h"
 
 //this file includes function implementations of the low-level SBS geometry and mesh code
 

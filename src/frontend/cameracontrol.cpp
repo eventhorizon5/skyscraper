@@ -31,7 +31,6 @@
 #include "sbs.h"
 #include "camera.h"
 #include "skyscraper.h"
-#include "unix.h"
 #include "cameracontrol.h"
 
 using namespace SBS;

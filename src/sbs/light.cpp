@@ -32,7 +32,6 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "scenenode.h"
-#include "unix.h"
 #include "light.h"
 
 namespace SBS {

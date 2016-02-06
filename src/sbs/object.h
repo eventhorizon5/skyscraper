@@ -28,6 +28,8 @@
 
 namespace SBS {
 
+class Object;
+
 //ObjectBase is used for lightweight objects, and core of Object
 class SBSIMPEXP ObjectBase
 {
@@ -37,7 +39,7 @@ public:
 	ObjectBase(Object *parent);
 	virtual ~ObjectBase() {};
 	Object* GetParent();
-	SBS* GetRoot() { return sbs; }
+	SBS* GetRoot();
 	void SetName(const std::string &name);
 	const std::string& GetName();
 	std::string GetNameBase();

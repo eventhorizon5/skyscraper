@@ -28,11 +28,12 @@
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
+#include "shaft.h"
 #include "stairs.h"
 #include "texture.h"
-#include "door.h"
 #include "camera.h"
-#include "unix.h"
+#include "sound.h"
+#include "door.h"
 
 namespace SBS {
 

@@ -105,7 +105,6 @@ private:
 	};
 
 	std::vector<SoundEntry> queue;
-
 };
 
 }

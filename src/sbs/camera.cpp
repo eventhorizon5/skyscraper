@@ -35,6 +35,7 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "floorindicator.h"
+#include "directional.h"
 #include "model.h"
 #include "mesh.h"
 #include "door.h"
@@ -46,7 +47,6 @@
 #include "control.h"
 #include "profiler.h"
 #include "scenenode.h"
-#include "unix.h"
 
 namespace SBS {
 

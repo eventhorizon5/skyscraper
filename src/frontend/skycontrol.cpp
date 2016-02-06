@@ -31,7 +31,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
-#include "unix.h"
 #include "skycontrol.h"
 
 namespace Skyscraper {

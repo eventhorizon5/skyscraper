@@ -75,7 +75,6 @@ private:
 	int KeyID;
 	bool light_status; //light on/off value, used for floor buttons
 	bool is_enabled;
-
 };
 
 }

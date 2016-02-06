@@ -26,6 +26,8 @@
 #ifndef _SBS_ELEVATORDOOR_H
 #define _SBS_ELEVATORDOOR_H
 
+#include "timer.h"
+
 namespace SBS {
 
 class SBSIMPEXP ElevatorDoor : public Object

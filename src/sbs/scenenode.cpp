@@ -26,7 +26,6 @@
 #include <OgreSceneManager.h>
 #include "globals.h"
 #include "sbs.h"
-#include "unix.h"
 #include "scenenode.h"
 
 namespace SBS {

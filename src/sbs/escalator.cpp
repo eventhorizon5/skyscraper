@@ -30,7 +30,6 @@
 #include "sound.h"
 #include "texture.h"
 #include "escalator.h"
-#include "unix.h"
 
 namespace SBS {
 

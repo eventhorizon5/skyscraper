@@ -32,8 +32,6 @@
 
 namespace SBS {
 
-class WallObject;
-
 struct Extents
 {
 	int x;

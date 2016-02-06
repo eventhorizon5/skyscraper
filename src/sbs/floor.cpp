@@ -41,8 +41,10 @@
 #include "callbutton.h"
 #include "control.h"
 #include "trigger.h"
+#include "floorindicator.h"
+#include "directional.h"
+#include "sound.h"
 #include "profiler.h"
-#include "unix.h"
 
 namespace SBS {
 

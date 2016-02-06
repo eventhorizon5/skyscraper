@@ -68,7 +68,6 @@ private:
 	std::vector<std::string> Actions; //trigger actions
 
 	Sound *sound; //sound object
-
 };
 
 }

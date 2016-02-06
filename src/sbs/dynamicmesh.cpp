@@ -33,7 +33,6 @@
 #include "triangle.h"
 #include "texture.h"
 #include "scenenode.h"
-#include "unix.h"
 #include "dynamicmesh.h"
 
 //this file includes function implementations of the low-level SBS geometry and mesh code

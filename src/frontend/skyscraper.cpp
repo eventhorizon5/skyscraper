@@ -33,7 +33,6 @@
 #include "debugpanel.h"
 #include "skyscraper.h"
 #include "profiler.h"
-#include "unix.h"
 #include "revmain.h"
 
 #if defined(__WXGTK__)

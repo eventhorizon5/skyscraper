@@ -34,7 +34,6 @@
 #include "elevator.h"
 #include "elevatordoor.h"
 #include "callbutton.h"
-#include "unix.h"
 #include "skyscraper.h"
 
 using namespace SBS;

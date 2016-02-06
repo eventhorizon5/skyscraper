@@ -53,10 +53,11 @@
 #include "callbutton.h"
 #include "control.h"
 #include "trigger.h"
-#include "profiler.h"
-#include "unix.h"
-#include "revsbs.h"
+#include "sound.h"
+#include "door.h"
 #include "model.h"
+#include "profiler.h"
+#include "revsbs.h"
 
 namespace SBS {
 

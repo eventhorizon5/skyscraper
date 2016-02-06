@@ -27,13 +27,14 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "shaft.h"
 #include "mesh.h"
 #include "camera.h"
 #include "texture.h"
 #include "trigger.h"
 #include "profiler.h"
+#include "sound.h"
 #include "elevatordoor.h"
-#include "unix.h"
 
 namespace SBS {
 

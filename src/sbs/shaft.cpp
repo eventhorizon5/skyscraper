@@ -36,7 +36,6 @@
 #include "camera.h"
 #include "control.h"
 #include "profiler.h"
-#include "unix.h"
 
 namespace SBS {
 

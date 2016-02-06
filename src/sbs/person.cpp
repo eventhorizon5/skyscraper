@@ -31,7 +31,6 @@
 #include "control.h"
 #include "route.h"
 #include "random.h"
-#include "unix.h"
 #include "person.h"
 
 namespace SBS {

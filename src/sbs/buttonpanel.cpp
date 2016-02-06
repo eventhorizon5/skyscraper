@@ -32,7 +32,6 @@
 #include "camera.h"
 #include "action.h"
 #include "control.h"
-#include "unix.h"
 
 namespace SBS {
 

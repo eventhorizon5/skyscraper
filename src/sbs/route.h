@@ -28,16 +28,12 @@
 
 namespace SBS {
 
-class SBSIMPEXP ElevatorRoute
+struct SBSIMPEXP ElevatorRoute
 {
-public:
 	ElevatorRoute(Elevator *elevator, int floor_selection);
 	~ElevatorRoute() {}
 	Elevator *elevator;
 	int floor_selection;
-
-private:
-
 };
 
 }

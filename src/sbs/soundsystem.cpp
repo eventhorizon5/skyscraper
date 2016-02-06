@@ -29,7 +29,6 @@
 #include "soundsystem.h"
 #include "sound.h"
 #include "profiler.h"
-#include "unix.h"
 
 namespace SBS {
 
