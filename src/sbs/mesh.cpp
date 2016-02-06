@@ -28,6 +28,7 @@
 #include <OgreMaterialManager.h>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreMath.h>
+#include <OgreAxisAlignedBox.h>
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <math.h>
@@ -39,6 +40,7 @@
 #include "texture.h"
 #include "profiler.h"
 #include "scenenode.h"
+#include "dynamicmesh.h"
 #include "mesh.h"
 
 //this file includes function implementations of the low-level SBS geometry and mesh code
@@ -541,6 +543,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	remove_on_disable = true;
 	wrapper_selfcreate = false;
 	model_loaded = false;
+	Bounds = new Ogre::AxisAlignedBox();
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -601,7 +604,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 		else
 		{
 			//create generic box collider if separate mesh collider isn't available
-			Bounds = MeshWrapper->GetBounds(this);
+			*Bounds = MeshWrapper->GetBounds(this);
 			CreateBoxCollider();
 		}
 	}
@@ -631,6 +634,10 @@ MeshObject::~MeshObject()
 	if (wrapper_selfcreate == true)
 		delete MeshWrapper;
 	MeshWrapper = 0;
+
+	if (Bounds)
+		delete Bounds;
+	Bounds = 0;
 }
 
 void MeshObject::Enable(bool value)
@@ -1139,7 +1146,7 @@ void MeshObject::Prepare(bool force)
 	if (model_loaded == false)
 	{
 		for (int i = 0; i < (int)MeshGeometry.size(); i++)
-			Bounds.merge(MeshGeometry[i].vertex);
+			Bounds->merge(MeshGeometry[i].vertex);
 	}
 
 	//update dynamic mesh
@@ -1472,14 +1479,14 @@ void MeshObject::CreateBoxCollider()
 		//initialize collider shape
 		float scale = GetSceneNode()->GetScale();
 
-		if (Bounds.isNull() == true)
+		if (Bounds->isNull() == true)
 			return;
 
-		Ogre::Vector3 bounds = Bounds.getHalfSize() * scale;
+		Ogre::Vector3 bounds = Bounds->getHalfSize() * scale;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 
 		//create a new scene node for this collider, and center the collider accordingly
-		Ogre::Vector3 collider_center = sbs->ToLocal(Bounds.getCenter());
+		Ogre::Vector3 collider_center = sbs->ToLocal(Bounds->getCenter());
 		if (!collider_node)
 			collider_node = GetSceneNode()->CreateChild(GetName() + " collider", collider_center);
 
@@ -1534,11 +1541,11 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 
 	Ogre::Vector3 position = sbs->ToRemote(pos - GetPosition());
 
-	if (Bounds.isNull() == true)
+	if (Bounds->isNull() == true)
 		return false;
 
-	Ogre::Vector3 min = Bounds.getMinimum();
-	Ogre::Vector3 max = Bounds.getMaximum();
+	Ogre::Vector3 min = Bounds->getMinimum();
+	Ogre::Vector3 max = Bounds->getMaximum();
 
 	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
 	{
@@ -1841,11 +1848,11 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	if (GetSubmeshCount() == 0)
 		return false;
 
-	if (Bounds.isNull() == true)
+	if (Bounds->isNull() == true)
 		return false;
 
-	Ogre::Vector3 min = Bounds.getMinimum();
-	Ogre::Vector3 max = Bounds.getMaximum();
+	Ogre::Vector3 min = Bounds->getMinimum();
+	Ogre::Vector3 max = Bounds->getMaximum();
 	Ogre::Vector3 pos = sbs->ToRemote(GetPosition());
 	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
 
@@ -1861,14 +1868,14 @@ Ogre::Vector3 MeshObject::GetOffset()
 {
 	//for models, return bounding box offset value, used to center the mesh
 
-	Bounds.scale(GetSceneNode()->GetRawSceneNode()->getScale());
+	Bounds->scale(GetSceneNode()->GetRawSceneNode()->getScale());
 
-	if (Bounds.isNull() == true)
+	if (Bounds->isNull() == true)
 		return Ogre::Vector3::ZERO;
 
-	Ogre::Vector3 vec = Bounds.getCenter();
-	Ogre::Vector3 min = Bounds.getMinimum();
-	Ogre::Vector3 offset (vec.x, -Bounds.getMinimum().y, -vec.z);
+	Ogre::Vector3 vec = Bounds->getCenter();
+	Ogre::Vector3 min = Bounds->getMinimum();
+	Ogre::Vector3 offset (vec.x, -Bounds->getMinimum().y, -vec.z);
 	return sbs->ToLocal(offset);
 }
 
@@ -1992,6 +1999,11 @@ unsigned int MeshObject::GetTriangleCount(int submesh)
 		return 0;
 
 	return Submeshes[submesh].Triangles.size();
+}
+
+bool MeshObject::UsingDynamicBuffers()
+{
+	return MeshWrapper->UseDynamicBuffers();
 }
 
 }

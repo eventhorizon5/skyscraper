@@ -26,8 +26,6 @@
 #ifndef _SBS_MESH_H
 #define _SBS_MESH_H
 
-#include <OgreAxisAlignedBox.h>
-#include "dynamicmesh.h"
 #include "triangle.h"
 
 namespace SBS {
@@ -116,7 +114,7 @@ public:
 	void CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors);
 	unsigned int GetVertexCount();
 	unsigned int GetTriangleCount(int submesh);
-	bool UsingDynamicBuffers() { return MeshWrapper->UseDynamicBuffers(); }
+	bool UsingDynamicBuffers();
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
@@ -125,7 +123,7 @@ public:
 
 	SceneNode *collider_node; //collider scenenode for box collider offsets
 
-	Ogre::AxisAlignedBox Bounds; //mesh bounds
+	Ogre::AxisAlignedBox *Bounds; //mesh bounds
 
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;

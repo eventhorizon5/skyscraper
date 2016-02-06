@@ -26,6 +26,7 @@
 #ifndef _SBS_H
 #define _SBS_H
 
+#include "OgrePrerequisites.h"
 #include "OgreSharedPtr.h"
 
 //fix naming collision on Windows
@@ -44,12 +45,14 @@ namespace OgreBulletCollisions {
 
 namespace Ogre {
 	class ConfigFile;
+	struct Box;
 	typedef vector<String>::type StringVector;
 	typedef SharedPtr<StringVector> StringVectorPtr;
 }
 
 namespace FMOD {
 	class System;
+	class Channel;
 }
 
 namespace SBS {

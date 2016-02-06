@@ -26,8 +26,8 @@
 #ifndef _SBS_TEXTURE_H
 #define _SBS_TEXTURE_H
 
-#include <OgreFont.h>
-#include <OgreResourceGroupManager.h>
+#include <OgreOverlayPrerequisites.h>
+#include <OgreColourValue.h>
 
 namespace SBS {
 
@@ -83,11 +83,11 @@ public:
 	void RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, float widthmult, float heightmult, bool enable_force, bool force_mode);
 	bool UnregisterTextureInfo(std::string name, std::string material_name = "");
 	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
-	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
+	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = "Autodetect");
 	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
 	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
 	std::string GetTextureName(Ogre::MaterialPtr mMat);
-	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
+	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = "Autodetect");
 	std::string GetTextureMaterial(const std::string &name, bool &result, bool report = true, const std::string &polygon_name = "");
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination);
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
@@ -153,7 +153,7 @@ private:
 	struct TexturePixelBox
 	{
 		Ogre::FontPtr font;
-		Ogre::PixelBox box;
+		Ogre::PixelBox *box;
 		unsigned char *buffer;
 	};
 	std::vector<TexturePixelBox> textureboxes;

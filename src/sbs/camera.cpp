@@ -37,6 +37,7 @@
 #include "floorindicator.h"
 #include "directional.h"
 #include "model.h"
+#include "dynamicmesh.h"
 #include "mesh.h"
 #include "door.h"
 #include "elevatordoor.h"

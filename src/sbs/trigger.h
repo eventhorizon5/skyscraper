@@ -26,8 +26,6 @@
 #ifndef _SBS_TRIGGER_H
 #define _SBS_TRIGGER_H
 
-#include "OgreAxisAlignedBox.h"
-
 namespace SBS {
 
 class SBSIMPEXP Trigger : public Object
@@ -56,12 +54,12 @@ public:
 	bool IsInside(const Ogre::Vector3 &position);
 	bool IsEnabled() { return is_enabled; }
 	Ogre::AxisAlignedBox GetBounds(bool relative = false);
-	Ogre::Vector3 GetMin() { return area_box.getMinimum(); }
-	Ogre::Vector3 GetMax() { return area_box.getMaximum(); }
+	Ogre::Vector3 GetMin();
+	Ogre::Vector3 GetMax();
 	bool IsOutside(Ogre::Vector3 v1, Ogre::Vector3 v2);
 
 private:
-	Ogre::AxisAlignedBox area_box;
+	Ogre::AxisAlignedBox *area_box;
 	int current_position; //current trigger position
 	bool is_inside;
 	bool is_enabled;

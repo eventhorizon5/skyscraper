@@ -26,9 +26,9 @@
 #ifndef _SBS_SOUND_H
 #define _SBS_SOUND_H
 
-#include "soundsystem.h"
-
 namespace SBS {
+
+struct SoundData;
 
 class SBSIMPEXP Sound : public Object
 {
@@ -68,7 +68,7 @@ public:
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
 	void Unload();
-	FMOD::Channel* GetChannel() { return channel; }
+	FMOD::Channel* GetChannel();
 
 private:
 
@@ -78,7 +78,7 @@ private:
 	FMOD::Channel *channel;
 
 	//associated sound data
-	SoundSystem::SoundData *sound;
+	SoundData *sound;
 
 	SoundSystem *system;
 

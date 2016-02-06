@@ -155,7 +155,7 @@ unsigned int SoundSystem::GetLength(SoundData *data)
 	return length;
 }
 
-SoundSystem::SoundData* SoundSystem::Load(const std::string &filename)
+SoundData* SoundSystem::Load(const std::string &filename)
 {
 	//load a sound file from specified filename
 
@@ -238,7 +238,7 @@ FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 	return channel;
 }
 
-SoundSystem::SoundData* SoundSystem::GetSoundData(std::string filename)
+SoundData* SoundSystem::GetSoundData(std::string filename)
 {
 	//get sound data element for related filename
 
@@ -259,83 +259,6 @@ void SoundSystem::Report(const std::string &message)
 bool SoundSystem::ReportError(const std::string &message)
 {
 	return sbs->ReportError("Sound System: " + message);
-}
-
-SoundSystem::SoundData::SoundData()
-{
-	sound = 0;
-}
-
-SoundSystem::SoundData::~SoundData()
-{
-	if (sound)
-		sound->release();
-	sound = 0;
-}
-
-void SoundSystem::SoundData::AddHandle(Sound *handle)
-{
-	//add a sound object handle
-
-	if (handle == 0)
-		return;
-
-	for (int i = 0; i < GetHandleCount(); i++)
-	{
-		if (handles[i] == handle)
-			return;
-	}
-	handles.push_back(handle);
-}
-
-void SoundSystem::SoundData::RemoveHandle(Sound *handle)
-{
-	//remove a sound object handle
-
-	if (handle == 0)
-		return;
-
-	for (int i = 0; i < GetHandleCount(); i++)
-	{
-		if (handles[i] == handle)
-		{
-			handles.erase(handles.begin() + i);
-			RemoveChannel(handle->GetChannel());
-			return;
-		}
-	}
-}
-
-void SoundSystem::SoundData::AddChannel(FMOD::Channel *channel)
-{
-	//add a sound channel
-
-	if (channel == 0)
-		return;
-
-	for (int i = 0; i < GetChannelCount(); i++)
-	{
-		if (channels[i] == channel)
-			return;
-	}
-	channels.push_back(channel);
-}
-
-void SoundSystem::SoundData::RemoveChannel(FMOD::Channel *channel)
-{
-	//remove a sound channel
-
-	if (channel == 0)
-		return;
-
-	for (int i = 0; i < GetChannelCount(); i++)
-	{
-		if (channels[i] == channel)
-		{
-			channels.erase(channels.begin() + i);
-			return;
-		}
-	}
 }
 
 int SoundSystem::GetPlayingCount()
@@ -382,6 +305,83 @@ void SoundSystem::ShowPlayingSounds()
 		}
 	}
 	sbs->Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
+}
+
+SoundData::SoundData()
+{
+	sound = 0;
+}
+
+SoundData::~SoundData()
+{
+	if (sound)
+		sound->release();
+	sound = 0;
+}
+
+void SoundData::AddHandle(Sound *handle)
+{
+	//add a sound object handle
+
+	if (handle == 0)
+		return;
+
+	for (int i = 0; i < GetHandleCount(); i++)
+	{
+		if (handles[i] == handle)
+			return;
+	}
+	handles.push_back(handle);
+}
+
+void SoundData::RemoveHandle(Sound *handle)
+{
+	//remove a sound object handle
+
+	if (handle == 0)
+		return;
+
+	for (int i = 0; i < GetHandleCount(); i++)
+	{
+		if (handles[i] == handle)
+		{
+			handles.erase(handles.begin() + i);
+			RemoveChannel(handle->GetChannel());
+			return;
+		}
+	}
+}
+
+void SoundData::AddChannel(FMOD::Channel *channel)
+{
+	//add a sound channel
+
+	if (channel == 0)
+		return;
+
+	for (int i = 0; i < GetChannelCount(); i++)
+	{
+		if (channels[i] == channel)
+			return;
+	}
+	channels.push_back(channel);
+}
+
+void SoundData::RemoveChannel(FMOD::Channel *channel)
+{
+	//remove a sound channel
+
+	if (channel == 0)
+		return;
+
+	for (int i = 0; i < GetChannelCount(); i++)
+	{
+		if (channels[i] == channel)
+		{
+			channels.erase(channels.begin() + i);
+			return;
+		}
+	}
 }
 
 }

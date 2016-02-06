@@ -48,6 +48,7 @@
 #include "buttonpanel.h"
 #include "directional.h"
 #include "floorindicator.h"
+#include "soundsystem.h"
 #include "sound.h"
 #include "random.h"
 #include "textwindow.h"

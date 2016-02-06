@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "dynamicmesh.h"
 #include "mesh.h"
 #include "sound.h"
 #include "door.h"

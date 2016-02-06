@@ -26,6 +26,8 @@
 #ifndef _SBS_POLYGON_H
 #define _SBS_POLYGON_H
 
+#include <OgrePlane.h>
+#include <OgreMatrix3.h>
 #include "mesh.h"
 #include "triangle.h"
 

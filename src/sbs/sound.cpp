@@ -466,4 +466,9 @@ void Sound::Unload()
 	channel = 0;
 }
 
+FMOD::Channel* Sound::GetChannel()
+{
+	return channel;
+}
+
 }

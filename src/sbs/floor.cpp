@@ -26,6 +26,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "manager.h"
+#include "dynamicmesh.h"
 #include "mesh.h"
 #include "elevator.h"
 #include "shaft.h"

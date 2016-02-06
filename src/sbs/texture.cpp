@@ -27,8 +27,10 @@
 #include <OgreTextureManager.h>
 #include <OgreTechnique.h>
 #include <OgreMaterialManager.h>
+#include <OgreFont.h>
 #include <OgreFontManager.h>
 #include <OgreHardwarePixelBuffer.h>
+#include <OgreResourceGroupManager.h>
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
@@ -102,6 +104,9 @@ TextureManager::~TextureManager()
 	//delete materials
 	UnloadMaterials();
 	textureinfo.clear();
+
+	if (textureboxes.empty() == false)
+		FreeTextureBoxes();
 }
 
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
@@ -1726,17 +1731,17 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 		textureboxes[index].buffer = (unsigned char*)calloc(nBuffSize, sizeof(unsigned char));
 
 		// create pixel box using the copy of the buffer
-		textureboxes[index].box = Ogre::PixelBox(fontBuffer->getWidth(), fontBuffer->getHeight(), fontBuffer->getDepth(), fontBuffer->getFormat(), textureboxes[index].buffer);
-		fontBuffer->blitToMemory(textureboxes[index].box); //this is very slow
+		textureboxes[index].box = new Ogre::PixelBox(fontBuffer->getWidth(), fontBuffer->getHeight(), fontBuffer->getDepth(), fontBuffer->getFormat(), textureboxes[index].buffer);
+		fontBuffer->blitToMemory(*textureboxes[index].box); //this is very slow
 	}
 
-	unsigned char* fontData = static_cast<unsigned char*>(textureboxes[index].box.data);
+	unsigned char* fontData = static_cast<unsigned char*>(textureboxes[index].box->data);
 	unsigned char* destData = static_cast<unsigned char*>(destPb.data);
 
-	const int fontPixelSize = (int)PixelUtil::getNumElemBytes(textureboxes[index].box.format);
+	const int fontPixelSize = (int)PixelUtil::getNumElemBytes(textureboxes[index].box->format);
 	const int destPixelSize = (int)PixelUtil::getNumElemBytes(destPb.format);
 
-	const int fontRowPitchBytes = (int)textureboxes[index].box.rowPitch * fontPixelSize;
+	const int fontRowPitchBytes = (int)textureboxes[index].box->rowPitch * fontPixelSize;
 	const int destRowPitchBytes = (int)destPb.rowPitch * destPixelSize;
 
 	Box *GlyphTexCoords;
@@ -2113,7 +2118,12 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 void TextureManager::FreeTextureBoxes()
 {
 	for (int i = 0; i < (int)textureboxes.size(); i++)
+	{
 		free(textureboxes[i].buffer);
+
+		if (textureboxes[i].box)
+			delete textureboxes[i].box;
+	}
 	textureboxes.clear();
 }
 

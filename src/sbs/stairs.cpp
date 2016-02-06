@@ -26,6 +26,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
+#include "dynamicmesh.h"
 #include "mesh.h"
 #include "control.h"
 #include "sound.h"
