@@ -26,6 +26,8 @@
 #ifndef _SBS_WALL_H
 #define _SBS_WALL_H
 
+#include "polygon.h"
+
 namespace SBS {
 
 class SBSIMPEXP WallObject : public Object

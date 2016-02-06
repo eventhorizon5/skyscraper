@@ -30,7 +30,10 @@
 #include "editelevator.h"
 #include "globals.h"
 #include "sbs.h"
+#include "floor.h"
 #include "elevator.h"
+#include "elevatordoor.h"
+#include "callbutton.h"
 #include "unix.h"
 #include "skyscraper.h"
 

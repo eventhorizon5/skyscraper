@@ -25,6 +25,10 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "mesh.h"
+#include "floor.h"
+#include "elevator.h"
+#include "stairs.h"
 #include "texture.h"
 #include "door.h"
 #include "camera.h"
@@ -168,6 +172,8 @@ Door::~Door()
 				static_cast<Elevator*>(GetParent())->RemoveDoor(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveDoor(this);
+			else if (type == "Shaft")
+				static_cast<Shaft*>(GetParent())->RemoveDoor(this);
 			else if (type == "Stairs")
 				static_cast<Stairs*>(GetParent())->RemoveDoor(this);
 		}

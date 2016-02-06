@@ -25,6 +25,8 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "floor.h"
+#include "elevator.h"
 #include "unix.h"
 #include "route.h"
 

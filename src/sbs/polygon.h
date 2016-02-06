@@ -26,6 +26,9 @@
 #ifndef _SBS_POLYGON_H
 #define _SBS_POLYGON_H
 
+#include "mesh.h"
+#include "triangle.h"
+
 namespace SBS {
 
 class SBSIMPEXP Polygon : public ObjectBase

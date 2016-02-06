@@ -25,6 +25,8 @@
 #ifndef ENGINECONTEXT_H
 #define ENGINECONTEXT_H
 
+#include "camera.h"
+
 namespace Skyscraper {
 
 class Skyscraper;

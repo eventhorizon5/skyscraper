@@ -25,9 +25,13 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "floor.h"
+#include "elevator.h"
+#include "shaft.h"
+#include "stairs.h"
+#include "manager.h"
 #include "unix.h"
 #include "dynamicmesh.h"
-#include "manager.h"
 
 namespace SBS {
 

@@ -26,8 +26,6 @@
 #ifndef _SBS_STAIRS_H
 #define _SBS_STAIRS_H
 
-#include "door.h"
-
 namespace SBS {
 
 class SBSIMPEXP Stairs : public Object

@@ -30,6 +30,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "camera.h"
 #include "debugpanel.h"
 #include "parameterviewer.h"
 #include "createobject.h"

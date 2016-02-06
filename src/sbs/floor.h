@@ -26,19 +26,6 @@
 #ifndef _SBS_FLOOR_H
 #define _SBS_FLOOR_H
 
-#include "callbutton.h"
-#include "door.h"
-#include "floorindicator.h"
-#include "directional.h"
-#include "sound.h"
-#include "control.h"
-#include "trigger.h"
-#include "cameratexture.h"
-#include "escalator.h"
-#include "elevator.h"
-#include "timer.h"
-#include "route.h"
-
 namespace SBS {
 
 class SBSIMPEXP Floor : public Object

@@ -24,6 +24,9 @@
 #include <math.h>
 #include "globals.h"
 #include "sbs.h"
+#include "mesh.h"
+#include "polygon.h"
+#include "triangle.h"
 #include "texture.h"
 #include "unix.h"
 

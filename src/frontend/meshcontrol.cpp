@@ -31,6 +31,8 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "shaft.h"
+#include "stairs.h"
 #include "skyscraper.h"
 
 namespace Skyscraper {

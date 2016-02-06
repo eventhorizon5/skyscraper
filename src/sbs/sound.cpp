@@ -25,8 +25,11 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "sound.h"
 #include "camera.h"
+#include "floor.h"
+#include "elevator.h"
+#include "soundsystem.h"
+#include "sound.h"
 #include "unix.h"
 
 namespace SBS {

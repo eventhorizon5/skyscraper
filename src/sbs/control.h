@@ -26,9 +26,6 @@
 #ifndef _SBS_CONTROL_H
 #define _SBS_CONTROL_H
 
-#include "globals.h"
-#include "action.h"
-
 namespace SBS {
 
 class SBSIMPEXP Control : public Object

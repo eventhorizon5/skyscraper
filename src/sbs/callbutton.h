@@ -26,8 +26,6 @@
 #ifndef _SBS_CALLBUTTON_H
 #define _SBS_CALLBUTTON_H
 
-#include "sound.h"
-
 namespace SBS {
 
 class Floor;

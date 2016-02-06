@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "mesh.h"
 #include "floorindicator.h"
 #include "elevator.h"
 #include "floor.h"

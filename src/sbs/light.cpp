@@ -26,6 +26,10 @@
 #include <OgreLight.h>
 #include "globals.h"
 #include "sbs.h"
+#include "floor.h"
+#include "elevator.h"
+#include "shaft.h"
+#include "stairs.h"
 #include "unix.h"
 #include "light.h"
 

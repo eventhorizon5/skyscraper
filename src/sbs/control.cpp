@@ -25,7 +25,15 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "action.h"
+#include "floor.h"
+#include "elevator.h"
+#include "shaft.h"
+#include "stairs.h"
+#include "buttonpanel.h"
 #include "texture.h"
+#include "sound.h"
+#include "mesh.h"
 #include "control.h"
 #include "unix.h"
 

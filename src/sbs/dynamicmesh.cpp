@@ -28,6 +28,8 @@
 #include <OgreEntity.h>
 #include "globals.h"
 #include "sbs.h"
+#include "mesh.h"
+#include "triangle.h"
 #include "texture.h"
 #include "unix.h"
 #include "dynamicmesh.h"

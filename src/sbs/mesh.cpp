@@ -32,7 +32,11 @@
 #include <math.h>
 #include "globals.h"
 #include "sbs.h"
+#include "camera.h"
+#include "polygon.h"
+#include "wall.h"
 #include "texture.h"
+#include "mesh.h"
 #include "unix.h"
 
 //this file includes function implementations of the low-level SBS geometry and mesh code

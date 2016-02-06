@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "mesh.h"
 #include "texture.h"
 #include "buttonpanel.h"
 #include "elevator.h"

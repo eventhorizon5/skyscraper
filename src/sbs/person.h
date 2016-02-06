@@ -26,7 +26,6 @@
 #ifndef _SBS_PERSON_H
 #define _SBS_PERSON_H
 
-#include "elevator.h"
 #include "route.h"
 #include "random.h"
 

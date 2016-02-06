@@ -46,33 +46,53 @@ namespace Ogre {
 	class ConfigFile;
 }
 
-#include "object.h"
-#include "light.h"
-#include "mesh.h"
-#include "manager.h"
-#include "polygon.h"
-#include "model.h"
-#include "wall.h"
-#include "floor.h"
-#include "elevator.h"
-#include "shaft.h"
-#include "camera.h"
-#include "stairs.h"
-#include "sound.h"
-#include "callbutton.h"
-#include "profiler.h"
-#include "control.h"
-#include "trigger.h"
-#include "escalator.h"
-#include "action.h"
-#include "timer.h"
-#include "scenenode.h"
+namespace FMOD {
+	class System;
+}
 
 namespace SBS {
+	//forward declarations
+	class Light;
+	class MeshObject;
+	class DynamicMesh;
+	class FloorManager;
+	class ElevatorManager;
+	class ShaftManager;
+	class StairsManager;
+	class TextureManager;
+	class Polygon;
+	class Model;
+	class WallObject;
+	class Door;
+	class Floor;
+	class Elevator;
+	class ElevatorDoor;
+	class Shaft;
+	class Camera;
+	struct CameraState;
+	class Stairs;
+	class Sound;
+	class SoundSystem;
+	class CallButton;
+	class Profiler;
+	class Control;
+	class Trigger;
+	class Escalator;
+	class Action;
+	class Person;
+	class DirectionalIndicator;
+	class FloorIndicator;
+	class CameraTexture;
+	class ElevatorRoute;
+	class SceneNode;
+	class TimerObject;
+}
 
-//forward declarations
-class TextureManager;
-class Person;
+#include "object.h"
+#include "scenenode.h"
+#include "profiler.h"
+
+namespace SBS {
 
 extern bool SBSIMPEXP enable_profiling; //enable general profiling
 extern bool SBSIMPEXP enable_advanced_profiling;

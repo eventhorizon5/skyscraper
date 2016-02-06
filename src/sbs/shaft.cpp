@@ -25,6 +25,13 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "floor.h"
+#include "elevator.h"
+#include "mesh.h"
+#include "sound.h"
+#include "door.h"
+#include "model.h"
+#include "light.h"
 #include "shaft.h"
 #include "camera.h"
 #include "unix.h"

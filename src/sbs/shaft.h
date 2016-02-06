@@ -26,8 +26,6 @@
 #ifndef _SBS_SHAFT_H
 #define _SBS_SHAFT_H
 
-#include "door.h"
-
 namespace SBS {
 
 class SBSIMPEXP Shaft : public Object

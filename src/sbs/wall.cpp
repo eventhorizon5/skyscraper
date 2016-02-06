@@ -25,6 +25,8 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "mesh.h"
+#include "triangle.h"
 #include "texture.h"
 #include "wall.h"
 #include "unix.h"

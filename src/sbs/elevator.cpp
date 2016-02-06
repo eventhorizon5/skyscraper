@@ -25,6 +25,10 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "floor.h"
+#include "mesh.h"
+#include "callbutton.h"
+#include "light.h"
 #include "texture.h"
 #include "elevator.h"
 #include "camera.h"

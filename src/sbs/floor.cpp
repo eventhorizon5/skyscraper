@@ -25,8 +25,20 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "manager.h"
+#include "mesh.h"
+#include "elevator.h"
+#include "shaft.h"
+#include "stairs.h"
+#include "door.h"
+#include "model.h"
+#include "light.h"
 #include "floor.h"
 #include "camera.h"
+#include "route.h"
+#include "escalator.h"
+#include "cameratexture.h"
+#include "callbutton.h"
 #include "unix.h"
 
 namespace SBS {
