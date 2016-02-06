@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "texture.h"
 #include "elevator.h"
 #include "camera.h"
 #include "shaft.h"

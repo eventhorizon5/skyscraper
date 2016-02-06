@@ -35,6 +35,8 @@
 #include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
+#include "person.h"
+#include "texture.h"
 #include "unix.h"
 #include "revsbs.h"
 #include "model.h"

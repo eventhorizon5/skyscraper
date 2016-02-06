@@ -30,6 +30,7 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "texture.h"
 #include "unix.h"
 #include "console.h"
 

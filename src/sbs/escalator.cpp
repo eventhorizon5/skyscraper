@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "texture.h"
 #include "escalator.h"
 #include "unix.h"
 

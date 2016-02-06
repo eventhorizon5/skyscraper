@@ -66,12 +66,13 @@ namespace Ogre {
 #include "escalator.h"
 #include "action.h"
 #include "timer.h"
-#include "person.h"
-#include "route.h"
 #include "scenenode.h"
-#include "texture.h"
 
 namespace SBS {
+
+//forward declarations
+class TextureManager;
+class Person;
 
 extern bool SBSIMPEXP enable_profiling; //enable general profiling
 extern bool SBSIMPEXP enable_advanced_profiling;

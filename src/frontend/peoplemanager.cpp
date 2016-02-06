@@ -28,6 +28,7 @@
 //*)
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "person.h"
 #include "peoplemanager.h"
 
 namespace Skyscraper {

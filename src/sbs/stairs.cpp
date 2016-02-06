@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "texture.h"
 #include "stairs.h"
 #include "camera.h"
 #include "unix.h"

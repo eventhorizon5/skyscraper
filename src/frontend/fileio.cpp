@@ -32,6 +32,7 @@
 #include "fileio.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "texture.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"

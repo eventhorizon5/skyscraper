@@ -30,6 +30,7 @@
 #include "stats.h"
 #include "globals.h"
 #include "sbs.h"
+#include "texture.h"
 #include "skyscraper.h"
 
 using namespace SBS;

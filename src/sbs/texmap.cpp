@@ -24,6 +24,7 @@
 #include <math.h>
 #include "globals.h"
 #include "sbs.h"
+#include "texture.h"
 #include "unix.h"
 
 namespace SBS {
