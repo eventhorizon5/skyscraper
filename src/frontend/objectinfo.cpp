@@ -439,7 +439,7 @@ void ObjectInfo::On_bMove_Click(wxCommandEvent& event)
 		delete moveobject;
 	moveobject = 0;
 
-	moveobject = new MoveObject(panel, this, -1, number);
+	moveobject = new MoveObject(panel, this, -1, panel->GetRoot()->GetActiveEngine(), number);
 	moveobject->Show();
 }
 

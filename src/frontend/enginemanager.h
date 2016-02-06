@@ -67,6 +67,7 @@ class EngineManager: public wxDialog
 		wxStaticText* StaticText2;
 		wxCheckBox* chkRender;
 		wxButton* bLoad;
+		wxButton* bMove;
 		//*)
 		void Loop();
 
@@ -89,6 +90,7 @@ class EngineManager: public wxDialog
 		static const long ID_chkRender;
 		static const long ID_bSetActive;
 		static const long ID_bReload;
+		static const long ID_bMove;
 		static const long ID_bLoad;
 		static const long ID_bShutdown;
 		static const long ID_bOk;
@@ -105,11 +107,13 @@ class EngineManager: public wxDialog
 		void On_chkCLoads_Click(wxCommandEvent& event);
 		void On_chkRender_Click(wxCommandEvent& event);
 		void On_bOk_Click(wxCommandEvent& event);
+		void On_bMove_Click(wxCommandEvent& event);
 		//*)
 
 		EngineContext *engine;
 		DebugPanel *panel;
 		LoadDialog *loader;
+		MoveObject *moveobject;
 		int lastcount;
 
 		DECLARE_EVENT_TABLE()

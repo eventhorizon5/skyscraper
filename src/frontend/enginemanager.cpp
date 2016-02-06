@@ -49,6 +49,7 @@ const long EngineManager::ID_CLoads = wxNewId();
 const long EngineManager::ID_chkRender = wxNewId();
 const long EngineManager::ID_bSetActive = wxNewId();
 const long EngineManager::ID_bReload = wxNewId();
+const long EngineManager::ID_bMove = wxNewId();
 const long EngineManager::ID_bLoad = wxNewId();
 const long EngineManager::ID_bShutdown = wxNewId();
 const long EngineManager::ID_bOk = wxNewId();
@@ -129,6 +130,8 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	BoxSizer5->Add(bSetActive, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bReload = new wxButton(this, ID_bReload, _("Reload"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bReload"));
 	BoxSizer5->Add(bReload, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bMove = new wxButton(this, ID_bMove, _("Move"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMove"));
+	BoxSizer5->Add(bMove, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer5, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
 	bLoad = new wxButton(this, ID_bLoad, _("Load Building"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bLoad"));
@@ -153,12 +156,14 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	Connect(ID_chkRender,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EngineManager::On_chkRender_Click);
 	Connect(ID_bSetActive,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bSetActive_Click);
 	Connect(ID_bReload,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bReload_Click);
+	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bMove_Click);
 	Connect(ID_bLoad,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bLoad_Click);
 	Connect(ID_bShutdown,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bShutdown_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bOk_Click);
 	//*)
 	panel = parent;
 	loader = 0;
+	moveobject = 0;
 	OnInit();
 }
 
@@ -170,6 +175,9 @@ EngineManager::~EngineManager()
 	if (loader)
 		loader->Destroy();
 	loader = 0;
+	if (moveobject)
+		moveobject->Destroy();
+	moveobject = 0;
 }
 
 void EngineManager::OnInit()
@@ -259,6 +267,9 @@ void EngineManager::Loop()
 		tActive->Clear();
 		tState->SetValue("Unloaded");
 	}
+
+	if (moveobject)
+		moveobject->Loop();
 }
 
 void EngineManager::On_bSetActive_Click(wxCommandEvent& event)
@@ -317,6 +328,26 @@ void EngineManager::On_chkRender_Click(wxCommandEvent& event)
 void EngineManager::On_bOk_Click(wxCommandEvent& event)
 {
 	this->Close();
+}
+
+void EngineManager::On_bMove_Click(wxCommandEvent& event)
+{
+	int selection = EngineList->GetSelection();
+
+	if (selection >= 0)
+	{
+		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
+
+		if (engine)
+		{
+			if (moveobject)
+				delete moveobject;
+			moveobject = 0;
+
+			moveobject = new MoveObject(panel, this, -1, engine, 0);
+			moveobject->Show();
+		}
+	}
 }
 
 }

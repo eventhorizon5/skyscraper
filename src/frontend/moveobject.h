@@ -42,7 +42,7 @@ class MoveObject: public wxDialog
 {
 	public:
 
-		MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id = -1, int object_number = 0);
+		MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id = -1, EngineContext *engine = 0, int object_number = 0);
 		virtual ~MoveObject();
 
 		//(*Identifiers(MoveObject)
@@ -173,6 +173,7 @@ class MoveObject: public wxDialog
 	private:
 
 		SBS::SBS *Simcore;
+		EngineContext *engine;
 		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
