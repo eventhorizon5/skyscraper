@@ -25,13 +25,14 @@
 //(*InternalHeaders(SkyControl)
 #include <wx/string.h>
 #include <wx/intl.h>
+#include <wx/object.h>
 //*)
 
 #include "Caelum.h"
 #include "globals.h"
 #include "sbs.h"
-#include "debugpanel.h"
 #include "skyscraper.h"
+#include "debugpanel.h"
 #include "skycontrol.h"
 
 namespace Skyscraper {

@@ -31,6 +31,7 @@
 
 //fix naming collision on Windows
 #undef GetObject
+#undef GetCurrentTime
 
 //external class declarations
 namespace OgreBulletDynamics {

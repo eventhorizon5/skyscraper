@@ -88,7 +88,7 @@ private:
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
 		std::vector<unsigned int> offset_table;
 		std::vector<unsigned int> vertex_counts;
-		std::vector<Ogre::AxisAlignedBox> client_bounds;
+		std::vector<Ogre::AxisAlignedBox*> client_bounds;
 		std::vector<Ogre::Real> client_radius;
 		Ogre::Entity *Movable;
 		SceneNode *node;

@@ -23,10 +23,10 @@
 */
 
 #include "globals.h"
+#include "skyscraper.h"
 #include "sbs.h"
 #include "camera.h"
 #include "debugpanel.h"
-#include "skyscraper.h"
 #include "fileio.h"
 #include "enginecontext.h"
 
