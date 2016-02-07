@@ -30,7 +30,6 @@
 #include <wx/sizer.h>
 #include <wx/button.h>
 //*)
-#include "parameterviewer.h"
 
 namespace Skyscraper {
 

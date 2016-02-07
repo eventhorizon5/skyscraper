@@ -26,14 +26,16 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
-#include "debugpanel.h"
-#include "meshcontrol.h"
+#include "globals.h"
+#include "sbs.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "skyscraper.h"
+#include "debugpanel.h"
+#include "meshcontrol.h"
 
 namespace Skyscraper {
 

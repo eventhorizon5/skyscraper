@@ -26,10 +26,10 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
-#include "debugpanel.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
 #include "moveobject.h"

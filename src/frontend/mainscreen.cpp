@@ -34,6 +34,7 @@
 #include "debugpanel.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
+#include "loaddialog.h"
 #include "mainscreen.h"
 
 using namespace SBS;

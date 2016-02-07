@@ -26,11 +26,11 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
-#include "debugpanel.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
 #include "skyscraper.h"
+#include "debugpanel.h"
 #include "cameracontrol.h"
 
 using namespace SBS;

@@ -36,8 +36,6 @@
 #include <wx/listbox.h>
 //*)
 
-#include "loaddialog.h"
-
 namespace Skyscraper {
 
 class EngineManager: public wxDialog

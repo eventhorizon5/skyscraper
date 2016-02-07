@@ -26,8 +26,6 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
-#include "debugpanel.h"
-#include "editelevator.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -35,6 +33,8 @@
 #include "elevator.h"
 #include "elevatordoor.h"
 #include "callbutton.h"
+#include "debugpanel.h"
+#include "editelevator.h"
 #include "skyscraper.h"
 
 using namespace SBS;

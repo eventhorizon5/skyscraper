@@ -26,9 +26,11 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
-#include "debugpanel.h"
-#include "skyscraper.h"
+#include "globals.h"
+#include "sbs.h"
 #include "person.h"
+#include "skyscraper.h"
+#include "debugpanel.h"
 #include "peoplemanager.h"
 
 namespace Skyscraper {

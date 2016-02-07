@@ -36,8 +36,6 @@
 #include <wx/listbox.h>
 //*)
 
-#include "timer.h"
-
 namespace Skyscraper {
 
 class PeopleManager: public wxDialog

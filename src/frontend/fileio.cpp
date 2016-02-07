@@ -29,10 +29,10 @@
 #include <OgreFileSystem.h>
 #include <stdlib.h>
 #include <cmath>
-#include "fileio.h"
-#include "debugpanel.h"
 #include "skyscraper.h"
+#include "debugpanel.h"
 #include "enginecontext.h"
+#include "fileio.h"
 #include "wall.h"
 #include "model.h"
 #include "texture.h"

@@ -34,9 +34,6 @@
 #include <wx/textctrl.h>
 #include <wx/treectrl.h>
 //*)
-#include "createobject.h"
-#include "parameterviewer.h"
-#include "moveobject.h"
 
 namespace Skyscraper {
 

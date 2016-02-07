@@ -31,7 +31,6 @@
     #pragma hdrstop
 #endif
 
-#include <wx/app.h>
 //(*Headers(DebugPanel)
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
@@ -41,25 +40,24 @@
 #include <wx/stattext.h>
 //*)
 #include <wx/timer.h>
-#include <wx/variant.h>
-
-#include "globals.h"
-#include "sbs.h"
-#include "skyscraper.h"
-
-#include "meshcontrol.h"
-#include "editelevator.h"
-#include "keydialog.h"
-#include "profilergui.h"
-#include "stats.h"
-#include "actionviewer.h"
-#include "cameracontrol.h"
-#include "skycontrol.h"
-#include "objectinfo.h"
-#include "enginemanager.h"
-#include "peoplemanager.h"
 
 namespace Skyscraper {
+
+class MeshControl;
+class editelevator;
+class Skyscraper;
+class CameraControl;
+class KeyDialog;
+class Stats;
+class ObjectInfo;
+class Profiler;
+class ActionViewer;
+class SkyControl;
+class EngineManager;
+class PeopleManager;
+class ParameterViewer;
+class CreateObject;
+class MoveObject;
 
 class DebugPanel: public wxFrame
 {

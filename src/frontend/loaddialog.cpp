@@ -27,8 +27,8 @@
 #include <wx/intl.h>
 //*)
 
-#include "debugpanel.h"
 #include "skyscraper.h"
+#include "debugpanel.h"
 #include "loaddialog.h"
 
 namespace Skyscraper {

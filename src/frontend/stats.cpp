@@ -26,12 +26,12 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
-#include "debugpanel.h"
-#include "stats.h"
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
 #include "skyscraper.h"
+#include "debugpanel.h"
+#include "stats.h"
 
 using namespace SBS;
 

@@ -28,6 +28,7 @@
 #include <wx/app.h>
 #include <wx/frame.h>
 #include <wx/progdlg.h>
+#include "OgrePrerequisites.h"
 #include <OgreLog.h>
 
 #if OGRE_VERSION >= 0x00010900
@@ -37,6 +38,7 @@
 namespace Ogre {
 	class SceneNode;
 	class Rectangle2D;
+	class ConfigFile;
 }
 
 namespace FMOD {
@@ -47,6 +49,10 @@ namespace FMOD {
 
 namespace Caelum {
 	class CaelumSystem;
+}
+
+namespace SBS {
+	class SBS;
 }
 
 int main (int argc, char* argv[]);

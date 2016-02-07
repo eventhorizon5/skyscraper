@@ -26,13 +26,28 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
-#include "debugpanel.h"
-#include "enginecontext.h"
+#include "globals.h"
+#include "sbs.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
 #include "texture.h"
+#include "skyscraper.h"
+#include "debugpanel.h"
+#include "fileio.h"
+#include "enginecontext.h"
 #include "console.h"
+#include "meshcontrol.h"
+#include "editelevator.h"
+#include "keydialog.h"
+#include "profilergui.h"
+#include "stats.h"
+#include "actionviewer.h"
+#include "cameracontrol.h"
+#include "skycontrol.h"
+#include "objectinfo.h"
+#include "enginemanager.h"
+#include "peoplemanager.h"
 
 namespace Skyscraper {
 

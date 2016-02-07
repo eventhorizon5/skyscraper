@@ -25,12 +25,6 @@
 #ifndef MESHCONTROL_H
 #define MESHCONTROL_H
 
-#include <wx/wxprec.h>
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 //(*Headers(MeshControl)
 #include <wx/checkbox.h>
 #include <wx/dialog.h>

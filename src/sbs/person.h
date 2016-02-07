@@ -26,6 +26,8 @@
 #ifndef _SBS_PERSON_H
 #define _SBS_PERSON_H
 
+#include "timer.h"
+
 namespace SBS {
 
 class SBSIMPEXP Person : public Object

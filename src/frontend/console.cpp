@@ -24,9 +24,9 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "fileio.h"
-#include "debugpanel.h"
 #include "skyscraper.h"
+#include "debugpanel.h"
+#include "fileio.h"
 #include "enginecontext.h"
 #include "console.h"
 

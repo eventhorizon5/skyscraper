@@ -41,6 +41,7 @@
 #include "enginecontext.h"
 #include "console.h"
 #include "mainscreen.h"
+#include "loaddialog.h"
 #include "profiler.h"
 #include "revmain.h"
 

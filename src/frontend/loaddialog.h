@@ -37,8 +37,6 @@
 
 namespace Skyscraper {
 
-class DebugPanel;
-
 class LoadDialog: public wxDialog
 {
 	public:

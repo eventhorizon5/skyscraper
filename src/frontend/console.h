@@ -25,7 +25,6 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <wx/app.h>
 //(*Headers(Console)
 #include <wx/checkbox.h>
 #include <wx/sizer.h>

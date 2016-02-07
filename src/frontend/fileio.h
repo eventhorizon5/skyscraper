@@ -27,8 +27,6 @@
 
 namespace Skyscraper {
 
-class EngineContext;
-
 class ScriptProcessor
 {
 public:

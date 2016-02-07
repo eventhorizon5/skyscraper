@@ -28,9 +28,9 @@
 //*)
 
 #include "Caelum.h"
-#include "debugpanel.h"
 #include "globals.h"
 #include "sbs.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 #include "skycontrol.h"
 
