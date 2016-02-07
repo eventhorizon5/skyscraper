@@ -90,7 +90,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	step_backward = false;
 
 	//create panel, for keyboard events
-	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(0, 0));
+	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(0, 0), wxNO_BORDER);
 	panel->Connect(wxID_ANY, wxEVT_KEY_DOWN, wxKeyEventHandler(MainScreen::OnKeyDown), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_KEY_UP, wxKeyEventHandler(MainScreen::OnKeyUp), NULL, this);
 }
