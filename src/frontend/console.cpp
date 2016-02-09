@@ -138,12 +138,18 @@ void Console::Write(const std::string &message)
 {
 	long point = tConsole->GetInsertionPoint();
 	long end = tConsole->GetLastPosition();
+	bool refresh = true;
 
 	//move cursor to end if needed
 	if (point != end)
 		tConsole->SetInsertionPointEnd();
+	else
+		refresh = false;
 
 	tConsole->WriteText(wxString::FromAscii(message.c_str()) + wxT("\n"));
+
+	if (refresh == true)
+		tConsole->SetInsertionPoint(point);
 }
 
 }
