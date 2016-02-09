@@ -1,5 +1,34 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-console will turn autoscroll off if user clicks at a location to stay at in the text box, and scroll will reenable when the "Auto Scroll" button is clicked
+-fixed an issue where physical models would not properly stay in elevators
+-header rework, to improve compiling performance
+-created new TextureManager object, for texture-related functions
+-added a Move button to the Engine Manager dialog, to allow moving sim engines
+-show the control reference when pressing the F1 key
+-changed 'faces' to 'triangles' for F2 key function
+-added new Dynamic Meshes system, which automatically combines grouped mesh objects into a single mesh, if needed, to greatly improve performance
+-when elevator number is changed, properly update the door count slider
+-fixed typo in SetRotation code, causing X and Z issues during Y axis rotation
+-added missing F8 key to docs
+-merged divide-by-zero fixes - fixes a reported issue in the elevator deceleration (jerk rate calculation) code
+-control panel needs to properly unregister on exit
+-(OgreBullet) add proper isInWorld check to base collision object, instead of a rigid body variable
+-(OgreBullet) manually update static collider bounding boxes, to improve performance
+-adjust freelook speed for frame rate
+-moved mainscreen code into separate file
+-added event-driven keyboard and mouse input system
+-reworked code that handles persistent shaft doors, so that they only stay persistent when the camera is active in that engine
+-removed extra shaft door disable code, since mesh disabling code should be run after the simulator startup, to prevent new colliders being added to disabled meshes
+-simplified triangle index array in PolyMesh system, to prevent an extra vertex copy operation.  This removes the TriangleMesh type and reuses TriangleIndices instead
+-moved Triangle code into separate header file, and added operator functions
+-renamed TriangleType to Triangle, due to SBS namespace addition
+-disable elevators in shafts that have ShowFloors disabled, when leaving/resetting building
+-turn off shafts and stairwells when resetting building
+-make sure destobject-specified models are custom models, not loaded models
+-disable Caelum sky system when switching to wireframe mode, to hide the sky triangles
+-added mention of subfolders for Buildings section Load command
+-when switching to fullscreen on Windows, enable double-buffering on the window to fix performance issues
 -have Global AddWall/AddFloor commands use a specified mesh object directly instead of processing a string internally - this also fixes a crash if no valid mesh was found in the functions.
 -have AddGround also draw underside of landscape
 -when inserting another script file, script should be loaded and inserted as a single block, instead of calling insert() for each line, which causes performance problems
@@ -57,7 +86,7 @@ Version 1.10 (2.0 Alpha 10)
 -added support for exporting and importing the camera state, to reapply camera settings when walking between engines
 -added support for walking between engines, with automatic context switching
 -make sure progress dialog is deleted on shutdown
--sync camera when attachin
+-sync camera when attaching
 -added "City Demo" building.
 -have SBS engine and Engine Contexts report instance numbers on console
 -only pause for SBS banner for the first instance
