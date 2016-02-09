@@ -136,7 +136,14 @@ void Console::On_Close(wxCloseEvent& event)
 
 void Console::Write(const std::string &message)
 {
-	tConsole->AppendText(wxString::FromAscii(message.c_str()) + wxT("\n"));
+	long point = tConsole->GetInsertionPoint();
+	long end = tConsole->GetLastPosition();
+
+	//move cursor to end if needed
+	if (point != end)
+		tConsole->SetInsertionPointEnd();
+
+	tConsole->WriteText(wxString::FromAscii(message.c_str()) + wxT("\n"));
 }
 
 }
