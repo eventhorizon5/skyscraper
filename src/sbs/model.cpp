@@ -167,7 +167,7 @@ void Model::Loop()
 
 			if (elev)
 			{
-				if (elev->IsInElevator(mesh->GetPosition()) == true)
+				if (elev->IsInElevator(GetPosition()) == true)
 				{
 					RemoveFromParent();
 					ChangeParent(elev);
@@ -181,7 +181,7 @@ void Model::Loop()
 	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor (or make it global)
 	else if (elevator)
 	{
-		if (elevator->IsInElevator(mesh->GetPosition()) == false)
+		if (elevator->IsInElevator(GetPosition()) == false)
 		{
 			if (global == false)
 			{
@@ -237,7 +237,7 @@ void Model::Drop()
 
 			if (elev)
 			{
-				if (elev->IsInElevator(mesh->GetPosition()) == true)
+				if (elev->IsInElevator(GetPosition()) == true)
 				{
 					ChangeParent(elev);
 					found = true;
