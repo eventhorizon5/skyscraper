@@ -46,6 +46,7 @@ class Console: public wxFrame
 		//(*Declarations(Console)
 		wxPanel* Panel1;
 		wxTextCtrl* tConsole;
+		wxButton* bAutoScroll;
 		wxCheckBox* chkEcho;
 		wxButton* bSend;
 		wxTextCtrl* tCommand;
@@ -58,6 +59,7 @@ class Console: public wxFrame
 		static const long ID_tConsole;
 		static const long ID_tCommand;
 		static const long ID_bSend;
+		static const long ID_bAutoScroll;
 		static const long ID_chkEcho;
 		static const long ID_PANEL1;
 		//*)
@@ -68,6 +70,7 @@ class Console: public wxFrame
 		void On_bSend_Click(wxCommandEvent& event);
 		void On_bClose_Click(wxCommandEvent& event);
 		void On_Close(wxCloseEvent& event);
+		void On_bAutoScroll_Click(wxCommandEvent& event);
 		//*)
 
 		SBS::SBS *Simcore;

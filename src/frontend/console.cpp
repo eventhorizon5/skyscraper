@@ -41,6 +41,7 @@ namespace Skyscraper {
 const long Console::ID_tConsole = wxNewId();
 const long Console::ID_tCommand = wxNewId();
 const long Console::ID_bSend = wxNewId();
+const long Console::ID_bAutoScroll = wxNewId();
 const long Console::ID_chkEcho = wxNewId();
 const long Console::ID_PANEL1 = wxNewId();
 //*)
@@ -77,7 +78,9 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	FlexGridSizer2->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	bSend = new wxButton(Panel1, ID_bSend, _("Send"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSend"));
-	BoxSizer1->Add(bSend, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer1->Add(bSend, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bAutoScroll = new wxButton(Panel1, ID_bAutoScroll, _("Auto Scroll"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAutoScroll"));
+	BoxSizer1->Add(bAutoScroll, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkEcho = new wxCheckBox(Panel1, ID_chkEcho, _("Echo"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkEcho"));
 	chkEcho->SetValue(false);
 	BoxSizer1->Add(chkEcho, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
@@ -92,6 +95,7 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	FlexGridSizer1->SetSizeHints(this);
 
 	Connect(ID_bSend,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bSend_Click);
+	Connect(ID_bAutoScroll,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bAutoScroll_Click);
 	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&Console::On_Close);
 	//*)
 	Simcore = 0;
@@ -150,6 +154,11 @@ void Console::Write(const std::string &message)
 
 	if (refresh == true)
 		tConsole->SetInsertionPoint(point);
+}
+
+void Console::On_bAutoScroll_Click(wxCommandEvent& event)
+{
+	tConsole->SetInsertionPointEnd();
 }
 
 }
