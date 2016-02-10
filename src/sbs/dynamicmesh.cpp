@@ -1131,8 +1131,8 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 
 	if (Parent->GetMeshCount() == 1)
 	{
-		Ogre::AxisAlignedBox box;
-		Ogre::Real radius;
+		Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
+		Ogre::Real radius = 0;
 
 		if (Parent->GetClientCount() != (int)client_bounds.size())
 			return;
