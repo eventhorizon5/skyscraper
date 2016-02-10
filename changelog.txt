@@ -1,5 +1,6 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-show renderer in Windows crash reports
 -console will turn autoscroll off if user clicks at a location to stay at in the text box, and scroll will reenable when the "Auto Scroll" button is clicked
 -fixed an issue where physical models would not properly stay in elevators
 -header rework, to improve compiling performance
