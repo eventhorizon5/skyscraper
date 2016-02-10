@@ -993,8 +993,14 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 	if (!Parent->GetClient(client))
 		return;
 
+	bool combined = true;
+	if (Parent->GetMeshCount() > 1)
+		combined = false;
+
 	//get client's offset from offset table
-	unsigned int loc = offset_table[client];
+	unsigned int loc = 0;
+	if (combined == true)
+		loc = offset_table[client];
 
 	//adjust if using a single vertex
 	if (single == true)
@@ -1022,8 +1028,18 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 		start = index;
 		end = index;
 	}
-	else if (vertex_counts[client] != geometry.size())
-		return; //make sure vertex count is the same
+	else
+	{
+		unsigned int count;
+
+		if (combined == true)
+			count = vertex_counts[client];
+		else
+			count = vertex_counts[0];
+
+		if (count != geometry.size())
+			return; //make sure vertex count is the same
+	}
 
 	Ogre::AxisAlignedBox box;
 
@@ -1053,7 +1069,10 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 	}
 
 	//store updated bounding box
-	*client_bounds[client] = box;
+	if (combined == true)
+		*client_bounds[client] = box;
+	else
+		*client_bounds[0] = box;
 
 	//get vertex data
 	Ogre::VertexData* data = MeshWrapper->sharedVertexData;

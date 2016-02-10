@@ -87,6 +87,7 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
+	DoorWrapper->force_combine = true;
 }
 
 Floor::~Floor()
