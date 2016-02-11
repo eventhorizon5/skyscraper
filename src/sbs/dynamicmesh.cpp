@@ -91,13 +91,6 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	//extra code from previous system
 
 	MeshWrapper->load();
-
-	//if a mesh was attached and was empty, it needs to be reattached to be visible
-	if (count == 0 && IsEnabled() == true)
-	{
-		GetSceneNode()->DetachObject(Movable);
-		GetSceneNode()->AttachObject(Movable);
-	}
 }*/
 
 void DynamicMesh::Enable(bool value, MeshObject *client)
@@ -702,9 +695,14 @@ void DynamicMesh::Mesh::Prepare(int client)
 		return;
 	}
 
+	size_t previous_count = 0;
+
 	//set up vertex buffer
 	if (MeshWrapper->sharedVertexData)
+	{
+		previous_count = MeshWrapper->sharedVertexData->vertexCount;
 		delete MeshWrapper->sharedVertexData;
+	}
 	Ogre::VertexData* data = new Ogre::VertexData();
 	MeshWrapper->sharedVertexData = data;
 	data->vertexCount = vertex_count;
@@ -942,6 +940,13 @@ void DynamicMesh::Mesh::Prepare(int client)
 
 	UpdateBoundingBox();
 
+	//if a mesh was attached and was empty, it needs to be reattached to be visible
+	if (previous_count == 0 && enabled == true)
+	{
+		Enable(false);
+		Enable(true);
+	}
+
 	prepared = true;
 }
 
@@ -1131,7 +1136,7 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 
 	if (Parent->GetMeshCount() == 1)
 	{
-		Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
+		Ogre::AxisAlignedBox box;
 		Ogre::Real radius = 0;
 
 		if (Parent->GetClientCount() != (int)client_bounds.size())
