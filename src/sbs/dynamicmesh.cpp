@@ -244,7 +244,10 @@ void DynamicMesh::Prepare(MeshObject *client)
 			if (total < separate_total || total <= 10 || force_combine == true)
 				meshes_to_create = 1; //create a single combined mesh for all clients
 			else
+			{
 				meshes_to_create = (int)clients.size(); //create separate meshes for each client
+				dynamic_buffers = false; //don't use dynamic buffers if keeping separate
+			}
 
 			std::string status;
 			if (meshes_to_create == 1)
@@ -993,6 +996,9 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
 	if (Parent->UseDynamicBuffers() == false || !node)
+		return;
+
+	if (prepared == false)
 		return;
 
 	if (!Parent->GetClient(client))
