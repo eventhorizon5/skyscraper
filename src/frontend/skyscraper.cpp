@@ -31,6 +31,8 @@
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreConfigFile.h>
+#include <OgreFontManager.h>
+#include <OgreRectangle2D.h>
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "globals.h"
@@ -1431,24 +1433,24 @@ const std::string Skyscraper::getOgreHandle() const
 
 int Skyscraper::GetConfigInt(const std::string &key, int default_value)
 {
-	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, "", ToString(default_value));
 	return ToInt(result);
 }
 
 std::string Skyscraper::GetConfigString(const std::string &key, const std::string &default_value)
 {
-	return configfile->getSetting(key, Ogre::StringUtil::BLANK, default_value);
+	return configfile->getSetting(key, "", default_value);
 }
 
 bool Skyscraper::GetConfigBool(const std::string &key, bool default_value)
 {
-	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, BoolToString(default_value));
+	std::string result = configfile->getSetting(key, "", BoolToString(default_value));
 	return ToBool(result);
 }
 
 float Skyscraper::GetConfigFloat(const std::string &key, float default_value)
 {
-	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, "", ToString(default_value));
 	return ToFloat(result);
 }
 

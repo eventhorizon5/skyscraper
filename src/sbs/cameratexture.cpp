@@ -28,6 +28,8 @@
 #include <OgreTextureManager.h>
 #include <OgreTechnique.h>
 #include <OgreMaterialManager.h>
+#include <OgreRenderTexture.h>
+#include <OgreViewport.h>
 #include <OgreHardwarePixelBuffer.h>
 #include "globals.h"
 #include "sbs.h"

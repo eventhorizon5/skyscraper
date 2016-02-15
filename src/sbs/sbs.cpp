@@ -3120,24 +3120,24 @@ void SBS::AddModel(Model *model)
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
 {
-	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, "", ToString(default_value));
 	return ToInt(result);
 }
 
 std::string SBS::GetConfigString(const std::string &key, const std::string &default_value)
 {
-	return configfile->getSetting(key, Ogre::StringUtil::BLANK, default_value);
+	return configfile->getSetting(key, "", default_value);
 }
 
 bool SBS::GetConfigBool(const std::string &key, bool default_value)
 {
-	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, "", ToString(default_value));
 	return ToBool(result);
 }
 
 float SBS::GetConfigFloat(const std::string &key, float default_value)
 {
-	std::string result = configfile->getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	std::string result = configfile->getSetting(key, "", ToString(default_value));
 	return ToFloat(result);
 }
 

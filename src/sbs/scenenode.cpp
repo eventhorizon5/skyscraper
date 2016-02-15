@@ -24,6 +24,7 @@
 */
 
 #include <OgreSceneManager.h>
+#include <OgreSceneNode.h>
 #include "globals.h"
 #include "sbs.h"
 #include "scenenode.h"

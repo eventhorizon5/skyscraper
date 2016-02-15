@@ -26,7 +26,9 @@
 #include <OgreSceneManager.h>
 #include <OgreSubMesh.h>
 #include <OgreMeshManager.h>
+#include <OgreMesh.h>
 #include <OgreEntity.h>
+#include <OgreCamera.h>
 #include "globals.h"
 #include "sbs.h"
 #include "mesh.h"

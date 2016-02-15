@@ -28,6 +28,8 @@
 #endif
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
+#include <OgreViewport.h>
+#include <OgreCamera.h>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
