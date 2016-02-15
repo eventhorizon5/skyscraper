@@ -2368,6 +2368,8 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 			return inelevator;
 		}
 	}
+	else if (camera == true)
+		CameraOffset = 0;
 
 	//cache values
 	lastcheckresult = false;
