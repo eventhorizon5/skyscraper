@@ -478,11 +478,11 @@ bool Skyscraper::Initialize()
 	Ogre::TextureFilterOptions filter;
 	if (filtermode == 0)
 		filter = Ogre::TFO_NONE;
-	if (filtermode == 1)
+	else if (filtermode == 1)
 		filter = Ogre::TFO_BILINEAR;
-	if (filtermode == 2)
+	else if (filtermode == 2)
 		filter = Ogre::TFO_TRILINEAR;
-	if (filtermode == 3)
+	else if (filtermode == 3)
 		filter = Ogre::TFO_ANISOTROPIC;
 
 	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);

@@ -358,7 +358,7 @@ namespace OgreBulletCollisions
 
         // for calculation of AABB
         Ogre::Vector3 min, max, currPos;
-        Ogre::Real maxSquaredRadius;
+        Ogre::Real maxSquaredRadius = 0;
         bool first = true;
 
         // Use iterator

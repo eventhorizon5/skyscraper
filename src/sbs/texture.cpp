@@ -582,28 +582,32 @@ bool TextureManager::TransformTexture(const std::string &name, const std::string
 		Ogre::TextureUnitState::TextureTransformType type;
 		if (xform_type == "scroll_x")
 			type = Ogre::TextureUnitState::TT_TRANSLATE_U;
-		if (xform_type == "scroll_y")
+		else if (xform_type == "scroll_y")
 			type = Ogre::TextureUnitState::TT_TRANSLATE_V;
-		if (xform_type == "rotate")
+		else if (xform_type == "rotate")
 			type = Ogre::TextureUnitState::TT_ROTATE;
-		if (xform_type == "scale_x")
+		else if (xform_type == "scale_x")
 			type = Ogre::TextureUnitState::TT_SCALE_U;
-		if (xform_type == "scale_y")
+		else if (xform_type == "scale_y")
 			type = Ogre::TextureUnitState::TT_SCALE_V;
+		else
+			return false;
 
 		Ogre::WaveformType wavetype;
 		if (wave == "sine")
 			wavetype = Ogre::WFT_SINE;
-		if (wave == "triangle")
+		else if (wave == "triangle")
 			wavetype = Ogre::WFT_TRIANGLE;
-		if (wave == "square")
+		else if (wave == "square")
 			wavetype = Ogre::WFT_SQUARE;
-		if (wave == "sawtooth")
+		else if (wave == "sawtooth")
 			wavetype = Ogre::WFT_SAWTOOTH;
-		if (wave == "inverse_sawtooth")
+		else if (wave == "inverse_sawtooth")
 			wavetype = Ogre::WFT_INVERSE_SAWTOOTH;
-		if (wave == "pwm")
+		else if (wave == "pwm")
 			wavetype = Ogre::WFT_PWM;
+		else
+			return false;
 
 		state->setTransformAnimation(type, wavetype, base, frequency, phase, amplitude);
 	}

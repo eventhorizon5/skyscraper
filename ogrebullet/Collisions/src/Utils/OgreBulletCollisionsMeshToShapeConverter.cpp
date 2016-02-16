@@ -1065,8 +1065,8 @@ CapsuleCollisionShape* AnimatedMeshToShapeConverter::createOrientedCapsuleCollis
 	// find axes with longest length
 
 	Vector3 cap_dir;    //std::max(box_afExtent.x,std::max(box_afExtent.y,box_afExtent.z));
-	Real cap_dirLength;  //std::max(box_afExtent.x,std::max(box_afExtent.y,box_afExtent.z));
-	Real cap_radius;	 // max axe length
+	Real cap_dirLength = 0;  //std::max(box_afExtent.x,std::max(box_afExtent.y,box_afExtent.z));
+	Real cap_radius = 0;	 // max axe length
 	if (box_afExtent.x - box_afExtent.y > 0 && box_afExtent.x - box_afExtent.z > 0)
 	{
 		cap_dir = Vector3::UNIT_X;
@@ -1079,7 +1079,7 @@ CapsuleCollisionShape* AnimatedMeshToShapeConverter::createOrientedCapsuleCollis
 		cap_dirLength = box_afExtent.y;
 		cap_radius = std::max (box_afExtent.x, box_afExtent.z);
 	}
-	else if (box_afExtent.z - box_afExtent.y > 0 && box_afExtent.z - box_afExtent.y > 0)
+	else if (box_afExtent.z - box_afExtent.x > 0 && box_afExtent.z - box_afExtent.y > 0)
 	{
 		cap_dir = Vector3::UNIT_Z;
 		cap_dirLength = box_afExtent.z;
