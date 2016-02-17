@@ -1478,8 +1478,8 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 	{
 		if (doors[i])
 			delete doors[i];
-		doors[i] = 0;
 	}
+	doors.clear();
 
 	//unregister from parent
 	if (parent_deleting == false)
@@ -1490,11 +1490,9 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const std::strin
 {
 	//initialize a door component
 
-	doors.resize(doors.size() + 1);
-	int index = (int)doors.size() - 1;
-	doors[index] = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
-
-	return doors[index];
+	DoorObject *door = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
+	doors.push_back(door);
+	return door;
 }
 
 void ElevatorDoor::DoorWrapper::Enable(bool value)
