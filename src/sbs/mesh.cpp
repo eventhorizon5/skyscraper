@@ -1046,6 +1046,10 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 	//create a new submesh if needed
 	if (index == -1)
 	{
+		//exit if vertex count is not valid
+		if (vertices.size() < 3)
+			return -1;
+
 		index = (int)Submeshes.size();
 		Submeshes.resize(Submeshes.size() + 1);
 		Submeshes[index].MeshGeometry.reserve(64); //reserve vertex space
@@ -1064,7 +1068,6 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 		}
 	}
 
-	//add triangles
 	if (add == true)
 	{
 		//add vertices
