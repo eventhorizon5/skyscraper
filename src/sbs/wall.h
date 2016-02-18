@@ -43,7 +43,6 @@ public:
 	int CreatePolygon(std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane);
 	void DeletePolygons(bool recreate_collider = true);
 	void DeletePolygon(int index, bool recreate_colliders);
-	void DeleteVertices(std::vector<int> &deleted_indices);
 	int GetPolygonCount();
 	Polygon* GetPolygon(int index);
 	int FindPolygon(const std::string &name);

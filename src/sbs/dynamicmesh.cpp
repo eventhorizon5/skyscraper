@@ -411,7 +411,7 @@ int DynamicMesh::GetMaterialCount(int client)
 	return total;
 }
 
-unsigned int DynamicMesh::GetVertexCount(int client)
+unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client)
 {
 	//calculate combined vertex count for all clients
 
@@ -428,7 +428,10 @@ unsigned int DynamicMesh::GetVertexCount(int client)
 
 	for (int i = start; i <= end; i++)
 	{
-		total += clients[i]->GetVertexCount();
+		int index = clients[i]->FindMatchingSubMesh(material);
+
+		if (index >= 0)
+			total += clients[i]->GetVertexCount(index);
 	}
 
 	return total;
