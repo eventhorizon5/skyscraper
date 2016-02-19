@@ -436,7 +436,7 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 				total += clients[i]->GetVertexCount(index);
 		}
 		else
-			total = clients[i]->GetVertexCount();
+			total += clients[i]->GetVertexCount();
 	}
 
 	return total;
@@ -479,7 +479,7 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 		return 0;
 
 	//get per-submesh index offset
-	for (int i = 0; i < submesh - 1; i++)
+	for (int i = 0; i < submesh; i++)
 	{
 		index += client->GetVertexCount(i);
 	}
