@@ -173,8 +173,8 @@ void Polygon::Move(const Ogre::Vector3 &position, float speed)
 			data.vertex += sbs->ToRemote(position * speed);
 
 			//update vertices in render buffer, if using dynamic buffers
-			//if (dynamic == true)
-				//mesh->MeshWrapper->UpdateVertices(mesh, index, true); --needs fixing
+			if (dynamic == true)
+				mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
 		}
 	}
 }

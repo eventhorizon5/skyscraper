@@ -1797,8 +1797,8 @@ void MeshObject::OnMove(bool parent)
 	if (mBody)
 		mBody->updateTransform(true, false, false);
 
-	if (UsingDynamicBuffers() == true)
-		MeshWrapper->UpdateVertices(this);
+	//if (UsingDynamicBuffers() == true)
+		//MeshWrapper->UpdateVertices(this);
 }
 
 void MeshObject::OnRotate(bool parent)
@@ -1814,8 +1814,8 @@ void MeshObject::OnRotate(bool parent)
 		mBody->updateTransform(false, true, false);
 	}
 
-	if (UsingDynamicBuffers() == true)
-		MeshWrapper->UpdateVertices(this);
+	//if (UsingDynamicBuffers() == true)
+		//MeshWrapper->UpdateVertices(this);
 }
 
 int MeshObject::GetSubmeshCount()
