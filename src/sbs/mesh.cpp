@@ -1039,12 +1039,6 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 	//the Prepare() function must be called when the mesh is ready to view
 	//the 'vertices' data is not needed if removing triangles
 
-	int index_count = (int)indices.size();
-	Triangle *indexarray = new Triangle[index_count];
-
-	for (int i = 0; i < index_count; i++)
-		indexarray[i] = indices[i];
-
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
 	bool createnew = false;
@@ -1070,10 +1064,9 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 	//delete submesh and exit if it's going to be emptied
 	if (createnew == false && add == false)
 	{
-		if (Submeshes[index].Triangles.size() - index_count <= 0)
+		if ((int)Submeshes[index].Triangles.size() - (int)indices.size() <= 0)
 		{
 			Submeshes.erase(Submeshes.begin() + index);
-			delete [] indexarray;
 			return -1;
 		}
 	}
@@ -1081,10 +1074,10 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 	if (add == true)
 	{
 		//add triangles
-		for (int i = 0; i < index_count; i++)
+		for (int i = 0; i < (int)indices.size(); i++)
 		{
-			indexarray[i] += Submeshes[index].MeshGeometry.size();
-			Submeshes[index].Triangles.push_back(indexarray[i]);
+			indices[i] += Submeshes[index].MeshGeometry.size();
+			Submeshes[index].Triangles.push_back(indices[i]);
 		}
 
 		//add vertices
@@ -1097,9 +1090,9 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 		for (int i = 0; i < (int)Submeshes[index].Triangles.size(); i++)
 		{
 			Triangle &triangle = Submeshes[index].Triangles[i];
-			for (int j = 0; j < index_count; j++)
+			for (int j = 0; j < (int)indices.size(); j++)
 			{
-				if (triangle == indexarray[j])
+				if (triangle == indices[j])
 				{
 					//delete match
 					Submeshes[index].Triangles.erase(Submeshes[index].Triangles.begin() + i);
@@ -1117,7 +1110,6 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 	Submeshes[index].Name = material;
 	prepared = false; //need to re-prepare mesh
 
-	delete [] indexarray;
 	return index;
 }
 

@@ -1183,9 +1183,11 @@ void Elevator::Loop()
 		{
 			for (int j = 0; j < (int)ElevatorMesh->Submeshes[i].MeshGeometry.size(); j++)
 			{
+				float y = sbs->ToLocal(ElevatorMesh->Submeshes[i].MeshGeometry[j].vertex.y);
+
 				//set height value
-				if (sbs->ToLocal(ElevatorMesh->Submeshes[i].MeshGeometry[j].vertex.y) > Height)
-					Height = sbs->ToLocal(ElevatorMesh->Submeshes[i].MeshGeometry[j].vertex.y);
+				if (y > Height)
+					Height = y;
 			}
 		}
 		HeightSet = true;
