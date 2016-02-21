@@ -968,7 +968,17 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	trimesh = 0;
 
 	//create submesh and set material
-	ProcessSubMesh(geometry, triangles, material, true);
+	int index = ProcessSubMesh(geometry, triangles, material, true);
+
+	if (index >= 0)
+	{
+		for (int i = 0; i < (int)mesh_indices.size(); i++)
+		{
+			unsigned int size = Submeshes[index].MeshGeometry.size() - geometry.size();
+			mesh_indices[i].x += size;
+			mesh_indices[i].y += size;
+		}
+	}
 
 	//recreate colliders if specified
 	if (sbs->DeleteColliders == true)
@@ -1070,13 +1080,16 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 
 	if (add == true)
 	{
+		//add triangles
+		for (int i = 0; i < index_count; i++)
+		{
+			indexarray[i] += Submeshes[index].MeshGeometry.size();
+			Submeshes[index].Triangles.push_back(indexarray[i]);
+		}
+
 		//add vertices
 		for (int i = 0; i < (int)vertices.size(); i++)
 			Submeshes[index].MeshGeometry.push_back(vertices[i]);
-
-		//add triangles
-		for (int i = 0; i < index_count; i++)
-			Submeshes[index].Triangles.push_back(indexarray[i]);
 	}
 	else
 	{
