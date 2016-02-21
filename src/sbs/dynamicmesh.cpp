@@ -1017,9 +1017,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
-	return;
-
-	/*if (Parent->UseDynamicBuffers() == false || !node)
+	if (Parent->UseDynamicBuffers() == false || !node)
 		return;
 
 	if (prepared == false)
@@ -1055,15 +1053,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	else
 		mVertexElements = new float[vertex_count * 8];
 
-	unsigned int start = 0;
-	unsigned int end = vertex_count - 1;
-
-	if (single == true)
-	{
-		start = index;
-		end = index;
-	}
-	else
+	if (single == false)
 	{
 		unsigned int count;
 
@@ -1076,33 +1066,54 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 			return; //make sure vertex count is the same
 	}
 
-	std::vector<MeshObject::Geometry> &geometry = mesh->MeshGeometry;
-
 	Ogre::AxisAlignedBox box;
 
 	//fill array with vertex's data
 	unsigned int pos = 0;
 	unsigned int add = 0;
-	for (unsigned int i = start; i <= end; i++)
+
+	for (int submesh = 0; submesh < (int)mesh->Submeshes.size(); submesh++)
 	{
-		MeshObject::Geometry &element = geometry[i];
+		unsigned int start;
+		unsigned int end;
 
-		//make mesh's vertex relative to this scene node
-		Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-		Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+		if (single == true)
+		{
+			if (mesh->Submeshes[submesh].Name != material)
+				continue;
 
-		//add elements to array
-		mVertexElements[pos] = vertex2.x;
-		mVertexElements[pos + 1] = vertex2.y;
-		mVertexElements[pos + 2] = vertex2.z;
-		mVertexElements[pos + 3] = element.normal.x;
-		mVertexElements[pos + 4] = element.normal.y;
-		mVertexElements[pos + 5] = element.normal.z;
-		mVertexElements[pos + 6] = element.texel.x;
-		mVertexElements[pos + 7] = element.texel.y;
-		box.merge(vertex2);
-		pos += 8;
-		add += 1;
+			start = index;
+			end = index;
+		}
+		else
+		{
+			start = 0;
+			end = mesh->Submeshes[submesh].MeshGeometry.size() - 1;
+		}
+
+		std::vector<MeshObject::Geometry> &geometry = mesh->Submeshes[submesh].MeshGeometry;
+
+		for (unsigned int i = start; i <= end; i++)
+		{
+			MeshObject::Geometry &element = geometry[i];
+
+			//make mesh's vertex relative to this scene node
+			Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+			Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+
+			//add elements to array
+			mVertexElements[pos] = vertex2.x;
+			mVertexElements[pos + 1] = vertex2.y;
+			mVertexElements[pos + 2] = vertex2.z;
+			mVertexElements[pos + 3] = element.normal.x;
+			mVertexElements[pos + 4] = element.normal.y;
+			mVertexElements[pos + 5] = element.normal.z;
+			mVertexElements[pos + 6] = element.texel.x;
+			mVertexElements[pos + 7] = element.texel.y;
+			box.merge(vertex2);
+			pos += 8;
+			add += 1;
+		}
 	}
 
 	//store updated bounding box
@@ -1116,7 +1127,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 
 	//get vertex buffer and size
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = data->vertexBufferBinding->getBuffer(0);
-	size_t vsize = data->vertexDeclaration->getVertexSize(0);*/
+	size_t vsize = data->vertexDeclaration->getVertexSize(0);
 
 	/*
 	//lock vertex buffer for writing
@@ -1133,12 +1144,12 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	*/
 
 	//write data to buffer
-	/*vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
+	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
 
 	delete [] mVertexElements;
 
 	//update mesh bounding box
-	UpdateBoundingBox();*/
+	UpdateBoundingBox();
 }
 
 void DynamicMesh::Mesh::Detach()
