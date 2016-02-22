@@ -1758,7 +1758,7 @@ Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 					tempnum = -vertex.z;
 			}
 
-			if (i == 0)
+			if (j == 0)
 			{
 				esmall = tempnum;
 				ebig = tempnum;
