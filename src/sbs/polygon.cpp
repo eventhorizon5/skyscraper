@@ -88,8 +88,8 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
-		int min = index_extents[i].x;
-		int max = index_extents[i].y;
+		int min = index_extents[i].min;
+		int max = index_extents[i].max;
 		int newsize = (int)vertices[i].size() + max - min + 1;
 		vertices[i].reserve(newsize);
 		if (reverse == false)
@@ -164,8 +164,8 @@ void Polygon::Move(const Ogre::Vector3 &position, float speed)
 
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
-		int min = index_extents[i].x;
-		int max = index_extents[i].y;
+		int min = index_extents[i].min;
+		int max = index_extents[i].max;
 
 		for (int index = min; index <= max; index++)
 		{

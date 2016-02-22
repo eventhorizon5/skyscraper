@@ -975,8 +975,8 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 		for (int i = 0; i < (int)mesh_indices.size(); i++)
 		{
 			unsigned int size = Submeshes[index].MeshGeometry.size() - geometry.size();
-			mesh_indices[i].x += size;
-			mesh_indices[i].y += size;
+			mesh_indices[i].min += size;
+			mesh_indices[i].max += size;
 		}
 	}
 
@@ -1290,10 +1290,10 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 				for (int m = 0; m < size; m++)
 				{
 					Extents extents = poly->index_extents[m];
-					if (deleted[k] < extents.x)
-						extents.x--;
-					if (deleted[k] < extents.y)
-						extents.y--;
+					if (deleted[k] < extents.min)
+						extents.min--;
+					if (deleted[k] < extents.max)
+						extents.max--;
 					poly->index_extents[m] = extents;
 				}
 			}
