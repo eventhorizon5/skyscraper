@@ -32,10 +32,10 @@ namespace SBS {
 
 struct Extents
 {
-	int x;
-	int y;
+	unsigned int x;
+	unsigned int y;
 
-	Extents(int min, int max)
+	Extents(unsigned int min, unsigned int max)
 	{
 		x = min;
 		y = max;

@@ -924,14 +924,14 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	geometry.resize(size);
 
 	//populate vertices, normals, and texels for mesh data
-	int k = 0;
+	unsigned int k = 0;
 
 	if (mesh_indices.capacity() < mesh_indices.size() + trimesh_size)
 		mesh_indices.reserve(mesh_indices.size() + trimesh_size);
 
 	for (int i = 0; i < trimesh_size; i++)
 	{
-		int min = k;
+		unsigned int min = k;
 		for (int j = 0; j < (int)vertices2[i].size(); j++)
 		{
 			geometry[k].normal = geometry[k].vertex = vertices2[i][j];
@@ -939,7 +939,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 			geometry[k].texel = table[k];
 			k++;
 		}
-		int max = k - 1;
+		unsigned int max = k - 1;
 		mesh_indices.push_back(Extents(min, max));
 	}
 
@@ -1178,7 +1178,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 
 	//copy vector index array into simple array
 	int deleted_size = (int)deleted_v.size();
-	int *deleted = new int[deleted_size];
+	unsigned int *deleted = new unsigned int[deleted_size];
 	for (int i = 0; i < deleted_size; i++)
 		deleted[i] = deleted_v[i];
 
@@ -1191,7 +1191,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 		std::vector<Triangle> &triangles = Submeshes[submesh].Triangles;
 
 		int elements_size = (int)triangles.size() * 3;
-		int *elements = new int[elements_size];
+		unsigned int *elements = new unsigned int[elements_size];
 
 		int elements_pos = 0;
 		for (int i = 0; i < (int)triangles.size(); i++)
@@ -1246,7 +1246,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 				continue;
 
 			int elements_size = (int)poly->triangles.size() * 3;
-			int *elements = new int[elements_size];
+			unsigned int *elements = new unsigned int[elements_size];
 
 			int elements_pos = 0;
 			for (int k = 0; k < (int)poly->triangles.size(); k++)
