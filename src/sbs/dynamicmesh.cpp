@@ -1046,6 +1046,10 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 
 	unsigned int vertex_count = mesh->GetVertexCount();
 
+	//exit if client mesh is empty
+	if (vertex_count == 0)
+		return;
+
 	//set up vertex data arrays
 	float *mVertexElements;
 	if (single == true)
