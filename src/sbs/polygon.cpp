@@ -79,10 +79,17 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 	else
 		mesh_position = sbs->ToRemote(mesh->GetPosition());
 
+	int index = mesh->FindMatchingSubMesh(material);
+
+	if (index == -1)
+		return;
+
+	MeshObject::SubMesh &submesh = mesh->Submeshes[index];
+
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
-		int min = index_extents[i].x;
-		int max = index_extents[i].y;
+		int min = index_extents[i].min;
+		int max = index_extents[i].max;
 		int newsize = (int)vertices[i].size() + max - min + 1;
 		vertices[i].reserve(newsize);
 		if (reverse == false)
@@ -92,16 +99,16 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 				if (relative == true)
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex, rescale));
+						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
 					else
-						vertices[i].push_back(mesh->MeshGeometry[j].vertex);
+						vertices[i].push_back(submesh.MeshGeometry[j].vertex);
 				}
 				else
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh_position, rescale));
+						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
 					else
-						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh_position);
+						vertices[i].push_back(submesh.MeshGeometry[j].vertex + mesh_position);
 				}
 			}
 		}
@@ -112,16 +119,16 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 				if (relative == true)
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex, rescale));
+						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
 					else
-						vertices[i].push_back(mesh->MeshGeometry[j].vertex);
+						vertices[i].push_back(submesh.MeshGeometry[j].vertex);
 				}
 				else
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh_position, rescale));
+						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
 					else
-						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh_position);
+						vertices[i].push_back(submesh.MeshGeometry[j].vertex + mesh_position);
 				}
 			}
 		}
@@ -150,19 +157,24 @@ void Polygon::Move(const Ogre::Vector3 &position, float speed)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();
 
+	int submesh = mesh->FindMatchingSubMesh(material);
+
+	if (submesh == -1)
+		return;
+
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
-		int min = index_extents[i].x;
-		int max = index_extents[i].y;
+		int min = index_extents[i].min;
+		int max = index_extents[i].max;
 
 		for (int index = min; index <= max; index++)
 		{
-			MeshObject::Geometry &data = mesh->MeshGeometry[index];
+			MeshObject::Geometry &data = mesh->Submeshes[submesh].MeshGeometry[index];
 			data.vertex += sbs->ToRemote(position * speed);
 
 			//update vertices in render buffer, if using dynamic buffers
 			if (dynamic == true)
-				mesh->MeshWrapper->UpdateVertices(mesh, index, true);
+				mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
 		}
 	}
 }
@@ -172,10 +184,8 @@ void Polygon::Delete()
 	//delete polygon geometry
 
 	//delete triangles
-	mesh->ProcessSubMesh(triangles, material, false);
-
-	//delete related mesh vertices
-	mesh->DeleteVertices(triangles);
+	std::vector<MeshObject::Geometry> geometry;
+	mesh->ProcessSubMesh(geometry, triangles, material, false);
 }
 
 }

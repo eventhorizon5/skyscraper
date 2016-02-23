@@ -411,7 +411,7 @@ int DynamicMesh::GetMaterialCount(int client)
 	return total;
 }
 
-unsigned int DynamicMesh::GetVertexCount(int client)
+unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client)
 {
 	//calculate combined vertex count for all clients
 
@@ -428,7 +428,15 @@ unsigned int DynamicMesh::GetVertexCount(int client)
 
 	for (int i = start; i <= end; i++)
 	{
-		total += clients[i]->GetVertexCount();
+		if (material != "")
+		{
+			int index = clients[i]->FindMatchingSubMesh(material);
+
+			if (index >= 0)
+				total += clients[i]->GetVertexCount(index);
+		}
+		else
+			total += clients[i]->GetVertexCount();
 	}
 
 	return total;
@@ -460,14 +468,23 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int clie
 	return total;
 }
 
-unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
+unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 {
 	//get vertex index offset of specific client mesh
 	//if multiple geometry sets are combined together, each set has a starting index number
 
 	unsigned int index = 0;
 
-	//return 0 if using separate meshes
+	if (submesh < 0 || submesh >= client->GetSubmeshCount())
+		return 0;
+
+	//get per-submesh index offset
+	for (int i = 0; i < submesh; i++)
+	{
+		index += client->GetVertexCount(i);
+	}
+
+	//return value if using separate meshes
 	if (meshes.size() > 1)
 		return index;
 
@@ -484,7 +501,7 @@ unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
 	return index;
 }
 
-void DynamicMesh::UpdateVertices(MeshObject *client, unsigned int index, bool single)
+void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material, unsigned int index, bool single)
 {
 	int client_index = GetClientIndex(client);
 
@@ -492,9 +509,9 @@ void DynamicMesh::UpdateVertices(MeshObject *client, unsigned int index, bool si
 		return;
 
 	if (meshes.size() == 1)
-		meshes[0]->UpdateVertices(client_index, index, single);
+		meshes[0]->UpdateVertices(client_index, material, index, single);
 	else
-		meshes[client_index]->UpdateVertices(client_index, index, single);
+		meshes[client_index]->UpdateVertices(client_index, material, index, single);
 }
 
 void DynamicMesh::DetachClient(MeshObject *client)
@@ -686,7 +703,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 	if (prepared == true || !node)
 		return;
 
-	unsigned int vertex_count = Parent->GetVertexCount(client);
+	unsigned int vertex_count = Parent->GetVertexCount("", client);
 
 	std::vector<std::string> materials;
 	int submesh_count = Parent->GetMaterials(materials, client);
@@ -760,33 +777,36 @@ void DynamicMesh::Mesh::Prepare(int client)
 		//get mesh's offset of associated scene node
 		Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
-		//fill array with mesh's geometry data
-		for (size_t i = 0; i < mesh->GetVertexCount(); i++)
+		//fill array with mesh's geometry data, from each submesh
+		for (int index = 0; index < mesh->GetSubmeshCount(); index++)
 		{
-			MeshObject::Geometry &element = mesh->MeshGeometry[i];
-
-			//make mesh's vertex relative to this scene node
-			Ogre::Vector3 vertex;
-			if (client == -1)
+			for (size_t i = 0; i < mesh->GetVertexCount(index); i++)
 			{
-				Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-				vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
-			}
-			else
-				vertex = mesh->MeshGeometry[i].vertex;
+				MeshObject::Geometry &element = mesh->Submeshes[index].MeshGeometry[i];
 
-			//add elements to array
-			mVertexElements[loc] = vertex.x;
-			mVertexElements[loc + 1] = vertex.y;
-			mVertexElements[loc + 2] = vertex.z;
-			mVertexElements[loc + 3] = element.normal.x;
-			mVertexElements[loc + 4] = element.normal.y;
-			mVertexElements[loc + 5] = element.normal.z;
-			mVertexElements[loc + 6] = element.texel.x;
-			mVertexElements[loc + 7] = element.texel.y;
-			client_box.merge(vertex);
-			radius = std::max(radius, vertex.length());
-			loc += 8;
+				//make mesh's vertex relative to this scene node
+				Ogre::Vector3 vertex;
+				if (client == -1)
+				{
+					Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+					vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+				}
+				else
+					vertex = mesh->Submeshes[index].MeshGeometry[i].vertex;
+
+				//add elements to array
+				mVertexElements[loc] = vertex.x;
+				mVertexElements[loc + 1] = vertex.y;
+				mVertexElements[loc + 2] = vertex.z;
+				mVertexElements[loc + 3] = element.normal.x;
+				mVertexElements[loc + 4] = element.normal.y;
+				mVertexElements[loc + 5] = element.normal.z;
+				mVertexElements[loc + 6] = element.texel.x;
+				mVertexElements[loc + 7] = element.texel.y;
+				client_box.merge(vertex);
+				radius = std::max(radius, vertex.length());
+				loc += 8;
+			}
 		}
 
 		//store client bounding box and radius
@@ -860,7 +880,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 				if (index >= 0)
 				{
 					//get index offset of mesh
-					unsigned int offset = Parent->GetIndexOffset(mesh);
+					unsigned int offset = Parent->GetIndexOffset(index, mesh);
 
 					//add mesh's triangles to array and adjust for offset
 					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
@@ -905,7 +925,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 				if (index >= 0)
 				{
 					//get index offset of mesh
-					unsigned int offset = Parent->GetIndexOffset(mesh);
+					unsigned int offset = Parent->GetIndexOffset(index, mesh);
 
 					//add mesh's triangles to array and adjust for offset
 					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
@@ -993,7 +1013,7 @@ bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 	return camera->isVisible(global_box);
 }
 
-void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool single)
+void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, unsigned int index, bool single)
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
@@ -1024,24 +1044,20 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 	//get mesh's offset of associated scene node
 	Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
-	std::vector<MeshObject::Geometry> &geometry = mesh->MeshGeometry;
+	unsigned int vertex_count = mesh->GetVertexCount();
+
+	//exit if client mesh is empty, or if no submeshes have been defined
+	if (vertex_count == 0 || mesh->Submeshes.empty() == true)
+		return;
 
 	//set up vertex data arrays
 	float *mVertexElements;
 	if (single == true)
 		mVertexElements = new float[8];
 	else
-		mVertexElements = new float[geometry.size() * 8];
+		mVertexElements = new float[vertex_count * 8];
 
-	unsigned int start = 0;
-	unsigned int end = geometry.size() - 1;
-
-	if (single == true)
-	{
-		start = index;
-		end = index;
-	}
-	else
+	if (single == false)
 	{
 		unsigned int count;
 
@@ -1050,7 +1066,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 		else
 			count = vertex_counts[0];
 
-		if (count != geometry.size())
+		if (count != vertex_count)
 			return; //make sure vertex count is the same
 	}
 
@@ -1059,26 +1075,49 @@ void DynamicMesh::Mesh::UpdateVertices(int client, unsigned int index, bool sing
 	//fill array with vertex's data
 	unsigned int pos = 0;
 	unsigned int add = 0;
-	for (unsigned int i = start; i <= end; i++)
+
+	for (int submesh = 0; submesh < (int)mesh->Submeshes.size(); submesh++)
 	{
-		MeshObject::Geometry &element = geometry[i];
+		unsigned int start;
+		unsigned int end;
 
-		//make mesh's vertex relative to this scene node
-		Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-		Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+		if (single == true)
+		{
+			if (mesh->Submeshes[submesh].Name != material)
+				continue;
 
-		//add elements to array
-		mVertexElements[pos] = vertex2.x;
-		mVertexElements[pos + 1] = vertex2.y;
-		mVertexElements[pos + 2] = vertex2.z;
-		mVertexElements[pos + 3] = element.normal.x;
-		mVertexElements[pos + 4] = element.normal.y;
-		mVertexElements[pos + 5] = element.normal.z;
-		mVertexElements[pos + 6] = element.texel.x;
-		mVertexElements[pos + 7] = element.texel.y;
-		box.merge(vertex2);
-		pos += 8;
-		add += 1;
+			start = index;
+			end = index;
+		}
+		else
+		{
+			start = 0;
+			end = mesh->Submeshes[submesh].MeshGeometry.size() - 1;
+		}
+
+		std::vector<MeshObject::Geometry> &geometry = mesh->Submeshes[submesh].MeshGeometry;
+
+		for (unsigned int i = start; i <= end; i++)
+		{
+			MeshObject::Geometry &element = geometry[i];
+
+			//make mesh's vertex relative to this scene node
+			Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+			Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+
+			//add elements to array
+			mVertexElements[pos] = vertex2.x;
+			mVertexElements[pos + 1] = vertex2.y;
+			mVertexElements[pos + 2] = vertex2.z;
+			mVertexElements[pos + 3] = element.normal.x;
+			mVertexElements[pos + 4] = element.normal.y;
+			mVertexElements[pos + 5] = element.normal.z;
+			mVertexElements[pos + 6] = element.texel.x;
+			mVertexElements[pos + 7] = element.texel.y;
+			box.merge(vertex2);
+			pos += 8;
+			add += 1;
+		}
 	}
 
 	//store updated bounding box

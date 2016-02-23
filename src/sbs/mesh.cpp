@@ -537,7 +537,6 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	this->friction = friction;
 	this->mass = mass;
 	no_collider = false;
-	MeshGeometry.reserve(128); //reserve vertex space
 	collider_node = 0;
 	Filename = filename;
 	remove_on_disable = true;
@@ -820,31 +819,6 @@ bool MeshObject::IsEnabled()
 	return enabled;
 }
 
-void MeshObject::AddVertex(Geometry &vertex_geom)
-{
-	//add a vertex to the mesh
-	MeshGeometry.push_back(vertex_geom);
-	prepared = false; //need to re-prepare mesh
-}
-
-void MeshObject::AddTriangle(int submesh, Triangle &triangle)
-{
-	//add a triangle to the mesh
-	Submeshes[submesh].Triangles.push_back(triangle);
-	prepared = false; //need to re-prepare mesh
-}
-
-void MeshObject::RemoveTriangle(int submesh, int index)
-{
-	//remove a triangle from the mesh
-
-	if (index < 0 || index >= (int)Submeshes[submesh].Triangles.size())
-		return;
-
-	Submeshes[submesh].Triangles.erase(Submeshes[submesh].Triangles.begin() + index);
-	prepared = false; //need to re-prepare mesh
-}
-
 bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
@@ -941,37 +915,31 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	}
 
 	//set up geometry array
-	Geometry *mesh_geometry = 0;
+	std::vector<Geometry> geometry;
 
 	//initialize geometry arrays
 	int size = 0;
 	for (int i = 0; i < trimesh_size; i++)
 		size += (int)vertices2[i].size();
-	mesh_geometry = new Geometry[size];
-
-	//get number of existing vertices
-	int count = (int)MeshGeometry.size();
+	geometry.resize(size);
 
 	//populate vertices, normals, and texels for mesh data
-	int k = 0;
+	unsigned int k = 0;
 
 	if (mesh_indices.capacity() < mesh_indices.size() + trimesh_size)
 		mesh_indices.reserve(mesh_indices.size() + trimesh_size);
 
 	for (int i = 0; i < trimesh_size; i++)
 	{
-		int min = count + k;
+		unsigned int min = k;
 		for (int j = 0; j < (int)vertices2[i].size(); j++)
 		{
-			mesh_geometry[k].normal = mesh_geometry[k].vertex = vertices2[i][j];
-			mesh_geometry[k].normal.normalise();
-			mesh_geometry[k].texel = table[k];
-
-			//add geometry to mesh
-			AddVertex(mesh_geometry[k]);
+			geometry[k].normal = geometry[k].vertex = vertices2[i][j];
+			geometry[k].normal.normalise();
+			geometry[k].texel = table[k];
 			k++;
 		}
-		int max = count + k - 1;
+		unsigned int max = k - 1;
 		mesh_indices.push_back(Extents(min, max));
 	}
 
@@ -979,10 +947,6 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	if (table)
 		delete [] table;
 	table = 0;
-
-	//delete geometry array
-	delete [] mesh_geometry;
-	mesh_geometry = 0;
 
 	//add triangles to single array, to be passed to the submesh
 	int location = 0;
@@ -993,7 +957,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 		for (int j = 0; j < (int)trimesh[i].triangles.size(); j++)
 		{
 			Triangle tri = trimesh[i].triangles[j];
-			tri += count + location;
+			tri += location;
 			triangles.push_back(tri);
 		}
 		location += (int)vertices2[i].size();
@@ -1004,7 +968,17 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	trimesh = 0;
 
 	//create submesh and set material
-	ProcessSubMesh(triangles, material, true);
+	int index = ProcessSubMesh(geometry, triangles, material, true);
+
+	if (index >= 0)
+	{
+		for (int i = 0; i < (int)mesh_indices.size(); i++)
+		{
+			unsigned int size = Submeshes[index].MeshGeometry.size() - geometry.size();
+			mesh_indices[i].min += size;
+			mesh_indices[i].max += size;
+		}
+	}
 
 	//recreate colliders if specified
 	if (sbs->DeleteColliders == true)
@@ -1059,16 +1033,11 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	return 0;
 }
 
-int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string &material, bool add)
+int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//the Prepare() function must be called when the mesh is ready to view
-
-	int index_count = (int)indices.size();
-	Triangle *indexarray = new Triangle[index_count];
-
-	for (int i = 0; i < index_count; i++)
-		indexarray[i] = indices[i];
+	//the 'vertices' data is not needed if removing triangles
 
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
@@ -1081,33 +1050,39 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 	//create a new submesh if needed
 	if (index == -1)
 	{
+		//exit if vertex count is not valid
+		if (vertices.size() < 3)
+			return -1;
+
 		index = (int)Submeshes.size();
 		Submeshes.resize(Submeshes.size() + 1);
+		Submeshes[index].MeshGeometry.reserve(64); //reserve vertex space
+		Submeshes[index].Triangles.reserve(16); //reserve triangle space
 		createnew = true;
 	}
 
 	//delete submesh and exit if it's going to be emptied
 	if (createnew == false && add == false)
 	{
-		if (Submeshes[index].Triangles.size() - index_count <= 0)
+		if ((int)Submeshes[index].Triangles.size() - (int)indices.size() <= 0)
 		{
 			Submeshes.erase(Submeshes.begin() + index);
-			delete [] indexarray;
 			return -1;
 		}
 	}
 
-	//add triangles
 	if (add == true)
 	{
-		//reserve triangles
-		int size = (int)Submeshes[index].Triangles.size() + index_count;
-		int capacity = (int)Submeshes[index].Triangles.capacity();
-		if (capacity < size)
-			Submeshes[index].Triangles.reserve(capacity * 2);
+		//add triangles
+		for (int i = 0; i < (int)indices.size(); i++)
+		{
+			indices[i] += Submeshes[index].MeshGeometry.size();
+			Submeshes[index].Triangles.push_back(indices[i]);
+		}
 
-		for (int i = 0; i < index_count; i++)
-			AddTriangle(index, indexarray[i]);
+		//add vertices
+		for (int i = 0; i < (int)vertices.size(); i++)
+			Submeshes[index].MeshGeometry.push_back(vertices[i]);
 	}
 	else
 	{
@@ -1115,23 +1090,26 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 		for (int i = 0; i < (int)Submeshes[index].Triangles.size(); i++)
 		{
 			Triangle &triangle = Submeshes[index].Triangles[i];
-			for (int j = 0; j < index_count; j++)
+			for (int j = 0; j < (int)indices.size(); j++)
 			{
-				if (triangle == indexarray[j])
+				if (triangle == indices[j])
 				{
 					//delete match
-					RemoveTriangle(index, i);
+					Submeshes[index].Triangles.erase(Submeshes[index].Triangles.begin() + i);
 					i--;
 					break;
 				}
 			}
 		}
+
+		//delete related vertices
+		DeleteVertices(index, indices);
 	}
 
 	//bind material
 	Submeshes[index].Name = material;
+	prepared = false; //need to re-prepare mesh
 
-	delete [] indexarray;
 	return index;
 }
 
@@ -1145,8 +1123,11 @@ void MeshObject::Prepare(bool force)
 	//set up bounding box
 	if (model_loaded == false)
 	{
-		for (int i = 0; i < (int)MeshGeometry.size(); i++)
-			Bounds->merge(MeshGeometry[i].vertex);
+		for (int i = 0; i < (int)Submeshes.size(); i++)
+		{
+			for (int j = 0; j < (int)Submeshes[i].MeshGeometry.size(); j++)
+				Bounds->merge(Submeshes[i].MeshGeometry[j].vertex);
+		}
 	}
 
 	//update dynamic mesh
@@ -1168,7 +1149,7 @@ int MeshObject::FindMatchingSubMesh(const std::string &material)
 	return -1;
 }
 
-void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
+void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes.
@@ -1176,6 +1157,9 @@ void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
 
 	//exit if index array is empty
 	if (deleted_indices.size() == 0)
+		return;
+
+	if (submesh < 0 || submesh > Submeshes.size())
 		return;
 
 	//construct new sorted and compressed index array
@@ -1194,21 +1178,20 @@ void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
 
 	//copy vector index array into simple array
 	int deleted_size = (int)deleted_v.size();
-	int *deleted = new int[deleted_size];
+	unsigned int *deleted = new unsigned int[deleted_size];
 	for (int i = 0; i < deleted_size; i++)
 		deleted[i] = deleted_v[i];
 
 	//delete specified vertices
 	for (int i = deleted_size - 1; i >= 0; i--)
-		MeshGeometry.erase(MeshGeometry.begin() + deleted[i]);
+		Submeshes[submesh].MeshGeometry.erase(Submeshes[submesh].MeshGeometry.begin() + deleted[i]);
 
-	//reindex triangle indices in all submeshes
-	for (int submesh = 0; submesh < (int)Submeshes.size(); submesh++)
+	//reindex triangle indices
 	{
 		std::vector<Triangle> &triangles = Submeshes[submesh].Triangles;
 
 		int elements_size = (int)triangles.size() * 3;
-		int *elements = new int[elements_size];
+		unsigned int *elements = new unsigned int[elements_size];
 
 		int elements_pos = 0;
 		for (int i = 0; i < (int)triangles.size(); i++)
@@ -1259,8 +1242,11 @@ void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
 
 			Polygon *poly = Walls[i]->GetPolygon(j);
 
+			if (poly->material != Submeshes[submesh].Name)
+				continue;
+
 			int elements_size = (int)poly->triangles.size() * 3;
-			int *elements = new int[elements_size];
+			unsigned int *elements = new unsigned int[elements_size];
 
 			int elements_pos = 0;
 			for (int k = 0; k < (int)poly->triangles.size(); k++)
@@ -1304,10 +1290,10 @@ void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
 				for (int m = 0; m < size; m++)
 				{
 					Extents extents = poly->index_extents[m];
-					if (deleted[k] < extents.x)
-						extents.x--;
-					if (deleted[k] < extents.y)
-						extents.y--;
+					if (deleted[k] < extents.min)
+						extents.min--;
+					if (deleted[k] < extents.max)
+						extents.max--;
 					poly->index_extents[m] = extents;
 				}
 			}
@@ -1336,17 +1322,21 @@ void MeshObject::CreateCollider()
 		return;
 
 	//exit if mesh is empty
-	if (MeshGeometry.size() == 0 || Submeshes.size() == 0)
+	if (Submeshes.size() == 0)
 		return;
 
-	int tricount = 0;
+	unsigned int tricount = 0;
+	unsigned int vcount = 0;
 	for (int i = 0; i < (int)Submeshes.size(); i++)
-		tricount += (int)Submeshes[i].Triangles.size();
+	{
+		tricount += Submeshes[i].Triangles.size();
+		vcount += Submeshes[i].MeshGeometry.size();
+	}
 
 	try
 	{
 		//initialize collider shape
-		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape((int)MeshGeometry.size(), tricount * 3);
+		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vcount, tricount * 3);
 
 		float scale = GetSceneNode()->GetScale();
 
@@ -1357,9 +1347,9 @@ void MeshObject::CreateCollider()
 			{
 				const Triangle &tri = Submeshes[i].Triangles[j];
 
-				Ogre::Vector3 a = MeshGeometry[tri.a].vertex;
-				Ogre::Vector3 b = MeshGeometry[tri.b].vertex;
-				Ogre::Vector3 c = MeshGeometry[tri.c].vertex;
+				Ogre::Vector3 a = Submeshes[i].MeshGeometry[tri.a].vertex;
+				Ogre::Vector3 b = Submeshes[i].MeshGeometry[tri.b].vertex;
+				Ogre::Vector3 c = Submeshes[i].MeshGeometry[tri.c].vertex;
 
 				if (scale != 1.0f)
 				{
@@ -1519,10 +1509,9 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 		for (int j = 0; j < (int)Submeshes[i].Triangles.size(); j++)
 		{
 			const Triangle &tri = Submeshes[i].Triangles[j];
-			Ogre::Vector3 tri_a, tri_b, tri_c;
-			tri_a = MeshGeometry[tri.a].vertex;
-			tri_b = MeshGeometry[tri.b].vertex;
-			tri_c = MeshGeometry[tri.c].vertex;
+			Ogre::Vector3 &tri_a = Submeshes[i].MeshGeometry[tri.a].vertex;
+			Ogre::Vector3 &tri_b = Submeshes[i].MeshGeometry[tri.b].vertex;
+			Ogre::Vector3 &tri_c = Submeshes[i].MeshGeometry[tri.c].vertex;
 
 			std::pair<bool, float> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
 			if (result.first == true)
@@ -1751,31 +1740,36 @@ Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	if (coord < 1 || coord > 3)
 		return Ogre::Vector2(0, 0);
 
-	for (i = 0; i < (int)MeshGeometry.size(); i++)
+	for (int i = 0; i < (int)Submeshes.size(); i++)
 	{
-		if (coord == 1)
-			tempnum = MeshGeometry[i].vertex.x;
-		if (coord == 2)
-			tempnum = MeshGeometry[i].vertex.y;
-		if (coord == 3)
+		for (int j = 0; j < (int)Submeshes[i].MeshGeometry.size(); j++)
 		{
-			if (flip_z == false)
-				tempnum = MeshGeometry[i].vertex.z;
-			else
-				tempnum = -MeshGeometry[i].vertex.z;
-		}
+			const Ogre::Vector3 &vertex = Submeshes[i].MeshGeometry[j].vertex;
 
-		if (i == 0)
-		{
-			esmall = tempnum;
-			ebig = tempnum;
-		}
-		else
-		{
-			if (tempnum < esmall)
+			if (coord == 1)
+				tempnum = vertex.x;
+			if (coord == 2)
+				tempnum = vertex.y;
+			if (coord == 3)
+			{
+				if (flip_z == false)
+					tempnum = vertex.z;
+				else
+					tempnum = -vertex.z;
+			}
+
+			if (j == 0)
+			{
 				esmall = tempnum;
-			if (tempnum > ebig)
 				ebig = tempnum;
+			}
+			else
+			{
+				if (tempnum < esmall)
+					esmall = tempnum;
+				if (tempnum > ebig)
+					ebig = tempnum;
+			}
 		}
 	}
 
@@ -1988,15 +1982,34 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 	return true;
 }
 
-unsigned int MeshObject::GetVertexCount()
+unsigned int MeshObject::GetVertexCount(int submesh)
 {
-	return MeshGeometry.size();
+	if (submesh < 0 || submesh >= (int)Submeshes.size())
+	{
+		//return total vertex count if a submesh hasn't been specified
+		unsigned int total = 0;
+
+		for (int i = 0; i < (int)Submeshes.size(); i++)
+			total += Submeshes[i].MeshGeometry.size();
+
+		return total;
+	}
+
+	return Submeshes[submesh].MeshGeometry.size();
 }
 
 unsigned int MeshObject::GetTriangleCount(int submesh)
 {
 	if (submesh < 0 || submesh >= (int)Submeshes.size())
-		return 0;
+	{
+		//return total triangle count if a submesh hasn't been specified
+		unsigned int total = 0;
+
+		for (int i = 0; i < (int)Submeshes.size(); i++)
+			total += Submeshes[i].Triangles.size();
+
+		return total;
+	}
 
 	return Submeshes[submesh].Triangles.size();
 }

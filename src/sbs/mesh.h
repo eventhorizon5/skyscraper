@@ -32,13 +32,13 @@ namespace SBS {
 
 struct Extents
 {
-	int x;
-	int y;
+	unsigned int min;
+	unsigned int max;
 
-	Extents(int min, int max)
+	Extents(unsigned int min, unsigned int max)
 	{
-		x = min;
-		y = max;
+		this->min = min;
+		this->max = max;
 	}
 };
 
@@ -65,6 +65,7 @@ public:
 	};
 	struct SubMesh
 	{
+		std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
 		std::vector<Triangle> Triangles; //per-submesh triangles
 		std::string Name;
 	};
@@ -80,15 +81,12 @@ public:
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	WallObject* FindWall(const Ogre::Vector3 &point, bool convert = true);
 	WallObject* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
-	void AddVertex(Geometry &vertex_geom);
-	void AddTriangle(int submesh, Triangle &triangle);
-	void RemoveTriangle(int submesh, int index);
 	bool PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles);
 	bool PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, float tw, float th, bool convert_vertices = true);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th);
-	int ProcessSubMesh(std::vector<Triangle> &indices, const std::string &material, bool add);
+	int ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add);
 	int FindMatchingSubMesh(const std::string &material);
-	void DeleteVertices(std::vector<Triangle> &deleted_indices);
+	void DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices);
 	void Prepare(bool force = false);
 	void EnableDebugView(bool value);
 	void CreateCollider();
@@ -112,12 +110,11 @@ public:
 	Ogre::Vector3 GetOffset();
 	void Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	void CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors);
-	unsigned int GetVertexCount();
-	unsigned int GetTriangleCount(int submesh);
+	unsigned int GetVertexCount(int submesh = -1);
+	unsigned int GetTriangleCount(int submesh = -1);
 	bool UsingDynamicBuffers();
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
-	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
 	std::vector<SubMesh> Submeshes; //submeshes
 	std::vector<WallObject*> Walls; //associated wall (polygon container) objects
 

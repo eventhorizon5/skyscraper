@@ -1179,11 +1179,16 @@ void Elevator::Loop()
 	{
 		Height = 0;
 		//search through mesh geometry to find actual height
-		for (int i = 0; i < (int)ElevatorMesh->MeshGeometry.size(); i++)
+		for (int i = 0; i < (int)ElevatorMesh->Submeshes.size(); i++)
 		{
-			//set height value
-			if (sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y) > Height)
-				Height = sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y);
+			for (int j = 0; j < (int)ElevatorMesh->Submeshes[i].MeshGeometry.size(); j++)
+			{
+				float y = sbs->ToLocal(ElevatorMesh->Submeshes[i].MeshGeometry[j].vertex.y);
+
+				//set height value
+				if (y > Height)
+					Height = y;
+			}
 		}
 		HeightSet = true;
 
