@@ -2019,6 +2019,8 @@ finish:
 
 	if (FinishedMove == false)
 		FinishMove();
+	else
+		EmergencyStop = 0; //make sure emergency stop status is cleared
 }
 
 void Elevator::MoveObjects(float offset)
