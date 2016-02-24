@@ -383,7 +383,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_DEFAULT);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
@@ -688,7 +688,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_DEFAULT);
 	IncrementTextureCount();
 
 	//get new texture dimensions, if it was resized
@@ -798,7 +798,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_DEFAULT);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
