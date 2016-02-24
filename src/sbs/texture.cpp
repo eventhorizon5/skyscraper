@@ -376,7 +376,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	if (height < 1)
 		height = (int)mTex->getHeight();
 
-	if (x >= (int)mTex->getWidth() || y >= (int)mTex->getHeight())
+	if (x > (int)mTex->getWidth() || y > (int)mTex->getHeight())
 		return sbs->ReportError("LoadTextureCropped: invalid coordinates for '" + Name + "'");
 	if (x + width > (int)mTex->getWidth() || y + height > (int)mTex->getHeight())
 		return sbs->ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
@@ -387,8 +387,8 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
-	Ogre::Box source (x, y, x + width - 1, y + height - 1);
-	Ogre::Box dest (0, 0, width - 1, height - 1);
+	Ogre::Box source (x, y, x + width, y + height);
+	Ogre::Box dest (0, 0, width, height);
 	CopyTexture(mTex, new_texture, source, dest);
 
 	//create a new material
@@ -791,7 +791,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	if (height < 1)
 		height = (int)image2->getHeight();
 
-	if (x >= (int)image1->getWidth() || y >= (int)image1->getHeight())
+	if (x > (int)image1->getWidth() || y > (int)image1->getHeight())
 		return sbs->ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
 	if (x + width > (int)image1->getWidth() || y + height > (int)image1->getHeight())
 		return sbs->ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
@@ -802,9 +802,9 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
-	Ogre::Box source (x, y, x + width - 1, y + height - 1);
-	Ogre::Box source_full (0, 0, image1->getWidth() - 1, image1->getHeight() - 1);
-	Ogre::Box overlay (0, 0, image2->getWidth() - 1, image2->getHeight() - 1);
+	Ogre::Box source (x, y, x + width, y + height);
+	Ogre::Box source_full (0, 0, image1->getWidth(), image1->getHeight());
+	Ogre::Box overlay (0, 0, image2->getWidth(), image2->getHeight());
 	CopyTexture(image1, new_texture, source_full, source_full);
 	CopyTexture(image2, new_texture, overlay, source);
 
@@ -2100,8 +2100,8 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 {
 	//copy a source texture onto a destination texture using the full sizes
 
-	Ogre::Box srcbox (0, 0, 0, source->getWidth() - 1, source->getHeight() - 1, source->getDepth());
-	Ogre::Box dstbox (0, 0, 0, destination->getWidth() - 1, destination->getHeight() - 1, destination->getDepth());
+	Ogre::Box srcbox (0, 0, 0, source->getWidth(), source->getHeight(), source->getDepth());
+	Ogre::Box dstbox (0, 0, 0, destination->getWidth(), destination->getHeight(), destination->getDepth());
 
 	CopyTexture(source, destination, srcbox, dstbox);
 }
