@@ -1,10 +1,3 @@
-material test_material
-{
-    technique default
-    {
-    }
-}
-
 // Empty sky w/o components. Happens to be very dark.
 caelum_sky_system EmptySky
 {

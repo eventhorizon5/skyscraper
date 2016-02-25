@@ -1978,8 +1978,20 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 	{
 		if (use_alpha_color == false)
 		{
-			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-			IncrementTextureCount();
+			//return any existing texture
+			Ogre::TexturePtr existing = GetTextureByName(filename2, path);
+			if (existing.isNull() == false)
+				return existing;
+
+			//get any existing texture
+			mTex = GetTextureByName(filename2, path);
+
+			//if not found, load new texture
+			if (mTex.isNull())
+			{
+				mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+				IncrementTextureCount();
+			}
 
 			if (mTex.isNull())
 			{
@@ -1994,7 +2006,13 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 			//load based on chroma key for alpha
 
 			texturename = "kc_" + filename2;
-			mTex = loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
+
+			//get any existing texture
+			mTex = GetTextureByName(texturename, path);
+
+			//if not found, load new texture
+			if (mTex.isNull())
+				mTex = loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
 
 			if (mTex.isNull())
 			{
