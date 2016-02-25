@@ -1978,11 +1978,6 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 	{
 		if (use_alpha_color == false)
 		{
-			//return any existing texture
-			Ogre::TexturePtr existing = GetTextureByName(filename2, path);
-			if (existing.isNull() == false)
-				return existing;
-
 			//get any existing texture
 			mTex = GetTextureByName(filename2, path);
 
