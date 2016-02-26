@@ -745,7 +745,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	//update associated polygons
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
-		for (int j = 0; j < Walls[i]->GetPolygonCount(); i++)
+		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
 			Polygon *poly = Walls[i]->GetPolygon(j);
 
