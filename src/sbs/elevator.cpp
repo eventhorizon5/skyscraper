@@ -2809,6 +2809,7 @@ bool Elevator::EnableIndependentService(bool value)
 	}
 	else
 	{
+		ResetQueue(true, true); //this will also stop the elevator
 		ResetDoors();
 		ResetNudgeTimer();
 		Report("Independent Service mode disabled");
