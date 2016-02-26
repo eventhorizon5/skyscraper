@@ -381,9 +381,14 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	if (x + width > (int)mTex->getWidth() || y + height > (int)mTex->getHeight())
 		return sbs->ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
 
+	//determine pixel format
+	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
+	if (has_alpha == true)
+		format = Ogre::PF_A8R8G8B8;
+
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_DEFAULT);
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
@@ -686,9 +691,14 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	int width = (int)background->getWidth();
 	int height = (int)background->getHeight();
 
+	//determine pixel format
+	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
+	if (has_alpha == true)
+		format = Ogre::PF_A8R8G8B8;
+
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//get new texture dimensions, if it was resized
@@ -796,9 +806,14 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	if (x + width > (int)image1->getWidth() || y + height > (int)image1->getHeight())
 		return sbs->ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
+	//determine pixel format
+	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
+	if (has_alpha == true)
+		format = Ogre::PF_A8R8G8B8;
+
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_DEFAULT);
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
