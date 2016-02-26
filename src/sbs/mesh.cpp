@@ -742,7 +742,21 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	if (result == false)
 		return false;
 
+	//update associated polygons
+	for (int i = 0; i < (int)Walls.size(); i++)
+	{
+		for (int j = 0; j < Walls[i]->GetPolygonCount(); i++)
+		{
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			if (poly->material == Submeshes[submesh].Name)
+				poly->material = material;
+		}
+	}
+
+	//update submesh
 	Submeshes[submesh].Name = material;
+
 	return true;
 }
 
