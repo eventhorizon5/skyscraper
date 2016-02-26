@@ -2123,15 +2123,13 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 {
 	//copy a source texture onto a destination texture using specified sizes
 
-	/*Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
+	Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
 
 	buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
 	const Ogre::PixelBox &pb = buffer->getCurrentLock();
 
 	destination->getBuffer()->blitFromMemory(pb, dstBox);
-	buffer->unlock();*/
-
-	destination->getBuffer()->blit(source->getBuffer(), srcBox, dstBox);
+	buffer->unlock();
 }
 
 void TextureManager::FreeTextureBoxes()
