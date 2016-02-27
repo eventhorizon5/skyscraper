@@ -388,8 +388,17 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
-	IncrementTextureCount();
+	Ogre::TexturePtr new_texture;
+	try
+	{
+		new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
+		IncrementTextureCount();
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
+		return false;
+	}
 
 	//copy source and overlay images onto new image
 	Ogre::Box source (x, y, x + width, y + height);
@@ -698,8 +707,17 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
-	IncrementTextureCount();
+	Ogre::TexturePtr texture;
+	try
+	{
+		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+		IncrementTextureCount();
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
+		return false;
+	}
 
 	//get new texture dimensions, if it was resized
 	width = (int)texture->getWidth();
@@ -813,8 +831,17 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
-	IncrementTextureCount();
+	Ogre::TexturePtr new_texture;
+	try
+	{
+		new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
+		IncrementTextureCount();
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
+		return false;
+	}
 
 	//copy source and overlay images onto new image
 	Ogre::Box source (x, y, x + width, y + height);
