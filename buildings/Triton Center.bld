@@ -8665,14 +8665,14 @@ ShowFullStairs 5 = true
 
 
 #East Stairwell
-CreateStairwell 6, 4.7515, 51.66, 79, 141
+CreateStairwell 6, 4.7515, 51.66, 79, 142
 CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
 
-<Floors 119 to 141>
+<Floors 119 to 142>
     #extra cut operation
     if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] Cut -17 + 4.7515, -%interfloorheight% + 1, -4.5 + 51.66, -9.0815 + 4.7515, %fullheight%, 4.5 + 51.66, false, true
     if[%floor% = 120] Cut -17 + 4.7515, -%interfloorheight% - 1, -4.5 + 51.66, -9.0815 + 4.7515, %height% + 2, 4.5 + 51.66, false, true
-    if[%floor% = 141] Cut -17 + 4.7515, -%interfloorheight% - 1, -4.5 + 51.66, -9.0815 + 4.7515, 5, 4.5 + 51.66, false, true
+    if[%floor% > 140] Cut -17 + 4.7515, -%interfloorheight% - 1, -4.5 + 51.66, -9.0815 + 4.7515, 15, 4.5 + 51.66, false, true
 <EndFloors>
 
 #79th floor double stairs
@@ -8764,10 +8764,9 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
-<Floors 79 to 141>
+<Floors 79 to 142>
     Set 6 = 3
-    if[%floor% = 79 | %floor% = 119] Set 6 = 4
-    if[%floor% = 141] Set 6 = 5
+    if[%floor% = 79 | %floor% = 119 | %floor% = 142] Set 6 = 4
     SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
@@ -8784,7 +8783,7 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     FloorOrientation = bottom
     SetAutoSize = true, true
     if[%floor% = 120] AddStairsFloor 6, StairsCeiling, Ceiling1, 0.5, -17, -4.5, -9.0815 + 0.33, 4.5, %height%, %height%, 0, 0
-    if[%floor% = 141] AddStairsFloor 6, StairsCeiling, Ceiling1, 0.5, -9.0815, -4.5, 9.0815, 4.5, 12, 12, 0, 0
+    if[%floor% = 141] AddStairsFloor 6, StairsCeiling, Ceiling1, 0.5, -17, -4.5, 9.0815, 4.5, 10, 10, 0, 0
 
     Set 5 = Wall1
     if[%floor% = 79 | %floor% = 119 | %floor% > 137] Set 5 = Stucco4
@@ -8801,13 +8800,13 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
 
     #doors
     if[%floor% = 79] AddStairsDoor 6, StairsDoor, 0.2, 1, -9.0815, 2, 3.5, 8, 0, 1, 1
-    if[%floor% > 79] AddStairsDoor 6, StairsDoor, 0.2, 3, 9.0815, -2, 3.5, 8, 0, 1, 1
+    if[%floor% > 79 & %floor% < 142] AddStairsDoor 6, StairsDoor, 0.2, 3, 9.0815, -2, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
     DrawWalls = true, false, false, false, false, false
-    if[%floor% > 79] AddStairsWall 6, SignTop, FloorSign, 0, 9.0815 - 0.335, 1.5, 9.0815 - 0.335, 2.5, 0.25, 0.25, 5, 5, 1, 1
-    if[%floor% > 79] AddStairsWall 6, SignTop, Button%floor%, 0, 9.0815 - 0.335, 1.5, 9.0815 - 0.335, 2.5, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% > 79 & %floor% < 142] AddStairsWall 6, SignTop, FloorSign, 0, 9.0815 - 0.335, 1.5, 9.0815 - 0.335, 2.5, 0.25, 0.25, 5, 5, 1, 1
+    if[%floor% > 79 & %floor% < 142] AddStairsWall 6, SignTop, Button%floor%, 0, 9.0815 - 0.335, 1.5, 9.0815 - 0.335, 2.5, 0.75, 0.75, 4.25, 4.25, 1, 1
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 79] AddStairsWall 6, SignTop, FloorSign, 0, -9.0815 + 0.335, -2.5, -9.0815 + 0.335, -1.5, 0.25, 0.25, 5, 5, 1, 1
     if[%floor% = 79] AddStairsWall 6, SignTop, Button%floor%, 0, -9.0815 + 0.335, -2.5, -9.0815 + 0.335, -1.5, 0.75, 0.75, 4.25, 4.25, 1, 1
