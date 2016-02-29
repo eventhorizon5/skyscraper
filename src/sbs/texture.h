@@ -145,6 +145,7 @@ private:
 	};
 
 	std::vector<TextureInfo> textureinfo;
+	std::vector<Ogre::TexturePtr> manual_textures;
 
 	//textures/materials count
 	int texturecount;

@@ -107,6 +107,14 @@ TextureManager::~TextureManager()
 
 	if (textureboxes.empty() == false)
 		FreeTextureBoxes();
+
+	for (int i = 0; i < (int)manual_textures.size(); i++)
+	{
+		if (manual_textures[i].isNull() == false)
+		{
+			Ogre::TextureManager::getSingleton().remove(manual_textures[i]->getHandle());
+		}
+	}
 }
 
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
@@ -392,6 +400,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	try
 	{
 		new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
+		manual_textures.push_back(new_texture);
 		IncrementTextureCount();
 	}
 	catch (Ogre::Exception &e)
@@ -711,6 +720,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	try
 	{
 		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+		manual_textures.push_back(texture);
 		IncrementTextureCount();
 	}
 	catch (Ogre::Exception &e)
@@ -835,6 +845,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	try
 	{
 		new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
+		manual_textures.push_back(new_texture);
 		IncrementTextureCount();
 	}
 	catch (Ogre::Exception &e)
