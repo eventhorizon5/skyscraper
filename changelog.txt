@@ -1,5 +1,18 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-manually-created textures need to be removed on engine shutdown
+-(Triton Center) fixed top of East Stairwell (on 141-142)
+-manual texture creation calls should check for exceptions
+-elevators should reset queues when switching off Independent Service mode
+-use default pixel formats for textures, and automatically determine the type when creating a manual texture
+-when changing a texture, the associated polygons need to have their material names updated, which fixes crashes related to failed geometry and submesh references
+-prevent duplicate texture loads
+-removed Caelum test material
+-use default (write-only) texture type, for functions where reading is not needed
+-make sure that the emergency stop status is cleared, in a situation where it could be initiated after the run of FinishMove()
+-merged "Separate Vertices" branch, which separates out the SBS MeshObject's vertex tables into per-submesh tables
+-reset elevator camera offset if outside vertical range
+-build fixes for Ogre 1.10
 -show renderer in Windows crash reports
 -console will turn autoscroll off if user clicks at a location to stay at in the text box, and scroll will reenable when the "Auto Scroll" button is clicked
 -fixed an issue where physical models would not properly stay in elevators
