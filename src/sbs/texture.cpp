@@ -108,6 +108,7 @@ TextureManager::~TextureManager()
 	if (textureboxes.empty() == false)
 		FreeTextureBoxes();
 
+	//remove manually-created textures
 	for (int i = 0; i < (int)manual_textures.size(); i++)
 	{
 		if (manual_textures[i].isNull() == false)
@@ -115,6 +116,7 @@ TextureManager::~TextureManager()
 			Ogre::TextureManager::getSingleton().remove(manual_textures[i]->getHandle());
 		}
 	}
+	manual_textures.clear();
 }
 
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
