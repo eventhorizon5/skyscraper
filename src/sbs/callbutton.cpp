@@ -535,12 +535,19 @@ void CallButton::Process(int direction)
 		if (elev->InServiceMode() == true || elev->IsRunning() == false || elev->IsStopped() == true)
 		{
 			reprocess = true;
+			ActiveElevator = 0;
 
-			//reset processed state
+			//reset processed and active elevator states
 			if (direction == 1)
+			{
 				ProcessedUp = false;
+				ActiveElevatorUp = 0;
+			}
 			else
+			{
 				ProcessedDown = false;
+				ActiveElevatorDown = 0;
+			}
 		}
 	}
 
