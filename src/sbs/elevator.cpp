@@ -5455,10 +5455,15 @@ bool Elevator::IsLeveled()
 {
 	//return true if elevator is leveled at a serviced floor
 
+	float tolerance = 0.005f;
+
 	int floor = GetFloor();
 	if (IsServicedFloor(floor) == true)
 	{
-		if (GetPosition().y == GetDestinationAltitude(floor))
+		float altitude = GetDestinationAltitude(floor);
+
+		if (GetPosition().y >= altitude - tolerance &&
+				GetPosition().y <= altitude + tolerance)
 			return true;
 	}
 	return false;
