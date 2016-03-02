@@ -88,13 +88,6 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	return true;
 }
 
-/*void DynamicMesh::Build()
-{
-	//extra code from previous system
-
-	MeshWrapper->load();
-}*/
-
 void DynamicMesh::Enable(bool value, MeshObject *client)
 {
 	if (client == 0 || meshes.size() == 1)
@@ -964,6 +957,8 @@ void DynamicMesh::Mesh::Prepare(int client)
 	MeshWrapper->_dirtyState();
 
 	UpdateBoundingBox();
+
+	MeshWrapper->load();
 
 	//if a mesh was attached and was empty, it needs to be reattached to be visible
 	if (previous_count == 0 && enabled == true)
