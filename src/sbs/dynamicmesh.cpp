@@ -856,15 +856,8 @@ void DynamicMesh::Mesh::Prepare(int client)
 
 			//create array of triangle indices
 			loc = 0;
-			start = 0;
-			end = Parent->GetClientCount() - 1;
 
-			if (client > -1)
-			{
-				start = client;
-				end = client;
-			}
-
+			//for each client, get triangles for a matching client submesh
 			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
@@ -901,15 +894,8 @@ void DynamicMesh::Mesh::Prepare(int client)
 
 			//create array of triangle indices
 			loc = 0;
-			start = 0;
-			end = Parent->GetClientCount() - 1;
 
-			if (client > -1)
-			{
-				start = client;
-				end = client;
-			}
-
+			//for each client, get triangles for a matching client submesh
 			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
