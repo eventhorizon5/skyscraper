@@ -66,7 +66,7 @@ public:
 private:
 
 	//raw mesh wrapper
-	struct SBSIMPEXP Mesh
+	struct Mesh
 	{
 		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
 		~Mesh();
@@ -83,13 +83,18 @@ private:
 		void Detach();
 		void UpdateBoundingBox();
 
+		struct ClientEntry
+		{
+			unsigned int vertex_offset;
+			unsigned int vertex_count;
+			Ogre::AxisAlignedBox* bounds;
+			Ogre::Real radius;
+		};
+
 		std::string name;
 		Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
-		std::vector<unsigned int> offset_table;
-		std::vector<unsigned int> vertex_counts;
-		std::vector<Ogre::AxisAlignedBox*> client_bounds;
-		std::vector<Ogre::Real> client_radius;
+		std::vector<ClientEntry> client_entries; //per-client information
 		Ogre::Entity *Movable;
 		SceneNode *node;
 		DynamicMesh *Parent;
