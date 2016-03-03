@@ -76,7 +76,7 @@ private:
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
 		Submesh* CreateSubMesh(const std::string &material);
-		void Prepare(int client = -1);
+		void Prepare(bool process_vertices = true, int client = -1);
 		void EnableDebugView(bool value);
 		bool IsVisible();
 		bool IsVisible(Ogre::Camera *camera);

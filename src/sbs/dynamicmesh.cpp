@@ -276,7 +276,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 		{
 			meshes[i]->prepared = false;
 			if (meshes.size() > 1)
-				meshes[i]->Prepare(i);
+				meshes[i]->Prepare(true, i);
 			else
 				meshes[i]->Prepare();
 		}
@@ -286,7 +286,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 		int index = GetClientIndex(client);
 
 		if (index >= 0)
-			return meshes[index]->Prepare(index);
+			return meshes[index]->Prepare(true, index);
 	}
 
 	prepared = true;
@@ -651,7 +651,7 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	{
 		//re-prepare mesh
 		prepared = false;
-		Prepare();
+		Prepare(false);
 		return true;
 	}
 
@@ -699,7 +699,7 @@ DynamicMesh::Mesh::Submesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &
 	return &Submeshes[index];
 }
 
-void DynamicMesh::Mesh::Prepare(int client)
+void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 {
 	//prepare mesh object
 
@@ -727,34 +727,6 @@ void DynamicMesh::Mesh::Prepare(int client)
 		return;
 	}
 
-	size_t previous_count = 0;
-
-	//set up vertex buffer
-	if (MeshWrapper->sharedVertexData)
-	{
-		previous_count = MeshWrapper->sharedVertexData->vertexCount;
-		delete MeshWrapper->sharedVertexData;
-	}
-	Ogre::VertexData* data = new Ogre::VertexData();
-	MeshWrapper->sharedVertexData = data;
-	data->vertexCount = vertex_count;
-	Ogre::VertexDeclaration* decl = data->vertexDeclaration;
-
-	//set up vertex data elements
-	size_t offset = 0;
-	decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION); //vertices
-	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
-	decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_NORMAL); //normals
-	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
-	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
-
-	//set up vertex data arrays
-	float *mVertexElements = new float[vertex_count * 8];
-
-	//populate array with vertex geometry from each client mesh
-	unsigned int loc = 0;
-	unsigned int vindex = 0;
-
 	int start = 0;
 	int end = Parent->GetClientCount() - 1;
 
@@ -764,83 +736,114 @@ void DynamicMesh::Mesh::Prepare(int client)
 		end = client;
 	}
 
-	//clear vertex offset, counts, and bounds tables
-	for (int i = 0; i < (int)client_entries.size(); i++)
+	size_t previous_count = 0;
+
+	if (process_vertices == true)
 	{
-		delete client_entries[i].bounds;
-	}
-	client_entries.clear();
-
-	for (int num = start; num <= end; num++)
-	{
-		MeshObject *mesh = Parent->GetClient(num);
-		Ogre::AxisAlignedBox client_box;
-		Ogre::Real radius = 0;
-
-		ClientEntry entry;
-
-		//add current client's vertex index to offset table
-		entry.vertex_offset = vindex;
-
-		//get mesh's offset of associated scene node
-		Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
-
-		//fill array with mesh's geometry data, from each submesh
-		for (int index = 0; index < mesh->GetSubmeshCount(); index++)
+		//set up vertex buffer
+		if (MeshWrapper->sharedVertexData)
 		{
-			for (size_t i = 0; i < mesh->GetVertexCount(index); i++)
+			previous_count = MeshWrapper->sharedVertexData->vertexCount;
+			delete MeshWrapper->sharedVertexData;
+		}
+		Ogre::VertexData* data = new Ogre::VertexData();
+		MeshWrapper->sharedVertexData = data;
+		data->vertexCount = vertex_count;
+		Ogre::VertexDeclaration* decl = data->vertexDeclaration;
+
+		//set up vertex data elements
+		size_t offset = 0;
+		decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION); //vertices
+		offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
+		decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_NORMAL); //normals
+		offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
+		decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
+
+		//set up vertex data arrays
+		float *mVertexElements = new float[vertex_count * 8];
+
+		//populate array with vertex geometry from each client mesh
+		unsigned int loc = 0;
+		unsigned int vindex = 0;
+
+		//clear vertex offset, counts, and bounds tables
+		for (int i = 0; i < (int)client_entries.size(); i++)
+		{
+			delete client_entries[i].bounds;
+		}
+		client_entries.clear();
+
+		for (int num = start; num <= end; num++)
+		{
+			MeshObject *mesh = Parent->GetClient(num);
+			Ogre::AxisAlignedBox client_box;
+			Ogre::Real radius = 0;
+
+			ClientEntry entry;
+
+			//add current client's vertex index to offset table
+			entry.vertex_offset = vindex;
+
+			//get mesh's offset of associated scene node
+			Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
+
+			//fill array with mesh's geometry data, from each submesh
+			for (int index = 0; index < mesh->GetSubmeshCount(); index++)
 			{
-				MeshObject::Geometry &element = mesh->Submeshes[index].MeshGeometry[i];
-
-				//make mesh's vertex relative to this scene node
-				Ogre::Vector3 vertex;
-				if (client == -1)
+				for (size_t i = 0; i < mesh->GetVertexCount(index); i++)
 				{
-					Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-					vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
-				}
-				else
-					vertex = mesh->Submeshes[index].MeshGeometry[i].vertex;
+					MeshObject::Geometry &element = mesh->Submeshes[index].MeshGeometry[i];
 
-				//add elements to array
-				mVertexElements[loc] = vertex.x;
-				mVertexElements[loc + 1] = vertex.y;
-				mVertexElements[loc + 2] = vertex.z;
-				mVertexElements[loc + 3] = element.normal.x;
-				mVertexElements[loc + 4] = element.normal.y;
-				mVertexElements[loc + 5] = element.normal.z;
-				mVertexElements[loc + 6] = element.texel.x;
-				mVertexElements[loc + 7] = element.texel.y;
-				client_box.merge(vertex);
-				radius = std::max(radius, vertex.length());
-				loc += 8;
+					//make mesh's vertex relative to this scene node
+					Ogre::Vector3 vertex;
+					if (client == -1)
+					{
+						Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+						vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+					}
+					else
+						vertex = mesh->Submeshes[index].MeshGeometry[i].vertex;
+
+					//add elements to array
+					mVertexElements[loc] = vertex.x;
+					mVertexElements[loc + 1] = vertex.y;
+					mVertexElements[loc + 2] = vertex.z;
+					mVertexElements[loc + 3] = element.normal.x;
+					mVertexElements[loc + 4] = element.normal.y;
+					mVertexElements[loc + 5] = element.normal.z;
+					mVertexElements[loc + 6] = element.texel.x;
+					mVertexElements[loc + 7] = element.texel.y;
+					client_box.merge(vertex);
+					radius = std::max(radius, vertex.length());
+					loc += 8;
+				}
 			}
+
+			//store client bounding box and radius
+			entry.bounds = new Ogre::AxisAlignedBox(client_box);
+			entry.radius = radius;
+
+			//add client vertex count to list
+			entry.vertex_count = mesh->GetVertexCount();
+			vindex += entry.vertex_count;
+
+			//store client information
+			client_entries.push_back(entry);
 		}
 
-		//store client bounding box and radius
-		entry.bounds = new Ogre::AxisAlignedBox(client_box);
-		entry.radius = radius;
+		//create vertex hardware buffer
+		Ogre::HardwareVertexBufferSharedPtr vbuffer;
+		if (Parent->UseDynamicBuffers() == false)
+			vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+		else
+			vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
 
-		//add client vertex count to list
-		entry.vertex_count = mesh->GetVertexCount();
-		vindex += entry.vertex_count;
+		vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
+		delete [] mVertexElements;
 
-		//store client information
-		client_entries.push_back(entry);
+		//bind vertex data to mesh
+		data->vertexBufferBinding->setBinding(0, vbuffer);
 	}
-
-	//create vertex hardware buffer
-	Ogre::HardwareVertexBufferSharedPtr vbuffer;
-	if (Parent->UseDynamicBuffers() == false)
-		vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-	else
-		vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
-
-	vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
-	delete [] mVertexElements;
-
-	//bind vertex data to mesh
-	data->vertexBufferBinding->setBinding(0, vbuffer);
 
 	//process index arrays for each submesh
 	for (int index = 0; index < submesh_count; index++)
@@ -879,7 +882,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 			unsigned int *mIndices = new unsigned int[isize];
 
 			//create array of triangle indices
-			loc = 0;
+			unsigned int loc = 0;
 
 			//for each client, get triangles for a matching client submesh
 			for (int num = start; num <= end; num++)
@@ -920,7 +923,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 			unsigned short *mIndices = new unsigned short[isize];
 
 			//create array of triangle indices
-			loc = 0;
+			unsigned int loc = 0;
 
 			//for each client, get triangles for a matching client submesh
 			for (int num = start; num <= end; num++)
@@ -972,15 +975,18 @@ void DynamicMesh::Mesh::Prepare(int client)
 	//mark ogre mesh as dirty to update changes
 	MeshWrapper->_dirtyState();
 
-	UpdateBoundingBox();
-
-	MeshWrapper->load();
-
-	//if a mesh was attached and was empty, it needs to be reattached to be visible
-	if (previous_count == 0 && enabled == true)
+	if (process_vertices == true)
 	{
-		Enable(false);
-		Enable(true);
+		UpdateBoundingBox();
+
+		MeshWrapper->load();
+
+		//if a mesh was attached and was empty, it needs to be reattached to be visible
+		if (previous_count == 0 && enabled == true)
+		{
+			Enable(false);
+			Enable(true);
+		}
 	}
 
 	prepared = true;
