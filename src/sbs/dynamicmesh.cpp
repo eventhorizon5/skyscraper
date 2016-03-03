@@ -630,6 +630,12 @@ void DynamicMesh::Mesh::Enable(bool value)
 
 bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)
 {
+	//change a texture on this mesh
+
+	//if multiple clients are referencing the matching submesh,
+	//re-prepare mesh to move client's triangles into the proper new submesh,
+	//to prevent changing (and interfering with) other clients' textures
+
 	//get new material
 	Ogre::MaterialPtr newmat = sbs->GetTextureManager()->GetMaterialByName(new_texture, "General");
 
@@ -641,8 +647,16 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	if (submesh == -1)
 		return false;
 
+	if (Submeshes[submesh].clients > 1)
+	{
+		//re-prepare mesh
+		prepared = false;
+		Prepare();
+		return true;
+	}
+
 	//set material if valid
-	MeshWrapper->getSubMesh(submesh)->setMaterialName(ToString(sbs->InstanceNumber) + ":" + new_texture);
+	Submeshes[submesh].object->setMaterialName(ToString(sbs->InstanceNumber) + ":" + new_texture);
 
 	//apply changes (refresh mesh state)
 	MeshWrapper->_dirtyState();

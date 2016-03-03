@@ -737,10 +737,18 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 			return false;
 	}
 
-	bool result = MeshWrapper->ChangeTexture(Submeshes[submesh].Name, material, this);
+	std::string old = Submeshes[submesh].Name;
+
+	//update submesh
+	Submeshes[submesh].Name = material;
+
+	bool result = MeshWrapper->ChangeTexture(old, material, this);
 
 	if (result == false)
+	{
+		Submeshes[submesh].Name = old; //revert name
 		return false;
+	}
 
 	//update associated polygons
 	for (int i = 0; i < (int)Walls.size(); i++)
@@ -753,9 +761,6 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 				poly->material = material;
 		}
 	}
-
-	//update submesh
-	Submeshes[submesh].Name = material;
 
 	return true;
 }
