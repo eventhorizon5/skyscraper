@@ -76,6 +76,7 @@ private:
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
 		Submesh* CreateSubMesh(const std::string &material);
+		void DeleteSubMesh(int index = -1);
 		void Prepare(bool process_vertices = true, int client = -1);
 		void EnableDebugView(bool value);
 		bool IsVisible();
@@ -97,6 +98,7 @@ private:
 		{
 			Ogre::SubMesh* object;
 			int clients;
+			std::string material;
 		};
 
 		std::string name;

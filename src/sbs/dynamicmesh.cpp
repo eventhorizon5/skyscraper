@@ -651,7 +651,19 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	if (submesh == -1)
 		return false;
 
+	bool reprepare = false;
+
 	if (Submeshes[submesh].clients > 1)
+		reprepare = true; //re-prepare if breaking out of shared mesh
+	else
+	{
+		int existing = FindMatchingSubMesh(new_texture);
+
+		if (existing > -1)
+			reprepare = true; //re-prepare if integrating into an existing shared mesh
+	}
+
+	if (reprepare == true)
 	{
 		//re-prepare mesh
 		prepared = false;
@@ -695,12 +707,48 @@ DynamicMesh::Mesh::Submesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &
 	submesh.object = MeshWrapper->createSubMesh(node->GetFullName() + ":" + ToString(GetSubMeshCount()));
 	submesh.object->useSharedVertices = true;
 	submesh.clients = 0;
-	Submeshes.push_back(submesh);
 
 	//bind material
 	submesh.object->setMaterialName(ToString(sbs->InstanceNumber) + ":" + material);
+	submesh.material = material;
 
+	Submeshes.push_back(submesh);
 	return &Submeshes[index];
+}
+
+void DynamicMesh::Mesh::DeleteSubMesh(int index)
+{
+	//delete a submesh
+	//if no index is provided, delete any empty submeshes
+
+	if (index == -1)
+	{
+		for (int i = 0; i < (int)Submeshes.size(); i++)
+		{
+			bool used = false;
+
+			for (int j = 0; j < Parent->GetClientCount(); j++)
+			{
+				if (Parent->GetClient(j)->FindMatchingSubMesh(Submeshes[i].material) >= 0)
+				{
+					used = true;
+					break;
+				}
+			}
+
+			if (used == false)
+			{
+				MeshWrapper->destroySubMesh(i);
+				Submeshes.erase(Submeshes.begin() + i);
+				i--;
+			}
+		}
+	}
+	else if (index >= 0 && index < (int)Submeshes.size())
+	{
+		MeshWrapper->destroySubMesh(index);
+		Submeshes.erase(Submeshes.begin() + index);
+	}
 }
 
 void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
@@ -728,8 +776,19 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		if (MeshWrapper->sharedVertexData)
 			delete MeshWrapper->sharedVertexData;
 		MeshWrapper->sharedVertexData = new Ogre::VertexData();
+
+		//delete any existing submeshes
+		for (int i = 0; i < (int)Submeshes.size(); i++)
+		{
+			DeleteSubMesh(i);
+		}
+
 		return;
 	}
+
+	//if removing existing submeshes, use existing submesh count
+	if (submesh_count < (int)Submeshes.size())
+		submesh_count = (int)Submeshes.size();
 
 	int start = 0;
 	int end = Parent->GetClientCount() - 1;
@@ -852,17 +911,26 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	//process index arrays for each submesh
 	for (int index = 0; index < submesh_count; index++)
 	{
-		std::string material = materials[index];
+		std::string material;
+		if (index < (int)materials.size())
+			material = materials[index];
+		else
+			material = "";
+
 		Submesh *submesh;
 		int client_count;
 		unsigned int triangle_count = Parent->GetTriangleCount(material, client_count, client);
 
-		//skip if no triangles found
-		if (triangle_count == 0)
-			continue;
-
 		//get submesh index
 		int match = FindMatchingSubMesh(material);
+
+		//skip if no triangles found
+		if (triangle_count == 0)
+		{
+			//delete submesh if needed
+			DeleteSubMesh();
+			continue;
+		}
 
 		//if a match is not found, create a new submesh
 		if (match == -1)
