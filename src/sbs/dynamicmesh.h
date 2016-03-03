@@ -68,12 +68,14 @@ private:
 	//raw mesh wrapper
 	struct Mesh
 	{
+		struct Submesh;
+
 		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
 		~Mesh();
 		void Enable(bool value);
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
-		Ogre::SubMesh* CreateSubMesh(const std::string &material);
+		Submesh* CreateSubMesh(const std::string &material);
 		void Prepare(int client = -1);
 		void EnableDebugView(bool value);
 		bool IsVisible();
@@ -91,9 +93,15 @@ private:
 			Ogre::Real radius;
 		};
 
+		struct Submesh
+		{
+			Ogre::SubMesh* object;
+			int clients;
+		};
+
 		std::string name;
 		Ogre::MeshPtr MeshWrapper; //mesh
-		std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
+		std::vector<Submesh> Submeshes; //submeshes (per-material mesh)
 		std::vector<ClientEntry> client_entries; //per-client information
 		Ogre::Entity *Movable;
 		SceneNode *node;

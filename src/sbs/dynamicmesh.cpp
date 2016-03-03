@@ -659,26 +659,30 @@ int DynamicMesh::Mesh::FindMatchingSubMesh(const std::string &material)
 
 	for (int i = 0; i < (int)Submeshes.size(); i++)
 	{
-		if (Submeshes[i]->getMaterialName() == full_name)
+		if (Submeshes[i].object->getMaterialName() == full_name)
 			return i;
 	}
 	return -1;
 }
 
-Ogre::SubMesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &material)
+DynamicMesh::Mesh::Submesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &material)
 {
 	if (!node)
 		return 0;
 
+	int index = (int)Submeshes.size();
+
 	//create and add submesh
-	Ogre::SubMesh *submesh = MeshWrapper->createSubMesh(node->GetFullName() + ":" + ToString(GetSubMeshCount()));
-	submesh->useSharedVertices = true;
+	Submesh submesh;
+	submesh.object = MeshWrapper->createSubMesh(node->GetFullName() + ":" + ToString(GetSubMeshCount()));
+	submesh.object->useSharedVertices = true;
+	submesh.clients = 0;
 	Submeshes.push_back(submesh);
 
 	//bind material
-	submesh->setMaterialName(ToString(sbs->InstanceNumber) + ":" + material);
+	submesh.object->setMaterialName(ToString(sbs->InstanceNumber) + ":" + material);
 
-	return submesh;
+	return &Submeshes[index];
 }
 
 void DynamicMesh::Mesh::Prepare(int client)
@@ -828,7 +832,7 @@ void DynamicMesh::Mesh::Prepare(int client)
 	for (int index = 0; index < submesh_count; index++)
 	{
 		std::string material = materials[index];
-		Ogre::SubMesh *submesh = 0;
+		Submesh *submesh;
 		unsigned int triangle_count = Parent->GetTriangleCount(material, client);
 
 		//skip if no triangles found
@@ -842,7 +846,13 @@ void DynamicMesh::Mesh::Prepare(int client)
 		if (match == -1)
 			submesh = CreateSubMesh(material);
 		else
-			submesh = Submeshes[match];
+			submesh = &Submeshes[match];
+
+		if (!submesh)
+			continue;
+
+		//reset submesh's client reference count
+		submesh->clients = 0;
 
 		//set up index data array
 		unsigned int isize = triangle_count * 3;
@@ -877,6 +887,9 @@ void DynamicMesh::Mesh::Prepare(int client)
 						mIndices[loc + 2] = tri.c + offset;
 						loc += 3;
 					}
+
+					//increment submesh's client reference count
+					submesh->clients += 1;
 				}
 			}
 
@@ -915,6 +928,9 @@ void DynamicMesh::Mesh::Prepare(int client)
 						mIndices[loc + 2] = tri.c + offset;
 						loc += 3;
 					}
+
+					//increment submesh's client reference count
+					submesh->clients += 1;
 				}
 			}
 
@@ -927,16 +943,16 @@ void DynamicMesh::Mesh::Prepare(int client)
 		}
 
 		//delete any old index data
-		if (submesh->indexData)
+		if (submesh->object->indexData)
 		{
-			delete submesh->indexData;
-			submesh->indexData = new Ogre::IndexData();
+			delete submesh->object->indexData;
+			submesh->object->indexData = new Ogre::IndexData();
 		}
 
 		//bind index data to submesh
-		submesh->indexData->indexCount = isize;
-		submesh->indexData->indexBuffer = ibuffer;
-		submesh->indexData->indexStart = 0;
+		submesh->object->indexData->indexCount = isize;
+		submesh->object->indexData->indexBuffer = ibuffer;
+		submesh->object->indexData->indexStart = 0;
 	}
 
 	//mark ogre mesh as dirty to update changes
