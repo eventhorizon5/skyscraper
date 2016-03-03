@@ -434,7 +434,7 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 	return total;
 }
 
-unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int client)
+unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &client_count, int client)
 {
 	//calculate combined triangle count for all clients
 
@@ -448,13 +448,17 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int clie
 	}
 
 	unsigned int total = 0;
+	client_count = 0;
 
 	for (int i = start; i <= end; i++)
 	{
 		int index = clients[i]->FindMatchingSubMesh(material);
 
 		if (index >= 0)
+		{
 			total += clients[i]->GetTriangleCount(index);
+			client_count += 1;
+		}
 	}
 
 	return total;
@@ -850,7 +854,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	{
 		std::string material = materials[index];
 		Submesh *submesh;
-		unsigned int triangle_count = Parent->GetTriangleCount(material, client);
+		int client_count;
+		unsigned int triangle_count = Parent->GetTriangleCount(material, client_count, client);
 
 		//skip if no triangles found
 		if (triangle_count == 0)
@@ -866,6 +871,10 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			submesh = &Submeshes[match];
 
 		if (!submesh)
+			continue;
+
+		//skip this submesh, if old and new client counts are the same, and vertices weren't processed
+		if (client_count == submesh->clients && process_vertices == false)
 			continue;
 
 		//reset submesh's client reference count

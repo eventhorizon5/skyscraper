@@ -53,7 +53,7 @@ public:
 	int GetMaterials(std::vector<std::string> &materials, int client = -1);
 	int GetMaterialCount(int client = -1);
 	unsigned int GetVertexCount(const std::string &material = "", int client = -1);
-	unsigned int GetTriangleCount(const std::string &material, int client = -1);
+	unsigned int GetTriangleCount(const std::string &material, int &client_count, int client = -1);
 	unsigned int GetIndexOffset(int submesh, MeshObject *client);
 	bool UseDynamicBuffers() { return dynamic_buffers; }
 	void UpdateVertices(MeshObject *client, const std::string &material = "", unsigned int index = 0, bool single = false);
