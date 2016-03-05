@@ -844,6 +844,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			Ogre::Real radius = 0;
 
 			ClientEntry entry;
+			entry.client = mesh;
 
 			//add current client's vertex index to offset table
 			entry.vertex_offset = vindex;
