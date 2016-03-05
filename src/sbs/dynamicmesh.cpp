@@ -97,17 +97,17 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 		{
 			int index = GetClientIndex(client);
 			if (index >= 0)
-				client_enable[index] = value;
+				clients[index].enable = value;
 
 			//don't disable mesh if another client has it enabled
-			if (value == false && (int)client_enable.size() > 1)
+			if (value == false && (int)clients.size() > 1)
 			{
-				for (int i = 0; i < (int)client_enable.size(); i++)
+				for (int i = 0; i < (int)clients.size(); i++)
 				{
 					if (i == index)
 						continue;
 
-					if (client_enable[i] == true)
+					if (clients[i].enable == true)
 						return;
 				}
 			}
@@ -231,7 +231,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 				if (i == limit)
 					break;
 
-				separate_total += clients[i]->GetSubmeshCount();
+				separate_total += clients[i].obj->GetSubmeshCount();
 			}
 
 			//if combined submesh/material count is less than three separate meshes
@@ -264,7 +264,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 			if (meshes_to_create == 1)
 				mesh = new Mesh(this, GetName(), node, render_distance);
 			else
-				mesh = new Mesh(this, clients[i]->GetName(), clients[i]->GetSceneNode(), render_distance);
+				mesh = new Mesh(this, clients[i].obj->GetName(), clients[i].obj->GetSceneNode(), render_distance);
 
 			meshes.push_back(mesh);
 		}
@@ -296,8 +296,10 @@ void DynamicMesh::AddClient(MeshObject *mesh)
 {
 	//add a client mesh object to this dynamic mesh
 
-	clients.push_back(mesh);
-	client_enable.push_back(true);
+	Client client;
+	client.obj = mesh;
+	client.enable = true;
+	clients.push_back(client);
 }
 
 void DynamicMesh::RemoveClient(MeshObject *mesh)
@@ -306,10 +308,9 @@ void DynamicMesh::RemoveClient(MeshObject *mesh)
 
 	for (int i = 0; i < (int)clients.size(); i++)
 	{
-		if (clients[i] == mesh)
+		if (clients[i].obj == mesh)
 		{
 			clients.erase(clients.begin() + i);
-			client_enable.erase(client_enable.begin() + i);
 			return;
 		}
 	}
@@ -320,7 +321,7 @@ MeshObject* DynamicMesh::GetClient(int number)
 	if (number < 0 || number >= (int)clients.size())
 		return 0;
 
-	return clients[number];
+	return clients[number].obj;
 }
 
 int DynamicMesh::GetClientIndex(MeshObject *client)
@@ -330,7 +331,7 @@ int DynamicMesh::GetClientIndex(MeshObject *client)
 
 	for (int i = 0; i < (int)clients.size(); i++)
 	{
-		if (clients[i] == client)
+		if (clients[i].obj == client)
 			return i;
 	}
 	return -1;
@@ -371,9 +372,9 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 	for (int i = start; i <= end; i++)
 	{
 		//for each client submesh entry
-		for (int j = 0; j < (int)clients[i]->Submeshes.size(); j++)
+		for (int j = 0; j < (int)clients[i].obj->Submeshes.size(); j++)
 		{
-			std::string material = clients[i]->Submeshes[j].Name;
+			std::string material = clients[i].obj->Submeshes[j].Name;
 
 			//find material in current list
 			bool found = false;
@@ -422,13 +423,13 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 	{
 		if (material != "")
 		{
-			int index = clients[i]->FindMatchingSubMesh(material);
+			int index = clients[i].obj->FindMatchingSubMesh(material);
 
 			if (index >= 0)
-				total += clients[i]->GetVertexCount(index);
+				total += clients[i].obj->GetVertexCount(index);
 		}
 		else
-			total += clients[i]->GetVertexCount();
+			total += clients[i].obj->GetVertexCount();
 	}
 
 	return total;
@@ -452,11 +453,11 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 
 	for (int i = start; i <= end; i++)
 	{
-		int index = clients[i]->FindMatchingSubMesh(material);
+		int index = clients[i].obj->FindMatchingSubMesh(material);
 
 		if (index >= 0)
 		{
-			total += clients[i]->GetTriangleCount(index);
+			total += clients[i].obj->GetTriangleCount(index);
 			client_count += 1;
 		}
 	}
@@ -487,11 +488,11 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 	for (int i = 0; i < (int)clients.size(); i++)
 	{
 		//if found, return current index value
-		if (clients[i] == client)
+		if (clients[i].obj == client)
 			return index;
 
 		//if not found, increment by client's vertex count
-		index += clients[i]->GetVertexCount();
+		index += clients[i].obj->GetVertexCount();
 	}
 
 	return index;

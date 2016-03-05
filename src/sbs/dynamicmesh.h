@@ -113,12 +113,19 @@ private:
 		bool prepared;
 	};
 
+	//client mapping
+	struct Client
+	{
+		MeshObject *obj;
+		bool enable;
+		std::vector<Mesh*> meshes;
+	};
+
 	std::vector<Mesh*> meshes;
 	SceneNode *node;
 	float render_distance;
 	bool file_model;
-	std::vector<MeshObject*> clients;
-	std::vector<bool> client_enable;
+	std::vector<Client> clients;
 	bool prepared;
 	bool dynamic_buffers;
 };
