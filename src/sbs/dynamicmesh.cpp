@@ -90,48 +90,61 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 
 void DynamicMesh::Enable(bool value, MeshObject *client)
 {
-	if (client == 0 || meshes.size() == 1)
+	//get client index, if specified
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
+
+	if (client == 0)
 	{
-		//manage client enabled status
-		if (client != 0)
-		{
-			int index = GetClientIndex(client);
-			if (index >= 0)
-				clients[index].enable = value;
-
-			//don't disable mesh if another client has it enabled
-			if (value == false && (int)clients.size() > 1)
-			{
-				for (int i = 0; i < (int)clients.size(); i++)
-				{
-					if (i == index)
-						continue;
-
-					if (clients[i].enable == true)
-						return;
-				}
-			}
-		}
-
 		//enable all meshes if no client specified
 		for (int i = 0; i < (int)meshes.size(); i++)
 			meshes[i]->Enable(value);
 	}
-	else if (meshes.size() > 1)
+	else if (index >= 0)
 	{
-		//enable a per-client mesh if specified
+		//manage client enabled status
+		Client &client = clients[index];
+		client.enable = value;
 
-		int index = GetClientIndex(client);
+		//don't disable meshes if another client has them enabled
+		if (value == false && (int)clients.size() > 1)
+		{
+			for (int i = 0; i < (int)clients.size(); i++)
+			{
+				if (i == index)
+					continue;
 
-		if (index >= 0)
-			meshes[index]->Enable(value);
+				if (clients[i].enable == true)
+				{
+					for (int j = 0; j < (int)clients[i].meshes.size(); j++)
+					{
+						for (int k = 0; k < (int)client.meshes.size(); k++)
+						{
+							if (clients[i].meshes[j] == client.meshes[k])
+								return;
+						}
+					}
+				}
+			}
+		}
+
+		//enable per-client meshes if specified
+		for (int i = 0; i < (int)client.meshes.size(); i++)
+			client.meshes[i]->Enable(value);
 	}
 }
 
 bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client)
 {
-	if (client == 0 || meshes.size() == 1)
+	//get client index, if specified
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
+
+	if (client == 0)
 	{
+		//change texture on all meshes, if no client specified
 		bool result = true;
 		for (int i = 0; i < (int)meshes.size(); i++)
 		{
@@ -141,29 +154,48 @@ bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::strin
 		}
 		return result;
 	}
-	else if (meshes.size() > 1)
+	else if (index >= 0)
 	{
-		int index = GetClientIndex(client);
+		//change texture on client's meshes, if client specified
+		Client &client = clients[index];
 
-		if (index >= 0)
-			return meshes[index]->ChangeTexture(old_texture, new_texture);
+		bool result = true;
+
+		for (int i = 0; i < (int)client.meshes.size(); i++)
+		{
+			bool change = client.meshes[index]->ChangeTexture(old_texture, new_texture);
+			if (change == false)
+				result = false;
+		}
+		return result;
 	}
 	return false;
 }
 
 void DynamicMesh::EnableDebugView(bool value, MeshObject *client)
 {
-	if (client == 0 || meshes.size() == 1)
-	{
-		for (int i = 0; i < (int)meshes.size(); i++)
-			meshes[i]->EnableDebugView(value);
-	}
-	else if (meshes.size() > 1)
-	{
-		int index = GetClientIndex(client);
+	//get client index, if specified
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
 
-		if (index >= 0)
-			meshes[index]->EnableDebugView(value);
+	if (client == 0)
+	{
+		//call on all meshes, if no client specified
+		for (int i = 0; i < (int)meshes.size(); i++)
+		{
+			meshes[i]->EnableDebugView(value);
+		}
+	}
+	else if (index >= 0)
+	{
+		//call on client's meshes, if client specified
+		Client &client = clients[index];
+
+		for (int i = 0; i < (int)client.meshes.size(); i++)
+		{
+			client.meshes[index]->EnableDebugView(value);
+		}
 	}
 }
 
@@ -172,15 +204,26 @@ bool DynamicMesh::IsVisible(MeshObject *client)
 	if (meshes.empty() == true)
 		return false;
 
-	if (client == 0 || meshes.size() == 1)
-		return meshes[0]->IsVisible();
-	else if (meshes.size() > 1)
-	{
-		int index = GetClientIndex(client);
+	//get client index, if specified
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
 
-		if (index >= 0)
-			return meshes[index]->IsVisible();
+	if (client == 0)
+	{
+		return meshes[0]->IsVisible();
 	}
+	else if (index >= 0)
+	{
+		//call on client's meshes, if client specified
+		Client &client = clients[index];
+
+		if (client.meshes.empty() == true)
+			return false;
+
+		return client.meshes[0]->IsVisible();
+	}
+
 	return false;
 }
 
@@ -189,15 +232,23 @@ bool DynamicMesh::IsVisible(Ogre::Camera *camera, MeshObject *client)
 	if (meshes.empty() == true)
 		return false;
 
-	if (client == 0 || meshes.size() == 1)
-		return IsVisible(camera, 0);
-	else if (meshes.size() > 1)
-	{
-		int index = GetClientIndex(client);
+	//get client index, if specified
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
 
-		if (index >= 0)
-			return IsVisible(camera, index);
+	if (client == 0)
+		return meshes[0]->IsVisible(camera);
+	else if (index >= 0)
+	{
+		Client &client = clients[index];
+
+		if (client.meshes.empty() == true)
+			return false;
+
+		return client.meshes[0]->IsVisible(camera);
 	}
+
 	return false;
 }
 
@@ -348,14 +399,19 @@ void DynamicMesh::NeedsUpdate(MeshObject *client)
 	if (prepared == false)
 		return;
 
-	if (client == 0 || meshes.size() == 1)
-		prepared = false;
-	else if (meshes.size() > 1)
-	{
-		int index = GetClientIndex(client);
+	//get client index, if specified
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
 
-		if (index >= 0)
-			meshes[index]->prepared = false;
+	if (client == 0)
+		prepared = false;
+	else if (index >= 0)
+	{
+		Client &client = clients[index];
+
+		for (int i = 0; i < (int)client.meshes.size(); i++)
+			client.meshes[i]->prepared = false;
 	}
 
 	Prepare(client);
