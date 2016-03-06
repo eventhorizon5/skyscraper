@@ -132,8 +132,14 @@ bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::strin
 {
 	if (client == 0 || meshes.size() == 1)
 	{
+		bool result = true;
 		for (int i = 0; i < (int)meshes.size(); i++)
-			return meshes[i]->ChangeTexture(old_texture, new_texture);
+		{
+			bool change = meshes[i]->ChangeTexture(old_texture, new_texture);
+			if (change == false)
+				result = false;
+		}
+		return result;
 	}
 	else if (meshes.size() > 1)
 	{
