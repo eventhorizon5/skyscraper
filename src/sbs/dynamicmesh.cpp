@@ -532,7 +532,14 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 	//get vertex index offset of specific client mesh
 	//if multiple geometry sets are combined together, each set has a starting index number
 
+	if (!client)
+		return 0;
+
+	int client_index = GetClientIndex(client);
 	unsigned int index = 0;
+
+	if (client_index == -1)
+		return 0;
 
 	if (submesh < 0 || submesh >= client->GetSubmeshCount())
 		return 0;
@@ -567,20 +574,34 @@ void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material
 	if (client_index == -1 || meshes.empty())
 		return;
 
-	if (meshes.size() == 1)
+	if (client == 0)
 		meshes[0]->UpdateVertices(client_index, material, index, single);
 	else
-		meshes[client_index]->UpdateVertices(client_index, material, index, single);
+	{
+		Client &client = clients[client_index];
+
+		if (client.meshes.empty() == true)
+			return;
+
+		client.meshes[0]->UpdateVertices(client_index, material, index, single);
+	}
 }
 
 void DynamicMesh::DetachClient(MeshObject *client)
 {
-	if (meshes.size() > 1)
-	{
-		int index = GetClientIndex(client);
+	if (!client)
+		return;
 
-		if (index >= 0)
-			meshes[index]->Detach();
+	int index = GetClientIndex(client);
+
+	if (index >= 0)
+	{
+		Client &client = clients[index];
+
+		for (int i = 0; i < (int)client.meshes.size(); i++)
+		{
+			client.meshes[i]->Detach();
+		}
 	}
 }
 
@@ -611,14 +632,21 @@ Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
 	if (meshes.empty() == true)
 		return Ogre::AxisAlignedBox::BOX_NULL;
 
-	if (client == 0 || meshes.size() == 1)
-		return meshes[0]->MeshWrapper->getBounds();
-	else if (meshes.size() > 1)
-	{
-		int index = GetClientIndex(client);
+	//get client index, if specified
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
 
-		if (index >= 0)
-			return meshes[index]->MeshWrapper->getBounds();
+	if (client == 0)
+		return meshes[0]->MeshWrapper->getBounds();
+	else if (index >= 0)
+	{
+		Client &client = clients[index];
+
+		if (client.meshes.empty() == true)
+			return Ogre::AxisAlignedBox::BOX_NULL;
+
+		return client.meshes[0]->MeshWrapper->getBounds();
 	}
 	return Ogre::AxisAlignedBox::BOX_NULL;
 }
