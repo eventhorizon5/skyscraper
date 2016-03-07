@@ -413,8 +413,10 @@ void DynamicMesh::NeedsUpdate(MeshObject *client)
 		for (int i = 0; i < (int)client.meshes.size(); i++)
 		{
 			client.meshes[i]->prepared = false;
-			prepared = false;
 		}
+
+		if (client.meshes.empty() == false)
+			prepared = false;
 	}
 
 	Prepare(client);
