@@ -343,7 +343,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 		int index = GetClientIndex(client);
 
 		if (index >= 0)
-			return meshes[index]->Prepare(true, index);
+			meshes[index]->Prepare(true, index);
 	}
 
 	prepared = true;
@@ -411,7 +411,10 @@ void DynamicMesh::NeedsUpdate(MeshObject *client)
 		Client &client = clients[index];
 
 		for (int i = 0; i < (int)client.meshes.size(); i++)
+		{
 			client.meshes[i]->prepared = false;
+			prepared = false;
+		}
 	}
 
 	Prepare(client);
