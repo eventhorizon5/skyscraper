@@ -62,6 +62,9 @@ public:
 	int GetSubMeshCount(int mesh_index);
 	std::string GetMeshName(int mesh_index);
 	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
+	void AddToGroup(int number, MeshObject* client);
+	void RemoveFromGroup(int number, MeshObject* client);
+	int IsInGroup(MeshObject* client);
 
 private:
 
@@ -122,11 +125,18 @@ private:
 		std::vector<Mesh*> meshes;
 	};
 
+	//group map
+	struct Group
+	{
+		std::vector<MeshObject*> clients;
+	};
+
 	std::vector<Mesh*> meshes;
 	SceneNode *node;
 	float render_distance;
 	bool file_model;
 	std::vector<Client> clients;
+	std::vector<Group> groups;
 	bool prepared;
 	bool dynamic_buffers;
 };

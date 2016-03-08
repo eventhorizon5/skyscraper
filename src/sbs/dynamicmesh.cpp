@@ -657,6 +657,51 @@ Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
 	return Ogre::AxisAlignedBox::BOX_NULL;
 }
 
+void DynamicMesh::AddToGroup(int number, MeshObject *client)
+{
+	//add a client to the specified group
+
+	if (number < 0)
+		return;
+
+	if (number >= groups.size())
+		groups.resize(number);
+
+	groups[number].clients.push_back(client);
+}
+
+void DynamicMesh::RemoveFromGroup(int number, MeshObject *client)
+{
+	//remove a client from the specified group
+
+	if (number < 0 || number >= (int)groups.size())
+		return;
+
+	for (int i = 0; i < (int)groups[number].clients.size(); i++)
+	{
+		if (groups[number].clients[i] == client)
+		{
+			groups[number].clients.erase(groups[number].clients.begin() + i);
+			break;
+		}
+	}
+}
+
+int DynamicMesh::IsInGroup(MeshObject *client)
+{
+	//return group number the specified client is in
+
+	for (int i = 0; i < (int)groups.size(); i++)
+	{
+		for (int j = 0; j < (int)groups[i].clients.size(); j++)
+		{
+			if (groups[i].clients[j] == client)
+				return i;
+		}
+	}
+	return -1;
+}
+
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
