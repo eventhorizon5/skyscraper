@@ -5703,7 +5703,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
     TextureOverride HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, HotelElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Front, HotelElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
     TextureOverride HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right, HotelElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
@@ -5716,25 +5716,32 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 7, 7, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.75, -3.125, 1.75, -3.125, 7, 7, 0, 0, 0, 0 #right panel
+    DrawWalls = true, true, false, false, false, true
+    SetPlanarMapping false, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Top Panel, ElevPanelMain, 0.2, -3.75, -3.125, 0, -3.125, 1, 1, 7, 7, 0, 0 #top wall
+    ResetTextureMapping = false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Top Panel, ElevPanelMain, 0.2, 0, -3.125, 3.75, -3.125, 1, 1, 7, 7, 0, 0 #top wall
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.126, 3.5, 7, true, 0, 0 #doors
     AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
     #floor signs
-    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, -3.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
-    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, -3.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, -3.426 - 0.2 - 0.33, 0.5, 0.42, 4.8
+    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, -3.426 - 0.2 - 0.33, 0.5, 0.42, 4.8
 
     #panel
-    CreatePanel ElevPanel, 14, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 14, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 3.5, 0, 0
     AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
     AddFloorButton 1, Button97, ButtonLit97, 4, 2, 97, 1, 1
@@ -5763,7 +5770,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton 1, ButtonAlarm, 13, 4, alarm, 1, 1
 
     #Floor Indicator
-    AddFloorIndicator back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6
 
 <EndElevators>
 
@@ -5813,6 +5820,7 @@ DrawWalls = true, true, false, false, false, false
 
     #front and left walls
     WallOrientation = left
+    DrawWalls = true, true, false, false, false, false
     TextureOverride ElevExt, HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Front, HotelElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
     TextureOverride ElevExt, HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt
@@ -5822,24 +5830,31 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 7, 7, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 7, 7, 0, 0, 0, 0 #right panel
+    DrawWalls = true, true, false, false, false, true
+    SetPlanarMapping false, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Top Panel, ElevPanelMain, 0.2, 3.75, 3.125, 0, 3.125, 1, 1, 7, 7, 0, 0 #top wall
+    ResetTextureMapping = false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Top Panel, ElevPanelMain, 0.2, -3.75, 3.125, 0, 3.125, 1, 1, 7, 7, 0, 0 #top wall
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 7, true, 0, 0 #doors
     AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
-    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
-    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 4.8
+    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 4.8
 
     #panel
-    CreatePanel ElevPanel, 14, 5, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 14, 5, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 3.5, 0, 0
     AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
     AddFloorButton 1, Button97, ButtonLit97, 4, 2, 97, 1, 1
@@ -5868,7 +5883,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton 1, ButtonAlarm, 13, 4, alarm, 1, 1
 
     #Floor Indicator
-    AddFloorIndicator front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6
 
 <EndElevators>
 
@@ -7139,10 +7154,10 @@ DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
 <Floors 80 to 99>
-    AddDirectionalIndicator 54, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 2.5, -3.426 - 0.2 - 0.66 - 0.02, 6.5, front, 0.5, 1, true, 0, 0
-    AddDirectionalIndicator 55, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.5, -3.426 - 0.2 - 0.66 - 0.02, 6.5, front, 0.5, 1, true, 0, 0
-    AddDirectionalIndicator 56, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 2.5, 3.426 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
-    AddDirectionalIndicator 57, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.5, 3.426 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 54, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 2.5, -3.426 - 0.2 - 0.66 - 0.02, 5.5, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 55, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.5, -3.426 - 0.2 - 0.66 - 0.02, 5.5, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 56, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 2.5, 3.426 + 0.2 + 0.66 + 0.02, 5.5, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 57, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.5, 3.426 + 0.2 + 0.66 + 0.02, 5.5, back, 0.5, 1, true, 0, 0
 
     AddDirectionalIndicator 69, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.5, 4.051 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
     AddDirectionalIndicator 70, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 2.5, 4.051 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
@@ -7364,15 +7379,15 @@ AddAction FireServiceOff54, Elevator54, Fire1Off
 AddAction FireServiceBypass54, Elevator54, Fire1Bypass
 <Floor 80>
     CallButtonElevators = 54, 55, 56, 57
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -36.25 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
-    AddActionControl FireSwitch54, switch.wav, front, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 0.25, 0.25, 3.5, FireServiceOff54, FireServiceBypass54, FireServiceOn54, Fire1Off, Fire1Bypass, Fire1On
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 3, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -36.25 + 4.25 + 0.33 + 0.01, 3, back, 0.5, 1, true, 0, 0
+    AddActionControl FireSwitch54, switch.wav, front, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 0.2, 0.2, 2.5, FireServiceOff54, FireServiceBypass54, FireServiceOn54, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
 <Floors 82 to 99>
     CallButtonElevators = 54, 55, 56, 57
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -36.25 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 3, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -36.25 + 4.25 + 0.33 + 0.01, 3, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Residential Locals
@@ -8647,8 +8662,8 @@ ShowFullStairs 5 = true
     if[%floor% > 98] AddWall StairsBackE, %5%, 0.33, -5.67 + 0, 8.5 + -13.5, 5.67 + 0, 8.5 + -13.5, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
-    if[%floor% = 79] AddStairsDoor 5, StairsDoor, 0.2, 4, 5.67, 6, 3.5, 8, 0, 1, 1
-    if[%floor% > 79] AddStairsDoor 5, StairsDoor, 0.2, 8, 2, -8.5, 3.5, 8, 0, 1, 1
+    if[%floor% = 79] AddStairsDoor 5, StairsDoor, 0.2, 4, 5.67, 6, 3, 7, 0, 1, 1
+    if[%floor% > 79] AddStairsDoor 5, StairsDoor, 0.2, 8, 2, -8.5, 3, 7, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
