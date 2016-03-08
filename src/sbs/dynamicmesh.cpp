@@ -101,7 +101,7 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 		for (int i = 0; i < (int)meshes.size(); i++)
 			meshes[i]->Enable(value);
 	}
-	else if (index >= 0)
+	else if (index >= 0) //if client index is valid
 	{
 		//manage client enabled status
 		Client &client = clients[index];
@@ -112,13 +112,16 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 		{
 			for (int i = 0; i < (int)clients.size(); i++)
 			{
+				//skip "this" client
 				if (i == index)
 					continue;
 
 				if (clients[i].enable == true)
 				{
+					//check each of other client's meshes
 					for (int j = 0; j < (int)clients[i].meshes.size(); j++)
 					{
+						//compare with each of "this" client's meshes
 						for (int k = 0; k < (int)client.meshes.size(); k++)
 						{
 							if (clients[i].meshes[j] == client.meshes[k])
@@ -154,7 +157,7 @@ bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::strin
 		}
 		return result;
 	}
-	else if (index >= 0)
+	else if (index >= 0) //if client index is valid
 	{
 		//change texture on client's meshes, if client specified
 		Client &client = clients[index];
@@ -163,7 +166,7 @@ bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::strin
 
 		for (int i = 0; i < (int)client.meshes.size(); i++)
 		{
-			bool change = client.meshes[index]->ChangeTexture(old_texture, new_texture);
+			bool change = client.meshes[i]->ChangeTexture(old_texture, new_texture);
 			if (change == false)
 				result = false;
 		}
@@ -187,14 +190,14 @@ void DynamicMesh::EnableDebugView(bool value, MeshObject *client)
 			meshes[i]->EnableDebugView(value);
 		}
 	}
-	else if (index >= 0)
+	else if (index >= 0) //if client index is valid
 	{
 		//call on client's meshes, if client specified
 		Client &client = clients[index];
 
 		for (int i = 0; i < (int)client.meshes.size(); i++)
 		{
-			client.meshes[index]->EnableDebugView(value);
+			client.meshes[i]->EnableDebugView(value);
 		}
 	}
 }
@@ -210,10 +213,8 @@ bool DynamicMesh::IsVisible(MeshObject *client)
 		index = GetClientIndex(client);
 
 	if (client == 0)
-	{
 		return meshes[0]->IsVisible();
-	}
-	else if (index >= 0)
+	else if (index >= 0) //if client index is valid
 	{
 		//call on client's meshes, if client specified
 		Client &client = clients[index];
@@ -239,7 +240,7 @@ bool DynamicMesh::IsVisible(Ogre::Camera *camera, MeshObject *client)
 
 	if (client == 0)
 		return meshes[0]->IsVisible(camera);
-	else if (index >= 0)
+	else if (index >= 0) //if client index is valid
 	{
 		Client &client = clients[index];
 
@@ -406,7 +407,7 @@ void DynamicMesh::NeedsUpdate(MeshObject *client)
 
 	if (client == 0)
 		prepared = false;
-	else if (index >= 0)
+	else if (index >= 0) //if client index is valid
 	{
 		Client &client = clients[index];
 
@@ -644,7 +645,7 @@ Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
 
 	if (client == 0)
 		return meshes[0]->MeshWrapper->getBounds();
-	else if (index >= 0)
+	else if (index >= 0) //if client index is valid
 	{
 		Client &client = clients[index];
 
