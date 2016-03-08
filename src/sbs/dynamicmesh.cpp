@@ -353,9 +353,9 @@ void DynamicMesh::Prepare(MeshObject *client)
 				Mesh *mesh = 0;
 
 				if (meshes_to_create == 1)
-					mesh = new Mesh(this, GetName(), node, render_distance);
+					mesh = new Mesh(this, i, GetName(), node, render_distance);
 				else
-					mesh = new Mesh(this, clients[j].obj->GetName(), clients[j].obj->GetSceneNode(), render_distance);
+					mesh = new Mesh(this, i, clients[j].obj->GetName(), clients[j].obj->GetSceneNode(), render_distance);
 
 				meshes.push_back(mesh);
 			}
@@ -419,6 +419,14 @@ MeshObject* DynamicMesh::GetClient(int number)
 		return 0;
 
 	return clients[number].obj;
+}
+
+int DynamicMesh::GetClientGroup(int number)
+{
+	if (number < 0 || number >= (int)clients.size())
+		return 0;
+
+	return clients[number].group;
 }
 
 int DynamicMesh::GetClientIndex(MeshObject *client)
@@ -769,7 +777,7 @@ void DynamicMesh::SetGroupForceCombine(int number, bool value)
 	groups[number].force_combine = value;
 }
 
-DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
+DynamicMesh::Mesh::Mesh(DynamicMesh *parent, int group, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
 	sbs = Parent->GetRoot();
@@ -777,6 +785,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	enabled = false;
 	prepared = false;
 	Movable = 0;
+	this->group = group;
 
 	if (filename == "")
 	{
@@ -938,6 +947,9 @@ void DynamicMesh::Mesh::DeleteSubMesh(int index)
 
 			for (int j = 0; j < Parent->GetClientCount(); j++)
 			{
+				if (Parent->GetClientGroup(j) != group)
+					continue;
+
 				if (Parent->GetClient(j)->FindMatchingSubMesh(Submeshes[i].material) >= 0)
 				{
 					used = true;
@@ -974,10 +986,10 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	if (prepared == true || !node)
 		return;
 
-	unsigned int vertex_count = Parent->GetVertexCount("", -1, client);
+	unsigned int vertex_count = Parent->GetVertexCount("", group, client);
 
 	std::vector<std::string> materials;
-	int submesh_count = Parent->GetMaterials(materials, -1, client);
+	int submesh_count = Parent->GetMaterials(materials, group, client);
 
 	//clear vertex data and exit if there's no associated submesh or geometry data
 	if (submesh_count == 0 || vertex_count == 0)
@@ -1047,6 +1059,9 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 		for (int num = start; num <= end; num++)
 		{
+			if (Parent->GetClientGroup(num) != group)
+				continue;
+
 			MeshObject *mesh = Parent->GetClient(num);
 			Ogre::AxisAlignedBox client_box;
 			Ogre::Real radius = 0;
@@ -1129,7 +1144,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 		Submesh *submesh;
 		int client_count;
-		unsigned int triangle_count = Parent->GetTriangleCount(material, client_count, -1, client);
+		unsigned int triangle_count = Parent->GetTriangleCount(material, client_count, group, client);
 
 		//get submesh index
 		int match = FindMatchingSubMesh(material);
@@ -1174,6 +1189,9 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			//for each client, get triangles for a matching client submesh
 			for (int num = start; num <= end; num++)
 			{
+				if (Parent->GetClientGroup(num) != group)
+					continue;
+
 				MeshObject *mesh = Parent->GetClient(num);
 				int index = mesh->FindMatchingSubMesh(material);
 
@@ -1215,6 +1233,9 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			//for each client, get triangles for a matching client submesh
 			for (int num = start; num <= end; num++)
 			{
+				if (Parent->GetClientGroup(num) != group)
+					continue;
+
 				MeshObject *mesh = Parent->GetClient(num);
 				int index = mesh->FindMatchingSubMesh(material);
 
@@ -1485,28 +1506,17 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 	if (client_entries.empty() == true)
 		return;
 
-	if (Parent->GetMeshCount() == 1)
+	Ogre::AxisAlignedBox box;
+	Ogre::Real radius = 0;
+
+	for (int i = 0; i < (int)client_entries.size(); i++)
 	{
-		Ogre::AxisAlignedBox box;
-		Ogre::Real radius = 0;
-
-		if (Parent->GetClientCount() != (int)client_entries.size())
-			return;
-
-		for (int i = 0; i < Parent->GetClientCount(); i++)
-		{
-			box.merge(*client_entries[i].bounds);
-			radius = std::max(radius, client_entries[i].radius);
-		}
-
-		MeshWrapper->_setBounds(box);
-		MeshWrapper->_setBoundingSphereRadius(radius);
+		box.merge(*client_entries[i].bounds);
+		radius = std::max(radius, client_entries[i].radius);
 	}
-	else if (Parent->GetMeshCount() > 1)
-	{
-		MeshWrapper->_setBounds(*client_entries[0].bounds);
-		MeshWrapper->_setBoundingSphereRadius(client_entries[0].radius);
-	}
+
+	MeshWrapper->_setBounds(box);
+	MeshWrapper->_setBoundingSphereRadius(radius);
 }
 
 }

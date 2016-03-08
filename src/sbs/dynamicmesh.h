@@ -47,6 +47,7 @@ public:
 	void AddClient(MeshObject *mesh);
 	void RemoveClient(MeshObject *mesh);
 	MeshObject* GetClient(int number);
+	int GetClientGroup(int number);
 	int GetClientIndex(MeshObject *client);
 	int GetClientCount() { return (int)clients.size(); }
 	void NeedsUpdate(MeshObject *client = 0);
@@ -74,7 +75,7 @@ private:
 	{
 		struct Submesh;
 
-		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
+		Mesh(DynamicMesh *parent, int group, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
 		~Mesh();
 		void Enable(bool value);
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
@@ -110,6 +111,7 @@ private:
 		Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Submesh> Submeshes; //submeshes (per-material mesh)
 		std::vector<ClientEntry> client_entries; //per-client information
+		int group; //associated group
 		Ogre::Entity *Movable;
 		SceneNode *node;
 		DynamicMesh *Parent;
