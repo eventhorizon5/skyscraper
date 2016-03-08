@@ -272,79 +272,112 @@ void DynamicMesh::Prepare(MeshObject *client)
 	if (clients.empty() == true)
 		return;
 
-	//determine if meshes should be combined or separated
+	//get client index, if specified
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
+
+	//determine if meshes should be combined or separated, in each group
 	if (meshes.empty() == true)
 	{
-		int meshes_to_create = 0;
-
-		if (clients.size() > 1)
+		for (int i = -1; i < (int)groups.size(); i++)
 		{
-			int total = GetMaterialCount();
-			int separate_total = 0;
+			//build or get clients table;
+			std::vector<Client*> group_clients;
 
-			int limit = 3; //compare against 3 client meshes totaled together
+			bool force = false;
 
-			for (int i = 0; i < (int)clients.size(); i++)
+			if (i == -1)
 			{
-				if (i == limit)
-					break;
+				//get all clients that are not in a group
+				for (int j = 0; j < (int)clients.size(); j++)
+				{
+					if (clients[j].group == -1)
+						group_clients.push_back(&clients[j]);
+				}
 
-				separate_total += clients[i].obj->GetSubmeshCount();
+				force = force_combine;
 			}
-
-			//if combined submesh/material count is less than three separate meshes
-			if (total < separate_total || total <= 10 || force_combine == true)
-				meshes_to_create = 1; //create a single combined mesh for all clients
 			else
 			{
-				meshes_to_create = (int)clients.size(); //create separate meshes for each client
-				dynamic_buffers = false; //don't use dynamic buffers if keeping separate
+				//get a group's clients
+				group_clients = groups[i].clients;
+				force = groups[i].force_combine;
 			}
 
-			std::string status;
-			if (meshes_to_create == 1)
-				status = "using combined";
+			int meshes_to_create = 0;
+
+			if (group_clients.size() > 1)
+			{
+				int total = GetMaterialCount(i);
+				int separate_total = 0;
+
+				int limit = 3; //compare against 3 client meshes totaled together
+
+				for (int i = 0; i < (int)group_clients.size(); i++)
+				{
+					if (i == limit)
+						break;
+
+					separate_total += group_clients[i]->obj->GetSubmeshCount();
+				}
+
+				//if combined submesh/material count is less than three separate meshes
+				if (total < separate_total || total <= 10 || force == true)
+					meshes_to_create = 1; //create a single combined mesh for all clients
+				else
+				{
+					meshes_to_create = (int)group_clients.size(); //create separate meshes for each client
+					dynamic_buffers = false; //don't use dynamic buffers if keeping separate
+				}
+
+				std::string status;
+				if (meshes_to_create == 1)
+					status = "using combined";
+				else
+					status = "using separate";
+
+				if (i >= 0)
+					status += " for group " + ToString(i);
+
+				//print optimization report
+				//if (sbs->Verbose)
+					sbs->Report(this->GetName() + ": Combined: " + ToString(total) + "  - Separate (3): " + ToString(separate_total) + " - " + status);
+			}
 			else
-				status = "using separate";
+				meshes_to_create = 1;
 
-			//print optimization report
-			//if (sbs->Verbose)
-				sbs->Report(this->GetName() + ": Combined: " + ToString(total) + "  - Separate (3): " + ToString(separate_total) + " - " + status);
-		}
-		else
-			meshes_to_create = 1;
+			//create mesh objects
+			for (int j = 0; j < meshes_to_create; j++)
+			{
+				Mesh *mesh = 0;
 
-		//create mesh objects
-		for (int i = 0; i < meshes_to_create; i++)
-		{
-			Mesh *mesh = 0;
+				if (meshes_to_create == 1)
+					mesh = new Mesh(this, GetName(), node, render_distance);
+				else
+					mesh = new Mesh(this, clients[j].obj->GetName(), clients[j].obj->GetSceneNode(), render_distance);
 
-			if (meshes_to_create == 1)
-				mesh = new Mesh(this, GetName(), node, render_distance);
-			else
-				mesh = new Mesh(this, clients[i].obj->GetName(), clients[i].obj->GetSceneNode(), render_distance);
-
-			meshes.push_back(mesh);
+				meshes.push_back(mesh);
+			}
 		}
 	}
 
-	if (client == 0 || meshes.size() == 1)
+	if (client == 0)
 	{
+		//process all meshes if no client specified
 		for (int i = 0; i < (int)meshes.size(); i++)
 		{
 			meshes[i]->prepared = false;
-			if (meshes.size() > 1)
-				meshes[i]->Prepare(true, i);
-			else
-				meshes[i]->Prepare();
+			meshes[i]->Prepare();
 		}
 	}
-	else if (meshes.size() > 1)
+	else if (index >= 0) //if client index is valid
 	{
-		int index = GetClientIndex(client);
-
-		if (index >= 0)
-			meshes[index]->Prepare(true, index);
+		//process a specific client's associated meshes
+		for (int i = 0; i < (int)clients[index].meshes.size(); i++)
+		{
+			clients[index].meshes[i]->Prepare(true, index);
+		}
 	}
 
 	prepared = true;
@@ -357,6 +390,7 @@ void DynamicMesh::AddClient(MeshObject *mesh)
 	Client client;
 	client.obj = mesh;
 	client.enable = true;
+	client.group = -1;
 	clients.push_back(client);
 }
 
@@ -423,9 +457,9 @@ void DynamicMesh::NeedsUpdate(MeshObject *client)
 	Prepare(client);
 }
 
-int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
+int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int group, int client)
 {
-	//calculate the total number of materials used by all clients
+	//calculate the total number of materials used by all/grouped clients or a specific client
 
 	int start = 0;
 	int end = (int)clients.size() - 1;
@@ -439,6 +473,10 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 	//for each client
 	for (int i = start; i <= end; i++)
 	{
+		//match group if specified
+		if (clients[i].group != group)
+			continue;
+
 		//for each client submesh entry
 		for (int j = 0; j < (int)clients[i].obj->Submeshes.size(); j++)
 		{
@@ -463,18 +501,17 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 	return (int)materials.size();
 }
 
-int DynamicMesh::GetMaterialCount(int client)
+int DynamicMesh::GetMaterialCount(int group, int client)
 {
-	//calculate the number of materials needed for all clients or a specific client
+	//calculate the number of materials needed for all/grouped clients or a specific client
 
 	std::vector<std::string> materials;
-	int total = GetMaterials(materials, client);
-	return total;
+	return GetMaterials(materials, group, client);
 }
 
-unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client)
+unsigned int DynamicMesh::GetVertexCount(const std::string &material, int group, int client)
 {
-	//calculate combined vertex count for all clients
+	//calculate combined vertex count for all/grouped clients or a specific client
 
 	int start = 0;
 	int end = (int)clients.size() - 1;
@@ -489,6 +526,10 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 
 	for (int i = start; i <= end; i++)
 	{
+		//match group if specified
+		if (clients[i].group != group)
+			continue;
+
 		if (material != "")
 		{
 			int index = clients[i].obj->FindMatchingSubMesh(material);
@@ -503,9 +544,9 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 	return total;
 }
 
-unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &client_count, int client)
+unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &client_count, int group, int client)
 {
-	//calculate combined triangle count for all clients
+	//calculate combined triangle count for all/grouped clients or a specific client
 
 	int start = 0;
 	int end = (int)clients.size() - 1;
@@ -521,6 +562,10 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 
 	for (int i = start; i <= end; i++)
 	{
+		//match group if specified
+		if (clients[i].group != group)
+			continue;
+
 		int index = clients[i].obj->FindMatchingSubMesh(material);
 
 		if (index >= 0)
@@ -556,12 +601,14 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 		index += client->GetVertexCount(i);
 	}
 
-	//return value if using separate meshes
-	if (meshes.size() > 1)
-		return index;
+	int group = clients[client_index].group;
 
 	for (int i = 0; i < (int)clients.size(); i++)
 	{
+		//match group
+		if (clients[i].group != group)
+			continue;
+
 		//if found, return current index value
 		if (clients[i].obj == client)
 			return index;
@@ -664,10 +711,21 @@ void DynamicMesh::AddToGroup(int number, MeshObject *client)
 	if (number < 0)
 		return;
 
-	if (number >= groups.size())
-		groups.resize(number);
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
 
-	groups[number].clients.push_back(client);
+	if (index == -1)
+		return;
+
+	if (number >= groups.size())
+	{
+		groups.resize(number + 1);
+		groups[number].force_combine = false;
+	}
+
+	clients[index].group = number;
+	groups[number].clients.push_back(&clients[index]);
 }
 
 void DynamicMesh::RemoveFromGroup(int number, MeshObject *client)
@@ -679,7 +737,7 @@ void DynamicMesh::RemoveFromGroup(int number, MeshObject *client)
 
 	for (int i = 0; i < (int)groups[number].clients.size(); i++)
 	{
-		if (groups[number].clients[i] == client)
+		if (groups[number].clients[i]->obj == client)
 		{
 			groups[number].clients.erase(groups[number].clients.begin() + i);
 			break;
@@ -691,15 +749,19 @@ int DynamicMesh::IsInGroup(MeshObject *client)
 {
 	//return group number the specified client is in
 
-	for (int i = 0; i < (int)groups.size(); i++)
-	{
-		for (int j = 0; j < (int)groups[i].clients.size(); j++)
-		{
-			if (groups[i].clients[j] == client)
-				return i;
-		}
-	}
-	return -1;
+	int index = -1;
+	if (client != 0)
+		index = GetClientIndex(client);
+
+	return clients[index].group;
+}
+
+void DynamicMesh::SetGroupForceCombine(int number, bool value)
+{
+	if (number < 0 || number >= (int)groups.size())
+		return;
+
+	groups[number].force_combine = value;
 }
 
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
@@ -907,10 +969,10 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	if (prepared == true || !node)
 		return;
 
-	unsigned int vertex_count = Parent->GetVertexCount("", client);
+	unsigned int vertex_count = Parent->GetVertexCount("", -1, client);
 
 	std::vector<std::string> materials;
-	int submesh_count = Parent->GetMaterials(materials, client);
+	int submesh_count = Parent->GetMaterials(materials, -1, client);
 
 	//clear vertex data and exit if there's no associated submesh or geometry data
 	if (submesh_count == 0 || vertex_count == 0)
@@ -1062,7 +1124,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 		Submesh *submesh;
 		int client_count;
-		unsigned int triangle_count = Parent->GetTriangleCount(material, client_count, client);
+		unsigned int triangle_count = Parent->GetTriangleCount(material, client_count, -1, client);
 
 		//get submesh index
 		int match = FindMatchingSubMesh(material);

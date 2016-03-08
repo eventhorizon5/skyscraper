@@ -50,10 +50,10 @@ public:
 	int GetClientIndex(MeshObject *client);
 	int GetClientCount() { return (int)clients.size(); }
 	void NeedsUpdate(MeshObject *client = 0);
-	int GetMaterials(std::vector<std::string> &materials, int client = -1);
-	int GetMaterialCount(int client = -1);
-	unsigned int GetVertexCount(const std::string &material = "", int client = -1);
-	unsigned int GetTriangleCount(const std::string &material, int &client_count, int client = -1);
+	int GetMaterials(std::vector<std::string> &materials, int group = -1, int client = -1);
+	int GetMaterialCount(int group = -1, int client = -1);
+	unsigned int GetVertexCount(const std::string &material = "", int group = -1, int client = -1);
+	unsigned int GetTriangleCount(const std::string &material, int &client_count, int group = -1, int client = -1);
 	unsigned int GetIndexOffset(int submesh, MeshObject *client);
 	bool UseDynamicBuffers() { return dynamic_buffers; }
 	void UpdateVertices(MeshObject *client, const std::string &material = "", unsigned int index = 0, bool single = false);
@@ -65,6 +65,7 @@ public:
 	void AddToGroup(int number, MeshObject* client);
 	void RemoveFromGroup(int number, MeshObject* client);
 	int IsInGroup(MeshObject* client);
+	void SetGroupForceCombine(int number, bool value);
 
 private:
 
@@ -123,12 +124,14 @@ private:
 		MeshObject *obj;
 		bool enable;
 		std::vector<Mesh*> meshes;
+		int group;
 	};
 
 	//group map
 	struct Group
 	{
-		std::vector<MeshObject*> clients;
+		std::vector<Client*> clients;
+		bool force_combine;
 	};
 
 	std::vector<Mesh*> meshes;
