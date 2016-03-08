@@ -314,12 +314,12 @@ void DynamicMesh::Prepare(MeshObject *client)
 
 				int limit = 3; //compare against 3 client meshes totaled together
 
-				for (int i = 0; i < (int)group_clients.size(); i++)
+				for (int j = 0; j < (int)group_clients.size(); j++)
 				{
-					if (i == limit)
+					if (j == limit)
 						break;
 
-					separate_total += group_clients[i]->obj->GetSubmeshCount();
+					separate_total += group_clients[j]->obj->GetSubmeshCount();
 				}
 
 				//if combined submesh/material count is less than three separate meshes
@@ -406,6 +406,11 @@ void DynamicMesh::RemoveClient(MeshObject *mesh)
 			return;
 		}
 	}
+
+	//remove from group
+	int group = IsInGroup(mesh);
+	if (group > -1)
+		RemoveFromGroup(group, mesh);
 }
 
 MeshObject* DynamicMesh::GetClient(int number)
