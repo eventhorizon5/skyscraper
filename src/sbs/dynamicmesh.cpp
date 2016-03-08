@@ -74,7 +74,7 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	if (meshes.empty() == false)
 		return false;
 
-	Mesh* mesh = new Mesh(this, "", node, render_distance, filename, path);
+	Mesh* mesh = new Mesh(this, -1, "", node, render_distance, filename, path);
 
 	//if load failed
 	if (mesh->MeshWrapper.isNull())
