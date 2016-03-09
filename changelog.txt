@@ -1,5 +1,11 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-(Triton Center) added LevelingOpen parameter to elevators
+-(Triton Center) use standard height measurements for doors and elevators, currently on hotel levels
+-fixed an issue where the dynamic mesh's Prepare flag wasn't being handled properly
+-(dynamic meshes) added support for automatically re-preparing meshes when changing textures, if multiple clients are referencing a specific submesh, to fix an issue where changing a texture would affect multiple client meshes
+-active elevator status should be reset if active elevator becomes unavailable
+-IsLeveled function needs to do a fuzzy check for the elevator's position, to overcome very slight differences with floor altitudes
 -manually-created textures need to be removed on engine shutdown
 -(Triton Center) fixed top of East Stairwell (on 141-142)
 -manual texture creation calls should check for exceptions
