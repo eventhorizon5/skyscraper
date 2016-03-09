@@ -1211,25 +1211,49 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 
 		int elements_size = (int)triangles.size() * 3;
 		unsigned int *elements = new unsigned int[elements_size];
+		bool *valid = new bool[elements_size];
 
 		int elements_pos = 0;
 		for (int i = 0; i < (int)triangles.size(); i++)
 		{
+			//copy triangle data
 			elements[elements_pos] = triangles[i].a;
-			elements_pos++;
-			elements[elements_pos] = triangles[i].b;
-			elements_pos++;
-			elements[elements_pos] = triangles[i].c;
-			elements_pos++;
+			elements[elements_pos + 1] = triangles[i].b;
+			elements[elements_pos + 2] = triangles[i].c;
+
+			//set validity flags
+			valid[elements_pos] = true;
+			valid[elements_pos + 1] = true;
+			valid[elements_pos + 2] = true;
+
+			elements_pos += 3;
 
 			for (int j = deleted_size - 1; j >= 0; j--)
 			{
 				if (elements[elements_pos - 3] >= deleted[j])
-					elements[elements_pos - 3]--;
+				{
+					//invalidate value if going off the end of the array
+					if (elements[elements_pos - 3] == 0)
+						valid[elements_pos - 3] = false;
+					else
+						elements[elements_pos - 3]--; //adjust triangle index for deleted value
+				}
 				if (elements[elements_pos - 2] >= deleted[j])
-					elements[elements_pos - 2]--;
+				{
+					//invalidate value if going off the end of the array
+					if (elements[elements_pos - 2] == 0)
+						valid[elements_pos - 2] = false;
+					else
+						elements[elements_pos - 2]--; //adjust triangle index for deleted value
+				}
 				if (elements[elements_pos - 1] >= deleted[j])
-					elements[elements_pos - 1]--;
+				{
+					//invalidate value if going off the end of the array
+					if (elements[elements_pos - 1] == 0)
+						valid[elements_pos - 1] = false;
+					else
+						elements[elements_pos - 1]--; //adjust triangle index for deleted value
+				}
 			}
 		}
 
@@ -1242,11 +1266,12 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 		for (int i = 0; i < size; i++)
 		{
 			//check if triangle indices are valid
-			if (elements[element] >= 0 || elements[element + 1] >= 0 || elements[element + 2] >= 0)
+			if (valid[element] == true && valid[element + 1] == true && valid[element + 2] == true)
 				triangles.push_back(Triangle(elements[element], elements[element + 1], elements[element + 2]));
 			element += 3;
 		}
 		delete [] elements;
+		delete [] valid;
 	}
 
 	//reindex triangle indices in all wall objects
@@ -1266,25 +1291,49 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 
 			int elements_size = (int)poly->triangles.size() * 3;
 			unsigned int *elements = new unsigned int[elements_size];
+			bool *valid = new bool[elements_size];
 
 			int elements_pos = 0;
 			for (int k = 0; k < (int)poly->triangles.size(); k++)
 			{
+				//copy triangle data
 				elements[elements_pos] = poly->triangles[k].a;
-				elements_pos++;
-				elements[elements_pos] = poly->triangles[k].b;
-				elements_pos++;
-				elements[elements_pos] = poly->triangles[k].c;
-				elements_pos++;
+				elements[elements_pos + 1] = poly->triangles[k].b;
+				elements[elements_pos + 2] = poly->triangles[k].c;
+
+				//set validity flags
+				valid[elements_pos] = true;
+				valid[elements_pos + 1] = true;
+				valid[elements_pos + 2] = true;
+
+				elements_pos += 3;
 
 				for (int j = deleted_size - 1; j >= 0; j--)
 				{
 					if (elements[elements_pos - 3] >= deleted[j])
-						elements[elements_pos - 3]--;
+					{
+						//invalidate value if going off the end of the array
+						if (elements[elements_pos - 3] == 0)
+							valid[elements_pos - 3] = false;
+						else
+							elements[elements_pos - 3]--; //adjust triangle index for deleted value
+					}
 					if (elements[elements_pos - 2] >= deleted[j])
-						elements[elements_pos - 2]--;
+					{
+						//invalidate value if going off the end of the array
+						if (elements[elements_pos - 2] == 0)
+							valid[elements_pos - 2] = false;
+						else
+							elements[elements_pos - 2]--; //adjust triangle index for deleted value
+					}
 					if (elements[elements_pos - 1] >= deleted[j])
-						elements[elements_pos - 1]--;
+					{
+						//invalidate value if going off the end of the array
+						if (elements[elements_pos - 1] == 0)
+							valid[elements_pos - 1] = false;
+						else
+							elements[elements_pos - 1]--; //adjust triangle index for deleted value
+					}
 				}
 			}
 
@@ -1297,7 +1346,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 			for (int ii = 0; ii < size; ii++)
 			{
 				//check if triangle indices are valid
-				if (elements[element] >= 0 || elements[element + 1] >= 0 || elements[element + 2] >= 0)
+				if (valid[element] == true && valid[element + 1] == true && valid[element + 2] == true)
 					poly->triangles.push_back(Triangle(elements[element], elements[element + 1], elements[element + 2]));
 				element += 3;
 			}
@@ -1317,6 +1366,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 				}
 			}
 			delete [] elements;
+			delete [] valid;
 		}
 	}
 	prepared = false; //need to re-prepare mesh
