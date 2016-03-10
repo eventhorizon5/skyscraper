@@ -1525,7 +1525,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//exit if doors are not fully closed while interlocks enabled
-		if (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false || DoorsStopped() == true))
+		if (CheckInterlocks() == false)
 		{
 			ReportError("Doors must be closed before moving when interlocks are enabled");
 			MoveElevator = false;
@@ -5187,79 +5187,89 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 				//and if it's not in any service mode
 				if (InServiceMode() == false)
 				{
-					//and if no queue changes are pending, unless doors are open on the same floor as call
-					if (QueuePending == false || ((AreDoorsOpen() == true || AreDoorsOpening() == true) && GetFloor() == floor))
+					//and if the interlock check passes
+					if (CheckInterlocks() == true)
 					{
-						//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
-						if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+						//and if no queue changes are pending, unless doors are open on the same floor as call
+						if (QueuePending == false || ((AreDoorsOpen() == true || AreDoorsOpening() == true) && GetFloor() == floor))
 						{
-							//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
-							if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+							//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
+							if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 							{
-								//and if doors are not being held or elevator is waiting in a peak mode
-								if (GetHoldStatus() == false || PeakWaiting() == true)
+								//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
+								if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 								{
-									//and if nudge mode is off on all doors
-									if (IsNudgeModeActive() == false)
+									//and if doors are not being held or elevator is waiting in a peak mode
+									if (GetHoldStatus() == false || PeakWaiting() == true)
 									{
-										//and if it's above the current floor and should be called down, or below the
-										//current floor and called up, or on the same floor and not moving, or idle
-										if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
+										//and if nudge mode is off on all doors
+										if (IsNudgeModeActive() == false)
 										{
-											//and if it's either going the same direction as the call, or queue is not active, or idle
-											if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle())
+											//and if it's above the current floor and should be called down, or below the
+											//current floor and called up, or on the same floor and not moving, or idle
+											if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
 											{
-												if (sbs->Verbose)
-													Report("Available for call");
-												return 1;
+												//and if it's either going the same direction as the call, or queue is not active, or idle
+												if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle())
+												{
+													if (sbs->Verbose)
+														Report("Available for call");
+													return 1;
+												}
+												else
+												{
+													if (sbs->Verbose == true && report_on_failure == true)
+														Report("Not available for call - going a different direction and is not idle");
+													return 0;
+												}
 											}
 											else
 											{
 												if (sbs->Verbose == true && report_on_failure == true)
-													Report("Not available for call - going a different direction and is not idle");
+													Report("Not available for call - position/direction wrong for call and is not idle");
 												return 0;
 											}
 										}
 										else
 										{
 											if (sbs->Verbose == true && report_on_failure == true)
-												Report("Not available for call - position/direction wrong for call and is not idle");
+												Report("Not available for call - in nudge mode");
 											return 0;
 										}
 									}
 									else
 									{
 										if (sbs->Verbose == true && report_on_failure == true)
-											Report("Not available for call - in nudge mode");
+											Report("Not available for call - door hold is enabled");
 										return 0;
 									}
 								}
 								else
 								{
 									if (sbs->Verbose == true && report_on_failure == true)
-										Report("Not available for call - door hold is enabled");
+										Report("Not available for call - queueresets is on and opposite queue direction is active");
 									return 0;
 								}
 							}
 							else
 							{
 								if (sbs->Verbose == true && report_on_failure == true)
-									Report("Not available for call - queueresets is on and opposite queue direction is active");
+									Report("Not available for call - limitqueue is on and queue is active");
 								return 0;
 							}
 						}
 						else
 						{
 							if (sbs->Verbose == true && report_on_failure == true)
-								Report("Not available for call - limitqueue is on and queue is active");
+								Report("Not available for call - queue change is pending");
 							return 0;
 						}
 					}
 					else
 					{
 						if (sbs->Verbose == true && report_on_failure == true)
-							Report("Not available for call - queue change is pending");
-						return 0;
+							Report("Not available for call - interlock check failed");
+						return 2;
 					}
 				}
 				else
@@ -6090,6 +6100,14 @@ Model* Elevator::GetModel(std::string name)
 	}
 
 	return 0;
+}
+
+bool Elevator::CheckInterlocks()
+{
+	//return true if interlock checks pass, or interlocks are disabled
+
+	bool status = (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false || DoorsStopped() == true));
+	return !status;
 }
 
 }
