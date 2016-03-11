@@ -266,9 +266,16 @@ std::string EngineContext::GetFilename()
 
 void EngineContext::StartSim()
 {
+	//get offset of parent engine
+	Ogre::Vector3 offset;
+	if (parent)
+		offset = parent->GetSystem()->GetPosition();
+	else
+		offset = Ogre::Vector3::ZERO;
+
 	//Create simulator object
 	if (!Simcore)
-		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position, rotation, area_min, area_max);
+		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position + offset, rotation, area_min, area_max);
 
 	//load script processor
 	if (!processor)
