@@ -521,6 +521,10 @@ void EngineContext::CutForEngine(EngineContext *engine)
 
 	if (IsRunning() == true)
 		Simcore->Prepare();
+
+	//if this has a valid parent, have parent cut for the specified engine
+	if (frontend->IsValidEngine(parent) == true)
+		parent->CutForEngine(engine);
 }
 
 void EngineContext::AddChild(EngineContext *engine)
