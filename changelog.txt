@@ -1,5 +1,9 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-have CutForEngine function pass engine cut operation to parent, mainly so that nested Buildings sections in code will cut the top-level engine properly
+-child engine positions need to be set relative of their parent engine
+-elevators should report that they're unavailable for a call if the interlock check fails.  This fixes a potential call button lockup
+-fixed triangle reindexing by adding proper validity checks, to fix a problem that arose when switching to an unsigned int type
 -(Triton Center) added LevelingOpen parameter to elevators
 -(Triton Center) use standard height measurements for doors and elevators, currently on hotel levels
 -fixed an issue where the dynamic mesh's Prepare flag wasn't being handled properly
