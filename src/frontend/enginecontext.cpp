@@ -60,6 +60,7 @@ EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::
 	raised = false;
 	progress = 0;
 	inside = false;
+	Moved = false;
 
 	//register this engine, and get it's instance number
 	instance = frontend->RegisterEngine(this);
@@ -273,6 +274,9 @@ void EngineContext::StartSim()
 	else
 		offset = Ogre::Vector3::ZERO;
 
+	if (position != Ogre::Vector3::ZERO)
+		Moved = true;
+
 	//Create simulator object
 	if (!Simcore)
 		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position + offset, rotation, area_min, area_max);
@@ -312,6 +316,7 @@ void EngineContext::UnloadSim()
 	loading = false;
 	running = false;
 	raised = false;
+	Moved = false;
 }
 
 bool EngineContext::Start(Ogre::Camera *camera)
