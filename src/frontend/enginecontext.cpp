@@ -550,4 +550,21 @@ void EngineContext::RemoveChild(EngineContext *engine)
 	}
 }
 
+void EngineContext::Move(Ogre::Vector3 &position, bool move_children)
+{
+	//move this engine
+	//if move_children is true, recursively call this function on all children
+
+	this->position += position;
+	Simcore->Move(position);
+
+	if (move_children == true)
+	{
+		for (int i = 0; i < (int)children.size(); i++)
+		{
+			children[i]->Move(position, move_children);
+		}
+	}
+}
+
 }

@@ -3239,7 +3239,7 @@ int ScriptProcessor::ProcGlobals()
 
 		if (engine->Moved == false)
 		{
-			Simcore->Move(position);
+			engine->Move(position, true);
 			engine->Moved = true;
 		}
 		return sNextLine;

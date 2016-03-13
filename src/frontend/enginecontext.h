@@ -73,6 +73,7 @@ public:
 	void AddChild(EngineContext *engine);
 	void RemoveChild(EngineContext *engine);
 	void RemoveParent() { parent = 0; }
+	void Move(Ogre::Vector3 &position, bool move_children = false);
 
 private:
 
