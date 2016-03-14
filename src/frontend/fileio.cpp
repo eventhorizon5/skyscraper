@@ -3237,8 +3237,11 @@ int ScriptProcessor::ProcGlobals()
 		position.y = ToFloat(tempdata[1]);
 		position.z = ToFloat(tempdata[2]);
 
-		if (Simcore->GetPosition() == Ogre::Vector3::ZERO)
-			Simcore->Move(position);
+		if (engine->Moved == false)
+		{
+			engine->Move(position, true);
+			engine->Moved = true;
+		}
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "rotation")

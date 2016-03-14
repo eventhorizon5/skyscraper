@@ -332,6 +332,7 @@ public:
 	bool IsOnFloor(int floor);
 	Model* GetModel(std::string name);
 	DynamicMesh* GetDoorContainer() { return DoorContainer; }
+	bool CheckInterlocks();
 
 private:
 
