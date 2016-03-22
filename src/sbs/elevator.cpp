@@ -3422,7 +3422,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	//3 = only shaft doors
 
 	//require open button to be held for fire service phase 2 if not on recall floor
-	if (FireServicePhase2 == 1 && OnRecallFloor() == false)
+	if (FireServicePhase2 == 1 && OnRecallFloor() == false && manual == false)
 		hold = true;
 
 	if (Interlocks == true)
@@ -3558,7 +3558,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 	//3 = only shaft doors
 
 	//turn on hold option for certain modes
-	if (IndependentService == true || FireServicePhase2 == 1)
+	if ((IndependentService == true || FireServicePhase2 == 1) && manual == false)
 		hold = true;
 
 	int start = number, end = number;
@@ -3610,7 +3610,10 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 			{
 				//open doors using persistent values, if button is released before doors are fully closed
 				if (GetDoor(i))
-					GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+				{
+					if (GetDoor(i)->AreDoorsMoving(0) == true)
+						GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+				}
 				else
 					ReportError("Invalid door " + ToString(i));
 			}

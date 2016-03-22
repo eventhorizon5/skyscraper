@@ -1970,6 +1970,19 @@ void Skyscraper::SwitchEngines()
 	if (active_engine->IsInside() == true)
 		return;
 
+	EngineContext *parent = active_engine->GetParent();
+
+	//if active engine has a parent, switch to the parent if possible
+	if (parent)
+	{
+		if (parent->IsInside() == true && parent->IsCameraActive() == false)
+		{
+			SetActiveEngine(parent->GetNumber(), true);
+			return;
+		}
+	}
+
+	//otherwise search for a valid engine to attach to
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
 		if (engines[i] != active_engine && engines[i])
