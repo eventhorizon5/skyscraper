@@ -118,7 +118,7 @@ private:
 		::SBS::SBS *sbs;
 		bool enabled;
 		bool prepared;
-		MeshObject *single_client; //if a separate mesh, client number this mesh maps to
+		MeshObject *single_client; //if a separate mesh, client this mesh maps to
 	};
 
 	//client mapping

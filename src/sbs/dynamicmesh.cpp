@@ -402,6 +402,12 @@ void DynamicMesh::RemoveClient(MeshObject *mesh)
 	{
 		if (clients[i].obj == mesh)
 		{
+			for (int j = 0; j < (int)clients[i].meshes.size(); j++)
+			{
+				if (clients[i].meshes[j]->single_client == mesh)
+					clients[i].meshes[j]->single_client = 0;
+			}
+
 			clients.erase(clients.begin() + i);
 			return;
 		}
@@ -987,7 +993,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	if (prepared == true || !node)
 		return;
 
-	if (client == -1 && single_client)
+	//if mesh is mapped to a single client, get stored client index
+	if (single_client)
 		client = Parent->GetClientIndex(single_client);
 
 	unsigned int vertex_count = Parent->GetVertexCount("", group, client);
