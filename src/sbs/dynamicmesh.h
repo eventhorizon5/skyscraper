@@ -75,7 +75,7 @@ private:
 	{
 		struct Submesh;
 
-		Mesh(DynamicMesh *parent, int group, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
+		Mesh(DynamicMesh *parent, int group, MeshObject *client, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
 		~Mesh();
 		void Enable(bool value);
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
@@ -118,6 +118,7 @@ private:
 		::SBS::SBS *sbs;
 		bool enabled;
 		bool prepared;
+		MeshObject *single_client; //if a separate mesh, client number this mesh maps to
 	};
 
 	//client mapping

@@ -74,7 +74,7 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	if (meshes.empty() == false)
 		return false;
 
-	Mesh* mesh = new Mesh(this, -1, "", node, render_distance, filename, path);
+	Mesh* mesh = new Mesh(this, -1, 0, "", node, render_distance, filename, path);
 
 	//if load failed
 	if (mesh->MeshWrapper.isNull())
@@ -353,9 +353,9 @@ void DynamicMesh::Prepare(MeshObject *client)
 				Mesh *mesh = 0;
 
 				if (meshes_to_create == 1)
-					mesh = new Mesh(this, i, GetName(), node, render_distance);
+					mesh = new Mesh(this, i, 0, GetName(), node, render_distance);
 				else
-					mesh = new Mesh(this, i, clients[j].obj->GetName(), clients[j].obj->GetSceneNode(), render_distance);
+					mesh = new Mesh(this, i, group_clients[j]->obj, group_clients[j]->obj->GetName(), group_clients[j]->obj->GetSceneNode(), render_distance);
 
 				meshes.push_back(mesh);
 			}
@@ -777,7 +777,7 @@ void DynamicMesh::SetGroupForceCombine(int number, bool value)
 	groups[number].force_combine = value;
 }
 
-DynamicMesh::Mesh::Mesh(DynamicMesh *parent, int group, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
+DynamicMesh::Mesh::Mesh(DynamicMesh *parent, int group, MeshObject *client, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
 	sbs = Parent->GetRoot();
@@ -786,6 +786,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, int group, const std::string &name,
 	prepared = false;
 	Movable = 0;
 	this->group = group;
+	single_client = client;
 
 	if (filename == "")
 	{
@@ -985,6 +986,9 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 	if (prepared == true || !node)
 		return;
+
+	if (client == -1 && single_client)
+		client = Parent->GetClientIndex(single_client);
 
 	unsigned int vertex_count = Parent->GetVertexCount("", group, client);
 
