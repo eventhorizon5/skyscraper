@@ -603,7 +603,7 @@ bool Skyscraper::ReportFatalError(const std::string &message)
 void Skyscraper::ShowError(const std::string &message)
 {
 	//show error dialog
-	wxMessageDialog dialog(0, wxString::FromAscii(message.c_str()), _("Skyscraper"), wxOK | wxICON_ERROR);
+	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_ERROR);
 	dialog.ShowModal();
 }
 
@@ -1602,12 +1602,12 @@ void Skyscraper::CreateProgressDialog(const std::string &message)
 	}
 
 	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(message.c_str()), 100, window);
+		progdialog = new wxProgressDialog(wxT("Loading..."), message, 100, window);
 	else
 	{
 		wxString msg = progdialog->GetMessage();
 		msg += "\n";
-		msg += message.c_str();
+		msg += message;
 		progdialog->Update(progdialog->GetValue(), msg);
 	}
 

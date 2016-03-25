@@ -197,25 +197,25 @@ void SkyControl::Loop()
 	if (bSet->GetValue() == false)
 	{
 		tJulian->SetValue(TruncateNumber(system->getJulianDay(), 4));
-		tYear->SetValue(wxVariant((long)year).GetString());
-		tMonth->SetValue(wxVariant((long)month).GetString());
-		tDay->SetValue(wxVariant((long)day).GetString());
-		tHour->SetValue(wxVariant((long)hour).GetString());
-		tMinute->SetValue(wxVariant((long)minute).GetString());
-		tSecond->SetValue(wxVariant((long)second).GetString());
+		tYear->SetValue(SBS::ToString(year));
+		tMonth->SetValue(SBS::ToString(month));
+		tDay->SetValue(SBS::ToString(day));
+		tHour->SetValue(SBS::ToString(hour));
+		tMinute->SetValue(SBS::ToString(minute));
+		tSecond->SetValue(SBS::ToString(second));
 	}
 }
 
 void SkyControl::On_bSetLatitude_Click(wxCommandEvent& event)
 {
 	if (system)
-		system->setObserverLatitude(Ogre::Degree(atof(tLatitude->GetValue().ToAscii())));
+		system->setObserverLatitude(Ogre::Degree(atof(tLatitude->GetValue())));
 }
 
 void SkyControl::On_bSetLongitude_Click(wxCommandEvent& event)
 {
 	if (system)
-		system->setObserverLongitude(Ogre::Degree(atof(tLongitude->GetValue().ToAscii())));
+		system->setObserverLongitude(Ogre::Degree(atof(tLongitude->GetValue())));
 }
 
 void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
@@ -238,17 +238,17 @@ void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
 
 		if (julian_changed == true)
 		{
-			system->setJulianDay(atof(julian.ToAscii()));
+			system->setJulianDay(atof(julian));
 			julian_changed = false;
 		}
 		else
 		{
-			int year = atoi(tYear->GetValue().ToAscii());
-			int month = atoi(tMonth->GetValue().ToAscii());
-			int day = atoi(tDay->GetValue().ToAscii());
-			int hour = atoi(tHour->GetValue().ToAscii());
-			int minute = atoi(tMinute->GetValue().ToAscii());
-			double second = atof(tSecond->GetValue().ToAscii());
+			int year = atoi(tYear->GetValue());
+			int month = atoi(tMonth->GetValue());
+			int day = atoi(tDay->GetValue());
+			int hour = atoi(tHour->GetValue());
+			int minute = atoi(tMinute->GetValue());
+			double second = atof(tSecond->GetValue());
 			system->getUniversalClock()->setGregorianDateTime(year, month, day, hour, minute, second);
 		}
 
@@ -278,7 +278,7 @@ void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
 
 void SkyControl::On_bSetMultiplier_Click(wxCommandEvent& event)
 {
-	panel->GetRoot()->SkyMult = atof(tMultiplier->GetValue().ToAscii());
+	panel->GetRoot()->SkyMult = atof(tMultiplier->GetValue());
 }
 
 }

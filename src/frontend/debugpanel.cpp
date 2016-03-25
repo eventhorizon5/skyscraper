@@ -422,20 +422,20 @@ void DebugPanel::Loop()
 
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
-	t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID.c_str()) + wxT(")"));
-	t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName().c_str()));
+	t_camerafloor->SetLabel(SBS::ToString(Simcore->camera->CurrentFloor) + wxT(" (") + Simcore->camera->CurrentFloorID + wxT(")"));
+	t_object->SetLabel(Simcore->camera->GetClickedMeshName());
 	t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
-	t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh.c_str()));
+	t_collision->SetLabel(Simcore->camera->LastHitMesh);
 	t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
 	if (floor)
-		t_floorname->SetLabel(wxString::FromAscii(floor->Name.c_str()));
+		t_floorname->SetLabel(floor->Name);
 
 	if (Simcore->GetElevatorCount() > 0)
 	{
 		bEditElevator->Enable(true);
-		t_elevnumber->SetLabel(wxVariant((long)Simcore->ElevatorNumber).GetString());
+		t_elevnumber->SetLabel(SBS::ToString(Simcore->ElevatorNumber));
 		if (Simcore->GetElevator(Simcore->ElevatorNumber))
-			t_elevfloor->SetLabel(wxVariant((long)Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()).GetString());
+			t_elevfloor->SetLabel(SBS::ToString(Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()));
 	}
 	else
 		bEditElevator->Enable(false);
@@ -666,7 +666,7 @@ void DebugPanel::ShowControlReference()
 wxString TruncateNumber(float value, int decimals)
 {
 	std::string number = SBS::TruncateNumber(value, decimals);
-	wxString number2 = wxString::FromAscii(number.c_str());
+	wxString number2 = number;
 
 	return number2;
 }
@@ -674,7 +674,7 @@ wxString TruncateNumber(float value, int decimals)
 wxString TruncateNumber(double value, int decimals)
 {
 	std::string number = SBS::TruncateNumber(value, decimals);
-	wxString number2 = wxString::FromAscii(number.c_str());
+	wxString number2 = number;
 
 	return number2;
 }
@@ -682,28 +682,28 @@ wxString TruncateNumber(double value, int decimals)
 bool IsNumeric(const wxString &string)
 {
 	std::string s;
-	s = string.ToAscii();
+	s = string;
 	return SBS::IsNumeric(s);
 }
 
 bool IsNumeric(const wxString &string, int &number)
 {
 	std::string s;
-	s = string.ToAscii();
+	s = string;
 	return SBS::IsNumeric(s, number);
 }
 
 bool IsNumeric(const wxString &string, float &number)
 {
 	std::string s;
-	s = string.ToAscii();
+	s = string;
 	return SBS::IsNumeric(s, number);
 }
 
 bool IsNumeric(const wxString &string, double &number)
 {
 	std::string s;
-	s = string.ToAscii();
+	s = string;
 	return SBS::IsNumeric(s, number);
 }
 

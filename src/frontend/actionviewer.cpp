@@ -35,6 +35,8 @@
 #include "skyscraper.h"
 #include "actionviewer.h"
 
+using namespace SBS;
+
 namespace Skyscraper {
 
 //(*IdInit(ActionViewer)
@@ -149,7 +151,7 @@ void ActionViewer::Loop()
 		ActionList->Clear();
 
 		for (int i = 0; i < Simcore->GetActionCount(); i++)
-			ActionList->Append(wxVariant(i + 1).GetString() + wxT(" - ") + wxString::FromAscii(Simcore->GetAction(i)->GetName().c_str()));
+			ActionList->Append(ToString(i + 1) + wxT(" - ") + Simcore->GetAction(i)->GetName());
 	}
 }
 
@@ -171,25 +173,25 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 	if (selection < 0)
 		return;
 
-	SBS::Action *action = Simcore->GetAction(selection);
+	Action *action = Simcore->GetAction(selection);
 	if (action)
 	{
-		tName->SetValue(wxString::FromAscii(action->GetName().c_str()));
+		tName->SetValue(action->GetName());
 		tParentName->Clear();
 		tType->Clear();
 
 		for (int i = 0; i < action->GetParentCount(); i++)
 		{
-			wxString index = wxVariant((int)i + 1).GetString();
-			tParentName->AppendText(index + wxT(": ") + wxString::FromAscii(action->GetParentName(i).c_str()) + wxT("\n"));
-			tType->AppendText(index + wxT(": ") + wxString::FromAscii(action->GetParentType(i).c_str()) + wxT("\n"));
+			wxString index = ToString(i + 1);
+			tParentName->AppendText(index + wxT(": ") + action->GetParentName(i) + wxT("\n"));
+			tType->AppendText(index + wxT(": ") + action->GetParentType(i) + wxT("\n"));
 		}
 
-		tCommand->SetValue(wxString::FromAscii(action->GetCommandName().c_str()));
+		tCommand->SetValue(action->GetCommandName());
 
 		tParameters->Clear();
 		for (int i = 0; i < action->GetParameterCount(); i++)
-			tParameters->AppendText(wxString::FromAscii(action->GetParameter(i).c_str()) + wxT("\n"));
+			tParameters->AppendText(action->GetParameter(i) + wxT("\n"));
 	}
 
 }
@@ -200,7 +202,7 @@ void ActionViewer::On_bDelete_Click(wxCommandEvent& event)
 	if (selection < 0)
 		return;
 
-	SBS::Action *action = Simcore->GetAction(selection);
+	Action *action = Simcore->GetAction(selection);
 	if (action)
 		Simcore->RemoveAction(action);
 }

@@ -253,16 +253,16 @@ void Stats::OnInit()
 {
 	Simcore = panel->GetSystem();
 
-	tFrontendVersion->SetValue(wxString::FromAscii(panel->GetRoot()->version_frontend.c_str()));
-	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version.c_str()));
-	tPlatform->SetValue(wxString::FromAscii(panel->GetRoot()->Platform.c_str()));
-	tRenderer->SetValue(wxString::FromAscii(panel->GetRoot()->Renderer.c_str()));
+	tFrontendVersion->SetValue(panel->GetRoot()->version_frontend);
+	tSBSVersion->SetValue(Simcore->version);
+	tPlatform->SetValue(panel->GetRoot()->Platform);
+	tRenderer->SetValue(panel->GetRoot()->Renderer);
 
-	tName->SetValue(wxString::FromAscii(Simcore->BuildingName.c_str()));
-	tDesigner->SetValue(wxString::FromAscii(Simcore->BuildingDesigner.c_str()));
-	tLocation->SetValue(wxString::FromAscii(Simcore->BuildingLocation.c_str()));
-	tDescription->SetValue(wxString::FromAscii(Simcore->BuildingDescription.c_str()));
-	tVersion->SetValue(wxString::FromAscii(Simcore->BuildingVersion.c_str()));
+	tName->SetValue(Simcore->BuildingName);
+	tDesigner->SetValue(Simcore->BuildingDesigner);
+	tLocation->SetValue(Simcore->BuildingLocation);
+	tDescription->SetValue(Simcore->BuildingDescription);
+	tVersion->SetValue(Simcore->BuildingVersion);
 }
 
 void Stats::Loop()
@@ -274,22 +274,22 @@ void Stats::Loop()
 	if (!Simcore)
 		return;
 
-	tMeshes->SetValue(wxVariant(Simcore->GetMeshCount()).GetString());
-	tTextures->SetValue(wxVariant(Simcore->GetTextureManager()->GetMaterialCount()).GetString());
-	tActions->SetValue(wxVariant(Simcore->GetActionCount()).GetString());
-	tSounds->SetValue(wxVariant(Simcore->GetSoundCount()).GetString());
-	tInStairwell->SetValue(wxString::FromAscii(BoolToString(Simcore->InStairwell).c_str()));
-	tInElevator->SetValue(wxString::FromAscii(BoolToString(Simcore->InElevator).c_str()));
-	tInShaft->SetValue(wxString::FromAscii(BoolToString(Simcore->InShaft).c_str()));
+	tMeshes->SetValue(ToString(Simcore->GetMeshCount()));
+	tTextures->SetValue(ToString(Simcore->GetTextureManager()->GetMaterialCount()));
+	tActions->SetValue(ToString(Simcore->GetActionCount()));
+	tSounds->SetValue(ToString(Simcore->GetSoundCount()));
+	tInStairwell->SetValue(BoolToString(Simcore->InStairwell));
+	tInElevator->SetValue(BoolToString(Simcore->InElevator));
+	tInShaft->SetValue(BoolToString(Simcore->InShaft));
 	tRunningTime->SetValue(TruncateNumber(Simcore->running_time, 2));
-	tObjects->SetValue(wxVariant(Simcore->GetObjectCount()).GetString());
-	tWalls->SetValue(wxVariant(Simcore->GetWallCount()).GetString());
-	tPolygons->SetValue(wxVariant(Simcore->GetPolygonCount()).GetString());
-	tFloors->SetValue(wxVariant(Simcore->Floors).GetString());
-	tBasements->SetValue(wxVariant(Simcore->Basements).GetString());
-	tElevators->SetValue(wxVariant(Simcore->GetElevatorCount()).GetString());
-	tShafts->SetValue(wxVariant(Simcore->GetShaftCount()).GetString());
-	tStairs->SetValue(wxVariant(Simcore->GetStairsCount()).GetString());
+	tObjects->SetValue(ToString(Simcore->GetObjectCount()));
+	tWalls->SetValue(ToString(Simcore->GetWallCount()));
+	tPolygons->SetValue(ToString(Simcore->GetPolygonCount()));
+	tFloors->SetValue(ToString(Simcore->Floors));
+	tBasements->SetValue(ToString(Simcore->Basements));
+	tElevators->SetValue(ToString(Simcore->GetElevatorCount()));
+	tShafts->SetValue(ToString(Simcore->GetShaftCount()));
+	tStairs->SetValue(ToString(Simcore->GetStairsCount()));
 }
 
 }

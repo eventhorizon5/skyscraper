@@ -1204,7 +1204,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	//show error dialog
 	if (warning == false)
 	{
-		wxMessageDialog dialog (0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
 		dialog.ShowModal();
 	}
 	return sError;
@@ -1344,7 +1344,7 @@ bool ScriptProcessor::ReportMissingFiles()
 		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
 		for (int i = 0; i < (int)nonexistent_files.size(); i++)
 		{
-			message.Append(wxString::FromAscii(nonexistent_files[i].c_str()));
+			message.Append(nonexistent_files[i]);
 			message.Append(wxT("\n"));
 		}
 		twindow->tMain->WriteText(message);

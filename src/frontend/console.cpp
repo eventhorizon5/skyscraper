@@ -122,7 +122,7 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 		return;
 
 	//load new commands into script interpreter, and run
-	processor->LoadFromText(std::string(tCommand->GetValue().ToAscii()));
+	processor->LoadFromText(std::string(tCommand->GetValue()));
 	if (chkEcho->GetValue() == true)
 		tConsole->AppendText(tCommand->GetValue());
 	tCommand->Clear();
@@ -150,7 +150,7 @@ void Console::Write(const std::string &message)
 	else
 		refresh = false;
 
-	tConsole->WriteText(wxString::FromAscii(message.c_str()) + wxT("\n"));
+	tConsole->WriteText(message + wxT("\n"));
 
 	if (refresh == true)
 		tConsole->SetInsertionPoint(point);
