@@ -121,6 +121,7 @@ private:
 	std::vector<bool> client_enable;
 	bool prepared;
 	bool dynamic_buffers;
+	bool auto_combine;
 };
 
 }

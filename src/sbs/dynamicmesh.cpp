@@ -56,6 +56,7 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 	prepared = false;
 	this->dynamic_buffers = dynamic_buffers;
 	force_combine = false;
+	auto_combine = sbs->GetConfigBool("Skyscraper.SBS.DynamicMesh.AutoCombine", true);
 	sbs->RegisterDynamicMesh(this);
 }
 
@@ -241,7 +242,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 			}
 
 			//if combined submesh/material count is less than three separate meshes
-			if (total < separate_total || total <= 10 || force_combine == true)
+			if (((total < separate_total || total <= 10) && auto_combine == true) || force_combine == true)
 				meshes_to_create = 1; //create a single combined mesh for all clients
 			else
 			{
