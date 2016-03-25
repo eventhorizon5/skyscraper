@@ -2255,8 +2255,27 @@ int ScriptProcessor::ProcCommands()
 
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
+		SetCase(temp2, false);
 
-		Simcore->GetStairs(stairnum)->ShowFullStairs = ToBool(temp2);
+		int value = 0;
+
+		if (IsBoolean(temp2) == true)
+		{
+			bool show = ToBool(temp2);
+			if (show == true)
+				value = 1;
+		}
+		else
+		{
+			if (temp2 == "inside")
+				value = 1;
+			else if (temp2 == "always")
+				value = 2;
+			else
+				return ScriptError("Invalid value: " + temp2);
+		}
+
+		Simcore->GetStairs(stairnum)->SetShowFull(value);
 		return sNextLine;
 	}
 

@@ -156,7 +156,7 @@ public:
 	bool AutoStairs; //true if stairwells should turn on and off automatically
 	bool ProcessElevators; //true if elevator system should be enabled
 	int ShaftDisplayRange; //number of shaft floors to display while in elevator; has no effect if shaft's ShowFullShaft is true
-	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if stairwell's ShowFullStairs is true
+	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if stairwell's ShowFullStairs is not 0
 	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
 	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
