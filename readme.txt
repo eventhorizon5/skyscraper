@@ -57,7 +57,7 @@ files.
 This release is the tenth development release of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
-This software utilizes the OGRE rendering engine library (version 1.8 or later), the Bullet physics engine with some custom patches, the FMOD sound system, the wxWidgets library (version 2.8 or later), and the Caleum sky system addon for OGRE.
+This software utilizes the OGRE rendering engine library (version 1.8 or later), the Bullet physics engine with some custom patches, the FMOD sound system, the wxWidgets library (version 3.0 or later), and the Caleum sky system addon for OGRE.
 
 Skyscraper on Windows supports both DirectX and OpenGL (previous versions only used OpenGL).  To switch between them, simply delete the ogre.cfg file in Skyscraper's folder, run the program again, and choose from the OGRE rendering menu.
 
