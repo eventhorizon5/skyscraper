@@ -23,7 +23,7 @@ class StackWalkerToConsole : public StackWalker
 protected:
 	virtual void OnOutput(LPCSTR szText)
 	{
-		twindow->tMain->WriteText(wxString::FromAscii(szText));
+		twindow->tMain->WriteText(szText);
 		//printf("%s", szText);
 	}
 };
@@ -116,7 +116,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 		pExPtrs->ExceptionRecord->ExceptionCode,
 		pExPtrs->ExceptionRecord->ExceptionFlags,
 		pExPtrs->ExceptionRecord->ExceptionAddress);
-	twindow->tMain->WriteText(wxString::FromAscii(lString));
+	twindow->tMain->WriteText(lString);
 
 	//print out stack trace
 	StackWalkerToConsole sw;  // output to console
