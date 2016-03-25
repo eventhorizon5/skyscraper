@@ -1117,8 +1117,9 @@ void Shaft::SetShowFull(bool value)
 	ShowFullShaft = value;
 
 	//force the combining of dynamic meshes, since they'll be fully shown
-	DoorWrapper->force_combine = true;
-	ShaftDoorContainer->force_combine = true;
+	dynamic_mesh->force_combine = value;
+	DoorWrapper->force_combine = value;
+	ShaftDoorContainer->force_combine = value;
 }
 
 }
