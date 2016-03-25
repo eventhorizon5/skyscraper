@@ -2261,8 +2261,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (IsBoolean(temp2) == true)
 		{
-			bool show = ToBool(temp2);
-			if (show == true)
+			if (ToBool(temp2) == true)
 				value = 1;
 		}
 		else
