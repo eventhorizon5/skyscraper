@@ -2031,7 +2031,7 @@ bool ElevatorDoor::GetNudgeStatus()
 
 void ElevatorDoor::CheckSensor()
 {
-	if (GetSensorStatus(false) == true && sensor && (AreDoorsOpen() == true || AreDoorsMoving() == true))
+	if (GetSensorStatus(false) == true && sensor && (AreDoorsOpen() == true || AreDoorsMoving() == true) && elev->PeakWaiting() == false)
 		sensor->Loop();
 }
 
