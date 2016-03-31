@@ -1222,15 +1222,15 @@ bool ElevatorDoor::AreShaftDoorsClosed(bool skip_current_floor)
 	{
 		DoorWrapper* door = ShaftDoors[i];
 
-		if (skip_current_floor == true)
-		{
-			//skip elevator's floor if specified
-			if (door->floor == elev->GetFloor())
-				continue;
-		}
-
 		if (door)
 		{
+			if (skip_current_floor == true)
+			{
+				//skip elevator's floor if specified
+				if (door->floor == elev->GetFloor())
+					continue;
+			}
+
 			if (door->Open == true)
 				return false;
 		}
