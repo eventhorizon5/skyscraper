@@ -3778,7 +3778,7 @@ bool Elevator::AreShaftDoorsOpen(int number, int floor)
 	return false;
 }
 
-bool Elevator::AreShaftDoorsClosed()
+bool Elevator::AreShaftDoorsClosed(bool skip_current_floor)
 {
 	//return true if all shaft doors are closed and not moving
 
@@ -3786,7 +3786,7 @@ bool Elevator::AreShaftDoorsClosed()
 	{
 		if (DoorArray[i])
 		{
-			if (DoorArray[i]->AreShaftDoorsClosed() == false)
+			if (DoorArray[i]->AreShaftDoorsClosed(skip_current_floor) == false)
 				return false;
 		}
 	}
@@ -5203,7 +5203,7 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 								if (GetHoldStatus() == false || PeakWaiting() == true)
 								{
 									//and if the interlock check passes, unless waiting in a peak mode
-									if (CheckInterlocks() == true || PeakWaiting() == true)
+									if (CheckInterlocks(true) == true || PeakWaiting() == true)
 									{
 										//and if nudge mode is off on all doors
 										if (IsNudgeModeActive() == false)
@@ -6105,11 +6105,17 @@ Model* Elevator::GetModel(std::string name)
 	return 0;
 }
 
-bool Elevator::CheckInterlocks()
+bool Elevator::CheckInterlocks(bool skip_current_floor)
 {
 	//return true if interlock checks pass, or interlocks are disabled
 
-	bool status = (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false || DoorsStopped() == true));
+	bool status;
+
+	if (skip_current_floor == false)
+		status = (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false || DoorsStopped() == true));
+	else
+		status = (Interlocks == true && (AreShaftDoorsClosed(true) == false || DoorsStopped() == true));
+
 	return !status;
 }
 

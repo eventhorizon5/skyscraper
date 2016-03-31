@@ -221,7 +221,7 @@ public:
 	void ShaftDoorsEnabledRange(int number, int floor, int range);
 	bool AreDoorsOpen(int number = 0);
 	bool AreShaftDoorsOpen(int number, int floor);
-	bool AreShaftDoorsClosed();
+	bool AreShaftDoorsClosed(bool skip_current_floor = false);
 	void ResetDoors(int number = 0, bool sensor = false);
 	bool DoorsStopped(int number = 0);
 	ElevatorDoor::DoorWrapper* AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
@@ -332,7 +332,7 @@ public:
 	bool IsOnFloor(int floor);
 	Model* GetModel(std::string name);
 	DynamicMesh* GetDoorContainer() { return DoorContainer; }
-	bool CheckInterlocks();
+	bool CheckInterlocks(bool skip_current_floor = false);
 
 private:
 

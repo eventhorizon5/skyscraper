@@ -1211,16 +1211,23 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	return false;
 }
 
-bool ElevatorDoor::AreShaftDoorsClosed()
+bool ElevatorDoor::AreShaftDoorsClosed(bool skip_current_floor)
 {
 	//returns true if all shaft doors are closed and not moving
 
-	if (AreDoorsMoving() == true)
+	if (AreDoorsMoving() == true && skip_current_floor == false)
 		return false;
 
 	for (int i = 0; i < (int)ShaftDoors.size(); i++)
 	{
 		DoorWrapper* door = ShaftDoors[i];
+
+		if (skip_current_floor == true)
+		{
+			//skip elevator's floor if specified
+			if (door->floor == elev->GetFloor())
+				continue;
+		}
 
 		if (door)
 		{
