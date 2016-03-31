@@ -730,18 +730,28 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			if (wrapper->IsShaftDoor == true)
 			{
 				//check shaft doors
-				if (elevator->AreShaftDoorsOpen(number, floor) == false)
-					elevator->OpenDoorsEmergency(number, 3, floor);
+				if (abs(elevator->AreDoorsMoving(number, false, true)) == 2)
+					elevator->StopDoors(number);
 				else
-					elevator->CloseDoorsEmergency(number, 3, floor);
+				{
+					if (elevator->AreShaftDoorsOpen(number, floor) == false)
+						elevator->OpenDoorsEmergency(number, 3, floor);
+					else
+						elevator->CloseDoorsEmergency(number, 3, floor);
+				}
 			}
 			else
 			{
 				//check elevator doors
-				if (elevator->AreDoorsOpen(number) == false)
-					elevator->OpenDoorsEmergency(number, 2);
+				if (abs(elevator->AreDoorsMoving(number, true, false)) == 2)
+					elevator->StopDoors(number);
 				else
-					elevator->CloseDoorsEmergency(number, 2);
+				{
+					if (elevator->AreDoorsOpen(number) == false)
+						elevator->OpenDoorsEmergency(number, 2);
+					else
+						elevator->CloseDoorsEmergency(number, 2);
+				}
 			}
 		}
 
