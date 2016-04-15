@@ -1235,14 +1235,15 @@ wall has thickness) - this creates a covering wall on each side and a floor
 above the door frame to fill the area.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFillerWalls
 <em>texture, thickness, CenterX, CenterZ, width, height, voffset, direction,
-tw, th</em><br>
+tw, th, isexternal</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">AddFillerWalls
-ConnectionWall, 0.5, -10, 0, 3.5, 8, 0, true, 0, 0</font></p>
+ConnectionWall, 0.5, -10, 0, 3.5, 8, 0, true, 0, 0, false</font></p>
 
 <p align="left">The parameters in this function are similar to the related
 door's parameters. <em>Direction</em> is either true if the door faces the
 front/back (width is along the X axis), or false if the door faces left/right
-(width is along the Z axis).</p>
+(width is along the Z axis).<br>
+The <em>isexternal</em> parameter is the same as with the AddWall command.</p>
 
 <p align="left"><strong>25. AddSound</strong> - creates a user-defined sound at
 the specified position<br>

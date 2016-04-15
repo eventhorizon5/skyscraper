@@ -4359,8 +4359,13 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData, 15);
 
-		if (params != 10)
+		if (params < 10 || params > 11)
 			return ScriptError("Incorrect number of parameters");
+
+		bool compat = false;
+
+		if (params == 10)
+			compat = true;
 
 		//check numeric values
 		for (int i = 1; i <= 9; i++)
@@ -4371,7 +4376,11 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+		if (compat == true)
+			floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), false);
+		else
+			floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]));
+
 		return sNextLine;
 	}
 

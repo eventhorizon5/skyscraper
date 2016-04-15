@@ -859,7 +859,7 @@ CallButton* Floor::GetCallButton(int elevator)
 	return 0;
 }
 
-void Floor::AddFillerWalls(const std::string &texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th)
+void Floor::AddFillerWalls(const std::string &texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th, bool isexternal)
 {
 	//convenience function for adding filler walls around doors
 	//direction is either "false" for a door that faces left/right, or "true" for one that faces front/back
@@ -912,18 +912,18 @@ void Floor::AddFillerWalls(const std::string &texture, float thickness, float Ce
 	//create walls
 	sbs->DrawWalls(false, true, false, false, false, false);
 	if (direction == false)
-		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, false);
+		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, isexternal);
 	else
-		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, false);
+		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, isexternal);
 	sbs->ResetWalls();
 
 	sbs->DrawWalls(true, false, false, false, false, false);
 	if (direction == false)
-		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, false);
+		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 	else
-		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 
-	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, false);
+	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, isexternal);
 	sbs->ResetWalls();
 }
 
