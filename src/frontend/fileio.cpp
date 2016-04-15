@@ -4126,7 +4126,7 @@ int ScriptProcessor::ProcFloors()
 	if (linecheck.substr(0, 16) == "addshaftstddoor ")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData, 16);
 
 		if (params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -4156,6 +4156,36 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid shaft");
+		return sNextLine;
+	}
+
+	//AddExternalDoor command
+	if (linecheck.substr(0, 16) == "addexternaldoor ")
+	{
+		//get data
+		int params = SplitData(LineData, 16);
+
+		if (params != 14)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i <= 13; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//check to see if file exists
+		CheckFile("data/" + tempdata[0]);
+		CheckFile("data/" + tempdata[1]);
+
+		//create door
+		Door* door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), true);
+
+		if (door)
+			door->SetLocked(lockvalue, keyvalue);
+
+		StoreCommand(door);
 		return sNextLine;
 	}
 

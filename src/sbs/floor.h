@@ -69,7 +69,7 @@ public:
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
 	bool IsInGroup(int floor);
-	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external = false);
 	bool CalculateAltitude();
 	void EnableColumnFrame(bool value);
 	void EnableInterfloor(bool value);

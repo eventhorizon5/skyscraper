@@ -236,6 +236,10 @@ void SBS::Initialize()
 	shaft_manager = new ShaftManager(this);
 	stairs_manager = new StairsManager(this);
 
+	//create a dynamic mesh for doors
+	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
+	DoorWrapper->force_combine = true;
+
 	//create camera object
 	this->camera = new Camera(this);
 }
@@ -247,6 +251,21 @@ SBS::~SBS()
 	Report("Deleting simulator objects...");
 
 	FastDelete = true;
+
+	//delete doors
+	for (int i = 0; i < (int)DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+		{
+			DoorArray[i]->parent_deleting = true;
+			delete DoorArray[i];
+		}
+		DoorArray[i] = 0;
+	}
+
+	if (DoorWrapper)
+		delete DoorWrapper;
+	DoorWrapper = 0;
 
 	//delete people
 	for (int i = 0; i < (int)PersonArray.size(); i++)
@@ -2833,6 +2852,20 @@ void SBS::RemoveStairs(Stairs *stairs)
 	stairs_manager->Remove(stairs);
 }
 
+void SBS::RemoveDoor(Door *door)
+{
+	//remove a door from the array
+	//this does not delete the object
+	for (int i = 0; i < (int)DoorArray.size(); i++)
+	{
+		if (DoorArray[i] == door)
+		{
+			DoorArray.erase(DoorArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void SBS::RemoveSound(Sound *sound)
 {
 	//remove a sound from the array
@@ -4173,6 +4206,15 @@ StairsManager* SBS::GetStairsManager()
 TextureManager* SBS::GetTextureManager()
 {
 	return texturemanager;
+}
+
+Door* SBS::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+{
+	int number = (int)DoorArray.size();
+	std::string name = "Door " + ToString(number);
+	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	DoorArray.push_back(door);
+	return door;
 }
 
 }

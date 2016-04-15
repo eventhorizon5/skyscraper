@@ -1084,7 +1084,17 @@ direction the door faces and also the direction it opens. For values of this,
 look at the AddDoor command above. Leave the <em>sound</em> fields blank for no
 sounds to be played.</p>
 
-<p align="left"><strong>17. AddDirectionalIndicator</strong> - creates a single
+<p align="left"><strong>18. AddExternalDoor</strong> - same as the AddDoor command,
+but creates an external (global) door that is always visible.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddExternalDoor <em>opensound,
+closesound, open, texturename, thickness</em>, <em>direction, speed,
+CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>,
+<em>voffset</em>, <em>tw</em>, <em>th<br>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddExternalDoor
+, , False, DoorTexture, 0.2, 1, 0, -8.5, 0, 3.5, 8, 0, 1, 1</font></p>
+</p>
+
+<p align="left"><strong>19. AddDirectionalIndicator</strong> - creates a single
 elevator directional indicator/lantern on the current floor (similar to the
 CreateCallButtons command) <br>
 Syntax: <font face="Courier New, Courier, mono"
@@ -1148,7 +1158,7 @@ and is either true or false</p>
 <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the
 wall plate.</p>
 
-<p align="left"><strong>18. AddShaftDoor</strong> - creates shaft elevator
+<p align="left"><strong>20. AddShaftDoor</strong> - creates shaft elevator
 doors on the current floor only<br>
 Syntax: <font face="Courier New, Courier, mono"
 size="2">AddShaftDoor<em> elevator, number, lefttexture, righttexture</em>,
@@ -1176,7 +1186,7 @@ of the door to create (related to the <em>Doors</em> command) - if the elevator
 only has one door, or if the <em>Doors</em> command was not used, specify 1
 here.</p>
 
-<p align="left"><strong>19. AddFloorIndicator</strong> - creates a floor
+<p align="left"><strong>21. AddFloorIndicator</strong> - creates a floor
 indicator associated with a specific elevator<br>
 Syntax: <font face="Courier New, Courier, mono"
 size="2">AddFloorIndicator<em> elevator, relative, texture_prefix, direction,
@@ -1193,7 +1203,7 @@ command can be given multiple times to create multiple indicators.
 a floor ID; for example if the indicator is on floor 3, and you specify a
 prefix of "Button", it'll load the "Button3" texture.</p>
 
-<p align="left"><strong>20. Cut</strong> - performs a manual box cut on an area
+<p align="left"><strong>22. Cut</strong> - performs a manual box cut on an area
 within the current floor<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Cut <em>x1, y1, z1,
 x2, y2, z2, cutwalls, cutfloors</em><br>
@@ -1205,7 +1215,7 @@ start and end coordinates of the box cut. The Y values are relative to the
 current floor's altitude. If <em>cutwalls</em> is true, the function will cut
 walls; if <em>cutfloors</em> is true, it'll cut floors.</p>
 
-<p align="left"><strong>21. CutAll</strong> - performs a manual box cut on all
+<p align="left"><strong>23. CutAll</strong> - performs a manual box cut on all
 objects associated with the current floor (the level itself, interfloor,
 shafts, stairs and external)<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">CutAll <em>x1, y1, z1,
@@ -1218,7 +1228,7 @@ start and end coordinates of the box cut. The Y values are relative to the
 current floor's altitude. If <em>cutwalls</em> is true, the function will cut
 walls; if <em>cutfloors</em> is true, it'll cut floors.</p>
 
-<p align="left"><strong>22. AddFillerWalls</strong> - helper function to add
+<p align="left"><strong>24. AddFillerWalls</strong> - helper function to add
 fillers around a door's cut location. When a door is created, the wall in it's
 location is cut to provide space; after the cut, the sides are open (if the
 wall has thickness) - this creates a covering wall on each side and a floor
@@ -1234,7 +1244,7 @@ door's parameters. <em>Direction</em> is either true if the door faces the
 front/back (width is along the X axis), or false if the door faces left/right
 (width is along the Z axis).</p>
 
-<p align="left"><strong>23. AddSound</strong> - creates a user-defined sound at
+<p align="left"><strong>25. AddSound</strong> - creates a user-defined sound at
 the specified position<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddSound <em>name,
 filename, x, y, z, loop[, volume, speed, min_distance, max_distance,
@@ -1251,7 +1261,7 @@ the Global Commands section. The only difference here is that the Y value is rel
 of the floor's base (altitude plus interfloor height). <em>Loop</em> specifies
 if the sound should loop and play on startup.</p>
 
-<p align="left"><strong>24. AddShaftDoorComponent</strong> - creates a single
+<p align="left"><strong>26. AddShaftDoorComponent</strong> - creates a single
 shaft door component, used for creating custom door styles<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftDoorComponent
 <em>elevator, number, name, texture, sidetexture, thickness, direction,
@@ -1265,7 +1275,7 @@ components. The components don't need to line up with the floor's base; the
 elevator will automatically stop at the base of the shaft door for each floor.
 This command replaces the AddShaftDoor command.</p>
 
-<p align="left"><strong>25. FinishShaftDoor</strong> - finishes shaft door
+<p align="left"><strong>27. FinishShaftDoor</strong> - finishes shaft door
 creation - use this after all related AddShaftDoorComponent commands are used,
 or specify it without the AddShaftDoorComponent commands if you're creating a
 manual shaft door.<br>
@@ -1276,7 +1286,7 @@ size="2">FinishShaftDoor<em> elevator, number[, door_walls, track_walls]</em></f
 the elevator section below - see that for more information) except that it's
 used for finishing a shaft door.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>26.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>28.
 AddModel</strong> - adds a 3D model to the floor. If a filename is specified, the model's
 textures/materials must be defined in a separate ".material" file, and a
 separate collider mesh ".collider" will be loaded. In that situation, if a collider mesh isn't
@@ -1308,7 +1318,7 @@ work if you don't provide a collider mesh), and <em>Restitution</em>,
 <em>Friction</em> and <em>Mass</em> determine the physical properties of the
 object.</p>
 
-<p align="left"><strong>27. AddStairsModel</strong> - adds a 3D model to the
+<p align="left"><strong>29. AddStairsModel</strong> - adds a 3D model to the
 specified stairwell, on the current floor. See the AddModel command above for
 parameter information.<br>
 Syntax: <font face="Courier New, Courier, mono"
@@ -1321,7 +1331,7 @@ EnablePhysics, Restitution, Friction, Mass</em><em><br>
 <p align="left">The <em>CenterY</em> value is relative to the current floor's
 altitude. </p>
 
-<p align="left"><strong>28. AddShaftModel</strong> - adds a 3D model to the
+<p align="left"><strong>30. AddShaftModel</strong> - adds a 3D model to the
 specified shaft, on the current floor. See the AddModel command above for
 parameter information.<br>
 Syntax: <font face="Courier New, Courier, mono"
@@ -1334,7 +1344,7 @@ EnablePhysics, Restitution, Friction, Mass</em><em><br>
 <p align="left">The <em>CenterY</em> value is relative to the current floor's
 altitude. </p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>29.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>31.
 AddActionControl</strong> - creates a custom control that uses a specific
 action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
@@ -1355,7 +1365,7 @@ action, and switches to the next actions in sequence when it's clicked.
 (front, left, right, back). <em>Voffset</em> is relative of the floor's base.
 Leave the <em>sound</em> field blank for no sound to be played.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>30.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
 AddShaftActionControl</strong> - creates a custom control in a specified shaft
 that uses a specific action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftActionControl
@@ -1377,7 +1387,7 @@ action, and switches to the next actions in sequence when it's clicked.
 Leave the <em>sound</em> field blank for no sound to be
 played.<strong></strong></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>31.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
 AddStairsActionControl</strong> - creates a custom control in a specified
 stairwell that uses a specific action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsActionControl
@@ -1399,7 +1409,7 @@ action, and switches to the next actions in sequence when it's clicked.
 Leave the <em>sound</em> field blank for no sound to be
 played.<strong></strong></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
 the user's camera enters or leaves the defined area.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddTrigger <em>name,

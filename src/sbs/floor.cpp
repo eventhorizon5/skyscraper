@@ -643,7 +643,7 @@ bool Floor::IsInGroup(int floor)
 	return false;
 }
 
-Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external)
 {
 	//interface to the SBS AddDoor function
 
@@ -675,6 +675,10 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 		CutAll(Ogre::Vector3(x1 - 1, GetBase(true) + voffset, z1), Ogre::Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
 	else
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
+
+	//create an external (global) door if specified
+	if (external == true)
+		return sbs->AddDoor(open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);

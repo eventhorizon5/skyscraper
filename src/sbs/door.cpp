@@ -177,6 +177,8 @@ Door::~Door()
 				static_cast<Shaft*>(GetParent())->RemoveDoor(this);
 			else if (type == "Stairs")
 				static_cast<Stairs*>(GetParent())->RemoveDoor(this);
+			else if (type == "SBS")
+				sbs->RemoveDoor(this);
 		}
 		sbs->UnregisterDoorCallback(this);
 	}
