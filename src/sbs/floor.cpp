@@ -678,7 +678,7 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 
 	//create an external (global) door if specified
 	if (external == true)
-		return sbs->AddDoor(open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+		return sbs->AddDoor(open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase() + voffset, tw, th);
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
