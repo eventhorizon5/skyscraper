@@ -907,7 +907,10 @@ void Floor::AddFillerWalls(const std::string &texture, float thickness, float Ce
 	}
 
 	//perform a cut in the area
-	CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2), true, false);
+	if (isexternal == false)
+		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2), true, false);
+	else
+		CutAll(Ogre::Vector3(x1, voffset, z1), Ogre::Vector3(x2, voffset + height, z2), true, false);
 
 	//create walls
 	sbs->DrawWalls(false, true, false, false, false, false);
