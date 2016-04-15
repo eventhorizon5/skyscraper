@@ -670,19 +670,23 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 		z2 = CenterZ;
 	}
 
+	float base = 0.0f;
+	if (external == false)
+		base = GetBase(true);
+
 	//cut area
 	if (direction < 5)
-		CutAll(Ogre::Vector3(x1 - 1, GetBase(true) + voffset, z1), Ogre::Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
+		CutAll(Ogre::Vector3(x1 - 1, base + voffset, z1), Ogre::Vector3(x2 + 1, base + voffset + height, z2), true, false);
 	else
-		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
+		CutAll(Ogre::Vector3(x1, base + voffset, z1 - 1), Ogre::Vector3(x2, base + voffset + height, z2 + 1), true, false);
 
 	//create an external (global) door if specified
 	if (external == true)
-		return sbs->AddDoor(open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase() + voffset, tw, th);
+		return sbs->AddDoor(open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
-	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, base + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
 }
