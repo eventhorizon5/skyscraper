@@ -537,11 +537,13 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 			sbs->GetShaft(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
 	}
 
+	Ogre::Vector3 offset (0, GetBase(true), 0);
+
 	//cut stairs
 	for (int i = 1; i <= sbs->GetStairsCount(); i++)
 	{
 		if (sbs->GetStairs(i))
-			sbs->GetStairs(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
+			sbs->GetStairs(i)->Cut(false, Number, start - offset, end - offset, cutwalls, cutfloors);
 	}
 
 	//cut external
