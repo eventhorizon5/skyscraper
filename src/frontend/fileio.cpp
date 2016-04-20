@@ -1204,7 +1204,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	//show error dialog
 	if (warning == false)
 	{
-		wxMessageDialog dialog (0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
 		dialog.ShowModal();
 	}
 	return sError;
@@ -1344,7 +1344,7 @@ bool ScriptProcessor::ReportMissingFiles()
 		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
 		for (int i = 0; i < (int)nonexistent_files.size(); i++)
 		{
-			message.Append(wxString::FromAscii(nonexistent_files[i].c_str()));
+			message.Append(nonexistent_files[i]);
 			message.Append(wxT("\n"));
 		}
 		twindow->tMain->WriteText(message);
@@ -2255,8 +2255,26 @@ int ScriptProcessor::ProcCommands()
 
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
+		SetCase(temp2, false);
 
-		Simcore->GetStairs(stairnum)->ShowFullStairs = ToBool(temp2);
+		int value = 0;
+
+		if (IsBoolean(temp2) == true)
+		{
+			if (ToBool(temp2) == true)
+				value = 1;
+		}
+		else
+		{
+			if (temp2 == "inside")
+				value = 1;
+			else if (temp2 == "always")
+				value = 2;
+			else
+				return ScriptError("Invalid value: " + temp2);
+		}
+
+		Simcore->GetStairs(stairnum)->SetShowFull(value);
 		return sNextLine;
 	}
 
@@ -4108,7 +4126,7 @@ int ScriptProcessor::ProcFloors()
 	if (linecheck.substr(0, 16) == "addshaftstddoor ")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData, 16);
 
 		if (params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -4138,6 +4156,36 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid shaft");
+		return sNextLine;
+	}
+
+	//AddExternalDoor command
+	if (linecheck.substr(0, 16) == "addexternaldoor ")
+	{
+		//get data
+		int params = SplitData(LineData, 16);
+
+		if (params != 14)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i <= 13; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//check to see if file exists
+		CheckFile("data/" + tempdata[0]);
+		CheckFile("data/" + tempdata[1]);
+
+		//create door
+		Door* door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), true);
+
+		if (door)
+			door->SetLocked(lockvalue, keyvalue);
+
+		StoreCommand(door);
 		return sNextLine;
 	}
 
@@ -4311,8 +4359,13 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData, 15);
 
-		if (params != 10)
+		if (params < 10 || params > 11)
 			return ScriptError("Incorrect number of parameters");
+
+		bool compat = false;
+
+		if (params == 10)
+			compat = true;
 
 		//check numeric values
 		for (int i = 1; i <= 9; i++)
@@ -4323,7 +4376,11 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+		if (compat == true)
+			floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), false);
+		else
+			floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]));
+
 		return sNextLine;
 	}
 

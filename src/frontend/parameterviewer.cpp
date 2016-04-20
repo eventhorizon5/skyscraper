@@ -307,7 +307,7 @@ bool ParameterViewer::Setup()
 		{
 			SetTitle(wxT("Create Floor"));
 
-			t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			wxString newlabel = wxT("Create a New Floor\nFloors above ground start with 0 (so a 15-story building would have floors 0-14).\nAlso, floors must be made in the proper order: basement levels must be made first in decending order (-1, -2, -3 etc),\nand then above-ground floors in ascending order (0, 1, 2, etc)\n");
 			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
@@ -345,7 +345,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddFloor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddFloor"));
 
@@ -401,7 +401,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddWall") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddWall"));
 
@@ -455,7 +455,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddInterfloorFloor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddInterfloorFloor"));
 
@@ -507,7 +507,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddInterfloorWall") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddInterfloorWall"));
 
@@ -557,7 +557,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddStairsFloor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddStairsFloor"));
 
@@ -611,7 +611,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddStairsWall") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddStairsWall"));
 
@@ -663,7 +663,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddShaftFloor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddShaftFloor"));
 
@@ -717,7 +717,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddShaftWall") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddShaftWall"));
 
@@ -769,7 +769,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("ColumnWallBox") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - ColumnWallBox"));
 
@@ -815,7 +815,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("ColumnWallBox2") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - ColumnWallBox2"));
 
@@ -861,7 +861,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("CreateCallButtons") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - CreateCallButtons"));
 
@@ -921,7 +921,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddStairs") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddStairs"));
 
@@ -971,7 +971,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddDoor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddDoor"));
 
@@ -1027,7 +1027,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddStairsDoor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddStairsDoor"));
 
@@ -1085,7 +1085,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddShaftStdDoor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddShaftStdDoor"));
 
@@ -1143,7 +1143,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddShaftDoor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddShaftDoor"));
 
@@ -1176,7 +1176,7 @@ bool ParameterViewer::Setup()
 
 		if (objecttype == wxT("AddFloorIndicator") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddFloorIndicator"));
 
@@ -1214,7 +1214,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("AddDirectionalIndicator") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddDirectionalIndicator"));
 
@@ -1284,7 +1284,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("Cut") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - Cut"));
 
@@ -1325,7 +1325,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("CutAll") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - CutAll"));
 
@@ -1366,7 +1366,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("AddFillerWalls") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddFillerWalls"));
 
@@ -1407,7 +1407,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("AddSound") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddSound"));
 
@@ -1481,7 +1481,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("AddShaftDoorComponent") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddShaftDoorComponent"));
 
@@ -1544,7 +1544,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("FinishShaftDoor") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - FinishShaftDoor"));
 
@@ -1563,7 +1563,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("AddModel") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddModel"));
 
@@ -1623,7 +1623,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("AddStairsModel") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddStairsModel"));
 
@@ -1685,7 +1685,7 @@ bool ParameterViewer::Setup()
 		}
 		if (objecttype == wxT("AddShaftModel") && objectparent == wxT("Floor"))
 		{
-			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+			//t1->SetValue(SBS::ToString(Simcore->Floors));
 
 			SetTitle(wxT("Floor - AddShaftModel"));
 
@@ -1862,7 +1862,7 @@ void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 {
 	Simcore->DeleteColliders = true;
 	ScriptProcessor *processor = panel->GetRoot()->GetActiveEngine()->GetScriptProcessor();
-	processor->LoadFromText(std::string(command.ToAscii()));
+	processor->LoadFromText(std::string(command));
 	this->Close();
 }
 
@@ -2005,7 +2005,7 @@ void ParameterViewer::On_bTextures_Click(wxCommandEvent& event)
 	twindow->Center();
 	twindow->SetTitle(wxT("Loaded Textures"));
 	twindow->Show(true);
-	wxString message = wxString::FromAscii(Simcore->GetTextureManager()->ListTextures().c_str());
+	wxString message = Simcore->GetTextureManager()->ListTextures();
 	twindow->tMain->WriteText(message);
 	twindow->tMain->SetInsertionPoint(0);
 }

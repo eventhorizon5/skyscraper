@@ -439,16 +439,16 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     SetAutoSize = true, true
 
     #Dearborn street doors
-    AddDoor StairsDoor2, 0.2, 8, 10, -70, 3.5, 8, 0, 0, 0
-    AddFillerWalls ConnectionWall, 0.2, 10, -70, 3.5, 8, 0, true, 0, 0
-    AddDoor StairsDoor2, 0.2, 5, -10, -70, 3.5, 8, 0, 0, 0
-    AddFillerWalls ConnectionWall, 0.2, -10, -70, 3.5, 8, 0, true, 0, 0
+    AddExternalDoor , , false, StairsDoor2, 0.2, 8, 0, 10, -70, 3.5, 8, %interfloorheight%, 0, 0
+    AddFillerWalls ConnectionWall, 0.2, 10, -70, 3.5, 8, %interfloorheight%, true, 0, 0, true
+    AddExternalDoor , , false, StairsDoor2, 0.2, 5, 0, -10, -70, 3.5, 8, %interfloorheight%, 0, 0
+    AddFillerWalls ConnectionWall, 0.2, -10, -70, 3.5, 8, %interfloorheight%, true, 0, 0, true
     
     #State street/plaza doors
-    AddDoor StairsDoor2, 0.2, 7, 10, 70, 3.5, 8, 0, 0, 0
-    AddFillerWalls ConnectionWall, 0.2, 10, 70, 3.5, 8, 0, true, 0, 0
-    AddDoor StairsDoor2, 0.2, 6, -10, 70, 3.5, 8, 0, 0, 0
-    AddFillerWalls ConnectionWall, 0.2, -10, 70, 3.5, 8, 0, true, 0, 0
+    AddExternalDoor , , false, StairsDoor2, 0.2, 7, 0, 10, 70, 3.5, 8, %interfloorheight%, 0, 0
+    AddFillerWalls ConnectionWall, 0.2, 10, 70, 3.5, 8, %interfloorheight%, true, 0, 0, true
+    AddExternalDoor , , false, StairsDoor2, 0.2, 6, 0, -10, 70, 3.5, 8, %interfloorheight%, 0, 0
+    AddFillerWalls ConnectionWall, 0.2, -10, 70, 3.5, 8, %interfloorheight%, true, 0, 0, true
     
     #Left Restroom
     DrawWalls = true, true, false, false, false, false
@@ -2175,10 +2175,10 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
 
     #doors
     WallOrientation = center
-    AddDoor StairsDoor, 0.2, 1, -20, 0, 3.5, 8, 0, 1, 1
-    AddFillerWalls ConnectionWall, 1, -20, 0, 3.5, 8, 0, false, 0, 0
-    AddDoor StairsDoor, 0.2, 3, 20, 0, 3.5, 8, 0, 1, 1
-    AddFillerWalls ConnectionWall, 1, 20, 0, 3.5, 8, 0, false, 0, 0
+    AddExternalDoor , , false, StairsDoor, 0.2, 1, 0, -20, 0, 3.5, 8, %interfloorheight%, 1, 1
+    AddFillerWalls ConnectionWall, 1, -20, 0, 3.5, 8, %interfloorheight%, false, 0, 0, true
+    AddExternalDoor , , false, StairsDoor, 0.2, 3, 0, 20, 0, 3.5, 8, %interfloorheight%, 1, 1
+    AddFillerWalls ConnectionWall, 1, 20, 0, 3.5, 8, %interfloorheight%, false, 0, 0, true
 
     DrawWalls = true, true, false, false, false, false
 

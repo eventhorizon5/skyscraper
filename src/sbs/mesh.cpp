@@ -1086,6 +1086,7 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 		if ((int)Submeshes[index].Triangles.size() - (int)indices.size() <= 0)
 		{
 			Submeshes.erase(Submeshes.begin() + index);
+			prepared = false; //need to re-prepare mesh
 			return -1;
 		}
 	}

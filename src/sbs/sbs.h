@@ -65,6 +65,7 @@ namespace SBS {
 	class ElevatorManager;
 	class ShaftManager;
 	class StairsManager;
+	class DoorManager;
 	class TextureManager;
 	class Polygon;
 	class Model;
@@ -156,7 +157,7 @@ public:
 	bool AutoStairs; //true if stairwells should turn on and off automatically
 	bool ProcessElevators; //true if elevator system should be enabled
 	int ShaftDisplayRange; //number of shaft floors to display while in elevator; has no effect if shaft's ShowFullShaft is true
-	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if stairwell's ShowFullStairs is true
+	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if stairwell's ShowFullStairs is not 0
 	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
 	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
@@ -371,6 +372,7 @@ public:
 	ElevatorManager* GetElevatorManager();
 	ShaftManager* GetShaftManager();
 	StairsManager* GetStairsManager();
+	DoorManager* GetDoorManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
@@ -419,6 +421,7 @@ private:
 	ElevatorManager* elevator_manager;
 	ShaftManager* shaft_manager;
 	StairsManager* stairs_manager;
+	DoorManager* door_manager;
 
 	//dynamic meshes
 	std::vector<DynamicMesh*> dynamic_meshes;

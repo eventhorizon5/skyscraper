@@ -69,7 +69,7 @@ public:
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
 	bool IsInGroup(int floor);
-	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external = false);
 	bool CalculateAltitude();
 	void EnableColumnFrame(bool value);
 	void EnableInterfloor(bool value);
@@ -85,7 +85,7 @@ public:
 	void Loop();
 	std::vector<int> GetCallButtons(int elevator);
 	CallButton* GetCallButton(int elevator);
-	void AddFillerWalls(const std::string &texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th);
+	void AddFillerWalls(const std::string &texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th, bool isexternal);
 	Sound* AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop = true, float volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float doppler_level = 0.0, float cone_inside_angle = 360, float cone_outside_angle = 360, float cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);

@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "manager.h"
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
@@ -177,6 +178,8 @@ Door::~Door()
 				static_cast<Shaft*>(GetParent())->RemoveDoor(this);
 			else if (type == "Stairs")
 				static_cast<Stairs*>(GetParent())->RemoveDoor(this);
+			else if (type == "SBS")
+				sbs->GetDoorManager()->RemoveDoor(this);
 		}
 		sbs->UnregisterDoorCallback(this);
 	}

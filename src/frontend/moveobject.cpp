@@ -304,14 +304,14 @@ void MoveObject::On_bZPlus_Click(wxCommandEvent& event)
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue().ToAscii()));
+		hold_vector += Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Ogre::Vector3(0, 0, 1) * atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->MoveObject(object, Ogre::Vector3(0, 0, 1) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
 	else
-		Simcore->RotateObject(object, Ogre::Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->RotateObject(object, Ogre::Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()), true, true, true, true);
 }
 
 void MoveObject::On_bYPlus_Click(wxCommandEvent& event)
@@ -321,14 +321,14 @@ void MoveObject::On_bYPlus_Click(wxCommandEvent& event)
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(0, atof(txtMoveSpeed->GetValue().ToAscii()), 0);
+		hold_vector += Ogre::Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Ogre::Vector3(0, 1, 0) * atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->MoveObject(object, Ogre::Vector3(0, 1, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
 	else
-		Simcore->RotateObject(object, Ogre::Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->RotateObject(object, Ogre::Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
 }
 
 void MoveObject::On_bXNeg_Click(wxCommandEvent& event)
@@ -338,14 +338,14 @@ void MoveObject::On_bXNeg_Click(wxCommandEvent& event)
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		hold_vector -= Ogre::Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Ogre::Vector3(-1, 0, 0) * atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->MoveObject(object, Ogre::Vector3(-1, 0, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
 	else
-		Simcore->RotateObject(object, Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->RotateObject(object, Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
 }
 
 void MoveObject::On_bXPlus_Click(wxCommandEvent& event)
@@ -355,14 +355,14 @@ void MoveObject::On_bXPlus_Click(wxCommandEvent& event)
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		hold_vector += Ogre::Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Ogre::Vector3(1, 0, 0) * atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->MoveObject(object, Ogre::Vector3(1, 0, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
 	else
-		Simcore->RotateObject(object, Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->RotateObject(object, Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
 }
 
 void MoveObject::On_bZNeg_Click(wxCommandEvent& event)
@@ -372,14 +372,14 @@ void MoveObject::On_bZNeg_Click(wxCommandEvent& event)
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue().ToAscii()));
+		hold_vector -= Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Ogre::Vector3(0, 0, -1) * atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->MoveObject(object, Ogre::Vector3(0, 0, -1) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
 	else
-		Simcore->RotateObject(object, Ogre::Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->RotateObject(object, Ogre::Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()), true, true, true, true);
 }
 
 void MoveObject::On_bYNeg_Click(wxCommandEvent& event)
@@ -389,50 +389,50 @@ void MoveObject::On_bYNeg_Click(wxCommandEvent& event)
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(0, atof(txtMoveSpeed->GetValue().ToAscii()), 0);
+		hold_vector -= Ogre::Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Ogre::Vector3(0, -1, 0) * atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->MoveObject(object, Ogre::Vector3(0, -1, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
 	else
-		Simcore->RotateObject(object, Ogre::Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue().ToAscii()), true, true, true, true);
+		Simcore->RotateObject(object, Ogre::Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
 }
 
 void MoveObject::On_bPositionX_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Ogre::Vector3(atof(txtPositionX->GetValue().ToAscii()), 0.0, 0.0), false, true, false, false);
+		Simcore->MoveObject(object, Ogre::Vector3(atof(txtPositionX->GetValue()), 0.0, 0.0), false, true, false, false);
 }
 
 void MoveObject::On_bPositionY_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Ogre::Vector3(0.0, atof(txtPositionY->GetValue().ToAscii()), 0.0), false, false, true, false);
+		Simcore->MoveObject(object, Ogre::Vector3(0.0, atof(txtPositionY->GetValue()), 0.0), false, false, true, false);
 }
 
 void MoveObject::On_bPositionZ_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Ogre::Vector3(0.0, 0.0, atof(txtPositionZ->GetValue().ToAscii())), false, false, false, true);
+		Simcore->MoveObject(object, Ogre::Vector3(0.0, 0.0, atof(txtPositionZ->GetValue())), false, false, false, true);
 }
 
 void MoveObject::On_bRotationX_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Ogre::Vector3(atof(txtRotationX->GetValue().ToAscii()), 0.0, 0.0), 0, false, true, false, false);
+		Simcore->RotateObject(object, Ogre::Vector3(atof(txtRotationX->GetValue()), 0.0, 0.0), 0, false, true, false, false);
 }
 
 void MoveObject::On_bRotationY_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Ogre::Vector3(0.0, atof(txtRotationY->GetValue().ToAscii()), 0.0), 0, false, false, true, false);
+		Simcore->RotateObject(object, Ogre::Vector3(0.0, atof(txtRotationY->GetValue()), 0.0), 0, false, false, true, false);
 }
 
 void MoveObject::On_bRotationZ_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Ogre::Vector3(0.0, 0.0, atof(txtRotationZ->GetValue().ToAscii())), 0, false, false, false, true);
+		Simcore->RotateObject(object, Ogre::Vector3(0.0, 0.0, atof(txtRotationZ->GetValue())), 0, false, false, false, true);
 }
 
 void MoveObject::On_chkHold_Click(wxCommandEvent& event)

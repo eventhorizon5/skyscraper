@@ -61,7 +61,7 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 	checkfirstrun = true;
 	lastposition = 0;
 	ShowFloors = false;
-	ShowFullStairs = false;
+	ShowFullStairs = 0;
 
 	std::string name;
 	name = "Stairwell " + ToString(number);
@@ -386,6 +386,9 @@ void Stairs::Enabled(int floor, bool value)
 void Stairs::EnableWholeStairwell(bool value, bool force)
 {
 	//turn on/off entire stairwell
+
+	if (value == false && ShowFullStairs == 2)
+		return;
 
 	if (force == true)
 		IsEnabled = !value;
@@ -871,7 +874,11 @@ void Stairs::ReplaceTexture(const std::string &oldtexture, const std::string &ne
 void Stairs::OnInit()
 {
 	//startup initialization of stairs
-	EnableWholeStairwell(false);
+
+	if (ShowFullStairs == 2)
+		EnableWholeStairwell(true);
+	else
+		EnableWholeStairwell(false);
 }
 
 void Stairs::AddShowFloor(int floor)
@@ -922,13 +929,13 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 			InsideStairwell = true;
 			sbs->InStairwell = true;
 
-			//turn on entire stairwell if ShowFullStairs is true
-			if (ShowFullStairs == true)
+			//turn on entire stairwell if ShowFullStairs is not 0
+			if (ShowFullStairs > 0)
 				EnableWholeStairwell(true);
 		}
 
 		//show specified stairwell range while in the stairwell
-		if (ShowFullStairs == false)
+		if (ShowFullStairs == 0)
 			EnableRange(current_floor, sbs->StairsDisplayRange, true);
 
 		//if user walked to a different floor, enable new floor and disable previous
@@ -963,8 +970,8 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 		InsideStairwell = false;
 		sbs->InStairwell = false;
 
-		//turn off stairwell if ShowFullStairs is true
-		if (ShowFullStairs == true)
+		//turn off stairwell if ShowFullStairs is 1
+		if (ShowFullStairs == 1)
 			EnableWholeStairwell(false);
 
 		//turn off related floors if outside stairwell
@@ -986,8 +993,16 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 	}
 	else if (InsideStairwell == false)
 	{
-		//show specified stairwell range if outside the stairwell
-		EnableRange(current_floor, sbs->StairsOutsideDisplayRange, true);
+		if (ShowFullStairs == 2)
+		{
+			//show full stairwell if specified
+			EnableWholeStairwell(true);
+		}
+		else
+		{
+			//show specified stairwell range if outside the stairwell
+			EnableRange(current_floor, sbs->StairsOutsideDisplayRange, true);
+		}
 	}
 }
 
@@ -1027,6 +1042,18 @@ Model* Stairs::GetModel(int floor, std::string name)
 	}
 
 	return 0;
+}
+
+void Stairs::SetShowFull(int value)
+{
+	ShowFullStairs = value;
+
+	//force the combining of dynamic meshes, since they'll be fully shown
+	if (value == 2)
+	{
+		dynamic_mesh->force_combine = true;
+		DoorWrapper->force_combine = true;
+	}
 }
 
 }

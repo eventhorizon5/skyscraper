@@ -145,6 +145,7 @@ private:
 	std::vector<Group> groups;
 	bool prepared;
 	bool dynamic_buffers;
+	bool auto_combine;
 };
 
 }

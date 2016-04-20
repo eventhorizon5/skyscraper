@@ -214,7 +214,7 @@ void EngineManager::Loop()
 			if (engine)
 				filename = engine->GetFilename();
 
-			EngineList->Append(wxVariant(i).GetString() + wxT(" - ") + wxString::FromAscii(filename.c_str()));
+			EngineList->Append(SBS::ToString(i) + wxT(" - ") + filename);
 		}
 
 		if (selection == -1)

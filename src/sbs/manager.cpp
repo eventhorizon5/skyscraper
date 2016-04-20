@@ -29,6 +29,7 @@
 #include "elevator.h"
 #include "shaft.h"
 #include "stairs.h"
+#include "door.h"
 #include "manager.h"
 #include "dynamicmesh.h"
 
@@ -626,6 +627,57 @@ void StairsManager::EnableAll(bool value)
 	//enable or disable all stairwells
 	for (int i = 0; i < (int)Array.size(); i++)
 		Array[i].object->EnableWholeStairwell(value, true);
+}
+
+DoorManager::DoorManager(Object* parent) : Object(parent)
+{
+	//set up SBS object
+	SetValues("DoorManager", "Door Manager", true);
+
+	//create a dynamic mesh for doors
+	wrapper = new DynamicMesh(this, GetSceneNode(), "Door Container", 0, true);
+	wrapper->force_combine = true;
+}
+
+DoorManager::~DoorManager()
+{
+	//delete doors
+	for (int i = 0; i < (int)Array.size(); i++)
+	{
+		if (Array[i])
+		{
+			Array[i]->parent_deleting = true;
+			delete Array[i];
+		}
+		Array[i] = 0;
+	}
+
+	if (wrapper)
+		delete wrapper;
+	wrapper = 0;
+}
+
+Door* DoorManager::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+{
+	int number = (int)Array.size();
+	std::string name = "Door " + ToString(number);
+	Door* door = new Door(this, wrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Array.push_back(door);
+	return door;
+}
+
+void DoorManager::RemoveDoor(Door *door)
+{
+	//remove a door from the array
+	//this does not delete the object
+	for (int i = 0; i < (int)Array.size(); i++)
+	{
+		if (Array[i] == door)
+		{
+			Array.erase(Array.begin() + i);
+			return;
+		}
+	}
 }
 
 }

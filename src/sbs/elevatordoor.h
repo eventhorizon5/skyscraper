@@ -128,7 +128,7 @@ public:
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool AreDoorsOpen();
 	bool AreShaftDoorsOpen(int floor);
-	bool AreShaftDoorsClosed();
+	bool AreShaftDoorsClosed(bool skip_current_floor = false);
 	void Reset(bool sensor = false);
 	bool DoorsStopped();
 	DoorWrapper* AddDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);

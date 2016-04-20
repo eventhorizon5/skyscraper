@@ -90,7 +90,7 @@ void Profiler::Loop()
 
 	std::string output;
 	SBS::ProfileManager::dumpRecursive(output, profileIterator,0);
-	txtMain->SetLabel(wxString::FromAscii(output.c_str()));
+	txtMain->SetLabel(output);
 
 	SBS::ProfileManager::Release_Iterator(profileIterator);
 }

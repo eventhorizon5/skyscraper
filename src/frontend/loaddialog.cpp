@@ -210,7 +210,7 @@ void LoadDialog::On_bSelect_Click(wxCommandEvent& event)
 {
 	std::string filename = panel->GetRoot()->SelectBuilding();
 
-	tFilename->SetValue(wxString::FromAscii(filename.c_str()));
+	tFilename->SetValue(filename);
 }
 
 void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
@@ -253,7 +253,7 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 		return;
 
 	std::string filename;
-	filename = tFilename->GetValue().ToAscii();
+	filename = tFilename->GetValue();
 
 	::Skyscraper::Skyscraper *frontend = panel->GetRoot();
 

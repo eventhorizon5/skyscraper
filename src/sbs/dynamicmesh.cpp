@@ -56,6 +56,7 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 	prepared = false;
 	this->dynamic_buffers = dynamic_buffers;
 	force_combine = false;
+	auto_combine = sbs->GetConfigBool("Skyscraper.SBS.DynamicMesh.AutoCombine", true);
 	sbs->RegisterDynamicMesh(this);
 }
 

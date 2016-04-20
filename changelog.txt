@@ -1,5 +1,11 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-added an "always" value to the ShowFullStairs command, which allows a stairwell to always be fully shown, like the ShowFullShaft command does with shafts
+-added INI file option to switch off the Dynamic Mesh's auto combiner
+-wxWidgets string cleanups
+-SwitchEngines function should try to switch to active engine's parent, if possible
+-elevator doors should only set "hold" option if not moving manually
+-for door re-openings, only issue a re-open on doors that are moving
 -position command in Globals section needs to recursively move child engines when run
 -fixed an issue where the Position command in the Globals script section wouldn't work for buildings loaded in nested Buildings sections
 -have CutForEngine function pass engine cut operation to parent, mainly so that nested Buildings sections in code will cut the top-level engine properly

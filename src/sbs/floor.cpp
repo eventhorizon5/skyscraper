@@ -537,11 +537,13 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 			sbs->GetShaft(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
 	}
 
+	Ogre::Vector3 offset (0, GetBase(true), 0);
+
 	//cut stairs
 	for (int i = 1; i <= sbs->GetStairsCount(); i++)
 	{
 		if (sbs->GetStairs(i))
-			sbs->GetStairs(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
+			sbs->GetStairs(i)->Cut(false, Number, start - offset, end - offset, cutwalls, cutfloors);
 	}
 
 	//cut external
@@ -643,7 +645,7 @@ bool Floor::IsInGroup(int floor)
 	return false;
 }
 
-Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external)
 {
 	//interface to the SBS AddDoor function
 
@@ -670,15 +672,23 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 		z2 = CenterZ;
 	}
 
+	float base = 0.0f;
+	if (external == false)
+		base = GetBase(true);
+
 	//cut area
 	if (direction < 5)
-		CutAll(Ogre::Vector3(x1 - 1, GetBase(true) + voffset, z1), Ogre::Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
+		CutAll(Ogre::Vector3(x1 - 1, base + voffset, z1), Ogre::Vector3(x2 + 1, base + voffset + height, z2), true, false);
 	else
-		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
+		CutAll(Ogre::Vector3(x1, base + voffset, z1 - 1), Ogre::Vector3(x2, base + voffset + height, z2 + 1), true, false);
+
+	//create an external (global) door if specified
+	if (external == true)
+		return sbs->GetDoorManager()->AddDoor(open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
-	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, base + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
 }
@@ -855,7 +865,7 @@ CallButton* Floor::GetCallButton(int elevator)
 	return 0;
 }
 
-void Floor::AddFillerWalls(const std::string &texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th)
+void Floor::AddFillerWalls(const std::string &texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th, bool isexternal)
 {
 	//convenience function for adding filler walls around doors
 	//direction is either "false" for a door that faces left/right, or "true" for one that faces front/back
@@ -903,23 +913,26 @@ void Floor::AddFillerWalls(const std::string &texture, float thickness, float Ce
 	}
 
 	//perform a cut in the area
-	CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2), true, false);
+	if (isexternal == false)
+		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2), true, false);
+	else
+		CutAll(Ogre::Vector3(x1, voffset, z1), Ogre::Vector3(x2, voffset + height, z2), true, false);
 
 	//create walls
 	sbs->DrawWalls(false, true, false, false, false, false);
 	if (direction == false)
-		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, false);
+		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, isexternal);
 	else
-		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, false);
+		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, isexternal);
 	sbs->ResetWalls();
 
 	sbs->DrawWalls(true, false, false, false, false, false);
 	if (direction == false)
-		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, false);
+		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 	else
-		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 
-	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, false);
+	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, isexternal);
 	sbs->ResetWalls();
 }
 

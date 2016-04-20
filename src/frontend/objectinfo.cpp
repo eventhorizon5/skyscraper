@@ -282,7 +282,7 @@ void ObjectInfo::Loop()
 			TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(id);
 			wxString num;
 			num = data->GetDesc();
-			number = atoi(num.ToAscii());
+			number = atoi(num);
 		}
 		changed = false;
 	}
@@ -291,7 +291,7 @@ void ObjectInfo::Loop()
 
 	oldobject = number;
 	Object *object = Simcore->GetObject(number);
-	tNumber->SetValue(wxVariant(number).GetString());
+	tNumber->SetValue(ToString(number));
 	tLineNum->Clear();
 	tIncludeFile->Clear();
 	tScriptCommand->Clear();
@@ -306,21 +306,21 @@ void ObjectInfo::Loop()
 
 	if (object)
 	{
-		tName->SetValue(wxString::FromAscii(object->GetName().c_str()));
-		tType->SetValue(wxString::FromAscii(object->GetType().c_str()));
-		tLineNum->SetValue(wxVariant(object->linenum).GetString());
-		tIncludeFile->SetValue(wxString::FromAscii(object->includefile.c_str()));
-		tScriptCommand->SetValue(wxString::FromAscii(object->command.c_str()));
-		tScriptCommand2->SetValue(wxString::FromAscii(object->command_processed.c_str()));
-		tContext->SetValue(wxString::FromAscii(object->context.c_str()));
-		tPermanent->SetValue(wxString::FromAscii(BoolToString(object->IsPermanent()).c_str()));
+		tName->SetValue(object->GetName());
+		tType->SetValue(object->GetType());
+		tLineNum->SetValue(ToString(object->linenum));
+		tIncludeFile->SetValue(object->includefile);
+		tScriptCommand->SetValue(object->command);
+		tScriptCommand2->SetValue(object->command_processed);
+		tContext->SetValue(object->context);
+		tPermanent->SetValue(BoolToString(object->IsPermanent()));
 
 		Object *parent = object->GetParent();
 		if (parent)
 		{
-			tParent->SetValue(wxVariant(parent->GetNumber()).GetString());
-			tParentName->SetValue(wxString::FromAscii(parent->GetName().c_str()));
-			tParentType->SetValue(wxString::FromAscii(parent->GetType().c_str()));
+			tParent->SetValue(ToString(parent->GetNumber()));
+			tParentName->SetValue(parent->GetName());
+			tParentType->SetValue(parent->GetType());
 		}
 	}
 }
@@ -331,7 +331,7 @@ void ObjectInfo::PopulateTree()
 	ObjectTree->DeleteAllItems();
 
 	//populate object tree
-	wxTreeItemId id = ObjectTree->AddRoot(wxString::FromAscii(Simcore->GetName().c_str()), -1, -1, new TreeItemData(wxVariant(Simcore->GetNumber()).GetString()));
+	wxTreeItemId id = ObjectTree->AddRoot(Simcore->GetName(), -1, -1, new TreeItemData(ToString(Simcore->GetNumber())));
 
 	//add child objects
 	AddChildren(Simcore, id);
@@ -352,7 +352,7 @@ void ObjectInfo::AddChildren(Object *parent, const wxTreeItemId& treeparent)
 			if (parent->GetChild(i))
 			{
 				//add child object
-				wxTreeItemId id = ObjectTree->AppendItem(treeparent, wxString::FromAscii(parent->GetChild(i)->GetName().c_str()), -1, -1, new TreeItemData(wxVariant(parent->GetChild(i)->GetNumber()).GetString()));
+				wxTreeItemId id = ObjectTree->AppendItem(treeparent, parent->GetChild(i)->GetName(), -1, -1, new TreeItemData(ToString(parent->GetChild(i)->GetNumber())));
 
 				//if child object has children, call recursively to add those
 				if (parent->GetChild(i)->GetChildrenCount() > 0)
@@ -377,7 +377,7 @@ void ObjectInfo::On_bDelete_Click(wxCommandEvent& event)
 	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(sel);
 	wxString num;
 	num = data->GetDesc();
-	int number = atoi(num.ToAscii());
+	int number = atoi(num);
 
 	//call SBS to delete object
 	if (Simcore->DeleteObject(number))
@@ -424,7 +424,7 @@ void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 	twindow->Show(true);
 	std::vector<std::string> *data = panel->GetRoot()->GetActiveEngine()->GetScriptProcessor()->GetBuildingData();
 	for (int i = 0; i < (int)data->size(); i++)
-			twindow->tMain->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));
+			twindow->tMain->WriteText(data->at(i) + wxT("\n"));
 	twindow->tMain->SetInsertionPoint(0);
 }
 
@@ -439,7 +439,7 @@ void ObjectInfo::On_bMove_Click(wxCommandEvent& event)
 
 	wxString num;
 	num = data->GetDesc();
-	int number = atoi(num.ToAscii());
+	int number = atoi(num);
 
 	if (moveobject)
 		delete moveobject;
@@ -459,7 +459,7 @@ void ObjectInfo::On_bReset_Click(wxCommandEvent& event)
 	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(sel);
 	wxString num;
 	num = data->GetDesc();
-	int number = atoi(num.ToAscii());
+	int number = atoi(num);
 
 	//call SBS to reset object state
 	Object *obj = Simcore->GetObject(number);

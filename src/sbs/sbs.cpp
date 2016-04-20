@@ -235,6 +235,7 @@ void SBS::Initialize()
 	elevator_manager = new ElevatorManager(this);
 	shaft_manager = new ShaftManager(this);
 	stairs_manager = new StairsManager(this);
+	door_manager = new DoorManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -331,6 +332,10 @@ SBS::~SBS()
 	if (stairs_manager)
 		delete stairs_manager;
 	stairs_manager = 0;
+
+	if (door_manager)
+		delete door_manager;
+	door_manager = 0;
 
 	//delete sounds
 	for (int i = 0; i < (int)sounds.size(); i++)
@@ -4168,6 +4173,11 @@ ShaftManager* SBS::GetShaftManager()
 StairsManager* SBS::GetStairsManager()
 {
 	return stairs_manager;
+}
+
+DoorManager* SBS::GetDoorManager()
+{
+	return door_manager;
 }
 
 TextureManager* SBS::GetTextureManager()

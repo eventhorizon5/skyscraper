@@ -197,7 +197,7 @@ void PeopleManager::Loop()
 		{
 			person = Simcore->GetPerson(selection);
 
-			tName->SetValue(wxString::FromAscii(person->GetName().c_str()));
+			tName->SetValue(person->GetName());
 			chkRandom->SetValue(person->IsRandomActivityEnabled());
 			chkService->SetValue(person->GetServiceAccess());
 			reset = true;
@@ -219,19 +219,19 @@ void PeopleManager::Loop()
 	if (person->GetFloor() != floor || reset == true)
 	{
 		floor = person->GetFloor();
-		tFloor->SetValue(wxVariant((int)floor).GetString());
+		tFloor->SetValue(SBS::ToString(floor));
 	}
 
 	if (person->GetDestinationFloor() != dest_floor || reset == true)
 	{
 		dest_floor = person->GetDestinationFloor();
-		tDestination->SetValue(wxVariant((int)dest_floor).GetString());
+		tDestination->SetValue(SBS::ToString(dest_floor));
 	}
 
 	if (person->GetStatus() != status || reset == true)
 	{
 		status = person->GetStatus();
-		tStatus->SetValue(wxString::FromAscii(status.c_str()));
+		tStatus->SetValue(status);
 	}
 }
 
@@ -239,7 +239,7 @@ void PeopleManager::On_bSetName_Click(wxCommandEvent& event)
 {
 	if (person)
 	{
-		person->SetName(std::string(tName->GetValue().ToAscii()));
+		person->SetName(std::string(tName->GetValue()));
 		lastcount = 0;
 		BuildList(true);
 	}
@@ -248,13 +248,13 @@ void PeopleManager::On_bSetName_Click(wxCommandEvent& event)
 void PeopleManager::On_bSetFloor_Click(wxCommandEvent& event)
 {
 	if (person)
-		person->SetFloor(atoi(tFloor->GetValue().ToAscii()));
+		person->SetFloor(atoi(tFloor->GetValue()));
 }
 
 void PeopleManager::On_bGo_Click(wxCommandEvent& event)
 {
 	if (person)
-		person->GotoFloor(atoi(tDestination->GetValue().ToAscii()));
+		person->GotoFloor(atoi(tDestination->GetValue()));
 }
 
 void PeopleManager::On_bNew_Click(wxCommandEvent& event)
@@ -303,7 +303,7 @@ void PeopleManager::BuildList(bool restore_selection)
 		PersonList->Clear();
 
 		for (int i = 0; i < count; i++)
-			PersonList->Append(wxVariant(i + 1).GetString() + wxT(": ") + wxString::FromAscii(Simcore->GetPerson(i)->GetName().c_str()));
+			PersonList->Append(SBS::ToString(i + 1) + wxT(": ") + Simcore->GetPerson(i)->GetName());
 
 		if (count > 0)
 		{

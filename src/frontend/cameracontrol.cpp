@@ -447,7 +447,7 @@ void CameraControl::OnInit()
 	Simcore = panel->GetSystem();
 
 	txtGravity->SetValue(TruncateNumber(Simcore->camera->GetGravity(), 4));
-	txtFreelookSpeed->SetValue(wxVariant((long)Simcore->camera->Freelook_speed).GetString());
+	txtFreelookSpeed->SetValue(TruncateNumber(Simcore->camera->Freelook_speed, 2));
 	hold_vector = Ogre::Vector3(0, 0, 0);
 	txtBinocularsFOV->SetValue(TruncateNumber(Simcore->camera->BinocularsFOV, 4));
 }
@@ -465,20 +465,20 @@ void CameraControl::Loop()
 	Simcore->camera->GetDirection(direction_front, direction_top);
 	txtDirectionFront->SetValue(TruncateNumber(direction_front.x, 2) + wxT(", ") + TruncateNumber(direction_front.y, 2) + wxT(", ") + TruncateNumber(direction_front.z, 2));
 	txtDirectionTop->SetValue(TruncateNumber(direction_top.x, 2) + wxT(", ") + TruncateNumber(direction_top.y, 2) + wxT(", ") + TruncateNumber(direction_top.z, 2));
-	txtCurrentFloor->SetValue(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID.c_str()) + wxT(")"));
-	txtLastMesh->SetValue(wxString::FromAscii(Simcore->camera->LastHitMesh.c_str()));
+	txtCurrentFloor->SetValue(ToString(Simcore->camera->CurrentFloor) + wxT(" (") + Simcore->camera->CurrentFloorID + wxT(")"));
+	txtLastMesh->SetValue(Simcore->camera->LastHitMesh);
 	txtDesiredVel->SetValue(TruncateNumber(Simcore->camera->desired_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_velocity.z, 2));
 	txtVelocity->SetValue(TruncateNumber(Simcore->camera->velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->velocity.z, 2));
 	txtDesiredAngle->SetValue(TruncateNumber(Simcore->camera->desired_angle_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_angle_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_angle_velocity.z, 2));
 	txtAngle->SetValue(TruncateNumber(Simcore->camera->angle_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->angle_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->angle_velocity.z, 2));
 	txtSpeed->SetValue(TruncateNumber(Simcore->camera->speed, 2));
-	txtMouseDown->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->MouseDown).c_str()));
-	txtStartFloor->SetValue(wxVariant((long)Simcore->camera->StartFloor).GetString());
+	txtMouseDown->SetValue(BoolToString(Simcore->camera->MouseDown));
+	txtStartFloor->SetValue(ToString(Simcore->camera->StartFloor));
 	txtStartPosition->SetValue(TruncateNumber(Simcore->camera->StartPositionX, 2) + wxT(", ") + TruncateNumber(Simcore->camera->StartPositionZ, 2));
-	txtGravityEnabled->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->GetGravityStatus()).c_str()));
-	txtCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->CollisionsEnabled()).c_str()));
-	txtReportCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->ReportCollisions).c_str()));
-	txtFreelook->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->Freelook).c_str()));
+	txtGravityEnabled->SetValue(BoolToString(Simcore->camera->GetGravityStatus()));
+	txtCollisions->SetValue(BoolToString(Simcore->camera->CollisionsEnabled()));
+	txtReportCollisions->SetValue(BoolToString(Simcore->camera->ReportCollisions));
+	txtFreelook->SetValue(BoolToString(Simcore->camera->Freelook));
 	lblPosition->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	lblRotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
 	txtFOV->SetValue(TruncateNumber(Simcore->camera->GetFOVAngle(), 4));
@@ -507,84 +507,84 @@ void CameraControl::On_bZPlus_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue().ToAscii()));
+		hold_vector += Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Move(Ogre::Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Rotate(Ogre::Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bYPlus_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(0, atof(txtMoveSpeed->GetValue().ToAscii()), 0);
+		hold_vector += Ogre::Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Move(Ogre::Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Rotate(Ogre::Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bXNeg_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		hold_vector -= Ogre::Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Move(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Rotate(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bXPlus_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		hold_vector += Ogre::Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Move(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Rotate(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bZNeg_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue().ToAscii()));
+		hold_vector -= Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Move(Ogre::Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Rotate(Ogre::Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bYNeg_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(0, atof(txtMoveSpeed->GetValue().ToAscii()), 0);
+		hold_vector -= Ogre::Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Move(Ogre::Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Rotate(Ogre::Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bStartPosition_Click(wxCommandEvent& event)
@@ -604,7 +604,7 @@ void CameraControl::On_bStartDirection_Click(wxCommandEvent& event)
 
 void CameraControl::On_bGravity_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetGravity(atof(txtGravity->GetValue().ToAscii()));
+	Simcore->camera->SetGravity(atof(txtGravity->GetValue()));
 }
 
 void CameraControl::On_bGravityEnabled_Click(wxCommandEvent& event)
@@ -624,37 +624,37 @@ void CameraControl::On_bFreelook_Click(wxCommandEvent& event)
 
 void CameraControl::On_bFreelookSpeed_Click(wxCommandEvent& event)
 {
-	Simcore->camera->Freelook_speed = atof(txtFreelookSpeed->GetValue().ToAscii());
+	Simcore->camera->Freelook_speed = atof(txtFreelookSpeed->GetValue());
 }
 
 void CameraControl::On_bPositionX_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetPosition(Ogre::Vector3(atof(txtPositionX->GetValue().ToAscii()), Simcore->camera->GetPosition().y, Simcore->camera->GetPosition().z));
+	Simcore->camera->SetPosition(Ogre::Vector3(atof(txtPositionX->GetValue()), Simcore->camera->GetPosition().y, Simcore->camera->GetPosition().z));
 }
 
 void CameraControl::On_bPositionY_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetPosition(Ogre::Vector3(Simcore->camera->GetPosition().x, atof(txtPositionY->GetValue().ToAscii()), Simcore->camera->GetPosition().z));
+	Simcore->camera->SetPosition(Ogre::Vector3(Simcore->camera->GetPosition().x, atof(txtPositionY->GetValue()), Simcore->camera->GetPosition().z));
 }
 
 void CameraControl::On_bPositionZ_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetPosition(Ogre::Vector3(Simcore->camera->GetPosition().x, Simcore->camera->GetPosition().y, atof(txtPositionZ->GetValue().ToAscii())));
+	Simcore->camera->SetPosition(Ogre::Vector3(Simcore->camera->GetPosition().x, Simcore->camera->GetPosition().y, atof(txtPositionZ->GetValue())));
 }
 
 void CameraControl::On_bRotationX_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetRotation(Ogre::Vector3(atof(txtRotationX->GetValue().ToAscii()), Simcore->camera->GetRotation().y, Simcore->camera->GetRotation().z));
+	Simcore->camera->SetRotation(Ogre::Vector3(atof(txtRotationX->GetValue()), Simcore->camera->GetRotation().y, Simcore->camera->GetRotation().z));
 }
 
 void CameraControl::On_bRotationY_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetRotation(Ogre::Vector3(Simcore->camera->GetRotation().x, atof(txtRotationY->GetValue().ToAscii()), Simcore->camera->GetRotation().z));
+	Simcore->camera->SetRotation(Ogre::Vector3(Simcore->camera->GetRotation().x, atof(txtRotationY->GetValue()), Simcore->camera->GetRotation().z));
 }
 
 void CameraControl::On_bRotationZ_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetRotation(Ogre::Vector3(Simcore->camera->GetRotation().x, Simcore->camera->GetRotation().y, atof(txtRotationZ->GetValue().ToAscii())));
+	Simcore->camera->SetRotation(Ogre::Vector3(Simcore->camera->GetRotation().x, Simcore->camera->GetRotation().y, atof(txtRotationZ->GetValue())));
 }
 
 void CameraControl::On_chkHold_Click(wxCommandEvent& event)
@@ -665,7 +665,7 @@ void CameraControl::On_chkHold_Click(wxCommandEvent& event)
 
 void CameraControl::On_bSetFOV_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetFOVAngle(atof(txtSetFOV->GetValue().ToAscii()));
+	Simcore->camera->SetFOVAngle(atof(txtSetFOV->GetValue()));
 }
 
 void CameraControl::On_bResetFOV_Click(wxCommandEvent& event)
@@ -675,7 +675,7 @@ void CameraControl::On_bResetFOV_Click(wxCommandEvent& event)
 
 void CameraControl::On_bGotoFloor_Click(wxCommandEvent& event)
 {
-	Simcore->camera->GotoFloor(atoi(txtGotoFloor->GetValue().ToAscii()), true);
+	Simcore->camera->GotoFloor(atoi(txtGotoFloor->GetValue()), true);
 }
 
 void CameraControl::On_bReportCollisions_Click(wxCommandEvent& event)
@@ -685,7 +685,7 @@ void CameraControl::On_bReportCollisions_Click(wxCommandEvent& event)
 
 void CameraControl::On_bBinocularsFOV_Click(wxCommandEvent& event)
 {
-	Simcore->camera->BinocularsFOV = (atof(txtBinocularsFOV->GetValue().ToAscii()));
+	Simcore->camera->BinocularsFOV = atof(txtBinocularsFOV->GetValue());
 }
 
 }
