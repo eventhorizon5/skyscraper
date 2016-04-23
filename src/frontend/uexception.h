@@ -132,7 +132,14 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 		//print out simulator state
 		EngineContext *context = skyscraper->GetActiveEngine();
 		if (context)
+		{
+			//print out engine state
 			twindow->tMain->WriteText(wxString(context->GetSystem()->DumpState()));
+
+			//print out script processor state, if loading
+			if (context->IsLoading() == true && context->IsLoadingFinished() == false)
+				twindow->tMain->WriteText(wxString(context->GetScriptProcessor()->DumpState()));
+		}
 	}
 
 	//print instructions

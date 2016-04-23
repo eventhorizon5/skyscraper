@@ -44,6 +44,7 @@ public:
 	int MathFunctions();
 	bool IsFunctionDefined(const std::string &name);
 	SBS::MeshObject* GetMeshObject(std::string name);
+	std::string DumpState();
 
 	bool IsFinished;
 

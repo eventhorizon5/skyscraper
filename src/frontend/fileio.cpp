@@ -9151,4 +9151,32 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	return 0;
 }
 
+std::string ScriptProcessor::DumpState()
+{
+	//dump the basic script interpreter state to a string
+
+	int LineNumber, FunctionLine;
+	bool IsInclude, IsIncludeFunction;
+	std::string IncludeFile, IncludeFunctionFile;
+
+	GetLineInformation(true, LineNumber, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
+
+	std::string output = "Line number: "  + ToString(LineNumber);
+	if (IsInclude == true)
+		output.append("In included file: " + IncludeFile);
+	output.append("Context: " + Context);
+
+	if (InFunction != 0)
+	{
+		//report function information
+		output.append("Function: " + FunctionStack[InFunction - 1].Name);
+		if (IsIncludeFunction == true)
+			output.append("Function include file: " + IncludeFunctionFile);
+		output.append("Function call line: " + ToString(FunctionLine));
+	}
+	output.append("Line text: " + LineData);
+
+	return output;
+}
+
 }
