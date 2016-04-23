@@ -1170,9 +1170,9 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	std::string error;
 	int LineNumber, FunctionLine;
 	bool IsInclude, IsIncludeFunction;
-	std::string IncludeFile, IncludeFunctionFile;
+	std::string FunctionName, IncludeFile, IncludeFunctionFile;
 
-	GetLineInformation(true, LineNumber, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
+	GetLineInformation(true, LineNumber, FunctionName, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
 
 	if (warning == false)
 		error = "Script error ";
@@ -1188,7 +1188,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		error += "\nLine Text: " + LineData;
 	else
 	{
-		error += "\nFunction: " + FunctionStack[InFunction - 1].Name;
+		error += "\nFunction: " + FunctionName;
 
 		if (IsIncludeFunction == true)
 			error += "\nFunction included in file: " + IncludeFunctionFile;
@@ -1210,7 +1210,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	return sError;
 }
 
-void ScriptProcessor::GetLineInformation(bool CheckFunctionCall, int &LineNumber, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile)
+void ScriptProcessor::GetLineInformation(bool CheckFunctionCall, int &LineNumber, std::string &FunctionName, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile)
 {
 	//calculate line information for current script line
 
@@ -1232,11 +1232,13 @@ void ScriptProcessor::GetLineInformation(bool CheckFunctionCall, int &LineNumber
 	FunctionLine = 0;
 	IsInclude = false;
 	IsIncludeFunction = false;
+	FunctionName = "";
 	IncludeFile = "";
 	IncludeFunctionFile = "";
 
 	if (InFunction > 0)
 	{
+		FunctionName = FunctionStack[InFunction - 1].Name;
 		function_line = FunctionStack[InFunction - 1].CallLine;
 		newfunction_line = function_line;
 	}
@@ -8219,9 +8221,9 @@ void ScriptProcessor::StoreCommand(Object *object)
 
 	int LineNumber, FunctionLine;
 	bool IsInclude, IsIncludeFunction;
-	std::string IncludeFile, IncludeFunctionFile;
+	std::string FunctionName, IncludeFile, IncludeFunctionFile;
 
-	GetLineInformation(false, LineNumber, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
+	GetLineInformation(false, LineNumber, FunctionName, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
 	object->linenum = LineNumber;
 	object->includefile = IncludeFile;
 
@@ -9157,9 +9159,9 @@ std::string ScriptProcessor::DumpState()
 
 	int LineNumber, FunctionLine;
 	bool IsInclude, IsIncludeFunction;
-	std::string IncludeFile, IncludeFunctionFile;
+	std::string FunctionName, IncludeFile, IncludeFunctionFile;
 
-	GetLineInformation(true, LineNumber, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
+	GetLineInformation(true, LineNumber, FunctionName, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
 
 	std::string output = "Line number: "  + ToString(LineNumber);
 	if (IsInclude == true)
@@ -9169,7 +9171,7 @@ std::string ScriptProcessor::DumpState()
 	if (InFunction != 0)
 	{
 		//report function information
-		output.append("Function: " + FunctionStack[InFunction - 1].Name);
+		output.append("Function: " + FunctionName);
 		if (IsIncludeFunction == true)
 			output.append("Function include file: " + IncludeFunctionFile);
 		output.append("Function call line: " + ToString(FunctionLine));
