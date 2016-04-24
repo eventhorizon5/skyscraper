@@ -134,7 +134,7 @@
 </Command>
     </PreBuildEvent>
     <ClCompile>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(OGRE_HOME_64)\Components\Overlay\include;$(FMOD_HOME)\api\lowlevel\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
