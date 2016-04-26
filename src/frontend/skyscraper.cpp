@@ -140,11 +140,11 @@ bool Skyscraper::OnInit(void)
 		{ wxCMD_LINE_SWITCH, "h", "help", "show this help message",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
 
-		{ wxCMD_LINE_SWITCH, "c", "console", "show or hide the console (dash after to hide)",
-			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_SWITCH_NEGATABLE },
+		{ wxCMD_LINE_SWITCH, "c", "no-console", "hide the console",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
-		{ wxCMD_LINE_SWITCH, "m", "menu", "show or hide the main menu",
-			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_SWITCH_NEGATABLE },
+		{ wxCMD_LINE_SWITCH, "m", "no-menu", "hide the main menu",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_PARAM, NULL, NULL, "building filename", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 
@@ -193,9 +193,8 @@ bool Skyscraper::OnInit(void)
 
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
 
-	if (parser.FoundSwitch(wxT("console")) == wxCMD_SWITCH_ON)
-		showconsole = true;
-	else if (parser.FoundSwitch(wxT("console")) == wxCMD_SWITCH_OFF)
+	//turn off console if specified on command line
+	if (parser.FoundSwitch(wxT("no-console")) == true)
 		showconsole = false;
 
 	//create console window
@@ -233,9 +232,9 @@ bool Skyscraper::OnInit(void)
 
 	//show menu
 	bool showmenu = GetConfigBool("Skyscraper.Frontend.Menu.Show", true);
-	if (parser.FoundSwitch(wxT("menu")) == wxCMD_SWITCH_ON)
-		showmenu = true;
-	else if (parser.FoundSwitch(wxT("menu")) == wxCMD_SWITCH_OFF)
+
+	//turn off menu if specified on command line
+	if (parser.Found(wxT("no-menu")) == true)
 		showmenu = false;
 
 	if (showmenu == true)
