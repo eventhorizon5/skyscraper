@@ -140,6 +140,12 @@ bool Skyscraper::OnInit(void)
 		{ wxCMD_LINE_SWITCH, "h", "help", "show this help message",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
 
+		{ wxCMD_LINE_SWITCH, "c", "console", "show or hide the console (dash after to hide)",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_SWITCH_NEGATABLE },
+
+		{ wxCMD_LINE_SWITCH, "m", "menu", "show or hide the main menu",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_SWITCH_NEGATABLE },
+
 		{ wxCMD_LINE_PARAM, NULL, NULL, "building filename", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_NONE }
@@ -187,6 +193,11 @@ bool Skyscraper::OnInit(void)
 
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
 
+	if (parser.FoundSwitch(wxT("console")) == wxCMD_SWITCH_ON)
+		showconsole = true;
+	else if (parser.FoundSwitch(wxT("console")) == wxCMD_SWITCH_OFF)
+		showconsole = false;
+
 	//create console window
 	if (showconsole == true)
 		ShowConsole(false);
@@ -221,7 +232,13 @@ bool Skyscraper::OnInit(void)
 		return Load(filename);
 
 	//show menu
-	if (GetConfigBool("Skyscraper.Frontend.Menu.Show", true) == true)
+	bool showmenu = GetConfigBool("Skyscraper.Frontend.Menu.Show", true);
+	if (parser.FoundSwitch(wxT("menu")) == wxCMD_SWITCH_ON)
+		showmenu = true;
+	else if (parser.FoundSwitch(wxT("menu")) == wxCMD_SWITCH_OFF)
+		showmenu = false;
+
+	if (showmenu == true)
 	{
 		StartupRunning = true;
 		StartSound();
