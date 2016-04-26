@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/dir.h"
+#include "wx/cmdline.h"
 #endif
 #include <locale>
 #include <OgreRoot.h>
@@ -132,6 +133,33 @@ bool Skyscraper::OnInit(void)
 	CutFloors = false;
 	loaddialog = 0;
 
+	//define command line options
+	static const wxCmdLineEntryDesc cmdLineDesc[] =
+	{
+		{ wxCMD_LINE_SWITCH, "h", "help", "show this help message",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+
+		{ wxCMD_LINE_PARAM, NULL, NULL, "building filename", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+
+		{ wxCMD_LINE_NONE }
+	};
+
+	//set up command line parser
+	wxCmdLineParser parser(cmdLineDesc, argc, argv);
+
+	switch (parser.Parse())
+	{
+		case -1:
+			break; //help was given
+		case 0:
+			break; //everything is good
+		default:
+			return ReportFatalError("Incorrect number of parameters");
+	}
+
+	if (parser.GetParamCount() > 1)
+		return ReportFatalError("Incorrect number of parameters");
+
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -176,7 +204,12 @@ bool Skyscraper::OnInit(void)
 	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
 	//autoload a building file if specified
-	std::string filename = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
+	std::string filename;
+	if (parser.GetParamCount() > 0)
+		filename = parser.GetParam(0).ToStdString();
+	else
+		filename = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
+
 	if (filename != "")
 		return Load(filename);
 
