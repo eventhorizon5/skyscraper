@@ -26,22 +26,20 @@
 #define SKYSCRAPER_H
 
 #include <wx/app.h>
-#include <wx/frame.h>
-#include <wx/progdlg.h>
-#include "OgrePrerequisites.h"
+#include <OgrePrerequisites.h>
+#include <OgreCommon.h>
+#include <OgreVector3.h>
 #include <OgreLog.h>
-
-#if OGRE_VERSION >= 0x00010900
-#include <OgreOverlaySystem.h>
-#endif
 
 //wxWidgets definitions
 class wxCmdLineParser;
+class wxProgressDialog;
 
 namespace Ogre {
 	class SceneNode;
 	class Rectangle2D;
 	class ConfigFile;
+	class OverlaySystem;
 }
 
 namespace FMOD {

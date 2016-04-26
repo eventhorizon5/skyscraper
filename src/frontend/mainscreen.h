@@ -25,6 +25,8 @@
 #ifndef MAINSCREEN_H
 #define MAINSCREEN_H
 
+#include <wx/frame.h>
+
 namespace Skyscraper {
 
 class MainScreen : public wxFrame

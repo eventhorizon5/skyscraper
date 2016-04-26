@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/dir.h"
+#include "wx/progdlg.h"
 #include "wx/cmdline.h"
 #include "wx/filename.h"
 #endif
@@ -49,6 +50,10 @@
 #include "loaddialog.h"
 #include "profiler.h"
 #include "revmain.h"
+
+#if OGRE_VERSION >= 0x00010900
+#include <OgreOverlaySystem.h>
+#endif
 
 #if defined(__WXGTK__)
    // NOTE: Find the GTK install config with `pkg-config --cflags gtk+-2.0`
