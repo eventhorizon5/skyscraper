@@ -147,21 +147,21 @@ bool Skyscraper::OnInit(void)
 	//set up command line parser
 	wxCmdLineParser parser(cmdLineDesc, argc, argv);
 
+	//process command line options
 	switch (parser.Parse())
 	{
 		case -1:
-			break; //help was given
+			return ReportFatalError(parser.GetUsageString().ToStdString()); //help was given, show usage and exit
 		case 0:
-			break; //everything is good
+			break; //everything is good, continue
 		default:
-			return ReportFatalError("Incorrect number of parameters");
+			return ReportFatalError("Incorrect number of parameters"); //exit with error message
 	}
 
-	if (parser.GetParamCount() > 1)
-		return ReportFatalError("Incorrect number of parameters");
-
+	//only run idle events on specified windows, to reduce overhead
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
+	//set up unhandled exception handler (crash report system)
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	UnhandledExceptionSetRoot(this);
 #endif
