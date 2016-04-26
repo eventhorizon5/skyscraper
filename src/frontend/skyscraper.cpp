@@ -151,6 +151,9 @@ bool Skyscraper::OnInit(void)
 		{ wxCMD_LINE_SWITCH, "m", "no-menu", "hide the main menu",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
+		{ wxCMD_LINE_SWITCH, "M", "no-music", "disable the intro music",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+
 		{ wxCMD_LINE_PARAM, NULL, NULL, "building filename",
 			wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 
@@ -1177,6 +1180,9 @@ void Skyscraper::StartSound()
 		return;
 
 	if (GetConfigBool("Skyscraper.Frontend.IntroMusic", true) == false)
+		return;
+
+	if (parser->Found(wxT("no-music")) == true)
 		return;
 
 	std::string filename = GetConfigString("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
