@@ -212,7 +212,7 @@ bool Skyscraper::OnInit(void)
 
 		//strip path from filename
 		wxFileName file (filename);
-		filename = file.GetName() + "." + file.GetExt();
+		filename = file.GetFullName();
 	}
 	else
 		filename = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
