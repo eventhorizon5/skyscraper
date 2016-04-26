@@ -35,6 +35,9 @@
 #include <OgreOverlaySystem.h>
 #endif
 
+//wxWidgets definitions
+class wxCmdLineParser;
+
 namespace Ogre {
 	class SceneNode;
 	class Rectangle2D;
@@ -204,6 +207,7 @@ private:
 	Ogre::LogManager* logger;
 	bool showconsole;
 	wxProgressDialog *progdialog;
+	wxCmdLineParser *parser;
 
 	//control panel
 	DebugPanel *dpanel;

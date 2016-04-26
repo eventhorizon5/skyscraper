@@ -146,19 +146,20 @@ bool Skyscraper::OnInit(void)
 		{ wxCMD_LINE_SWITCH, "m", "no-menu", "hide the main menu",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
-		{ wxCMD_LINE_PARAM, NULL, NULL, "building filename", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+		{ wxCMD_LINE_PARAM, NULL, NULL, "building filename",
+			wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_NONE }
 	};
 
 	//set up command line parser
-	wxCmdLineParser parser(cmdLineDesc, argc, argv);
+	parser = new wxCmdLineParser(cmdLineDesc, argc, argv);
 
 	//process command line options
-	switch (parser.Parse())
+	switch (parser->Parse())
 	{
 		case -1:
-			return ReportFatalError(parser.GetUsageString().ToStdString()); //help was given, show usage and exit
+			return ReportFatalError(parser->GetUsageString().ToStdString()); //help was given, show usage and exit
 		case 0:
 			break; //everything is good, continue
 		default:
@@ -194,7 +195,7 @@ bool Skyscraper::OnInit(void)
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
 
 	//turn off console if specified on command line
-	if (parser.FoundSwitch(wxT("no-console")) == true)
+	if (parser->FoundSwitch(wxT("no-console")) == true)
 		showconsole = false;
 
 	//create console window
@@ -216,9 +217,9 @@ bool Skyscraper::OnInit(void)
 
 	//autoload a building file if specified
 	std::string filename;
-	if (parser.GetParamCount() > 0)
+	if (parser->GetParamCount() > 0)
 	{
-		filename = parser.GetParam(0).ToStdString();
+		filename = parser->GetParam(0).ToStdString();
 
 		//strip path from filename
 		wxFileName file (filename);
@@ -234,7 +235,7 @@ bool Skyscraper::OnInit(void)
 	bool showmenu = GetConfigBool("Skyscraper.Frontend.Menu.Show", true);
 
 	//turn off menu if specified on command line
-	if (parser.Found(wxT("no-menu")) == true)
+	if (parser->Found(wxT("no-menu")) == true)
 		showmenu = false;
 
 	if (showmenu == true)
@@ -291,6 +292,10 @@ int Skyscraper::OnExit()
 	if (configfile)
 		delete configfile;
 	configfile = 0;
+
+	if (parser)
+		delete parser;
+	parser = 0;
 
 #if OGRE_VERSION >= 0x00010900
 	delete mOverlaySystem;
