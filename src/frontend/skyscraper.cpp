@@ -27,6 +27,7 @@
 #include "wx/wx.h"
 #include "wx/dir.h"
 #include "wx/cmdline.h"
+#include "wx/filename.h"
 #endif
 #include <locale>
 #include <OgreRoot.h>
@@ -206,7 +207,13 @@ bool Skyscraper::OnInit(void)
 	//autoload a building file if specified
 	std::string filename;
 	if (parser.GetParamCount() > 0)
+	{
 		filename = parser.GetParam(0).ToStdString();
+
+		//strip path from filename
+		wxFileName file (filename);
+		filename = file.GetName() + "." + file.GetExt();
+	}
 	else
 		filename = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
 
