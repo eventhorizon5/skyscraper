@@ -29,6 +29,8 @@
 #include "wx/progdlg.h"
 #include "wx/cmdline.h"
 #include "wx/filename.h"
+#include "wx/filefn.h"
+#include "wx/stdpaths.h"
 #endif
 #include <locale>
 #include <OgreRoot.h>
@@ -139,6 +141,10 @@ bool Skyscraper::OnInit(void)
 	CutFloors = false;
 	loaddialog = 0;
 	Verbose = false;
+
+	//switch current working directory to executable's path, if needed
+	wxString app_path = wxStandardPaths::Get().GetDataDir();
+	wxSetWorkingDirectory(app_path);
 
 	//define command line options
 	static const wxCmdLineEntryDesc cmdLineDesc[] =
