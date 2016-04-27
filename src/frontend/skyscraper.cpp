@@ -1172,7 +1172,6 @@ void Skyscraper::Click(int index)
 
 	if (filename != "")
 	{
-		DeleteButtons();
 		Load(filename);
 	}
 }
@@ -1305,7 +1304,11 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 {
 	//load simulator and data file
 
-	StartupRunning = false;
+	if (StartupRunning == true)
+	{
+		DeleteButtons();
+		StartupRunning = false;
+	}
 
 	//exit if no building specified
 	if (filename == "")
