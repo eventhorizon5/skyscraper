@@ -143,8 +143,9 @@ bool Skyscraper::OnInit(void)
 	Verbose = false;
 
 	//switch current working directory to executable's path, if needed
-	wxString app_path = wxStandardPaths::Get().GetDataDir();
-	wxSetWorkingDirectory(app_path);
+	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
+	wxString app_path = wxPathOnly(exefile); //strip off filename
+	wxSetWorkingDirectory(app_path); //set working directory to path
 
 	//define command line options
 	static const wxCmdLineEntryDesc cmdLineDesc[] =
