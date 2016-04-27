@@ -2213,6 +2213,12 @@ void Skyscraper::MacOpenFile(const wxString &filename)
 {
 	//support launching app with a building file, on Mac
 
+	if (IsEngineLoading() == true)
+		return;
+
+	if (StartupRunning == true)
+		StopSound();
+
 	//strip path from filename
 	wxFileName file (filename);
 
