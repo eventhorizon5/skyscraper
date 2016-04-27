@@ -161,6 +161,7 @@ public:
 	EngineContext* GetFirstValidEngine();
 	void EnableSky(bool value);
 	void UnregisterDebugPanel() { dpanel = 0; }
+	virtual void MacOpenFile(const wxString &filename);
 
 private:
 	//sound data

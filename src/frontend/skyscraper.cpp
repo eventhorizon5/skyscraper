@@ -2206,4 +2206,14 @@ void Skyscraper::EnableSky(bool value)
 	}
 }
 
+void Skyscraper::MacOpenFile(const wxString &filename)
+{
+	//support launching app with a building file, on Mac
+
+	//strip path from filename
+	wxFileName file (filename);
+
+	Load(file.GetFullName().ToStdString());
+}
+
 }
