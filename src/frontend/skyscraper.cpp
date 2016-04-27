@@ -142,10 +142,12 @@ bool Skyscraper::OnInit(void)
 	loaddialog = 0;
 	Verbose = false;
 
+#if !defined(__WXMAC__)
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
 	wxString app_path = wxPathOnly(exefile); //strip off filename
 	wxSetWorkingDirectory(app_path); //set working directory to path
+#endif
 
 	//define command line options
 	static const wxCmdLineEntryDesc cmdLineDesc[] =
