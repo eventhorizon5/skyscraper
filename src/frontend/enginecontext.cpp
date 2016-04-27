@@ -288,6 +288,10 @@ void EngineContext::StartSim()
 	//refresh console to fix banner message on Linux
 	frontend->RefreshConsole();
 
+	//override verbose mode if specified
+	if (frontend->Verbose == true)
+		Simcore->Verbose = true;
+
 	//Pause for 2 seconds, if first instance
 	if (instance == 0)
 	{

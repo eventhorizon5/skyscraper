@@ -102,6 +102,7 @@ public:
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
 	bool RenderOnStartup; //override SBS engine setting with same name
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
+	bool Verbose;
 
 	void Loop();
 	virtual bool OnInit(void);
@@ -117,6 +118,7 @@ public:
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
 	void ShowError(const std::string &message);
+	void ShowMessage(const std::string &message);
 	bool Initialize();
 	void GetMenuInput();
 	void StartSound();

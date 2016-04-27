@@ -138,6 +138,7 @@ bool Skyscraper::OnInit(void)
 	CutExternal = false;
 	CutFloors = false;
 	loaddialog = 0;
+	Verbose = false;
 
 	//define command line options
 	static const wxCmdLineEntryDesc cmdLineDesc[] =
@@ -154,6 +155,12 @@ bool Skyscraper::OnInit(void)
 		{ wxCMD_LINE_SWITCH, "M", "no-music", "disable the intro music",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
+		{ wxCMD_LINE_SWITCH, "v", "verbose", "enable verbose mode",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+
+		{ wxCMD_LINE_SWITCH, "V", "version", "show version",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+
 		{ wxCMD_LINE_PARAM, NULL, NULL, "building filename",
 			wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 
@@ -167,7 +174,8 @@ bool Skyscraper::OnInit(void)
 	switch (parser->Parse())
 	{
 		case -1:
-			return ReportFatalError(parser->GetUsageString().ToStdString()); //help was given, show usage and exit
+			ShowMessage(parser->GetUsageString().ToStdString()); //help was given, show usage and exit
+			return false;
 		case 0:
 			break; //everything is good, continue
 		default:
@@ -188,6 +196,17 @@ bool Skyscraper::OnInit(void)
 #else
 	setlocale(LC_ALL, "C");
 #endif
+
+	//show version number and exit if specified
+	if (parser->FoundSwitch(wxT("version")) == true)
+	{
+		printf("Skyscraper version %s\n", version_frontend.c_str());
+		return false;
+	}
+
+	//set verbose mode if specified
+	if (parser->FoundSwitch(wxT("verbose")) == true)
+		Verbose = true;
 
 	//load config file
 	try
@@ -674,6 +693,13 @@ void Skyscraper::ShowError(const std::string &message)
 {
 	//show error dialog
 	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_ERROR);
+	dialog.ShowModal();
+}
+
+void Skyscraper::ShowMessage(const std::string &message)
+{
+	//show message dialog
+	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_INFORMATION);
 	dialog.ShowModal();
 }
 
