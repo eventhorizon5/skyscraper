@@ -149,10 +149,16 @@ bool Skyscraper::OnInit(void)
 		{ wxCMD_LINE_SWITCH, "c", "no-console", "hide the console",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
+		{ wxCMD_LINE_SWITCH, "f", "fullscreen", "start up in full-screen mode",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+
 		{ wxCMD_LINE_SWITCH, "m", "no-menu", "hide the main menu",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_SWITCH, "M", "no-music", "disable the intro music",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+
+		{ wxCMD_LINE_SWITCH, "p", "no-panel", "hide the control panel",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_SWITCH, "v", "verbose", "enable verbose mode",
@@ -1354,7 +1360,13 @@ bool Skyscraper::Start(EngineContext *engine)
 			Simcore->CreateSky();
 
 		//switch to fullscreen mode if specified
-		if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
+		bool fullscreen = GetConfigBool("Skyscraper.Frontend.FullScreen", false);
+
+		//override fullscreen setting if specified on the command line
+		if (parser->FoundSwitch(wxT("fullscreen")) == true)
+			fullscreen = true;
+
+		if (fullscreen == true)
 			SetFullScreen(true);
 
 		//resize main window
@@ -1377,7 +1389,13 @@ bool Skyscraper::Start(EngineContext *engine)
 	//load control panel
 	if (engine == active_engine)
 	{
-		if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
+		bool panel = GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true);
+
+		//override if disabled on the command line
+		if (parser->FoundSwitch(wxT("no-panel")) == true)
+			panel = false;
+
+		if (panel == true)
 		{
 			if (!dpanel)
 				dpanel = new DebugPanel(this, NULL, -1);
