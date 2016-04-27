@@ -180,12 +180,11 @@ bool Skyscraper::OnInit(void)
 	switch (parser->Parse())
 	{
 		case -1:
-			ShowMessage(parser->GetUsageString().ToStdString()); //help was given, show usage and exit
-			return false;
+			return false; //help was given, exit
 		case 0:
 			break; //everything is good, continue
 		default:
-			return ReportFatalError("Incorrect number of parameters"); //exit with error message
+			return false; //exit if parameters are incorrect
 	}
 
 	//only run idle events on specified windows, to reduce overhead
@@ -204,14 +203,14 @@ bool Skyscraper::OnInit(void)
 #endif
 
 	//show version number and exit if specified
-	if (parser->FoundSwitch(wxT("version")) == true)
+	if (parser->Found(wxT("version")) == true)
 	{
 		printf("Skyscraper version %s\n", version_frontend.c_str());
 		return false;
 	}
 
 	//set verbose mode if specified
-	if (parser->FoundSwitch(wxT("verbose")) == true)
+	if (parser->Found(wxT("verbose")) == true)
 		Verbose = true;
 
 	//load config file
@@ -228,7 +227,7 @@ bool Skyscraper::OnInit(void)
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
 
 	//turn off console if specified on command line
-	if (parser->FoundSwitch(wxT("no-console")) == true)
+	if (parser->Found(wxT("no-console")) == true)
 		showconsole = false;
 
 	//create console window
@@ -1363,7 +1362,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		bool fullscreen = GetConfigBool("Skyscraper.Frontend.FullScreen", false);
 
 		//override fullscreen setting if specified on the command line
-		if (parser->FoundSwitch(wxT("fullscreen")) == true)
+		if (parser->Found(wxT("fullscreen")) == true)
 			fullscreen = true;
 
 		if (fullscreen == true)
@@ -1392,7 +1391,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		bool panel = GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true);
 
 		//override if disabled on the command line
-		if (parser->FoundSwitch(wxT("no-panel")) == true)
+		if (parser->Found(wxT("no-panel")) == true)
 			panel = false;
 
 		if (panel == true)
