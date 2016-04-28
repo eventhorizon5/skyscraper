@@ -202,6 +202,7 @@ private:
 	void HandleEngineShutdown();
 	void HandleReload();
 	int GetFreeInstanceNumber();
+	void ShowProgressDialog();
 
 	Ogre::ConfigFile *configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
@@ -221,6 +222,10 @@ private:
 
 	//load dialog window
 	LoadDialog *loaddialog;
+
+	//progress dialog initial data
+	bool show_progress;
+	std::string prog_text;
 
 	bool new_location, new_time;
 	float latitude, longitude;

@@ -141,6 +141,7 @@ bool Skyscraper::OnInit(void)
 	CutFloors = false;
 	loaddialog = 0;
 	Verbose = false;
+	show_progress = false;
 
 #if !defined(__WXMAC__)
 	//switch current working directory to executable's path, if needed
@@ -732,6 +733,10 @@ void Skyscraper::Loop()
 		Render();
 		return;
 	}
+
+	//show progress dialog if needed
+	if (show_progress == true)
+		ShowProgressDialog();
 
 	//run sim engine instances
 	bool result = RunEngines();
@@ -1730,7 +1735,11 @@ void Skyscraper::CreateProgressDialog(const std::string &message)
 	}
 
 	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), message, 100, window);
+	{
+		//show progress dialog in a queued fashion
+		show_progress = true;
+		prog_text = message;
+	}
 	else
 	{
 		wxString msg = progdialog->GetMessage();
@@ -1754,6 +1763,14 @@ void Skyscraper::CloseProgressDialog()
 	//start control panel timer
 	if (dpanel)
 		dpanel->EnableTimer(true);
+}
+
+void Skyscraper::ShowProgressDialog()
+{
+	if (!progdialog)
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, window);
+
+	show_progress = false;
 }
 
 void Skyscraper::UpdateProgress()
