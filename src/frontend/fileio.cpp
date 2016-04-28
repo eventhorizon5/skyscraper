@@ -9163,20 +9163,20 @@ std::string ScriptProcessor::DumpState()
 
 	GetLineInformation(true, LineNumber, FunctionName, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
 
-	std::string output = "Line number: "  + ToString(LineNumber);
+	std::string output = "Line number: "  + ToString(LineNumber) + "\n";
 	if (IsInclude == true)
-		output.append("In included file: " + IncludeFile);
-	output.append("Context: " + Context);
+		output.append("In included file: " + IncludeFile + "\n");
+	output.append("Context: " + Context + "\n");
 
 	if (InFunction != 0)
 	{
 		//report function information
-		output.append("Function: " + FunctionName);
+		output.append("Function: " + FunctionName + "\n");
 		if (IsIncludeFunction == true)
-			output.append("Function include file: " + IncludeFunctionFile);
-		output.append("Function call line: " + ToString(FunctionLine));
+			output.append("Function include file: " + IncludeFunctionFile + "\n");
+		output.append("Function call line: " + ToString(FunctionLine) + "\n");
 	}
-	output.append("Line text: " + LineData);
+	output.append("Line text: " + LineData + "\n");
 
 	return output;
 }
