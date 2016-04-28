@@ -1,5 +1,33 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-removed old Windows-only CodeBlocks file, and rename Linux one
+-added converted Mac icon, and added Mac bundle data into tools folder
+-queue the creation of the progress dialog, to fix an issue on Mac where the main window would freeze if a building is autoloaded
+-DeleteButtons should be run in Load function
+-added building "open with" load support for Mac systems
+-app should switch current working directory to executable's directory on start, which allows double-clicking on building files outside of the app to start
+-added command line options for fullscreen and no-panel modes
+-added command line options to disable the intro music, show version and enable verbose mode
+-added command line options for showing/hiding the console and main menu
+-added command line option support
+-enabled large address flag for 32-bit builds, and also included the disabling of inline function expansions
+-have GetLineInformation function also return function name
+-have crash report show script interpreter state, if a script is loading
+-moved global door code into new DoorManager object, to fix positioning issues
+-CutAll function needs to remove floor's base offset for it to cut stairwell walls properly
+-(Simple) added filler walls for the stairs doors
+-fixed cut voffset for AddFillerWalls
+-fixed Triton Center external filler walls, and added mention in script guide about the voffset value
+-added "isexternal" parameter to AddFillerWalls script command
+-(Triton Center) have exterior doors use new External Doors feature
+-fix for AddShaftStdDoor command
+-added AddExternalDoor script command
+-(Glass Tower) service elevator button arrangement fix
+-floor indicators need to use proper texture prefix when created
+-when elevator doors are being manually opened (shift-click), shift-clicking again will stop the doors
+-when an elevator checks if it's available for a call, the interlock check should skip the current elevator floor to prevent issues, since that check is done later
+-disable the door sensor if the elevator is waiting in a peak mode
+-elevator interlock check should be skipped if the elevator is waiting in a peak mode
 -added an "always" value to the ShowFullStairs command, which allows a stairwell to always be fully shown, like the ShowFullShaft command does with shafts
 -added INI file option to switch off the Dynamic Mesh's auto combiner
 -wxWidgets string cleanups
