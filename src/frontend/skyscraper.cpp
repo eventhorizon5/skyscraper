@@ -1801,10 +1801,10 @@ void Skyscraper::SetFullScreen(bool enabled)
 #if defined(__WXMSW__)
 	//in Windows, enable double-buffering when switching to fullscreen
 	//to fix framerate drop issues
-	if (enabled == true)
+	/*if (enabled == true)
 		window->SetDoubleBuffered(true);
 	else
-		window->SetDoubleBuffered(false);
+		window->SetDoubleBuffered(false);*/
 #endif
 }
 
