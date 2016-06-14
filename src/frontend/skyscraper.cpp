@@ -2033,7 +2033,7 @@ void Skyscraper::HandleEngineShutdown()
 	//clean up empty engine slots at the end of the list
 	if (deleted == true)
 	{
-		for (int i = (int)engines.size() - 1; i >= 0; i--)
+		for (size_t i = engines.size() - 1; i < engines.size(); --i)
 		{
 			if (!engines[i])
 				engines.erase(engines.begin() + i);
@@ -2128,13 +2128,13 @@ void Skyscraper::SwitchEngines()
 	}
 
 	//otherwise search for a valid engine to attach to
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] != active_engine && engines[i])
 		{
 			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
 			{
-				SetActiveEngine(i, true);
+				SetActiveEngine((int)i, true);
 				return;
 			}
 		}

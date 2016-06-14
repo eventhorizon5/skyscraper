@@ -1064,7 +1064,7 @@ void Elevator::ProcessCallQueue()
 	else if (QueuePositionDirection == -1)
 	{
 		//search through down queue (search order is reversed since calls need to be processed in descending order)
-		for (int i = (int)DownQueue.size() - 1; i >= 0; i--)
+		for (size_t i = DownQueue.size() - 1; i < DownQueue.size(); --i)
 		{
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
 			if (DownQueue[i].floor <= ElevatorFloor)
