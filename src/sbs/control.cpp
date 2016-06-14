@@ -356,7 +356,7 @@ bool Control::DoAction()
 		return sbs->ReportError("No available actions for control '" + GetName() + "'");
 
 	bool result = false;
-	for (int i = 0; i < (int)actionlist.size(); i++)
+	for (size_t i = 0; i < actionlist.size(); i++)
 	{
 		bool result2 = false;
 
@@ -496,7 +496,7 @@ int Control::GetKeyID()
 
 void Control::RemoveAction(Action *action)
 {
-	for (int i = 0; i < (int)Actions.size(); i++)
+	for (size_t i = 0; i < Actions.size(); i++)
 	{
 		if (Actions[i] == action)
 		{

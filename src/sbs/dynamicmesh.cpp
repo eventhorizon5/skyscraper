@@ -62,7 +62,7 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 
 DynamicMesh::~DynamicMesh()
 {
-	for (int i = 0; i < (int)meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 		delete meshes[i];
 	meshes.clear();
 

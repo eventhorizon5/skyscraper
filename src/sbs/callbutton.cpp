@@ -134,7 +134,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	int topfloor = 0;
 	bool firstrun = true;
 
-	for (int i = 0; i < (int)Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		Elevator *elev = sbs->GetElevator(Elevators[i]);
 		if (elev)
@@ -350,7 +350,7 @@ bool CallButton::Call(bool direction)
 
 	//check to make sure elevator objects are valid
 	bool isvalid = false;
-	for (int i = 0; i < (int)Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
@@ -476,7 +476,7 @@ void CallButton::SetLights(int up, int down)
 bool CallButton::ServicesElevator(int elevator)
 {
 	//return true if this call button services the specified elevator
-	for (int i = 0; i < (int)Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i] == elevator)
 		{
@@ -703,7 +703,7 @@ void CallButton::FireService(int value)
 {
 	//enables fire service phase 1 on all elevators associated with this call button
 
-	for (int i = 0; i < (int)Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
@@ -730,7 +730,7 @@ void CallButton::SetLightsGroup(int up, int down)
 	std::vector<int> buttons = floor->GetCallButtons(Elevators[0]);
 
 	//set status on each call button
-	for (int i = 0; i < (int)buttons.size(); i++)
+	for (size_t i = 0; i < buttons.size(); i++)
 	{
 		floor->CallButtonArray[buttons[i]]->SetLights(up, down);
 	}
@@ -740,7 +740,7 @@ bool CallButton::AddElevator(int elevator)
 {
 	//add an elevator to this call button
 
-	for (int i = 0; i < (int)Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i] == elevator)
 			return false;
@@ -754,7 +754,7 @@ bool CallButton::RemoveElevator(int elevator)
 {
 	//remove an elevator from this call button
 
-	for (int i = 0; i < (int)Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i] == elevator)
 		{

@@ -234,7 +234,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 Elevator::~Elevator()
 {
 	//delete controls
-	for (int i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
 		if (ControlArray[i])
 		{
@@ -245,7 +245,7 @@ Elevator::~Elevator()
 	}
 
 	//delete triggers
-	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
 		{
@@ -256,7 +256,7 @@ Elevator::~Elevator()
 	}
 
 	//delete models
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 		{
@@ -267,7 +267,7 @@ Elevator::~Elevator()
 	}
 
 	//delete lights
-	for (int i = 0; i < (int)lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i])
 		{
@@ -306,7 +306,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting interior directional indicators");
 
-	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 		{
@@ -322,7 +322,7 @@ Elevator::~Elevator()
 
 	if (DoorArray.size() > 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
+		for (size_t i = 0; i < DoorArray.size(); i++)
 		{
 			if (DoorArray[i])
 			{
@@ -341,7 +341,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting floor indicators");
 
-	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 		{
@@ -355,7 +355,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting button panels");
 
-	for (int i = 0; i < (int)PanelArray.size(); i++)
+	for (size_t i = 0; i < PanelArray.size(); i++)
 	{
 		if (PanelArray[i])
 		{
@@ -369,7 +369,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting standard doors");
 
-	for (int i = 0; i < (int)StdDoorArray.size(); i++)
+	for (size_t i = 0; i < StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i])
 		{
@@ -435,7 +435,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting sounds");
 
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -500,7 +500,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		AddServicedFloor(floor);
 
 	//ensure that serviced floors are valid for the shaft
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
 	{
 		if (GetShaft()->IsValidFloor(ServicedFloors[i]) == false)
 		{
@@ -633,11 +633,11 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 	if (direction == 1)
 	{
 		int loc = -1;
-		for (int i = 0; i < (int)UpQueue.size(); i++)
+		for (size_t i = 0; i < UpQueue.size(); i++)
 		{
 			if (UpQueue[i].floor == floor)
 			{
-				loc = i;
+				loc = (int)i;
 				break;
 			}
 		}
@@ -660,11 +660,11 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 	else
 	{
 		int loc = -1;
-		for (int i = 0; i < (int)DownQueue.size(); i++)
+		for (size_t i = 0; i < DownQueue.size(); i++)
 		{
 			if (DownQueue[i].floor == floor)
 			{
-				loc = i;
+				loc = (int)i;
 				break;
 			}
 		}
@@ -717,7 +717,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 	if (direction == 1)
 	{
 		//delete floor entry from up queue
-		for (int i = 0; i < (int)UpQueue.size(); i++)
+		for (size_t i = 0; i < UpQueue.size(); i++)
 		{
 			if (UpQueue[i].floor == floor)
 			{
@@ -732,7 +732,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 	else
 	{
 		//delete floor entry from down queue
-		for (int i = 0; i < (int)DownQueue.size(); i++)
+		for (size_t i = 0; i < DownQueue.size(); i++)
 		{
 			if (DownQueue[i].floor == floor)
 			{
@@ -982,7 +982,7 @@ void Elevator::ProcessCallQueue()
 	if (QueuePositionDirection == 1)
 	{
 		//search through up queue
-		for (int i = 0; i < (int)UpQueue.size(); i++)
+		for (size_t i = 0; i < UpQueue.size(); i++)
 		{
 			//if the queued floor number is a higher floor, dispatch the elevator to that floor
 			if (UpQueue[i].floor >= ElevatorFloor)
@@ -1179,9 +1179,9 @@ void Elevator::Loop()
 	{
 		Height = 0;
 		//search through mesh geometry to find actual height
-		for (int i = 0; i < (int)ElevatorMesh->Submeshes.size(); i++)
+		for (size_t i = 0; i < ElevatorMesh->Submeshes.size(); i++)
 		{
-			for (int j = 0; j < (int)ElevatorMesh->Submeshes[i].MeshGeometry.size(); j++)
+			for (size_t j = 0; j < ElevatorMesh->Submeshes[i].MeshGeometry.size(); j++)
 			{
 				float y = sbs->ToLocal(ElevatorMesh->Submeshes[i].MeshGeometry[j].vertex.y);
 
@@ -1408,14 +1408,14 @@ void Elevator::Loop()
 	if (IsEnabled == true)
 	{
 		//process triggers
-		for (int i = 0; i < (int)TriggerArray.size(); i++)
+		for (size_t i = 0; i < TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Loop();
 		}
 
 		//process models
-		for (int i = 0; i < (int)ModelArray.size(); i++)
+		for (size_t i = 0; i < ModelArray.size(); i++)
 		{
 			if (ModelArray[i])
 				ModelArray[i]->Loop();
@@ -1423,7 +1423,7 @@ void Elevator::Loop()
 	}
 
 	//process door sensors
-	for (int i = 0; i < (int)DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i])
 			DoorArray[i]->CheckSensor();
@@ -2206,27 +2206,27 @@ void Elevator::DumpQueues()
 	if (UpQueue.size() > 0)
 		sbs->Report("Up:");
 
-	for (int i = 0; i < (int)UpQueue.size(); i++)
+	for (size_t i = 0; i < UpQueue.size(); i++)
 	{
 		std::string type = "Car";
 		if (UpQueue[i].call_type == 1)
 			type = "Hall";
 		if (UpQueue[i].call_type == 2)
 			type = "System";
-		sbs->Report("Entry: " + ToString(i) + "\t-\tFloor: " + ToString(UpQueue[i].floor) + "\t-\tCall type: " + type);
+		sbs->Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(UpQueue[i].floor) + "\t-\tCall type: " + type);
 	}
 
 	if (DownQueue.size() > 0)
 		sbs->Report("Down:");
 
-	for (int i = 0; i < (int)DownQueue.size(); i++)
+	for (size_t i = 0; i < DownQueue.size(); i++)
 	{
 		std::string type = "Car";
 		if (DownQueue[i].call_type == 1)
 			type = "Hall";
 		if (DownQueue[i].call_type == 2)
 			type = "System";
-		sbs->Report("Entry: " + ToString(i) + "\t-\tFloor: " + ToString(DownQueue[i].floor) + "\t-\tCall type: " + type);
+		sbs->Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(DownQueue[i].floor) + "\t-\tCall type: " + type);
 	}
 	sbs->Report("");
 }
@@ -2251,7 +2251,7 @@ void Elevator::Enabled(bool value)
 	IsEnabled = value;
 
 	//floor indicators
-	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
@@ -2291,32 +2291,32 @@ void Elevator::EnableObjects(bool value)
 	//EnableDirectionalIndicators(value);
 
 	//controls
-	for (size_t i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
 		if (ControlArray[i])
 			ControlArray[i]->Enabled(value);
 	}
 
 	//triggers
-	for (size_t i = 0; i < (int)TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
 			TriggerArray[i]->Enabled(value);
 	}
 
 	//models
-	for (size_t i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 			ModelArray[i]->Enable(value);
 	}
 
 	//panels
-	for (int i = 0; i < (int)PanelArray.size(); i++)
+	for (size_t i = 0; i < PanelArray.size(); i++)
 		PanelArray[i]->Enabled(value);
 
 	//sounds
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -2420,8 +2420,8 @@ void Elevator::DumpServicedFloors()
 	//dump serviced floors list
 
 	sbs->Report("\n--- Elevator " + ToString(Number) + "'s Serviced Floors ---\n");
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
-		sbs->Report(ToString(i) + " - " + ToString(ServicedFloors[i]));
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+		sbs->Report(ToString((int)i) + " - " + ToString(ServicedFloors[i]));
 	sbs->Report("");
 }
 
@@ -2472,7 +2472,7 @@ void Elevator::UpdateFloorIndicators()
 {
 	//updates all floor indicators
 
-	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Update();
@@ -3292,7 +3292,7 @@ void Elevator::SetDirectionalIndicators(int floor, bool UpLight, bool DownLight)
 		sbs->GetFloor(floor)->SetDirectionalIndicators(Number, UpLight, DownLight);
 
 	//interior indicators
-	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		DirectionalIndicator *indicator = DirIndicatorArray[i];
 
@@ -3312,7 +3312,7 @@ void Elevator::UpdateDirectionalIndicators()
 {
 	//updates all interior active direction indicators
 
-	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		DirectionalIndicator *indicator = DirIndicatorArray[i];
 
@@ -3352,7 +3352,7 @@ void Elevator::EnableDirectionalIndicators(bool value)
 			Report("disabling interior directional indicators");
 	}
 
-	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 			DirIndicatorArray[i]->Enabled(value);
@@ -3782,7 +3782,7 @@ bool Elevator::AreShaftDoorsClosed(bool skip_current_floor)
 {
 	//return true if all shaft doors are closed and not moving
 
-	for (int i = 0; i < (int)DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i])
 		{
@@ -3974,7 +3974,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const std::string &
 	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
 	sbs->GetTextureManager()->SetAutoSize(false, false);
 
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
 	{
 		bool door_result = false;
 		int floor = ServicedFloors[i];
@@ -4019,7 +4019,7 @@ void Elevator::NotifyCallButtons(int floor, bool direction)
 
 	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
 
-	for (int i = 0; i < (int)buttons.size(); i++)
+	for (size_t i = 0; i < buttons.size(); i++)
 	{
 		CallButton *button = 0;
 		if ((int)sbs->GetFloor(floor)->CallButtonArray.size() > buttons[i])
@@ -4069,7 +4069,7 @@ void Elevator::ResetLights()
 	if (sbs->Verbose)
 		Report("turning off button lights");
 
-	for (int i = 0; i < (int)PanelArray.size(); i++)
+	for (size_t i = 0; i < PanelArray.size(); i++)
 		PanelArray[i]->ChangeAllLights(false);
 }
 
@@ -4088,7 +4088,7 @@ void Elevator::ChangeLight(int floor, bool value)
 			Report("turning off button lights for floor " + ToString(floor));
 	}
 
-	for (int i = 0; i < (int)PanelArray.size(); i++)
+	for (size_t i = 0; i < PanelArray.size(); i++)
 		PanelArray[i]->ChangeLight(floor, value);
 }
 
@@ -4354,7 +4354,7 @@ Control* Elevator::GetFloorButton(int floor)
 
 	if (PanelArray.empty() == false)
 	{
-		for (int i = 0; i < (int)PanelArray.size(); i++)
+		for (size_t i = 0; i < PanelArray.size(); i++)
 		{
 			control = PanelArray[i]->GetFloorButton(floor);
 			if (control)
@@ -4368,13 +4368,13 @@ bool Elevator::IsQueued(int floor)
 {
 	//return true if the given floor is in either queue
 
-	for (int i = 0; i < (int)UpQueue.size(); i++)
+	for (size_t i = 0; i < UpQueue.size(); i++)
 	{
 		if (UpQueue[i].floor == floor)
 			return true;
 	}
 
-	for (int i = 0; i < (int)DownQueue.size(); i++)
+	for (size_t i = 0; i < DownQueue.size(); i++)
 	{
 		if (DownQueue[i].floor == floor)
 			return true;
@@ -4458,7 +4458,7 @@ Door* Elevator::GetStdDoor(int number)
 void Elevator::RemovePanel(ButtonPanel* panel)
 {
 	//remove a button panel reference (does not delete the object itself)
-	for (int i = 0; i < (int)PanelArray.size(); i++)
+	for (size_t i = 0; i < PanelArray.size(); i++)
 	{
 		if (PanelArray[i] == panel)
 		{
@@ -4471,7 +4471,7 @@ void Elevator::RemovePanel(ButtonPanel* panel)
 void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 {
 	//remove a directional indicator reference (does not delete the object itself)
-	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i] == indicator)
 		{
@@ -4484,7 +4484,7 @@ void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 {
 	//remove an elevator door reference (does not delete the object itself)
-	for (int i = 0; i < (int)DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i] == door)
 		{
@@ -4502,7 +4502,7 @@ void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 {
 	//remove a floor indicator reference (does not delete the object itself)
-	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i] == indicator)
 		{
@@ -4515,7 +4515,7 @@ void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 void Elevator::RemoveDoor(Door* door)
 {
 	//remove a door reference (does not delete the object itself)
-	for (int i = 0; i < (int)StdDoorArray.size(); i++)
+	for (size_t i = 0; i < StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i] == door)
 		{
@@ -4528,7 +4528,7 @@ void Elevator::RemoveDoor(Door* door)
 void Elevator::RemoveSound(Sound *sound)
 {
 	//remove a sound reference (does not delete the object itself)
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i] == sound)
 		{
@@ -4541,7 +4541,7 @@ void Elevator::RemoveSound(Sound *sound)
 void Elevator::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (int i = 0; i < (int)lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i] == light)
 		{
@@ -4554,7 +4554,7 @@ void Elevator::RemoveLight(Light *light)
 void Elevator::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i] == model)
 		{
@@ -4567,7 +4567,7 @@ void Elevator::RemoveModel(Model *model)
 void Elevator::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (int i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
 		if (ControlArray[i] == control)
 		{
@@ -4580,7 +4580,7 @@ void Elevator::RemoveControl(Control *control)
 void Elevator::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i] == trigger)
 		{
@@ -4978,7 +4978,7 @@ void Elevator::AddModel(Model *model)
 	if (!model)
 		return;
 
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i] == model)
 			return;
@@ -5010,7 +5010,7 @@ std::string Elevator::GetFloorDisplay()
 	{
 		if (DisplayFloors.size() > 0)
 		{
-			for (int i = 0; i < (int)DisplayFloors.size(); i++)
+			for (size_t i = 0; i < DisplayFloors.size(); i++)
 			{
 				if (floornum == DisplayFloors[i])
 				{
@@ -5055,7 +5055,7 @@ std::vector<Sound*> Elevator::GetSound(const std::string &name)
 	std::string findname = name;
 	SetCase(findname, false);
 	std::vector<Sound*> soundlist;
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -5072,10 +5072,10 @@ int Elevator::GetFloorIndex(int floor)
 {
 	//return array index of the specified floor
 
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
 	{
 		if (ServicedFloors[i] == floor)
-			return i;
+			return (int)i;
 	}
 
 	return -1;
@@ -5090,7 +5090,7 @@ float Elevator::GetDestinationAltitude(int floor)
 
 	float result = 0;
 	bool found = false;
-	for (int i = 0; i < (int)DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i]->ShaftDoorsExist(floor) == true)
 		{
@@ -5416,14 +5416,14 @@ int Elevator::GetNearestServicedFloor()
 	int nearest = 0;
 	float nearest_difference = 0;
 
-	for (int i = 0; i < (int)ServicedFloors.size() - 1; i++)
+	for (size_t i = 0; i < ServicedFloors.size() - 1; i++)
 	{
 		if (firstrun == true)
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
 				nearest_difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
-				nearest = i;
+				nearest = (int)i;
 				firstrun = false;
 			}
 		}
@@ -5436,7 +5436,7 @@ int Elevator::GetNearestServicedFloor()
 				{
 					//mark closest
 					nearest_difference = difference;
-					nearest = i;
+					nearest = (int)i;
 				}
 			}
 		}
@@ -6096,7 +6096,7 @@ Model* Elevator::GetModel(std::string name)
 
 	SetCase(name, false);
 
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
 			return ModelArray[i];

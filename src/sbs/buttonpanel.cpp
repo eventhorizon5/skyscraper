@@ -97,7 +97,7 @@ ButtonPanel::ButtonPanel(Elevator *elevator, int index, const std::string &textu
 ButtonPanel::~ButtonPanel()
 {
 	//delete controls
-	for (int i = 0; i < (int)controls.size(); i++)
+	for (size_t i = 0; i < controls.size(); i++)
 	{
 		if (controls[i])
 		{
@@ -121,7 +121,7 @@ ButtonPanel::~ButtonPanel()
 			sbs->GetElevator(elevator)->RemovePanel(this);
 
 		//remove associated actions
-		for (int i = 0; i < (int)action_list.size(); i++)
+		for (size_t i = 0; i < action_list.size(); i++)
 			sbs->RemoveAction(action_list[i]);
 	}
 }
@@ -213,7 +213,7 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 	std::vector<Action*> actions;
 	std::vector<std::string> actionsnull; //not used
 
-	for (int i = 0; i < (int)action_names.size(); i++)
+	for (size_t i = 0; i < action_names.size(); i++)
 	{
 		std::string newname = sbs->GetElevator(elevator)->GetName();
 		newname += ":" + action_names[i];
@@ -248,7 +248,7 @@ void ButtonPanel::Enabled(bool value)
 
 	ButtonPanelMesh->Enable(value);
 
-	for (int i = 0; i < (int)controls.size(); i++)
+	for (size_t i = 0; i < controls.size(); i++)
 	{
 		controls[i]->Enabled(value);
 	}
@@ -266,7 +266,7 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 {
 	//change light status for all buttons that call the specified floor
 
-	for (int i = 0; i < (int)controls.size(); i++)
+	for (size_t i = 0; i < controls.size(); i++)
 	{
 		controls[i]->ChangeFloorLight(floor, value);
 	}
@@ -276,7 +276,7 @@ void ButtonPanel::ChangeAllLights(bool value)
 {
 	//turns on or off all lights (for floor buttons)
 
-	for (int i = 0; i < (int)controls.size(); i++)
+	for (size_t i = 0; i < controls.size(); i++)
 	{
 		controls[i]->ChangeLight(value);
 	}
@@ -290,7 +290,7 @@ Control* ButtonPanel::GetFloorButton(int floor)
 
 	if (controls.empty() == false)
 	{
-		for (int i = 0; i < (int)controls.size(); i++)
+		for (size_t i = 0; i < controls.size(); i++)
 		{
 			if (controls[i]->FindActionPosition(floornum) > 0)
 				return controls[i];
@@ -302,7 +302,7 @@ Control* ButtonPanel::GetFloorButton(int floor)
 void ButtonPanel::RemoveControl(Control *control)
 {
 	//remove a control from the array (does not delete the object)
-	for (int i = 0; i < (int)controls.size(); i++)
+	for (size_t i = 0; i < controls.size(); i++)
 	{
 		if (controls[i] == control)
 		{

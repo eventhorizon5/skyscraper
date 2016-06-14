@@ -92,7 +92,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
 
 	//initialize shaft door array
 	ShaftDoors.resize(elev->ServicedFloors.size());
-	for (int i = 0; i < (int)ShaftDoors.size(); i++)
+	for (size_t i = 0; i < ShaftDoors.size(); i++)
 		ShaftDoors[i] = 0;
 
 	//create sound object
@@ -104,7 +104,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
 ElevatorDoor::~ElevatorDoor()
 {
 	//delete shaft door objects
-	for (int i = 0; i < (int)ShaftDoors.size(); i++)
+	for (size_t i = 0; i < ShaftDoors.size(); i++)
 	{
 		if (ShaftDoors[i])
 		{
@@ -539,7 +539,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		//reset finished states
 		if (elevdoors == true)
 		{
-			for (int i = 0; i < (int)Doors->doors.size(); i++)
+			for (size_t i = 0; i < Doors->doors.size(); i++)
 			{
 				Doors->doors[i]->finished = false;
 			}
@@ -549,7 +549,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		{
 			if (ShaftDoors[index])
 			{
-				for (int i = 0; i < (int)ShaftDoors[index]->doors.size(); i++)
+				for (size_t i = 0; i < ShaftDoors[index]->doors.size(); i++)
 				{
 					ShaftDoors[index]->doors[i]->finished = false;
 				}
@@ -584,7 +584,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//perform door movement and get open state of each door
 	if (elevdoors == true)
 	{
-		for (int i = 0; i < (int)Doors->doors.size(); i++)
+		for (size_t i = 0; i < Doors->doors.size(); i++)
 		{
 			Doors->doors[i]->MoveDoors(open, manual);
 		}
@@ -594,7 +594,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	{
 		if (ShaftDoors[index])
 		{
-			for (int i = 0; i < (int)ShaftDoors[index]->doors.size(); i++)
+			for (size_t i = 0; i < ShaftDoors[index]->doors.size(); i++)
 			{
 				ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
 			}

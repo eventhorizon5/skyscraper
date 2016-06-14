@@ -47,7 +47,7 @@ Action::Action(Object *parent, const std::string &name, std::vector<Object*> &ac
 	SetCase(command_name, false);
 
 	command_parameters.resize(parameters.size());
-	for (int i = 0; i < (int)parameters.size(); i++)
+	for (size_t i = 0; i < parameters.size(); i++)
 	{
 		command_parameters[i] = parameters[i];
 		TrimString(command_parameters[i]);
@@ -84,8 +84,8 @@ bool Action::DoAction(Object *caller)
 	//returns true if at least one action succeeded
 
 	bool result = false;
-	int count = (int)parent_objects.size();
-	for (int i = 0; i < count; i++)
+	size_t count = parent_objects.size();
+	for (size_t i = 0; i < count; i++)
 	{
 		if (!parent_objects[i])
 			continue;
@@ -613,7 +613,7 @@ bool Action::Run(Object *caller, Object *parent)
 
 			if ((int)soundlist.size() > 0)
 			{
-				for (int i = 0; i < (int)soundlist.size(); i++)
+				for (size_t i = 0; i < soundlist.size(); i++)
 				{
 					if (soundlist[i])
 					{
@@ -655,7 +655,7 @@ bool Action::Run(Object *caller, Object *parent)
 			else
 				return false;
 
-			for (int i = 0; i < (int)soundlist.size(); i++)
+			for (size_t i = 0; i < soundlist.size(); i++)
 			{
 				if (soundlist[i])
 					soundlist[i]->Stop();
@@ -718,7 +718,7 @@ bool Action::AddParent(Object *parent)
 	if (!parent)
 		return false;
 
-	for (int i = 0; i < (int)parent_objects.size(); i++)
+	for (size_t i = 0; i < parent_objects.size(); i++)
 	{
 		if (parent_objects[i] == parent)
 			return false;
@@ -733,7 +733,7 @@ bool Action::RemoveParent(Object *parent)
 	if (!parent)
 		return false;
 
-	for (int i = 0; i < (int)parent_objects.size(); i++)
+	for (size_t i = 0; i < parent_objects.size(); i++)
 	{
 		if (parent_objects[i] == parent)
 		{
