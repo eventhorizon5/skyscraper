@@ -138,10 +138,10 @@ void Person::GotoFloor(int floor)
 		Report("Routing table:");
 
 	//create a new route table entry for each elevator in list
-	for (int i = 0; i < (int)elevators.size(); i++)
+	for (size_t i = 0; i < elevators.size(); i++)
 	{
 		if (sbs->Verbose == true)
-			Report(ToString(i) + ": Elevator " + ToString(elevators[i]->elevator->Number) + " - floor selection " + ToString(elevators[i]->floor_selection) + " - elevator name: " + elevators[i]->elevator->Name);
+			Report(ToString((int)i) + ": Elevator " + ToString(elevators[i]->elevator->Number) + " - floor selection " + ToString(elevators[i]->floor_selection) + " - elevator name: " + elevators[i]->elevator->Name);
 
 		RouteEntry route_entry;
 		route_entry.elevator_route = elevators[i];
@@ -377,7 +377,7 @@ void Person::Stop()
 	//delete routes
 	if (route.empty() == false)
 	{
-		for (int i = 0; i < (int)route.size(); i++)
+		for (size_t i = 0; i < route.size(); i++)
 		{
 			delete route[i].elevator_route;
 		}

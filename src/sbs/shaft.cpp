@@ -110,9 +110,9 @@ Shaft::~Shaft()
 	//destructor
 
 	//delete controls
-	for (int i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
-		for (int j = 0; j < (int)ControlArray[i].size(); j++)
+		for (size_t j = 0; j < ControlArray[i].size(); j++)
 		{
 			if (ControlArray[i][j])
 			{
@@ -124,9 +124,9 @@ Shaft::~Shaft()
 	}
 
 	//delete triggers
-	/*for (int i = 0; i < (int)TriggerArray.size(); i++)
+	/*for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
-		for (int j = 0; j < (int)TriggerArray[i].size(); j++)
+		for (size_t j = 0; j < TriggerArray[i].size(); j++)
 		{
 			if (TriggerArray[i][j])
 			{
@@ -138,9 +138,9 @@ Shaft::~Shaft()
 	}*/
 
 	//delete models
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
-		for (int j = 0; j < (int)ModelArray[i].size(); j++)
+		for (size_t j = 0; j < ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j])
 			{
@@ -152,9 +152,9 @@ Shaft::~Shaft()
 	}
 
 	//delete lights
-	for (int i = 0; i < (int)lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
-		for (int j = 0; j < (int)lights[i].size(); j++)
+		for (size_t j = 0; j < lights[i].size(); j++)
 		{
 			if (lights[i][j])
 			{
@@ -166,9 +166,9 @@ Shaft::~Shaft()
 	}
 
 	//delete doors
-	for (int i = 0; i < (int)DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
-		for (int j = 0; j < (int)DoorArray[i].size(); j++)
+		for (size_t j = 0; j < DoorArray[i].size(); j++)
 		{
 			if (DoorArray[i][j])
 			{
@@ -188,7 +188,7 @@ Shaft::~Shaft()
 	ShaftDoorContainer = 0;
 
 	//delete mesh array objects
-	for (int i = 0; i < (int)ShaftArray.size(); i++)
+	for (size_t i = 0; i < ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i])
 		{
@@ -424,7 +424,7 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
 
-	for (int i = 0; i < (int)sbs->External->Walls.size(); i++)
+	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
 			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
@@ -451,7 +451,7 @@ bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre
 	if (!sbs->GetFloor(floor))
 		return false;
 
-	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
+	for (size_t i = 0; i < GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
@@ -540,7 +540,7 @@ void Shaft::RemoveShowFloor(int floor)
 {
 	//removes a floor number from the ShowFloors list
 
-	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	for (size_t i = 0; i < ShowFloorsList.size(); i++)
 	{
 		if (ShowFloorsList[i] == floor)
 		{
@@ -554,7 +554,7 @@ bool Shaft::IsShowFloor(int floor)
 {
 	//return true if a floor is in the ShowFloors list
 
-	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	for (size_t i = 0; i < ShowFloorsList.size(); i++)
 	{
 		if (ShowFloorsList[i] == floor)
 			return true;
@@ -577,7 +577,7 @@ void Shaft::RemoveShowOutside(int floor)
 {
 	//removes a floor number from the ShowOutside list
 
-	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
+	for (size_t i = 0; i < ShowOutsideList.size(); i++)
 	{
 		if (ShowOutsideList[i] == floor)
 		{
@@ -591,7 +591,7 @@ bool Shaft::IsShowOutside(int floor)
 {
 	//return true if a floor is in the ShowOutside list
 
-	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
+	for (size_t i = 0; i < ShowOutsideList.size(); i++)
 	{
 		if (ShowOutsideList[i] == floor)
 			return true;
@@ -614,7 +614,7 @@ void Shaft::RemoveShowInterfloor(int floor)
 {
 	//removes a floor number from the ShowInterfloors list
 
-	for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+	for (size_t i = 0; i < ShowInterfloorsList.size(); i++)
 	{
 		if (ShowInterfloorsList[i] == floor)
 		{
@@ -628,7 +628,7 @@ bool Shaft::IsShowInterfloor(int floor)
 {
 	//return true if a floor is in the ShowInterfloors list
 
-	for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+	for (size_t i = 0; i < ShowInterfloorsList.size(); i++)
 	{
 		if (ShowInterfloorsList[i] == floor)
 			return true;
@@ -653,7 +653,7 @@ void Shaft::AddElevator(int number)
 {
 	//add specified elevator to list
 
-	for (int i = 0; i < (int)elevators.size(); i++)
+	for (size_t i = 0; i < elevators.size(); i++)
 	{
 		if (elevators[i] == number)
 			return;
@@ -666,7 +666,7 @@ void Shaft::AddElevator(int number)
 void Shaft::RemoveElevator(int number)
 {
 	//remove specified elevator from list
-	for (int i = 0; i < (int)elevators.size(); i++)
+	for (size_t i = 0; i < elevators.size(); i++)
 	{
 		if (elevators[i] == number)
 		{
@@ -679,9 +679,9 @@ void Shaft::RemoveElevator(int number)
 void Shaft::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (int i = 0; i < (int)lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
-		for (int j = 0; j < (int)lights[i].size(); j++)
+		for (size_t j = 0; j < lights[i].size(); j++)
 		{
 			if (lights[i][j] == light)
 			{
@@ -695,9 +695,9 @@ void Shaft::RemoveLight(Light *light)
 void Shaft::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
-		for (int j = 0; j < (int)ModelArray[i].size(); j++)
+		for (size_t j = 0; j < ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j] == model)
 			{
@@ -711,9 +711,9 @@ void Shaft::RemoveModel(Model *model)
 void Shaft::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (int i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
-		for (int j = 0; j < (int)ControlArray[i].size(); j++)
+		for (size_t j = 0; j < ControlArray[i].size(); j++)
 		{
 			if (ControlArray[i][j] == control)
 			{
@@ -727,9 +727,9 @@ void Shaft::RemoveControl(Control *control)
 void Shaft::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	/*for (int i = 0; i < (int)TriggerArray.size(); i++)
+	/*for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
-		for (int j = 0; j < (int)TriggerArray[i].size(); j++)
+		for (size_t j = 0; j < TriggerArray[i].size(); j++)
 		{
 			if (TriggerArray[i][j] == trigger)
 			{
@@ -804,7 +804,7 @@ void Shaft::AddModel(int floor, Model *model)
 	if (!IsValidFloor(floor))
 		return;
 
-	for (int i = 0; i < (int)ModelArray[floor - startfloor].size(); i++)
+	for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
 	{
 		if (ModelArray[floor - startfloor][i] == model)
 			return;
@@ -922,9 +922,9 @@ Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string
 void Shaft::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
-	for (int i = 0; i < (int)DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
-		for (int j = 0; j < (int)DoorArray[i].size(); j++)
+		for (size_t j = 0; j < DoorArray[i].size(); j++)
 		{
 			if (DoorArray[i][j] == door)
 			{
@@ -1000,7 +1000,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		if (ShowFloors == 2 && ShowFloorsFull_Enabled == false)
 		{
 			ShowFloorsFull_Enabled = true;
-			for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+			for (size_t i = 0; i < ShowFloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
 				if (floor->IsEnabled == false)
@@ -1014,7 +1014,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		//display interfloors
 		if (ShowInterfloors == true)
 		{
-			for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+			for (size_t i = 0; i < ShowInterfloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowInterfloorsList[i]);
 				if (floor->IsInterfloorEnabled == false)
@@ -1037,7 +1037,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		if (ShowFloors == 2 && ShowFloorsFull_Enabled == true)
 		{
 			ShowFloorsFull_Enabled = false;
-			for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+			for (size_t i = 0; i < ShowFloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
 				if (floor->IsEnabled == true && sbs->camera->CurrentFloor != floor->Number)
@@ -1059,7 +1059,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		//disable interfloors
 		if (ShowInterfloors == true)
 		{
-			for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+			for (size_t i = 0; i < ShowInterfloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowInterfloorsList[i]);
 				if (floor->IsInterfloorEnabled == true && floor->IsEnabled == false)
@@ -1078,11 +1078,11 @@ void Shaft::Loop()
 {
 	//shaft runloop
 
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (EnableArray[i] == true)
 		{
-			for (int j = 0; j < (int)ModelArray[i].size(); j++)
+			for (size_t j = 0; j < ModelArray[i].size(); j++)
 			{
 				if (ModelArray[i][j])
 					ModelArray[i][j]->Loop();
@@ -1103,7 +1103,7 @@ Model* Shaft::GetModel(int floor, std::string name)
 
 	int index = floor - startfloor;
 
-	for (int i = 0; i < (int)ModelArray[index].size(); i++)
+	for (size_t i = 0; i < ModelArray[index].size(); i++)
 	{
 		if (SetCaseCopy(ModelArray[index][i]->GetName(), false) == name)
 			return ModelArray[index][i];

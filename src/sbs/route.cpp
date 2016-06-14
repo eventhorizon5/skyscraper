@@ -81,7 +81,7 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 	//the elevators that serve that floor, and check those floors individually to see if they are accessible
 	std::vector<int> connected = dest_floor->GetDirectFloors(false);
 
-	for (int i = 0; i < (int)connected.size(); i++)
+	for (size_t i = 0; i < connected.size(); i++)
 	{
 		checked_floors.clear();
 		route = GetIndirectRoute(checked_floors, StartingFloor, connected[i], service_access);
@@ -154,7 +154,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 
 	while (true)
 	{
-		for (int i = 0; i < (int)list.size(); i++)
+		for (size_t i = 0; i < list.size(); i++)
 		{
 			Elevator *elev = GetElevator(list[i]);
 
@@ -180,7 +180,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 					}
 				}
 
-				for (int j = 0; j < (int)floor_list.size(); j++)
+				for (size_t j = 0; j < floor_list.size(); j++)
 				{
 					int number = floor_list[j];
 
@@ -195,7 +195,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 								ElevatorRoute *first = new ElevatorRoute(elev, number);
 								result.push_back(first);
 
-								for (int i = 0; i < (int)result2.size(); i++)
+								for (size_t i = 0; i < result2.size(); i++)
 								{
 									result.push_back(result2[i]);
 								}
@@ -208,7 +208,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 
 							//see if this floor has already been checked
 							bool checked = false;
-							for (int i = 0; i < (int)checked_floors.size(); i++)
+							for (size_t i = 0; i < checked_floors.size(); i++)
 							{
 								if (checked_floors[i] == number)
 								{

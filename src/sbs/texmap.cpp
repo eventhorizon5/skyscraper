@@ -251,10 +251,9 @@ int SBS::Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value)
 	//2 - polygon is in back of plane
 	//3 - polygon intersects with plane
 
-	int i;
 	int front = 0, back = 0;
 
-	for (i = 0; i < (int)vertices.size(); i++)
+	for (size_t i = 0; i < vertices.size(); i++)
 	{
 		float loc = 0;
 		if (axis == 0)
@@ -429,9 +428,8 @@ bool SBS::InPolygon(std::vector<Ogre::Vector3> &poly, const Ogre::Vector3 &v)
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//determine if the point 'v' is inside the given polygon
 
-	int i, i1;
-	i1 = (int)poly.size() - 1;
-	for (i = 0; i < (int)poly.size(); i++)
+	size_t i1 = poly.size() - 1;
+	for (size_t i = 0; i < poly.size(); i++)
 	{
 		if (WhichSide3D(v, poly[i1], poly[i]) < 0)
 			return false;
@@ -506,8 +504,8 @@ bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vec
 	Ogre::Vector3 relend = end;
 	relend -= start;
 
-	int i1 = (int)vertices.size() - 1;
-	for (int i = 0; i < (int)vertices.size(); i++)
+	size_t i1 = vertices.size() - 1;
+	for (size_t i = 0; i < vertices.size(); i++)
 	{
 		Ogre::Vector3 start2 = start - vertices[i1];
 		normal = start2.crossProduct(start - vertices[i]);
@@ -531,7 +529,7 @@ bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &
 	std::vector<std::vector<Ogre::Vector3> > vertices;
 	GetGeometry(vertices, false, convert, rescale, false, true);
 
-	for (int i = 0; i < (int)vertices.size(); i++)
+	for (size_t i = 0; i < vertices.size(); i++)
 	{
 		if (!IntersectRay(vertices[i], start, end))
 			continue;

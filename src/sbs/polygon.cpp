@@ -86,7 +86,7 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 
 	MeshObject::SubMesh &submesh = mesh->Submeshes[index];
 
-	for (int i = 0; i < (int)index_extents.size(); i++)
+	for (size_t i = 0; i < index_extents.size(); i++)
 	{
 		int min = index_extents[i].min;
 		int max = index_extents[i].max;
@@ -144,7 +144,7 @@ bool Polygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool con
 	std::vector<std::vector<Ogre::Vector3> > vertices;
 	GetGeometry(vertices, false, convert);
 
-	for (int i = 0; i < (int)vertices.size(); i++)
+	for (size_t i = 0; i < vertices.size(); i++)
 	{
 		if (sbs->InPolygon(vertices[i], point))
 			return true;
@@ -162,7 +162,7 @@ void Polygon::Move(const Ogre::Vector3 &position, float speed)
 	if (submesh == -1)
 		return;
 
-	for (int i = 0; i < (int)index_extents.size(); i++)
+	for (size_t i = 0; i < index_extents.size(); i++)
 	{
 		int min = index_extents[i].min;
 		int max = index_extents[i].max;

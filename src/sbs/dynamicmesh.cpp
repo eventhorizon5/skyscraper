@@ -103,7 +103,7 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 			//don't disable mesh if another client has it enabled
 			if (value == false && (int)client_enable.size() > 1)
 			{
-				for (int i = 0; i < (int)client_enable.size(); i++)
+				for (size_t i = 0; i < client_enable.size(); i++)
 				{
 					if (i == index)
 						continue;
@@ -115,7 +115,7 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 		}
 
 		//enable all meshes if no client specified
-		for (int i = 0; i < (int)meshes.size(); i++)
+		for (size_t i = 0; i < meshes.size(); i++)
 			meshes[i]->Enable(value);
 	}
 	else if (meshes.size() > 1)
@@ -134,7 +134,7 @@ bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::strin
 	if (client == 0 || meshes.size() == 1)
 	{
 		bool result = true;
-		for (int i = 0; i < (int)meshes.size(); i++)
+		for (size_t i = 0; i < meshes.size(); i++)
 		{
 			bool change = meshes[i]->ChangeTexture(old_texture, new_texture);
 			if (change == false)
@@ -156,7 +156,7 @@ void DynamicMesh::EnableDebugView(bool value, MeshObject *client)
 {
 	if (client == 0 || meshes.size() == 1)
 	{
-		for (int i = 0; i < (int)meshes.size(); i++)
+		for (size_t i = 0; i < meshes.size(); i++)
 			meshes[i]->EnableDebugView(value);
 	}
 	else if (meshes.size() > 1)
@@ -233,7 +233,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 
 			int limit = 3; //compare against 3 client meshes totaled together
 
-			for (int i = 0; i < (int)clients.size(); i++)
+			for (size_t i = 0; i < clients.size(); i++)
 			{
 				if (i == limit)
 					break;
@@ -279,11 +279,11 @@ void DynamicMesh::Prepare(MeshObject *client)
 
 	if (client == 0 || meshes.size() == 1)
 	{
-		for (int i = 0; i < (int)meshes.size(); i++)
+		for (size_t i = 0; i < meshes.size(); i++)
 		{
 			meshes[i]->prepared = false;
 			if (meshes.size() > 1)
-				meshes[i]->Prepare(true, i);
+				meshes[i]->Prepare(true, (int)i);
 			else
 				meshes[i]->Prepare();
 		}
@@ -311,7 +311,7 @@ void DynamicMesh::RemoveClient(MeshObject *mesh)
 {
 	//remove a client mesh from this dynamic mesh
 
-	for (int i = 0; i < (int)clients.size(); i++)
+	for (size_t i = 0; i < clients.size(); i++)
 	{
 		if (clients[i] == mesh)
 		{
@@ -335,7 +335,7 @@ int DynamicMesh::GetClientIndex(MeshObject *client)
 	if (!client)
 		return -1;
 
-	for (int i = 0; i < (int)clients.size(); i++)
+	for (size_t i = 0; i < clients.size(); i++)
 	{
 		if (clients[i] == client)
 			return i;
@@ -381,13 +381,13 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 	for (int i = start; i <= end; i++)
 	{
 		//for each client submesh entry
-		for (int j = 0; j < (int)clients[i]->Submeshes.size(); j++)
+		for (size_t j = 0; j < clients[i]->Submeshes.size(); j++)
 		{
 			std::string material = clients[i]->Submeshes[j].Name;
 
 			//find material in current list
 			bool found = false;
-			for (int k = 0; k < (int)materials.size(); k++)
+			for (size_t k = 0; k < materials.size(); k++)
 			{
 				if (materials[k] == material)
 				{
@@ -494,7 +494,7 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 	if (meshes.size() > 1)
 		return index;
 
-	for (int i = 0; i < (int)clients.size(); i++)
+	for (size_t i = 0; i < clients.size(); i++)
 	{
 		//if found, return current index value
 		if (clients[i] == client)
@@ -616,7 +616,7 @@ DynamicMesh::Mesh::~Mesh()
 {
 	Detach();
 
-	for (int i = 0; i < (int)client_entries.size(); i++)
+	for (size_t i = 0; i < client_entries.size(); i++)
 	{
 		delete client_entries[i].bounds;
 	}
@@ -697,10 +697,10 @@ int DynamicMesh::Mesh::FindMatchingSubMesh(const std::string &material)
 
 	std::string full_name = ToString(sbs->InstanceNumber) + ":" + material;
 
-	for (int i = 0; i < (int)Submeshes.size(); i++)
+	for (size_t i = 0; i < Submeshes.size(); i++)
 	{
 		if (Submeshes[i].object->getMaterialName() == full_name)
-			return i;
+			return (int)i;
 	}
 	return -1;
 }
@@ -733,7 +733,7 @@ void DynamicMesh::Mesh::DeleteSubMesh(int index)
 
 	if (index == -1)
 	{
-		for (int i = 0; i < (int)Submeshes.size(); i++)
+		for (size_t i = 0; i < Submeshes.size(); i++)
 		{
 			bool used = false;
 
@@ -788,9 +788,9 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		MeshWrapper->sharedVertexData = new Ogre::VertexData();
 
 		//delete any existing submeshes
-		for (int i = 0; i < (int)Submeshes.size(); i++)
+		for (size_t i = 0; i < Submeshes.size(); i++)
 		{
-			DeleteSubMesh(i);
+			DeleteSubMesh((int)i);
 		}
 
 		return;
@@ -840,7 +840,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		unsigned int vindex = 0;
 
 		//clear vertex offset, counts, and bounds tables
-		for (int i = 0; i < (int)client_entries.size(); i++)
+		for (size_t i = 0; i < client_entries.size(); i++)
 		{
 			delete client_entries[i].bounds;
 		}
@@ -1180,7 +1180,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	unsigned int pos = 0;
 	unsigned int add = 0;
 
-	for (int submesh = 0; submesh < (int)mesh->Submeshes.size(); submesh++)
+	for (size_t submesh = 0; submesh < mesh->Submeshes.size(); submesh++)
 	{
 		unsigned int start;
 		unsigned int end;

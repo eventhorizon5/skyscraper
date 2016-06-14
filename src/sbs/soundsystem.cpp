@@ -58,7 +58,7 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 
 SoundSystem::~SoundSystem()
 {
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 		delete sounds[i];
 }
 

@@ -50,7 +50,7 @@ FloorManager::FloorManager(Object* parent) : Object(parent)
 FloorManager::~FloorManager()
 {
 	//delete floors
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object)
 		{
@@ -151,7 +151,7 @@ Floor* FloorManager::Get(int number)
 		}
 	}
 
-	for (size_t i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].number == number)
 		{
@@ -177,7 +177,7 @@ Floor* FloorManager::GetIndex(int index)
 void FloorManager::Remove(Floor *floor)
 {
 	//remove a floor (does not delete the object)
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object == floor)
 		{
@@ -199,7 +199,7 @@ void FloorManager::Remove(Floor *floor)
 void FloorManager::EnableAll(bool value)
 {
 	//enable or disable all floors
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 		Array[i].object->Enabled(value);
 
 	//enable/disable dynamic meshes
@@ -220,7 +220,7 @@ ElevatorManager::ElevatorManager(Object* parent) : Object(parent)
 ElevatorManager::~ElevatorManager()
 {
 	//delete elevators
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object)
 		{
@@ -307,7 +307,7 @@ Elevator* ElevatorManager::GetIndex(int index)
 void ElevatorManager::Remove(Elevator *elevator)
 {
 	//remove an elevator (does not delete the object)
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object == elevator)
 		{
@@ -325,7 +325,7 @@ void ElevatorManager::EnableAll(bool value)
 {
 	//turn off elevators, if the related shaft is only partially shown
 
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		Shaft *shaft = Array[i].object->GetShaft();
 
@@ -348,7 +348,7 @@ ShaftManager::ShaftManager(Object* parent) : Object(parent)
 ShaftManager::~ShaftManager()
 {
 	//delete shafts
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object)
 		{
@@ -462,7 +462,7 @@ Shaft* ShaftManager::GetIndex(int index)
 void ShaftManager::Remove(Shaft *shaft)
 {
 	//remove a shaft (does not delete the object)
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object == shaft)
 		{
@@ -479,7 +479,7 @@ void ShaftManager::Remove(Shaft *shaft)
 void ShaftManager::EnableAll(bool value)
 {
 	//enable or disable all shafts
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 		Array[i].object->EnableWholeShaft(value, true, true);
 }
 
@@ -495,7 +495,7 @@ StairsManager::StairsManager(Object* parent) : Object(parent)
 StairsManager::~StairsManager()
 {
 	//delete stairs
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object)
 		{
@@ -608,7 +608,7 @@ Stairs* StairsManager::GetIndex(int index)
 void StairsManager::Remove(Stairs *stairs)
 {
 	//remove a stairs object (does not delete the object)
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object == stairs)
 		{
@@ -625,7 +625,7 @@ void StairsManager::Remove(Stairs *stairs)
 void StairsManager::EnableAll(bool value)
 {
 	//enable or disable all stairwells
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 		Array[i].object->EnableWholeStairwell(value, true);
 }
 
@@ -642,7 +642,7 @@ DoorManager::DoorManager(Object* parent) : Object(parent)
 DoorManager::~DoorManager()
 {
 	//delete doors
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i])
 		{
@@ -670,7 +670,7 @@ void DoorManager::RemoveDoor(Door *door)
 {
 	//remove a door from the array
 	//this does not delete the object
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i] == door)
 		{

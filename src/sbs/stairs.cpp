@@ -92,9 +92,9 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 Stairs::~Stairs()
 {
 	//delete controls
-	for (int i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
-		for (int j = 0; j < (int)ControlArray[i].size(); j++)
+		for (size_t j = 0; j < ControlArray[i].size(); j++)
 		{
 			if (ControlArray[i][j])
 			{
@@ -106,9 +106,9 @@ Stairs::~Stairs()
 	}
 
 	//delete triggers
-	/*for (int i = 0; i < (int)TriggerArray.size(); i++)
+	/*for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
-		for (int j = 0; j < (int)TriggerArray[i].size(); j++)
+		for (size_t j = 0; j < TriggerArray[i].size(); j++)
 		{
 			if (TriggerArray[i][j])
 			{
@@ -120,9 +120,9 @@ Stairs::~Stairs()
 	}*/
 
 	//delete models
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
-		for (int j = 0; j < (int)ModelArray[i].size(); j++)
+		for (size_t j = 0; j < ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j])
 			{
@@ -134,9 +134,9 @@ Stairs::~Stairs()
 	}
 
 	//delete lights
-	for (int i = 0; i < (int)lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
-		for (int j = 0; j < (int)lights[i].size(); j++)
+		for (size_t j = 0; j < lights[i].size(); j++)
 		{
 			if (lights[i][j])
 			{
@@ -148,9 +148,9 @@ Stairs::~Stairs()
 	}
 
 	//delete doors
-	for (int i = 0; i < (int)DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
-		for (int j = 0; j < (int)DoorArray[i].size(); j++)
+		for (size_t j = 0; j < DoorArray[i].size(); j++)
 		{
 			if (DoorArray[i][j])
 			{
@@ -166,7 +166,7 @@ Stairs::~Stairs()
 	DoorWrapper = 0;
 
 	//delete mesh array objects
-	for (int i = 0; i < (int)StairArray.size(); i++)
+	for (size_t i = 0; i < StairArray.size(); i++)
 	{
 		if (StairArray[i])
 		{
@@ -570,7 +570,7 @@ void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Ve
 	//cut external
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
-	for (int i = 0; i < (int)sbs->External->Walls.size(); i++)
+	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
 			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
@@ -597,7 +597,7 @@ bool Stairs::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogr
 	if (!sbs->GetFloor(floor))
 		return false;
 
-	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
+	for (size_t i = 0; i < GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
@@ -696,9 +696,9 @@ bool Stairs::ReportError(const std::string &message)
 void Stairs::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
-	for (int i = 0; i < (int)DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
-		for (int j = 0; j < (int)DoorArray[i].size(); j++)
+		for (size_t j = 0; j < DoorArray[i].size(); j++)
 		{
 			if (DoorArray[i][j] == door)
 			{
@@ -712,9 +712,9 @@ void Stairs::RemoveDoor(Door *door)
 void Stairs::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (int i = 0; i < (int)lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
-		for (int j = 0; j < (int)lights[i].size(); j++)
+		for (size_t j = 0; j < lights[i].size(); j++)
 		{
 			if (lights[i][j] == light)
 			{
@@ -728,9 +728,9 @@ void Stairs::RemoveLight(Light *light)
 void Stairs::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
-		for (int j = 0; j < (int)ModelArray[i].size(); j++)
+		for (size_t j = 0; j < ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j] == model)
 			{
@@ -744,9 +744,9 @@ void Stairs::RemoveModel(Model *model)
 void Stairs::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (int i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
-		for (int j = 0; j < (int)ControlArray[i].size(); j++)
+		for (size_t j = 0; j < ControlArray[i].size(); j++)
 		{
 			if (ControlArray[i][j] == control)
 			{
@@ -760,9 +760,9 @@ void Stairs::RemoveControl(Control *control)
 void Stairs::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	/*for (int i = 0; i < (int)TriggerArray.size(); i++)
+	/*for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
-		for (int j = 0; j < (int)TriggerArray[i].size(); j++)
+		for (size_t j = 0; j < TriggerArray[i].size(); j++)
 		{
 			if (TriggerArray[i][j] == trigger)
 			{
@@ -825,7 +825,7 @@ void Stairs::AddModel(int floor, Model *model)
 	if (!IsValidFloor(floor))
 		return;
 
-	for (int i = 0; i < (int)ModelArray[floor - startfloor].size(); i++)
+	for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
 	{
 		if (ModelArray[floor - startfloor][i] == model)
 			return;
@@ -896,7 +896,7 @@ void Stairs::RemoveShowFloor(int floor)
 {
 	//removes a floor number from the ShowFloors array
 
-	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	for (size_t i = 0; i < ShowFloorsList.size(); i++)
 	{
 		if (ShowFloorsList[i] == floor)
 		{
@@ -910,7 +910,7 @@ bool Stairs::IsShowFloor(int floor)
 {
 	//return true if a floor is in the ShowFloors list
 
-	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	for (size_t i = 0; i < ShowFloorsList.size(); i++)
 	{
 		if (ShowFloorsList[i] == floor)
 			return true;
@@ -953,7 +953,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 			//turn on related floors if ShowFloors is true
 			if (ShowFloors == true)
 			{
-				for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+				for (size_t i = 0; i < ShowFloorsList.size(); i++)
 				{
 					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
 					if (floor->IsEnabled == false)
@@ -977,7 +977,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 		//turn off related floors if outside stairwell
 		if (ShowFloors == true)
 		{
-			for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+			for (size_t i = 0; i < ShowFloorsList.size(); i++)
 			{
 				if (ShowFloorsList[i] != current_floor)
 				{
@@ -1010,11 +1010,11 @@ void Stairs::Loop()
 {
 	//stairwell runloop
 
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (EnableArray[i] == true)
 		{
-			for (int j = 0; j < (int)ModelArray[i].size(); j++)
+			for (size_t j = 0; j < ModelArray[i].size(); j++)
 			{
 				if (ModelArray[i][j])
 					ModelArray[i][j]->Loop();
@@ -1035,7 +1035,7 @@ Model* Stairs::GetModel(int floor, std::string name)
 
 	int index = floor - startfloor;
 
-	for (int i = 0; i < (int)ModelArray[index].size(); i++)
+	for (size_t i = 0; i < ModelArray[index].size(); i++)
 	{
 		if (SetCaseCopy(ModelArray[index][i]->GetName(), false) == name)
 			return ModelArray[index][i];

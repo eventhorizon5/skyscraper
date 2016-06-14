@@ -250,7 +250,7 @@ SBS::~SBS()
 	FastDelete = true;
 
 	//delete people
-	for (int i = 0; i < (int)PersonArray.size(); i++)
+	for (size_t i = 0; i < PersonArray.size(); i++)
 	{
 		if (PersonArray[i])
 		{
@@ -261,7 +261,7 @@ SBS::~SBS()
 	}
 
 	//delete controls
-	for (int i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
 		if (ControlArray[i])
 		{
@@ -272,7 +272,7 @@ SBS::~SBS()
 	}
 
 	//delete triggers
-	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
 		{
@@ -283,7 +283,7 @@ SBS::~SBS()
 	}
 
 	//delete models
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 		{
@@ -294,7 +294,7 @@ SBS::~SBS()
 	}
 
 	//delete lights
-	for (int i = 0; i < (int)lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i])
 		{
@@ -338,7 +338,7 @@ SBS::~SBS()
 	door_manager = 0;
 
 	//delete sounds
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -349,7 +349,7 @@ SBS::~SBS()
 	}
 
 	//delete actions
-	for (int i = 0; i < (int)ActionArray.size(); i++)
+	for (size_t i = 0; i < ActionArray.size(); i++)
 	{
 		if (ActionArray[i])
 			delete ActionArray[i];
@@ -443,7 +443,7 @@ bool SBS::Start(Ogre::Camera *camera)
 	Init();
 
 	//play looping global sounds
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -576,21 +576,21 @@ void SBS::MainLoop()
 		CheckAutoAreas();
 
 		//process triggers
-		for (int i = 0; i < (int)TriggerArray.size(); i++)
+		for (size_t i = 0; i < TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Loop();
 		}
 
 		//process models
-		for (int i = 0; i < (int)ModelArray.size(); i++)
+		for (size_t i = 0; i < ModelArray.size(); i++)
 		{
 			if (ModelArray[i])
 				ModelArray[i]->Loop();
 		}
 
 		//process people
-		for (int i = 0; i < (int)PersonArray.size(); i++)
+		for (size_t i = 0; i < PersonArray.size(); i++)
 		{
 			if (PersonArray[i])
 				PersonArray[i]->Loop();
@@ -1418,7 +1418,7 @@ WallObject* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const
 
 	//set up 3D vertex array
 	varray3.reserve(varray.size());
-	for (int i = 0; i < (int)varray.size(); i++)
+	for (size_t i = 0; i < varray.size(); i++)
 	{
 		varray3.push_back(Ogre::Vector3(varray[i].x, altitude, varray[i].y));
 	}
@@ -2105,11 +2105,11 @@ bool SBS::RegisterDoorCallback(Door *door)
 		return false;
 
 	int index = -1;
-	for (int i = 0; i < (int)doorcallbacks.size(); i++)
+	for (size_t i = 0; i < doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i] == door)
 		{
-			index = i;
+			index = (int)i;
 			break;
 		}
 	}
@@ -2134,7 +2134,7 @@ bool SBS::UnregisterDoorCallback(Door *door)
 		return false;
 
 	int index = -1;
-	for (int i = 0; i < (int)doorcallbacks.size(); i++)
+	for (size_t i = 0; i < doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i] == door)
 		{
@@ -2159,7 +2159,7 @@ bool SBS::RegisterCallButtonCallback(CallButton *button)
 	if (!button)
 		return false;
 
-	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
+	for (size_t i = 0; i < buttoncallbacks.size(); i++)
 	{
 		if (buttoncallbacks[i] == button)
 			return false;
@@ -2177,7 +2177,7 @@ bool SBS::UnregisterCallButtonCallback(CallButton *button)
 		return false;
 
 	int index = -1;
-	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
+	for (size_t i = 0; i < buttoncallbacks.size(); i++)
 	{
 		//unregister existing call button callback
 		if (buttoncallbacks[i] == button)
@@ -2197,7 +2197,7 @@ bool SBS::RegisterTimerCallback(TimerObject *timer)
 	if (!timer)
 		return false;
 
-	for (int i = 0; i < (int)timercallbacks.size(); i++)
+	for (size_t i = 0; i < timercallbacks.size(); i++)
 	{
 		if (timercallbacks[i] == timer)
 			return false;
@@ -2215,7 +2215,7 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 		return false;
 
 	int index = -1;
-	for (int i = 0; i < (int)timercallbacks.size(); i++)
+	for (size_t i = 0; i < timercallbacks.size(); i++)
 	{
 		//unregister existing call button callback
 		if (timercallbacks[i] == timer)
@@ -2232,15 +2232,15 @@ void SBS::ProcessCallButtons()
 {
 	//process all registered call buttons
 
-	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
+	for (size_t i = 0; i < buttoncallbacks.size(); i++)
 	{
-		int size = (int)buttoncallbacks.size();
+		size_t size = (int)buttoncallbacks.size();
 
 		if (buttoncallbacks[i])
 			buttoncallbacks[i]->Loop();
 
 		//if a callback was removed, reset position
-		if (size != (int)buttoncallbacks.size())
+		if (size != buttoncallbacks.size())
 			i--;
 	}
 }
@@ -2248,7 +2248,7 @@ void SBS::ProcessCallButtons()
 void SBS::ProcessDoors()
 {
 	//process all registered doors
-	for (int i = 0; i < (int)doorcallbacks.size(); i++)
+	for (size_t i = 0; i < doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i])
 		{
@@ -2263,7 +2263,7 @@ void SBS::ProcessDoors()
 void SBS::ProcessTimers()
 {
 	//process all registered timers
-	for (int i = 0; i < (int)timercallbacks.size(); i++)
+	for (size_t i = 0; i < timercallbacks.size(); i++)
 	{
 		if (timercallbacks[i])
 			timercallbacks[i]->Loop();
@@ -2326,7 +2326,7 @@ void SBS::CheckAutoAreas()
 	Ogre::Vector3 position = camera->GetPosition();
 	int floor = camera->CurrentFloor;
 
-	for (int i = 0; i < (int)FloorAutoArea.size(); i++)
+	for (size_t i = 0; i < FloorAutoArea.size(); i++)
 	{
 		//reset inside value if floor changed
 		if (FloorAutoArea[i].camerafloor != floor)
@@ -2407,7 +2407,7 @@ std::vector<Sound*> SBS::GetSound(const std::string &name)
 	std::string findname = name;
 	SetCase(findname, false);
 	std::vector<Sound*> soundlist;
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -2843,7 +2843,7 @@ void SBS::RemoveSound(Sound *sound)
 	//remove a sound from the array
 	//this does not delete the object
 
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i] == sound)
 		{
@@ -2856,7 +2856,7 @@ void SBS::RemoveSound(Sound *sound)
 void SBS::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (int i = 0; i < (int)lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i] == light)
 		{
@@ -2869,7 +2869,7 @@ void SBS::RemoveLight(Light *light)
 void SBS::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i] == model)
 		{
@@ -2882,7 +2882,7 @@ void SBS::RemoveModel(Model *model)
 void SBS::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (int i = 0; i < (int)ControlArray.size(); i++)
+	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
 		if (ControlArray[i] == control)
 		{
@@ -2895,7 +2895,7 @@ void SBS::RemoveControl(Control *control)
 void SBS::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i] == trigger)
 		{
@@ -2927,7 +2927,7 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 	//check for a cached result
 	if (skip_cache == false)
 	{
-		for (int i = 0; i < (int)verify_results.size(); i++)
+		for (size_t i = 0; i < verify_results.size(); i++)
 		{
 			if (verify_results[i].filename == filename)
 				return verify_results[i].result;
@@ -2979,7 +2979,7 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 	}
 
 	//go through file listing, to find a match with a different case
-	for (int i = 0; i < (int)listing->size(); i++)
+	for (size_t i = 0; i < listing->size(); i++)
 	{
 		std::string check = listing->at(i);
 		std::string checkoriginal = SetCaseCopy(check, false);
@@ -3031,13 +3031,13 @@ void SBS::Prepare(bool report)
 	}
 
 	//prepare mesh objects
-	for (int i = 0; i < (int)meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
 	}
 
 	//process dynamic meshes
-	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
+	for (size_t i = 0; i < dynamic_meshes.size(); i++)
 	{
 		dynamic_meshes[i]->Prepare();
 	}
@@ -3045,7 +3045,7 @@ void SBS::Prepare(bool report)
 	if (report == true)
 		Report("Creating colliders...");
 
-	for (int i = 0; i < (int)meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i]->tricollider == true)
 			meshes[i]->CreateCollider();
@@ -3073,7 +3073,7 @@ void SBS::AddMeshHandle(MeshObject* handle)
 
 void SBS::DeleteMeshHandle(MeshObject* handle)
 {
-	for (int i = 0; i < (int)meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i] == handle)
 		{
@@ -3086,7 +3086,7 @@ void SBS::DeleteMeshHandle(MeshObject* handle)
 MeshObject* SBS::FindMeshObject(const std::string &name)
 {
 	//find a mesh object by searching for matching wrapper
-	for (int i = 0; i < (int)meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i]->name == name)
 			return meshes[i];
@@ -3114,7 +3114,7 @@ void SBS::AddModel(Model *model)
 	if (!model)
 		return;
 
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i] == model)
 			return;
@@ -3235,7 +3235,7 @@ std::string SBS::GetMountPath(std::string filename, std::string &newfilename)
 	ReplaceAll(filename, "\\", "/");
 	newfilename = filename;
 
-	for (int i = 0; i < (int)list.size(); i++)
+	for (size_t i = 0; i < list.size(); i++)
 	{
 		if (StartsWith(filename, list[i] + "/") == true)
 		{
@@ -3327,7 +3327,7 @@ std::vector<Action*> SBS::GetAction(std::string name)
 	//get action by name
 	ReplaceAll(name, " ", "");
 	std::vector<Action*> actionlist;
-	for (int i = 0; i < (int)ActionArray.size(); i++)
+	for (size_t i = 0; i < ActionArray.size(); i++)
 	{
 		std::string actionname = ActionArray[i]->GetName();
 		ReplaceAll(actionname, " ", "");
@@ -3350,10 +3350,10 @@ bool SBS::AddActionParent(const std::string &name, std::vector<Object*> &parents
 	bool result = false;
 	std::vector<Action*> actionlist = GetAction(name);
 
-	for (int i = 0; i < (int)actionlist.size(); i++)
+	for (size_t i = 0; i < actionlist.size(); i++)
 	{
 		Action *action = actionlist[i];
-		for (int j = 0; j < (int)parents.size(); j++)
+		for (size_t j = 0; j < parents.size(); j++)
 		{
 			if (action->AddParent(parents[j]))
 				result = true;
@@ -3369,10 +3369,10 @@ bool SBS::RemoveActionParent(const std::string &name, std::vector<Object*> &pare
 	bool result = false;
 	std::vector<Action*> actionlist = GetAction(name);
 
-	for (int i = 0; i < (int)actionlist.size(); i++)
+	for (size_t i = 0; i < actionlist.size(); i++)
 	{
 		Action *action = actionlist[i];
-		for (int j = 0; j < (int)parents.size(); j++)
+		for (size_t j = 0; j < parents.size(); j++)
 		{
 			if (action->RemoveParent(parents[j]))
 				result = true;
@@ -3386,10 +3386,10 @@ bool SBS::RemoveActionParent(std::vector<Object*> &parents)
 	//remove parent object from all action objects
 
 	bool result = false;
-	for (int i = 0; i < (int)ActionArray.size(); i++)
+	for (size_t i = 0; i < ActionArray.size(); i++)
 	{
 		Action *action = ActionArray[i];
-		for (int j = 0; j < (int)parents.size(); j++)
+		for (size_t j = 0; j < parents.size(); j++)
 		{
 			if (action->RemoveParent(parents[j]))
 				result = true;
@@ -3404,7 +3404,7 @@ bool SBS::RemoveAction(std::string name)
 
 	ReplaceAll(name, " ", "");
 	bool result = false;
-	for (int i = 0; i < (int)ActionArray.size(); i++)
+	for (size_t i = 0; i < ActionArray.size(); i++)
 	{
 		if (ActionArray[i])
 		{
@@ -3430,7 +3430,7 @@ bool SBS::RemoveAction(Action *action)
 		return false;
 
 	bool result = false;
-	for (int i = 0; i < (int)ActionArray.size(); i++)
+	for (size_t i = 0; i < ActionArray.size(); i++)
 	{
 		if (ActionArray[i] == action)
 		{
@@ -3440,7 +3440,7 @@ bool SBS::RemoveAction(Action *action)
 			result = true;
 
 			//remove reference to action in all control objects
-			for (int j = 0; j < (int)control_index.size(); j++)
+			for (size_t j = 0; j < control_index.size(); j++)
 			{
 				control_index[j]->RemoveAction(action);
 			}
@@ -3455,7 +3455,7 @@ Object* SBS::GetObject(std::string name)
 
 	ReplaceAll(name, " ", "");
 
-	for (int i = 0; i < (int)ObjectArray.size(); i++)
+	for (size_t i = 0; i < ObjectArray.size(); i++)
 	{
 		if (ObjectArray[i])
 		{
@@ -3509,7 +3509,7 @@ std::vector<Object*> SBS::GetObjectRange(const std::string &expression)
 			return objects;
 		}
 
-		for (int i = 0; i < (int)ObjectArray.size(); i++)
+		for (size_t i = 0; i < ObjectArray.size(); i++)
 		{
 			if (ObjectArray[i])
 			{
@@ -3566,7 +3566,7 @@ bool SBS::RunAction(const std::string &name)
 	std::vector<Action*> actionlist = GetAction(name);
 
 	bool result = true;
-	for (int i = 0; i < (int)actionlist.size(); i++)
+	for (size_t i = 0; i < actionlist.size(); i++)
 	{
 		bool result2 = false;
 
@@ -3604,7 +3604,7 @@ bool SBS::CheckKey(int keyid)
 {
 	//checks to see if the user has the specified key
 
-	for (int i = 0; i < (int)keys.size(); i++)
+	for (size_t i = 0; i < keys.size(); i++)
 	{
 		if (keys[i].id == keyid)
 			return true;
@@ -3618,7 +3618,7 @@ void SBS::ListKeys()
 
 	Report("\n--- Keys ---\n");
 
-	for (int i = 0; i < (int)keys.size(); i++)
+	for (size_t i = 0; i < keys.size(); i++)
 	{
 		std::string id = ToString(keys[i].id);
 		Report(id + " - " + keys[i].name);
@@ -3649,7 +3649,7 @@ void SBS::UnregisterControl(Control *control)
 {
 	//remove control from index
 
-	for (int i = 0; i < (int)control_index.size(); i++)
+	for (size_t i = 0; i < control_index.size(); i++)
 	{
 		if (control_index[i] == control)
 		{
@@ -3705,9 +3705,9 @@ void SBS::ListVisibleMeshes()
 	int submeshes = 0;
 	int total = 0;
 
-	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
+	for (size_t i = 0; i < dynamic_meshes.size(); i++)
 	{
-		for (int j = 0; j < (int)dynamic_meshes[i]->GetMeshCount(); j++)
+		for (size_t j = 0; j < dynamic_meshes[i]->GetMeshCount(); j++)
 		{
 			if (camera->IsDynamicMeshVisible(dynamic_meshes[i], j) == true)
 			{
@@ -3806,7 +3806,7 @@ void SBS::EnableRandomActivity(bool value)
 	}
 	else if (value == false)
 	{
-		for (int i = 0; i < (int)PersonArray.size(); i++)
+		for (size_t i = 0; i < PersonArray.size(); i++)
 		{
 			if (PersonArray[i]->IsRandomActivityEnabled() == true)
 			{
@@ -3858,7 +3858,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 	}
 	else if (type == "Mesh")
 	{
-		for (int i = 0; i < (int)meshes.size(); i++)
+		for (size_t i = 0; i < meshes.size(); i++)
 		{
 			if (meshes[i] == static_cast<MeshObject*>(object))
 				return true;
@@ -3866,7 +3866,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 	}
 	else if (type == "Control")
 	{
-		for (int i = 0; i < (int)control_index.size(); i++)
+		for (size_t i = 0; i < control_index.size(); i++)
 		{
 			if (control_index[i] == static_cast<Control*>(object))
 				return true;
@@ -3874,7 +3874,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 	}
 
 	//do a slow full scan of the object array for all other objects
-	for (int i = 0; i < (int)ObjectArray.size(); i++)
+	for (size_t i = 0; i < ObjectArray.size(); i++)
 	{
 		if (ObjectArray[i] == object)
 			return true;
@@ -3886,7 +3886,7 @@ bool SBS::IsActionValid(Action *action)
 {
 	//test if an action is valid
 
-	for (int i = 0; i < (int)ActionArray.size(); i++)
+	for (size_t i = 0; i < ActionArray.size(); i++)
 	{
 		if (ActionArray[i] == action)
 			return true;
@@ -3912,7 +3912,7 @@ void SBS::RemovePerson(Person *person)
 {
 	//remove a person (does not delete the object)
 
-	for (int i = 0; i < (int)PersonArray.size(); i++)
+	for (size_t i = 0; i < PersonArray.size(); i++)
 	{
 		if (PersonArray[i] == person)
 		{
@@ -4110,7 +4110,7 @@ Model* SBS::GetModel(std::string name)
 
 	SetCase(name, false);
 
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
 			return ModelArray[i];
@@ -4130,7 +4130,7 @@ void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//unregister a dynamic mesh from the system
 
-	for (int i = 0; i < (int)dynamic_meshes.size(); i++)
+	for (size_t i = 0; i < dynamic_meshes.size(); i++)
 	{
 		if (dynamic_meshes[i] == dynmesh)
 		{

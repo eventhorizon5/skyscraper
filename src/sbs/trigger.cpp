@@ -248,7 +248,7 @@ bool Trigger::DoAction()
 
 	bool result = false;
 
-	for (int i = 0; i < (int)actionlist.size(); i++)
+	for (size_t i = 0; i < actionlist.size(); i++)
 	{
 		bool result2 = false;
 

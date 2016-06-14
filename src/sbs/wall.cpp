@@ -51,7 +51,7 @@ WallObject::~WallObject()
 
 	if (sbs->FastDelete == false && parent_array && parent_deleting == false && IsTemporary() == false)
 	{
-		for (int i = 0; i < (int)parent_array->size(); i++)
+		for (size_t i = 0; i < parent_array->size(); i++)
 		{
 			if (parent_array->at(i) == this)
 			{
@@ -196,10 +196,10 @@ int WallObject::FindPolygon(const std::string &name)
 
 	SBS_PROFILE("WallObject::FindPolygon");
 
-	for (int i = 0; i < (int)polygons.size(); i++)
+	for (size_t i = 0; i < polygons.size(); i++)
 	{
 		if (name == polygons[i].GetName())
-			return i;
+			return (int)i;
 	}
 	return -1;
 }
@@ -226,7 +226,7 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
 
 	SBS_PROFILE("WallObject::IsPointOnWall");
 	bool checkplane = false;
-	for (int i = 0; i < (int)polygons.size(); i++)
+	for (size_t i = 0; i < polygons.size(); i++)
 	{
 		if (i == 0)
 			checkplane = true;
@@ -245,14 +245,14 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 	int best_i = -1;
 	Ogre::Vector3 cur_isect, normal;
 
-	for (int i = 0; i < (int)polygons.size(); i++)
+	for (size_t i = 0; i < polygons.size(); i++)
 	{
 		if (polygons[i].IntersectSegment(start, end, cur_isect, &pr, normal, convert))
 		{
 			if (pr < best_pr)
 			{
 				best_pr = pr;
-				best_i = i;
+				best_i = (int)i;
 				isect = cur_isect;
 			}
 		}
@@ -268,7 +268,7 @@ void WallObject::Move(const Ogre::Vector3 &position, float speed)
 {
 	//move a wall object
 
-	for (int i = 0; i < (int)polygons.size(); i++)
+	for (size_t i = 0; i < polygons.size(); i++)
 	{
 		polygons[i].Move(position, speed);
 	}
@@ -321,7 +321,7 @@ Ogre::Vector3 WallObject::GetWallExtents(float altitude, bool get_max)
 
 		std::vector<Ogre::Vector3> original, tmp1, tmp2;
 		original.reserve(origpolys[0].size());
-		for (int i = 0; i < (int)origpolys[0].size(); i++)
+		for (size_t i = 0; i < origpolys[0].size(); i++)
 			original.push_back(origpolys[0][i]);
 
 		//if given altitude is outside of polygon's range, return 0

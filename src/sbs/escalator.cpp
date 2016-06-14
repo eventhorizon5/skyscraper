@@ -75,7 +75,7 @@ Escalator::~Escalator()
 	sound = 0;
 
 	//remove step meshes
-	for (int i = 0; i < (int)Steps.size(); i++)
+	for (size_t i = 0; i < Steps.size(); i++)
 	{
 		if (Steps[i])
 		{
@@ -108,7 +108,7 @@ void Escalator::Enabled(bool value)
 	if (is_enabled == value)
 		return;
 
-	for (int i = 0; i < (int)Steps.size(); i++)
+	for (size_t i = 0; i < Steps.size(); i++)
 		Steps[i]->Enable(value);
 
 	if (value == false && sound->IsPlaying() == true)

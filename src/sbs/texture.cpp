@@ -109,7 +109,7 @@ TextureManager::~TextureManager()
 		FreeTextureBoxes();
 
 	//remove manually-created textures
-	for (int i = 0; i < (int)manual_textures.size(); i++)
+	for (size_t i = 0; i < manual_textures.size(); i++)
 	{
 		if (manual_textures[i].isNull() == false)
 		{
@@ -155,7 +155,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 	int num_frames = (int)filenames.size();
 
 	//first verify the filenames
-	for (int i = 0; i < (int)filenames.size(); i++)
+	for (size_t i = 0; i < filenames.size(); i++)
 	{
 		TrimString(filenames[i]);
 		filenames2.push_back(sbs->VerifyFile(filenames[i]));
@@ -163,7 +163,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 
 	bool has_alpha = false;
 
-	for (int i = 0; i < (int)filenames2.size(); i++)
+	for (size_t i = 0; i < filenames2.size(); i++)
 	{
 		bool has_alpha2 = false;
 
@@ -318,7 +318,7 @@ bool TextureManager::UnregisterTextureInfo(std::string name, std::string materia
 	TrimString(name);
 	TrimString(material_name);
 
-	for (int i = 0; i < (int)textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == name || (textureinfo[i].material_name == material_name && textureinfo[i].material_name != ""))
 		{
@@ -978,7 +978,7 @@ void TextureManager::ProcessTextureFlip(float tw, float th)
 bool TextureManager::GetTextureTiling(const std::string &texture, float &tw, float &th)
 {
 	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < (int)textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == texture)
 		{
@@ -993,7 +993,7 @@ bool TextureManager::GetTextureTiling(const std::string &texture, float &tw, flo
 bool TextureManager::GetTextureForce(const std::string &texture, bool &enable_force, bool &force_mode)
 {
 	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < (int)textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == texture)
 		{
@@ -1113,10 +1113,9 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 		size_t selY = (1 << selX) & 0x3;
 
 		varray.reserve(vertices.size());
-		for (int i = 0; i < (int)vertices.size(); i++)
+		for (size_t i = 0; i < vertices.size(); i++)
 		{
-			Ogre::Vector3 tmpvertex = vertices[i];
-			varray.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
+			varray.push_back(Ogre::Vector3(vertices[i][selX], vertices[i][selY], 0));
 		}
 
 		//automatically flip texture based on largest normal (corrects some situations where the texture is incorrectly reversed)
@@ -1582,7 +1581,7 @@ std::string TextureManager::ListTextures(bool show_filename)
 	if (show_filename == true)
 		list.append("Name --- Filename\n\n");
 
-	for (int i = 0; i < (int)textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		list.append(textureinfo[i].name);
 		if (show_filename == true)
@@ -1637,13 +1636,13 @@ Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filen
 	{
 		//get chroma transparency color from GIF file data
 		uchar enabled = 0, trans_color = 0, check = 0;
-		int found = 0;
+		size_t found = 0;
 
 		//first, find graphics control extension (starts with 21:F9:04 hex)
-		for (int i = 0; i < (int)encoded->size(); i++)
+		for (size_t i = 0; i < encoded->size(); i++)
 		{
 			//extension found
-			if (found == 3 && i < (int)encoded->size() - 4)
+			if (found == 3 && i < encoded->size() - 4)
 			{
 				//gif transparency info
 
@@ -1668,7 +1667,7 @@ Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filen
 			encoded->read(&check, 1);
 
 			//check for first value, 21h
-			if (check == 33 && i < (int)encoded->size() - 4)
+			if (check == 33 && i < encoded->size() - 4)
 			{
 				found = 1;
 
@@ -1772,11 +1771,11 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	// The font texture buffer was created write only...so we cannot read it back :o). One solution is to copy the buffer  instead of locking it. (Maybe there is a way to create a font texture which is not write_only ?)
 
 	int index = -1;
-	for (int i = 0; i < (int)textureboxes.size(); i++)
+	for (size_t i = 0; i < textureboxes.size(); i++)
 	{
 		if (textureboxes[i].font == font)
 		{
-			index = i;
+			index = (int)i;
 			break;
 		}
 	}
@@ -1821,10 +1820,10 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 			GlyphTexCoords[i].bottom = Ogre::uint32(glypheTexRect.bottom * fontTexture->getSrcHeight());
 
 			//get true bottom of character, since the previous routine doesn't seem to get an accurate result
-			int lastline = 0;
-			for (int j = 0; j < (int)GlyphTexCoords[i].getHeight(); j++)
+			size_t lastline = 0;
+			for (size_t j = 0; j < GlyphTexCoords[i].getHeight(); j++)
 			{
-				for (int k = 0; k < (int)GlyphTexCoords[i].getWidth(); k++)
+				for (size_t k = 0; k < GlyphTexCoords[i].getWidth(); k++)
 				{
 					float alpha =  color.a * (fontData[(j + GlyphTexCoords[i].top) * fontRowPitchBytes + (k + GlyphTexCoords[i].left) * fontPixelSize + 1] / 255.0f);
 					if (alpha > 0.0)
@@ -1951,9 +1950,9 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 				//printf("%d, %d\n", cursorX, cursorY);
 
 				//draw pixel by pixel
-				for (int i = 0; i < (int)GlyphTexCoords[strindex].getHeight(); i++)
+				for (size_t i = 0; i < GlyphTexCoords[strindex].getHeight(); i++)
 				{
-					for (int j = 0; j < (int)GlyphTexCoords[strindex].getWidth(); j++)
+					for (size_t j = 0; j < GlyphTexCoords[strindex].getWidth(); j++)
 					{
 						float alpha =  color.a * (fontData[(i + GlyphTexCoords[strindex].top) * fontRowPitchBytes + (j + GlyphTexCoords[strindex].left) * fontPixelSize + 1] / 255.0f);
 						float invalpha = 1.0f - alpha;
@@ -2158,7 +2157,7 @@ void TextureManager::UnloadMaterials()
 {
 	//delete all registered materials
 
-	for (int i = 0; i < (int)textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		Ogre::MaterialManager::getSingleton().remove(ToString(sbs->InstanceNumber) + ":" + textureinfo[i].name);
 	}
@@ -2189,7 +2188,7 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 
 void TextureManager::FreeTextureBoxes()
 {
-	for (int i = 0; i < (int)textureboxes.size(); i++)
+	for (size_t i = 0; i < textureboxes.size(); i++)
 	{
 		free(textureboxes[i].buffer);
 
