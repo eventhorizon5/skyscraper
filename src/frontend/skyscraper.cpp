@@ -1282,7 +1282,7 @@ std::string Skyscraper::SelectBuilding()
 	wxDir::GetAllFiles(_("buildings/"), &filelist, _("*.bld"), wxDIR_FILES);
 
 	//strip directory name and extension from entries
-	for (int i = 0; i < (int)filelist.size(); i++)
+	for (size_t i = 0; i < filelist.size(); i++)
 	{
 		filelist[i] = filelist[i].substr(10);
 		filelist[i] = filelist[i].substr(0, filelist[i].length() - 4);
@@ -1781,7 +1781,7 @@ void Skyscraper::UpdateProgress()
 	int total_percent = GetEngineCount() * 100;
 	int current_percent = 0;
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 			current_percent += engines[i]->GetProgress();
@@ -1834,7 +1834,7 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 	if (!engine)
 		return false;
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] == engine)
 		{
@@ -1869,7 +1869,7 @@ void Skyscraper::DeleteEngines()
 {
 	//delete all sim emgine instances
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 			delete engines[i];
@@ -1882,7 +1882,7 @@ EngineContext* Skyscraper::FindActiveEngine()
 {
 	//find engine instance with an active camera
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 		{
@@ -1948,7 +1948,7 @@ bool Skyscraper::RunEngines()
 	if (ConcurrentLoads == true && isloading == true)
 		RefreshViewport();
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (!engines[i])
 			continue;
@@ -1999,7 +1999,7 @@ bool Skyscraper::IsEngineLoading()
 	//return true if an engine is loading
 
 	bool result = false;
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 		{
@@ -2014,7 +2014,7 @@ void Skyscraper::HandleEngineShutdown()
 {
 	bool deleted = false;
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 		{
@@ -2047,7 +2047,7 @@ void Skyscraper::HandleReload()
 {
 	//reload building if requested
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 		{
@@ -2076,7 +2076,7 @@ int Skyscraper::GetEngineCount()
 
 	int count = 0;
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 			count++;
@@ -2150,7 +2150,7 @@ bool Skyscraper::IsValidEngine(EngineContext *engine)
 	if (!engine)
 		return false;
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] == engine)
 			return true;
@@ -2163,7 +2163,7 @@ bool Skyscraper::IsValidSystem(::SBS::SBS *sbs)
 	if (!sbs)
 		return false;
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 		{
@@ -2178,10 +2178,10 @@ int Skyscraper::GetFreeInstanceNumber()
 {
 	//get an available engine instance number
 
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (!engines[i])
-			return i;
+			return (int)i;
 	}
 	return (int)engines.size();
 }
@@ -2202,7 +2202,7 @@ int Skyscraper::RegisterEngine(EngineContext *engine)
 
 EngineContext* Skyscraper::GetFirstValidEngine()
 {
-	for (int i = 0; i < (int)engines.size(); i++)
+	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
 			return engines[i];

@@ -83,7 +83,7 @@ EngineContext::~EngineContext()
 
 	if (children.empty() == false)
 	{
-		for (int i = 0; i < (int)children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 		{
 			children[i]->RemoveParent();
 		}
@@ -338,7 +338,7 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	//if this has child engines, and has reloaded, cut for the child engines
 	if (children.empty() == false && reloading == true)
 	{
-		for (int i = 0; i < (int)children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 		{
 			CutForEngine(children[i]);
 		}
@@ -544,7 +544,7 @@ void EngineContext::AddChild(EngineContext *engine)
 
 void EngineContext::RemoveChild(EngineContext *engine)
 {
-	for (int i = 0; i < (int)children.size(); i++)
+	for (size_t i = 0; i < children.size(); i++)
 	{
 		if (children[i] == engine)
 		{
@@ -564,7 +564,7 @@ void EngineContext::Move(Ogre::Vector3 &position, bool move_children)
 
 	if (move_children == true)
 	{
-		for (int i = 0; i < (int)children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 		{
 			children[i]->Move(position, move_children);
 		}

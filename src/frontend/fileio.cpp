@@ -280,7 +280,7 @@ bool ScriptProcessor::Run()
 				TrimString(temp2);
 
 				bool found = false;
-				for (int i = 0; i < (int)variables.size(); i++)
+				for (size_t i = 0; i < variables.size(); i++)
 				{
 					if (variables[i].name == temp2)
 					{
@@ -910,7 +910,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 		}
 
 		//adjust function lines
-		for (int i = 0; i < (int)functions.size(); i++)
+		for (size_t i = 0; i < functions.size(); i++)
 		{
 			if (functions[i].line > line)
 				functions[i].line += lines;
@@ -918,7 +918,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 
 		if (InFunction > 0)
 		{
-			for (int i = 0; i < (int)FunctionStack.size(); i++)
+			for (size_t i = 0; i < FunctionStack.size(); i++)
 			{
 				if (FunctionStack[i].CallLine > line)
 					FunctionStack[i].CallLine += lines;
@@ -945,7 +945,7 @@ bool ScriptProcessor::LoadFromText(const std::string &text)
 
 	//feed each line of text into the script array
 
-	for (int i = 0; i < (int)textarray.size(); i++)
+	for (size_t i = 0; i < textarray.size(); i++)
 	{
 		//append data to building array
 		BuildingData.push_back(textarray[i]);
@@ -1331,7 +1331,7 @@ bool ScriptProcessor::ReportMissingFiles()
 	if (nonexistent_files.size() > 0)
 	{
 		sort(nonexistent_files.begin(), nonexistent_files.end());
-		for (int i = 0; i < (int)nonexistent_files.size(); i++)
+		for (size_t i = 0; i < nonexistent_files.size(); i++)
 			Simcore->Report("Missing file: " + nonexistent_files[i]);
 
 		//create text window
@@ -1344,7 +1344,7 @@ bool ScriptProcessor::ReportMissingFiles()
 		twindow->Show(true);
 		wxString message;
 		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
-		for (int i = 0; i < (int)nonexistent_files.size(); i++)
+		for (size_t i = 0; i < nonexistent_files.size(); i++)
 		{
 			message.Append(nonexistent_files[i]);
 			message.Append(wxT("\n"));
@@ -7494,7 +7494,7 @@ int ScriptProcessor::ProcTextures()
 		}
 
 		//check existence of files
-		for (int i = 0; i < (int)filenames.size(); i++)
+		for (size_t i = 0; i < filenames.size(); i++)
 			CheckFile(filenames[i]);
 
 		if (force == false)
@@ -8242,7 +8242,7 @@ void ScriptProcessor::StoreCommand(Object *object)
 bool ScriptProcessor::FunctionProc()
 {
 	//process functions
-	for (int i = 0; i < (int)functions.size(); i++)
+	for (size_t i = 0; i < functions.size(); i++)
 	{
 		int location = LineData.find(functions[i].name + "(");
 		if (location >= 0)
@@ -8317,7 +8317,7 @@ void ScriptProcessor::CheckFile(const std::string &filename)
 	if (Simcore->FileExists(file) == false)
 	{
 		bool exists = false;
-		for (int i = 0; i < (int)nonexistent_files.size(); i++)
+		for (size_t i = 0; i < nonexistent_files.size(); i++)
 		{
 			if (nonexistent_files[i] == file)
 			{
@@ -8347,7 +8347,7 @@ int ScriptProcessor::SplitData(const std::string &string, int start, bool calc)
 	SplitString(tempdata, data.substr(start), ',');
 	if (calc == true)
 	{
-		for (int i = 0; i < (int)tempdata.size(); i++)
+		for (size_t i = 0; i < tempdata.size(); i++)
 		{
 			stringbuffer = Calc(tempdata[i]);
 			tempdata[i] = stringbuffer;
@@ -8376,7 +8376,7 @@ int ScriptProcessor::SplitAfterEquals(const std::string &string, bool calc)
 	SplitString(tempdata, temp, ',');
 	if (calc == true)
 	{
-		for (int i = 0; i < (int)tempdata.size(); i++)
+		for (size_t i = 0; i < tempdata.size(); i++)
 		{
 			std::string buffer = Calc(tempdata[i]);
 			tempdata[i] = buffer;
@@ -9008,7 +9008,7 @@ bool ScriptProcessor::IsFunctionDefined(const std::string &name)
 {
 	//return true if a function of the specified name has already been defined
 
-	for (int i = 0; i < (int)functions.size(); i++)
+	for (size_t i = 0; i < functions.size(); i++)
 	{
 		if (functions[i].name == name)
 			return true;

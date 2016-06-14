@@ -422,9 +422,13 @@ void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 	twindow->Center();
 	twindow->SetTitle(wxT("Current Script"));
 	twindow->Show(true);
+
 	std::vector<std::string> *data = panel->GetRoot()->GetActiveEngine()->GetScriptProcessor()->GetBuildingData();
-	for (int i = 0; i < (int)data->size(); i++)
-			twindow->tMain->WriteText(data->at(i) + wxT("\n"));
+	for (size_t i = 0; i < data->size(); i++)
+	{
+		twindow->tMain->WriteText(data->at(i) + wxT("\n"));
+	}
+
 	twindow->tMain->SetInsertionPoint(0);
 }
 
