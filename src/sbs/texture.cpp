@@ -152,7 +152,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 {
 	std::vector<std::string> filenames2;
 
-	int num_frames = (int)filenames.size();
+	size_t num_frames = filenames.size();
 
 	//first verify the filenames
 	for (size_t i = 0; i < filenames.size(); i++)
@@ -192,7 +192,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 	if (state)
 	{
 		std::string *namelist = new std::string[num_frames];
-		for (int i = 0; i < num_frames; i++)
+		for (size_t i = 0; i < num_frames; i++)
 			namelist[i] = filenames2[i];
 		state->setAnimatedTextureName(namelist, num_frames, duration);
 		delete [] namelist;
@@ -894,8 +894,7 @@ std::string TextureManager::GetTextureMaterial(const std::string &name, bool &re
 		return matname;
 	}
 
-	int size = (int)textureinfo.size();
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == matname)
 		{
@@ -1336,8 +1335,8 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 				SetCase(string, false);
 
 				//find X component
-				int location = (int)string.find("x");
-				if (location >= 0)
+				size_t location = string.find("x");
+				if (location != std::string::npos)
 				{
 					std::string number = string.substr(location + 1);
 					if (ToInt(number) < (int)vertices.size())
@@ -1347,8 +1346,8 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 				}
 
 				//find Y component
-				location = (int)string.find("y");
-				if (location >= 0)
+				location = string.find("y");
+				if (location != std::string::npos)
 				{
 					std::string number = string.substr(location + 1);
 					if (ToInt(number) < (int)vertices.size())
@@ -1358,8 +1357,8 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 				}
 
 				//find Z component
-				location = (int)string.find("z");
-				if (location >= 0)
+				location = string.find("z");
+				if (location != std::string::npos)
 				{
 					std::string number = string.substr(location + 1);
 					if (ToInt(number) < (int)vertices.size())
@@ -1809,7 +1808,7 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	int charheight = 0; //max character height
 	int charwidth = 0; //max character width
 
-	for(unsigned int i = 0; i < str.size(); i++)
+	for(size_t i = 0; i < str.size(); i++)
 	{
 		if ((str[i] != '\t') && (str[i] != '\n') && (str[i] != ' '))
 		{
@@ -1843,7 +1842,7 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	int cursorY = 0;
 	//int lineend = destRight - destLeft;
 	bool carriagereturn = true;
-	for (unsigned int strindex = 0; strindex < str.size(); strindex++)
+	for (size_t strindex = 0; strindex < str.size(); strindex++)
 	{
 		switch(str[strindex])
 		{

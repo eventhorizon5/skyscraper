@@ -48,7 +48,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	SetValues("Control", name, permanent);
 
 	std::string name2 = name;
-	if ((int)name.find("Control", 0) == -1)
+	if (name.find("Control", 0) == std::string::npos)
 		name2 = "Control " + name;
 
 	ActionNames = action_names;
@@ -272,9 +272,9 @@ std::string Control::GetPositionAction(int position)
 
 	std::vector<Action*> actionlist;
 
-	if ((int)ActionNames.size() > 0)
+	if (ActionNames.empty() == false)
 		actionlist = sbs->GetAction(ActionNames[position - 1]);
-	else if ((int)Actions.size() > 0)
+	else if (Actions.empty() == false)
 		actionlist.push_back(Actions[position - 1]);
 	else
 		return "";

@@ -922,7 +922,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 
 	//triangulate mesh
 	TriangleIndices *trimesh = new TriangleIndices[vertices2.size()];
-	int trimesh_size = (int)vertices2.size();
+	size_t trimesh_size = vertices2.size();
 
 	for (int i = 0; i < trimesh_size; i++)
 	{
@@ -937,9 +937,9 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	std::vector<Geometry> geometry;
 
 	//initialize geometry arrays
-	int size = 0;
-	for (int i = 0; i < trimesh_size; i++)
-		size += (int)vertices2[i].size();
+	size_t size = 0;
+	for (size_t i = 0; i < trimesh_size; i++)
+		size += vertices2[i].size();
 	geometry.resize(size);
 
 	//populate vertices, normals, and texels for mesh data
@@ -948,7 +948,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	if (mesh_indices.capacity() < mesh_indices.size() + trimesh_size)
 		mesh_indices.reserve(mesh_indices.size() + trimesh_size);
 
-	for (int i = 0; i < trimesh_size; i++)
+	for (size_t i = 0; i < trimesh_size; i++)
 	{
 		unsigned int min = k;
 		for (size_t j = 0; j < vertices2[i].size(); j++)
@@ -968,8 +968,8 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	table = 0;
 
 	//add triangles to single array, to be passed to the submesh
-	int location = 0;
-	for (int i = 0; i < trimesh_size; i++)
+	size_t location = 0;
+	for (size_t i = 0; i < trimesh_size; i++)
 	{
 		if (triangles.capacity() < trimesh[i].triangles.size())
 			triangles.reserve(trimesh[i].triangles.size());
@@ -979,7 +979,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 			tri += location;
 			triangles.push_back(tri);
 		}
-		location += (int)vertices2[i].size();
+		location += vertices2[i].size();
 	}
 
 	//delete trimesh array
@@ -1016,13 +1016,13 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	if (sbs->TexelOverride == false)
 	{
 		//create array for texel map
-		int texel_count = 0;
+		size_t texel_count = 0;
 		for (size_t i = 0; i < vertices.size(); i++)
-			texel_count += (int)vertices[i].size();
+			texel_count += vertices[i].size();
 		Ogre::Vector2 *texels = new Ogre::Vector2[texel_count];
 
 		//transform matrix into texel map
-		int index = 0;
+		size_t index = 0;
 		Ogre::Vector3 texel_temp;
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
@@ -1290,7 +1290,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 			if (poly->material != Submeshes[submesh].Name)
 				continue;
 
-			int elements_size = (int)poly->triangles.size() * 3;
+			size_t elements_size = poly->triangles.size() * 3;
 			unsigned int *elements = new unsigned int[elements_size];
 			bool *valid = new bool[elements_size];
 
@@ -1339,7 +1339,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 			}
 
 			int element = 0;
-			int size = (int)poly->triangles.size();
+			size_t size = poly->triangles.size();
 			poly->triangles.clear();
 			if ((int)poly->triangles.capacity() < size)
 				poly->triangles.reserve(size);

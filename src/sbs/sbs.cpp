@@ -1354,11 +1354,11 @@ void SBS::AddPolygon(WallObject* wallobject, const std::string &texture, std::ve
 	std::vector<Ogre::Vector3> varray2;
 
 	//get number of stored vertices
-	int num = (int)varray.size();
+	size_t num = varray.size();
 
 	//create a second array with reversed vertices
 	varray2.reserve(num);
-	for (int i = num - 1; i >= 0; i--)
+	for (size_t i = num - 1; i < num; --i)
 		varray2.push_back(varray1[i]);
 
 	//create 2 polygons (front and back) from the vertex array
@@ -2234,7 +2234,7 @@ void SBS::ProcessCallButtons()
 
 	for (size_t i = 0; i < buttoncallbacks.size(); i++)
 	{
-		size_t size = (int)buttoncallbacks.size();
+		size_t size = buttoncallbacks.size();
 
 		if (buttoncallbacks[i])
 			buttoncallbacks[i]->Loop();
@@ -3473,16 +3473,16 @@ std::vector<Object*> SBS::GetObjectRange(const std::string &expression)
 	//get object by name range expression (ex. "Floors 1 to 3")
 
 	std::vector<Object*> objects;
-	int temp = (int)expression.find("to", 0);
+	size_t temp = expression.find("to", 0);
 
 	//the name 'elevator' matches the previous search - in this case, detect it and undo
-	int temp2 = (int)expression.find("tor", 0);
+	size_t temp2 = expression.find("tor", 0);
 	if (temp == temp2)
 		temp = 0;
 
 	std::string type;
 
-	if (temp > 0)
+	if (temp > 0 && temp != std::string::npos)
 	{
 		if (expression.substr(0, 6) == "Floors")
 			type = "floor";
@@ -3942,12 +3942,12 @@ std::string SBS::ProcessFullName(std::string name, int &instance, int &object_nu
 	//if strip_number is false, leave object number identifier in string
 
 	//get and strip off engine instance number
-	int index = (int)name.find(":(");
+	size_t index = name.find(":(");
 	instance = ToInt(name.substr(0, index));
 	name.erase(name.begin(), name.begin() + index + 1);
 
 	//get and optionally strip off object number
-	index = (int)name.find(")");
+	index = name.find(")");
 	object_number = ToInt(name.substr(1, index - 1));
 
 	if (strip_number == true)

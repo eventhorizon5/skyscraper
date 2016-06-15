@@ -5413,7 +5413,7 @@ int Elevator::GetNearestServicedFloor()
 		return 0;
 
 	bool firstrun = true;
-	int nearest = 0;
+	size_t nearest = 0;
 	float nearest_difference = 0;
 
 	for (size_t i = 0; i < ServicedFloors.size() - 1; i++)
@@ -5423,7 +5423,7 @@ int Elevator::GetNearestServicedFloor()
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
 				nearest_difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
-				nearest = (int)i;
+				nearest = i;
 				firstrun = false;
 			}
 		}
@@ -5436,7 +5436,7 @@ int Elevator::GetNearestServicedFloor()
 				{
 					//mark closest
 					nearest_difference = difference;
-					nearest = (int)i;
+					nearest = i;
 				}
 			}
 		}

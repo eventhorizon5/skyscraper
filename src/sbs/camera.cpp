@@ -680,10 +680,10 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 		if (callbutton && right == false)
 		{
-			int index = (int)meshname.find(":");
-			int index2 = (int)meshname.find(":", index + 1);
+			size_t index = meshname.find(":");
+			size_t index2 = meshname.find(":", index + 1);
 
-			if (index > -1 && index2 > -1)
+			if (index != std::string::npos && index2 != std::string::npos)
 			{
 				std::string direction = meshname.substr(index2 + 1);
 				TrimString(direction);

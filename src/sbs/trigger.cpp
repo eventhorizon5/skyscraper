@@ -195,14 +195,14 @@ std::string Trigger::GetPositionAction(int position)
 {
 	//return action name associated with the specified selection position
 
-	if ((int)Actions.size() == 0)
+	if (Actions.empty() == true)
 		return "";
 
 	std::vector<Action*> actionlist;
 	actionlist = sbs->GetAction(Actions[position - 1]);
 
 	//return command of first action in list
-	if ((int)actionlist.size() > 0)
+	if (actionlist.empty() == false)
 	{
 		if (actionlist[0])
 			return actionlist[0]->GetCommandName();
@@ -241,7 +241,7 @@ bool Trigger::DoAction()
 	//perform trigger's action
 	//result is true if at least one action in the list succeeded
 
-	if ((int)Actions.size() == 0)
+	if (Actions.empty() == true)
 		return sbs->ReportError("No available actions for trigger '" + GetName() + "'");
 
 	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);

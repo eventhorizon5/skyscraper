@@ -184,11 +184,7 @@ int FindWithCase(const std::string &string, bool uppercase, const std::string &k
 {
 	//change case of a string, and return location of search key
 	std::string newstring = SetCaseCopy(string, uppercase);
-	int loc = (int)newstring.find(key, offset);
-	if (loc == std::string::npos)
-		return -1;
-	else
-		return loc;
+	return (int)newstring.find(key, offset);
 }
 
 void TrimString(std::string &string)
@@ -239,30 +235,30 @@ void SplitString(std::vector<std::string> &dest_array, const std::string &origin
 {
 	//split a string into an array of strings, divided by "separator"
 
-	int startpos = 0;
-	int endpos = 0;
+	size_t startpos = 0;
+	size_t endpos = 0;
 	std::string newstring;
 
 	dest_array.clear();
 	std::string original = original_string;
 	TrimString(original);
 
-	endpos = (int)original.find_first_of(separator, startpos);
-	if (endpos == -1)
+	endpos = original.find_first_of(separator, startpos);
+	if (endpos == std::string::npos)
 	{
 		newstring = original.substr(startpos, endpos - startpos);
 		TrimString(newstring);
 		dest_array.push_back(newstring);
 	}
 
-	while (endpos != -1)
+	while (endpos != std::string::npos)
 	{
 		newstring = original.substr(startpos, endpos - startpos);
 		TrimString(newstring);
 		dest_array.push_back(newstring); //add to vector
 		startpos = endpos + 1; //jump past separator
-		endpos = (int)original.find_first_of(separator, startpos); //find next
-		if(endpos == -1)
+		endpos = original.find_first_of(separator, startpos); //find next
+		if(endpos == std::string::npos)
 		{
 			//last one, so no 2nd param required to go to end of string
 			newstring = original.substr(startpos);
