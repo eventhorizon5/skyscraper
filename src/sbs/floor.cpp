@@ -697,21 +697,20 @@ bool Floor::CalculateAltitude()
 {
 	//calculate the floor's altitude in relation to floor below (or above it, if it's a basement level)
 	//and return the altitude value
-	//if the related floor does not have an adjacent floor, return false
+
+	//floors 0 or -1 can be created first.
+	//if any of the other floors don't have an adjacent floor, return false
 
 	if (Altitude == 0)
 	{
-		if (Number > 0)
+		if (Number >= 0)
 		{
 			if (sbs->GetFloor(Number - 1))
 				Altitude = sbs->GetFloor(Number - 1)->Altitude + sbs->GetFloor(Number - 1)->FullHeight();
-			else
-			{
+			else if (Number != 0)
 				return ReportError("Invalid floor number specified - no adjacent floor");
-			}
 		}
-
-		if (Number < 0)
+		else
 		{
 			if (sbs->GetFloor(Number + 1))
 				Altitude = sbs->GetFloor(Number + 1)->Altitude - FullHeight();
