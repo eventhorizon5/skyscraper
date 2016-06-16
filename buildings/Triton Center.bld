@@ -383,7 +383,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Description = Lobby
     Height = 10
     InterfloorHeight = 2.24
-    Altitude = -2.24
+    Altitude = -%interfloorheight%
     Group = 1 #enable mezzanine also, since both are merged
 
     #ambient lobby sounds

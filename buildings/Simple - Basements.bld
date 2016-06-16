@@ -70,7 +70,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     Type = Office
     Height = 10
     InterfloorHeight = 2.24
-    Altitude = -2.24
+    Altitude = -%interfloorheight%
     Group = 1
 <EndFloor>
 

@@ -112,7 +112,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     #the interfloor area represents the area used by trusses (floor supports), below the floor's base
     InterfloorHeight = 2.24 #This is the height in feet of the interfloor space between floors
     #Floor 0 needs to have it's altitude manually set, since it's interfloor space is below the floor's base
-    if[%floor% = 0] Altitude = -2.24
+    if[%floor% = 0] Altitude = -%interfloorheight%
 
     #create a basic carpeted floor
     DrawWalls = false, true, false, false, false, false
