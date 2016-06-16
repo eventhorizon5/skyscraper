@@ -711,15 +711,17 @@ bool Floor::CalculateAltitude()
 			}
 		}
 
-		if (Number == -1)
-			Altitude = -FullHeight();
-
-		if (Number < -1)
+		if (Number < 0)
 		{
 			if (sbs->GetFloor(Number + 1))
 				Altitude = sbs->GetFloor(Number + 1)->Altitude - FullHeight();
 			else
-				return ReportError("Invalid floor number specified - no adjacent floor");
+			{
+				if (Number == -1)
+					Altitude = -FullHeight();
+				else
+					return ReportError("Invalid floor number specified - no adjacent floor");
+			}
 		}
 	}
 

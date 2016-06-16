@@ -63,24 +63,7 @@
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 
-# Basements
-<Floor -1>
-    ID = B1
-    Name = Basement 1
-    Type = Basement
-    Height = 10
-    InterfloorHeight = 2.24
-    Altitude = -14.48 #(this is floor 0's altitude "-2.24" minus this floor's height and interfloorheight).
-<EndFloor>
-
-<Floors -2 to -21>
-    ID = B(0 - %floor%) #the (0 - %floor%) finds the absolute value of the floor - so -2 would end up being 2
-    Name = Basement (0 - %floor%)
-    Type = Basement
-    Height = 10
-    InterfloorHeight = 2.24
-<EndFloors>
-
+# Ground floor
 <Floor 0>
     ID = G
     Name = Ground Floor
@@ -90,6 +73,15 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     Altitude = -2.24
     Group = 1
 <EndFloor>
+
+# Basements
+<Floors -1 to -21>
+    ID = B(0 - %floor%) #the (0 - %floor%) finds the absolute value of the floor - so -2 would end up being 2
+    Name = Basement (0 - %floor%)
+    Type = Basement
+    Height = 10
+    InterfloorHeight = 2.24
+<EndFloors>
 
 <Floors -21 to 0>
     #Floor
