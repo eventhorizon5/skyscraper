@@ -606,7 +606,8 @@ bool Skyscraper::Initialize()
 		}
 		else
 		{
-			result = soundsys->init(100, FMOD_INIT_NORMAL, 0);
+			char name [30] = "Skyscraper"; //set name for PulseAudio on Linux
+			result = soundsys->init(100, FMOD_INIT_NORMAL, &name);
 			if (result != FMOD_OK)
 			{
 				ReportFatalError("Error initializing sound");
