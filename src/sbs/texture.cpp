@@ -2176,6 +2176,16 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 {
 	//copy a source texture onto a destination texture using specified sizes
 
+	//if dimensions are the same, use standard copy method to prevent
+	//some crashes on systems with small npot textures
+	if (srcBox.getWidth() == dstBox.getWidth() &&
+		srcBox.getHeight() == dstBox.getHeight() &&
+		srcBox.getDepth() == dstBox.getDepth())
+	{
+		source->copyToTexture(destination);
+		return;
+	}
+
 	Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
 
 	buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
