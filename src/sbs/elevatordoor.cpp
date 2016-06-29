@@ -251,8 +251,8 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//check if elevator doors are already open
 	if (AreDoorsOpen() == true && whichdoors != 3 && AreDoorsMoving() == false && doors_stopped == false)
 	{
-		//reset timer if not in a service mode
-		if (elev->InServiceMode() == false)
+		//reset timer if not in a service mode or waiting in a peak mode
+		if (elev->InServiceMode() == false && elev->PeakWaiting() == false)
 		{
 			elev->Report("doors" + GetNumberText() + " already open; resetting timer");
 			Reset();
