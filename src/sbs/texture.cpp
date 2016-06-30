@@ -2072,6 +2072,11 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 	}
 	catch (Ogre::Exception &e)
 	{
+		//texture needs to be removed if a load failed
+		Ogre::ResourcePtr wrapper = GetTextureByName(filename2, path);
+		if (wrapper.get())
+			Ogre::TextureManager::getSingleton().remove(wrapper);
+
 		sbs->ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
 		return mTex;
 	}
