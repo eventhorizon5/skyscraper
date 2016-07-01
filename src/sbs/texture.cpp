@@ -23,6 +23,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreRoot.h>
 #include <OgreImage.h>
 #include <OgreTextureManager.h>
 #include <OgreTechnique.h>
@@ -2180,6 +2181,18 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox)
 {
 	//copy a source texture onto a destination texture using specified sizes
+
+	//if dimensions are the same, use standard copy method to prevent
+	//some crashes on systems with small npot textures
+	//note - this currently doesn't work properly on DirectX, needs fixing
+	if (srcBox.getWidth() == dstBox.getWidth() &&
+		srcBox.getHeight() == dstBox.getHeight() &&
+		srcBox.getDepth() == dstBox.getDepth() &&
+		sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem")
+	{
+		source->copyToTexture(destination);
+		return;
+	}
 
 	Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
 
