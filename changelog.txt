@@ -1,5 +1,16 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-CameraState should store FOV value, so that the camera's FOV will be persistent when switching engines
+-added "Simple - Top Box" building
+-if a texture load fails, the texture resource needs to be removed afterwards.  This fixes an issue where the failed texture would show up as loaded, during a reload
+-if elevator doors are open due to the elevator waiting in a peak mode, don't reset the door timers when a call button on the same floor is pressed
+-(OpenGL only) use standard texture copy method if dimensions are the same, to try to remedy texture copy crashes mainly on systems with Intel graphics, with small non-pow2 textures
+-set name of FMod audio client, used with PulseAudio on Linux
+-enhanced setting of adjusted floor 0 altitudes
+-if floor 0 is created after floor -1, adjust floor 0 based on floor -1's altitude
+-when creating basement floors, if floor 0 is created first, properly calculate floor -1's altitude offset based on floor 0, instead of assuming a default value
+-frontend size_t migrations, to simplify loop code
+-disable double-buffer fps fix in Windows, due to an issue where the screen turns black on fullscreen
 -removed old Windows-only CodeBlocks file, and rename Linux one
 -added converted Mac icon, and added Mac bundle data into tools folder
 -queue the creation of the progress dialog, to fix an issue on Mac where the main window would freeze if a building is autoloaded
