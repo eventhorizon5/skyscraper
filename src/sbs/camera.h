@@ -41,6 +41,7 @@ struct SBSIMPEXP CameraState
 	Ogre::Vector3 desired_angle_velocity;
 	Ogre::Vector3 angle_velocity;
 	Ogre::Vector3 accum_movement;
+	float fov;
 };
 
 class SBSIMPEXP Camera : public Object
