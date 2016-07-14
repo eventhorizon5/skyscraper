@@ -153,12 +153,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	FinishedMove = false;
 	WaitForDoors = false;
 	ActiveDirection = 0;
-	carsound = 0;
-	idlesound = 0;
 	motorsound = 0;
 	motoridlesound = 0;
-	alarm = 0;
-	floorbeep = 0;
 	StartingFloor = 0;
 	Fan = true;
 	NotifyEarly = sbs->GetConfigInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
@@ -174,8 +170,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WaitForTimer = false;
 	SoundsQueued = false;
 	HeightSet = false;
-	announcesnd = 0;
-	musicsound = 0;
 	elevposition = 0;
 	lastposition = 0;
 	ManualUp = false;
@@ -194,10 +188,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	OpenOnStart = sbs->GetConfigBool("Skyscraper.SBS.Elevator.OpenOnStart", false);
 	ManualMove = 0;
 	ManualMoveHold = false;
-	doorhold_direction = 0;
-	doorhold_whichdoors = 0;
-	doorhold_floor = 0;
-	doorhold_manual = 0;
 	Interlocks = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Interlocks", true);
 	GoActive = false;
 	GoActiveFloor = 0;
@@ -208,10 +198,11 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	MotorEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorEmergencyStopSound", "");
 	AutoAdjustSound = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 	SkipFloorSound = false;
-	DirMessageSound = false;
-	DoorMessageSound = false;
 	ControlPressActive = false;
 	ManualStop = false;
+
+	//create a default car object
+	CreateCar();
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -233,50 +224,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 
 Elevator::~Elevator()
 {
-	//delete controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i])
-		{
-			ControlArray[i]->parent_deleting = true;
-			delete ControlArray[i];
-		}
-		ControlArray[i] = 0;
-	}
-
-	//delete triggers
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-		{
-			TriggerArray[i]->parent_deleting = true;
-			delete TriggerArray[i];
-		}
-		TriggerArray[i] = 0;
-	}
-
-	//delete models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-		{
-			ModelArray[i]->parent_deleting = true;
-			delete ModelArray[i];
-		}
-		ModelArray[i] = 0;
-	}
-
-	//delete lights
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i])
-		{
-			lights[i]->parent_deleting = true;
-			delete lights[i];
-		}
-		lights[i] = 0;
-	}
-
 	//delete timers
 	if (sbs->Verbose)
 		Report("deleting timers");
@@ -302,148 +249,34 @@ Elevator::~Elevator()
 	}
 	departure_delay = 0;
 
-	//delete directional indicators
+	//delete cars
 	if (sbs->Verbose)
-		Report("deleting interior directional indicators");
+		Report("deleting cars");
 
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		if (DirIndicatorArray[i])
-		{
-			DirIndicatorArray[i]->parent_deleting = true;
-			delete DirIndicatorArray[i];
-		}
-		DirIndicatorArray[i] = 0;
+		if (Cars[i])
+			delete Cars[i];
+		Cars[i] = 0;
 	}
+	Cars.clear();
 
-	//delete doors
+	//delete objects
 	if (sbs->Verbose)
-		Report("deleting doors");
+		Report("deleting elevator objects");
 
-	if (DoorArray.size() > 0)
-	{
-		for (size_t i = 0; i < DoorArray.size(); i++)
-		{
-			if (DoorArray[i])
-			{
-				DoorArray[i]->parent_deleting = true;
-				delete DoorArray[i];
-			}
-			DoorArray[i] = 0;
-		}
-	}
-
-	if (DoorContainer)
-		delete DoorContainer;
-	DoorContainer = 0;
-
-	//delete floor indicators
-	if (sbs->Verbose)
-		Report("deleting floor indicators");
-
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-		{
-			FloorIndicatorArray[i]->parent_deleting = true;
-			delete FloorIndicatorArray[i];
-		}
-		FloorIndicatorArray[i] = 0;
-	}
-
-	//delete panels
-	if (sbs->Verbose)
-		Report("deleting button panels");
-
-	for (size_t i = 0; i < PanelArray.size(); i++)
-	{
-		if (PanelArray[i])
-		{
-			PanelArray[i]->parent_deleting = true;
-			delete PanelArray[i];
-		}
-		PanelArray[i] = 0;
-	}
-
-	//delete doors
-	if (sbs->Verbose)
-		Report("deleting standard doors");
-
-	for (size_t i = 0; i < StdDoorArray.size(); i++)
-	{
-		if (StdDoorArray[i])
-		{
-			StdDoorArray[i]->parent_deleting = true;
-			delete StdDoorArray[i];
-		}
-		StdDoorArray[i] = 0;
-	}
-
-	//Destructor
-	if (sbs->Verbose)
-		Report("deleting objects");
-	if (carsound)
-	{
-		carsound->parent_deleting = true;
-		delete carsound;
-	}
-	carsound = 0;
-	if (alarm)
-	{
-		alarm->parent_deleting = true;
-		delete alarm;
-	}
-	alarm = 0;
-	if (floorbeep)
-	{
-		floorbeep->parent_deleting = true;
-		delete floorbeep;
-	}
-	floorbeep = 0;
 	if (motorsound)
 	{
 		motorsound->parent_deleting = true;
 		delete motorsound;
 	}
 	motorsound = 0;
-	if (idlesound)
-	{
-		idlesound->parent_deleting = true;
-		delete idlesound;
-	}
-	idlesound = 0;
 	if (motoridlesound)
 	{
 		motoridlesound->parent_deleting = true;
 		delete motoridlesound;
 	}
 	motoridlesound = 0;
-	if (announcesnd)
-	{
-		announcesnd->parent_deleting = true;
-		delete announcesnd;
-	}
-	announcesnd = 0;
-	if (musicsound)
-	{
-		musicsound->parent_deleting = true;
-		delete musicsound;
-	}
-	musicsound = 0;
-
-	//delete sounds
-	if (sbs->Verbose)
-		Report("deleting sounds");
-
-	for (size_t i = 0; i < sounds.size(); i++)
-	{
-		if (sounds[i])
-		{
-			sounds[i]->parent_deleting = true;
-			delete sounds[i];
-		}
-		sounds[i] = 0;
-	}
 
 	if (ElevatorMesh)
 	{
@@ -553,14 +386,14 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (NumDoors > 0)
 	{
 		for (int i = 1; i <= NumDoors; i++)
-			DoorArray.push_back(new ElevatorDoor(i, this));
+			GetCar(0)->DoorArray.push_back(new ElevatorDoor(i, this));
 	}
 
 	//create sound objects
 	if (sbs->Verbose)
 		Report("creating sound objects");
-	carsound = new Sound(this, "Car", true);
-	idlesound = new Sound(this, "Idle", true);
+	GetCar(0)->carsound = new Sound(this, "Car", true);
+	GetCar(0)->idlesound = new Sound(this, "Idle", true);
 
 	std::string motorname = "Motor " + ToString(Number);
 	motorsound = new Sound(GetShaft(), motorname, true);
@@ -578,11 +411,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - GetPosition().x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition().z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
-	alarm = new Sound(this, "Alarm", true);
-	floorbeep = new Sound(this, "Floor Beep", true);
-	announcesnd = new Sound(this, "Announcement Sound", true);
-	musicsound = new Sound(this, "Music Sound", true);
-	musicsound->Move(MusicPosition);
+	GetCar(0)->alarm = new Sound(this, "Alarm", true);
+	GetCar(0)->floorbeep = new Sound(this, "Floor Beep", true);
+	GetCar(0)->announcesnd = new Sound(this, "Announcement Sound", true);
+	GetCar(0)->musicsound = new Sound(this, "Music Sound", true);
+	GetCar(0)->musicsound->Move(MusicPosition);
 
 	//set elevator's floor
 	ElevatorFloor = floor;
@@ -787,9 +620,9 @@ void Elevator::Alarm()
 		Report("alarm on");
 		if (AlarmSound != "")
 		{
-			alarm->Load(AlarmSound);
-			alarm->SetLoopState(true);
-			alarm->Play();
+			GetCar(0)->alarm->Load(AlarmSound);
+			GetCar(0)->alarm->SetLoopState(true);
+			GetCar(0)->alarm->Play();
 		}
 	}
 	else if (AlarmActive == true && sbs->camera->MouseDown == false)
@@ -798,10 +631,10 @@ void Elevator::Alarm()
 		AlarmActive = false;
 		if (AlarmSound != "")
 		{
-			alarm->Stop();
-			alarm->Load(AlarmSoundStop);
-			alarm->SetLoopState(false);
-			alarm->Play();
+			GetCar(0)->alarm->Stop();
+			GetCar(0)->alarm->Load(AlarmSoundStop);
+			GetCar(0)->alarm->SetLoopState(false);
+			GetCar(0)->alarm->Play();
 		}
 		Report("alarm off");
 	}
@@ -1194,15 +1027,15 @@ void Elevator::Loop()
 
 		//position sounds at top of elevator car
 		Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
-		idlesound->SetPositionRelative(top);
-		alarm->SetPositionRelative(top);
-		floorbeep->SetPositionRelative(top);
-		announcesnd->SetPositionRelative(top);
+		GetCar(0)->idlesound->SetPositionRelative(top);
+		GetCar(0)->alarm->SetPositionRelative(top);
+		GetCar(0)->floorbeep->SetPositionRelative(top);
+		GetCar(0)->announcesnd->SetPositionRelative(top);
 
 		//set default music position to elevator height
 		if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
 			MusicPosition = top;
-		musicsound->SetPositionRelative(MusicPosition);
+		GetCar(0)->musicsound->SetPositionRelative(MusicPosition);
 	}
 
 	//perform first-run tasks
@@ -1262,33 +1095,33 @@ void Elevator::Loop()
 	//play car idle sound if in elevator, or if doors open
 	if (CarIdleSound != "")
 	{
-		if (idlesound->IsPlaying() == false && Fan == true)
+		if (GetCar(0)->idlesound->IsPlaying() == false && Fan == true)
 		{
 			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
 			{
 				if (sbs->Verbose)
 					Report("playing car idle sound");
 
-				if (idlesound->IsLoaded() == false)
-					idlesound->Load(CarIdleSound);
+				if (GetCar(0)->idlesound->IsLoaded() == false)
+					GetCar(0)->idlesound->Load(CarIdleSound);
 
-				idlesound->SetLoopState(true);
-				idlesound->Play();
+				GetCar(0)->idlesound->SetLoopState(true);
+				GetCar(0)->idlesound->Play();
 			}
 		}
 		else
 		{
-			if (Fan == false && idlesound->IsPlaying() == true)
+			if (Fan == false && GetCar(0)->idlesound->IsPlaying() == true)
 			{
 				if (sbs->Verbose)
 					Report("stopping car idle sound");
-				idlesound->Stop();
+				GetCar(0)->idlesound->Stop();
 			}
 			else if (InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
 					Report("stopping car idle sound");
-				idlesound->Stop();
+				GetCar(0)->idlesound->Stop();
 			}
 		}
 	}
@@ -1320,7 +1153,7 @@ void Elevator::Loop()
 	//play music sound if in elevator, or if doors open
 	if (Music != "")
 	{
-		if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && IsMoving == true) || MusicOnMove == false))
+		if (GetCar(0)->musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && IsMoving == true) || MusicOnMove == false))
 		{
 			if (InServiceMode() == false)
 			{
@@ -1329,27 +1162,27 @@ void Elevator::Loop()
 					if (sbs->Verbose)
 						Report("playing music");
 
-					if (musicsound->IsLoaded() == false)
-						musicsound->Load(Music);
+					if (GetCar(0)->musicsound->IsLoaded() == false)
+						GetCar(0)->musicsound->Load(Music);
 
-					musicsound->SetLoopState(true);
-					musicsound->Play(false);
+					GetCar(0)->musicsound->SetLoopState(true);
+					GetCar(0)->musicsound->Play(false);
 				}
 			}
 		}
 		else
 		{
-			if ((MusicOn == false || InServiceMode() == true || (MusicOnMove == true && IsMoving == false)) && musicsound->IsPlaying() == true)
+			if ((MusicOn == false || InServiceMode() == true || (MusicOnMove == true && IsMoving == false)) && GetCar(0)->musicsound->IsPlaying() == true)
 			{
 				if (sbs->Verbose)
 					Report("stopping music");
-				musicsound->Pause();
+				GetCar(0)->musicsound->Pause();
 			}
 			else if (InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
 					Report("stopping music");
-				musicsound->Pause();
+				GetCar(0)->musicsound->Pause();
 			}
 		}
 	}
@@ -1368,9 +1201,9 @@ void Elevator::Loop()
 	}
 
 	//process door open/close holds
-	if (doorhold_direction > 0)
+	if (GetCar(0)->doorhold_direction > 0)
 		OpenDoors();
-	if (doorhold_direction < 0)
+	if (GetCar(0)->doorhold_direction < 0)
 		CloseDoors();
 
 	//process Go function hold
@@ -1408,33 +1241,33 @@ void Elevator::Loop()
 	if (IsEnabled == true)
 	{
 		//process triggers
-		for (size_t i = 0; i < TriggerArray.size(); i++)
+		for (size_t i = 0; i < GetCar(0)->TriggerArray.size(); i++)
 		{
-			if (TriggerArray[i])
-				TriggerArray[i]->Loop();
+			if (GetCar(0)->TriggerArray[i])
+				GetCar(0)->TriggerArray[i]->Loop();
 		}
 
 		//process models
-		for (size_t i = 0; i < ModelArray.size(); i++)
+		for (size_t i = 0; i < GetCar(0)->ModelArray.size(); i++)
 		{
-			if (ModelArray[i])
-				ModelArray[i]->Loop();
+			if (GetCar(0)->ModelArray[i])
+				GetCar(0)->ModelArray[i]->Loop();
 		}
 	}
 
 	//process door sensors
-	for (size_t i = 0; i < DoorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->DoorArray.size(); i++)
 	{
-		if (DoorArray[i])
-			DoorArray[i]->CheckSensor();
+		if (GetCar(0)->DoorArray[i])
+			GetCar(0)->DoorArray[i]->CheckSensor();
 	}
 
 	//process queued sounds
-	announcesnd->ProcessQueue();
+	GetCar(0)->announcesnd->ProcessQueue();
 
 	//reset message sound status
-	DirMessageSound = false;
-	DoorMessageSound = false;
+	GetCar(0)->DirMessageSound = false;
+	GetCar(0)->DoorMessageSound = false;
 
 	//elevator movement
 	if (MoveElevator == true)
@@ -2009,7 +1842,7 @@ finish:
 	MoveElevator = false;
 	IsMoving = false;
 	Leveling = false;
-	carsound->Stop();
+	GetCar(0)->carsound->Stop();
 	motorsound->Stop();
 	tmpDecelJerk = 0;
 
@@ -2193,7 +2026,7 @@ FloorIndicator* Elevator::AddFloorIndicator(const std::string &texture_prefix, c
 	//Creates a floor indicator at the specified location
 
 	FloorIndicator* indicator = new FloorIndicator(this, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
-	FloorIndicatorArray.push_back(indicator);
+	GetCar(0)->FloorIndicatorArray.push_back(indicator);
 	return indicator;
 }
 
@@ -2251,10 +2084,10 @@ void Elevator::Enabled(bool value)
 	IsEnabled = value;
 
 	//floor indicators
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->FloorIndicatorArray.size(); i++)
 	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
+		if (GetCar(0)->FloorIndicatorArray[i])
+			GetCar(0)->FloorIndicatorArray[i]->Enabled(value);
 	}
 
 	//interior directional indicators
@@ -2291,41 +2124,41 @@ void Elevator::EnableObjects(bool value)
 	//EnableDirectionalIndicators(value);
 
 	//controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ControlArray.size(); i++)
 	{
-		if (ControlArray[i])
-			ControlArray[i]->Enabled(value);
+		if (GetCar(0)->ControlArray[i])
+			GetCar(0)->ControlArray[i]->Enabled(value);
 	}
 
 	//triggers
-	for (size_t i = 0; i < TriggerArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->TriggerArray.size(); i++)
 	{
-		if (TriggerArray[i])
-			TriggerArray[i]->Enabled(value);
+		if (GetCar(0)->TriggerArray[i])
+			GetCar(0)->TriggerArray[i]->Enabled(value);
 	}
 
 	//models
-	for (size_t i = 0; i < ModelArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ModelArray.size(); i++)
 	{
-		if (ModelArray[i])
-			ModelArray[i]->Enable(value);
+		if (GetCar(0)->ModelArray[i])
+			GetCar(0)->ModelArray[i]->Enable(value);
 	}
 
 	//panels
-	for (size_t i = 0; i < PanelArray.size(); i++)
-		PanelArray[i]->Enabled(value);
+	for (size_t i = 0; i < GetCar(0)->PanelArray.size(); i++)
+		GetCar(0)->PanelArray[i]->Enabled(value);
 
 	//sounds
-	for (size_t i = 0; i < sounds.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->sounds.size(); i++)
 	{
-		if (sounds[i])
+		if (GetCar(0)->sounds[i])
 		{
-			if (sounds[i]->GetLoopState() == true)
+			if (GetCar(0)->sounds[i]->GetLoopState() == true)
 			{
 				if (value == false)
-					sounds[i]->Stop();
+					GetCar(0)->sounds[i]->Stop();
 				else
-					sounds[i]->Play();
+					GetCar(0)->sounds[i]->Play();
 			}
 		}
 	}
@@ -2458,13 +2291,13 @@ ButtonPanel* Elevator::CreateButtonPanel(const std::string &texture, int rows, i
 {
 	//create a new button panel object and store the pointer
 
-	int index = (int)PanelArray.size();
+	int index = (int)GetCar(0)->PanelArray.size();
 
 	if (sbs->Verbose)
 		Report("creating button panel " + ToString(index + 1));
 
 	ButtonPanel* panel = new ButtonPanel(this, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
-	PanelArray.push_back(panel);
+	GetCar(0)->PanelArray.push_back(panel);
 	return panel;
 }
 
@@ -2472,10 +2305,10 @@ void Elevator::UpdateFloorIndicators()
 {
 	//updates all floor indicators
 
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->FloorIndicatorArray.size(); i++)
 	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Update();
+		if (GetCar(0)->FloorIndicatorArray[i])
+			GetCar(0)->FloorIndicatorArray[i]->Update();
 	}
 }
 
@@ -3278,7 +3111,7 @@ DirectionalIndicator* Elevator::AddDirectionalIndicator(bool active_direction, b
 		Report("adding interior directional indicator");
 
 	DirectionalIndicator *indicator = new DirectionalIndicator(this, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	DirIndicatorArray.push_back(indicator);
+	GetCar(0)->DirIndicatorArray.push_back(indicator);
 	return indicator;
 }
 
@@ -3292,9 +3125,9 @@ void Elevator::SetDirectionalIndicators(int floor, bool UpLight, bool DownLight)
 		sbs->GetFloor(floor)->SetDirectionalIndicators(Number, UpLight, DownLight);
 
 	//interior indicators
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->DirIndicatorArray.size(); i++)
 	{
-		DirectionalIndicator *indicator = DirIndicatorArray[i];
+		DirectionalIndicator *indicator = GetCar(0)->DirIndicatorArray[i];
 
 		if (indicator)
 		{
@@ -3312,9 +3145,9 @@ void Elevator::UpdateDirectionalIndicators()
 {
 	//updates all interior active direction indicators
 
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->DirIndicatorArray.size(); i++)
 	{
-		DirectionalIndicator *indicator = DirIndicatorArray[i];
+		DirectionalIndicator *indicator = GetCar(0)->DirIndicatorArray[i];
 
 		if (indicator)
 		{
@@ -3352,10 +3185,10 @@ void Elevator::EnableDirectionalIndicators(bool value)
 			Report("disabling interior directional indicators");
 	}
 
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i])
-			DirIndicatorArray[i]->Enabled(value);
+		if (GetCar(0)->DirIndicatorArray[i])
+			GetCar(0)->DirIndicatorArray[i]->Enabled(value);
 	}
 }
 
@@ -3367,11 +3200,11 @@ ElevatorDoor* Elevator::GetDoor(int number)
 	if (lastdoor_number == number && lastdoor_result)
 		return lastdoor_result;
 
-	if (number > 0 && number <= (int)DoorArray.size())
+	if (number > 0 && number <= (int)GetCar(0)->DoorArray.size())
 	{
-		if (DoorArray[number - 1])
+		if (GetCar(0)->DoorArray[number - 1])
 		{
-			lastdoor_result = DoorArray[number - 1];
+			lastdoor_result = GetCar(0)->DoorArray[number - 1];
 			lastdoor_number = number;
 			return lastdoor_result;
 		}
@@ -3440,25 +3273,25 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 		start = 1;
 		end = NumDoors;
 	}
-	if (doorhold_direction == 0)
+	if (GetCar(0)->doorhold_direction == 0)
 	{
 		if (ControlPressActive == true && AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
 		{
-			doorhold_direction = 2;
+			GetCar(0)->doorhold_direction = 2;
 
 			if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
 				return true; //exit to skip an extra open door call
 		}
 
 		if (hold == true)
-			doorhold_direction = 1;
+			GetCar(0)->doorhold_direction = 1;
 
-		if (doorhold_direction > 0)
+		if (GetCar(0)->doorhold_direction > 0)
 		{
 			//set persistent values
-			doorhold_whichdoors = whichdoors;
-			doorhold_floor = floor;
-			doorhold_manual = manual;
+			GetCar(0)->doorhold_whichdoors = whichdoors;
+			GetCar(0)->doorhold_floor = floor;
+			GetCar(0)->doorhold_manual = manual;
 		}
 
 		for (int i = start; i <= end; i++)
@@ -3469,7 +3302,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 				ReportError("Invalid door " + ToString(i));
 		}
 	}
-	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
+	else if (GetCar(0)->doorhold_direction == 1 && sbs->camera->MouseDown == false)
 	{
 		//require button to be held down to open doors
 
@@ -3496,19 +3329,19 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			if (GetDoor(i))
 			{
 				if (closedstate == true)
-					GetDoor(i)->CloseDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+					GetDoor(i)->CloseDoors(GetCar(0)->doorhold_whichdoors, GetCar(0)->doorhold_floor, GetCar(0)->doorhold_manual);
 			}
 			else
 				ReportError("Invalid door " + ToString(i));
 		}
 
 		//reset persistent values
-		doorhold_direction = 0;
-		doorhold_whichdoors = 0;
-		doorhold_floor = 0;
-		doorhold_manual = false;
+		GetCar(0)->doorhold_direction = 0;
+		GetCar(0)->doorhold_whichdoors = 0;
+		GetCar(0)->doorhold_floor = 0;
+		GetCar(0)->doorhold_manual = false;
 	}
-	else if (doorhold_direction == 2)
+	else if (GetCar(0)->doorhold_direction == 2)
 	{
 		//hold doors while button is held
 
@@ -3527,7 +3360,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 				{
 					//open doors using persistent values
 					if (GetDoor(i))
-						GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+						GetDoor(i)->OpenDoors(GetCar(0)->doorhold_whichdoors, GetCar(0)->doorhold_floor, GetCar(0)->doorhold_manual);
 					else
 						ReportError("Invalid door " + ToString(i));
 				}
@@ -3537,10 +3370,10 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 		if (sbs->camera->MouseDown == false)
 		{
 			//reset persistent values
-			doorhold_direction = 0;
-			doorhold_whichdoors = 0;
-			doorhold_floor = 0;
-			doorhold_manual = false;
+			GetCar(0)->doorhold_direction = 0;
+			GetCar(0)->doorhold_whichdoors = 0;
+			GetCar(0)->doorhold_floor = 0;
+			GetCar(0)->doorhold_manual = false;
 		}
 	}
 
@@ -3567,7 +3400,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 		start = 1;
 		end = NumDoors;
 	}
-	if (doorhold_direction == 0)
+	if (GetCar(0)->doorhold_direction == 0)
 	{
 		for (int i = start; i <= end; i++)
 		{
@@ -3580,13 +3413,13 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 		if (hold == true)
 		{
 			//set persistent values
-			doorhold_direction = -1;
-			doorhold_whichdoors = whichdoors;
-			doorhold_floor = floor;
-			doorhold_manual = manual;
+			GetCar(0)->doorhold_direction = -1;
+			GetCar(0)->doorhold_whichdoors = whichdoors;
+			GetCar(0)->doorhold_floor = floor;
+			GetCar(0)->doorhold_manual = manual;
 		}
 	}
-	else if (doorhold_direction == -1 && sbs->camera->MouseDown == false)
+	else if (GetCar(0)->doorhold_direction == -1 && sbs->camera->MouseDown == false)
 	{
 		bool openstate = false;
 		for (int i = start; i <= end; i++)
@@ -3612,7 +3445,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 				if (GetDoor(i))
 				{
 					if (GetDoor(i)->AreDoorsMoving(0) == true)
-						GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+						GetDoor(i)->OpenDoors(GetCar(0)->doorhold_whichdoors, GetCar(0)->doorhold_floor, GetCar(0)->doorhold_manual);
 				}
 				else
 					ReportError("Invalid door " + ToString(i));
@@ -3620,10 +3453,10 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 		}
 
 		//reset persistent values
-		doorhold_direction = 0;
-		doorhold_whichdoors = 0;
-		doorhold_floor = 0;
-		doorhold_manual = false;
+		GetCar(0)->doorhold_direction = 0;
+		GetCar(0)->doorhold_whichdoors = 0;
+		GetCar(0)->doorhold_floor = 0;
+		GetCar(0)->doorhold_manual = false;
 	}
 }
 
@@ -3782,11 +3615,11 @@ bool Elevator::AreShaftDoorsClosed(bool skip_current_floor)
 {
 	//return true if all shaft doors are closed and not moving
 
-	for (size_t i = 0; i < DoorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->DoorArray.size(); i++)
 	{
-		if (DoorArray[i])
+		if (GetCar(0)->DoorArray[i])
 		{
-			if (DoorArray[i]->AreShaftDoorsClosed(skip_current_floor) == false)
+			if (GetCar(0)->DoorArray[i]->AreShaftDoorsClosed(skip_current_floor) == false)
 				return false;
 		}
 	}
@@ -4069,8 +3902,8 @@ void Elevator::ResetLights()
 	if (sbs->Verbose)
 		Report("turning off button lights");
 
-	for (size_t i = 0; i < PanelArray.size(); i++)
-		PanelArray[i]->ChangeAllLights(false);
+	for (size_t i = 0; i < GetCar(0)->PanelArray.size(); i++)
+		GetCar(0)->PanelArray[i]->ChangeAllLights(false);
 }
 
 void Elevator::ChangeLight(int floor, bool value)
@@ -4088,8 +3921,8 @@ void Elevator::ChangeLight(int floor, bool value)
 			Report("turning off button lights for floor " + ToString(floor));
 	}
 
-	for (size_t i = 0; i < PanelArray.size(); i++)
-		PanelArray[i]->ChangeLight(floor, value);
+	for (size_t i = 0; i < GetCar(0)->PanelArray.size(); i++)
+		GetCar(0)->PanelArray[i]->ChangeLight(floor, value);
 }
 
 void Elevator::SetBeepSound(const std::string &filename)
@@ -4159,7 +3992,7 @@ Sound* Elevator::AddSound(const std::string &name, const std::string &filename, 
 {
 	//create a sound object
 	Sound *sound = new Sound(this, name, false);
-	sounds.push_back(sound);
+	GetCar(0)->sounds.push_back(sound);
 
 	//set parameters and play sound
 	sound->Move(position);
@@ -4334,10 +4167,10 @@ ButtonPanel* Elevator::GetPanel(int index)
 {
 	//get a button panel object
 
-	if (index > (int)PanelArray.size() || index < 1)
+	if (index > (int)GetCar(0)->PanelArray.size() || index < 1)
 		return 0;
 
-	return PanelArray[index - 1];
+	return GetCar(0)->PanelArray[index - 1];
 }
 
 Control* Elevator::GetFloorButton(int floor)
@@ -4352,11 +4185,11 @@ Control* Elevator::GetFloorButton(int floor)
 
 	Control *control = 0;
 
-	if (PanelArray.empty() == false)
+	if (GetCar(0)->PanelArray.empty() == false)
 	{
-		for (size_t i = 0; i < PanelArray.size(); i++)
+		for (size_t i = 0; i < GetCar(0)->PanelArray.size(); i++)
 		{
-			control = PanelArray[i]->GetFloorButton(floor);
+			control = GetCar(0)->PanelArray[i]->GetFloorButton(floor);
 			if (control)
 				return control;
 		}
@@ -4437,20 +4270,20 @@ Door* Elevator::AddDoor(const std::string &open_sound, const std::string &close_
 	*/
 
 	std::string elevnum = ToString(Number);
-	std::string num = ToString((int)StdDoorArray.size());
+	std::string num = ToString((int)GetCar(0)->StdDoorArray.size());
 	std::string name = "Elevator " + elevnum + ":Door " + num;
 	Door* door = new Door(this, 0, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
-	StdDoorArray.push_back(door);
+	GetCar(0)->StdDoorArray.push_back(door);
 	return door;
 }
 
 Door* Elevator::GetStdDoor(int number)
 {
 	//get door object
-	if (number < (int)StdDoorArray.size())
+	if (number < (int)GetCar(0)->StdDoorArray.size())
 	{
-		if (StdDoorArray[number])
-			return StdDoorArray[number];
+		if (GetCar(0)->StdDoorArray[number])
+			return GetCar(0)->StdDoorArray[number];
 	}
 
 	return 0;
@@ -4458,11 +4291,11 @@ Door* Elevator::GetStdDoor(int number)
 void Elevator::RemovePanel(ButtonPanel* panel)
 {
 	//remove a button panel reference (does not delete the object itself)
-	for (size_t i = 0; i < PanelArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->PanelArray.size(); i++)
 	{
-		if (PanelArray[i] == panel)
+		if (GetCar(0)->PanelArray[i] == panel)
 		{
-			PanelArray.erase(PanelArray.begin() + i);
+			GetCar(0)->PanelArray.erase(GetCar(0)->PanelArray.begin() + i);
 			return;
 		}
 	}
@@ -4471,11 +4304,11 @@ void Elevator::RemovePanel(ButtonPanel* panel)
 void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 {
 	//remove a directional indicator reference (does not delete the object itself)
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i] == indicator)
+		if (GetCar(0)->DirIndicatorArray[i] == indicator)
 		{
-			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
+			GetCar(0)->DirIndicatorArray.erase(GetCar(0)->DirIndicatorArray.begin() + i);
 			return;
 		}
 	}
@@ -4484,11 +4317,11 @@ void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 {
 	//remove an elevator door reference (does not delete the object itself)
-	for (size_t i = 0; i < DoorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->DoorArray.size(); i++)
 	{
-		if (DoorArray[i] == door)
+		if (GetCar(0)->DoorArray[i] == door)
 		{
-			DoorArray.erase(DoorArray.begin() + i);
+			GetCar(0)->DoorArray.erase(GetCar(0)->DoorArray.begin() + i);
 			NumDoors--;
 
 			//reset cache values
@@ -4502,11 +4335,11 @@ void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 {
 	//remove a floor indicator reference (does not delete the object itself)
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->FloorIndicatorArray.size(); i++)
 	{
-		if (FloorIndicatorArray[i] == indicator)
+		if (GetCar(0)->FloorIndicatorArray[i] == indicator)
 		{
-			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
+			GetCar(0)->FloorIndicatorArray.erase(GetCar(0)->FloorIndicatorArray.begin() + i);
 			return;
 		}
 	}
@@ -4515,11 +4348,11 @@ void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 void Elevator::RemoveDoor(Door* door)
 {
 	//remove a door reference (does not delete the object itself)
-	for (size_t i = 0; i < StdDoorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->StdDoorArray.size(); i++)
 	{
-		if (StdDoorArray[i] == door)
+		if (GetCar(0)->StdDoorArray[i] == door)
 		{
-			StdDoorArray.erase(StdDoorArray.begin() + i);
+			GetCar(0)->StdDoorArray.erase(GetCar(0)->StdDoorArray.begin() + i);
 			return;
 		}
 	}
@@ -4528,11 +4361,11 @@ void Elevator::RemoveDoor(Door* door)
 void Elevator::RemoveSound(Sound *sound)
 {
 	//remove a sound reference (does not delete the object itself)
-	for (size_t i = 0; i < sounds.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->sounds.size(); i++)
 	{
-		if (sounds[i] == sound)
+		if (GetCar(0)->sounds[i] == sound)
 		{
-			sounds.erase(sounds.begin() + i);
+			GetCar(0)->sounds.erase(GetCar(0)->sounds.begin() + i);
 			return;
 		}
 	}
@@ -4541,11 +4374,11 @@ void Elevator::RemoveSound(Sound *sound)
 void Elevator::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->lights.size(); i++)
 	{
-		if (lights[i] == light)
+		if (GetCar(0)->lights[i] == light)
 		{
-			lights.erase(lights.begin() + i);
+			GetCar(0)->lights.erase(GetCar(0)->lights.begin() + i);
 			return;
 		}
 	}
@@ -4554,11 +4387,11 @@ void Elevator::RemoveLight(Light *light)
 void Elevator::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ModelArray.size(); i++)
 	{
-		if (ModelArray[i] == model)
+		if (GetCar(0)->ModelArray[i] == model)
 		{
-			ModelArray.erase(ModelArray.begin() + i);
+			GetCar(0)->ModelArray.erase(GetCar(0)->ModelArray.begin() + i);
 			return;
 		}
 	}
@@ -4567,11 +4400,11 @@ void Elevator::RemoveModel(Model *model)
 void Elevator::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ControlArray.size(); i++)
 	{
-		if (ControlArray[i] == control)
+		if (GetCar(0)->ControlArray[i] == control)
 		{
-			ControlArray.erase(ControlArray.begin() + i);
+			GetCar(0)->ControlArray.erase(GetCar(0)->ControlArray.begin() + i);
 			return;
 		}
 	}
@@ -4580,11 +4413,11 @@ void Elevator::RemoveControl(Control *control)
 void Elevator::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->TriggerArray.size(); i++)
 	{
-		if (TriggerArray[i] == trigger)
+		if (GetCar(0)->TriggerArray[i] == trigger)
 		{
-			TriggerArray.erase(TriggerArray.begin() + i);
+			GetCar(0)->TriggerArray.erase(GetCar(0)->TriggerArray.begin() + i);
 			return;
 		}
 	}
@@ -4751,10 +4584,10 @@ bool Elevator::PlayFloorBeep()
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
-	floorbeep->Stop();
-	floorbeep->Load(newsound);
-	floorbeep->SetLoopState(false);
-	floorbeep->Play();
+	GetCar(0)->floorbeep->Stop();
+	GetCar(0)->floorbeep->Load(newsound);
+	GetCar(0)->floorbeep->SetLoopState(false);
+	GetCar(0)->floorbeep->Play();
 	return true;
 }
 
@@ -4772,7 +4605,7 @@ bool Elevator::PlayFloorSound()
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GotoFloor));
 	TrimString(newsound);
-	announcesnd->PlayQueued(newsound, false, false);
+	GetCar(0)->announcesnd->PlayQueued(newsound, false, false);
 	return true;
 }
 
@@ -4793,7 +4626,7 @@ bool Elevator::PlayMessageSound(bool type)
 	if (type == true)
 	{
 		//exit if directional message sounds are off, or one has already been queued
-		if (UseDirMessageSounds == false || DirMessageSound == true)
+		if (UseDirMessageSounds == false || GetCar(0)->DirMessageSound == true)
 			return false;
 
 		int direction = LastChimeDirection;
@@ -4822,12 +4655,12 @@ bool Elevator::PlayMessageSound(bool type)
 			newsound = DownMessageSound;
 		}
 
-		DirMessageSound = true;
+		GetCar(0)->DirMessageSound = true;
 	}
 	else
 	{
 		//exit if door message sounds are off, or one has already been queued
-		if (UseDoorMessageSounds == false || DoorMessageSound == true)
+		if (UseDoorMessageSounds == false || GetCar(0)->DoorMessageSound == true)
 			return false;
 
 		if (AreDoorsOpening() == true)
@@ -4853,13 +4686,13 @@ bool Elevator::PlayMessageSound(bool type)
 		else
 			return false;
 
-		DoorMessageSound = true;
+		GetCar(0)->DoorMessageSound = true;
 	}
 
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
-	announcesnd->PlayQueued(newsound, false, false);
+	GetCar(0)->announcesnd->PlayQueued(newsound, false, false);
 	return true;
 }
 
@@ -4954,7 +4787,7 @@ Light* Elevator::AddLight(const std::string &name, int type, Ogre::Vector3 posit
 	//add a global light
 
 	Light* light = new Light(this, name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
-	lights.push_back(light);
+	GetCar(0)->lights.push_back(light);
 	return light;
 }
 
@@ -4967,7 +4800,7 @@ Model* Elevator::AddModel(const std::string &name, const std::string &filename, 
 		delete model;
 		return 0;
 	}
-	ModelArray.push_back(model);
+	GetCar(0)->ModelArray.push_back(model);
 	return model;
 }
 
@@ -4978,13 +4811,13 @@ void Elevator::AddModel(Model *model)
 	if (!model)
 		return;
 
-	for (size_t i = 0; i < ModelArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ModelArray.size(); i++)
 	{
-		if (ModelArray[i] == model)
+		if (GetCar(0)->ModelArray[i] == model)
 			return;
 	}
 
-	ModelArray.push_back(model);
+	GetCar(0)->ModelArray.push_back(model);
 }
 
 void Elevator::AddDisplayFloor(int floor)
@@ -5031,7 +4864,7 @@ Control* Elevator::AddControl(const std::string &name, const std::string &sound,
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
 	control->Move(Ogre::Vector3(CenterX, voffset, CenterZ));
-	ControlArray.push_back(control);
+	GetCar(0)->ControlArray.push_back(control);
 	return control;
 }
 
@@ -5039,7 +4872,7 @@ Trigger* Elevator::AddTrigger(const std::string &name, const std::string &sound_
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
-	TriggerArray.push_back(trigger);
+	GetCar(0)->TriggerArray.push_back(trigger);
 	return trigger;
 }
 
@@ -5055,14 +4888,14 @@ std::vector<Sound*> Elevator::GetSound(const std::string &name)
 	std::string findname = name;
 	SetCase(findname, false);
 	std::vector<Sound*> soundlist;
-	for (size_t i = 0; i < sounds.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->sounds.size(); i++)
 	{
-		if (sounds[i])
+		if (GetCar(0)->sounds[i])
 		{
-			std::string name2 = sounds[i]->GetName();
+			std::string name2 = GetCar(0)->sounds[i]->GetName();
 			SetCase(name2, false);
 			if (findname == name2)
-				soundlist.push_back(sounds[i]);
+				soundlist.push_back(GetCar(0)->sounds[i]);
 		}
 	}
 	return soundlist;
@@ -5090,11 +4923,11 @@ float Elevator::GetDestinationAltitude(int floor)
 
 	float result = 0;
 	bool found = false;
-	for (size_t i = 0; i < DoorArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->DoorArray.size(); i++)
 	{
-		if (DoorArray[i]->ShaftDoorsExist(floor) == true)
+		if (GetCar(0)->DoorArray[i]->ShaftDoorsExist(floor) == true)
 		{
-			float altitude = DoorArray[i]->GetShaftDoorAltitude(floor);
+			float altitude = GetCar(0)->DoorArray[i]->GetShaftDoorAltitude(floor);
 
 			if (altitude > result || found == false)
 			{
@@ -5624,24 +5457,24 @@ void Elevator::PlayStartingSounds()
 	//play elevator starting sounds
 
 	//car sound
-	carsound->Stop();
+	GetCar(0)->carsound->Stop();
 	if (Direction == 1 && CarUpStartSound.empty() == false && CarUpStartSound != "")
 	{
 		if (sbs->Verbose)
 			Report("playing car up start sound");
 
-		carsound->Load(CarUpStartSound);
-		carsound->SetLoopState(false);
-		carsound->Play();
+		GetCar(0)->carsound->Load(CarUpStartSound);
+		GetCar(0)->carsound->SetLoopState(false);
+		GetCar(0)->carsound->Play();
 	}
 	if (Direction == -1 && CarDownStartSound.empty() == false && CarDownStartSound != "")
 	{
 		if (sbs->Verbose)
 			Report("playing car down start sound");
 
-		carsound->Load(CarDownStartSound);
-		carsound->SetLoopState(false);
-		carsound->Play();
+		GetCar(0)->carsound->Load(CarDownStartSound);
+		GetCar(0)->carsound->SetLoopState(false);
+		GetCar(0)->carsound->Play();
 	}
 
 	//motor sound
@@ -5740,21 +5573,21 @@ void Elevator::PlayStoppingSounds(bool emergency)
 		}
 	}
 
-	carsound->Stop();
+	GetCar(0)->carsound->Stop();
 	motorsound->Stop();
 
 	if (carsound_play == true)
 	{
-		carsound->Load(CarSoundFile);
-		carsound->SetLoopState(false);
+		GetCar(0)->carsound->Load(CarSoundFile);
+		GetCar(0)->carsound->SetLoopState(false);
 
 		//set play position to current percent of the total speed
 		if (AutoAdjustSound == true)
-			carsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
+			GetCar(0)->carsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
 		else
-			carsound->Reset();
+			GetCar(0)->carsound->Reset();
 
-		carsound->Play(false);
+		GetCar(0)->carsound->Play(false);
 
 	}
 	if (motorsound_play == true)
@@ -5777,25 +5610,25 @@ void Elevator::PlayMovingSounds()
 	//play elevator movement sounds
 
 	//car sound
-	if (carsound->IsPlaying() == false)
+	if (GetCar(0)->carsound->IsPlaying() == false)
 	{
 		if (Direction == 1 && CarUpMoveSound.empty() == false && CarUpMoveSound != "")
 		{
 			if (sbs->Verbose)
 				Report("playing car up movement sound");
 
-			carsound->Load(CarUpMoveSound);
-			carsound->SetLoopState(true);
-			carsound->Play();
+			GetCar(0)->carsound->Load(CarUpMoveSound);
+			GetCar(0)->carsound->SetLoopState(true);
+			GetCar(0)->carsound->Play();
 		}
 		else if (Direction == -1 && CarDownMoveSound.empty() == false && CarDownMoveSound != "")
 		{
 			if (sbs->Verbose)
 				Report("playing car down movement sound");
 
-			carsound->Load(CarDownMoveSound);
-			carsound->SetLoopState(true);
-			carsound->Play();
+			GetCar(0)->carsound->Load(CarDownMoveSound);
+			GetCar(0)->carsound->SetLoopState(true);
+			GetCar(0)->carsound->Play();
 		}
 	}
 
@@ -6096,10 +5929,10 @@ Model* Elevator::GetModel(std::string name)
 
 	SetCase(name, false);
 
-	for (size_t i = 0; i < ModelArray.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ModelArray.size(); i++)
 	{
-		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
-			return ModelArray[i];
+		if (SetCaseCopy(GetCar(0)->ModelArray[i]->GetName(), false) == name)
+			return GetCar(0)->ModelArray[i];
 	}
 
 	return 0;
@@ -6117,6 +5950,218 @@ bool Elevator::CheckInterlocks(bool skip_current_floor)
 		status = (Interlocks == true && (AreShaftDoorsClosed(true) == false || DoorsStopped() == true));
 
 	return !status;
+}
+
+Elevator::Car* Elevator::CreateCar()
+{
+	//create a new elevator car object
+
+	int number = (int)Cars.size();
+	Car *car = new Car(this, number);
+	Cars.push_back(car);
+	return car;
+}
+
+Elevator::Car* Elevator::GetCar(int number)
+{
+	if (number < 0 || number > (int)Cars.size() - 1)
+		return 0;
+
+	return Cars[number];
+}
+
+Elevator::Car::Car(Elevator *parent, int number) : ObjectBase(parent)
+{
+	this->parent = parent;
+	this->number = number;
+	carsound = 0;
+	idlesound = 0;
+	alarm = 0;
+	floorbeep = 0;
+	doorhold_direction = 0;
+	doorhold_whichdoors = 0;
+	doorhold_floor = 0;
+	doorhold_manual = 0;
+	announcesnd = 0;
+	musicsound = 0;
+	DirMessageSound = false;
+	DoorMessageSound = false;
+
+	if (sbs->Verbose)
+		parent->Report("created car " + ToString(number));
+}
+
+Elevator::Car::~Car()
+{
+	if (sbs->Verbose)
+		parent->Report("deleting car objects");
+
+	//delete controls
+	for (size_t i = 0; i < ControlArray.size(); i++)
+	{
+		if (ControlArray[i])
+		{
+			ControlArray[i]->parent_deleting = true;
+			delete ControlArray[i];
+		}
+		ControlArray[i] = 0;
+	}
+
+	//delete triggers
+	for (size_t i = 0; i < TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+		{
+			TriggerArray[i]->parent_deleting = true;
+			delete TriggerArray[i];
+		}
+		TriggerArray[i] = 0;
+	}
+
+	//delete models
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i])
+		{
+			ModelArray[i]->parent_deleting = true;
+			delete ModelArray[i];
+		}
+		ModelArray[i] = 0;
+	}
+
+	//delete lights
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (lights[i])
+		{
+			lights[i]->parent_deleting = true;
+			delete lights[i];
+		}
+		lights[i] = 0;
+	}
+
+	//delete directional indicators
+	if (sbs->Verbose)
+		parent->Report("deleting car interior directional indicators");
+
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	{
+		if (DirIndicatorArray[i])
+		{
+			DirIndicatorArray[i]->parent_deleting = true;
+			delete DirIndicatorArray[i];
+		}
+		DirIndicatorArray[i] = 0;
+	}
+
+	//delete doors
+	if (sbs->Verbose)
+		parent->Report("deleting car doors");
+
+	if (DoorArray.size() > 0)
+	{
+		for (size_t i = 0; i < DoorArray.size(); i++)
+		{
+			if (DoorArray[i])
+			{
+				DoorArray[i]->parent_deleting = true;
+				delete DoorArray[i];
+			}
+			DoorArray[i] = 0;
+		}
+	}
+
+	//delete floor indicators
+	if (sbs->Verbose)
+		parent->Report("deleting car floor indicators");
+
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i])
+		{
+			FloorIndicatorArray[i]->parent_deleting = true;
+			delete FloorIndicatorArray[i];
+		}
+		FloorIndicatorArray[i] = 0;
+	}
+
+	//delete panels
+	if (sbs->Verbose)
+		parent->Report("deleting car button panels");
+
+	for (size_t i = 0; i < PanelArray.size(); i++)
+	{
+		if (PanelArray[i])
+		{
+			PanelArray[i]->parent_deleting = true;
+			delete PanelArray[i];
+		}
+		PanelArray[i] = 0;
+	}
+
+	//delete doors
+	if (sbs->Verbose)
+		parent->Report("deleting car standard doors");
+
+	for (size_t i = 0; i < StdDoorArray.size(); i++)
+	{
+		if (StdDoorArray[i])
+		{
+			StdDoorArray[i]->parent_deleting = true;
+			delete StdDoorArray[i];
+		}
+		StdDoorArray[i] = 0;
+	}
+
+	if (sbs->Verbose)
+		parent->Report("deleting car sounds");
+	if (carsound)
+	{
+		carsound->parent_deleting = true;
+		delete carsound;
+	}
+	carsound = 0;
+	if (alarm)
+	{
+		alarm->parent_deleting = true;
+		delete alarm;
+	}
+	alarm = 0;
+	if (floorbeep)
+	{
+		floorbeep->parent_deleting = true;
+		delete floorbeep;
+	}
+	floorbeep = 0;
+
+	if (idlesound)
+	{
+		idlesound->parent_deleting = true;
+		delete idlesound;
+	}
+	idlesound = 0;
+	if (announcesnd)
+	{
+		announcesnd->parent_deleting = true;
+		delete announcesnd;
+	}
+	announcesnd = 0;
+	if (musicsound)
+	{
+		musicsound->parent_deleting = true;
+		delete musicsound;
+	}
+	musicsound = 0;
+
+	for (size_t i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i])
+		{
+			sounds[i]->parent_deleting = true;
+			delete sounds[i];
+		}
+		sounds[i] = 0;
+	}
 }
 
 }
