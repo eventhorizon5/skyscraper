@@ -148,8 +148,6 @@ public:
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
 	bool ControlPressActive; //true if a control associated with this elevator has just been pressed
 
-	MeshObject* ElevatorMesh; //elevator mesh object
-
 	//functions
 	Elevator(Object *parent, int number);
 	~Elevator();
@@ -334,44 +332,14 @@ public:
 	DynamicMesh* GetDoorContainer() { return DoorContainer; }
 	bool CheckInterlocks(bool skip_current_floor = false);
 
-private:
-
-	//elevator parking timer
-	class Timer : public TimerObject
-	{
-	public:
-		Elevator *elevator;
-		int type; //0 = parking timer, 1 = arrival/departure
-		Timer(const std::string &name, Elevator *parent, int Type) : TimerObject(parent, name)
-		{
-			elevator = parent;
-			type = Type;
-		}
-		virtual void Notify();
-	};
-
-	struct QueueEntry
-	{
-		int floor; //floor number
-		int call_type; //0 = car call, 1 = hall call, 2 = system call
-
-		QueueEntry(int floor, int call_type)
-		{
-			this->floor = floor;
-			this->call_type = call_type;
-		}
-
-		bool operator < (const QueueEntry& element) const
-		{
-			return floor < element.floor;
-		}
-	};
-
 	//elevator car object
 	class Car : public ObjectBase
 	{
 		friend class Elevator;
 	public:
+
+		MeshObject* Mesh; //car mesh object
+
 		Car(Elevator *parent, int number);
 		~Car();
 
@@ -427,6 +395,41 @@ private:
 		bool doorhold_manual;
 	};
 
+	Car* GetCar(int number);
+
+private:
+
+	//elevator parking timer
+	class Timer : public TimerObject
+	{
+	public:
+		Elevator *elevator;
+		int type; //0 = parking timer, 1 = arrival/departure
+		Timer(const std::string &name, Elevator *parent, int Type) : TimerObject(parent, name)
+		{
+			elevator = parent;
+			type = Type;
+		}
+		virtual void Notify();
+	};
+
+	struct QueueEntry
+	{
+		int floor; //floor number
+		int call_type; //0 = car call, 1 = hall call, 2 = system call
+
+		QueueEntry(int floor, int call_type)
+		{
+			this->floor = floor;
+			this->call_type = call_type;
+		}
+
+		bool operator < (const QueueEntry& element) const
+		{
+			return floor < element.floor;
+		}
+	};
+
 	//parking timer object
 	Timer *parking_timer;
 
@@ -468,7 +471,6 @@ private:
 	void PlayMovingSounds();
 	void HandleDequeue(int direction, bool stop_if_empty = true);
 	Car* CreateCar();
-	Car* GetCar(int number);
 
 	//motor sound objects
 	Sound *motorsound;

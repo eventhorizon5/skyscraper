@@ -9044,7 +9044,7 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	else if (name == "elevator")
 	{
 		if (Section == 4)
-			return Simcore->GetElevator(Current)->ElevatorMesh;
+			return Simcore->GetElevator(Current)->GetCar(0)->Mesh;
 		return 0;
 	}
 	else if (name == "external")

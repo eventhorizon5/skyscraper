@@ -201,9 +201,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ControlPressActive = false;
 	ManualStop = false;
 
-	//create a default car object
-	CreateCar();
-
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
 	arrival_delay = new Timer("Arrival Delay Timer", this, 1);
@@ -212,7 +209,9 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	//create object meshes
 	std::string name = "Elevator " + ToString(Number);
 	SetName(name);
-	ElevatorMesh = new MeshObject(this, name);
+
+	//create a default car object
+	CreateCar();
 
 	//create a dynamic mesh for elevator doors
 	DoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Door Container", 0, true);
@@ -277,13 +276,6 @@ Elevator::~Elevator()
 		delete motoridlesound;
 	}
 	motoridlesound = 0;
-
-	if (ElevatorMesh)
-	{
-		ElevatorMesh->parent_deleting = true;
-		delete ElevatorMesh;
-	}
-	ElevatorMesh = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
@@ -1012,11 +1004,11 @@ void Elevator::Loop()
 	{
 		Height = 0;
 		//search through mesh geometry to find actual height
-		for (size_t i = 0; i < ElevatorMesh->Submeshes.size(); i++)
+		for (size_t i = 0; i < GetCar(0)->Mesh->Submeshes.size(); i++)
 		{
-			for (size_t j = 0; j < ElevatorMesh->Submeshes[i].MeshGeometry.size(); j++)
+			for (size_t j = 0; j < GetCar(0)->Mesh->Submeshes[i].MeshGeometry.size(); j++)
 			{
-				float y = sbs->ToLocal(ElevatorMesh->Submeshes[i].MeshGeometry[j].vertex.y);
+				float y = sbs->ToLocal(GetCar(0)->Mesh->Submeshes[i].MeshGeometry[j].vertex.y);
 
 				//set height value
 				if (y > Height)
@@ -2007,7 +1999,7 @@ WallObject* Elevator::AddWall(const std::string &name, const std::string &textur
 {
 	//Adds a wall with the specified dimensions
 
-	WallObject *wall = ElevatorMesh->CreateWallObject(name);
+	WallObject *wall = GetCar(0)->Mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
@@ -2016,7 +2008,7 @@ WallObject* Elevator::AddFloor(const std::string &name, const std::string &textu
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
-	WallObject *wall = ElevatorMesh->CreateWallObject(name);
+	WallObject *wall = GetCar(0)->Mesh->CreateWallObject(name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
@@ -2079,7 +2071,7 @@ void Elevator::Enabled(bool value)
 			Report("disabling elevator");
 	}
 
-	ElevatorMesh->Enable(value);
+	GetCar(0)->Mesh->Enable(value);
 	EnableDoors(value);
 	IsEnabled = value;
 
@@ -2187,9 +2179,9 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 
 	if (position.y >= (GetPosition().y - 0.1) && position.y < GetPosition().y + (Height * 2))
 	{
-		if (ElevatorMesh->InBoundingBox(position, false) == true)
+		if (GetCar(0)->Mesh->InBoundingBox(position, false) == true)
 		{
-			if (ElevatorMesh->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
+			if (GetCar(0)->Mesh->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
 				if (camera == true)
 					CameraOffset = position.y - GetPosition().y;
@@ -4878,7 +4870,7 @@ Trigger* Elevator::AddTrigger(const std::string &name, const std::string &sound_
 
 bool Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	return ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
+	return GetCar(0)->Mesh->ReplaceTexture(oldtexture, newtexture);
 }
 
 std::vector<Sound*> Elevator::GetSound(const std::string &name)
@@ -5987,6 +5979,11 @@ Elevator::Car::Car(Elevator *parent, int number) : ObjectBase(parent)
 	DirMessageSound = false;
 	DoorMessageSound = false;
 
+	std::string name = parent->Name + ":Car " + ToString(number);
+	SetName(name);
+
+	Mesh = new MeshObject(parent, name);
+
 	if (sbs->Verbose)
 		parent->Report("created car " + ToString(number));
 }
@@ -6162,6 +6159,14 @@ Elevator::Car::~Car()
 		}
 		sounds[i] = 0;
 	}
+
+	//delete mesh object
+	if (Mesh)
+	{
+		Mesh->parent_deleting = true;
+		delete Mesh;
+	}
+	Mesh = 0;
 }
 
 }

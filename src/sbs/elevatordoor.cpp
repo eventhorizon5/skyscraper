@@ -951,8 +951,8 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 		{
 			name1 = "Door" + GetNumberText() + ":F1";
 			name2 = "Door" + GetNumberText() + ":F2";
-			sbs->CreateWallBox(elev->ElevatorMesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(elev->ElevatorMesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(elev->GetCar(0)->Mesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(elev->GetCar(0)->Mesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 		else
 		{
