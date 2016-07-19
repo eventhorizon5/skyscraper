@@ -1767,4 +1767,3 @@ void editelevator::On_bSetType_Click(wxCommandEvent& event)
 }
 
 }
-            
