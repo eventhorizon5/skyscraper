@@ -75,6 +75,8 @@ Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSiz
 
 Profiler::~Profiler()
 {
+	SBS::ProfileManager::CleanupMemory();
+
 	//(*Destroy(Profiler)
 	//*)
 }
