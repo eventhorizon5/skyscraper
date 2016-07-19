@@ -30,8 +30,8 @@
 #include "skyscraper.h"
 
 //(*InternalHeaders(Profiler)
-#include <wx/string.h>
 #include <wx/intl.h>
+#include <wx/string.h>
 //*)
 
 namespace Skyscraper {
@@ -49,9 +49,9 @@ END_EVENT_TABLE()
 Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(Profiler)
-	wxFlexGridSizer* FlexGridSizer1;
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
+	wxFlexGridSizer* FlexGridSizer1;
 
 	Create(parent, wxID_ANY, _("Profiler"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
@@ -59,17 +59,18 @@ Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSiz
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	chkAdvanced = new wxCheckBox(this, ID_chkAdvanced, _("Advanced Profiling"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAdvanced"));
 	chkAdvanced->SetValue(false);
-	BoxSizer2->Add(chkAdvanced, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer2->Add(chkAdvanced, 1, wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
-	txtMain = new wxStaticText(this, ID_txtMain, wxEmptyString, wxDefaultPosition, wxSize(400,400), wxALIGN_LEFT, _T("ID_txtMain"));
-	FlexGridSizer1->Add(txtMain, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	BoxSizer1->Add(FlexGridSizer1, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	txtMain = new wxStaticText(this, ID_txtMain, wxEmptyString, wxDefaultPosition, wxSize(400,400), 0, _T("ID_txtMain"));
+	FlexGridSizer1->Add(txtMain, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
+	BoxSizer1->Add(FlexGridSizer1, 1, wxALIGN_TOP, 5);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
 	//*)
 	advanced = false;
+	count = 0;
 }
 
 Profiler::~Profiler()
@@ -85,14 +86,21 @@ void Profiler::Loop()
 
 	advanced = chkAdvanced->GetValue();
 	SBS::enable_advanced_profiling = advanced;
-	SBS::ProfileIterator* profileIterator = 0;
-	profileIterator = SBS::ProfileManager::Get_Iterator();
 
-	std::string output;
-	SBS::ProfileManager::dumpRecursive(output, profileIterator,0);
-	txtMain->SetLabel(output);
+	if (count == 0)
+	{
+		SBS::ProfileIterator* profileIterator = SBS::ProfileManager::Get_Iterator();
 
-	SBS::ProfileManager::Release_Iterator(profileIterator);
+		std::string output;
+		SBS::ProfileManager::dumpRecursive(output, profileIterator, 0);
+		txtMain->SetLabelText(output);
+
+		SBS::ProfileManager::Release_Iterator(profileIterator);
+	}
+	count++;
+
+	if (count == 10)
+		count = 0;
 }
 
 }
