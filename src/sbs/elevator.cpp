@@ -42,6 +42,7 @@
 #include "buttonpanel.h"
 #include "directional.h"
 #include "floorindicator.h"
+#include "elevatorcar.h"
 #include "profiler.h"
 
 #include <time.h>
@@ -5950,229 +5951,22 @@ bool Elevator::CheckInterlocks(bool skip_current_floor)
 	return !status;
 }
 
-Elevator::Car* Elevator::CreateCar()
+ElevatorCar* Elevator::CreateCar()
 {
 	//create a new elevator car object
 
 	int number = (int)Cars.size();
-	Car *car = new Car(this, number);
+	ElevatorCar *car = new ElevatorCar(this, number);
 	Cars.push_back(car);
 	return car;
 }
 
-Elevator::Car* Elevator::GetCar(int number)
+ElevatorCar* Elevator::GetCar(int number)
 {
-	if (number < 0 || number > (int)Cars.size() - 1)
+	if (number < 0 || number >(int)Cars.size() - 1)
 		return 0;
 
 	return Cars[number];
-}
-
-Elevator::Car::Car(Elevator *parent, int number) : ObjectBase(parent)
-{
-	this->parent = parent;
-	this->number = number;
-	carsound = 0;
-	idlesound = 0;
-	alarm = 0;
-	floorbeep = 0;
-	doorhold_direction = 0;
-	doorhold_whichdoors = 0;
-	doorhold_floor = 0;
-	doorhold_manual = 0;
-	announcesnd = 0;
-	musicsound = 0;
-	DirMessageSound = false;
-	DoorMessageSound = false;
-
-	std::string name = parent->Name + ":Car " + ToString(number);
-	SetName(name);
-
-	Mesh = new MeshObject(parent, name);
-
-	if (sbs->Verbose)
-		parent->Report("created car " + ToString(number));
-}
-
-Elevator::Car::~Car()
-{
-	if (sbs->Verbose)
-		parent->Report("deleting car objects");
-
-	//delete controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i])
-		{
-			ControlArray[i]->parent_deleting = true;
-			delete ControlArray[i];
-		}
-		ControlArray[i] = 0;
-	}
-
-	//delete triggers
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-		{
-			TriggerArray[i]->parent_deleting = true;
-			delete TriggerArray[i];
-		}
-		TriggerArray[i] = 0;
-	}
-
-	//delete models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-		{
-			ModelArray[i]->parent_deleting = true;
-			delete ModelArray[i];
-		}
-		ModelArray[i] = 0;
-	}
-
-	//delete lights
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i])
-		{
-			lights[i]->parent_deleting = true;
-			delete lights[i];
-		}
-		lights[i] = 0;
-	}
-
-	//delete directional indicators
-	if (sbs->Verbose)
-		parent->Report("deleting car interior directional indicators");
-
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i])
-		{
-			DirIndicatorArray[i]->parent_deleting = true;
-			delete DirIndicatorArray[i];
-		}
-		DirIndicatorArray[i] = 0;
-	}
-
-	//delete doors
-	if (sbs->Verbose)
-		parent->Report("deleting car doors");
-
-	if (DoorArray.size() > 0)
-	{
-		for (size_t i = 0; i < DoorArray.size(); i++)
-		{
-			if (DoorArray[i])
-			{
-				DoorArray[i]->parent_deleting = true;
-				delete DoorArray[i];
-			}
-			DoorArray[i] = 0;
-		}
-	}
-
-	//delete floor indicators
-	if (sbs->Verbose)
-		parent->Report("deleting car floor indicators");
-
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-		{
-			FloorIndicatorArray[i]->parent_deleting = true;
-			delete FloorIndicatorArray[i];
-		}
-		FloorIndicatorArray[i] = 0;
-	}
-
-	//delete panels
-	if (sbs->Verbose)
-		parent->Report("deleting car button panels");
-
-	for (size_t i = 0; i < PanelArray.size(); i++)
-	{
-		if (PanelArray[i])
-		{
-			PanelArray[i]->parent_deleting = true;
-			delete PanelArray[i];
-		}
-		PanelArray[i] = 0;
-	}
-
-	//delete doors
-	if (sbs->Verbose)
-		parent->Report("deleting car standard doors");
-
-	for (size_t i = 0; i < StdDoorArray.size(); i++)
-	{
-		if (StdDoorArray[i])
-		{
-			StdDoorArray[i]->parent_deleting = true;
-			delete StdDoorArray[i];
-		}
-		StdDoorArray[i] = 0;
-	}
-
-	if (sbs->Verbose)
-		parent->Report("deleting car sounds");
-	if (carsound)
-	{
-		carsound->parent_deleting = true;
-		delete carsound;
-	}
-	carsound = 0;
-	if (alarm)
-	{
-		alarm->parent_deleting = true;
-		delete alarm;
-	}
-	alarm = 0;
-	if (floorbeep)
-	{
-		floorbeep->parent_deleting = true;
-		delete floorbeep;
-	}
-	floorbeep = 0;
-
-	if (idlesound)
-	{
-		idlesound->parent_deleting = true;
-		delete idlesound;
-	}
-	idlesound = 0;
-	if (announcesnd)
-	{
-		announcesnd->parent_deleting = true;
-		delete announcesnd;
-	}
-	announcesnd = 0;
-	if (musicsound)
-	{
-		musicsound->parent_deleting = true;
-		delete musicsound;
-	}
-	musicsound = 0;
-
-	for (size_t i = 0; i < sounds.size(); i++)
-	{
-		if (sounds[i])
-		{
-			sounds[i]->parent_deleting = true;
-			delete sounds[i];
-		}
-		sounds[i] = 0;
-	}
-
-	//delete mesh object
-	if (Mesh)
-	{
-		Mesh->parent_deleting = true;
-		delete Mesh;
-	}
-	Mesh = 0;
 }
 
 }

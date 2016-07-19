@@ -31,6 +31,8 @@
 
 namespace SBS {
 
+class ElevatorCar;
+
 class SBSIMPEXP Elevator : public Object
 {
 	friend class ElevatorDoor;
@@ -332,70 +334,7 @@ public:
 	DynamicMesh* GetDoorContainer() { return DoorContainer; }
 	bool CheckInterlocks(bool skip_current_floor = false);
 
-	//elevator car object
-	class Car : public ObjectBase
-	{
-		friend class Elevator;
-	public:
-
-		MeshObject* Mesh; //car mesh object
-
-		Car(Elevator *parent, int number);
-		~Car();
-
-	private:
-
-		Elevator* parent;
-		int number;
-
-		//sound objects
-		Sound *carsound;
-		Sound *idlesound;
-		Sound *alarm;
-		Sound *floorbeep;
-		std::vector<Sound*> sounds; //generic sounds
-		Sound *announcesnd;
-		Sound *musicsound;
-
-		//interior directional indicators
-		std::vector<DirectionalIndicator*> DirIndicatorArray;
-
-		//doors and shaft doors
-		std::vector<ElevatorDoor*> DoorArray;
-
-		//floor indicators
-		std::vector<FloorIndicator*> FloorIndicatorArray;
-
-		//button panel array
-		std::vector<ButtonPanel*> PanelArray; //elevator button panel objects
-
-		//standard door array
-		std::vector<Door*> StdDoorArray; //pointer array to standard door objects
-
-		//light array
-		std::vector<Light*> lights;
-
-		//Models
-		std::vector<Model*> ModelArray;
-
-		//Controls
-		std::vector<Control*> ControlArray;
-
-		//Triggers
-		std::vector<Trigger*> TriggerArray;
-
-		//misc internals
-		bool DirMessageSound; //true if a directional message sound is queued, to prevent repeats
-		bool DoorMessageSound; //true if a door message sound is queued, to prevent repeats
-
-		//internal data for door open/close hold feature
-		int doorhold_direction;
-		int doorhold_whichdoors;
-		int doorhold_floor;
-		bool doorhold_manual;
-	};
-
-	Car* GetCar(int number);
+	ElevatorCar* GetCar(int number);
 
 private:
 
@@ -438,7 +377,7 @@ private:
 	Timer *departure_delay;
 
 	//Internal elevator simulation data
-	std::vector<Car*> Cars; //car objects
+	std::vector<ElevatorCar*> Cars; //car objects
 	std::vector<QueueEntry> UpQueue; //up call queue
 	std::vector<QueueEntry> DownQueue; //down call queue
 	float ElevatorStart; //elevator vertical starting location
@@ -470,7 +409,7 @@ private:
 	void PlayStoppingSounds(bool emergency = false);
 	void PlayMovingSounds();
 	void HandleDequeue(int direction, bool stop_if_empty = true);
-	Car* CreateCar();
+	ElevatorCar* CreateCar();
 
 	//motor sound objects
 	Sound *motorsound;

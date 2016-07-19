@@ -39,6 +39,7 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "callbutton.h"
