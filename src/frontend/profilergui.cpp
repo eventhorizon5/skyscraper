@@ -89,13 +89,15 @@ void Profiler::Loop()
 
 	if (count == 0)
 	{
-		SBS::ProfileIterator* profileIterator = SBS::ProfileManager::Get_Iterator();
-
 		std::string output;
-		SBS::ProfileManager::dumpRecursive(output, profileIterator, 0);
-		txtMain->SetLabelText(output);
 
-		SBS::ProfileManager::Release_Iterator(profileIterator);
+		/*SBS::ProfileIterator* profileIterator = SBS::ProfileManager::Get_Iterator();
+		SBS::ProfileManager::dumpRecursive(output, profileIterator, 0);
+		SBS::ProfileManager::Release_Iterator(profileIterator);*/
+
+		SBS::ProfileManager::dumpAll(output);
+
+		txtMain->SetLabelText(output);
 	}
 	count++;
 

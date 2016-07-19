@@ -107,7 +107,7 @@ public:
 
 	static void	dumpRecursive(std::string &output, ProfileIterator* profileIterator, int spacing);
 
-	static void	dumpAll();
+	static void	dumpAll(std::string &output);
 
 private:
 	static	ProfileNode			Root;
