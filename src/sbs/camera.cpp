@@ -280,6 +280,8 @@ Ogre::Vector3 Camera::GetRotation()
 
 void Camera::UpdateCameraFloor()
 {
+	SBS_PROFILE("Camera::UpdateCameraFloor");
+
 	if (!MainCamera)
 		return;
 
@@ -491,6 +493,7 @@ void Camera::CheckShaft()
 		return;
 
 	SBS_PROFILE("Camera::CheckShaft");
+
 	for (int i = 1; i <= sbs->GetShaftCount(); i++)
 	{
 		Shaft *shaft = sbs->GetShaft(i);
@@ -513,6 +516,7 @@ void Camera::CheckStairwell()
 		return;
 
 	SBS_PROFILE("Camera::CheckStairwell");
+
 	for (int i = 1; i <= sbs->GetStairsCount(); i++)
 	{
 		Stairs *stairs = sbs->GetStairs(i);
@@ -532,10 +536,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	if (!MainCamera)
 		return;
 
+	SBS_PROFILE("Camera::ClickedObject");
+
 	Ogre::Vector3 pos = GetPosition();
 
 	//cast a ray from the camera in the direction of the clicked position
-	SBS_PROFILE("Camera::ClickedObject");
 	int width = MainCamera->getViewport()->getActualWidth();
 	int height = MainCamera->getViewport()->getActualHeight();
 

@@ -31,6 +31,7 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "camera.h"
+#include "profiler.h"
 #include "model.h"
 
 namespace SBS {
@@ -153,6 +154,8 @@ void Model::AddToParent()
 void Model::Loop()
 {
 	//runloop, called by parent to allow for switching parents
+
+	SBS_PROFILE("Model::Loop");
 
 	Floor *floor = GetParent()->ConvertTo<Floor>();
 	Elevator *elevator = GetParent()->ConvertTo<Elevator>();

@@ -772,12 +772,7 @@ void Skyscraper::Loop()
 		return;
 
 	//update Caelum
-	if (mCaelumSystem)
-	{
-		mCaelumSystem->notifyCameraChanged(mCamera);
-		mCaelumSystem->setTimeScale(SkyMult);
-		mCaelumSystem->updateSubcomponents(float(active_engine->GetSystem()->GetElapsedTime()) / 1000);
-	}
+	UpdateSky();
 
 	//render graphics
 	Render();
@@ -1704,6 +1699,19 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	}
 
 	return true;
+}
+
+void Skyscraper::UpdateSky()
+{
+	//update sky
+	SBS_PROFILE_MAIN("Sky");
+
+	if (mCaelumSystem)
+	{
+		mCaelumSystem->notifyCameraChanged(mCamera);
+		mCaelumSystem->setTimeScale(SkyMult);
+		mCaelumSystem->updateSubcomponents(float(active_engine->GetSystem()->GetElapsedTime()) / 1000);
+	}
 }
 
 void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage)

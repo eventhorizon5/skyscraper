@@ -2472,6 +2472,8 @@ void Elevator::UpdateFloorIndicators()
 {
 	//updates all floor indicators
 
+	SBS_PROFILE("Elevator::UpdateFloorIndicators");
+
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
@@ -3311,6 +3313,8 @@ void Elevator::SetDirectionalIndicators(int floor, bool UpLight, bool DownLight)
 void Elevator::UpdateDirectionalIndicators()
 {
 	//updates all interior active direction indicators
+
+	SBS_PROFILE("Elevator::UpdateDirectionalIndicators");
 
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
@@ -5374,6 +5378,8 @@ bool Elevator::Check(Ogre::Vector3 position)
 
 	if (IsEnabled == false)
 		return false;
+
+	SBS_PROFILE("Elevator::Check");
 
 	if (IsInElevator(position, true) == true && IsEnabled)
 	{

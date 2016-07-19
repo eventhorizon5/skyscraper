@@ -942,6 +942,8 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 	if (!elevator)
 		return;
 
+	SBS_PROFILE("Shaft::Check");
+
 	if (IsInShaft(position) == true)
 	{
 		if (InsideShaft == false && sbs->InElevator == false)
@@ -1077,6 +1079,8 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 void Shaft::Loop()
 {
 	//shaft runloop
+
+	SBS_PROFILE("Shaft::Loop");
 
 	for (size_t i = 0; i < ModelArray.size(); i++)
 	{

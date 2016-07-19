@@ -2232,6 +2232,8 @@ void SBS::ProcessCallButtons()
 {
 	//process all registered call buttons
 
+	SBS_PROFILE("SBS::ProcessCallButtons");
+
 	for (size_t i = 0; i < buttoncallbacks.size(); i++)
 	{
 		size_t size = buttoncallbacks.size();
@@ -2247,6 +2249,8 @@ void SBS::ProcessCallButtons()
 
 void SBS::ProcessDoors()
 {
+	SBS_PROFILE("SBS::ProcessDoors");
+
 	//process all registered doors
 	for (size_t i = 0; i < doorcallbacks.size(); i++)
 	{
@@ -2262,6 +2266,8 @@ void SBS::ProcessDoors()
 
 void SBS::ProcessTimers()
 {
+	SBS_PROFILE("SBS::ProcessTimers");
+
 	//process all registered timers
 	for (size_t i = 0; i < timercallbacks.size(); i++)
 	{
@@ -2322,6 +2328,8 @@ void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
 void SBS::CheckAutoAreas()
 {
 	//check all automatic areas
+
+	SBS_PROFILE("SBS::CheckAutoAreas");
 
 	Ogre::Vector3 position = camera->GetPosition();
 	int floor = camera->CurrentFloor;

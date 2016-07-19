@@ -1319,6 +1319,7 @@ void ElevatorDoor::Loop()
 {
 	//main loop
 	SBS_PROFILE("ElevatorDoor::Loop");
+
 	if (OpenDoor == 1)
 		MoveDoors(true, false);
 	if (OpenDoor == -1)

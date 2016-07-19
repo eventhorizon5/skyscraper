@@ -922,6 +922,8 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 {
 	//check to see if user (camera) is in the stairwell
 
+	SBS_PROFILE("Stairs::Check");
+
 	if (IsInStairwell(position) == true)
 	{
 		if (InsideStairwell == false)
@@ -1009,6 +1011,8 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 void Stairs::Loop()
 {
 	//stairwell runloop
+
+	SBS_PROFILE("Stairs::Loop");
 
 	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
