@@ -29,6 +29,7 @@
 #include "floor.h"
 #include "sound.h"
 #include "texture.h"
+#include "profiler.h"
 #include "escalator.h"
 
 namespace SBS {
@@ -132,6 +133,8 @@ bool Escalator::ReportError(const std::string &message)
 void Escalator::Loop()
 {
 	//run loop
+
+	SBS_PROFILE("Escalator::Loop");
 
 	if (!IsEnabled() || !Run)
 	{

@@ -800,6 +800,8 @@ void Floor::UpdateFloorIndicators()
 {
 	//updates all floor indicators
 
+	SBS_PROFILE("Floor::UpdateFloorIndicators");
+
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
@@ -813,6 +815,8 @@ void Floor::Loop()
 
 	if (IsEnabled == false)
 		return;
+
+	SBS_PROFILE("Floor::Loop");
 
 	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{

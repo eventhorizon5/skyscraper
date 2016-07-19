@@ -33,6 +33,7 @@
 #include "camera.h"
 #include "sound.h"
 #include "action.h"
+#include "profiler.h"
 #include "trigger.h"
 
 namespace SBS {
@@ -267,6 +268,8 @@ void Trigger::Loop()
 
 	if (is_enabled == false)
 		return;
+
+	SBS_PROFILE("Trigger::Loop");
 
 	Ogre::Vector3 cam = sbs->camera->GetPosition();
 	bool changed = false;

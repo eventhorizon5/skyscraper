@@ -23,7 +23,7 @@
 								<object class="wxScrollBar" name="ID_sNumber" variable="sNumber" member="yes">
 									<style>wxSB_HORIZONTAL</style>
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxALL|wxEXPAND</flag>
 							</object>
 							<object class="sizeritem">
 								<object class="wxStaticText" name="ID_tFloor" variable="tFloor" member="yes">
@@ -37,7 +37,7 @@
 								<object class="wxScrollBar" name="ID_sFloor" variable="sFloor" member="yes">
 									<style>wxSB_HORIZONTAL</style>
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxALL|wxEXPAND</flag>
 							</object>
 							<object class="sizeritem">
 								<object class="wxFlexGridSizer" variable="FlexGridSizer4" member="no">
@@ -87,7 +87,7 @@
 													<label>Inspection Service</label>
 													<handler function="On_bInsService_Toggle" entry="EVT_TOGGLEBUTTON" />
 												</object>
-												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -104,9 +104,10 @@
 												<object class="wxRadioButton" name="ID_Fire1Off" variable="Fire1Off" member="yes">
 													<label>Off</label>
 													<selected>1</selected>
+													<style>wxRB_GROUP</style>
 													<handler function="On_Fire1Off_Select" entry="EVT_RADIOBUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxALIGN_LEFT</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -115,7 +116,7 @@
 													<label>On</label>
 													<handler function="On_Fire1On_Select" entry="EVT_RADIOBUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxALIGN_LEFT</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -124,7 +125,7 @@
 													<label>Bypass</label>
 													<handler function="On_Fire1Bypass_Select" entry="EVT_RADIOBUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxALIGN_LEFT</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -140,9 +141,10 @@
 											<object class="sizeritem">
 												<object class="wxRadioButton" name="ID_Fire2Off" variable="Fire2Off" member="yes">
 													<label>Off</label>
+													<style>wxRB_GROUP</style>
 													<handler function="On_Fire2Off_Select" entry="EVT_RADIOBUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxALIGN_LEFT</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -151,7 +153,7 @@
 													<label>On</label>
 													<handler function="On_Fire2On_Select" entry="EVT_RADIOBUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxALIGN_LEFT</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -160,7 +162,7 @@
 													<label>Hold</label>
 													<handler function="On_Fire2Hold_Select" entry="EVT_RADIOBUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxALIGN_LEFT</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -216,7 +218,7 @@
 													<label>Door</label>
 													<style>wxALIGN_CENTRE</style>
 												</object>
-												<flag>wxEXPAND|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+												<flag>wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -224,7 +226,7 @@
 												<object class="wxScrollBar" name="ID_sDoor" variable="sDoor" member="yes">
 													<style>wxSB_HORIZONTAL</style>
 												</object>
-												<flag>wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxBOTTOM|wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -233,7 +235,7 @@
 													<label>Refresh Values</label>
 													<handler function="On_bRefresh_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -242,7 +244,7 @@
 													<label>Dump Floor List</label>
 													<handler function="On_bDumpFloors_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -251,7 +253,7 @@
 													<label>Dump Queues</label>
 													<handler function="On_bDumpQueues_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -291,7 +293,7 @@
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_TOP</flag>
 						<border>5</border>
 						<option>2</option>
 					</object>
@@ -307,35 +309,35 @@
 											<focused>1</focused>
 											<handler function="On_bCall_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bGo" variable="bGo" member="yes">
 											<label>Go</label>
 											<handler function="On_bGo_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bOpen" variable="bOpen" member="yes">
 											<label>Open</label>
 											<handler function="On_bOpen_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bOpenManual" variable="bOpenManual" member="yes">
 											<label>Open Manual</label>
 											<handler function="On_bOpenManual_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bOpenShaftDoor" variable="bOpenShaftDoor" member="yes">
 											<label>Open Shaft Doors</label>
 											<handler function="On_bOpenShaftDoor_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -344,19 +346,19 @@
 											<label>Emergency Stop</label>
 											<handler function="On_bStop_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bChime" variable="bChime" member="yes">
 											<label>Chime</label>
 											<handler function="On_bChime_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxALL|wxALIGN_TOP</flag>
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
@@ -367,35 +369,35 @@
 											<label>Enqueue Up</label>
 											<handler function="On_bEnqueueUp_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bEnqueueDown" variable="bEnqueueDown" member="yes">
 											<label>Enqueue Down</label>
 											<handler function="On_bEnqueueDown_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bClose" variable="bClose" member="yes">
 											<label>Close</label>
 											<handler function="On_bClose_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bCloseManual" variable="bCloseManual" member="yes">
 											<label>Close Manual</label>
 											<handler function="On_bCloseManual_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bCloseShaftDoor" variable="bCloseShaftDoor" member="yes">
 											<label>Close Shaft Doors</label>
 											<handler function="On_bCloseShaftDoor_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -404,28 +406,28 @@
 											<label>Hold Doors</label>
 											<handler function="On_bHoldDoors_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bStopDoors" variable="bStopDoors" member="yes">
 											<label>Stop Doors</label>
 											<handler function="On_bStopDoors_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxALL|wxALIGN_TOP</flag>
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxRIGHT|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+						<flag>wxRIGHT|wxALIGN_TOP</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+				<flag>wxEXPAND</flag>
 			</object>
 			<object class="sizeritem">
 				<object class="wxBoxSizer" variable="BoxSizer3" member="yes">
@@ -818,7 +820,7 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxFlexGridSizer" variable="FlexGridSizer9" member="no">
@@ -1285,15 +1287,15 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxLEFT|wxALIGN_TOP</flag>
 										<border>5</border>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxALL|wxALIGN_TOP</flag>
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP</flag>
 						<border>5</border>
 					</object>
 					<object class="sizeritem">
@@ -1464,10 +1466,10 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_TOP</flag>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxALL|wxALIGN_LEFT</flag>
 							</object>
 							<object class="sizeritem">
 								<object class="wxStaticBoxSizer" variable="StaticBoxSizer3" member="yes">
@@ -1589,13 +1591,13 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_TOP</flag>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxALL|wxALIGN_LEFT</flag>
 							</object>
 						</object>
-						<flag>wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_TOP</flag>
 						<border>5</border>
 					</object>
 					<object class="sizeritem">
@@ -2017,10 +2019,10 @@
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxALL|wxALIGN_TOP</flag>
 							</object>
 						</object>
-						<flag>wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_TOP</flag>
 						<border>5</border>
 					</object>
 					<object class="sizeritem">
@@ -2274,11 +2276,11 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_TOP</flag>
 										<border>5</border>
 									</object>
 								</object>
-								<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxEXPAND</flag>
 								<border>5</border>
 							</object>
 							<object class="sizeritem">
@@ -2455,17 +2457,17 @@
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxALIGN_LEFT</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxBOTTOM|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_TOP</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxALL|wxEXPAND</flag>
 			</object>
 		</object>
 	</object>

@@ -349,14 +349,13 @@ void ProfileManager::dumpRecursive(std::string &output, ProfileIterator* profile
 	}
 }
 
-void ProfileManager::dumpAll()
+void ProfileManager::dumpAll(std::string &output)
 {
 	ProfileIterator* profileIterator = 0;
 	profileIterator = ProfileManager::Get_Iterator();
 
-	std::string output;
 	dumpRecursive(output, profileIterator, 0);
-	printf("%s\n", output.c_str());
+	//printf("%s\n", output.c_str());
 
 	ProfileManager::Release_Iterator(profileIterator);
 }

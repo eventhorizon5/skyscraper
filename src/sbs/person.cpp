@@ -31,6 +31,7 @@
 #include "control.h"
 #include "route.h"
 #include "random.h"
+#include "profiler.h"
 #include "person.h"
 
 namespace SBS {
@@ -161,6 +162,8 @@ void Person::ProcessRoute()
 {
 	if (IsRouteActive() == false)
 		return;
+
+	SBS_PROFILE("Person::ProcessRoute");
 
 	Floor *floor_obj = sbs->GetFloor(current_floor);
 

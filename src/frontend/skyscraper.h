@@ -109,7 +109,6 @@ public:
 	virtual int OnExit(void);
 	void DrawBackground();
 
-	//engine related stuff
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
@@ -160,6 +159,7 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	void EnableSky(bool value);
+	void UpdateSky();
 	void UnregisterDebugPanel() { dpanel = 0; }
 	virtual void MacOpenFile(const wxString &filename);
 

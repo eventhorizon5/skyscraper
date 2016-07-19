@@ -15,7 +15,7 @@
 								<object class="wxCheckBox" name="ID_chkAdvanced" variable="chkAdvanced" member="yes">
 									<label>Advanced Profiling</label>
 								</object>
-								<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -28,14 +28,13 @@
 						<object class="wxStaticText" name="ID_txtMain" variable="txtMain" member="yes">
 							<label></label>
 							<size>400,400</size>
-							<style>wxALIGN_LEFT</style>
 						</object>
-						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+				<flag>wxALIGN_TOP</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>
