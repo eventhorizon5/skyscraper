@@ -29,6 +29,7 @@
 #include "dynamicmesh.h"
 #include "mesh.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "door.h"
@@ -480,7 +481,7 @@ CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string
 		Elevator *elev = sbs->GetElevator(elevators[i]);
 		if (elev)
 		{
-			if (elev->IsServicedFloor(Number) == true)
+			if (elev->GetCar(0)->IsServicedFloor(Number) == true)
 			{
 				check = true;
 				break;
@@ -1044,7 +1045,7 @@ DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, bool relative
 	if (active_direction == false)
 	{
 		//if active_direction is false, only create indicator if the elevator serves the floor
-		if (elev->IsServicedFloor(Number) == false)
+		if (elev->GetCar(0)->IsServicedFloor(Number) == false)
 			return 0;
 	}
 
@@ -1476,7 +1477,7 @@ void Floor::GetElevatorList(std::vector<int> &listing, bool get_locals, bool get
 		{
 			std::string type = SetCaseCopy(elev->Type, false);
 
-			if (elev->IsServicedFloor(Number) == true)
+			if (elev->GetCar(0)->IsServicedFloor(Number) == true)
 			{
 				if (get_locals == true && type == "local")
 					listing.push_back(elev->Number);
@@ -1536,7 +1537,7 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 		if (elev)
 		{
 			std::string type = SetCaseCopy(elev->Type, false);
-			bool serviced = elev->IsServicedFloor(DestinationFloor);
+			bool serviced = elev->GetCar(0)->IsServicedFloor(DestinationFloor);
 			CallButton *button = GetCallButton(elev->Number);
 
 			if (serviced == true && type == ElevatorType && button)
@@ -1566,9 +1567,9 @@ std::vector<int> Floor::GetDirectFloors(bool include_service)
 			if (include_service == false && type == "service")
 				continue;
 
-			for (int j = 0; j < elev->GetServicedFloorCount(); j++)
+			for (int j = 0; j < elev->GetCar(0)->GetServicedFloorCount(); j++)
 			{
-				int floor = elev->GetServicedFloor(j);
+				int floor = elev->GetCar(0)->GetServicedFloor(j);
 
 				//skip this floor
 				if (floor == Number)

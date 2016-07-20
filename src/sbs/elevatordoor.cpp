@@ -92,7 +92,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
 	nudgetimer = new Timer("Nudge Timer", this, elev, 1);
 
 	//initialize shaft door array
-	ShaftDoors.resize(elev->ServicedFloors.size());
+	ShaftDoors.resize(elev->GetCar(0)->ServicedFloors.size());
 	for (size_t i = 0; i < ShaftDoors.size(); i++)
 		ShaftDoors[i] = 0;
 
@@ -506,7 +506,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		DoorIsRunning = true;
 		door_changed = false;
 
-		index = elev->GetFloorIndex(ShaftDoorFloor);
+		index = elev->GetCar(0)->GetFloorIndex(ShaftDoorFloor);
 		int index2 = GetManualIndex(ShaftDoorFloor);
 
 		if (ShaftDoorsExist(ShaftDoorFloor) == false && index2 == -1)
@@ -800,10 +800,10 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 	//adds a shaft door component; remake of AddShaftDoor command
 
 	//exit if floor is not serviced by the elevator
-	if (!elev->IsServicedFloor(floor))
+	if (!elev->GetCar(0)->IsServicedFloor(floor))
 		return 0;
 
-	int index = elev->GetFloorIndex(floor);
+	int index = elev->GetCar(0)->GetFloorIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -828,9 +828,9 @@ void ElevatorDoor::AddShaftDoorsComponent(const std::string &name, const std::st
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
 	//create doors
-	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
+	for (size_t i = 0; i < elev->GetCar(0)->ServicedFloors.size(); i++)
 	{
-		int floor = elev->ServicedFloors[i];
+		int floor = elev->GetCar(0)->ServicedFloors[i];
 		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	}
 }
@@ -1008,7 +1008,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishShaftDoor(int floor, bool DoorWal
 	std::string floornum = ToString(floor);
 
 	//exit if floor is not serviced by the elevator
-	if (!elev->IsServicedFloor(floor))
+	if (!elev->GetCar(0)->IsServicedFloor(floor))
 	{
 		elev->ReportError("Floor " + floornum + " not a serviced floor");
 		return 0;
@@ -1021,7 +1021,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishShaftDoor(int floor, bool DoorWal
 	}
 
 	DoorWrapper *wrapper = 0;
-	int index = elev->GetFloorIndex(floor);
+	int index = elev->GetCar(0)->GetFloorIndex(floor);
 
 	if (index > -1)
 		wrapper = ShaftDoors[index];
@@ -1033,8 +1033,8 @@ bool ElevatorDoor::FinishShaftDoors(bool DoorWalls, bool TrackWalls)
 {
 	//finish all shaft doors
 
-	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
-		FinishShaftDoor(elev->ServicedFloors[i], DoorWalls, TrackWalls);
+	for (size_t i = 0; i < elev->GetCar(0)->ServicedFloors.size(); i++)
+		FinishShaftDoor(elev->GetCar(0)->ServicedFloors[i], DoorWalls, TrackWalls);
 
 	return true;
 }
@@ -1049,9 +1049,9 @@ bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::stri
 	ShaftDoorThickness = thickness;
 
 	//create doors
-	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
+	for (size_t i = 0; i < elev->GetCar(0)->ServicedFloors.size(); i++)
 	{
-		if (!AddShaftDoor(elev->ServicedFloors[i], lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
+		if (!AddShaftDoor(elev->GetCar(0)->ServicedFloors[i], lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
 			return false;
 	}
 
@@ -1072,12 +1072,12 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::stri
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
 
 	//exit if floor is not serviced by the elevator
-	if (!elev->IsServicedFloor(floor))
+	if (!elev->GetCar(0)->IsServicedFloor(floor))
 		return 0;
 
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
-	int index = elev->GetFloorIndex(floor);
+	int index = elev->GetCar(0)->GetFloorIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1143,7 +1143,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 		return;
 
 	//exit if elevator doesn't service the requested floor
-	int index = elev->GetFloorIndex(floor);
+	int index = elev->GetCar(0)->GetFloorIndex(floor);
 
 	if (index == -1)
 		return;
@@ -1201,7 +1201,7 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	//returns the internal door state
 	if (ShaftDoorsExist(floor))
 	{
-		int index = elev->GetFloorIndex(floor);
+		int index = elev->GetCar(0)->GetFloorIndex(floor);
 
 		if (index > -1)
 		{
@@ -1352,7 +1352,7 @@ float ElevatorDoor::GetShaftDoorAltitude(int floor)
 {
 	//returns altitude of the shaft door on the specified floor
 
-	int index = elev->GetFloorIndex(floor);
+	int index = elev->GetCar(0)->GetFloorIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1389,7 +1389,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 {
 	//return true if shaft doors have been created for this door on the specified floor
 
-	int index = elev->GetFloorIndex(floor);
+	int index = elev->GetCar(0)->GetFloorIndex(floor);
 
 	if (index != -1)
 	{
@@ -1963,7 +1963,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::GetShaftDoorWrapper(int floor)
 {
 	//return shaft door wrapper object for the specified floor
 
-	int index = elev->GetFloorIndex(floor);
+	int index = elev->GetCar(0)->GetFloorIndex(floor);
 
 	if (index == -1)
 		return 0;

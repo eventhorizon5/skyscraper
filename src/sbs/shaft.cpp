@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
 #include "sound.h"
@@ -312,10 +313,10 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 				Elevator *elevator = sbs->GetElevator(elevators[i]);
 				if (elevator)
 				{
-					for(size_t j = 0; j < elevator->ServicedFloors.size(); j++)
+					for(size_t j = 0; j < elevator->GetCar(0)->ServicedFloors.size(); j++)
 					{
-						if (elevator->ServicedFloors[j] == floor)
-							elevator->ShaftDoorsEnabled(0, elevator->ServicedFloors[j], value);
+						if (elevator->GetCar(0)->ServicedFloors[j] == floor)
+							elevator->ShaftDoorsEnabled(0, elevator->GetCar(0)->ServicedFloors[j], value);
 					}
 				}
 			}

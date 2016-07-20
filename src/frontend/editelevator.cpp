@@ -32,6 +32,7 @@
 #include "floor.h"
 #include "elevator.h"
 #include "elevatordoor.h"
+#include "elevatorcar.h"
 #include "callbutton.h"
 #include "debugpanel.h"
 #include "editelevator.h"
@@ -1155,7 +1156,7 @@ void editelevator::On_bSetDeceleration_Click(wxCommandEvent& event)
 void editelevator::On_bDumpFloors_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->DumpServicedFloors();
+		elevator->GetCar(0)->DumpServicedFloors();
 }
 
 void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
@@ -1214,7 +1215,7 @@ void editelevator::Loop()
 		last_elevator = elev_num;
 
 		//set floor range slider
-		sFloor->SetScrollbar(0, 1, elevator->GetServicedFloorCount(), 1);
+		sFloor->SetScrollbar(0, 1, elevator->GetCar(0)->GetServicedFloorCount(), 1);
 
 		//set door range slider
 		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
@@ -1237,7 +1238,7 @@ void editelevator::Loop()
 	}
 
 	tElevator->SetLabel(wxT("Number " + ToString(sNumber->GetThumbPosition() + 1)));
-	floor_number = elevator->GetServicedFloor(sFloor->GetThumbPosition());
+	floor_number = elevator->GetCar(0)->GetServicedFloor(sFloor->GetThumbPosition());
 	wxString floor_name;
 	if (Simcore->GetFloor(floor_number))
 		floor_name = Simcore->GetFloor(floor_number)->ID;
@@ -1306,7 +1307,7 @@ void editelevator::Loop()
 	txtActiveCallFloor->SetValue(ToString(elevator->GetActiveCallFloor()));
 	txtActiveDirection->SetValue(ToString(elevator->ActiveDirection));
 	txtManualMove->SetValue(ToString(elevator->ManualMove));
-	txtMusicPosition->SetValue(TruncateNumber(elevator->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(elevator->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(elevator->MusicPosition.z, 2));
+	txtMusicPosition->SetValue(TruncateNumber(elevator->GetCar(0)->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(elevator->GetCar(0)->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(elevator->GetCar(0)->MusicPosition.z, 2));
 
 	//changeable values
 	if (chkVisible->GetValue() != elevator->IsEnabled)

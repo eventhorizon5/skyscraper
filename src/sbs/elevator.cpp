@@ -157,12 +157,10 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	motorsound = 0;
 	motoridlesound = 0;
 	StartingFloor = 0;
-	Fan = true;
 	NotifyEarly = sbs->GetConfigInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
 	Running = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Run", true);
 	Notified = false;
 	Parking = false;
-	MusicPosition = 0;
 	Music = sbs->GetConfigString("Skyscraper.SBS.Elevator.Music", "");
 	MusicOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOn", true);
 	MusicOnMove = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOnMove", false);
@@ -322,16 +320,16 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		return ReportError("Invalid starting floor " + ToString(floor));
 
 	//add elevator's starting floor to serviced floor list - this also ensures that the list is populated to prevent errors
-	if (IsServicedFloor(floor) == false)
-		AddServicedFloor(floor);
+	if (GetCar(0)->IsServicedFloor(floor) == false)
+		GetCar(0)->AddServicedFloor(floor);
 
 	//ensure that serviced floors are valid for the shaft
-	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ServicedFloors.size(); i++)
 	{
-		if (GetShaft()->IsValidFloor(ServicedFloors[i]) == false)
+		if (GetShaft()->IsValidFloor(GetCar(0)->ServicedFloors[i]) == false)
 		{
 			std::string snum = ToString(AssignedShaft);
-			std::string num = ToString(ServicedFloors[i]);
+			std::string num = ToString(GetCar(0)->ServicedFloors[i]);
 			return ReportError("Floor " + num + " not valid for shaft " + snum);
 		}
 	}
@@ -408,7 +406,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	GetCar(0)->floorbeep = new Sound(this, "Floor Beep", true);
 	GetCar(0)->announcesnd = new Sound(this, "Announcement Sound", true);
 	GetCar(0)->musicsound = new Sound(this, "Music Sound", true);
-	GetCar(0)->musicsound->Move(MusicPosition);
+	GetCar(0)->musicsound->Move(GetCar(0)->MusicPosition);
 
 	//set elevator's floor
 	ElevatorFloor = floor;
@@ -1026,9 +1024,9 @@ void Elevator::Loop()
 		GetCar(0)->announcesnd->SetPositionRelative(top);
 
 		//set default music position to elevator height
-		if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
-			MusicPosition = top;
-		GetCar(0)->musicsound->SetPositionRelative(MusicPosition);
+		if (GetCar(0)->MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
+			GetCar(0)->MusicPosition = top;
+		GetCar(0)->musicsound->SetPositionRelative(GetCar(0)->MusicPosition);
 	}
 
 	//perform first-run tasks
@@ -1088,7 +1086,7 @@ void Elevator::Loop()
 	//play car idle sound if in elevator, or if doors open
 	if (CarIdleSound != "")
 	{
-		if (GetCar(0)->idlesound->IsPlaying() == false && Fan == true)
+		if (GetCar(0)->idlesound->IsPlaying() == false && GetCar(0)->Fan == true)
 		{
 			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
 			{
@@ -1104,7 +1102,7 @@ void Elevator::Loop()
 		}
 		else
 		{
-			if (Fan == false && GetCar(0)->idlesound->IsPlaying() == true)
+			if (GetCar(0)->Fan == false && GetCar(0)->idlesound->IsPlaying() == true)
 			{
 				if (sbs->Verbose)
 					Report("stopping car idle sound");
@@ -1330,7 +1328,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//if destination floor is not a serviced floor, reset and exit
-		if (IsServicedFloor(GotoFloor) == false && InspectionService == false && ManualMove == 0)
+		if (GetCar(0)->IsServicedFloor(GotoFloor) == false && InspectionService == false && ManualMove == 0)
 		{
 			ReportError("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
@@ -1730,7 +1728,7 @@ void Elevator::MoveElevatorToFloor()
 				Report("on floor " + ToString(GetFloor()));
 
 			//play floor beep sound if floor is a serviced floor
-			if (IsServicedFloor(GetFloor()) == true)
+			if (GetCar(0)->IsServicedFloor(GetFloor()) == true)
 				PlayFloorBeep();
 
 			//update floor indicators
@@ -1996,33 +1994,6 @@ void Elevator::FinishMove()
 	FinishedMove = true;
 }
 
-WallObject* Elevator::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
-{
-	//Adds a wall with the specified dimensions
-
-	WallObject *wall = GetCar(0)->Mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
-	return wall;
-}
-
-WallObject* Elevator::AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
-{
-	//Adds a floor with the specified dimensions and vertical offset
-
-	WallObject *wall = GetCar(0)->Mesh->CreateWallObject(name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
-	return wall;
-}
-
-FloorIndicator* Elevator::AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
-{
-	//Creates a floor indicator at the specified location
-
-	FloorIndicator* indicator = new FloorIndicator(this, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
-	GetCar(0)->FloorIndicatorArray.push_back(indicator);
-	return indicator;
-}
-
 void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
@@ -2241,59 +2212,6 @@ int  Elevator::GetEmergencyStopStatus()
 	return EmergencyStop;
 }
 
-void Elevator::DumpServicedFloors()
-{
-	//dump serviced floors list
-
-	sbs->Report("\n--- Elevator " + ToString(Number) + "'s Serviced Floors ---\n");
-	for (size_t i = 0; i < ServicedFloors.size(); i++)
-		sbs->Report(ToString((int)i) + " - " + ToString(ServicedFloors[i]));
-	sbs->Report("");
-}
-
-bool Elevator::AddServicedFloor(int number)
-{
-	if (sbs->Verbose)
-		Report("adding serviced floor " + ToString(number));
-
-	//check if floor is outside valid floor range
-	if (sbs->IsValidFloor(number) == false)
-		return ReportError("AddServicedFloor: Invalid floor " + ToString(number));
-
-	if (IsServicedFloor(number) == false)
-	{
-		ServicedFloors.push_back(number);
-		std::sort(ServicedFloors.begin(), ServicedFloors.end());
-	}
-	return true;
-}
-
-void Elevator::RemoveServicedFloor(int number)
-{
-	if (sbs->Verbose)
-		Report("removing serviced floor " + ToString(number));
-	if (IsServicedFloor(number) == true)
-	{
-		int index = GetFloorIndex(number);
-		if (index > -1)
-			ServicedFloors.erase(ServicedFloors.begin() + index);
-	}
-}
-
-ButtonPanel* Elevator::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
-{
-	//create a new button panel object and store the pointer
-
-	int index = (int)GetCar(0)->PanelArray.size();
-
-	if (sbs->Verbose)
-		Report("creating button panel " + ToString(index + 1));
-
-	ButtonPanel* panel = new ButtonPanel(this, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
-	GetCar(0)->PanelArray.push_back(panel);
-	return panel;
-}
-
 void Elevator::UpdateFloorIndicators()
 {
 	//updates all floor indicators
@@ -2341,25 +2259,6 @@ std::string Elevator::GetFloorSkipText()
 {
 	//get the floor skip text
 	return FloorSkipText;
-}
-
-bool Elevator::IsServicedFloor(int floor, bool report)
-{
-	//returns true if floor is in serviced floor list, otherwise false
-
-	int index = GetFloorIndex(floor);
-	if (index == -1)
-	{
-		if (sbs->Verbose && report == true)
-			Report("Floor " + ToString(floor) + " is not a serviced floor");
-		return false;
-	}
-	else
-	{
-		if (sbs->Verbose && report == true)
-			Report("Floor " + ToString(floor) + " is a serviced floor");
-		return true;
-	}
 }
 
 bool Elevator::InServiceMode()
@@ -2868,9 +2767,9 @@ bool Elevator::SetRecallFloor(int floor)
 {
 	//set elevator's fire recall floor
 
-	if (ServicedFloors.size() == 0)
+	if (GetCar(0)->ServicedFloors.size() == 0)
 		return ReportError("No serviced floors assigned");
-	if (IsServicedFloor(floor) == false)
+	if (GetCar(0)->IsServicedFloor(floor) == false)
 		return ReportError("Invalid recall floor");
 
 	if (sbs->Verbose)
@@ -2884,9 +2783,9 @@ bool Elevator::SetAlternateRecallFloor(int floor)
 {
 	//set elevator's alternate fire recall floor
 
-	if (ServicedFloors.size() == 0)
+	if (GetCar(0)->ServicedFloors.size() == 0)
 		return ReportError("No serviced floors assigned");
-	if (IsServicedFloor(floor) == false)
+	if (GetCar(0)->IsServicedFloor(floor) == false)
 		return ReportError("Invalid alternate recall floor");
 
 	if (sbs->Verbose)
@@ -2900,9 +2799,9 @@ bool Elevator::SetACPFloor(int floor)
 {
 	//set elevator's ACP floor
 
-	if (ServicedFloors.size() == 0)
+	if (GetCar(0)->ServicedFloors.size() == 0)
 		return ReportError("No serviced floors assigned");
-	if (IsServicedFloor(floor) == false)
+	if (GetCar(0)->IsServicedFloor(floor) == false)
 		return ReportError("Invalid ACP floor");
 
 	if (sbs->Verbose)
@@ -3075,13 +2974,13 @@ bool Elevator::SetDownButton(bool value)
 int Elevator::GetTopFloor()
 {
 	//returns highest serviced floor
-	return ServicedFloors[ServicedFloors.size() - 1];
+	return GetCar(0)->ServicedFloors[GetCar(0)->ServicedFloors.size() - 1];
 }
 
 int Elevator::GetBottomFloor()
 {
 	//returns lowest serviced floor
-	return ServicedFloors[0];
+	return GetCar(0)->ServicedFloors[0];
 }
 
 void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
@@ -3091,10 +2990,10 @@ void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bo
 	if (sbs->Verbose)
 		Report("adding directional indicators");
 
-	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ServicedFloors.size(); i++)
 	{
-		if (sbs->GetFloor(ServicedFloors[i]))
-			sbs->GetFloor(ServicedFloors[i])->AddDirectionalIndicator(Number, relative, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+		if (sbs->GetFloor(GetCar(0)->ServicedFloors[i]))
+			sbs->GetFloor(GetCar(0)->ServicedFloors[i])->AddDirectionalIndicator(Number, relative, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	}
 }
 
@@ -3506,7 +3405,7 @@ ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const s
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
-	if (IsServicedFloor(floor) == true && GetDoor(number))
+	if (GetCar(0)->IsServicedFloor(floor) == true && GetDoor(number))
 		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
 	else
 		return 0;
@@ -3517,7 +3416,7 @@ ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const s
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
-	if (IsServicedFloor(floor) == true && GetDoor(number))
+	if (GetCar(0)->IsServicedFloor(floor) == true && GetDoor(number))
 		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	else
 		return 0;
@@ -3804,10 +3703,10 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const std::string &
 	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
 	sbs->GetTextureManager()->SetAutoSize(false, false);
 
-	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	for (size_t i = 0; i < GetCar(0)->ServicedFloors.size(); i++)
 	{
 		bool door_result = false;
-		int floor = ServicedFloors[i];
+		int floor = GetCar(0)->ServicedFloors[i];
 		float base = GetDestinationOffset(floor);
 
 		if (door_number != 0)
@@ -4076,7 +3975,7 @@ ElevatorDoor::DoorWrapper* Elevator::AddShaftDoorComponent(int number, int floor
 {
 	//adds a single elevator shaft door component on the specified floor
 
-	if (IsServicedFloor(floor) == true && GetDoor(number))
+	if (GetCar(0)->IsServicedFloor(floor) == true && GetDoor(number))
 		return GetDoor(number)->AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	else
 		return 0;
@@ -4107,7 +4006,7 @@ ElevatorDoor::DoorWrapper* Elevator::FinishShaftDoor(int number, int floor, bool
 {
 	//finishes a single shaft door
 
-	if (IsServicedFloor(floor) == true && GetDoor(number))
+	if (GetCar(0)->IsServicedFloor(floor) == true && GetDoor(number))
 		return GetDoor(number)->FinishShaftDoor(floor, DoorWalls, TrackWalls);
 	else
 		return 0;
@@ -4820,7 +4719,7 @@ void Elevator::AddModel(Model *model)
 void Elevator::AddDisplayFloor(int floor)
 {
 	//add a floor to the display floors list
-	DisplayFloors.push_back(floor);
+	GetCar(0)->DisplayFloors.push_back(floor);
 }
 
 std::string Elevator::GetFloorDisplay()
@@ -4834,15 +4733,15 @@ std::string Elevator::GetFloorDisplay()
 	if (!floor)
 		return value;
 
-	if (UseFloorSkipText == true && IsServicedFloor(floornum) == false)
+	if (UseFloorSkipText == true && GetCar(0)->IsServicedFloor(floornum) == false)
 		value = FloorSkipText;
 	else
 	{
-		if (DisplayFloors.size() > 0)
+		if (GetCar(0)->DisplayFloors.size() > 0)
 		{
-			for (size_t i = 0; i < DisplayFloors.size(); i++)
+			for (size_t i = 0; i < GetCar(0)->DisplayFloors.size(); i++)
 			{
-				if (floornum == DisplayFloors[i])
+				if (floornum == GetCar(0)->DisplayFloors[i])
 				{
 					value = floor->ID;
 					break;
@@ -4898,24 +4797,11 @@ std::vector<Sound*> Elevator::GetSound(const std::string &name)
 	return soundlist;
 }
 
-int Elevator::GetFloorIndex(int floor)
-{
-	//return array index of the specified floor
-
-	for (size_t i = 0; i < ServicedFloors.size(); i++)
-	{
-		if (ServicedFloors[i] == floor)
-			return (int)i;
-	}
-
-	return -1;
-}
-
 float Elevator::GetDestinationAltitude(int floor)
 {
 	//returns the destination altitude of the specified floor, based on shaft door positioning
 
-	if (IsServicedFloor(floor) == false)
+	if (GetCar(0)->IsServicedFloor(floor) == false)
 		return 0.0f;
 
 	float result = 0;
@@ -4946,7 +4832,7 @@ float Elevator::GetDestinationOffset(int floor)
 {
 	//returns the offset distance from the floor's base altitude the elevator destination is
 
-	if (IsServicedFloor(floor) == false)
+	if (GetCar(0)->IsServicedFloor(floor) == false)
 		return 0.0f;
 
 	if (sbs->GetFloor(floor))
@@ -5009,7 +4895,7 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 	//2 - unavailable due to a service mode or error
 
 	//if floor is a serviced floor
-	if (IsServicedFloor(floor, report_on_failure) == true)
+	if (GetCar(0)->IsServicedFloor(floor, report_on_failure) == true)
 	{
 		//if direction doesn't go beyond elevator's range
 		if ((direction == 1 && floor < GetTopFloor()) || (direction == -1 && floor > GetBottomFloor()))
@@ -5238,32 +5124,32 @@ int Elevator::GetNearestServicedFloor()
 {
 	//return number of closest serviced floor
 
-	if (IsServicedFloor(GetFloor()) == true)
+	if (GetCar(0)->IsServicedFloor(GetFloor()) == true)
 		return GetFloor();
 
-	if (ServicedFloors.size() == 0)
+	if (GetCar(0)->ServicedFloors.size() == 0)
 		return 0;
 
 	bool firstrun = true;
 	size_t nearest = 0;
 	float nearest_difference = 0;
 
-	for (size_t i = 0; i < ServicedFloors.size() - 1; i++)
+	for (size_t i = 0; i < GetCar(0)->ServicedFloors.size() - 1; i++)
 	{
 		if (firstrun == true)
 		{
-			if (sbs->GetFloor(ServicedFloors[i]))
+			if (sbs->GetFloor(GetCar(0)->ServicedFloors[i]))
 			{
-				nearest_difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
+				nearest_difference = fabsf(GetPosition().y - GetDestinationOffset(GetCar(0)->ServicedFloors[i]));
 				nearest = i;
 				firstrun = false;
 			}
 		}
 		else
 		{
-			if (sbs->GetFloor(ServicedFloors[i]))
+			if (sbs->GetFloor(GetCar(0)->ServicedFloors[i]))
 			{
-				float difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
+				float difference = fabsf(GetPosition().y - GetDestinationOffset(GetCar(0)->ServicedFloors[i]));
 				if (difference < nearest_difference)
 				{
 					//mark closest
@@ -5274,7 +5160,7 @@ int Elevator::GetNearestServicedFloor()
 		}
 	}
 
-	return ServicedFloors[nearest];
+	return GetCar(0)->ServicedFloors[nearest];
 }
 
 bool Elevator::ReturnToNearestFloor()
@@ -5303,7 +5189,7 @@ bool Elevator::IsLeveled()
 	float tolerance = 0.005f;
 
 	int floor = GetFloor();
-	if (IsServicedFloor(floor) == true)
+	if (GetCar(0)->IsServicedFloor(floor) == true)
 	{
 		float altitude = GetDestinationAltitude(floor);
 
@@ -5700,20 +5586,6 @@ void Elevator::EnableSensor(bool value, int number)
 	}
 }
 
-int Elevator::GetServicedFloorCount()
-{
-	//return number of serviced floors
-	return (int)ServicedFloors.size();
-}
-
-int Elevator::GetServicedFloor(int index)
-{
-	//get a specific serviced floor
-	if (index >= 0 && index < (int)ServicedFloors.size())
-		return ServicedFloors[index];
-	return 0;
-}
-
 void Elevator::ResetShaftDoors(int floor)
 {
 	//reset shaft doors
@@ -5843,9 +5715,9 @@ std::vector<Floor*> Elevator::GetLobbies()
 
 	std::vector<Floor*> list;
 
-	for (int i = 0; i < GetServicedFloorCount(); i++)
+	for (int i = 0; i < GetCar(0)->GetServicedFloorCount(); i++)
 	{
-		int num = GetServicedFloor(i);
+		int num = GetCar(0)->GetServicedFloor(i);
 
 		Floor *floor = sbs->GetFloor(num);
 		if (floor)
@@ -5967,6 +5839,11 @@ ElevatorCar* Elevator::GetCar(int number)
 		return 0;
 
 	return Cars[number];
+}
+
+int Elevator::GetCarCount()
+{
+	return (int)Cars.size();
 }
 
 }

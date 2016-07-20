@@ -5229,7 +5229,7 @@ int ScriptProcessor::ProcElevators()
 
 				for (int k = start; k <= end; k++)
 				{
-					if (!elev->AddServicedFloor(k))
+					if (!elev->GetCar(0)->AddServicedFloor(k))
 						return ScriptError();
 				}
 			}
@@ -5238,7 +5238,7 @@ int ScriptProcessor::ProcElevators()
 				int data;
 				if (!IsNumeric(tempdata[line], data))
 					return ScriptError("Invalid value");
-				if (!elev->AddServicedFloor(data))
+				if (!elev->GetCar(0)->AddServicedFloor(data))
 					return ScriptError();
 			}
 		}
@@ -6148,7 +6148,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		elev->MusicPosition = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		elev->GetCar(0)->MusicPosition = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "inspectionspeed")
@@ -6321,9 +6321,9 @@ int ScriptProcessor::ProcElevators()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
+			StoreCommand(elev->GetCar(0)->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
 		else
-			StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+			StoreCommand(elev->GetCar(0)->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
 	}
 
@@ -6344,7 +6344,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//create wall
-		StoreCommand(elev->AddWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+		StoreCommand(elev->GetCar(0)->AddWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
 	}
 
@@ -6502,7 +6502,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(elev->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+		StoreCommand(elev->GetCar(0)->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
 	}
 
@@ -6856,9 +6856,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			StoreCommand(elev->AddFloorIndicator(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
+			StoreCommand(elev->GetCar(0)->AddFloorIndicator(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
 		else
-			StoreCommand(elev->AddFloorIndicator("Button", tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+			StoreCommand(elev->GetCar(0)->AddFloorIndicator("Button", tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		return sNextLine;
 	}
 

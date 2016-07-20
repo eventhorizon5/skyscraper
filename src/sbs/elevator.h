@@ -58,7 +58,6 @@ public:
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
 	float ElevatorRate;
-	std::vector<int> ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
@@ -67,7 +66,7 @@ public:
 	bool IsMoving; //is elevator moving?
 	std::string CarUpStartSound; //elevator up start/speedup sound
 	std::string CarDownStartSound; //elevator down start/speedup sound
-	std::string CarUpMoveSound; //elevator up ove sound
+	std::string CarUpMoveSound; //elevator up move sound
 	std::string CarDownMoveSound; //elevator down move sound
 	std::string CarUpStopSound; //elevator up stop/slowdown sound
 	std::string CarDownStopSound; //elevator down stop/slowdown sound
@@ -121,17 +120,14 @@ public:
 	float LevelingOpen; //leveling door open offset
 	bool WaitForDoors; //set to true for the MoveElevatorToFloor() function to wait for the doors to close before running
 	int ActiveDirection; //variant of Direction that doesn't change during slowdown
-	bool Fan; //fan enabled status
 	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
 	bool Notified; //true if arrival notification has been performed
 	bool Parking; //is elevator parking?
-	Ogre::Vector3 MusicPosition; //music emitter position, relative of elevator center
 	bool MusicOn; //music enabled status
 	bool MusicOnMove; //true if music should only play during move
 	float DepartureDelay; //delay in seconds between door closure and elevator departure
 	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
-	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 	float InspectionSpeed; //inspection service speed multiplier
 	bool LimitQueue; //true to only allow floor selections in the same queue direction
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
@@ -163,10 +159,6 @@ public:
 	void ProcessCallQueue();
 	int GetFloor();
 	void Loop();
-	WallObject* AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
-	WallObject* AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
-	FloorIndicator* AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
-	ButtonPanel* CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	void DumpQueues();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
@@ -176,15 +168,11 @@ public:
 	float GetStoppingDistance();
 	bool GetBrakeStatus();
 	int GetEmergencyStopStatus();
-	void DumpServicedFloors();
-	bool AddServicedFloor(int number);
-	void RemoveServicedFloor(int number);
 	void UpdateFloorIndicators();
 	float GetJerkRate();
 	float GetJerkPosition();
 	void SetFloorSkipText(const std::string &id);
 	std::string GetFloorSkipText();
-	bool IsServicedFloor(int floor, bool report = true);
 	bool InServiceMode();
 	bool Go(int floor, bool hold = false);
 	bool EnableACP(bool value);
@@ -284,7 +272,6 @@ public:
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	std::vector<Sound*> GetSound(const std::string &name);
-	int GetFloorIndex(int floor);
 	float GetDestinationAltitude(int floor);
 	float GetDestinationOffset(int floor);
 	void MoveObjects(float offset);
@@ -314,8 +301,6 @@ public:
 	bool InElevator();
 	void EnableSensor(bool value, int number = 0);
 	bool GetSensorStatus(int number = 0);
-	int GetServicedFloorCount();
-	int GetServicedFloor(int index);
 	void ResetShaftDoors(int floor);
 	std::string GetFloorDisplay();
 	bool GetHoldStatus(int number = 0);
@@ -335,6 +320,7 @@ public:
 	bool CheckInterlocks(bool skip_current_floor = false);
 
 	ElevatorCar* GetCar(int number);
+	int GetCarCount();
 
 private:
 

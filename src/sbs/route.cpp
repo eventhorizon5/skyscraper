@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "route.h"
 
 namespace SBS {
@@ -167,16 +168,16 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 				if ((DestinationFloor > StartingFloor && elev->GetTopFloor() < DestinationFloor) ||
 						(DestinationFloor < StartingFloor && elev->GetBottomFloor() < DestinationFloor))
 				{
-					for (int j = elev->GetServicedFloorCount() - 1; j >= 0; j--)
+					for (int j = elev->GetCar(0)->GetServicedFloorCount() - 1; j >= 0; j--)
 					{
-						floor_list.push_back(elev->GetServicedFloor(j));
+						floor_list.push_back(elev->GetCar(0)->GetServicedFloor(j));
 					}
 				}
 				else
 				{
-					for (int j = 0; j < elev->GetServicedFloorCount(); j++)
+					for (int j = 0; j < elev->GetCar(0)->GetServicedFloorCount(); j++)
 					{
-						floor_list.push_back(elev->GetServicedFloor(j));
+						floor_list.push_back(elev->GetCar(0)->GetServicedFloor(j));
 					}
 				}
 

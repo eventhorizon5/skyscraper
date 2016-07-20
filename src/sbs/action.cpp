@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "camera.h"
@@ -354,12 +355,12 @@ bool Action::Run(Object *caller, Object *parent)
 			return elevator->EnableACP(false);
 		if (command_name == "fanon")
 		{
-			elevator->Fan = true;
+			elevator->GetCar(0)->Fan = true;
 			return true;
 		}
 		if (command_name == "fanoff")
 		{
-			elevator->Fan = false;
+			elevator->GetCar(0)->Fan = false;
 			return true;
 		}
 		if (command_name == "musicon")

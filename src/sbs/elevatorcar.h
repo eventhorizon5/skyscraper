@@ -33,10 +33,30 @@ class SBSIMPEXP ElevatorCar : public ObjectBase
 	friend class Elevator;
 public:
 
-	MeshObject* Mesh; //car mesh object
+	std::vector<int> ServicedFloors; //list of floors this car services
+	float Height; //car height
+	bool HeightSet;
+	bool Fan; //fan enabled status
+	Ogre::Vector3 MusicPosition; //music emitter position, relative of elevator center
+	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
+	WallObject* AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	WallObject* AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
+	FloorIndicator* AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
+	ButtonPanel* CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
+	void DumpServicedFloors();
+	bool AddServicedFloor(int number);
+	void RemoveServicedFloor(int number);
+	bool IsServicedFloor(int floor, bool report = true);
+	int GetFloorIndex(int floor);
+	int GetServicedFloorCount();
+	int GetServicedFloor(int index);
+
+	MeshObject* Mesh; //car mesh object
 
 private:
 
