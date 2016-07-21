@@ -402,7 +402,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 		return ReportError("Invalid floor " + ToString(floor));
 
 	//if doors are open or moving in independent service mode, quit
-	if (IndependentService == true && (GetCar(0)->AreDoorsOpen() == false || GetCar(0)->AreDoorsMoving() != 0))
+	if (IndependentService == true && (AreDoorsOpen() == false || AreDoorsMoving() != 0))
 		return ReportError("floor button must be pressed before closing doors while in independent service");
 
 	//do not add routes if in inspection service or fire phase 1 modes
@@ -711,7 +711,7 @@ void Elevator::ProcessCallQueue()
 	DownCall = false;
 
 	//set search direction to 0 if any related queue is empty, and if doors are not open or moving
-	if (GetCar(0)->AreDoorsOpen() == false && GetCar(0)->AreDoorsMoving() == 0)
+	if (AreDoorsOpen() == false && AreDoorsMoving() == 0)
 	{
 		if (QueuePositionDirection == 1 && UpQueue.size() == 0)
 		{
@@ -1080,7 +1080,7 @@ void Elevator::MoveElevatorToFloor()
 	//wait until doors are fully closed if WaitForDoors is true
 	if (WaitForDoors == true)
 	{
-		if (GetCar(0)->AreDoorsOpen() == true || GetCar(0)->AreDoorsMoving() != 0)
+		if (AreDoorsOpen() == true || AreDoorsMoving() != 0)
 			return;
 		else
 			WaitForDoors = false;
@@ -2434,7 +2434,7 @@ bool Elevator::EnableFireService2(int value, bool force)
 	}
 
 	//require doors to be open to change modes
-	if (GetCar(0)->AreDoorsOpen() == false && force == false)
+	if (AreDoorsOpen() == false && force == false)
 		return ReportError("EnableFireService2: doors must be open to change phase 2 modes");
 
 	//exit if no change
@@ -2761,7 +2761,7 @@ void Elevator::NotifyCallButtons(int floor, bool direction)
 bool Elevator::IsIdle()
 {
 	//return true if elevator is idle (not moving, doors are closed (unless in a peak mode) and not moving)
-	if (MoveElevator == false && (GetCar(0)->AreDoorsOpen() == false || UpPeak == true || DownPeak == true) && GetCar(0)->AreDoorsMoving() == 0 && Running == true)
+	if (MoveElevator == false && (AreDoorsOpen() == false || UpPeak == true || DownPeak == true) && AreDoorsMoving() == 0 && Running == true)
 		return true;
 	else
 		return false;
@@ -3160,7 +3160,7 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 				if (InServiceMode() == false)
 				{
 					//and if no queue changes are pending, unless doors are open on the same floor as call
-					if (QueuePending == false || ((GetCar(0)->AreDoorsOpen() == true || GetCar(0)->AreDoorsOpening() == true) && GetFloor() == floor))
+					if (QueuePending == false || ((AreDoorsOpen() == true || AreDoorsOpening() == true) && GetFloor() == floor))
 					{
 						//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
 						if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
@@ -3595,24 +3595,9 @@ void Elevator::PlayStartingSounds()
 	//play elevator starting sounds
 
 	//car sound
-	GetCar(0)->carsound->Stop();
-	if (Direction == 1 && GetCar(0)->UpStartSound.empty() == false && GetCar(0)->UpStartSound != "")
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		if (sbs->Verbose)
-			Report("playing car up start sound");
-
-		GetCar(0)->carsound->Load(GetCar(0)->UpStartSound);
-		GetCar(0)->carsound->SetLoopState(false);
-		GetCar(0)->carsound->Play();
-	}
-	if (Direction == -1 && GetCar(0)->DownStartSound.empty() == false && GetCar(0)->DownStartSound != "")
-	{
-		if (sbs->Verbose)
-			Report("playing car down start sound");
-
-		GetCar(0)->carsound->Load(GetCar(0)->DownStartSound);
-		GetCar(0)->carsound->SetLoopState(false);
-		GetCar(0)->carsound->Play();
+		Cars[i]->PlayStartingSounds();
 	}
 
 	//motor sound
@@ -3642,22 +3627,17 @@ void Elevator::PlayStoppingSounds(bool emergency)
 	//play elevator stopping sounds
 	//if emergency is true, plays emergency stop sounds with a fallback to standard sounds
 
-	bool carsound_play = false;
 	bool motorsound_play = false;
-	std::string CarSoundFile, MotorSoundFile;
+	std::string MotorSoundFile;
+
+	//car sounds
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		Cars[i]->PlayStoppingSounds(emergency);
+	}
 
 	if (emergency == true)
 	{
-		//car sound
-		if (GetCar(0)->EmergencyStopSound.empty() == false && GetCar(0)->EmergencyStopSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing car emergency stop sound");
-
-			CarSoundFile = GetCar(0)->EmergencyStopSound;
-			carsound_play = true;
-		}
-
 		//motor sound
 		if (MotorEmergencyStopSound.empty() == false && MotorEmergencyStopSound != "")
 		{
@@ -3666,27 +3646,6 @@ void Elevator::PlayStoppingSounds(bool emergency)
 
 			MotorSoundFile = MotorEmergencyStopSound;
 			motorsound_play = true;
-		}
-	}
-
-	//car sound
-	if (carsound_play == false)
-	{
-		if (Direction == -1 && GetCar(0)->UpStopSound.empty() == false && GetCar(0)->UpStopSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing car up stop sound");
-
-			CarSoundFile = GetCar(0)->UpStopSound;
-			carsound_play = true;
-		}
-		if (Direction == 1 && GetCar(0)->DownStopSound.empty() == false && GetCar(0)->DownStopSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing car down stop sound");
-
-			CarSoundFile = GetCar(0)->DownStopSound;
-			carsound_play = true;
 		}
 	}
 
@@ -3711,23 +3670,8 @@ void Elevator::PlayStoppingSounds(bool emergency)
 		}
 	}
 
-	GetCar(0)->carsound->Stop();
 	motorsound->Stop();
 
-	if (carsound_play == true)
-	{
-		GetCar(0)->carsound->Load(CarSoundFile);
-		GetCar(0)->carsound->SetLoopState(false);
-
-		//set play position to current percent of the total speed
-		if (AutoAdjustSound == true)
-			GetCar(0)->carsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
-		else
-			GetCar(0)->carsound->Reset();
-
-		GetCar(0)->carsound->Play(false);
-
-	}
 	if (motorsound_play == true)
 	{
 		motorsound->Load(MotorSoundFile);
@@ -3747,27 +3691,10 @@ void Elevator::PlayMovingSounds()
 {
 	//play elevator movement sounds
 
-	//car sound
-	if (GetCar(0)->carsound->IsPlaying() == false)
+	//car sounds
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		if (Direction == 1 && GetCar(0)->UpMoveSound.empty() == false && GetCar(0)->UpMoveSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing car up movement sound");
-
-			GetCar(0)->carsound->Load(GetCar(0)->UpMoveSound);
-			GetCar(0)->carsound->SetLoopState(true);
-			GetCar(0)->carsound->Play();
-		}
-		else if (Direction == -1 && GetCar(0)->DownMoveSound.empty() == false && GetCar(0)->DownMoveSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing car down movement sound");
-
-			GetCar(0)->carsound->Load(GetCar(0)->DownMoveSound);
-			GetCar(0)->carsound->SetLoopState(true);
-			GetCar(0)->carsound->Play();
-		}
+		Cars[i]->PlayMovingSounds();
 	}
 
 	//motor sound
@@ -3924,9 +3851,9 @@ bool Elevator::CheckInterlocks(bool skip_current_floor)
 	bool status;
 
 	if (skip_current_floor == false)
-		status = (Interlocks == true && (GetCar(0)->AreDoorsOpen() == true || GetCar(0)->AreShaftDoorsClosed() == false || GetCar(0)->DoorsStopped() == true));
+		status = (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false || DoorsStopped() == true));
 	else
-		status = (Interlocks == true && (GetCar(0)->AreShaftDoorsClosed(true) == false || GetCar(0)->DoorsStopped() == true));
+		status = (Interlocks == true && (AreShaftDoorsClosed(true) == false || DoorsStopped() == true));
 
 	return !status;
 }
@@ -3965,6 +3892,79 @@ ElevatorCar* Elevator::GetCarForFloor(int number)
 	}
 
 	return 0;
+}
+
+bool Elevator::AreDoorsOpen()
+{
+	//returns true if any door is open
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		if (Cars[i]->AreDoorsOpen() == true)
+			return true;
+	}
+	return false;
+}
+
+int Elevator::AreDoorsMoving(bool car_doors, bool shaft_doors)
+{
+	//returns status if any door is moving
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		int result = Cars[i]->AreDoorsMoving(0, car_doors, shaft_doors);
+		if (result != 0)
+			return result;
+	}
+	return 0;
+}
+
+bool Elevator::AreShaftDoorsClosed(bool skip_current_floor)
+{
+	//returns true if all shaft doors are closed and not moving
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		if (Cars[i]->AreShaftDoorsClosed(skip_current_floor) == false)
+			return false;
+	}
+	return true;
+}
+
+bool Elevator::DoorsStopped()
+{
+	//returns true if any of the doors are stopped
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		if (Cars[i]->DoorsStopped() == true)
+			return true;
+	}
+	return false;
+}
+
+bool Elevator::AreDoorsOpening(bool car_doors, bool shaft_doors)
+{
+	//returns true if doors are opening
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		if (Cars[i]->AreDoorsOpening(0, car_doors, shaft_doors) == true)
+			return true;
+	}
+	return false;
+}
+
+bool Elevator::AreDoorsClosing(bool car_doors, bool shaft_doors)
+{
+	//returns true if doors are closing
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		if (Cars[i]->AreDoorsClosing(0, car_doors, shaft_doors) == true)
+			return true;
+	}
+	return false;
 }
 
 }

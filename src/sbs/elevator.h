@@ -205,6 +205,12 @@ public:
 	bool IsOnFloor(int floor);
 	DynamicMesh* GetDoorContainer() { return DoorContainer; }
 	bool CheckInterlocks(bool skip_current_floor = false);
+	bool AreDoorsOpen();
+	int AreDoorsMoving(bool car_doors = true, bool shaft_doors = true);
+	bool AreShaftDoorsClosed(bool skip_current_floor = false);
+	bool DoorsStopped();
+	bool AreDoorsOpening(bool car_doors = true, bool shaft_doors = true);
+	bool AreDoorsClosing(bool car_doors = true, bool shaft_doors = true);
 
 	ElevatorCar* CreateCar();
 	ElevatorCar* GetCar(int number);

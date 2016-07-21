@@ -1392,7 +1392,7 @@ bool ElevatorCar::DoorsStopped(int number)
 int ElevatorCar::AreDoorsMoving(int number, bool car_doors, bool shaft_doors)
 {
 	//returns 1 if doors are opening (2 manual), -1 if doors are closing (-2 manual), or 0 if doors are not moving
-	//if the type of door is specified, returns true if that type of door is moving
+	//if the type of door is specified, returns value if that type of door is moving
 
 	int start = number, end = number;
 	if (number == 0)
@@ -2427,6 +2427,115 @@ bool ElevatorCar::PlayMessageSound(bool type)
 	TrimString(newsound);
 	announcesnd->PlayQueued(newsound, false, false);
 	return true;
+}
+
+void ElevatorCar::PlayStartingSounds()
+{
+	//play car starting sounds
+
+	carsound->Stop();
+	if (parent->Direction == 1 && UpStartSound.empty() == false && UpStartSound != "")
+	{
+		if (sbs->Verbose)
+			Report("playing car up start sound");
+
+		carsound->Load(UpStartSound);
+		carsound->SetLoopState(false);
+		carsound->Play();
+	}
+	if (parent->Direction == -1 && DownStartSound.empty() == false && DownStartSound != "")
+	{
+		if (sbs->Verbose)
+			Report("playing car down start sound");
+
+		carsound->Load(DownStartSound);
+		carsound->SetLoopState(false);
+		carsound->Play();
+	}
+}
+
+void ElevatorCar::PlayStoppingSounds(bool emergency)
+{
+	//play car stopping sounds
+	//if emergency is true, plays emergency stop sounds with a fallback to standard sounds
+
+	bool play = false;
+	std::string file;
+
+	if (emergency == true)
+	{
+		if (EmergencyStopSound.empty() == false && EmergencyStopSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing car emergency stop sound");
+
+			file = EmergencyStopSound;
+			play = true;
+		}
+	}
+
+	if (play == false)
+	{
+		if (parent->Direction == -1 && UpStopSound.empty() == false && UpStopSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing car up stop sound");
+
+			file = UpStopSound;
+			play = true;
+		}
+		if (parent->Direction == 1 && DownStopSound.empty() == false && DownStopSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing car down stop sound");
+
+			file = DownStopSound;
+			play = true;
+		}
+	}
+
+	carsound->Stop();
+
+	if (play == true)
+	{
+		carsound->Load(file);
+		carsound->SetLoopState(false);
+
+		//set play position to current percent of the total speed
+		if (parent->AutoAdjustSound == true)
+			carsound->SetPlayPosition(1 - (parent->ElevatorRate / parent->ElevatorSpeed));
+		else
+			carsound->Reset();
+
+		carsound->Play(false);
+	}
+}
+
+void ElevatorCar::PlayMovingSounds()
+{
+	//play car movement sounds
+
+	if (carsound->IsPlaying() == false)
+	{
+		if (parent->Direction == 1 && UpMoveSound.empty() == false && UpMoveSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing car up movement sound");
+
+			carsound->Load(UpMoveSound);
+			carsound->SetLoopState(true);
+			carsound->Play();
+		}
+		else if (parent->Direction == -1 && DownMoveSound.empty() == false && DownMoveSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing car down movement sound");
+
+			carsound->Load(DownMoveSound);
+			carsound->SetLoopState(true);
+			carsound->Play();
+		}
+	}
 }
 
 }

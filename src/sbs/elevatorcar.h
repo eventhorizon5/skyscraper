@@ -185,6 +185,11 @@ private:
 	Elevator* parent;
 	int number;
 
+	//functions
+	void PlayStartingSounds();
+	void PlayStoppingSounds(bool emergency = false);
+	void PlayMovingSounds();
+
 	//sound objects
 	Sound *carsound;
 	Sound *idlesound;
