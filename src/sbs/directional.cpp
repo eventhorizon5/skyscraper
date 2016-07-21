@@ -28,8 +28,9 @@
 #include "floor.h"
 #include "mesh.h"
 #include "texture.h"
-#include "directional.h"
 #include "elevator.h"
+#include "elevatorcar.h"
+#include "directional.h"
 
 namespace SBS {
 
@@ -302,7 +303,7 @@ DirectionalIndicator::~DirectionalIndicator()
 		std::string type = GetParent()->GetType();
 
 		if (type == "Elevator")
-			static_cast<Elevator*>(GetParent())->RemoveDirectionalIndicator(this);
+			static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveDirectionalIndicator(this);
 		else if (type == "Floor")
 			static_cast<Floor*>(GetParent())->RemoveDirectionalIndicator(this);
 	}
@@ -340,7 +341,7 @@ void DirectionalIndicator::UpLight(bool value)
 		//stop or start timer
 		if (value == false && DownStatus == false)
 			timer->Stop();
-		else if (value == true && (elev->AutoDoors == false || elev->ShaftDoorsExist(0, floor) == false))
+		else if (value == true && (elev->AutoDoors == false || elev->GetCar(0)->ShaftDoorsExist(0, floor) == false))
 			timer->Start(timer_interval, true);
 	}
 
@@ -372,7 +373,7 @@ void DirectionalIndicator::DownLight(bool value)
 		//stop or start timer
 		if (value == false && UpStatus == false)
 			timer->Stop();
-		else if (value == true && (elev->AutoDoors == false || elev->ShaftDoorsExist(0, floor) == false))
+		else if (value == true && (elev->AutoDoors == false || elev->GetCar(0)->ShaftDoorsExist(0, floor) == false))
 			timer->Start(timer_interval, true);
 	}
 

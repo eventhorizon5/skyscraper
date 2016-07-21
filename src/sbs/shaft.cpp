@@ -316,7 +316,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 					for(size_t j = 0; j < elevator->GetCar(0)->ServicedFloors.size(); j++)
 					{
 						if (elevator->GetCar(0)->ServicedFloors[j] == floor)
-							elevator->ShaftDoorsEnabled(0, elevator->GetCar(0)->ServicedFloors[j], value);
+							elevator->GetCar(0)->ShaftDoorsEnabled(0, elevator->GetCar(0)->ServicedFloors[j], value);
 					}
 				}
 			}
@@ -970,7 +970,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		{
 			//if user is in an elevator, show a range of the shaft at a time (while it's moving)
 			EnableRange(current_floor, sbs->ShaftDisplayRange, true, false);
-			elevator->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
+			elevator->GetCar(0)->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
 		}
 
 		//turn on related floors if ShowFloors is true

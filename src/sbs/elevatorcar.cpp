@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "globals.h"
 #include "sbs.h"
 #include "mesh.h"
+#include "floor.h"
 #include "elevator.h"
 #include "control.h"
 #include "trigger.h"
@@ -36,6 +37,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "buttonpanel.h"
 #include "directional.h"
 #include "floorindicator.h"
+#include "shaft.h"
+#include "camera.h"
+#include "dynamicmesh.h"
+#include "texture.h"
+#include "profiler.h"
 #include "elevatorcar.h"
 
 namespace SBS {
@@ -63,6 +69,10 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MusicPosition = 0;
 	Height = 0;
 	HeightSet = false;
+	lastdoor_result = 0;
+	lastdoor_number = 0;
+	NumDoors = 1;
+	ControlPressActive = false;
 
 	std::string name = "Car " + ToString(number);
 	SetName(name);
@@ -406,6 +416,1567 @@ int ElevatorCar::GetServicedFloor(int index)
 	//get a specific serviced floor
 	if (index >= 0 && index < (int)ServicedFloors.size())
 		return ServicedFloors[index];
+	return 0;
+}
+
+void ElevatorCar::OpenHatch()
+{
+	//Opens the elevator's upper escape hatch, allowing access to the shaft
+
+	Report("opening hatch");
+}
+
+void ElevatorCar::Loop()
+{
+	//elevator car monitor loop
+
+}
+
+void ElevatorCar::EnableObjects(bool value)
+{
+	//enable or disable interior objects, such as floor indicators and button panels
+
+	if (parent->AutoEnable == false)
+		return;
+
+	//SBS_PROFILE("ElevatorCar::EnableObjects");
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("enabling objects");
+		else
+			Report("disabling objects");
+	}
+
+	//floor indicators
+	/*for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->Enabled(value);
+	}*/
+
+	//interior directional indicators
+	//EnableDirectionalIndicators(value);
+
+	//controls
+	for (size_t i = 0; i < ControlArray.size(); i++)
+	{
+		if (ControlArray[i])
+			ControlArray[i]->Enabled(value);
+	}
+
+	//triggers
+	for (size_t i = 0; i < TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+			TriggerArray[i]->Enabled(value);
+	}
+
+	//models
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i])
+			ModelArray[i]->Enable(value);
+	}
+
+	//panels
+	for (size_t i = 0; i < PanelArray.size(); i++)
+		PanelArray[i]->Enabled(value);
+
+	//sounds
+	for (size_t i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i])
+		{
+			if (sounds[i]->GetLoopState() == true)
+			{
+				if (value == false)
+					sounds[i]->Stop();
+				else
+					sounds[i]->Play();
+			}
+		}
+	}
+}
+
+void ElevatorCar::UpdateFloorIndicators()
+{
+	//updates all floor indicators
+
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->Update();
+	}
+}
+
+int ElevatorCar::GetTopFloor()
+{
+	//returns highest serviced floor
+	return ServicedFloors[ServicedFloors.size() - 1];
+}
+
+int ElevatorCar::GetBottomFloor()
+{
+	//returns lowest serviced floor
+	return ServicedFloors[0];
+}
+
+void ElevatorCar::AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+{
+	//create external directional indicators on all serviced floors
+
+	if (sbs->Verbose)
+		Report("adding directional indicators");
+
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (sbs->GetFloor(ServicedFloors[i]))
+			sbs->GetFloor(ServicedFloors[i])->AddDirectionalIndicator(parent->Number, relative, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	}
+}
+
+DirectionalIndicator* ElevatorCar::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+{
+	//create a directional indicator inside the elevator
+
+	if (sbs->Verbose)
+		Report("adding interior directional indicator");
+
+	DirectionalIndicator *indicator = new DirectionalIndicator(this, parent->Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirIndicatorArray.push_back(indicator);
+	return indicator;
+}
+
+void ElevatorCar::SetDirectionalIndicators(int floor, bool UpLight, bool DownLight)
+{
+	//set light status of exterior and interior directional indicators
+	//for interior indicators, the value of floor is passed to the indicator for checks
+
+	//exterior indicators
+	if (sbs->GetFloor(floor))
+		sbs->GetFloor(floor)->SetDirectionalIndicators(parent->Number, UpLight, DownLight);
+
+	//interior indicators
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	{
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
+		{
+			if (indicator->ActiveDirection == false)
+			{
+				indicator->floor = floor;
+				indicator->DownLight(DownLight);
+				indicator->UpLight(UpLight);
+			}
+		}
+	}
+}
+
+void ElevatorCar::UpdateDirectionalIndicators()
+{
+	//updates all interior active direction indicators
+
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	{
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
+		{
+			if (indicator->ActiveDirection == true)
+			{
+				if (parent->ActiveDirection == 1)
+				{
+					indicator->DownLight(false);
+					indicator->UpLight(true);
+				}
+				if (parent->ActiveDirection == 0)
+				{
+					indicator->DownLight(false);
+					indicator->UpLight(false);
+				}
+				if (parent->ActiveDirection == -1)
+				{
+					indicator->DownLight(true);
+					indicator->UpLight(false);
+				}
+			}
+		}
+	}
+}
+
+void ElevatorCar::EnableDirectionalIndicators(bool value)
+{
+	//turn on/off all interior directional indicators
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("enabling interior directional indicators");
+		else
+			Report("disabling interior directional indicators");
+	}
+
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	{
+		if (DirIndicatorArray[i])
+			DirIndicatorArray[i]->Enabled(value);
+	}
+}
+
+ElevatorDoor* ElevatorCar::GetDoor(int number)
+{
+	//get elevator door object
+
+	//return cached check if number is the same
+	if (lastdoor_number == number && lastdoor_result)
+		return lastdoor_result;
+
+	if (number > 0 && number <= (int)DoorArray.size())
+	{
+		if (DoorArray[number - 1])
+		{
+			lastdoor_result = DoorArray[number - 1];
+			lastdoor_number = number;
+			return lastdoor_result;
+		}
+	}
+	return 0;
+}
+
+bool ElevatorCar::OpenDoorsEmergency(int number, int whichdoors, int floor, bool hold)
+{
+	//Simulates manually prying doors open.
+	//Slowly opens the elevator doors no matter where elevator is.
+	//If lined up with shaft doors, then opens the shaft doors also
+
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
+
+	return OpenDoors(number, whichdoors, floor, true, hold);
+}
+
+void ElevatorCar::CloseDoorsEmergency(int number, int whichdoors, int floor, bool hold)
+{
+	//Simulates manually closing doors.
+	//Slowly closes the elevator doors no matter where elevator is.
+	//If lined up with shaft doors, then closes the shaft doors also
+
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
+
+	CloseDoors(number, whichdoors, floor, true, hold);
+}
+
+bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, bool hold)
+{
+	//Opens elevator doors
+
+	//if manual is true, then it simulates manually prying doors open,
+	//Slowly opens the elevator doors no matter where elevator is,
+	//and if lined up with shaft doors, then opens the shaft doors also.
+	//if hold is true, sets 'hold' state requiring button to be held to keep doors opening
+
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
+
+	//require open button to be held for fire service phase 2 if not on recall floor
+	if (parent->FireServicePhase2 == 1 && parent->OnRecallFloor() == false && manual == false)
+		hold = true;
+
+	if (parent->Interlocks == true)
+	{
+		if (parent->IsMoving == true && parent->OnFloor == false)
+			return ReportError("Cannot open doors while moving if interlocks are enabled");
+
+		if (parent->OnFloor == false || (whichdoors == 3 && floor != parent->GetFloor()))
+			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
+	}
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	if (doorhold_direction == 0)
+	{
+		if (ControlPressActive == true && parent->AutoDoors == true && parent->InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
+		{
+			doorhold_direction = 2;
+
+			if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
+				return true; //exit to skip an extra open door call
+		}
+
+		if (hold == true)
+			doorhold_direction = 1;
+
+		if (doorhold_direction > 0)
+		{
+			//set persistent values
+			doorhold_whichdoors = whichdoors;
+			doorhold_floor = floor;
+			doorhold_manual = manual;
+		}
+
+		for (int i = start; i <= end; i++)
+		{
+			if (GetDoor(i))
+				GetDoor(i)->OpenDoors(whichdoors, floor, manual);
+			else
+				ReportError("Invalid door " + ToString(i));
+		}
+	}
+	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
+	{
+		//require button to be held down to open doors
+
+		bool closedstate = false;
+
+		for (int i = start; i <= end; i++)
+		{
+			//check door states first
+			if (GetDoor(i))
+			{
+				if (GetDoor(i)->AreDoorsOpen() == false)
+				{
+					closedstate = true;
+					break;
+				}
+			}
+			else
+				ReportError("Invalid door " + ToString(i));
+		}
+
+		for (int i = start; i <= end; i++)
+		{
+			//close doors using persistent values, if button is released before doors are fully open
+			if (GetDoor(i))
+			{
+				if (closedstate == true)
+					GetDoor(i)->CloseDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+			}
+			else
+				ReportError("Invalid door " + ToString(i));
+		}
+
+		//reset persistent values
+		doorhold_direction = 0;
+		doorhold_whichdoors = 0;
+		doorhold_floor = 0;
+		doorhold_manual = false;
+	}
+	else if (doorhold_direction == 2)
+	{
+		//hold doors while button is held
+
+		if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
+		{
+			if (sbs->camera->MouseDown == true)
+			{
+				//hold doors while button is held down
+				HoldDoors(number);
+				return true;
+			}
+			else
+			{
+				//run door open again to reset doors (turn off hold) if button is released
+				for (int i = start; i <= end; i++)
+				{
+					//open doors using persistent values
+					if (GetDoor(i))
+						GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+					else
+						ReportError("Invalid door " + ToString(i));
+				}
+			}
+		}
+
+		if (sbs->camera->MouseDown == false)
+		{
+			//reset persistent values
+			doorhold_direction = 0;
+			doorhold_whichdoors = 0;
+			doorhold_floor = 0;
+			doorhold_manual = false;
+		}
+	}
+
+	return true;
+}
+
+void ElevatorCar::CloseDoors(int number, int whichdoors, int floor, bool manual, bool hold)
+{
+	//Closes elevator doors
+	//if hold is true, sets 'hold' state requiring button to be held to keep doors closing
+
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
+
+	//turn on hold option for certain modes
+	if ((parent->IndependentService == true || parent->FireServicePhase2 == 1) && manual == false)
+		hold = true;
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	if (doorhold_direction == 0)
+	{
+		for (int i = start; i <= end; i++)
+		{
+			if (GetDoor(i))
+				GetDoor(i)->CloseDoors(whichdoors, floor, manual);
+			else
+				ReportError("Invalid door " + ToString(i));
+		}
+
+		if (hold == true)
+		{
+			//set persistent values
+			doorhold_direction = -1;
+			doorhold_whichdoors = whichdoors;
+			doorhold_floor = floor;
+			doorhold_manual = manual;
+		}
+	}
+	else if (doorhold_direction == -1 && sbs->camera->MouseDown == false)
+	{
+		bool openstate = false;
+		for (int i = start; i <= end; i++)
+		{
+			//check door states first
+			if (GetDoor(i))
+			{
+				if (GetDoor(i)->AreDoorsOpen() == true)
+				{
+					openstate = true;
+					break;
+				}
+			}
+			else
+				ReportError("Invalid door " + ToString(i));
+		}
+
+		if (openstate == true)
+		{
+			for (int i = start; i <= end; i++)
+			{
+				//open doors using persistent values, if button is released before doors are fully closed
+				if (GetDoor(i))
+				{
+					if (GetDoor(i)->AreDoorsMoving(0) == true)
+						GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+				}
+				else
+					ReportError("Invalid door " + ToString(i));
+			}
+		}
+
+		//reset persistent values
+		doorhold_direction = 0;
+		doorhold_whichdoors = 0;
+		doorhold_floor = 0;
+		doorhold_manual = false;
+	}
+}
+
+void ElevatorCar::StopDoors(int number)
+{
+	//stops doors that are currently moving; can only be used for manual/emergency movements
+	//this basically just resets the door internals
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		if (GetDoor(i))
+			GetDoor(i)->StopDoors();
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+ElevatorDoor::DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+{
+	//adds elevator doors specified at a relative central position (off of elevator origin)
+	//if direction is false, doors are on the left/right side; otherwise front/back
+
+	if (GetDoor(number))
+		return GetDoor(number)->AddDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, width, height, direction, tw, th);
+	else
+		ReportError("Invalid door " + ToString(number));
+	return 0;
+}
+
+bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+{
+	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
+	//uses some parameters (width, height, direction) from AddDoors function
+
+	if (GetDoor(number))
+		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+	else
+		ReportError("Invalid door " + ToString(number));
+	return false;
+}
+
+ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float tw, float th)
+{
+	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
+	//by the SetShaftDoors command.
+
+	if (IsServicedFloor(floor) == true && GetDoor(number))
+		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
+	else
+		return 0;
+}
+
+ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+{
+	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
+	//by the SetShaftDoors command.
+
+	if (IsServicedFloor(floor) == true && GetDoor(number))
+		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+	else
+		return 0;
+}
+
+void ElevatorCar::ShaftDoorsEnabled(int number, int floor, bool value)
+{
+	//turns shaft elevator doors on/off
+
+	SBS_PROFILE("Elevator::ShaftDoorsEnabled");
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->ShaftDoorsEnabled(floor, value);
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+void ElevatorCar::ShaftDoorsEnabledRange(int number, int floor, int range)
+{
+	//turn on a range of floors
+	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
+	//if range is 1, show door on only the current floor (floor)
+
+	SBS_PROFILE("Elevator::ShaftDoorsEnabledRange");
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->ShaftDoorsEnabledRange(floor, range);
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+bool ElevatorCar::AreDoorsOpen(int number)
+{
+	//returns the internal door state
+
+	SBS_PROFILE("Elevator::AreDoorsOpen");
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->AreDoorsOpen() == true)
+				return true;
+		}
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+	return false;
+}
+
+bool ElevatorCar::AreShaftDoorsOpen(int number, int floor)
+{
+	//returns the internal shaft door state
+
+	SBS_PROFILE("Elevator::AreShaftDoorsOpen");
+	ElevatorDoor *door = GetDoor(number);
+	if (door)
+		return door->AreShaftDoorsOpen(floor);
+	else
+		ReportError("Invalid door " + ToString(number));
+	return false;
+}
+
+bool ElevatorCar::AreShaftDoorsClosed(bool skip_current_floor)
+{
+	//return true if all shaft doors are closed and not moving
+
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+		{
+			if (DoorArray[i]->AreShaftDoorsClosed(skip_current_floor) == false)
+				return false;
+		}
+	}
+	return true;
+}
+
+void ElevatorCar::Chime(int number, int floor, bool direction)
+{
+	//play chime sound on specified floor
+
+	SBS_PROFILE("Elevator::Chime");
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->Chime(floor, direction);
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+	if (direction == true)
+		parent->LastChimeDirection = 1;
+	else
+		parent->LastChimeDirection = -1;
+}
+
+void ElevatorCar::ResetDoors(int number, bool sensor)
+{
+	//reset elevator door timer
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->Reset(sensor);
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+bool ElevatorCar::DoorsStopped(int number)
+{
+	//return true if doors are stopped
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->DoorsStopped() == true)
+				return true;
+		}
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+	return false;
+}
+
+int ElevatorCar::AreDoorsMoving(int number, bool car_doors, bool shaft_doors)
+{
+	//returns 1 if doors are opening (2 manual), -1 if doors are closing (-2 manual), or 0 if doors are not moving
+	//if the type of door is specified, returns true if that type of door is moving
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->AreDoorsMoving(0, car_doors, shaft_doors) == true)
+				return door->OpenDoor;
+		}
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+	return 0;
+}
+
+bool ElevatorCar::AreDoorsOpening(int number, bool car_doors, bool shaft_doors)
+{
+	//returns true if doors are opening
+
+	if (AreDoorsMoving(number, car_doors, shaft_doors) == 1)
+		return true;
+	return false;
+}
+
+bool ElevatorCar::AreDoorsClosing(int number, bool car_doors, bool shaft_doors)
+{
+	//returns true if doors are closing
+
+	if (AreDoorsMoving(number, car_doors, shaft_doors) == -1)
+		return true;
+	return false;
+}
+
+void ElevatorCar::EnableDoors(bool value)
+{
+	//enable/disable all doors
+
+	SBS_PROFILE("Elevator::EnableDoors");
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("enabling doors");
+		else
+			Report("disabling doors");
+	}
+
+	for (int i = 1; i <= NumDoors; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->Enabled(value);
+	}
+
+	parent->DoorContainer->Enable(value);
+}
+
+void ElevatorCar::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)
+{
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		if (GetDoor(i))
+			GetDoor(i)->SetShaftDoors(thickness, CenterX, CenterZ);
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
+{
+	//adds floor signs at the specified position and direction for each serviced floor,
+	//depending on if the given door number services the floor or not (unless door_number is 0)
+
+	float x, z;
+	if (relative == true)
+	{
+		x = GetPosition().x + CenterX;
+		z = GetPosition().z + CenterZ;
+	}
+	else
+	{
+		x = CenterX;
+		z = CenterZ;
+	}
+
+	//make sure specified door exists before continuing
+	if (door_number != 0)
+	{
+		if (DoorExists(door_number) == false)
+			return ReportError("AddFloorSigns: door " + ToString(door_number) + " does not exist");
+	}
+
+	bool autosize_x, autosize_y;
+	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
+	sbs->GetTextureManager()->SetAutoSize(false, false);
+
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	{
+		bool door_result = false;
+		int floor = ServicedFloors[i];
+		float base = parent->GetDestinationOffset(floor);
+
+		if (door_number != 0)
+			door_result = ShaftDoorsExist(door_number, floor);
+
+		if ((door_number == 0 || door_result == true) && sbs->GetFloor(floor))
+		{
+			std::string texture = texture_prefix + sbs->GetFloor(floor)->ID;
+			std::string tmpdirection = direction;
+			SetCase(tmpdirection, false);
+
+			if (tmpdirection == "front" || tmpdirection == "left")
+				sbs->DrawWalls(true, false, false, false, false, false);
+			else
+				sbs->DrawWalls(false, true, false, false, false, false);
+
+			if (tmpdirection == "front" || tmpdirection == "back")
+				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
+			else
+				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
+			sbs->ResetWalls();
+		}
+	}
+	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
+	return true;
+}
+
+bool ElevatorCar::DoorExists(int number)
+{
+	//check if the specified door exists
+	//if number is 0, return true if any door exists
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		if (GetDoor(i))
+			return true;
+	}
+	return false;
+}
+
+bool ElevatorCar::ShaftDoorsExist(int number, int floor)
+{
+	//return true if shaft doors exist on the specified floor
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->ShaftDoorsExist(floor) == true)
+				return true;
+		}
+	}
+	return false;
+}
+
+Sound* ElevatorCar::AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+{
+	//create a sound object
+	Sound *sound = new Sound(this, name, false);
+	sounds.push_back(sound);
+
+	//set parameters and play sound
+	sound->Move(position);
+	sound->SetDirection(direction);
+	sound->SetVolume(volume);
+	sound->SetSpeed(speed);
+	sound->SetDistances(min_distance, max_distance);
+	sound->SetDirection(direction);
+	sound->SetDopplerLevel(doppler_level);
+	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
+	sound->Load(filename);
+	sound->SetLoopState(loop);
+	if (loop && sbs->IsRunning == true && parent->InElevator() == true)
+		sound->Play();
+
+	return sound;
+}
+
+void ElevatorCar::ResetLights()
+{
+	//turn off button lights
+	if (sbs->Verbose)
+		Report("turning off button lights");
+
+	for (size_t i = 0; i < PanelArray.size(); i++)
+		PanelArray[i]->ChangeAllLights(false);
+}
+
+void ElevatorCar::ChangeLight(int floor, bool value)
+{
+	//turn on or off specified button lights
+
+	if (value == true)
+	{
+		if (sbs->Verbose)
+			Report("turning on button lights for floor " + ToString(floor));
+	}
+	else
+	{
+		if (sbs->Verbose)
+			Report("turning off button lights for floor " + ToString(floor));
+	}
+
+	for (size_t i = 0; i < PanelArray.size(); i++)
+		PanelArray[i]->ChangeLight(floor, value);
+}
+
+ElevatorDoor::DoorWrapper* ElevatorCar::AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+{
+	//adds an elevator door component to the specified door at a relative central position (off of elevator origin)
+
+	if (GetDoor(number))
+		return GetDoor(number)->AddDoorComponent(name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	else
+		ReportError("Invalid door " + ToString(number));
+	return 0;
+}
+
+ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+{
+	//adds a single elevator shaft door component on the specified floor
+
+	if (IsServicedFloor(floor) == true && GetDoor(number))
+		return GetDoor(number)->AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	else
+		return 0;
+}
+
+void ElevatorCar::AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+{
+	//adds shaft's elevator door components specified at a relative central position (off of elevator origin)
+
+	if (GetDoor(number))
+		GetDoor(number)->AddShaftDoorsComponent(name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	else
+		ReportError("Invalid door " + ToString(number));
+}
+
+ElevatorDoor::DoorWrapper* ElevatorCar::FinishDoors(int number, bool DoorWalls, bool TrackWalls)
+{
+	//finishes elevator door
+
+	if (GetDoor(number))
+		return GetDoor(number)->FinishDoors(DoorWalls, TrackWalls);
+	else
+		ReportError("Invalid door " + ToString(number));
+	return 0;
+}
+
+ElevatorDoor::DoorWrapper* ElevatorCar::FinishShaftDoor(int number, int floor, bool DoorWalls, bool TrackWalls)
+{
+	//finishes a single shaft door
+
+	if (IsServicedFloor(floor) == true && GetDoor(number))
+		return GetDoor(number)->FinishShaftDoor(floor, DoorWalls, TrackWalls);
+	else
+		return 0;
+}
+
+bool ElevatorCar::FinishShaftDoors(int number, bool DoorWalls, bool TrackWalls)
+{
+	//finishes all shaft doors
+
+	if (GetDoor(number))
+		return GetDoor(number)->FinishShaftDoors(DoorWalls, TrackWalls);
+	else
+		ReportError("Invalid door " + ToString(number));
+	return false;
+}
+
+ButtonPanel* ElevatorCar::GetPanel(int index)
+{
+	//get a button panel object
+
+	if (index > (int)PanelArray.size() || index < 1)
+		return 0;
+
+	return PanelArray[index - 1];
+}
+
+Control* ElevatorCar::GetFloorButton(int floor)
+{
+	//get a floor button
+
+	if (parent->Running == false)
+	{
+		ReportError("Elevator not running");
+		return 0;
+	}
+
+	Control *control = 0;
+
+	if (PanelArray.empty() == false)
+	{
+		for (size_t i = 0; i < PanelArray.size(); i++)
+		{
+			control = PanelArray[i]->GetFloorButton(floor);
+			if (control)
+				return control;
+		}
+	}
+	return 0;
+}
+
+void ElevatorCar::HoldDoors(int number, bool sensor)
+{
+	//hold specified door, or all if "0" is given
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		if (GetDoor(i))
+			GetDoor(i)->Hold(sensor);
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+{
+	//interface to the SBS AddDoor function
+
+	if (direction > 8 || direction < 1)
+	{
+		ReportError("Door direction out of range");
+		return 0;
+	}
+
+	/*float x1, z1, x2, z2;
+	//set up coordinates
+	if (direction < 5)
+	{
+		x1 = CenterX;
+		x2 = CenterX;
+		z1 = CenterZ - (width / 2);
+		z2 = CenterZ + (width / 2);
+	}
+	else
+	{
+		x1 = CenterX - (width / 2);
+		x2 = CenterX + (width / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+	}
+
+	//cut area
+	if (direction < 5)
+		CutAll(Ogre::Vector3(x1 - 1, GetBase(true) + voffset, z1), Ogre::Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
+	else
+		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
+	*/
+
+	std::string elevnum = ToString(parent->Number);
+	std::string num = ToString((int)StdDoorArray.size());
+	std::string name = "Elevator " + elevnum + ":Door " + num;
+	Door* door = new Door(this, 0, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	StdDoorArray.push_back(door);
+	return door;
+}
+
+Door* ElevatorCar::GetStdDoor(int number)
+{
+	//get door object
+	if (number < (int)StdDoorArray.size())
+	{
+		if (StdDoorArray[number])
+			return StdDoorArray[number];
+	}
+
+	return 0;
+}
+void ElevatorCar::RemovePanel(ButtonPanel* panel)
+{
+	//remove a button panel reference (does not delete the object itself)
+	for (size_t i = 0; i < PanelArray.size(); i++)
+	{
+		if (PanelArray[i] == panel)
+		{
+			PanelArray.erase(PanelArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
+{
+	//remove a directional indicator reference (does not delete the object itself)
+	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
+	{
+		if (DirIndicatorArray[i] == indicator)
+		{
+			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveElevatorDoor(ElevatorDoor* door)
+{
+	//remove an elevator door reference (does not delete the object itself)
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i] == door)
+		{
+			DoorArray.erase(DoorArray.begin() + i);
+			NumDoors--;
+
+			//reset cache values
+			lastdoor_number = 0;
+			lastdoor_result = 0;
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveFloorIndicator(FloorIndicator* indicator)
+{
+	//remove a floor indicator reference (does not delete the object itself)
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i] == indicator)
+		{
+			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveDoor(Door* door)
+{
+	//remove a door reference (does not delete the object itself)
+	for (size_t i = 0; i < StdDoorArray.size(); i++)
+	{
+		if (StdDoorArray[i] == door)
+		{
+			StdDoorArray.erase(StdDoorArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveSound(Sound *sound)
+{
+	//remove a sound reference (does not delete the object itself)
+	for (size_t i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i] == sound)
+		{
+			sounds.erase(sounds.begin() + i);
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveLight(Light *light)
+{
+	//remove a light reference (does not delete the object itself)
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (lights[i] == light)
+		{
+			lights.erase(lights.begin() + i);
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveModel(Model *model)
+{
+	//remove a model reference (does not delete the object itself)
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+		{
+			ModelArray.erase(ModelArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveControl(Control *control)
+{
+	//remove a control reference (does not delete the object itself)
+	for (size_t i = 0; i < ControlArray.size(); i++)
+	{
+		if (ControlArray[i] == control)
+		{
+			ControlArray.erase(ControlArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void ElevatorCar::RemoveTrigger(Trigger *trigger)
+{
+	//remove a trigger reference (does not delete the object itself)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i] == trigger)
+		{
+			TriggerArray.erase(TriggerArray.begin() + i);
+			return;
+		}
+	}
+}
+
+bool ElevatorCar::IsNudgeModeActive(int number)
+{
+	//checks doors and returns true if any (or the specified door) have nudge mode active
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->GetNudgeStatus() == true)
+				return true;
+		}
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+
+	return false;
+}
+
+void ElevatorCar::EnableNudgeMode(bool value, int number)
+{
+	//enables nudge mode on all doors or the specified door
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->EnableNudgeMode(value);
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+void ElevatorCar::ResetNudgeTimer(bool start, int number)
+{
+	//resets and optionally starts nudge timer on the specified door
+
+	int start2 = number, end = number;
+	if (number == 0)
+	{
+		start2 = 1;
+		end = NumDoors;
+	}
+	for (int i = start2; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			door->ResetNudgeTimer(start);
+		}
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+Light* ElevatorCar::AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+{
+	//add a global light
+
+	Light* light = new Light(this, name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	lights.push_back(light);
+	return light;
+}
+
+Model* ElevatorCar::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+{
+	//add a model
+	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	if (model->load_error == true)
+	{
+		delete model;
+		return 0;
+	}
+	ModelArray.push_back(model);
+	return model;
+}
+
+void ElevatorCar::AddModel(Model *model)
+{
+	//add a model reference
+
+	if (!model)
+		return;
+
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+			return;
+	}
+
+	ModelArray.push_back(model);
+}
+
+void ElevatorCar::AddDisplayFloor(int floor)
+{
+	//add a floor to the display floors list
+	DisplayFloors.push_back(floor);
+}
+
+std::string ElevatorCar::GetFloorDisplay()
+{
+	//returns the current floor's indicator display string
+
+	std::string value;
+	int floornum = parent->GetFloor();
+	Floor *floor = sbs->GetFloor(floornum);
+
+	if (!floor)
+		return value;
+
+	if (parent->UseFloorSkipText == true && IsServicedFloor(floornum) == false)
+		value = parent->FloorSkipText;
+	else
+	{
+		if (DisplayFloors.size() > 0)
+		{
+			for (size_t i = 0; i < DisplayFloors.size(); i++)
+			{
+				if (floornum == DisplayFloors[i])
+				{
+					value = floor->ID;
+					break;
+				}
+			}
+		}
+		else
+			value = floor->ID;
+	}
+	return value;
+}
+
+Control* ElevatorCar::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+{
+	//add a control
+	std::vector<Action*> actionnull; //not used
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	control->Move(Ogre::Vector3(CenterX, voffset, CenterZ));
+	ControlArray.push_back(control);
+	return control;
+}
+
+Trigger* ElevatorCar::AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+{
+	//add a trigger
+	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
+	TriggerArray.push_back(trigger);
+	return trigger;
+}
+
+bool ElevatorCar::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	return Mesh->ReplaceTexture(oldtexture, newtexture);
+}
+
+std::vector<Sound*> ElevatorCar::GetSound(const std::string &name)
+{
+	//get sound by name
+
+	std::string findname = name;
+	SetCase(findname, false);
+	std::vector<Sound*> soundlist;
+	for (size_t i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i])
+		{
+			std::string name2 = sounds[i]->GetName();
+			SetCase(name2, false);
+			if (findname == name2)
+				soundlist.push_back(sounds[i]);
+		}
+	}
+	return soundlist;
+}
+
+bool ElevatorCar::GetSensorStatus(int number)
+{
+	//checks doors and returns true if any (or the specified door) have their door sensor active
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->GetSensorStatus() == true)
+				return true;
+		}
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+
+	return false;
+}
+
+void ElevatorCar::EnableSensor(bool value, int number)
+{
+	//enables door sensor on all doors or the specified door
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->EnableSensor(value);
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+void ElevatorCar::ResetShaftDoors(int floor)
+{
+	//reset shaft doors
+
+	//this might not be needed, due to addition of full-shaft enable check to
+	//floor object's EnableGroup function, needs testing
+
+	for (int i = 1; i <= sbs->GetShaftCount(); i++)
+	{
+		Shaft *shaft = sbs->GetShaft(i);
+		if (shaft)
+		{
+			if (shaft->IsEnabled == false)
+			{
+				shaft->EnableRange(floor, sbs->ShaftDisplayRange, false, true);
+				shaft->EnableRange(floor, sbs->ShaftDisplayRange, true, true);
+			}
+		}
+	}
+}
+
+bool ElevatorCar::GetHoldStatus(int number)
+{
+	//checks doors and returns true if any (or the specified door) have door hold enabled
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->GetHoldStatus() == true)
+				return true;
+		}
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+
+	return false;
+}
+
+void ElevatorCar::ResetDoorState(int number)
+{
+	//reset elevator internal door state, in case of door malfunction
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->ResetState();
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
+}
+
+Model* ElevatorCar::GetModel(std::string name)
+{
+	//get a model by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
+			return ModelArray[i];
+	}
+
 	return 0;
 }
 

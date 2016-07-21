@@ -27,11 +27,12 @@
 #include "sbs.h"
 #include "mesh.h"
 #include "texture.h"
-#include "buttonpanel.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "camera.h"
 #include "action.h"
 #include "control.h"
+#include "buttonpanel.h"
 
 namespace SBS {
 
@@ -118,7 +119,7 @@ ButtonPanel::~ButtonPanel()
 	{
 		//unregister with parent floor object
 		if (parent_deleting == false)
-			sbs->GetElevator(elevator)->RemovePanel(this);
+			sbs->GetElevator(elevator)->GetCar(0)->RemovePanel(this);
 
 		//remove associated actions
 		for (size_t i = 0; i < action_list.size(); i++)

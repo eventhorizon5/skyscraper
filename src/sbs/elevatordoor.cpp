@@ -173,7 +173,7 @@ ElevatorDoor::~ElevatorDoor()
 
 		//unregister from parent
 		if (parent_deleting == false)
-			elev->RemoveElevatorDoor(this);
+			car->RemoveElevatorDoor(this);
 	}
 }
 
@@ -427,7 +427,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//turn off directional indicators
-	elev->SetDirectionalIndicators(floor, false, false);
+	car->SetDirectionalIndicators(floor, false, false);
 
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;
@@ -2210,7 +2210,7 @@ std::string ElevatorDoor::GetNumberText()
 	//return a text string representing the door number, or blank if it's the only door
 
 	std::string doornumber;
-	if (elev->NumDoors > 1)
+	if (car->NumDoors > 1)
 		doornumber = " " + ToString(Number);
 
 	return doornumber;

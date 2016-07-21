@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "callbutton.h"
 #include "control.h"
 #include "route.h"
@@ -232,7 +233,7 @@ void Person::ProcessRoute()
 				route[0].elevator_route->elevator = elevator;
 
 				//wait for elevator doors to open before pressing button
-				if (elevator->AreDoorsOpen() == true)
+				if (elevator->GetCar(0)->AreDoorsOpen() == true)
 				{
 					Floor *floor = sbs->GetFloor(floor_selection);
 
@@ -241,7 +242,7 @@ void Person::ProcessRoute()
 
 					Report("Pressing elevator button for floor " + floor->ID);
 
-					Control *control = elevator->GetFloorButton(floor_selection);
+					Control *control = elevator->GetCar(0)->GetFloorButton(floor_selection);
 
 					if (control)
 					{
@@ -277,7 +278,7 @@ void Person::ProcessRoute()
 	{
 		//wait for the elevator to arrive at the selected floor
 
-		if (elevator->OnFloor == true && elevator->GetFloor() == floor_selection && elevator->AreDoorsOpen() == true)
+		if (elevator->OnFloor == true && elevator->GetFloor() == floor_selection && elevator->GetCar(0)->AreDoorsOpen() == true)
 		{
 			std::string floor_status;
 
@@ -410,7 +411,7 @@ std::string Person::GetStatus()
 
 	if (route[0].floor_selected == true && elevator)
 	{
-		if (elevator->AreDoorsOpen() == true)
+		if (elevator->GetCar(0)->AreDoorsOpen() == true)
 			return "Pressed " + floor->ID + " in elevator " + ToString(elevator->Number);
 		else
 		{

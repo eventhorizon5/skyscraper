@@ -28,6 +28,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "camera.h"
@@ -86,7 +87,7 @@ Trigger::~Trigger()
 			std::string type = GetParent()->GetType();
 
 			if (type == "Elevator")
-				static_cast<Elevator*>(GetParent())->RemoveTrigger(this);
+				static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveTrigger(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveTrigger(this);
 			else if (type == "Shaft")

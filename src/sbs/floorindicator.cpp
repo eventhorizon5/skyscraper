@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "mesh.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "profiler.h"
 #include "floor.h"
 #include "floorindicator.h"
@@ -96,7 +97,7 @@ FloorIndicator::~FloorIndicator()
 		std::string type = GetParent()->GetType();
 
 		if (type == "Elevator")
-			static_cast<Elevator*>(GetParent())->RemoveFloorIndicator(this);
+			static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveFloorIndicator(this);
 		else if (type == "Floor")
 			static_cast<Floor*>(GetParent())->RemoveFloorIndicator(this);
 	}
@@ -125,7 +126,7 @@ void FloorIndicator::Update()
 	if (!elevator)
 		return;
 
-	texture = elevator->GetFloorDisplay();
+	texture = elevator->GetCar(0)->GetFloorDisplay();
 
 	//don't update texture if no value
 	if (texture == "")

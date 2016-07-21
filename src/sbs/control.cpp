@@ -28,6 +28,7 @@
 #include "action.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "buttonpanel.h"
@@ -159,7 +160,7 @@ Control::~Control()
 			if (type == "ButtonPanel")
 				static_cast<ButtonPanel*>(GetParent())->RemoveControl(this);
 			else if (type == "Elevator")
-				static_cast<Elevator*>(GetParent())->RemoveControl(this);
+				static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveControl(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveControl(this);
 			else if (type == "Shaft")

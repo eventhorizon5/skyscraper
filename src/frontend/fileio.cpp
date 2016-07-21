@@ -4304,11 +4304,11 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid elevator");
 
 		if (compat == 0)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->GetCar(0)->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		if (compat == 1)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->GetCar(0)->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4])));
 		if (compat == 2)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->GetCar(0)->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		return sNextLine;
 	}
 
@@ -4490,9 +4490,9 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid elevator");
 
 		if (compat == true)
-			StoreCommand(elev->AddShaftDoorComponent(ToInt(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
+			StoreCommand(elev->GetCar(0)->AddShaftDoorComponent(ToInt(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		else
-			StoreCommand(elev->AddShaftDoorComponent(ToInt(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
+			StoreCommand(elev->GetCar(0)->AddShaftDoorComponent(ToInt(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
 		return sNextLine;
 	}
 
@@ -4529,11 +4529,11 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid elevator");
 
 		if (params == 2 || legacy == true)
-			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current));
+			StoreCommand(elev->GetCar(0)->FinishShaftDoor(ToInt(tempdata[1]), Current));
 		else if (params == 3)
-			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2])));
+			StoreCommand(elev->GetCar(0)->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2])));
 		else
-			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2]), ToBool(tempdata[3])));
+			StoreCommand(elev->GetCar(0)->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2]), ToBool(tempdata[3])));
 		return sNextLine;
 	}
 
@@ -5167,10 +5167,10 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->OpenSpeed))
+		if (!IsNumeric(str2, elev->GetCar(0)->GetDoor(temp3)->OpenSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -5179,7 +5179,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		std::string str = Calc(temp2);
-		if (!IsNumeric(str, elev->NumDoors))
+		if (!IsNumeric(str, elev->GetCar(0)->NumDoors))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -5272,7 +5272,7 @@ int ScriptProcessor::ProcElevators()
 
 				for (int k = start; k <= end; k++)
 				{
-					elev->AddDisplayFloor(k);
+					elev->GetCar(0)->AddDisplayFloor(k);
 				}
 			}
 			else
@@ -5280,7 +5280,7 @@ int ScriptProcessor::ProcElevators()
 				int data;
 				if (!IsNumeric(tempdata[line], data))
 					return ScriptError("Invalid value");
-				elev->AddDisplayFloor(data);
+				elev->GetCar(0)->AddDisplayFloor(data);
 			}
 		}
 		return sNextLine;
@@ -5304,10 +5304,10 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->DoorTimer))
+		if (!IsNumeric(str2, elev->GetCar(0)->GetDoor(temp3)->DoorTimer))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -5321,10 +5321,10 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->QuickClose))
+		if (!IsNumeric(str2, elev->GetCar(0)->GetDoor(temp3)->QuickClose))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -5338,10 +5338,10 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->NudgeTimer))
+		if (!IsNumeric(str2, elev->GetCar(0)->GetDoor(temp3)->NudgeTimer))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -5355,10 +5355,10 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->SlowSpeed))
+		if (!IsNumeric(str2, elev->GetCar(0)->GetDoor(temp3)->SlowSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -5372,10 +5372,10 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->ManualSpeed))
+		if (!IsNumeric(str2, elev->GetCar(0)->GetDoor(temp3)->ManualSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -5389,13 +5389,13 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->GetDoor(temp3)->OpenSound = temp2;
+		elev->GetCar(0)->GetDoor(temp3)->OpenSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "closesound")
@@ -5408,13 +5408,13 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->GetDoor(temp3)->CloseSound = temp2;
+		elev->GetCar(0)->GetDoor(temp3)->CloseSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "nudgesound")
@@ -5427,13 +5427,13 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->GetDoor(temp3)->NudgeSound = temp2;
+		elev->GetCar(0)->GetDoor(temp3)->NudgeSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "startsound")
@@ -5771,14 +5771,14 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->GetDoor(temp3)->UpChimeSound = temp2;
-		elev->GetDoor(temp3)->DownChimeSound = temp2;
+		elev->GetCar(0)->GetDoor(temp3)->UpChimeSound = temp2;
+		elev->GetCar(0)->GetDoor(temp3)->DownChimeSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "upchimesound")
@@ -5791,13 +5791,13 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->GetDoor(temp3)->UpChimeSound = temp2;
+		elev->GetCar(0)->GetDoor(temp3)->UpChimeSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "downchimesound")
@@ -5810,13 +5810,13 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->GetDoor(temp3)->DownChimeSound = temp2;
+		elev->GetCar(0)->GetDoor(temp3)->DownChimeSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "alarmsound")
@@ -6212,20 +6212,20 @@ int ScriptProcessor::ProcElevators()
 		str = Calc(str);
 		if (!IsNumeric(str, temp3))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
+		if (temp3 == 0 || temp3 > elev->GetCar(0)->NumDoors)
 			return ScriptError("Invalid door number");
 
 		int params = SplitAfterEquals(LineData);
 		if (params < 1 || params > 2)
 			return ScriptError("Incorrect number of parameters");
 
-		elev->GetDoor(temp3)->EnableSensor(ToBool(tempdata[0]));
+		elev->GetCar(0)->GetDoor(temp3)->EnableSensor(ToBool(tempdata[0]));
 		if (params == 2)
 		{
 			//check to see if file exists
 			CheckFile("data/" + tempdata[1]);
 			//set door sound
-			elev->GetDoor(temp3)->SensorSound = tempdata[1];
+			elev->GetCar(0)->GetDoor(temp3)->SensorSound = tempdata[1];
 		}
 		return sNextLine;
 	}
@@ -6390,9 +6390,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			StoreCommand(elev->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10])));
+			StoreCommand(elev->GetCar(0)->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10])));
 		else
-			StoreCommand(elev->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+			StoreCommand(elev->GetCar(0)->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		return sNextLine;
 	}
 
@@ -6416,7 +6416,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		elev->SetShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		elev->GetCar(0)->SetShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		setshaftdoors = true;
 		return sNextLine;
 	}
@@ -6473,11 +6473,11 @@ int ScriptProcessor::ProcElevators()
 
 		bool result;
 		if (compat == 0)
-			result = elev->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			result = elev->GetCar(0)->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 		if (compat == 1)
-			result = elev->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+			result = elev->GetCar(0)->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		if (compat == 2)
-			result = elev->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+			result = elev->GetCar(0)->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 
 		if (result == false)
 			return ScriptError();
@@ -6586,7 +6586,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		if (!elev->GetPanel(ToInt(tempdata[0])))
+		if (!elev->GetCar(0)->GetPanel(ToInt(tempdata[0])))
 			return ScriptError("Invalid panel number");
 
 		if (compat > 0 && warn_deprecated == true)
@@ -6597,12 +6597,12 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			CheckFile("data/" + tempdata[1]);
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
+			control = elev->GetCar(0)->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 		}
 		if (compat == 1)
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
+			control = elev->GetCar(0)->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), hoffset, voffset);
+			control = elev->GetCar(0)->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), hoffset, voffset);
 
 		if (control)
 		{
@@ -6694,7 +6694,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		if (!elev->GetPanel(ToInt(tempdata[0])))
+		if (!elev->GetCar(0)->GetPanel(ToInt(tempdata[0])))
 			return ScriptError("Invalid panel number");
 
 		if (compat > 0 && warn_deprecated == true)
@@ -6705,12 +6705,12 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			CheckFile("data/" + tempdata[1]);
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
+			control = elev->GetCar(0)->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 		}
 		if (compat == 1)
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
+			control = elev->GetCar(0)->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), hoffset, voffset);
+			control = elev->GetCar(0)->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), hoffset, voffset);
 
 		if (control)
 		{
@@ -6750,13 +6750,13 @@ int ScriptProcessor::ProcElevators()
 			voffset = ToFloat(tempdata[10]);
 		}
 
-		if (!elev->GetPanel(ToInt(tempdata[0])))
+		if (!elev->GetCar(0)->GetPanel(ToInt(tempdata[0])))
 			return ScriptError("Invalid panel number");
 
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
+		Control* control = elev->GetCar(0)->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 
 		if (control)
 		{
@@ -6787,7 +6787,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		if (!elev->GetPanel(ToInt(tempdata[0])))
+		if (!elev->GetCar(0)->GetPanel(ToInt(tempdata[0])))
 			return ScriptError("Invalid panel number");
 
 		std::vector<std::string> action_array, tex_array;
@@ -6809,7 +6809,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddControl(tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = elev->GetCar(0)->GetPanel(ToInt(tempdata[0]))->AddControl(tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
 		if (control)
 		{
@@ -6898,9 +6898,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			elev->AddDirectionalIndicators(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
+			elev->GetCar(0)->AddDirectionalIndicators(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		else
-			elev->AddDirectionalIndicators(ToBool(tempdata[0]), false, ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
+			elev->GetCar(0)->AddDirectionalIndicators(ToBool(tempdata[0]), false, ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 		return sNextLine;
 	}
 
@@ -6953,14 +6953,14 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			bool result;
-			result = elev->AddFloorSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			result = elev->GetCar(0)->AddFloorSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 			if (result == false)
 				return ScriptError();
 		}
 		else if (compat == 1)
-			elev->AddFloorSigns(0, ToBool(tempdata[0]), "Button", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+			elev->GetCar(0)->AddFloorSigns(0, ToBool(tempdata[0]), "Button", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		else if (compat == 2)
-			elev->AddFloorSigns(0, ToBool(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+			elev->GetCar(0)->AddFloorSigns(0, ToBool(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		return sNextLine;
 	}
 
@@ -7020,16 +7020,16 @@ int ScriptProcessor::ProcElevators()
 		if (compat == true)
 		{
 			if (partial == true)
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]))));
+				StoreCommand(elev->GetCar(0)->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]))));
 			else
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), true, ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 0.0, 360, 360, 1.0, Ogre::Vector3(ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]))));
+				StoreCommand(elev->GetCar(0)->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), true, ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 0.0, 360, 360, 1.0, Ogre::Vector3(ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]))));
 		}
 		else
 		{
 			if (partial == true)
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
+				StoreCommand(elev->GetCar(0)->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
 			else
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
+				StoreCommand(elev->GetCar(0)->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
 		}
 		return sNextLine;
 	}
@@ -7063,9 +7063,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == true)
-			StoreCommand(elev->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
+			StoreCommand(elev->GetCar(0)->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
 		else
-			StoreCommand(elev->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
+			StoreCommand(elev->GetCar(0)->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		return sNextLine;
 	}
 
@@ -7098,9 +7098,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == true)
-			elev->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
+			elev->GetCar(0)->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 		else
-			elev->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
+			elev->GetCar(0)->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		return sNextLine;
 	}
 
@@ -7130,11 +7130,11 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value: " + tempdata[0]);
 
 		if (params == 1 || legacy == true)
-			StoreCommand(elev->FinishDoors(ToInt(tempdata[0])));
+			StoreCommand(elev->GetCar(0)->FinishDoors(ToInt(tempdata[0])));
 		else if (params == 2)
-			StoreCommand(elev->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1])));
+			StoreCommand(elev->GetCar(0)->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1])));
 		else
-			StoreCommand(elev->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2])));
+			StoreCommand(elev->GetCar(0)->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2])));
 
 		return sNextLine;
 	}
@@ -7166,11 +7166,11 @@ int ScriptProcessor::ProcElevators()
 
 		bool result;
 		if (params == 1 || legacy == true)
-			result = elev->FinishShaftDoors(ToInt(tempdata[0]));
+			result = elev->GetCar(0)->FinishShaftDoors(ToInt(tempdata[0]));
 		else if (params == 2)
-			result = elev->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]));
+			result = elev->GetCar(0)->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]));
 		else
-			result = elev->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]));
+			result = elev->GetCar(0)->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]));
 
 		if (result == false)
 			return ScriptError();
@@ -7195,7 +7195,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(elev->AddDirectionalIndicator(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
+		StoreCommand(elev->GetCar(0)->AddDirectionalIndicator(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
 		return sNextLine;
 	}
 
@@ -7248,11 +7248,11 @@ int ScriptProcessor::ProcElevators()
 		Door* door;
 
 		if (compat == 1)
-			door = elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
+			door = elev->GetCar(0)->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
 		else if (compat == 2)
-			door = elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
+			door = elev->GetCar(0)->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 		else
-			door = elev->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			door = elev->GetCar(0)->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 
 		if (door)
 			door->SetLocked(lockvalue, keyvalue);
@@ -7304,9 +7304,9 @@ int ScriptProcessor::ProcElevators()
 		//create model
 		Model *model;
 		if (compat == true)
-			model = elev->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			model = elev->GetCar(0)->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
-			model = elev->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			model = elev->GetCar(0)->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 		if (setkey == true && model)
 			model->SetKey(keyvalue);
@@ -7351,7 +7351,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		Control* control = elev->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = elev->GetCar(0)->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
 		if (control)
 		{
@@ -7391,7 +7391,7 @@ int ScriptProcessor::ProcElevators()
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
-		StoreCommand(elev->AddTrigger(tempdata[0], tempdata[1], min, max, action_array));
+		StoreCommand(elev->GetCar(0)->AddTrigger(tempdata[0], tempdata[1], min, max, action_array));
 		return sNextLine;
 	}
 
@@ -9142,7 +9142,7 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	if (Section == 2)
 		model = Simcore->GetFloor(Current)->GetModel(name);
 	else if (Section == 4)
-		model = Simcore->GetElevator(Current)->GetModel(name);
+		model = Simcore->GetElevator(Current)->GetCar(0)->GetModel(name);
 	else
 		model = Simcore->GetModel(name);
 

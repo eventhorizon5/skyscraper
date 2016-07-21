@@ -31,6 +31,7 @@
 #include "callbutton.h"
 #include "camera.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "sound.h"
 #include "profiler.h"
 
@@ -617,9 +618,9 @@ void CallButton::Process(int direction)
 			elevator->NotifyCallButtons(GetFloor(), false);
 
 			//turn on directional indicator
-			elevator->SetDirectionalIndicators(GetFloor(), false, true);
+			elevator->GetCar(0)->SetDirectionalIndicators(GetFloor(), false, true);
 			//play chime sound
-			elevator->Chime(0, GetFloor(), false);
+			elevator->GetCar(0)->Chime(0, GetFloor(), false);
 		}
 		else
 		{
@@ -627,12 +628,12 @@ void CallButton::Process(int direction)
 			elevator->NotifyCallButtons(GetFloor(), true);
 
 			//turn on directional indicator
-			elevator->SetDirectionalIndicators(GetFloor(), true, false);
+			elevator->GetCar(0)->SetDirectionalIndicators(GetFloor(), true, false);
 			//play chime sound
-			elevator->Chime(0, GetFloor(), true);
+			elevator->GetCar(0)->Chime(0, GetFloor(), true);
 		}
 		//open elevator if it's on the same floor
-		elevator->OpenDoors();
+		elevator->GetCar(0)->OpenDoors();
 	}
 	else
 	{

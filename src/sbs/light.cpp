@@ -29,6 +29,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "scenenode.h"
@@ -87,7 +88,7 @@ Light::~Light()
 		std::string type = GetParent()->GetType();
 
 		if (type == "Elevator")
-			static_cast<Elevator*>(GetParent())->RemoveLight(this);
+			static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveLight(this);
 		else if (type == "Floor")
 			static_cast<Floor*>(GetParent())->RemoveLight(this);
 		else if (type == "Shaft")

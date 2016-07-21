@@ -28,6 +28,7 @@
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "camera.h"
@@ -119,7 +120,7 @@ void Model::RemoveFromParent()
 	std::string type = GetParent()->GetType();
 
 	if (type == "Elevator")
-		static_cast<Elevator*>(GetParent())->RemoveModel(this);
+		static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveModel(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->RemoveModel(this);
 	else if (type == "Shaft")
@@ -140,7 +141,7 @@ void Model::AddToParent()
 	std::string type = GetParent()->GetType();
 
 	if (type == "Elevator")
-		static_cast<Elevator*>(GetParent())->AddModel(this);
+		static_cast<Elevator*>(GetParent())->GetCar(0)->AddModel(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->AddModel(this);
 	else if (type == "Shaft")

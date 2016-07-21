@@ -36,12 +36,12 @@ class ElevatorCar;
 class SBSIMPEXP Elevator : public Object
 {
 	friend class ElevatorDoor;
+	friend class ElevatorCar;
 
 public:
 	int Number; //elevator number
 	std::string Name; //elevator name
 	std::string Type; //type of elevator: standard, express, service, freight
-	int NumDoors; //number of elevator doors
 	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction
 	int LastQueueDirection; //last queue processing direction
@@ -144,7 +144,6 @@ public:
 	float EmergencyStopSpeed; //emergency stop deceleration multiplier
 	bool AutoAdjustSound; //auto-adjust stopping sounds
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
-	bool ControlPressActive; //true if a control associated with this elevator has just been pressed
 
 	//functions
 	Elevator(Object *parent, int number);
@@ -155,13 +154,11 @@ public:
 	bool CallCancel();
 	void Alarm();
 	bool Stop(bool emergency = false);
-	void OpenHatch();
 	void ProcessCallQueue();
 	int GetFloor();
 	void Loop();
 	void DumpQueues();
 	void Enabled(bool value);
-	void EnableObjects(bool value);
 	bool IsInElevator(const Ogre::Vector3 &position, bool camera = false);
 	float GetElevatorStart();
 	float GetDestination();
@@ -193,33 +190,7 @@ public:
 	bool SetDownButton(bool value);
 	int GetTopFloor();
 	int GetBottomFloor();
-	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	DirectionalIndicator* AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void SetDirectionalIndicators(int floor, bool UpLight, bool DownLight);
 	void UpdateDirectionalIndicators();
-	void EnableDirectionalIndicators(bool value);
-	ElevatorDoor* GetDoor(int number);
-	bool OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0, bool hold = false);
-	void CloseDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0, bool hold = false);
-	bool OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
-	void CloseDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
-	void StopDoors(int number = 0);
-	void HoldDoors(int number = 0, bool sensor = false);
-	void ShaftDoorsEnabled(int number, int floor, bool value);
-	void ShaftDoorsEnabledRange(int number, int floor, int range);
-	bool AreDoorsOpen(int number = 0);
-	bool AreShaftDoorsOpen(int number, int floor);
-	bool AreShaftDoorsClosed(bool skip_current_floor = false);
-	void ResetDoors(int number = 0, bool sensor = false);
-	bool DoorsStopped(int number = 0);
-	ElevatorDoor::DoorWrapper* AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	bool AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
-	ElevatorDoor::DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float tw, float th);
-	ElevatorDoor::DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
-	void Chime(int number, int floor, bool direction);
-	void EnableDoors(bool value);
-	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
-	bool AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void NotifyCallButtons(int floor, bool direction);
 	bool IsIdle();
 	void ResetQueue(bool up, bool down, bool stop_if_empty = true);
@@ -227,33 +198,12 @@ public:
 	void SetFloorSound(const std::string &prefix);
 	void SetMessageSound(bool type, bool direction, const std::string &filename);
 	void SetMusic(const std::string &filename);
-	Sound* AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop = true, float volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float doppler_level = 0.0, float cone_inside_angle = 360, float cone_outside_angle = 360, float cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	void DeleteActiveRoute();
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	ElevatorDoor::DoorWrapper* AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	ElevatorDoor::DoorWrapper* AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	void AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	ElevatorDoor::DoorWrapper* FinishDoors(int number, bool DoorWalls = true, bool TrackWalls = true);
-	ElevatorDoor::DoorWrapper* FinishShaftDoor(int number, int floor, bool DoorWalls = true, bool TrackWalls = true);
-	bool FinishShaftDoors(int number, bool DoorWalls = true, bool TrackWalls = true);
-	ButtonPanel* GetPanel(int index);
-	Control* GetFloorButton(int floor);
 	bool IsQueued(int floor);
-	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
-	Door* GetStdDoor(int number);
-	void RemovePanel(ButtonPanel* panel);
-	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
-	void RemoveElevatorDoor(ElevatorDoor *door);
-	void RemoveFloorIndicator(FloorIndicator *indicator);
-	void RemoveDoor(Door *door);
-	void RemoveSound(Sound *sound);
-	void RemoveLight(Light *light);
-	void RemoveModel(Model *model);
-	void RemoveControl(Control *control);
-	void RemoveTrigger(Trigger *trigger);
 	void NotifyArrival(int floor);
 	void SetRunState(bool value);
 	bool IsRunning();
@@ -261,17 +211,6 @@ public:
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
 	bool PlayMessageSound(bool type);
-	bool DoorExists(int number);
-	bool IsNudgeModeActive(int number = 0);
-	void EnableNudgeMode(bool value, int number = 0);
-	Light* AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
-	Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
-	void AddModel(Model *model);
-	void AddDisplayFloor(int floor);
-	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
-	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
-	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	std::vector<Sound*> GetSound(const std::string &name);
 	float GetDestinationAltitude(int floor);
 	float GetDestinationOffset(int floor);
 	void MoveObjects(float offset);
@@ -293,20 +232,7 @@ public:
 	int GetActiveCallFloor();
 	int GetActiveCallDirection();
 	int GetActiveCallType();
-	void ResetLights();
-	void ChangeLight(int floor, bool value);
-	int AreDoorsMoving(int number = 0, bool car_doors = true, bool shaft_doors = true);
-	bool AreDoorsOpening(int number = 0, bool car_doors = true, bool shaft_doors = true);
-	bool AreDoorsClosing(int number = 0, bool car_doors = true, bool shaft_doors = true);
 	bool InElevator();
-	void EnableSensor(bool value, int number = 0);
-	bool GetSensorStatus(int number = 0);
-	void ResetShaftDoors(int floor);
-	std::string GetFloorDisplay();
-	bool GetHoldStatus(int number = 0);
-	void ResetNudgeTimer(bool start = true, int number = 0);
-	bool ShaftDoorsExist(int number, int floor);
-	void ResetDoorState(int number = 0);
 	bool PeakWaiting();
 	bool OnRecallFloor();
 	int GetActiveRecallFloor();
@@ -315,12 +241,13 @@ public:
 	void CancelHallCall(int floor, int direction);
 	bool IsManuallyStopped();
 	bool IsOnFloor(int floor);
-	Model* GetModel(std::string name);
 	DynamicMesh* GetDoorContainer() { return DoorContainer; }
 	bool CheckInterlocks(bool skip_current_floor = false);
 
+	ElevatorCar* CreateCar();
 	ElevatorCar* GetCar(int number);
 	int GetCarCount();
+	ElevatorCar* GetCarForFloor(int number);
 
 private:
 
@@ -395,7 +322,6 @@ private:
 	void PlayStoppingSounds(bool emergency = false);
 	void PlayMovingSounds();
 	void HandleDequeue(int direction, bool stop_if_empty = true);
-	ElevatorCar* CreateCar();
 
 	//motor sound objects
 	Sound *motorsound;
@@ -414,8 +340,6 @@ private:
 	bool RecallAltSet;
 	bool ACPFloorSet;
 	bool RecallUnavailable; //true if recall floor is unavailable (alarm has been triggered on that floor)
-	ElevatorDoor* lastdoor_result;
-	int lastdoor_number;
 	Ogre::Vector3 elevposition;
 	float tmpDecelJerk;
 	bool FinishedMove;

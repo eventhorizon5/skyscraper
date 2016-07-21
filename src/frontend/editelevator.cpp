@@ -1096,25 +1096,25 @@ void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 void editelevator::On_bOpen_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->OpenDoors(sDoor->GetThumbPosition());
+		elevator->GetCar(0)->OpenDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bClose_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->CloseDoors(sDoor->GetThumbPosition());
+		elevator->GetCar(0)->CloseDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bOpenManual_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->OpenDoorsEmergency(sDoor->GetThumbPosition());
+		elevator->GetCar(0)->OpenDoorsEmergency(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bCloseManual_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->CloseDoorsEmergency(sDoor->GetThumbPosition());
+		elevator->GetCar(0)->CloseDoorsEmergency(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bStop_Click(wxCommandEvent& event)
@@ -1126,7 +1126,7 @@ void editelevator::On_bStop_Click(wxCommandEvent& event)
 void editelevator::On_bHoldDoors_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->HoldDoors(sDoor->GetThumbPosition());
+		elevator->GetCar(0)->HoldDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bSetName_Click(wxCommandEvent& event)
@@ -1180,7 +1180,7 @@ void editelevator::OnInit()
 		sNumber->SetScrollbar(0, 1, Simcore->GetElevatorCount(), 1);
 
 		//set door range slider
-		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
+		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetCar(0)->NumDoors + 1, 1);
 	}
 	else
 		sNumber->Enable(false);
@@ -1207,7 +1207,7 @@ void editelevator::Loop()
 	if (!elevator)
 		return;
 
-	door = elevator->GetDoor(door_num);
+	door = elevator->GetCar(0)->GetDoor(door_num);
 
 	if (elev_num != last_elevator)
 	{
@@ -1218,7 +1218,7 @@ void editelevator::Loop()
 		sFloor->SetScrollbar(0, 1, elevator->GetCar(0)->GetServicedFloorCount(), 1);
 
 		//set door range slider
-		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
+		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetCar(0)->NumDoors + 1, 1);
 
 		SetMainValues();
 	}
@@ -1290,7 +1290,7 @@ void editelevator::Loop()
 	txtParking->SetValue(BoolToString(elevator->Parking));
 	txtQueueResets->SetValue(BoolToString(elevator->QueueResets));
 	txtLimitQueue->SetValue(BoolToString(elevator->LimitQueue));
-	txtNudgeMode->SetValue(BoolToString(elevator->IsNudgeModeActive()));
+	txtNudgeMode->SetValue(BoolToString(elevator->GetCar(0)->IsNudgeModeActive()));
 	txtNotified->SetValue(BoolToString(elevator->Notified));
 	txtWaitForTimer->SetValue(BoolToString(elevator->WaitForTimer));
 	txtMusicOn->SetValue(BoolToString(elevator->MusicOn));
@@ -1420,13 +1420,13 @@ void editelevator::On_bSetDecelJerk_Click(wxCommandEvent& event)
 void editelevator::On_bOpenShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->OpenDoors(sDoor->GetThumbPosition(), 3, floor_number);
+		elevator->GetCar(0)->OpenDoors(sDoor->GetThumbPosition(), 3, floor_number);
 }
 
 void editelevator::On_bCloseShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->CloseDoors(sDoor->GetThumbPosition(), 3, floor_number);
+		elevator->GetCar(0)->CloseDoors(sDoor->GetThumbPosition(), 3, floor_number);
 }
 
 void editelevator::On_bSetDoorTimer_Click(wxCommandEvent& event)
@@ -1561,7 +1561,7 @@ void editelevator::On_Fire2Hold_Select(wxCommandEvent& event)
 void editelevator::On_bStopDoors_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->StopDoors(sDoor->GetThumbPosition());
+		elevator->GetCar(0)->StopDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bUp_Toggle(wxCommandEvent& event)
@@ -1746,8 +1746,8 @@ void editelevator::On_bSetNudge_Click(wxCommandEvent& event)
 	if (elevator)
 	{
 		int door = sDoor->GetThumbPosition();
-		bool status = elevator->IsNudgeModeActive(door);
-		elevator->EnableNudgeMode(!status, door);
+		bool status = elevator->GetCar(0)->IsNudgeModeActive(door);
+		elevator->GetCar(0)->EnableNudgeMode(!status, door);
 	}
 }
 
@@ -1756,8 +1756,8 @@ void editelevator::On_bDoorSensor_Click(wxCommandEvent& event)
 	if (elevator)
 	{
 		int door = sDoor->GetThumbPosition();
-		bool status = elevator->GetSensorStatus(door);
-		elevator->EnableSensor(!status, door);
+		bool status = elevator->GetCar(0)->GetSensorStatus(door);
+		elevator->GetCar(0)->EnableSensor(!status, door);
 	}
 }
 
