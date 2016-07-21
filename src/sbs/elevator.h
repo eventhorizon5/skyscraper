@@ -26,8 +26,6 @@
 #ifndef _SBS_ELEVATOR_H
 #define _SBS_ELEVATOR_H
 
-#include "timer.h"
-
 namespace SBS {
 
 class SBSIMPEXP Elevator : public Object
@@ -215,20 +213,6 @@ public:
 
 private:
 
-	//elevator parking timer
-	class Timer : public TimerObject
-	{
-	public:
-		Elevator *elevator;
-		int type; //0 = parking timer, 1 = arrival/departure
-		Timer(const std::string &name, Elevator *parent, int Type) : TimerObject(parent, name)
-		{
-			elevator = parent;
-			type = Type;
-		}
-		virtual void Notify();
-	};
-
 	struct QueueEntry
 	{
 		int floor; //floor number
@@ -245,6 +229,8 @@ private:
 			return floor < element.floor;
 		}
 	};
+
+	class Timer; //internal timer class
 
 	//parking timer object
 	Timer *parking_timer;

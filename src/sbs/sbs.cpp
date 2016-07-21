@@ -57,6 +57,7 @@
 #include "sound.h"
 #include "door.h"
 #include "model.h"
+#include "timer.h"
 #include "profiler.h"
 #include "revsbs.h"
 

@@ -26,8 +26,6 @@
 #ifndef _SBS_ELEVATORDOOR_H
 #define _SBS_ELEVATORDOOR_H
 
-#include "timer.h"
-
 namespace SBS {
 
 class SBSIMPEXP ElevatorDoor : public Object
@@ -185,18 +183,7 @@ private:
 
 	void MoveDoors(bool open, bool manual);
 
-	//door autoclose timer
-	class Timer : public TimerObject
-	{
-	public:
-		ElevatorDoor *door;
-		ElevatorCar *car;
-		Elevator *elevator;
-		int type; //0 = autoclose, 1 = nudge
-
-		Timer(const std::string &name, ElevatorDoor *parent, ElevatorCar *car, int Type);
-		virtual void Notify();
-	};
+	class Timer; //internal timer class
 
 	//autoclose timer object
 	Timer *timer;

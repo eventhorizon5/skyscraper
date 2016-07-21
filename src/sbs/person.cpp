@@ -32,10 +32,23 @@
 #include "control.h"
 #include "route.h"
 #include "random.h"
+#include "timer.h"
 #include "profiler.h"
 #include "person.h"
 
 namespace SBS {
+
+//random call timer
+class Person::Timer : public TimerObject
+{
+public:
+	Person *parent;
+	Timer(const std::string &name, Person *parent) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+	}
+	virtual void Notify();
+};
 
 Person::Person(Object *parent, const std::string &name, int floor, bool service_access) : Object(parent)
 {
@@ -436,6 +449,11 @@ std::string Person::GetStatus()
 		return "Call button Down pressed";
 
 	return "";
+}
+
+bool Person::IsRandomActivityEnabled()
+{
+	return random_timer->IsRunning();
 }
 
 }

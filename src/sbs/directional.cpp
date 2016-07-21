@@ -30,9 +30,22 @@
 #include "texture.h"
 #include "elevator.h"
 #include "elevatorcar.h"
+#include "timer.h"
 #include "directional.h"
 
 namespace SBS {
+
+//shut-off timer
+class DirectionalIndicator::Timer : public TimerObject
+{
+public:
+	DirectionalIndicator *indicator;
+	Timer(const std::string &name, DirectionalIndicator *parent) : TimerObject(parent, name)
+	{
+		indicator = parent;
+	}
+	virtual void Notify();
+};
 
 DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th) : Object(parent)
 {

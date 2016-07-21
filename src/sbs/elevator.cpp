@@ -35,11 +35,26 @@
 #include "control.h"
 #include "sound.h"
 #include "elevatorcar.h"
+#include "timer.h"
 #include "profiler.h"
 
 #include <time.h>
 
 namespace SBS {
+
+//elevator parking timer
+class Elevator::Timer : public TimerObject
+{
+public:
+	Elevator *elevator;
+	int type; //0 = parking timer, 1 = arrival/departure
+	Timer(const std::string &name, Elevator *parent, int Type) : TimerObject(parent, name)
+	{
+		elevator = parent;
+		type = Type;
+	}
+	virtual void Notify();
+};
 
 Elevator::Elevator(Object *parent, int number) : Object(parent)
 {

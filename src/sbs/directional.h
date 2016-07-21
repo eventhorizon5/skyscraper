@@ -26,8 +26,6 @@
 #ifndef _SBS_DIRECTIONAL_H
 #define _SBS_DIRECTIONAL_H
 
-#include "timer.h"
-
 namespace SBS {
 
 class SBSIMPEXP DirectionalIndicator : public Object
@@ -64,20 +62,9 @@ private:
 
 	bool is_enabled; //true if indicator is currently enabled
 
-	//shut-off timer
-	class Timer : public TimerObject
-	{
-	public:
-		DirectionalIndicator *indicator;
-		Timer(const std::string &name, DirectionalIndicator *parent) : TimerObject(parent, name)
-		{
-			indicator = parent;
-		}
-		virtual void Notify();
-	};
-
 	//timer object
-	Timer *timer;
+	class Timer; //internal timer class
+	Timer* timer;
 	int timer_interval;
 };
 

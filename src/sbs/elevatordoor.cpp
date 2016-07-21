@@ -35,9 +35,29 @@
 #include "trigger.h"
 #include "profiler.h"
 #include "sound.h"
+#include "timer.h"
 #include "elevatordoor.h"
 
 namespace SBS {
+
+//door autoclose timer
+class ElevatorDoor::Timer : public TimerObject
+{
+public:
+	ElevatorDoor *door;
+	ElevatorCar *car;
+	Elevator *elevator;
+	int type; //0 = autoclose, 1 = nudge
+
+	Timer(const std::string &name, ElevatorDoor *parent, ElevatorCar *car, int Type) : TimerObject(parent, name)
+	{
+		door = parent;
+		this->car = car;
+		elevator = car->GetElevator();
+		type = Type;
+	}
+	virtual void Notify();
+};
 
 ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car->GetParent())
 {
@@ -2253,14 +2273,6 @@ void ElevatorDoor::RemoveShaftDoor(DoorWrapper *door)
 			}
 		}
 	}
-}
-
-ElevatorDoor::Timer::Timer(const std::string &name, ElevatorDoor *parent, ElevatorCar *car, int Type) : TimerObject(parent, name)
-{
-	door = parent;
-	this->car = car;
-	elevator = car->GetElevator();
-	type = Type;
 }
 
 }
