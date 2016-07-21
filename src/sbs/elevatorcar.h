@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace SBS {
 
-class SBSIMPEXP ElevatorCar : public ObjectBase
+class SBSIMPEXP ElevatorCar : public Object
 {
 	friend class Elevator;
 public:
@@ -42,6 +42,7 @@ public:
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
+	Elevator* GetElevator();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	WallObject* AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);

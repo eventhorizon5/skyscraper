@@ -377,7 +377,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (NumDoors > 0)
 	{
 		for (int i = 1; i <= NumDoors; i++)
-			GetCar(0)->DoorArray.push_back(new ElevatorDoor(i, this));
+			GetCar(0)->DoorArray.push_back(new ElevatorDoor(i, GetCar(0)));
 	}
 
 	//create sound objects

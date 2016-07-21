@@ -30,6 +30,9 @@
 
 namespace SBS {
 
+class Elevator;
+class ElevatorCar;
+
 class SBSIMPEXP ElevatorDoor : public Object
 {
 public:
@@ -99,6 +102,7 @@ public:
 
 	int Number; //door instance number
 	Elevator *elev; //pointer to associated elevator object
+	ElevatorCar *car; //pointer to associated elevator car object
 	float OpenSpeed; //door opening/closing speed (for backwards-compatibility only)
 	bool DoorDirection; //if direction is false, doors are on the left/right side
 	int DoorTimer; //door autoclose timer value, in milliseconds
@@ -116,7 +120,7 @@ public:
 	float ManualSpeed; //manual speed multiplier
 	float SlowSpeed; //slow speed multiplier, mainly for nudge mode
 
-	ElevatorDoor(int number, Elevator* elevator);
+	ElevatorDoor(int number, ElevatorCar* car);
 	~ElevatorDoor();
 	void OpenDoorsEmergency(int whichdoors = 1, int floor = 0);
 	void CloseDoorsEmergency(int whichdoors = 1, int floor = 0);
@@ -189,14 +193,11 @@ private:
 	{
 	public:
 		ElevatorDoor *door;
+		ElevatorCar *car;
 		Elevator *elevator;
 		int type; //0 = autoclose, 1 = nudge
-		Timer(const std::string &name, ElevatorDoor *parent, Elevator *elev, int Type) : TimerObject(parent, name)
-		{
-			door = parent;
-			elevator = elev;
-			type = Type;
-		}
+
+		Timer(const std::string &name, ElevatorDoor *parent, ElevatorCar *car, int Type);
 		virtual void Notify();
 	};
 

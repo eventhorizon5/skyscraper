@@ -40,8 +40,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace SBS {
 
-ElevatorCar::ElevatorCar(Elevator *parent, int number) : ObjectBase(parent)
+ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 {
+	//set up SBS object
+	SetValues("ElevatorCar", "", false);
+
 	this->parent = parent;
 	this->number = number;
 	carsound = 0;
@@ -249,6 +252,11 @@ ElevatorCar::~ElevatorCar()
 		delete Mesh;
 	}
 	Mesh = 0;
+}
+
+Elevator* ElevatorCar::GetElevator()
+{
+	return parent;
 }
 
 void ElevatorCar::Report(const std::string &message)
