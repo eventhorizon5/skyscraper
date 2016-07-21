@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatordoor.h"
 #include "control.h"
 #include "trigger.h"
 #include "sound.h"
@@ -82,7 +83,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	DownMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.DownMoveSound", "");
 	UpStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.UpStopSound", "");
 	DownStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.DownStopSound", "");
-	CarIdleSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.IdleSound", "elevidle.wav");
+	IdleSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.IdleSound", "elevidle.wav");
 	AlarmSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.AlarmSound", "bell1.wav");
 	AlarmSoundStop = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.AlarmSoundStop", "bell1-stop.wav");
 	EmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.EmergencyStopSound", "");
@@ -525,7 +526,7 @@ void ElevatorCar::Loop()
 	//elevator car monitor loop
 
 	//play car idle sound if in elevator, or if doors open
-	if (CarIdleSound != "")
+	if (IdleSound != "")
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
@@ -535,7 +536,7 @@ void ElevatorCar::Loop()
 					Report("playing car idle sound");
 
 				if (idlesound->IsLoaded() == false)
-					idlesound->Load(CarIdleSound);
+					idlesound->Load(IdleSound);
 
 				idlesound->SetLoopState(true);
 				idlesound->Play();

@@ -40,6 +40,7 @@
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatordoor.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "action.h"

@@ -26,7 +26,6 @@
 #ifndef _SBS_ELEVATOR_H
 #define _SBS_ELEVATOR_H
 
-#include "elevatordoor.h"
 #include "timer.h"
 
 namespace SBS {

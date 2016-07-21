@@ -5523,7 +5523,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->GetCar(0)->CarIdleSound = temp2;
+		elev->GetCar(0)->IdleSound = temp2;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -5645,7 +5645,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->GetCar(0)->CarIdleSound = temp2;
+		elev->GetCar(0)->IdleSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "motorstartsound")

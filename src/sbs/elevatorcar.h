@@ -26,6 +26,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _SBS_ELEVATORCAR_H
 #define _SBS_ELEVATORCAR_H
 
+#include "elevatordoor.h"
+
 namespace SBS {
 
 class SBSIMPEXP ElevatorCar : public Object
@@ -49,7 +51,7 @@ public:
 	std::string DownMoveSound; //car down move sound
 	std::string UpStopSound; //car up stop/slowdown sound
 	std::string DownStopSound; //car down stop/slowdown sound
-	std::string CarIdleSound; //car idle/fan sound
+	std::string IdleSound; //car idle/fan sound
 	std::string AlarmSound; //alarm sound (loop)
 	std::string AlarmSoundStop; //alarm stopping sound
 	std::string BeepSound; //floor beep sound (played when changing floors)
