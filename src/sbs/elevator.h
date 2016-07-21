@@ -56,7 +56,6 @@ public:
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
-	float Height; //elevator height
 	bool HeightSet;
 	bool IsMoving; //is elevator moving?
 	std::string MotorUpStartSound; //motor up start/speedup sound
@@ -84,7 +83,6 @@ public:
 	bool ManualDown;  //down toggle for inspection service mode
 	Ogre::Vector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
-	float CameraOffset; //camera vertical offset
 	int ParkingFloor; //floor to automatically park the elevator on when idle
 	float ParkingDelay; //time to wait in idle mode before parking
 	bool Leveling; //is elevator in leveling mode?
@@ -301,11 +299,6 @@ private:
 	float tmpDecelJerk;
 	bool FinishedMove;
 	bool SoundsQueued;
-
-	//cache objects for IsInElevator()
-	Ogre::Vector3 lastposition;
-	bool lastcheckresult;
-	bool checkfirstrun;
 };
 
 }

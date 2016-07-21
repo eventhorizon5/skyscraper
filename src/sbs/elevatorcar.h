@@ -70,6 +70,7 @@ public:
 	bool MusicOn; //music enabled status
 	bool MusicOnMove; //true if music should only play during move
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
+	float CameraOffset; //camera vertical offset
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
@@ -177,6 +178,9 @@ public:
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
 	bool PlayMessageSound(bool type);
+	float SetHeight();
+	bool IsInCar(const Ogre::Vector3 &position, bool camera = false);
+	bool Check(Ogre::Vector3 position);
 
 	MeshObject* Mesh; //car mesh object
 
@@ -231,12 +235,18 @@ private:
 	bool DoorMessageSound; //true if a door message sound is queued, to prevent repeats
 	ElevatorDoor* lastdoor_result;
 	int lastdoor_number;
+	bool FirstRun; //used for setting first-run items in the run loop
 
 	//internal data for door open/close hold feature
 	int doorhold_direction;
 	int doorhold_whichdoors;
 	int doorhold_floor;
 	bool doorhold_manual;
+
+	//cache objects for IsInCar()
+	Ogre::Vector3 lastposition;
+	bool lastcheckresult;
+	bool checkfirstrun;
 };
 
 }

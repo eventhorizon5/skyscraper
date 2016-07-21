@@ -1263,7 +1263,7 @@ void editelevator::Loop()
 	txtEnabled->SetValue(BoolToString(elevator->IsEnabled));
 	txtErrorOffset->SetValue(TruncateNumber(elevator->ErrorOffset, 2));
 	txtFloor->SetValue(ToString(elevator->GetFloor()));
-	txtHeight->SetValue(TruncateNumber(elevator->Height, 2));
+	txtHeight->SetValue(TruncateNumber(elevator->GetCar(0)->Height, 2));
 	txtMoveElevator->SetValue(BoolToString(elevator->MoveElevator));
 	txtNumber->SetValue(ToString(elevator->Number));
 	txtOriginFloor->SetValue(ToString(elevator->StartingFloor));
@@ -1284,7 +1284,7 @@ void editelevator::Loop()
 	txtIsIdle->SetValue(BoolToString(elevator->IsIdle()));
 	txtWaitForDoors->SetValue(BoolToString(elevator->WaitForDoors));
 	txtMotor->SetValue(TruncateNumber(elevator->MotorPosition.x, 2) + wxT(", ") + TruncateNumber(elevator->MotorPosition.y, 2) + wxT(", ") + TruncateNumber(elevator->MotorPosition.z, 2));
-	txtCameraOffset->SetValue(TruncateNumber(elevator->CameraOffset, 2));
+	txtCameraOffset->SetValue(TruncateNumber(elevator->GetCar(0)->CameraOffset, 2));
 	txtManualGo->SetValue(BoolToString(elevator->ManualGo));
 	txtLeveling->SetValue(BoolToString(elevator->Leveling));
 	txtParking->SetValue(BoolToString(elevator->Parking));

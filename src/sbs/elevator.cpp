@@ -90,7 +90,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	EmergencyStop = 0;
 	AssignedShaft = 0;
 	IsEnabled = true;
-	Height = 0;
 	TempDeceleration = 0;
 	ErrorOffset = 0;
 	JerkRate = 0;
@@ -125,15 +124,12 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	RecallUnavailable = false;
 	ManualGo = false;
 	Created = false;
-	lastcheckresult = false;
-	checkfirstrun = true;
 	MotorPosition = 0;
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;
 	ActiveCallType = 0;
 	QueueResets = sbs->GetConfigBool("Skyscraper.SBS.Elevator.QueueResets", false);
 	FirstRun = true;
-	CameraOffset = 0;
 	ParkingFloor = 0;
 	ParkingDelay = 0;
 	Leveling = false;
@@ -157,7 +153,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	SoundsQueued = false;
 	HeightSet = false;
 	elevposition = 0;
-	lastposition = 0;
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6f);
@@ -925,37 +920,14 @@ void Elevator::Loop()
 	if (Created == false)
 		return;
 
-	GetCar(0)->ControlPressActive = false;
-
 	//make sure height value is set
 	if (HeightSet == false)
 	{
-		Height = 0;
-		//search through mesh geometry to find actual height
-		for (size_t i = 0; i < GetCar(0)->Mesh->Submeshes.size(); i++)
+		for (size_t i = 0; i < Cars.size(); i++)
 		{
-			for (size_t j = 0; j < GetCar(0)->Mesh->Submeshes[i].MeshGeometry.size(); j++)
-			{
-				float y = sbs->ToLocal(GetCar(0)->Mesh->Submeshes[i].MeshGeometry[j].vertex.y);
-
-				//set height value
-				if (y > Height)
-					Height = y;
-			}
+			float y = Cars[i]->SetHeight();
 		}
 		HeightSet = true;
-
-		//position sounds at top of elevator car
-		Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
-		GetCar(0)->idlesound->SetPositionRelative(top);
-		GetCar(0)->alarm->SetPositionRelative(top);
-		GetCar(0)->floorbeep->SetPositionRelative(top);
-		GetCar(0)->announcesnd->SetPositionRelative(top);
-
-		//set default music position to elevator height
-		if (GetCar(0)->MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
-			GetCar(0)->MusicPosition = top;
-		GetCar(0)->musicsound->SetPositionRelative(GetCar(0)->MusicPosition);
 	}
 
 	//perform first-run tasks
@@ -1006,8 +978,6 @@ void Elevator::Loop()
 			ACPFloor = 0;
 			SetACPFloor(tmp);
 		}
-		if (OpenOnStart == true)
-			GetCar(0)->OpenDoors();
 
 		UpdateFloorIndicators();
 	}
@@ -1706,7 +1676,7 @@ void Elevator::FinishMove()
 		UpdateFloorIndicators();
 
 		//turn on objects if user is in elevator
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && CameraOffset < Height)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && GetCar(0)->CameraOffset < GetCar(0)->Height)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning on objects");
@@ -1862,47 +1832,15 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 	//if camera is true, set associated camera offset
 
 	//SBS_PROFILE("Elevator::IsInElevator");
-	bool inelevator = false;
 
 	if (IsEnabled == false)
 		return false;
 
-	//if last position is the same as new, return previous result
-	if (position.positionEquals(lastposition) == true && checkfirstrun == false)
-		return lastcheckresult;
-
-	checkfirstrun = false;
-
-	if (position.y >= (GetPosition().y - 0.1) && position.y < GetPosition().y + (Height * 2))
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		if (GetCar(0)->Mesh->InBoundingBox(position, false) == true)
-		{
-			if (GetCar(0)->Mesh->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
-			{
-				if (camera == true)
-					CameraOffset = position.y - GetPosition().y;
-				inelevator = true;
-			}
-		}
-		else if (camera == true)
-			CameraOffset = 0;
-
-		if (position.y < GetPosition().y + Height)
-		{
-			//cache values
-			lastcheckresult = inelevator;
-			lastposition = position;
-
-			return inelevator;
-		}
+		if (Cars[i]->IsInCar(position, camera) == true)
+			return true;
 	}
-	else if (camera == true)
-		CameraOffset = 0;
-
-	//cache values
-	lastcheckresult = false;
-	lastposition = position;
-
 	return false;
 }
 
@@ -3346,30 +3284,12 @@ bool Elevator::Check(Ogre::Vector3 position)
 
 	SBS_PROFILE("Elevator::Check");
 
-	if (IsInElevator(position, true) == true && IsEnabled)
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		if (InElevator() == false)
-		{
-			GetCar(0)->EnableObjects(true);
-			UpdateFloorIndicators();
-		}
-		sbs->InElevator = true;
-		sbs->ElevatorNumber = Number;
-		sbs->ElevatorSync = true;
-		return true;
+		if (Cars[i]->Check(position) == true)
+			return true;
 	}
 
-	//turn off objects if user has moved outside the checked elevator
-	else if (InElevator() == true)
-		GetCar(0)->EnableObjects(false);
-
-	//if camera is within vertical elevator range, turn on syncing to allow things like elevator surfing
-	else if (CameraOffset > Height && CameraOffset < Height * 2)
-	{
-		sbs->ElevatorNumber = Number;
-		sbs->ElevatorSync = true;
-		return true;
-	}
 	return false;
 }
 

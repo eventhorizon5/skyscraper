@@ -96,6 +96,11 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MusicOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.MusicOn", true);
 	MusicOnMove = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.MusicOnMove", false);
 	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.AutoEnable", true);
+	CameraOffset = 0;
+	FirstRun = true;
+	lastcheckresult = false;
+	checkfirstrun = true;
+	lastposition = 0;
 
 	std::string name = "Car " + ToString(number);
 	SetName(name);
@@ -526,6 +531,17 @@ void ElevatorCar::OpenHatch()
 void ElevatorCar::Loop()
 {
 	//elevator car monitor loop
+
+	ControlPressActive = false;
+
+	//perform first-run tasks
+	if (FirstRun == true && parent->Running == true)
+	{
+		FirstRun = false;
+
+		if (parent->OpenOnStart == true)
+			OpenDoors();
+	}
 
 	//play car idle sound if in elevator, or if doors open
 	if (IdleSound != "")
@@ -2538,6 +2554,132 @@ void ElevatorCar::PlayMovingSounds()
 			carsound->Play();
 		}
 	}
+}
+
+float ElevatorCar::SetHeight()
+{
+	//make sure height value is set
+	if (HeightSet == false)
+	{
+		Height = 0;
+		//search through mesh geometry to find actual height
+		for (size_t i = 0; i < Mesh->Submeshes.size(); i++)
+		{
+			for (size_t j = 0; j < Mesh->Submeshes[i].MeshGeometry.size(); j++)
+			{
+				float y = sbs->ToLocal(Mesh->Submeshes[i].MeshGeometry[j].vertex.y);
+
+				//set height value
+				if (y > Height)
+					Height = y;
+			}
+		}
+		HeightSet = true;
+
+		//position sounds at top of elevator car
+		Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
+		idlesound->SetPositionRelative(top);
+		alarm->SetPositionRelative(top);
+		floorbeep->SetPositionRelative(top);
+		announcesnd->SetPositionRelative(top);
+
+		//set default music position to elevator height
+		if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
+			MusicPosition = top;
+		musicsound->SetPositionRelative(MusicPosition);
+	}
+
+	return Height;
+}
+
+bool ElevatorCar::IsInCar(const Ogre::Vector3 &position, bool camera)
+{
+	//determine if the given 3D position is inside the car
+
+	//first checks to see if camera is within an car height range, and then
+	//checks for a collision with the car floor below
+
+	//if camera is true, set associated camera offset
+
+	//SBS_PROFILE("ElevatorCar::IsInCar");
+	bool result = false;
+
+	if (IsEnabled == false)
+		return false;
+
+	//if last position is the same as new, return previous result
+	if (position.positionEquals(lastposition) == true && checkfirstrun == false)
+		return lastcheckresult;
+
+	checkfirstrun = false;
+
+	if (position.y >= (GetPosition().y - 0.1) && position.y < GetPosition().y + (Height * 2))
+	{
+		if (Mesh->InBoundingBox(position, false) == true)
+		{
+			if (Mesh->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
+			{
+				if (camera == true)
+					CameraOffset = position.y - GetPosition().y;
+				result = true;
+			}
+		}
+		else if (camera == true)
+			CameraOffset = 0;
+
+		if (position.y < GetPosition().y + Height)
+		{
+			//cache values
+			lastcheckresult = result;
+			lastposition = position;
+
+			return result;
+		}
+	}
+	else if (camera == true)
+		CameraOffset = 0;
+
+	//cache values
+	lastcheckresult = false;
+	lastposition = position;
+
+	return false;
+}
+
+bool ElevatorCar::Check(Ogre::Vector3 position)
+{
+	//check to see if user (camera) is in the car
+
+	if (IsEnabled == false)
+		return false;
+
+	//SBS_PROFILE("ElevatorCar::Check");
+
+	if (IsInCar(position, true) == true && IsEnabled)
+	{
+		if (parent->InElevator() == false)
+		{
+			EnableObjects(true);
+			UpdateFloorIndicators();
+		}
+		sbs->InElevator = true;
+		sbs->ElevatorNumber = parent->Number;
+		sbs->ElevatorSync = true;
+		return true;
+	}
+
+	//turn off objects if user has moved outside the checked elevator
+	else if (parent->InElevator() == true)
+		EnableObjects(false);
+
+	//if camera is within vertical elevator range, turn on syncing to allow things like elevator surfing
+	else if (CameraOffset > Height && CameraOffset < Height * 2)
+	{
+		sbs->ElevatorNumber = parent->Number;
+		sbs->ElevatorSync = true;
+		return true;
+	}
+	return false;
 }
 
 }
