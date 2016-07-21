@@ -55,7 +55,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	//init variables
 	Name = "";
 	this->parent = parent;
-	this->number = number;
+	Number = number;
 	carsound = 0;
 	idlesound = 0;
 	alarm = 0;
@@ -327,7 +327,7 @@ void ElevatorCar::Report(const std::string &message)
 	//general reporting function
 
 	if (parent->GetCarCount() > 1)
-		parent->Report("Car " + ToString(number) + ": " + message);
+		parent->Report("Car " + ToString(Number) + ": " + message);
 	else
 		parent->Report(message);
 }
@@ -337,7 +337,7 @@ bool ElevatorCar::ReportError(const std::string &message)
 	//general reporting function
 
 	if (parent->GetCarCount() > 1)
-		return parent->ReportError("Car " + ToString(number) + ": " + message);
+		return parent->ReportError("Car " + ToString(Number) + ": " + message);
 
 	return parent->ReportError(message);
 }
@@ -390,7 +390,7 @@ void ElevatorCar::DumpServicedFloors()
 	if (parent->GetCarCount() > 1)
 		sbs->Report("\n--- Elevator " + ToString(parent->Number) + "'s Serviced Floors ---\n");
 	else
-		sbs->Report("\n--- Elevator " + ToString(parent->Number) + " Car " + ToString(number) + "'s Serviced Floors ---\n");
+		sbs->Report("\n--- Elevator " + ToString(parent->Number) + " Car " + ToString(Number) + "'s Serviced Floors ---\n");
 
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
 		sbs->Report(ToString((int)i) + " - " + ToString(ServicedFloors[i]));
@@ -2687,6 +2687,36 @@ void ElevatorCar::StopCarSound()
 	//stop car sound
 
 	carsound->Stop();
+}
+
+int ElevatorCar::GetFloor()
+{
+	//Determine floor that the car is on
+
+	int newlastfloor;
+
+	if (lastfloorset == true)
+		newlastfloor = sbs->GetFloorNumber(GetPosition().y, lastfloor, true);
+	else
+		newlastfloor = sbs->GetFloorNumber(GetPosition().y);
+
+	lastfloor = newlastfloor;
+	lastfloorset = true;
+	return lastfloor;
+}
+
+bool ElevatorCar::OnTopFloor()
+{
+	//returns true if car is on the highest serviced floor
+
+	return (GetFloor() == GetTopFloor());
+}
+
+bool ElevatorCar::OnBottomFloor()
+{
+	//returns true if car is on the lowest serviced floor
+
+	return (GetFloor() == GetBottomFloor());
 }
 
 }

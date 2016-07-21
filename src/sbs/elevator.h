@@ -210,6 +210,13 @@ public:
 	bool AreDoorsOpening(bool car_doors = true, bool shaft_doors = true);
 	bool AreDoorsClosing(bool car_doors = true, bool shaft_doors = true);
 	bool IsServicedFloor(int floor, bool report = true);
+	void ChangeLight(int floor, bool value);
+	void ResetLights();
+	void OpenDoors();
+	void CloseDoors();
+	bool GetHoldStatus();
+	bool OnTopFloor();
+	bool OnBottomFloor();
 
 	ElevatorCar* CreateCar();
 	ElevatorCar* GetCar(int number);
@@ -222,11 +229,23 @@ private:
 	{
 		int floor; //floor number
 		int call_type; //0 = car call, 1 = hall call, 2 = system call
+		int car; //car number
+		int direction; //queue direction
 
-		QueueEntry(int floor, int call_type)
+		QueueEntry()
+		{
+			floor = 0;
+			call_type = 0;
+			car = 0;
+			direction = 0;
+		}
+
+		QueueEntry(int floor, int call_type, int car, int direction)
 		{
 			this->floor = floor;
 			this->call_type = call_type;
+			this->car = car;
+			this->direction = direction;
 		}
 
 		bool operator < (const QueueEntry& element) const
@@ -257,9 +276,7 @@ private:
 	int EmergencyStop; //internal stop status; 0 for off, 1 for standard stop, 2 for emergency stop
 	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
-	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
-	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
-	int ActiveCallType; //type of active call (0 = car, 1 = hall, 2 = system)
+	QueueEntry ActiveCall; //active call (that the elevator's currently responding to)
 	bool FirstRun; //used for setting first-run items in the run loop
 	bool Running; //is elevator in run mode?
 	bool UpQueueEmpty;

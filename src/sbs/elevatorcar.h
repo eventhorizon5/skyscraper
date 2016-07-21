@@ -35,6 +35,7 @@ class SBSIMPEXP ElevatorCar : public Object
 	friend class Elevator;
 public:
 
+	int Number; //car number
 	std::string Name; //car name
 	std::vector<int> ServicedFloors; //list of floors this car services
 	int NumDoors; //number of elevator doors
@@ -182,13 +183,15 @@ public:
 	bool IsInCar(const Ogre::Vector3 &position, bool camera = false);
 	bool Check(Ogre::Vector3 &position);
 	void StopCarSound();
+	int GetFloor();
+	bool OnTopFloor();
+	bool OnBottomFloor();
 
 	MeshObject* Mesh; //car mesh object
 
 private:
 
 	Elevator* parent;
-	int number;
 
 	//functions
 	void PlayStartingSounds();
@@ -237,6 +240,8 @@ private:
 	ElevatorDoor* lastdoor_result;
 	int lastdoor_number;
 	bool FirstRun; //used for setting first-run items in the run loop
+	int lastfloor;
+	bool lastfloorset;
 
 	//internal data for door open/close hold feature
 	int doorhold_direction;
