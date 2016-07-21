@@ -3935,7 +3935,7 @@ ElevatorCar* Elevator::CreateCar()
 {
 	//create a new elevator car object
 
-	int number = (int)Cars.size();
+	int number = (int)Cars.size() + 1;
 	ElevatorCar *car = new ElevatorCar(this, number);
 	Cars.push_back(car);
 	return car;
