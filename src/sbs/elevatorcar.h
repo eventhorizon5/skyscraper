@@ -71,6 +71,7 @@ public:
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
+	void CreateCar();
 	Elevator* GetElevator();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
@@ -85,6 +86,7 @@ public:
 	int GetFloorIndex(int floor);
 	int GetServicedFloorCount();
 	int GetServicedFloor(int index);
+	bool CheckServicedFloors();
 	void Alarm();
 	void OpenHatch();
 	void Loop();

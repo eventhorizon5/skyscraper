@@ -286,6 +286,31 @@ ElevatorCar::~ElevatorCar()
 	Mesh = 0;
 }
 
+void ElevatorCar::CreateCar()
+{
+	//used with CreateElevator function; this is the car-specific code
+
+	//create door objects
+	if (sbs->Verbose)
+		Report("creating doors");
+	if (NumDoors > 0)
+	{
+		for (int i = 1; i <= NumDoors; i++)
+			DoorArray.push_back(new ElevatorDoor(i, this));
+	}
+
+	//create sound objects
+	if (sbs->Verbose)
+		Report("creating sound objects");
+	carsound = new Sound(this, "Car", true);
+	idlesound = new Sound(this, "Idle", true);
+	alarm = new Sound(this, "Alarm", true);
+	floorbeep = new Sound(this, "Floor Beep", true);
+	announcesnd = new Sound(this, "Announcement Sound", true);
+	musicsound = new Sound(this, "Music Sound", true);
+	musicsound->Move(MusicPosition);
+}
+
 Elevator* ElevatorCar::GetElevator()
 {
 	return parent;
@@ -439,6 +464,22 @@ int ElevatorCar::GetServicedFloor(int index)
 	if (index >= 0 && index < (int)ServicedFloors.size())
 		return ServicedFloors[index];
 	return 0;
+}
+
+bool ElevatorCar::CheckServicedFloors()
+{
+	//ensure serviced floors are valid for the shaft
+
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (parent->GetShaft()->IsValidFloor(ServicedFloors[i]) == false)
+		{
+			std::string snum = ToString(parent->AssignedShaft);
+			std::string num = ToString(ServicedFloors[i]);
+			return ReportError("Floor " + num + " not valid for shaft " + snum);
+		}
+	}
+	return true;
 }
 
 void ElevatorCar::Alarm()

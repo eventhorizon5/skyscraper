@@ -285,6 +285,10 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (!GetShaft())
 		return ReportError("Shaft " + ToString(AssignedShaft) + " doesn't exist");
 
+	//check starting floor
+	if (!sbs->GetFloor(floor))
+		return ReportError("Floor " + ToString(floor) + " doesn't exist");
+
 	if (floor < GetShaft()->startfloor || floor > GetShaft()->endfloor)
 		return ReportError("Invalid starting floor " + ToString(floor));
 
@@ -293,19 +297,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		GetCar(0)->AddServicedFloor(floor);
 
 	//ensure that serviced floors are valid for the shaft
-	for (size_t i = 0; i < GetCar(0)->ServicedFloors.size(); i++)
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		if (GetShaft()->IsValidFloor(GetCar(0)->ServicedFloors[i]) == false)
-		{
-			std::string snum = ToString(AssignedShaft);
-			std::string num = ToString(GetCar(0)->ServicedFloors[i]);
-			return ReportError("Floor " + num + " not valid for shaft " + snum);
-		}
+		if (Cars[i]->CheckServicedFloors() == false)
+			return false;
 	}
-
-	//set data
-	if (!sbs->GetFloor(floor))
-		return ReportError("Floor " + ToString(floor) + " doesn't exist");
 
 	//set starting position
 	Ogre::Vector3 position = Ogre::Vector3::ZERO;
@@ -340,21 +336,13 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	SetPosition(position);
 	elevposition = GetPosition();
 
-	//create door objects
-	if (sbs->Verbose)
-		Report("creating doors");
-	if (GetCar(0)->NumDoors > 0)
+	//create cars
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		for (int i = 1; i <= GetCar(0)->NumDoors; i++)
-			GetCar(0)->DoorArray.push_back(new ElevatorDoor(i, GetCar(0)));
+		Cars[i]->CreateCar();
 	}
 
-	//create sound objects
-	if (sbs->Verbose)
-		Report("creating sound objects");
-	GetCar(0)->carsound = new Sound(this, "Car", true);
-	GetCar(0)->idlesound = new Sound(this, "Idle", true);
-
+	//create motor sounds
 	std::string motorname = "Motor " + ToString(Number);
 	motorsound = new Sound(GetShaft(), motorname, true);
 	motorname += " Idle";
@@ -371,11 +359,6 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - GetPosition().x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition().z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
-	GetCar(0)->alarm = new Sound(this, "Alarm", true);
-	GetCar(0)->floorbeep = new Sound(this, "Floor Beep", true);
-	GetCar(0)->announcesnd = new Sound(this, "Announcement Sound", true);
-	GetCar(0)->musicsound = new Sound(this, "Music Sound", true);
-	GetCar(0)->musicsound->Move(GetCar(0)->MusicPosition);
 
 	//set elevator's floor
 	ElevatorFloor = floor;
