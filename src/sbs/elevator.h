@@ -277,6 +277,7 @@ private:
 	void PlayStoppingSounds(bool emergency = false);
 	void PlayMovingSounds();
 	void HandleDequeue(int direction, bool stop_if_empty = true);
+	void StopSounds();
 
 	//motor sound objects
 	Sound *motorsound;

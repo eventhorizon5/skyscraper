@@ -181,6 +181,7 @@ public:
 	float SetHeight();
 	bool IsInCar(const Ogre::Vector3 &position, bool camera = false);
 	bool Check(Ogre::Vector3 &position);
+	void StopCarSound();
 
 	MeshObject* Mesh; //car mesh object
 

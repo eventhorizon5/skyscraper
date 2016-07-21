@@ -1605,9 +1605,9 @@ finish:
 	MoveElevator = false;
 	IsMoving = false;
 	Leveling = false;
-	GetCar(0)->carsound->Stop();
-	motorsound->Stop();
 	tmpDecelJerk = 0;
+
+	StopSounds();
 
 	//dequeue floor route
 	if (EmergencyStop == 0 && IsManuallyStopped() == false)
@@ -3908,6 +3908,17 @@ bool Elevator::IsServicedFloor(int floor, bool report)
 	}
 
 	return result;
+}
+
+void Elevator::StopSounds()
+{
+	//stop movement sounds
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		Cars[i]->StopCarSound();
+	}
+	motorsound->Stop();
 }
 
 }

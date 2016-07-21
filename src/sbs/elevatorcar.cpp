@@ -2682,4 +2682,11 @@ bool ElevatorCar::Check(Ogre::Vector3 &position)
 	return false;
 }
 
+void ElevatorCar::StopCarSound()
+{
+	//stop car sound
+
+	carsound->Stop();
+}
+
 }
