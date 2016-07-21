@@ -3967,4 +3967,27 @@ bool Elevator::AreDoorsClosing(bool car_doors, bool shaft_doors)
 	return false;
 }
 
+bool Elevator::IsServicedFloor(int floor, bool report)
+{
+	//returns true if floor is in any of the serviced floor lists, otherwise false
+
+	bool result = false;
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		if (Cars[i]->GetFloorIndex(floor) != -1)
+			result = true;
+	}
+
+	if (sbs->Verbose && report == true)
+	{
+		if (result == false)
+			Report("Floor " + ToString(floor) + " is not a serviced floor");
+		else
+			Report("Floor " + ToString(floor) + " is a serviced floor");
+	}
+
+	return result;
+}
+
 }

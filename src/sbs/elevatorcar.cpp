@@ -401,11 +401,15 @@ bool ElevatorCar::AddServicedFloor(int number)
 	if (sbs->IsValidFloor(number) == false)
 		return ReportError("AddServicedFloor: Invalid floor " + ToString(number));
 
-	if (IsServicedFloor(number) == false)
+	//only add floor if not serviced by another car
+	if (parent->IsServicedFloor(number) == false)
 	{
 		ServicedFloors.push_back(number);
 		std::sort(ServicedFloors.begin(), ServicedFloors.end());
 	}
+	else
+		return ReportError("AddServicedFloor: Floor " + ToString(number) + " already serviced");
+
 	return true;
 }
 
@@ -413,12 +417,10 @@ void ElevatorCar::RemoveServicedFloor(int number)
 {
 	if (sbs->Verbose)
 		Report("removing serviced floor " + ToString(number));
-	if (IsServicedFloor(number) == true)
-	{
-		int index = GetFloorIndex(number);
-		if (index > -1)
-			ServicedFloors.erase(ServicedFloors.begin() + index);
-	}
+
+	int index = GetFloorIndex(number);
+	if (index > -1)
+		ServicedFloors.erase(ServicedFloors.begin() + index);
 }
 
 bool ElevatorCar::IsServicedFloor(int floor, bool report)

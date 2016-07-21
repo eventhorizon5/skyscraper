@@ -211,6 +211,7 @@ public:
 	bool DoorsStopped();
 	bool AreDoorsOpening(bool car_doors = true, bool shaft_doors = true);
 	bool AreDoorsClosing(bool car_doors = true, bool shaft_doors = true);
+	bool IsServicedFloor(int floor, bool report = true);
 
 	ElevatorCar* CreateCar();
 	ElevatorCar* GetCar(int number);
