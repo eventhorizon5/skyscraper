@@ -86,8 +86,8 @@ Trigger::~Trigger()
 		{
 			std::string type = GetParent()->GetType();
 
-			if (type == "Elevator")
-				static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveTrigger(this);
+			if (type == "ElevatorCar")
+				static_cast<ElevatorCar*>(GetParent())->RemoveTrigger(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveTrigger(this);
 			else if (type == "Shaft")

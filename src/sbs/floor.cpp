@@ -481,7 +481,7 @@ CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string
 		Elevator *elev = sbs->GetElevator(elevators[i]);
 		if (elev)
 		{
-			if (elev->GetCar(0)->IsServicedFloor(Number) == true)
+			if (elev->IsServicedFloor(Number) == true)
 			{
 				check = true;
 				break;
@@ -759,13 +759,13 @@ WallObject* Floor::ColumnWallBox2(const std::string &name, const std::string &te
 	return sbs->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
-FloorIndicator* Floor::AddFloorIndicator(int elevator, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
 	if (relative == false)
 	{
-		FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
+		FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
 		FloorIndicatorArray.push_back(ind);
 		return ind;
 	}
@@ -774,7 +774,7 @@ FloorIndicator* Floor::AddFloorIndicator(int elevator, bool relative, const std:
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
+			FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
 			FloorIndicatorArray.push_back(ind);
 			return ind;
 		}
@@ -1019,7 +1019,7 @@ float Floor::GetBase(bool relative)
 	}
 }
 
-DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, int car, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator on the specified floor, associated with a given elevator
 
@@ -1045,11 +1045,11 @@ DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, bool relative
 	if (active_direction == false)
 	{
 		//if active_direction is false, only create indicator if the elevator serves the floor
-		if (elev->GetCar(0)->IsServicedFloor(Number) == false)
+		if (elev->IsServicedFloor(Number) == false)
 			return 0;
 	}
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(this, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, GetBase(true) + voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(this, elevator, car, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, GetBase(true) + voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
 	return indicator;
 }
@@ -1477,7 +1477,7 @@ void Floor::GetElevatorList(std::vector<int> &listing, bool get_locals, bool get
 		{
 			std::string type = SetCaseCopy(elev->Type, false);
 
-			if (elev->GetCar(0)->IsServicedFloor(Number) == true)
+			if (elev->IsServicedFloor(Number) == true)
 			{
 				if (get_locals == true && type == "local")
 					listing.push_back(elev->Number);

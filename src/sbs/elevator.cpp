@@ -277,7 +277,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (Deceleration <= 0)
 		return ReportError("Deceleration not set or invalid");
 
-	if (GetCar(0)->NumDoors < 0)
+	if (GetCar(1)->NumDoors < 0)
 		return ReportError("Number of doors invalid");
 
 	if (AccelJerk <= 0)
@@ -300,8 +300,8 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		return ReportError("Invalid starting floor " + ToString(floor));
 
 	//add elevator's starting floor to serviced floor list - this also ensures that the list is populated to prevent errors
-	if (GetCar(0)->IsServicedFloor(floor) == false)
-		GetCar(0)->AddServicedFloor(floor);
+	if (GetCar(1)->IsServicedFloor(floor) == false)
+		GetCar(1)->AddServicedFloor(floor);
 
 	//ensure that serviced floors are valid for the shaft
 	for (size_t i = 0; i < Cars.size(); i++)
@@ -1224,7 +1224,7 @@ void Elevator::MoveElevatorToFloor()
 			}
 
 			//reset shaft doors
-			GetCar(0)->ResetShaftDoors(GetFloor());
+			GetCar(sbs->CarNumber)->ResetShaftDoors(GetFloor());
 		}
 
 		//set interior directional indicators
@@ -3841,10 +3841,13 @@ ElevatorCar* Elevator::CreateCar()
 
 ElevatorCar* Elevator::GetCar(int number)
 {
-	if (number < 0 || number >(int)Cars.size() - 1)
+	if (number < 0 || number >(int)Cars.size())
 		return 0;
 
-	return Cars[number];
+	if (number == 0)
+		number = 1;
+
+	return Cars[number - 1];
 }
 
 int Elevator::GetCarCount()

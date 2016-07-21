@@ -186,6 +186,7 @@ public:
 	int GetFloor();
 	bool OnTopFloor();
 	bool OnBottomFloor();
+	bool InCar();
 
 	MeshObject* Mesh; //car mesh object
 

@@ -34,7 +34,7 @@
 
 namespace SBS {
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset) : Object(parent)
+FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset) : Object(parent)
 {
 	//creates a new floor indicator at the specified position
 
@@ -43,6 +43,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 
 	is_enabled = true;
 	elev = elevator;
+	this->car = car;
 	Prefix = texture_prefix;
 
 	//move object
@@ -53,6 +54,10 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 
 	//exit if elevator is invalid
 	if (!sbs->GetElevator(elev))
+		return;
+
+	//exit if the elevator car is invalid
+	if (!sbs->GetElevator(elev)->GetCar(car))
 		return;
 
 	FloorIndicatorMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
@@ -96,8 +101,8 @@ FloorIndicator::~FloorIndicator()
 	{
 		std::string type = GetParent()->GetType();
 
-		if (type == "Elevator")
-			static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveFloorIndicator(this);
+		if (type == "ElevatorCar")
+			static_cast<ElevatorCar*>(GetParent())->RemoveFloorIndicator(this);
 		else if (type == "Floor")
 			static_cast<Floor*>(GetParent())->RemoveFloorIndicator(this);
 	}
@@ -126,7 +131,12 @@ void FloorIndicator::Update()
 	if (!elevator)
 		return;
 
-	texture = elevator->GetCar(0)->GetFloorDisplay();
+	ElevatorCar *car = elevator->GetCar(this->car);
+
+	if (!car)
+		return;
+
+	texture = car->GetFloorDisplay();
 
 	//don't update texture if no value
 	if (texture == "")

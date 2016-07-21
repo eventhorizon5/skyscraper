@@ -33,6 +33,7 @@ class SBSIMPEXP DirectionalIndicator : public Object
 public:
 
 	int elevator; //elevator this indicator is assigned to
+	int car; //elevator car this indicator is assigned to
 	int floor; //floor the indicator is on
 	std::string Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
 	std::string UpTextureUnlit; //unlit up texture
@@ -46,7 +47,7 @@ public:
 	bool ActiveDirection; //true if this indicator displays the active elevator direction, instead of only for an available call
 
 	//functions
-	DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	DirectionalIndicator(Object *parent, int elevator, int car, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~DirectionalIndicator();
 	void Enabled(bool value);
 	void UpLight(bool value);

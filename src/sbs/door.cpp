@@ -171,8 +171,8 @@ Door::~Door()
 		{
 			std::string type = GetParent()->GetType();
 
-			if (type == "Elevator")
-				static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveDoor(this);
+			if (type == "ElevatorCar")
+				static_cast<ElevatorCar*>(GetParent())->RemoveDoor(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveDoor(this);
 			else if (type == "Shaft")

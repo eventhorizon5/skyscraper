@@ -47,7 +47,7 @@ public:
 	virtual void Notify();
 };
 
-DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th) : Object(parent)
+DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th) : Object(parent)
 {
 	//create a directional indicator
 
@@ -56,6 +56,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 
 	is_enabled = true;
 	this->elevator = elevator;
+	this->car = car;
 	this->floor = floor;
 	Direction = direction;
 	UpTextureUnlit = uptexture;
@@ -315,8 +316,8 @@ DirectionalIndicator::~DirectionalIndicator()
 	{
 		std::string type = GetParent()->GetType();
 
-		if (type == "Elevator")
-			static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveDirectionalIndicator(this);
+		if (type == "ElevatorCar")
+			static_cast<ElevatorCar*>(GetParent())->RemoveDirectionalIndicator(this);
 		else if (type == "Floor")
 			static_cast<Floor*>(GetParent())->RemoveDirectionalIndicator(this);
 	}
@@ -351,10 +352,13 @@ void DirectionalIndicator::UpLight(bool value)
 
 	if (timer && elev)
 	{
+		if (!elev->GetCar(car))
+			return;
+
 		//stop or start timer
 		if (value == false && DownStatus == false)
 			timer->Stop();
-		else if (value == true && (elev->AutoDoors == false || elev->GetCar(0)->ShaftDoorsExist(0, floor) == false))
+		else if (value == true && (elev->AutoDoors == false || elev->GetCar(car)->ShaftDoorsExist(0, floor) == false))
 			timer->Start(timer_interval, true);
 	}
 
@@ -383,10 +387,13 @@ void DirectionalIndicator::DownLight(bool value)
 
 	if (timer && elev)
 	{
+		if (!elev->GetCar(car))
+			return;
+
 		//stop or start timer
 		if (value == false && UpStatus == false)
 			timer->Stop();
-		else if (value == true && (elev->AutoDoors == false || elev->GetCar(0)->ShaftDoorsExist(0, floor) == false))
+		else if (value == true && (elev->AutoDoors == false || elev->GetCar(car)->ShaftDoorsExist(0, floor) == false))
 			timer->Start(timer_interval, true);
 	}
 

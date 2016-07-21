@@ -119,8 +119,8 @@ void Model::RemoveFromParent()
 {
 	std::string type = GetParent()->GetType();
 
-	if (type == "Elevator")
-		static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveModel(this);
+	if (type == "ElevatorCar")
+		static_cast<ElevatorCar*>(GetParent())->RemoveModel(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->RemoveModel(this);
 	else if (type == "Shaft")
@@ -140,8 +140,8 @@ void Model::AddToParent()
 
 	std::string type = GetParent()->GetType();
 
-	if (type == "Elevator")
-		static_cast<Elevator*>(GetParent())->GetCar(0)->AddModel(this);
+	if (type == "ElevatorCar")
+		static_cast<ElevatorCar*>(GetParent())->AddModel(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->AddModel(this);
 	else if (type == "Shaft")

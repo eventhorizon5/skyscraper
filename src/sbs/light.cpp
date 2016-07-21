@@ -87,8 +87,8 @@ Light::~Light()
 	{
 		std::string type = GetParent()->GetType();
 
-		if (type == "Elevator")
-			static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveLight(this);
+		if (type == "ElevatorCar")
+			static_cast<ElevatorCar*>(GetParent())->RemoveLight(this);
 		else if (type == "Floor")
 			static_cast<Floor*>(GetParent())->RemoveLight(this);
 		else if (type == "Shaft")

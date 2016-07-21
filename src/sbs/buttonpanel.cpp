@@ -36,7 +36,7 @@
 
 namespace SBS {
 
-ButtonPanel::ButtonPanel(Elevator *elevator, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th) : Object(elevator)
+ButtonPanel::ButtonPanel(ElevatorCar *car, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th) : Object(car)
 {
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
@@ -45,7 +45,8 @@ ButtonPanel::ButtonPanel(Elevator *elevator, int index, const std::string &textu
 	SetValues("ButtonPanel", "", false);
 
 	IsEnabled = true;
-	this->elevator = elevator->Number;
+	this->elevator = car->GetElevator()->Number;
+	this->car = car->Number;
 	Index = index;
 	Direction = direction;
 	ButtonWidth = buttonwidth;
@@ -119,7 +120,7 @@ ButtonPanel::~ButtonPanel()
 	{
 		//unregister with parent floor object
 		if (parent_deleting == false)
-			sbs->GetElevator(elevator)->GetCar(0)->RemovePanel(this);
+			sbs->GetElevator(elevator)->GetCar(car)->RemovePanel(this);
 
 		//remove associated actions
 		for (size_t i = 0; i < action_list.size(); i++)

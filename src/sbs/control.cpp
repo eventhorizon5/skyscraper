@@ -159,8 +159,8 @@ Control::~Control()
 
 			if (type == "ButtonPanel")
 				static_cast<ButtonPanel*>(GetParent())->RemoveControl(this);
-			else if (type == "Elevator")
-				static_cast<Elevator*>(GetParent())->GetCar(0)->RemoveControl(this);
+			else if (type == "ElevatorCar")
+				static_cast<ElevatorCar*>(GetParent())->RemoveControl(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveControl(this);
 			else if (type == "Shaft")

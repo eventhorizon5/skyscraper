@@ -110,6 +110,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
 	ElevatorNumber = 1;
+	CarNumber = 1;
 	wall_orientation = 1;
 	floor_orientation = 2;
 	DrawMainN = true;
@@ -2604,6 +2605,9 @@ std::string SBS::DumpState()
 	output.append("\n");
 	output.append("ElevatorNumber: ");
 	output.append(ToString(ElevatorNumber));
+	output.append("\n");
+	output.append("CarNumber: ");
+	output.append(ToString(CarNumber));
 	output.append("\n");
 	output.append("ElevatorSync: ");
 	output.append(BoolToString(ElevatorSync));

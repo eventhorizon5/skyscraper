@@ -612,15 +612,19 @@ void CallButton::Process(int direction)
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
+		ElevatorCar *car = elevator->GetCarForFloor(GetFloor());
+		if (!car)
+			return;
+
 		if (direction == -1)
 		{
 			//update arrival information
 			elevator->NotifyCallButtons(GetFloor(), false);
 
 			//turn on directional indicator
-			elevator->GetCar(0)->SetDirectionalIndicators(GetFloor(), false, true);
+			car->SetDirectionalIndicators(GetFloor(), false, true);
 			//play chime sound
-			elevator->GetCar(0)->Chime(0, GetFloor(), false);
+			car->Chime(0, GetFloor(), false);
 		}
 		else
 		{
@@ -628,12 +632,12 @@ void CallButton::Process(int direction)
 			elevator->NotifyCallButtons(GetFloor(), true);
 
 			//turn on directional indicator
-			elevator->GetCar(0)->SetDirectionalIndicators(GetFloor(), true, false);
+			car->SetDirectionalIndicators(GetFloor(), true, false);
 			//play chime sound
-			elevator->GetCar(0)->Chime(0, GetFloor(), true);
+			car->Chime(0, GetFloor(), true);
 		}
 		//open elevator if it's on the same floor
-		elevator->GetCar(0)->OpenDoors();
+		car->OpenDoors();
 	}
 	else
 	{

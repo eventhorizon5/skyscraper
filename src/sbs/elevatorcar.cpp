@@ -101,6 +101,8 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	lastcheckresult = false;
 	checkfirstrun = true;
 	lastposition = 0;
+	lastfloor = 0;
+	lastfloorset = false;
 
 	std::string name = "Car " + ToString(number);
 	SetName(name);
@@ -364,7 +366,7 @@ FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix
 {
 	//Creates a floor indicator at the specified location
 
-	FloorIndicator* indicator = new FloorIndicator(parent, parent->Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicator* indicator = new FloorIndicator(this, parent->Number, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray.push_back(indicator);
 	return indicator;
 }
@@ -378,7 +380,7 @@ ButtonPanel* ElevatorCar::CreateButtonPanel(const std::string &texture, int rows
 	if (sbs->Verbose)
 		Report("creating button panel " + ToString(index + 1));
 
-	ButtonPanel* panel = new ButtonPanel(parent, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	ButtonPanel* panel = new ButtonPanel(this, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	PanelArray.push_back(panel);
 	return panel;
 }
@@ -810,7 +812,7 @@ void ElevatorCar::AddDirectionalIndicators(bool relative, bool active_direction,
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
 	{
 		if (sbs->GetFloor(ServicedFloors[i]))
-			sbs->GetFloor(ServicedFloors[i])->AddDirectionalIndicator(parent->Number, relative, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+			sbs->GetFloor(ServicedFloors[i])->AddDirectionalIndicator(parent->Number, Number, relative, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	}
 }
 
@@ -821,7 +823,7 @@ DirectionalIndicator* ElevatorCar::AddDirectionalIndicator(bool active_direction
 	if (sbs->Verbose)
 		Report("adding interior directional indicator");
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(this, parent->Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(this, parent->Number, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
 	return indicator;
 }
@@ -2664,6 +2666,7 @@ bool ElevatorCar::Check(Ogre::Vector3 &position)
 		}
 		sbs->InElevator = true;
 		sbs->ElevatorNumber = parent->Number;
+		sbs->CarNumber = Number;
 		sbs->ElevatorSync = true;
 		return true;
 	}
@@ -2676,6 +2679,7 @@ bool ElevatorCar::Check(Ogre::Vector3 &position)
 	else if (CameraOffset > Height && CameraOffset < Height * 2)
 	{
 		sbs->ElevatorNumber = parent->Number;
+		sbs->CarNumber = Number;
 		sbs->ElevatorSync = true;
 		return true;
 	}
@@ -2717,6 +2721,13 @@ bool ElevatorCar::OnBottomFloor()
 	//returns true if car is on the lowest serviced floor
 
 	return (GetFloor() == GetBottomFloor());
+}
+
+bool ElevatorCar::InCar()
+{
+	//return true if user is currently in car
+
+	return (sbs->InElevator == true && sbs->ElevatorNumber == parent->Number && sbs->CarNumber == Number);
 }
 
 }
