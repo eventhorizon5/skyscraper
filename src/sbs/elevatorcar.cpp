@@ -73,6 +73,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	lastdoor_number = 0;
 	NumDoors = 1;
 	ControlPressActive = false;
+	IsEnabled = true;
 
 	std::string name = "Car " + ToString(number);
 	SetName(name);
@@ -430,6 +431,96 @@ void ElevatorCar::Loop()
 {
 	//elevator car monitor loop
 
+	//process door open/close holds
+	if (doorhold_direction > 0)
+		OpenDoors();
+	if (doorhold_direction < 0)
+		CloseDoors();
+
+	//door operations
+	for (int i = 1; i <= NumDoors; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->Loop();
+
+		//reset door timer if peak mode is enabled and a movement is pending
+		if ((parent->UpPeak == true || parent->DownPeak == true))
+		{
+			if ((parent->UpQueue.size() != 0 || parent->DownQueue.size() != 0) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
+			{
+				if (door)
+				{
+					if (door->TimerIsRunning() == false)
+						door->Reset();
+				}
+			}
+		}
+	}
+
+	if (IsEnabled == true)
+	{
+		//process triggers
+		for (size_t i = 0; i < TriggerArray.size(); i++)
+		{
+			if (TriggerArray[i])
+				TriggerArray[i]->Loop();
+		}
+
+		//process models
+		for (size_t i = 0; i < ModelArray.size(); i++)
+		{
+			if (ModelArray[i])
+				ModelArray[i]->Loop();
+		}
+	}
+
+	//process door sensors
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+			DoorArray[i]->CheckSensor();
+	}
+
+	//process queued sounds
+	announcesnd->ProcessQueue();
+
+	//reset message sound status
+	DirMessageSound = false;
+	DoorMessageSound = false;
+}
+
+void ElevatorCar::Enabled(bool value)
+{
+	//shows/hides elevator car
+
+	if (IsEnabled == value)
+		return;
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("enabling car");
+		else
+			Report("disabling car");
+	}
+
+	Mesh->Enable(value);
+	EnableDoors(value);
+	IsEnabled = value;
+
+	//floor indicators
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->Enabled(value);
+	}
+
+	//interior directional indicators
+	EnableDirectionalIndicators(value);
+
+	if (value == false)
+		EnableObjects(false);
 }
 
 void ElevatorCar::EnableObjects(bool value)

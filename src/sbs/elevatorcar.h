@@ -41,6 +41,7 @@ public:
 	Ogre::Vector3 MusicPosition; //music emitter position, relative of elevator center
 	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 	bool ControlPressActive; //true if a control associated with this elevator has just been pressed
+	bool IsEnabled; //true if car is enabled
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
@@ -60,6 +61,7 @@ public:
 	int GetServicedFloor(int index);
 	void OpenHatch();
 	void Loop();
+	void Enabled(bool value);
 	void EnableObjects(bool value);
 	void UpdateFloorIndicators();
 	int GetTopFloor();

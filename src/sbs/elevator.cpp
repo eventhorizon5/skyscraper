@@ -29,19 +29,11 @@
 #include "dynamicmesh.h"
 #include "mesh.h"
 #include "callbutton.h"
-#include "light.h"
-#include "texture.h"
 #include "elevator.h"
 #include "camera.h"
 #include "shaft.h"
 #include "control.h"
-#include "trigger.h"
 #include "sound.h"
-#include "model.h"
-#include "door.h"
-#include "buttonpanel.h"
-#include "directional.h"
-#include "floorindicator.h"
 #include "elevatorcar.h"
 #include "profiler.h"
 
@@ -1180,12 +1172,6 @@ void Elevator::Loop()
 			Down();
 	}
 
-	//process door open/close holds
-	if (GetCar(0)->doorhold_direction > 0)
-		GetCar(0)->OpenDoors();
-	if (GetCar(0)->doorhold_direction < 0)
-		GetCar(0)->CloseDoors();
-
 	//process Go function hold
 	if (GoActive == true)
 		Go(GoActiveFloor, true);
@@ -1193,71 +1179,19 @@ void Elevator::Loop()
 	//call queue processor
 	ProcessCallQueue();
 
-	//door operations
-	for (int i = 1; i <= GetCar(0)->NumDoors; i++)
-	{
-		ElevatorDoor *door = GetCar(0)->GetDoor(i);
-		if (door)
-			door->Loop();
-
-		//reset door timer if peak mode is enabled and a movement is pending
-		if ((UpPeak == true || DownPeak == true))
-		{
-			if ((UpQueue.size() != 0 || DownQueue.size() != 0) && (GetCar(0)->AreDoorsOpen() == true && GetCar(0)->AreDoorsMoving() == 0))
-			{
-				if (door)
-				{
-					if (door->TimerIsRunning() == false)
-						door->Reset();
-				}
-			}
-		}
-	}
-
 	//enable auto-park timer if specified
 	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false && AutoDoors == true)
 		parking_timer->Start(int(ParkingDelay * 1000), true);
-
-	if (IsEnabled == true)
-	{
-		//process triggers
-		for (size_t i = 0; i < GetCar(0)->TriggerArray.size(); i++)
-		{
-			if (GetCar(0)->TriggerArray[i])
-				GetCar(0)->TriggerArray[i]->Loop();
-		}
-
-		//process models
-		for (size_t i = 0; i < GetCar(0)->ModelArray.size(); i++)
-		{
-			if (GetCar(0)->ModelArray[i])
-				GetCar(0)->ModelArray[i]->Loop();
-		}
-	}
-
-	//process door sensors
-	for (size_t i = 0; i < GetCar(0)->DoorArray.size(); i++)
-	{
-		if (GetCar(0)->DoorArray[i])
-			GetCar(0)->DoorArray[i]->CheckSensor();
-	}
-
-	//process queued sounds
-	GetCar(0)->announcesnd->ProcessQueue();
-
-	//reset message sound status
-	GetCar(0)->DirMessageSound = false;
-	GetCar(0)->DoorMessageSound = false;
-
-	//elevator movement
-	if (MoveElevator == true)
-		MoveElevatorToFloor();
 
 	//run per-car loops
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
 		Cars[i]->Loop();
 	}
+
+	//elevator movement
+	if (MoveElevator == true)
+		MoveElevatorToFloor();
 }
 
 void Elevator::MoveElevatorToFloor()
@@ -2038,22 +1972,11 @@ void Elevator::Enabled(bool value)
 			Report("disabling elevator");
 	}
 
-	GetCar(0)->Mesh->Enable(value);
-	GetCar(0)->EnableDoors(value);
-	IsEnabled = value;
-
-	//floor indicators
-	for (size_t i = 0; i < GetCar(0)->FloorIndicatorArray.size(); i++)
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		if (GetCar(0)->FloorIndicatorArray[i])
-			GetCar(0)->FloorIndicatorArray[i]->Enabled(value);
+		Cars[i]->Enabled(value);
 	}
-
-	//interior directional indicators
-	GetCar(0)->EnableDirectionalIndicators(value);
-
-	if (value == false)
-		GetCar(0)->EnableObjects(false);
+	IsEnabled = value;
 }
 
 bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
@@ -4258,13 +4181,16 @@ void Elevator::CancelHallCall(int floor, int direction)
 {
 	//delete a route if the route is a hall call response, and no floor button has been pressed
 
-	Control *control = GetCar(0)->GetFloorButton(floor);
-
-	if (control)
+	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		//exit if a floor button has been pressed
-		if (control->GetLightStatus() == true)
-			return;
+		Control *control = Cars[i]->GetFloorButton(floor);
+
+		if (control)
+		{
+			//exit if a floor button has been pressed
+			if (control->GetLightStatus() == true)
+				return;
+		}
 	}
 
 	DeleteRoute(floor, direction);
