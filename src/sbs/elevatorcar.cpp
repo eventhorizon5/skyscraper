@@ -64,10 +64,10 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	Height = 0;
 	HeightSet = false;
 
-	std::string name = parent->Name + ":Car " + ToString(number);
+	std::string name = "Car " + ToString(number);
 	SetName(name);
 
-	Mesh = new MeshObject(parent, name);
+	Mesh = new MeshObject(this, name);
 
 	if (sbs->Verbose)
 		parent->Report("created car " + ToString(number));
