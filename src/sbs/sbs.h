@@ -73,6 +73,7 @@ namespace SBS {
 	class Door;
 	class Floor;
 	class Elevator;
+	class ElevatorCar;
 	class ElevatorDoor;
 	class Shaft;
 	class Camera;
@@ -80,6 +81,7 @@ namespace SBS {
 	class Stairs;
 	class Sound;
 	class SoundSystem;
+	struct SoundData;
 	class CallButton;
 	class Profiler;
 	class Control;

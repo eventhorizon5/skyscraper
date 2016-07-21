@@ -28,8 +28,6 @@
 
 namespace SBS {
 
-struct SoundData;
-
 class SBSIMPEXP Sound : public Object
 {
 public:

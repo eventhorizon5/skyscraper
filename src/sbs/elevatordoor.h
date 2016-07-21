@@ -30,9 +30,6 @@
 
 namespace SBS {
 
-class Elevator;
-class ElevatorCar;
-
 class SBSIMPEXP ElevatorDoor : public Object
 {
 public:

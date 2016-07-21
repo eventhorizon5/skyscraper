@@ -30,8 +30,6 @@
 
 namespace SBS {
 
-class ElevatorCar;
-
 class SBSIMPEXP Elevator : public Object
 {
 	friend class ElevatorDoor;
