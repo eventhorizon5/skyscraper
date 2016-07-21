@@ -2646,7 +2646,7 @@ bool ElevatorCar::IsInCar(const Ogre::Vector3 &position, bool camera)
 	return false;
 }
 
-bool ElevatorCar::Check(Ogre::Vector3 position)
+bool ElevatorCar::Check(Ogre::Vector3 &position)
 {
 	//check to see if user (camera) is in the car
 

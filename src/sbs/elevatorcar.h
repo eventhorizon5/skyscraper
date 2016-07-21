@@ -180,7 +180,7 @@ public:
 	bool PlayMessageSound(bool type);
 	float SetHeight();
 	bool IsInCar(const Ogre::Vector3 &position, bool camera = false);
-	bool Check(Ogre::Vector3 position);
+	bool Check(Ogre::Vector3 &position);
 
 	MeshObject* Mesh; //car mesh object
 

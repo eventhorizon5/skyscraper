@@ -329,7 +329,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	StartingFloor = floor;
 
-	//add elevator to associated shaft's list
+	//add elevator to associated shaft
 	GetShaft()->AddElevator(Number);
 
 	//set recall/ACP floors if not already set
