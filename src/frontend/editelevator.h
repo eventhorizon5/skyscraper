@@ -65,6 +65,8 @@ class editelevator: public wxDialog
 		static const long ID_bUp;
 		static const long ID_bGoToggle;
 		static const long ID_bDown;
+		static const long ID_tCar;
+		static const long ID_sCar;
 		static const long ID_tDoor;
 		static const long ID_sDoor;
 		static const long ID_bRefresh;
@@ -472,6 +474,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtLevelingOffset;
 		wxStaticText* StaticText3;
 		wxFlexGridSizer* FlexGridSizer6;
+		wxStaticText* tCar;
 		wxButton* bSetNudgeTimer;
 		wxTextCtrl* txtMusicPosition;
 		wxTextCtrl* txtElevStart;
@@ -623,6 +626,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtDoorSize;
 		wxBoxSizer* BoxSizer1;
 		wxButton* bResetQueues;
+		wxScrollBar* sCar;
 		wxButton* bSetRecallFloor;
 		wxButton* bOpen;
 		wxToggleButton* bIndService;
@@ -658,9 +662,11 @@ class editelevator: public wxDialog
 
 		SBS::SBS *Simcore;
 		DebugPanel *debugpanel;
+		int last_car;
 		int last_door;
 		int last_elevator_count;
 		SBS::Elevator *elevator;
+		SBS::ElevatorCar *car;
 		SBS::ElevatorDoor *door;
 
 		DECLARE_EVENT_TABLE()
