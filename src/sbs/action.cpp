@@ -324,7 +324,7 @@ bool Action::Run(Object *caller, Object *parent)
 			return elevator->Stop(true);
 		if (command_name == "alarm")
 		{
-			elevator->Alarm();
+			elevator->GetCar(0)->Alarm();
 			return true;
 		}
 		if (command_name == "fire2off")
@@ -365,12 +365,12 @@ bool Action::Run(Object *caller, Object *parent)
 		}
 		if (command_name == "musicon")
 		{
-			elevator->MusicOn = true;
+			elevator->GetCar(0)->MusicOn = true;
 			return true;
 		}
 		if (command_name == "musicoff")
 		{
-			elevator->MusicOn = false;
+			elevator->GetCar(0)->MusicOn = false;
 			return true;
 		}
 		if (command_name == "upon")

@@ -64,13 +64,6 @@ public:
 	float Height; //elevator height
 	bool HeightSet;
 	bool IsMoving; //is elevator moving?
-	std::string CarUpStartSound; //elevator up start/speedup sound
-	std::string CarDownStartSound; //elevator down start/speedup sound
-	std::string CarUpMoveSound; //elevator up move sound
-	std::string CarDownMoveSound; //elevator down move sound
-	std::string CarUpStopSound; //elevator up stop/slowdown sound
-	std::string CarDownStopSound; //elevator down stop/slowdown sound
-	std::string CarIdleSound; //elevator idle/fan sound
 	std::string MotorUpStartSound; //motor up start/speedup sound
 	std::string MotorUpRunSound; //motor up move sound
 	std::string MotorUpStopSound; //motor up stop/slowdown sound
@@ -78,16 +71,6 @@ public:
 	std::string MotorDownRunSound; //motor down move sound
 	std::string MotorDownStopSound; //motor down stop/slowdown sound
 	std::string MotorIdleSound; //motor idle sound
-	std::string AlarmSound; //alarm sound (loop)
-	std::string AlarmSoundStop; //alarm stopping sound
-	std::string BeepSound; //floor beep sound (played when changing floors)
-	std::string FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
-	std::string UpMessageSound; //sound to play with message of elevator's direction if going up
-	std::string DownMessageSound; //sound to play with message of elevator's direction if going down
-	std::string OpenMessageSound; //sound to play with message of elevator's doors are opening
-	std::string CloseMessageSound; //sound to play with message of elevator's doors are closing
-	std::string Music; //elevator music sound to play
-	std::string CarEmergencyStopSound; //car emergency stop sound
 	std::string MotorEmergencyStopSound; //motor emergency stop sound
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
@@ -104,11 +87,6 @@ public:
 	bool ManualGo; //go toggle for inspection service mode
 	bool ManualUp; //up toggle for inspection service mode
 	bool ManualDown;  //down toggle for inspection service mode
-	bool AlarmActive; //true if alarm is active
-	bool UseFloorBeeps; //true if floor beeps should be used
-	bool UseFloorSounds; //true if floor sounds should be used
-	bool UseDirMessageSounds; //true if direction message sounds should be used
-	bool UseDoorMessageSounds; //true if door message sounds should be used
 	Ogre::Vector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
 	float CameraOffset; //camera vertical offset
@@ -123,14 +101,11 @@ public:
 	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
 	bool Notified; //true if arrival notification has been performed
 	bool Parking; //is elevator parking?
-	bool MusicOn; //music enabled status
-	bool MusicOnMove; //true if music should only play during move
 	float DepartureDelay; //delay in seconds between door closure and elevator departure
 	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 	float InspectionSpeed; //inspection service speed multiplier
 	bool LimitQueue; //true to only allow floor selections in the same queue direction
-	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 	bool ReOpen; //true if elevator should reopen doors if the same floor is selected
 	int LastChimeDirection; //direction of last arrival chime
 	bool AutoDoors; //true if doors should be automatic (automatically open when reaching destination and refuse to open if off floor)
@@ -152,7 +127,6 @@ public:
 	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);
 	bool CallCancel();
-	void Alarm();
 	bool Stop(bool emergency = false);
 	void ProcessCallQueue();
 	int GetFloor();
@@ -194,10 +168,6 @@ public:
 	void NotifyCallButtons(int floor, bool direction);
 	bool IsIdle();
 	void ResetQueue(bool up, bool down, bool stop_if_empty = true);
-	void SetBeepSound(const std::string &filename);
-	void SetFloorSound(const std::string &prefix);
-	void SetMessageSound(bool type, bool direction, const std::string &filename);
-	void SetMusic(const std::string &filename);
 	void DeleteActiveRoute();
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);
@@ -208,9 +178,6 @@ public:
 	void SetRunState(bool value);
 	bool IsRunning();
 	bool GetArrivalDirection(int floor);
-	bool PlayFloorBeep();
-	bool PlayFloorSound();
-	bool PlayMessageSound(bool type);
 	float GetDestinationAltitude(int floor);
 	float GetDestinationOffset(int floor);
 	void MoveObjects(float offset);

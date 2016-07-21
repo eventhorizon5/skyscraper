@@ -5448,8 +5448,8 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpStartSound = temp2;
-		elev->CarDownStartSound = temp2;
+		elev->GetCar(0)->UpStartSound = temp2;
+		elev->GetCar(0)->DownStartSound = temp2;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -5473,8 +5473,8 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpMoveSound = temp2;
-		elev->CarDownMoveSound = temp2;
+		elev->GetCar(0)->UpMoveSound = temp2;
+		elev->GetCar(0)->DownMoveSound = temp2;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -5498,8 +5498,8 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpStopSound = temp2;
-		elev->CarDownStopSound = temp2;
+		elev->GetCar(0)->UpStopSound = temp2;
+		elev->GetCar(0)->DownStopSound = temp2;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -5523,7 +5523,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarIdleSound = temp2;
+		elev->GetCar(0)->CarIdleSound = temp2;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -5543,8 +5543,8 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpStartSound = temp2;
-		elev->CarDownStartSound = temp2;
+		elev->GetCar(0)->UpStartSound = temp2;
+		elev->GetCar(0)->DownStartSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "carupstartsound")
@@ -5555,7 +5555,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpStartSound = temp2;
+		elev->GetCar(0)->UpStartSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "cardownstartsound")
@@ -5566,7 +5566,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarDownStartSound = temp2;
+		elev->GetCar(0)->DownStartSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "carmovesound")
@@ -5577,8 +5577,8 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpMoveSound = temp2;
-		elev->CarDownMoveSound = temp2;
+		elev->GetCar(0)->UpMoveSound = temp2;
+		elev->GetCar(0)->DownMoveSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "carupmovesound")
@@ -5589,7 +5589,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpMoveSound = temp2;
+		elev->GetCar(0)->UpMoveSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "cardownmovesound")
@@ -5600,7 +5600,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarDownMoveSound = temp2;
+		elev->GetCar(0)->DownMoveSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "carstopsound")
@@ -5611,8 +5611,8 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpStopSound = temp2;
-		elev->CarDownStopSound = temp2;
+		elev->GetCar(0)->UpStopSound = temp2;
+		elev->GetCar(0)->DownStopSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "carupstopsound")
@@ -5623,7 +5623,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarUpStopSound = temp2;
+		elev->GetCar(0)->UpStopSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "cardownstopsound")
@@ -5634,7 +5634,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarDownStopSound = temp2;
+		elev->GetCar(0)->DownStopSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "caridlesound")
@@ -5645,7 +5645,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarIdleSound = temp2;
+		elev->GetCar(0)->CarIdleSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "motorstartsound")
@@ -5827,7 +5827,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->AlarmSound = temp2;
+		elev->GetCar(0)->AlarmSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "alarmsoundstop")
@@ -5838,7 +5838,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->AlarmSoundStop = temp2;
+		elev->GetCar(0)->AlarmSoundStop = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "beepsound")
@@ -5849,7 +5849,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->SetBeepSound(temp2);
+		elev->GetCar(0)->SetBeepSound(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "floorsound")
@@ -5860,7 +5860,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->SetFloorSound(temp2);
+		elev->GetCar(0)->SetFloorSound(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "upmessage")
@@ -5871,7 +5871,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->SetMessageSound(true, true, temp2);
+		elev->GetCar(0)->SetMessageSound(true, true, temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "downmessage")
@@ -5882,7 +5882,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->SetMessageSound(true, false, temp2);
+		elev->GetCar(0)->SetMessageSound(true, false, temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "openmessage")
@@ -5893,7 +5893,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->SetMessageSound(false, true, temp2);
+		elev->GetCar(0)->SetMessageSound(false, true, temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "closemessage")
@@ -5904,7 +5904,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->SetMessageSound(false, false, temp2);
+		elev->GetCar(0)->SetMessageSound(false, false, temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "music ")
@@ -5915,7 +5915,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->Music = temp2;
+		elev->GetCar(0)->Music = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "musicon ")
@@ -5923,7 +5923,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->MusicOn = ToBool(temp2);
+		elev->GetCar(0)->MusicOn = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "musiconmove")
@@ -5931,7 +5931,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->MusicOnMove = ToBool(temp2);
+		elev->GetCar(0)->MusicOnMove = ToBool(temp2);
 	}
 	if (linecheck.substr(0, 13) == "floorskiptext")
 	{
@@ -6165,7 +6165,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->AutoEnable = ToBool(temp2);
+		elev->GetCar(0)->AutoEnable = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "autodoors")
@@ -6237,7 +6237,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + temp2);
 
-		elev->CarEmergencyStopSound = temp2;
+		elev->GetCar(0)->EmergencyStopSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 23) == "motoremergencystopsound")

@@ -43,6 +43,31 @@ public:
 	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 	bool ControlPressActive; //true if a control associated with this elevator has just been pressed
 	bool IsEnabled; //true if car is enabled
+	std::string UpStartSound; //car up start/speedup sound
+	std::string DownStartSound; //car down start/speedup sound
+	std::string UpMoveSound; //car up move sound
+	std::string DownMoveSound; //car down move sound
+	std::string UpStopSound; //car up stop/slowdown sound
+	std::string DownStopSound; //car down stop/slowdown sound
+	std::string CarIdleSound; //car idle/fan sound
+	std::string AlarmSound; //alarm sound (loop)
+	std::string AlarmSoundStop; //alarm stopping sound
+	std::string BeepSound; //floor beep sound (played when changing floors)
+	std::string FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
+	std::string UpMessageSound; //sound to play with message of elevator's direction if going up
+	std::string DownMessageSound; //sound to play with message of elevator's direction if going down
+	std::string OpenMessageSound; //sound to play with message of elevator's doors are opening
+	std::string CloseMessageSound; //sound to play with message of elevator's doors are closing
+	std::string Music; //car music sound to play
+	std::string EmergencyStopSound; //car emergency stop sound
+	bool AlarmActive; //true if alarm is active
+	bool UseFloorBeeps; //true if floor beeps should be used
+	bool UseFloorSounds; //true if floor sounds should be used
+	bool UseDirMessageSounds; //true if direction message sounds should be used
+	bool UseDoorMessageSounds; //true if door message sounds should be used
+	bool MusicOn; //music enabled status
+	bool MusicOnMove; //true if music should only play during move
+	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
@@ -60,6 +85,7 @@ public:
 	int GetFloorIndex(int floor);
 	int GetServicedFloorCount();
 	int GetServicedFloor(int index);
+	void Alarm();
 	void OpenHatch();
 	void Loop();
 	void Enabled(bool value);
@@ -140,6 +166,13 @@ public:
 	void ResetNudgeTimer(bool start = true, int number = 0);
 	void ResetDoorState(int number = 0);
 	Model* GetModel(std::string name);
+	void SetBeepSound(const std::string &filename);
+	void SetFloorSound(const std::string &prefix);
+	void SetMessageSound(bool type, bool direction, const std::string &filename);
+	void SetMusic(const std::string &filename);
+	bool PlayFloorBeep();
+	bool PlayFloorSound();
+	bool PlayMessageSound(bool type);
 
 	MeshObject* Mesh; //car mesh object
 

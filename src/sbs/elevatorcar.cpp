@@ -76,6 +76,25 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	NumDoors = 1;
 	ControlPressActive = false;
 	IsEnabled = true;
+	UpStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.UpStartSound", "");
+	DownStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.DownStartSound", "");
+	UpMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.UpMoveSound", "");
+	DownMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.DownMoveSound", "");
+	UpStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.UpStopSound", "");
+	DownStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.DownStopSound", "");
+	CarIdleSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.IdleSound", "elevidle.wav");
+	AlarmSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.AlarmSound", "bell1.wav");
+	AlarmSoundStop = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.AlarmSoundStop", "bell1-stop.wav");
+	EmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.EmergencyStopSound", "");
+	AlarmActive = false;
+	UseFloorBeeps = false;
+	UseFloorSounds = false;
+	UseDirMessageSounds = false;
+	UseDoorMessageSounds = false;
+	Music = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.Music", "");
+	MusicOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.MusicOn", true);
+	MusicOnMove = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.MusicOnMove", false);
+	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.AutoEnable", true);
 
 	std::string name = "Car " + ToString(number);
 	SetName(name);
@@ -422,6 +441,37 @@ int ElevatorCar::GetServicedFloor(int index)
 	return 0;
 }
 
+void ElevatorCar::Alarm()
+{
+	//elevator alarm code
+
+	if (AlarmActive == false)
+	{
+		//ring alarm
+		AlarmActive = true;
+		Report("alarm on");
+		if (AlarmSound != "")
+		{
+			alarm->Load(AlarmSound);
+			alarm->SetLoopState(true);
+			alarm->Play();
+		}
+	}
+	else if (AlarmActive == true && sbs->camera->MouseDown == false)
+	{
+		//stop alarm
+		AlarmActive = false;
+		if (AlarmSound != "")
+		{
+			alarm->Stop();
+			alarm->Load(AlarmSoundStop);
+			alarm->SetLoopState(false);
+			alarm->Play();
+		}
+		Report("alarm off");
+	}
+}
+
 void ElevatorCar::OpenHatch()
 {
 	//Opens the elevator's upper escape hatch, allowing access to the shaft
@@ -432,6 +482,81 @@ void ElevatorCar::OpenHatch()
 void ElevatorCar::Loop()
 {
 	//elevator car monitor loop
+
+	//play car idle sound if in elevator, or if doors open
+	if (CarIdleSound != "")
+	{
+		if (idlesound->IsPlaying() == false && Fan == true)
+		{
+			if (parent->InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
+			{
+				if (sbs->Verbose)
+					Report("playing car idle sound");
+
+				if (idlesound->IsLoaded() == false)
+					idlesound->Load(CarIdleSound);
+
+				idlesound->SetLoopState(true);
+				idlesound->Play();
+			}
+		}
+		else
+		{
+			if (Fan == false && idlesound->IsPlaying() == true)
+			{
+				if (sbs->Verbose)
+					Report("stopping car idle sound");
+				idlesound->Stop();
+			}
+			else if (parent->InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
+			{
+				if (sbs->Verbose)
+					Report("stopping car idle sound");
+				idlesound->Stop();
+			}
+		}
+	}
+
+	//play music sound if in elevator, or if doors open
+	if (Music != "")
+	{
+		if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && parent->IsMoving == true) || MusicOnMove == false))
+		{
+			if (parent->InServiceMode() == false)
+			{
+				if (parent->InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+				{
+					if (sbs->Verbose)
+						Report("playing music");
+
+					if (musicsound->IsLoaded() == false)
+						musicsound->Load(Music);
+
+					musicsound->SetLoopState(true);
+					musicsound->Play(false);
+				}
+			}
+		}
+		else
+		{
+			if ((MusicOn == false || parent->InServiceMode() == true || (MusicOnMove == true && parent->IsMoving == false)) && musicsound->IsPlaying() == true)
+			{
+				if (sbs->Verbose)
+					Report("stopping music");
+				musicsound->Pause();
+			}
+			else if (parent->InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
+			{
+				if (sbs->Verbose)
+					Report("stopping music");
+				musicsound->Pause();
+			}
+		}
+	}
+
+	//process alarm
+	if (AlarmActive == true)
+		Alarm();
 
 	//process door open/close holds
 	if (doorhold_direction > 0)
@@ -529,7 +654,7 @@ void ElevatorCar::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
 
-	if (parent->AutoEnable == false)
+	if (AutoEnable == false)
 		return;
 
 	//SBS_PROFILE("ElevatorCar::EnableObjects");
@@ -2071,6 +2196,195 @@ Model* ElevatorCar::GetModel(std::string name)
 	}
 
 	return 0;
+}
+
+void ElevatorCar::SetBeepSound(const std::string &filename)
+{
+	//set sound used for floor beeps
+	if (sbs->Verbose)
+		Report("setting beep sound");
+	BeepSound = filename;
+	TrimString(BeepSound);
+	UseFloorBeeps = true;
+}
+
+void ElevatorCar::SetFloorSound(const std::string &prefix)
+{
+	//set prefix of floor sound
+	if (sbs->Verbose)
+		Report("setting floor sound");
+	FloorSound = prefix;
+	TrimString(FloorSound);
+	UseFloorSounds = true;
+}
+
+void ElevatorCar::SetMessageSound(bool type, bool direction, const std::string &filename)
+{
+	//if type is true, sets up and down messages.  If false, sets open and close messages
+	//if direction is true, set up message sound; otherwise set down message sound
+
+	if (type == true)
+	{
+		if (direction == true)
+		{
+			if (sbs->Verbose)
+				Report("setting up message sound");
+			UpMessageSound = filename;
+			TrimString(UpMessageSound);
+		}
+		else
+		{
+			if (sbs->Verbose)
+				Report("setting down message sound");
+			DownMessageSound = filename;
+			TrimString(DownMessageSound);
+		}
+		UseDirMessageSounds = true;
+	}
+	else
+	{
+		if (direction == true)
+		{
+			if (sbs->Verbose)
+				Report("setting open message sound");
+			OpenMessageSound = filename;
+			TrimString(OpenMessageSound);
+		}
+		else
+		{
+			if (sbs->Verbose)
+				Report("setting close message sound");
+			CloseMessageSound = filename;
+			TrimString(CloseMessageSound);
+		}
+		UseDoorMessageSounds = true;
+	}
+}
+
+bool ElevatorCar::PlayFloorBeep()
+{
+	//play floor beep sound
+
+	if (parent->InServiceMode() == true || BeepSound == "" || UseFloorBeeps == false)
+		return false;
+
+	if (sbs->Verbose)
+		Report("playing floor beep sound");
+
+	std::string newsound = BeepSound;
+	//change the asterisk into the current floor number
+	ReplaceAll(newsound, "*", ToString(parent->GetFloor()));
+	TrimString(newsound);
+	floorbeep->Stop();
+	floorbeep->Load(newsound);
+	floorbeep->SetLoopState(false);
+	floorbeep->Play();
+	return true;
+}
+
+bool ElevatorCar::PlayFloorSound()
+{
+	//play floor sound
+
+	if (parent->InServiceMode() == true || FloorSound == "" || UseFloorSounds == false || parent->SkipFloorSound == true)
+		return false;
+
+	if (sbs->Verbose)
+		Report("playing floor sound");
+
+	std::string newsound = FloorSound;
+	//change the asterisk into the current floor number
+	ReplaceAll(newsound, "*", ToString(parent->GotoFloor));
+	TrimString(newsound);
+	announcesnd->PlayQueued(newsound, false, false);
+	return true;
+}
+
+bool ElevatorCar::PlayMessageSound(bool type)
+{
+	//play message sound
+	//if type is true, play directional up/down sounds, otherwise play door open/close sounds
+	//if direction is true, play up sound; otherwise play down sound
+
+	if (parent->InServiceMode() == true)
+		return false;
+
+	if (parent->IsQueueActive() == false && type == true)
+		return false;
+
+	std::string newsound;
+
+	if (type == true)
+	{
+		//exit if directional message sounds are off, or one has already been queued
+		if (UseDirMessageSounds == false || DirMessageSound == true)
+			return false;
+
+		int direction = parent->LastChimeDirection;
+
+		if (parent->LastChimeDirection == 0)
+			direction = parent->LastQueueDirection;
+
+		if (direction == 1)
+		{
+			if (UpMessageSound == "")
+				return false;
+
+			if (sbs->Verbose)
+				Report("playing up message sound");
+
+			newsound = UpMessageSound;
+		}
+		else
+		{
+			if (DownMessageSound == "")
+				return false;
+
+			if (sbs->Verbose)
+				Report("playing down message sound");
+
+			newsound = DownMessageSound;
+		}
+
+		DirMessageSound = true;
+	}
+	else
+	{
+		//exit if door message sounds are off, or one has already been queued
+		if (UseDoorMessageSounds == false || DoorMessageSound == true)
+			return false;
+
+		if (AreDoorsOpening() == true)
+		{
+			if (OpenMessageSound == "")
+				return false;
+
+			if (sbs->Verbose)
+				Report("playing open message sound");
+
+			newsound = OpenMessageSound;
+		}
+		else if (AreDoorsClosing() == true)
+		{
+			if (CloseMessageSound == "")
+				return false;
+
+			if (sbs->Verbose)
+				Report("playing close message sound");
+
+			newsound = CloseMessageSound;
+		}
+		else
+			return false;
+
+		DoorMessageSound = true;
+	}
+
+	//change the asterisk into the current floor number
+	ReplaceAll(newsound, "*", ToString(parent->GetFloor()));
+	TrimString(newsound);
+	announcesnd->PlayQueued(newsound, false, false);
+	return true;
 }
 
 }

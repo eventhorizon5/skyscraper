@@ -580,7 +580,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			doorsound->Load(CloseSound);
 			doorsound->Play();
 		}
-		elev->PlayMessageSound(false);
+		elev->GetCar(0)->PlayMessageSound(false);
 	}
 
 	//perform door movement and get open state of each door
@@ -666,7 +666,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 
 		//play direction message sound
-		elev->PlayMessageSound(true);
+		elev->GetCar(0)->PlayMessageSound(true);
 	}
 	else
 	{

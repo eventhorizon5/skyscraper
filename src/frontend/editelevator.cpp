@@ -1279,7 +1279,7 @@ void editelevator::Loop()
 	txtJerkRate->SetValue(TruncateNumber(elevator->GetJerkRate(), 4));
 	txtIsMoving->SetValue(BoolToString(elevator->IsMoving));
 	txtOnFloor->SetValue(BoolToString(elevator->OnFloor));
-	txtAlarm->SetValue(BoolToString(elevator->AlarmActive));
+	txtAlarm->SetValue(BoolToString(elevator->GetCar(0)->AlarmActive));
 	txtQueueLastDirection->SetValue(ToString(elevator->LastQueueDirection));
 	txtIsIdle->SetValue(BoolToString(elevator->IsIdle()));
 	txtWaitForDoors->SetValue(BoolToString(elevator->WaitForDoors));
@@ -1293,12 +1293,12 @@ void editelevator::Loop()
 	txtNudgeMode->SetValue(BoolToString(elevator->GetCar(0)->IsNudgeModeActive()));
 	txtNotified->SetValue(BoolToString(elevator->Notified));
 	txtWaitForTimer->SetValue(BoolToString(elevator->WaitForTimer));
-	txtMusicOn->SetValue(BoolToString(elevator->MusicOn));
-	txtMusicOnMove->SetValue(BoolToString(elevator->MusicOnMove));
-	txtFloorSounds->SetValue(BoolToString(elevator->UseFloorSounds));
-	txtFloorBeeps->SetValue(BoolToString(elevator->UseFloorBeeps));
-	txtMessageSounds->SetValue(BoolToString(elevator->UseDirMessageSounds));
-	txtAutoEnable->SetValue(BoolToString(elevator->AutoEnable));
+	txtMusicOn->SetValue(BoolToString(elevator->GetCar(0)->MusicOn));
+	txtMusicOnMove->SetValue(BoolToString(elevator->GetCar(0)->MusicOnMove));
+	txtFloorSounds->SetValue(BoolToString(elevator->GetCar(0)->UseFloorSounds));
+	txtFloorBeeps->SetValue(BoolToString(elevator->GetCar(0)->UseFloorBeeps));
+	txtMessageSounds->SetValue(BoolToString(elevator->GetCar(0)->UseDirMessageSounds));
+	txtAutoEnable->SetValue(BoolToString(elevator->GetCar(0)->AutoEnable));
 	txtReOpen->SetValue(BoolToString(elevator->ReOpen));
 	txtAutoDoors->SetValue(BoolToString(elevator->AutoDoors));
 	txtOpenOnStart->SetValue(BoolToString(elevator->OpenOnStart));
@@ -1690,37 +1690,37 @@ void editelevator::On_bSetInspectionSpeed_Click(wxCommandEvent& event)
 void editelevator::On_bSetMusicOn_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->MusicOn = !elevator->MusicOn;
+		elevator->GetCar(0)->MusicOn = !elevator->GetCar(0)->MusicOn;
 }
 
 void editelevator::On_bSetMusicOnMove_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->MusicOnMove = !elevator->MusicOnMove;
+		elevator->GetCar(0)->MusicOnMove = !elevator->GetCar(0)->MusicOnMove;
 }
 
 void editelevator::On_bSetFloorSounds_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->UseFloorSounds = !elevator->UseFloorSounds;
+		elevator->GetCar(0)->UseFloorSounds = !elevator->GetCar(0)->UseFloorSounds;
 }
 
 void editelevator::On_bSetFloorBeeps_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->UseFloorBeeps = !elevator->UseFloorBeeps;
+		elevator->GetCar(0)->UseFloorBeeps = !elevator->GetCar(0)->UseFloorBeeps;
 }
 
 void editelevator::On_bSetMessageSounds_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->UseDirMessageSounds = !elevator->UseDirMessageSounds;
+		elevator->GetCar(0)->UseDirMessageSounds = !elevator->GetCar(0)->UseDirMessageSounds;
 }
 
 void editelevator::On_bSetAutoEnable_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->AutoEnable = !elevator->AutoEnable;
+		elevator->GetCar(0)->AutoEnable = !elevator->GetCar(0)->AutoEnable;
 }
 
 void editelevator::On_bSetReOpen_Click(wxCommandEvent& event)
