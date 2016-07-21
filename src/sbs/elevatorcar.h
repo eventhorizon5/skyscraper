@@ -33,6 +33,7 @@ class SBSIMPEXP ElevatorCar : public Object
 	friend class Elevator;
 public:
 
+	std::string Name; //car name
 	std::vector<int> ServicedFloors; //list of floors this car services
 	int NumDoors; //number of elevator doors
 	float Height; //car height

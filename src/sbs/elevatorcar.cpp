@@ -51,6 +51,8 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	//set up SBS object
 	SetValues("ElevatorCar", "", false);
 
+	//init variables
+	Name = "";
 	this->parent = parent;
 	this->number = number;
 	carsound = 0;
