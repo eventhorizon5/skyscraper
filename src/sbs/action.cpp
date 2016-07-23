@@ -569,7 +569,7 @@ bool Action::Run(Object *caller, Object *parent)
 				}
 				return false;
 			}
-			if (parent_type == "Elevator")
+			if (parent_type == "Elevator" || parent_type == "ElevatorCar")
 			{
 				if (elevator && car)
 					return car->ReplaceTexture(command_parameters[0], command_parameters[1]);
@@ -612,7 +612,7 @@ bool Action::Run(Object *caller, Object *parent)
 				else
 					return false;
 			}
-			else if (parent_type == "Elevator")
+			else if (parent_type == "Elevator" || parent_type == "ElevatorCar")
 			{
 				if (elevator && car)
 					soundlist = car->GetSound(command_parameters[0]);
@@ -654,7 +654,7 @@ bool Action::Run(Object *caller, Object *parent)
 				else
 					return false;
 			}
-			else if (parent_type == "Elevator")
+			else if (parent_type == "Elevator" || parent_type == "ElevatorCar")
 			{
 				if (elevator && car)
 					soundlist = car->GetSound(command_parameters[0]);

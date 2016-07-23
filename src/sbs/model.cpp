@@ -171,10 +171,11 @@ void Model::Loop()
 
 			if (elev)
 			{
-				if (elev->IsInElevator(GetPosition()) == true)
+				ElevatorCar *car = elev->IsInElevator(GetPosition());
+				if (car)
 				{
 					RemoveFromParent();
-					ChangeParent(elev);
+					ChangeParent(car);
 					AddToParent();
 					break;
 				}
@@ -185,7 +186,7 @@ void Model::Loop()
 	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor (or make it global)
 	else if (elevator)
 	{
-		if (elevator->IsInElevator(GetPosition()) == false)
+		if (elevator->IsInElevator(GetPosition()) == 0)
 		{
 			if (global == false)
 			{
@@ -241,9 +242,10 @@ void Model::Drop()
 
 			if (elev)
 			{
-				if (elev->IsInElevator(GetPosition()) == true)
+				ElevatorCar *car = elev->IsInElevator(GetPosition());
+				if (car)
 				{
-					ChangeParent(elev);
+					ChangeParent(car);
 					found = true;
 					break;
 				}

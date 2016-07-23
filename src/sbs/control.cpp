@@ -27,7 +27,6 @@
 #include "sbs.h"
 #include "action.h"
 #include "floor.h"
-#include "elevator.h"
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"

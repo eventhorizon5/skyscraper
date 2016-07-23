@@ -9044,6 +9044,12 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 			return Simcore->GetFloor(Current)->ColumnFrame;
 		return 0;
 	}
+	else if (name == "elevatorcar")
+	{
+		//if (Section == 4)
+			//return Simcore->GetElevator(Current)->GetCar(0)->Mesh;
+		return 0;
+	}
 	else if (name == "elevator")
 	{
 		if (Section == 4)

@@ -62,8 +62,7 @@ ButtonPanel::ButtonPanel(ElevatorCar *car, int index, const std::string &texture
 	Height = ((Rows + 1) * SpacingY) + (Rows * ButtonHeight);
 
 	//create mesh
-	std::string name = "Button Panel " + ToString(this->elevator) + ":" + ToString(index);
-	TrimString(name);
+	std::string name = "Button Panel " + ToString(this->elevator) + ":" + ToString(this->car) + ":" + ToString(index);
 	SetName(name);
 	ButtonPanelMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
@@ -217,10 +216,10 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 
 	for (size_t i = 0; i < action_names.size(); i++)
 	{
-		std::string newname = sbs->GetElevator(elevator)->GetName();
+		std::string newname = sbs->GetElevator(elevator)->GetCar(car)->GetName();
 		newname += ":" + action_names[i];
 		std::vector<Object*> parents;
-		parents.push_back(sbs->GetElevator(elevator));
+		parents.push_back(sbs->GetElevator(elevator)->GetCar(car));
 		if ((off_action == 0 && action_names[i] == "off") || action_names[i] != "off")
 		{
 			Action* action = sbs->AddAction(newname, parents, action_names[i]);

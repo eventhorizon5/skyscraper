@@ -1767,26 +1767,27 @@ void Elevator::Enabled(bool value)
 	IsEnabled = value;
 }
 
-bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
+ElevatorCar* Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 {
 	//determine if the given 3D position is inside the elevator
+	//returns the related car object, or 0 if not found
 
-	//first checks to see if camera is within an elevator's height range, and then
-	//checks for a collision with the elevator's floor below
+	//first checks to see if camera is within a car's height range, and then
+	//checks for a collision with the car's floor below
 
 	//if camera is true, set associated camera offset
 
 	//SBS_PROFILE("Elevator::IsInElevator");
 
 	if (IsEnabled == false)
-		return false;
+		return 0;
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
 		if (Cars[i]->IsInCar(position, camera) == true)
-			return true;
+			return Cars[i];
 	}
-	return false;
+	return 0;
 }
 
 float Elevator::GetElevatorStart()

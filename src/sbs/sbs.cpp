@@ -40,6 +40,7 @@
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "elevatordoor.h"
 #include "shaft.h"
 #include "stairs.h"
@@ -2759,6 +2760,14 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "Person")
 		deleted = true;
+	else if (type == "ElevatorCar")
+	{
+		ElevatorCar *car = static_cast<ElevatorCar*>(object);
+		if (car->Number != car->GetElevator()->GetCarCount())
+			return ReportError("Only the highest elevator car can be deleted");
+
+		deleted = true;
+	}
 
 	//delete object
 	if (deleted == true)

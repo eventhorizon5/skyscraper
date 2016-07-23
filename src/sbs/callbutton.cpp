@@ -837,28 +837,32 @@ int CallButton::FindClosestElevator(int direction)
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
 		{
-			if (sbs->Verbose && recheck == false)
-				Report("Checking elevator " + ToString(elevator->Number));
-
-			//if elevator is closer than the previously checked one or we're starting the checks
-			if (abs(elevator->GetCar(0)->GetFloor() - GetFloor()) < closest || check == false)
+			ElevatorCar *car = elevator->GetCarForFloor(GetFloor());
+			if (car)
 			{
-				//see if elevator is available for the call
-				if (recheck == true && elevator->Number == ActiveElevator)
-					result = 1; //if rechecking elevators, consider the active one
-				else
-					result = elevator->AvailableForCall(GetFloor(), direction, !recheck);
+				if (sbs->Verbose && recheck == false)
+					Report("Checking elevator " + ToString(elevator->Number) + " car " + ToString(car->Number));
 
-				if (result == 1) //available
+				//if elevator is closer than the previously checked one or we're starting the checks
+				if (abs(car->GetFloor() - GetFloor()) < closest || check == false)
 				{
-					if (sbs->Verbose && count > 1 && recheck == false)
-						Report("Marking - closest so far");
-					closest = abs(elevator->GetCar(0)->GetFloor() - GetFloor());
-					closest_elev = i;
-					check = true;
+					//see if elevator is available for the call
+					if (recheck == true && elevator->Number == ActiveElevator)
+						result = 1; //if rechecking elevators, consider the active one
+					else
+						result = elevator->AvailableForCall(GetFloor(), direction, !recheck);
+
+					if (result == 1) //available
+					{
+						if (sbs->Verbose && count > 1 && recheck == false)
+							Report("Marking - closest so far");
+						closest = abs(car->GetFloor() - GetFloor());
+						closest_elev = i;
+						check = true;
+					}
+					else if (result == 2) //elevator won't service the call
+						errors++;
 				}
-				else if (result == 2) //elevator won't service the call
-					errors++;
 			}
 		}
 	}

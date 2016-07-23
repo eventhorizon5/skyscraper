@@ -125,7 +125,7 @@ public:
 	void Loop();
 	void DumpQueues();
 	void Enabled(bool value);
-	bool IsInElevator(const Ogre::Vector3 &position, bool camera = false);
+	ElevatorCar* IsInElevator(const Ogre::Vector3 &position, bool camera = false);
 	float GetElevatorStart();
 	float GetDestination();
 	float GetStoppingDistance();
