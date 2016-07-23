@@ -48,7 +48,6 @@ public:
 	float Deceleration; //deceleration value; may be removed
 	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
 	float DecelJerk;
-	int StartingFloor; //elevator starting floor
 	float TempDeceleration; //temporary deceleration value, used in overrun correction
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
@@ -268,7 +267,6 @@ private:
 	std::vector<QueueEntry> UpQueue; //up call queue
 	std::vector<QueueEntry> DownQueue; //down call queue
 	float ElevatorStart; //elevator vertical starting location
-	int ElevatorFloor; //current elevator floor
 	float Destination; //elevator destination Y value
 	float StoppingDistance; //distance needed to stop the elevator
 	bool CalculateStoppingDistance;

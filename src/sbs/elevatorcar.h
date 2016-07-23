@@ -72,10 +72,12 @@ public:
 	bool MusicOnMove; //true if music should only play during move
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 	float CameraOffset; //camera vertical offset
+	int StartingFloor; //car starting floor
+	bool Created; //has car been created with the CreateCar function?
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
-	void CreateCar();
+	bool CreateCar(int floor);
 	Elevator* GetElevator();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
@@ -93,6 +95,7 @@ public:
 	bool CheckServicedFloors();
 	void Alarm();
 	void OpenHatch();
+	void OnInit();
 	void Loop();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
@@ -234,6 +237,9 @@ private:
 
 	//Triggers
 	std::vector<Trigger*> TriggerArray;
+
+	//internal simulation data
+	int CurrentFloor; //current car floor
 
 	//misc internals
 	bool DirMessageSound; //true if a directional message sound is queued, to prevent repeats

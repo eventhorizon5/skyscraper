@@ -57,12 +57,13 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 		return;
 
 	//exit if the elevator car is invalid
-	if (!sbs->GetElevator(elev)->GetCar(car))
+	ElevatorCar *Car = sbs->GetElevator(elev)->GetCar(car);
+	if (!Car)
 		return;
 
 	FloorIndicatorMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	std::string texture = Prefix + sbs->GetFloor(sbs->GetElevator(elev)->StartingFloor)->ID;
+	std::string texture = Prefix + sbs->GetFloor(Car->StartingFloor)->ID;
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 

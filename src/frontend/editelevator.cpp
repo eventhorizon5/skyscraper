@@ -1291,7 +1291,7 @@ void editelevator::Loop()
 	txtHeight->SetValue(TruncateNumber(car->Height, 2));
 	txtMoveElevator->SetValue(BoolToString(elevator->MoveElevator));
 	txtNumber->SetValue(ToString(elevator->Number));
-	txtOriginFloor->SetValue(ToString(elevator->StartingFloor));
+	txtOriginFloor->SetValue(ToString(car->StartingFloor));
 	txtPosition->SetValue(TruncateNumber(elevator->GetPosition().x, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().y, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().z, 2));
 	txtQueueDirection->SetValue(ToString(elevator->QueuePositionDirection));
 	txtQueueLastDown->SetValue(ToString(elevator->LastQueueFloor[0]));

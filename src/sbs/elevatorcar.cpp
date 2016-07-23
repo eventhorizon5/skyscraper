@@ -103,6 +103,9 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	lastposition = 0;
 	lastfloor = 0;
 	lastfloorset = false;
+	StartingFloor = 0;
+	CurrentFloor = 0;
+	Created = false;
 
 	std::string name = "Car " + ToString(number);
 	SetName(name);
@@ -294,9 +297,34 @@ ElevatorCar::~ElevatorCar()
 	Mesh = 0;
 }
 
-void ElevatorCar::CreateCar()
+bool ElevatorCar::CreateCar(int floor)
 {
 	//used with CreateElevator function; this is the car-specific code
+
+	//check if starting floor is valid
+	if (!sbs->GetFloor(floor))
+		return ReportError("Floor " + ToString(floor) + " doesn't exist");
+
+	//make sure starting floor is within associated shaft's range
+	if (floor < parent->GetShaft()->startfloor || floor > parent->GetShaft()->endfloor)
+		return ReportError("Invalid starting floor " + ToString(floor));
+
+	//check door count
+	if (NumDoors < 0)
+		return ReportError("Number of doors invalid");
+
+	//add car's starting floor to serviced floor list
+	//this also ensures that the list is populated to prevent errors
+	if (IsServicedFloor(floor) == false)
+		AddServicedFloor(floor);
+
+	//ensure that serviced floors are valid for the shaft
+	if (CheckServicedFloors() == false)
+		return false;
+
+	//set starting position
+	SetPositionY(sbs->GetFloor(floor)->GetBase());
+	StartingFloor = floor;
 
 	//create door objects
 	if (sbs->Verbose)
@@ -317,6 +345,17 @@ void ElevatorCar::CreateCar()
 	announcesnd = new Sound(this, "Announcement Sound", true);
 	musicsound = new Sound(this, "Music Sound", true);
 	musicsound->Move(MusicPosition);
+
+	//set current floor
+	CurrentFloor = floor;
+
+	//create test light
+	//AddLight("light", 0, Ogre::Vector3(0, 6, 0), Ogre::Vector3(0, 0, 0), 1, 1, 1, 1, 1, 1, 0, 0, 0, 1000, 1, 1, 1);
+
+	Created = true;
+
+	Report("created on floor " + ToString(floor));
+	return true;
 }
 
 Elevator* ElevatorCar::GetElevator()
@@ -528,6 +567,18 @@ void ElevatorCar::OpenHatch()
 	//Opens the elevator's upper escape hatch, allowing access to the shaft
 
 	Report("opening hatch");
+}
+
+void ElevatorCar::OnInit()
+{
+	//startup car initialization
+
+	//exit if not created properly
+	if (Created == false)
+		return;
+
+	//disable objects
+	EnableObjects(false);
 }
 
 void ElevatorCar::Loop()

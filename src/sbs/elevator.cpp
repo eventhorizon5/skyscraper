@@ -79,7 +79,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	AccelJerk = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.AccelJerk", 1);
 	DecelJerk = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.DecelJerk", 1);
 	ElevatorStart = 0;
-	ElevatorFloor = 0;
 	Direction = 0;
 	DistanceToTravel = 0;
 	Destination = 0;
@@ -139,7 +138,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ActiveDirection = 0;
 	motorsound = 0;
 	motoridlesound = 0;
-	StartingFloor = 0;
 	NotifyEarly = sbs->GetConfigInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
 	Running = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Run", true);
 	Notified = false;
@@ -185,7 +183,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	std::string name = "Elevator " + ToString(Number);
 	SetName(name);
 
-	//create a default car object
+	//create a primary car object
 	CreateCar();
 
 	//create a dynamic mesh for elevator doors
@@ -277,9 +275,6 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (Deceleration <= 0)
 		return ReportError("Deceleration not set or invalid");
 
-	if (GetCar(1)->NumDoors < 0)
-		return ReportError("Number of doors invalid");
-
 	if (AccelJerk <= 0)
 		return ReportError("Invalid value for AccelJerk");
 
@@ -292,28 +287,9 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (!GetShaft())
 		return ReportError("Shaft " + ToString(AssignedShaft) + " doesn't exist");
 
-	//check starting floor
-	if (!sbs->GetFloor(floor))
-		return ReportError("Floor " + ToString(floor) + " doesn't exist");
-
-	if (floor < GetShaft()->startfloor || floor > GetShaft()->endfloor)
-		return ReportError("Invalid starting floor " + ToString(floor));
-
-	//add elevator's starting floor to serviced floor list - this also ensures that the list is populated to prevent errors
-	if (GetCar(1)->IsServicedFloor(floor) == false)
-		GetCar(1)->AddServicedFloor(floor);
-
-	//ensure that serviced floors are valid for the shaft
-	for (size_t i = 0; i < Cars.size(); i++)
-	{
-		if (Cars[i]->CheckServicedFloors() == false)
-			return false;
-	}
-
 	//set starting position
 	Ogre::Vector3 position = Ogre::Vector3::ZERO;
 
-	position.y = sbs->GetFloor(floor)->GetBase();
 	if (relative == false)
 	{
 		position.x = x;
@@ -324,7 +300,6 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		position.x = GetShaft()->GetPosition().x + x;
 		position.z = GetShaft()->GetPosition().z + z;
 	}
-	StartingFloor = floor;
 
 	//add elevator to associated shaft
 	GetShaft()->AddElevator(Number);
@@ -341,13 +316,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (sbs->Verbose)
 		Report("moving elevator to origin position");
 	SetPosition(position);
-	elevposition = GetPosition();
 
-	//create cars
-	for (size_t i = 0; i < Cars.size(); i++)
-	{
-		Cars[i]->CreateCar();
-	}
+	//set up primary car
+	GetCar(1)->CreateCar(floor);
+
+	elevposition = GetPosition();
 
 	//create motor sounds
 	std::string motorname = "Motor " + ToString(Number);
@@ -367,15 +340,9 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - GetPosition().x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition().z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
 
-	//set elevator's floor
-	ElevatorFloor = floor;
-
-	//create test light
-	//AddLight("light", 0, Ogre::Vector3(0, 6, 0), Ogre::Vector3(0, 0, 0), 1, 1, 1, 1, 1, 1, 0, 0, 0, 1000, 1, 1, 1);
-
 	Created = true;
 
-	Report("created at " + TruncateNumber(position.x, 4) + ", " + TruncateNumber(position.z, 4) + ", " + ToString(floor));
+	Report("created at " + TruncateNumber(position.x, 4) + ", " + TruncateNumber(position.z, 4));
 	return true;
 }
 
@@ -736,7 +703,7 @@ void Elevator::ProcessCallQueue()
 		for (size_t i = 0; i < UpQueue.size(); i++)
 		{
 			//if the queued floor number is a higher floor, dispatch the elevator to that floor
-			if (UpQueue[i].floor >= ElevatorFloor)
+			if (UpQueue[i].floor >= GetCar(0)->CurrentFloor)
 			{
 				if (MoveElevator == false)
 				{
@@ -773,7 +740,7 @@ void Elevator::ProcessCallQueue()
 				return;
 			}
 			//if the queued floor number is a lower floor
-			if (UpQueue[i].floor < ElevatorFloor && MoveElevator == false)
+			if (UpQueue[i].floor < GetCar(0)->CurrentFloor && MoveElevator == false)
 			{
 				//dispatch elevator if it's idle
 				if (IsIdle() == true && LastQueueDirection == 0)
@@ -813,7 +780,7 @@ void Elevator::ProcessCallQueue()
 		for (size_t i = DownQueue.size() - 1; i < DownQueue.size(); --i)
 		{
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
-			if (DownQueue[i].floor <= ElevatorFloor)
+			if (DownQueue[i].floor <= GetCar(0)->CurrentFloor)
 			{
 				if (MoveElevator == false)
 				{
@@ -850,7 +817,7 @@ void Elevator::ProcessCallQueue()
 				return;
 			}
 			//if the queued floor number is an upper floor
-			if (DownQueue[i].floor > ElevatorFloor && MoveElevator == false)
+			if (DownQueue[i].floor > GetCar(0)->CurrentFloor && MoveElevator == false)
 			{
 				//dispatch elevator if idle
 				if (IsIdle() == true && LastQueueDirection == 0)
@@ -1076,11 +1043,11 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorStart = elevposition.y;
 
 		//get elevator's current floor
-		ElevatorFloor = GetFloor();
-		oldfloor = ElevatorFloor;
+		GetCar(0)->CurrentFloor = GetFloor();
+		oldfloor = GetCar(0)->CurrentFloor;
 
 		//switch off directional indicators on current floor if not already done so
-		GetCar(0)->SetDirectionalIndicators(ElevatorFloor, false, false);
+		GetCar(0)->SetDirectionalIndicators(GetCar(0)->CurrentFloor, false, false);
 
 		//exit if floor doesn't exist
 		if (!sbs->GetFloor(GotoFloor) && ManualMove == 0)
@@ -1103,7 +1070,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//If elevator is already on specified floor, open doors and exit
-		if (ElevatorFloor == GotoFloor && InspectionService == false && IsLeveled() == true && ManualMove == 0)
+		if (GetCar(0)->CurrentFloor == GotoFloor && InspectionService == false && IsLeveled() == true && ManualMove == 0)
 		{
 			ReportError("Elevator already on specified floor");
 			MoveElevator = false;
@@ -1750,7 +1717,7 @@ void Elevator::FinishMove()
 	}
 
 	//update elevator's floor number
-	ElevatorFloor = GotoFloor;
+	GetCar(0)->CurrentFloor = GotoFloor;
 
 	EmergencyStop = 0;
 	ManualStop = false;
@@ -2214,7 +2181,7 @@ bool Elevator::EnableIndependentService(bool value)
 		ResetQueue(true, true); //this will also stop the elevator
 		GetCar(0)->HoldDoors(); //turn off door timers
 		GetCar(0)->ResetNudgeTimer(false); //switch off nudge timer
-		GetCar(0)->SetDirectionalIndicators(ElevatorFloor, false, false); //switch off directional indicators on current floor
+		GetCar(0)->SetDirectionalIndicators(GetCar(0)->CurrentFloor, false, false); //switch off directional indicators on current floor
 		if (IsMoving == false)
 			if (AutoDoors == true)
 				GetCar(0)->OpenDoors();
@@ -2254,7 +2221,7 @@ bool Elevator::EnableInspectionService(bool value)
 		ResetQueue(true, true); //this will also stop the elevator
 		GetCar(0)->HoldDoors(); //turn off door timers
 		GetCar(0)->ResetNudgeTimer(false); //switch off nudge timer
-		GetCar(0)->SetDirectionalIndicators(ElevatorFloor, false, false); //switch off directional indicators on current floor
+		GetCar(0)->SetDirectionalIndicators(GetCar(0)->CurrentFloor, false, false); //switch off directional indicators on current floor
 		Report("Inspection Service mode enabled");
 		InspectionService = true;
 	}
@@ -2334,7 +2301,7 @@ bool Elevator::EnableFireService1(int value)
 			Report("Fire Service Phase 1 mode set to On");
 
 			//switch off directional indicators on current floor
-			GetCar(0)->SetDirectionalIndicators(ElevatorFloor, false, false);
+			GetCar(0)->SetDirectionalIndicators(GetCar(0)->CurrentFloor, false, false);
 
 			//recall elevator if not in phase 2 hold
 			if (FireServicePhase2 != 2)
@@ -3077,16 +3044,11 @@ void Elevator::OnInit()
 
 	bool enable_elevators = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IsEnabled", true);
 
-	//disable objects
-	for (size_t i = 0; i < Cars.size(); i++)
-	{
-		Cars[i]->EnableObjects(false);
-	}
 	if (enable_elevators == false)
 		Enabled(false);
 
 	//move elevator to starting position
-	SetFloor(StartingFloor);
+	SetFloor(GetCar(1)->StartingFloor);
 }
 
 bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
