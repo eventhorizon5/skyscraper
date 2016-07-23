@@ -107,7 +107,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	CurrentFloor = 0;
 	Created = false;
 
-	std::string name = "Car " + ToString(number);
+	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
 
 	Mesh = new MeshObject(this, name);

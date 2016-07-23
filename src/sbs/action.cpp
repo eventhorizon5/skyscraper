@@ -173,6 +173,7 @@ bool Action::Run(Object *caller, Object *parent)
 	//DownToggle
 
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
+	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
 	Floor *floor = dynamic_cast<Floor*>(parent);
 	Shaft *shaft = dynamic_cast<Shaft*>(parent);
 	Stairs *stairs = dynamic_cast<Stairs*>(parent);
@@ -186,14 +187,21 @@ bool Action::Run(Object *caller, Object *parent)
 	//report the action used
 	sbs->Report("Action '" + GetName() + "': object '" + parent_name + "' using command '" + command_name + "'");
 
+	//if parent is an elevator object, also use default (first) car as car object
+	if (elevator)
+		car = elevator->GetCar(1);
+	//if parent is an elevator car, get parent elevator object
+	else if (car)
+		elevator = car->GetElevator();
+
 	//numeric commands for elevator floor selections
-	if (IsNumeric(command_name) == true && elevator)
+	if (IsNumeric(command_name) == true && elevator && car)
 	{
 		int floor = ToInt(command_name);
 		return elevator->SelectFloor(floor);
 	}
 
-	if (elevator)
+	if (elevator && car)
 	{
 		//elevator-specific commands
 
@@ -202,7 +210,7 @@ bool Action::Run(Object *caller, Object *parent)
 
 		//if called from a control and mouse button is held down, notify elevator
 		if (caller_type == "Control" && sbs->camera->MouseDown == true)
-			elevator->GetCar(0)->ControlPressActive = true;
+			car->ControlPressActive = true;
 
 		if (command_name == "off")
 			return true;
@@ -214,14 +222,14 @@ bool Action::Run(Object *caller, Object *parent)
 				int number = 0;
 				if (command_name.length() > 13)
 					number = ToInt(command_name.substr(13, command_name.length() - 13));
-				return elevator->GetCar(0)->OpenDoors(number, 2, 0, true);
+				return car->OpenDoors(number, 2, 0, true);
 			}
 			if (StartsWith(command_name, "closeintmanual", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 14)
 					number = ToInt(command_name.substr(14, command_name.length() - 14));
-				elevator->GetCar(0)->CloseDoors(number, 2, 0, true);
+				car->CloseDoors(number, 2, 0, true);
 				return true;
 			}
 			if (StartsWith(command_name, "openextmanual", false) == true && elevator->Direction == 0)
@@ -229,14 +237,14 @@ bool Action::Run(Object *caller, Object *parent)
 				int number = 0;
 				if (command_name.length() > 13)
 					number = ToInt(command_name.substr(13, command_name.length() - 13));
-				return elevator->GetCar(0)->OpenDoors(number, 3, 0, true);
+				return car->OpenDoors(number, 3, 0, true);
 			}
 			if (StartsWith(command_name, "closeextmanual", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 14)
 					number = ToInt(command_name.substr(14, command_name.length() - 14));
-				elevator->GetCar(0)->CloseDoors(number, 3, 0, true);
+				car->CloseDoors(number, 3, 0, true);
 				return true;
 			}
 			if (StartsWith(command_name, "openmanual", false) == true && elevator->Direction == 0)
@@ -244,14 +252,14 @@ bool Action::Run(Object *caller, Object *parent)
 				int number = 0;
 				if (command_name.length() > 10)
 					number = ToInt(command_name.substr(10, command_name.length() - 10));
-				return elevator->GetCar(0)->OpenDoors(number, 1, 0, true);
+				return car->OpenDoors(number, 1, 0, true);
 			}
 			if (StartsWith(command_name, "closemanual", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 11)
 					number = ToInt(command_name.substr(11, command_name.length() - 11));
-				elevator->GetCar(0)->CloseDoors(number, 1, 0, true);
+				car->CloseDoors(number, 1, 0, true);
 				return true;
 			}
 			if (StartsWith(command_name, "openint", false) == true && elevator->Direction == 0)
@@ -259,14 +267,14 @@ bool Action::Run(Object *caller, Object *parent)
 				int number = 0;
 				if (command_name.length() > 7)
 					number = ToInt(command_name.substr(7, command_name.length() - 7));
-				return elevator->GetCar(0)->OpenDoors(number, 2, 0, false);
+				return car->OpenDoors(number, 2, 0, false);
 			}
 			if (StartsWith(command_name, "closeint", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 8)
 					number = ToInt(command_name.substr(8, command_name.length() - 8));
-				elevator->GetCar(0)->CloseDoors(number, 2, 0, false);
+				car->CloseDoors(number, 2, 0, false);
 				return true;
 			}
 			if (StartsWith(command_name, "openext", false) == true && elevator->Direction == 0)
@@ -274,14 +282,14 @@ bool Action::Run(Object *caller, Object *parent)
 				int number = 0;
 				if (command_name.length() > 7)
 					number = ToInt(command_name.substr(7, command_name.length() - 7));
-				return elevator->GetCar(0)->OpenDoors(number, 3, elevator->GetCar(0)->GetFloor(), false);
+				return car->OpenDoors(number, 3, car->GetFloor(), false);
 			}
 			if (StartsWith(command_name, "closeext", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 8)
 					number = ToInt(command_name.substr(8, command_name.length() - 8));
-				elevator->GetCar(0)->CloseDoors(number, 3, elevator->GetCar(0)->GetFloor(), false);
+				car->CloseDoors(number, 3, car->GetFloor(), false);
 				return true;
 			}
 			if (StartsWith(command_name, "open", false) == true && elevator->Direction == 0)
@@ -289,14 +297,14 @@ bool Action::Run(Object *caller, Object *parent)
 				int number = 0;
 				if (command_name.length() > 4)
 					number = ToInt(command_name.substr(4, command_name.length() - 4));
-				return elevator->GetCar(0)->OpenDoors(number);
+				return car->OpenDoors(number);
 			}
 			if (StartsWith(command_name, "close", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 5)
 					number = ToInt(command_name.substr(5, command_name.length() - 5));
-				elevator->GetCar(0)->CloseDoors(number);
+				car->CloseDoors(number);
 				return true;
 			}
 			if (StartsWith(command_name, "stopdoors", false) == true && elevator->Direction == 0)
@@ -304,7 +312,7 @@ bool Action::Run(Object *caller, Object *parent)
 				int number = 0;
 				if (command_name.length() > 9)
 					number = ToInt(command_name.substr(9, command_name.length() - 9));
-				elevator->GetCar(0)->StopDoors(number);
+				car->StopDoors(number);
 				return true;
 			}
 		}
@@ -324,7 +332,7 @@ bool Action::Run(Object *caller, Object *parent)
 			return elevator->Stop(true);
 		if (command_name == "alarm")
 		{
-			elevator->GetCar(0)->Alarm();
+			car->Alarm();
 			return true;
 		}
 		if (command_name == "fire2off")
@@ -355,22 +363,22 @@ bool Action::Run(Object *caller, Object *parent)
 			return elevator->EnableACP(false);
 		if (command_name == "fanon")
 		{
-			elevator->GetCar(0)->Fan = true;
+			car->Fan = true;
 			return true;
 		}
 		if (command_name == "fanoff")
 		{
-			elevator->GetCar(0)->Fan = false;
+			car->Fan = false;
 			return true;
 		}
 		if (command_name == "musicon")
 		{
-			elevator->GetCar(0)->MusicOn = true;
+			car->MusicOn = true;
 			return true;
 		}
 		if (command_name == "musicoff")
 		{
-			elevator->GetCar(0)->MusicOn = false;
+			car->MusicOn = false;
 			return true;
 		}
 		if (command_name == "upon")
@@ -446,7 +454,7 @@ bool Action::Run(Object *caller, Object *parent)
 			int number = 0;
 			if (command_name.length() > 4)
 				number = ToInt(command_name.substr(4, command_name.length() - 4));
-			elevator->GetCar(0)->HoldDoors(number);
+			car->HoldDoors(number);
 			return true;
 		}
 		if (StartsWith(command_name, "sensoron", false) == true)
@@ -454,7 +462,7 @@ bool Action::Run(Object *caller, Object *parent)
 			int number = 0;
 			if (command_name.length() > 8)
 				number = ToInt(command_name.substr(8, command_name.length() - 8));
-			elevator->GetCar(0)->EnableSensor(true, number);
+			car->EnableSensor(true, number);
 			return true;
 		}
 		if (StartsWith(command_name, "sensoroff", false) == true)
@@ -462,7 +470,7 @@ bool Action::Run(Object *caller, Object *parent)
 			int number = 0;
 			if (command_name.length() > 9)
 				number = ToInt(command_name.substr(9, command_name.length() - 9));
-			elevator->GetCar(0)->EnableSensor(false, number);
+			car->EnableSensor(false, number);
 			return true;
 		}
 		if (StartsWith(command_name, "sensorreset", false) == true && elevator->Direction == 0)
@@ -470,7 +478,7 @@ bool Action::Run(Object *caller, Object *parent)
 			int number = 0;
 			if (command_name.length() > 11)
 				number = ToInt(command_name.substr(11, command_name.length() - 11));
-			elevator->GetCar(0)->ResetDoors(number, true);
+			car->ResetDoors(number, true);
 			return true;
 		}
 		if (StartsWith(command_name, "sensor", false) == true && elevator->Direction == 0)
@@ -478,8 +486,8 @@ bool Action::Run(Object *caller, Object *parent)
 			int number = 0;
 			if (command_name.length() > 6)
 				number = ToInt(command_name.substr(6, command_name.length() - 6));
-			elevator->GetCar(0)->OpenDoors(number);
-			elevator->GetCar(0)->HoldDoors(number, true);
+			car->OpenDoors(number);
+			car->HoldDoors(number, true);
 			return true;
 		}
 		if (StartsWith(command_name, "reset", false) == true && elevator->Direction == 0)
@@ -487,7 +495,7 @@ bool Action::Run(Object *caller, Object *parent)
 			int number = 0;
 			if (command_name.length() > 5)
 				number = ToInt(command_name.substr(5, command_name.length() - 5));
-			elevator->GetCar(0)->ResetDoors(number);
+			car->ResetDoors(number);
 			return true;
 		}
 		if (command_name == "openshaftdoor")
@@ -496,7 +504,7 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0], param1) && IsNumeric(command_parameters[1], param2))
-					return elevator->GetCar(0)->OpenDoors(param1, 3, param2, false);
+					return car->OpenDoors(param1, 3, param2, false);
 			}
 			return false;
 		}
@@ -507,7 +515,7 @@ bool Action::Run(Object *caller, Object *parent)
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0], param1) && IsNumeric(command_parameters[1], param2))
 				{
-					elevator->GetCar(0)->CloseDoors(param1, 3, param2, false);
+					car->CloseDoors(param1, 3, param2, false);
 					return true;
 				}
 			}
@@ -519,7 +527,7 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0], param1) && IsNumeric(command_parameters[1], param2))
-					return elevator->GetCar(0)->OpenDoors(param1, 3, param2, true);
+					return car->OpenDoors(param1, 3, param2, true);
 			}
 			return false;
 		}
@@ -530,7 +538,7 @@ bool Action::Run(Object *caller, Object *parent)
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0], param1) && IsNumeric(command_parameters[1], param2))
 				{
-					elevator->GetCar(0)->CloseDoors(param1, 3, param2, true);
+					car->CloseDoors(param1, 3, param2, true);
 					return true;
 				}
 			}
@@ -563,8 +571,8 @@ bool Action::Run(Object *caller, Object *parent)
 			}
 			if (parent_type == "Elevator")
 			{
-				if (elevator)
-					return elevator->GetCar(0)->ReplaceTexture(command_parameters[0], command_parameters[1]);
+				if (elevator && car)
+					return car->ReplaceTexture(command_parameters[0], command_parameters[1]);
 				return false;
 			}
 			if (parent_type == "Shaft")
@@ -606,8 +614,8 @@ bool Action::Run(Object *caller, Object *parent)
 			}
 			else if (parent_type == "Elevator")
 			{
-				if (elevator)
-					soundlist = elevator->GetCar(0)->GetSound(command_parameters[0]);
+				if (elevator && car)
+					soundlist = car->GetSound(command_parameters[0]);
 				else
 					return false;
 			}
@@ -648,8 +656,8 @@ bool Action::Run(Object *caller, Object *parent)
 			}
 			else if (parent_type == "Elevator")
 			{
-				if (elevator)
-					soundlist = elevator->GetCar(0)->GetSound(command_parameters[0]);
+				if (elevator && car)
+					soundlist = car->GetSound(command_parameters[0]);
 				else
 					return false;
 			}
