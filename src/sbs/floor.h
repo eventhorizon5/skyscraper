@@ -81,7 +81,7 @@ public:
 	void UpdateDirectionalIndicators(int elevator);
 	void UpdateDirectionalIndicators();
 	DirectionalIndicator* AddDirectionalIndicator(int elevator, int car, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight);
+	void SetDirectionalIndicators(int elevator, int car, bool UpLight, bool DownLight);
 	void Loop();
 	std::vector<int> GetCallButtons(int elevator);
 	CallButton* GetCallButton(int elevator);

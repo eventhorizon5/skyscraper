@@ -610,15 +610,15 @@ void CallButton::Process(int direction)
 	if (sbs->Verbose)
 		Report("Using elevator " + ToString(elevator->Number));
 
+	ElevatorCar *car = elevator->GetCarForFloor(GetFloor());
+	if (!car)
+		return;
+
 	//if closest elevator is already on the called floor
-	if (elevator->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
+	if (car->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
 	{
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
-
-		ElevatorCar *car = elevator->GetCarForFloor(GetFloor());
-		if (!car)
-			return;
 
 		if (direction == -1)
 		{

@@ -169,7 +169,6 @@ public:
 	void ChangeLight(int floor, bool value);
 	void EnableSensor(bool value, int number = 0);
 	bool GetSensorStatus(int number = 0);
-	void ResetShaftDoors(int floor);
 	std::string GetFloorDisplay();
 	bool GetHoldStatus(int number = 0);
 	void ResetNudgeTimer(bool start = true, int number = 0);
@@ -191,6 +190,11 @@ public:
 	bool OnBottomFloor();
 	bool InCar();
 	int GetNearestServicedFloor();
+	float GetDestinationAltitude(int floor);
+	float GetDestinationOffset(int floor);
+	void SetFloor(int floor, bool move_parent = true);
+	bool IsLeveled();
+	bool IsOnFloor(int floor);
 
 	MeshObject* Mesh; //car mesh object
 

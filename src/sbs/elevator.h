@@ -118,6 +118,7 @@ public:
 	bool CreateElevator(bool relative, float x, float z, int floor);
 	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);
+	bool RouteExists(bool direction, int floor);
 	bool CallCancel();
 	bool Stop(bool emergency = false);
 	void ProcessCallQueue();
@@ -172,7 +173,6 @@ public:
 	float GetDestinationAltitude(int floor);
 	float GetDestinationOffset(int floor);
 	void MoveObjects(float offset);
-	void SetFloor(int floor);
 	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 	int AvailableForCall(int floor, int direction, bool report_on_failure = true);
@@ -197,7 +197,6 @@ public:
 	bool IsStopped();
 	void CancelHallCall(int floor, int direction);
 	bool IsManuallyStopped();
-	bool IsOnFloor(int floor);
 	DynamicMesh* GetDoorContainer() { return DoorContainer; }
 	bool CheckInterlocks(bool skip_current_floor = false);
 	bool AreDoorsOpen();
@@ -214,11 +213,13 @@ public:
 	bool GetHoldStatus();
 	bool OnTopFloor();
 	bool OnBottomFloor();
+	bool IsNudgeModeActive();
+	void ResetShaftDoors(int floor);
 
 	ElevatorCar* CreateCar();
 	ElevatorCar* GetCar(int number);
 	int GetCarCount();
-	ElevatorCar* GetCarForFloor(int number);
+	ElevatorCar* GetCarForFloor(int number, bool report_on_failure = false);
 
 private:
 

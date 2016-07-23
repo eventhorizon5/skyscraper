@@ -1054,9 +1054,9 @@ DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, int car, bool
 	return indicator;
 }
 
-void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
+void Floor::SetDirectionalIndicators(int elevator, int car, bool UpLight, bool DownLight)
 {
-	//set light status of all standard (non active-direction) directional indicators associated with the given elevator
+	//set light status of all standard (non active-direction) directional indicators associated with the given elevator and car
 
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
@@ -1064,7 +1064,7 @@ void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 
 		if (indicator)
 		{
-			if (indicator->elevator == elevator && indicator->ActiveDirection == false)
+			if (indicator->elevator == elevator && indicator->car == car && indicator->ActiveDirection == false)
 			{
 				indicator->DownLight(DownLight);
 				indicator->UpLight(UpLight);

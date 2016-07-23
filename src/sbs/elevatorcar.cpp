@@ -581,6 +581,9 @@ void ElevatorCar::OnInit()
 
 	//disable objects
 	EnableObjects(false);
+
+	//move car (and possibly elevator) to starting position
+	SetFloor(StartingFloor, (Number == 1));
 }
 
 void ElevatorCar::Loop()
@@ -603,7 +606,7 @@ void ElevatorCar::Loop()
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
-			if (parent->InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
+			if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
 			{
 				if (sbs->Verbose)
 					Report("playing car idle sound");
@@ -623,7 +626,7 @@ void ElevatorCar::Loop()
 					Report("stopping car idle sound");
 				idlesound->Stop();
 			}
-			else if (parent->InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
+			else if (InCar() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
 					Report("stopping car idle sound");
@@ -639,7 +642,7 @@ void ElevatorCar::Loop()
 		{
 			if (parent->InServiceMode() == false)
 			{
-				if (parent->InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+				if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
 				{
 					if (sbs->Verbose)
 						Report("playing music");
@@ -660,7 +663,7 @@ void ElevatorCar::Loop()
 					Report("stopping music");
 				musicsound->Pause();
 			}
-			else if (parent->InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
+			else if (InCar() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
 					Report("stopping music");
@@ -689,7 +692,7 @@ void ElevatorCar::Loop()
 		//reset door timer if peak mode is enabled and a movement is pending
 		if ((parent->UpPeak == true || parent->DownPeak == true))
 		{
-			if ((parent->UpQueue.size() != 0 || parent->DownQueue.size() != 0) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
+			if ((parent->UpQueue.empty() == false || parent->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
 			{
 				if (door)
 				{
@@ -846,12 +849,20 @@ void ElevatorCar::UpdateFloorIndicators()
 int ElevatorCar::GetTopFloor()
 {
 	//returns highest serviced floor
+
+	if (ServicedFloors.empty() == true)
+		return 0;
+
 	return ServicedFloors[ServicedFloors.size() - 1];
 }
 
 int ElevatorCar::GetBottomFloor()
 {
 	//returns lowest serviced floor
+
+	if (ServicedFloors.empty() == true)
+		return 0;
+
 	return ServicedFloors[0];
 }
 
@@ -888,7 +899,7 @@ void ElevatorCar::SetDirectionalIndicators(int floor, bool UpLight, bool DownLig
 
 	//exterior indicators
 	if (sbs->GetFloor(floor))
-		sbs->GetFloor(floor)->SetDirectionalIndicators(parent->Number, UpLight, DownLight);
+		sbs->GetFloor(floor)->SetDirectionalIndicators(parent->Number, Number, UpLight, DownLight);
 
 	//interior indicators
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
@@ -1577,7 +1588,7 @@ bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::strin
 	{
 		bool door_result = false;
 		int floor = ServicedFloors[i];
-		float base = parent->GetDestinationOffset(floor);
+		float base = GetDestinationOffset(floor);
 
 		if (door_number != 0)
 			door_result = ShaftDoorsExist(door_number, floor);
@@ -1662,7 +1673,7 @@ Sound* ElevatorCar::AddSound(const std::string &name, const std::string &filenam
 	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
 	sound->SetLoopState(loop);
-	if (loop && sbs->IsRunning == true && parent->InElevator() == true)
+	if (loop && sbs->IsRunning == true && InCar() == true)
 		sound->Play();
 
 	return sound;
@@ -1848,8 +1859,9 @@ Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &clo
 	*/
 
 	std::string elevnum = ToString(parent->Number);
+	std::string carnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
-	std::string name = "Elevator " + elevnum + ":Door " + num;
+	std::string name = "Elevator " + elevnum + ": Car " + carnum + ": Door " + num;
 	Door* door = new Door(this, 0, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door;
@@ -2229,27 +2241,6 @@ void ElevatorCar::EnableSensor(bool value, int number)
 			door->EnableSensor(value);
 		else
 			ReportError("Invalid door " + ToString(i));
-	}
-}
-
-void ElevatorCar::ResetShaftDoors(int floor)
-{
-	//reset shaft doors
-
-	//this might not be needed, due to addition of full-shaft enable check to
-	//floor object's EnableGroup function, needs testing
-
-	for (int i = 1; i <= sbs->GetShaftCount(); i++)
-	{
-		Shaft *shaft = sbs->GetShaft(i);
-		if (shaft)
-		{
-			if (shaft->IsEnabled == false)
-			{
-				shaft->EnableRange(floor, sbs->ShaftDisplayRange, false, true);
-				shaft->EnableRange(floor, sbs->ShaftDisplayRange, true, true);
-			}
-		}
 	}
 }
 
@@ -2803,7 +2794,7 @@ int ElevatorCar::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				nearest_difference = fabsf(GetPosition().y - parent->GetDestinationOffset(ServicedFloors[i]));
+				nearest_difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
 				nearest = i;
 				firstrun = false;
 			}
@@ -2812,7 +2803,7 @@ int ElevatorCar::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				float difference = fabsf(GetPosition().y - parent->GetDestinationOffset(ServicedFloors[i]));
+				float difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
 				if (difference < nearest_difference)
 				{
 					//mark closest
@@ -2824,6 +2815,100 @@ int ElevatorCar::GetNearestServicedFloor()
 	}
 
 	return ServicedFloors[nearest];
+}
+
+float ElevatorCar::GetDestinationAltitude(int floor)
+{
+	//returns the destination altitude of the specified floor, based on shaft door positioning
+
+	if (IsServicedFloor(floor) == false)
+		return 0.0f;
+
+	float result = 0;
+	bool found = false;
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i]->ShaftDoorsExist(floor) == true)
+		{
+			float altitude = DoorArray[i]->GetShaftDoorAltitude(floor);
+
+			if (altitude > result || found == false)
+			{
+				result = altitude;
+				found = true;
+			}
+		}
+	}
+
+	if (found == false)
+	{
+		if (sbs->GetFloor(floor))
+			return sbs->GetFloor(floor)->GetBase();
+	}
+	return result;
+}
+
+float ElevatorCar::GetDestinationOffset(int floor)
+{
+	//returns the offset distance from the floor's base altitude the elevator destination is
+
+	if (IsServicedFloor(floor) == false)
+		return 0.0f;
+
+	if (sbs->GetFloor(floor))
+		return GetDestinationAltitude(floor) - sbs->GetFloor(floor)->GetBase();
+
+	return 0.0f;
+}
+
+void ElevatorCar::SetFloor(int floor, bool move_parent)
+{
+	//set car's altitude to specified floor
+
+	float altitude = 0;
+	if (!sbs->GetFloor(floor))
+		return;
+
+	altitude = GetDestinationAltitude(floor);
+	if (move_parent == true)
+	{
+		//move elevator, and any other cars
+		parent->MoveObjects(altitude - GetPosition().y);
+	}
+	else
+	{
+		//move just this car
+		Ogre::Vector3 vector (0, altitude - GetPosition().y, 0);
+		Move(vector);
+	}
+}
+
+bool ElevatorCar::IsLeveled()
+{
+	//return true if car is leveled at a serviced floor
+
+	float tolerance = 0.005f;
+
+	int floor = GetFloor();
+	if (IsServicedFloor(floor) == true)
+	{
+		float altitude = GetDestinationAltitude(floor);
+
+		if (GetPosition().y >= altitude - tolerance &&
+				GetPosition().y <= altitude + tolerance)
+			return true;
+	}
+	return false;
+}
+
+bool ElevatorCar::IsOnFloor(int floor)
+{
+	//return true if the car is on and leveled on the specified floor
+
+	if (GetFloor() == floor && IsLeveled() == true && parent->IsMoving == false)
+		return true;
+
+	return false;
 }
 
 }
