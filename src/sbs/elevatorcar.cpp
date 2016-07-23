@@ -326,7 +326,10 @@ bool ElevatorCar::CreateCar()
 		return false;
 
 	//set starting position
-	SetPositionY(sbs->GetFloor(StartingFloor)->GetBase());
+	if (Number == 1)
+		parent->SetPositionY(sbs->GetFloor(StartingFloor)->GetBase());
+	else
+		SetPositionY(sbs->GetFloor(StartingFloor)->GetBase());
 
 	//create door objects
 	if (sbs->Verbose)
@@ -2873,7 +2876,7 @@ void ElevatorCar::SetFloor(int floor, bool move_parent)
 	if (move_parent == true)
 	{
 		//move elevator, and any other cars
-		parent->MoveObjects(altitude - GetPosition().y);
+		parent->MoveObjects(altitude - parent->GetPosition().y);
 	}
 	else
 	{

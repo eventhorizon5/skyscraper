@@ -62,7 +62,7 @@ ButtonPanel::ButtonPanel(ElevatorCar *car, int index, const std::string &texture
 	Height = ((Rows + 1) * SpacingY) + (Rows * ButtonHeight);
 
 	//create mesh
-	std::string name = "Button Panel " + ToString(this->elevator) + ":" + ToString(this->car) + ":" + ToString(index);
+	std::string name = "Button Panel " + ToString(index);
 	SetName(name);
 	ButtonPanelMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
