@@ -190,6 +190,7 @@ public:
 	bool OnTopFloor();
 	bool OnBottomFloor();
 	bool InCar();
+	int GetNearestServicedFloor();
 
 	MeshObject* Mesh; //car mesh object
 

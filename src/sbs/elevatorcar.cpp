@@ -2783,4 +2783,47 @@ bool ElevatorCar::InCar()
 	return (sbs->InElevator == true && sbs->ElevatorNumber == parent->Number && sbs->CarNumber == Number);
 }
 
+int ElevatorCar::GetNearestServicedFloor()
+{
+	//return number of closest serviced floor
+
+	if (IsServicedFloor(GetFloor()) == true)
+		return GetFloor();
+
+	if (ServicedFloors.size() == 0)
+		return 0;
+
+	bool firstrun = true;
+	size_t nearest = 0;
+	float nearest_difference = 0;
+
+	for (size_t i = 0; i < ServicedFloors.size() - 1; i++)
+	{
+		if (firstrun == true)
+		{
+			if (sbs->GetFloor(ServicedFloors[i]))
+			{
+				nearest_difference = fabsf(GetPosition().y - parent->GetDestinationOffset(ServicedFloors[i]));
+				nearest = i;
+				firstrun = false;
+			}
+		}
+		else
+		{
+			if (sbs->GetFloor(ServicedFloors[i]))
+			{
+				float difference = fabsf(GetPosition().y - parent->GetDestinationOffset(ServicedFloors[i]));
+				if (difference < nearest_difference)
+				{
+					//mark closest
+					nearest_difference = difference;
+					nearest = i;
+				}
+			}
+		}
+	}
+
+	return ServicedFloors[nearest];
+}
+
 }

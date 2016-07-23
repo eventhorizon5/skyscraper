@@ -165,8 +165,8 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 				//if the checked elevator doesn't go beyond the destination floor
 
 				std::vector<int> floor_list;
-				if ((DestinationFloor > StartingFloor && elev->GetTopFloor() < DestinationFloor) ||
-						(DestinationFloor < StartingFloor && elev->GetBottomFloor() < DestinationFloor))
+				if ((DestinationFloor > StartingFloor && elev->GetCar(0)->GetTopFloor() < DestinationFloor) ||
+						(DestinationFloor < StartingFloor && elev->GetCar(0)->GetBottomFloor() < DestinationFloor))
 				{
 					for (int j = elev->GetCar(0)->GetServicedFloorCount() - 1; j >= 0; j--)
 					{

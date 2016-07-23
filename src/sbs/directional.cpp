@@ -74,6 +74,14 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 	timer = 0;
 	timer_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Timer", 15000);
 
+	//validate objects
+	if (!sbs->GetElevator(elevator))
+		return;
+	if (!sbs->GetElevator(elevator)->GetCar(car))
+		return;
+	if (!sbs->GetFloor(floor))
+		return;
+
 	bool in_elevator = false;
 	if (parent->GetType() == "Elevator")
 		in_elevator = true;
@@ -125,8 +133,8 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 	}
 
 	//create indicator lanterns
-	int bottomfloor = sbs->GetElevator(elevator)->GetBottomFloor();
-	int topfloor = sbs->GetElevator(elevator)->GetTopFloor();
+	int bottomfloor = sbs->GetElevator(elevator)->GetCar(car)->GetBottomFloor();
+	int topfloor = sbs->GetElevator(elevator)->GetCar(car)->GetTopFloor();
 
 	if (Direction == "front" || Direction == "back")
 	{

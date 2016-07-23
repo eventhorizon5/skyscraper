@@ -178,7 +178,6 @@ public:
 	int AvailableForCall(int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);
-	int GetNearestServicedFloor();
 	bool ReturnToNearestFloor();
 	bool IsLeveled();
 	bool Up();

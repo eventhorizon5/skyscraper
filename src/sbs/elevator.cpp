@@ -306,11 +306,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	//set recall/ACP floors if not already set
 	if (RecallSet == false)
-		SetRecallFloor(GetBottomFloor());
+		SetRecallFloor(GetCar(1)->GetBottomFloor());
 	if (RecallAltSet == false)
-		SetAlternateRecallFloor(GetTopFloor());
+		SetAlternateRecallFloor(GetCar(1)->GetTopFloor());
 	if (ACPFloorSet == false)
-		SetACPFloor(GetBottomFloor());
+		SetACPFloor(GetCar(1)->GetBottomFloor());
 
 	//move objects to positions
 	if (sbs->Verbose)
@@ -596,8 +596,8 @@ void Elevator::ProcessCallQueue()
 	//if both queues are empty
 	if (UpQueue.empty() && DownQueue.empty())
 	{
-		int TopFloor = GetTopFloor();
-		int BottomFloor = GetBottomFloor();
+		int TopFloor = GetCar(1)->GetTopFloor();
+		int BottomFloor = GetCar(1)->GetBottomFloor();
 
 		UpQueueEmpty = false;
 		DownQueueEmpty = false;
@@ -1107,7 +1107,7 @@ void Elevator::MoveElevatorToFloor()
 			//otherwise if inspection service is on, choose the altitude of the top/bottom floor
 			if (Direction == 1)
 			{
-				Destination = GetDestinationAltitude(GetTopFloor());
+				Destination = GetDestinationAltitude(GetCar(0)->GetTopFloor());
 				if (ElevatorStart >= Destination)
 				{
 					//don't go above top floor
@@ -1122,7 +1122,7 @@ void Elevator::MoveElevatorToFloor()
 			}
 			else
 			{
-				Destination = GetDestinationAltitude(GetBottomFloor());
+				Destination = GetDestinationAltitude(GetCar(0)->GetBottomFloor());
 				if (ElevatorStart <= Destination)
 				{
 					//don't go below bottom floor
@@ -1665,14 +1665,14 @@ void Elevator::FinishMove()
 		}
 
 		//reverse queues if at either top or bottom of serviced floors
-		if (QueuePositionDirection == 1 && GotoFloor == GetTopFloor())
+		if (QueuePositionDirection == 1 && GotoFloor == GetCar(0)->GetTopFloor())
 		{
 			if (sbs->Verbose)
 				Report("at top floor; setting queue search direction to down");
 			LastQueueDirection = QueuePositionDirection;
 			QueuePositionDirection = -1;
 		}
-		else if (QueuePositionDirection == -1 && GotoFloor == GetBottomFloor())
+		else if (QueuePositionDirection == -1 && GotoFloor == GetCar(0)->GetBottomFloor())
 		{
 			if (sbs->Verbose)
 				Report("at bottom floor; setting queue search direction to up");
@@ -1965,7 +1965,7 @@ void Elevator::GoToRecallFloor()
 	if (RecallUnavailable == false)
 	{
 		Report("Proceeding to recall floor");
-		if (RecallFloor > GetCar(0)->GetFloor())
+		if (RecallFloor > GetCar(1)->GetFloor())
 			AddRoute(RecallFloor, 1, 2);
 		else
 			AddRoute(RecallFloor, -1, 2);
@@ -1973,7 +1973,7 @@ void Elevator::GoToRecallFloor()
 	else
 	{
 		Report("Proceeding to alternate recall floor");
-		if (RecallFloorAlternate > GetCar(0)->GetFloor())
+		if (RecallFloorAlternate > GetCar(1)->GetFloor())
 			AddRoute(RecallFloorAlternate, 1, 2);
 		else
 			AddRoute(RecallFloorAlternate, -1, 2);
@@ -2856,11 +2856,16 @@ bool Elevator::GetArrivalDirection(int floor)
 	//determine if the directional lantern should show up or down on arrival to the specified floor
 	//true for up, false for down
 
+	ElevatorCar *car = GetCarForFloor(floor);
+
+	if (!car)
+		return false;
+
 	int newfloor = floor;
 
-	if (floor == GetTopFloor())
+	if (floor == car->GetTopFloor())
 		return false; //turn on down light if on top floor
-	if (floor == GetBottomFloor())
+	if (floor == car->GetBottomFloor())
 		return true; //turn on up light if on bottom floor
 
 	//chime queue direction if queue resets are on
@@ -3280,60 +3285,17 @@ bool Elevator::Check(Ogre::Vector3 position)
 	return false;
 }
 
-int Elevator::GetNearestServicedFloor()
-{
-	//return number of closest serviced floor
-
-	if (GetCar(1)->IsServicedFloor(GetCar(1)->GetFloor()) == true)
-		return GetCar(1)->GetFloor();
-
-	if (GetCar(1)->ServicedFloors.size() == 0)
-		return 0;
-
-	bool firstrun = true;
-	size_t nearest = 0;
-	float nearest_difference = 0;
-
-	for (size_t i = 0; i < GetCar(1)->ServicedFloors.size() - 1; i++)
-	{
-		if (firstrun == true)
-		{
-			if (sbs->GetFloor(GetCar(1)->ServicedFloors[i]))
-			{
-				nearest_difference = fabsf(GetPosition().y - GetDestinationOffset(GetCar(1)->ServicedFloors[i]));
-				nearest = i;
-				firstrun = false;
-			}
-		}
-		else
-		{
-			if (sbs->GetFloor(GetCar(1)->ServicedFloors[i]))
-			{
-				float difference = fabsf(GetPosition().y - GetDestinationOffset(GetCar(1)->ServicedFloors[i]));
-				if (difference < nearest_difference)
-				{
-					//mark closest
-					nearest_difference = difference;
-					nearest = i;
-				}
-			}
-		}
-	}
-
-	return GetCar(1)->ServicedFloors[nearest];
-}
-
 bool Elevator::ReturnToNearestFloor()
 {
 	//return and relevel to nearest floor
 
 	if (IsIdle() == true && InServiceMode() == false)
 	{
-		int floor = GetNearestServicedFloor();
+		int floor = GetCar(1)->GetNearestServicedFloor();
 		Report("returning to nearest floor");
 		Parking = true; //enable parking mode to prevent arrival notification
 
-		if (floor >= GetCar(0)->GetFloor())
+		if (floor >= GetCar(1)->GetFloor())
 			AddRoute(floor, 1, 2);
 		else
 			AddRoute(floor, -1, 2);

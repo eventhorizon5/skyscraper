@@ -140,13 +140,17 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		Elevator *elev = sbs->GetElevator(Elevators[i]);
 		if (elev)
 		{
-			int tmpbottom = elev->GetBottomFloor();
-			int tmptop = elev->GetTopFloor();
-			if (tmpbottom < bottomfloor || firstrun == true)
-				bottomfloor = tmpbottom;
-			if (tmptop > topfloor || firstrun == true)
-				topfloor = tmptop;
-			firstrun = false;
+			ElevatorCar *car = elev->GetCarForFloor(floornum);
+			if (car)
+			{
+				int tmpbottom = car->GetBottomFloor();
+				int tmptop = car->GetTopFloor();
+				if (tmpbottom < bottomfloor || firstrun == true)
+					bottomfloor = tmpbottom;
+				if (tmptop > topfloor || firstrun == true)
+					topfloor = tmptop;
+				firstrun = false;
+			}
 		}
 	}
 
