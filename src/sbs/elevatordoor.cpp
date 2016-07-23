@@ -59,7 +59,7 @@ public:
 	virtual void Notify();
 };
 
-ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car->GetParent())
+ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 {
 	//set up SBS object
 	SetValues("ElevatorDoor", "", false);
@@ -810,7 +810,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const std::string &nam
 	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "ElevatorDoor " + ToString(elev->Number) + ":" + ToString(Number) + ":" + Name;
+	buffer = "ElevatorDoor " + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":" + Name;
 
 	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return Doors;
@@ -836,7 +836,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "Elevator " + ToString(elev->Number) + ": Shaft Door " + ToString(Number) + ":" + ToString(floor) + ":" + Name;
+	buffer = "Elevator " + ToString(elev->Number) + ": Shaft Door " + ToString(car->Number) + ":" + ToString(Number) + ":" + ToString(floor) + ":" + Name;
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
@@ -971,17 +971,17 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 
 		if (ShaftDoor == false)
 		{
-			name1 = "Door" + GetNumberText() + ":F1";
-			name2 = "Door" + GetNumberText() + ":F2";
+			name1 = "Door" + ToString(car->Number) + GetNumberText() + ":F1";
+			name2 = "Door" + ToString(car->Number) + GetNumberText() + ":F2";
 			sbs->CreateWallBox(car->Mesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
 			sbs->CreateWallBox(car->Mesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 		else
 		{
 			Shaft *shaft = elev->GetShaft();
-			Ogre::Vector3 position (elev->GetPosition() - shaft->GetPosition());
-			name1 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(Number) + ":F1";
-			name2 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(Number) + ":F2";
+			Ogre::Vector3 position (car->GetPosition() - shaft->GetPosition());
+			name1 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":F1";
+			name2 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":F2";
 			sbs->CreateWallBox(shaft->GetMeshObject(floor), name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
 			sbs->CreateWallBox(shaft->GetMeshObject(floor), name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
@@ -1492,9 +1492,9 @@ ElevatorDoor::DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_ob
 
 	std::string name;
 	if (IsShaftDoor == true)
-		name = "Shaft Door " + ToString(parent->elev->Number) + ":" + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
+		name = "Shaft Door " + ToString(parent->elev->Number) + ":" + ToString(parent->car->Number) + ":" + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
 	else
-		name = "Elevator Door " + ToString(parent->Number);
+		name = "Elevator Door " + ToString(parent->car->Number) + ":" + ToString(parent->Number);
 
 	SetValues("DoorWrapper", name, false);
 
