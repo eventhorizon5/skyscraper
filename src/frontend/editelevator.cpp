@@ -1074,11 +1074,11 @@ void editelevator::On_bCall_Click(wxCommandEvent& event)
 {
 	//calls elevator to the current camera floor
 
-	if (elevator)
+	if (elevator && car)
 	{
-		if (elevator->GetFloor() > Simcore->camera->CurrentFloor)
+		if (car->GetFloor() > Simcore->camera->CurrentFloor)
 			elevator->AddRoute(Simcore->camera->CurrentFloor, -1, 1);
-		if (elevator->GetFloor() < Simcore->camera->CurrentFloor)
+		if (car->GetFloor() < Simcore->camera->CurrentFloor)
 			elevator->AddRoute(Simcore->camera->CurrentFloor, 1, 1);
 	}
 }
@@ -1287,7 +1287,7 @@ void editelevator::Loop()
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(BoolToString(elevator->IsEnabled));
 	txtErrorOffset->SetValue(TruncateNumber(elevator->ErrorOffset, 2));
-	txtFloor->SetValue(ToString(elevator->GetFloor()));
+	txtFloor->SetValue(ToString(car->GetFloor()));
 	txtHeight->SetValue(TruncateNumber(car->Height, 2));
 	txtMoveElevator->SetValue(BoolToString(elevator->MoveElevator));
 	txtNumber->SetValue(ToString(elevator->Number));

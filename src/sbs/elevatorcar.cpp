@@ -297,17 +297,20 @@ ElevatorCar::~ElevatorCar()
 	Mesh = 0;
 }
 
-bool ElevatorCar::CreateCar(int floor)
+bool ElevatorCar::CreateCar()
 {
 	//used with CreateElevator function; this is the car-specific code
 
+	if (Number > 1)
+		StartingFloor = parent->GetCar(Number - 1)->StartingFloor;
+
 	//check if starting floor is valid
-	if (!sbs->GetFloor(floor))
-		return ReportError("Floor " + ToString(floor) + " doesn't exist");
+	if (!sbs->GetFloor(StartingFloor))
+		return ReportError("Floor " + ToString(StartingFloor) + " doesn't exist");
 
 	//make sure starting floor is within associated shaft's range
-	if (floor < parent->GetShaft()->startfloor || floor > parent->GetShaft()->endfloor)
-		return ReportError("Invalid starting floor " + ToString(floor));
+	if (StartingFloor < parent->GetShaft()->startfloor || StartingFloor > parent->GetShaft()->endfloor)
+		return ReportError("Invalid starting floor " + ToString(StartingFloor));
 
 	//check door count
 	if (NumDoors < 0)
@@ -315,16 +318,15 @@ bool ElevatorCar::CreateCar(int floor)
 
 	//add car's starting floor to serviced floor list
 	//this also ensures that the list is populated to prevent errors
-	if (IsServicedFloor(floor) == false)
-		AddServicedFloor(floor);
+	if (IsServicedFloor(StartingFloor) == false)
+		AddServicedFloor(StartingFloor);
 
 	//ensure that serviced floors are valid for the shaft
 	if (CheckServicedFloors() == false)
 		return false;
 
 	//set starting position
-	SetPositionY(sbs->GetFloor(floor)->GetBase());
-	StartingFloor = floor;
+	SetPositionY(sbs->GetFloor(StartingFloor)->GetBase());
 
 	//create door objects
 	if (sbs->Verbose)
@@ -347,14 +349,14 @@ bool ElevatorCar::CreateCar(int floor)
 	musicsound->Move(MusicPosition);
 
 	//set current floor
-	CurrentFloor = floor;
+	CurrentFloor = StartingFloor;
 
 	//create test light
 	//AddLight("light", 0, Ogre::Vector3(0, 6, 0), Ogre::Vector3(0, 0, 0), 1, 1, 1, 1, 1, 1, 0, 0, 0, 1000, 1, 1, 1);
 
 	Created = true;
 
-	Report("created on floor " + ToString(floor));
+	Report("created on floor " + ToString(StartingFloor));
 	return true;
 }
 
@@ -1027,7 +1029,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 		if (parent->IsMoving == true && parent->OnFloor == false)
 			return ReportError("Cannot open doors while moving if interlocks are enabled");
 
-		if (parent->OnFloor == false || (whichdoors == 3 && floor != parent->GetFloor()))
+		if (parent->OnFloor == false || (whichdoors == 3 && floor != GetFloor()))
 			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
 	}
 
@@ -2115,7 +2117,7 @@ std::string ElevatorCar::GetFloorDisplay()
 	//returns the current floor's indicator display string
 
 	std::string value;
-	int floornum = parent->GetFloor();
+	int floornum = GetFloor();
 	Floor *floor = sbs->GetFloor(floornum);
 
 	if (!floor)
@@ -2386,7 +2388,7 @@ bool ElevatorCar::PlayFloorBeep()
 
 	std::string newsound = BeepSound;
 	//change the asterisk into the current floor number
-	ReplaceAll(newsound, "*", ToString(parent->GetFloor()));
+	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
 	floorbeep->Stop();
 	floorbeep->Load(newsound);
@@ -2494,7 +2496,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 	}
 
 	//change the asterisk into the current floor number
-	ReplaceAll(newsound, "*", ToString(parent->GetFloor()));
+	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
 	announcesnd->PlayQueued(newsound, false, false);
 	return true;

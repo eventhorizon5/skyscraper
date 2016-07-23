@@ -328,7 +328,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		if (elev->MoveElevator == true && elev->Leveling == true)
 			floor = elev->GotoFloor;
 		else
-			floor = elev->GetFloor();
+			floor = car->GetFloor();
 	}
 
 	//if opening both doors, exit if shaft doors don't exist
@@ -362,7 +362,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//do not close doors while fire service mode 1 is in recall mode and the elevator is waiting at the parking floor
-	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
+	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && car->GetFloor() == elev->ParkingFloor)
 	{
 		car->ReportError("cannot close doors" + GetNumberText() + " while Fire Service Phase 1 is in recall mode");
 		return;
@@ -435,7 +435,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	if (whichdoors != 3)
-		floor = elev->GetFloor();
+		floor = car->GetFloor();
 
 	//if closing both doors, exit if shaft doors don't exist
 	int index = GetManualIndex(floor);
@@ -676,8 +676,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 		//turn on autoclose timer
 		if ((elev->InServiceMode() == false || elev->WaitForDoors == true) &&
-				(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
-				(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
+				(elev->UpPeak == false || ShaftDoorFloor != car->GetBottomFloor()) &&
+				(elev->DownPeak == false || ShaftDoorFloor != car->GetTopFloor()))
 		{
 			if (IsSensorBlocked() == false)
 				Reset();
@@ -1249,7 +1249,7 @@ bool ElevatorDoor::AreShaftDoorsClosed(bool skip_current_floor)
 			if (skip_current_floor == true)
 			{
 				//skip elevator's floor if specified
-				if (door->floor == elev->GetFloor())
+				if (door->floor == car->GetFloor())
 					continue;
 			}
 
@@ -2217,7 +2217,7 @@ bool ElevatorDoor::AllowNudgeMode()
 
 	if (GetNudgeStatus() == false && AreDoorsOpen() == true && elev->AutoDoors == true && (elev->InServiceMode() == false || firelobby == true))
 	{
-		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
+		if ((elev->UpPeak == true && car->GetFloor() == car->GetBottomFloor()) || (elev->DownPeak == true && car->GetFloor() == car->GetTopFloor()))
 			return false;
 
 		return true;

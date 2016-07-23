@@ -121,7 +121,6 @@ public:
 	bool CallCancel();
 	bool Stop(bool emergency = false);
 	void ProcessCallQueue();
-	int GetFloor();
 	void Loop();
 	void DumpQueues();
 	void Enabled(bool value);

@@ -893,7 +893,7 @@ void Camera::Loop(float delta)
 						if (door->OpenDoor == -1 && door->GetWhichDoors() == 1)
 						{
 							//either open doors if the hit door was an internal door or a shaft door on the elevator floor
-							if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->elev->GetFloor()))
+							if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->elev->GetCar(0)->GetFloor()))
 								door->elev->GetCar(0)->OpenDoors(door->Number, 1);
 						}
 					}

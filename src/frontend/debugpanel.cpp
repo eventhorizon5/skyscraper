@@ -31,6 +31,7 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "texture.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
@@ -435,7 +436,7 @@ void DebugPanel::Loop()
 		bEditElevator->Enable(true);
 		t_elevnumber->SetLabel(SBS::ToString(Simcore->ElevatorNumber));
 		if (Simcore->GetElevator(Simcore->ElevatorNumber))
-			t_elevfloor->SetLabel(SBS::ToString(Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()));
+			t_elevfloor->SetLabel(SBS::ToString(Simcore->GetElevator(Simcore->ElevatorNumber)->GetCar(1)->GetFloor()));
 	}
 	else
 		bEditElevator->Enable(false);

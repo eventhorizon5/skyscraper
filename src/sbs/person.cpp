@@ -291,7 +291,7 @@ void Person::ProcessRoute()
 	{
 		//wait for the elevator to arrive at the selected floor
 
-		if (elevator->OnFloor == true && elevator->GetFloor() == floor_selection && elevator->GetCar(0)->AreDoorsOpen() == true)
+		if (elevator->OnFloor == true && elevator->GetCar(0)->GetFloor() == floor_selection && elevator->GetCar(0)->AreDoorsOpen() == true)
 		{
 			std::string floor_status;
 
@@ -337,7 +337,7 @@ void Person::ProcessRoute()
 			else
 			{
 				//otherwise exit at current floor and try another elevator
-				current_floor = elevator->GetFloor();
+				current_floor = elevator->GetCar(0)->GetFloor();
 				route[0].floor_selected = false;
 				route[0].call_made = 0;
 			}
@@ -345,8 +345,8 @@ void Person::ProcessRoute()
 		}
 		else if (elevator->IsMoving == true)
 		{
-			if (current_floor != elevator->GetFloor())
-				current_floor = elevator->GetFloor();
+			if (current_floor != elevator->GetCar(0)->GetFloor())
+				current_floor = elevator->GetCar(0)->GetFloor();
 		}
 	}
 }

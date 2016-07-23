@@ -837,7 +837,7 @@ int CallButton::FindClosestElevator(int direction)
 				Report("Checking elevator " + ToString(elevator->Number));
 
 			//if elevator is closer than the previously checked one or we're starting the checks
-			if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
+			if (abs(elevator->GetCar(0)->GetFloor() - GetFloor()) < closest || check == false)
 			{
 				//see if elevator is available for the call
 				if (recheck == true && elevator->Number == ActiveElevator)
@@ -849,7 +849,7 @@ int CallButton::FindClosestElevator(int direction)
 				{
 					if (sbs->Verbose && count > 1 && recheck == false)
 						Report("Marking - closest so far");
-					closest = abs(elevator->GetFloor() - GetFloor());
+					closest = abs(elevator->GetCar(0)->GetFloor() - GetFloor());
 					closest_elev = i;
 					check = true;
 				}

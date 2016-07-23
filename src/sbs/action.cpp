@@ -274,14 +274,14 @@ bool Action::Run(Object *caller, Object *parent)
 				int number = 0;
 				if (command_name.length() > 7)
 					number = ToInt(command_name.substr(7, command_name.length() - 7));
-				return elevator->GetCar(0)->OpenDoors(number, 3, elevator->GetFloor(), false);
+				return elevator->GetCar(0)->OpenDoors(number, 3, elevator->GetCar(0)->GetFloor(), false);
 			}
 			if (StartsWith(command_name, "closeext", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 8)
 					number = ToInt(command_name.substr(8, command_name.length() - 8));
-				elevator->GetCar(0)->CloseDoors(number, 3, elevator->GetFloor(), false);
+				elevator->GetCar(0)->CloseDoors(number, 3, elevator->GetCar(0)->GetFloor(), false);
 				return true;
 			}
 			if (StartsWith(command_name, "open", false) == true && elevator->Direction == 0)
