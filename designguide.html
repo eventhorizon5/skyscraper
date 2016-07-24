@@ -1100,7 +1100,7 @@ CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>,
 elevator directional indicator/lantern on the current floor (similar to the
 CreateCallButtons command) <br>
 Syntax: <font face="Courier New, Courier, mono"
-size="2">AddDirectionalIndicator<em> Elevator, Relative, ActiveDirection,
+size="2">AddDirectionalIndicator<em> Elevator:Car, Relative, ActiveDirection,
 Single, Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit,
 DownTexture, DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth,
 BackHeight, ShowBack, tw, th<br>
@@ -1114,8 +1114,9 @@ floor (if <em>ActiveDirection</em> is false, then it'll only create it if the
 elevator serves that floor). It'll also automatically create the up and down
 lights depending on the floor.</p>
 
-<p align="left"><em>Elevator</em> specifies the elevator to create the
-indicators for.</p>
+<p align="left"><em>Elevator:Car</em> specifies the elevator and car to create the
+indicators for.  The car value is optional, and if left out, the first car will be used.
+For example, values can be "1" for Elevator 1 (uses Car 1), or "1:1" for Elevator 1 Car 1.</p>
 
 <p align="left"><em>Relative</em> determines if the X and Z coordinates are
 relative to the elevator's origin (center) or not.</p>
@@ -1191,12 +1192,12 @@ here.</p>
 <p align="left"><strong>21. AddFloorIndicator</strong> - creates a floor
 indicator associated with a specific elevator<br>
 Syntax: <font face="Courier New, Courier, mono"
-size="2">AddFloorIndicator<em> elevator, relative, texture_prefix, direction,
+size="2">AddFloorIndicator<em> elevator:car, relative, texture_prefix, direction,
 CenterX, CenterZ, width, height, voffset</em></font> </p>
 
 <p align="left">The AddFloorIndicator command creates a floor indicator at the
 position specified by <em>CenterX</em> and <em>CenterZ</em>, associated with
-the elevator specified by <em>elevator</em>. <em>Direction</em> is the
+the elevator and car specified by <em>elevator:car</em>. <em>Direction</em> is the
 direction the indicator faces, and can be either "left", "right", "front" or
 "back". <em>Relative</em> determines if the <em>CenterX</em> and
 <em>CenterZ</em> values are relative of the elevator's center or not. This
