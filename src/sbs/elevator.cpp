@@ -1074,10 +1074,7 @@ void Elevator::MoveElevatorToFloor()
 		oldfloor = GetCar(1)->CurrentFloor;
 
 		//switch off directional indicators on current floor(s) if not already done so
-		for (int i = 1; i <= GetCarCount(); i++)
-		{
-			GetCar(i)->SetDirectionalIndicators(GetCar(i)->CurrentFloor, false, false);
-		}
+		DirectionalIndicatorsOff();
 
 		//exit if floor doesn't exist
 		if (!sbs->GetFloor(GotoFloor) && ManualMove == 0)
@@ -2102,14 +2099,15 @@ bool Elevator::EnableUpPeak(bool value)
 	if (value == true)
 	{
 		EnableDownPeak(false);
-		if (IsMoving == false && OnBottomFloor() == true && sbs->GetFloor(GetCar(0)->GetFloor()))
+		if (IsMoving == false && OnBottomFloor() == true)
 		{
 			//set directional indicators on all cars
 			for (size_t i = 0; i < Cars.size(); i++)
 			{
-				if (Cars[i]->OnBottomFloor() == true)
+				if (sbs->GetFloor(Cars[i]->GetFloor()))
 				{
 					Cars[i]->SetDirectionalIndicators(Cars[i]->GetFloor(), true, false);
+
 					if (AutoDoors == true)
 						Cars[i]->OpenDoors();
 				}
@@ -2119,11 +2117,8 @@ bool Elevator::EnableUpPeak(bool value)
 	}
 	else
 	{
-		for (size_t i = 0; i < Cars.size(); i++)
-		{
-			Cars[i]->ResetDoors();
-			Cars[i]->ResetNudgeTimer();
-		}
+		ResetDoors();
+		ResetNudgeTimers();
 		Report("Up Peak mode disabled");
 	}
 
@@ -2160,14 +2155,15 @@ bool Elevator::EnableDownPeak(bool value)
 	if (value == true)
 	{
 		EnableUpPeak(false);
-		if (IsMoving == false && OnTopFloor() == true && sbs->GetFloor(GetCar(0)->GetFloor()))
+		if (IsMoving == false && OnTopFloor() == true)
 		{
 			//set directional indicators on all cars
 			for (size_t i = 0; i < Cars.size(); i++)
 			{
-				if (Cars[i]->OnTopFloor() == true)
+				if (sbs->GetFloor(Cars[i]->GetFloor()))
 				{
 					Cars[i]->SetDirectionalIndicators(Cars[i]->GetFloor(), false, true);
+
 					if (AutoDoors == true)
 						Cars[i]->OpenDoors();
 				}
@@ -2177,11 +2173,8 @@ bool Elevator::EnableDownPeak(bool value)
 	}
 	else
 	{
-		for (size_t i = 0; i < Cars.size(); i++)
-		{
-			Cars[i]->ResetDoors();
-			Cars[i]->ResetNudgeTimer();
-		}
+		ResetDoors();
+		ResetNudgeTimers();
 		Report("Down Peak mode disabled");
 	}
 
@@ -2219,19 +2212,19 @@ bool Elevator::EnableIndependentService(bool value)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		ResetQueue(true, true); //this will also stop the elevator
-		GetCar(0)->HoldDoors(); //turn off door timers
-		GetCar(0)->ResetNudgeTimer(false); //switch off nudge timer
-		GetCar(0)->SetDirectionalIndicators(GetCar(0)->CurrentFloor, false, false); //switch off directional indicators on current floor
+		HoldDoors(); //turn off door timers
+		ResetNudgeTimers(false); //switch off nudge timer
+		DirectionalIndicatorsOff(); //switch off directional indicators on current floor
 		if (IsMoving == false)
 			if (AutoDoors == true)
-				GetCar(0)->OpenDoors();
+				OpenDoors();
 		Report("Independent Service mode enabled");
 	}
 	else
 	{
 		ResetQueue(true, true); //this will also stop the elevator
-		GetCar(0)->ResetDoors();
-		GetCar(0)->ResetNudgeTimer();
+		ResetDoors();
+		ResetNudgeTimers();
 		Report("Independent Service mode disabled");
 	}
 
@@ -2259,31 +2252,33 @@ bool Elevator::EnableInspectionService(bool value)
 		EnableFireService1(0);
 		EnableFireService2(0, true);
 		ResetQueue(true, true); //this will also stop the elevator
-		GetCar(0)->HoldDoors(); //turn off door timers
-		GetCar(0)->ResetNudgeTimer(false); //switch off nudge timer
-		GetCar(0)->SetDirectionalIndicators(GetCar(0)->CurrentFloor, false, false); //switch off directional indicators on current floor
+		HoldDoors(); //turn off door timers
+		ResetNudgeTimers(false); //switch off nudge timer
+		DirectionalIndicatorsOff(); //switch off directional indicators on current floor
 		Report("Inspection Service mode enabled");
 		InspectionService = true;
 	}
 	else
 	{
-		GetCar(0)->ResetDoors();
-		GetCar(0)->ResetNudgeTimer();
+		ResetDoors();
+		ResetNudgeTimers();
 		Report("Inspection Service mode disabled");
 
 		UpdateFloorIndicators();
 
 		//turn on objects if user is in elevator
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && IsMoving == false)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && IsMoving == false && GetCar(sbs->CarNumber))
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning on objects");
 
+			int carfloor = GetCar(sbs->CarNumber)->GetFloor();
+
 			//turn on floor
-			if (sbs->GetFloor(GetCar(0)->GetFloor()))
+			if (sbs->GetFloor(carfloor))
 			{
-				sbs->GetFloor(GetCar(0)->GetFloor())->Enabled(true);
-				sbs->GetFloor(GetCar(0)->GetFloor())->EnableGroup(true);
+				sbs->GetFloor(carfloor)->Enabled(true);
+				sbs->GetFloor(carfloor)->EnableGroup(true);
 			}
 
 			//Turn on sky, buildings, and landscape
@@ -2293,7 +2288,7 @@ bool Elevator::EnableInspectionService(bool value)
 			sbs->EnableExternal(true);
 
 			//reset shaft doors
-			ResetShaftDoors(GetCar(0)->GetFloor());
+			ResetShaftDoors(carfloor);
 		}
 
 		InspectionService = false;
@@ -2341,18 +2336,18 @@ bool Elevator::EnableFireService1(int value)
 			Report("Fire Service Phase 1 mode set to On");
 
 			//switch off directional indicators on current floor
-			GetCar(0)->SetDirectionalIndicators(GetCar(0)->CurrentFloor, false, false);
+			DirectionalIndicatorsOff();
 
 			//recall elevator if not in phase 2 hold
 			if (FireServicePhase2 != 2)
 			{
 				//turn off all door timers
-				GetCar(0)->HoldDoors();
-				GetCar(0)->ResetNudgeTimer(false); //switch off nudge timer
+				HoldDoors();
+				ResetNudgeTimers(false); //switch off nudge timer
 
 				//enable nudge mode on all doors if any are open
 				if (OnRecallFloor() == false)
-					GetCar(0)->EnableNudgeMode(true);
+					EnableNudgeMode(true);
 
 				//goto recall floor
 				GoToRecallFloor();
@@ -2362,8 +2357,8 @@ bool Elevator::EnableFireService1(int value)
 		{
 			if (FireServicePhase2 == 0)
 			{
-				GetCar(0)->ResetDoors(); //enable door timers
-				GetCar(0)->ResetNudgeTimer();
+				ResetDoors(); //enable door timers
+				ResetNudgeTimers();
 			}
 			Report("Fire Service Phase 1 mode set to Bypass");
 		}
@@ -2372,8 +2367,8 @@ bool Elevator::EnableFireService1(int value)
 	{
 		if (FireServicePhase2 == 0)
 		{
-			GetCar(0)->ResetDoors(); //enable door timers
-			GetCar(0)->ResetNudgeTimer();
+			ResetDoors(); //enable door timers
+			ResetNudgeTimers();
 		}
 		Report("Fire Service Phase 1 mode set to Off");
 	}
@@ -2427,8 +2422,8 @@ bool Elevator::EnableFireService2(int value, bool force)
 		EnableDownPeak(false);
 		EnableIndependentService(false);
 		ResetQueue(true, true); //this will also stop the elevator
-		GetCar(0)->HoldDoors(); //disable all door timers
-		GetCar(0)->ResetNudgeTimer(false); //switch off nudge timer
+		HoldDoors(); //disable all door timers
+		ResetNudgeTimers(false); //switch off nudge timer
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
@@ -2440,13 +2435,13 @@ bool Elevator::EnableFireService2(int value, bool force)
 
 		if (FireServicePhase1 == 0)
 		{
-			GetCar(0)->ResetDoors(); //enable door timers
-			GetCar(0)->ResetNudgeTimer();
+			ResetDoors(); //enable door timers
+			ResetNudgeTimers();
 		}
 		else if (FireServicePhase1 == 1 && OnRecallFloor() == false)
 		{
 			//enable nudge mode on all doors if any are open
-			GetCar(0)->EnableNudgeMode(true);
+			EnableNudgeMode(true);
 
 			//recall elevator
 			GoToRecallFloor();
@@ -2664,29 +2659,15 @@ bool Elevator::SetDownButton(bool value)
 int Elevator::GetTopFloor()
 {
 	//returns highest serviced floor
-	std::vector<int> floors;
 
-	for (size_t i = 0; i < Cars.size(); i++)
-	{
-		floors.push_back(Cars[i]->GetTopFloor());
-	}
-
-	std::sort(floors.begin(), floors.end());
-	return floors.back();
+	return GetCar(GetCarCount())->GetTopFloor();
 }
 
 int Elevator::GetBottomFloor()
 {
 	//returns lowest serviced floor
-	std::vector<int> floors;
 
-	for (size_t i = 0; i < Cars.size(); i++)
-	{
-		floors.push_back(Cars[i]->GetBottomFloor());
-	}
-
-	std::sort(floors.begin(), floors.end());
-	return floors.front();
+	return GetCar(1)->GetBottomFloor();
 }
 
 void Elevator::UpdateDirectionalIndicators()
@@ -2826,19 +2807,23 @@ void Elevator::Timer::Notify()
 
 		if (elevator->ParkingDelay > 0 && elevator->IsIdle() == true && elevator->InServiceMode() == false)
 		{
-			int floor = elevator->GetCar(0)->GetFloor();
-			if (elevator->ParkingFloor != floor)
+			ElevatorCar *car = elevator->GetCarForFloor(elevator->ParkingFloor);
+			if (car)
 			{
-				elevator->Report("parking to floor " + ToString(elevator->ParkingFloor));
-				elevator->Parking = true;
+				int floor = car->GetFloor();
+				if (elevator->ParkingFloor != floor)
+				{
+					elevator->Report("parking to floor " + ToString(elevator->ParkingFloor));
+					elevator->Parking = true;
+				}
+
+				if (elevator->ParkingFloor > floor)
+					elevator->AddRoute(elevator->ParkingFloor, 1, 2);
+				else if (elevator->ParkingFloor < floor)
+					elevator->AddRoute(elevator->ParkingFloor, -1, 2);
+
+				Stop();
 			}
-
-			if (elevator->ParkingFloor > floor)
-				elevator->AddRoute(elevator->ParkingFloor, 1, 2);
-			else if (elevator->ParkingFloor < floor)
-				elevator->AddRoute(elevator->ParkingFloor, -1, 2);
-
-			Stop();
 		}
 		else if (elevator->InServiceMode() == true)
 			Stop(); //stop timer if in service mode
@@ -3010,12 +2995,7 @@ void Elevator::SetRunState(bool value)
 
 	//switch off directional indicators on current floor
 	if (value == false && IsMoving == false)
-	{
-		for (size_t i = 0; i < Cars.size(); i++)
-		{
-			Cars[i]->SetDirectionalIndicators(Cars[i]->GetFloor(), false, false);
-		}
-	}
+		DirectionalIndicatorsOff();
 
 	if (value == false)
 		Report("Elevator stopped");
@@ -3980,6 +3960,53 @@ void Elevator::ResetShaftDoors(int floor)
 				shaft->EnableRange(floor, sbs->ShaftDisplayRange, true, true);
 			}
 		}
+	}
+}
+
+void Elevator::ResetDoors()
+{
+	//reset all doors
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		Cars[i]->ResetDoors();
+	}
+}
+
+void Elevator::ResetNudgeTimers(bool start)
+{
+	//reset all nudge timers
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		Cars[i]->ResetNudgeTimer();
+	}
+}
+
+void Elevator::HoldDoors()
+{
+	//hold all doors
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		Cars[i]->HoldDoors();
+	}
+}
+
+void Elevator::DirectionalIndicatorsOff()
+{
+	//switch off all directional indicators
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		Cars[i]->SetDirectionalIndicators(Cars[i]->CurrentFloor, false, false);
+	}
+}
+
+void Elevator::EnableNudgeMode(bool value)
+{
+	//enable nudge mode on all cars
+
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		Cars[i]->EnableNudgeMode(value);
 	}
 }
 

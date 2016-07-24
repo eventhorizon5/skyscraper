@@ -214,6 +214,10 @@ public:
 	bool OnBottomFloor();
 	bool IsNudgeModeActive();
 	void ResetShaftDoors(int floor);
+	void ResetDoors();
+	void ResetNudgeTimers(bool start = true);
+	void HoldDoors();
+	void EnableNudgeMode(bool value);
 
 	ElevatorCar* CreateCar();
 	ElevatorCar* GetCar(int number);
@@ -294,6 +298,7 @@ private:
 	void StopSounds();
 	float GetDestinationAltitude(int floor);
 	float GetDestinationOffset(int floor);
+	void DirectionalIndicatorsOff();
 
 	//motor sound objects
 	Sound *motorsound;
