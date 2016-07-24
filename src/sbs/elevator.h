@@ -44,6 +44,7 @@ public:
 	float ElevatorSpeed; //maximum elevator speed
 	bool MoveElevator; //Tells elevator to start going to specified floor
 	int GotoFloor; //floor to move elevator to
+	int GotoFloorCar; //car that requested movement
 	float Acceleration; //percentage of speed increase
 	float Deceleration; //deceleration value; may be removed
 	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
@@ -220,6 +221,7 @@ public:
 	ElevatorCar* GetCar(int number);
 	int GetCarCount();
 	ElevatorCar* GetCarForFloor(int number, bool report_on_failure = false);
+	float GetCarOffset(int number);
 
 private:
 
