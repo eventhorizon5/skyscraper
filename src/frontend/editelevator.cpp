@@ -1192,7 +1192,7 @@ void editelevator::OnInit()
 		sCar->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetCarCount(), 1);
 
 		//set door range slider
-		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetCar(0)->NumDoors + 1, 1);
+		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetCar(1)->NumDoors + 1, 1);
 	}
 	else
 		sNumber->Enable(false);
