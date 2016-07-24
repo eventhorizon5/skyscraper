@@ -171,8 +171,6 @@ public:
 	void SetRunState(bool value);
 	bool IsRunning();
 	bool GetArrivalDirection(int floor);
-	float GetDestinationAltitude(int floor);
-	float GetDestinationOffset(int floor);
 	void MoveObjects(float offset);
 	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
@@ -294,6 +292,8 @@ private:
 	void PlayMovingSounds();
 	void HandleDequeue(int direction, bool stop_if_empty = true);
 	void StopSounds();
+	float GetDestinationAltitude(int floor);
+	float GetDestinationOffset(int floor);
 
 	//motor sound objects
 	Sound *motorsound;

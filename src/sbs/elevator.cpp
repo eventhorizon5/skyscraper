@@ -3031,7 +3031,7 @@ bool Elevator::IsRunning()
 	return Running;
 }
 
-/*float Elevator::GetDestinationAltitude(int floor)
+float Elevator::GetDestinationAltitude(int floor)
 {
 	//returns the destination altitude of the specified floor, based on shaft door positioning
 	//this adjusts the value based on the car offset, so that it returns the altitude that
@@ -3053,7 +3053,7 @@ float Elevator::GetDestinationOffset(int floor)
 		return 0.0f;
 
 	return car->GetDestinationOffset(floor);
-}*/
+}
 
 void Elevator::OnInit()
 {
