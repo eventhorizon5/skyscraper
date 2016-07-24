@@ -4239,11 +4239,13 @@ int ScriptProcessor::ProcFloors()
 		if (!Simcore->GetElevator(ToInt(tempdata[0])))
 			return ScriptError("Invalid elevator");
 
-		//TODO: this needs fixing for Car support
+		int elevator, car;
+		GetElevatorCar(tempdata[0], elevator, car);
+
 		if (compat == true)
-			StoreCommand(floor->AddDirectionalIndicator(ToInt(tempdata[0]), 1, ToBool(tempdata[1]), false, ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
+			StoreCommand(floor->AddDirectionalIndicator(elevator, car, ToBool(tempdata[1]), false, ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		else
-			StoreCommand(floor->AddDirectionalIndicator(ToInt(tempdata[0]), 1, ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), ToBool(tempdata[4]), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), tempdata[13], ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToBool(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
+			StoreCommand(floor->AddDirectionalIndicator(elevator, car, ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), ToBool(tempdata[4]), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), tempdata[13], ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToBool(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
 		return sNextLine;
 	}
 
@@ -4350,11 +4352,13 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
-		//TODO - this needs to be fixed for Car support
+		int elevator, car;
+		GetElevatorCar(tempdata[0], elevator, car);
+
 		if (compat == false)
-			StoreCommand(floor->AddFloorIndicator(ToInt(tempdata[0]), 1, ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
+			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
 		else
-			StoreCommand(floor->AddFloorIndicator(ToInt(tempdata[0]), 1, ToBool(tempdata[1]), "Button", tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), "Button", tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
 		return sNextLine;
 	}
 
@@ -9188,6 +9192,25 @@ std::string ScriptProcessor::DumpState()
 	output.append("Line text: " + LineData + "\n");
 
 	return output;
+}
+
+void ScriptProcessor::GetElevatorCar(std::string &value, int &elevator, int &car)
+{
+	//returns an elevator and car number for the specified string
+	//for example, use "1" for Elevator 1
+	//or "1:1" for Elevator 1 Car 1
+
+	TrimString(value);
+
+	if (IsNumeric(value, elevator))
+	{
+		car = 1;
+		return;
+	}
+
+	int pos = value.find(":");
+	elevator = ToInt(value.substr(0, pos));
+	car = ToInt(value.substr(pos + 1));
 }
 
 }

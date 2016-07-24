@@ -45,6 +45,7 @@ public:
 	bool IsFunctionDefined(const std::string &name);
 	SBS::MeshObject* GetMeshObject(std::string name);
 	std::string DumpState();
+	void GetElevatorCar(std::string &value, int &elevator, int &car);
 
 	bool IsFinished;
 
