@@ -238,9 +238,9 @@ Elevator::~Elevator()
 		delete DoorContainer;
 	DoorContainer = 0;
 
-	//delete objects
+	//delete sounds
 	if (sbs->Verbose)
-		Report("deleting elevator objects");
+		Report("deleting motor sounds");
 
 	if (motorsound)
 	{

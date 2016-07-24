@@ -119,7 +119,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 ElevatorCar::~ElevatorCar()
 {
 	if (sbs->Verbose)
-		parent->Report("deleting car objects");
+		parent->Report("deleting objects");
 
 	//delete controls
 	for (size_t i = 0; i < ControlArray.size(); i++)
@@ -167,7 +167,7 @@ ElevatorCar::~ElevatorCar()
 
 	//delete directional indicators
 	if (sbs->Verbose)
-		parent->Report("deleting car interior directional indicators");
+		parent->Report("deleting interior directional indicators");
 
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
@@ -181,7 +181,7 @@ ElevatorCar::~ElevatorCar()
 
 	//delete doors
 	if (sbs->Verbose)
-		parent->Report("deleting car doors");
+		parent->Report("deleting doors");
 
 	if (DoorArray.size() > 0)
 	{
@@ -198,7 +198,7 @@ ElevatorCar::~ElevatorCar()
 
 	//delete floor indicators
 	if (sbs->Verbose)
-		parent->Report("deleting car floor indicators");
+		parent->Report("deleting floor indicators");
 
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
@@ -212,7 +212,7 @@ ElevatorCar::~ElevatorCar()
 
 	//delete panels
 	if (sbs->Verbose)
-		parent->Report("deleting car button panels");
+		parent->Report("deleting button panels");
 
 	for (size_t i = 0; i < PanelArray.size(); i++)
 	{
@@ -226,7 +226,7 @@ ElevatorCar::~ElevatorCar()
 
 	//delete doors
 	if (sbs->Verbose)
-		parent->Report("deleting car standard doors");
+		parent->Report("deleting standard doors");
 
 	for (size_t i = 0; i < StdDoorArray.size(); i++)
 	{
@@ -239,7 +239,7 @@ ElevatorCar::~ElevatorCar()
 	}
 
 	if (sbs->Verbose)
-		parent->Report("deleting car sounds");
+		parent->Report("deleting sounds");
 	if (carsound)
 	{
 		carsound->parent_deleting = true;
@@ -433,7 +433,7 @@ void ElevatorCar::DumpServicedFloors()
 {
 	//dump serviced floors list
 
-	if (parent->GetCarCount() > 1)
+	if (parent->GetCarCount() == 1)
 		sbs->Report("\n--- Elevator " + ToString(parent->Number) + "'s Serviced Floors ---\n");
 	else
 		sbs->Report("\n--- Elevator " + ToString(parent->Number) + " Car " + ToString(Number) + "'s Serviced Floors ---\n");
