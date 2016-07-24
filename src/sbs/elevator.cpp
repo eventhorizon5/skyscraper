@@ -233,6 +233,11 @@ Elevator::~Elevator()
 	}
 	Cars.clear();
 
+	//delete door container
+	if (DoorContainer)
+		delete DoorContainer;
+	DoorContainer = 0;
+
 	//delete objects
 	if (sbs->Verbose)
 		Report("deleting elevator objects");
