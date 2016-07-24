@@ -1536,14 +1536,18 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 		Elevator *elev = sbs->GetElevator(list[i]);
 		if (elev)
 		{
-			std::string type = SetCaseCopy(elev->Type, false);
-			bool serviced = elev->GetCar(0)->IsServicedFloor(DestinationFloor);
-			CallButton *button = GetCallButton(elev->Number);
-
-			if (serviced == true && type == ElevatorType && button)
+			ElevatorCar *car = elev->GetCarForFloor(Number);
+			if (car)
 			{
-				ElevatorRoute* route = new ElevatorRoute(elev, DestinationFloor);
-				return route;
+				std::string type = SetCaseCopy(elev->Type, false);
+				bool serviced = car->IsServicedFloor(DestinationFloor);
+				CallButton *button = GetCallButton(elev->Number);
+
+				if (serviced == true && type == ElevatorType && button)
+				{
+					ElevatorRoute* route = new ElevatorRoute(elev, DestinationFloor);
+					return route;
+				}
 			}
 		}
 	}
@@ -1567,27 +1571,31 @@ std::vector<int> Floor::GetDirectFloors(bool include_service)
 			if (include_service == false && type == "service")
 				continue;
 
-			for (int j = 0; j < elev->GetCar(0)->GetServicedFloorCount(); j++)
+			ElevatorCar *car = elev->GetCarForFloor(Number);
+			if (car)
 			{
-				int floor = elev->GetCar(0)->GetServicedFloor(j);
-
-				//skip this floor
-				if (floor == Number)
-					continue;
-
-				bool found = false;
-				for (size_t k = 0; k < result.size(); k++)
+				for (int j = 0; j < car->GetServicedFloorCount(); j++)
 				{
-					//make sure floor is not already in result list
-					if (result[k] == floor)
-					{
-						found = true;
-						break;
-					}
-				}
+					int floor = car->GetServicedFloor(j);
 
-				if (found == false)
-					result.push_back(floor);
+					//skip this floor
+					if (floor == Number)
+						continue;
+
+					bool found = false;
+					for (size_t k = 0; k < result.size(); k++)
+					{
+						//make sure floor is not already in result list
+						if (result[k] == floor)
+						{
+							found = true;
+							break;
+						}
+					}
+
+					if (found == false)
+						result.push_back(floor);
+				}
 			}
 		}
 	}

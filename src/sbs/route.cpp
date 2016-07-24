@@ -161,76 +161,81 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 
 			if (elev)
 			{
-				//floor list needs to be checked in the direction opposite of the travel direction,
-				//if the checked elevator doesn't go beyond the destination floor
+				ElevatorCar *car = elev->GetCarForFloor(StartingFloor);
 
-				std::vector<int> floor_list;
-				if ((DestinationFloor > StartingFloor && elev->GetCar(0)->GetTopFloor() < DestinationFloor) ||
-						(DestinationFloor < StartingFloor && elev->GetCar(0)->GetBottomFloor() < DestinationFloor))
+				if (car)
 				{
-					for (int j = elev->GetCar(0)->GetServicedFloorCount() - 1; j >= 0; j--)
-					{
-						floor_list.push_back(elev->GetCar(0)->GetServicedFloor(j));
-					}
-				}
-				else
-				{
-					for (int j = 0; j < elev->GetCar(0)->GetServicedFloorCount(); j++)
-					{
-						floor_list.push_back(elev->GetCar(0)->GetServicedFloor(j));
-					}
-				}
+					//floor list needs to be checked in the direction opposite of the travel direction,
+					//if the checked elevator doesn't go beyond the destination floor
 
-				for (size_t j = 0; j < floor_list.size(); j++)
-				{
-					int number = floor_list[j];
-
-					if (number != StartingFloor)
+					std::vector<int> floor_list;
+					if ((DestinationFloor > StartingFloor && car->GetTopFloor() < DestinationFloor) ||
+							(DestinationFloor < StartingFloor && car->GetBottomFloor() < DestinationFloor))
 					{
-						if (recurse == true)
+						for (int j = car->GetServicedFloorCount() - 1; j >= 0; j--)
 						{
-							std::vector<ElevatorRoute*> result2 = GetIndirectRoute(checked_floors, number, DestinationFloor, service_access, false);
-
-							if (result2.empty() == false)
-							{
-								ElevatorRoute *first = new ElevatorRoute(elev, number);
-								result.push_back(first);
-
-								for (size_t i = 0; i < result2.size(); i++)
-								{
-									result.push_back(result2[i]);
-								}
-								return result;
-							}
+							floor_list.push_back(car->GetServicedFloor(j));
 						}
-						else
+					}
+					else
+					{
+						for (int j = 0; j < car->GetServicedFloorCount(); j++)
 						{
-							Floor *floor = GetFloor(number);
+							floor_list.push_back(car->GetServicedFloor(j));
+						}
+					}
 
-							//see if this floor has already been checked
-							bool checked = false;
-							for (size_t i = 0; i < checked_floors.size(); i++)
+					for (size_t j = 0; j < floor_list.size(); j++)
+					{
+						int number = floor_list[j];
+
+						if (number != StartingFloor)
+						{
+							if (recurse == true)
 							{
-								if (checked_floors[i] == number)
-								{
-									checked = true;
-									break;
-								}
-							}
+								std::vector<ElevatorRoute*> result2 = GetIndirectRoute(checked_floors, number, DestinationFloor, service_access, false);
 
-							if (floor && checked == false)
-							{
-								ElevatorRoute *result2 = GetDirectRoute(floor, DestinationFloor, service_access);
-
-								if (result2)
+								if (result2.empty() == false)
 								{
 									ElevatorRoute *first = new ElevatorRoute(elev, number);
 									result.push_back(first);
-									result.push_back(result2);
+
+									for (size_t i = 0; i < result2.size(); i++)
+									{
+										result.push_back(result2[i]);
+									}
 									return result;
 								}
+							}
+							else
+							{
+								Floor *floor = GetFloor(number);
 
-								checked_floors.push_back(number);
+								//see if this floor has already been checked
+								bool checked = false;
+								for (size_t i = 0; i < checked_floors.size(); i++)
+								{
+									if (checked_floors[i] == number)
+									{
+										checked = true;
+										break;
+									}
+								}
+
+								if (floor && checked == false)
+								{
+									ElevatorRoute *result2 = GetDirectRoute(floor, DestinationFloor, service_access);
+
+									if (result2)
+									{
+										ElevatorRoute *first = new ElevatorRoute(elev, number);
+										result.push_back(first);
+										result.push_back(result2);
+										return result;
+									}
+
+									checked_floors.push_back(number);
+								}
 							}
 						}
 					}
