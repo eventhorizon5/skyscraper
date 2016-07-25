@@ -2971,7 +2971,7 @@ void ElevatorCar::NotifyArrival(int floor)
 	bool up = true, down = true;
 
 	//if ChimeOnArrival is off, only chime if responding to a hall call
-	if (ChimeOnArrival == false)
+	if (parent->ChimeOnArrival == false)
 		parent->GetCallButtonStatus(floor, up, down);
 
 	//play chime sound and change indicator
