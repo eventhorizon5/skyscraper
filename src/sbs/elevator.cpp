@@ -605,14 +605,14 @@ void Elevator::ProcessCallQueue()
 	//if both queues are empty
 	if (UpQueue.empty() && DownQueue.empty())
 	{
-		int TopFloor = GetCar(1)->GetTopFloor();
-		int BottomFloor = GetCar(1)->GetBottomFloor();
-
 		UpQueueEmpty = false;
 		DownQueueEmpty = false;
 
 		if (DownPeak == true || UpPeak == true)
 		{
+			int TopFloor = GetCar(1)->GetTopFloor();
+			int BottomFloor = GetCar(1)->GetBottomFloor();
+
 			//if DownPeak mode is active, send elevator to the top serviced floor if not already there
 			if (GetCar(1)->GetFloor() != TopFloor && DownPeak == true && IsMoving == false)
 			{
@@ -1445,7 +1445,7 @@ void Elevator::MoveElevatorToFloor()
 				PlayStoppingSounds();
 
 				if (NotifyEarly == 2 && Parking == false)
-					NotifyArrival(GotoFloor);
+					NotifyArrival();
 			}
 		}
 	}
@@ -1460,7 +1460,7 @@ void Elevator::MoveElevatorToFloor()
 			StartLeveling = true;
 
 			if (NotifyEarly == 1 && Parking == false)
-				NotifyArrival(GotoFloor);
+				NotifyArrival();
 		}
 	}
 
@@ -1689,7 +1689,7 @@ void Elevator::FinishMove()
 		{
 			//notify on arrival
 			if ((NotifyEarly == 0 || Notified == false) && Parking == false)
-				NotifyArrival(GotoFloor);
+				NotifyArrival();
 
 			//get status of call buttons before switching off
 			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
@@ -2853,41 +2853,16 @@ bool Elevator::IsQueued(int floor)
 	return false;
 }
 
-void Elevator::NotifyArrival(int floor)
+void Elevator::NotifyArrival()
 {
 	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
+	//for all cars
 
-	//do not notify if in a service mode
-	if (InServiceMode() == true)
-		return;
-
-	ElevatorCar *car = GetCarForFloor(floor);
-
-	if (!car)
-		return;
-
-	//get call button status
-	bool up = false, down = false;
-	GetCallButtonStatus(floor, up, down);
-
-	//play chime sound and change indicator
-	if (GetArrivalDirection(floor) == true)
+	for (int i = 1; i <= GetCarCount(); i++)
 	{
-		if (up == true)
-			car->Chime(0, floor, true);
-		car->SetDirectionalIndicators(floor, true, false);
-		LastChimeDirection = 1;
+		int floor = GetFloorForCar(i, GotoFloor);
+		GetCar(i)->NotifyArrival(floor);
 	}
-	else
-	{
-		if (down == true)
-			car->Chime(0, floor, false);
-		car->SetDirectionalIndicators(floor, false, true);
-		LastChimeDirection = -1;
-	}
-
-	if (FireServicePhase1 == 0 && FireServicePhase2 == 0)
-		car->PlayFloorSound();
 
 	Notified = true;
 }
@@ -4013,6 +3988,21 @@ float Elevator::GetCarOffset(int number)
 {
 	//get vertical offset of specified car
 	return GetCar(GotoFloorCar)->GetPosition().y - GetPosition().y;
+}
+
+int Elevator::GetFloorForCar(int car, int number)
+{
+	if (!GetCar(car))
+		return 0;
+
+	ElevatorCar *obj = GetCarForFloor(number);
+	if (!obj)
+		return 0;
+
+	//subtract car's offset to get base car's value
+	number -= obj->Offset;
+
+	return number += GetCar(car)->Offset;
 }
 
 }

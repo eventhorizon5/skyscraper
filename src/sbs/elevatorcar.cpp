@@ -106,6 +106,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	StartingFloor = 0;
 	CurrentFloor = 0;
 	Created = false;
+	Offset = 0;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -311,6 +312,8 @@ bool ElevatorCar::CreateCar(int floor)
 
 	if (Number > 1)
 	{
+		Offset = floor - parent->GetCar(Number - 1)->StartingFloor;
+
 		//make sure starting floor is above previous car
 		if (StartingFloor < parent->GetCar(Number - 1)->StartingFloor)
 			return ReportError("Car " + ToString(Number) + " must be above car " + ToString(Number - 1));
@@ -2954,6 +2957,38 @@ bool ElevatorCar::IsOnFloor(int floor)
 		return true;
 
 	return false;
+}
+
+void ElevatorCar::NotifyArrival(int floor)
+{
+	//notify on car arrival (play chime and turn on related directional indicator lantern)
+
+	//do not notify if in a service mode
+	if (parent->InServiceMode() == true)
+		return;
+
+	//get call button status
+	bool up = false, down = false;
+	parent->GetCallButtonStatus(floor, up, down);
+
+	//play chime sound and change indicator
+	if (parent->GetArrivalDirection(floor) == true)
+	{
+		if (up == true)
+			Chime(0, floor, true);
+		SetDirectionalIndicators(floor, true, false);
+		parent->LastChimeDirection = 1;
+	}
+	else
+	{
+		if (down == true)
+			Chime(0, floor, false);
+		SetDirectionalIndicators(floor, false, true);
+		parent->LastChimeDirection = -1;
+	}
+
+	if (parent->FireServicePhase1 == 0 && parent->FireServicePhase2 == 0)
+		PlayFloorSound();
 }
 
 }

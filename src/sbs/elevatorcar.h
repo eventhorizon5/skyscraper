@@ -74,6 +74,7 @@ public:
 	float CameraOffset; //camera vertical offset
 	int StartingFloor; //car starting floor
 	bool Created; //has car been created with the CreateCar function?
+	int Offset; //floor number offset from the primary elevator
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
@@ -195,6 +196,7 @@ public:
 	void SetFloor(int floor, bool move_parent = true);
 	bool IsLeveled();
 	bool IsOnFloor(int floor);
+	void NotifyArrival(int floor);
 
 	MeshObject* Mesh; //car mesh object
 

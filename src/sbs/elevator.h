@@ -167,7 +167,6 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool IsQueued(int floor);
-	void NotifyArrival(int floor);
 	void SetRunState(bool value);
 	bool IsRunning();
 	bool GetArrivalDirection(int floor);
@@ -223,6 +222,7 @@ public:
 	ElevatorCar* GetCar(int number);
 	int GetCarCount();
 	ElevatorCar* GetCarForFloor(int number, bool report_on_failure = false);
+	int GetFloorForCar(int car, int number);
 	float GetCarOffset(int number);
 
 private:
@@ -299,6 +299,7 @@ private:
 	float GetDestinationAltitude(int floor);
 	float GetDestinationOffset(int floor);
 	void DirectionalIndicatorsOff();
+	void NotifyArrival();
 
 	//motor sound objects
 	Sound *motorsound;
