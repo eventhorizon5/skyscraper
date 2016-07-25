@@ -304,7 +304,7 @@ bool ElevatorCar::CreateCar()
 	//get starting floor from previous car
 	//if bottom car, the parent elevator must set this manually
 	if (Number > 1)
-		StartingFloor = parent->GetCar(Number - 1)->StartingFloor;
+		StartingFloor = parent->GetCar(Number - 1)->StartingFloor + 1;
 
 	//check if starting floor is valid
 	if (!sbs->GetFloor(StartingFloor))

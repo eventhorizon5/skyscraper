@@ -1208,7 +1208,7 @@ void editelevator::Loop()
 		return;
 
 	int elev_num = sNumber->GetThumbPosition() + 1;
-	int car_num = sCar->GetThumbPosition();
+	int car_num = sCar->GetThumbPosition() + 1;
 	int door_num = sDoor->GetThumbPosition();
 	int elevator_count = Simcore->GetElevatorCount();
 	elevator = Simcore->GetElevator(elev_num);
@@ -1233,7 +1233,7 @@ void editelevator::Loop()
 		sFloor->SetScrollbar(0, 1, car->GetServicedFloorCount(), 1);
 
 		//set car range slider
-		sCar->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetCarCount(), 1);
+		sCar->SetScrollbar(0, 1, Simcore->GetElevator(elev_num)->GetCarCount(), 1);
 
 		//set door range slider
 		sDoor->SetScrollbar(1, 1, car->NumDoors + 1, 1);
