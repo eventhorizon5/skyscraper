@@ -7620,6 +7620,17 @@ int ScriptProcessor::ProcElevatorCars()
 		return sNextLine;
 	}
 
+	//CreateCar command
+	if (linecheck.substr(0, 9) == "createcar")
+	{
+		bool result = car->CreateCar();
+		if (result == false)
+			return ScriptError();
+
+		StoreCommand(car);
+		return sNextLine;
+	}
+
 	//handle car range
 	if (RangeL != RangeH && linecheck.substr(0, 7) == "<endcar")
 	{

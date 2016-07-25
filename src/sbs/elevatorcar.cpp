@@ -321,10 +321,11 @@ bool ElevatorCar::CreateCar()
 	//add car's starting floor to serviced floor list
 	//this also ensures that the list is populated to prevent errors
 	if (IsServicedFloor(StartingFloor) == false)
-	{
-		if (!AddServicedFloor(StartingFloor))
-			return false;
-	}
+		AddServicedFloor(StartingFloor);
+
+	//ensure that serviced floors are valid for the shaft
+	if (CheckServicedFloors() == false)
+		return false;
 
 	//set starting position
 	if (Number == 1)
@@ -453,12 +454,10 @@ bool ElevatorCar::AddServicedFloor(int number)
 	if (sbs->IsValidFloor(number) == false)
 		return ReportError("AddServicedFloor: Invalid floor " + ToString(number));
 
-	//ensure that floor is valid for the shaft
-	if (parent->GetShaft()->IsValidFloor(number) == false)
+	if (Created == true)
 	{
-		std::string snum = ToString(parent->AssignedShaft);
-		std::string num = ToString(number);
-		return ReportError("Floor " + num + " not valid for shaft " + snum);
+		if (CheckServicedFloors() == false)
+			return false;
 	}
 
 	//only add floor if not serviced by another car
@@ -527,6 +526,22 @@ int ElevatorCar::GetServicedFloor(int index)
 	if (index >= 0 && index < (int)ServicedFloors.size())
 		return ServicedFloors[index];
 	return 0;
+}
+
+bool ElevatorCar::CheckServicedFloors()
+{
+	//ensure serviced floors are valid for the shaft
+
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (parent->GetShaft()->IsValidFloor(ServicedFloors[i]) == false)
+		{
+			std::string snum = ToString(parent->AssignedShaft);
+			std::string num = ToString(ServicedFloors[i]);
+			return ReportError("Floor " + num + " not valid for shaft " + snum);
+		}
+	}
+	return true;
 }
 
 void ElevatorCar::Alarm()

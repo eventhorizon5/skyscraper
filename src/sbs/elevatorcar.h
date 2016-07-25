@@ -92,6 +92,7 @@ public:
 	int GetFloorIndex(int floor);
 	int GetServicedFloorCount();
 	int GetServicedFloor(int index);
+	bool CheckServicedFloors();
 	void Alarm();
 	void OpenHatch();
 	void OnInit();
