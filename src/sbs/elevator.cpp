@@ -212,6 +212,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	DoorMessageSound = false;
 	ControlPressActive = false;
 	ManualStop = false;
+	ChimeOnArrival = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ChimeOnArrival", false);
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -4603,8 +4604,11 @@ void Elevator::NotifyArrival(int floor)
 		return;
 
 	//get call button status
-	bool up = false, down = false;
-	GetCallButtonStatus(floor, up, down);
+	bool up = true, down = true;
+
+	//if ChimeOnArrival is off, only chime if responding to a hall call
+	if (ChimeOnArrival == false)
+		GetCallButtonStatus(floor, up, down);
 
 	//play chime sound and change indicator
 	if (GetArrivalDirection(floor) == true)

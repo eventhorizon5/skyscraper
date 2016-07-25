@@ -147,6 +147,7 @@ public:
 	bool AutoAdjustSound; //auto-adjust stopping sounds
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
 	bool ControlPressActive; //true if a control associated with this elevator has just been pressed
+	bool ChimeOnArrival; //set to true for elevator to always chime on arrival, instead of just when responding to a hall call
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
