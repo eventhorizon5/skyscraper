@@ -2714,8 +2714,9 @@ bool ElevatorCar::Check(Ogre::Vector3 &position)
 
 	if (IsInCar(position, true) == true && IsEnabled)
 	{
-		if (parent->InElevator() == false)
+		if (InCar() == false)
 		{
+			//turn on objects if moving into the car
 			EnableObjects(true);
 			UpdateFloorIndicators();
 		}
@@ -2726,9 +2727,11 @@ bool ElevatorCar::Check(Ogre::Vector3 &position)
 		return true;
 	}
 
-	//turn off objects if user has moved outside the checked elevator
-	else if (parent->InElevator() == true)
+	//turn off objects if user has moved outside the car
+	else if (InCar() == true)
+	{
 		EnableObjects(false);
+	}
 
 	//if camera is within vertical elevator range, turn on syncing to allow things like elevator surfing
 	else if (CameraOffset > Height && CameraOffset < Height * 2)

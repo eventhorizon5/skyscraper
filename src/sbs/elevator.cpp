@@ -3288,7 +3288,7 @@ bool Elevator::Check(Ogre::Vector3 position)
 
 	SBS_PROFILE("Elevator::Check");
 
-	for (size_t i = 0; i < Cars.size(); i++)
+	for (size_t i = Cars.size() - 1; i < Cars.size(); --i)
 	{
 		if (Cars[i]->Check(position) == true)
 			return true;
