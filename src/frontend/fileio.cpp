@@ -5685,6 +5685,13 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 14) == "chimeonarrival")
+        {
+                if (temp2check < 0)
+                        return ScriptError("Syntax error");
+                elev->ChimeOnArrival = ToBool(temp2);
+                return sNextLine;
+        }
 
 	//CreateElevator command
 	if (linecheck.substr(0, 14) == "createelevator")

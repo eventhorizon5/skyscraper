@@ -112,6 +112,7 @@ public:
 	float EmergencyStopSpeed; //emergency stop deceleration multiplier
 	bool AutoAdjustSound; //auto-adjust stopping sounds
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
+	bool ChimeOnArrival; //set to true for elevator to always chime on arrival, instead of just when responding to a hall call
 
 	//functions
 	Elevator(Object *parent, int number);

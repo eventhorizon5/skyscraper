@@ -174,6 +174,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	AutoAdjustSound = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 	SkipFloorSound = false;
 	ManualStop = false;
+	ChimeOnArrival = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ChimeOnArrival", false);
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
