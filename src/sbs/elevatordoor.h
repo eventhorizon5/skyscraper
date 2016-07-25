@@ -169,6 +169,8 @@ public:
 	std::string GetNumberText();
 	void ResetState();
 	void RemoveShaftDoor(DoorWrapper *door);
+	void AddServicedFloor(int floor);
+	void RemoveServicedFloor(int floor);
 
 private:
 

@@ -324,8 +324,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	SetPosition(position);
 
 	//set up primary car
-	GetCar(1)->StartingFloor = floor;
-	GetCar(1)->CreateCar();
+	GetCar(1)->CreateCar(floor);
 
 	elevposition = GetPosition();
 

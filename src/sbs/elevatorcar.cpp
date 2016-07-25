@@ -297,14 +297,19 @@ ElevatorCar::~ElevatorCar()
 	Mesh = 0;
 }
 
-bool ElevatorCar::CreateCar()
+bool ElevatorCar::CreateCar(int floor)
 {
 	//used with CreateElevator function; this is the car-specific code
 
-	//get starting floor from previous car
-	//if bottom car, the parent elevator must set this manually
+	if (Created == true)
+		return ReportError("Has already been created");
+
 	if (Number > 1)
-		StartingFloor = parent->GetCar(Number - 1)->StartingFloor + 1;
+	{
+		//make sure starting floor is above previous car
+		if (floor < parent->GetCar(Number - 1)->StartingFloor)
+			return ReportError("Car " + ToString(Number) + " must be above car " + ToString(Number - 1));
+	}
 
 	//check if starting floor is valid
 	if (!sbs->GetFloor(StartingFloor))
@@ -460,14 +465,23 @@ bool ElevatorCar::AddServicedFloor(int number)
 			return false;
 	}
 
-	//only add floor if not serviced by another car
-	if (parent->IsServicedFloor(number) == false)
+	if (IsServicedFloor(number) == false)
 	{
-		ServicedFloors.push_back(number);
-		std::sort(ServicedFloors.begin(), ServicedFloors.end());
+		//only add floor if not serviced by another car
+		if (parent->IsServicedFloor(number) == false)
+		{
+			ServicedFloors.push_back(number);
+			std::sort(ServicedFloors.begin(), ServicedFloors.end());
+
+			//add serviced floors to doors, if needed
+			for (size_t i = 0; i < DoorArray.size(); i++)
+			{
+				DoorArray[i]->AddServicedFloor(number);
+			}
+		}
+		else
+			return ReportError("AddServicedFloor: Floor " + ToString(number) + " already serviced");
 	}
-	else
-		return ReportError("AddServicedFloor: Floor " + ToString(number) + " already serviced");
 
 	return true;
 }
@@ -480,6 +494,12 @@ void ElevatorCar::RemoveServicedFloor(int number)
 	int index = GetFloorIndex(number);
 	if (index > -1)
 		ServicedFloors.erase(ServicedFloors.begin() + index);
+
+	//remove serviced floors from doors
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		DoorArray[i]->RemoveServicedFloor(number);
+	}
 }
 
 bool ElevatorCar::IsServicedFloor(int floor, bool report)

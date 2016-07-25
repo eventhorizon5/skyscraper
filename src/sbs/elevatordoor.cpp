@@ -197,6 +197,71 @@ ElevatorDoor::~ElevatorDoor()
 	}
 }
 
+void ElevatorDoor::AddServicedFloor(int floor)
+{
+	//add serviced floor to door
+
+	DoorWrapper *wrapper = 0;
+
+	if (ShaftDoors.empty() == true)
+	{
+		ShaftDoors.resize(1);
+		ShaftDoors[1] = 0;
+		return;
+	}
+
+	for (size_t i = 0; i < ShaftDoors.size(); i++)
+	{
+		if (ShaftDoors[i])
+		{
+			if (i == 0 && ShaftDoors[i]->floor > floor)
+			{
+				//insert at bottom
+				ShaftDoors.insert(ShaftDoors.begin(), wrapper);
+				return;
+			}
+			else if (ShaftDoors[i]->floor > floor && ShaftDoors[i - 1]->floor < floor)
+			{
+				//insert inside
+				ShaftDoors.insert(ShaftDoors.begin() + i, wrapper);
+				return;
+			}
+		}
+	}
+
+	//insert at top
+	ShaftDoors.push_back(wrapper);
+		return;
+}
+
+void ElevatorDoor::RemoveServicedFloor(int floor)
+{
+	//remove serviced floor from door
+
+	for (size_t i = 0; i < ShaftDoors.size(); i++)
+	{
+		if (ShaftDoors[i])
+		{
+			if (ShaftDoors[i]->floor == floor)
+			{
+				delete ShaftDoors[i];
+				ShaftDoors.erase(ShaftDoors.begin() + i);
+				return;
+			}
+			if (ShaftDoors[i]->floor > floor && i > 0)
+			{
+				//erase previous element
+				ShaftDoors.erase(ShaftDoors.begin() + i - 1);
+				return;
+			}
+		}
+	}
+
+	//if not found, remove last element
+	if (!ShaftDoors.back())
+		ShaftDoors.pop_back();
+}
+
 void ElevatorDoor::OpenDoorsEmergency(int whichdoors, int floor)
 {
 	//Simulates manually prying doors open.

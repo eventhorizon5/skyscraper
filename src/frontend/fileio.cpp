@@ -1285,6 +1285,9 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 
 	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + engine->GetFilename() + "\nContext: " + Context;
 
+	if (RangeL != RangeH)
+		error += "\nIteration Number: " + ToString(Current);
+
 	if (InFunction == 0)
 		error += "\nLine Text: " + LineData;
 	else
@@ -7632,7 +7635,13 @@ int ScriptProcessor::ProcElevatorCars()
 	//CreateCar command
 	if (linecheck.substr(0, 9) == "createcar")
 	{
-		bool result = car->CreateCar();
+		//get data
+		int params = SplitData(LineData, 10);
+
+		if (params != 1)
+			return ScriptError("Incorrect number of parameters");
+
+		bool result = car->CreateCar(ToInt(tempdata[0]));
 		if (result == false)
 			return ScriptError();
 
@@ -9426,6 +9435,9 @@ std::string ScriptProcessor::DumpState()
 	if (IsInclude == true)
 		output.append("In included file: " + IncludeFile + "\n");
 	output.append("Context: " + Context + "\n");
+
+	if (RangeL != RangeH)
+		output.append("Iteration Number: " + ToString(Current) + "\n");
 
 	if (InFunction != 0)
 	{

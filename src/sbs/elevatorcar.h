@@ -77,7 +77,7 @@ public:
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();
-	bool CreateCar();
+	bool CreateCar(int floor);
 	Elevator* GetElevator();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
