@@ -5704,6 +5704,11 @@ int ScriptProcessor::ProcElevators()
 		return sNextLine;
 	}
 
+	//process elevator car commands for default car
+	int value = ProcElevatorCars();
+	if (value != sContinue)
+		return value;
+
 	//handle elevator range
 	if (RangeL != RangeH && linecheck.substr(0, 12) == "<endelevator")
 	{
@@ -5732,20 +5737,23 @@ int ScriptProcessor::ProcElevatorCars()
 	//Process elevator cars
 
 	//replace variables with actual values
-	ReplaceAll(LineData, "%elevator%", ToString(CurrentOld));
-	ReplaceAll(LineData, "%car%", ToString(Current));
+	if (Section == 6) //only run if not being called from elevator function
+	{
+		ReplaceAll(LineData, "%elevator%", ToString(CurrentOld));
+		ReplaceAll(LineData, "%car%", ToString(Current));
 
-	//IF/While statement stub (continue to global commands for processing)
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
-		return sContinue;
+		//IF/While statement stub (continue to global commands for processing)
+		if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+			return sContinue;
 
-	//process math functions
-	if (MathFunctions() == sError)
-		return sError;
+		//process math functions
+		if (MathFunctions() == sError)
+			return sError;
 
-	//process functions
-	if (FunctionProc() == true)
-		return sNextLine;
+		//process functions
+		if (FunctionProc() == true)
+			return sNextLine;
+	}
 
 	//get text after equal sign
 	int temp2check = LineData.find("=", 0);
@@ -5753,9 +5761,20 @@ int ScriptProcessor::ProcElevatorCars()
 
 	//get car object
 	ElevatorCar *car = 0;
-	Elevator *elev = Simcore->GetElevator(CurrentOld);
-	if (elev)
-		car = elev->GetCar(Current);
+	Elevator *elev = 0;
+	if (Section == 6)
+	{
+		elev = Simcore->GetElevator(CurrentOld);
+		if (elev)
+			car = elev->GetCar(Current);
+	}
+	else
+	{
+		//get default car if not in a separate car section
+		elev = Simcore->GetElevator(Current);
+		if (elev)
+			car = elev->GetCar(1);
+	}
 
 	if (!car)
 		return sError;
