@@ -652,6 +652,14 @@ breakpoint:
 				ScriptError("Invalid range");
 				goto Error;
 			}
+
+			//verify elevator
+			if (!Simcore->GetElevator(CurrentOld))
+			{
+				ScriptError("Invalid elevator");
+				goto Error;
+			}
+
 			Context = "Elevator " + ToString(CurrentOld) + " Car range " + ToString(RangeL) + " to " + ToString(RangeH);
 			Current = RangeL;
 			RangeStart = line;
@@ -675,23 +683,17 @@ breakpoint:
 			TrimString(str);
 			if (!IsNumeric(str, Current))
 			{
-				ScriptError("Invalid car");
+				ScriptError("Invalid car number");
 				goto Error;
 			}
 
-			//get elevator
-			Elevator *elev = Simcore->GetElevator(CurrentOld);
-			if (!elev)
+			//verify elevator
+			if (!Simcore->GetElevator(CurrentOld))
 			{
 				ScriptError("Invalid elevator");
 				goto Error;
 			}
 
-			if (!elev->GetCar(Current))
-			{
-				ScriptError("Invalid car");
-				goto Error;
-			}
 			Context = "Elevator " + ToString(CurrentOld) + " Car " + ToString(Current);
 			engine->Report("Processing elevator " + ToString(CurrentOld) + " car " + ToString(Current) + "...");
 			goto Nextline;
@@ -5736,6 +5738,33 @@ int ScriptProcessor::ProcElevatorCars()
 {
 	//Process elevator cars
 
+	//get car object
+	ElevatorCar *car = 0;
+	Elevator *elev = 0;
+	if (Section == 6)
+	{
+		elev = Simcore->GetElevator(CurrentOld);
+		if (elev)
+			car = elev->GetCar(Current);
+	}
+	else
+	{
+		//get default car if not in a separate car section
+		elev = Simcore->GetElevator(Current);
+		if (elev)
+			car = elev->GetCar(1);
+	}
+
+	if (!elev)
+		return sError;
+
+	//create car if not created already
+	if (!car)
+		car = elev->AddCar();
+
+	if (!car)
+		return sError;
+
 	//replace variables with actual values
 	if (Section == 6) //only run if not being called from elevator function
 	{
@@ -5758,26 +5787,6 @@ int ScriptProcessor::ProcElevatorCars()
 	//get text after equal sign
 	int temp2check = LineData.find("=", 0);
 	temp2 = GetAfterEquals(LineData);
-
-	//get car object
-	ElevatorCar *car = 0;
-	Elevator *elev = 0;
-	if (Section == 6)
-	{
-		elev = Simcore->GetElevator(CurrentOld);
-		if (elev)
-			car = elev->GetCar(Current);
-	}
-	else
-	{
-		//get default car if not in a separate car section
-		elev = Simcore->GetElevator(Current);
-		if (elev)
-			car = elev->GetCar(1);
-	}
-
-	if (!car)
-		return sError;
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);

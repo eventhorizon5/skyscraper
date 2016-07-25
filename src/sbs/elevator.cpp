@@ -185,7 +185,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	SetName(name);
 
 	//create a primary car object
-	CreateCar();
+	AddCar();
 
 	//create a dynamic mesh for elevator doors
 	DoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Door Container", 0, true);
@@ -3723,7 +3723,7 @@ bool Elevator::CheckInterlocks(bool skip_current_floor)
 	return !status;
 }
 
-ElevatorCar* Elevator::CreateCar()
+ElevatorCar* Elevator::AddCar()
 {
 	//create a new elevator car object
 

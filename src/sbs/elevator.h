@@ -219,7 +219,7 @@ public:
 	void HoldDoors();
 	void EnableNudgeMode(bool value);
 
-	ElevatorCar* CreateCar();
+	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
 	int GetCarCount();
 	ElevatorCar* GetCarForFloor(int number, bool report_on_failure = false);
