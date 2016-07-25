@@ -4401,15 +4401,21 @@ int ScriptProcessor::ProcFloors()
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
-		if (!Simcore->GetElevator(ToInt(tempdata[0])))
+		int elevator, carnum;
+		GetElevatorCar(tempdata[0], elevator, carnum);
+		Elevator *elev = Simcore->GetElevator(elevator);
+		if (!elev)
 			return ScriptError("Invalid elevator");
+		ElevatorCar *car = elev->GetCar(carnum);
+		if (!car)
+			return ScriptError("Invalid elevator car");
 
 		if (compat == 0)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->GetCar(0)->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+			StoreCommand(car->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		if (compat == 1)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->GetCar(0)->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+			StoreCommand(car->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4])));
 		if (compat == 2)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->GetCar(0)->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+			StoreCommand(car->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		return sNextLine;
 	}
 
