@@ -323,11 +323,6 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		Report("moving elevator to origin position");
 	SetPosition(position);
 
-	//set up primary car
-	GetCar(1)->CreateCar(floor);
-
-	elevposition = GetPosition();
-
 	//create motor sounds
 	std::string motorname = "Motor " + ToString(Number);
 	motorsound = new Sound(GetShaft(), motorname, true);
@@ -349,6 +344,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	Created = true;
 
 	Report("created at " + TruncateNumber(position.x, 4) + ", " + TruncateNumber(position.z, 4));
+
+	//set up primary car
+	GetCar(1)->CreateCar(floor);
+	elevposition = GetPosition();
+
 	return true;
 }
 

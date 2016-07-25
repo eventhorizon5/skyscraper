@@ -304,10 +304,15 @@ bool ElevatorCar::CreateCar(int floor)
 	if (Created == true)
 		return ReportError("Has already been created");
 
+	if (parent->Created == false)
+		return ReportError("Elevator has not been created yet");
+
+	StartingFloor = floor;
+
 	if (Number > 1)
 	{
 		//make sure starting floor is above previous car
-		if (floor < parent->GetCar(Number - 1)->StartingFloor)
+		if (StartingFloor < parent->GetCar(Number - 1)->StartingFloor)
 			return ReportError("Car " + ToString(Number) + " must be above car " + ToString(Number - 1));
 	}
 
@@ -474,9 +479,12 @@ bool ElevatorCar::AddServicedFloor(int number)
 			std::sort(ServicedFloors.begin(), ServicedFloors.end());
 
 			//add serviced floors to doors, if needed
-			for (size_t i = 0; i < DoorArray.size(); i++)
+			if (Created == true)
 			{
-				DoorArray[i]->AddServicedFloor(number);
+				for (size_t i = 0; i < DoorArray.size(); i++)
+				{
+					DoorArray[i]->AddServicedFloor(number);
+				}
 			}
 		}
 		else
@@ -496,9 +504,12 @@ void ElevatorCar::RemoveServicedFloor(int number)
 		ServicedFloors.erase(ServicedFloors.begin() + index);
 
 	//remove serviced floors from doors
-	for (size_t i = 0; i < DoorArray.size(); i++)
+	if (Created == true)
 	{
-		DoorArray[i]->RemoveServicedFloor(number);
+		for (size_t i = 0; i < DoorArray.size(); i++)
+		{
+			DoorArray[i]->RemoveServicedFloor(number);
+		}
 	}
 }
 
