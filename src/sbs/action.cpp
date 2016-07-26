@@ -215,8 +215,8 @@ bool Action::Run(Object *caller, Object *parent)
 		if (command_name == "off")
 			return true;
 
-		if (!(elevator->FireServicePhase1 == 1 && elevator->FireServicePhase2 == 0))
-		{
+		//if (!(elevator->FireServicePhase1 == 1 && elevator->FireServicePhase2 == 0))
+		//{
 			if (StartsWith(command_name, "openintmanual", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
@@ -315,7 +315,7 @@ bool Action::Run(Object *caller, Object *parent)
 				car->StopDoors(number);
 				return true;
 			}
-		}
+		//}
 		if (command_name == "cancel" && elevator->FireServicePhase2 == 1)
 			return elevator->CallCancel();
 		if (command_name == "run")

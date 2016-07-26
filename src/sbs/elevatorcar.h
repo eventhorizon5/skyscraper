@@ -196,7 +196,7 @@ public:
 	float GetDestinationOffset(int floor);
 	void SetFloor(int floor, bool move_parent = true);
 	bool IsLeveled();
-	bool IsOnFloor(int floor);
+	bool IsOnFloor(int floor, bool leveled = true);
 	void NotifyArrival(int floor);
 	bool IndependentServiceActive();
 	bool IndependentServiceOnOtherCar();

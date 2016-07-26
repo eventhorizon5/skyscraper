@@ -1761,10 +1761,15 @@ void Elevator::FinishMove()
 			if (Parking == false)
 				if (AutoDoors == true)
 				{
-					for (int i = 1; i <= GetCarCount(); i++)
+					if ((OnRecallFloor() == true && FireServicePhase1 == 1) || PeakWaiting() == true)
+						OpenDoors(); //automatically open doors in Fire Phase 1 and Peak modes
+					else
 					{
-						if (GetCar(i)->GotoFloor == true)
-							GetCar(i)->OpenDoors();
+						for (int i = 1; i <= GetCarCount(); i++)
+						{
+							if (GetCar(i)->GotoFloor == true)
+								GetCar(i)->OpenDoors();
+						}
 					}
 				}
 		}
@@ -3663,9 +3668,9 @@ bool Elevator::OnRecallFloor()
 	//returns true if on the alternate recall floor and normal recall is unavailable
 
 	if (RecallUnavailable == false)
-		return GetCar(1)->IsOnFloor(RecallFloor);
+		return GetCar(1)->IsOnFloor(RecallFloor, false);
 
-	return GetCar(1)->IsOnFloor(RecallFloorAlternate);
+	return GetCar(1)->IsOnFloor(RecallFloorAlternate, false);
 }
 
 int Elevator::GetActiveRecallFloor()
@@ -4101,6 +4106,17 @@ void Elevator::ProcessGotoFloor(int floor, int direction)
 		if (IsQueued(GetFloorForCar(i, floor), direction) == true)
 			GetCar(i)->GotoFloor = true;
 	}
+}
+
+bool Elevator::OnParkingFloor()
+{
+	//returns true if the elevator is on the parking floor
+
+	ElevatorCar *car = GetCarForFloor(ParkingFloor);
+	if (!car)
+		return false;
+
+	return (car->GetFloor() == ParkingFloor);
 }
 
 }

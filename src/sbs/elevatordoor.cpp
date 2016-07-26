@@ -426,8 +426,8 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		return;
 	}
 
-	//do not close doors while fire service mode 1 is in recall mode and the elevator is waiting at the parking floor
-	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && car->GetFloor() == elev->ParkingFloor)
+	//do not close doors while fire service mode 1 is in recall mode and the elevator is waiting at the recall floor
+	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && elev->OnRecallFloor() == true)
 	{
 		car->ReportError("cannot close doors" + GetNumberText() + " while Fire Service Phase 1 is in recall mode");
 		return;

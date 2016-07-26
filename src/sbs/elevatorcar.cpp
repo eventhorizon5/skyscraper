@@ -2950,12 +2950,18 @@ bool ElevatorCar::IsLeveled()
 	return false;
 }
 
-bool ElevatorCar::IsOnFloor(int floor)
+bool ElevatorCar::IsOnFloor(int floor, bool leveled)
 {
-	//return true if the car is on and leveled on the specified floor
+	//return true if the car is on the specified floor
+	//if leveled is true, returns true only if the car is leveled on that floor
 
-	if (GetFloor() == floor && IsLeveled() == true && parent->IsMoving == false)
-		return true;
+	if (GetFloor() == floor)
+	{
+		if (leveled == false)
+			return true;
+		else if (IsLeveled() == true && parent->IsMoving == false)
+			return true;
+	}
 
 	return false;
 }

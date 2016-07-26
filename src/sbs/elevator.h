@@ -219,6 +219,7 @@ public:
 	void ResetNudgeTimers(bool start = true);
 	void HoldDoors();
 	void EnableNudgeMode(bool value);
+	bool OnParkingFloor();
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
