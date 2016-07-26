@@ -37,6 +37,8 @@ also allow the user to view the building in 3D as it's being created.</p>
 
 <p align="center"><a href="#Elevator">Elevator Sections</a></p>
 
+<p align="center"><a href="#Car">Car (Elevator) Sections</a></p>
+
 <p align="center"><a href="#GlobalCommands">Global Commands</a></p>
 
 <p align="center"><a href="#Functions">Predefined Functions</a></p>
@@ -1442,8 +1444,13 @@ to be played.</p>
 for your building. Elevators are numbered, starting with 1. Parameters that
 have defaults listed are optional.</p>
 
+<p align="left">Each elevator is created with a single default car, Car 1.
+Car-specific parameters and commands are listed in the <em>Car</em> section, but can
+also be specified in this section, if an elevator only has a single car,
+or if you're referring to Car 1.</p>
+
 <p align="left">The section headers and footers are similar to the ones in the
-Floor section.<br>
+<em>Floor</em> section.<br>
 To specify a single elevator, you would type something like:<br>
 <font face="Courier New, Courier, mono" size="2">&lt;Elevator 1&gt;</font><br>
 and end it with:<br>
@@ -2533,6 +2540,45 @@ consecutive action when the users enters/leaves. The <em>X</em>, <em>Y</em> and
 <em>Z</em> parameters specify the 3D box that defines the trigger area, and are
 relative of the elevator's location. Leave the <em>sound</em> field blank for
 no sound to be played.</p>
+
+<p align="left"> </p>
+
+<p align="left"><strong><font size="+1"><a name="Car"></a>7. The
+<em>Car</em> (Elevator) Section</font></strong></p>
+
+<p align="left">In order to support multi-deck elevators, each elevator car
+can be defined separately.  The <em>Car</em> section is a subsection of the <em>Elevator</em>
+section, and allows you to create additional cars for your elevator.  These are
+also numbered, starting with 1.  Parameters that have defaults listed are optional.</p>
+
+<p align="left">To create additional cars, this section is normally placed right after
+the elevator's CreateElevator command.</p>
+
+<p align="left">The section headers and footers are similar to the ones in the
+<em>Elevator</em> section.<br>
+To specify a single car, you would type something like:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;Car 2&gt;</font><br>
+and end it with:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;EndCar&gt;</font><br>
+<br>
+For a range of elevators, you would use something like:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;Cars 1 to
+2&gt;</font><br>
+and end with:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;EndCars&gt;</font></p>
+
+<p align="left"><strong>Variables:</strong></p>
+
+<p align="left"><font face="Courier New, Courier, mono"
+size="2"><strong>%elevator%</strong></font> - number of the current elevator<br>
+<font face="Courier New, Courier, mono"
+size="2"><strong>%car%</strong></font> - number of the current car</p>
+
+<p align="left"><strong>Parameters</strong>:</p>
+
+<p align="left"><strong>1. Name</strong> - sets the name of the car<br>
+Example: <font face="Courier New, Courier, mono" size="2">Name = Lower Car
+</font></p>
 
 <p align="left"> </p>
 
