@@ -391,7 +391,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	if (whichdoors == 1)
 	{
 		if (elev->MoveElevator == true && elev->Leveling == true)
-			floor = elev->GotoFloor;
+			floor = elev->GetFloorForCar(car->Number, elev->GotoFloor);
 		else
 			floor = car->GetFloor();
 	}

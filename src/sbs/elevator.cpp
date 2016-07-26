@@ -715,13 +715,13 @@ void Elevator::ProcessCallQueue()
 		//search through up queue
 		for (size_t i = 0; i < UpQueue.size(); i++)
 		{
-			//if the queued floor number is a higher floor, dispatch the elevator to that floor
-			if (UpQueue[i].floor >= GetCar(GetCarCount())->CurrentFloor)
-			{
-				ElevatorCar *car = GetCarForFloor(UpQueue[i].floor);
-				if (!car)
-					return;
+			ElevatorCar *car = GetCarForFloor(UpQueue[i].floor);
+			if (!car)
+				return;
 
+			//if the queued floor number is a higher floor, dispatch the elevator to that floor
+			if (UpQueue[i].floor >= car->CurrentFloor)
+			{
 				if (MoveElevator == false)
 				{
 					if (sbs->Verbose)
@@ -764,12 +764,8 @@ void Elevator::ProcessCallQueue()
 				return;
 			}
 			//if the queued floor number is a lower floor
-			if (UpQueue[i].floor < GetCar(1)->CurrentFloor && MoveElevator == false)
+			if (UpQueue[i].floor < car->CurrentFloor && MoveElevator == false)
 			{
-				ElevatorCar *car = GetCarForFloor(UpQueue[i].floor);
-				if (!car)
-					return;
-
 				//dispatch elevator if it's idle
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
@@ -778,6 +774,7 @@ void Elevator::ProcessCallQueue()
 					ActiveCall = UpQueue[i];
 					GotoFloor = UpQueue[i].floor;
 					GotoFloorCar = car->Number;
+					car->GotoFloor = true;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
 					{
 						WaitForDoors = true;
@@ -809,13 +806,13 @@ void Elevator::ProcessCallQueue()
 		//search through down queue (search order is reversed since calls need to be processed in descending order)
 		for (size_t i = DownQueue.size() - 1; i < DownQueue.size(); --i)
 		{
-			//if the queued floor number is a lower floor, dispatch the elevator to that floor
-			if (DownQueue[i].floor <= GetCar(1)->CurrentFloor)
-			{
-				ElevatorCar *car = GetCarForFloor(DownQueue[i].floor);
-				if (!car)
-					return;
+			ElevatorCar *car = GetCarForFloor(DownQueue[i].floor);
+			if (!car)
+				return;
 
+			//if the queued floor number is a lower floor, dispatch the elevator to that floor
+			if (DownQueue[i].floor <= car->CurrentFloor)
+			{
 				if (MoveElevator == false)
 				{
 					if (sbs->Verbose)
@@ -823,6 +820,7 @@ void Elevator::ProcessCallQueue()
 					ActiveCall = DownQueue[i];
 					GotoFloor = DownQueue[i].floor;
 					GotoFloorCar = car->Number;
+					car->GotoFloor = true;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
 					{
 						WaitForDoors = true;
@@ -857,12 +855,8 @@ void Elevator::ProcessCallQueue()
 				return;
 			}
 			//if the queued floor number is an upper floor
-			if (DownQueue[i].floor > GetCar(GetCarCount())->CurrentFloor && MoveElevator == false)
+			if (DownQueue[i].floor > car->CurrentFloor && MoveElevator == false)
 			{
-				ElevatorCar *car = GetCarForFloor(DownQueue[i].floor);
-				if (!car)
-					return;
-
 				//dispatch elevator if idle
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
@@ -871,6 +865,7 @@ void Elevator::ProcessCallQueue()
 					ActiveCall = DownQueue[i];
 					GotoFloor = DownQueue[i].floor;
 					GotoFloorCar = car->Number;
+					car->GotoFloor = true;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
 					{
 						WaitForDoors = true;
@@ -4076,6 +4071,9 @@ int Elevator::GetFloorForCar(int car, int number)
 void Elevator::ProcessGotoFloor(int floor, int direction)
 {
 	//set GotoFloor status on other cars, if queue entries exists for those cars
+
+	if (MoveElevator == false)
+		return;
 
 	for (int i = 1; i <= GetCarCount(); i++)
 	{
