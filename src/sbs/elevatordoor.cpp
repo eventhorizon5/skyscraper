@@ -1332,7 +1332,7 @@ void ElevatorDoor::Timer::Notify()
 		//door autoclose timer
 
 		//close doors if open
-		if (door->AreDoorsOpen() == true && (elevator->InServiceMode() == false || elevator->WaitForDoors == true))
+		if (door->AreDoorsOpen() == true && (elevator->InServiceMode() == false || elevator->WaitForDoors == true || car->IndependentServiceOnOtherCar() == true))
 			door->CloseDoors();
 	}
 	if (type == 1)

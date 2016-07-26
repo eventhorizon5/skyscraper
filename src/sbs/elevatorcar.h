@@ -198,6 +198,8 @@ public:
 	bool IsLeveled();
 	bool IsOnFloor(int floor);
 	void NotifyArrival(int floor);
+	bool IndependentServiceActive();
+	bool IndependentServiceOnOtherCar();
 
 	MeshObject* Mesh; //car mesh object
 

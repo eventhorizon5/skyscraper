@@ -112,6 +112,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	UpPeak = sbs->GetConfigBool("Skyscraper.SBS.Elevator.UpPeak", false);
 	DownPeak = sbs->GetConfigBool("Skyscraper.SBS.Elevator.DownPeak", false);
 	IndependentService = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IndependentService", false);
+	IndependentServiceCar = 0;
 	InspectionService = sbs->GetConfigBool("Skyscraper.SBS.Elevator.InspectionService", false);
 	FireServicePhase1 = sbs->GetConfigInt("Skyscraper.SBS.Elevator.FireService1", 0);
 	FireServicePhase2 = sbs->GetConfigInt("Skyscraper.SBS.Elevator.FireService2", 0);
@@ -931,7 +932,7 @@ void Elevator::Loop()
 		if (IndependentService == true)
 		{
 			IndependentService = false;
-			EnableIndependentService(true);
+			EnableIndependentService(true, IndependentServiceCar);
 		}
 		if (InspectionService == true)
 		{
@@ -2224,12 +2225,20 @@ bool Elevator::EnableDownPeak(bool value)
 	return true;
 }
 
-bool Elevator::EnableIndependentService(bool value)
+bool Elevator::EnableIndependentService(bool value, int car_number)
 {
 	//enable Independent Service (ISC) mode
+	//car_number is the car number to use for independent service; only used when enabling the mode
 
 	if (Running == false)
 		return ReportError("Elevator not running");
+
+	//exit if mode is already active for another car
+	if (IndependentService == true && car_number > 0 && IndependentServiceCar != car_number)
+	{
+		ReportError("EnableIndependentService: mode already active for car " + ToString(IndependentServiceCar));
+		return !value; //succeed if disabling mode
+	}
 
 	//exit if no change
 	if (IndependentService == value)
@@ -2239,32 +2248,38 @@ bool Elevator::EnableIndependentService(bool value)
 		return true;
 	}
 
+	if (car_number == 0)
+		car_number = 1;
+
 	if (value == true)
 	{
 		if (InspectionService == true)
 			return ReportError("EnableIndependentService: cannot enable while in inspection service mode");
 		if (FireServicePhase1 > 0 || FireServicePhase2 > 0)
 			return ReportError("EnableIndependentService: cannot enable while in a fire service mode");
-	}
 
-	IndependentService = value;
+		ElevatorCar *car = GetCar(car_number);
+		if (!car)
+			return ReportError("EnableIndependentService: invalid car " + ToString(car_number));
 
-	if (value == true)
-	{
+		IndependentService = true;
+		IndependentServiceCar = car_number;
 		EnableACP(false);
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		ResetQueue(true, true); //this will also stop the elevator
-		HoldDoors(); //turn off door timers
-		ResetNudgeTimers(false); //switch off nudge timer
+		car->HoldDoors(); //turn off door timers for selected car
+		car->ResetNudgeTimer(false); //switch off nudge timer for selected car
 		DirectionalIndicatorsOff(); //switch off directional indicators on current floor
 		if (IsMoving == false)
 			if (AutoDoors == true)
-				OpenDoors();
-		Report("Independent Service mode enabled");
+				car->OpenDoors();
+		Report("Independent Service mode enabled for car " + ToString(car_number));
 	}
 	else
 	{
+		IndependentService = false;
+		IndependentServiceCar = 0;
 		ResetQueue(true, true); //this will also stop the elevator
 		ResetDoors();
 		ResetNudgeTimers();

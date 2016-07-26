@@ -1486,8 +1486,8 @@ void editelevator::On_bDownPeak_Toggle(wxCommandEvent& event)
 
 void editelevator::On_bIndService_Toggle(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->EnableIndependentService(bIndService->GetValue());
+	if (elevator && car)
+		elevator->EnableIndependentService(bIndService->GetValue(), car->Number);
 }
 
 void editelevator::On_bInsService_Toggle(wxCommandEvent& event)

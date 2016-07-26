@@ -1214,7 +1214,7 @@ void ElevatorCar::CloseDoors(int number, int whichdoors, int floor, bool manual,
 	//3 = only shaft doors
 
 	//turn on hold option for certain modes
-	if ((parent->IndependentService == true || parent->FireServicePhase2 == 1) && manual == false)
+	if ((IndependentServiceActive() == true || parent->FireServicePhase2 == 1) && manual == false)
 		hold = true;
 
 	int start = number, end = number;
@@ -2993,6 +2993,20 @@ void ElevatorCar::NotifyArrival(int floor)
 
 	if (parent->FireServicePhase1 == 0 && parent->FireServicePhase2 == 0)
 		PlayFloorSound();
+}
+
+bool ElevatorCar::IndependentServiceActive()
+{
+	//returns true if independent service mode is active for this car
+
+	return (parent->IndependentService == true && parent->IndependentServiceCar == Number);
+}
+
+bool ElevatorCar::IndependentServiceOnOtherCar()
+{
+	//returns true if independent service mode is active on this elevator, but on a different car
+
+	return (parent->IndependentService == true && parent->IndependentServiceCar != Number);
 }
 
 }

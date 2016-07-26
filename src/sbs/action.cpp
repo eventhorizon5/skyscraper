@@ -350,9 +350,9 @@ bool Action::Run(Object *caller, Object *parent)
 		if (command_name == "downpeakoff")
 			return elevator->EnableDownPeak(false);
 		if (command_name == "indon")
-			return elevator->EnableIndependentService(true);
+			return elevator->EnableIndependentService(true, car->Number);
 		if (command_name == "indoff")
-			return elevator->EnableIndependentService(false);
+			return elevator->EnableIndependentService(false, car->Number);
 		if (command_name == "inson")
 			return elevator->EnableInspectionService(true);
 		if (command_name == "insoff")

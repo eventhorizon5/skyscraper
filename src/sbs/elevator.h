@@ -72,6 +72,7 @@ public:
 	bool UpPeak; //Up Peak mode
 	bool DownPeak; //Down Peak mode
 	bool IndependentService; //Independent Service (ISC) mode
+	int IndependentServiceCar; //car number for Independent Service mode
 	bool InspectionService; //Inspection Service (INS) mode
 	int FireServicePhase1; //Fire service (EFS) phase 1 modes: 0 for off, 1 for on, and 2 for bypass
 	int FireServicePhase2; //Fire service (EFS) phase 2 modes: 0 for off, 1 for on, and 2 for hold
@@ -143,7 +144,7 @@ public:
 	bool EnableACP(bool value);
 	bool EnableUpPeak(bool value);
 	bool EnableDownPeak(bool value);
-	bool EnableIndependentService(bool value);
+	bool EnableIndependentService(bool value, int car_number = 0);
 	bool EnableInspectionService(bool value);
 	bool EnableFireService1(int value);
 	bool EnableFireService2(int value, bool force = false);

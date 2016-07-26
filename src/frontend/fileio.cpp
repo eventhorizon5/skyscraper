@@ -5513,13 +5513,6 @@ int ScriptProcessor::ProcElevators()
 		elev->DownPeak = ToBool(temp2);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 18) == "independentservice")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		elev->IndependentService = ToBool(temp2);
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 17) == "inspectionservice")
 	{
 		if (temp2check < 0)
@@ -6533,6 +6526,14 @@ int ScriptProcessor::ProcElevatorCars()
 		CheckFile("data/" + temp2);
 
 		car->EmergencyStopSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 18) == "independentservice")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		elev->IndependentService = ToBool(temp2);
+		elev->IndependentServiceCar = car->Number;
 		return sNextLine;
 	}
 

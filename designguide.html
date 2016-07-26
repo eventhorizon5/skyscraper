@@ -1595,46 +1595,41 @@ elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">DownPeak =
 true</font></p>
 
-<p align="left"><strong>21. IndependentService</strong> - enables independent
-service mode for this elevator.<br>
-Example: <font face="Courier New, Courier, mono" size="2">IndependentService =
-true</font></p>
-
-<p align="left"><strong>22. InspectionService</strong> - enables inspection
+<p align="left"><strong>21. InspectionService</strong> - enables inspection
 service mode for this elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">InspectionService =
 true</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>23.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
 InspectionSpeed</strong> - speed multiplier for inspection service (if set to
 0.6, would be 60% of elevator speed)<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">InspectionSpeed =
 <em>multiplier</em></font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>24.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>23.
 Parking</strong> - enables automatic elevator parking. If this option is used,
 the elevator will automatically send itself to the specified parking floor
 after the number of seconds specified in <em>delay</em>. <br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Parking = <em>floor,
 delay</em></font></p>
 
-<p align="left"><strong>25. LevelingSpeed</strong> - elevator's leveling speed.
+<p align="left"><strong>24. LevelingSpeed</strong> - elevator's leveling speed.
 Default is 0.2<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingSpeed =
 <em>speed</em></font></p>
 
-<p align="left"><strong>26. LevelingOffset</strong> - distance in feet from the
+<p align="left"><strong>25. LevelingOffset</strong> - distance in feet from the
 destination floor that the elevator will switch into leveling mode. Default is
 0.5<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingOffset =
 <em>distance</em></font></p>
 
-<p align="left"><strong>27. LevelingOpen</strong> - distance in feet from the
+<p align="left"><strong>26. LevelingOpen</strong> - distance in feet from the
 destination floor that the elevator will open the doors. Default is 0.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingOpen =
 <em>distance</em></font></p>
 
-<p align="left"><strong>28. NotifyEarly</strong> - changes behavior of arrival
+<p align="left"><strong>27. NotifyEarly</strong> - changes behavior of arrival
 notifications (chime, lighting of directional indicator, and floor announcement
 sound). 0 is the default and notifies when the elevator stops on the floor. 1
 notifies when the elevator starts the leveling process, and 2 notifies when the
@@ -1642,31 +1637,31 @@ elevator starts decelerating.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">NotifyEarly =
 <em>value</em></font></p>
 
-<p align="left"><strong>29. DepartureDelay</strong> - sets the time in seconds
+<p align="left"><strong>28. DepartureDelay</strong> - sets the time in seconds
 that the elevator waits before proceeding to the next floor. Default is 0.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">DepartureDelay =
 <em>1</em> </font></p>
 
-<p align="left"><strong>30. ArrivalDelay</strong> - sets the time in seconds
+<p align="left"><strong>29. ArrivalDelay</strong> - sets the time in seconds
 that the elevator waits before opening the doors after arriving at a floor. The
 default is 0. Note that a value greater than 0 will switch off the LevelingOpen
 setting.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">ArrivalDelay =
 <em>0.5</em></font></p>
 
-<p align="left"><strong>31. FireService1</strong> - sets the fire service phase
+<p align="left"><strong>30. FireService1</strong> - sets the fire service phase
 1 mode that the elevator will start with. Default is 0. Values are 0 for off, 1
 for on, 2 for bypass.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService1 =
 2</font></p>
 
-<p align="left"><strong>32. FireService2</strong> - sets the fire service phase
+<p align="left"><strong>31. FireService2</strong> - sets the fire service phase
 2 mode that the elevator will start with. Default is 0. Values are 0 for off, 1
 for on, 2 for hold.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService2 =
 1</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
 AutoDoors</strong> - if this is set to true, the elevator doors will
 automatically open if instructed (for example, when arriving at a floor), and
 will refuse to open if between floors. Set to false for manual elevators. The
@@ -1674,13 +1669,13 @@ default is true.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AutoDoors =
 false</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
 OpenOnStart</strong> - if this is set to true, the elevator doors will
 automatically open on startup. The default is false.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">OpenOnStart =
 false</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>35.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
 Interlocks</strong> - if this is set to true, the elevator doors will remain
 locked while the elevator is moving, will refuse to open unless the elevator is
 within a landing zone, and the elevator will not move unless the doors are
@@ -1688,7 +1683,7 @@ closed. The default is true.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Interlocks =
 false</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>36.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>35.
 FloorHold</strong> - if this is set to true, the user must hold down the floor
 button in order to move to the desired floor. When the button is released, the
 elevator will immediately stop. This is used to mimic a modern manual elevator
@@ -1696,20 +1691,20 @@ elevator will immediately stop. This is used to mimic a modern manual elevator
 Syntax: <font face="Courier New, Courier, mono" size="2">FloorHold =
 true</font></p>
 
-<p align="left"><strong>37. MotorEmergencyStopSound</strong> - the sound file to play
+<p align="left"><strong>36. MotorEmergencyStopSound</strong> - the sound file to play
 for the elevator motor when an emergency stop is initiated.
 Leave the filename field blank to use the normal motor stop sound, if specified.
 The default is <em>emergstop.wav</em><br>
 Example: <font face="Courier New, Courier, mono" size="2">MotorEmergencyStopSound =
 emergstop.wav</font></p>
 
-<p align="left"><strong>38. EmergencyStopSpeed</strong> - the speed multiplier to
+<p align="left"><strong>37. EmergencyStopSpeed</strong> - the speed multiplier to
 use for an emergency stop.  A value of 3, the default, would mean 3 times the
 normal deceleration rate.<br>
 Example: <font face="Courier New, Courier, mono" size="2">EmergencyStopSpeed =
 2.5</font></p>
 
-<p align="left"><strong>39. ChimeOnArrival</strong> - if set to true, the elevator
+<p align="left"><strong>38. ChimeOnArrival</strong> - if set to true, the elevator
 will always chime when arriving to a floor.  If false (the default), the elevator
 will only chime when responding to a hall call.<br>
 Example: <font face="Courier New, Courier, mono" size="2">ChimeOnArrival =
@@ -2043,6 +2038,11 @@ Leave the filename field blank to use the normal car stop sound, if specified.
 By default no sound is played.<br>
 Example: <font face="Courier New, Courier, mono" size="2">CarEmergencyStopSound =
 emergstop_car.wav</font></p>
+
+<p align="left"><strong>37. IndependentService</strong> - enables independent
+service mode for the elevator, and makes this car the active car for the mode.<br>
+Example: <font face="Courier New, Courier, mono" size="2">IndependentService =
+true</font></p>
 
 <br>
 
