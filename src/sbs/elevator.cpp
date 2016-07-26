@@ -426,6 +426,8 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 		Report("adding route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction down");
 	}
 
+	ProcessGotoFloor(floor, direction);
+
 	//turn on button lights
 	if (call_type == 0)
 		ChangeLight(floor, true);
@@ -727,6 +729,7 @@ void Elevator::ProcessCallQueue()
 					ActiveCall = UpQueue[i];
 					GotoFloor = UpQueue[i].floor;
 					GotoFloorCar = car->Number;
+					car->GotoFloor = true;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
 					{
 						WaitForDoors = true;
@@ -735,23 +738,27 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = 1;
 					QueuePending = false;
+					ProcessGotoFloor(GotoFloor, QueuePositionDirection);
 				}
 				else if (Leveling == false && ActiveDirection == 1)
 				{
 					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != UpQueue[i].floor)
 					{
-						float tmpdestination = GetDestinationAltitude(UpQueue[i].floor);
-						if (BeyondDecelMarker(1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
+						if (car == GetCar(GotoFloorCar)) //make sure car is the same
 						{
-							ActiveCall = UpQueue[i];
-							GotoFloor = UpQueue[i].floor;
-							GotoFloorCar = car->Number;
-							Destination = tmpdestination;
-							Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+							float tmpdestination = GetDestinationAltitude(UpQueue[i].floor);
+							if (BeyondDecelMarker(1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
+							{
+								ActiveCall = UpQueue[i];
+								GotoFloor = UpQueue[i].floor;
+								GotoFloorCar = car->Number;
+								Destination = tmpdestination;
+								Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+							}
+							else if (sbs->Verbose)
+								Report("ProcessCallQueue up: cannot change destination floor to " + ToString(UpQueue[i].floor));
 						}
-						else if (sbs->Verbose)
-							Report("ProcessCallQueue up: cannot change destination floor to " + ToString(UpQueue[i].floor));
 					}
 				}
 				return;
@@ -779,6 +786,7 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = 1;
 					QueuePending = false;
+					ProcessGotoFloor(GotoFloor, QueuePositionDirection);
 					return;
 				}
 				//reset search direction if it's the last entry and idle
@@ -823,23 +831,27 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = -1;
 					QueuePending = false;
+					ProcessGotoFloor(GotoFloor, QueuePositionDirection);
 				}
 				else if (Leveling == false && ActiveDirection == -1)
 				{
 					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != DownQueue[i].floor)
 					{
-						float tmpdestination = GetDestinationAltitude(DownQueue[i].floor);
-						if (BeyondDecelMarker(-1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
+						if (car == GetCar(GotoFloorCar)) //make sure car is the same
 						{
-							ActiveCall = DownQueue[i];
-							GotoFloor = DownQueue[i].floor;
-							GotoFloorCar = car->Number;
-							Destination = tmpdestination;
-							Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+							float tmpdestination = GetDestinationAltitude(DownQueue[i].floor);
+							if (BeyondDecelMarker(-1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
+							{
+								ActiveCall = DownQueue[i];
+								GotoFloor = DownQueue[i].floor;
+								GotoFloorCar = car->Number;
+								Destination = tmpdestination;
+								Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+							}
+							else if (sbs->Verbose)
+								Report("ProcessCallQueue down: cannot change destination floor to " + ToString(DownQueue[i].floor));
 						}
-						else if (sbs->Verbose)
-							Report("ProcessCallQueue down: cannot change destination floor to " + ToString(DownQueue[i].floor));
 					}
 				}
 				return;
@@ -867,6 +879,7 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = -1;
 					QueuePending = false;
+					ProcessGotoFloor(GotoFloor, QueuePositionDirection);
 					return;
 				}
 				//reset search direction if it's the last entry and idle
@@ -1611,6 +1624,12 @@ finish:
 		FinishMove();
 	else
 		EmergencyStop = 0; //make sure emergency stop status is cleared
+
+	//reset cars' GotoFloor states
+	for (int i = 1; i <= GetCarCount(); i++)
+	{
+		GetCar(i)->GotoFloor = false;
+	}
 }
 
 void Elevator::MoveObjects(float offset)
@@ -1680,7 +1699,14 @@ void Elevator::FinishMove()
 			sbs->EnableExternal(true);
 
 			//reset shaft doors
-			ResetShaftDoors(GotoFloor);
+			for (int i = 1; i <= GetCarCount(); i++)
+			{
+				if (GetCar(i)->GotoFloor == true)
+				{
+					int floor = GetFloorForCar(i, GotoFloor);
+					ResetShaftDoors(floor);
+				}
+			}
 		}
 		else if (sbs->Verbose)
 			Report("user not in elevator - not turning on objects");
@@ -1696,7 +1722,14 @@ void Elevator::FinishMove()
 			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
 
 			//notify call buttons of arrival (which also disables call button lights)
-			NotifyCallButtons(GotoFloor, GetArrivalDirection(GotoFloor));
+			for (int i = 1; i <= GetCarCount(); i++)
+			{
+				if (GetCar(i)->GotoFloor == true)
+				{
+					int floor = GetFloorForCar(i, GotoFloor);
+					NotifyCallButtons(floor, GetArrivalDirection(GotoFloor));
+				}
+			}
 		}
 
 		//reset queues if specified
@@ -1731,7 +1764,13 @@ void Elevator::FinishMove()
 		{
 			if (Parking == false)
 				if (AutoDoors == true)
-					GetCar(GotoFloorCar)->OpenDoors();
+				{
+					for (int i = 1; i <= GetCarCount(); i++)
+					{
+						if (GetCar(i)->GotoFloor == true)
+							GetCar(i)->OpenDoors();
+					}
+				}
 		}
 	}
 	else
@@ -1741,7 +1780,16 @@ void Elevator::FinishMove()
 
 		//reset shaft doors
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-			ResetShaftDoors(GotoFloor);
+		{
+			for (int i = 1; i <= GetCarCount(); i++)
+			{
+				if (GetCar(i)->GotoFloor == true)
+				{
+					int floor = GetFloorForCar(i, GotoFloor);
+					ResetShaftDoors(floor);
+				}
+			}
+		}
 	}
 
 	//update car floor numbers
@@ -2752,6 +2800,15 @@ void Elevator::DeleteActiveRoute()
 	if (sbs->Verbose)
 		Report("deleting active route");
 	DeleteRoute(ActiveCall.floor, ActiveCall.direction);
+
+	//delete associated routes for any other cars
+	for (int i = 1; i <= GetCarCount(); i++)
+	{
+		int floor = GetFloorForCar(i, ActiveCall.floor);
+		if (IsQueued(floor, ActiveCall.direction) == true)
+			DeleteRoute(floor, ActiveCall.direction);
+	}
+
 	ActiveCall.floor = 0;
 	ActiveCall.direction = 0;
 	ActiveCall.call_type = 0;
@@ -2835,20 +2892,27 @@ void Elevator::Timer::Notify()
 	}
 }
 
-bool Elevator::IsQueued(int floor)
+bool Elevator::IsQueued(int floor, int queue)
 {
 	//return true if the given floor is in either queue
+	//if queue is 0, check both queues; otherwise up queue with 1, and down queue with -1
 
-	for (size_t i = 0; i < UpQueue.size(); i++)
+	if (queue == 0 || queue == 1)
 	{
-		if (UpQueue[i].floor == floor)
-			return true;
+		for (size_t i = 0; i < UpQueue.size(); i++)
+		{
+			if (UpQueue[i].floor == floor)
+				return true;
+		}
 	}
 
-	for (size_t i = 0; i < DownQueue.size(); i++)
+	if (queue == 0 || queue == -1)
 	{
-		if (DownQueue[i].floor == floor)
-			return true;
+		for (size_t i = 0; i < DownQueue.size(); i++)
+		{
+			if (DownQueue[i].floor == floor)
+				return true;
+		}
 	}
 
 	return false;
@@ -2861,8 +2925,11 @@ void Elevator::NotifyArrival()
 
 	for (int i = 1; i <= GetCarCount(); i++)
 	{
-		int floor = GetFloorForCar(i, GotoFloor);
-		GetCar(i)->NotifyArrival(floor);
+		if (GetCar(i)->GotoFloor == true)
+		{
+			int floor = GetFloorForCar(i, GotoFloor);
+			GetCar(i)->NotifyArrival(floor);
+		}
 	}
 
 	Notified = true;
@@ -4004,6 +4071,23 @@ int Elevator::GetFloorForCar(int car, int number)
 	number -= obj->Offset;
 
 	return number += GetCar(car)->Offset;
+}
+
+void Elevator::ProcessGotoFloor(int floor, int direction)
+{
+	//set GotoFloor status on other cars, if queue entries exists for those cars
+
+	for (int i = 1; i <= GetCarCount(); i++)
+	{
+		if (i == GotoFloorCar)
+		{
+			i++;
+			continue;
+		}
+
+		if (IsQueued(GetFloorForCar(i, floor), direction) == true)
+			GetCar(i)->GotoFloor = true;
+	}
 }
 
 }

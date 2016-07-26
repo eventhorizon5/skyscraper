@@ -167,7 +167,7 @@ public:
 	bool BeyondDecelMarker(int direction, float destination);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	bool IsQueued(int floor);
+	bool IsQueued(int floor, int queue = 0);
 	void SetRunState(bool value);
 	bool IsRunning();
 	bool GetArrivalDirection(int floor);
@@ -301,6 +301,7 @@ private:
 	float GetDestinationOffset(int floor);
 	void DirectionalIndicatorsOff();
 	void NotifyArrival();
+	void ProcessGotoFloor(int floor, int direction);
 
 	//motor sound objects
 	Sound *motorsound;
