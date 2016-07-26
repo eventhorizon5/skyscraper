@@ -5801,6 +5801,14 @@ int ScriptProcessor::ProcElevatorCars()
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
 
+	//parameters
+	if (linecheck.substr(0, 4) == "name")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		car->Name = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 9) == "openspeed")
 	{
 		if (temp2check < 0)

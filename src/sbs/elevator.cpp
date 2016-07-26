@@ -1645,10 +1645,10 @@ void Elevator::FinishMove()
 {
 	//post-move operations, such as chimes, opening doors, indicator updates, etc
 
-	if (IsManuallyStopped() == true)
+	if (IsManuallyStopped() == true || InspectionService == true)
 	{
 		GotoFloor = GetCar(1)->GetFloor();
-		GotoFloorCar = GetCar(1)->Number;
+		GotoFloorCar = 1;
 	}
 
 	if (EmergencyStop == 0 || IsManuallyStopped() == true)
