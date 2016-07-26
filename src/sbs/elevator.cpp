@@ -1761,7 +1761,7 @@ void Elevator::FinishMove()
 			if (Parking == false)
 				if (AutoDoors == true)
 				{
-					if ((OnRecallFloor() == true && FireServicePhase1 == 1) || PeakWaiting() == true)
+					if ((OnRecallFloor() == true && FireServicePhase1 == 1) || OnPeakFloor() == true)
 						OpenDoors(); //automatically open doors in Fire Phase 1 and Peak modes
 					else
 					{
@@ -3657,6 +3657,16 @@ bool Elevator::PeakWaiting()
 
 	if ((OnTopFloor() && DownPeak == true && IsMoving == false) ||
 		(OnBottomFloor() && UpPeak == true && IsMoving == false))
+		return true;
+	return false;
+}
+
+bool Elevator::OnPeakFloor()
+{
+	//similar to PeakWaiting(), but returns true if elevator is on the related peak mode floor
+
+	if ((OnTopFloor() && DownPeak == true) ||
+		(OnBottomFloor() && UpPeak == true))
 		return true;
 	return false;
 }

@@ -191,6 +191,7 @@ public:
 	int GetActiveCallType();
 	bool InElevator();
 	bool PeakWaiting();
+	bool OnPeakFloor();
 	bool OnRecallFloor();
 	int GetActiveRecallFloor();
 	std::vector<Floor*> GetLobbies();
