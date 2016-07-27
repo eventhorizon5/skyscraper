@@ -2389,6 +2389,8 @@ bool Elevator::EnableFireService1(int value)
 	if (value < 0 || value > 2)
 		return ReportError("EnableFireService1: invalid value");
 
+	FireServicePhase1 = value;
+
 	if (value > 0)
 	{
 		EnableACP(false);
@@ -2436,8 +2438,6 @@ bool Elevator::EnableFireService1(int value)
 		}
 		Report("Fire Service Phase 1 mode set to Off");
 	}
-
-	FireServicePhase1 = value;
 
 	return true;
 }
@@ -2507,9 +2507,7 @@ bool Elevator::EnableFireService2(int value, int car_number, bool force)
 		//close other doors
 		for (int i = 1; i <= GetCarCount(); i++)
 		{
-			if (i == car_number)
-				i++;
-			else
+			if (i != car_number)
 				GetCar(i)->CloseDoors();
 		}
 
@@ -4072,7 +4070,7 @@ void Elevator::ResetNudgeTimers(bool start)
 	//reset all nudge timers
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		Cars[i]->ResetNudgeTimer();
+		Cars[i]->ResetNudgeTimer(start);
 	}
 }
 
