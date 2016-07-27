@@ -2277,8 +2277,8 @@ bool ElevatorDoor::AllowNudgeMode()
 {
 	//return true if current situation allows nudge mode to be enabled
 
-	//allow nudge mode if fire phase 1 is on (phase 2 is off) and elevator is not at recall floor
-	bool firelobby = elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->OnRecallFloor() == false;
+	//allow nudge mode if fire phase 1 is on (phase 2 is not on Hold) and elevator is not at recall floor
+	bool firelobby = elev->FireServicePhase1 == 1 && elev->FireServicePhase2 != 2 && elev->OnRecallFloor() == false;
 
 	if (GetNudgeStatus() == false && AreDoorsOpen() == true && elev->AutoDoors == true && (elev->InServiceMode() == false || firelobby == true))
 	{
