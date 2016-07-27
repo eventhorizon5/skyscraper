@@ -1383,7 +1383,7 @@ action_name(s), texture_name(s)<br>
 size="2">AddShaftActionControl 1, MyControl, switch.wav, front, -10, 10, 1.5,
 1.5, 4, UndoMyAction, MyAction, Touch, TouchLit<br>
 </font><br>
-This command creates an advanced control similar to elevator button panel
+This command creates an advanced control similar to elevator car button panel
 controls, but assigned to an action created with the AddAction command. The
 <em>action_name(s)</em> and <em>texture_name(s)</em> parameters allow you to
 specify a list of actions, and a list of textures to go along with those
@@ -1427,7 +1427,7 @@ size="2"> AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20,
 UndoMyAction, MyAction</font><br>
 <br>
 AddTrigger creates a trigger similar to action controls (AddActionControl) and
-elevator controls. The <em>action_names(s)</em> parameter allows you to specify
+elevator car controls. The <em>action_names(s)</em> parameter allows you to specify
 a list of actions that this trigger will call when the camera enters or exits
 the area. The trigger starts in the first action, and will switch to each
 consecutive action when the users enters/leaves. The <em>X</em>, <em>Y</em> and
@@ -1436,6 +1436,8 @@ relative of the floor's base. Leave the <em>sound</em> field blank for no sound
 to be played.</p>
 
 <p align="left"><strong></strong></p>
+
+<br>
 
 <p align="left"><strong><font size="+1"><a name="Elevator"></a>6. The
 <em>Elevator</em> Section</font></strong></p>
@@ -1721,6 +1723,8 @@ coordinates to place the center of the elevator at, and <em>Floor</em> is the
 floor to place the elevator on.</p>
 
 <p align="left"></p>
+
+<br>
 
 <p align="left"><strong><font size="+1"><a name="Car"></a>7. The
 <em>Car</em> (Elevator) Section</font></strong></p>
@@ -2021,7 +2025,7 @@ click.wav</font><br>
 To have the sensor play a continuous beep while it's on (obstructed), create a
 sound inside the elevator car with the AddSound command using the filename of the
 beep sound you want, and then create an action with the elevator car's "sensor"
-command name. So for elevator 1, you would create an action named "Elevator
+command name. So for elevator 1 car 1, you would create an action named "Elevator
 1:Car 1:sensor", and the action would do a "playsound" command on the sound you
 created.<br>
 </p>
@@ -2039,7 +2043,7 @@ Example: <font face="Courier New, Courier, mono" size="2">IndependentService =
 true</font></p>
 
 <p align="left"><strong>38. FireService2</strong> - sets the fire service phase
-2 mode that the elevator will start with, and makes this car the active car for the mode.<br>
+2 mode that the elevator will start with, and makes this car the active car for the mode.
 Default is 0. Values are 0 for off, 1 for on, 2 for hold.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService2 =
 1</font></p>
@@ -2269,9 +2273,9 @@ When this command is used, actions are created using the specified commands.
 The resulting names of the actions are the elevator name, followed by a colon,
 then the Car name followed by another colon, and then the command name,
 in order to be unique to each elevator and car. So the "Open"
-command for Elevator 1 is created as an action named "Elevator 1:Car 1:open", and you
+command for Elevator 1 Car 1 is created as an action named "Elevator 1:Car 1:open", and you
 can specify more actions with that name to run multiple actions when the
-elevator opens it's doors.  For compatibility, if the car number is 1, that action is also created as "Elevator 1:open".<br>
+elevator car opens it's doors.<br>
 <br>
 <strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
 Syntax: <font face="Courier New, Courier, mono"
@@ -2279,12 +2283,12 @@ size="2">AddFloorIndicator<em> texture_prefix, direction, CenterX, CenterZ,
 width, height, voffset</em></font> </p>
 
 <p align="left">The AddFloorIndicator command creates a floor indicator at the
-position (relative to the elevator) specified by <em>CenterX</em> and
+position (relative to the elevator car) specified by <em>CenterX</em> and
 <em>CenterZ</em>. <em>Direction</em> is the direction the indicator faces, and
 can be either "left", "right", "front" or "back". This command can be given
 multiple times to create multiple indicators. <em>Texture_prefix</em> is the
 base name of the texture to load when displaying a floor ID; for example if the
-elevator is on floor 3, and you specify a prefix of "Button", it'll load the
+elevator car is on floor 3, and you specify a prefix of "Button", it'll load the
 "Button3" texture.</p>
 
 <p align="left"><strong>10. AddDirectionalIndicator</strong> - creates an
@@ -2300,7 +2304,7 @@ UpLightOn, DownLight, DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0,
 0</em></font></p>
 
 <p align="left">This command will create a directional indicator inside the
-elevator, and the positioning is relative of the elevator's center.</p>
+elevator car, and the positioning is relative of the elevator car's center.</p>
 
 <p align="left"><em>ActiveDirection</em> determines if the indicator should
 continuously display the active elevator direction (true), or if it should show
@@ -2356,12 +2360,12 @@ UpLight, UpLightOn, DownLight, DownLightOn, -3, -4.162, 6, front, 0.5, 1, true,
 0, 0</em></font></p>
 
 <p align="left">This command will create directional indicators on all floors
-the elevator serves. It'll also automatically create the up and down lights
+the elevator car serves. It'll also automatically create the up and down lights
 depending on the floor. To create indicators on a per-floor basis, use the
 AddDirectionalIndicator command in the Floor section.</p>
 
 <p align="left"><em>Relative</em> determines if the X and Z coordinates are
-relative to the elevator's origin (center) or not.</p>
+relative to the elevator car's origin (center) or not.</p>
 
 <p align="left"><em>ActiveDirection</em> determines if the indicator should
 continuously display the active elevator direction (true), or if it should show
@@ -2423,7 +2427,7 @@ size="2">AddFloorSigns<em> door_number, relative, texture_prefix, direction,
 CenterX, CenterZ, width, height, voffset</em></font> </p>
 
 <p align="left">The AddFloorSigns command creates floor signs (similar to floor
-indicators) on all the floors serviced by the current elevator.
+indicators) on all the floors serviced by the current elevator car.
 <em>Direction</em> is the direction the signs face, and can be either "left",
 "right", "front" or "back". <em>Texture_prefix</em> is the base name of the
 texture to load when displaying a floor ID; for example if the sign is on floor
@@ -2447,7 +2451,7 @@ MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0,
 
 <p align="left">For information on the parameters, see the AddSound command in
 the Global Commands section. The only difference here is that the X, Y and Z position
-values are relative of the elevator's center/origin. <em>Loop</em> specifies if
+values are relative of the elevator car's center/origin. <em>Loop</em> specifies if
 the sound should loop and play on startup.</p>
 
 <p align="left"><strong>15. AddDoorComponent</strong> - creates a single
@@ -2468,7 +2472,7 @@ With this command you specify the positioning of a component similar to wall
 creation, specify it's textures, tell it which direction it's going to travel
 during opening, and what it's speed will be. <em>Number</em> specifies the
 number of the door to create (related to the <em>Doors</em> command) - if the
-elevator only has one door, or if the Doors command was not used, specify 1
+elevator car only has one door, or if the Doors command was not used, specify 1
 here. <em>Texture</em> refers to the texture used on the main (front and back)
 sides of the door. <em>SideTexture</em> refers to the texture used on the sides
 (and top/bottom) of the door. <em>Direction</em> is either Up, Down, Left (or
@@ -2497,7 +2501,7 @@ creation - use this after all related AddDoorComponent commands are used.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FinishDoors
 <em>number[, door_walls, track_walls]</em></font></p>
 
-<p align="left">This command completes the elevator door creation by storing
+<p align="left">This command completes the elevator car door creation by storing
 the central location and shift factor, cutting walls for the door, creating
 side connection pieces for the cut, etc. The optional <em>door_walls</em>
 option specifies if the command should create the side door filler walls (texture used is "ConnectionWall"), and the
@@ -2523,7 +2527,7 @@ CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>,
 
 <p align="left">See the AddDoor command in the floor section for information on
 the parameters. <em>CenterX</em> and <em>CenterZ</em> are relative of the
-elevator's center.</p>
+elevator car's center.</p>
 
 <p align="left"><strong>20. AddModel</strong> - adds a 3D model to the elevator car.
 If a filename is specified, the model's textures/materials must be defined in a separate ".material" file,
