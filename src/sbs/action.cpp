@@ -336,11 +336,11 @@ bool Action::Run(Object *caller, Object *parent)
 			return true;
 		}
 		if (command_name == "fire2off")
-			return elevator->EnableFireService2(0);
+			return elevator->EnableFireService2(0, car->Number);
 		if (command_name == "fire2on")
-			return elevator->EnableFireService2(1);
+			return elevator->EnableFireService2(1, car->Number);
 		if (command_name == "fire2hold")
-			return elevator->EnableFireService2(2);
+			return elevator->EnableFireService2(2, car->Number);
 		if (command_name == "uppeakon")
 			return elevator->EnableUpPeak(true);
 		if (command_name == "uppeakoff")

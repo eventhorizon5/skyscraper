@@ -76,6 +76,7 @@ public:
 	bool InspectionService; //Inspection Service (INS) mode
 	int FireServicePhase1; //Fire service (EFS) phase 1 modes: 0 for off, 1 for on, and 2 for bypass
 	int FireServicePhase2; //Fire service (EFS) phase 2 modes: 0 for off, 1 for on, and 2 for hold
+	int FireServicePhase2Car; //car number for Fire service phase 2 mode
 	int RecallFloor; //Fire service recall floor
 	int RecallFloorAlternate; //Fire service alternate recall floor
 	bool OnFloor; //true if elevator is stopped on a floor, false if not
@@ -147,7 +148,7 @@ public:
 	bool EnableIndependentService(bool value, int car_number = 0);
 	bool EnableInspectionService(bool value);
 	bool EnableFireService1(int value);
-	bool EnableFireService2(int value, bool force = false);
+	bool EnableFireService2(int value, int car_number = 0, bool force = false);
 	bool SetRecallFloor(int floor);
 	bool SetAlternateRecallFloor(int floor);
 	bool SetACPFloor(int floor);

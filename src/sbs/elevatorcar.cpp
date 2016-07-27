@@ -1078,7 +1078,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 	//3 = only shaft doors
 
 	//require open button to be held for fire service phase 2 if not on recall floor
-	if (parent->FireServicePhase2 == 1 && parent->OnRecallFloor() == false && manual == false)
+	if (FirePhase2Active() == 1 && parent->OnRecallFloor() == false && manual == false)
 		hold = true;
 
 	if (parent->Interlocks == true)
@@ -1214,7 +1214,7 @@ void ElevatorCar::CloseDoors(int number, int whichdoors, int floor, bool manual,
 	//3 = only shaft doors
 
 	//turn on hold option for certain modes
-	if ((IndependentServiceActive() == true || parent->FireServicePhase2 == 1) && manual == false)
+	if ((IndependentServiceActive() == true || FirePhase2Active() == 1) && manual == false)
 		hold = true;
 
 	int start = number, end = number;
@@ -3010,9 +3010,25 @@ bool ElevatorCar::IndependentServiceActive()
 
 bool ElevatorCar::IndependentServiceOnOtherCar()
 {
-	//returns true if independent service mode is active on this elevator, but on a different car
+	//returns true if independent service mode is active on this elevator, but for a different car
 
 	return (parent->IndependentService == true && parent->IndependentServiceCar != Number);
+}
+
+int ElevatorCar::FirePhase2Active()
+{
+	//returns value if fire phase 2 mode is active for this car
+
+	if (parent->FireServicePhase2 > 0 && parent->FireServicePhase2Car == Number)
+		return parent->FireServicePhase2;
+	return 0;
+}
+
+bool ElevatorCar::FirePhase2OnOtherCar()
+{
+	//returns true if fire phase 2 mode is active on this elevator, but for a different car
+
+	return (parent->FireServicePhase2 > 0 && parent->FireServicePhase2Car != Number);
 }
 
 }

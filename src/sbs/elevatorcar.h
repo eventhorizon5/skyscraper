@@ -200,6 +200,8 @@ public:
 	void NotifyArrival(int floor);
 	bool IndependentServiceActive();
 	bool IndependentServiceOnOtherCar();
+	int FirePhase2Active();
+	bool FirePhase2OnOtherCar();
 
 	MeshObject* Mesh; //car mesh object
 

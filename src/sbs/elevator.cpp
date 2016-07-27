@@ -116,6 +116,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	InspectionService = sbs->GetConfigBool("Skyscraper.SBS.Elevator.InspectionService", false);
 	FireServicePhase1 = sbs->GetConfigInt("Skyscraper.SBS.Elevator.FireService1", 0);
 	FireServicePhase2 = sbs->GetConfigInt("Skyscraper.SBS.Elevator.FireService2", 0);
+	FireServicePhase2Car = 0;
 	RecallFloor = 0;
 	RecallFloorAlternate = 0;
 	OnFloor = true;
@@ -949,7 +950,7 @@ void Elevator::Loop()
 		{
 			int value = FireServicePhase2;
 			FireServicePhase2 = 0;
-			EnableFireService2(value);
+			EnableFireService2(value, FireServicePhase2Car);
 		}
 		if (ACP == true)
 		{
@@ -2441,7 +2442,7 @@ bool Elevator::EnableFireService1(int value)
 	return true;
 }
 
-bool Elevator::EnableFireService2(int value, bool force)
+bool Elevator::EnableFireService2(int value, int car_number, bool force)
 {
 	//enable Fire Service Phase 2 mode
 	//valid values are 0 (off), 1 (on) or 2 (hold)
@@ -2461,6 +2462,13 @@ bool Elevator::EnableFireService2(int value, bool force)
 			return ReportError("EnableFireService2: not in fire service phase 1 mode");
 	}
 
+	//exit if mode is already active for another car
+	if (FireServicePhase2 > 0 && car_number > 0 && FireServicePhase2Car != car_number)
+	{
+		ReportError("EnableFireService2: mode already active for car " + ToString(FireServicePhase2Car));
+		return !value; //succeed if disabling mode
+	}
+
 	//require doors to be open to change modes
 	if (AreDoorsOpen() == false && force == false)
 		return ReportError("EnableFireService2: doors must be open to change phase 2 modes");
@@ -2473,6 +2481,9 @@ bool Elevator::EnableFireService2(int value, bool force)
 		return true;
 	}
 
+	if (car_number == 0)
+		car_number = 1;
+
 	if (value >= 0 && value <= 2)
 		FireServicePhase2 = value;
 	else
@@ -2480,21 +2491,38 @@ bool Elevator::EnableFireService2(int value, bool force)
 
 	if (value > 0)
 	{
+		ElevatorCar *car = GetCar(car_number);
+		if (!car)
+			return ReportError("EnableFireService2: invalid car " + ToString(car_number));
+
+		FireServicePhase2Car = car_number;
 		EnableACP(false);
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		EnableIndependentService(false);
 		ResetQueue(true, true); //this will also stop the elevator
-		HoldDoors(); //disable all door timers
-		ResetNudgeTimers(false); //switch off nudge timer
+		car->HoldDoors(); //disable all door timers for selected car
+		car->ResetNudgeTimer(false); //switch off nudge timer for selected car
+
+		//close other doors
+		for (int i = 1; i <= GetCarCount(); i++)
+		{
+			if (i == car_number)
+				i++;
+			else
+				GetCar(i)->CloseDoors();
+		}
+
 		if (value == 1)
-			Report("Fire Service Phase 2 mode set to On");
+			Report("Fire Service Phase 2 mode set to On for car " + ToString(car_number));
 		else
-			Report("Fire Service Phase 2 mode set to Hold");
+			Report("Fire Service Phase 2 mode set to Hold for car " + ToString(car_number));
 	}
 	else
 	{
 		Report("Fire Service Phase 2 mode set to Off");
+
+		FireServicePhase2Car = 0;
 
 		if (FireServicePhase1 == 0)
 		{

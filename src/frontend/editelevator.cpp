@@ -1345,15 +1345,15 @@ void editelevator::Loop()
 		bUpPeak->SetValue(elevator->UpPeak);
 	if (bDownPeak->GetValue() != elevator->DownPeak)
 		bDownPeak->SetValue(elevator->DownPeak);
-	if (bIndService->GetValue() != elevator->IndependentService)
-		bIndService->SetValue(elevator->IndependentService);
+	if (bIndService->GetValue() != car->IndependentServiceActive())
+		bIndService->SetValue(car->IndependentServiceActive());
 	if (bInsService->GetValue() != elevator->InspectionService)
 		bInsService->SetValue(elevator->InspectionService);
-	if (elevator->FireServicePhase2 == 0 && Fire2Off->GetValue() == false)
+	if (car->FirePhase2Active() == 0 && Fire2Off->GetValue() == false)
 		Fire2Off->SetValue(true);
-	if (elevator->FireServicePhase2 == 1 && Fire2On->GetValue() == false)
+	if (car->FirePhase2Active() == 1 && Fire2On->GetValue() == false)
 		Fire2On->SetValue(true);
-	if (elevator->FireServicePhase2 == 2 && Fire2Hold->GetValue() == false)
+	if (car->FirePhase2Active() == 2 && Fire2Hold->GetValue() == false)
 		Fire2Hold->SetValue(true);
 	if (elevator->FireServicePhase1 == 0 && Fire1Off->GetValue() == false)
 		Fire1Off->SetValue(true);
@@ -1567,20 +1567,20 @@ void editelevator::On_Fire1Bypass_Select(wxCommandEvent& event)
 
 void editelevator::On_Fire2Off_Select(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->EnableFireService2(0);
+	if (elevator && car)
+		elevator->EnableFireService2(0, car->Number);
 }
 
 void editelevator::On_Fire2On_Select(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->EnableFireService2(1);
+	if (elevator && car)
+		elevator->EnableFireService2(1, car->Number);
 }
 
 void editelevator::On_Fire2Hold_Select(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->EnableFireService2(2);
+	if (elevator && car)
+		elevator->EnableFireService2(2, car->Number);
 }
 
 void editelevator::On_bStopDoors_Click(wxCommandEvent& event)

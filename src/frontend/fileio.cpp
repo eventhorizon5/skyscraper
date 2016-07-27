@@ -5527,13 +5527,6 @@ int ScriptProcessor::ProcElevators()
 		elev->FireServicePhase1 = ToInt(temp2);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "fireservice2")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		elev->FireServicePhase2 = ToInt(temp2);
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 7) == "parking")
 	{
 		int params = SplitAfterEquals(LineData);
@@ -6534,6 +6527,14 @@ int ScriptProcessor::ProcElevatorCars()
 			return ScriptError("Syntax error");
 		elev->IndependentService = ToBool(temp2);
 		elev->IndependentServiceCar = car->Number;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "fireservice2")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		elev->FireServicePhase2 = ToInt(temp2);
+		elev->FireServicePhase2Car = car->Number;
 		return sNextLine;
 	}
 

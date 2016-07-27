@@ -1655,13 +1655,7 @@ for on, 2 for bypass.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService1 =
 2</font></p>
 
-<p align="left"><strong>31. FireService2</strong> - sets the fire service phase
-2 mode that the elevator will start with. Default is 0. Values are 0 for off, 1
-for on, 2 for hold.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">FireService2 =
-1</font></p>
-
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>31.
 AutoDoors</strong> - if this is set to true, the elevator doors will
 automatically open if instructed (for example, when arriving at a floor), and
 will refuse to open if between floors. Set to false for manual elevators. The
@@ -1669,13 +1663,13 @@ default is true.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AutoDoors =
 false</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
 OpenOnStart</strong> - if this is set to true, the elevator doors will
 automatically open on startup. The default is false.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">OpenOnStart =
 false</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
 Interlocks</strong> - if this is set to true, the elevator doors will remain
 locked while the elevator is moving, will refuse to open unless the elevator is
 within a landing zone, and the elevator will not move unless the doors are
@@ -1683,7 +1677,7 @@ closed. The default is true.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Interlocks =
 false</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>35.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
 FloorHold</strong> - if this is set to true, the user must hold down the floor
 button in order to move to the desired floor. When the button is released, the
 elevator will immediately stop. This is used to mimic a modern manual elevator
@@ -1691,20 +1685,20 @@ elevator will immediately stop. This is used to mimic a modern manual elevator
 Syntax: <font face="Courier New, Courier, mono" size="2">FloorHold =
 true</font></p>
 
-<p align="left"><strong>36. MotorEmergencyStopSound</strong> - the sound file to play
+<p align="left"><strong>35. MotorEmergencyStopSound</strong> - the sound file to play
 for the elevator motor when an emergency stop is initiated.
 Leave the filename field blank to use the normal motor stop sound, if specified.
 The default is <em>emergstop.wav</em><br>
 Example: <font face="Courier New, Courier, mono" size="2">MotorEmergencyStopSound =
 emergstop.wav</font></p>
 
-<p align="left"><strong>37. EmergencyStopSpeed</strong> - the speed multiplier to
+<p align="left"><strong>36. EmergencyStopSpeed</strong> - the speed multiplier to
 use for an emergency stop.  A value of 3, the default, would mean 3 times the
 normal deceleration rate.<br>
 Example: <font face="Courier New, Courier, mono" size="2">EmergencyStopSpeed =
 2.5</font></p>
 
-<p align="left"><strong>38. ChimeOnArrival</strong> - if set to true, the elevator
+<p align="left"><strong>37. ChimeOnArrival</strong> - if set to true, the elevator
 will always chime when arriving to a floor.  If false (the default), the elevator
 will only chime when responding to a hall call.<br>
 Example: <font face="Courier New, Courier, mono" size="2">ChimeOnArrival =
@@ -2043,6 +2037,12 @@ emergstop_car.wav</font></p>
 service mode for the elevator, and makes this car the active car for the mode.<br>
 Example: <font face="Courier New, Courier, mono" size="2">IndependentService =
 true</font></p>
+
+<p align="left"><strong>38. FireService2</strong> - sets the fire service phase
+2 mode that the elevator will start with. Default is 0. Values are 0 for off, 1
+for on, 2 for hold.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">FireService2 =
+1</font></p>
 
 <br>
 
