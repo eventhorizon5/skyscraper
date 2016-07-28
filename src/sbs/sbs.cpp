@@ -3732,10 +3732,10 @@ void SBS::ListVisibleMeshes()
 	{
 		for (size_t j = 0; j < dynamic_meshes[i]->GetMeshCount(); j++)
 		{
-			if (camera->IsDynamicMeshVisible(dynamic_meshes[i], j) == true)
+			if (camera->IsDynamicMeshVisible(dynamic_meshes[i], (int)j) == true)
 			{
-				submeshes = dynamic_meshes[i]->GetSubMeshCount(j);
-				Report(dynamic_meshes[i]->GetMeshName(j) + "\t-\t" + ToString(submeshes));
+				submeshes = dynamic_meshes[i]->GetSubMeshCount((int)j);
+				Report(dynamic_meshes[i]->GetMeshName((int)j) + "\t-\t" + ToString(submeshes));
 				count++;
 				total += submeshes;
 			}

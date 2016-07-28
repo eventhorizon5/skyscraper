@@ -850,7 +850,7 @@ std::vector<int> Floor::GetCallButtons(int elevator)
 		if (CallButtonArray[i])
 		{
 			if (CallButtonArray[i]->ServicesElevator(elevator) == true)
-				buttons.push_back(i);
+				buttons.push_back((int)i);
 		}
 	}
 	return buttons;

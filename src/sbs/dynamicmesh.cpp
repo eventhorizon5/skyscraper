@@ -338,7 +338,7 @@ int DynamicMesh::GetClientIndex(MeshObject *client)
 	for (size_t i = 0; i < clients.size(); i++)
 	{
 		if (clients[i] == client)
-			return i;
+			return (int)i;
 	}
 	return -1;
 }

@@ -2064,7 +2064,7 @@ int ElevatorDoor::GetManualIndex(int floor)
 	for (size_t i = 0; i < ManualFloors.size(); i++)
 	{
 		if (ManualFloors[i] == floor)
-			return i;
+			return (int)i;
 	}
 
 	return -1;
