@@ -6,7 +6,7 @@ The Skyscraper Project - Version 1.10 Alpha
 Copyright (C)2004-2016 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
-Contact - ryan@tliquest.net
+Contact - ryan@skyscrapersim.com
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
