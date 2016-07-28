@@ -27,13 +27,14 @@
 #include "sbs.h"
 #include "mesh.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "profiler.h"
 #include "floor.h"
 #include "floorindicator.h"
 
 namespace SBS {
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset) : Object(parent)
+FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset) : Object(parent)
 {
 	//creates a new floor indicator at the specified position
 
@@ -42,6 +43,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 
 	is_enabled = true;
 	elev = elevator;
+	this->car = car;
 	Prefix = texture_prefix;
 
 	//move object
@@ -54,9 +56,14 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 	if (!sbs->GetElevator(elev))
 		return;
 
+	//exit if the elevator car is invalid
+	ElevatorCar *Car = sbs->GetElevator(elev)->GetCar(car);
+	if (!Car)
+		return;
+
 	FloorIndicatorMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	std::string texture = Prefix + sbs->GetFloor(sbs->GetElevator(elev)->StartingFloor)->ID;
+	std::string texture = Prefix + sbs->GetFloor(Car->StartingFloor)->ID;
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
@@ -95,8 +102,8 @@ FloorIndicator::~FloorIndicator()
 	{
 		std::string type = GetParent()->GetType();
 
-		if (type == "Elevator")
-			static_cast<Elevator*>(GetParent())->RemoveFloorIndicator(this);
+		if (type == "ElevatorCar")
+			static_cast<ElevatorCar*>(GetParent())->RemoveFloorIndicator(this);
 		else if (type == "Floor")
 			static_cast<Floor*>(GetParent())->RemoveFloorIndicator(this);
 	}
@@ -125,7 +132,12 @@ void FloorIndicator::Update()
 	if (!elevator)
 		return;
 
-	texture = elevator->GetFloorDisplay();
+	ElevatorCar *car = elevator->GetCar(this->car);
+
+	if (!car)
+		return;
+
+	texture = car->GetFloorDisplay();
 
 	//don't update texture if no value
 	if (texture == "")

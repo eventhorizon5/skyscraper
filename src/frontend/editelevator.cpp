@@ -32,6 +32,7 @@
 #include "floor.h"
 #include "elevator.h"
 #include "elevatordoor.h"
+#include "elevatorcar.h"
 #include "callbutton.h"
 #include "debugpanel.h"
 #include "editelevator.h"
@@ -60,6 +61,8 @@ const long editelevator::ID_Fire2Hold = wxNewId();
 const long editelevator::ID_bUp = wxNewId();
 const long editelevator::ID_bGoToggle = wxNewId();
 const long editelevator::ID_bDown = wxNewId();
+const long editelevator::ID_tCar = wxNewId();
+const long editelevator::ID_sCar = wxNewId();
 const long editelevator::ID_tDoor = wxNewId();
 const long editelevator::ID_sDoor = wxNewId();
 const long editelevator::ID_bRefresh = wxNewId();
@@ -368,6 +371,11 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	StaticBoxSizer6->Add(bDown, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(StaticBoxSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer8 = new wxFlexGridSizer(0, 1, 0, 0);
+	tCar = new wxStaticText(this, ID_tCar, _("Car"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_tCar"));
+	FlexGridSizer8->Add(tCar, 1, wxEXPAND, 5);
+	sCar = new wxScrollBar(this, ID_sCar, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL, wxDefaultValidator, _T("ID_sCar"));
+	sCar->SetScrollbar(0, 0, 0, 0);
+	FlexGridSizer8->Add(sCar, 1, wxBOTTOM|wxEXPAND, 5);
 	tDoor = new wxStaticText(this, ID_tDoor, _("Door"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_tDoor"));
 	FlexGridSizer8->Add(tDoor, 1, wxEXPAND, 5);
 	sDoor = new wxScrollBar(this, ID_sDoor, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL, wxDefaultValidator, _T("ID_sDoor"));
@@ -1052,6 +1060,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Simcore = 0;
 	debugpanel = parent;
 	elevator = 0;
+	car = 0;
 	door = 0;
 	OnInit();
 }
@@ -1065,11 +1074,11 @@ void editelevator::On_bCall_Click(wxCommandEvent& event)
 {
 	//calls elevator to the current camera floor
 
-	if (elevator)
+	if (elevator && car)
 	{
-		if (elevator->GetFloor() > Simcore->camera->CurrentFloor)
+		if (car->GetFloor() > Simcore->camera->CurrentFloor)
 			elevator->AddRoute(Simcore->camera->CurrentFloor, -1, 1);
-		if (elevator->GetFloor() < Simcore->camera->CurrentFloor)
+		if (car->GetFloor() < Simcore->camera->CurrentFloor)
 			elevator->AddRoute(Simcore->camera->CurrentFloor, 1, 1);
 	}
 }
@@ -1094,26 +1103,26 @@ void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 
 void editelevator::On_bOpen_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->OpenDoors(sDoor->GetThumbPosition());
+	if (car)
+		car->OpenDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bClose_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->CloseDoors(sDoor->GetThumbPosition());
+	if (car)
+		car->CloseDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bOpenManual_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->OpenDoorsEmergency(sDoor->GetThumbPosition());
+	if (car)
+		car->OpenDoorsEmergency(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bCloseManual_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->CloseDoorsEmergency(sDoor->GetThumbPosition());
+	if (car)
+		car->CloseDoorsEmergency(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bStop_Click(wxCommandEvent& event)
@@ -1124,8 +1133,8 @@ void editelevator::On_bStop_Click(wxCommandEvent& event)
 
 void editelevator::On_bHoldDoors_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->HoldDoors(sDoor->GetThumbPosition());
+	if (car)
+		car->HoldDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bSetName_Click(wxCommandEvent& event)
@@ -1154,8 +1163,8 @@ void editelevator::On_bSetDeceleration_Click(wxCommandEvent& event)
 
 void editelevator::On_bDumpFloors_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->DumpServicedFloors();
+	if (car)
+		car->DumpServicedFloors();
 }
 
 void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
@@ -1170,6 +1179,7 @@ void editelevator::OnInit()
 
 	last_elevator = 0;
 	floor_number = 0;
+	last_car = 0;
 	last_door = -1;
 	last_elevator_count = 0;
 
@@ -1178,8 +1188,11 @@ void editelevator::OnInit()
 		//set elevator range slider
 		sNumber->SetScrollbar(0, 1, Simcore->GetElevatorCount(), 1);
 
+		//set car range slider
+		sCar->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetCarCount(), 1);
+
 		//set door range slider
-		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
+		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetCar(1)->NumDoors + 1, 1);
 	}
 	else
 		sNumber->Enable(false);
@@ -1194,19 +1207,22 @@ void editelevator::Loop()
 	if (!Simcore)
 		return;
 
-	int elev_num;
-	int door_num;
-	int elevator_count;
-	elev_num = sNumber->GetThumbPosition() + 1;
-	door_num = sDoor->GetThumbPosition();
-	elevator_count = Simcore->GetElevatorCount();
+	int elev_num = sNumber->GetThumbPosition() + 1;
+	int car_num = sCar->GetThumbPosition() + 1;
+	int door_num = sDoor->GetThumbPosition();
+	int elevator_count = Simcore->GetElevatorCount();
 	elevator = Simcore->GetElevator(elev_num);
 	door = 0;
 
 	if (!elevator)
 		return;
 
-	door = elevator->GetDoor(door_num);
+	car = elevator->GetCar(car_num);
+
+	if (!car)
+		return;
+
+	door = car->GetDoor(door_num);
 
 	if (elev_num != last_elevator)
 	{
@@ -1214,11 +1230,20 @@ void editelevator::Loop()
 		last_elevator = elev_num;
 
 		//set floor range slider
-		sFloor->SetScrollbar(0, 1, elevator->GetServicedFloorCount(), 1);
+		sFloor->SetScrollbar(0, 1, car->GetServicedFloorCount(), 1);
+
+		//set car range slider
+		sCar->SetScrollbar(0, 1, Simcore->GetElevator(elev_num)->GetCarCount(), 1);
 
 		//set door range slider
-		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
+		sDoor->SetScrollbar(1, 1, car->NumDoors + 1, 1);
 
+		SetMainValues();
+	}
+	if (car_num != last_car)
+	{
+		//number changed; update values
+		last_car = car_num;
 		SetMainValues();
 	}
 	if (door_num != last_door)
@@ -1237,11 +1262,12 @@ void editelevator::Loop()
 	}
 
 	tElevator->SetLabel(wxT("Number " + ToString(sNumber->GetThumbPosition() + 1)));
-	floor_number = elevator->GetServicedFloor(sFloor->GetThumbPosition());
+	floor_number = car->GetServicedFloor(sFloor->GetThumbPosition());
 	wxString floor_name;
 	if (Simcore->GetFloor(floor_number))
 		floor_name = Simcore->GetFloor(floor_number)->ID;
 	tFloor->SetLabel(wxT("Floor ") + ToString(floor_number) + wxT(" (" + floor_name) + wxT(")"));
+	tCar->SetLabel(wxT("Car " + ToString(sCar->GetThumbPosition() + 1)));
 	tDoor->SetLabel(wxT("Door " + ToString(sDoor->GetThumbPosition()) + wxT(" (0 = all)")));
 	txtBrakes->SetValue(BoolToString(elevator->GetBrakeStatus()));
 	txtDestFloor->SetValue(ToString(elevator->GotoFloor));
@@ -1261,11 +1287,11 @@ void editelevator::Loop()
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(BoolToString(elevator->IsEnabled));
 	txtErrorOffset->SetValue(TruncateNumber(elevator->ErrorOffset, 2));
-	txtFloor->SetValue(ToString(elevator->GetFloor()));
-	txtHeight->SetValue(TruncateNumber(elevator->Height, 2));
+	txtFloor->SetValue(ToString(car->GetFloor()));
+	txtHeight->SetValue(TruncateNumber(car->Height, 2));
 	txtMoveElevator->SetValue(BoolToString(elevator->MoveElevator));
 	txtNumber->SetValue(ToString(elevator->Number));
-	txtOriginFloor->SetValue(ToString(elevator->StartingFloor));
+	txtOriginFloor->SetValue(ToString(car->StartingFloor));
 	txtPosition->SetValue(TruncateNumber(elevator->GetPosition().x, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().y, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().z, 2));
 	txtQueueDirection->SetValue(ToString(elevator->QueuePositionDirection));
 	txtQueueLastDown->SetValue(ToString(elevator->LastQueueFloor[0]));
@@ -1278,26 +1304,26 @@ void editelevator::Loop()
 	txtJerkRate->SetValue(TruncateNumber(elevator->GetJerkRate(), 4));
 	txtIsMoving->SetValue(BoolToString(elevator->IsMoving));
 	txtOnFloor->SetValue(BoolToString(elevator->OnFloor));
-	txtAlarm->SetValue(BoolToString(elevator->AlarmActive));
+	txtAlarm->SetValue(BoolToString(car->AlarmActive));
 	txtQueueLastDirection->SetValue(ToString(elevator->LastQueueDirection));
 	txtIsIdle->SetValue(BoolToString(elevator->IsIdle()));
 	txtWaitForDoors->SetValue(BoolToString(elevator->WaitForDoors));
 	txtMotor->SetValue(TruncateNumber(elevator->MotorPosition.x, 2) + wxT(", ") + TruncateNumber(elevator->MotorPosition.y, 2) + wxT(", ") + TruncateNumber(elevator->MotorPosition.z, 2));
-	txtCameraOffset->SetValue(TruncateNumber(elevator->CameraOffset, 2));
+	txtCameraOffset->SetValue(TruncateNumber(car->CameraOffset, 2));
 	txtManualGo->SetValue(BoolToString(elevator->ManualGo));
 	txtLeveling->SetValue(BoolToString(elevator->Leveling));
 	txtParking->SetValue(BoolToString(elevator->Parking));
 	txtQueueResets->SetValue(BoolToString(elevator->QueueResets));
 	txtLimitQueue->SetValue(BoolToString(elevator->LimitQueue));
-	txtNudgeMode->SetValue(BoolToString(elevator->IsNudgeModeActive()));
+	txtNudgeMode->SetValue(BoolToString(car->IsNudgeModeActive()));
 	txtNotified->SetValue(BoolToString(elevator->Notified));
 	txtWaitForTimer->SetValue(BoolToString(elevator->WaitForTimer));
-	txtMusicOn->SetValue(BoolToString(elevator->MusicOn));
-	txtMusicOnMove->SetValue(BoolToString(elevator->MusicOnMove));
-	txtFloorSounds->SetValue(BoolToString(elevator->UseFloorSounds));
-	txtFloorBeeps->SetValue(BoolToString(elevator->UseFloorBeeps));
-	txtMessageSounds->SetValue(BoolToString(elevator->UseDirMessageSounds));
-	txtAutoEnable->SetValue(BoolToString(elevator->AutoEnable));
+	txtMusicOn->SetValue(BoolToString(car->MusicOn));
+	txtMusicOnMove->SetValue(BoolToString(car->MusicOnMove));
+	txtFloorSounds->SetValue(BoolToString(car->UseFloorSounds));
+	txtFloorBeeps->SetValue(BoolToString(car->UseFloorBeeps));
+	txtMessageSounds->SetValue(BoolToString(car->UseDirMessageSounds));
+	txtAutoEnable->SetValue(BoolToString(car->AutoEnable));
 	txtReOpen->SetValue(BoolToString(elevator->ReOpen));
 	txtAutoDoors->SetValue(BoolToString(elevator->AutoDoors));
 	txtOpenOnStart->SetValue(BoolToString(elevator->OpenOnStart));
@@ -1306,7 +1332,7 @@ void editelevator::Loop()
 	txtActiveCallFloor->SetValue(ToString(elevator->GetActiveCallFloor()));
 	txtActiveDirection->SetValue(ToString(elevator->ActiveDirection));
 	txtManualMove->SetValue(ToString(elevator->ManualMove));
-	txtMusicPosition->SetValue(TruncateNumber(elevator->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(elevator->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(elevator->MusicPosition.z, 2));
+	txtMusicPosition->SetValue(TruncateNumber(car->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.z, 2));
 
 	//changeable values
 	if (chkVisible->GetValue() != elevator->IsEnabled)
@@ -1319,15 +1345,15 @@ void editelevator::Loop()
 		bUpPeak->SetValue(elevator->UpPeak);
 	if (bDownPeak->GetValue() != elevator->DownPeak)
 		bDownPeak->SetValue(elevator->DownPeak);
-	if (bIndService->GetValue() != elevator->IndependentService)
-		bIndService->SetValue(elevator->IndependentService);
+	if (bIndService->GetValue() != car->IndependentServiceActive())
+		bIndService->SetValue(car->IndependentServiceActive());
 	if (bInsService->GetValue() != elevator->InspectionService)
 		bInsService->SetValue(elevator->InspectionService);
-	if (elevator->FireServicePhase2 == 0 && Fire2Off->GetValue() == false)
+	if (car->FirePhase2Active() == 0 && Fire2Off->GetValue() == false)
 		Fire2Off->SetValue(true);
-	if (elevator->FireServicePhase2 == 1 && Fire2On->GetValue() == false)
+	if (car->FirePhase2Active() == 1 && Fire2On->GetValue() == false)
 		Fire2On->SetValue(true);
-	if (elevator->FireServicePhase2 == 2 && Fire2Hold->GetValue() == false)
+	if (car->FirePhase2Active() == 2 && Fire2Hold->GetValue() == false)
 		Fire2Hold->SetValue(true);
 	if (elevator->FireServicePhase1 == 0 && Fire1Off->GetValue() == false)
 		Fire1Off->SetValue(true);
@@ -1418,14 +1444,14 @@ void editelevator::On_bSetDecelJerk_Click(wxCommandEvent& event)
 
 void editelevator::On_bOpenShaftDoor_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->OpenDoors(sDoor->GetThumbPosition(), 3, floor_number);
+	if (car)
+		car->OpenDoors(sDoor->GetThumbPosition(), 3, floor_number);
 }
 
 void editelevator::On_bCloseShaftDoor_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->CloseDoors(sDoor->GetThumbPosition(), 3, floor_number);
+	if (car)
+		car->CloseDoors(sDoor->GetThumbPosition(), 3, floor_number);
 }
 
 void editelevator::On_bSetDoorTimer_Click(wxCommandEvent& event)
@@ -1460,8 +1486,8 @@ void editelevator::On_bDownPeak_Toggle(wxCommandEvent& event)
 
 void editelevator::On_bIndService_Toggle(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->EnableIndependentService(bIndService->GetValue());
+	if (elevator && car)
+		elevator->EnableIndependentService(bIndService->GetValue(), car->Number);
 }
 
 void editelevator::On_bInsService_Toggle(wxCommandEvent& event)
@@ -1541,26 +1567,26 @@ void editelevator::On_Fire1Bypass_Select(wxCommandEvent& event)
 
 void editelevator::On_Fire2Off_Select(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->EnableFireService2(0);
+	if (elevator && car)
+		elevator->EnableFireService2(0, car->Number);
 }
 
 void editelevator::On_Fire2On_Select(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->EnableFireService2(1);
+	if (elevator && car)
+		elevator->EnableFireService2(1, car->Number);
 }
 
 void editelevator::On_Fire2Hold_Select(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->EnableFireService2(2);
+	if (elevator && car)
+		elevator->EnableFireService2(2, car->Number);
 }
 
 void editelevator::On_bStopDoors_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->StopDoors(sDoor->GetThumbPosition());
+	if (car)
+		car->StopDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bUp_Toggle(wxCommandEvent& event)
@@ -1688,38 +1714,38 @@ void editelevator::On_bSetInspectionSpeed_Click(wxCommandEvent& event)
 
 void editelevator::On_bSetMusicOn_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->MusicOn = !elevator->MusicOn;
+	if (car)
+		car->MusicOn = !car->MusicOn;
 }
 
 void editelevator::On_bSetMusicOnMove_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->MusicOnMove = !elevator->MusicOnMove;
+	if (car)
+		car->MusicOnMove = !car->MusicOnMove;
 }
 
 void editelevator::On_bSetFloorSounds_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->UseFloorSounds = !elevator->UseFloorSounds;
+	if (car)
+		car->UseFloorSounds = !car->UseFloorSounds;
 }
 
 void editelevator::On_bSetFloorBeeps_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->UseFloorBeeps = !elevator->UseFloorBeeps;
+	if (car)
+		car->UseFloorBeeps = !car->UseFloorBeeps;
 }
 
 void editelevator::On_bSetMessageSounds_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->UseDirMessageSounds = !elevator->UseDirMessageSounds;
+	if (car)
+		car->UseDirMessageSounds = !car->UseDirMessageSounds;
 }
 
 void editelevator::On_bSetAutoEnable_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->AutoEnable = !elevator->AutoEnable;
+	if (car)
+		car->AutoEnable = !car->AutoEnable;
 }
 
 void editelevator::On_bSetReOpen_Click(wxCommandEvent& event)
@@ -1745,8 +1771,8 @@ void editelevator::On_bSetNudge_Click(wxCommandEvent& event)
 	if (elevator)
 	{
 		int door = sDoor->GetThumbPosition();
-		bool status = elevator->IsNudgeModeActive(door);
-		elevator->EnableNudgeMode(!status, door);
+		bool status = car->IsNudgeModeActive(door);
+		car->EnableNudgeMode(!status, door);
 	}
 }
 
@@ -1755,8 +1781,8 @@ void editelevator::On_bDoorSensor_Click(wxCommandEvent& event)
 	if (elevator)
 	{
 		int door = sDoor->GetThumbPosition();
-		bool status = elevator->GetSensorStatus(door);
-		elevator->EnableSensor(!status, door);
+		bool status = car->GetSensorStatus(door);
+		car->EnableSensor(!status, door);
 	}
 }
 

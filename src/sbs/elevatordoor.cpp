@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "mesh.h"
 #include "camera.h"
@@ -34,11 +35,31 @@
 #include "trigger.h"
 #include "profiler.h"
 #include "sound.h"
+#include "timer.h"
 #include "elevatordoor.h"
 
 namespace SBS {
 
-ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
+//door autoclose timer
+class ElevatorDoor::Timer : public TimerObject
+{
+public:
+	ElevatorDoor *door;
+	ElevatorCar *car;
+	Elevator *elevator;
+	int type; //0 = autoclose, 1 = nudge
+
+	Timer(const std::string &name, ElevatorDoor *parent, ElevatorCar *car, int Type) : TimerObject(parent, name)
+	{
+		door = parent;
+		this->car = car;
+		elevator = car->GetElevator();
+		type = Type;
+	}
+	virtual void Notify();
+};
+
+ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 {
 	//set up SBS object
 	SetValues("ElevatorDoor", "", false);
@@ -48,7 +69,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
 
 	//create a new elevator door
 	Number = number;
-	elev = elevator;
+	this->car = car;
+	elev = car->GetElevator();
 	OpenDoor = 0;
 	OpenSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3f);
 	WhichDoors = 0;
@@ -87,11 +109,11 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
 	Doors = new DoorWrapper(this, this, false);
 
 	//create timers
-	timer = new Timer("Door Close Timer", this, elev, 0);
-	nudgetimer = new Timer("Nudge Timer", this, elev, 1);
+	timer = new Timer("Door Close Timer", this, car, 0);
+	nudgetimer = new Timer("Nudge Timer", this, car, 1);
 
 	//initialize shaft door array
-	ShaftDoors.resize(elev->ServicedFloors.size());
+	ShaftDoors.resize(car->ServicedFloors.size());
 	for (size_t i = 0; i < ShaftDoors.size(); i++)
 		ShaftDoors[i] = 0;
 
@@ -171,8 +193,73 @@ ElevatorDoor::~ElevatorDoor()
 
 		//unregister from parent
 		if (parent_deleting == false)
-			elev->RemoveElevatorDoor(this);
+			car->RemoveElevatorDoor(this);
 	}
+}
+
+void ElevatorDoor::AddServicedFloor(int floor)
+{
+	//add serviced floor to door
+
+	DoorWrapper *wrapper = 0;
+
+	if (ShaftDoors.empty() == true)
+	{
+		ShaftDoors.resize(1);
+		ShaftDoors[1] = 0;
+		return;
+	}
+
+	for (size_t i = 0; i < ShaftDoors.size(); i++)
+	{
+		if (ShaftDoors[i])
+		{
+			if (i == 0 && ShaftDoors[i]->floor > floor)
+			{
+				//insert at bottom
+				ShaftDoors.insert(ShaftDoors.begin(), wrapper);
+				return;
+			}
+			else if (ShaftDoors[i]->floor > floor && ShaftDoors[i - 1]->floor < floor)
+			{
+				//insert inside
+				ShaftDoors.insert(ShaftDoors.begin() + i, wrapper);
+				return;
+			}
+		}
+	}
+
+	//insert at top
+	ShaftDoors.push_back(wrapper);
+		return;
+}
+
+void ElevatorDoor::RemoveServicedFloor(int floor)
+{
+	//remove serviced floor from door
+
+	for (size_t i = 0; i < ShaftDoors.size(); i++)
+	{
+		if (ShaftDoors[i])
+		{
+			if (ShaftDoors[i]->floor == floor)
+			{
+				delete ShaftDoors[i];
+				ShaftDoors.erase(ShaftDoors.begin() + i);
+				return;
+			}
+			if (ShaftDoors[i]->floor > floor && i > 0)
+			{
+				//erase previous element
+				ShaftDoors.erase(ShaftDoors.begin() + i - 1);
+				return;
+			}
+		}
+	}
+
+	//if not found, remove last element
+	if (!ShaftDoors.back())
+		ShaftDoors.pop_back();
 }
 
 void ElevatorDoor::OpenDoorsEmergency(int whichdoors, int floor)
@@ -219,14 +306,14 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		elev->ReportError("cannot open doors" + GetNumberText() + "; doors manually stopped");
+		car->ReportError("cannot open doors" + GetNumberText() + "; doors manually stopped");
 		return;
 	}
 
 	//exit if in nudge mode
 	if (GetNudgeStatus() == true)
 	{
-		elev->ReportError("cannot open doors" + GetNumberText() + "; nudge mode enabled");
+		car->ReportError("cannot open doors" + GetNumberText() + "; nudge mode enabled");
 		return;
 	}
 
@@ -237,14 +324,14 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//don't open doors if emergency stop is enabled
 	if (elev->OnFloor == false && whichdoors != 3 && manual == false && elev->AutoDoors == true)
 	{
-		elev->ReportError("cannot open doors" + GetNumberText() + "; emergency stop enabled");
+		car->ReportError("cannot open doors" + GetNumberText() + "; emergency stop enabled");
 		return;
 	}
 
 	//exit if doors are manually moving, or automatically moving and a manual open is requested
 	if (DoorIsRunning == true && (AreDoorsMoving(2) == true || (AreDoorsMoving(1) == true && manual == true)))
 	{
-		elev->ReportError("doors" + GetNumberText() + " in use");
+		car->ReportError("doors" + GetNumberText() + " in use");
 		return;
 	}
 
@@ -254,11 +341,11 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//reset timer if not in a service mode or waiting in a peak mode
 		if (elev->InServiceMode() == false && elev->PeakWaiting() == false)
 		{
-			elev->Report("doors" + GetNumberText() + " already open; resetting timer");
+			car->Report("doors" + GetNumberText() + " already open; resetting timer");
 			Reset();
 		}
 		else
-			elev->Report("doors" + GetNumberText() + " already open");
+			car->Report("doors" + GetNumberText() + " already open");
 		return;
 	}
 
@@ -272,23 +359,23 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			elev->ReportError("Doors" + GetNumberText() + ": invalid shaft doors");
+			car->ReportError("Doors" + GetNumberText() + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == true)
 		{
-			elev->Report("shaft doors" + GetNumberText() + " already open on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			car->Report("shaft doors" + GetNumberText() + " already open on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			elev->Report("opening shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			car->Report("opening shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			elev->Report("manually opening shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			car->Report("manually opening shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		elev->Report("opening doors" + GetNumberText());
+		car->Report("opening doors" + GetNumberText());
 	else
-		elev->Report("manually opening doors" + GetNumberText());
+		car->Report("manually opening doors" + GetNumberText());
 
 	if (manual == false)
 		OpenDoor = 1;
@@ -304,16 +391,16 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	if (whichdoors == 1)
 	{
 		if (elev->MoveElevator == true && elev->Leveling == true)
-			floor = elev->GotoFloor;
+			floor = elev->GetFloorForCar(car->Number, elev->GotoFloor);
 		else
-			floor = elev->GetFloor();
+			floor = car->GetFloor();
 	}
 
 	//if opening both doors, exit if shaft doors don't exist
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		elev->ReportError("can't open doors" + GetNumberText() + " - no shaft doors on " + ToString(floor));
+		car->ReportError("can't open doors" + GetNumberText() + " - no shaft doors on " + ToString(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -335,35 +422,35 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		elev->ReportError("cannot close doors" + GetNumberText() + "; doors manually stopped");
+		car->ReportError("cannot close doors" + GetNumberText() + "; doors manually stopped");
 		return;
 	}
 
-	//do not close doors while fire service mode 1 is in recall mode and the elevator is waiting at the parking floor
-	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
+	//do not close doors while fire service mode 1 is in recall mode and the elevator is waiting at the recall floor
+	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && elev->OnRecallFloor() == true)
 	{
-		elev->ReportError("cannot close doors" + GetNumberText() + " while Fire Service Phase 1 is in recall mode");
+		car->ReportError("cannot close doors" + GetNumberText() + " while Fire Service Phase 1 is in recall mode");
 		return;
 	}
 
 	//do not close doors while fire service mode 2 is set to hold
 	if (manual == false && elev->FireServicePhase2 == 2)
 	{
-		elev->ReportError("cannot close doors" + GetNumberText() + " while Fire Service Phase 2 is set to hold");
+		car->ReportError("cannot close doors" + GetNumberText() + " while Fire Service Phase 2 is set to hold");
 		return;
 	}
 
 	//exit if doors are manually moving, or automatically moving and a manual close is requested
 	if (DoorIsRunning == true && (AreDoorsMoving(2) == true || (AreDoorsMoving(1) == true && manual == true)))
 	{
-		elev->ReportError("doors" + GetNumberText() + " in use");
+		car->ReportError("doors" + GetNumberText() + " in use");
 		return;
 	}
 
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (AreDoorsMoving() == true && manual == false && elev->FireServicePhase2 == 0)
 	{
-		elev->Report("will close doors" + GetNumberText() + " in quick-close mode");
+		car->Report("will close doors" + GetNumberText() + " in quick-close mode");
 		quick_close = true;
 		return;
 	}
@@ -371,7 +458,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//check if elevator doors are already closed
 	if (AreDoorsOpen() == false && whichdoors != 3 && AreDoorsMoving() == false && doors_stopped == false)
 	{
-		elev->Report("doors" + GetNumberText() + " already closed");
+		car->Report("doors" + GetNumberText() + " already closed");
 		return;
 	}
 
@@ -385,23 +472,23 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			elev->ReportError("Doors" + GetNumberText() + ": invalid shaft doors");
+			car->ReportError("Doors" + GetNumberText() + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
-			elev->ReportError("shaft doors" + GetNumberText() + " already closed on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			car->ReportError("shaft doors" + GetNumberText() + " already closed on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			elev->Report("closing shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			car->Report("closing shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			elev->Report("manually closing shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			car->Report("manually closing shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		elev->Report("closing doors" + GetNumberText());
+		car->Report("closing doors" + GetNumberText());
 	else
-		elev->Report("manually closing doors" + GetNumberText());
+		car->Report("manually closing doors" + GetNumberText());
 
 	if (manual == false)
 		OpenDoor = -1;
@@ -413,19 +500,19 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	if (whichdoors != 3)
-		floor = elev->GetFloor();
+		floor = car->GetFloor();
 
 	//if closing both doors, exit if shaft doors don't exist
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		elev->ReportError("can't close doors" + GetNumberText() + " - no shaft doors on " + ToString(floor));
+		car->ReportError("can't close doors" + GetNumberText() + " - no shaft doors on " + ToString(floor));
 		OpenDoor = 0;
 		return;
 	}
 
 	//turn off directional indicators
-	elev->SetDirectionalIndicators(floor, false, false);
+	car->SetDirectionalIndicators(floor, false, false);
 
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;
@@ -440,9 +527,9 @@ void ElevatorDoor::StopDoors()
 	if (AreDoorsMoving(2) == true)
 	{
 		if (WhichDoors == 3)
-			elev->Report("stopping shaft doors" + GetNumberText() + " on floor " + ToString(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
+			car->Report("stopping shaft doors" + GetNumberText() + " on floor " + ToString(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
 		else
-			elev->Report("stopping doors" + GetNumberText());
+			car->Report("stopping doors" + GetNumberText());
 
 		if (WhichDoors == 1 || WhichDoors == 2)
 			Doors->StopDoors();
@@ -462,9 +549,9 @@ void ElevatorDoor::StopDoors()
 		ResetNudgeTimer(false);
 	}
 	else if (AreDoorsMoving() == true)
-		elev->Report("can only stop doors" + GetNumberText() + " in manual/emergency mode");
+		car->Report("can only stop doors" + GetNumberText() + " in manual/emergency mode");
 	else
-		elev->Report("cannot stop doors" + GetNumberText() + "; no doors moving");
+		car->Report("cannot stop doors" + GetNumberText() + "; no doors moving");
 }
 
 void ElevatorDoor::MoveDoors(bool open, bool manual)
@@ -505,7 +592,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		DoorIsRunning = true;
 		door_changed = false;
 
-		index = elev->GetFloorIndex(ShaftDoorFloor);
+		index = car->GetFloorIndex(ShaftDoorFloor);
 		int index2 = GetManualIndex(ShaftDoorFloor);
 
 		if (ShaftDoorsExist(ShaftDoorFloor) == false && index2 == -1)
@@ -578,7 +665,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			doorsound->Load(CloseSound);
 			doorsound->Play();
 		}
-		elev->PlayMessageSound(false);
+		car->PlayMessageSound(false);
 	}
 
 	//perform door movement and get open state of each door
@@ -654,17 +741,17 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 		//turn on autoclose timer
 		if ((elev->InServiceMode() == false || elev->WaitForDoors == true) &&
-				(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
-				(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
+				(elev->UpPeak == false || ShaftDoorFloor != car->GetBottomFloor()) &&
+				(elev->DownPeak == false || ShaftDoorFloor != car->GetTopFloor()))
 		{
 			if (IsSensorBlocked() == false)
 				Reset();
 			else
-				elev->Report("not resetting timer for door" + GetNumberText() + " due to blocked sensor");
+				car->Report("not resetting timer for door" + GetNumberText() + " due to blocked sensor");
 		}
 
 		//play direction message sound
-		elev->PlayMessageSound(true);
+		car->PlayMessageSound(true);
 	}
 	else
 	{
@@ -788,7 +875,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const std::string &nam
 	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "ElevatorDoor " + ToString(elev->Number) + ":" + ToString(Number) + ":" + Name;
+	buffer = "ElevatorDoor " + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":" + Name;
 
 	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return Doors;
@@ -799,10 +886,10 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 	//adds a shaft door component; remake of AddShaftDoor command
 
 	//exit if floor is not serviced by the elevator
-	if (!elev->IsServicedFloor(floor))
+	if (!car->IsServicedFloor(floor))
 		return 0;
 
-	int index = elev->GetFloorIndex(floor);
+	int index = car->GetFloorIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -814,7 +901,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "Elevator " + ToString(elev->Number) + ": Shaft Door " + ToString(Number) + ":" + ToString(floor) + ":" + Name;
+	buffer = "Elevator " + ToString(elev->Number) + ": Shaft Door " + ToString(car->Number) + ":" + ToString(Number) + ":" + ToString(floor) + ":" + Name;
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
@@ -827,9 +914,9 @@ void ElevatorDoor::AddShaftDoorsComponent(const std::string &name, const std::st
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
 	//create doors
-	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
+	for (size_t i = 0; i < car->ServicedFloors.size(); i++)
 	{
-		int floor = elev->ServicedFloors[i];
+		int floor = car->ServicedFloors[i];
 		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	}
 }
@@ -949,17 +1036,17 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 
 		if (ShaftDoor == false)
 		{
-			name1 = "Door" + GetNumberText() + ":F1";
-			name2 = "Door" + GetNumberText() + ":F2";
-			sbs->CreateWallBox(elev->ElevatorMesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(elev->ElevatorMesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			name1 = "Door" + ToString(car->Number) + GetNumberText() + ":F1";
+			name2 = "Door" + ToString(car->Number) + GetNumberText() + ":F2";
+			sbs->CreateWallBox(car->Mesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(car->Mesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 		else
 		{
 			Shaft *shaft = elev->GetShaft();
-			Ogre::Vector3 position (elev->GetPosition() - shaft->GetPosition());
-			name1 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(Number) + ":F1";
-			name2 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(Number) + ":F2";
+			Ogre::Vector3 position (car->GetPosition() - shaft->GetPosition());
+			name1 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":F1";
+			name2 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":F2";
 			sbs->CreateWallBox(shaft->GetMeshObject(floor), name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
 			sbs->CreateWallBox(shaft->GetMeshObject(floor), name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
@@ -1007,20 +1094,20 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishShaftDoor(int floor, bool DoorWal
 	std::string floornum = ToString(floor);
 
 	//exit if floor is not serviced by the elevator
-	if (!elev->IsServicedFloor(floor))
+	if (!car->IsServicedFloor(floor))
 	{
-		elev->ReportError("Floor " + floornum + " not a serviced floor");
+		car->ReportError("Floor " + floornum + " not a serviced floor");
 		return 0;
 	}
 
 	if (!sbs->GetFloor(floor))
 	{
-		elev->ReportError("Floor " + floornum + " does not exist");
+		car->ReportError("Floor " + floornum + " does not exist");
 		return 0;
 	}
 
 	DoorWrapper *wrapper = 0;
-	int index = elev->GetFloorIndex(floor);
+	int index = car->GetFloorIndex(floor);
 
 	if (index > -1)
 		wrapper = ShaftDoors[index];
@@ -1032,8 +1119,8 @@ bool ElevatorDoor::FinishShaftDoors(bool DoorWalls, bool TrackWalls)
 {
 	//finish all shaft doors
 
-	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
-		FinishShaftDoor(elev->ServicedFloors[i], DoorWalls, TrackWalls);
+	for (size_t i = 0; i < car->ServicedFloors.size(); i++)
+		FinishShaftDoor(car->ServicedFloors[i], DoorWalls, TrackWalls);
 
 	return true;
 }
@@ -1048,9 +1135,9 @@ bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::stri
 	ShaftDoorThickness = thickness;
 
 	//create doors
-	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
+	for (size_t i = 0; i < car->ServicedFloors.size(); i++)
 	{
-		if (!AddShaftDoor(elev->ServicedFloors[i], lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
+		if (!AddShaftDoor(car->ServicedFloors[i], lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
 			return false;
 	}
 
@@ -1071,12 +1158,12 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::stri
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
 
 	//exit if floor is not serviced by the elevator
-	if (!elev->IsServicedFloor(floor))
+	if (!car->IsServicedFloor(floor))
 		return 0;
 
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
-	int index = elev->GetFloorIndex(floor);
+	int index = car->GetFloorIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1142,7 +1229,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 		return;
 
 	//exit if elevator doesn't service the requested floor
-	int index = elev->GetFloorIndex(floor);
+	int index = car->GetFloorIndex(floor);
 
 	if (index == -1)
 		return;
@@ -1200,7 +1287,7 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	//returns the internal door state
 	if (ShaftDoorsExist(floor))
 	{
-		int index = elev->GetFloorIndex(floor);
+		int index = car->GetFloorIndex(floor);
 
 		if (index > -1)
 		{
@@ -1227,7 +1314,7 @@ bool ElevatorDoor::AreShaftDoorsClosed(bool skip_current_floor)
 			if (skip_current_floor == true)
 			{
 				//skip elevator's floor if specified
-				if (door->floor == elev->GetFloor())
+				if (door->floor == car->GetFloor())
 					continue;
 			}
 
@@ -1245,7 +1332,7 @@ void ElevatorDoor::Timer::Notify()
 		//door autoclose timer
 
 		//close doors if open
-		if (door->AreDoorsOpen() == true && (elevator->InServiceMode() == false || elevator->WaitForDoors == true))
+		if (door->AreDoorsOpen() == true && (elevator->InServiceMode() == false || elevator->WaitForDoors == true || car->IndependentServiceOnOtherCar() == true))
 			door->CloseDoors();
 	}
 	if (type == 1)
@@ -1283,9 +1370,9 @@ void ElevatorDoor::Reset(bool sensor)
 	if (sbs->Verbose == true)
 	{
 		if (sensor == true)
-			elev->Report("sensor resetting doors" + GetNumberText());
+			car->Report("sensor resetting doors" + GetNumberText());
 		else
-			elev->Report("resetting doors" + GetNumberText());
+			car->Report("resetting doors" + GetNumberText());
 	}
 
 	if (quick_close == false)
@@ -1351,7 +1438,7 @@ float ElevatorDoor::GetShaftDoorAltitude(int floor)
 {
 	//returns altitude of the shaft door on the specified floor
 
-	int index = elev->GetFloorIndex(floor);
+	int index = car->GetFloorIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1388,7 +1475,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 {
 	//return true if shaft doors have been created for this door on the specified floor
 
-	int index = elev->GetFloorIndex(floor);
+	int index = car->GetFloorIndex(floor);
 
 	if (index != -1)
 	{
@@ -1470,9 +1557,9 @@ ElevatorDoor::DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_ob
 
 	std::string name;
 	if (IsShaftDoor == true)
-		name = "Shaft Door " + ToString(parent->elev->Number) + ":" + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
+		name = "Shaft Door " + ToString(parent->elev->Number) + ":" + ToString(parent->car->Number) + ":" + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
 	else
-		name = "Elevator Door " + ToString(parent->Number);
+		name = "Elevator Door " + ToString(parent->car->Number) + ":" + ToString(parent->Number);
 
 	SetValues("DoorWrapper", name, false);
 
@@ -1962,7 +2049,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::GetShaftDoorWrapper(int floor)
 {
 	//return shaft door wrapper object for the specified floor
 
-	int index = elev->GetFloorIndex(floor);
+	int index = car->GetFloorIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1977,7 +2064,7 @@ int ElevatorDoor::GetManualIndex(int floor)
 	for (size_t i = 0; i < ManualFloors.size(); i++)
 	{
 		if (ManualFloors[i] == floor)
-			return i;
+			return (int)i;
 	}
 
 	return -1;
@@ -1997,9 +2084,9 @@ void ElevatorDoor::Hold(bool sensor)
 		return;
 
 	if (sensor == true)
-		elev->Report("sensor holding doors" + GetNumberText());
+		car->Report("sensor holding doors" + GetNumberText());
 	else
-		elev->Report("holding doors" + GetNumberText());
+		car->Report("holding doors" + GetNumberText());
 
 	timer->Stop();
 
@@ -2013,7 +2100,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 
 	if (value == true && AllowNudgeMode() == true)
 	{
-		elev->Report("Doors" + GetNumberText() + ": nudge mode activated");
+		car->Report("Doors" + GetNumberText() + ": nudge mode activated");
 		nudge_enabled = true;
 		if (nudgesound_loaded == false)
 			nudgesound->Load(NudgeSound);
@@ -2024,7 +2111,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	}
 	else if (nudge_enabled == true)
 	{
-		elev->Report("Doors" + GetNumberText() + ": nudge mode disabled");
+		car->Report("Doors" + GetNumberText() + ": nudge mode disabled");
 		nudge_enabled = false;
 		nudgesound->Stop();
 	}
@@ -2048,11 +2135,11 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	//create action for elevator door
 	std::string action_name1 = "sensor " + ToString(Number);
 	std::string action_name2 = "sensorreset " + ToString(Number);
-	std::string full_name1 = elev->GetName() + ":" + action_name1;
-	std::string full_name2 = elev->GetName() + ":" + action_name2;
+	std::string full_name1 = car->GetName() + ":" + action_name1;
+	std::string full_name2 = car->GetName() + ":" + action_name2;
 
 	std::vector<Object*> parents;
-	parents.push_back(elev);
+	parents.push_back(car);
 	sensor_action = sbs->AddAction(full_name1, parents, action_name1);
 	reset_action = sbs->AddAction(full_name2, parents, action_name2);
 
@@ -2114,9 +2201,9 @@ void ElevatorDoor::EnableSensor(bool value, bool persistent)
 		if (sbs->IsRunning == true || sbs->Verbose)
 		{
 			if (value == true)
-				elev->Report("Doors" + GetNumberText() + ": enabling sensor");
+				car->Report("Doors" + GetNumberText() + ": enabling sensor");
 			else
-				elev->Report("Doors" + GetNumberText() + ": disabling sensor");
+				car->Report("Doors" + GetNumberText() + ": disabling sensor");
 		}
 
 		sensor_status = value;
@@ -2125,9 +2212,9 @@ void ElevatorDoor::EnableSensor(bool value, bool persistent)
 	if (sbs->IsRunning == true || sbs->Verbose)
 	{
 		if (value == true)
-			elev->Report("Doors" + GetNumberText() + ": activating sensor");
+			car->Report("Doors" + GetNumberText() + ": activating sensor");
 		else
-			elev->Report("Doors" + GetNumberText() + ": deactivating sensor");
+			car->Report("Doors" + GetNumberText() + ": deactivating sensor");
 	}
 
 	sensor_enabled = value;
@@ -2167,16 +2254,13 @@ bool ElevatorDoor::GetHoldStatus()
 
 void ElevatorDoor::ResetNudgeTimer(bool start)
 {
-	if (AreDoorsOpen() == false || doors_stopped == true)
-	{
-		//switch off nudge mode timer if on
-		if (nudgetimer->IsRunning() == true)
-			nudgetimer->Stop();
+	//switch off nudge mode timer if on
+	if (nudgetimer->IsRunning() == true)
+		nudgetimer->Stop();
 
-		//switch off nudge mode if on
-		if (GetNudgeStatus() == true)
-			EnableNudgeMode(false);
-	}
+	//switch off nudge mode if on
+	if (GetNudgeStatus() == true)
+		EnableNudgeMode(false);
 
 	//turn on nudge mode timer if doors are open
 	if (start == true)
@@ -2195,7 +2279,7 @@ bool ElevatorDoor::AllowNudgeMode()
 
 	if (GetNudgeStatus() == false && AreDoorsOpen() == true && elev->AutoDoors == true && (elev->InServiceMode() == false || firelobby == true))
 	{
-		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
+		if ((elev->UpPeak == true && car->GetFloor() == car->GetBottomFloor()) || (elev->DownPeak == true && car->GetFloor() == car->GetTopFloor()))
 			return false;
 
 		return true;
@@ -2208,7 +2292,7 @@ std::string ElevatorDoor::GetNumberText()
 	//return a text string representing the door number, or blank if it's the only door
 
 	std::string doornumber;
-	if (elev->NumDoors > 1)
+	if (car->NumDoors > 1)
 		doornumber = " " + ToString(Number);
 
 	return doornumber;

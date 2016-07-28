@@ -1868,7 +1868,7 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 				//justify
 				if (carriagereturn)
 				{
-					int l = strindex;
+					int l = (int)strindex;
 					int textwidth = 0;
 					int wordwidth = 0;
 

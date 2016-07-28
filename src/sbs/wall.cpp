@@ -143,7 +143,7 @@ void WallObject::DeletePolygons(bool recreate_collider)
 	//delete polygons
 
 	for (size_t i = polygons.size() - 1; i < polygons.size(); --i)
-		DeletePolygon(i, false);
+		DeletePolygon((int)i, false);
 
 	//recreate colliders
 	if (recreate_collider == true)

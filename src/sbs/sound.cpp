@@ -28,6 +28,7 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "soundsystem.h"
 #include "sound.h"
 
@@ -77,8 +78,8 @@ Sound::~Sound()
 		{
 			std::string type = GetParent()->GetType();
 
-			if (type == "Elevator")
-				static_cast<Elevator*>(GetParent())->RemoveSound(this);
+			if (type == "ElevatorCar")
+				static_cast<ElevatorCar*>(GetParent())->RemoveSound(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveSound(this);
 			else if (type == "SBS")

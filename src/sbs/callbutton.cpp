@@ -31,6 +31,7 @@
 #include "callbutton.h"
 #include "camera.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "sound.h"
 #include "profiler.h"
 
@@ -139,13 +140,17 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		Elevator *elev = sbs->GetElevator(Elevators[i]);
 		if (elev)
 		{
-			int tmpbottom = elev->GetBottomFloor();
-			int tmptop = elev->GetTopFloor();
-			if (tmpbottom < bottomfloor || firstrun == true)
-				bottomfloor = tmpbottom;
-			if (tmptop > topfloor || firstrun == true)
-				topfloor = tmptop;
-			firstrun = false;
+			ElevatorCar *car = elev->GetCarForFloor(floornum);
+			if (car)
+			{
+				int tmpbottom = car->GetBottomFloor();
+				int tmptop = car->GetTopFloor();
+				if (tmpbottom < bottomfloor || firstrun == true)
+					bottomfloor = tmpbottom;
+				if (tmptop > topfloor || firstrun == true)
+					topfloor = tmptop;
+				firstrun = false;
+			}
 		}
 	}
 
@@ -605,8 +610,12 @@ void CallButton::Process(int direction)
 	if (sbs->Verbose)
 		Report("Using elevator " + ToString(elevator->Number));
 
+	ElevatorCar *car = elevator->GetCarForFloor(GetFloor());
+	if (!car)
+		return;
+
 	//if closest elevator is already on the called floor
-	if (elevator->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
+	if (car->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
 	{
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
@@ -617,9 +626,9 @@ void CallButton::Process(int direction)
 			elevator->NotifyCallButtons(GetFloor(), false);
 
 			//turn on directional indicator
-			elevator->SetDirectionalIndicators(GetFloor(), false, true);
+			car->SetDirectionalIndicators(GetFloor(), false, true);
 			//play chime sound
-			elevator->Chime(0, GetFloor(), false);
+			car->Chime(0, GetFloor(), false);
 		}
 		else
 		{
@@ -627,12 +636,12 @@ void CallButton::Process(int direction)
 			elevator->NotifyCallButtons(GetFloor(), true);
 
 			//turn on directional indicator
-			elevator->SetDirectionalIndicators(GetFloor(), true, false);
+			car->SetDirectionalIndicators(GetFloor(), true, false);
 			//play chime sound
-			elevator->Chime(0, GetFloor(), true);
+			car->Chime(0, GetFloor(), true);
 		}
 		//open elevator if it's on the same floor
-		elevator->OpenDoors();
+		car->OpenDoors();
 	}
 	else
 	{
@@ -828,28 +837,32 @@ int CallButton::FindClosestElevator(int direction)
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
 		{
-			if (sbs->Verbose && recheck == false)
-				Report("Checking elevator " + ToString(elevator->Number));
-
-			//if elevator is closer than the previously checked one or we're starting the checks
-			if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
+			ElevatorCar *car = elevator->GetCarForFloor(GetFloor());
+			if (car)
 			{
-				//see if elevator is available for the call
-				if (recheck == true && elevator->Number == ActiveElevator)
-					result = 1; //if rechecking elevators, consider the active one
-				else
-					result = elevator->AvailableForCall(GetFloor(), direction, !recheck);
+				if (sbs->Verbose && recheck == false)
+					Report("Checking elevator " + ToString(elevator->Number) + " car " + ToString(car->Number));
 
-				if (result == 1) //available
+				//if elevator is closer than the previously checked one or we're starting the checks
+				if (abs(car->GetFloor() - GetFloor()) < closest || check == false)
 				{
-					if (sbs->Verbose && count > 1 && recheck == false)
-						Report("Marking - closest so far");
-					closest = abs(elevator->GetFloor() - GetFloor());
-					closest_elev = i;
-					check = true;
+					//see if elevator is available for the call
+					if (recheck == true && elevator->Number == ActiveElevator)
+						result = 1; //if rechecking elevators, consider the active one
+					else
+						result = elevator->AvailableForCall(GetFloor(), direction, !recheck);
+
+					if (result == 1) //available
+					{
+						if (sbs->Verbose && count > 1 && recheck == false)
+							Report("Marking - closest so far");
+						closest = abs(car->GetFloor() - GetFloor());
+						closest_elev = i;
+						check = true;
+					}
+					else if (result == 2) //elevator won't service the call
+						errors++;
 				}
-				else if (result == 2) //elevator won't service the call
-					errors++;
 			}
 		}
 	}

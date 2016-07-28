@@ -45,6 +45,7 @@ public:
 	bool IsFunctionDefined(const std::string &name);
 	SBS::MeshObject* GetMeshObject(std::string name);
 	std::string DumpState();
+	void GetElevatorCar(std::string &value, int &elevator, int &car);
 
 	bool IsFinished;
 
@@ -63,9 +64,9 @@ private:
 
 	int line; //line number
 	std::string LineData; //line text
-	int Current; //current range iteration
+	int Current, CurrentOld; //current range iteration
 	int Section; //current section number
-	std::string Context; //section context
+	std::string Context, ContextOld; //section context
 	int temp1;
 	std::string temp2;
 	int temp3;
@@ -75,9 +76,9 @@ private:
 	std::vector<std::string> tempdata;
 	std::vector<int> callbutton_elevators;
 	int FloorCheck;
-	int RangeL;
-	int RangeH;
-	long RangeStart;
+	int RangeL, RangeLOld;
+	int RangeH, RangeHOld;
+	long RangeStart, RangeStartOld;
 	SBS::WallObject *wall;
 	std::string buffer;
 	int startpos;
@@ -112,6 +113,7 @@ private:
 	int ProcGlobals();
 	int ProcFloors();
 	int ProcElevators();
+	int ProcElevatorCars();
 	int ProcTextures();
 	int ProcBuildings();
 	bool FunctionProc();

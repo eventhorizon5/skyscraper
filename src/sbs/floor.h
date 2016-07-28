@@ -75,13 +75,13 @@ public:
 	void EnableInterfloor(bool value);
 	WallObject* ColumnWallBox(const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	WallObject* ColumnWallBox2(const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
-	FloorIndicator* AddFloorIndicator(int elevator, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
+	FloorIndicator* AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void UpdateFloorIndicators(int elevator);
 	void UpdateFloorIndicators();
 	void UpdateDirectionalIndicators(int elevator);
 	void UpdateDirectionalIndicators();
-	DirectionalIndicator* AddDirectionalIndicator(int elevator, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight);
+	DirectionalIndicator* AddDirectionalIndicator(int elevator, int car, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	void SetDirectionalIndicators(int elevator, int car, bool UpLight, bool DownLight);
 	void Loop();
 	std::vector<int> GetCallButtons(int elevator);
 	CallButton* GetCallButton(int elevator);

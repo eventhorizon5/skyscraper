@@ -32,6 +32,7 @@
 #include "manager.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "floorindicator.h"
@@ -725,8 +726,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			if (!parent)
 				return;
 
-			Elevator *elevator = parent->elev;
-			if (!elevator)
+			ElevatorCar *car = parent->car;
+			if (!car)
 				return;
 
 			int number = parent->Number;
@@ -735,27 +736,27 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			if (wrapper->IsShaftDoor == true)
 			{
 				//check shaft doors
-				if (abs(elevator->AreDoorsMoving(number, false, true)) == 2)
-					elevator->StopDoors(number);
+				if (abs(car->AreDoorsMoving(number, false, true)) == 2)
+					car->StopDoors(number);
 				else
 				{
-					if (elevator->AreShaftDoorsOpen(number, floor) == false)
-						elevator->OpenDoorsEmergency(number, 3, floor);
+					if (car->AreShaftDoorsOpen(number, floor) == false)
+						car->OpenDoorsEmergency(number, 3, floor);
 					else
-						elevator->CloseDoorsEmergency(number, 3, floor);
+						car->CloseDoorsEmergency(number, 3, floor);
 				}
 			}
 			else
 			{
 				//check elevator doors
-				if (abs(elevator->AreDoorsMoving(number, true, false)) == 2)
-					elevator->StopDoors(number);
+				if (abs(car->AreDoorsMoving(number, true, false)) == 2)
+					car->StopDoors(number);
 				else
 				{
-					if (elevator->AreDoorsOpen(number) == false)
-						elevator->OpenDoorsEmergency(number, 2);
+					if (car->AreDoorsOpen(number) == false)
+						car->OpenDoorsEmergency(number, 2);
 					else
-						elevator->CloseDoorsEmergency(number, 2);
+						car->CloseDoorsEmergency(number, 2);
 				}
 			}
 		}
@@ -892,8 +893,8 @@ void Camera::Loop(float delta)
 						if (door->OpenDoor == -1 && door->GetWhichDoors() == 1)
 						{
 							//either open doors if the hit door was an internal door or a shaft door on the elevator floor
-							if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->elev->GetFloor()))
-								door->elev->OpenDoors(door->Number, 1);
+							if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->car->GetFloor()))
+								door->car->OpenDoors(door->Number, 1);
 						}
 					}
 				}

@@ -29,6 +29,7 @@
 #include "dynamicmesh.h"
 #include "mesh.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "door.h"
@@ -758,13 +759,13 @@ WallObject* Floor::ColumnWallBox2(const std::string &name, const std::string &te
 	return sbs->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
-FloorIndicator* Floor::AddFloorIndicator(int elevator, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
 	if (relative == false)
 	{
-		FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
+		FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
 		FloorIndicatorArray.push_back(ind);
 		return ind;
 	}
@@ -773,7 +774,7 @@ FloorIndicator* Floor::AddFloorIndicator(int elevator, bool relative, const std:
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
+			FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
 			FloorIndicatorArray.push_back(ind);
 			return ind;
 		}
@@ -849,7 +850,7 @@ std::vector<int> Floor::GetCallButtons(int elevator)
 		if (CallButtonArray[i])
 		{
 			if (CallButtonArray[i]->ServicesElevator(elevator) == true)
-				buttons.push_back(i);
+				buttons.push_back((int)i);
 		}
 	}
 	return buttons;
@@ -1018,7 +1019,7 @@ float Floor::GetBase(bool relative)
 	}
 }
 
-DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, int car, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator on the specified floor, associated with a given elevator
 
@@ -1048,14 +1049,14 @@ DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, bool relative
 			return 0;
 	}
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(this, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, GetBase(true) + voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(this, elevator, car, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, GetBase(true) + voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
 	return indicator;
 }
 
-void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
+void Floor::SetDirectionalIndicators(int elevator, int car, bool UpLight, bool DownLight)
 {
-	//set light status of all standard (non active-direction) directional indicators associated with the given elevator
+	//set light status of all standard (non active-direction) directional indicators associated with the given elevator and car
 
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
@@ -1063,7 +1064,7 @@ void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 
 		if (indicator)
 		{
-			if (indicator->elevator == elevator && indicator->ActiveDirection == false)
+			if (indicator->elevator == elevator && indicator->car == car && indicator->ActiveDirection == false)
 			{
 				indicator->DownLight(DownLight);
 				indicator->UpLight(UpLight);
@@ -1535,14 +1536,18 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 		Elevator *elev = sbs->GetElevator(list[i]);
 		if (elev)
 		{
-			std::string type = SetCaseCopy(elev->Type, false);
-			bool serviced = elev->IsServicedFloor(DestinationFloor);
-			CallButton *button = GetCallButton(elev->Number);
-
-			if (serviced == true && type == ElevatorType && button)
+			ElevatorCar *car = elev->GetCarForFloor(Number);
+			if (car)
 			{
-				ElevatorRoute* route = new ElevatorRoute(elev, DestinationFloor);
-				return route;
+				std::string type = SetCaseCopy(elev->Type, false);
+				bool serviced = car->IsServicedFloor(DestinationFloor);
+				CallButton *button = GetCallButton(elev->Number);
+
+				if (serviced == true && type == ElevatorType && button)
+				{
+					ElevatorRoute* route = new ElevatorRoute(elev, DestinationFloor);
+					return route;
+				}
 			}
 		}
 	}
@@ -1566,27 +1571,31 @@ std::vector<int> Floor::GetDirectFloors(bool include_service)
 			if (include_service == false && type == "service")
 				continue;
 
-			for (int j = 0; j < elev->GetServicedFloorCount(); j++)
+			ElevatorCar *car = elev->GetCarForFloor(Number);
+			if (car)
 			{
-				int floor = elev->GetServicedFloor(j);
-
-				//skip this floor
-				if (floor == Number)
-					continue;
-
-				bool found = false;
-				for (size_t k = 0; k < result.size(); k++)
+				for (int j = 0; j < car->GetServicedFloorCount(); j++)
 				{
-					//make sure floor is not already in result list
-					if (result[k] == floor)
-					{
-						found = true;
-						break;
-					}
-				}
+					int floor = car->GetServicedFloor(j);
 
-				if (found == false)
-					result.push_back(floor);
+					//skip this floor
+					if (floor == Number)
+						continue;
+
+					bool found = false;
+					for (size_t k = 0; k < result.size(); k++)
+					{
+						//make sure floor is not already in result list
+						if (result[k] == floor)
+						{
+							found = true;
+							break;
+						}
+					}
+
+					if (found == false)
+						result.push_back(floor);
+				}
 			}
 		}
 	}

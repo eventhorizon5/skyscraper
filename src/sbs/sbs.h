@@ -73,6 +73,7 @@ namespace SBS {
 	class Door;
 	class Floor;
 	class Elevator;
+	class ElevatorCar;
 	class ElevatorDoor;
 	class Shaft;
 	class Camera;
@@ -80,6 +81,7 @@ namespace SBS {
 	class Stairs;
 	class Sound;
 	class SoundSystem;
+	struct SoundData;
 	class CallButton;
 	class Profiler;
 	class Control;
@@ -143,6 +145,7 @@ public:
 	bool InElevator; //true if user is in an elevator
 	bool InShaft; //true if user is in a shaft
 	int ElevatorNumber; //number of currently selected elevator
+	int CarNumber; //number of currently selected elevator car
 	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle
 	int FrameRate; //max frame rate

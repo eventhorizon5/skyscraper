@@ -27,14 +27,28 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "callbutton.h"
 #include "control.h"
 #include "route.h"
 #include "random.h"
+#include "timer.h"
 #include "profiler.h"
 #include "person.h"
 
 namespace SBS {
+
+//random call timer
+class Person::Timer : public TimerObject
+{
+public:
+	Person *parent;
+	Timer(const std::string &name, Person *parent) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+	}
+	virtual void Notify();
+};
 
 Person::Person(Object *parent, const std::string &name, int floor, bool service_access) : Object(parent)
 {
@@ -176,6 +190,10 @@ void Person::ProcessRoute()
 	if (!elevator)
 		return;
 
+	ElevatorCar *car = elevator->GetCarForFloor(current_floor);
+	if (!car)
+		return;
+
 	//if a call has not been made, press first elevator's associated call button
 	if (route[0].call_made == 0)
 	{
@@ -228,36 +246,40 @@ void Person::ProcessRoute()
 			Elevator *elevator = sbs->GetElevator(number);
 			if (elevator)
 			{
-				//have elevator route use arrived elevator
-				route[0].elevator_route->elevator = elevator;
-
-				//wait for elevator doors to open before pressing button
-				if (elevator->AreDoorsOpen() == true)
+				ElevatorCar *car = elevator->GetCarForFloor(current_floor);
+				if (car)
 				{
-					Floor *floor = sbs->GetFloor(floor_selection);
+					//have elevator route use arrived elevator
+					route[0].elevator_route->elevator = elevator;
 
-					if (!floor)
-						return;
-
-					Report("Pressing elevator button for floor " + floor->ID);
-
-					Control *control = elevator->GetFloorButton(floor_selection);
-
-					if (control)
+					//wait for elevator doors to open before pressing button
+					if (car->AreDoorsOpen() == true)
 					{
-						if (control->IsLocked() == false)
-						{
-							//press floor button
-							control->Press();
-							route[0].floor_selected = true;
-							return;
-						}
-					}
+						Floor *floor = sbs->GetFloor(floor_selection);
 
-					//stop route if floor button is locked, or does not exist
-					Report("Can't press elevator button for floor " + floor->ID);
-					Stop();
-					return;
+						if (!floor)
+							return;
+
+						Report("Pressing elevator button for floor " + floor->ID);
+
+						Control *control = car->GetFloorButton(floor_selection);
+
+						if (control)
+						{
+							if (control->IsLocked() == false)
+							{
+								//press floor button
+								control->Press();
+								route[0].floor_selected = true;
+								return;
+							}
+						}
+
+						//stop route if floor button is locked, or does not exist
+						Report("Can't press elevator button for floor " + floor->ID);
+						Stop();
+						return;
+					}
 				}
 			}
 		}
@@ -277,7 +299,7 @@ void Person::ProcessRoute()
 	{
 		//wait for the elevator to arrive at the selected floor
 
-		if (elevator->OnFloor == true && elevator->GetFloor() == floor_selection && elevator->AreDoorsOpen() == true)
+		if (elevator->OnFloor == true && car->GetFloor() == floor_selection && car->AreDoorsOpen() == true)
 		{
 			std::string floor_status;
 
@@ -323,7 +345,7 @@ void Person::ProcessRoute()
 			else
 			{
 				//otherwise exit at current floor and try another elevator
-				current_floor = elevator->GetFloor();
+				current_floor = car->GetFloor();
 				route[0].floor_selected = false;
 				route[0].call_made = 0;
 			}
@@ -331,8 +353,8 @@ void Person::ProcessRoute()
 		}
 		else if (elevator->IsMoving == true)
 		{
-			if (current_floor != elevator->GetFloor())
-				current_floor = elevator->GetFloor();
+			if (current_floor != car->GetFloor())
+				current_floor = car->GetFloor();
 		}
 	}
 }
@@ -404,13 +426,17 @@ std::string Person::GetStatus()
 	Elevator *elevator = route[0].elevator_route->elevator;
 	int floor_selection = route[0].elevator_route->floor_selection;
 
+	ElevatorCar *car = elevator->GetCarForFloor(current_floor);
+	if (!car)
+		return "";
+
 	Floor *floor = sbs->GetFloor(floor_selection);
 	if (!floor)
 		return "";
 
 	if (route[0].floor_selected == true && elevator)
 	{
-		if (elevator->AreDoorsOpen() == true)
+		if (car->AreDoorsOpen() == true)
 			return "Pressed " + floor->ID + " in elevator " + ToString(elevator->Number);
 		else
 		{
@@ -435,6 +461,11 @@ std::string Person::GetStatus()
 		return "Call button Down pressed";
 
 	return "";
+}
+
+bool Person::IsRandomActivityEnabled()
+{
+	return random_timer->IsRunning();
 }
 
 }

@@ -2445,7 +2445,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndFloors>
 
 
-#Zone 1 Express (supposed to be double-deckers, but that functionality isn't implemented yet in SBS)
+#Zone 1 Express (double decker)
 <Elevator 1>
     Type = Express
     Speed = 21
@@ -2453,8 +2453,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33
+    ServicedFloors = 0, 32
+    DisplayFloors = 0, 9, 19, 29, 32
     AssignedShaft = 1
     CreateElevator false, -11.849, 71.513, 0
 <EndElevator>
@@ -2466,8 +2466,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33
+    ServicedFloors = 0, 32
+    DisplayFloors = 0, 9, 19, 29, 32
     AssignedShaft = 1
     CreateElevator false, -11.849, 61.837, 0
 <EndElevator>
@@ -2479,8 +2479,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33
+    ServicedFloors = 0, 32
+    DisplayFloors = 0, 9, 19, 29, 32
     AssignedShaft = 1
     CreateElevator false, -11.849, 52.236, 0
 <EndElevator>
@@ -2492,66 +2492,84 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33
+    ServicedFloors = 0, 32
+    DisplayFloors = 0, 9, 19, 29, 32
     AssignedShaft = 1
     CreateElevator false, -11.849, 42.484, 0
 <EndElevator>
 
 <Elevators 1 to 4>
-    #floor
-    FloorOrientation = top
-    DrawWalls = true, true, true, true, true, true
-    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Floor, ElevFloor, 0.2, -3.418, -3.56, 3.418, 3.56, 0, 0, 0, 0
+    <Car 2>
+        ServicedFloors = 1, 33
+        DisplayFloors = 1, 9, 19, 29, 33
+        CreateCar 1
+    <EndCar>
 
-    #ceiling
-    FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0
+    <Cars 1 to 2>
+        #floor
+        FloorOrientation = top
+        DrawWalls = true, true, true, true, true, true
+        TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+        AddFloor Floor, ElevFloor, 0.2, -3.418, -3.56, 3.418, 3.56, 0, 0, 0, 0
 
-    #back wall (in global perspective)
-    WallOrientation = right
-    DrawWalls = true, true, false, false, false, false
-    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, ExpressElevWall, 0.2, -3.418, 3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #ceiling
+        FloorOrientation = bottom
+        TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddFloor Ceiling, ElevCeiling, 0.2, -3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0
 
-    #front and left walls
-    WallOrientation = left
-    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, ExpressElevWall, 0.2, -3.418, -3.56, 3.418, -3.56, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, ExpressElevWall, 0.2, -3.418, -3.56, -3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #back wall (in global perspective)
+        WallOrientation = right
+        DrawWalls = true, true, false, false, false, false
+        TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Back, ExpressElevWall, 0.2, -3.418, 3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #panels
-    WallOrientation = right
-    DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left Panel, ElevPanelMain, 0.2, 3.418, -3.56, 3.418, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right Panel, ElevPanelMain, 0.2, 3.418, 1.75, 3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #front and left walls
+        WallOrientation = left
+        TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Front, ExpressElevWall, 0.2, -3.418, -3.56, 3.418, -3.56, 8, 8, 0, 0, 0, 0
+        TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Left, ExpressElevWall, 0.2, -3.418, -3.56, -3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #doors
-    WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.419, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 3.719, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
+        #panels
+        WallOrientation = right
+        DrawWalls = true, true, false, true, false, false
+        TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Left Panel, ElevPanelMain, 0.2, 3.418, -3.56, 3.418, -1.75, 8, 8, 0, 0, 0, 0
+        DrawWalls = true, true, true, false, false, false
+        TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Right Panel, ElevPanelMain, 0.2, 3.418, 1.75, 3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #panel
-    CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddButton 1, switch.wav, Button34, ButtonLit34, 2, 3, 33, 1, 1
-    AddButton 1, switch.wav, Button33, ButtonLit33, 3, 3, 32, 1, 1
-    AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
-    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
-    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
-    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
+        #doors
+        WallOrientation = left
+        AddDoors 1, ElevDoors, 0.2, 3.419, 0, 3.5, 8, false, 0, 0 #doors
+        AddShaftDoors 1, ElevDoors, 0.2, 3.719, 0, 0, 0 #shaft doors
+        SetAutoSize = true, true
 
-    #Floor Indicator
-    AddFloorIndicator left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
+        #Floor Indicator
+        AddFloorIndicator left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
+    <EndCars>
 
+    <Car 1>
+        #lower car panel
+        CreatePanel ElevPanel, 7, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+        AddButton 1, switch.wav, Button33, ButtonLit33, 2, 3, 32, 1, 1
+        AddButton 1, switch.wav, ButtonL, ButtonLitL, 3, 3, 0, 1, 1
+        AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 5, 2, open, 1, 1
+        AddButton 1, switch.wav, ButtonClose, ButtonClose, 5, 4, close, 1, 1
+        AddButton 1, switch.wav, ButtonStop, ButtonStop, 6, 2, stop, 1, 1
+        AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 6, 4, alarm, 1, 1
+    <EndCar>
+
+    <Car 2>
+        #upper car panel
+        CreatePanel ElevPanel, 7, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+        AddButton 1, switch.wav, Button34, ButtonLit34, 2, 3, 33, 1, 1
+        AddButton 1, switch.wav, ButtonR, ButtonLitR, 3, 3, 1, 1, 1
+        AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 5, 2, open, 1, 1
+        AddButton 1, switch.wav, ButtonClose, ButtonClose, 5, 4, close, 1, 1
+        AddButton 1, switch.wav, ButtonStop, ButtonStop, 6, 2, stop, 1, 1
+        AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 6, 4, alarm, 1, 1
+    <EndCar>
 <EndElevators>
 
 <Elevator 5>
@@ -2561,8 +2579,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33
+    ServicedFloors = 0, 32
+    DisplayFloors = 0, 9, 19, 29, 32
     AssignedShaft = 2
     CreateElevator false, 11.849, 71.513, 32
 <EndElevator>
@@ -2574,8 +2592,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33
+    ServicedFloors = 0, 32
+    DisplayFloors = 0, 9, 19, 29, 32
     AssignedShaft = 2
     CreateElevator false, 11.849, 61.837, 32
 <EndElevator>
@@ -2587,8 +2605,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33
+    ServicedFloors = 0, 32
+    DisplayFloors = 0, 9, 19, 29, 32
     AssignedShaft = 2
     CreateElevator false, 11.849, 52.236, 32
 <EndElevator>
@@ -2600,70 +2618,88 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33
+    ServicedFloors = 0, 32
+    DisplayFloors = 0, 9, 19, 29, 32
     AssignedShaft = 2
     CreateElevator false, 11.849, 42.484, 32
 <EndElevator>
 
 <Elevators 5 to 8>
-    #floor
-    FloorOrientation = top
-    DrawWalls = true, true, true, true, true, true
-    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Floor, ElevFloor, 0.2, -3.418, -3.56, 3.418, 3.56, 0, 0, 0, 0
+    <Car 2>
+        ServicedFloors = 1, 33
+        DisplayFloors = 1, 9, 19, 29, 33
+        CreateCar 33
+    <EndCar>
 
-    #ceiling
-    FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0
+    <Cars 1 to 2>
+        #floor
+        FloorOrientation = top
+        DrawWalls = true, true, true, true, true, true
+        TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+        AddFloor Floor, ElevFloor, 0.2, -3.418, -3.56, 3.418, 3.56, 0, 0, 0, 0
 
-    #back and right walls (in global perspective)
-    WallOrientation = right
-    DrawWalls = true, true, false, false, false, false
-    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, ExpressElevWall, 0.2, -3.418, 3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
-    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right, ExpressElevWall, 0.2, 3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #ceiling
+        FloorOrientation = bottom
+        TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddFloor Ceiling, ElevCeiling, 0.2, -3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0
 
-    #front wall
-    WallOrientation = left
-    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, ExpressElevWall, 0.2, -3.418, -3.56, 3.418, -3.56, 8, 8, 0, 0, 0, 0
+        #back and right walls (in global perspective)
+        WallOrientation = right
+        DrawWalls = true, true, false, false, false, false
+        TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Back, ExpressElevWall, 0.2, -3.418, 3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
+        TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Right, ExpressElevWall, 0.2, 3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #panels
-    WallOrientation = left
-    DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left Panel, ElevPanelMain, 0.2, -3.418, -3.56, -3.418, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right Panel, ElevPanelMain, 0.2, -3.418, 1.75, -3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #front wall
+        WallOrientation = left
+        TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Front, ExpressElevWall, 0.2, -3.418, -3.56, 3.418, -3.56, 8, 8, 0, 0, 0, 0
 
-    #doors
-    WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.419, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -3.719, 0, 0, 0 #shaft doors
-    WallOrientation = left
-    SetAutoSize = true, true
+        #panels
+        WallOrientation = left
+        DrawWalls = true, true, false, true, false, false
+        TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Left Panel, ElevPanelMain, 0.2, -3.418, -3.56, -3.418, -1.75, 8, 8, 0, 0, 0, 0
+        DrawWalls = true, true, true, false, false, false
+        TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Right Panel, ElevPanelMain, 0.2, -3.418, 1.75, -3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #panel
-    CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddButton 1, switch.wav, Button34, ButtonLit34, 2, 3, 33, 1, 1
-    AddButton 1, switch.wav, Button33, ButtonLit33, 3, 3, 32, 1, 1
-    AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
-    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
-    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
-    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
+        #doors
+        WallOrientation = right
+        AddDoors 1, ElevDoors, 0.2, -3.419, 0, 3.5, 8, false, 0, 0 #doors
+        AddShaftDoors 1, ElevDoors, 0.2, -3.719, 0, 0, 0 #shaft doors
+        WallOrientation = left
+        SetAutoSize = true, true
 
-    #Floor Indicator
-    AddFloorIndicator right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
+        #Floor Indicator
+        AddFloorIndicator right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
+    <EndCars>
 
+    <Car 1>
+        #lower car panel
+        CreatePanel ElevPanel, 7, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+        AddButton 1, switch.wav, Button33, ButtonLit33, 2, 3, 32, 1, 1
+        AddButton 1, switch.wav, ButtonL, ButtonLitL, 3, 3, 0, 1, 1
+        AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 5, 2, open, 1, 1
+        AddButton 1, switch.wav, ButtonClose, ButtonClose, 5, 4, close, 1, 1
+        AddButton 1, switch.wav, ButtonStop, ButtonStop, 6, 2, stop, 1, 1
+        AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 6, 4, alarm, 1, 1
+    <EndCar>
+
+    <Car 2>
+        #upper car panel
+        CreatePanel ElevPanel, 7, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+        AddButton 1, switch.wav, Button34, ButtonLit34, 2, 3, 33, 1, 1
+        AddButton 1, switch.wav, ButtonR, ButtonLitR, 3, 3, 1, 1, 1
+        AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 5, 2, open, 1, 1
+        AddButton 1, switch.wav, ButtonClose, ButtonClose, 5, 4, close, 1, 1
+        AddButton 1, switch.wav, ButtonStop, ButtonStop, 6, 2, stop, 1, 1
+        AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 6, 4, alarm, 1, 1
+    <EndCar>
 <EndElevators>
 
-#Zone 2 Express (supposed to be double-deckers, but that functionality isn't implemented yet)
+#Zone 2 Express (double decker)
 <Elevator 9>
     Type = Express
     Speed = 21
@@ -2671,8 +2707,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33, 65, 66
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33, 39, 49, 59, 65, 66
+    ServicedFloors = 0, 32, 65
+    DisplayFloors = 0, 9, 19, 29, 32, 39, 49, 59, 65
     AssignedShaft = 3
     CreateElevator false, -11.849, -52.965, 0
 <EndElevator>
@@ -2684,8 +2720,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33, 65, 66
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33, 39, 49, 59, 65, 66
+    ServicedFloors = 0, 32, 65
+    DisplayFloors = 0, 9, 19, 29, 32, 39, 49, 59, 65
     AssignedShaft = 3
     CreateElevator false, -11.849, -61.7, 0
 <EndElevator>
@@ -2697,68 +2733,86 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33, 65, 66
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33, 39, 49, 59, 65, 66
+    ServicedFloors = 0, 32, 65
+    DisplayFloors = 0, 9, 19, 29, 32, 39, 49, 59, 65
     AssignedShaft = 3
     CreateElevator false, -11.849, -70.435, 0
 <EndElevator>
 
 <Elevators 9 to 11>
-    #floor
-    FloorOrientation = top
-    DrawWalls = true, true, true, true, true, true
-    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Floor, ElevFloor, 0.2, -3.418, -3.56, 3.418, 3.56, 0, 0, 0, 0
+    <Car 2>
+        ServicedFloors = 1, 33, 66
+        DisplayFloors = 1, 9, 19, 29, 33, 39, 49, 59, 66
+        CreateCar 1
+    <EndCar>
 
-    #ceiling
-    FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0
+    <Cars 1 to 2>
+        #floor
+        FloorOrientation = top
+        DrawWalls = true, true, true, true, true, true
+        TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+        AddFloor Floor, ElevFloor, 0.2, -3.418, -3.56, 3.418, 3.56, 0, 0, 0, 0
 
-    #back wall (in global perspective)
-    WallOrientation = right
-    DrawWalls = true, true, false, false, false, false
-    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, ExpressElevWall, 0.2, -3.418, 3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #ceiling
+        FloorOrientation = bottom
+        TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddFloor Ceiling, ElevCeiling, 0.2, -3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0
 
-    #front and left walls
-    WallOrientation = left
-    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, ExpressElevWall, 0.2, -3.418, -3.56, 3.418, -3.56, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, ExpressElevWall, 0.2, -3.418, -3.56, -3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #back wall (in global perspective)
+        WallOrientation = right
+        DrawWalls = true, true, false, false, false, false
+        TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Back, ExpressElevWall, 0.2, -3.418, 3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #panels
-    WallOrientation = right
-    DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left Panel, ElevPanelMain, 0.2, 3.418, -3.56, 3.418, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right Panel, ElevPanelMain, 0.2, 3.418, 1.75, 3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #front and left walls
+        WallOrientation = left
+        TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Front, ExpressElevWall, 0.2, -3.418, -3.56, 3.418, -3.56, 8, 8, 0, 0, 0, 0
+        TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Left, ExpressElevWall, 0.2, -3.418, -3.56, -3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #doors
-    WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.419, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 3.719, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
+        #panels
+        WallOrientation = right
+        DrawWalls = true, true, false, true, false, false
+        TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Left Panel, ElevPanelMain, 0.2, 3.418, -3.56, 3.418, -1.75, 8, 8, 0, 0, 0, 0
+        DrawWalls = true, true, true, false, false, false
+        TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Right Panel, ElevPanelMain, 0.2, 3.418, 1.75, 3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #panel
-    CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddButton 1, switch.wav, Button67, ButtonLit67, 2, 4, 66, 1, 1
-    AddButton 1, switch.wav, Button66, ButtonLit66, 2, 2, 65, 1, 1
-    AddButton 1, switch.wav, Button34, ButtonLit34, 3, 4, 33, 1, 1
-    AddButton 1, switch.wav, Button33, ButtonLit33, 3, 2, 32, 1, 1
-    AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
-    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
-    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
-    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
+        #doors
+        WallOrientation = left
+        AddDoors 1, ElevDoors, 0.2, 3.419, 0, 3.5, 8, false, 0, 0 #doors
+        AddShaftDoors 1, ElevDoors, 0.2, 3.719, 0, 0, 0 #shaft doors
+        SetAutoSize = true, true
 
-    #Floor Indicator
-    AddFloorIndicator left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
+        #Floor Indicator
+        AddFloorIndicator left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
+    <EndCars>
 
+    <Car 1>
+        #lower car panel
+        CreatePanel ElevPanel, 8, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+        AddButton 1, switch.wav, Button66, ButtonLit66, 2, 3, 65, 1, 1
+        AddButton 1, switch.wav, Button33, ButtonLit33, 3, 3, 32, 1, 1
+        AddButton 1, switch.wav, ButtonL, ButtonLitL, 4, 3, 0, 1, 1
+        AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 6, 2, open, 1, 1
+        AddButton 1, switch.wav, ButtonClose, ButtonClose, 6, 4, close, 1, 1
+        AddButton 1, switch.wav, ButtonStop, ButtonStop, 7, 2, stop, 1, 1
+        AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 7, 4, alarm, 1, 1
+    <EndCar>
+
+    <Car 2>
+        #upper car panel
+        CreatePanel ElevPanel, 8, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+        AddButton 1, switch.wav, Button67, ButtonLit67, 2, 3, 66, 1, 1
+        AddButton 1, switch.wav, Button34, ButtonLit34, 3, 3, 33, 1, 1
+        AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+        AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 6, 2, open, 1, 1
+        AddButton 1, switch.wav, ButtonClose, ButtonClose, 6, 4, close, 1, 1
+        AddButton 1, switch.wav, ButtonStop, ButtonStop, 7, 2, stop, 1, 1
+        AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 7, 4, alarm, 1, 1
+    <EndCar>
 <EndElevators>
 
 <Elevator 12>
@@ -2768,8 +2822,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33, 65, 66
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33, 39, 49, 59, 65, 66
+    ServicedFloors = 0, 32, 65
+    DisplayFloors = 0, 9, 19, 29, 32, 39, 49, 59, 65
     AssignedShaft = 4
     CreateElevator false, 11.849, -52.965, 65
 <EndElevator>
@@ -2781,8 +2835,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33, 65, 66
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33, 39, 49, 59, 65, 66
+    ServicedFloors = 0, 32, 65
+    DisplayFloors = 0, 9, 19, 29, 32, 39, 49, 59, 65
     AssignedShaft = 4
     CreateElevator false, 11.849, -61.7, 65
 <EndElevator>
@@ -2794,69 +2848,87 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Deceleration = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 32, 33, 65, 66
-    DisplayFloors = 0, 1, 9, 19, 29, 32, 33, 39, 49, 59, 65, 66
+    ServicedFloors = 0, 32, 65
+    DisplayFloors = 0, 9, 19, 29, 32, 39, 49, 59, 65
     AssignedShaft = 4
     CreateElevator false, 11.849, -70.435, 65
 <EndElevator>
 
 <Elevators 12 to 14>
-    #floor
-    FloorOrientation = top
-    DrawWalls = true, true, true, true, true, true
-    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Floor, ElevFloor, 0.2, -3.418, -3.56, 3.418, 3.56, 0, 0, 0, 0
+    <Car 2>
+        ServicedFloors = 1, 33, 66
+        DisplayFloors = 1, 9, 19, 29, 33, 39, 49, 59, 66
+        CreateCar 66
+    <EndCar>
 
-    #ceiling
-    FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0
+    <Cars 1 to 2>
+        #floor
+        FloorOrientation = top
+        DrawWalls = true, true, true, true, true, true
+        TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+        AddFloor Floor, ElevFloor, 0.2, -3.418, -3.56, 3.418, 3.56, 0, 0, 0, 0
 
-    #back and right walls (in global perspective)
-    WallOrientation = right
-    DrawWalls = true, true, false, false, false, false
-    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, ExpressElevWall, 0.2, -3.418, 3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
-    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right, ExpressElevWall, 0.2, 3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #ceiling
+        FloorOrientation = bottom
+        TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddFloor Ceiling, ElevCeiling, 0.2, -3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0
 
-    #front wall
-    WallOrientation = left
-    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, ExpressElevWall, 0.2, -3.418, -3.56, 3.418, -3.56, 8, 8, 0, 0, 0, 0
+        #back and right walls (in global perspective)
+        WallOrientation = right
+        DrawWalls = true, true, false, false, false, false
+        TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Back, ExpressElevWall, 0.2, -3.418, 3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
+        TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Right, ExpressElevWall, 0.2, 3.418, -3.56, 3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #panels
-    WallOrientation = left
-    DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left Panel, ElevPanelMain, 0.2, -3.418, -3.56, -3.418, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right Panel, ElevPanelMain, 0.2, -3.418, 1.75, -3.418, 3.56, 8, 8, 0, 0, 0, 0
+        #front wall
+        WallOrientation = left
+        TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Front, ExpressElevWall, 0.2, -3.418, -3.56, 3.418, -3.56, 8, 8, 0, 0, 0, 0
 
-    #doors
-    WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.419, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -3.719, 0, 0, 0 #shaft doors
-    WallOrientation = left
-    SetAutoSize = true, true
+        #panels
+        WallOrientation = left
+        DrawWalls = true, true, false, true, false, false
+        TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Left Panel, ElevPanelMain, 0.2, -3.418, -3.56, -3.418, -1.75, 8, 8, 0, 0, 0, 0
+        DrawWalls = true, true, true, false, false, false
+        TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+        AddWall Right Panel, ElevPanelMain, 0.2, -3.418, 1.75, -3.418, 3.56, 8, 8, 0, 0, 0, 0
 
-    #panel
-    CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddButton 1, switch.wav, Button67, ButtonLit67, 2, 4, 66, 1, 1
-    AddButton 1, switch.wav, Button66, ButtonLit66, 2, 2, 65, 1, 1
-    AddButton 1, switch.wav, Button34, ButtonLit34, 3, 4, 33, 1, 1
-    AddButton 1, switch.wav, Button33, ButtonLit33, 3, 2, 32, 1, 1
-    AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
-    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
-    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
-    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
+        #doors
+        WallOrientation = right
+        AddDoors 1, ElevDoors, 0.2, -3.419, 0, 3.5, 8, false, 0, 0 #doors
+        AddShaftDoors 1, ElevDoors, 0.2, -3.719, 0, 0, 0 #shaft doors
+        WallOrientation = left
+        SetAutoSize = true, true
 
-    #Floor Indicator
-    AddFloorIndicator right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
+        #Floor Indicator
+        AddFloorIndicator right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
+    <EndCars>
 
+    <Car 1>
+        #lower car panel
+        CreatePanel ElevPanel, 8, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+        AddButton 1, switch.wav, Button66, ButtonLit66, 2, 3, 65, 1, 1
+        AddButton 1, switch.wav, Button33, ButtonLit33, 3, 3, 32, 1, 1
+        AddButton 1, switch.wav, ButtonL, ButtonLitL, 4, 3, 0, 1, 1
+        AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 6, 2, open, 1, 1
+        AddButton 1, switch.wav, ButtonClose, ButtonClose, 6, 4, close, 1, 1
+        AddButton 1, switch.wav, ButtonStop, ButtonStop, 7, 2, stop, 1, 1
+        AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 7, 4, alarm, 1, 1
+    <EndCar>
+
+    <Car 2>
+        #upper car panel
+        CreatePanel ElevPanel, 8, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+        AddButton 1, switch.wav, Button67, ButtonLit67, 2, 3, 66, 1, 1
+        AddButton 1, switch.wav, Button34, ButtonLit34, 3, 3, 33, 1, 1
+        AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+        AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 6, 2, open, 1, 1
+        AddButton 1, switch.wav, ButtonClose, ButtonClose, 6, 4, close, 1, 1
+        AddButton 1, switch.wav, ButtonStop, ButtonStop, 7, 2, stop, 1, 1
+        AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 7, 4, alarm, 1, 1
+    <EndCar>
 <EndElevators>
 
 #Zone1 Locals 3-10 

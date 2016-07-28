@@ -40,6 +40,8 @@
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
+#include "elevatordoor.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "action.h"
@@ -56,6 +58,7 @@
 #include "sound.h"
 #include "door.h"
 #include "model.h"
+#include "timer.h"
 #include "profiler.h"
 #include "revsbs.h"
 
@@ -108,6 +111,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
 	ElevatorNumber = 1;
+	CarNumber = 1;
 	wall_orientation = 1;
 	floor_orientation = 2;
 	DrawMainN = true;
@@ -2603,6 +2607,9 @@ std::string SBS::DumpState()
 	output.append("ElevatorNumber: ");
 	output.append(ToString(ElevatorNumber));
 	output.append("\n");
+	output.append("CarNumber: ");
+	output.append(ToString(CarNumber));
+	output.append("\n");
 	output.append("ElevatorSync: ");
 	output.append(BoolToString(ElevatorSync));
 	output.append("\n");
@@ -2753,6 +2760,14 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "Person")
 		deleted = true;
+	else if (type == "ElevatorCar")
+	{
+		ElevatorCar *car = static_cast<ElevatorCar*>(object);
+		if (car->Number != car->GetElevator()->GetCarCount())
+			return ReportError("Only the highest elevator car can be deleted");
+
+		deleted = true;
+	}
 
 	//delete object
 	if (deleted == true)
@@ -3717,10 +3732,10 @@ void SBS::ListVisibleMeshes()
 	{
 		for (size_t j = 0; j < dynamic_meshes[i]->GetMeshCount(); j++)
 		{
-			if (camera->IsDynamicMeshVisible(dynamic_meshes[i], j) == true)
+			if (camera->IsDynamicMeshVisible(dynamic_meshes[i], (int)j) == true)
 			{
-				submeshes = dynamic_meshes[i]->GetSubMeshCount(j);
-				Report(dynamic_meshes[i]->GetMeshName(j) + "\t-\t" + ToString(submeshes));
+				submeshes = dynamic_meshes[i]->GetSubMeshCount((int)j);
+				Report(dynamic_meshes[i]->GetMeshName((int)j) + "\t-\t" + ToString(submeshes));
 				count++;
 				total += submeshes;
 			}

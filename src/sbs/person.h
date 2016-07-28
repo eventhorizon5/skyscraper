@@ -26,8 +26,6 @@
 #ifndef _SBS_PERSON_H
 #define _SBS_PERSON_H
 
-#include "timer.h"
-
 namespace SBS {
 
 class SBSIMPEXP Person : public Object
@@ -46,7 +44,7 @@ public:
 	bool ReportError(const std::string &message);
 	int GetRandomFloor();
 	bool IsRouteActive() { return !route.empty(); }
-	bool IsRandomActivityEnabled() { return random_timer->IsRunning(); }
+	bool IsRandomActivityEnabled();
 	void EnableRandomActivity(bool value);
 	void SetFloor(int value);
 	int GetFloor() { return current_floor; }
@@ -71,17 +69,7 @@ private:
 	bool service_access;
 	std::vector<RouteEntry> route;
 
-	//random call timer
-	class Timer : public TimerObject
-	{
-	public:
-		Person *parent;
-		Timer(const std::string &name, Person *parent) : TimerObject(parent, name)
-		{
-			this->parent = parent;
-		}
-		virtual void Notify();
-	};
+	class Timer; //internal timer class
 
 	//random call timer object
 	Timer *random_timer;

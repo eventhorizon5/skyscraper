@@ -26,8 +26,6 @@
 #ifndef _SBS_ELEVATORDOOR_H
 #define _SBS_ELEVATORDOOR_H
 
-#include "timer.h"
-
 namespace SBS {
 
 class SBSIMPEXP ElevatorDoor : public Object
@@ -99,6 +97,7 @@ public:
 
 	int Number; //door instance number
 	Elevator *elev; //pointer to associated elevator object
+	ElevatorCar *car; //pointer to associated elevator car object
 	float OpenSpeed; //door opening/closing speed (for backwards-compatibility only)
 	bool DoorDirection; //if direction is false, doors are on the left/right side
 	int DoorTimer; //door autoclose timer value, in milliseconds
@@ -116,7 +115,7 @@ public:
 	float ManualSpeed; //manual speed multiplier
 	float SlowSpeed; //slow speed multiplier, mainly for nudge mode
 
-	ElevatorDoor(int number, Elevator* elevator);
+	ElevatorDoor(int number, ElevatorCar* car);
 	~ElevatorDoor();
 	void OpenDoorsEmergency(int whichdoors = 1, int floor = 0);
 	void CloseDoorsEmergency(int whichdoors = 1, int floor = 0);
@@ -170,6 +169,8 @@ public:
 	std::string GetNumberText();
 	void ResetState();
 	void RemoveShaftDoor(DoorWrapper *door);
+	void AddServicedFloor(int floor);
+	void RemoveServicedFloor(int floor);
 
 private:
 
@@ -184,21 +185,7 @@ private:
 
 	void MoveDoors(bool open, bool manual);
 
-	//door autoclose timer
-	class Timer : public TimerObject
-	{
-	public:
-		ElevatorDoor *door;
-		Elevator *elevator;
-		int type; //0 = autoclose, 1 = nudge
-		Timer(const std::string &name, ElevatorDoor *parent, Elevator *elev, int Type) : TimerObject(parent, name)
-		{
-			door = parent;
-			elevator = elev;
-			type = Type;
-		}
-		virtual void Notify();
-	};
+	class Timer; //internal timer class
 
 	//autoclose timer object
 	Timer *timer;

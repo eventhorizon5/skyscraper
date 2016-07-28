@@ -153,7 +153,16 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 		{
 			if (this->HasFocus() && !panel->HasFocus())
 				panel->SetFocus();
-			frontend->Loop(); //run simulator loop
+
+			try {
+				frontend->Loop(); //run simulator loop
+			}
+			catch (Ogre::Exception &e)
+			{
+				frontend->ReportFatalError("Unhandled OGRE exception:\n\n" + e.getFullDescription() + "\n\nSkyscraper will now exit.  Please report this as a bug.");
+				frontend->Quit();
+			}
+
 			HandleMouseMovement();
 			event.RequestMore(); //request more idles
 		}

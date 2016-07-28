@@ -39,6 +39,7 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "callbutton.h"
@@ -86,8 +87,10 @@ void ScriptProcessor::Reset()
 	line = 0; //line number
 	LineData = "";  //line contents
 	Current = 0;
+	CurrentOld = 0;
 	Section = 0;
 	Context = "None";
+	ContextOld = "";
 	temp1 = 0;
 	temp2 = "";
 	temp3 = 0;
@@ -98,8 +101,11 @@ void ScriptProcessor::Reset()
 	callbutton_elevators.clear();
 	FloorCheck = 0;
 	RangeL = 0;
+	RangeLOld = 0;
 	RangeH = 0;
+	RangeHOld = 0;
 	RangeStart = 0;
+	RangeStartOld = 0;
 	wall = 0;
 	buffer = "";
 	startpos = 0;
@@ -620,6 +626,97 @@ breakpoint:
 			engine->Report("Finished loading other buildings");
 			goto Nextline;
 		}
+		if (linecheck.substr(0, 5) == "<cars" && Section == 4)
+		{
+			Section = 6;
+			temp3 = linecheck.find("to", 5);
+			if (temp3 < 0)
+			{
+				ScriptError("Syntax error");
+				goto Error;
+			}
+
+			//store previous elevator section values
+			CurrentOld = Current;
+			RangeLOld = RangeL;
+			RangeHOld = RangeH;
+			RangeStartOld = RangeStart;
+			ContextOld = Context;
+
+			std::string str1 = LineData.substr(6, temp3 - 7);
+			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
+			TrimString(str1);
+			TrimString(str2);
+			if (!IsNumeric(str1, RangeL) || !IsNumeric(str2, RangeH))
+			{
+				ScriptError("Invalid range");
+				goto Error;
+			}
+
+			//verify elevator
+			if (!Simcore->GetElevator(CurrentOld))
+			{
+				ScriptError("Invalid elevator");
+				goto Error;
+			}
+
+			Context = "Elevator " + ToString(CurrentOld) + " Car range " + ToString(RangeL) + " to " + ToString(RangeH);
+			Current = RangeL;
+			RangeStart = line;
+			engine->Report("Processing elevator " + ToString(CurrentOld) + " cars " + ToString(RangeL) + " to " + ToString(RangeH) + "...");
+			goto Nextline;
+		}
+		if (linecheck.substr(0, 5) == "<car " && Section == 4)
+		{
+			Section = 6;
+
+			//store previous elevator section values
+			CurrentOld = Current;
+			RangeLOld = RangeL;
+			RangeHOld = RangeH;
+			RangeStartOld = RangeStart;
+			ContextOld = Context;
+
+			RangeL = 0;
+			RangeH = 0;
+			std::string str = LineData.substr(5, LineData.length() - 6);
+			TrimString(str);
+			if (!IsNumeric(str, Current))
+			{
+				ScriptError("Invalid car number");
+				goto Error;
+			}
+
+			//verify elevator
+			if (!Simcore->GetElevator(CurrentOld))
+			{
+				ScriptError("Invalid elevator");
+				goto Error;
+			}
+
+			Context = "Elevator " + ToString(CurrentOld) + " Car " + ToString(Current);
+			engine->Report("Processing elevator " + ToString(CurrentOld) + " car " + ToString(Current) + "...");
+			goto Nextline;
+		}
+		if (linecheck == "<endcar>" && RangeL == RangeH)
+		{
+			if (Section != 6)
+			{
+				ScriptError("Not in car section");
+				goto Error;
+			}
+
+			//return to elevator section
+			Section = 4;
+			Context = ContextOld;
+			Current = CurrentOld;
+			RangeL = RangeLOld;
+			RangeH = RangeHOld;
+			RangeStart = RangeStartOld;
+
+			engine->Report("Finished car");
+			goto Nextline;
+		}
 
 
 		//////////////////////////
@@ -764,6 +861,10 @@ recalc:
 		//Process textures
 		else if (Section == 5)
 			returncode = ProcTextures();
+
+		//process elevator cars
+		else if (Section == 6)
+			returncode = ProcElevatorCars();
 
 		//Global commands
 		if (returncode == sContinue)
@@ -1183,6 +1284,9 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		error += "in included file " + IncludeFile + " ";
 
 	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + engine->GetFilename() + "\nContext: " + Context;
+
+	if (RangeL != RangeH)
+		error += "\nIteration Number: " + ToString(Current);
 
 	if (InFunction == 0)
 		error += "\nLine Text: " + LineData;
@@ -4238,10 +4342,13 @@ int ScriptProcessor::ProcFloors()
 		if (!Simcore->GetElevator(ToInt(tempdata[0])))
 			return ScriptError("Invalid elevator");
 
+		int elevator, car;
+		GetElevatorCar(tempdata[0], elevator, car);
+
 		if (compat == true)
-			StoreCommand(floor->AddDirectionalIndicator(ToInt(tempdata[0]), ToBool(tempdata[1]), false, ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
+			StoreCommand(floor->AddDirectionalIndicator(elevator, car, ToBool(tempdata[1]), false, ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		else
-			StoreCommand(floor->AddDirectionalIndicator(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), ToBool(tempdata[4]), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), tempdata[13], ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToBool(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
+			StoreCommand(floor->AddDirectionalIndicator(elevator, car, ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), ToBool(tempdata[4]), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), tempdata[13], ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToBool(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
 		return sNextLine;
 	}
 
@@ -4299,15 +4406,21 @@ int ScriptProcessor::ProcFloors()
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
-		if (!Simcore->GetElevator(ToInt(tempdata[0])))
+		int elevator, carnum;
+		GetElevatorCar(tempdata[0], elevator, carnum);
+		Elevator *elev = Simcore->GetElevator(elevator);
+		if (!elev)
 			return ScriptError("Invalid elevator");
+		ElevatorCar *car = elev->GetCar(carnum);
+		if (!car)
+			return ScriptError("Invalid elevator car");
 
 		if (compat == 0)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+			StoreCommand(car->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		if (compat == 1)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+			StoreCommand(car->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4])));
 		if (compat == 2)
-			StoreCommand(Simcore->GetElevator(ToInt(tempdata[0]))->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+			StoreCommand(car->AddShaftDoor(Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		return sNextLine;
 	}
 
@@ -4348,10 +4461,13 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
+		int elevator, car;
+		GetElevatorCar(tempdata[0], elevator, car);
+
 		if (compat == false)
-			StoreCommand(floor->AddFloorIndicator(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
+			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
 		else
-			StoreCommand(floor->AddFloorIndicator(ToInt(tempdata[0]), ToBool(tempdata[1]), "Button", tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), "Button", tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
 		return sNextLine;
 	}
 
@@ -4484,14 +4600,19 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Elevator *elev = Simcore->GetElevator(ToInt(tempdata[0]));
+		int elevator, carnum;
+		GetElevatorCar(tempdata[0], elevator, carnum);
+		Elevator *elev = Simcore->GetElevator(elevator);
 		if (!elev)
 			return ScriptError("Invalid elevator");
+		ElevatorCar *car = elev->GetCar(carnum);
+		if (!car)
+			return ScriptError("Invalid elevator car");
 
 		if (compat == true)
-			StoreCommand(elev->AddShaftDoorComponent(ToInt(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
+			StoreCommand(car->AddShaftDoorComponent(ToInt(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		else
-			StoreCommand(elev->AddShaftDoorComponent(ToInt(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
+			StoreCommand(car->AddShaftDoorComponent(ToInt(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
 		return sNextLine;
 	}
 
@@ -4523,16 +4644,21 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Elevator *elev = Simcore->GetElevator(ToInt(tempdata[0]));
+		int elevator, carnum;
+		GetElevatorCar(tempdata[0], elevator, carnum);
+		Elevator *elev = Simcore->GetElevator(elevator);
 		if (!elev)
 			return ScriptError("Invalid elevator");
+		ElevatorCar *car = elev->GetCar(carnum);
+		if (!car)
+			return ScriptError("Invalid elevator car");
 
 		if (params == 2 || legacy == true)
-			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current));
+			StoreCommand(car->FinishShaftDoor(ToInt(tempdata[1]), Current));
 		else if (params == 3)
-			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2])));
+			StoreCommand(car->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2])));
 		else
-			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2]), ToBool(tempdata[3])));
+			StoreCommand(car->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2]), ToBool(tempdata[3])));
 		return sNextLine;
 	}
 
@@ -5090,7 +5216,6 @@ int ScriptProcessor::ProcElevators()
 	Simcore->NewElevator(Current);
 
 	//replace variables with actual values
-	buffer = ToString(Current);
 	ReplaceAll(LineData, "%elevator%", buffer);
 
 	//IF/While statement stub (continue to global commands for processing)
@@ -5109,6 +5234,7 @@ int ScriptProcessor::ProcElevators()
 	int temp2check = LineData.find("=", 0);
 	temp2 = GetAfterEquals(LineData);
 
+	//get elevator object
 	Elevator *elev = Simcore->GetElevator(Current);
 
 	//create a lowercase string of the line
@@ -5156,32 +5282,6 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "openspeed")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->OpenSpeed))
-			return ScriptError("Invalid value");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 6) == "doors ")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
-		if (!IsNumeric(str, elev->NumDoors))
-			return ScriptError("Invalid value");
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 9) == "acceljerk")
 	{
 		if (temp2check < 0)
@@ -5200,90 +5300,6 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "servicedfloors")
-	{
-		//copy string listing of serviced floors into array
-		int params = SplitAfterEquals(LineData, false);
-		if (params < 1)
-			return ScriptError("Syntax Error");
-
-		for (int line = 0; line < params; line++)
-		{
-			if (tempdata[line].find("-", 1) > 0)
-			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
-				for (int k = start; k <= end; k++)
-				{
-					if (!elev->AddServicedFloor(k))
-						return ScriptError();
-				}
-			}
-			else
-			{
-				int data;
-				if (!IsNumeric(tempdata[line], data))
-					return ScriptError("Invalid value");
-				if (!elev->AddServicedFloor(data))
-					return ScriptError();
-			}
-		}
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 13) == "displayfloors")
-	{
-		//copy string listing of serviced floors into array
-		int params = SplitAfterEquals(LineData, false);
-		if (params < 1)
-			return ScriptError("Syntax Error");
-
-		for (int line = 0; line < params; line++)
-		{
-			if (tempdata[line].find("-", 1) > 0)
-			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
-				for (int k = start; k <= end; k++)
-				{
-					elev->AddDisplayFloor(k);
-				}
-			}
-			else
-			{
-				int data;
-				if (!IsNumeric(tempdata[line], data))
-					return ScriptError("Invalid value");
-				elev->AddDisplayFloor(data);
-			}
-		}
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 13) == "assignedshaft")
 	{
 		if (temp2check < 0)
@@ -5291,360 +5307,6 @@ int ScriptProcessor::ProcElevators()
 		std::string str = Calc(temp2);
 		if (!IsNumeric(str, elev->AssignedShaft))
 			return ScriptError("Invalid value");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 9) == "doortimer")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->DoorTimer))
-			return ScriptError("Invalid value");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 10) == "quickclose")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->QuickClose))
-			return ScriptError("Invalid value");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 10) == "nudgetimer")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->NudgeTimer))
-			return ScriptError("Invalid value");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 9) == "slowspeed")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->SlowSpeed))
-			return ScriptError("Invalid value");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 11) == "manualspeed")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(11, LineData.find("=", 0) - 11);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, elev->GetDoor(temp3)->ManualSpeed))
-			return ScriptError("Invalid value");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 9) == "opensound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->GetDoor(temp3)->OpenSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 10) == "closesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->GetDoor(temp3)->CloseSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 10) == "nudgesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->GetDoor(temp3)->NudgeSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 10) == "startsound")
-	{
-		//backwards compatibility
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		if (warn_deprecated == true)
-			ScriptWarning("Command deprecated");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpStartSound = temp2;
-		elev->CarDownStartSound = temp2;
-
-		//turn off motor sounds
-		elev->MotorUpStartSound = "";
-		elev->MotorDownStartSound = "";
-		elev->MotorUpRunSound = "";
-		elev->MotorDownRunSound = "";
-		elev->MotorUpStopSound = "";
-		elev->MotorDownStopSound = "";
-		elev->MotorIdleSound = "";
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 9) == "movesound")
-	{
-		//backwards compatibility
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		if (warn_deprecated == true)
-			ScriptWarning("Command deprecated");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpMoveSound = temp2;
-		elev->CarDownMoveSound = temp2;
-
-		//turn off motor sounds
-		elev->MotorUpStartSound = "";
-		elev->MotorDownStartSound = "";
-		elev->MotorUpRunSound = "";
-		elev->MotorDownRunSound = "";
-		elev->MotorUpStopSound = "";
-		elev->MotorDownStopSound = "";
-		elev->MotorIdleSound = "";
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 9) == "stopsound")
-	{
-		//backwards compatibility
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		if (warn_deprecated == true)
-			ScriptWarning("Command deprecated");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpStopSound = temp2;
-		elev->CarDownStopSound = temp2;
-
-		//turn off motor sounds
-		elev->MotorUpStartSound = "";
-		elev->MotorDownStartSound = "";
-		elev->MotorUpRunSound = "";
-		elev->MotorDownRunSound = "";
-		elev->MotorUpStopSound = "";
-		elev->MotorDownStopSound = "";
-		elev->MotorIdleSound = "";
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 9) == "idlesound")
-	{
-		//backwards compatibility
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		if (warn_deprecated == true)
-			ScriptWarning("Command deprecated");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarIdleSound = temp2;
-
-		//turn off motor sounds
-		elev->MotorUpStartSound = "";
-		elev->MotorDownStartSound = "";
-		elev->MotorUpRunSound = "";
-		elev->MotorDownRunSound = "";
-		elev->MotorUpStopSound = "";
-		elev->MotorDownStopSound = "";
-		elev->MotorIdleSound = "";
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 13) == "carstartsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpStartSound = temp2;
-		elev->CarDownStartSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 15) == "carupstartsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpStartSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 17) == "cardownstartsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarDownStartSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 12) == "carmovesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpMoveSound = temp2;
-		elev->CarDownMoveSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 14) == "carupmovesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpMoveSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 16) == "cardownmovesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarDownMoveSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 12) == "carstopsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpStopSound = temp2;
-		elev->CarDownStopSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 14) == "carupstopsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarUpStopSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 16) == "cardownstopsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarDownStopSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 12) == "caridlesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarIdleSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "motorstartsound")
@@ -5760,178 +5422,6 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorIdleSound = temp2;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "chimesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->GetDoor(temp3)->UpChimeSound = temp2;
-		elev->GetDoor(temp3)->DownChimeSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 12) == "upchimesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(12, LineData.find("=", 0) - 12);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->GetDoor(temp3)->UpChimeSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 14) == "downchimesound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		std::string str = LineData.substr(14, LineData.find("=", 0) - 14);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->GetDoor(temp3)->DownChimeSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 10) == "alarmsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->AlarmSound = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 14) == "alarmsoundstop")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->AlarmSoundStop = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 9) == "beepsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->SetBeepSound(temp2);
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 10) == "floorsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->SetFloorSound(temp2);
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 9) == "upmessage")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->SetMessageSound(true, true, temp2);
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 11) == "downmessage")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->SetMessageSound(true, false, temp2);
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 11) == "openmessage")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->SetMessageSound(false, true, temp2);
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 12) == "closemessage")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->SetMessageSound(false, false, temp2);
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 6) == "music ")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->Music = temp2;
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 8) == "musicon ")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		elev->MusicOn = ToBool(temp2);
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 11) == "musiconmove")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		elev->MusicOnMove = ToBool(temp2);
-	}
 	if (linecheck.substr(0, 13) == "floorskiptext")
 	{
 		if (temp2check < 0)
@@ -6023,13 +5513,6 @@ int ScriptProcessor::ProcElevators()
 		elev->DownPeak = ToBool(temp2);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 18) == "independentservice")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		elev->IndependentService = ToBool(temp2);
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 17) == "inspectionservice")
 	{
 		if (temp2check < 0)
@@ -6042,13 +5525,6 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->FireServicePhase1 = ToInt(temp2);
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 11) == "fireservice2")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		elev->FireServicePhase2 = ToInt(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "parking")
@@ -6134,22 +5610,6 @@ int ScriptProcessor::ProcElevators()
 		elev->ArrivalDelay = delay;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "musicposition")
-	{
-		int params = SplitAfterEquals(LineData);
-		if (params != 3)
-			return ScriptError("Incorrect number of parameters");
-
-		//check numeric values
-		for (int i = 0; i <= 2; i++)
-		{
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
-		}
-
-		elev->MusicPosition = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 15) == "inspectionspeed")
 	{
 		if (temp2check < 0)
@@ -6157,14 +5617,6 @@ int ScriptProcessor::ProcElevators()
 		std::string str = Calc(temp2);
 		if (!IsNumeric(str, elev->InspectionSpeed))
 			return ScriptError("Invalid value");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 10) == "autoenable")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		elev->AutoEnable = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "autodoors")
@@ -6199,46 +5651,6 @@ int ScriptProcessor::ProcElevators()
 		elev->FloorHold = ToBool(temp2);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "doorsensor")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
-		if (!IsNumeric(str, temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-
-		int params = SplitAfterEquals(LineData);
-		if (params < 1 || params > 2)
-			return ScriptError("Incorrect number of parameters");
-
-		elev->GetDoor(temp3)->EnableSensor(ToBool(tempdata[0]));
-		if (params == 2)
-		{
-			//check to see if file exists
-			CheckFile("data/" + tempdata[1]);
-			//set door sound
-			elev->GetDoor(temp3)->SensorSound = tempdata[1];
-		}
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 21) == "caremergencystopsound")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		CheckFile("data/" + temp2);
-
-		elev->CarEmergencyStopSound = temp2;
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 23) == "motoremergencystopsound")
 	{
 		if (temp2check < 0)
@@ -6260,12 +5672,12 @@ int ScriptProcessor::ProcElevators()
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "chimeonarrival")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		elev->ChimeOnArrival = ToBool(temp2);
-		return sNextLine;
-	}
+        {
+                if (temp2check < 0)
+                        return ScriptError("Syntax error");
+                elev->ChimeOnArrival = ToBool(temp2);
+                return sNextLine;
+        }
 
 	//CreateElevator command
 	if (linecheck.substr(0, 14) == "createelevator")
@@ -6287,6 +5699,842 @@ int ScriptProcessor::ProcElevators()
 		if (result == false)
 			return ScriptError();
 		StoreCommand(elev);
+		return sNextLine;
+	}
+
+	//process elevator car commands for default car
+	int value = ProcElevatorCars();
+	if (value != sContinue)
+		return value;
+
+	//handle elevator range
+	if (RangeL != RangeH && linecheck.substr(0, 12) == "<endelevator")
+	{
+		if (Current < RangeH)
+		{
+			Current++;
+			line = RangeStart;  //loop back
+			return sNextLine;
+		}
+		else
+		{
+			Section = 0; //break out of loop
+			Context = "None";
+			RangeL = 0;
+			RangeH = 0;
+			engine->Report("Finished elevators");
+			return sNextLine;
+		}
+	}
+
+	return sContinue;
+}
+
+int ScriptProcessor::ProcElevatorCars()
+{
+	//Process elevator cars
+
+	//get car object
+	ElevatorCar *car = 0;
+	Elevator *elev = 0;
+	if (Section == 6)
+	{
+		elev = Simcore->GetElevator(CurrentOld);
+		if (elev)
+			car = elev->GetCar(Current);
+	}
+	else
+	{
+		//get default car if not in a separate car section
+		elev = Simcore->GetElevator(Current);
+		if (elev)
+			car = elev->GetCar(1);
+	}
+
+	if (!elev)
+		return sError;
+
+	//create car if not created already
+	if (!car)
+		car = elev->AddCar();
+
+	if (!car)
+		return sError;
+
+	//replace variables with actual values
+	if (Section == 6) //only run if not being called from elevator function
+	{
+		ReplaceAll(LineData, "%elevator%", ToString(CurrentOld));
+		ReplaceAll(LineData, "%car%", ToString(Current));
+
+		//IF/While statement stub (continue to global commands for processing)
+		if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+			return sContinue;
+
+		//process math functions
+		if (MathFunctions() == sError)
+			return sError;
+
+		//process functions
+		if (FunctionProc() == true)
+			return sNextLine;
+	}
+
+	//get text after equal sign
+	int temp2check = LineData.find("=", 0);
+	temp2 = GetAfterEquals(LineData);
+
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
+	//parameters
+	if (linecheck.substr(0, 4) == "name")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		car->Name = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "openspeed")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+		std::string str2 = Calc(temp2);
+		if (!IsNumeric(str2, car->GetDoor(temp3)->OpenSpeed))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 6) == "doors ")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		std::string str = Calc(temp2);
+		if (!IsNumeric(str, car->NumDoors))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 14) == "servicedfloors")
+	{
+		//copy string listing of serviced floors into array
+		int params = SplitAfterEquals(LineData, false);
+		if (params < 1)
+			return ScriptError("Syntax Error");
+
+		for (int line = 0; line < params; line++)
+		{
+			if (tempdata[line].find("-", 1) > 0)
+			{
+				int start, end;
+				//found a range marker
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
+				TrimString(str1);
+				TrimString(str2);
+				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
+					return ScriptError("Invalid value");
+				if (end < start)
+				{
+					int temp = start;
+					start = end;
+					end = temp;
+				}
+
+				for (int k = start; k <= end; k++)
+				{
+					if (!car->AddServicedFloor(k))
+						return ScriptError();
+				}
+			}
+			else
+			{
+				int data;
+				if (!IsNumeric(tempdata[line], data))
+					return ScriptError("Invalid value");
+				if (!car->AddServicedFloor(data))
+					return ScriptError();
+			}
+		}
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 13) == "displayfloors")
+	{
+		//copy string listing of serviced floors into array
+		int params = SplitAfterEquals(LineData, false);
+		if (params < 1)
+			return ScriptError("Syntax Error");
+
+		for (int line = 0; line < params; line++)
+		{
+			if (tempdata[line].find("-", 1) > 0)
+			{
+				int start, end;
+				//found a range marker
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
+				TrimString(str1);
+				TrimString(str2);
+				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
+					return ScriptError("Invalid value");
+				if (end < start)
+				{
+					int temp = start;
+					start = end;
+					end = temp;
+				}
+
+				for (int k = start; k <= end; k++)
+				{
+					car->AddDisplayFloor(k);
+				}
+			}
+			else
+			{
+				int data;
+				if (!IsNumeric(tempdata[line], data))
+					return ScriptError("Invalid value");
+				car->AddDisplayFloor(data);
+			}
+		}
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "doortimer")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+		std::string str2 = Calc(temp2);
+		if (!IsNumeric(str2, car->GetDoor(temp3)->DoorTimer))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "quickclose")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+		std::string str2 = Calc(temp2);
+		if (!IsNumeric(str2, car->GetDoor(temp3)->QuickClose))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "nudgetimer")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+		std::string str2 = Calc(temp2);
+		if (!IsNumeric(str2, car->GetDoor(temp3)->NudgeTimer))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "slowspeed")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+		std::string str2 = Calc(temp2);
+		if (!IsNumeric(str2, car->GetDoor(temp3)->SlowSpeed))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "manualspeed")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(11, LineData.find("=", 0) - 11);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+		std::string str2 = Calc(temp2);
+		if (!IsNumeric(str2, car->GetDoor(temp3)->ManualSpeed))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "opensound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->GetDoor(temp3)->OpenSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "closesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->GetDoor(temp3)->CloseSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "nudgesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->GetDoor(temp3)->NudgeSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "startsound")
+	{
+		//backwards compatibility
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpStartSound = temp2;
+		car->DownStartSound = temp2;
+
+		//turn off motor sounds
+		elev->MotorUpStartSound = "";
+		elev->MotorDownStartSound = "";
+		elev->MotorUpRunSound = "";
+		elev->MotorDownRunSound = "";
+		elev->MotorUpStopSound = "";
+		elev->MotorDownStopSound = "";
+		elev->MotorIdleSound = "";
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "movesound")
+	{
+		//backwards compatibility
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpMoveSound = temp2;
+		car->DownMoveSound = temp2;
+
+		//turn off motor sounds
+		elev->MotorUpStartSound = "";
+		elev->MotorDownStartSound = "";
+		elev->MotorUpRunSound = "";
+		elev->MotorDownRunSound = "";
+		elev->MotorUpStopSound = "";
+		elev->MotorDownStopSound = "";
+		elev->MotorIdleSound = "";
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "stopsound")
+	{
+		//backwards compatibility
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpStopSound = temp2;
+		car->DownStopSound = temp2;
+
+		//turn off motor sounds
+		elev->MotorUpStartSound = "";
+		elev->MotorDownStartSound = "";
+		elev->MotorUpRunSound = "";
+		elev->MotorDownRunSound = "";
+		elev->MotorUpStopSound = "";
+		elev->MotorDownStopSound = "";
+		elev->MotorIdleSound = "";
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "idlesound")
+	{
+		//backwards compatibility
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->IdleSound = temp2;
+
+		//turn off motor sounds
+		elev->MotorUpStartSound = "";
+		elev->MotorDownStartSound = "";
+		elev->MotorUpRunSound = "";
+		elev->MotorDownRunSound = "";
+		elev->MotorUpStopSound = "";
+		elev->MotorDownStopSound = "";
+		elev->MotorIdleSound = "";
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 13) == "carstartsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpStartSound = temp2;
+		car->DownStartSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 15) == "carupstartsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpStartSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 17) == "cardownstartsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->DownStartSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "carmovesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpMoveSound = temp2;
+		car->DownMoveSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 14) == "carupmovesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpMoveSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 16) == "cardownmovesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->DownMoveSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "carstopsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpStopSound = temp2;
+		car->DownStopSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 14) == "carupstopsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->UpStopSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 16) == "cardownstopsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->DownStopSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "caridlesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->IdleSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "chimesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->GetDoor(temp3)->UpChimeSound = temp2;
+		car->GetDoor(temp3)->DownChimeSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "upchimesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(12, LineData.find("=", 0) - 12);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->GetDoor(temp3)->UpChimeSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 14) == "downchimesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(14, LineData.find("=", 0) - 14);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->GetDoor(temp3)->DownChimeSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "alarmsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->AlarmSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 14) == "alarmsoundstop")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->AlarmSoundStop = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "beepsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->SetBeepSound(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "floorsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->SetFloorSound(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "upmessage")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->SetMessageSound(true, true, temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "downmessage")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->SetMessageSound(true, false, temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "openmessage")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->SetMessageSound(false, true, temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "closemessage")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->SetMessageSound(false, false, temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 6) == "music ")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->Music = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 8) == "musicon ")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		car->MusicOn = ToBool(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "musiconmove")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		car->MusicOnMove = ToBool(temp2);
+	}
+	if (linecheck.substr(0, 13) == "musicposition")
+	{
+		int params = SplitAfterEquals(LineData);
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 2; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		car->MusicPosition = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "autoenable")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		car->AutoEnable = ToBool(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "doorsensor")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
+		str = Calc(str);
+		if (!IsNumeric(str, temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		int params = SplitAfterEquals(LineData);
+		if (params < 1 || params > 2)
+			return ScriptError("Incorrect number of parameters");
+
+		car->GetDoor(temp3)->EnableSensor(ToBool(tempdata[0]));
+		if (params == 2)
+		{
+			//check to see if file exists
+			CheckFile("data/" + tempdata[1]);
+			//set door sound
+			car->GetDoor(temp3)->SensorSound = tempdata[1];
+		}
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 21) == "caremergencystopsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile("data/" + temp2);
+
+		car->EmergencyStopSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 18) == "independentservice")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		elev->IndependentService = ToBool(temp2);
+		elev->IndependentServiceCar = car->Number;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "fireservice2")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		elev->FireServicePhase2 = ToInt(temp2);
+		elev->FireServicePhase2Car = car->Number;
 		return sNextLine;
 	}
 
@@ -6327,9 +6575,9 @@ int ScriptProcessor::ProcElevators()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
+			StoreCommand(car->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
 		else
-			StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+			StoreCommand(car->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
 	}
 
@@ -6350,7 +6598,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//create wall
-		StoreCommand(elev->AddWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+		StoreCommand(car->AddWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
 	}
 
@@ -6396,9 +6644,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			StoreCommand(elev->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10])));
+			StoreCommand(car->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10])));
 		else
-			StoreCommand(elev->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+			StoreCommand(car->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		return sNextLine;
 	}
 
@@ -6422,7 +6670,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		elev->SetShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		car->SetShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		setshaftdoors = true;
 		return sNextLine;
 	}
@@ -6479,11 +6727,11 @@ int ScriptProcessor::ProcElevators()
 
 		bool result;
 		if (compat == 0)
-			result = elev->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			result = car->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 		if (compat == 1)
-			result = elev->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+			result = car->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		if (compat == 2)
-			result = elev->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+			result = car->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 
 		if (result == false)
 			return ScriptError();
@@ -6508,7 +6756,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(elev->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+		StoreCommand(car->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
 	}
 
@@ -6592,7 +6840,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		if (!elev->GetPanel(ToInt(tempdata[0])))
+		if (!car->GetPanel(ToInt(tempdata[0])))
 			return ScriptError("Invalid panel number");
 
 		if (compat > 0 && warn_deprecated == true)
@@ -6603,12 +6851,12 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			CheckFile("data/" + tempdata[1]);
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
+			control = car->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 		}
 		if (compat == 1)
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
+			control = car->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), hoffset, voffset);
+			control = car->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), hoffset, voffset);
 
 		if (control)
 		{
@@ -6700,7 +6948,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		if (!elev->GetPanel(ToInt(tempdata[0])))
+		if (!car->GetPanel(ToInt(tempdata[0])))
 			return ScriptError("Invalid panel number");
 
 		if (compat > 0 && warn_deprecated == true)
@@ -6711,12 +6959,12 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			CheckFile("data/" + tempdata[1]);
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
+			control = car->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 		}
 		if (compat == 1)
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
+			control = car->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
-			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), hoffset, voffset);
+			control = car->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), hoffset, voffset);
 
 		if (control)
 		{
@@ -6756,13 +7004,13 @@ int ScriptProcessor::ProcElevators()
 			voffset = ToFloat(tempdata[10]);
 		}
 
-		if (!elev->GetPanel(ToInt(tempdata[0])))
+		if (!car->GetPanel(ToInt(tempdata[0])))
 			return ScriptError("Invalid panel number");
 
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
+		Control* control = car->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 
 		if (control)
 		{
@@ -6793,7 +7041,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		if (!elev->GetPanel(ToInt(tempdata[0])))
+		if (!car->GetPanel(ToInt(tempdata[0])))
 			return ScriptError("Invalid panel number");
 
 		std::vector<std::string> action_array, tex_array;
@@ -6815,7 +7063,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddControl(tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = car->GetPanel(ToInt(tempdata[0]))->AddControl(tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
 		if (control)
 		{
@@ -6862,9 +7110,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			StoreCommand(elev->AddFloorIndicator(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
+			StoreCommand(car->AddFloorIndicator(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
 		else
-			StoreCommand(elev->AddFloorIndicator("Button", tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+			StoreCommand(car->AddFloorIndicator("Button", tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		return sNextLine;
 	}
 
@@ -6904,9 +7152,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			elev->AddDirectionalIndicators(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
+			car->AddDirectionalIndicators(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		else
-			elev->AddDirectionalIndicators(ToBool(tempdata[0]), false, ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
+			car->AddDirectionalIndicators(ToBool(tempdata[0]), false, ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 		return sNextLine;
 	}
 
@@ -6959,14 +7207,14 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			bool result;
-			result = elev->AddFloorSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			result = car->AddFloorSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 			if (result == false)
 				return ScriptError();
 		}
 		else if (compat == 1)
-			elev->AddFloorSigns(0, ToBool(tempdata[0]), "Button", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+			car->AddFloorSigns(0, ToBool(tempdata[0]), "Button", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		else if (compat == 2)
-			elev->AddFloorSigns(0, ToBool(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+			car->AddFloorSigns(0, ToBool(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		return sNextLine;
 	}
 
@@ -7026,16 +7274,16 @@ int ScriptProcessor::ProcElevators()
 		if (compat == true)
 		{
 			if (partial == true)
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]))));
+				StoreCommand(car->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]))));
 			else
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), true, ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 0.0, 360, 360, 1.0, Ogre::Vector3(ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]))));
+				StoreCommand(car->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), true, ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 0.0, 360, 360, 1.0, Ogre::Vector3(ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]))));
 		}
 		else
 		{
 			if (partial == true)
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
+				StoreCommand(car->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
 			else
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
+				StoreCommand(car->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
 		}
 		return sNextLine;
 	}
@@ -7069,9 +7317,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == true)
-			StoreCommand(elev->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
+			StoreCommand(car->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
 		else
-			StoreCommand(elev->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
+			StoreCommand(car->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		return sNextLine;
 	}
 
@@ -7104,9 +7352,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == true)
-			elev->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
+			car->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 		else
-			elev->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
+			car->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		return sNextLine;
 	}
 
@@ -7136,11 +7384,11 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value: " + tempdata[0]);
 
 		if (params == 1 || legacy == true)
-			StoreCommand(elev->FinishDoors(ToInt(tempdata[0])));
+			StoreCommand(car->FinishDoors(ToInt(tempdata[0])));
 		else if (params == 2)
-			StoreCommand(elev->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1])));
+			StoreCommand(car->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1])));
 		else
-			StoreCommand(elev->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2])));
+			StoreCommand(car->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2])));
 
 		return sNextLine;
 	}
@@ -7172,11 +7420,11 @@ int ScriptProcessor::ProcElevators()
 
 		bool result;
 		if (params == 1 || legacy == true)
-			result = elev->FinishShaftDoors(ToInt(tempdata[0]));
+			result = car->FinishShaftDoors(ToInt(tempdata[0]));
 		else if (params == 2)
-			result = elev->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]));
+			result = car->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]));
 		else
-			result = elev->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]));
+			result = car->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]));
 
 		if (result == false)
 			return ScriptError();
@@ -7201,7 +7449,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(elev->AddDirectionalIndicator(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
+		StoreCommand(car->AddDirectionalIndicator(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
 		return sNextLine;
 	}
 
@@ -7254,11 +7502,11 @@ int ScriptProcessor::ProcElevators()
 		Door* door;
 
 		if (compat == 1)
-			door = elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
+			door = car->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
 		else if (compat == 2)
-			door = elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
+			door = car->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 		else
-			door = elev->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			door = car->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 
 		if (door)
 			door->SetLocked(lockvalue, keyvalue);
@@ -7310,9 +7558,9 @@ int ScriptProcessor::ProcElevators()
 		//create model
 		Model *model;
 		if (compat == true)
-			model = elev->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			model = car->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
-			model = elev->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			model = car->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 		if (setkey == true && model)
 			model->SetKey(keyvalue);
@@ -7357,7 +7605,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		Control* control = elev->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = car->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
 		if (control)
 		{
@@ -7397,12 +7645,29 @@ int ScriptProcessor::ProcElevators()
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
-		StoreCommand(elev->AddTrigger(tempdata[0], tempdata[1], min, max, action_array));
+		StoreCommand(car->AddTrigger(tempdata[0], tempdata[1], min, max, action_array));
 		return sNextLine;
 	}
 
-	//handle elevator range
-	if (RangeL != RangeH && linecheck.substr(0, 12) == "<endelevator")
+	//CreateCar command
+	if (linecheck.substr(0, 9) == "createcar")
+	{
+		//get data
+		int params = SplitData(LineData, 10);
+
+		if (params != 1)
+			return ScriptError("Incorrect number of parameters");
+
+		bool result = car->CreateCar(ToInt(tempdata[0]));
+		if (result == false)
+			return ScriptError();
+
+		StoreCommand(car);
+		return sNextLine;
+	}
+
+	//handle car range
+	if (RangeL != RangeH && linecheck.substr(0, 7) == "<endcar")
 	{
 		if (Current < RangeH)
 		{
@@ -7412,14 +7677,17 @@ int ScriptProcessor::ProcElevators()
 		}
 		else
 		{
-			Section = 0; //break out of loop
-			Context = "None";
-			RangeL = 0;
-			RangeH = 0;
-			engine->Report("Finished elevators");
+			Section = 4; //break out of loop
+			Context = ContextOld;
+			RangeL = RangeLOld;
+			RangeH = RangeHOld;
+			RangeStart = RangeStartOld;
+			Current = CurrentOld;
+			engine->Report("Finished cars");
 			return sNextLine;
 		}
 	}
+
 	return sContinue;
 }
 
@@ -8244,6 +8512,8 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->context = "Floor " + current;
 	if (Section == 4)
 		object->context = "Elevator " + current;
+	if (Section == 6)
+		object->context = "Elevator " + ToString(CurrentOld) + " Car " + current;
 }
 
 bool ScriptProcessor::FunctionProc()
@@ -9048,10 +9318,16 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 			return Simcore->GetFloor(Current)->ColumnFrame;
 		return 0;
 	}
+	else if (name == "elevatorcar")
+	{
+		if (Section == 6)
+			return Simcore->GetElevator(CurrentOld)->GetCar(Current)->Mesh;
+		return 0;
+	}
 	else if (name == "elevator")
 	{
 		if (Section == 4)
-			return Simcore->GetElevator(Current)->ElevatorMesh;
+			return Simcore->GetElevator(Current)->GetCar(1)->Mesh;
 		return 0;
 	}
 	else if (name == "external")
@@ -9148,7 +9424,9 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	if (Section == 2)
 		model = Simcore->GetFloor(Current)->GetModel(name);
 	else if (Section == 4)
-		model = Simcore->GetElevator(Current)->GetModel(name);
+		model = Simcore->GetElevator(Current)->GetCar(1)->GetModel(name);
+	else if (Section == 6)
+		model = Simcore->GetElevator(CurrentOld)->GetCar(Current)->GetModel(name);
 	else
 		model = Simcore->GetModel(name);
 
@@ -9175,6 +9453,9 @@ std::string ScriptProcessor::DumpState()
 		output.append("In included file: " + IncludeFile + "\n");
 	output.append("Context: " + Context + "\n");
 
+	if (RangeL != RangeH)
+		output.append("Iteration Number: " + ToString(Current) + "\n");
+
 	if (InFunction != 0)
 	{
 		//report function information
@@ -9186,6 +9467,25 @@ std::string ScriptProcessor::DumpState()
 	output.append("Line text: " + LineData + "\n");
 
 	return output;
+}
+
+void ScriptProcessor::GetElevatorCar(std::string &value, int &elevator, int &car)
+{
+	//returns an elevator and car number for the specified string
+	//for example, use "1" for Elevator 1
+	//or "1:1" for Elevator 1 Car 1
+
+	TrimString(value);
+
+	if (IsNumeric(value, elevator))
+	{
+		car = 1;
+		return;
+	}
+
+	int pos = value.find(":");
+	elevator = ToInt(value.substr(0, pos));
+	car = ToInt(value.substr(pos + 1));
 }
 
 }

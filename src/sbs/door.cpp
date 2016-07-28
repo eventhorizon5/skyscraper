@@ -28,7 +28,7 @@
 #include "manager.h"
 #include "mesh.h"
 #include "floor.h"
-#include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "texture.h"
@@ -170,8 +170,8 @@ Door::~Door()
 		{
 			std::string type = GetParent()->GetType();
 
-			if (type == "Elevator")
-				static_cast<Elevator*>(GetParent())->RemoveDoor(this);
+			if (type == "ElevatorCar")
+				static_cast<ElevatorCar*>(GetParent())->RemoveDoor(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveDoor(this);
 			else if (type == "Shaft")

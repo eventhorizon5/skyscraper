@@ -28,6 +28,7 @@
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "camera.h"
@@ -118,8 +119,8 @@ void Model::RemoveFromParent()
 {
 	std::string type = GetParent()->GetType();
 
-	if (type == "Elevator")
-		static_cast<Elevator*>(GetParent())->RemoveModel(this);
+	if (type == "ElevatorCar")
+		static_cast<ElevatorCar*>(GetParent())->RemoveModel(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->RemoveModel(this);
 	else if (type == "Shaft")
@@ -139,8 +140,8 @@ void Model::AddToParent()
 
 	std::string type = GetParent()->GetType();
 
-	if (type == "Elevator")
-		static_cast<Elevator*>(GetParent())->AddModel(this);
+	if (type == "ElevatorCar")
+		static_cast<ElevatorCar*>(GetParent())->AddModel(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->AddModel(this);
 	else if (type == "Shaft")
@@ -170,10 +171,11 @@ void Model::Loop()
 
 			if (elev)
 			{
-				if (elev->IsInElevator(GetPosition()) == true)
+				ElevatorCar *car = elev->IsInElevator(GetPosition());
+				if (car)
 				{
 					RemoveFromParent();
-					ChangeParent(elev);
+					ChangeParent(car);
 					AddToParent();
 					break;
 				}
@@ -184,7 +186,7 @@ void Model::Loop()
 	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor (or make it global)
 	else if (elevator)
 	{
-		if (elevator->IsInElevator(GetPosition()) == false)
+		if (elevator->IsInElevator(GetPosition()) == 0)
 		{
 			if (global == false)
 			{
@@ -240,9 +242,10 @@ void Model::Drop()
 
 			if (elev)
 			{
-				if (elev->IsInElevator(GetPosition()) == true)
+				ElevatorCar *car = elev->IsInElevator(GetPosition());
+				if (car)
 				{
-					ChangeParent(elev);
+					ChangeParent(car);
 					found = true;
 					break;
 				}

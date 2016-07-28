@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevatorcar.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
 #include "sound.h"
@@ -312,10 +313,15 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 				Elevator *elevator = sbs->GetElevator(elevators[i]);
 				if (elevator)
 				{
-					for(size_t j = 0; j < elevator->ServicedFloors.size(); j++)
+					for (size_t j = 1; j <= elevator->GetCarCount(); j++)
 					{
-						if (elevator->ServicedFloors[j] == floor)
-							elevator->ShaftDoorsEnabled(0, elevator->ServicedFloors[j], value);
+						ElevatorCar *car = elevator->GetCar((int)j);
+
+						for (size_t k = 0; k < car->ServicedFloors.size(); k++)
+						{
+							if (car->ServicedFloors[k] == floor)
+								car->ShaftDoorsEnabled(0, car->ServicedFloors[k], value);
+						}
 					}
 				}
 			}
@@ -942,6 +948,11 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 	if (!elevator)
 		return;
 
+	ElevatorCar *car = elevator->GetCar(sbs->CarNumber);
+
+	if (!car)
+		return;
+
 	SBS_PROFILE("Shaft::Check");
 
 	if (IsInShaft(position) == true)
@@ -969,7 +980,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		{
 			//if user is in an elevator, show a range of the shaft at a time (while it's moving)
 			EnableRange(current_floor, sbs->ShaftDisplayRange, true, false);
-			elevator->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
+			car->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
 		}
 
 		//turn on related floors if ShowFloors is true
