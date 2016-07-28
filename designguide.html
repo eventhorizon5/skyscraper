@@ -1706,6 +1706,12 @@ will only chime when responding to a hall call.<br>
 Example: <font face="Courier New, Courier, mono" size="2">ChimeOnArrival =
 true</font></p>
 
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>38.
+ReOpen</strong> - if this is set to true, if the elevator is idle, the doors
+will reopen if the same floor is selected. The default is true.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">ReOpen =
+false</font></p>
+
 <br>
 
 <p align="left"><strong>Commands:</strong></p>
@@ -2005,13 +2011,7 @@ glass elevators).<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AutoEnable =
 false</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
-ReOpen</strong> - if this is set to true, if the elevator is idle, the doors
-will reopen if the same floor is selected. The default is true.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">ReOpen =
-false</font></p>
-
-<p align="left"><strong>35. DoorSensor</strong> - enable or disable the door
+<p align="left"><strong>34. DoorSensor</strong> - enable or disable the door
 sensor (electric eye), which is a trigger object placed in the elevator door
 area. Default is enabled for automatic doors. A second parameter specifies the
 sound file to play when switching between on and off - this is normally used
@@ -2030,19 +2030,19 @@ command name. So for elevator 1 car 1, you would create an action named "Elevato
 created.<br>
 </p>
 
-<p align="left"><strong>36. CarEmergencyStopSound</strong> - the sound file to play
+<p align="left"><strong>35. CarEmergencyStopSound</strong> - the sound file to play
 for the elevator car when an emergency stop is initiated.
 Leave the filename field blank to use the normal car stop sound, if specified.
 By default no sound is played.<br>
 Example: <font face="Courier New, Courier, mono" size="2">CarEmergencyStopSound =
 emergstop_car.wav</font></p>
 
-<p align="left"><strong>37. IndependentService</strong> - enables independent
+<p align="left"><strong>36. IndependentService</strong> - enables independent
 service mode for the elevator, and makes this car the active car for the mode.<br>
 Example: <font face="Courier New, Courier, mono" size="2">IndependentService =
 true</font></p>
 
-<p align="left"><strong>38. FireService2</strong> - sets the fire service phase
+<p align="left"><strong>37. FireService2</strong> - sets the fire service phase
 2 mode that the elevator will start with, and makes this car the active car for the mode.
 Default is 0. Values are 0 for off, 1 for on, 2 for hold.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService2 =
