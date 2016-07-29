@@ -5216,7 +5216,7 @@ int ScriptProcessor::ProcElevators()
 	Simcore->NewElevator(Current);
 
 	//replace variables with actual values
-	ReplaceAll(LineData, "%elevator%", buffer);
+	ReplaceAll(LineData, "%elevator%", ToString(Current));
 
 	//IF/While statement stub (continue to global commands for processing)
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
