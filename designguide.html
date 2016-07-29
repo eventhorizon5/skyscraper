@@ -3239,6 +3239,9 @@ be the elevator object)<br>
 needs to be elevator object)<br>
 <em>CloseShaftDoorManual</em>: door number (0 for all), floor number (parent
 needs to be elevator object)<br>
+<em>AccessDown</em>: floor number (parent needs to be elevator object)<br>
+<em>AccessOff</em>: floor number (parent needs to be elevator object)<br>
+<em>AccessUp</em>: floor number (parent needs to be elevator object)<br>
 (for other elevator commands, see the AddControl command in the elevator
 section)</p>
 
@@ -3260,6 +3263,10 @@ to play sound FireAlarm created using the AddSound command on Floor 1:</p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"><font
 face="Courier New, Courier, mono" size="2">AddAction MySound, Floor 1,
 FireAlarm, true</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">The
+<em>Access</em> commands enable and disable Hoistway Access Mode on the elevator, which is part of Inspection Mode.<br>
+For example, when <em>AccessUp</em> is used by a switch on the elevator's lowest landing, and the elevator is in inspection mode with the shaft doors open, the interlock check for that shaft door is disabled, and the elevator is allowed to move upwards at leveling speed.  If <em>AccessDown</em> is set, the elevator can move down.  When <em>AccessOff</em> is set, the elevator will refuse to move, due to the shaft doors being open, which causes the interlock check to fail.<br>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ak.
 AddActionControl</strong> - creates a custom control that uses a specific
