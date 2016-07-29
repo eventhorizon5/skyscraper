@@ -357,7 +357,6 @@
     <ClCompile Include="..\src\frontend\editelevator.cpp" />
     <ClCompile Include="..\src\frontend\enginecontext.cpp" />
     <ClCompile Include="..\src\frontend\enginemanager.cpp" />
-    <ClCompile Include="..\src\frontend\fileio.cpp" />
     <ClCompile Include="..\src\frontend\keydialog.cpp" />
     <ClCompile Include="..\src\frontend\loaddialog.cpp" />
     <ClCompile Include="..\src\frontend\mainscreen.cpp" />
@@ -372,6 +371,14 @@
     <ClCompile Include="..\src\frontend\stackwalker.cpp" />
     <ClCompile Include="..\src\frontend\stats.cpp" />
     <ClCompile Include="..\src\frontend\textwindow.cpp" />
+    <ClCompile Include="..\src\frontend\scriptprocessor.cpp" />
+    <ClCompile Include="..\src\frontend\script_globals.cpp" />
+    <ClCompile Include="..\src\frontend\script_buildings.cpp" />
+    <ClCompile Include="..\src\frontend\script_textures.cpp" />
+    <ClCompile Include="..\src\frontend\script_commands.cpp" />
+    <ClCompile Include="..\src\frontend\script_floors.cpp" />
+    <ClCompile Include="..\src\frontend\script_elevators.cpp" />
+    <ClCompile Include="..\src\frontend\script_elevatorcars.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\frontend\actionviewer.h" />
@@ -382,7 +389,7 @@
     <ClInclude Include="..\src\frontend\editelevator.h" />
     <ClInclude Include="..\src\frontend\enginecontext.h" />
     <ClInclude Include="..\src\frontend\enginemanager.h" />
-    <ClInclude Include="..\src\frontend\fileio.h" />
+    <ClInclude Include="..\src\frontend\scriptprocessor.h" />
     <ClInclude Include="..\src\frontend\keydialog.h" />
     <ClInclude Include="..\src\frontend\loaddialog.h" />
     <ClInclude Include="..\src\frontend\mainscreen.h" />
