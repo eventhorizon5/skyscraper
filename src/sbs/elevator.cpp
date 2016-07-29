@@ -1003,8 +1003,8 @@ void Elevator::Loop()
 	}
 
 	//process Hoistway Access
-	if (HoistwayAccess != 0)
-		SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);
+	/*if (HoistwayAccess != 0)
+		SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);*/
 
 	//process Go function hold
 	if (GoActive == true)
