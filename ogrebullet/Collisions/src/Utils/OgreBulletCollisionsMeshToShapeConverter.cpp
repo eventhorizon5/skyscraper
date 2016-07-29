@@ -302,7 +302,7 @@ BoxCollisionShape* VertexIndexToShape::createBox()
 {
 	const Ogre::Vector3 sz = getSize();
 
-	assert((sz.x > 0.0) && (sz.y > 0.0) && (sz.y > 0.0) && 
+	assert((sz.x > 0.0) && (sz.y > 0.0) && (sz.z > 0.0) && 
         ("Size of box must be greater than zero on all axes"));
 
 	BoxCollisionShape* shape = new BoxCollisionShape(sz);
@@ -313,7 +313,7 @@ CylinderCollisionShape* VertexIndexToShape::createCylinder()
 {
     const Ogre::Vector3 sz = getSize();
 
-    assert((sz.x > 0.0) && (sz.y > 0.0) && (sz.y > 0.0) && 
+    assert((sz.x > 0.0) && (sz.y > 0.0) && (sz.z > 0.0) && 
         ("Size of Cylinder must be greater than zero on all axes"));
 
     CylinderCollisionShape* shape = new CylinderCollisionShape(sz, Vector3::UNIT_X);
