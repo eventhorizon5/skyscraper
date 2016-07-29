@@ -177,6 +177,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	SkipFloorSound = false;
 	ManualStop = false;
 	ChimeOnArrival = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ChimeOnArrival", false);
+	HoistwayAccess = 0;
+	HoistwayAccessFloor = 0;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -999,6 +1001,10 @@ void Elevator::Loop()
 		if (ManualMove == -1)
 			Down();
 	}
+
+	//process Hoistway Access
+	if (HoistwayAccess != 0)
+		SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);
 
 	//process Go function hold
 	if (GoActive == true)
@@ -2320,6 +2326,8 @@ bool Elevator::EnableInspectionService(bool value)
 		ResetNudgeTimers(false); //switch off nudge timer
 		DirectionalIndicatorsOff(); //switch off directional indicators on current floor
 		Report("Inspection Service mode enabled");
+		HoistwayAccess = 0;
+		HoistwayAccessFloor = 0;
 		InspectionService = true;
 	}
 	else
@@ -2355,6 +2363,8 @@ bool Elevator::EnableInspectionService(bool value)
 			ResetShaftDoors(carfloor);
 		}
 
+		HoistwayAccess = 0;
+		HoistwayAccessFloor = 0;
 		InspectionService = false;
 
 		if (IsMoving == true)
@@ -4153,6 +4163,36 @@ bool Elevator::OnParkingFloor()
 		return false;
 
 	return (car->GetFloor() == ParkingFloor);
+}
+
+bool Elevator::SetHoistwayAccess(int floor, int access)
+{
+	//sets the hoistway access direction for the specified floor, for Inspection Service mode
+	//access is -1 for Down, 0 for Off, and 1 for Up
+
+	//with a direction enabled and held, this allows the elevator
+	//to move in that direction while the shaft doors are open
+
+	if (Running == false)
+		return ReportError("Elevator not running");
+
+	if (InspectionService == false)
+		return ReportError("Not in inspection service mode");
+
+	if (HoistwayAccess == 0)
+	{
+		//enable mode
+		HoistwayAccess = access;
+		HoistwayAccessFloor = floor;
+		return true;
+	}
+	else if (HoistwayAccess != 0 && sbs->camera->MouseDown == false)
+	{
+		//switch off if mouse button is released
+		HoistwayAccess = 0;
+		HoistwayAccessFloor = 0;
+	}
+	return true;
 }
 
 }

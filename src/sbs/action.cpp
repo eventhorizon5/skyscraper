@@ -544,6 +544,36 @@ bool Action::Run(Object *caller, Object *parent)
 			}
 			return false;
 		}
+		if (command_name == "accessdown")
+		{
+			if ((int)command_parameters.size() == 1)
+			{
+				int param = 0;
+				if (IsNumeric(command_parameters[0], param))
+					return elevator->SetHoistwayAccess(param, -1);
+			}
+			return false;
+		}
+		if (command_name == "accessup")
+		{
+			if ((int)command_parameters.size() == 1)
+			{
+				int param = 0;
+				if (IsNumeric(command_parameters[0], param))
+					return elevator->SetHoistwayAccess(param, 1);
+			}
+			return false;
+		}
+		if (command_name == "accessoff")
+		{
+			if ((int)command_parameters.size() == 1)
+			{
+				int param = 0;
+				if (IsNumeric(command_parameters[0], param))
+					return elevator->SetHoistwayAccess(param, 0);
+			}
+			return false;
+		}
 	}
 
 	if (command_name == "changetexture")

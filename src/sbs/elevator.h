@@ -222,6 +222,7 @@ public:
 	void HoldDoors();
 	void EnableNudgeMode(bool value);
 	bool OnParkingFloor();
+	bool SetHoistwayAccess(int floor, int access);
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
@@ -292,6 +293,8 @@ private:
 	bool QueuePending; //true if either queue has changed, and needs to be processed
 	int GoActiveFloor; //associated floor number for GoActive flag
 	bool ManualStop; //true if elevator has been manually stopped
+	int HoistwayAccess; //INS mode Hoistway Access; -1 for Down, 0 for Off, 1 for Up
+	int HoistwayAccessFloor; //floor used for Hoistway Access
 
 	//functions
 	void MoveElevatorToFloor();
