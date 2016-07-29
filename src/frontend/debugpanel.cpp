@@ -35,7 +35,7 @@
 #include "texture.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
-#include "fileio.h"
+#include "scriptprocessor.h"
 #include "enginecontext.h"
 #include "console.h"
 #include "meshcontrol.h"

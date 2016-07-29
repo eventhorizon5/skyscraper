@@ -46,7 +46,7 @@
 #include "debugpanel.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
-#include "fileio.h"
+#include "scriptprocessor.h"
 #include "console.h"
 #include "mainscreen.h"
 #include "loaddialog.h"

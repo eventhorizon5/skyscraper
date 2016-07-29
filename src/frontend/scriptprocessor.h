@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.10 Alpha - File I/O and Script Processing Routines
+	Skyscraper 1.10 Alpha - Script Processor
 	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -22,8 +22,16 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef FILEIO_H
-#define FILEIO_H
+#ifndef SCRIPTPROCESSOR_H
+#define SCRIPTPROCESSOR_H
+
+#define sContinue 0
+#define sNextLine 1
+#define sError 2
+#define sCheckFloors 3
+#define sBreak 4
+#define sRecalc 5
+#define sSkipReset 6
 
 namespace Skyscraper {
 

@@ -27,7 +27,7 @@
 #include "sbs.h"
 #include "camera.h"
 #include "debugpanel.h"
-#include "fileio.h"
+#include "scriptprocessor.h"
 #include "enginecontext.h"
 
 using namespace SBS;

@@ -34,7 +34,7 @@
 #include "skyscraper.h"
 #include "debugpanel.h"
 #include "enginecontext.h"
-#include "fileio.h"
+#include "scriptprocessor.h"
 #include "createobject.h"
 #include "parameterviewer.h"
 #include "moveobject.h"
