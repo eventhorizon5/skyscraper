@@ -25,19 +25,12 @@
 #ifndef SCRIPTPROCESSOR_H
 #define SCRIPTPROCESSOR_H
 
-#define sContinue 0
-#define sNextLine 1
-#define sError 2
-#define sCheckFloors 3
-#define sBreak 4
-#define sRecalc 5
-#define sSkipReset 6
-
 namespace Skyscraper {
 
 class ScriptProcessor
 {
 public:
+
 	ScriptProcessor(EngineContext *instance);
 	~ScriptProcessor();
 	bool Run();
@@ -56,6 +49,15 @@ public:
 	void GetElevatorCar(std::string &value, int &elevator, int &car);
 
 	bool IsFinished;
+
+	//return codes
+	static const int sContinue = 0;
+	static const int sNextLine = 1;
+	static const int sError = 2;
+	static const int sCheckFloors = 3;
+	static const int sBreak = 4;
+	static const int sRecalc = 5;
+	static const int sSkipReset = 6;
 
 private:
 
