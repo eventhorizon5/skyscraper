@@ -1123,17 +1123,6 @@ void Elevator::MoveElevatorToFloor()
 			goto finish; //skip main processing and run cleanup section
 		}
 
-		//exit if doors are not fully closed while interlocks enabled
-		if (CheckInterlocks() == false)
-		{
-			ReportError("Doors must be closed before moving when interlocks are enabled");
-			MoveElevator = false;
-			MovementRunning = false;
-			Direction = 0;
-			DeleteActiveRoute();
-			return;
-		}
-
 		//determine direction
 		if (InspectionService == false && ManualMove == 0)
 		{
@@ -1158,6 +1147,29 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		ActiveDirection = Direction;
+
+		bool skip_interlock = false;
+		if (InspectionService == true && HoistwayAccess == Direction)
+		{
+			//skip the interlock check if Hoistway Access is enabled
+			//for the floor and direction, and the shaft doors are open
+			if (GetCar(GotoFloorCar)->AreShaftDoorsOpen(0, HoistwayAccessFloor) == true)
+			{
+				skip_interlock = true;
+				Report("skipping interlock check for floor " + ToString(HoistwayAccessFloor));
+			}
+		}
+
+		//exit if doors are not fully closed while interlocks enabled
+		if (CheckInterlocks() == false && skip_interlock == false)
+		{
+			ReportError("Doors must be closed before moving when interlocks are enabled");
+			MoveElevator = false;
+			MovementRunning = false;
+			Direction = 0;
+			DeleteActiveRoute();
+			return;
+		}
 
 		//determine distance to destination floor
 		if (InspectionService == false && ManualMove == 0)
@@ -1330,8 +1342,10 @@ void Elevator::MoveElevatorToFloor()
 		float limit = 0;
 		if (InspectionService == false)
 			limit = ElevatorSpeed;
-		else
+		else if (HoistwayAccess == 0)
 			limit = ElevatorSpeed * InspectionSpeed;
+		else
+			limit = LevelingSpeed; //if hoistway access is on, run at leveling speed
 
 		if (Direction == 1 && ElevatorRate < limit)
 			ElevatorRate += ElevatorSpeed * ((Acceleration * JerkRate) * sbs->delta);
@@ -4179,20 +4193,39 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 	if (InspectionService == false)
 		return ReportError("Not in inspection service mode");
 
-	if (HoistwayAccess == 0)
+	if (access == 0)
+	{
+		//disable mode
+		HoistwayAccess = 0;
+		HoistwayAccessFloor = 0;
+		if (IsMoving == true)
+			Stop();
+
+		Report("Hoistway Access set to Off for floor " + ToString(floor));
+		return true;
+	}
+	else if (HoistwayAccess == 0)
 	{
 		//enable mode
 		HoistwayAccess = access;
 		HoistwayAccessFloor = floor;
+
+		std::string direction = "Down";
+		if (HoistwayAccess == 1)
+			direction == "Up";
+		Report("Hoistway Access set to " + direction + " for floor " + ToString(floor));
 		return true;
 	}
-	else if (HoistwayAccess != 0 && sbs->camera->MouseDown == false)
+	/*else if (HoistwayAccess != 0 && sbs->camera->MouseDown == false)
 	{
 		//switch off if mouse button is released
 		HoistwayAccess = 0;
 		HoistwayAccessFloor = 0;
-	}
-	return true;
+
+		if (IsMoving == true)
+			Stop();
+	}*/
+	return false;
 }
 
 }

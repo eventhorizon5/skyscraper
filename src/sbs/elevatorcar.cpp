@@ -1426,11 +1426,24 @@ bool ElevatorCar::AreShaftDoorsOpen(int number, int floor)
 	//returns the internal shaft door state
 
 	SBS_PROFILE("Elevator::AreShaftDoorsOpen");
-	ElevatorDoor *door = GetDoor(number);
-	if (door)
-		return door->AreShaftDoorsOpen(floor);
-	else
-		ReportError("Invalid door " + ToString(number));
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->AreShaftDoorsOpen(floor) == true)
+				return true;
+		}
+		else
+			ReportError("Invalid door " + ToString(i));
+	}
 	return false;
 }
 
