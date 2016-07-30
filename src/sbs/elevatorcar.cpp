@@ -297,6 +297,13 @@ ElevatorCar::~ElevatorCar()
 		delete Mesh;
 	}
 	Mesh = 0;
+
+	if (sbs->FastDelete == false)
+	{
+		//unregister from parent
+		if (parent_deleting == false)
+			parent->RemoveCar(this);
+	}
 }
 
 bool ElevatorCar::CreateCar(int floor)

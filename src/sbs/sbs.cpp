@@ -2765,6 +2765,8 @@ bool SBS::DeleteObject(Object *object)
 		ElevatorCar *car = static_cast<ElevatorCar*>(object);
 		if (car->Number != car->GetElevator()->GetCarCount())
 			return ReportError("Only the highest elevator car can be deleted");
+		if (car->Number == 1)
+			return ReportError("Cannot delete the primary elevator car");
 
 		deleted = true;
 	}

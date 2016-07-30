@@ -3866,6 +3866,19 @@ int Elevator::GetCarCount()
 	return (int)Cars.size();
 }
 
+void Elevator::RemoveCar(ElevatorCar* car)
+{
+	//remove a car reference (does not delete the object itself)
+	for (size_t i = 0; i < Cars.size(); i++)
+	{
+		if (Cars[i] == car)
+		{
+			Cars.erase(Cars.begin() + i);
+			return;
+		}
+	}
+}
+
 ElevatorCar* Elevator::GetCarForFloor(int number, bool report_on_failure)
 {
 	//return car that services specified floor

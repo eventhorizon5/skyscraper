@@ -226,6 +226,7 @@ public:
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
+	void RemoveCar(ElevatorCar* car);
 	int GetCarCount();
 	ElevatorCar* GetCarForFloor(int number, bool report_on_failure = false);
 	int GetFloorForCar(int car, int number);
