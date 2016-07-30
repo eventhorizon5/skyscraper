@@ -54,13 +54,6 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 {
 	//process global commands
 
-	std::string buffer;
-	int temp1;
-	int temp3;
-	int temp4;
-	int temp5;
-	std::string temp2;
-
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
 
@@ -72,17 +65,18 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		IsIf = 2;
 	if (IsIf > 0)
 	{
-		temp1 = LineData.find("[", 0);
-		temp3 = LineData.find("]", 0);
-		if (temp1 + temp3 > 0)
-			temp2 = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
+		int loc1 = LineData.find("[", 0);
+		int loc2 = LineData.find("]", 0);
+		std::string str;
+		if (loc1 + loc2 > 0)
+			str = LineData.substr(loc1 + 1, loc2 - loc1 - 1);
 		else
-			temp2 = "";
-		TrimString(temp2);
-		if (IfProc(temp2) == true)
+			str = "";
+		TrimString(str);
+		if (IfProc(str) == true)
 		{
 			//trim off IF/While statement
-			LineData = LineData.substr(temp3 + 1);
+			LineData = LineData.substr(loc2 + 1);
 			TrimString(LineData);
 
 			if (IsIf == 2)
@@ -287,11 +281,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	//Set command
 	if (linecheck.substr(0, 4) == "set ")
 	{
-		temp1 = LineData.find("=", 0);
-		if (temp1 < 0)
+		int loc = LineData.find("=", 0);
+		if (loc < 0)
 			return ScriptError("Syntax Error");
 
-		std::string str = LineData.substr(4, temp1 - 5);
+		std::string str = LineData.substr(4, loc - 5);
 		TrimString(str);
 
 		//reserved keywords
@@ -299,7 +293,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Cannot use system variable name");
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		std::string value = Calc(GetAfterEquals(LineData));
 
 		//find existing variable by name
 		int index = -1;
@@ -311,8 +305,6 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				break;
 			}
 		}
-
-		std::string value = Calc(temp2);
 
 		if (index == -1)
 		{
@@ -465,8 +457,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		std::vector<Ogre::Vector3> varray;
-		for (temp3 = start; temp3 < params - 2; temp3 += 3)
-			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]) + voffset, ToFloat(tempdata[temp3 + 2])));
+		for (int i = start; i < params - 2; i += 3)
+			varray.push_back(Ogre::Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
 		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
@@ -504,8 +496,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		std::vector<Ogre::Vector2> varray;
-		for (temp3 = 3; temp3 < params - 3; temp3 += 2)
-			varray.push_back(Ogre::Vector2(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1])));
+		for (int i = 3; i < params - 3; i += 2)
+			varray.push_back(Ogre::Vector2(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1])));
 
 		StoreCommand(Simcore->AddCustomFloor(mesh, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
@@ -548,8 +540,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		std::vector<Ogre::Vector3> varray;
-		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
-			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]) + voffset, ToFloat(tempdata[temp3 + 2])));
+		for (int i = 3; i < params - 2; i += 3)
+			varray.push_back(Ogre::Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
 		Simcore->AddPolygon(wall, tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 
@@ -830,9 +822,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Invalid shaft number");
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		std::string value = GetAfterEquals(LineData);
 
-		Simcore->GetShaft(shaftnum)->SetShowFull(ToBool(temp2));
+		Simcore->GetShaft(shaftnum)->SetShowFull(ToBool(value));
 		return sNextLine;
 	}
 
@@ -956,24 +948,24 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Invalid stairwell number");
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
-		SetCase(temp2, false);
+		std::string strvalue = GetAfterEquals(LineData);
+		SetCase(strvalue, false);
 
 		int value = 0;
 
-		if (IsBoolean(temp2) == true)
+		if (IsBoolean(strvalue) == true)
 		{
-			if (ToBool(temp2) == true)
+			if (ToBool(strvalue) == true)
 				value = 1;
 		}
 		else
 		{
-			if (temp2 == "inside")
+			if (strvalue == "inside")
 				value = 1;
-			else if (temp2 == "always")
+			else if (strvalue == "always")
 				value = 2;
 			else
-				return ScriptError("Invalid value: " + temp2);
+				return ScriptError("Invalid value: " + strvalue);
 		}
 
 		Simcore->GetStairs(stairnum)->SetShowFull(value);
@@ -984,9 +976,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 15) == "wallorientation")
 	{
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		std::string value = GetAfterEquals(LineData);
 
-		if (!Simcore->SetWallOrientation(temp2))
+		if (!Simcore->SetWallOrientation(value))
 			return ScriptError();
 		return sNextLine;
 	}
@@ -995,9 +987,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 16) == "floororientation")
 	{
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		std::string value = GetAfterEquals(LineData);
 
-		if (!Simcore->SetFloorOrientation(temp2))
+		if (!Simcore->SetFloorOrientation(value))
 			return ScriptError();
 		return sNextLine;
 	}
@@ -1075,9 +1067,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Syntax Error");
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		std::string value = GetAfterEquals(LineData);
 
-		texturemanager->ResetTextureMapping(ToBool(temp2));
+		texturemanager->ResetTextureMapping(ToBool(value));
 		return sNextLine;
 	}
 
@@ -1120,26 +1112,27 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		int temp2check = LineData.find("=", 0);
 		if (temp2check < 0)
 			return ScriptError("Syntax Error");
-		temp2 = GetAfterEquals(LineData);
+		std::string value = GetAfterEquals(LineData);
 
-		ReverseAxis = ToBool(temp2);
+		ReverseAxis = ToBool(value);
 		return sNextLine;
 	}
 
 	//Intersection points
-	temp5 = linecheck.find("isect(", 0);
-	while (temp5 > -1)
+	int found = (int)linecheck.find("isect(", 0);
+	while (found > -1)
 	{
-		temp1 = LineData.find("(", 0);
-		temp4 = LineData.find(")", 0);
-		if (temp1 < 0 || temp4 < 0)
+		int loc1 = LineData.find("(", 0);
+		int loc2 = LineData.find(")", 0);
+		if (loc1 < 0 || loc2 < 0)
 			return ScriptError("Syntax error");
 
-		SplitString(tempdata, LineData.substr(temp1 + 1, temp4 - temp1 - 1), ',');
-		for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
+		std::string buffer;
+		SplitString(tempdata, LineData.substr(loc1 + 1, loc2 - loc1 - 1), ',');
+		for (int i = 0; i < (int)tempdata.size(); i++)
 		{
-			buffer = Calc(tempdata[temp3]);
-			tempdata[temp3] = buffer;
+			buffer = Calc(tempdata[i]);
+			tempdata[i] = buffer;
 		}
 		if (tempdata.size() < 8 || tempdata.size() > 8)
 			return ScriptError("Incorrect number of parameters");
@@ -1158,26 +1151,27 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		Ogre::Vector3 isect = mesh->GetPoint(tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
 
-		buffer = LineData.substr(0, temp5) + ToString(isect.x) + ", " + ToString(isect.y) + ", " + ToString(isect.z) + LineData.substr(temp4 + 1);
+		buffer = LineData.substr(0, found) + ToString(isect.x) + ", " + ToString(isect.y) + ", " + ToString(isect.z) + LineData.substr(loc2 + 1);
 		LineData = buffer;
 		linecheck = SetCaseCopy(LineData, false);
-		temp5 = linecheck.find("isect(", 0);
+		found = linecheck.find("isect(", 0);
 	}
 
 	//Endpoint function
-	temp5 = linecheck.find("endpoint(", 0);
-	while (temp5 > -1)
+	found = linecheck.find("endpoint(", 0);
+	while (found > -1)
 	{
-		temp1 = LineData.find("(", 0);
-		temp4 = LineData.find(")", 0);
-		if (temp1 < 0 || temp4 < 0)
+		int loc1 = LineData.find("(", 0);
+		int loc2 = LineData.find(")", 0);
+		if (loc1 < 0 || loc2 < 0)
 			return ScriptError("Syntax error");
 
-		SplitString(tempdata, LineData.substr(temp1 + 1, temp4 - temp1 - 1), ',');
-		for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
+		std::string buffer;
+		SplitString(tempdata, LineData.substr(loc1 + 1, loc2 - loc1 - 1), ',');
+		for (int i = 0; i < (int)tempdata.size(); i++)
 		{
-			buffer = Calc(tempdata[temp3]);
-			tempdata[temp3] = buffer;
+			buffer = Calc(tempdata[i]);
+			tempdata[i] = buffer;
 		}
 		if (tempdata.size() != 4)
 			return ScriptError("Incorrect number of parameters");
@@ -1192,10 +1186,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Ogre::Vector2 startpoint (ToFloat(tempdata[0]), ToFloat(tempdata[1]));
 		Ogre::Vector2 endpoint = Simcore->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 
-		buffer = LineData.substr(0, temp5) + ToString(endpoint.x) + ", " + ToString(endpoint.y) + LineData.substr(temp4 + 1);
+		buffer = LineData.substr(0, found) + ToString(endpoint.x) + ", " + ToString(endpoint.y) + LineData.substr(loc2 + 1);
 		LineData = buffer;
 		linecheck = SetCaseCopy(LineData, false);
-		temp5 = linecheck.find("endpoint(", 0);
+		found = linecheck.find("endpoint(", 0);
 	}
 
 	//GetWallExtents command
@@ -1551,10 +1545,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (temp3 = 8; temp3 < slength - (parameters / 2); temp3++)
-			action_array.push_back(tempdata[temp3]);
-		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
-			tex_array.push_back(tempdata[temp3]);
+		for (int i = 8; i < slength - (parameters / 2); i++)
+			action_array.push_back(tempdata[i]);
+		for (int i = slength - (parameters / 2); i < slength; i++)
+			tex_array.push_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -1687,11 +1681,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		//calculate inline math
-		buffer = Calc(LineData.substr(7));
+		std::string value = Calc(LineData.substr(7));
 
 		int obj;
-		if (!IsNumeric(buffer, obj))
-			return ScriptError("Invalid value: " + buffer);
+		if (!IsNumeric(value, obj))
+			return ScriptError("Invalid value: " + value);
 
 		//delete object
 		Simcore->DeleteObject(obj);
@@ -1706,10 +1700,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		//calculate inline math
-		buffer = Calc(LineData.substr(10));
+		std::string value = Calc(LineData.substr(10));
 
 		//run action
-		Simcore->RunAction(buffer);
+		Simcore->RunAction(value);
 
 		return sNextLine;
 	}
@@ -1721,11 +1715,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		//calculate inline math
-		buffer = Calc(LineData.substr(10));
+		std::string value = Calc(LineData.substr(10));
 
 		int num;
-		if (!IsNumeric(buffer, num))
-			return ScriptError("Invalid value: " + buffer);
+		if (!IsNumeric(value, num))
+			return ScriptError("Invalid value: " + value);
 
 		Simcore->camera->GotoFloor(num);
 
@@ -1740,11 +1734,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		else
 		{
 			//calculate inline math
-			buffer = Calc(LineData.substr(10));
+			std::string value = Calc(LineData.substr(10));
 
 			int num;
-			if (!IsNumeric(buffer, num))
-				return ScriptError("Invalid value: " + buffer);
+			if (!IsNumeric(value, num))
+				return ScriptError("Invalid value: " + value);
 
 			Floor *floor = Simcore->GetFloor(num);
 			if (floor)
@@ -1787,10 +1781,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 5) == "print")
 	{
 		//calculate inline math
-		buffer = Calc(LineData.substr(5));
+		std::string value = Calc(LineData.substr(5));
 
 		//print line
-		engine->Report(buffer);
+		engine->Report(value);
 
 		return sNextLine;
 	}
