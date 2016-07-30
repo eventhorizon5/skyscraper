@@ -65,6 +65,7 @@ public:
 	static const int sBreak = 4;
 	static const int sRecalc = 5;
 	static const int sSkipReset = 6;
+	static const int sExit = 7;
 
 	struct VariableMap
 	{
@@ -120,6 +121,12 @@ private:
 	bool FunctionProc();
 	void CheckFile(const std::string &filename);
 	void GetLineInformation(bool CheckFunctionCall, int &LineNumber, std::string &FunctionName, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile);
+	void ProcessFunctionParameters();
+	void ProcessUserVariables();
+	int ProcessSections();
+	int ProcessFloorObjects();
+	void Breakpoint();
+	void ProcessExtents();
 
 	struct FunctionInfo
 	{

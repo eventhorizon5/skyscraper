@@ -123,14 +123,6 @@ bool ScriptProcessor::Run()
 {
 	//building loader/script interpreter
 
-	int temp1;
-	std::string temp2;
-	int temp3;
-	int temp4;
-	std::string buffer;
-	int temp5;
-	std::string temp6;
-
 	int returncode = sContinue;
 	IsFinished = false;
 
@@ -145,674 +137,40 @@ bool ScriptProcessor::Run()
 			ReplaceLine = false;
 		}
 
-		//create a lowercase string of the line
-		std::string linecheck = SetCaseCopy(LineData, false);
-
 		//skip blank lines
 		if (LineData == "")
 			goto Nextline;
 
 		//process comment markers
-		temp1 = LineData.find("#", 0);
-		if (temp1 > -1)
-			LineData.erase(temp1);
-
-		linecheck = SetCaseCopy(LineData, false);
+		{
+		int marker = LineData.find("#", 0);
+		if (marker > -1)
+			LineData.erase(marker);
+		}
 
 		//skip blank lines
 		if (LineData == "")
 			goto Nextline;
 
+		//process function parameters
+		ProcessFunctionParameters();
 
-		//////////////////////////////
-		//Function parameter variables
-		//////////////////////////////
-		if (InFunction > 0)
-		{
-			startpos = 0;
-			do
-			{
-				//Function parameter conversion
-				temp1 = LineData.find("%param", startpos);
-				if (temp1 >= startpos)
-				{
-					temp3 = LineData.find("%", temp1 + 6);
-					if (temp3 >= (int)LineData.length() || temp3 < 0)
-					{
-						temp1 = 0;
-						temp3 = 0;
-						break;
-					}
-				}
-				else
-				{
-					//none (or no more) variables found
-					temp1 = 0;
-					temp3 = 0;
-					break;
-				}
+		//process user variables
+		ProcessUserVariables();
 
-				if (temp1 + temp3 > 0)
-				{
-					std::string str = LineData.substr(temp1 + 6, temp3 - (temp1 + 6));
-					TrimString(str);
-					temp2 = str;
-					if (IsNumeric(temp2) == true)
-					{
-						temp4 = ToInt(temp2);
+		//process sections
+		returncode = ProcessSections();
+		if (returncode != sContinue)
+			goto handlecodes;
 
-						//replace all occurrences of the variable with it's value
-						std::string replacement;
-						if (temp4 > 0 && temp4 <= (int)FunctionStack[InFunction - 1].Params.size())
-							replacement = FunctionStack[InFunction - 1].Params[temp4 - 1];
-						else
-							replacement = "";
-
-						ReplaceAll(LineData, "%param" + temp2 + "%", replacement);
-						startpos = temp1;
-					}
-					else
-						startpos = temp3 + 1;
-				}
-				else
-					startpos++;
-			} while (true);
-		}
-		else if (show_percent == true)
-		{
-			int percent = ((float)line / (float)BuildingData.size()) * 100.0;
-			std::string percent_s = ToString(percent);
-			int marker = percent / 10;
-			if (marker > progress_marker)
-			{
-				progress_marker = marker;
-				engine->Report(percent_s + "%");
-				engine->UpdateProgress(percent);
-			}
-		}
-
-		linecheck = SetCaseCopy(LineData, false);
-
-
-		//////////////////
-		//User variables
-		//////////////////
-		startpos = 0;
-		do
-		{
-			//User variable conversion
-			temp1 = LineData.find("%", startpos);
-			if (temp1 >= startpos)
-			{
-				temp3 = LineData.find("%", temp1 + 1);
-				if (temp3 >= (int)LineData.length() || temp3 < 0)
-				{
-					temp1 = 0;
-					temp3 = 0;
-					break;
-				}
-			}
-			else
-			{
-				//none (or no more) variables found
-				temp1 = 0;
-				temp3 = 0;
-				break;
-			}
-
-			if (temp1 + temp3 > 0)
-			{
-				temp2 = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
-				TrimString(temp2);
-
-				bool found = false;
-				for (size_t i = 0; i < variables.size(); i++)
-				{
-					if (variables[i].name == temp2)
-					{
-						found = true;
-
-						//replace all occurrences of the variable with it's value
-						ReplaceAll(LineData, "%" + temp2 + "%", variables[i].value);
-						startpos = temp1;
-						break;
-					}
-				}
-
-				if (found == false)
-					startpos = temp3 + 1;
-			}
-			else
-				startpos++;
-		} while (true);
-
-
-		//////////////////////
-		//Section information
-		//////////////////////
-		if (linecheck == "<globals>")
-		{
-			if (Section::SectionNum > 0)
-			{
-				ScriptError("Already within a section");
-				goto Error;
-			}
-			Section::SectionNum = 1;
-			Section::Context = "Globals";
-			engine->Report("Processing globals...");
-			goto Nextline;
-		}
-		if (linecheck == "<endglobals>")
-		{
-			if (Section::SectionNum != 1)
-			{
-				ScriptError("Not in global section");
-				goto Error;
-			}
-			Section::SectionNum = 0;
-			Section::Context = "None";
-			engine->Report("Finished globals");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 5) == "<end>")
-		{
-			Section::SectionNum = 0;
-			Section::Context = "None";
-			engine->Report("Exiting building script");
-			IsFinished = true;
-			show_percent = false;
-			line = (int)BuildingData.size(); //jump to end of script
-			return true; //exit data file parser
-		}
-		if (linecheck.substr(0, 7) == "<break>")
-		{
-			//breakpoint function for debugging scripts
-breakpoint:
-			engine->Report("Script breakpoint reached");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 8) == "<include")
-		{
-			//include another file at the current script location
-
-			int endloc = LineData.find(">");
-
-			if (endloc == -1)
-			{
-				ScriptError("Syntax error");
-				goto Error;
-			}
-
-			std::string includefile = LineData.substr(9, endloc - 9);
-			TrimString(includefile);
-
-			//delete current line
-			BuildingData.erase(BuildingData.begin() + line);
-
-			//insert file at current line
-			std::string filename = Simcore->VerifyFile(includefile);
-			bool result = LoadDataFile(filename, true, line);
-			if (result == false)
-				goto Error;
-			engine->Report("Inserted file " + includefile);
-
-			line--;
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 9) == "<function")
-		{
-			//define a function
-
-			if (Section::SectionNum != 0)
-			{
-				ScriptError("Cannot define a function within a section");
-				goto Error;
-			}
-
-			int endloc = LineData.find(">");
-
-			if (endloc == -1)
-			{
-				ScriptError("Syntax error");
-				goto Error;
-			}
-
-			std::string function = LineData.substr(10, endloc - 10);
-			TrimString(function);
-
-			//skip the function definition and show a warning if it's already been defined
-			bool defined = IsFunctionDefined(function);
-
-			if (defined == true)
-				engine->Report("Function '" + function + "' already defined");
-			else
-			{
-				//store function info in array
-				FunctionInfo info;
-				info.name = function;
-				info.line = line;
-				functions.push_back(info);
-			}
-
-			//skip to end of function
-			for (int i = line + 1; i < (int)BuildingData.size(); i++)
-			{
-				if (SetCaseCopy(BuildingData[i].substr(0, 13), false) == "<endfunction>")
-				{
-					line = i;
-					break;
-				}
-			}
-
-			if (defined == false)
-				engine->Report("Defined function " + function);
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 10) == "<textures>")
-		{
-			if (Section::SectionNum > 0)
-			{
-				ScriptError("Already within a section");
-				goto Error;
-			}
-			Section::SectionNum = 5;
-			Section::Context = "Textures";
-			engine->Report("Processing textures...");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 13) == "<endtextures>")
-		{
-			if (Section::SectionNum != 5)
-			{
-				ScriptError("Not in texture section");
-				goto Error;
-			}
-			Simcore->GetTextureManager()->FreeTextureImages();
-			Section::SectionNum = 0;
-			Section::Context = "None";
-			engine->Report("Finished textures");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
-		{
-			//end function and return to original line
-			line = FunctionStack[InFunction - 1].CallLine - 1;
-			ReplaceLineData = FunctionStack[InFunction - 1].LineData;
-			FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
-			InFunction -= 1;
-			ReplaceLine = true;
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 7) == "<floors")
-		{
-			if (Section::SectionNum > 0)
-			{
-				ScriptError("Already within a section");
-				goto Error;
-			}
-			Section::SectionNum = 2;
-			temp3 = linecheck.find("to", 0);
-			if (temp3 < 0)
-			{
-				ScriptError("Syntax error");
-				goto Error;
-
-			}
-			//get low and high range markers
-			std::string str1 = LineData.substr(8, temp3 - 9);
-			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
-			TrimString(str1);
-			TrimString(str2);
-			if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
-			{
-				ScriptError("Invalid range");
-				goto Error;
-			}
-			Section::Context = "Floor range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
-			Section::Current = Section::RangeL;
-			Section::RangeStart = line;
-			engine->Report("Processing floors " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 7) == "<floor ")
-		{
-			if (Section::SectionNum > 0)
-			{
-				ScriptError("Already within a section");
-				goto Error;
-			}
-			Section::SectionNum = 2;
-			Section::RangeL = 0;
-			Section::RangeH = 0;
-			std::string str = LineData.substr(7, LineData.length() - 8);
-			TrimString(str);
-			if (!IsNumeric(str, Section::Current))
-			{
-				ScriptError("Invalid floor");
-				goto Error;
-			}
-			Section::Context = "Floor " + ToString(Section::Current);
-			engine->Report("Processing floor " + ToString(Section::Current) + "...");
-			goto Nextline;
-		}
-		if (linecheck == "<endfloor>" && Section::RangeL == Section::RangeH)
-		{
-			if (Section::SectionNum != 2)
-			{
-				ScriptError("Not in floor section");
-				goto Error;
-			}
-			Section::SectionNum = 0;
-			Section::Context = "None";
-			engine->Report("Finished floor");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 10) == "<elevators")
-		{
-			if (Section::SectionNum > 0)
-			{
-				ScriptError("Already within a section");
-				goto Error;
-			}
-			Section::SectionNum = 4;
-			temp3 = linecheck.find("to", 10);
-			if (temp3 < 0)
-			{
-				ScriptError("Syntax error");
-				goto Error;
-			}
-			std::string str1 = LineData.substr(11, temp3 - 12);
-			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
-			TrimString(str1);
-			TrimString(str2);
-			if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
-			{
-				ScriptError("Invalid range");
-				goto Error;
-			}
-			Section::Context = "Elevator range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
-			Section::Current = Section::RangeL;
-			Section::RangeStart = line;
-			engine->Report("Processing elevators " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 10) == "<elevator ")
-		{
-			if (Section::SectionNum > 0)
-			{
-				ScriptError("Already within a section");
-				goto Error;
-			}
-			Section::SectionNum = 4;
-			Section::RangeL = 0;
-			Section::RangeH = 0;
-			std::string str = LineData.substr(10, LineData.length() - 11);
-			TrimString(str);
-			if (!IsNumeric(str, Section::Current))
-			{
-				ScriptError("Invalid elevator");
-				goto Error;
-			}
-			if (Section::Current < 1 || Section::Current > Simcore->GetElevatorCount() + 1)
-			{
-				ScriptError("Invalid elevator");
-				goto Error;
-			}
-			Section::Context = "Elevator " + ToString(Section::Current);
-			engine->Report("Processing elevator " + ToString(Section::Current) + "...");
-			goto Nextline;
-		}
-		if (linecheck == "<endelevator>" && Section::RangeL == Section::RangeH)
-		{
-			if (Section::SectionNum != 4)
-			{
-				ScriptError("Not in elevator section");
-				goto Error;
-			}
-			Section::SectionNum = 0;
-			Section::Context = "None";
-			engine->Report("Finished elevator");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 11) == "<buildings>")
-		{
-			//skip this section if reloading
-			if (engine->IsReloading() == true)
-				goto Nextline;
-
-			if (Section::SectionNum > 0)
-			{
-				ScriptError("Already within a section");
-				goto Error;
-			}
-			Section::SectionNum = 3;
-			Section::Context = "Buildings";
-			engine->Report("Loading other buildings...");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 14) == "<endbuildings>")
-		{
-			//skip this section if reloading
-			if (engine->IsReloading() == true)
-				goto Nextline;
-
-			if (Section::SectionNum != 3)
-			{
-				ScriptError("Not in buildings section");
-				goto Error;
-			}
-			Section::SectionNum = 0;
-			Section::Context = "None";
-			engine->Report("Finished loading other buildings");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 5) == "<cars" && Section::SectionNum == 4)
-		{
-			Section::SectionNum = 6;
-			temp3 = linecheck.find("to", 5);
-			if (temp3 < 0)
-			{
-				ScriptError("Syntax error");
-				goto Error;
-			}
-
-			//store previous elevator section values
-			Section::CurrentOld = Section::Current;
-			Section::RangeLOld = Section::RangeL;
-			Section::RangeHOld = Section::RangeH;
-			Section::RangeStartOld = Section::RangeStart;
-			Section::ContextOld = Section::Context;
-
-			std::string str1 = LineData.substr(6, temp3 - 7);
-			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
-			TrimString(str1);
-			TrimString(str2);
-			if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
-			{
-				ScriptError("Invalid range");
-				goto Error;
-			}
-
-			//verify elevator
-			if (!Simcore->GetElevator(Section::CurrentOld))
-			{
-				ScriptError("Invalid elevator");
-				goto Error;
-			}
-
-			Section::Context = "Elevator " + ToString(Section::CurrentOld) + " Car range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
-			Section::Current = Section::RangeL;
-			Section::RangeStart = line;
-			engine->Report("Processing elevator " + ToString(Section::CurrentOld) + " cars " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 5) == "<car " && Section::SectionNum == 4)
-		{
-			Section::SectionNum = 6;
-
-			//store previous elevator section values
-			Section::CurrentOld = Section::Current;
-			Section::RangeLOld = Section::RangeL;
-			Section::RangeHOld = Section::RangeH;
-			Section::RangeStartOld = Section::RangeStart;
-			Section::ContextOld = Section::Context;
-
-			Section::RangeL = 0;
-			Section::RangeH = 0;
-			std::string str = LineData.substr(5, LineData.length() - 6);
-			TrimString(str);
-			if (!IsNumeric(str, Section::Current))
-			{
-				ScriptError("Invalid car number");
-				goto Error;
-			}
-
-			//verify elevator
-			if (!Simcore->GetElevator(Section::CurrentOld))
-			{
-				ScriptError("Invalid elevator");
-				goto Error;
-			}
-
-			Section::Context = "Elevator " + ToString(Section::CurrentOld) + " Car " + ToString(Section::Current);
-			engine->Report("Processing elevator " + ToString(Section::CurrentOld) + " car " + ToString(Section::Current) + "...");
-			goto Nextline;
-		}
-		if (linecheck == "<endcar>" && Section::RangeL == Section::RangeH)
-		{
-			if (Section::SectionNum != 6)
-			{
-				ScriptError("Not in car section");
-				goto Error;
-			}
-
-			//return to elevator section
-			Section::SectionNum = 4;
-			Section::Context = Section::ContextOld;
-			Section::Current = Section::CurrentOld;
-			Section::RangeL = Section::RangeLOld;
-			Section::RangeH = Section::RangeHOld;
-			Section::RangeStart = Section::RangeStartOld;
-
-			engine->Report("Finished car");
-			goto Nextline;
-		}
-
-
-		//////////////////////////
-		//Floor object conversion
-		//////////////////////////
+		//process floor object conversions
 checkfloors:
-		temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
-		while (temp5 > -1)
-		{
-			temp1 = LineData.find("(", temp5);
-			temp3 = LineData.find(")", temp5);
-			if (temp3 < 0)
-			{
-				ScriptError("Syntax error");
-				goto Error;
-			}
-			if (Section::SectionNum == 2 && getfloordata == false)
-			{
-				//process floor-specific variables if in a floor section
-				getfloordata = true;
-				goto recalc;
-			}
-			else
-				getfloordata = false;
-			std::string tempdata = Calc(LineData.substr(temp1 + 1, temp3 - temp1 - 1));
-			LineData = LineData.substr(0, temp1 + 1) + tempdata + LineData.substr(temp3);
+		returncode = ProcessFloorObjects();
+		if (returncode != sContinue)
+			goto handlecodes;
 
-			if (!IsNumeric(tempdata, temp4))
-			{
-				ScriptError("Invalid floor " + tempdata);
-				goto Error;
-			}
-			if (Simcore->IsValidFloor(temp4) == false)
-			{
-				ScriptError("Invalid floor " + tempdata);
-				goto Error;
-			}
-
-			//fullheight parameter
-			buffer = ToString(temp4);
-			TrimString(buffer);
-			temp6 = "floor(" + buffer + ").fullheight";
-			buffer = LineData;
-			SetCase(buffer, false);
-			temp1 = buffer.find(temp6, 0);
-			if (temp1 > 0)
-			{
-				buffer = ToString(Simcore->GetFloor(temp4)->FullHeight());
-				TrimString(buffer);
-				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
-			}
-
-			//height parameter
-			buffer = ToString(temp4);
-			TrimString(buffer);
-			temp6 = "floor(" + buffer + ").height";
-			buffer = LineData;
-			SetCase(buffer, false);
-			temp1 = buffer.find(temp6, 0);
-			if (temp1 > 0)
-			{
-				buffer = ToString(Simcore->GetFloor(temp4)->Height);
-				TrimString(buffer);
-				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
-			}
-
-			//altitude parameter
-			buffer = ToString(temp4);
-			TrimString(buffer);
-			temp6 = "floor(" + buffer + ").altitude";
-			buffer = LineData;
-			SetCase(buffer, false);
-			temp1 = buffer.find(temp6, 0);
-			if (temp1 > 0)
-			{
-				buffer = ToString(Simcore->GetFloor(temp4)->Altitude);
-				TrimString(buffer);
-				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
-			}
-
-			//interfloorheight parameter
-			buffer = ToString(temp4);
-			TrimString(buffer);
-			temp6 = "floor(" + buffer + ").interfloorheight";
-			buffer = LineData;
-			SetCase(buffer, false);
-			temp1 = buffer.find(temp6, 0);
-			if (temp1 > 0)
-			{
-				buffer = ToString(Simcore->GetFloor(temp4)->InterfloorHeight);
-				TrimString(buffer);
-				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
-			}
-			temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
-
-			//base parameter
-			buffer = ToString(temp4);
-			TrimString(buffer);
-			temp6 = "floor(" + buffer + ").base";
-			buffer = LineData;
-			SetCase(buffer, false);
-			temp1 = buffer.find(temp6, 0);
-			if (temp1 > 0)
-			{
-				buffer = ToString(Simcore->GetFloor(temp4)->GetBase());
-				TrimString(buffer);
-				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
-			}
-			temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
-		}
-
-		//Extent variables
-		ReplaceAll(LineData, "%minx%", ToString(Section::MinExtent.x));
-		ReplaceAll(LineData, "%minz%", ToString(Section::MinExtent.z));
-		ReplaceAll(LineData, "%maxx%", ToString(Section::MaxExtent.x));
-		ReplaceAll(LineData, "%maxz%", ToString(Section::MaxExtent.z));
+		//process extent variables
+		ProcessExtents();
 
 		//reset return code
 		returncode = sContinue;
@@ -851,16 +209,22 @@ recalc:
 			returncode = commands_section->Run(LineData);
 
 		//handle return values
+handlecodes:
 		if (returncode == sError)
 			goto Error;
 		else if (returncode == sCheckFloors)
 			goto checkfloors;
 		else if (returncode == sBreak)
-			goto breakpoint;
+		{
+			Breakpoint();
+			goto Nextline;
+		}
 		else if (returncode == sRecalc)
 			goto recalc;
 		else if (returncode == sSkipReset)
 			goto Nextline;
+		else if (returncode == sExit)
+			return true;
 
 		//reset temporary states
 		Simcore->GetTextureManager()->TextureOverride = false;
@@ -1803,6 +1167,681 @@ EngineContext* ScriptProcessor::GetEngine()
 ScriptProcessor::ElevatorCarSection* ScriptProcessor::GetElevatorCarSection()
 {
 	return elevatorcar_section;
+}
+
+void ScriptProcessor::ProcessFunctionParameters()
+{
+	//////////////////////////////
+	//Function parameter variables
+	//////////////////////////////
+	if (InFunction > 0)
+	{
+		startpos = 0;
+		int loc1 = 0;
+		int loc2 = 0;
+		do
+		{
+			//Function parameter conversion
+			loc1 = LineData.find("%param", startpos);
+			loc2 = 0;
+			if (loc1 >= startpos)
+			{
+				loc2 = LineData.find("%", loc1 + 6);
+				if (loc2 >= (int)LineData.length() || loc2 < 0)
+				{
+					loc1 = 0;
+					loc2 = 0;
+					break;
+				}
+			}
+			else
+			{
+				//none (or no more) variables found
+				loc1 = 0;
+				loc2 = 0;
+				break;
+			}
+
+			if (loc1 + loc2 > 0)
+			{
+				std::string str = LineData.substr(loc1 + 6, loc2 - (loc1 + 6));
+				TrimString(str);
+				if (IsNumeric(str) == true)
+				{
+					int index = ToInt(str);
+
+					//replace all occurrences of the variable with it's value
+					std::string replacement;
+					if (index > 0 && index <= (int)FunctionStack[InFunction - 1].Params.size())
+						replacement = FunctionStack[InFunction - 1].Params[index - 1];
+					else
+						replacement = "";
+
+					ReplaceAll(LineData, "%param" + str + "%", replacement);
+					startpos = loc1;
+				}
+				else
+					startpos = loc2 + 1;
+			}
+			else
+				startpos++;
+		} while (true);
+	}
+	else if (show_percent == true)
+	{
+		int percent = ((float)line / (float)BuildingData.size()) * 100.0;
+		std::string percent_s = ToString(percent);
+		int marker = percent / 10;
+		if (marker > progress_marker)
+		{
+			progress_marker = marker;
+			engine->Report(percent_s + "%");
+			engine->UpdateProgress(percent);
+		}
+	}
+}
+
+void ScriptProcessor::ProcessUserVariables()
+{
+	//////////////////
+	//User variables
+	//////////////////
+	startpos = 0;
+	do
+	{
+		//User variable conversion
+		int loc1 = LineData.find("%", startpos);
+		int loc2 = 0;
+		std::string str;
+		if (loc1 >= startpos)
+		{
+			loc2 = LineData.find("%", loc1 + 1);
+			if (loc2 >= (int)LineData.length() || loc2 < 0)
+			{
+				loc1 = 0;
+				loc2 = 0;
+				break;
+			}
+		}
+		else
+		{
+			//none (or no more) variables found
+			loc1 = 0;
+			loc2 = 0;
+			break;
+		}
+
+		if (loc1 + loc2 > 0)
+		{
+			str = LineData.substr(loc1 + 1, loc2 - loc1 - 1);
+			TrimString(str);
+
+			bool found = false;
+			for (size_t i = 0; i < variables.size(); i++)
+			{
+				if (variables[i].name == str)
+				{
+					found = true;
+
+					//replace all occurrences of the variable with it's value
+					ReplaceAll(LineData, "%" + str + "%", variables[i].value);
+					startpos = loc1;
+					break;
+				}
+			}
+
+			if (found == false)
+				startpos = loc2 + 1;
+		}
+		else
+			startpos++;
+	} while (true);
+}
+
+int ScriptProcessor::ProcessSections()
+{
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
+	//////////////////////
+	//Section information
+	//////////////////////
+	if (linecheck == "<globals>")
+	{
+		if (Section::SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		Section::SectionNum = 1;
+		Section::Context = "Globals";
+		engine->Report("Processing globals...");
+		return sNextLine;
+	}
+	if (linecheck == "<endglobals>")
+	{
+		if (Section::SectionNum != 1)
+		{
+			ScriptError("Not in global section");
+			return sError;
+		}
+		Section::SectionNum = 0;
+		Section::Context = "None";
+		engine->Report("Finished globals");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 5) == "<end>")
+	{
+		Section::SectionNum = 0;
+		Section::Context = "None";
+		engine->Report("Exiting building script");
+		IsFinished = true;
+		show_percent = false;
+		line = (int)BuildingData.size(); //jump to end of script
+		return sExit; //exit data file parser
+	}
+	if (linecheck.substr(0, 7) == "<break>")
+	{
+		Breakpoint();
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 8) == "<include")
+	{
+		//include another file at the current script location
+
+		int endloc = LineData.find(">");
+
+		if (endloc == -1)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+
+		std::string includefile = LineData.substr(9, endloc - 9);
+		TrimString(includefile);
+
+		//delete current line
+		BuildingData.erase(BuildingData.begin() + line);
+
+		//insert file at current line
+		std::string filename = Simcore->VerifyFile(includefile);
+		bool result = LoadDataFile(filename, true, line);
+		if (result == false)
+			return sError;
+		engine->Report("Inserted file " + includefile);
+
+		line--;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "<function")
+	{
+		//define a function
+
+		if (Section::SectionNum != 0)
+		{
+			ScriptError("Cannot define a function within a section");
+			return sError;
+		}
+
+		int endloc = LineData.find(">");
+
+		if (endloc == -1)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+
+		std::string function = LineData.substr(10, endloc - 10);
+		TrimString(function);
+
+		//skip the function definition and show a warning if it's already been defined
+		bool defined = IsFunctionDefined(function);
+
+		if (defined == true)
+			engine->Report("Function '" + function + "' already defined");
+		else
+		{
+			//store function info in array
+			FunctionInfo info;
+			info.name = function;
+			info.line = line;
+			functions.push_back(info);
+		}
+
+		//skip to end of function
+		for (int i = line + 1; i < (int)BuildingData.size(); i++)
+		{
+			if (SetCaseCopy(BuildingData[i].substr(0, 13), false) == "<endfunction>")
+			{
+				line = i;
+				break;
+			}
+		}
+
+		if (defined == false)
+			engine->Report("Defined function " + function);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "<textures>")
+	{
+		if (Section::SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		Section::SectionNum = 5;
+		Section::Context = "Textures";
+		engine->Report("Processing textures...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 13) == "<endtextures>")
+	{
+		if (Section::SectionNum != 5)
+		{
+			ScriptError("Not in texture section");
+			return sError;
+		}
+		Simcore->GetTextureManager()->FreeTextureImages();
+		Section::SectionNum = 0;
+		Section::Context = "None";
+		engine->Report("Finished textures");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
+	{
+		//end function and return to original line
+		line = FunctionStack[InFunction - 1].CallLine - 1;
+		ReplaceLineData = FunctionStack[InFunction - 1].LineData;
+		FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
+		InFunction -= 1;
+		ReplaceLine = true;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 7) == "<floors")
+	{
+		if (Section::SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		Section::SectionNum = 2;
+		int loc = linecheck.find("to", 0);
+		if (loc < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+
+		}
+		//get low and high range markers
+		std::string str1 = LineData.substr(8, loc - 9);
+		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
+		{
+			ScriptError("Invalid range");
+			return sError;
+		}
+		Section::Context = "Floor range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
+		Section::Current = Section::RangeL;
+		Section::RangeStart = line;
+		engine->Report("Processing floors " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 7) == "<floor ")
+	{
+		if (Section::SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		Section::SectionNum = 2;
+		Section::RangeL = 0;
+		Section::RangeH = 0;
+		std::string str = LineData.substr(7, LineData.length() - 8);
+		TrimString(str);
+		if (!IsNumeric(str, Section::Current))
+		{
+			ScriptError("Invalid floor");
+			return sError;
+		}
+		Section::Context = "Floor " + ToString(Section::Current);
+		engine->Report("Processing floor " + ToString(Section::Current) + "...");
+		return sNextLine;
+	}
+	if (linecheck == "<endfloor>" && Section::RangeL == Section::RangeH)
+	{
+		if (Section::SectionNum != 2)
+		{
+			ScriptError("Not in floor section");
+			return sError;
+		}
+		Section::SectionNum = 0;
+		Section::Context = "None";
+		engine->Report("Finished floor");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "<elevators")
+	{
+		if (Section::SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		Section::SectionNum = 4;
+		int loc = linecheck.find("to", 10);
+		if (loc < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		std::string str1 = LineData.substr(11, loc - 12);
+		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
+		{
+			ScriptError("Invalid range");
+			return sError;
+		}
+		Section::Context = "Elevator range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
+		Section::Current = Section::RangeL;
+		Section::RangeStart = line;
+		engine->Report("Processing elevators " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "<elevator ")
+	{
+		if (Section::SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		Section::SectionNum = 4;
+		Section::RangeL = 0;
+		Section::RangeH = 0;
+		std::string str = LineData.substr(10, LineData.length() - 11);
+		TrimString(str);
+		if (!IsNumeric(str, Section::Current))
+		{
+			ScriptError("Invalid elevator");
+			return sError;
+		}
+		if (Section::Current < 1 || Section::Current > Simcore->GetElevatorCount() + 1)
+		{
+			ScriptError("Invalid elevator");
+			return sError;
+		}
+		Section::Context = "Elevator " + ToString(Section::Current);
+		engine->Report("Processing elevator " + ToString(Section::Current) + "...");
+		return sNextLine;
+	}
+	if (linecheck == "<endelevator>" && Section::RangeL == Section::RangeH)
+	{
+		if (Section::SectionNum != 4)
+		{
+			ScriptError("Not in elevator section");
+			return sError;
+		}
+		Section::SectionNum = 0;
+		Section::Context = "None";
+		engine->Report("Finished elevator");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "<buildings>")
+	{
+		//skip this section if reloading
+		if (engine->IsReloading() == true)
+			return sNextLine;
+
+		if (Section::SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		Section::SectionNum = 3;
+		Section::Context = "Buildings";
+		engine->Report("Loading other buildings...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 14) == "<endbuildings>")
+	{
+		//skip this section if reloading
+		if (engine->IsReloading() == true)
+			return sNextLine;
+
+		if (Section::SectionNum != 3)
+		{
+			ScriptError("Not in buildings section");
+			return sError;
+		}
+		Section::SectionNum = 0;
+		Section::Context = "None";
+		engine->Report("Finished loading other buildings");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 5) == "<cars" && Section::SectionNum == 4)
+	{
+		Section::SectionNum = 6;
+		int loc = linecheck.find("to", 5);
+		if (loc < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+
+		//store previous elevator section values
+		Section::CurrentOld = Section::Current;
+		Section::RangeLOld = Section::RangeL;
+		Section::RangeHOld = Section::RangeH;
+		Section::RangeStartOld = Section::RangeStart;
+		Section::ContextOld = Section::Context;
+
+		std::string str1 = LineData.substr(6, loc - 7);
+		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
+		{
+			ScriptError("Invalid range");
+			return sError;
+		}
+
+		//verify elevator
+		if (!Simcore->GetElevator(Section::CurrentOld))
+		{
+			ScriptError("Invalid elevator");
+			return sError;
+		}
+
+		Section::Context = "Elevator " + ToString(Section::CurrentOld) + " Car range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
+		Section::Current = Section::RangeL;
+		Section::RangeStart = line;
+		engine->Report("Processing elevator " + ToString(Section::CurrentOld) + " cars " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 5) == "<car " && Section::SectionNum == 4)
+	{
+		Section::SectionNum = 6;
+
+		//store previous elevator section values
+		Section::CurrentOld = Section::Current;
+		Section::RangeLOld = Section::RangeL;
+		Section::RangeHOld = Section::RangeH;
+		Section::RangeStartOld = Section::RangeStart;
+		Section::ContextOld = Section::Context;
+
+		Section::RangeL = 0;
+		Section::RangeH = 0;
+		std::string str = LineData.substr(5, LineData.length() - 6);
+		TrimString(str);
+		if (!IsNumeric(str, Section::Current))
+		{
+			ScriptError("Invalid car number");
+			return sError;
+		}
+
+		//verify elevator
+		if (!Simcore->GetElevator(Section::CurrentOld))
+		{
+			ScriptError("Invalid elevator");
+			return sError;
+		}
+
+		Section::Context = "Elevator " + ToString(Section::CurrentOld) + " Car " + ToString(Section::Current);
+		engine->Report("Processing elevator " + ToString(Section::CurrentOld) + " car " + ToString(Section::Current) + "...");
+		return sNextLine;
+	}
+	if (linecheck == "<endcar>" && Section::RangeL == Section::RangeH)
+	{
+		if (Section::SectionNum != 6)
+		{
+			ScriptError("Not in car section");
+			return sError;
+		}
+
+		//return to elevator section
+		Section::SectionNum = 4;
+		Section::Context = Section::ContextOld;
+		Section::Current = Section::CurrentOld;
+		Section::RangeL = Section::RangeLOld;
+		Section::RangeH = Section::RangeHOld;
+		Section::RangeStart = Section::RangeStartOld;
+
+		engine->Report("Finished car");
+		return sNextLine;
+	}
+
+	return sContinue;
+}
+
+int ScriptProcessor::ProcessFloorObjects()
+{
+	//////////////////////////
+	//Floor object conversion
+	//////////////////////////
+	int exists = SetCaseCopy(LineData, false).find("floor(", 0);
+	while (exists > -1)
+	{
+		int loc1 = LineData.find("(", exists);
+		int loc2 = LineData.find(")", exists);
+		if (loc2 < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		if (Section::SectionNum == 2 && getfloordata == false)
+		{
+			//process floor-specific variables if in a floor section
+			getfloordata = true;
+			return sRecalc;
+		}
+		else
+			getfloordata = false;
+		std::string tempdata = Calc(LineData.substr(loc1 + 1, loc2 - loc1 - 1));
+		LineData = LineData.substr(0, loc1 + 1) + tempdata + LineData.substr(loc2);
+
+		int floor = 0;
+		if (!IsNumeric(tempdata, floor))
+		{
+			ScriptError("Invalid floor " + tempdata);
+			return sError;
+		}
+		if (Simcore->IsValidFloor(floor) == false)
+		{
+			ScriptError("Invalid floor " + tempdata);
+			return sError;
+		}
+
+		//fullheight parameter
+		std::string buffer = ToString(floor);
+		TrimString(buffer);
+		std::string name = "floor(" + buffer + ").fullheight";
+		buffer = LineData;
+		SetCase(buffer, false);
+		loc1 = buffer.find(name, 0);
+		if (loc1 > 0)
+		{
+			buffer = ToString(Simcore->GetFloor(floor)->FullHeight());
+			TrimString(buffer);
+			LineData = LineData.substr(0, loc1) + buffer + LineData.substr(loc1 + name.length());
+		}
+
+		//height parameter
+		buffer = ToString(floor);
+		TrimString(buffer);
+		name = "floor(" + buffer + ").height";
+		buffer = LineData;
+		SetCase(buffer, false);
+		loc1 = buffer.find(name, 0);
+		if (loc1 > 0)
+		{
+			buffer = ToString(Simcore->GetFloor(floor)->Height);
+			TrimString(buffer);
+			LineData = LineData.substr(0, loc1) + buffer + LineData.substr(loc1 + name.length());
+		}
+
+		//altitude parameter
+		buffer = ToString(floor);
+		TrimString(buffer);
+		name = "floor(" + buffer + ").altitude";
+		buffer = LineData;
+		SetCase(buffer, false);
+		loc1 = buffer.find(name, 0);
+		if (loc1 > 0)
+		{
+			buffer = ToString(Simcore->GetFloor(floor)->Altitude);
+			TrimString(buffer);
+			LineData = LineData.substr(0, loc1) + buffer + LineData.substr(loc1 + name.length());
+		}
+
+		//interfloorheight parameter
+		buffer = ToString(floor);
+		TrimString(buffer);
+		name = "floor(" + buffer + ").interfloorheight";
+		buffer = LineData;
+		SetCase(buffer, false);
+		loc1 = buffer.find(name, 0);
+		if (loc1 > 0)
+		{
+			buffer = ToString(Simcore->GetFloor(floor)->InterfloorHeight);
+			TrimString(buffer);
+			LineData = LineData.substr(0, loc1) + buffer + LineData.substr(loc1 + name.length());
+		}
+		exists = SetCaseCopy(LineData, false).find("floor(", 0);
+
+		//base parameter
+		buffer = ToString(floor);
+		TrimString(buffer);
+		name = "floor(" + buffer + ").base";
+		buffer = LineData;
+		SetCase(buffer, false);
+		loc1 = buffer.find(name, 0);
+		if (loc1 > 0)
+		{
+			buffer = ToString(Simcore->GetFloor(floor)->GetBase());
+			TrimString(buffer);
+			LineData = LineData.substr(0, loc1) + buffer + LineData.substr(loc1 + name.length());
+		}
+		exists = SetCaseCopy(LineData, false).find("floor(", 0);
+	}
+
+	return sContinue;
+}
+
+void ScriptProcessor::Breakpoint()
+{
+	//breakpoint function for debugging scripts
+	engine->Report("Script breakpoint reached");
+}
+
+void ScriptProcessor::ProcessExtents()
+{
+	//Extent variables
+	ReplaceAll(LineData, "%minx%", ToString(Section::MinExtent.x));
+	ReplaceAll(LineData, "%minz%", ToString(Section::MinExtent.z));
+	ReplaceAll(LineData, "%maxx%", ToString(Section::MaxExtent.x));
+	ReplaceAll(LineData, "%maxz%", ToString(Section::MaxExtent.z));
 }
 
 }
