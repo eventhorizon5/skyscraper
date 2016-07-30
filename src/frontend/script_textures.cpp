@@ -42,10 +42,6 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 {
 	//Process Textures
 
-	std::string buffer;
-	std::string temp6;
-	std::string temp2;
-
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
 
@@ -199,19 +195,20 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		}
 		int RangeL = ToInt(tempdata[0]);
 		int RangeH = ToInt(tempdata[1]);
+		std::string filename, buffer, name;
 		for (int Current = RangeL; Current <= RangeH; Current++)
 		{
-			temp2 = tempdata[2];
+			filename = tempdata[2];
 			buffer = ToString(Current);
 			TrimString(buffer);
-			ReplaceAll(temp2, "%number%", buffer);
-			temp6 = tempdata[3];
-			ReplaceAll(temp6, "%number%", buffer);
-			parent->CheckFile(temp2);
+			ReplaceAll(filename, "%number%", buffer);
+			name = tempdata[3];
+			ReplaceAll(name, "%number%", buffer);
+			parent->CheckFile(filename);
 			if (params == 6)
-				texturemanager->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+				texturemanager->LoadTexture(filename, name, ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 			else
-				texturemanager->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]), true, ToBool(tempdata[6]));
+				texturemanager->LoadTexture(filename, name, ToFloat(tempdata[4]), ToFloat(tempdata[5]), true, ToBool(tempdata[6]));
 		}
 		return sNextLine;
 	}
@@ -236,14 +233,14 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		buffer = tempdata[2];
-		TrimString(buffer);
-		buffer.insert(0, "data/fonts/");
-		parent->CheckFile(buffer);
+		std::string filename = tempdata[2];
+		TrimString(filename);
+		filename.insert(0, "data/fonts/");
+		parent->CheckFile(filename);
 		if (params == 14)
-			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]));
+			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], filename, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]));
 		else
-			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]), true, ToBool(tempdata[14]));
+			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], filename, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]), true, ToBool(tempdata[14]));
 		return sNextLine;
 	}
 
@@ -271,25 +268,25 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		}
 		int RangeL = ToInt(tempdata[0]);
 		int RangeH = ToInt(tempdata[1]);
-		temp6 = LineData;
+		std::string orig_line = LineData;
 		for (int Current = RangeL; Current <= RangeH; Current++)
 		{
-			buffer = ToString(Current);
-			TrimString(buffer);
-			LineData = temp6;
-			ReplaceAll(LineData, "%number%", buffer);
+			std::string num = ToString(Current);
+			TrimString(num);
+			LineData = orig_line;
+			ReplaceAll(LineData, "%number%", num);
 
 			//get data
 			int params = SplitData(LineData, 13, false);
 
-			buffer = tempdata[4];
-			TrimString(buffer);
-			buffer.insert(0, "data/fonts/");
-			parent->CheckFile(buffer);
+			std::string filename = tempdata[4];
+			TrimString(filename);
+			filename.insert(0, "data/fonts/");
+			parent->CheckFile(filename);
 			if (params == 16)
-				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]));
+				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], filename, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]));
 			else
-				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, ToBool(tempdata[16]));
+				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], filename, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, ToBool(tempdata[16]));
 		}
 		linecheck = SetCaseCopy(LineData, false);
 		return sNextLine;

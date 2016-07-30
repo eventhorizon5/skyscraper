@@ -43,11 +43,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 {
 	//process global parameters
 
-	int temp3;
-	int temp4;
-
 	//get text after equal sign
-	std::string temp2 = GetAfterEquals(LineData);
+	std::string value = GetAfterEquals(LineData);
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -55,53 +52,53 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	//store variable values
 	if (linecheck.substr(0, 4) == "name")
 	{
-		Simcore->BuildingName = temp2;
+		Simcore->BuildingName = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "designer")
 	{
-		Simcore->BuildingDesigner = temp2;
+		Simcore->BuildingDesigner = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "location")
 	{
-		Simcore->BuildingLocation = temp2;
+		Simcore->BuildingLocation = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "description")
 	{
-		Simcore->BuildingDescription = temp2;
+		Simcore->BuildingDescription = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "version")
 	{
-		Simcore->BuildingVersion = temp2;
+		Simcore->BuildingVersion = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 3) == "sky")
 	{
-		Simcore->SkyName = temp2;
+		Simcore->SkyName = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "dynamicsky")
 	{
-		engine->GetFrontend()->SkyName = temp2;
+		engine->GetFrontend()->SkyName = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "collisions")
 	{
-		Simcore->camera->EnableCollisions(ToBool(temp2));
+		Simcore->camera->EnableCollisions(ToBool(value));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "gravity")
 	{
-		Simcore->camera->EnableGravity(ToBool(temp2));
+		Simcore->camera->EnableGravity(ToBool(value));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "camerafloor")
 	{
 		int data;
-		if (!IsNumeric(temp2, data))
+		if (!IsNumeric(value, data))
 			return ScriptError("Invalid floor");
 
 		Simcore->camera->StartFloor = data;
@@ -110,8 +107,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 14) == "cameraposition")
 	{
 		float x, z;
-		std::string str1 = temp2.substr(0, temp2.find(",", 0));
-		std::string str2 = temp2.substr(temp2.find(",", 0) + 1);
+		std::string str1 = value.substr(0, value.find(",", 0));
+		std::string str2 = value.substr(value.find(",", 0) + 1);
 		TrimString(str1);
 		TrimString(str2);
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, z))
@@ -123,12 +120,12 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 15) == "cameradirection")
 	{
-		temp3 = temp2.find(",", 0);
-		temp4 = temp2.find(",", temp3 + 1);
+		int loc1 = value.find(",", 0);
+		int loc2 = value.find(",", loc1 + 1);
 		float x, y, z;
-		std::string str1 = temp2.substr(0, temp3);
-		std::string str2 = temp2.substr(temp3 + 1, temp4 - temp3 - 1);
-		std::string str3 = temp2.substr(temp4 + 1);
+		std::string str1 = value.substr(0, loc1);
+		std::string str2 = value.substr(loc1 + 1, loc2 - loc1 - 1);
+		std::string str3 = value.substr(loc2 + 1);
 		TrimString(str1);
 		TrimString(str2);
 		TrimString(str3);
@@ -140,12 +137,12 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 14) == "camerarotation")
 	{
-		temp3 = temp2.find(",", 0);
-		temp4 = temp2.find(",", temp3 + 1);
+		int loc1 = value.find(",", 0);
+		int loc2 = value.find(",", loc1 + 1);
 		float x, y, z;
-		std::string str1 = temp2.substr(0, temp3);
-		std::string str2 = temp2.substr(temp3 + 1, temp4 - temp3 - 1);
-		std::string str3 = temp2.substr(temp4 + 1);
+		std::string str1 = value.substr(0, loc1);
+		std::string str2 = value.substr(loc1 + 1, loc2 - loc1 - 1);
+		std::string str3 = value.substr(loc2 + 1);
 		TrimString(str1);
 		TrimString(str2);
 		TrimString(str3);
@@ -157,15 +154,15 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 15) == "interfloorontop")
 	{
-		Simcore->InterfloorOnTop = ToBool(temp2);
+		Simcore->InterfloorOnTop = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "coordinates")
 	{
-		temp3 = temp2.find(",", 0);
+		int loc = value.find(",", 0);
 		float latitude, longitude;
-		std::string str1 = temp2.substr(0, temp3);
-		std::string str2 = temp2.substr(temp3 + 1);
+		std::string str1 = value.substr(0, loc);
+		std::string str2 = value.substr(loc + 1);
 		TrimString(str1);
 		TrimString(str2);
 		if (!IsNumeric(str1, latitude) || !IsNumeric(str2, longitude))
@@ -177,7 +174,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 8) == "datetime")
 	{
 		double data;
-		if (!IsNumeric(temp2, data))
+		if (!IsNumeric(value, data))
 			return ScriptError("Invalid Julian date/time");
 
 		engine->GetFrontend()->SetDateTime(data);
@@ -211,7 +208,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 8) == "rotation")
 	{
 		float rotation;
-		if (!IsNumeric(temp2, rotation))
+		if (!IsNumeric(value, rotation))
 			return ScriptError("Invalid rotation");
 
 		Simcore->Rotate(0.0f, rotation, 0.0f);

@@ -42,8 +42,6 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 {
 	//Load additional buildings
 
-	std::string temp2;
-
 	//IF/While statement stub (continue to global commands for processing)
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
 		return sContinue;
@@ -58,7 +56,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 
 	//get text after equal sign
 	int temp2check = LineData.find("=", 0);
-	temp2 = GetAfterEquals(LineData);
+	std::string value = GetAfterEquals(LineData);
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -69,7 +67,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->ConcurrentLoads = ToBool(temp2);
+		engine->GetFrontend()->ConcurrentLoads = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "cutlandscape")
@@ -77,7 +75,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutLandscape = ToBool(temp2);
+		engine->GetFrontend()->CutLandscape = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "cutbuildings")
@@ -85,7 +83,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutBuildings = ToBool(temp2);
+		engine->GetFrontend()->CutBuildings = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "cutexternal")
@@ -93,7 +91,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutExternal = ToBool(temp2);
+		engine->GetFrontend()->CutExternal = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "cutfloors")
@@ -101,7 +99,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutFloors = ToBool(temp2);
+		engine->GetFrontend()->CutFloors = ToBool(value);
 		return sNextLine;
 	}
 
