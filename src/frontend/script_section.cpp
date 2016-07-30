@@ -355,7 +355,7 @@ bool ScriptProcessor::Section::IfProc(const std::string &expression)
 	return ToBool(tmpcalc);
 }
 
-void ScriptProcessor::Section::StoreCommand(SBS::Object *object)
+void ScriptProcessor::Section::StoreCommand(::SBS::Object *object)
 {
 	parent->StoreCommand(object);
 }
