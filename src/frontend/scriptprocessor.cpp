@@ -41,6 +41,7 @@
 #include "random.h"
 #include "textwindow.h"
 #include "scriptprocessor.h"
+#include "script_section.h"
 
 using namespace SBS;
 
@@ -53,82 +54,82 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 
 	engine = instance;
 	Simcore = instance->GetSystem();
+
+	//create section objects
+	globals_section = new GlobalsSection(this);
+	buildings_section = new BuildingsSection(this);
+	textures_section = new TexturesSection(this);
+	commands_section = new CommandsSection(this);
+	floor_section = new FloorSection(this);
+	elevator_section = new ElevatorSection(this);
+	elevatorcar_section = new ElevatorCarSection(this);
+
 	Reset();
 }
 
 ScriptProcessor::~ScriptProcessor()
 {
-
+	if (globals_section)
+		delete globals_section;
+	if (buildings_section)
+		delete buildings_section;
+	if (textures_section)
+		delete textures_section;
+	if (commands_section)
+		delete commands_section;
+	if (floor_section)
+		delete floor_section;
+	if (elevator_section)
+		delete elevator_section;
+	if (elevatorcar_section)
+		delete elevatorcar_section;
 }
 
 void ScriptProcessor::Reset()
 {
 	line = 0; //line number
 	LineData = "";  //line contents
-	Current = 0;
-	CurrentOld = 0;
-	Section = 0;
-	Context = "None";
-	ContextOld = "";
-	temp1 = 0;
-	temp2 = "";
-	temp3 = 0;
-	temp4 = 0;
-	temp5 = 0;
-	temp6 = "";
-	tempdata.clear();
-	callbutton_elevators.clear();
-	FloorCheck = 0;
-	RangeL = 0;
-	RangeLOld = 0;
-	RangeH = 0;
-	RangeHOld = 0;
-	RangeStart = 0;
-	RangeStartOld = 0;
 	wall = 0;
-	buffer = "";
 	startpos = 0;
 	getfloordata = false;
-	setshaftdoors = false;
+	Section::setshaftdoors = false;
 	BuildingData.clear();
 	BuildingDataOrig.clear();
 	BuildingData.reserve(1024);
 	BuildingDataOrig.reserve(1024);
-	MinExtent = 0;
-	MaxExtent = 0;
 	InFunction = 0;
 	FunctionStack.clear();
 	ReplaceLine = false;
 	ReplaceLineData = "";
 	nonexistent_files.clear();
-	ReverseAxis = false;
-	setkey = false;
-	keyvalue = 0;
-	lockvalue = 0;
-	warn_deprecated = engine->GetFrontend()->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
 	show_percent = true;
-	InWhile = false;
 	IsFinished = false;
 	progress_marker = 0;
 	functions.clear();
 	includes.clear();
 	variables.clear();
-	floorcache_firstrun = true;
-	cache_current = 0;
-	cache_current_s = "";
-	cache_height = 0;
-	cache_height_s = "";
-	cache_fullheight = 0;
-	cache_fullheight_s = "";
-	cache_interfloorheight = 0;
-	cache_interfloorheight_s = "";
-	cache_base = 0;
-	cache_base_s = "";
+
+	//reset section objects
+	globals_section->Reset();
+	buildings_section->Reset();
+	textures_section->Reset();
+	commands_section->Reset();
+	floor_section->Reset();
+	elevator_section->Reset();
+	elevatorcar_section->Reset();
 }
 
 bool ScriptProcessor::Run()
 {
 	//building loader/script interpreter
+
+	int temp1;
+	std::string temp2;
+	int temp3;
+	int temp4;
+	std::string buffer;
+	int temp5;
+	std::string temp6;
 
 	int returncode = sContinue;
 	IsFinished = false;
@@ -291,32 +292,32 @@ bool ScriptProcessor::Run()
 		//////////////////////
 		if (linecheck == "<globals>")
 		{
-			if (Section > 0)
+			if (Section::SectionNum > 0)
 			{
 				ScriptError("Already within a section");
 				goto Error;
 			}
-			Section = 1;
-			Context = "Globals";
+			Section::SectionNum = 1;
+			Section::Context = "Globals";
 			engine->Report("Processing globals...");
 			goto Nextline;
 		}
 		if (linecheck == "<endglobals>")
 		{
-			if (Section != 1)
+			if (Section::SectionNum != 1)
 			{
 				ScriptError("Not in global section");
 				goto Error;
 			}
-			Section = 0;
-			Context = "None";
+			Section::SectionNum = 0;
+			Section::Context = "None";
 			engine->Report("Finished globals");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 5) == "<end>")
 		{
-			Section = 0;
-			Context = "None";
+			Section::SectionNum = 0;
+			Section::Context = "None";
 			engine->Report("Exiting building script");
 			IsFinished = true;
 			show_percent = false;
@@ -362,7 +363,7 @@ breakpoint:
 		{
 			//define a function
 
-			if (Section != 0)
+			if (Section::SectionNum != 0)
 			{
 				ScriptError("Cannot define a function within a section");
 				goto Error;
@@ -409,26 +410,26 @@ breakpoint:
 		}
 		if (linecheck.substr(0, 10) == "<textures>")
 		{
-			if (Section > 0)
+			if (Section::SectionNum > 0)
 			{
 				ScriptError("Already within a section");
 				goto Error;
 			}
-			Section = 5;
-			Context = "Textures";
+			Section::SectionNum = 5;
+			Section::Context = "Textures";
 			engine->Report("Processing textures...");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 13) == "<endtextures>")
 		{
-			if (Section != 5)
+			if (Section::SectionNum != 5)
 			{
 				ScriptError("Not in texture section");
 				goto Error;
 			}
 			Simcore->GetTextureManager()->FreeTextureImages();
-			Section = 0;
-			Context = "None";
+			Section::SectionNum = 0;
+			Section::Context = "None";
 			engine->Report("Finished textures");
 			goto Nextline;
 		}
@@ -444,12 +445,12 @@ breakpoint:
 		}
 		if (linecheck.substr(0, 7) == "<floors")
 		{
-			if (Section > 0)
+			if (Section::SectionNum > 0)
 			{
 				ScriptError("Already within a section");
 				goto Error;
 			}
-			Section = 2;
+			Section::SectionNum = 2;
 			temp3 = linecheck.find("to", 0);
 			if (temp3 < 0)
 			{
@@ -462,58 +463,58 @@ breakpoint:
 			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
 			TrimString(str1);
 			TrimString(str2);
-			if (!IsNumeric(str1, RangeL) || !IsNumeric(str2, RangeH))
+			if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
 			{
 				ScriptError("Invalid range");
 				goto Error;
 			}
-			Context = "Floor range " + ToString(RangeL) + " to " + ToString(RangeH);
-			Current = RangeL;
-			RangeStart = line;
-			engine->Report("Processing floors " + ToString(RangeL) + " to " + ToString(RangeH) + "...");
+			Section::Context = "Floor range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
+			Section::Current = Section::RangeL;
+			Section::RangeStart = line;
+			engine->Report("Processing floors " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 7) == "<floor ")
 		{
-			if (Section > 0)
+			if (Section::SectionNum > 0)
 			{
 				ScriptError("Already within a section");
 				goto Error;
 			}
-			Section = 2;
-			RangeL = 0;
-			RangeH = 0;
+			Section::SectionNum = 2;
+			Section::RangeL = 0;
+			Section::RangeH = 0;
 			std::string str = LineData.substr(7, LineData.length() - 8);
 			TrimString(str);
-			if (!IsNumeric(str, Current))
+			if (!IsNumeric(str, Section::Current))
 			{
 				ScriptError("Invalid floor");
 				goto Error;
 			}
-			Context = "Floor " + ToString(Current);
-			engine->Report("Processing floor " + ToString(Current) + "...");
+			Section::Context = "Floor " + ToString(Section::Current);
+			engine->Report("Processing floor " + ToString(Section::Current) + "...");
 			goto Nextline;
 		}
-		if (linecheck == "<endfloor>" && RangeL == RangeH)
+		if (linecheck == "<endfloor>" && Section::RangeL == Section::RangeH)
 		{
-			if (Section != 2)
+			if (Section::SectionNum != 2)
 			{
 				ScriptError("Not in floor section");
 				goto Error;
 			}
-			Section = 0;
-			Context = "None";
+			Section::SectionNum = 0;
+			Section::Context = "None";
 			engine->Report("Finished floor");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 10) == "<elevators")
 		{
-			if (Section > 0)
+			if (Section::SectionNum > 0)
 			{
 				ScriptError("Already within a section");
 				goto Error;
 			}
-			Section = 4;
+			Section::SectionNum = 4;
 			temp3 = linecheck.find("to", 10);
 			if (temp3 < 0)
 			{
@@ -524,52 +525,52 @@ breakpoint:
 			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
 			TrimString(str1);
 			TrimString(str2);
-			if (!IsNumeric(str1, RangeL) || !IsNumeric(str2, RangeH))
+			if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
 			{
 				ScriptError("Invalid range");
 				goto Error;
 			}
-			Context = "Elevator range " + ToString(RangeL) + " to " + ToString(RangeH);
-			Current = RangeL;
-			RangeStart = line;
-			engine->Report("Processing elevators " + ToString(RangeL) + " to " + ToString(RangeH) + "...");
+			Section::Context = "Elevator range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
+			Section::Current = Section::RangeL;
+			Section::RangeStart = line;
+			engine->Report("Processing elevators " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 10) == "<elevator ")
 		{
-			if (Section > 0)
+			if (Section::SectionNum > 0)
 			{
 				ScriptError("Already within a section");
 				goto Error;
 			}
-			Section = 4;
-			RangeL = 0;
-			RangeH = 0;
+			Section::SectionNum = 4;
+			Section::RangeL = 0;
+			Section::RangeH = 0;
 			std::string str = LineData.substr(10, LineData.length() - 11);
 			TrimString(str);
-			if (!IsNumeric(str, Current))
+			if (!IsNumeric(str, Section::Current))
 			{
 				ScriptError("Invalid elevator");
 				goto Error;
 			}
-			if (Current < 1 || Current > Simcore->GetElevatorCount() + 1)
+			if (Section::Current < 1 || Section::Current > Simcore->GetElevatorCount() + 1)
 			{
 				ScriptError("Invalid elevator");
 				goto Error;
 			}
-			Context = "Elevator " + ToString(Current);
-			engine->Report("Processing elevator " + ToString(Current) + "...");
+			Section::Context = "Elevator " + ToString(Section::Current);
+			engine->Report("Processing elevator " + ToString(Section::Current) + "...");
 			goto Nextline;
 		}
-		if (linecheck == "<endelevator>" && RangeL == RangeH)
+		if (linecheck == "<endelevator>" && Section::RangeL == Section::RangeH)
 		{
-			if (Section != 4)
+			if (Section::SectionNum != 4)
 			{
 				ScriptError("Not in elevator section");
 				goto Error;
 			}
-			Section = 0;
-			Context = "None";
+			Section::SectionNum = 0;
+			Section::Context = "None";
 			engine->Report("Finished elevator");
 			goto Nextline;
 		}
@@ -579,13 +580,13 @@ breakpoint:
 			if (engine->IsReloading() == true)
 				goto Nextline;
 
-			if (Section > 0)
+			if (Section::SectionNum > 0)
 			{
 				ScriptError("Already within a section");
 				goto Error;
 			}
-			Section = 3;
-			Context = "Buildings";
+			Section::SectionNum = 3;
+			Section::Context = "Buildings";
 			engine->Report("Loading other buildings...");
 			goto Nextline;
 		}
@@ -595,19 +596,19 @@ breakpoint:
 			if (engine->IsReloading() == true)
 				goto Nextline;
 
-			if (Section != 3)
+			if (Section::SectionNum != 3)
 			{
 				ScriptError("Not in buildings section");
 				goto Error;
 			}
-			Section = 0;
-			Context = "None";
+			Section::SectionNum = 0;
+			Section::Context = "None";
 			engine->Report("Finished loading other buildings");
 			goto Nextline;
 		}
-		if (linecheck.substr(0, 5) == "<cars" && Section == 4)
+		if (linecheck.substr(0, 5) == "<cars" && Section::SectionNum == 4)
 		{
-			Section = 6;
+			Section::SectionNum = 6;
 			temp3 = linecheck.find("to", 5);
 			if (temp3 < 0)
 			{
@@ -616,82 +617,82 @@ breakpoint:
 			}
 
 			//store previous elevator section values
-			CurrentOld = Current;
-			RangeLOld = RangeL;
-			RangeHOld = RangeH;
-			RangeStartOld = RangeStart;
-			ContextOld = Context;
+			Section::CurrentOld = Section::Current;
+			Section::RangeLOld = Section::RangeL;
+			Section::RangeHOld = Section::RangeH;
+			Section::RangeStartOld = Section::RangeStart;
+			Section::ContextOld = Section::Context;
 
 			std::string str1 = LineData.substr(6, temp3 - 7);
 			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
 			TrimString(str1);
 			TrimString(str2);
-			if (!IsNumeric(str1, RangeL) || !IsNumeric(str2, RangeH))
+			if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
 			{
 				ScriptError("Invalid range");
 				goto Error;
 			}
 
 			//verify elevator
-			if (!Simcore->GetElevator(CurrentOld))
+			if (!Simcore->GetElevator(Section::CurrentOld))
 			{
 				ScriptError("Invalid elevator");
 				goto Error;
 			}
 
-			Context = "Elevator " + ToString(CurrentOld) + " Car range " + ToString(RangeL) + " to " + ToString(RangeH);
-			Current = RangeL;
-			RangeStart = line;
-			engine->Report("Processing elevator " + ToString(CurrentOld) + " cars " + ToString(RangeL) + " to " + ToString(RangeH) + "...");
+			Section::Context = "Elevator " + ToString(Section::CurrentOld) + " Car range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
+			Section::Current = Section::RangeL;
+			Section::RangeStart = line;
+			engine->Report("Processing elevator " + ToString(Section::CurrentOld) + " cars " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
 			goto Nextline;
 		}
-		if (linecheck.substr(0, 5) == "<car " && Section == 4)
+		if (linecheck.substr(0, 5) == "<car " && Section::SectionNum == 4)
 		{
-			Section = 6;
+			Section::SectionNum = 6;
 
 			//store previous elevator section values
-			CurrentOld = Current;
-			RangeLOld = RangeL;
-			RangeHOld = RangeH;
-			RangeStartOld = RangeStart;
-			ContextOld = Context;
+			Section::CurrentOld = Section::Current;
+			Section::RangeLOld = Section::RangeL;
+			Section::RangeHOld = Section::RangeH;
+			Section::RangeStartOld = Section::RangeStart;
+			Section::ContextOld = Section::Context;
 
-			RangeL = 0;
-			RangeH = 0;
+			Section::RangeL = 0;
+			Section::RangeH = 0;
 			std::string str = LineData.substr(5, LineData.length() - 6);
 			TrimString(str);
-			if (!IsNumeric(str, Current))
+			if (!IsNumeric(str, Section::Current))
 			{
 				ScriptError("Invalid car number");
 				goto Error;
 			}
 
 			//verify elevator
-			if (!Simcore->GetElevator(CurrentOld))
+			if (!Simcore->GetElevator(Section::CurrentOld))
 			{
 				ScriptError("Invalid elevator");
 				goto Error;
 			}
 
-			Context = "Elevator " + ToString(CurrentOld) + " Car " + ToString(Current);
-			engine->Report("Processing elevator " + ToString(CurrentOld) + " car " + ToString(Current) + "...");
+			Section::Context = "Elevator " + ToString(Section::CurrentOld) + " Car " + ToString(Section::Current);
+			engine->Report("Processing elevator " + ToString(Section::CurrentOld) + " car " + ToString(Section::Current) + "...");
 			goto Nextline;
 		}
-		if (linecheck == "<endcar>" && RangeL == RangeH)
+		if (linecheck == "<endcar>" && Section::RangeL == Section::RangeH)
 		{
-			if (Section != 6)
+			if (Section::SectionNum != 6)
 			{
 				ScriptError("Not in car section");
 				goto Error;
 			}
 
 			//return to elevator section
-			Section = 4;
-			Context = ContextOld;
-			Current = CurrentOld;
-			RangeL = RangeLOld;
-			RangeH = RangeHOld;
-			RangeStart = RangeStartOld;
+			Section::SectionNum = 4;
+			Section::Context = Section::ContextOld;
+			Section::Current = Section::CurrentOld;
+			Section::RangeL = Section::RangeLOld;
+			Section::RangeH = Section::RangeHOld;
+			Section::RangeStart = Section::RangeStartOld;
 
 			engine->Report("Finished car");
 			goto Nextline;
@@ -712,7 +713,7 @@ checkfloors:
 				ScriptError("Syntax error");
 				goto Error;
 			}
-			if (Section == 2 && getfloordata == false)
+			if (Section::SectionNum == 2 && getfloordata == false)
 			{
 				//process floor-specific variables if in a floor section
 				getfloordata = true;
@@ -808,46 +809,46 @@ checkfloors:
 		}
 
 		//Extent variables
-		ReplaceAll(LineData, "%minx%", ToString(MinExtent.x));
-		ReplaceAll(LineData, "%minz%", ToString(MinExtent.z));
-		ReplaceAll(LineData, "%maxx%", ToString(MaxExtent.x));
-		ReplaceAll(LineData, "%maxz%", ToString(MaxExtent.z));
+		ReplaceAll(LineData, "%minx%", ToString(Section::MinExtent.x));
+		ReplaceAll(LineData, "%minz%", ToString(Section::MinExtent.z));
+		ReplaceAll(LineData, "%maxx%", ToString(Section::MaxExtent.x));
+		ReplaceAll(LineData, "%maxz%", ToString(Section::MaxExtent.z));
 
 		//reset return code
 		returncode = sContinue;
 
 		//Global parameters
-		if (Section == 1)
-			returncode = ProcGlobals();
+		if (Section::SectionNum == 1)
+			returncode = globals_section->Run(LineData);
 
 		//Process floors
-		else if (Section == 2)
+		else if (Section::SectionNum == 2)
 		{
 			//create floor if not created already
-			Simcore->NewFloor(Current);
+			Simcore->NewFloor(Section::Current);
 recalc:
-			returncode = ProcFloors();
+			returncode = floor_section->Run(LineData);
 		}
 
 		//Process external buildings
-		else if (Section == 3)
-			returncode = ProcBuildings();
+		else if (Section::SectionNum == 3)
+			returncode = buildings_section->Run(LineData);
 
 		//process elevators
-		else if (Section == 4)
-			returncode = ProcElevators();
+		else if (Section::SectionNum == 4)
+			returncode = elevator_section->Run(LineData);
 
 		//Process textures
-		else if (Section == 5)
-			returncode = ProcTextures();
+		else if (Section::SectionNum == 5)
+			returncode = textures_section->Run(LineData);
 
 		//process elevator cars
-		else if (Section == 6)
-			returncode = ProcElevatorCars();
+		else if (Section::SectionNum == 6)
+			returncode = elevatorcar_section->Run(LineData);
 
 		//Global commands
 		if (returncode == sContinue)
-			returncode = ProcCommands();
+			returncode = commands_section->Run(LineData);
 
 		//handle return values
 		if (returncode == sError)
@@ -866,8 +867,8 @@ recalc:
 		Simcore->GetTextureManager()->FlipTexture = false;
 
 Nextline:
-		if (InWhile == true && InFunction == 0)
-			InWhile = false;
+		if (Section::InWhile == true && InFunction == 0)
+			Section::InWhile = false;
 		else
 			line++;
 
@@ -1034,214 +1035,6 @@ bool ScriptProcessor::LoadFromText(const std::string &text)
 	return true;
 }
 
-bool ScriptProcessor::IfProc(const std::string &expression)
-{
-	//IF statement processor
-
-	int temp1;
-	std::string tmpcalc = expression;
-	std::string one;
-	std::string two;
-	int start, end;
-	bool check;
-
-	//first remove all whitespace from the string
-	ReplaceAll(tmpcalc, " ", "");
-
-	//first check for bad and/or character sets
-	if (int(tmpcalc.find("&&")) >= 0 || int(tmpcalc.find("||")) >= 0 || int(tmpcalc.find("==")) >= 0 || int(tmpcalc.find("!=")) >= 0)
-	{
-		ScriptError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
-		return false;
-	}
-
-	//find parenthesis
-	do
-	{
-		start = tmpcalc.find("(", 0);
-		if (start >= 0)
-		{
-			//find matching parenthesis
-			int match = 1;
-			int end = -1;
-			for (int i = start + 1; i < (int)tmpcalc.length(); i++)
-			{
-				char &tmpchar = tmpcalc.at(i);
-				if (tmpchar == '(')
-					match++;
-				if (tmpchar == ')')
-					match--;
-				if (match == 0)
-				{
-					end = i;
-					break;
-				}
-			}
-			if (end != -1)
-			{
-				//call function recursively
-				std::string newdata;
-				if (IfProc(tmpcalc.substr(start + 1, end - start - 1)) == true)
-					newdata = "true";
-				else
-					newdata = "false";
-				//construct new string
-				one = tmpcalc.substr(0, start);
-				if (end < (int)tmpcalc.length() - 1)
-					two = tmpcalc.substr(end + 1);
-				else
-					two = "";
-				tmpcalc = one + newdata + two;
-			}
-			else
-			{
-				ScriptError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
-				return false;
-			}
-		}
-		else
-			break;
-	} while (1 == 1);
-	//find number of operators and recurse if multiple found
-	int operators;
-	int operators2;
-	do
-	{
-		operators = 0;
-		operators2 = 0;
-		start = 0;
-		end = 0;
-		check = false;
-		for (int i = 1; i < (int)tmpcalc.length(); i++)
-		{
-			char &tmpchar = tmpcalc.at(i);
-			if (tmpchar == '=' || tmpchar == '!' || tmpchar == '<' || tmpchar == '>')
-				operators++;
-
-			if (tmpchar == '&' || tmpchar == '|')
-			{
-				check = true;
-				operators2++;
-				if (operators == 1 && operators2 == 2)
-				{
-					//handle 2 and/if operators
-					end = i;
-					start = 0;
-					operators = 2;
-					break;
-				}
-				if (operators == 1)
-				{
-					operators = 2;
-					end = i;
-				}
-				else if (operators == 0)
-				{
-					operators = 1;
-					start = i + 1;
-					end = (int)tmpcalc.length();
-				}
-			}
-		}
-		//return error if multiple standard operators are found, but no and/or operator (ex. if[5 = 5 = 5])
-		if (operators > 1 && check == false)
-		{
-			ScriptError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
-			return false;
-		}
-		if (operators > 1)
-		{
-			std::string newdata;
-			if (IfProc(tmpcalc.substr(start, end - start)) == true)
-				newdata = "true";
-			else
-				newdata = "false";
-			//construct new string
-			one = tmpcalc.substr(0, start);
-			two = tmpcalc.substr(end);
-			tmpcalc = one + newdata + two;
-		}
-		else
-			break;
-	} while (1 == 1);
-	//return value if none found
-	if (operators == 0)
-		return ToBool(tmpcalc);
-
-	//otherwise perform comparisons
-	temp1 = tmpcalc.find("=", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.substr(0, temp1);
-		two = tmpcalc.substr(temp1 + 1);
-		if (one == two)
-			return true;
-		else
-			return false;
-	}
-	temp1 = tmpcalc.find("!", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.substr(0, temp1);
-		two = tmpcalc.substr(temp1 + 1);
-		if (one != two)
-			return true;
-		else
-			return false;
-	}
-	temp1 = tmpcalc.find("<", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.substr(0, temp1);
-		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one) == true && IsNumeric(two) == true)
-		{
-			if(ToFloat(one) < ToFloat(two))
-				return true;
-			else
-				return false;
-		}
-		else
-			return false;
-	}
-	temp1 = tmpcalc.find(">", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.substr(0, temp1);
-		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one) == true && IsNumeric(two) == true)
-		{
-			if(ToFloat(one) > ToFloat(two))
-				return true;
-			else
-				return false;
-		}
-		else
-			return false;
-	}
-	temp1 = tmpcalc.find("&", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.substr(0, temp1);
-		two = tmpcalc.substr(temp1 + 1);
-		if (one == "true" && two == "true")
-			return true;
-		else
-			return false;
-	}
-	temp1 = tmpcalc.find("|", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.substr(0, temp1);
-		two = tmpcalc.substr(temp1 + 1);
-		if (one == "true" || two == "true")
-			return true;
-		else
-			return false;
-	}
-	return ToBool(tmpcalc);
-}
-
 int ScriptProcessor::ScriptError(std::string message, bool warning)
 {
 	//report a script error, with line and context information.
@@ -1262,10 +1055,10 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	if (IsInclude == true)
 		error += "in included file " + IncludeFile + " ";
 
-	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + engine->GetFilename() + "\nContext: " + Context;
+	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + engine->GetFilename() + "\nContext: " + Section::Context;
 
-	if (RangeL != RangeH)
-		error += "\nIteration Number: " + ToString(Current);
+	if (Section::RangeL != Section::RangeH)
+		error += "\nIteration Number: " + ToString(Section::Current);
 
 	if (InFunction == 0)
 		error += "\nLine Text: " + LineData;
@@ -1705,15 +1498,15 @@ void ScriptProcessor::StoreCommand(Object *object)
 	TrimString(BuildingData[line]);
 	object->command = BuildingData[line];
 	object->command_processed = LineData;
-	object->context = Context;
+	object->context = Section::Context;
 	std::string current;
-	current = ToString(Current);
-	if (Section == 2)
+	current = ToString(Section::Current);
+	if (Section::SectionNum == 2)
 		object->context = "Floor " + current;
-	if (Section == 4)
+	if (Section::SectionNum == 4)
 		object->context = "Elevator " + current;
-	if (Section == 6)
-		object->context = "Elevator " + ToString(CurrentOld) + " Car " + current;
+	if (Section::SectionNum == 6)
+		object->context = "Elevator " + ToString(Section::CurrentOld) + " Car " + current;
 }
 
 bool ScriptProcessor::FunctionProc()
@@ -1737,13 +1530,15 @@ bool ScriptProcessor::FunctionProc()
 			int location2 = location + (int)data.Name.length() + 1;
 			int end_loc = LineData.find(")", location);
 			std::string newdata = LineData.substr(location2, end_loc - location2);
+			std::vector<std::string> tempdata;
 			SplitString(tempdata, newdata, ',');
 
 			//calculate inline math
 			data.Params.reserve(tempdata.size());
-			for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
+			std::string buffer;
+			for (int j = 0; j < (int)tempdata.size(); j++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[j]);
 				TrimString(buffer);
 				data.Params.push_back(buffer);
 			}
@@ -1807,678 +1602,9 @@ void ScriptProcessor::CheckFile(const std::string &filename)
 	}
 }
 
-int ScriptProcessor::SplitData(const std::string &string, int start, bool calc)
-{
-	//split data into separate strings starting at the "start" character
-	//delimeter is a comma ","
-	//returns the number of parameters found
-	//if calc is on, calc_skip can be used to specify an index that does not cooperate properly with calculations, such as filenames
-
-	std::string data = string;
-	std::string stringbuffer;
-
-	//verify length of input string
-	if ((int)data.size() < start)
-		return 0;
-
-	SplitString(tempdata, data.substr(start), ',');
-	if (calc == true)
-	{
-		for (size_t i = 0; i < tempdata.size(); i++)
-		{
-			stringbuffer = Calc(tempdata[i]);
-			tempdata[i] = stringbuffer;
-		}
-	}
-	return (int)tempdata.size();
-}
-
-int ScriptProcessor::SplitAfterEquals(const std::string &string, bool calc)
-{
-	//get and split data after equal sign
-	//returns -1 if equal sign not found
-	//returns 0 if no parameters found
-
-	std::string data = string;
-	int loc = data.find("=", 0);
-	if (loc < 0)
-		return -1;
-
-	std::string temp = data.substr(loc + 1);
-	TrimString(temp);
-
-	if (temp == "")
-		return 0;
-
-	SplitString(tempdata, temp, ',');
-	if (calc == true)
-	{
-		for (size_t i = 0; i < tempdata.size(); i++)
-		{
-			std::string buffer = Calc(tempdata[i]);
-			tempdata[i] = buffer;
-		}
-	}
-	return (int)tempdata.size();
-}
-
-std::string ScriptProcessor::GetAfterEquals(const std::string &string)
-{
-	//return data after equal sign
-
-	std::string data = string;
-	int loc = data.find("=", 0);
-	if (loc < 0)
-		return "";
-
-	std::string temp = data.substr(loc + 1);
-	TrimString(temp);
-	return temp;
-}
-
 std::vector<std::string> *ScriptProcessor::GetBuildingData()
 {
 	return &BuildingDataOrig;
-}
-
-int ScriptProcessor::MathFunctions()
-{
-	//functions for advanced math
-
-	int start, first, last;
-	float value, result;
-	std::string tempdata;
-
-	int check = LineData.find("(", 0);
-
-	if (check < 0)
-		return true;
-
-	//calculate cosine
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("cos(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = cosf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate sine
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("sin(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = sinf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate tangent
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("tan(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = tanf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate arc cosine
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("acos(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value < -1 || value > 1)
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = acosf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate arc sine
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("asin(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value < -1 || value > 1)
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = asinf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate arc tangent
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("atan(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = atanf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate arc tangent with 2 parameters
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("atan2(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		int mid = LineData.find(",", first);
-		last = LineData.find(")", start);
-		if (last < 0 || mid < 0)
-			return ScriptError("Syntax error");
-
-		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1));
-		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1));
-
-		float value1, value2;
-		if (!IsNumeric(tempdata1, value1))
-			return ScriptError("Invalid value: " + tempdata1);
-		if (!IsNumeric(tempdata2, value2))
-			return ScriptError("Invalid value: " + tempdata2);
-
-		result = atan2f(value1, value2);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate square root
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("sqrt(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = sqrtf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate absolute value
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("abs(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = fabsf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate exponential function
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("exp(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = expf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate natural logarithm
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("log(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value <= 0)
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = logf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate common logarithm
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("log10(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value <= 0)
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = log10f(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate binary logarithm
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("log2(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value <= 0)
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = Log2(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate remainder
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("mod(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		int mid = LineData.find(",", first);
-		last = LineData.find(")", start);
-		if (last < 0 || mid < 0)
-			return ScriptError("Syntax error");
-
-		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1));
-		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1));
-
-		float value1, value2;
-		if (!IsNumeric(tempdata1, value1))
-			return ScriptError("Invalid value: " + tempdata1);
-		if (!IsNumeric(tempdata2, value2))
-			return ScriptError("Invalid value: " + tempdata2);
-
-		if (value2 == 0)
-			return ScriptError("Invalid value: " + tempdata2);
-
-		result = fmodf(value1, value2);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate hypotenuse
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("hypot(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		int mid = LineData.find(",", first);
-		last = LineData.find(")", start);
-		if (last < 0 || mid < 0)
-			return ScriptError("Syntax error");
-
-		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1));
-		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1));
-
-		float value1, value2;
-		if (!IsNumeric(tempdata1, value1))
-			return ScriptError("Invalid value: " + tempdata1);
-		if (!IsNumeric(tempdata2, value2))
-			return ScriptError("Invalid value: " + tempdata2);
-
-		if (value2 == 0)
-			return ScriptError("Invalid value: " + tempdata2);
-
-		result = sqrtf(powf(value1, 2) + powf(value2, 2));
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate ceiling
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("ceil(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value <= 0)
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = ceilf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate floor
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("flr(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value <= 0)
-			return ScriptError("Invalid value: " + tempdata);
-
-		result = floorf(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//calculate random number
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("rnd(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value <= 0)
-			return ScriptError("Invalid value: " + tempdata);
-
-		RandomGen rnd(time(0));
-		result = rnd.Get(value);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	//round a number
-	while(true)
-	{
-		start = SetCaseCopy(LineData, false).find("round(", 0);
-		if (start > 0)
-		{
-			//break if preceding letter is found
-			char check = LineData[start - 1];
-			if (check >= 65 && check <= 122)
-				break;
-		}
-		else if (start < 0)
-			break;
-
-		first = LineData.find("(", start);
-		last = LineData.find(")", start);
-		if (last < 0)
-			return ScriptError("Syntax error");
-
-		int option = LineData.find(",", first);
-		std::string decimals;
-		int decimal = 0;
-		if (option > 0 && option < last)
-		{
-			tempdata = Calc(LineData.substr(first + 1, option - first - 1));
-			decimals = Calc(LineData.substr(option + 1, last - option - 1));
-		}
-		else
-		{
-			tempdata = Calc(LineData.substr(first + 1, last - first - 1));
-			decimals = "0";
-		}
-
-		if (!IsNumeric(tempdata, value))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (!IsNumeric(decimals, decimal))
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (value <= 0)
-			return ScriptError("Invalid value: " + tempdata);
-
-		if (decimal < 0)
-			return ScriptError("Invalid value: " + decimals);
-
-		result = Round(value, decimal);
-		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
-	}
-
-	return true;
 }
 
 bool ScriptProcessor::IsFunctionDefined(const std::string &name)
@@ -2502,32 +1628,32 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	//get a system mesh object
 	if (name == "floor")
 	{
-		if (Section == 2)
-			return Simcore->GetFloor(Current)->Level;
+		if (Section::SectionNum == 2)
+			return Simcore->GetFloor(Section::Current)->Level;
 		return 0;
 	}
 	else if (name == "interfloor")
 	{
-		if (Section == 2)
-			return Simcore->GetFloor(Current)->Interfloor;
+		if (Section::SectionNum == 2)
+			return Simcore->GetFloor(Section::Current)->Interfloor;
 		return 0;
 	}
 	else if (name == "columnframe")
 	{
-		if (Section == 2)
-			return Simcore->GetFloor(Current)->ColumnFrame;
+		if (Section::SectionNum == 2)
+			return Simcore->GetFloor(Section::Current)->ColumnFrame;
 		return 0;
 	}
 	else if (name == "elevatorcar")
 	{
-		if (Section == 6)
-			return Simcore->GetElevator(CurrentOld)->GetCar(Current)->Mesh;
+		if (Section::SectionNum == 6)
+			return Simcore->GetElevator(Section::CurrentOld)->GetCar(Section::Current)->Mesh;
 		return 0;
 	}
 	else if (name == "elevator")
 	{
-		if (Section == 4)
-			return Simcore->GetElevator(Current)->GetCar(1)->Mesh;
+		if (Section::SectionNum == 4)
+			return Simcore->GetElevator(Section::Current)->GetCar(1)->Mesh;
 		return 0;
 	}
 	else if (name == "external")
@@ -2538,7 +1664,7 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 		return Simcore->Buildings;
 	else if (name.substr(0, 5) == "shaft")
 	{
-		if (Section == 2)
+		if (Section::SectionNum == 2)
 		{
 			//get a shaft mesh object, or a model in a shaft
 
@@ -2563,7 +1689,7 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 
 			if (marker > 0)
 			{
-				Model *model = shaft->GetModel(Current, modelname);
+				Model *model = shaft->GetModel(Section::Current, modelname);
 				if (model)
 				{
 					if (model->IsCustom() == true)
@@ -2572,13 +1698,13 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 				return 0;
 			}
 			else
-				return shaft->GetMeshObject(Current);
+				return shaft->GetMeshObject(Section::Current);
 		}
 		return 0;
 	}
 	else if (name.substr(0, 9) == "stairwell")
 	{
-		if (Section == 2)
+		if (Section::SectionNum == 2)
 		{
 			//get a stairwell mesh object, or a model in a stairwell
 
@@ -2603,7 +1729,7 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 
 			if (marker > 0)
 			{
-				Model *model = stairs->GetModel(Current, modelname);
+				Model *model = stairs->GetModel(Section::Current, modelname);
 				if (model)
 				{
 					if (model->IsCustom() == true)
@@ -2612,7 +1738,7 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 				return 0;
 			}
 			else
-				return stairs->GetMeshObject(Current);
+				return stairs->GetMeshObject(Section::Current);
 		}
 		return 0;
 	}
@@ -2621,12 +1747,12 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 
 	Model* model = 0;
 
-	if (Section == 2)
-		model = Simcore->GetFloor(Current)->GetModel(name);
-	else if (Section == 4)
-		model = Simcore->GetElevator(Current)->GetCar(1)->GetModel(name);
-	else if (Section == 6)
-		model = Simcore->GetElevator(CurrentOld)->GetCar(Current)->GetModel(name);
+	if (Section::SectionNum == 2)
+		model = Simcore->GetFloor(Section::Current)->GetModel(name);
+	else if (Section::SectionNum == 4)
+		model = Simcore->GetElevator(Section::Current)->GetCar(1)->GetModel(name);
+	else if (Section::SectionNum == 6)
+		model = Simcore->GetElevator(Section::CurrentOld)->GetCar(Section::Current)->GetModel(name);
 	else
 		model = Simcore->GetModel(name);
 
@@ -2651,10 +1777,10 @@ std::string ScriptProcessor::DumpState()
 	std::string output = "Line number: "  + ToString(LineNumber) + "\n";
 	if (IsInclude == true)
 		output.append("In included file: " + IncludeFile + "\n");
-	output.append("Context: " + Context + "\n");
+	output.append("Context: " + Section::Context + "\n");
 
-	if (RangeL != RangeH)
-		output.append("Iteration Number: " + ToString(Current) + "\n");
+	if (Section::RangeL != Section::RangeH)
+		output.append("Iteration Number: " + ToString(Section::Current) + "\n");
 
 	if (InFunction != 0)
 	{
@@ -2669,23 +1795,14 @@ std::string ScriptProcessor::DumpState()
 	return output;
 }
 
-void ScriptProcessor::GetElevatorCar(std::string &value, int &elevator, int &car)
+EngineContext* ScriptProcessor::GetEngine()
 {
-	//returns an elevator and car number for the specified string
-	//for example, use "1" for Elevator 1
-	//or "1:1" for Elevator 1 Car 1
+	return engine;
+}
 
-	TrimString(value);
-
-	if (IsNumeric(value, elevator))
-	{
-		car = 1;
-		return;
-	}
-
-	int pos = value.find(":");
-	elevator = ToInt(value.substr(0, pos));
-	car = ToInt(value.substr(pos + 1));
+ScriptProcessor::ElevatorCarSection* ScriptProcessor::GetElevatorCarSection()
+{
+	return elevatorcar_section;
 }
 
 }

@@ -27,14 +27,24 @@
 #include "skyscraper.h"
 #include "texture.h"
 #include "scriptprocessor.h"
+#include "script_section.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-int ScriptProcessor::ProcTextures()
+ScriptProcessor::TexturesSection::TexturesSection(ScriptProcessor *parent) : Section(parent)
+{
+
+}
+
+int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 {
 	//Process Textures
+
+	std::string buffer;
+	std::string temp6;
+	std::string temp2;
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -56,7 +66,7 @@ int ScriptProcessor::ProcTextures()
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		CheckFile(tempdata[0]);
+		parent->CheckFile(tempdata[0]);
 		if (params == 4)
 			texturemanager->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		else
@@ -111,7 +121,7 @@ int ScriptProcessor::ProcTextures()
 
 		//check existence of files
 		for (size_t i = 0; i < filenames.size(); i++)
-			CheckFile(filenames[i]);
+			parent->CheckFile(filenames[i]);
 
 		if (force == false)
 			texturemanager->LoadAnimatedTexture(filenames, tempdata[params - 4], ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
@@ -137,9 +147,9 @@ int ScriptProcessor::ProcTextures()
 		}
 
 		//check existence of files
-		CheckFile(tempdata[0]);
-		CheckFile(tempdata[1]);
-		CheckFile(tempdata[2]);
+		parent->CheckFile(tempdata[0]);
+		parent->CheckFile(tempdata[1]);
+		parent->CheckFile(tempdata[2]);
 
 		if (params == 7)
 			texturemanager->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
@@ -187,9 +197,9 @@ int ScriptProcessor::ProcTextures()
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		RangeL = ToInt(tempdata[0]);
-		RangeH = ToInt(tempdata[1]);
-		for (Current = RangeL; Current <= RangeH; Current++)
+		int RangeL = ToInt(tempdata[0]);
+		int RangeH = ToInt(tempdata[1]);
+		for (int Current = RangeL; Current <= RangeH; Current++)
 		{
 			temp2 = tempdata[2];
 			buffer = ToString(Current);
@@ -197,7 +207,7 @@ int ScriptProcessor::ProcTextures()
 			ReplaceAll(temp2, "%number%", buffer);
 			temp6 = tempdata[3];
 			ReplaceAll(temp6, "%number%", buffer);
-			CheckFile(temp2);
+			parent->CheckFile(temp2);
 			if (params == 6)
 				texturemanager->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 			else
@@ -229,7 +239,7 @@ int ScriptProcessor::ProcTextures()
 		buffer = tempdata[2];
 		TrimString(buffer);
 		buffer.insert(0, "data/fonts/");
-		CheckFile(buffer);
+		parent->CheckFile(buffer);
 		if (params == 14)
 			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]));
 		else
@@ -259,10 +269,10 @@ int ScriptProcessor::ProcTextures()
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		RangeL = ToInt(tempdata[0]);
-		RangeH = ToInt(tempdata[1]);
+		int RangeL = ToInt(tempdata[0]);
+		int RangeH = ToInt(tempdata[1]);
 		temp6 = LineData;
-		for (Current = RangeL; Current <= RangeH; Current++)
+		for (int Current = RangeL; Current <= RangeH; Current++)
 		{
 			buffer = ToString(Current);
 			TrimString(buffer);
@@ -275,7 +285,7 @@ int ScriptProcessor::ProcTextures()
 			buffer = tempdata[4];
 			TrimString(buffer);
 			buffer.insert(0, "data/fonts/");
-			CheckFile(buffer);
+			parent->CheckFile(buffer);
 			if (params == 16)
 				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]));
 			else
@@ -300,7 +310,7 @@ int ScriptProcessor::ProcTextures()
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		CheckFile(tempdata[0]);
+		parent->CheckFile(tempdata[0]);
 		if (params == 8)
 			texturemanager->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		else

@@ -28,14 +28,22 @@
 #include "enginecontext.h"
 #include "elevator.h"
 #include "scriptprocessor.h"
+#include "script_section.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-int ScriptProcessor::ProcElevators()
+ScriptProcessor::ElevatorSection::ElevatorSection(ScriptProcessor *parent) : Section(parent)
+{
+
+}
+
+int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 {
 	//Process elevators
+
+	std::string temp2;
 
 	//create elevator if not created already
 	Simcore->NewElevator(Current);
@@ -48,11 +56,11 @@ int ScriptProcessor::ProcElevators()
 		return sContinue;
 
 	//process math functions
-	if (MathFunctions() == sError)
+	if (MathFunctions(LineData) == sError)
 		return sError;
 
 	//process functions
-	if (FunctionProc() == true)
+	if (parent->FunctionProc() == true)
 		return sNextLine;
 
 	//get text after equal sign
@@ -140,7 +148,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorUpStartSound = temp2;
 		elev->MotorDownStartSound = temp2;
@@ -152,7 +160,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorUpStartSound = temp2;
 		return sNextLine;
@@ -163,7 +171,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorDownStartSound = temp2;
 		return sNextLine;
@@ -174,7 +182,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorUpRunSound = temp2;
 		elev->MotorDownRunSound = temp2;
@@ -186,7 +194,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorUpRunSound = temp2;
 		return sNextLine;
@@ -197,7 +205,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorDownRunSound = temp2;
 		return sNextLine;
@@ -208,7 +216,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorUpStopSound = temp2;
 		elev->MotorDownStopSound = temp2;
@@ -220,7 +228,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorUpStopSound = temp2;
 		return sNextLine;
@@ -231,7 +239,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorDownStopSound = temp2;
 		return sNextLine;
@@ -242,7 +250,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorIdleSound = temp2;
 		return sNextLine;
@@ -482,7 +490,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + temp2);
 
 		elev->MotorEmergencyStopSound = temp2;
 		return sNextLine;
@@ -536,7 +544,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//process elevator car commands for default car
-	int value = ProcElevatorCars();
+	int value = parent->GetElevatorCarSection()->Run(LineData);
 	if (value != sContinue)
 		return value;
 
@@ -546,12 +554,12 @@ int ScriptProcessor::ProcElevators()
 		if (Current < RangeH)
 		{
 			Current++;
-			line = RangeStart;  //loop back
+			parent->line = RangeStart;  //loop back
 			return sNextLine;
 		}
 		else
 		{
-			Section = 0; //break out of loop
+			SectionNum = 0; //break out of loop
 			Context = "None";
 			RangeL = 0;
 			RangeH = 0;

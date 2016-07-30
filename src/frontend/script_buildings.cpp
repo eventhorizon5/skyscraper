@@ -27,25 +27,33 @@
 #include "skyscraper.h"
 #include "enginecontext.h"
 #include "scriptprocessor.h"
+#include "script_section.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-int ScriptProcessor::ProcBuildings()
+ScriptProcessor::BuildingsSection::BuildingsSection(ScriptProcessor *parent) : Section(parent)
+{
+
+}
+
+int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 {
 	//Load additional buildings
+
+	std::string temp2;
 
 	//IF/While statement stub (continue to global commands for processing)
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
 		return sContinue;
 
 	//process math functions
-	if (MathFunctions() == sError)
+	if (MathFunctions(LineData) == sError)
 		return sError;
 
 	//process functions
-	if (FunctionProc() == true)
+	if (parent->FunctionProc() == true)
 		return sNextLine;
 
 	//get text after equal sign
@@ -111,7 +119,7 @@ int ScriptProcessor::ProcBuildings()
 		{
 			for (int i = 1; i <= params - 1; i++)
 			{
-				tempdata[i] = Calc(tempdata[i]);
+				tempdata[i] = parent->Calc(tempdata[i]);
 				if (!IsNumeric(tempdata[i]))
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}

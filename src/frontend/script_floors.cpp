@@ -42,14 +42,41 @@
 #include "door.h"
 #include "directional.h"
 #include "scriptprocessor.h"
+#include "script_section.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-int ScriptProcessor::ProcFloors()
+ScriptProcessor::FloorSection::FloorSection(ScriptProcessor *parent) : Section(parent)
+{
+	floorcache_firstrun = true;
+	cache_current = 0;
+	cache_current_s = "";
+	cache_height = 0;
+	cache_height_s = "";
+	cache_fullheight = 0;
+	cache_fullheight_s = "";
+	cache_interfloorheight = 0;
+	cache_interfloorheight_s = "";
+	cache_base = 0;
+	cache_base_s = "";
+
+	Reset();
+}
+
+void ScriptProcessor::FloorSection::Reset()
+{
+	FloorCheck = 0;
+	callbutton_elevators.clear();
+}
+
+int ScriptProcessor::FloorSection::Run(std::string &LineData)
 {
 	//process floors
+
+	std::string temp2;
+	int temp3;
 
 	Floor *floor = Simcore->GetFloor(Current);
 
@@ -101,7 +128,7 @@ int ScriptProcessor::ProcFloors()
 	ReplaceAll(LineData, "%floortype%", floor->FloorType);
 	ReplaceAll(LineData, "%description%", floor->Description);
 
-	if (getfloordata == true)
+	if (parent->getfloordata == true)
 		return sCheckFloors;
 
 	//IF/While statement stub (continue to global commands for processing)
@@ -109,11 +136,11 @@ int ScriptProcessor::ProcFloors()
 		return sContinue;
 
 	//process math functions
-	if (MathFunctions() == sError)
+	if (MathFunctions(LineData) == sError)
 		return sError;
 
 	//process functions
-	if (FunctionProc() == true)
+	if (parent->FunctionProc() == true)
 		return sNextLine;
 
 	//get text after equal sign
@@ -754,8 +781,8 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile("data/" + tempdata[0]);
-			CheckFile("data/" + tempdata[1]);
+			parent->CheckFile("data/" + tempdata[0]);
+			parent->CheckFile("data/" + tempdata[1]);
 		}
 
 		if (compat > 0 && warn_deprecated == true)
@@ -839,8 +866,8 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile("data/" + tempdata[1]);
-			CheckFile("data/" + tempdata[2]);
+			parent->CheckFile("data/" + tempdata[1]);
+			parent->CheckFile("data/" + tempdata[2]);
 		}
 
 		if (compat > 0 && warn_deprecated == true)
@@ -889,8 +916,8 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
-		CheckFile("data/" + tempdata[2]);
+		parent->CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[2]);
 
 		//create door
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
@@ -924,8 +951,8 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[0]);
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[0]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		//create door
 		Door* door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), true);
@@ -1195,7 +1222,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		if (compat == true)
 		{
@@ -1342,7 +1369,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		//create model
 		Model *model;
@@ -1397,7 +1424,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[2]);
+		parent->CheckFile("data/" + tempdata[2]);
 
 		//create model
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
@@ -1458,7 +1485,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[2]);
+		parent->CheckFile("data/" + tempdata[2]);
 
 		//create model
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
@@ -1513,7 +1540,7 @@ int ScriptProcessor::ProcFloors()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		Control* control = floor->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
@@ -1563,7 +1590,7 @@ int ScriptProcessor::ProcFloors()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
@@ -1618,7 +1645,7 @@ int ScriptProcessor::ProcFloors()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
@@ -1661,7 +1688,7 @@ int ScriptProcessor::ProcFloors()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
@@ -1694,7 +1721,7 @@ int ScriptProcessor::ProcFloors()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
@@ -1730,7 +1757,7 @@ int ScriptProcessor::ProcFloors()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
@@ -1814,12 +1841,12 @@ int ScriptProcessor::ProcFloors()
 			if (Current < RangeH)
 			{
 				Current++;
-				line = RangeStart;  //loop back
+				parent->line = RangeStart;  //loop back
 				return sNextLine;
 			}
 			else
 			{
-				Section = 0; //break out of loop
+				SectionNum = 0; //break out of loop
 				Context = "None";
 				RangeL = 0;
 				RangeH = 0;
@@ -1832,12 +1859,12 @@ int ScriptProcessor::ProcFloors()
 			if (Current > RangeH)
 			{
 				Current--;
-				line = RangeStart; //loop back
+				parent->line = RangeStart; //loop back
 				return sNextLine;
 			}
 			else
 			{
-				Section = 0; //break out of loop
+				SectionNum = 0; //break out of loop
 				Context = "None";
 				RangeL = 0;
 				RangeH = 0;

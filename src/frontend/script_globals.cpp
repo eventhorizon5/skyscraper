@@ -28,17 +28,26 @@
 #include "enginecontext.h"
 #include "camera.h"
 #include "scriptprocessor.h"
+#include "script_section.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-int ScriptProcessor::ProcGlobals()
+ScriptProcessor::GlobalsSection::GlobalsSection(ScriptProcessor *parent) : Section(parent)
+{
+
+}
+
+int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 {
 	//process global parameters
 
+	int temp3;
+	int temp4;
+
 	//get text after equal sign
-	temp2 = GetAfterEquals(LineData);
+	std::string temp2 = GetAfterEquals(LineData);
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);

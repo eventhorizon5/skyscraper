@@ -31,22 +31,29 @@ class ScriptProcessor
 {
 public:
 
+	//sub-classes
+	class Section;
+	class GlobalsSection;
+	class BuildingsSection;
+	class TexturesSection;
+	class CommandsSection;
+	class FloorSection;
+	class ElevatorSection;
+	class ElevatorCarSection;
+
 	ScriptProcessor(EngineContext *instance);
 	~ScriptProcessor();
 	bool Run();
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const std::string &text);
 	bool ReportMissingFiles();
-	int SplitData(const std::string &string, int start, bool calc = true);
-	int SplitAfterEquals(const std::string &string, bool calc = true);
-	std::string GetAfterEquals(const std::string &string);
 	void Reset();
 	std::vector<std::string> *GetBuildingData();
-	int MathFunctions();
 	bool IsFunctionDefined(const std::string &name);
 	SBS::MeshObject* GetMeshObject(std::string name);
 	std::string DumpState();
-	void GetElevatorCar(std::string &value, int &elevator, int &car);
+	EngineContext* GetEngine();
+	ElevatorCarSection* GetElevatorCarSection();
 
 	bool IsFinished;
 
@@ -59,10 +66,30 @@ public:
 	static const int sRecalc = 5;
 	static const int sSkipReset = 6;
 
+	struct VariableMap
+	{
+		std::string name;
+		std::string value;
+	};
+
+	std::vector<VariableMap> variables; //named user variables
+
+	bool getfloordata;
+	int line; //line number
+	std::string LineData; //line text
+
 private:
 
 	SBS::SBS *Simcore;
 	EngineContext *engine;
+
+	GlobalsSection *globals_section;
+	BuildingsSection *buildings_section;
+	TexturesSection *textures_section;
+	CommandsSection *commands_section;
+	FloorSection *floor_section;
+	ElevatorSection *elevator_section;
+	ElevatorCarSection *elevatorcar_section;
 
 	struct FunctionData
 	{
@@ -72,60 +99,24 @@ private:
 		std::vector<std::string> Params;
 	};
 
-	int line; //line number
-	std::string LineData; //line text
-	int Current, CurrentOld; //current range iteration
-	int Section; //current section number
-	std::string Context, ContextOld; //section context
-	int temp1;
-	std::string temp2;
-	int temp3;
-	int temp4;
-	int temp5;
-	std::string temp6;
-	std::vector<std::string> tempdata;
-	std::vector<int> callbutton_elevators;
-	int FloorCheck;
-	int RangeL, RangeLOld;
-	int RangeH, RangeHOld;
-	long RangeStart, RangeStartOld;
 	SBS::WallObject *wall;
-	std::string buffer;
 	int startpos;
-	bool getfloordata;
-	bool setshaftdoors;
 	std::vector<std::string> BuildingData;
 	std::vector<std::string> BuildingDataOrig;
-	Ogre::Vector3 MinExtent;
-	Ogre::Vector3 MaxExtent;
 	int InFunction;
 	std::vector<FunctionData> FunctionStack;
 	bool ReplaceLine;
 	std::string ReplaceLineData;
 	std::vector<std::string> nonexistent_files;
 	bool CalcError;
-	bool ReverseAxis;
-	bool setkey;
-	int keyvalue;
-	int lockvalue;
-	bool warn_deprecated;
 	bool show_percent;
-	bool InWhile;
 	int progress_marker;
 
 	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();
 	int ScriptWarning(std::string message);
 	std::string Calc(const std::string &expression);
-	bool IfProc(const std::string &expression);
 	void StoreCommand(SBS::Object *object);
-	int ProcCommands();
-	int ProcGlobals();
-	int ProcFloors();
-	int ProcElevators();
-	int ProcElevatorCars();
-	int ProcTextures();
-	int ProcBuildings();
 	bool FunctionProc();
 	void CheckFile(const std::string &filename);
 	void GetLineInformation(bool CheckFunctionCall, int &LineNumber, std::string &FunctionName, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile);
@@ -147,26 +138,6 @@ private:
 	};
 
 	std::vector<IncludeInfo> includes; //stored include mappings
-
-	struct VariableMap
-	{
-		std::string name;
-		std::string value;
-	};
-
-	std::vector<VariableMap> variables; //named user variables
-
-	bool floorcache_firstrun;
-	int cache_current;
-	std::string cache_current_s;
-	float cache_height;
-	std::string cache_height_s;
-	float cache_fullheight;
-	std::string cache_fullheight_s;
-	float cache_interfloorheight;
-	std::string cache_interfloorheight_s;
-	float cache_base;
-	std::string cache_base_s;
 };
 
 }

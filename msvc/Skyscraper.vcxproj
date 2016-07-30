@@ -379,6 +379,7 @@
     <ClCompile Include="..\src\frontend\script_floors.cpp" />
     <ClCompile Include="..\src\frontend\script_elevators.cpp" />
     <ClCompile Include="..\src\frontend\script_elevatorcars.cpp" />
+    <ClCompile Include="..\src\frontend\script_section.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\frontend\actionviewer.h" />
@@ -405,6 +406,7 @@
     <ClInclude Include="..\src\frontend\stats.h" />
     <ClInclude Include="..\src\frontend\textwindow.h" />
     <ClInclude Include="..\src\frontend\uexception.h" />
+    <ClInclude Include="..\src\frontend\script_section.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\skyscraper.ico" />

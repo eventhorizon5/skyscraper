@@ -39,14 +39,27 @@
 #include "stairs.h"
 #include "shaft.h"
 #include "scriptprocessor.h"
+#include "script_section.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-int ScriptProcessor::ProcCommands()
+ScriptProcessor::CommandsSection::CommandsSection(ScriptProcessor *parent) : Section(parent)
+{
+
+}
+
+int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 {
 	//process global commands
+
+	std::string buffer;
+	int temp1;
+	int temp3;
+	int temp4;
+	int temp5;
+	std::string temp2;
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -81,14 +94,14 @@ int ScriptProcessor::ProcCommands()
 			return sNextLine; //skip line
 	}
 
-	if (Section != 2 && Section != 4)
+	if (SectionNum != 2 && SectionNum != 4)
 	{
 		//process math functions
-		if (MathFunctions() == sError)
+		if (MathFunctions(LineData) == sError)
 			return sError;
 
 		//process any functions
-		if (FunctionProc() == true)
+		if (parent->FunctionProc() == true)
 			return sNextLine;
 	}
 
@@ -121,7 +134,7 @@ int ScriptProcessor::ProcCommands()
 		float voffset2 = ToFloat(tempdata[7]);
 		float voffset3 = ToFloat(tempdata[10]);
 
-		if (Section == 2)
+		if (SectionNum == 2)
 		{
 			if (meshname == "floor")
 			{
@@ -290,9 +303,9 @@ int ScriptProcessor::ProcCommands()
 
 		//find existing variable by name
 		int index = -1;
-		for (int i = 0; i < (int)variables.size(); i++)
+		for (int i = 0; i < (int)parent->variables.size(); i++)
 		{
-			if (variables[i].name == str)
+			if (parent->variables[i].name == str)
 			{
 				index = i;
 				break;
@@ -307,15 +320,15 @@ int ScriptProcessor::ProcCommands()
 			VariableMap variable;
 			variable.name = str;
 			variable.value = value;
-			variables.push_back(variable);
+			parent->variables.push_back(variable);
 			value = variable.value;
 		}
 		else
 		{
 			//set existing variable
-			variables[index].name = str;
-			variables[index].value = value;
-			value = variables[index].value;
+			parent->variables[index].name = str;
+			parent->variables[index].value = value;
+			value = parent->variables[index].value;
 		}
 
 		if (Simcore->Verbose == true)
@@ -348,7 +361,7 @@ int ScriptProcessor::ProcCommands()
 
 		float voffset = ToFloat(tempdata[8]);
 
-		if (Section == 2)
+		if (SectionNum == 2)
 		{
 			if (meshname == "floor")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
@@ -386,7 +399,7 @@ int ScriptProcessor::ProcCommands()
 
 		float voffset = ToFloat(tempdata[8]);
 
-		if (Section == 2)
+		if (SectionNum == 2)
 		{
 			if (meshname == "floor")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
@@ -435,7 +448,7 @@ int ScriptProcessor::ProcCommands()
 
 		float voffset = 0;
 
-		if (Section == 2)
+		if (SectionNum == 2)
 		{
 			if (relative == true)
 			{
@@ -446,7 +459,7 @@ int ScriptProcessor::ProcCommands()
 			}
 			else if (relative_option == false)
 			{
-				if (meshname == "floor" && Section == 2)
+				if (meshname == "floor" && SectionNum == 2)
 					voffset -= mesh->GetPosition().y; //subtract altitude for new positioning model
 			}
 		}
@@ -482,7 +495,7 @@ int ScriptProcessor::ProcCommands()
 
 		float altitude = ToFloat(tempdata[params - 3]);
 
-		if (Section == 2)
+		if (SectionNum == 2)
 		{
 			if (meshname == "floor")
 				altitude += Simcore->GetFloor(Current)->GetBase(true);
@@ -526,7 +539,7 @@ int ScriptProcessor::ProcCommands()
 
 		float voffset = 0.0f;
 
-		if (Section == 2)
+		if (SectionNum == 2)
 		{
 			if (meshname == "floor")
 				voffset += Simcore->GetFloor(Current)->GetBase(true);
@@ -1207,7 +1220,7 @@ int ScriptProcessor::ProcCommands()
 		if (!mesh)
 			return ScriptError("Invalid object");
 
-		if (meshname == "floor" && Section == 2)
+		if (meshname == "floor" && SectionNum == 2)
 			offset = mesh->GetPosition().y;
 
 		float alt = ToFloat(tempdata[2]);
@@ -1351,7 +1364,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		if (compat == true)
 		{
@@ -1408,7 +1421,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		//create model
 		Model* model;
@@ -1544,7 +1557,7 @@ int ScriptProcessor::ProcCommands()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		Control* control = Simcore->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
@@ -1582,7 +1595,7 @@ int ScriptProcessor::ProcCommands()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
