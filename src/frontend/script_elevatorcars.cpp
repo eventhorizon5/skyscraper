@@ -53,9 +53,6 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 {
 	//Process elevator cars
 
-	int temp3;
-	std::string temp2;
-
 	//get car object
 	ElevatorCar *car = 0;
 	Elevator *elev = 0;
@@ -103,8 +100,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//get text after equal sign
-	int temp2check = LineData.find("=", 0);
-	temp2 = GetAfterEquals(LineData);
+	bool equals = true;
+	if ((int)LineData.find("=", 0) == -1)
+		equals = false;
+	std::string value = GetAfterEquals(LineData);
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -112,14 +111,14 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	//parameters
 	if (linecheck.substr(0, 4) == "name")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		car->Name = temp2;
+		car->Name = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "openspeed")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -127,20 +126,21 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, car->GetDoor(temp3)->OpenSpeed))
+		std::string str2 = Calc(value);
+		if (!IsNumeric(str2, car->GetDoor(door)->OpenSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "doors ")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, car->NumDoors))
 			return ScriptError("Invalid value");
 		return sNextLine;
@@ -231,7 +231,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 9) == "doortimer")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -239,18 +239,19 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, car->GetDoor(temp3)->DoorTimer))
+		std::string str2 = Calc(value);
+		if (!IsNumeric(str2, car->GetDoor(door)->DoorTimer))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "quickclose")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -258,18 +259,19 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, car->GetDoor(temp3)->QuickClose))
+		std::string str2 = Calc(value);
+		if (!IsNumeric(str2, car->GetDoor(door)->QuickClose))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "nudgetimer")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -277,18 +279,19 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, car->GetDoor(temp3)->NudgeTimer))
+		std::string str2 = Calc(value);
+		if (!IsNumeric(str2, car->GetDoor(door)->NudgeTimer))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "slowspeed")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -296,18 +299,19 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, car->GetDoor(temp3)->SlowSpeed))
+		std::string str2 = Calc(value);
+		if (!IsNumeric(str2, car->GetDoor(door)->SlowSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "manualspeed")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -315,18 +319,19 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(11, LineData.find("=", 0) - 11);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
-		std::string str2 = Calc(temp2);
-		if (!IsNumeric(str2, car->GetDoor(temp3)->ManualSpeed))
+		std::string str2 = Calc(value);
+		if (!IsNumeric(str2, car->GetDoor(door)->ManualSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "opensound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -334,20 +339,21 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->GetDoor(temp3)->OpenSound = temp2;
+		car->GetDoor(door)->OpenSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "closesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -355,20 +361,21 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->GetDoor(temp3)->CloseSound = temp2;
+		car->GetDoor(door)->CloseSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "nudgesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -376,31 +383,32 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->GetDoor(temp3)->NudgeSound = temp2;
+		car->GetDoor(door)->NudgeSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "startsound")
 	{
 		//backwards compatibility
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		if (warn_deprecated == true)
 			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpStartSound = temp2;
-		car->DownStartSound = temp2;
+		car->UpStartSound = value;
+		car->DownStartSound = value;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -415,17 +423,17 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 9) == "movesound")
 	{
 		//backwards compatibility
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		if (warn_deprecated == true)
 			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpMoveSound = temp2;
-		car->DownMoveSound = temp2;
+		car->UpMoveSound = value;
+		car->DownMoveSound = value;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -440,17 +448,17 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 9) == "stopsound")
 	{
 		//backwards compatibility
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		if (warn_deprecated == true)
 			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpStopSound = temp2;
-		car->DownStopSound = temp2;
+		car->UpStopSound = value;
+		car->DownStopSound = value;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -465,16 +473,16 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 9) == "idlesound")
 	{
 		//backwards compatibility
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		if (warn_deprecated == true)
 			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->IdleSound = temp2;
+		car->IdleSound = value;
 
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
@@ -488,120 +496,120 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 13) == "carstartsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpStartSound = temp2;
-		car->DownStartSound = temp2;
+		car->UpStartSound = value;
+		car->DownStartSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "carupstartsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpStartSound = temp2;
+		car->UpStartSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "cardownstartsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->DownStartSound = temp2;
+		car->DownStartSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "carmovesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpMoveSound = temp2;
-		car->DownMoveSound = temp2;
+		car->UpMoveSound = value;
+		car->DownMoveSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "carupmovesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpMoveSound = temp2;
+		car->UpMoveSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "cardownmovesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->DownMoveSound = temp2;
+		car->DownMoveSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "carstopsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpStopSound = temp2;
-		car->DownStopSound = temp2;
+		car->UpStopSound = value;
+		car->DownStopSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "carupstopsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->UpStopSound = temp2;
+		car->UpStopSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "cardownstopsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->DownStopSound = temp2;
+		car->DownStopSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "caridlesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->IdleSound = temp2;
+		car->IdleSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "chimesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -609,21 +617,22 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->GetDoor(temp3)->UpChimeSound = temp2;
-		car->GetDoor(temp3)->DownChimeSound = temp2;
+		car->GetDoor(door)->UpChimeSound = value;
+		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "upchimesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -631,20 +640,21 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(12, LineData.find("=", 0) - 12);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->GetDoor(temp3)->UpChimeSound = temp2;
+		car->GetDoor(door)->UpChimeSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "downchimesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
@@ -652,130 +662,131 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Car not created yet");
 		std::string str = LineData.substr(14, LineData.find("=", 0) - 14);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->GetDoor(temp3)->DownChimeSound = temp2;
+		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "alarmsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->AlarmSound = temp2;
+		car->AlarmSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "alarmsoundstop")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->AlarmSoundStop = temp2;
+		car->AlarmSoundStop = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "beepsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->SetBeepSound(temp2);
+		car->SetBeepSound(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "floorsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->SetFloorSound(temp2);
+		car->SetFloorSound(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "upmessage")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->SetMessageSound(true, true, temp2);
+		car->SetMessageSound(true, true, value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "downmessage")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->SetMessageSound(true, false, temp2);
+		car->SetMessageSound(true, false, value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "openmessage")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->SetMessageSound(false, true, temp2);
+		car->SetMessageSound(false, true, value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "closemessage")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->SetMessageSound(false, false, temp2);
+		car->SetMessageSound(false, false, value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "music ")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->Music = temp2;
+		car->Music = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "musicon ")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
-		car->MusicOn = ToBool(temp2);
+		car->MusicOn = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "musiconmove")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
-		car->MusicOnMove = ToBool(temp2);
+		car->MusicOnMove = ToBool(value);
 	}
 	if (linecheck.substr(0, 13) == "musicposition")
 	{
@@ -795,15 +806,15 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 10) == "autoenable")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
-		car->AutoEnable = ToBool(temp2);
+		car->AutoEnable = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "doorsensor")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		if (elev->Created == false)
@@ -813,49 +824,50 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		str = Calc(str);
-		if (!IsNumeric(str, temp3))
+		int door = 0;
+		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > car->NumDoors)
+		if (door == 0 || door > car->NumDoors)
 			return ScriptError("Invalid door number");
 
 		int params = SplitAfterEquals(LineData);
 		if (params < 1 || params > 2)
 			return ScriptError("Incorrect number of parameters");
 
-		car->GetDoor(temp3)->EnableSensor(ToBool(tempdata[0]));
+		car->GetDoor(door)->EnableSensor(ToBool(tempdata[0]));
 		if (params == 2)
 		{
 			//check to see if file exists
 			parent->CheckFile("data/" + tempdata[1]);
 			//set door sound
-			car->GetDoor(temp3)->SensorSound = tempdata[1];
+			car->GetDoor(door)->SensorSound = tempdata[1];
 		}
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 21) == "caremergencystopsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		car->EmergencyStopSound = temp2;
+		car->EmergencyStopSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 18) == "independentservice")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->IndependentService = ToBool(temp2);
+		elev->IndependentService = ToBool(value);
 		elev->IndependentServiceCar = car->Number;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "fireservice2")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->FireServicePhase2 = ToInt(temp2);
+		elev->FireServicePhase2 = ToInt(value);
 		elev->FireServicePhase2Car = car->Number;
 		return sNextLine;
 	}
@@ -1377,10 +1389,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (temp3 = 8; temp3 < slength - (parameters / 2); temp3++)
-			action_array.push_back(tempdata[temp3]);
-		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
-			tex_array.push_back(tempdata[temp3]);
+		for (int i = 8; i < slength - (parameters / 2); i++)
+			action_array.push_back(tempdata[i]);
+		for (int i = slength - (parameters / 2); i < slength; i++)
+			tex_array.push_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -1919,10 +1931,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (temp3 = 8; temp3 < slength - (parameters / 2); temp3++)
-			action_array.push_back(tempdata[temp3]);
-		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
-			tex_array.push_back(tempdata[temp3]);
+		for (int i = 8; i < slength - (parameters / 2); i++)
+			action_array.push_back(tempdata[i]);
+		for (int i = slength - (parameters / 2); i < slength; i++)
+			tex_array.push_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);

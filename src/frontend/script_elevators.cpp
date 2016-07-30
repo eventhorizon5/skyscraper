@@ -43,8 +43,6 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 {
 	//Process elevators
 
-	std::string temp2;
-
 	//create elevator if not created already
 	Simcore->NewElevator(Current);
 
@@ -64,8 +62,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	int temp2check = LineData.find("=", 0);
-	temp2 = GetAfterEquals(LineData);
+	bool equals = true;
+	if ((int)LineData.find("=", 0) == -1)
+		equals = false;
+	std::string value = GetAfterEquals(LineData);
 
 	//get elevator object
 	Elevator *elev = Simcore->GetElevator(Current);
@@ -76,198 +76,198 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	//parameters
 	if (linecheck.substr(0, 4) == "name")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->Name = temp2;
+		elev->Name = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 4) == "type")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->Type = temp2;
+		elev->Type = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "speed")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, elev->ElevatorSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "acceleration")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, elev->Acceleration))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "deceleration")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, elev->Deceleration))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "acceljerk")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, elev->AccelJerk))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "deceljerk")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, elev->DecelJerk))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "assignedshaft")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, elev->AssignedShaft))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "motorstartsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorUpStartSound = temp2;
-		elev->MotorDownStartSound = temp2;
+		elev->MotorUpStartSound = value;
+		elev->MotorDownStartSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "motorupstartsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorUpStartSound = temp2;
+		elev->MotorUpStartSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 19) == "motordownstartsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorDownStartSound = temp2;
+		elev->MotorDownStartSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "motorrunsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorUpRunSound = temp2;
-		elev->MotorDownRunSound = temp2;
+		elev->MotorUpRunSound = value;
+		elev->MotorDownRunSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "motoruprunsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorUpRunSound = temp2;
+		elev->MotorUpRunSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "motordownrunsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorDownRunSound = temp2;
+		elev->MotorDownRunSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "motorstopsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorUpStopSound = temp2;
-		elev->MotorDownStopSound = temp2;
+		elev->MotorUpStopSound = value;
+		elev->MotorDownStopSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "motorupstopsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorUpStopSound = temp2;
+		elev->MotorUpStopSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 18) == "motordownstopsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorDownStopSound = temp2;
+		elev->MotorDownStopSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "motoridlesound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorIdleSound = temp2;
+		elev->MotorIdleSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "floorskiptext")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->SetFloorSkipText(temp2);
+		elev->SetFloorSkipText(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "recallfloor")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		int floortemp;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, floortemp))
 			return ScriptError("Invalid value");
 		elev->SetRecallFloor(floortemp);
@@ -275,10 +275,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 20) == "alternaterecallfloor")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		int floortemp;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, floortemp))
 			return ScriptError("Invalid value");
 		elev->SetAlternateRecallFloor(floortemp);
@@ -286,10 +286,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 8) == "acpfloor")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		int floortemp;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, floortemp))
 			return ScriptError("Invalid value");
 		elev->SetACPFloor(floortemp);
@@ -313,51 +313,51 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 11) == "queueresets")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->QueueResets = ToBool(temp2);
+		elev->QueueResets = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "limitqueue")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->LimitQueue = ToBool(temp2);
+		elev->LimitQueue = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 3) == "acp")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->ACP = ToBool(temp2);
+		elev->ACP = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "uppeak")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->UpPeak = ToBool(temp2);
+		elev->UpPeak = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "downpeak")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->DownPeak = ToBool(temp2);
+		elev->DownPeak = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "inspectionservice")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->InspectionService = ToBool(temp2);
+		elev->InspectionService = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "fireservice1")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->FireServicePhase1 = ToInt(temp2);
+		elev->FireServicePhase1 = ToInt(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "parking")
@@ -379,10 +379,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 13) == "levelingspeed")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		float leveling;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingSpeed = leveling;
@@ -390,10 +390,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 14) == "levelingoffset")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		float leveling;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingOffset = leveling;
@@ -401,10 +401,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 12) == "levelingopen")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		float leveling;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingOpen = leveling;
@@ -412,10 +412,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 11) == "notifyearly")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		float notify;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, notify))
 			return ScriptError("Invalid value");
 		elev->NotifyEarly = notify;
@@ -423,10 +423,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 14) == "departuredelay")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		float delay;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, delay))
 			return ScriptError("Invalid value");
 		elev->DepartureDelay = delay;
@@ -434,10 +434,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 12) == "arrivaldelay")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 		float delay;
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, delay))
 			return ScriptError("Invalid value");
 		elev->ArrivalDelay = delay;
@@ -445,78 +445,78 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 15) == "inspectionspeed")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, elev->InspectionSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "autodoors")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
-		elev->AutoDoors = ToBool(temp2);
+		elev->AutoDoors = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "openonstart")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
-		elev->OpenOnStart = ToBool(temp2);
+		elev->OpenOnStart = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "interlocks")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
-		elev->Interlocks = ToBool(temp2);
+		elev->Interlocks = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "floorhold")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
-		elev->FloorHold = ToBool(temp2);
+		elev->FloorHold = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 23) == "motoremergencystopsound")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		parent->CheckFile("data/" + temp2);
+		parent->CheckFile("data/" + value);
 
-		elev->MotorEmergencyStopSound = temp2;
+		elev->MotorEmergencyStopSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 18) == "emergencystopspeed")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, elev->EmergencyStopSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "chimeonarrival")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->ChimeOnArrival = ToBool(temp2);
+		elev->ChimeOnArrival = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "reopen")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
-		elev->ReOpen = ToBool(temp2);
+		elev->ReOpen = ToBool(value);
 		return sNextLine;
 	}
 
@@ -544,9 +544,9 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 
 	//process elevator car commands for default car
-	int value = parent->GetElevatorCarSection()->Run(LineData);
-	if (value != sContinue)
-		return value;
+	int result = parent->GetElevatorCarSection()->Run(LineData);
+	if (result != sContinue)
+		return result;
 
 	//handle elevator range
 	if (RangeL != RangeH && linecheck.substr(0, 12) == "<endelevator")

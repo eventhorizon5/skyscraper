@@ -75,9 +75,6 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 {
 	//process floors
 
-	std::string temp2;
-	int temp3;
-
 	Floor *floor = Simcore->GetFloor(Current);
 
 	//exit with error if floor is invalid
@@ -144,8 +141,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	int temp2check = LineData.find("=", 0);
-	temp2 = GetAfterEquals(LineData);
+	bool equals = true;
+	if ((int)LineData.find("=", 0) == -1)
+		equals = false;
+	std::string value = GetAfterEquals(LineData);
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -153,9 +152,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	//parameters
 	if (linecheck.substr(0, 6) == "height")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, floor->Height))
 			return ScriptError("Invalid value");
 		if (FloorCheck < 2)
@@ -165,9 +164,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 16) == "interfloorheight")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		if (!IsNumeric(str, floor->InterfloorHeight))
 			return ScriptError("Invalid value");
 		if (FloorCheck == 0)
@@ -177,9 +176,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 8) == "altitude")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		std::string str = Calc(temp2);
+		std::string str = Calc(value);
 		float alt;
 		if (!IsNumeric(str, alt))
 			return ScriptError("Invalid value");
@@ -188,37 +187,37 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 2) == "id")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		floor->ID = Calc(temp2);
+		floor->ID = Calc(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 4) == "name")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		floor->Name = Calc(temp2);
+		floor->Name = Calc(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 4) == "type")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		floor->FloorType = temp2;
+		floor->FloorType = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "description")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		floor->Description = temp2;
+		floor->Description = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "indicatortexture")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
-		floor->IndicatorTexture = Calc(temp2);
+		floor->IndicatorTexture = Calc(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "group")
@@ -1534,10 +1533,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (temp3 = 8; temp3 < slength - (parameters / 2); temp3++)
-			action_array.push_back(tempdata[temp3]);
-		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
-			tex_array.push_back(tempdata[temp3]);
+		for (int i = 8; i < slength - (parameters / 2); i++)
+			action_array.push_back(tempdata[i]);
+		for (int i = slength - (parameters / 2); i < slength; i++)
+			tex_array.push_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -1584,10 +1583,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (temp3 = 9; temp3 < slength - (parameters / 2); temp3++)
-			action_array.push_back(tempdata[temp3]);
-		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
-			tex_array.push_back(tempdata[temp3]);
+		for (int i = 9; i < slength - (parameters / 2); i++)
+			action_array.push_back(tempdata[i]);
+		for (int i = slength - (parameters / 2); i < slength; i++)
+			tex_array.push_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -1639,10 +1638,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (temp3 = 9; temp3 < slength - (parameters / 2); temp3++)
-			action_array.push_back(tempdata[temp3]);
-		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
-			tex_array.push_back(tempdata[temp3]);
+		for (int i = 9; i < slength - (parameters / 2); i++)
+			action_array.push_back(tempdata[i]);
+		for (int i = slength - (parameters / 2); i < slength; i++)
+			tex_array.push_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);

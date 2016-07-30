@@ -55,7 +55,9 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	int temp2check = LineData.find("=", 0);
+	bool equals = true;
+	if ((int)LineData.find("=", 0) == -1)
+		equals = false;
 	std::string value = GetAfterEquals(LineData);
 
 	//create a lowercase string of the line
@@ -64,7 +66,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	//parameters
 	if (linecheck.substr(0, 15) == "concurrentloads")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		engine->GetFrontend()->ConcurrentLoads = ToBool(value);
@@ -72,7 +74,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 12) == "cutlandscape")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		engine->GetFrontend()->CutLandscape = ToBool(value);
@@ -80,7 +82,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 12) == "cutbuildings")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		engine->GetFrontend()->CutBuildings = ToBool(value);
@@ -88,7 +90,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 11) == "cutexternal")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		engine->GetFrontend()->CutExternal = ToBool(value);
@@ -96,7 +98,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 9) == "cutfloors")
 	{
-		if (temp2check < 0)
+		if (equals == false)
 			return ScriptError("Syntax error");
 
 		engine->GetFrontend()->CutFloors = ToBool(value);

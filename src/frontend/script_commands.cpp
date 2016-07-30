@@ -1062,8 +1062,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	//ResetTextureMapping command
 	if (linecheck.substr(0, 19) == "resettexturemapping")
 	{
-		int temp2check = LineData.find("=", 0);
-		if (temp2check < 0)
+		int check = (int)LineData.find("=", 0);
+		if (check < 0)
 			return ScriptError("Syntax Error");
 
 		//get text after equal sign
@@ -1109,8 +1109,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (warn_deprecated == true)
 			ScriptWarning("Command deprecated");
 
-		int temp2check = LineData.find("=", 0);
-		if (temp2check < 0)
+		int check = (int)LineData.find("=", 0);
+		if (check < 0)
 			return ScriptError("Syntax Error");
 		std::string value = GetAfterEquals(LineData);
 
