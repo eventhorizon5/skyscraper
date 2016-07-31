@@ -26,6 +26,12 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
+#include "floor.h"
+#include "elevator.h"
+#include "elevatorcar.h"
+#include "shaft.h"
+#include "stairs.h"
+#include "model.h"
 #include "random.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
@@ -967,7 +973,147 @@ std::string ScriptProcessor::Section::Calc(const std::string &expression)
 
 MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 {
-	return parent->GetMeshObject(name);
+	//get a system mesh object, or search for a custom one by name
+
+	SetCase(name, false);
+
+	//get a system mesh object
+	if (name == "floor")
+	{
+		if (SectionNum == 2)
+			return Simcore->GetFloor(Current)->Level;
+		return 0;
+	}
+	else if (name == "interfloor")
+	{
+		if (SectionNum == 2)
+			return Simcore->GetFloor(Current)->Interfloor;
+		return 0;
+	}
+	else if (name == "columnframe")
+	{
+		if (SectionNum == 2)
+			return Simcore->GetFloor(Current)->ColumnFrame;
+		return 0;
+	}
+	else if (name == "elevatorcar")
+	{
+		if (SectionNum == 6)
+			return Simcore->GetElevator(CurrentOld)->GetCar(Current)->Mesh;
+		return 0;
+	}
+	else if (name == "elevator")
+	{
+		if (SectionNum == 4)
+			return Simcore->GetElevator(Current)->GetCar(1)->Mesh;
+		return 0;
+	}
+	else if (name == "external")
+		return Simcore->External;
+	else if (name == "landscape")
+		return Simcore->Landscape;
+	else if (name == "buildings")
+		return Simcore->Buildings;
+	else if (name.substr(0, 5) == "shaft")
+	{
+		if (SectionNum == 2)
+		{
+			//get a shaft mesh object, or a model in a shaft
+
+			std::string num, modelname;
+			int marker = (int)name.find(":");
+			if (marker > 0)
+				modelname = name.substr(marker + 1);
+
+			if (marker > 0)
+				num = name.substr(5, (int)name.length() - marker - 5 - 1);
+			else
+				num = name.substr(5);
+
+			TrimString(num);
+			int number;
+			if (!IsNumeric(num, number))
+				return 0;
+
+			Shaft *shaft = Simcore->GetShaft(number);
+			if (!shaft)
+				return 0;
+
+			if (marker > 0)
+			{
+				Model *model = shaft->GetModel(Current, modelname);
+				if (model)
+				{
+					if (model->IsCustom() == true)
+						return model->GetMeshObject();
+				}
+				return 0;
+			}
+			else
+				return shaft->GetMeshObject(Current);
+		}
+		return 0;
+	}
+	else if (name.substr(0, 9) == "stairwell")
+	{
+		if (SectionNum == 2)
+		{
+			//get a stairwell mesh object, or a model in a stairwell
+
+			std::string num, modelname;
+			int marker = (int)name.find(":");
+			if (marker > 0)
+				modelname = name.substr(marker + 1);
+
+			if (marker > 0)
+				num = name.substr(9, (int)name.length() - marker - 5 - 1);
+			else
+				num = name.substr(9);
+
+			TrimString(num);
+			int number;
+			if (!IsNumeric(num, number))
+				return 0;
+
+			Stairs *stairs = Simcore->GetStairs(number);
+			if (!stairs)
+				return 0;
+
+			if (marker > 0)
+			{
+				Model *model = stairs->GetModel(Current, modelname);
+				if (model)
+				{
+					if (model->IsCustom() == true)
+						return model->GetMeshObject();
+				}
+				return 0;
+			}
+			else
+				return stairs->GetMeshObject(Current);
+		}
+		return 0;
+	}
+
+	//get a custom model mesh
+
+	Model* model = 0;
+
+	if (SectionNum == 2)
+		model = Simcore->GetFloor(Current)->GetModel(name);
+	else if (SectionNum == 4)
+		model = Simcore->GetElevator(Current)->GetCar(1)->GetModel(name);
+	else if (SectionNum == 6)
+		model = Simcore->GetElevator(CurrentOld)->GetCar(Current)->GetModel(name);
+	else
+		model = Simcore->GetModel(name);
+
+	if (model)
+	{
+		if (model->IsCustom() == true)
+			return model->GetMeshObject();
+	}
+	return 0;
 }
 
 void ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator, int &car)

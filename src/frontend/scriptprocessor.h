@@ -50,7 +50,6 @@ public:
 	void Reset();
 	std::vector<std::string> *GetBuildingData();
 	bool IsFunctionDefined(const std::string &name);
-	SBS::MeshObject* GetMeshObject(std::string name);
 	std::string DumpState();
 	EngineContext* GetEngine();
 	ElevatorCarSection* GetElevatorCarSection();
