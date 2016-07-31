@@ -1002,10 +1002,6 @@ void Elevator::Loop()
 			Down();
 	}
 
-	//process Hoistway Access
-	/*if (HoistwayAccess != 0)
-		SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);*/
-
 	//process Go function hold
 	if (GoActive == true)
 		Go(GoActiveFloor, true);
@@ -4233,15 +4229,7 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 		Report("Hoistway Access set to " + direction + " for floor " + ToString(floor));
 		return true;
 	}
-	/*else if (HoistwayAccess != 0 && sbs->camera->MouseDown == false)
-	{
-		//switch off if mouse button is released
-		HoistwayAccess = 0;
-		HoistwayAccessFloor = 0;
 
-		if (IsMoving == true)
-			Stop();
-	}*/
 	return false;
 }
 
