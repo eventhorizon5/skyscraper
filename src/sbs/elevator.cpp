@@ -4143,6 +4143,10 @@ void Elevator::EnableNudgeMode(bool value)
 float Elevator::GetCarOffset(int number)
 {
 	//get vertical offset of specified car
+
+	if (!GetCar(GotoFloorCar))
+		return 0.0f;
+
 	return GetCar(GotoFloorCar)->GetPosition().y - GetPosition().y;
 }
 

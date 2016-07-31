@@ -665,6 +665,8 @@ class editelevator: public wxDialog
 		int last_car;
 		int last_door;
 		int last_elevator_count;
+		int last_car_count;
+		int last_door_count;
 		SBS::Elevator *elevator;
 		SBS::ElevatorCar *car;
 		SBS::ElevatorDoor *door;

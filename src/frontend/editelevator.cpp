@@ -1182,6 +1182,8 @@ void editelevator::OnInit()
 	last_car = 0;
 	last_door = -1;
 	last_elevator_count = 0;
+	last_car_count = 0;
+	last_door_count = 0;
 
 	if (Simcore->GetElevatorCount() > 0)
 	{
@@ -1217,26 +1219,33 @@ void editelevator::Loop()
 	if (!elevator)
 		return;
 
+	int car_count = elevator->GetCarCount();
 	car = elevator->GetCar(car_num);
 
 	if (!car)
+	{
+		sCar->SetThumbPosition(0);
 		return;
+	}
 
+	int door_count = car->NumDoors;
 	door = car->GetDoor(door_num);
 
-	if (elev_num != last_elevator)
+	if (elev_num != last_elevator || car_count != last_car_count || door_count != last_door_count)
 	{
-		//number changed; update values
+		//number or count changed; update values
 		last_elevator = elev_num;
+		last_car_count = car_count;
+		last_door_count = door_count;
 
 		//set floor range slider
 		sFloor->SetScrollbar(0, 1, car->GetServicedFloorCount(), 1);
 
 		//set car range slider
-		sCar->SetScrollbar(0, 1, Simcore->GetElevator(elev_num)->GetCarCount(), 1);
+		sCar->SetScrollbar(0, 1, car_count, 1);
 
 		//set door range slider
-		sDoor->SetScrollbar(1, 1, car->NumDoors + 1, 1);
+		sDoor->SetScrollbar(1, 1, door_count + 1, 1);
 
 		SetMainValues();
 	}
