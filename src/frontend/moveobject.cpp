@@ -256,13 +256,16 @@ void MoveObject::Loop()
 	if (!engine)
 		return;
 
+	//validate engine
 	if (panel->GetRoot()->IsValidEngine(engine) == false)
 	{
 		engine = 0;
 		Simcore = 0;
+		Close();
 		return;
 	}
 
+	Simcore = engine->GetSystem();
 	object = Simcore->GetObject(object_num);
 
 	if (object)
