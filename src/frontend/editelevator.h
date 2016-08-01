@@ -62,6 +62,8 @@ class editelevator: public wxDialog
 		static const long ID_Fire2Off;
 		static const long ID_Fire2On;
 		static const long ID_Fire2Hold;
+		static const long ID_CHECKBOX1;
+		static const long ID_chkRun;
 		static const long ID_bUp;
 		static const long ID_bGoToggle;
 		static const long ID_bDown;
@@ -72,8 +74,6 @@ class editelevator: public wxDialog
 		static const long ID_bRefresh;
 		static const long ID_bDumpFloors;
 		static const long ID_bDumpQueues;
-		static const long ID_CHECKBOX1;
-		static const long ID_chkRun;
 		static const long ID_bCall;
 		static const long ID_bGo;
 		static const long ID_bOpen;
