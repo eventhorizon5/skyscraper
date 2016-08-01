@@ -30,9 +30,9 @@ namespace SBS {
 
 struct SBSIMPEXP ElevatorRoute
 {
-	ElevatorRoute(Elevator *elevator, int floor_selection);
+	ElevatorRoute(ElevatorCar *car, int floor_selection);
 	~ElevatorRoute() {}
-	Elevator *elevator;
+	ElevatorCar *car;
 	int floor_selection;
 };
 

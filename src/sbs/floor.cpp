@@ -1545,7 +1545,7 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 
 				if (serviced == true && type == ElevatorType && button)
 				{
-					ElevatorRoute* route = new ElevatorRoute(elev, DestinationFloor);
+					ElevatorRoute* route = new ElevatorRoute(car, DestinationFloor);
 					return route;
 				}
 			}

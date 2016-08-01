@@ -155,8 +155,9 @@ void Person::GotoFloor(int floor)
 	//create a new route table entry for each elevator in list
 	for (size_t i = 0; i < elevators.size(); i++)
 	{
+		Elevator *elevator = elevators[i]->car->GetElevator();
 		if (sbs->Verbose == true)
-			Report(ToString((int)i) + ": Elevator " + ToString(elevators[i]->elevator->Number) + " - floor selection " + ToString(elevators[i]->floor_selection) + " - elevator name: " + elevators[i]->elevator->Name);
+			Report(ToString((int)i) + ": Elevator " + ToString(elevator->Number) + " - floor selection " + ToString(elevators[i]->floor_selection) + " - elevator name: " + elevator->Name);
 
 		RouteEntry route_entry;
 		route_entry.elevator_route = elevators[i];
@@ -184,15 +185,13 @@ void Person::ProcessRoute()
 	if (!floor_obj)
 		return;
 
-	Elevator *elevator = route[0].elevator_route->elevator;
+	ElevatorCar *car = route[0].elevator_route->car;
 	int floor_selection = route[0].elevator_route->floor_selection;
 
-	if (!elevator)
-		return;
-
-	ElevatorCar *car = elevator->GetCarForFloor(current_floor);
 	if (!car)
 		return;
+
+	Elevator *elevator = car->GetElevator();
 
 	//if a call has not been made, press first elevator's associated call button
 	if (route[0].call_made == 0)
@@ -250,7 +249,7 @@ void Person::ProcessRoute()
 				if (car)
 				{
 					//have elevator route use arrived elevator
-					route[0].elevator_route->elevator = elevator;
+					route[0].elevator_route->car = car;
 
 					//wait for elevator doors to open before pressing button
 					if (car->AreDoorsOpen() == true)
@@ -423,21 +422,19 @@ std::string Person::GetStatus()
 		return "Idle on floor " + floor->ID;
 	}
 
-	Elevator *elevator = route[0].elevator_route->elevator;
+	ElevatorCar *car = route[0].elevator_route->car;
 	int floor_selection = route[0].elevator_route->floor_selection;
-
-	ElevatorCar *car = elevator->GetCarForFloor(current_floor);
-	if (!car)
-		return "";
 
 	Floor *floor = sbs->GetFloor(floor_selection);
 	if (!floor)
 		return "";
 
-	if (route[0].floor_selected == true && elevator)
+	if (route[0].floor_selected == true && car)
 	{
+		int elevator_number = car->GetElevator()->Number;
+
 		if (car->AreDoorsOpen() == true)
-			return "Pressed " + floor->ID + " in elevator " + ToString(elevator->Number);
+			return "Pressed " + floor->ID + " in elevator " + ToString(elevator_number);
 		else
 		{
 			if (route[0].call_made != 2)
@@ -447,7 +444,7 @@ std::string Person::GetStatus()
 					direction = "Up";
 				else
 					direction = "Down";
-				return direction + " to floor " + floor->ID + " in elevator " + ToString(elevator->Number);
+				return direction + " to floor " + floor->ID + " in elevator " + ToString(elevator_number);
 			}
 			else
 				return "Proceeding to recall floor";

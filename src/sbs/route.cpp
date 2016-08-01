@@ -32,9 +32,9 @@
 
 namespace SBS {
 
-ElevatorRoute::ElevatorRoute(Elevator *elevator, int floor_selection)
+ElevatorRoute::ElevatorRoute(ElevatorCar *car, int floor_selection)
 {
-	this->elevator = elevator;
+	this->car = car;
 	this->floor_selection = floor_selection;
 }
 
@@ -197,7 +197,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 
 								if (result2.empty() == false)
 								{
-									ElevatorRoute *first = new ElevatorRoute(elev, number);
+									ElevatorRoute *first = new ElevatorRoute(car, number);
 									result.push_back(first);
 
 									for (size_t i = 0; i < result2.size(); i++)
@@ -228,7 +228,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 
 									if (result2)
 									{
-										ElevatorRoute *first = new ElevatorRoute(elev, number);
+										ElevatorRoute *first = new ElevatorRoute(car, number);
 										result.push_back(first);
 										result.push_back(result2);
 										return result;
