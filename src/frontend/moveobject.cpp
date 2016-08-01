@@ -266,6 +266,10 @@ void MoveObject::Loop()
 	}
 
 	Simcore = engine->GetSystem();
+
+	if (!Simcore)
+		return;
+
 	object = Simcore->GetObject(object_num);
 
 	if (object)
