@@ -4225,7 +4225,7 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 
 		std::string direction = "Down";
 		if (HoistwayAccess == 1)
-			direction == "Up";
+			direction = "Up";
 		Report("Hoistway Access set to " + direction + " for floor " + ToString(floor));
 		return true;
 	}
