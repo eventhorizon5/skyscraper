@@ -50,7 +50,7 @@ public:
 	ButtonPanel(ElevatorCar *car, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th);
 	~ButtonPanel();
 	Control* AddButton(const std::string &sound, const std::string &texture, const std::string &texture_lit, int row, int column, const std::string &type, float width, float height, float hoffset = 0, float voffset = 0);
-	Control* AddControl(const std::string &sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
+	Control* AddControl(const std::string &sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	void Enabled(bool value);
 	bool AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	void ChangeLight(int floor, bool value);

@@ -819,7 +819,7 @@ void Shaft::AddModel(int floor, Model *model)
 	ModelArray[floor - startfloor].push_back(model);
 }
 
-Control* Shaft::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Shaft::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 
@@ -828,7 +828,7 @@ Control* Shaft::AddControl(int floor, const std::string &name, const std::string
 		return 0;
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	Control* control = new Control(GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, voffset, CenterZ);
 	ControlArray[floor - startfloor].push_back(control);
 	return control;

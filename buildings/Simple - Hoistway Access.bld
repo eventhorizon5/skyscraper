@@ -479,9 +479,10 @@ AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0
     AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
 
 <Floor 0>
-    AddActionControl AccessSwitch, switch.wav, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33 + 5.706, 0.25, 0.25, 6.5, AccessDownLanding, AccessOffLanding, AccessUpLanding, Fire1Off, Fire1Bypass, Fire1On
+    AddActionControl AccessSwitch, switch.wav, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33 + 5.706, 0.25, 0.25, 6.5, 2, AccessDownLanding, AccessOffLanding, AccessUpLanding, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
 <Floor 9>
+    AddActionControl AccessSwitch, switch.wav, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33 + 5.706, 0.25, 0.25, 6.5, 2, AccessDownTop, AccessOffTop, AccessUpTop, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 

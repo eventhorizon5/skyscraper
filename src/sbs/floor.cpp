@@ -1355,11 +1355,11 @@ void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &new
 	ColumnFrame->ReplaceTexture(oldtexture, newtexture);
 }
 
-Control* Floor::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Floor::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, GetBase(true) + voffset, CenterZ);
 	ControlArray.push_back(control);
 	return control;

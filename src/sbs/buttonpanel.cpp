@@ -153,10 +153,10 @@ Control* ButtonPanel::AddButton(const std::string &sound, const std::string &tex
 	else
 		names.push_back(newtype);
 
-	return AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
+	return AddControl(sound, row, column, width, height, hoffset, voffset, 1, names, textures);
 }
 
-Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//create an elevator control (button, switch, knob)
 
@@ -232,7 +232,7 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(this, name, false, sound, actionsnull, actions, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, false);
+	Control *control = controls[control_index] = new Control(this, name, false, sound, actionsnull, actions, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, false, selection_position);
 
 	//move control
 	controls[control_index]->Move(position);

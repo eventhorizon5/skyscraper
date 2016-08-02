@@ -1357,10 +1357,10 @@ AddActionControl</strong> - creates a custom control that uses a specific
 action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
 <em>name, sound, direction, centerx, centerz, width, height, voffset,
-action_name(s), texture_name(s)<br>
+selection_position, action_name(s), texture_name(s)<br>
 </em></font>Example: <font face="Courier New, Courier, mono"
 size="2">AddActionControl MyControl, switch.wav, front, -10, 10, 1.5, 1.5, 4,
-UndoMyAction, MyAction, Touch, TouchLit<br>
+1, UndoMyAction, MyAction, Touch, TouchLit<br>
 </font><br>
 AddActionControl command creates an advanced control similar to elevator button
 panel controls, but assigned to an action created with the AddAction command.
@@ -1371,17 +1371,17 @@ and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
 (front, left, right, back). <em>Voffset</em> is relative of the floor's base.
-Leave the <em>sound</em> field blank for no sound to be played.</p>
+Leave the <em>sound</em> field blank for no sound to be played. <em>Selection_position</em> is the selection position to start at, which is normally 1.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
 AddShaftActionControl</strong> - creates a custom control in a specified shaft
 that uses a specific action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftActionControl
 <em>number, name, sound, direction, centerx, centerz, width, height, voffset,
-action_name(s), texture_name(s)<br>
+selection_position, action_name(s), texture_name(s)<br>
 </em></font>Example: <font face="Courier New, Courier, mono"
 size="2">AddShaftActionControl 1, MyControl, switch.wav, front, -10, 10, 1.5,
-1.5, 4, UndoMyAction, MyAction, Touch, TouchLit<br>
+1.5, 4, 1, UndoMyAction, MyAction, Touch, TouchLit<br>
 </font><br>
 This command creates an advanced control similar to elevator car button panel
 controls, but assigned to an action created with the AddAction command. The
@@ -1393,17 +1393,18 @@ action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
 (front, left, right, back). <em>Voffset</em> is relative of the floor's base.
 Leave the <em>sound</em> field blank for no sound to be
-played.<strong></strong></p>
+played. <em>Selection_position</em> is the starting selection position, which
+is normally 1.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
 AddStairsActionControl</strong> - creates a custom control in a specified
 stairwell that uses a specific action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsActionControl
 <em>number, name, sound, direction, centerx, centerz, width, height, voffset,
-action_name(s), texture_name(s)<br>
+selection_position, action_name(s), texture_name(s)<br>
 </em></font>Example: <font face="Courier New, Courier, mono"
 size="2">AddStairsActionControl 1, MyControl, switch.wav, front, -10, 10, 1.5,
-1.5, 4, UndoMyAction, MyAction, Touch, TouchLit<br>
+1.5, 4, 1, UndoMyAction, MyAction, Touch, TouchLit<br>
 </font><br>
 This command creates an advanced control similar to elevator button panel
 controls, but assigned to an action created with the AddAction command. The
@@ -1415,7 +1416,8 @@ action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
 (front, left, right, back). <em>Voffset</em> is relative of the floor's base.
 Leave the <em>sound</em> field blank for no sound to be
-played.<strong></strong></p>
+played. <em>Selection_position</em> is the starting selection position, which is
+normally 1.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
@@ -2171,16 +2173,16 @@ the right, and 0.1 grid units down. Notice that no sound is specified in the
 buttons, switches and knobs on the panel<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddControl
 <em>panel_number, sound, row, column, width, height, hoffset, voffset,
-command_name(s), texture_name(s)<br>
+selection_position, command_name(s), texture_name(s)<br>
 </em></font>Example 1: <font face="Courier New, Courier, mono"
-size="2">AddControl 1, switch.wav, 7, 3, 1, 1, 0, 0, open, ButtonOpen</font><br>
+size="2">AddControl 1, switch.wav, 7, 3, 1, 1, 0, 0, 1, open, ButtonOpen</font><br>
 Example 2: <font face="Courier New, Courier, mono" size="2">AddControl 1,
-switch.wav, 7, 3, 1, 1, 0, 0, FanOff, FanOn, SwitchFanOff,
+switch.wav, 7, 3, 1, 1, 0, 0, 1, FanOff, FanOn, SwitchFanOff,
 SwitchFanOn</font><br>
 Example 3: <font face="Courier New, Courier, mono" size="2">AddControl 1,
-switch.wav, 7, 3, 1, 1, 0, 0, Off, 4, Button5, ButtonLit5</font><br>
+switch.wav, 7, 3, 1, 1, 0, 0, 1, Off, 4, Button5, ButtonLit5</font><br>
 Example 4: <font face="Courier New, Courier, mono" size="2">AddControl 1,
-switch.wav, 7, 3, 1, 1, 0, 0, Fire2Off, Fire2On, Fire2Hold, FireKnob1,
+switch.wav, 7, 3, 1, 1, 0, 0, 1, Fire2Off, Fire2On, Fire2Hold, FireKnob1,
 FireKnob2, FireKnob3</font></p>
 
 <p align="left">The AddControl command creates an advanced control on the
@@ -2196,7 +2198,8 @@ fan switch being created, with the first command being "FanOff" with the
 with the "SwitchFanOn" texture being used for that. Example 3 shows a standard
 floor button being created (which is what the AddButton command does) and
 example 4 shows a fire service mode knob being created with 3 positions. Leave
-the sound field blank for no sound to be played.</p>
+the sound field blank for no sound to be played.  The <em>selection_position</em>
+parameter specifies the starting selection position, which is normally 1.</p>
 
 <p align="left">Available command names for elevators:</p>
 
@@ -2558,10 +2561,10 @@ AddActionControl</strong> - creates a custom control that uses a specific
 action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
 <em>name, sound, direction, centerx, centerz, width, height, voffset,
-action_name(s), texture_name(s)<br>
+selection_position, action_name(s), texture_name(s)<br>
 </em></font>Example: <font face="Courier New, Courier, mono"
 size="2">AddActionControl MyControl, switch.wav, front, -10, 10, 1.5, 1.5, 4,
-UndoMyAction, MyAction, Touch, TouchLit<br>
+1, UndoMyAction, MyAction, Touch, TouchLit<br>
 </font><br>
 AddActionControl command creates an advanced control similar to elevator button
 panel controls, but assigned to an action created with the AddAction command.
@@ -2573,7 +2576,8 @@ action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
 (front, left, right, back). <em>Voffset</em> is relative of the elevator car's
 base. Leave the sound field blank for no sound to be
-played.<strong></strong></p>
+played. <em>Selection_position</em> is the starting selection position, which is
+normally 1.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
@@ -3273,10 +3277,10 @@ AddActionControl</strong> - creates a custom control that uses a specific
 action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
 <em>name, sound, direction, centerx, centerz, width, height, voffset,
-action_name(s), texture_name(s)<br>
+selection_position, action_name(s), texture_name(s)<br>
 </em></font>Example: <font face="Courier New, Courier, mono"
 size="2">AddActionControl MyControl, switch.wav, front, -10, 10, 1.5, 1.5, 4,
-UndoMyAction, MyAction, Touch, TouchLit<br>
+1, UndoMyAction, MyAction, Touch, TouchLit<br>
 </font><br>
 AddActionControl command creates an advanced control similar to elevator button
 panel controls, but assigned to an action created with the AddAction command.
@@ -3287,7 +3291,8 @@ and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
 (front, left, right, back). Leave the sound field blank for no sound to be
-played.</p>
+played.  <em>Selection_position</em> is the selection position to start at,
+which is normally 1.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>al.
 AddTrigger</strong> - creates a trigger that is used to signal an action when

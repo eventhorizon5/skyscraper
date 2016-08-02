@@ -1515,8 +1515,17 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (params < 10)
 			return ScriptError("Incorrect number of parameters");
 
+		//set backwards compatibility
+		bool compat = false;
+		if (IsNumeric(tempdata[8]) == false)
+			compat = true;
+
+		int end = 8;
+		if (compat == true)
+			end = 7;
+
 		//check numeric values
-		for (int i = 3; i <= 7; i++)
+		for (int i = 3; i <= end; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1527,13 +1536,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//get number of action & texture parameters
 		slength = (int)tempdata.size();
-		parameters = slength - 8; //strip off main parameters
+		parameters = slength - (end + 1); //strip off main parameters
 
 		//action & texture parameter number needs to be even
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (int i = 8; i < slength - (parameters / 2); i++)
+		for (int i = (end + 1); i < slength - (parameters / 2); i++)
 			action_array.push_back(tempdata[i]);
 		for (int i = slength - (parameters / 2); i < slength; i++)
 			tex_array.push_back(tempdata[i]);
@@ -1541,7 +1550,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
-		Control* control = floor->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = 0;
+		if (compat == true)
+			control = floor->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), 1, action_array, tex_array);
+		else
+			control = floor->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), action_array, tex_array);
 
 		if (control)
 		{
@@ -1563,8 +1576,17 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (params < 11)
 			return ScriptError("Incorrect number of parameters");
 
+		//set backwards compatibility
+		bool compat = false;
+		if (IsNumeric(tempdata[9]) == false)
+			compat = true;
+
+		int end = 9;
+		if (compat == true)
+			end = 8;
+
 		//check numeric values
-		for (int i = 0; i <= 8; i++)
+		for (int i = 0; i <= end; i++)
 		{
 			if (i == 1)
 				i = 4;
@@ -1577,13 +1599,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//get number of action & texture parameters
 		slength = (int)tempdata.size();
-		parameters = slength - 9; //strip off main parameters
+		parameters = slength - (end + 1); //strip off main parameters
 
 		//action & texture parameter number needs to be even
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (int i = 9; i < slength - (parameters / 2); i++)
+		for (int i = (end + 1); i < slength - (parameters / 2); i++)
 			action_array.push_back(tempdata[i]);
 		for (int i = slength - (parameters / 2); i < slength; i++)
 			tex_array.push_back(tempdata[i]);
@@ -1593,7 +1615,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
-			Control* control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), action_array, tex_array);
+			Control* control = 0;
+			if (compat == true)
+				control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
+			else
+				control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), action_array, tex_array);
 
 			if (control)
 			{
@@ -1618,8 +1644,17 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (params < 11)
 			return ScriptError("Incorrect number of parameters");
 
+		//set backwards compatibility
+		bool compat = false;
+		if (IsNumeric(tempdata[9]) == false)
+			compat = true;
+
+		int end = 9;
+		if (compat == true)
+			end = 8;
+
 		//check numeric values
-		for (int i = 0; i <= 8; i++)
+		for (int i = 0; i <= end; i++)
 		{
 			if (i == 1)
 				i = 4;
@@ -1632,13 +1667,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//get number of action & texture parameters
 		slength = (int)tempdata.size();
-		parameters = slength - 9; //strip off main parameters
+		parameters = slength - (end + 1); //strip off main parameters
 
 		//action & texture parameter number needs to be even
 		if (IsEven(parameters) == false)
 			return ScriptError("Incorrect number of parameters");
 
-		for (int i = 9; i < slength - (parameters / 2); i++)
+		for (int i = (end + 1); i < slength - (parameters / 2); i++)
 			action_array.push_back(tempdata[i]);
 		for (int i = slength - (parameters / 2); i < slength; i++)
 			tex_array.push_back(tempdata[i]);
@@ -1648,7 +1683,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
-			Control* control = Simcore->GetStairs(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), action_array, tex_array);
+			Control* control = 0;
+			if (compat == true)
+				control = Simcore->GetStairs(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
+			else
+				control = Simcore->GetStairs(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), action_array, tex_array);
 
 			if (control)
 			{

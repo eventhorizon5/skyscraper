@@ -2222,11 +2222,11 @@ std::string ElevatorCar::GetFloorDisplay()
 	return value;
 }
 
-Control* ElevatorCar::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* ElevatorCar::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(Ogre::Vector3(CenterX, voffset, CenterZ));
 	ControlArray.push_back(control);
 	return control;

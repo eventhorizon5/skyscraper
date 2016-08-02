@@ -311,7 +311,7 @@ public:
 	void ResetDoorwayWalls();
 	void SetLighting(float red = 1.0, float green = 1.0, float blue = 1.0);
 	void ResetLighting();
-	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
+	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	Action* AddAction(const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
 	Action* AddAction(const std::string &name, std::vector<Object*> &action_parents, const std::string &command);
