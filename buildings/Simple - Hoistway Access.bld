@@ -74,6 +74,9 @@
     Load data/fire1keyoff.png, Fire1Off, 1, 1
     Load data/fire1keyon.png, Fire1On, 1, 1
     Load data/fire1keybypass.png, Fire1Bypass, 1, 1
+    Load data/accessdown.png, AccessDown, 1, 1
+    Load data/accessoff.png, AccessOff, 1, 1
+    Load data/accessup.png, AccessUp, 1, 1
     Load data/runkey.png, RunKey, 1, 1
     Load data/stopkey.png, StopKey, 1, 1
     Load data/indservkeyon.png, IndOn, 1, 1
@@ -475,14 +478,11 @@ AddAction AccessDownTop, Elevator1, AccessDown, 9
 
 #Create the switches for Hoistway Access, on both the landing floor and top floor
 #These use the same X and Z positions as the Floor Signs that were created above.
-AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
-    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
-
 <Floor 0>
-    AddActionControl AccessSwitch, switch.wav, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33 + 5.706, 0.25, 0.25, 6.5, 2, AccessDownLanding, AccessOffLanding, AccessUpLanding, Fire1Off, Fire1Bypass, Fire1On
+    AddActionControl AccessSwitch, switch.wav, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33 + 5.706, 0.25, 0.25, 6.5, 2, AccessDownLanding, AccessOffLanding, AccessUpLanding, AccessDown, AccessOff, AccessUp 
 <EndFloor>
 
 <Floor 9>
-    AddActionControl AccessSwitch, switch.wav, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33 + 5.706, 0.25, 0.25, 6.5, 2, AccessDownTop, AccessOffTop, AccessUpTop, Fire1Off, Fire1Bypass, Fire1On
+    AddActionControl AccessSwitch, switch.wav, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33 + 5.706, 0.25, 0.25, 6.5, 2, AccessDownTop, AccessOffTop, AccessUpTop, AccessDown, AccessOff, AccessUp
 <EndFloor>
 
