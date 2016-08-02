@@ -1,5 +1,6 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-added key switch textures for Hoistway Access
 -added "selection_position" parameter to Control object (AddControl and AddActionControl commands), which allows you to specify the starting selection position
 -added "Simple - Hoistway Access" building
 -Move Object window needs to keep the SBS engine pointer current, otherwise a crash can happen when reloading a building

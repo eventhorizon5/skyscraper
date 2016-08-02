@@ -351,7 +351,9 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	Report("created at " + TruncateNumber(position.x, 4) + ", " + TruncateNumber(position.z, 4));
 
 	//set up primary car
-	GetCar(1)->CreateCar(floor);
+	if (!GetCar(1)->CreateCar(floor))
+		return ReportError("Error creating primary car");
+
 	elevposition = GetPosition();
 
 	return true;
