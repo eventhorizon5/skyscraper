@@ -1,5 +1,22 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-added "selection_position" parameter to Control object (AddControl and AddActionControl commands), which allows you to specify the starting selection position
+-added "Simple - Hoistway Access" building
+-Move Object window needs to keep the SBS engine pointer current, otherwise a crash can happen when reloading a building
+-split Script Processor out into multiple files and classes
+-added Hoistway Access mode feature
+-added missing ReOpen elevator parameter to script interpreter, and fixed script guide
+-fixed an issue where nudge mode would not activate properly when an elevator in Fire Phase 2 mode was recalled to the lobby
+-added top-level Ogre exception handler, which should help with error reports
+-(Sears Tower) Express elevators are now real double-decker elevators
+-added "Simple - Double Decker" building
+-added elevator double-decker (multi-car) support
+-fixed issue where an elevator in Fire Service Phase 2 mode wouldn't put doors into nudge mode, when recalled from lobby (Phase 1 mode re-enabled)
+-added elevator ChimeOnArrival parameter
+-make sure profiler is cleaned up when window exits
+-update profiler statistics every 10 frames instead of continuously
+-added more performance metrics for the Profiler
+-properly group radio buttons in Elevator Editor
 -CameraState should store FOV value, so that the camera's FOV will be persistent when switching engines
 -added "Simple - Top Box" building
 -if a texture load fails, the texture resource needs to be removed afterwards.  This fixes an issue where the failed texture would show up as loaded, during a reload
