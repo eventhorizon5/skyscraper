@@ -46,7 +46,7 @@ ScriptProcessor::Section::Section(ScriptProcessor *parent)
 	engine = parent->GetEngine();
 	Simcore = engine->GetSystem();
 	warn_deprecated = engine->GetFrontend()->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
-	config = parent->GetConfig();
+	config = parent->GetConfigHandler();
 }
 
 int ScriptProcessor::Section::SplitData(const std::string &string, int start, bool calc)

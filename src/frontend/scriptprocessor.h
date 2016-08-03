@@ -54,7 +54,7 @@ public:
 	std::string DumpState();
 	EngineContext* GetEngine();
 	ElevatorCarSection* GetElevatorCarSection();
-	ConfigHandler* GetConfig();
+	ConfigHandler* GetConfigHandler();
 
 	bool IsFinished;
 
