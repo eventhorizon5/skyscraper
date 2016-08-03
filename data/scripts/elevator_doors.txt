@@ -1,3 +1,5 @@
+# $Id$
+
 #Elevator door functions
 
 <Function elevdoor_single>
