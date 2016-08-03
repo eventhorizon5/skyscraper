@@ -1,4 +1,4 @@
-# $Id: Simple.bld 2155 2010-09-01 01:07:08Z ryan $
+# $Id$
 	
 #This building is a bare-bones building designed to help others learn how to
 #make their own buildings in Skyscraper's scripting language.
