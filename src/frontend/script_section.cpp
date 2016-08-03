@@ -40,33 +40,13 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-//shared class variables
-bool ScriptProcessor::Section::setkey = false;
-int ScriptProcessor::Section::keyvalue = 0;
-int ScriptProcessor::Section::lockvalue = 0;
-Ogre::Vector3 ScriptProcessor::Section::MinExtent = Ogre::Vector3::ZERO;
-Ogre::Vector3 ScriptProcessor::Section::MaxExtent = Ogre::Vector3::ZERO;
-int ScriptProcessor::Section::RangeL = 0;
-int ScriptProcessor::Section::RangeLOld = 0;
-int ScriptProcessor::Section::RangeH = 0;
-int ScriptProcessor::Section::RangeHOld = 0;
-long ScriptProcessor::Section::RangeStart = 0;
-long ScriptProcessor::Section::RangeStartOld = 0;
-int ScriptProcessor::Section::Current = 0;
-int ScriptProcessor::Section::CurrentOld = 0;
-int ScriptProcessor::Section::SectionNum = 0;
-std::string ScriptProcessor::Section::Context = "None";
-std::string ScriptProcessor::Section::ContextOld = "";
-bool ScriptProcessor::Section::ReverseAxis = false;
-bool ScriptProcessor::Section::InWhile = false;
-bool ScriptProcessor::Section::setshaftdoors = false;
-
 ScriptProcessor::Section::Section(ScriptProcessor *parent)
 {
 	this->parent = parent;
 	engine = parent->GetEngine();
 	Simcore = engine->GetSystem();
 	warn_deprecated = engine->GetFrontend()->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
+	config = parent->GetConfig();
 }
 
 int ScriptProcessor::Section::SplitData(const std::string &string, int start, bool calc)
@@ -980,32 +960,32 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 	//get a system mesh object
 	if (name == "floor")
 	{
-		if (SectionNum == 2)
-			return Simcore->GetFloor(Current)->Level;
+		if (config->SectionNum == 2)
+			return Simcore->GetFloor(config->Current)->Level;
 		return 0;
 	}
 	else if (name == "interfloor")
 	{
-		if (SectionNum == 2)
-			return Simcore->GetFloor(Current)->Interfloor;
+		if (config->SectionNum == 2)
+			return Simcore->GetFloor(config->Current)->Interfloor;
 		return 0;
 	}
 	else if (name == "columnframe")
 	{
-		if (SectionNum == 2)
-			return Simcore->GetFloor(Current)->ColumnFrame;
+		if (config->SectionNum == 2)
+			return Simcore->GetFloor(config->Current)->ColumnFrame;
 		return 0;
 	}
 	else if (name == "elevatorcar")
 	{
-		if (SectionNum == 6)
-			return Simcore->GetElevator(CurrentOld)->GetCar(Current)->Mesh;
+		if (config->SectionNum == 6)
+			return Simcore->GetElevator(config->CurrentOld)->GetCar(config->Current)->Mesh;
 		return 0;
 	}
 	else if (name == "elevator")
 	{
-		if (SectionNum == 4)
-			return Simcore->GetElevator(Current)->GetCar(1)->Mesh;
+		if (config->SectionNum == 4)
+			return Simcore->GetElevator(config->Current)->GetCar(1)->Mesh;
 		return 0;
 	}
 	else if (name == "external")
@@ -1016,7 +996,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 		return Simcore->Buildings;
 	else if (name.substr(0, 5) == "shaft")
 	{
-		if (SectionNum == 2)
+		if (config->SectionNum == 2)
 		{
 			//get a shaft mesh object, or a model in a shaft
 
@@ -1041,7 +1021,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 
 			if (marker > 0)
 			{
-				Model *model = shaft->GetModel(Current, modelname);
+				Model *model = shaft->GetModel(config->Current, modelname);
 				if (model)
 				{
 					if (model->IsCustom() == true)
@@ -1050,13 +1030,13 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				return 0;
 			}
 			else
-				return shaft->GetMeshObject(Current);
+				return shaft->GetMeshObject(config->Current);
 		}
 		return 0;
 	}
 	else if (name.substr(0, 9) == "stairwell")
 	{
-		if (SectionNum == 2)
+		if (config->SectionNum == 2)
 		{
 			//get a stairwell mesh object, or a model in a stairwell
 
@@ -1081,7 +1061,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 
 			if (marker > 0)
 			{
-				Model *model = stairs->GetModel(Current, modelname);
+				Model *model = stairs->GetModel(config->Current, modelname);
 				if (model)
 				{
 					if (model->IsCustom() == true)
@@ -1090,7 +1070,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				return 0;
 			}
 			else
-				return stairs->GetMeshObject(Current);
+				return stairs->GetMeshObject(config->Current);
 		}
 		return 0;
 	}
@@ -1099,12 +1079,12 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 
 	Model* model = 0;
 
-	if (SectionNum == 2)
-		model = Simcore->GetFloor(Current)->GetModel(name);
-	else if (SectionNum == 4)
-		model = Simcore->GetElevator(Current)->GetCar(1)->GetModel(name);
-	else if (SectionNum == 6)
-		model = Simcore->GetElevator(CurrentOld)->GetCar(Current)->GetModel(name);
+	if (config->SectionNum == 2)
+		model = Simcore->GetFloor(config->Current)->GetModel(name);
+	else if (config->SectionNum == 4)
+		model = Simcore->GetElevator(config->Current)->GetCar(1)->GetModel(name);
+	else if (config->SectionNum == 6)
+		model = Simcore->GetElevator(config->CurrentOld)->GetCar(config->Current)->GetModel(name);
 	else
 		model = Simcore->GetModel(name);
 
@@ -1133,6 +1113,35 @@ void ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator,
 	int pos = value.find(":");
 	elevator = ToInt(value.substr(0, pos));
 	car = ToInt(value.substr(pos + 1));
+}
+
+ScriptProcessor::ConfigHandler::ConfigHandler()
+{
+	Reset();
+}
+
+void ScriptProcessor::ConfigHandler::Reset()
+{
+	//shared variables
+	setkey = false;
+	keyvalue = 0;
+	lockvalue = 0;
+	MinExtent = Ogre::Vector3::ZERO;
+	MaxExtent = Ogre::Vector3::ZERO;
+	RangeL = 0;
+	RangeLOld = 0;
+	RangeH = 0;
+	RangeHOld = 0;
+	RangeStart = 0;
+	RangeStartOld = 0;
+	Current = 0;
+	CurrentOld = 0;
+	SectionNum = 0;
+	Context = "None";
+	ContextOld = "";
+	ReverseAxis = false;
+	InWhile = false;
+	setshaftdoors = false;
 }
 
 }

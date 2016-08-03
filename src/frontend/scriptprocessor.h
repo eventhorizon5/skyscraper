@@ -33,6 +33,7 @@ public:
 
 	//sub-classes
 	class Section;
+	class ConfigHandler;
 	class GlobalsSection;
 	class BuildingsSection;
 	class TexturesSection;
@@ -53,6 +54,7 @@ public:
 	std::string DumpState();
 	EngineContext* GetEngine();
 	ElevatorCarSection* GetElevatorCarSection();
+	ConfigHandler* GetConfig();
 
 	bool IsFinished;
 
@@ -83,6 +85,7 @@ private:
 	SBS::SBS *Simcore;
 	EngineContext *engine;
 
+	ConfigHandler *config;
 	GlobalsSection *globals_section;
 	BuildingsSection *buildings_section;
 	TexturesSection *textures_section;

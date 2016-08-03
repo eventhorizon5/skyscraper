@@ -50,6 +50,9 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	engine = instance;
 	Simcore = instance->GetSystem();
 
+	//create configuration handler
+	config = new ConfigHandler();
+
 	//create section objects
 	globals_section = new GlobalsSection(this);
 	buildings_section = new BuildingsSection(this);
@@ -64,6 +67,8 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 
 ScriptProcessor::~ScriptProcessor()
 {
+	if (config)
+		delete config;
 	if (globals_section)
 		delete globals_section;
 	if (buildings_section)
@@ -87,7 +92,6 @@ void ScriptProcessor::Reset()
 	wall = 0;
 	startpos = 0;
 	getfloordata = false;
-	Section::setshaftdoors = false;
 	BuildingData.clear();
 	BuildingDataOrig.clear();
 	BuildingData.reserve(1024);
@@ -103,6 +107,9 @@ void ScriptProcessor::Reset()
 	functions.clear();
 	includes.clear();
 	variables.clear();
+
+	//reset configuration
+	GetConfig()->Reset();
 
 	//reset section objects
 	globals_section->Reset();
@@ -171,32 +178,32 @@ checkfloors:
 		returncode = sContinue;
 
 		//Global parameters
-		if (Section::SectionNum == 1)
+		if (GetConfig()->SectionNum == 1)
 			returncode = globals_section->Run(LineData);
 
 		//Process floors
-		else if (Section::SectionNum == 2)
+		else if (GetConfig()->SectionNum == 2)
 		{
 			//create floor if not created already
-			Simcore->NewFloor(Section::Current);
+			Simcore->NewFloor(GetConfig()->Current);
 recalc:
 			returncode = floor_section->Run(LineData);
 		}
 
 		//Process external buildings
-		else if (Section::SectionNum == 3)
+		else if (GetConfig()->SectionNum == 3)
 			returncode = buildings_section->Run(LineData);
 
 		//process elevators
-		else if (Section::SectionNum == 4)
+		else if (GetConfig()->SectionNum == 4)
 			returncode = elevator_section->Run(LineData);
 
 		//Process textures
-		else if (Section::SectionNum == 5)
+		else if (GetConfig()->SectionNum == 5)
 			returncode = textures_section->Run(LineData);
 
 		//process elevator cars
-		else if (Section::SectionNum == 6)
+		else if (GetConfig()->SectionNum == 6)
 			returncode = elevatorcar_section->Run(LineData);
 
 		//Global commands
@@ -226,8 +233,8 @@ handlecodes:
 		Simcore->GetTextureManager()->FlipTexture = false;
 
 Nextline:
-		if (Section::InWhile == true && InFunction == 0)
-			Section::InWhile = false;
+		if (GetConfig()->InWhile == true && InFunction == 0)
+			GetConfig()->InWhile = false;
 		else
 			line++;
 
@@ -414,10 +421,10 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	if (IsInclude == true)
 		error += "in included file " + IncludeFile + " ";
 
-	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + engine->GetFilename() + "\nContext: " + Section::Context;
+	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + engine->GetFilename() + "\nContext: " + GetConfig()->Context;
 
-	if (Section::RangeL != Section::RangeH)
-		error += "\nIteration Number: " + ToString(Section::Current);
+	if (GetConfig()->RangeL != GetConfig()->RangeH)
+		error += "\nIteration Number: " + ToString(GetConfig()->Current);
 
 	if (InFunction == 0)
 		error += "\nLine Text: " + LineData;
@@ -857,15 +864,15 @@ void ScriptProcessor::StoreCommand(Object *object)
 	TrimString(BuildingData[line]);
 	object->command = BuildingData[line];
 	object->command_processed = LineData;
-	object->context = Section::Context;
+	object->context = GetConfig()->Context;
 	std::string current;
-	current = ToString(Section::Current);
-	if (Section::SectionNum == 2)
+	current = ToString(GetConfig()->Current);
+	if (GetConfig()->SectionNum == 2)
 		object->context = "Floor " + current;
-	if (Section::SectionNum == 4)
+	if (GetConfig()->SectionNum == 4)
 		object->context = "Elevator " + current;
-	if (Section::SectionNum == 6)
-		object->context = "Elevator " + ToString(Section::CurrentOld) + " Car " + current;
+	if (GetConfig()->SectionNum == 6)
+		object->context = "Elevator " + ToString(GetConfig()->CurrentOld) + " Car " + current;
 }
 
 bool ScriptProcessor::FunctionProc()
@@ -991,10 +998,10 @@ std::string ScriptProcessor::DumpState()
 	std::string output = "Line number: "  + ToString(LineNumber) + "\n";
 	if (IsInclude == true)
 		output.append("In included file: " + IncludeFile + "\n");
-	output.append("Context: " + Section::Context + "\n");
+	output.append("Context: " + GetConfig()->Context + "\n");
 
-	if (Section::RangeL != Section::RangeH)
-		output.append("Iteration Number: " + ToString(Section::Current) + "\n");
+	if (GetConfig()->RangeL != GetConfig()->RangeH)
+		output.append("Iteration Number: " + ToString(GetConfig()->Current) + "\n");
 
 	if (InFunction != 0)
 	{
@@ -1158,32 +1165,32 @@ int ScriptProcessor::ProcessSections()
 	//////////////////////
 	if (linecheck == "<globals>")
 	{
-		if (Section::SectionNum > 0)
+		if (GetConfig()->SectionNum > 0)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		Section::SectionNum = 1;
-		Section::Context = "Globals";
+		GetConfig()->SectionNum = 1;
+		GetConfig()->Context = "Globals";
 		engine->Report("Processing globals...");
 		return sNextLine;
 	}
 	if (linecheck == "<endglobals>")
 	{
-		if (Section::SectionNum != 1)
+		if (GetConfig()->SectionNum != 1)
 		{
 			ScriptError("Not in global section");
 			return sError;
 		}
-		Section::SectionNum = 0;
-		Section::Context = "None";
+		GetConfig()->SectionNum = 0;
+		GetConfig()->Context = "None";
 		engine->Report("Finished globals");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "<end>")
 	{
-		Section::SectionNum = 0;
-		Section::Context = "None";
+		GetConfig()->SectionNum = 0;
+		GetConfig()->Context = "None";
 		engine->Report("Exiting building script");
 		IsFinished = true;
 		show_percent = false;
@@ -1227,7 +1234,7 @@ int ScriptProcessor::ProcessSections()
 	{
 		//define a function
 
-		if (Section::SectionNum != 0)
+		if (GetConfig()->SectionNum != 0)
 		{
 			ScriptError("Cannot define a function within a section");
 			return sError;
@@ -1274,26 +1281,26 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (linecheck.substr(0, 10) == "<textures>")
 	{
-		if (Section::SectionNum > 0)
+		if (GetConfig()->SectionNum > 0)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		Section::SectionNum = 5;
-		Section::Context = "Textures";
+		GetConfig()->SectionNum = 5;
+		GetConfig()->Context = "Textures";
 		engine->Report("Processing textures...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "<endtextures>")
 	{
-		if (Section::SectionNum != 5)
+		if (GetConfig()->SectionNum != 5)
 		{
 			ScriptError("Not in texture section");
 			return sError;
 		}
 		Simcore->GetTextureManager()->FreeTextureImages();
-		Section::SectionNum = 0;
-		Section::Context = "None";
+		GetConfig()->SectionNum = 0;
+		GetConfig()->Context = "None";
 		engine->Report("Finished textures");
 		return sNextLine;
 	}
@@ -1309,12 +1316,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (linecheck.substr(0, 7) == "<floors")
 	{
-		if (Section::SectionNum > 0)
+		if (GetConfig()->SectionNum > 0)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		Section::SectionNum = 2;
+		GetConfig()->SectionNum = 2;
 		int loc = linecheck.find("to", 0);
 		if (loc < 0)
 		{
@@ -1327,58 +1334,58 @@ int ScriptProcessor::ProcessSections()
 		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
 		TrimString(str1);
 		TrimString(str2);
-		if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
+		if (!IsNumeric(str1, GetConfig()->RangeL) || !IsNumeric(str2, GetConfig()->RangeH))
 		{
 			ScriptError("Invalid range");
 			return sError;
 		}
-		Section::Context = "Floor range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
-		Section::Current = Section::RangeL;
-		Section::RangeStart = line;
-		engine->Report("Processing floors " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
+		GetConfig()->Context = "Floor range " + ToString(GetConfig()->RangeL) + " to " + ToString(GetConfig()->RangeH);
+		GetConfig()->Current = GetConfig()->RangeL;
+		GetConfig()->RangeStart = line;
+		engine->Report("Processing floors " + ToString(GetConfig()->RangeL) + " to " + ToString(GetConfig()->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "<floor ")
 	{
-		if (Section::SectionNum > 0)
+		if (GetConfig()->SectionNum > 0)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		Section::SectionNum = 2;
-		Section::RangeL = 0;
-		Section::RangeH = 0;
+		GetConfig()->SectionNum = 2;
+		GetConfig()->RangeL = 0;
+		GetConfig()->RangeH = 0;
 		std::string str = LineData.substr(7, LineData.length() - 8);
 		TrimString(str);
-		if (!IsNumeric(str, Section::Current))
+		if (!IsNumeric(str, GetConfig()->Current))
 		{
 			ScriptError("Invalid floor");
 			return sError;
 		}
-		Section::Context = "Floor " + ToString(Section::Current);
-		engine->Report("Processing floor " + ToString(Section::Current) + "...");
+		GetConfig()->Context = "Floor " + ToString(GetConfig()->Current);
+		engine->Report("Processing floor " + ToString(GetConfig()->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck == "<endfloor>" && Section::RangeL == Section::RangeH)
+	if (linecheck == "<endfloor>" && GetConfig()->RangeL == GetConfig()->RangeH)
 	{
-		if (Section::SectionNum != 2)
+		if (GetConfig()->SectionNum != 2)
 		{
 			ScriptError("Not in floor section");
 			return sError;
 		}
-		Section::SectionNum = 0;
-		Section::Context = "None";
+		GetConfig()->SectionNum = 0;
+		GetConfig()->Context = "None";
 		engine->Report("Finished floor");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "<elevators")
 	{
-		if (Section::SectionNum > 0)
+		if (GetConfig()->SectionNum > 0)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		Section::SectionNum = 4;
+		GetConfig()->SectionNum = 4;
 		int loc = linecheck.find("to", 10);
 		if (loc < 0)
 		{
@@ -1389,52 +1396,52 @@ int ScriptProcessor::ProcessSections()
 		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
 		TrimString(str1);
 		TrimString(str2);
-		if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
+		if (!IsNumeric(str1, GetConfig()->RangeL) || !IsNumeric(str2, GetConfig()->RangeH))
 		{
 			ScriptError("Invalid range");
 			return sError;
 		}
-		Section::Context = "Elevator range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
-		Section::Current = Section::RangeL;
-		Section::RangeStart = line;
-		engine->Report("Processing elevators " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
+		GetConfig()->Context = "Elevator range " + ToString(GetConfig()->RangeL) + " to " + ToString(GetConfig()->RangeH);
+		GetConfig()->Current = GetConfig()->RangeL;
+		GetConfig()->RangeStart = line;
+		engine->Report("Processing elevators " + ToString(GetConfig()->RangeL) + " to " + ToString(GetConfig()->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "<elevator ")
 	{
-		if (Section::SectionNum > 0)
+		if (GetConfig()->SectionNum > 0)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		Section::SectionNum = 4;
-		Section::RangeL = 0;
-		Section::RangeH = 0;
+		GetConfig()->SectionNum = 4;
+		GetConfig()->RangeL = 0;
+		GetConfig()->RangeH = 0;
 		std::string str = LineData.substr(10, LineData.length() - 11);
 		TrimString(str);
-		if (!IsNumeric(str, Section::Current))
+		if (!IsNumeric(str, GetConfig()->Current))
 		{
 			ScriptError("Invalid elevator");
 			return sError;
 		}
-		if (Section::Current < 1 || Section::Current > Simcore->GetElevatorCount() + 1)
+		if (GetConfig()->Current < 1 || GetConfig()->Current > Simcore->GetElevatorCount() + 1)
 		{
 			ScriptError("Invalid elevator");
 			return sError;
 		}
-		Section::Context = "Elevator " + ToString(Section::Current);
-		engine->Report("Processing elevator " + ToString(Section::Current) + "...");
+		GetConfig()->Context = "Elevator " + ToString(GetConfig()->Current);
+		engine->Report("Processing elevator " + ToString(GetConfig()->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck == "<endelevator>" && Section::RangeL == Section::RangeH)
+	if (linecheck == "<endelevator>" && GetConfig()->RangeL == GetConfig()->RangeH)
 	{
-		if (Section::SectionNum != 4)
+		if (GetConfig()->SectionNum != 4)
 		{
 			ScriptError("Not in elevator section");
 			return sError;
 		}
-		Section::SectionNum = 0;
-		Section::Context = "None";
+		GetConfig()->SectionNum = 0;
+		GetConfig()->Context = "None";
 		engine->Report("Finished elevator");
 		return sNextLine;
 	}
@@ -1444,13 +1451,13 @@ int ScriptProcessor::ProcessSections()
 		if (engine->IsReloading() == true)
 			return sNextLine;
 
-		if (Section::SectionNum > 0)
+		if (GetConfig()->SectionNum > 0)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		Section::SectionNum = 3;
-		Section::Context = "Buildings";
+		GetConfig()->SectionNum = 3;
+		GetConfig()->Context = "Buildings";
 		engine->Report("Loading other buildings...");
 		return sNextLine;
 	}
@@ -1460,19 +1467,19 @@ int ScriptProcessor::ProcessSections()
 		if (engine->IsReloading() == true)
 			return sNextLine;
 
-		if (Section::SectionNum != 3)
+		if (GetConfig()->SectionNum != 3)
 		{
 			ScriptError("Not in buildings section");
 			return sError;
 		}
-		Section::SectionNum = 0;
-		Section::Context = "None";
+		GetConfig()->SectionNum = 0;
+		GetConfig()->Context = "None";
 		engine->Report("Finished loading other buildings");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "<cars" && Section::SectionNum == 4)
+	if (linecheck.substr(0, 5) == "<cars" && GetConfig()->SectionNum == 4)
 	{
-		Section::SectionNum = 6;
+		GetConfig()->SectionNum = 6;
 		int loc = linecheck.find("to", 5);
 		if (loc < 0)
 		{
@@ -1481,82 +1488,82 @@ int ScriptProcessor::ProcessSections()
 		}
 
 		//store previous elevator section values
-		Section::CurrentOld = Section::Current;
-		Section::RangeLOld = Section::RangeL;
-		Section::RangeHOld = Section::RangeH;
-		Section::RangeStartOld = Section::RangeStart;
-		Section::ContextOld = Section::Context;
+		GetConfig()->CurrentOld = GetConfig()->Current;
+		GetConfig()->RangeLOld = GetConfig()->RangeL;
+		GetConfig()->RangeHOld = GetConfig()->RangeH;
+		GetConfig()->RangeStartOld = GetConfig()->RangeStart;
+		GetConfig()->ContextOld = GetConfig()->Context;
 
 		std::string str1 = LineData.substr(6, loc - 7);
 		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
 		TrimString(str1);
 		TrimString(str2);
-		if (!IsNumeric(str1, Section::RangeL) || !IsNumeric(str2, Section::RangeH))
+		if (!IsNumeric(str1, GetConfig()->RangeL) || !IsNumeric(str2, GetConfig()->RangeH))
 		{
 			ScriptError("Invalid range");
 			return sError;
 		}
 
 		//verify elevator
-		if (!Simcore->GetElevator(Section::CurrentOld))
+		if (!Simcore->GetElevator(GetConfig()->CurrentOld))
 		{
 			ScriptError("Invalid elevator");
 			return sError;
 		}
 
-		Section::Context = "Elevator " + ToString(Section::CurrentOld) + " Car range " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH);
-		Section::Current = Section::RangeL;
-		Section::RangeStart = line;
-		engine->Report("Processing elevator " + ToString(Section::CurrentOld) + " cars " + ToString(Section::RangeL) + " to " + ToString(Section::RangeH) + "...");
+		GetConfig()->Context = "Elevator " + ToString(GetConfig()->CurrentOld) + " Car range " + ToString(GetConfig()->RangeL) + " to " + ToString(GetConfig()->RangeH);
+		GetConfig()->Current = GetConfig()->RangeL;
+		GetConfig()->RangeStart = line;
+		engine->Report("Processing elevator " + ToString(GetConfig()->CurrentOld) + " cars " + ToString(GetConfig()->RangeL) + " to " + ToString(GetConfig()->RangeH) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "<car " && Section::SectionNum == 4)
+	if (linecheck.substr(0, 5) == "<car " && GetConfig()->SectionNum == 4)
 	{
-		Section::SectionNum = 6;
+		GetConfig()->SectionNum = 6;
 
 		//store previous elevator section values
-		Section::CurrentOld = Section::Current;
-		Section::RangeLOld = Section::RangeL;
-		Section::RangeHOld = Section::RangeH;
-		Section::RangeStartOld = Section::RangeStart;
-		Section::ContextOld = Section::Context;
+		GetConfig()->CurrentOld = GetConfig()->Current;
+		GetConfig()->RangeLOld = GetConfig()->RangeL;
+		GetConfig()->RangeHOld = GetConfig()->RangeH;
+		GetConfig()->RangeStartOld = GetConfig()->RangeStart;
+		GetConfig()->ContextOld = GetConfig()->Context;
 
-		Section::RangeL = 0;
-		Section::RangeH = 0;
+		GetConfig()->RangeL = 0;
+		GetConfig()->RangeH = 0;
 		std::string str = LineData.substr(5, LineData.length() - 6);
 		TrimString(str);
-		if (!IsNumeric(str, Section::Current))
+		if (!IsNumeric(str, GetConfig()->Current))
 		{
 			ScriptError("Invalid car number");
 			return sError;
 		}
 
 		//verify elevator
-		if (!Simcore->GetElevator(Section::CurrentOld))
+		if (!Simcore->GetElevator(GetConfig()->CurrentOld))
 		{
 			ScriptError("Invalid elevator");
 			return sError;
 		}
 
-		Section::Context = "Elevator " + ToString(Section::CurrentOld) + " Car " + ToString(Section::Current);
-		engine->Report("Processing elevator " + ToString(Section::CurrentOld) + " car " + ToString(Section::Current) + "...");
+		GetConfig()->Context = "Elevator " + ToString(GetConfig()->CurrentOld) + " Car " + ToString(GetConfig()->Current);
+		engine->Report("Processing elevator " + ToString(GetConfig()->CurrentOld) + " car " + ToString(GetConfig()->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck == "<endcar>" && Section::RangeL == Section::RangeH)
+	if (linecheck == "<endcar>" && GetConfig()->RangeL == GetConfig()->RangeH)
 	{
-		if (Section::SectionNum != 6)
+		if (GetConfig()->SectionNum != 6)
 		{
 			ScriptError("Not in car section");
 			return sError;
 		}
 
 		//return to elevator section
-		Section::SectionNum = 4;
-		Section::Context = Section::ContextOld;
-		Section::Current = Section::CurrentOld;
-		Section::RangeL = Section::RangeLOld;
-		Section::RangeH = Section::RangeHOld;
-		Section::RangeStart = Section::RangeStartOld;
+		GetConfig()->SectionNum = 4;
+		GetConfig()->Context = GetConfig()->ContextOld;
+		GetConfig()->Current = GetConfig()->CurrentOld;
+		GetConfig()->RangeL = GetConfig()->RangeLOld;
+		GetConfig()->RangeH = GetConfig()->RangeHOld;
+		GetConfig()->RangeStart = GetConfig()->RangeStartOld;
 
 		engine->Report("Finished car");
 		return sNextLine;
@@ -1580,7 +1587,7 @@ int ScriptProcessor::ProcessFloorObjects()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		if (Section::SectionNum == 2 && getfloordata == false)
+		if (GetConfig()->SectionNum == 2 && getfloordata == false)
 		{
 			//process floor-specific variables if in a floor section
 			getfloordata = true;
@@ -1688,10 +1695,15 @@ void ScriptProcessor::Breakpoint()
 void ScriptProcessor::ProcessExtents()
 {
 	//Extent variables
-	ReplaceAll(LineData, "%minx%", ToString(Section::MinExtent.x));
-	ReplaceAll(LineData, "%minz%", ToString(Section::MinExtent.z));
-	ReplaceAll(LineData, "%maxx%", ToString(Section::MaxExtent.x));
-	ReplaceAll(LineData, "%maxz%", ToString(Section::MaxExtent.z));
+	ReplaceAll(LineData, "%minx%", ToString(GetConfig()->MinExtent.x));
+	ReplaceAll(LineData, "%minz%", ToString(GetConfig()->MinExtent.z));
+	ReplaceAll(LineData, "%maxx%", ToString(GetConfig()->MaxExtent.x));
+	ReplaceAll(LineData, "%maxz%", ToString(GetConfig()->MaxExtent.z));
+}
+
+ScriptProcessor::ConfigHandler* ScriptProcessor::GetConfig()
+{
+	return config;
 }
 
 }

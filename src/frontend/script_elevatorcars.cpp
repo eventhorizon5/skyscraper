@@ -56,16 +56,16 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	//get car object
 	ElevatorCar *car = 0;
 	Elevator *elev = 0;
-	if (SectionNum == 6)
+	if (config->SectionNum == 6)
 	{
-		elev = Simcore->GetElevator(CurrentOld);
+		elev = Simcore->GetElevator(config->CurrentOld);
 		if (elev)
-			car = elev->GetCar(Current);
+			car = elev->GetCar(config->Current);
 	}
 	else
 	{
 		//get default car if not in a separate car section
-		elev = Simcore->GetElevator(Current);
+		elev = Simcore->GetElevator(config->Current);
 		if (elev)
 			car = elev->GetCar(1);
 	}
@@ -81,10 +81,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		return sError;
 
 	//replace variables with actual values
-	if (SectionNum == 6) //only run if not being called from elevator function
+	if (config->SectionNum == 6) //only run if not being called from elevator function
 	{
-		ReplaceAll(LineData, "%elevator%", ToString(CurrentOld));
-		ReplaceAll(LineData, "%car%", ToString(Current));
+		ReplaceAll(LineData, "%elevator%", ToString(config->CurrentOld));
+		ReplaceAll(LineData, "%car%", ToString(config->Current));
 
 		//IF/While statement stub (continue to global commands for processing)
 		if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
@@ -909,7 +909,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		//create floor
 		if (compat == true)
-			StoreCommand(car->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
+			StoreCommand(car->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), config->ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
 		else
 			StoreCommand(car->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
@@ -1005,7 +1005,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		}
 
 		car->SetShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
-		setshaftdoors = true;
+		config->setshaftdoors = true;
 		return sNextLine;
 	}
 
@@ -1194,10 +1194,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		if (control)
 		{
-			if (lockvalue == 0)
-				control->SetLocked(false, keyvalue);
+			if (config->lockvalue == 0)
+				control->SetLocked(false, config->keyvalue);
 			else
-				control->SetLocked(true, keyvalue);
+				control->SetLocked(true, config->keyvalue);
 		}
 		StoreCommand(control);
 		return sNextLine;
@@ -1302,10 +1302,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		if (control)
 		{
-			if (lockvalue == 0)
-				control->SetLocked(false, keyvalue);
+			if (config->lockvalue == 0)
+				control->SetLocked(false, config->keyvalue);
 			else
-				control->SetLocked(true, keyvalue);
+				control->SetLocked(true, config->keyvalue);
 		}
 		StoreCommand(control);
 		return sNextLine;
@@ -1348,10 +1348,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		if (control)
 		{
-			if (lockvalue == 0)
-				control->SetLocked(false, keyvalue);
+			if (config->lockvalue == 0)
+				control->SetLocked(false, config->keyvalue);
 			else
-				control->SetLocked(true, keyvalue);
+				control->SetLocked(true, config->keyvalue);
 		}
 		StoreCommand(control);
 		return sNextLine;
@@ -1414,10 +1414,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		if (control)
 		{
-			if (lockvalue == 0)
-				control->SetLocked(false, keyvalue);
+			if (config->lockvalue == 0)
+				control->SetLocked(false, config->keyvalue);
 			else
-				control->SetLocked(true, keyvalue);
+				control->SetLocked(true, config->keyvalue);
 		}
 		StoreCommand(control);
 		return sNextLine;
@@ -1856,7 +1856,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			door = car->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 
 		if (door)
-			door->SetLocked(lockvalue, keyvalue);
+			door->SetLocked(config->lockvalue, config->keyvalue);
 
 		StoreCommand(door);
 		return sNextLine;
@@ -1909,9 +1909,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		else
 			model = car->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
-		if (setkey == true && model)
-			model->SetKey(keyvalue);
-		setkey = false;
+		if (config->setkey == true && model)
+			model->SetKey(config->keyvalue);
+		config->setkey = false;
 
 		StoreCommand(model);
 		return sNextLine;
@@ -1969,10 +1969,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		if (control)
 		{
-			if (lockvalue == 0)
-				control->SetLocked(false, keyvalue);
+			if (config->lockvalue == 0)
+				control->SetLocked(false, config->keyvalue);
 			else
-				control->SetLocked(true, keyvalue);
+				control->SetLocked(true, config->keyvalue);
 		}
 		StoreCommand(control);
 		return sNextLine;
@@ -2027,22 +2027,22 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//handle car range
-	if (RangeL != RangeH && linecheck.substr(0, 7) == "<endcar")
+	if (config->RangeL != config->RangeH && linecheck.substr(0, 7) == "<endcar")
 	{
-		if (Current < RangeH)
+		if (config->Current < config->RangeH)
 		{
-			Current++;
-			parent->line = RangeStart;  //loop back
+			config->Current++;
+			parent->line = config->RangeStart;  //loop back
 			return sNextLine;
 		}
 		else
 		{
-			SectionNum = 4; //break out of loop
-			Context = ContextOld;
-			RangeL = RangeLOld;
-			RangeH = RangeHOld;
-			RangeStart = RangeStartOld;
-			Current = CurrentOld;
+			config->SectionNum = 4; //break out of loop
+			config->Context = config->ContextOld;
+			config->RangeL = config->RangeLOld;
+			config->RangeH = config->RangeHOld;
+			config->RangeStart = config->RangeStartOld;
+			config->Current = config->CurrentOld;
 			engine->Report("Finished cars");
 			return sNextLine;
 		}

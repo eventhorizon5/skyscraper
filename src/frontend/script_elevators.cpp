@@ -44,10 +44,10 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	//Process elevators
 
 	//create elevator if not created already
-	Simcore->NewElevator(Current);
+	Simcore->NewElevator(config->Current);
 
 	//replace variables with actual values
-	ReplaceAll(LineData, "%elevator%", ToString(Current));
+	ReplaceAll(LineData, "%elevator%", ToString(config->Current));
 
 	//IF/While statement stub (continue to global commands for processing)
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
@@ -68,7 +68,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	std::string value = GetAfterEquals(LineData);
 
 	//get elevator object
-	Elevator *elev = Simcore->GetElevator(Current);
+	Elevator *elev = Simcore->GetElevator(config->Current);
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -549,20 +549,20 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		return result;
 
 	//handle elevator range
-	if (RangeL != RangeH && linecheck.substr(0, 12) == "<endelevator")
+	if (config->RangeL != config->RangeH && linecheck.substr(0, 12) == "<endelevator")
 	{
-		if (Current < RangeH)
+		if (config->Current < config->RangeH)
 		{
-			Current++;
-			parent->line = RangeStart;  //loop back
+			config->Current++;
+			parent->line = config->RangeStart;  //loop back
 			return sNextLine;
 		}
 		else
 		{
-			SectionNum = 0; //break out of loop
-			Context = "None";
-			RangeL = 0;
-			RangeH = 0;
+			config->SectionNum = 0; //break out of loop
+			config->Context = "None";
+			config->RangeL = 0;
+			config->RangeH = 0;
 			engine->Report("Finished elevators");
 			return sNextLine;
 		}

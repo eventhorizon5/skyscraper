@@ -80,7 +80,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			TrimString(LineData);
 
 			if (IsIf == 2)
-				InWhile = true;
+				config->InWhile = true;
 
 			return sCheckFloors;
 		}
@@ -88,7 +88,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine; //skip line
 	}
 
-	if (SectionNum != 2 && SectionNum != 4)
+	if (config->SectionNum != 2 && config->SectionNum != 4)
 	{
 		//process math functions
 		if (MathFunctions(LineData) == sError)
@@ -128,18 +128,18 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		float voffset2 = ToFloat(tempdata[7]);
 		float voffset3 = ToFloat(tempdata[10]);
 
-		if (SectionNum == 2)
+		if (config->SectionNum == 2)
 		{
 			if (meshname == "floor")
 			{
-				float base = Simcore->GetFloor(Current)->GetBase(true);
+				float base = Simcore->GetFloor(config->Current)->GetBase(true);
 				voffset1 += base;
 				voffset2 += base;
 				voffset3 += base;
 			}
 			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
 			{
-				float base = Simcore->GetFloor(Current)->GetBase();
+				float base = Simcore->GetFloor(config->Current)->GetBase();
 				voffset1 += base;
 				voffset2 += base;
 				voffset3 += base;
@@ -225,7 +225,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//create floor
 		if (compat == true)
-			StoreCommand(Simcore->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
+			StoreCommand(Simcore->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 		else
 			StoreCommand(Simcore->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		return sNextLine;
@@ -353,12 +353,12 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		float voffset = ToFloat(tempdata[8]);
 
-		if (SectionNum == 2)
+		if (config->SectionNum == 2)
 		{
 			if (meshname == "floor")
-				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+				voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase(true));
 			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
-				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+				voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase());
 		}
 
 		StoreCommand(Simcore->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
@@ -391,12 +391,12 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		float voffset = ToFloat(tempdata[8]);
 
-		if (SectionNum == 2)
+		if (config->SectionNum == 2)
 		{
 			if (meshname == "floor")
-				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+				voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase(true));
 			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
-				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+				voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase());
 		}
 
 		StoreCommand(Simcore->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
@@ -440,18 +440,18 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		float voffset = 0;
 
-		if (SectionNum == 2)
+		if (config->SectionNum == 2)
 		{
 			if (relative == true)
 			{
 				if (meshname == "floor")
-					voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+					voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase(true));
 				else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
-					voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+					voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase());
 			}
 			else if (relative_option == false)
 			{
-				if (meshname == "floor" && SectionNum == 2)
+				if (meshname == "floor" && config->SectionNum == 2)
 					voffset -= mesh->GetPosition().y; //subtract altitude for new positioning model
 			}
 		}
@@ -487,12 +487,12 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		float altitude = ToFloat(tempdata[params - 3]);
 
-		if (SectionNum == 2)
+		if (config->SectionNum == 2)
 		{
 			if (meshname == "floor")
-				altitude += Simcore->GetFloor(Current)->GetBase(true);
+				altitude += Simcore->GetFloor(config->Current)->GetBase(true);
 			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
-				altitude += Simcore->GetFloor(Current)->GetBase();
+				altitude += Simcore->GetFloor(config->Current)->GetBase();
 		}
 
 		std::vector<Ogre::Vector2> varray;
@@ -531,12 +531,12 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		float voffset = 0.0f;
 
-		if (SectionNum == 2)
+		if (config->SectionNum == 2)
 		{
 			if (meshname == "floor")
-				voffset += Simcore->GetFloor(Current)->GetBase(true);
+				voffset += Simcore->GetFloor(config->Current)->GetBase(true);
 			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
-				voffset += Simcore->GetFloor(Current)->GetBase();
+				voffset += Simcore->GetFloor(config->Current)->GetBase();
 		}
 
 		std::vector<Ogre::Vector3> varray;
@@ -1114,7 +1114,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Syntax Error");
 		std::string value = GetAfterEquals(LineData);
 
-		ReverseAxis = ToBool(value);
+		config->ReverseAxis = ToBool(value);
 		return sNextLine;
 	}
 
@@ -1214,7 +1214,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!mesh)
 			return ScriptError("Invalid object");
 
-		if (meshname == "floor" && SectionNum == 2)
+		if (meshname == "floor" && config->SectionNum == 2)
 			offset = mesh->GetPosition().y;
 
 		float alt = ToFloat(tempdata[2]);
@@ -1222,8 +1222,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//GetWallExtents command requires relative position, so subtract altitude from value
 		alt -= offset;
 
-		MinExtent = mesh->GetWallExtents(tempdata[1], alt, false);
-		MaxExtent = mesh->GetWallExtents(tempdata[1], alt, true);
+		config->MinExtent = mesh->GetWallExtents(tempdata[1], alt, false);
+		config->MaxExtent = mesh->GetWallExtents(tempdata[1], alt, true);
 		return sNextLine;
 	}
 
@@ -1424,9 +1424,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		else
 			model = Simcore->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
-		if (setkey == true && model)
-			model->SetKey(keyvalue);
-		setkey = false;
+		if (config->setkey == true && model)
+			model->SetKey(config->keyvalue);
+		config->setkey = false;
 
 		StoreCommand(model);
 		return sNextLine;
@@ -1570,10 +1570,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (control)
 		{
-			if (lockvalue == 0)
-				control->SetLocked(false, keyvalue);
+			if (config->lockvalue == 0)
+				control->SetLocked(false, config->keyvalue);
 			else
-				control->SetLocked(true, keyvalue);
+				control->SetLocked(true, config->keyvalue);
 		}
 		StoreCommand(control);
 		return sNextLine;
@@ -1642,14 +1642,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!IsNumeric(tempdata[0]))
 			return ScriptError("Invalid value: " + tempdata[0]);
 
-		keyvalue = ToInt(tempdata[0]);
-		if (keyvalue < 1)
+		config->keyvalue = ToInt(tempdata[0]);
+		if (config->keyvalue < 1)
 		{
-			keyvalue = 0;
+			config->keyvalue = 0;
 			return ScriptError("Incorrect key ID number");
 		}
 
-		setkey = true;
+		config->setkey = true;
 		return sNextLine;
 	}
 
@@ -1669,19 +1669,19 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		lockvalue = ToInt(tempdata[0]);
-		if (lockvalue < 0 || lockvalue > 3)
+		config->lockvalue = ToInt(tempdata[0]);
+		if (config->lockvalue < 0 || config->lockvalue > 3)
 		{
-			lockvalue = 0;
-			keyvalue = 0;
+			config->lockvalue = 0;
+			config->keyvalue = 0;
 			return ScriptError("Incorrect lock parameter");
 		}
 
-		keyvalue = ToInt(tempdata[1]);
-		if (keyvalue < 0)
+		config->keyvalue = ToInt(tempdata[1]);
+		if (config->keyvalue < 0)
 		{
-			lockvalue = 0;
-			keyvalue = 0;
+			config->lockvalue = 0;
+			config->keyvalue = 0;
 			return ScriptError("Incorrect key ID number");
 		}
 		return sNextLine;

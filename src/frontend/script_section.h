@@ -51,24 +51,33 @@ protected:
 	EngineContext *engine;
 	std::vector<std::string> tempdata;
 	bool warn_deprecated;
-
-	//shared values
-	static bool setkey;
-	static int keyvalue;
-	static int lockvalue;
-	static Ogre::Vector3 MinExtent;
-	static Ogre::Vector3 MaxExtent;
-	static int RangeL, RangeLOld;
-	static int RangeH, RangeHOld;
-	static long RangeStart, RangeStartOld;
-	static int Current, CurrentOld; //current range iteration
-	static int SectionNum; //current section number
-	static std::string Context, ContextOld; //section context
-	static bool ReverseAxis;
-	static bool InWhile;
-	static bool setshaftdoors;
+	ScriptProcessor::ConfigHandler *config;
 
 	std::string Calc(const std::string &expression);
+};
+
+class ScriptProcessor::ConfigHandler
+{
+public:
+	ConfigHandler();
+	~ConfigHandler() {}
+	void Reset();
+
+	//shared values for sections
+	bool setkey;
+	int keyvalue;
+	int lockvalue;
+	Ogre::Vector3 MinExtent;
+	Ogre::Vector3 MaxExtent;
+	int RangeL, RangeLOld;
+	int RangeH, RangeHOld;
+	long RangeStart, RangeStartOld;
+	int Current, CurrentOld; //current range iteration
+	int SectionNum; //current section number
+	std::string Context, ContextOld; //section context
+	bool ReverseAxis;
+	bool InWhile;
+	bool setshaftdoors;
 };
 
 class ScriptProcessor::GlobalsSection : public ScriptProcessor::Section
