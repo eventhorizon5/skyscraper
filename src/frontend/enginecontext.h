@@ -75,6 +75,7 @@ public:
 	void RemoveParent() { parent = 0; }
 	void Move(Ogre::Vector3 &position, bool move_children = false);
 	EngineContext* GetParent() { return parent; }
+	bool IsParent(EngineContext *engine, bool recursive = false);
 
 private:
 

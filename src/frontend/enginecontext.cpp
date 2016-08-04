@@ -478,6 +478,15 @@ void EngineContext::OnEnter()
 	//switch to this engine on entry
 
 	inside = true;
+
+	if (frontend->GetActiveEngine())
+	{
+		//if this engine is an ancestor of the active engine, don't switch to this engine
+		if (frontend->GetActiveEngine()->IsParent(this) == true)
+			return;
+	}
+
+	//make this engine active
 	frontend->SetActiveEngine(instance, true);
 }
 
@@ -569,6 +578,27 @@ void EngineContext::Move(Ogre::Vector3 &position, bool move_children)
 			children[i]->Move(position, move_children);
 		}
 	}
+}
+
+bool EngineContext::IsParent(EngineContext *engine, bool recursive)
+{
+	//returns true if the specified engine is a parent, or ancestor (if recursive is true) of this engine
+
+	if (!engine)
+		return false;
+
+	if (!GetParent())
+		return false;
+
+	//if this engine is the specified engine's parent, return true
+	if (engine == GetParent())
+		return true;
+
+	//ask the parent if recursive
+	if (recursive == true)
+		return GetParent()->IsParent(engine, recursive);
+
+	return false;
 }
 
 }
