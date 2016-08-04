@@ -87,7 +87,8 @@ Polygon* WallObject::AddPolygon(const std::string &name, const std::string &text
 	Ogre::Vector3 tv;
 	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
-	if (!meshwrapper->PolyMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles))
+	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
+	if (!meshwrapper->PolyMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles, converted_vertices))
 	{
 		sbs->ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -100,7 +101,7 @@ Polygon* WallObject::AddPolygon(const std::string &name, const std::string &text
 	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 
 	//compute plane
-	Ogre::Plane plane = sbs->ComputePlane(vertices);
+	Ogre::Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
 	int index = CreatePolygon(triangles, index_extents, tm, tv, material, name, plane);
 	return &polygons[index];
@@ -111,7 +112,8 @@ Polygon* WallObject::AddPolygon(const std::string &name, const std::string &mate
 	//add a set of polygons, providing the original material and texture mapping
 	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
-	if (!meshwrapper->PolyMesh(name, material, vertices, tex_matrix, tex_vector, index_extents, triangles, 0, 0))
+	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
+	if (!meshwrapper->PolyMesh(name, material, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
 	{
 		sbs->ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -121,7 +123,7 @@ Polygon* WallObject::AddPolygon(const std::string &name, const std::string &mate
 		return 0;
 
 	//compute plane
-	Ogre::Plane plane = sbs->ComputePlane(vertices[0]);
+	Ogre::Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
 	int index = CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, material, name, plane);
 	return &polygons[index];

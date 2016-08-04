@@ -838,7 +838,7 @@ bool MeshObject::IsEnabled()
 	return enabled;
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<std::vector<Ogre::Vector3> > &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -854,19 +854,18 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 		texname = "Default";
 
 	//convert to remote positioning
-	std::vector<std::vector<Ogre::Vector3> > vertices2;
-	vertices2.resize(1);
+	converted_vertices.resize(1);
 
-	vertices2[0].reserve(vertices.size());
+	converted_vertices[0].reserve(vertices.size());
 	for (size_t i = 0; i < vertices.size(); i++)
-		vertices2[0].push_back(sbs->ToRemote(vertices[i]));
+		converted_vertices[0].push_back(sbs->ToRemote(vertices[i]));
 
 	//texture mapping
 	Ogre::Vector3 v1, v2, v3;
 	int direction;
 
 	//get texture mapping coordinates
-	if (!sbs->GetTextureManager()->GetTextureMapping(vertices2[0], v1, v2, v3, direction))
+	if (!sbs->GetTextureManager()->GetTextureMapping(converted_vertices[0], v1, v2, v3, direction))
 		return sbs->ReportError("PolyMesh: Texture mapping error");
 
 	if (tw == 0)
@@ -891,45 +890,44 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 		th2 = sizing.y * mh;
 	}
 
-	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, vertices2[0], v1, v2, v3, tw2, th2))
+	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, converted_vertices[0], v1, v2, v3, tw2, th2))
 		return false;
 
-	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, tw2, th2, false);
+	return PolyMesh(name, material, converted_vertices, t_matrix, t_vector, mesh_indices, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, float tw, float th, bool convert_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<std::vector<Ogre::Vector3> > &converted_vertices, float tw, float th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
 
 	//convert to remote positioning
-	std::vector<std::vector<Ogre::Vector3> > vertices2;
 	if (convert_vertices == true)
 	{
-		vertices2.resize(vertices.size());
+		converted_vertices.resize(vertices.size());
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
-			vertices2[i].reserve(vertices[i].size());
+			converted_vertices[i].reserve(vertices[i].size());
 			for (size_t j = 0; j < vertices[i].size(); j++)
-				vertices2[i].push_back(sbs->ToRemote(vertices[i][j]));
+				converted_vertices[i].push_back(sbs->ToRemote(vertices[i][j]));
 		}
 	}
 	else
-		vertices2 = vertices;
+		converted_vertices = vertices;
 
 	//texture mapping
-	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2, tw, th);
+	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, converted_vertices, tw, th);
 
 	//triangulate mesh
-	TriangleIndices *trimesh = new TriangleIndices[vertices2.size()];
-	size_t trimesh_size = vertices2.size();
+	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
+	size_t trimesh_size = converted_vertices.size();
 
 	for (int i = 0; i < trimesh_size; i++)
 	{
 		//do a (very) simple triangulation
 		//this method also somewhat works with non-planar polygons
-		trimesh[i].triangles.reserve(vertices2[i].size() - 2);
-		for (size_t j = 2; j < vertices2[i].size(); j++)
+		trimesh[i].triangles.reserve(converted_vertices[i].size() - 2);
+		for (size_t j = 2; j < converted_vertices[i].size(); j++)
 			trimesh[i].triangles.push_back(Triangle(0, j - 1, j));
 	}
 
@@ -939,7 +937,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	//initialize geometry arrays
 	size_t size = 0;
 	for (size_t i = 0; i < trimesh_size; i++)
-		size += vertices2[i].size();
+		size += converted_vertices[i].size();
 	geometry.resize(size);
 
 	//populate vertices, normals, and texels for mesh data
@@ -951,9 +949,9 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	for (size_t i = 0; i < trimesh_size; i++)
 	{
 		unsigned int min = k;
-		for (size_t j = 0; j < vertices2[i].size(); j++)
+		for (size_t j = 0; j < converted_vertices[i].size(); j++)
 		{
-			geometry[k].normal = geometry[k].vertex = vertices2[i][j];
+			geometry[k].normal = geometry[k].vertex = converted_vertices[i][j];
 			geometry[k].normal.normalise();
 			geometry[k].texel = table[k];
 			k++;
@@ -979,7 +977,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 			tri += location;
 			triangles.push_back(tri);
 		}
-		location += vertices2[i].size();
+		location += converted_vertices[i].size();
 	}
 
 	//delete trimesh array

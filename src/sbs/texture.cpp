@@ -1084,7 +1084,7 @@ Ogre::Vector2 TextureManager::CalculateSizing(const std::string &texture, const 
 
 bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction)
 {
-	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
+	//returns texture mapping coordinates for the specified vertices, in the v1, v2, and v3 vectors
 	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
 
 	if (MapMethod == 0)

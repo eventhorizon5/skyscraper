@@ -38,7 +38,7 @@ class SBSIMPEXP Polygon : public ObjectBase
 public:
 	MeshObject* mesh;
 	std::vector<Triangle> triangles;
-	Ogre::Plane plane;
+	Ogre::Plane plane; //plane in remote (Ogre) form
 
 	//array holding index extents, to get original geometry
 	std::vector<Extents> index_extents;

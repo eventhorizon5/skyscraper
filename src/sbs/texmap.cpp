@@ -479,20 +479,13 @@ bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vec
 	// First we do backface culling on the polygon with respect to
 	// the starting point of the beam.
 
-	//compute plane
-	float DD;
-	Ogre::Vector3 norm = sbs->ComputeNormal(vertices, DD);
-	norm.normalise();
-
-	Ogre::Plane pl(norm.x, norm.y, norm.z, DD);
-
-	float dot1 = pl.d + pl.normal.x * start.x + pl.normal.y * start.y + pl.normal.z * start.z;
+	float dot1 = plane.d + plane.normal.x * start.x + plane.normal.y * start.y + plane.normal.z * start.z;
 	if (dot1 > 0)
 		return false;
 
 	// If this vector is perpendicular to the plane of the polygon we
 	// need to catch this case here.
-	float dot2 = pl.d + pl.normal.x * end.x + pl.normal.y * end.y + pl.normal.z * end.z;
+	float dot2 = plane.d + plane.normal.x * end.x + plane.normal.y * end.y + plane.normal.z * end.z;
 	if (fabsf(dot1 - dot2) < SMALL_EPSILON)
 		return false;
 
@@ -570,13 +563,6 @@ bool Polygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const 
 	// Set *pr to -1 to indicate error if we return false now.
 	if (pr) *pr = -1;
 
-	//compute plane
-	float DD;
-	Ogre::Vector3 norm = sbs->ComputeNormal(vertices, DD);
-	norm.normalise();
-
-	Ogre::Plane plane(norm.x, norm.y, norm.z, DD);
-
 	denom = plane.normal.x * (x2 - x1) +
 			plane.normal.y * (y2 - y1) +
 			plane.normal.z * (z2 - z1);
@@ -604,7 +590,7 @@ bool Polygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const 
 	if (r < 0 /*-SMALL_EPSILON*/ || r > 1)
 		return false;
 
-	normal = norm;
+	normal = plane.normal;
 	return true;
 }
 
