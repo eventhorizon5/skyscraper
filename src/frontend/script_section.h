@@ -43,7 +43,7 @@ public:
 	void StoreCommand(SBS::Object *object);
 	int MathFunctions(std::string &LineData);
 	::SBS::MeshObject* GetMeshObject(std::string name);
-	void GetElevatorCar(std::string &value, int &elevator, int &car);
+	bool GetElevatorCar(std::string &value, int &elevator, int &car);
 
 protected:
 	ScriptProcessor *parent;

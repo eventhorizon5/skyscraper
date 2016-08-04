@@ -977,10 +977,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check numeric values
 		if (params == 18)
 		{
-			for (int i = 0; i <= 17; i++)
+			for (int i = 9; i <= 17; i++)
 			{
-				if (i == 1)
-					i = 9;
 				if (i == 12)
 					i = 13;
 				if (i == 15)
@@ -994,10 +992,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 		if (params == 19)
 		{
-			for (int i = 0; i <= 18; i++)
+			for (int i = 10; i <= 18; i++)
 			{
-				if (i == 1)
-					i = 10;
 				if (i == 13)
 					i = 14;
 				if (i == 16)
@@ -1007,11 +1003,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			}
 		}
 
-		if (!Simcore->GetElevator(ToInt(tempdata[0])))
-			return ScriptError("Invalid elevator");
-
 		int elevator, car;
-		GetElevatorCar(tempdata[0], elevator, car);
+		if (!GetElevatorCar(tempdata[0], elevator, car))
+			return false;
 
 		if (compat == true)
 			StoreCommand(floor->AddDirectionalIndicator(elevator, car, ToBool(tempdata[1]), false, ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
@@ -1042,7 +1036,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check numeric values
 		if (compat == 0)
 		{
-			for (int i = 0; i <= 9; i++)
+			for (int i = 1; i <= 9; i++)
 			{
 				if (i == 2)
 					i = 4;
@@ -1052,7 +1046,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 		if (compat == 1)
 		{
-			for (int i = 0; i <= 4; i++)
+			for (int i = 1; i <= 4; i++)
 			{
 				if (i == 2)
 					i = 3;
@@ -1062,7 +1056,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 		if (compat == 2)
 		{
-			for (int i = 0; i <= 5; i++)
+			for (int i = 1; i <= 5; i++)
 			{
 				if (i == 2)
 					i = 4;
@@ -1075,13 +1069,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			ScriptWarning("Syntax deprecated");
 
 		int elevator, carnum;
-		GetElevatorCar(tempdata[0], elevator, carnum);
+		if (!GetElevatorCar(tempdata[0], elevator, carnum))
+			return false;
+
 		Elevator *elev = Simcore->GetElevator(elevator);
-		if (!elev)
-			return ScriptError("Invalid elevator");
 		ElevatorCar *car = elev->GetCar(carnum);
-		if (!car)
-			return ScriptError("Invalid elevator car");
 
 		if (compat == 0)
 			StoreCommand(car->AddShaftDoor(config->Current, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
@@ -1108,10 +1100,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check numeric values
 		if (compat == true)
 		{
-			for (int i = 0; i <= 7; i++)
+			for (int i = 3; i <= 7; i++)
 			{
-				if (i == 1)
-					i = 3;
 				if (!IsNumeric(tempdata[i]))
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}
@@ -1120,17 +1110,16 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 		else
 		{
-			for (int i = 0; i <= 8; i++)
+			for (int i = 4; i <= 8; i++)
 			{
-				if (i == 1)
-					i = 4;
 				if (!IsNumeric(tempdata[i]))
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
 		int elevator, car;
-		GetElevatorCar(tempdata[0], elevator, car);
+		if (!GetElevatorCar(tempdata[0], elevator, car))
+			return false;
 
 		if (compat == false)
 			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
@@ -1258,7 +1247,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				ScriptWarning("Syntax deprecated");
 		}
 
-		for (int i = 0; i <= params - 1; i++)
+		for (int i = 1; i <= params - 1; i++)
 		{
 			if (i == 2)
 				i = 5;
@@ -1269,13 +1258,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		int elevator, carnum;
-		GetElevatorCar(tempdata[0], elevator, carnum);
+		if (!GetElevatorCar(tempdata[0], elevator, carnum))
+			return false;
+
 		Elevator *elev = Simcore->GetElevator(elevator);
-		if (!elev)
-			return ScriptError("Invalid elevator");
 		ElevatorCar *car = elev->GetCar(carnum);
-		if (!car)
-			return ScriptError("Invalid elevator car");
 
 		if (compat == true)
 			StoreCommand(car->AddShaftDoorComponent(ToInt(tempdata[1]), config->Current, tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
@@ -1306,20 +1293,18 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		//check numeric values
-		for (int i = 0; i <= 1; i++)
+		for (int i = 1; i <= 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		int elevator, carnum;
-		GetElevatorCar(tempdata[0], elevator, carnum);
+		if (!GetElevatorCar(tempdata[0], elevator, carnum))
+			return false;
+
 		Elevator *elev = Simcore->GetElevator(elevator);
-		if (!elev)
-			return ScriptError("Invalid elevator");
 		ElevatorCar *car = elev->GetCar(carnum);
-		if (!car)
-			return ScriptError("Invalid elevator car");
 
 		if (params == 2 || legacy == true)
 			StoreCommand(car->FinishShaftDoor(ToInt(tempdata[1]), config->Current));

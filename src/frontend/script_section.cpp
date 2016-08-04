@@ -1096,7 +1096,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 	return 0;
 }
 
-void ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator, int &car)
+bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator, int &car)
 {
 	//returns an elevator and car number for the specified string
 	//for example, use "1" for Elevator 1
@@ -1106,13 +1106,32 @@ void ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator,
 
 	if (IsNumeric(value, elevator))
 	{
+		if (!Simcore->GetElevator(elevator))
+			return ScriptError("Invalid elevator " + ToString(elevator));
+
 		car = 1;
-		return;
+		return true;
 	}
 
 	int pos = value.find(":");
+	if (pos == -1)
+	{
+		elevator = 0;
+		car = 0;
+		return ScriptError("Invalid elevator value");
+	}
+
 	elevator = ToInt(value.substr(0, pos));
 	car = ToInt(value.substr(pos + 1));
+
+	//verify elevator and car objects
+	Elevator *elev = Simcore->GetElevator(elevator);
+	if (!elev)
+		return ScriptError("Invalid elevator " + ToString(elevator));
+	if (!elev->GetCar(car))
+		return ScriptError("Invalid elevator car " + ToString(car));
+
+	return true;
 }
 
 ScriptProcessor::ConfigHandler::ConfigHandler()
