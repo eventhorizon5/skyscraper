@@ -788,9 +788,10 @@ WallObject* MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
 	return 0;
 }
 
-WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert, bool rescale)
+WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal)
 {
 	//find a wall from a 3D point
+	//positions need to be in remote (Ogre) positioning
 
 	SBS_PROFILE("MeshObject::FindWallIntersect");
 	float pr, best_pr = 2000000000.;
@@ -803,7 +804,7 @@ WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre
 	{
 		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
-			if (Walls[i]->GetPolygon(j)->IntersectSegment(start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
+			if (Walls[i]->GetPolygon(j)->IntersectSegment(start, end, cur_isect, &pr, tmpnormal) == true)
 			{
 				if (pr < best_pr)
 				{

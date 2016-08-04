@@ -238,7 +238,7 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
 	return false;
 }
 
-bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert)
+bool WallObject::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 &isect, bool convert)
 {
 	//check through polygons to see if the specified point is on this wall object
 
@@ -247,9 +247,15 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 	int best_i = -1;
 	Ogre::Vector3 cur_isect, normal;
 
+	if (convert == true)
+	{
+		start = sbs->ToRemote(start);
+		end = sbs->ToRemote(end);
+	}
+
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
-		if (polygons[i].IntersectSegment(start, end, cur_isect, &pr, normal, convert))
+		if (polygons[i].IntersectSegment(start, end, cur_isect, &pr, normal))
 		{
 			if (pr < best_pr)
 			{

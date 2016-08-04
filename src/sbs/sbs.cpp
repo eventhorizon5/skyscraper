@@ -3802,7 +3802,7 @@ bool SBS::HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, W
 	Ogre::Vector3 isect;
 	float distance = 2000000000.;
 	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
-	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal, false, false);
+	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
 }

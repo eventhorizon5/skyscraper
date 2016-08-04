@@ -48,7 +48,7 @@ public:
 	int FindPolygon(const std::string &name);
 	void GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IsPointOnWall(const Ogre::Vector3 &point, bool convert = true);
-	bool IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert = true);
+	bool IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 &isect, bool convert = true);
 	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
 	MeshObject* GetMesh();
 	void SetParentArray(std::vector<WallObject*> &array);

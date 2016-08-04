@@ -510,9 +510,11 @@ bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vec
 	return true;
 }
 
-bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal, bool convert, bool rescale)
+bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
+
+	//positions need to be in remote (Ogre) values
 
 	/**
 	 * Intersect object-space segment with this polygon. Return
@@ -520,20 +522,20 @@ bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &
 	 */
 
 	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(vertices, false, convert, rescale, false, true);
+	GetGeometry(vertices, false, false, false, false, true);
 
 	for (size_t i = 0; i < vertices.size(); i++)
 	{
 		if (!IntersectRay(vertices[i], start, end))
 			continue;
 
-		if (IntersectSegmentPlane(vertices[i], start, end, isect, pr, normal))
+		if (IntersectSegmentPlane(start, end, isect, pr, normal))
 			return true;
 	}
 	return false;
 }
 
-bool Polygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal)
+bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -541,14 +543,6 @@ bool Polygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const 
 	 * Intersect object-space segment with the plane of this polygon. Return
 	 * true if it intersects and the intersection point in world coordinates.
 	 */
-
-	float x1 = start.x;
-	float y1 = start.y;
-	float z1 = start.z;
-	float x2 = end.x;
-	float y2 = end.y;
-	float z2 = end.z;
-	float r, num, denom;
 
 	// So now we have the plane equation of the polygon:
 	// A*x + B*y + C*z + D = 0
@@ -561,20 +555,21 @@ bool Polygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const 
 	//
 	// =>   A*(r*(x2-x1)+x1) + B*(r*(y2-y1)+y1) + C*(r*(z2-z1)+z1) + D = 0
 	// Set *pr to -1 to indicate error if we return false now.
-	if (pr) *pr = -1;
+	if (pr)
+		*pr = -1;
 
-	denom = plane.normal.x * (x2 - x1) +
-			plane.normal.y * (y2 - y1) +
-			plane.normal.z * (z2 - z1);
+	float denom = plane.normal.x * (end.x) +
+			plane.normal.y * (end.y - start.y) +
+			plane.normal.z * (end.z - start.z);
 
 	if (fabsf(denom) < SMALL_EPSILON)
 		return false;  // Lines are parallel
 
-	num = -(plane.normal.x * x1 +
-			plane.normal.y * y1 +
-			plane.normal.z * z1 +
+	float num = -(plane.normal.x * start.x +
+			plane.normal.y * start.y +
+			plane.normal.z * start.z +
 			plane.d);
-	r = num / denom;
+	float r = num / denom;
 
 	// Calculate 'r' and 'isect' even if the intersection point is
 	// not on the segment. That way we can use this function for testing
@@ -582,9 +577,9 @@ bool Polygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const 
 	if (pr)
 		*pr = r;
 
-	isect.x = r * (x2 - x1) + x1;
-	isect.y = r * (y2 - y1) + y1;
-	isect.z = r * (z2 - z1) + z1;
+	isect.x = r * (end.x - start.x) + start.x;
+	isect.y = r * (end.y - start.y) + start.y;
+	isect.z = r * (end.z - start.z) + start.z;
 
 	// If r is not in [0,1] the intersection point is not on the segment.
 	if (r < 0 /*-SMALL_EPSILON*/ || r > 1)
