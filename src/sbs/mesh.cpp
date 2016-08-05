@@ -175,24 +175,22 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 			temppoly5.clear();
 			worker.clear();
 			Ogre::Vector2 extentsx, extentsy, extentsz;
+			Ogre::AxisAlignedBox bounds (start, end);
+			Ogre::AxisAlignedBox polybounds;
 			bool polycheck2 = false;
 
 			//copy source polygon vertices
 			for (size_t k = 0; k < origpolys[j].size(); k++)
-				temppoly.push_back(origpolys[j][k]);
-
-			//make sure the polygon is not outside the cut area
-			Ogre::AxisAlignedBox polybounds;
-			for (size_t k = 0; k < temppoly.size(); k++)
 			{
-				polybounds.merge(temppoly[k]);
+				temppoly.push_back(origpolys[j][k]);
+				polybounds.merge(origpolys[j][k]);
 			}
-			Ogre::AxisAlignedBox bounds (start, end);
 
 			//skip if the polygon is completely inside the bounding box
 			if (bounds.contains(polybounds) == true)
 				continue;
 
+			//make sure the polygon intersects bounds (is not outside the cut area)
 			if (bounds.intersects(polybounds) == true)
 			{
 				extentsx = GetExtents(temppoly, 1);
