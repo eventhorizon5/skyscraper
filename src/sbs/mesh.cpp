@@ -1771,17 +1771,8 @@ Ogre::Vector3 MeshObject::GetPoint(const std::string &wallname, const Ogre::Vect
 
 	WallObject *wall = GetWallByName(wallname);
 
-	Ogre::Vector3 isect;
-	float distance = 2000000000.;
-	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
-
-	WallObject *result;
-
 	if (wall)
-		result = FindWallIntersect(start, end, isect, distance, normal, wall);
-
-	if (result)
-		return isect;
+		return wall->GetPoint(start, end);
 
 	return Ogre::Vector3(0, 0, 0);
 }

@@ -282,6 +282,22 @@ void WallObject::SetParentArray(std::vector<WallObject*> &array)
 	parent_array = &array;
 }
 
+Ogre::Vector3 WallObject::GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+{
+	//do a line intersection with this wall, and return the intersection point
+
+	Ogre::Vector3 isect;
+	float distance = 2000000000.;
+	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
+
+	WallObject *result = meshwrapper->FindWallIntersect(start, end, isect, distance, normal, this);
+
+	if (result)
+		return isect;
+
+	return Ogre::Vector3(0, 0, 0);
+}
+
 Ogre::Vector3 WallObject::GetWallExtents(float altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut
