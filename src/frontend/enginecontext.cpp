@@ -435,7 +435,7 @@ void EngineContext::DetachCamera(bool reset_building)
 	Simcore->DetachCamera();
 
 	if (reset_building == true)
-		Simcore->ResetBuilding();
+		Simcore->ResetState();
 }
 
 void EngineContext::AttachCamera(Ogre::Camera *camera, bool init_state)

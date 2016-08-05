@@ -441,7 +441,7 @@ bool SBS::Start(Ogre::Camera *camera)
 	texturemanager->FreeTextureBoxes();
 
 	//reset building state
-	ResetBuilding();
+	ResetState();
 
 	//initialize objects (cascades down through entire object tree)
 	Init();
@@ -4084,7 +4084,7 @@ void SBS::SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max
 	}
 }
 
-void SBS::ResetBuilding()
+void SBS::ResetState()
 {
 	//reset building to original state
 
@@ -4099,6 +4099,9 @@ void SBS::ResetBuilding()
 	shaft_manager->EnableAll(false);
 	stairs_manager->EnableAll(false);
 	elevator_manager->EnableAll(false);
+
+	//reset camera state
+	camera->ResetState();
 }
 
 Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)

@@ -360,7 +360,7 @@ public:
 	void CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max, bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
 	void SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max);
 	bool HasBounds();
-	void ResetBuilding();
+	void ResetState();
 	Ogre::Vector3 ToGlobal(const Ogre::Vector3 &position);
 	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
 	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
