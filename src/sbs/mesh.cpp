@@ -779,10 +779,11 @@ bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string
 	return result;
 }
 
-WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal)
+WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, WallObject *wall)
 {
 	//find a wall from a 3D point
 	//positions need to be in remote (Ogre) positioning
+	//if wall_number is 0 or greater, this will only check that specified wall
 
 	SBS_PROFILE("MeshObject::FindWallIntersect");
 	float pr, best_pr = 2000000000.;
@@ -793,6 +794,9 @@ WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (wall && Walls[i] != wall)
+			continue;
+
 		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
 			if (Walls[i]->GetPolygon(j)->IntersectSegment(start, end, cur_isect, &pr, tmpnormal) == true)
@@ -1758,6 +1762,28 @@ void MeshObject::DeleteWalls(Object *parent)
 			}
 		}
 	}
+}
+
+Ogre::Vector3 MeshObject::GetPoint(const std::string &wallname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+{
+	//do a line intersection with a specified wall associated with this mesh object,
+	//and return the intersection point
+
+	WallObject *wall = GetWallByName(wallname);
+
+	Ogre::Vector3 isect;
+	float distance = 2000000000.;
+	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
+
+	WallObject *result;
+
+	if (wall)
+		result = FindWallIntersect(start, end, isect, distance, normal, wall);
+
+	if (result)
+		return isect;
+
+	return Ogre::Vector3(0, 0, 0);
 }
 
 Ogre::Vector3 MeshObject::GetWallExtents(const std::string &name, float altitude, bool get_max)

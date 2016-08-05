@@ -79,7 +79,7 @@ public:
 	WallObject* GetWallByName(std::string name);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true, int submesh = 0);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	WallObject* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal);
+	WallObject* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, WallObject *wall = 0);
 	bool PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<std::vector<Ogre::Vector3> > &converted_vertices);
 	bool PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<std::vector<Ogre::Vector3> > &converted_vertices, float tw, float th, bool convert_vertices = true);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th);
@@ -97,6 +97,7 @@ public:
 	void CreateBoxCollider();
 	void DeleteWalls();
 	void DeleteWalls(Object *parent);
+	Ogre::Vector3 GetPoint(const std::string &wallname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	Ogre::Vector3 GetWallExtents(const std::string &name, float altitude, bool get_max);
 	Ogre::Vector2 GetExtents(int coord, bool flip_z = false);
 	WallObject* FindPolygon(const std::string &name, int &index);
