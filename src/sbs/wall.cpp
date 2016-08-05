@@ -290,10 +290,10 @@ Ogre::Vector3 WallObject::GetPoint(const Ogre::Vector3 &start, const Ogre::Vecto
 	float distance = 2000000000.;
 	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
 
-	WallObject *result = meshwrapper->FindWallIntersect(start, end, isect, distance, normal, this);
+	WallObject *result = meshwrapper->FindWallIntersect(sbs->ToRemote(start), sbs->ToRemote(end), isect, distance, normal, this);
 
 	if (result)
-		return isect;
+		return sbs->ToLocal(isect);
 
 	return Ogre::Vector3(0, 0, 0);
 }
