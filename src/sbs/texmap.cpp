@@ -240,44 +240,6 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 	return true;
 }
 
-int SBS::Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value)
-{
-	//from Crystal Space libs/csgeom/poly3d.cpp
-	//axis is 0 for X, 1 for Y, 2 for Z
-
-	//return codes:
-	//0 - polygon is on same plane
-	//1 - polygon is in front of plane
-	//2 - polygon is in back of plane
-	//3 - polygon intersects with plane
-
-	int front = 0, back = 0;
-
-	for (size_t i = 0; i < vertices.size(); i++)
-	{
-		float loc = 0;
-		if (axis == 0)
-			loc = vertices[i].x - value;
-		if (axis == 1)
-			loc = vertices[i].y - value;
-		if (axis == 2)
-			loc = vertices[i].z - value;
-
-		if (loc < -EPSILON)
-			front++;
-		else if (loc > EPSILON)
-			back++;
-	}
-
-	if (back == 0 && front == 0)
-		return 0; //polygon is on same plane
-	if (back == 0)
-		return 1; //polygon is in front of plane
-	if (front == 0)
-		return 2; //polygon is in back of plane
-	return 3; //polygon intersects with plane
-}
-
 void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp

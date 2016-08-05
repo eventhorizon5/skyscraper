@@ -182,12 +182,18 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 				temppoly.push_back(origpolys[j][k]);
 
 			//make sure the polygon is not outside the cut area
-			if (Classify(0, temppoly, start.x) != 1 &&
-					Classify(0, temppoly, end.x) != 2 &&
-					Classify(1, temppoly, start.y) != 1 &&
-					Classify(1, temppoly, end.y) != 2 &&
-					Classify(2, temppoly, start.z) != 1 &&
-					Classify(2, temppoly, end.z) != 2)
+			Ogre::AxisAlignedBox polybounds;
+			for (size_t k = 0; k < temppoly.size(); k++)
+			{
+				polybounds.merge(temppoly[k]);
+			}
+			Ogre::AxisAlignedBox bounds (start, end);
+
+			//skip if the polygon is completely inside the bounding box
+			if (bounds.contains(polybounds) == true)
+				continue;
+
+			if (bounds.intersects(polybounds) == true)
 			{
 				extentsx = GetExtents(temppoly, 1);
 				extentsy = GetExtents(temppoly, 2);

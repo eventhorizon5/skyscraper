@@ -294,7 +294,6 @@ public:
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
 	float GetConfigFloat(const std::string &key, float default_value);
-	int Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value);
 	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
 	void AdvanceClock();
