@@ -1005,7 +1005,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		int elevator, car;
 		if (!GetElevatorCar(tempdata[0], elevator, car))
-			return false;
+			return sError;
 
 		if (compat == true)
 			StoreCommand(floor->AddDirectionalIndicator(elevator, car, ToBool(tempdata[1]), false, ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
@@ -1070,7 +1070,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		int elevator, carnum;
 		if (!GetElevatorCar(tempdata[0], elevator, carnum))
-			return false;
+			return sError;
 
 		Elevator *elev = Simcore->GetElevator(elevator);
 		ElevatorCar *car = elev->GetCar(carnum);
@@ -1119,7 +1119,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		int elevator, car;
 		if (!GetElevatorCar(tempdata[0], elevator, car))
-			return false;
+			return sError;
 
 		if (compat == false)
 			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
@@ -1259,7 +1259,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		int elevator, carnum;
 		if (!GetElevatorCar(tempdata[0], elevator, carnum))
-			return false;
+			return sError;
 
 		Elevator *elev = Simcore->GetElevator(elevator);
 		ElevatorCar *car = elev->GetCar(carnum);
@@ -1301,7 +1301,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		int elevator, carnum;
 		if (!GetElevatorCar(tempdata[0], elevator, carnum))
-			return false;
+			return sError;
 
 		Elevator *elev = Simcore->GetElevator(elevator);
 		ElevatorCar *car = elev->GetCar(carnum);

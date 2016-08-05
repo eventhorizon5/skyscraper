@@ -357,7 +357,7 @@ int ScriptProcessor::Section::MathFunctions(std::string &LineData)
 	int check = LineData.find("(", 0);
 
 	if (check < 0)
-		return true;
+		return sContinue;
 
 	//calculate cosine
 	while(true)
@@ -943,7 +943,7 @@ int ScriptProcessor::Section::MathFunctions(std::string &LineData)
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
-	return true;
+	return sContinue;
 }
 
 std::string ScriptProcessor::Section::Calc(const std::string &expression)
@@ -1107,7 +1107,10 @@ bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator,
 	if (IsNumeric(value, elevator))
 	{
 		if (!Simcore->GetElevator(elevator))
-			return ScriptError("Invalid elevator " + ToString(elevator));
+		{
+			ScriptError("Invalid elevator " + ToString(elevator));
+			return false;
+		}
 
 		car = 1;
 		return true;
@@ -1118,7 +1121,8 @@ bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator,
 	{
 		elevator = 0;
 		car = 0;
-		return ScriptError("Invalid elevator value");
+		ScriptError("Invalid elevator value");
+		return false;
 	}
 
 	elevator = ToInt(value.substr(0, pos));
@@ -1127,9 +1131,15 @@ bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator,
 	//verify elevator and car objects
 	Elevator *elev = Simcore->GetElevator(elevator);
 	if (!elev)
-		return ScriptError("Invalid elevator " + ToString(elevator));
+	{
+		ScriptError("Invalid elevator " + ToString(elevator));
+		return false;
+	}
 	if (!elev->GetCar(car))
-		return ScriptError("Invalid elevator car " + ToString(car));
+	{
+		ScriptError("Invalid elevator car " + ToString(car));
+		return false;
+	}
 
 	return true;
 }
