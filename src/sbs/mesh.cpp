@@ -1760,19 +1760,6 @@ void MeshObject::DeleteWalls(Object *parent)
 	}
 }
 
-Ogre::Vector3 MeshObject::GetPoint(const std::string &wallname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
-{
-	//do a line intersection with a specified wall associated with this mesh object,
-	//and return the intersection point
-
-	WallObject *wall = GetWallByName(wallname);
-
-	if (wall)
-		return wall->GetPoint(start, end);
-
-	return Ogre::Vector3(0, 0, 0);
-}
-
 Ogre::Vector3 MeshObject::GetWallExtents(const std::string &name, float altitude, bool get_max)
 {
 	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut

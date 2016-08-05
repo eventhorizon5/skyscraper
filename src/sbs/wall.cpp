@@ -282,26 +282,6 @@ void WallObject::SetParentArray(std::vector<WallObject*> &array)
 	parent_array = &array;
 }
 
-Ogre::Vector3 WallObject::GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &end)
-{
-	//do a line intersection with this wall, and return the intersection point
-
-	for (int i = 0; i < GetPolygonCount(); i++)
-	{
-		//do a plane intersection with a line
-		Ogre::Vector3 isect;
-		float dist = 0;
-		std::vector<std::vector<Ogre::Vector3> > origpolys;
-		GetGeometry(i, origpolys, true);
-		Ogre::Plane plane = sbs->ComputePlane(origpolys[0]);
-
-		bool result = sbs->SegmentPlane(start, end, plane, isect, dist);
-		if (result == true)
-			return isect;
-	}
-	return Ogre::Vector3(0, 0, 0);
-}
-
 Ogre::Vector3 WallObject::GetWallExtents(float altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut

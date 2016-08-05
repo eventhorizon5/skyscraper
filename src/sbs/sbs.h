@@ -333,7 +333,6 @@ public:
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance);
 	void ShowFloorList();
 	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices);
-	bool SegmentPlane(const Ogre::Vector3 &u, const Ogre::Vector3 &v, Ogre::Plane &plane, Ogre::Vector3 &isect, float &dist);
 	void ShowSceneNodes(bool value);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon);
 	void ShowBoundingBoxes(bool value);
