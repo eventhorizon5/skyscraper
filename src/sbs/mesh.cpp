@@ -463,8 +463,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 	for (size_t i = 0; i < polygon.size(); i++)
 		newpoly.push_back(ToRemote(polygon[i], true, false));
 
-	float D = 0;
-	Ogre::Vector3 normal = ComputeNormal(newpoly, D);
+	Ogre::Vector3 normal = -ComputePlane(newpoly).normal;
 
 	int largest_normal = 0; //x
 

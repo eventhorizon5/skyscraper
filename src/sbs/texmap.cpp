@@ -381,48 +381,6 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	}
 }
 
-Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, float &D)
-{
-	//from Crystal Space libs/csgeom/poly3d.cpp
-	//calculate polygon normal
-
-	float ayz = 0;
-	float azx = 0;
-	float axy = 0;
-	size_t i, i1;
-	float x1, y1, z1, x, y, z;
-
-	i1 = vertices.size() - 1;
-	x1 = vertices[i1].x;
-	y1 = vertices[i1].y;
-	z1 = vertices[i1].z;
-	for (i = 0; i < vertices.size(); i++)
-	{
-		x = vertices[i].x;
-		y = vertices[i].y;
-		z = vertices[i].z;
-		ayz += (z1 + z) * (y - y1);
-		azx += (x1 + x) * (z - z1);
-		axy += (y1 + y) * (x - x1);
-		x1 = x;
-		y1 = y;
-		z1 = z;
-	}
-
-	float sqd = ayz * ayz + azx * azx + axy * axy;
-	float invd;
-	if (sqd < SMALL_EPSILON)
-		invd = 1.0f / SMALL_EPSILON;
-	else
-		invd = 1.0f / sqrtf(sqd);
-	Ogre::Vector3 norm;
-	norm.x = ayz * invd;
-	norm.y = azx * invd;
-	norm.z = axy * invd;
-	D = -norm.x * vertices[0].x - norm.y * vertices[0].y - norm.z * vertices[0].z;
-	return norm;
-}
-
 bool SBS::InPolygon(std::vector<Ogre::Vector3> &poly, const Ogre::Vector3 &v)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
