@@ -240,7 +240,7 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
 
 bool WallObject::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 &isect, bool convert)
 {
-	//check through polygons to see if the specified point is on this wall object
+	//check through polygons to see if the specified line intersects with this wall object
 
 	SBS_PROFILE("WallObject::IntersectsWall");
 	float pr, best_pr = 2000000000.;
