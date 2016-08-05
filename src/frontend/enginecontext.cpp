@@ -171,10 +171,7 @@ bool EngineContext::Run()
 	if (loading == false)
 	{
 		//run SBS main loop
-		Simcore->MainLoop();
-
-		//process camera loop
-		Simcore->CameraLoop();
+		Simcore->Loop();
 
 		//run functions if user enters or leaves this engine
 		if (inside == false && IsInside() == true)

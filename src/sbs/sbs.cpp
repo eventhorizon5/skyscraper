@@ -478,7 +478,7 @@ void SBS::PrintBanner()
 	Report(" conditions. For details, see the file gpl.txt\n");
 }
 
-void SBS::MainLoop()
+void SBS::Loop()
 {
 	//Main simulator loop
 	SBS_PROFILE("SBS::MainLoop");
@@ -610,6 +610,9 @@ void SBS::MainLoop()
 	//process engine boundary trigger
 	if (area_trigger)
 		area_trigger->Loop();
+
+	//process camera loop
+	CameraLoop();
 
 	ProfileManager::Stop_Profile();
 }
