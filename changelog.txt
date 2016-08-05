@@ -1,5 +1,15 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-removed SegmentPlane function
+-removed and replaced old Classify function with an AABB test
+-Cut function now skips polygons that are completely inside the cutting area, instead of needlessly processing over them and not getting cut results
+-removed old point-on-polygon/findwall code
+-removed old ComputeNormal function
+-intersection functions need to convert the polygon's relative plane to absolute positioning
+-fixed computing of stored polygon plane, and polygon intersection functions now used the stored plane instead of computing one
+-engines shouldn't automatically make themselves the active engine on entry, if they're an ancestor of the active engine.  This fixes issues where overlapping engines' activations would bounce back and forth, causing colliders to fall through the ground, and wrong engines being selected
+-moved shared script section variables into a separate Config Handler object, mainly to fix an issue where the shared variables were never reset on script interpreter shutdown/startup
+-make sure elevator's CreateElevator function returns with error if the primary car has an error
 -added key switch textures for Hoistway Access
 -added "selection_position" parameter to Control object (AddControl and AddActionControl commands), which allows you to specify the starting selection position
 -added "Simple - Hoistway Access" building
