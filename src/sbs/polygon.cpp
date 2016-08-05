@@ -188,4 +188,11 @@ void Polygon::Delete()
 	mesh->ProcessSubMesh(geometry, triangles, material, false);
 }
 
+Ogre::Plane Polygon::GetAbsolutePlane()
+{
+	//convert to an absolute plane
+	Ogre::Plane plane2(this->plane.normal, sbs->ToRemote(mesh->GetPosition()));
+	return Ogre::Plane(this->plane.normal, -(this->plane.d + plane2.d));
+}
+
 }

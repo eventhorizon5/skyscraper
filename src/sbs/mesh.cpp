@@ -517,10 +517,9 @@ Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
 {
 	//compute plane from a set of given vertices
 
-	float det;
-	Ogre::Vector3 normal = -ComputeNormal(vertices, det);
-	normal.normalise();
-	return Ogre::Plane(normal, det);
+	if (vertices.size() < 3)
+		return Ogre::Plane();
+	return Ogre::Plane(vertices[0], vertices[1], vertices[2]);
 }
 
 MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass) : Object(parent)

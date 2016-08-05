@@ -479,6 +479,8 @@ bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vec
 	// First we do backface culling on the polygon with respect to
 	// the starting point of the beam.
 
+	Ogre::Plane plane = GetAbsolutePlane();
+
 	float dot1 = plane.d + plane.normal.x * start.x + plane.normal.y * start.y + plane.normal.z * start.z;
 	if (dot1 > 0)
 		return false;
@@ -557,6 +559,8 @@ bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vect
 	// Set *pr to -1 to indicate error if we return false now.
 	if (pr)
 		*pr = -1;
+
+	Ogre::Plane plane = GetAbsolutePlane();
 
 	float denom = plane.normal.x * (end.x) +
 			plane.normal.y * (end.y - start.y) +

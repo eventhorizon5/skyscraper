@@ -38,7 +38,7 @@ class SBSIMPEXP Polygon : public ObjectBase
 public:
 	MeshObject* mesh;
 	std::vector<Triangle> triangles;
-	Ogre::Plane plane; //plane in remote (Ogre) form
+	Ogre::Plane plane; //plane in remote (Ogre) form, relative positioning
 
 	//array holding index extents, to get original geometry
 	std::vector<Extents> index_extents;
@@ -60,6 +60,7 @@ public:
 	bool IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal);
 	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
 	void Delete();
+	Ogre::Plane GetAbsolutePlane();
 };
 
 }
