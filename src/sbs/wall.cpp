@@ -222,22 +222,6 @@ void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> >
 	polygons[index].GetGeometry(vertices, firstonly, convert, rescale, relative, reverse);
 }
 
-bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
-{
-	//check through polygons to see if the specified point is on this wall object
-
-	SBS_PROFILE("WallObject::IsPointOnWall");
-	bool checkplane = false;
-	for (size_t i = 0; i < polygons.size(); i++)
-	{
-		if (i == 0)
-			checkplane = true;
-		if(polygons[i].PointInside(point, checkplane, convert))
-			return true;
-	}
-	return false;
-}
-
 bool WallObject::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 &isect, bool convert)
 {
 	//check through polygons to see if the specified line intersects with this wall object

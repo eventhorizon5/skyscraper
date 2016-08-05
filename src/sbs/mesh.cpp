@@ -773,19 +773,6 @@ bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string
 	return result;
 }
 
-WallObject* MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
-{
-	//find a wall from a 3D point
-
-	SBS_PROFILE("MeshObject::FindWall");
-	for (size_t i = 0; i < Walls.size(); i++)
-	{
-		if (Walls[i]->IsPointOnWall(point, convert) == true)
-			return Walls[i];
-	}
-	return 0;
-}
-
 WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal)
 {
 	//find a wall from a 3D point

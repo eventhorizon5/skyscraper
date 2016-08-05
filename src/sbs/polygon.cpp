@@ -137,22 +137,6 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 	}
 }
 
-bool Polygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool convert)
-{
-	//check if a point is inside the polygon
-
-	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(vertices, false, convert);
-
-	for (size_t i = 0; i < vertices.size(); i++)
-	{
-		if (sbs->InPolygon(vertices[i], point))
-			return true;
-	}
-
-	return false;
-}
-
 void Polygon::Move(const Ogre::Vector3 &position, float speed)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();

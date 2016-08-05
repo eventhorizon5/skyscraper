@@ -381,47 +381,6 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	}
 }
 
-bool SBS::InPolygon(std::vector<Ogre::Vector3> &poly, const Ogre::Vector3 &v)
-{
-	//from Crystal Space libs/csgeom/poly3d.cpp
-	//determine if the point 'v' is inside the given polygon
-
-	size_t i1 = poly.size() - 1;
-	for (size_t i = 0; i < poly.size(); i++)
-	{
-		if (WhichSide3D(v, poly[i1], poly[i]) < 0)
-			return false;
-		i1 = i;
-	}
-
-	return true;
-}
-
-int SBS::WhichSide3D(const Ogre::Vector3 &p, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2)
-{
-	//from Crystal Space include/csgeom/math3d.h
-
-	/**
-	   * Tests which side of a plane the given 3D point is on.
-	   * \return -1 if point p is left of plane '0-v1-v2',
-	   *         1 if point p is right of plane '0-v1-v2',
-	   *      or 0 if point p lies on plane '0-v1-v2'.
-	   * Plane '0-v1-v2' is the plane passing through points <0,0,0>, v1, and v2.
-	   *<p>
-	   * Warning: the result of this function when 'p' is exactly on the plane
-	   * 0-v1-v2 is undefined. It should return 0 but it will not often do that
-	   * due to numerical inaccuracies. So you should probably test for this
-	   * case separately.
-	   */
-
-	float s = p.x * (v1.y * v2.z - v1.z * v2.y) + p.y * (v1.z * v2.x - v1.x * v2.z) + p.z * (v1.x * v2.y - v1.y * v2.x);
-	if (s < 0)
-		return 1;
-	else if (s > 0)
-		return -1;
-	else return 0;
-}
-
 bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
