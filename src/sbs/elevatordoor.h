@@ -77,6 +77,7 @@ public:
 		void Enable(bool value);
 		bool CheckDoorsOpen();
 		bool IsFinished();
+		void ResetFinished();
 		void MoveDoors(bool open, bool manual);
 		void StopDoors();
 		void ResetState();

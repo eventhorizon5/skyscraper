@@ -625,22 +625,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 		//reset finished states
 		if (elevdoors == true)
-		{
-			for (size_t i = 0; i < Doors->doors.size(); i++)
-			{
-				Doors->doors[i]->finished = false;
-			}
-		}
+			Doors->ResetFinished();
 
 		if (shaftdoors == true)
 		{
 			if (ShaftDoors[index])
-			{
-				for (size_t i = 0; i < ShaftDoors[index]->doors.size(); i++)
-				{
-					ShaftDoors[index]->doors[i]->finished = false;
-				}
-			}
+				ShaftDoors[index]->ResetFinished();
 		}
 	}
 	else if (previous_open != open && manual == false && door_changed == false)
@@ -2006,6 +1996,16 @@ bool ElevatorDoor::DoorWrapper::IsFinished()
 			return false;
 	}
 	return true;
+}
+
+void ElevatorDoor::DoorWrapper::ResetFinished()
+{
+	//reset finished state on all doors
+
+	for (size_t i = 0; i < doors.size(); i++)
+	{
+		doors[i]->finished = false;
+	}
 }
 
 void ElevatorDoor::DoorWrapper::StopDoors()
