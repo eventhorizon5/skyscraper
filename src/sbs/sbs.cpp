@@ -481,7 +481,7 @@ void SBS::PrintBanner()
 void SBS::Loop()
 {
 	//Main simulator loop
-	SBS_PROFILE("SBS::MainLoop");
+	SBS_PROFILE("SBS::Loop");
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
@@ -611,10 +611,10 @@ void SBS::Loop()
 	if (area_trigger)
 		area_trigger->Loop();
 
+	ProfileManager::Stop_Profile();
+
 	//process camera loop
 	CameraLoop();
-
-	ProfileManager::Stop_Profile();
 }
 
 void SBS::CalculateFrameRate()
