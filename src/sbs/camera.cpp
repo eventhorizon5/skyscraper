@@ -825,13 +825,22 @@ std::string Camera::GetClickedObjectCommandP()
 	return object_cmd_processed;
 }
 
-void Camera::Loop(float delta)
+void Camera::Loop()
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
 	if (!MainCamera)
 		return;
 
+	//get delta value
+	unsigned long timing;
+	if (sbs->SmoothFrames > 0)
+		timing = sbs->GetAverageTime();
+	else
+		timing = sbs->GetElapsedTime();
+	float delta = timing / 1000.0f;
+
+	//reset collisions if needed
 	if (collision_reset == true && EnableBullet == true)
 		mCharacter->resetCollisions();
 	collision_reset = false;

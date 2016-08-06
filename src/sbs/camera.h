@@ -125,7 +125,7 @@ public:
 	int GetClickedObjectLine();
 	std::string GetClickedObjectCommand();
 	std::string GetClickedObjectCommandP();
-	void Loop(float delta);
+	void Loop();
 	void Strafe(float speed = 1.0f);
 	void Step(float speed = 1.0f);
 	void Float(float speed = 1.0f);

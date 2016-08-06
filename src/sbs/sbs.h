@@ -327,7 +327,6 @@ public:
 	void ListKeys();
 	bool MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool X, bool Y, bool Z);
 	bool RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool relative, bool X, bool Y, bool Z);
-	void CameraLoop();
 	void RegisterControl(Control *control);
 	void UnregisterControl(Control *control);
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance);

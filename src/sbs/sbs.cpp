@@ -614,7 +614,7 @@ void SBS::Loop()
 	ProfileManager::Stop_Profile();
 
 	//process camera loop
-	CameraLoop();
+	camera->Loop();
 }
 
 void SBS::CalculateFrameRate()
@@ -3652,19 +3652,6 @@ void SBS::ListKeys()
 		Report(id + " - " + keys[i].name);
 	}
 	Report("");
-}
-
-void SBS::CameraLoop()
-{
-	unsigned long timing;
-	if (SmoothFrames > 0)
-		timing = GetAverageTime();
-	else
-		timing = GetElapsedTime();
-	float elapsed = timing / 1000.0f;
-
-	//Process camera loop
-	camera->Loop(elapsed);
 }
 
 void SBS::RegisterControl(Control *control)
