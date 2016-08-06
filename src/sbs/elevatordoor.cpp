@@ -670,22 +670,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	//perform door movement and get open state of each door
 	if (elevdoors == true)
-	{
-		for (size_t i = 0; i < Doors->doors.size(); i++)
-		{
-			Doors->doors[i]->MoveDoors(open, manual);
-		}
-	}
+		Doors->MoveDoors(open, manual);
 
 	if (shaftdoors == true)
 	{
 		if (ShaftDoors[index])
-		{
-			for (size_t i = 0; i < ShaftDoors[index]->doors.size(); i++)
-			{
-				ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
-			}
-		}
+			ShaftDoors[index]->MoveDoors(open, manual);
 	}
 
 	//update call status (previous_open detects call changes during movement)
