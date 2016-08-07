@@ -643,6 +643,8 @@ void ElevatorCar::Loop()
 {
 	//elevator car monitor loop
 
+	SBS_PROFILE("ElevatorCar::Loop");
+
 	ControlPressActive = false;
 
 	//perform first-run tasks
