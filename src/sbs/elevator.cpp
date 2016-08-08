@@ -413,7 +413,13 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = 1;
-		Report("adding route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction up");
+
+		//add car number info if needed
+		std::string car_msg = "";
+		if (GetCarCount() > 1)
+			car_msg = " for car " + ToString(car->Number);
+
+		Report("adding route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Up" + car_msg);
 	}
 	else
 	{
@@ -429,7 +435,13 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
-		Report("adding route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction down");
+
+		//add car number info if needed
+		std::string car_msg = "";
+		if (GetCarCount() > 1)
+			car_msg = " for car " + ToString(car->Number);
+
+		Report("adding route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Down" + car_msg);
 	}
 
 	ProcessGotoFloor(floor, direction);
