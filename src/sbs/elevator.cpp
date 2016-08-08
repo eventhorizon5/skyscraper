@@ -484,7 +484,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 		{
 			if (UpQueue[i].floor == floor)
 			{
-				Report("deleting route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction up");
+				Report("deleting route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Up");
 				UpQueue.erase(UpQueue.begin() + i);
 				break;
 			}
@@ -499,7 +499,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 		{
 			if (DownQueue[i].floor == floor)
 			{
-				Report("deleting route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction down");
+				Report("deleting route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Down");
 				DownQueue.erase(DownQueue.begin() + i);
 				break;
 			}
@@ -737,13 +737,17 @@ void Elevator::ProcessCallQueue()
 			if (!car)
 				return;
 
+			std::string car_msg = "";
+			if (GetCarCount() > 1)
+				car_msg = " for car " + ToString(car->Number);
+
 			//if the queued floor number is a higher floor, dispatch the elevator to that floor
 			if (UpQueue[i].floor >= car->CurrentFloor)
 			{
 				if (MoveElevator == false)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue up: standard dispatch, floor " + ToString(UpQueue[i].floor));
+						Report("ProcessCallQueue up: standard dispatch, floor " + ToString(UpQueue[i].floor) + car_msg);
 					ActiveCall = UpQueue[i];
 					GotoFloor = UpQueue[i].floor;
 					GotoFloorCar = car->Number;
@@ -772,10 +776,10 @@ void Elevator::ProcessCallQueue()
 								GotoFloor = UpQueue[i].floor;
 								GotoFloorCar = car->Number;
 								Destination = tmpdestination;
-								Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+								Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")" + car_msg);
 							}
 							else if (sbs->Verbose)
-								Report("ProcessCallQueue up: cannot change destination floor to " + ToString(UpQueue[i].floor));
+								Report("ProcessCallQueue up: cannot change destination floor to " + ToString(UpQueue[i].floor) + car_msg);
 						}
 					}
 				}
@@ -788,7 +792,7 @@ void Elevator::ProcessCallQueue()
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue up: dispatching idle lower elevator, floor " + ToString(UpQueue[i].floor));
+						Report("ProcessCallQueue up: dispatching idle lower elevator, floor " + ToString(UpQueue[i].floor) + car_msg);
 					ActiveCall = UpQueue[i];
 					GotoFloor = UpQueue[i].floor;
 					GotoFloorCar = car->Number;
@@ -808,14 +812,14 @@ void Elevator::ProcessCallQueue()
 				if (i == UpQueue.size() - 1 && IsIdle() == true && QueuePositionDirection != 0)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue up: resetting search direction since last entry is lower");
+						Report("ProcessCallQueue up: resetting search direction since last entry is lower" + car_msg);
 					LastQueueDirection = QueuePositionDirection;
 					QueuePositionDirection = 0;
 					return;
 				}
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
-					Report("ProcessCallQueue up: skipping floor entry " + ToString(UpQueue[i].floor));
+					Report("ProcessCallQueue up: skipping floor entry " + ToString(UpQueue[i].floor) + car_msg);
 			}
 		}
 	}
@@ -828,13 +832,17 @@ void Elevator::ProcessCallQueue()
 			if (!car)
 				return;
 
+			std::string car_msg = "";
+			if (GetCarCount() > 1)
+				car_msg = " for car " + ToString(car->Number);
+
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
 			if (DownQueue[i].floor <= car->CurrentFloor)
 			{
 				if (MoveElevator == false)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue down: standard dispatch, floor " + ToString(DownQueue[i].floor));
+						Report("ProcessCallQueue down: standard dispatch, floor " + ToString(DownQueue[i].floor) + car_msg);
 					ActiveCall = DownQueue[i];
 					GotoFloor = DownQueue[i].floor;
 					GotoFloorCar = car->Number;
@@ -863,10 +871,10 @@ void Elevator::ProcessCallQueue()
 								GotoFloor = DownQueue[i].floor;
 								GotoFloorCar = car->Number;
 								Destination = tmpdestination;
-								Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+								Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")" + car_msg);
 							}
 							else if (sbs->Verbose)
-								Report("ProcessCallQueue down: cannot change destination floor to " + ToString(DownQueue[i].floor));
+								Report("ProcessCallQueue down: cannot change destination floor to " + ToString(DownQueue[i].floor) + car_msg);
 						}
 					}
 				}
@@ -879,7 +887,7 @@ void Elevator::ProcessCallQueue()
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue down: dispatching idle higher elevator, floor " + ToString(DownQueue[i].floor));
+						Report("ProcessCallQueue down: dispatching idle higher elevator, floor " + ToString(DownQueue[i].floor) + car_msg);
 					ActiveCall = DownQueue[i];
 					GotoFloor = DownQueue[i].floor;
 					GotoFloorCar = car->Number;
@@ -899,14 +907,14 @@ void Elevator::ProcessCallQueue()
 				if (i == 0 && IsIdle() == true && QueuePositionDirection != 0)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue down: resetting search direction since last entry is higher");
+						Report("ProcessCallQueue down: resetting search direction since last entry is higher" + car_msg);
 					LastQueueDirection = QueuePositionDirection;
 					QueuePositionDirection = 0;
 					return;
 				}
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
-					Report("ProcessCallQueue down: skipping floor entry " + ToString(DownQueue[i].floor));
+					Report("ProcessCallQueue down: skipping floor entry " + ToString(DownQueue[i].floor) + car_msg);
 			}
 		}
 	}
@@ -1266,9 +1274,13 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->GetFloor(sbs->camera->CurrentFloor))
 			sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
+		std::string car_msg = "";
+		if (GetCarCount() > 1)
+			car_msg = " for car " + ToString(GotoFloorCar);
+
 		//notify about movement
 		if (InspectionService == false && ManualMove == 0)
-			Report("moving " + dir_string + " to floor " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+			Report("moving " + dir_string + " to floor " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")" + car_msg);
 		else
 			Report("moving " + dir_string);
 		IsMoving = true;
