@@ -4199,8 +4199,8 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 	//sets the hoistway access direction for the specified floor, for Inspection Service mode
 	//access is -1 for Down, 0 for Off, and 1 for Up
 
-	//with a direction enabled and held, this allows the elevator
-	//to move in that direction while the shaft doors are open
+	//with a direction enabled and held, this moves the elevator
+	//at leveling speed, in that direction while the shaft doors are open
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -4221,6 +4221,13 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 	}
 	else if (HoistwayAccess == 0)
 	{
+		if (IsMoving == true)
+		{
+			if (sbs->Verbose)
+				ReportError("SetHoistwayAccess: already moving");
+			return false;
+		}
+
 		//enable mode
 		HoistwayAccess = access;
 		HoistwayAccessFloor = floor;
@@ -4229,6 +4236,11 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 		if (HoistwayAccess == 1)
 			direction = "Up";
 		Report("Hoistway Access set to " + direction + " for floor " + ToString(floor));
+
+		//set direction
+		Direction = HoistwayAccess;
+		MoveElevator = true;
+
 		return true;
 	}
 
