@@ -4228,6 +4228,13 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 			return false;
 		}
 
+		ElevatorCar *car = GetCarForFloor(floor);
+		if (!car)
+			return ReportError("SetHoistwayAccess: no car found that services floor " + ToString(floor));
+
+		if (car->AreShaftDoorsOpen(0, floor) == false)
+			return ReportError("Shaft doors need to be open on floor " + ToString(floor) + " to enable Hoistway Access");
+
 		//enable mode
 		HoistwayAccess = access;
 		HoistwayAccessFloor = floor;
