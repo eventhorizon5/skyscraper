@@ -233,8 +233,6 @@ public:
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0, int stairsnumber = 0);
 	bool RegisterDoorCallback(Door *door);
 	bool UnregisterDoorCallback(Door *door);
-	bool RegisterCallButtonCallback(CallButton *button);
-	bool UnregisterCallButtonCallback(CallButton *button);
 	bool RegisterTimerCallback(TimerObject *timer);
 	bool UnregisterTimerCallback(TimerObject *timer);
 	void ProcessDoors();

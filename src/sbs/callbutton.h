@@ -91,6 +91,11 @@ private:
 	bool DownExists; //does down button exist?
 	int ActiveElevatorUp; //elevator the up call button is waiting for
 	int ActiveElevatorDown; //elevator the down call button is waiting for
+
+	class Timer; //internal timer class
+
+	//timer object
+	Timer *timer;
 };
 
 }

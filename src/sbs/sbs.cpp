@@ -2159,44 +2159,6 @@ bool SBS::UnregisterDoorCallback(Door *door)
 	return false;
 }
 
-bool SBS::RegisterCallButtonCallback(CallButton *button)
-{
-	//register a call button object for callbacks (used for the object loop)
-
-	if (!button)
-		return false;
-
-	for (size_t i = 0; i < buttoncallbacks.size(); i++)
-	{
-		if (buttoncallbacks[i] == button)
-			return false;
-	}
-
-	//if call button isn't already in the array, add it
-	buttoncallbacks.push_back(button);
-
-	return true;
-}
-
-bool SBS::UnregisterCallButtonCallback(CallButton *button)
-{
-	if (!button)
-		return false;
-
-	int index = -1;
-	for (size_t i = 0; i < buttoncallbacks.size(); i++)
-	{
-		//unregister existing call button callback
-		if (buttoncallbacks[i] == button)
-		{
-			buttoncallbacks.erase(buttoncallbacks.begin() + i);
-			return true;
-		}
-	}
-
-	return false;
-}
-
 bool SBS::RegisterTimerCallback(TimerObject *timer)
 {
 	//register a timer object for callbacks

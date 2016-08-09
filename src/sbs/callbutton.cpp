@@ -28,14 +28,26 @@
 #include "mesh.h"
 #include "floor.h"
 #include "texture.h"
-#include "callbutton.h"
 #include "camera.h"
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "sound.h"
 #include "profiler.h"
+#include "timer.h"
+#include "callbutton.h"
 
 namespace SBS {
+
+class CallButton::Timer : public TimerObject
+{
+public:
+	CallButton *parent;
+	Timer(const std::string &name, CallButton *parent) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+	}
+	virtual void Notify();
+};
 
 CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th) : Object(parent)
 {
@@ -264,6 +276,9 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	//set position of object
 	Move(CenterX, floor->GetBase(true) + voffset, CenterZ);
 
+	//create timer
+	timer = new Timer("Call Timer", this);
+
 	if (sbs->Verbose)
 		Report("Created");
 }
@@ -296,13 +311,18 @@ CallButton::~CallButton()
 	}
 	sound = 0;
 
+	if (timer)
+	{
+		timer->parent_deleting = true;
+		delete timer;
+	}
+	timer = 0;
+
 	//unregister with parent floor object
 	if (sbs->FastDelete == false)
 	{
 		if (parent_deleting == false)
 			floor->RemoveCallButton(this);
-
-		sbs->UnregisterCallButtonCallback(this);
 	}
 }
 
@@ -396,7 +416,9 @@ bool CallButton::Call(bool direction)
 	if (sbs->Verbose)
 		Report("Registering callback");
 
-	sbs->RegisterCallButtonCallback(this);
+	//start timer
+	timer->Start(1000);
+
 	return true;
 }
 
@@ -521,8 +543,8 @@ void CallButton::Process(int direction)
 	if (UpStatus == false && DownStatus == false)
 	{
 		if (sbs->Verbose)
-			Report("Unregistering callback");
-		sbs->UnregisterCallButtonCallback(this);
+			Report("Deactivating timer");
+		timer->Stop();
 		return;
 	}
 
@@ -898,6 +920,11 @@ int CallButton::FindClosestElevator(int direction)
 	}
 
 	return closest_elev;
+}
+
+void CallButton::Timer::Notify()
+{
+	parent->Loop();
 }
 
 }
