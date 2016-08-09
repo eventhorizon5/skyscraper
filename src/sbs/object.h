@@ -103,6 +103,8 @@ public:
 	void Init(bool children = true); //pre-runloop (first-run) object initialization
 	virtual void OnInit() {} //called when object is initialized
 	virtual void Loop() {} //object runloop
+	void RegisterLoop(Object *object);
+	void UnregisterLoop(Object *object);
 
 	template <typename T> bool IsType()
 	{
@@ -116,6 +118,10 @@ public:
 		return dynamic_cast<T*>(this);
 	}
 
+protected:
+	void EnableLoop(bool value);
+	void LoopChildren();
+
 private:
 	void NotifyChildren(bool move, bool rotate);
 	void InitChildren();
@@ -128,6 +134,8 @@ private:
 	SceneNode *node; //node in scene graph
 	bool values_set;
 	bool initialized;
+	std::vector<Object*> runloops; //child object active runloops
+	bool loop_enabled;
 };
 
 }

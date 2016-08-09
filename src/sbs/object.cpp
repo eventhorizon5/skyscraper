@@ -85,6 +85,7 @@ Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
 	node = 0;
 	values_set = false;
 	initialized = false;
+	loop_enabled = false;
 
 	//register object with engine
 	if (temporary == false)
@@ -502,6 +503,74 @@ void Object::InitChildren()
 
 	for (int i = 0; i < count; i++)
 			children[i]->Init();
+}
+
+void Object::EnableLoop(bool value)
+{
+	//enable or disable dynamic runloop
+
+	if (!GetParent())
+		return;
+
+	if (loop_enabled == value)
+		return;
+
+	Object *parent = GetParent();
+	if (parent->GetType() == "Mesh")
+		parent = parent->GetParent();
+
+	if (value == true)
+		parent->RegisterLoop(this);
+	else
+		parent->UnregisterLoop(this);
+
+	loop_enabled = value;
+}
+
+void Object::RegisterLoop(Object *object)
+{
+	//register a child object dynamic runloop
+
+	for (size_t i = 0; i < runloops.size(); i++)
+	{
+		if (runloops[i] == object)
+			return;
+	}
+
+	runloops.push_back(object);
+}
+
+void Object::UnregisterLoop(Object *object)
+{
+	//unregister a child object dynamic runloop
+
+	if (runloops.empty())
+		return;
+
+	if (runloops.back() == object)
+	{
+		runloops.pop_back();
+		return;
+	}
+
+	for (size_t i = 0; i < runloops.size(); i++)
+	{
+		if (runloops[i] == object)
+		{
+			runloops.erase(runloops.begin() + i);
+			return;
+		}
+	}
+}
+
+void Object::LoopChildren()
+{
+	//run dynamic child runloops
+
+	for (size_t i = 0; i < runloops.size(); i++)
+	{
+		runloops[i]->Loop();
+	}
 }
 
 }

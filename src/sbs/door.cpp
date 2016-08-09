@@ -191,6 +191,8 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 
 	sbs->Report("Opening door '" + GetName() + "'");
 
+	EnableLoop(true);
+
 	if (force == false)
 	{
 		//check lock state
@@ -215,6 +217,8 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 void Door::Close(bool playsound)
 {
 	sbs->Report("Closing door '" + GetName() + "'");
+
+	EnableLoop(true);
 
 	OpenDoor = false;
 
@@ -246,6 +250,8 @@ void Door::Loop()
 {
 	if (IsMoving == true)
 		MoveDoor();
+	else
+		EnableLoop(false);
 }
 
 void Door::MoveDoor()

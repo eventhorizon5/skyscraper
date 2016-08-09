@@ -517,7 +517,7 @@ bool CallButton::ServicesElevator(int elevator)
 
 void CallButton::Loop()
 {
-	//this function runs for every registered call button via callback
+	//this function runs for every registered call button via timer callback
 
 	//process up calls
 	Process(1);

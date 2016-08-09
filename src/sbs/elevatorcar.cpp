@@ -758,29 +758,9 @@ void ElevatorCar::Loop()
 		}
 	}
 
+	//run child object runloops
 	if (IsEnabled == true)
-	{
-		//process standard doors
-		for (size_t i = 0; i < StdDoorArray.size(); i++)
-		{
-			if (StdDoorArray[i])
-				StdDoorArray[i]->Loop();
-		}
-
-		//process triggers
-		for (size_t i = 0; i < TriggerArray.size(); i++)
-		{
-			if (TriggerArray[i])
-				TriggerArray[i]->Loop();
-		}
-
-		//process models
-		for (size_t i = 0; i < ModelArray.size(); i++)
-		{
-			if (ModelArray[i])
-				ModelArray[i]->Loop();
-		}
-	}
+		LoopChildren();
 
 	//process door sensors
 	for (size_t i = 0; i < DoorArray.size(); i++)

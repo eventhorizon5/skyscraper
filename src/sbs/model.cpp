@@ -87,6 +87,7 @@ Model::~Model()
 void Model::Enable(bool value)
 {
 	mesh->Enable(value);
+	EnableLoop(value);
 }
 
 bool Model::IsEnabled()

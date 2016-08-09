@@ -107,6 +107,7 @@ void Trigger::Enabled(bool value)
 		return;
 
 	is_enabled = value;
+	EnableLoop(value);
 }
 
 bool Trigger::SetSelectPosition(int position)

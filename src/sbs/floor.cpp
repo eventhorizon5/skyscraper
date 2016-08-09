@@ -819,28 +819,7 @@ void Floor::Loop()
 
 	SBS_PROFILE("Floor::Loop");
 
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i])
-			DoorArray[i]->Loop();
-	}
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-			TriggerArray[i]->Loop();
-	}
-
-	for (size_t i = 0; i < EscalatorArray.size(); i++)
-	{
-		if (EscalatorArray[i])
-			EscalatorArray[i]->Loop();
-	}
-
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-			ModelArray[i]->Loop();
-	}
+	LoopChildren();
 }
 
 std::vector<int> Floor::GetCallButtons(int elevator)

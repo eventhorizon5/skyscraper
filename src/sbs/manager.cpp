@@ -694,4 +694,9 @@ Door* DoorManager::GetIndex(int index)
 	return Array[index];
 }
 
+void DoorManager::Loop()
+{
+	LoopChildren();
+}
+
 }

@@ -109,6 +109,8 @@ void Escalator::Enabled(bool value)
 	if (is_enabled == value)
 		return;
 
+	EnableLoop(value);
+
 	for (size_t i = 0; i < Steps.size(); i++)
 		Steps[i]->Enable(value);
 

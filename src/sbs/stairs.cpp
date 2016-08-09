@@ -1014,23 +1014,7 @@ void Stairs::Loop()
 
 	SBS_PROFILE("Stairs::Loop");
 
-	for (size_t i = 0; i < EnableArray.size(); i++)
-	{
-		if (EnableArray[i] == true)
-		{
-			for (size_t j = 0; j < DoorArray[i].size(); j++)
-			{
-				if (DoorArray[i][j])
-					DoorArray[i][j]->Loop();
-			}
-
-			for (size_t j = 0; j < ModelArray[i].size(); j++)
-			{
-				if (ModelArray[i][j])
-					ModelArray[i][j]->Loop();
-			}
-		}
-	}
+	LoopChildren();
 }
 
 Model* Stairs::GetModel(int floor, std::string name)

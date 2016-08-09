@@ -570,25 +570,10 @@ void SBS::Loop()
 		CheckAutoAreas();
 
 		//process doors
-		for (size_t i = 0; i < door_manager->GetCount(); i++)
-		{
-			if (door_manager->GetIndex(i))
-				door_manager->GetIndex(i)->Loop();
-		}
+		door_manager->Loop();
 
-		//process triggers
-		for (size_t i = 0; i < TriggerArray.size(); i++)
-		{
-			if (TriggerArray[i])
-				TriggerArray[i]->Loop();
-		}
-
-		//process models
-		for (size_t i = 0; i < ModelArray.size(); i++)
-		{
-			if (ModelArray[i])
-				ModelArray[i]->Loop();
-		}
+		//process child object dynamic runloops
+		LoopChildren();
 
 		//process people
 		for (size_t i = 0; i < PersonArray.size(); i++)

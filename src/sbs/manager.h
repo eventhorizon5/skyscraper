@@ -149,6 +149,7 @@ public:
 	void RemoveDoor(Door *door);
 	int GetCount();
 	Door* GetIndex(int index);
+	void Loop();
 
 private:
 	std::vector<Door*> Array;

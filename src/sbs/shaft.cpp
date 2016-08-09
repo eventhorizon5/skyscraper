@@ -1093,23 +1093,7 @@ void Shaft::Loop()
 
 	SBS_PROFILE("Shaft::Loop");
 
-	for (size_t i = 0; i < EnableArray.size(); i++)
-	{
-		if (EnableArray[i] == true)
-		{
-			for (size_t j = 0; j < DoorArray[i].size(); j++)
-			{
-				if (DoorArray[i][j])
-					DoorArray[i][j]->Loop();
-			}
-
-			for (size_t j = 0; j < ModelArray[i].size(); j++)
-			{
-				if (ModelArray[i][j])
-					ModelArray[i][j]->Loop();
-			}
-		}
-	}
+	LoopChildren();
 }
 
 Model* Shaft::GetModel(int floor, std::string name)
