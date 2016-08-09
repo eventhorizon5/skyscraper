@@ -760,6 +760,13 @@ void ElevatorCar::Loop()
 
 	if (IsEnabled == true)
 	{
+		//process standard doors
+		for (size_t i = 0; i < StdDoorArray.size(); i++)
+		{
+			if (StdDoorArray[i])
+				StdDoorArray[i]->Loop();
+		}
+
 		//process triggers
 		for (size_t i = 0; i < TriggerArray.size(); i++)
 		{

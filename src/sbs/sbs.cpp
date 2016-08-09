@@ -569,6 +569,13 @@ void SBS::Loop()
 		//process auto areas
 		CheckAutoAreas();
 
+		//process doors
+		for (size_t i = 0; i < door_manager->GetCount(); i++)
+		{
+			if (door_manager->GetIndex(i))
+				door_manager->GetIndex(i)->Loop();
+		}
+
 		//process triggers
 		for (size_t i = 0; i < TriggerArray.size(); i++)
 		{

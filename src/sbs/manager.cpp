@@ -680,4 +680,18 @@ void DoorManager::RemoveDoor(Door *door)
 	}
 }
 
+int DoorManager::GetCount()
+{
+	//return the number of doors
+	return (int)Array.size();
+}
+
+Door* DoorManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index];
+}
+
 }

@@ -819,6 +819,11 @@ void Floor::Loop()
 
 	SBS_PROFILE("Floor::Loop");
 
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+			DoorArray[i]->Loop();
+	}
 	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])

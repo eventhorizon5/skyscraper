@@ -147,6 +147,8 @@ public:
 	~DoorManager();
 	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void RemoveDoor(Door *door);
+	int GetCount();
+	Door* GetIndex(int index);
 
 private:
 	std::vector<Door*> Array;

@@ -67,11 +67,6 @@ private:
 	float rotation;
 	int Locked;
 	int KeyID;
-
-	class Timer; //internal timer class
-
-	//timer object
-	Timer *timer;
 };
 
 }
