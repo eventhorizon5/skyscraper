@@ -444,6 +444,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 		Report("adding route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Down" + car_msg);
 	}
 
+	//make sure the car's GotoFloor status is set, if this is an additional car heading the same route
 	ProcessGotoFloor(floor, direction);
 
 	//turn on button lights
@@ -1766,7 +1767,7 @@ void Elevator::FinishMove()
 				if (GetCar(i)->GotoFloor == true)
 				{
 					int floor = GetFloorForCar(i, GotoFloor);
-					NotifyCallButtons(floor, GetArrivalDirection(GotoFloor));
+					NotifyCallButtons(floor, GetArrivalDirection(floor));
 				}
 			}
 		}
@@ -4197,10 +4198,7 @@ void Elevator::ProcessGotoFloor(int floor, int direction)
 	for (int i = 1; i <= GetCarCount(); i++)
 	{
 		if (i == GotoFloorCar)
-		{
-			i++;
 			continue;
-		}
 
 		if (IsQueued(GetFloorForCar(i, floor), direction) == true)
 			GetCar(i)->GotoFloor = true;
