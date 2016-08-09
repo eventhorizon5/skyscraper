@@ -318,7 +318,6 @@ SBS::~SBS()
 
 	//delete callbacks
 	doorcallbacks.clear();
-	buttoncallbacks.clear();
 
 	//delete manager objects
 	if (floor_manager)
@@ -568,9 +567,6 @@ void SBS::Loop()
 
 		//open/close doors by using door callback
 		ProcessDoors();
-
-		//process call button callbacks
-		ProcessCallButtons();
 
 		//process misc operations on current floor
 		if (GetFloor(camera->CurrentFloor))
@@ -2197,25 +2193,6 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 	return false;
 }
 
-void SBS::ProcessCallButtons()
-{
-	//process all registered call buttons
-
-	SBS_PROFILE("SBS::ProcessCallButtons");
-
-	for (size_t i = 0; i < buttoncallbacks.size(); i++)
-	{
-		size_t size = buttoncallbacks.size();
-
-		if (buttoncallbacks[i])
-			buttoncallbacks[i]->Loop();
-
-		//if a callback was removed, reset position
-		if (size != buttoncallbacks.size())
-			i--;
-	}
-}
-
 void SBS::ProcessDoors()
 {
 	SBS_PROFILE("SBS::ProcessDoors");
@@ -2249,12 +2226,6 @@ int SBS::GetDoorCallbackCount()
 {
 	//return the number of registered door callbacks
 	return (int)doorcallbacks.size();
-}
-
-int SBS::GetCallButtonCallbackCount()
-{
-	//return the number of registered call button callbacks
-	return (int)buttoncallbacks.size();
 }
 
 int SBS::GetTimerCallbackCount()

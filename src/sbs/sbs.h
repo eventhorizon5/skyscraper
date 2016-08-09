@@ -236,10 +236,8 @@ public:
 	bool RegisterTimerCallback(TimerObject *timer);
 	bool UnregisterTimerCallback(TimerObject *timer);
 	void ProcessDoors();
-	void ProcessCallButtons();
 	void ProcessTimers();
 	int GetDoorCallbackCount();
-	int GetCallButtonCallbackCount();
 	int GetTimerCallbackCount();
 	bool Mount(const std::string &filename, const std::string &path);
 	void AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end);
@@ -437,9 +435,6 @@ private:
 
 	//door object array for callback
 	std::vector<Door*> doorcallbacks;
-
-	//call button object array for callback
-	std::vector<CallButton*> buttoncallbacks;
 
 	//timer callback array
 	std::vector<TimerObject*> timercallbacks;
