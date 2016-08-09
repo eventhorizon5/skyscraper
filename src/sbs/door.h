@@ -54,6 +54,8 @@ public:
 	bool ToggleLock(const Ogre::Vector3 &position, bool force = false);
 	int GetKeyID();
 	bool IsEnabled() { return is_enabled; }
+	void Loop();
+	void ClickDoor(Ogre::Vector3 &position);
 
 private:
 	MeshObject* DoorMesh; //door mesh
@@ -65,6 +67,11 @@ private:
 	float rotation;
 	int Locked;
 	int KeyID;
+
+	class Timer; //internal timer class
+
+	//timer object
+	Timer *timer;
 };
 
 }

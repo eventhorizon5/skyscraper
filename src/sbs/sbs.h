@@ -231,13 +231,9 @@ public:
 	WallObject* AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	WallObject* AddGround(const std::string &name, const std::string &texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0, int stairsnumber = 0);
-	bool RegisterDoorCallback(Door *door);
-	bool UnregisterDoorCallback(Door *door);
 	bool RegisterTimerCallback(TimerObject *timer);
 	bool UnregisterTimerCallback(TimerObject *timer);
-	void ProcessDoors();
 	void ProcessTimers();
-	int GetDoorCallbackCount();
 	int GetTimerCallbackCount();
 	bool Mount(const std::string &filename, const std::string &path);
 	void AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end);
@@ -432,9 +428,6 @@ private:
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
 	Ogre::Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
-
-	//door object array for callback
-	std::vector<Door*> doorcallbacks;
 
 	//timer callback array
 	std::vector<TimerObject*> timercallbacks;

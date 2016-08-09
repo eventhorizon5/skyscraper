@@ -34,9 +34,21 @@
 #include "texture.h"
 #include "camera.h"
 #include "sound.h"
+#include "timer.h"
 #include "door.h"
 
 namespace SBS {
+
+class Door::Timer : public TimerObject
+{
+public:
+	Door *parent;
+	Timer(const std::string &name, Door *parent) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+	}
+	virtual void Notify();
+};
 
 Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th) : Object(parent)
 {
@@ -143,11 +155,22 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	//open door on startup (without sound) if specified
 	if (open_state == true)
 		Open(position, false, true);
+
+	//create timer
+	timer = new Timer("Door Timer", this);
+	timer->ReportNotify = false;
 }
 
 Door::~Door()
 {
 	//destructor
+
+	if (timer)
+	{
+		timer->parent_deleting = true;
+		delete timer;
+	}
+	timer = 0;
 
 	if (sound)
 	{
@@ -181,7 +204,6 @@ Door::~Door()
 			else if (type == "SBS")
 				sbs->GetDoorManager()->RemoveDoor(this);
 		}
-		sbs->UnregisterDoorCallback(this);
 	}
 }
 
@@ -192,8 +214,8 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 
 	sbs->Report("Opening door '" + GetName() + "'");
 
-	if (!sbs->RegisterDoorCallback(this))
-		return false;
+	//start timer
+	timer->Start(1);
 
 	if (force == false)
 	{
@@ -202,14 +224,15 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 			return sbs->ReportError("Door '" + GetName() + "' is locked");
 	}
 
-	if (IsMoving == false)
-		OpenDoor = true;
+	OpenDoor = true;
 
 	if (playsound == true && sound)
 	{
 		sound->Load(OpenSound);
 		sound->Play();
 	}
+
+	OpenState = false;
 	IsMoving = true;
 
 	return true;
@@ -219,17 +242,18 @@ void Door::Close(bool playsound)
 {
 	sbs->Report("Closing door '" + GetName() + "'");
 
-	if (!sbs->RegisterDoorCallback(this))
-		return;
+	//start timer
+	timer->Start(1);
 
-	if (IsMoving == false)
-		OpenDoor = false;
+	OpenDoor = false;
 
 	if (playsound == true && sound)
 	{
 		sound->Load(CloseSound);
 		sound->Play();
 	}
+
+	OpenState = true;
 	IsMoving = true;
 }
 
@@ -245,6 +269,14 @@ void Door::Enabled(bool value)
 
 	DoorMesh->Enable(value);
 	is_enabled = value;
+}
+
+void Door::Loop()
+{
+	if (IsMoving == true)
+		MoveDoor();
+	else
+		timer->Stop();
 }
 
 void Door::MoveDoor()
@@ -394,6 +426,32 @@ bool Door::IsLocked(const Ogre::Vector3 &position)
 int Door::GetKeyID()
 {
 	return KeyID;
+}
+
+void Door::ClickDoor(Ogre::Vector3 &position)
+{
+	//code that runs when a user clicks on a door
+
+	//open and close doors
+	if (IsOpen() == false)
+	{
+		if (IsMoving == false)
+			Open(position);
+		else
+			Close();
+	}
+	else
+	{
+		if (IsMoving == false)
+			Close();
+		else
+			Open(position);
+	}
+}
+
+void Door::Timer::Notify()
+{
+	parent->Loop();
 }
 
 }

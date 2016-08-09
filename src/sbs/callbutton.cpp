@@ -285,6 +285,13 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 
 CallButton::~CallButton()
 {
+	if (timer)
+	{
+		timer->parent_deleting = true;
+		delete timer;
+	}
+	timer = 0;
+
 	if (CallButtonMeshDown)
 	{
 		CallButtonMeshDown->parent_deleting = true;
@@ -310,13 +317,6 @@ CallButton::~CallButton()
 		delete sound;
 	}
 	sound = 0;
-
-	if (timer)
-	{
-		timer->parent_deleting = true;
-		delete timer;
-	}
-	timer = 0;
 
 	//unregister with parent floor object
 	if (sbs->FastDelete == false)

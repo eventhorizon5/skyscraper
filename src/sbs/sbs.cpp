@@ -316,9 +316,6 @@ SBS::~SBS()
 	}
 	camera = 0;
 
-	//delete callbacks
-	doorcallbacks.clear();
-
 	//delete manager objects
 	if (floor_manager)
 		delete floor_manager;
@@ -564,9 +561,6 @@ void SBS::Loop()
 
 		//check if the user is in a stairwell
 		camera->CheckStairwell();
-
-		//open/close doors by using door callback
-		ProcessDoors();
 
 		//process misc operations on current floor
 		if (GetFloor(camera->CurrentFloor))
@@ -2100,61 +2094,6 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	}
 }
 
-bool SBS::RegisterDoorCallback(Door *door)
-{
-	//register a door object for callbacks (used for door movement)
-
-	if (!door)
-		return false;
-
-	int index = -1;
-	for (size_t i = 0; i < doorcallbacks.size(); i++)
-	{
-		if (doorcallbacks[i] == door)
-		{
-			index = (int)i;
-			break;
-		}
-	}
-
-	if (index == -1)
-	{
-		//if door isn't already in the array, add it
-		doorcallbacks.push_back(door);
-	}
-	else
-	{
-		//otherwise change door's direction
-		if (doorcallbacks[index])
-			doorcallbacks[index]->OpenDoor = !doorcallbacks[index]->OpenDoor;
-	}
-	return true;
-}
-
-bool SBS::UnregisterDoorCallback(Door *door)
-{
-	if (!door)
-		return false;
-
-	int index = -1;
-	for (size_t i = 0; i < doorcallbacks.size(); i++)
-	{
-		if (doorcallbacks[i] == door)
-		{
-			//unregister existing door callback
-			if (door->IsMoving == false)
-			{
-				doorcallbacks.erase(doorcallbacks.begin() + i);
-				return true;
-			}
-			else
-				return ReportError("Door in use; cannot unregister callback");
-		}
-	}
-
-	return false;
-}
-
 bool SBS::RegisterTimerCallback(TimerObject *timer)
 {
 	//register a timer object for callbacks
@@ -2193,23 +2132,6 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 	return false;
 }
 
-void SBS::ProcessDoors()
-{
-	SBS_PROFILE("SBS::ProcessDoors");
-
-	//process all registered doors
-	for (size_t i = 0; i < doorcallbacks.size(); i++)
-	{
-		if (doorcallbacks[i])
-		{
-			if (doorcallbacks[i]->IsMoving == true)
-				doorcallbacks[i]->MoveDoor();
-			else
-				UnregisterDoorCallback(doorcallbacks[i]);
-		}
-	}
-}
-
 void SBS::ProcessTimers()
 {
 	SBS_PROFILE("SBS::ProcessTimers");
@@ -2220,12 +2142,6 @@ void SBS::ProcessTimers()
 		if (timercallbacks[i])
 			timercallbacks[i]->Loop();
 	}
-}
-
-int SBS::GetDoorCallbackCount()
-{
-	//return the number of registered door callbacks
-	return (int)doorcallbacks.size();
 }
 
 int SBS::GetTimerCallbackCount()

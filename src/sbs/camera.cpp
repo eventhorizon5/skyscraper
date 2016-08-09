@@ -641,23 +641,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			if (ctrl == true && shift == true)
 				door->ToggleLock(pos);
 			else
-			{
-				//open and close doors
-				if (door->IsOpen() == false)
-				{
-					if (door->IsMoving == false)
-						door->Open(pos);
-					else
-						door->Close();
-				}
-				else
-				{
-					if (door->IsMoving == false)
-						door->Close();
-					else
-						door->Open(pos);
-				}
-			}
+				door->ClickDoor(pos);
 		}
 
 		//check models

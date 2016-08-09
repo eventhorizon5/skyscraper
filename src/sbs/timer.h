@@ -32,6 +32,8 @@ class SBSIMPEXP TimerObject : public Object
 {
 public:
 
+	bool ReportNotify; //if true, timer reports when Notify is run, in verbose mode
+
 	TimerObject(Object *parent, const std::string &name);
 	virtual ~TimerObject();
 	void Start(int milliseconds = -1, bool oneshot = false);

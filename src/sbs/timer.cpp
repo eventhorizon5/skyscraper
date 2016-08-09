@@ -40,6 +40,7 @@ TimerObject::TimerObject(Object *parent, const std::string &name) : Object(paren
 	Running = false;
 	CurrentTime = 0;
 	StartTime = 0;
+	ReportNotify = true;
 }
 
 TimerObject::~TimerObject()
@@ -87,7 +88,7 @@ void TimerObject::Loop()
 
 	if (CurrentTime - LastHit >= (unsigned long)Interval)
 	{
-		if (sbs->Verbose)
+		if (sbs->Verbose && ReportNotify == true)
 			Report("Notify");
 
 		Notify();
