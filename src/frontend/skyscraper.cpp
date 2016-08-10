@@ -342,6 +342,9 @@ int Skyscraper::OnExit()
 #if OGRE_VERSION >= 0x00010900
 	delete mOverlaySystem;
 #endif
+
+	Ogre::ResourceGroupManager::getSingleton().shutdownAll();
+
 	mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
 	//delete mRoot;
 	delete logger;
