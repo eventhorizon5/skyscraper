@@ -417,7 +417,7 @@ bool CallButton::Call(bool direction)
 		Report("Registering callback");
 
 	//start timer
-	timer->Start(1000);
+	timer->Start(50, true);
 
 	return true;
 }
@@ -546,6 +546,11 @@ void CallButton::Process(int direction)
 			Report("Deactivating timer");
 		timer->Stop();
 		return;
+	}
+	else
+	{
+		//if timer is starting up, restart it with a longer interval for future call processing
+		timer->Start(1000);
 	}
 
 	int ActiveElevator = 0;
