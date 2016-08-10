@@ -88,6 +88,8 @@ namespace OgreBulletDynamics
 		bool in_world;
 		bool collisions_enabled;
 		btKinematicCharacterController *m_character;
+		btGhostPairCallback *callback;
+		btConvexShape *capsule;
     };
     // -------------------------------------------------------------------------
     inline DynamicsWorld*       CharacterController::getDynamicsWorld()

@@ -62,8 +62,9 @@ namespace OgreBulletDynamics
 		btPairCachingGhostObject* ghost = new btPairCachingGhostObject();
 		mObject = ghost;
 		mObject->setWorldTransform(startTransform);
-		getDynamicsWorld()->getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-		btConvexShape* capsule = new btCapsuleShape(width, height);
+		callback = new btGhostPairCallback();
+		getDynamicsWorld()->getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(callback);
+		capsule = new btCapsuleShape(width, height);
 		mObject->setCollisionShape (capsule);
 		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 		mObject->setContactProcessingThreshold(0.0);
@@ -80,6 +81,11 @@ namespace OgreBulletDynamics
     CharacterController::~CharacterController()
     {
 		mShapeNode->detachAllObjects();
+		delete m_character;
+		getDynamicsWorld()->getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(0);
+		delete callback;
+		mObject->setCollisionShape(0);
+		delete capsule;
     }
 	void CharacterController::addToWorld()
 	{
