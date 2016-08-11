@@ -2029,6 +2029,48 @@ void ElevatorDoor::DoorWrapper::ResetState()
 		doors[i]->Reset(false);
 }
 
+void ElevatorDoor::DoorWrapper::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+{
+	if (shift == true && right == false)
+	{
+		if (!parent)
+			return;
+
+		ElevatorCar *car = parent->car;
+		if (!car)
+			return;
+
+		int number = parent->Number;
+
+		if (IsShaftDoor == true)
+		{
+			//check shaft doors
+			if (abs(car->AreDoorsMoving(number, false, true)) == 2)
+				car->StopDoors(number);
+			else
+			{
+				if (car->AreShaftDoorsOpen(number, floor) == false)
+					car->OpenDoorsEmergency(number, 3, floor);
+				else
+					car->CloseDoorsEmergency(number, 3, floor);
+			}
+		}
+		else
+		{
+			//check elevator doors
+			if (abs(car->AreDoorsMoving(number, true, false)) == 2)
+				car->StopDoors(number);
+			else
+			{
+				if (car->AreDoorsOpen(number) == false)
+					car->OpenDoorsEmergency(number, 2);
+				else
+					car->CloseDoorsEmergency(number, 2);
+			}
+		}
+	}
+}
+
 ElevatorDoor::DoorWrapper* ElevatorDoor::GetDoorWrapper()
 {
 	//return door wrapper object

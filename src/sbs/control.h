@@ -63,6 +63,7 @@ public:
 	void RemoveAction(Action *action);
 	bool IsEnabled() { return is_enabled; }
 	bool GetLightStatus() { return light_status; }
+	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 
 private:
 	MeshObject* ControlMesh; //control mesh object

@@ -282,4 +282,18 @@ void Model::OnInit()
 	}
 }
 
+void Model::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+{
+	if (right == false)
+	{
+		//if model is a key, add key to keyring and delete model
+		if (IsKey() == true)
+		{
+			sbs->AddKey(GetKeyID(), GetName());
+			SelfDestruct(); //self-destruct this model
+			return;
+		}
+	}
+}
+
 }

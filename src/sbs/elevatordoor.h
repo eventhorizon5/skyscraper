@@ -81,6 +81,7 @@ public:
 		void MoveDoors(bool open, bool manual);
 		void StopDoors();
 		void ResetState();
+		void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 
 		std::vector<DoorObject*> doors;
 		std::string name;

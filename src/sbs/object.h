@@ -95,6 +95,7 @@ public:
 	Ogre::Quaternion GetOrientation(bool relative = false);
 	virtual void OnMove(bool parent) {} //called when object is moved
 	virtual void OnRotate(bool parent) {} //called when object is rotated
+	virtual void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right) {} //called when object is clicked on
 	void NotifyMove(bool parent = false);
 	void NotifyRotate(bool parent = false);
 	virtual void ResetState() {} //resets the internal state of an object
@@ -121,6 +122,7 @@ public:
 protected:
 	void EnableLoop(bool value);
 	void LoopChildren();
+	bool SelfDestruct();
 
 private:
 	void NotifyChildren(bool move, bool rotate);

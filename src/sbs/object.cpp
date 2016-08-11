@@ -573,4 +573,14 @@ void Object::LoopChildren()
 	}
 }
 
+bool Object::SelfDestruct()
+{
+	//have this object delete itself (make a deletion request to the sim engine root)
+	//this is a dangerous function; make sure no more calls are made to this object when calling this,
+	//and make sure that this is the last function called by this object
+
+	sbs->Report("Self-destructing object " + ToString(Number));
+	return sbs->DeleteObject(this);
+}
+
 }

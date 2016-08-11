@@ -606,63 +606,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	//get original object (parent object of clicked mesh)
 	if (mesh_parent)
 	{
-		//check controls
-		Control *control = dynamic_cast<Control*>(mesh_parent);
-
-		if (control)
+		//delete object if ctrl and alt keys are pressed
+		if (ctrl == true && alt == true && shift == false && right == false)
 		{
-			//delete control if ctrl and alt keys are pressed
-			if (ctrl == true && alt == true && shift == false)
-			{
-				sbs->DeleteObject(mesh_parent);
-				return;
-			}
-
-			//toggle lock status if ctrl and shift are pressed
-			if (ctrl == true && shift == true)
-				control->ToggleLock();
-			else
-				control->Press(right);
-		}
-
-		//check doors
-		Door *door = dynamic_cast<Door*>(mesh_parent);
-
-		if (door && right == false)
-		{
-			//delete door if ctrl and alt keys are pressed
-			if (ctrl == true && alt == true && shift == false)
-			{
-				sbs->DeleteObject(mesh_parent);
-				return;
-			}
-
-			//toggle lock status if ctrl and shift are pressed
-			if (ctrl == true && shift == true)
-				door->ToggleLock(pos);
-			else
-				door->ClickDoor(pos);
-		}
-
-		//check models
-		Model *model = dynamic_cast<Model*>(mesh_parent);
-
-		if (model && right == false)
-		{
-			//delete model if ctrl and alt keys are pressed
-			if (ctrl == true && alt == true && shift == false)
-			{
-				sbs->DeleteObject(mesh_parent);
-				return;
-			}
-
-			//if model is a key, add key to keyring and delete model
-			if (model->IsKey() == true)
-			{
-				sbs->AddKey(model->GetKeyID(), model->GetName());
-				sbs->DeleteObject(mesh_parent);
-				return;
-			}
+			sbs->DeleteObject(mesh_parent);
+			return;
 		}
 
 		//check call buttons
@@ -701,63 +649,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			}
 		}
 
-		//check elevator doors
-		ElevatorDoor::DoorWrapper *wrapper = dynamic_cast<ElevatorDoor::DoorWrapper*>(mesh_parent);
-
-		if (wrapper && shift == true && right == false)
-		{
-			ElevatorDoor *parent = wrapper->parent;
-			if (!parent)
-				return;
-
-			ElevatorCar *car = parent->car;
-			if (!car)
-				return;
-
-			int number = parent->Number;
-			int floor = wrapper->floor;
-
-			if (wrapper->IsShaftDoor == true)
-			{
-				//check shaft doors
-				if (abs(car->AreDoorsMoving(number, false, true)) == 2)
-					car->StopDoors(number);
-				else
-				{
-					if (car->AreShaftDoorsOpen(number, floor) == false)
-						car->OpenDoorsEmergency(number, 3, floor);
-					else
-						car->CloseDoorsEmergency(number, 3, floor);
-				}
-			}
-			else
-			{
-				//check elevator doors
-				if (abs(car->AreDoorsMoving(number, true, false)) == 2)
-					car->StopDoors(number);
-				else
-				{
-					if (car->AreDoorsOpen(number) == false)
-						car->OpenDoorsEmergency(number, 2);
-					else
-						car->CloseDoorsEmergency(number, 2);
-				}
-			}
-		}
-
-		//check floor and directional indicators
-		FloorIndicator *ind = dynamic_cast<FloorIndicator*>(mesh_parent);
-		DirectionalIndicator *ind2 = dynamic_cast<DirectionalIndicator*>(mesh_parent);
-
-		if ((ind || ind2) && right == false)
-		{
-			//delete indicator if ctrl and alt keys are pressed
-			if (ctrl == true && alt == true && shift == false)
-			{
-				sbs->DeleteObject(mesh_parent);
-				return;
-			}
-		}
+		//call object's OnClick function
+		mesh_parent->OnClick(pos, shift, ctrl, alt, right);
 	}
 
 	//delete wall if ctrl and alt are pressed

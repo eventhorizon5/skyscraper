@@ -521,4 +521,13 @@ void Control::RemoveAction(Action *action)
 	}
 }
 
+void Control::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+{
+	//toggle lock status if ctrl and shift are pressed
+	if (ctrl == true && shift == true)
+		ToggleLock();
+	else
+		Press(right);
+}
+
 }

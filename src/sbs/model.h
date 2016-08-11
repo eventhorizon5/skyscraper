@@ -49,6 +49,7 @@ public:
 	MeshObject* GetMeshObject() { return mesh; }
 	void OnInit();
 	bool IsCustom() { return custom; }
+	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 
 private:
 	void RemoveFromParent();

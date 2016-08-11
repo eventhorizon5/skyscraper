@@ -56,6 +56,7 @@ public:
 	bool IsEnabled() { return is_enabled; }
 	void Loop();
 	void ClickDoor(Ogre::Vector3 &position);
+	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 
 private:
 	MeshObject* DoorMesh; //door mesh

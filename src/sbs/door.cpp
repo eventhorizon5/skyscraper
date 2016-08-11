@@ -424,4 +424,16 @@ void Door::ClickDoor(Ogre::Vector3 &position)
 	}
 }
 
+void Door::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+{
+	if (right == false)
+	{
+		//toggle lock status if ctrl and shift are pressed
+		if (ctrl == true && shift == true)
+			ToggleLock(position);
+		else
+			ClickDoor(position);
+	}
+}
+
 }
