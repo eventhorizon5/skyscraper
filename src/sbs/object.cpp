@@ -109,7 +109,10 @@ Object::~Object()
 	if (sbs)
 	{
 		if (Parent && sbs->FastDelete == false)
+		{
+			EnableLoop(false);
 			Parent->RemoveChild(this);
+		}
 	}
 
 	//delete scene node
