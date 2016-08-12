@@ -303,6 +303,14 @@ Control* ButtonPanel::GetFloorButton(int floor)
 	return 0;
 }
 
+Control* ButtonPanel::GetControl(int index)
+{
+	if (index < 0 || index > (int)controls.size() - 1)
+		return 0;
+
+	return controls[index];
+}
+
 void ButtonPanel::RemoveControl(Control *control)
 {
 	//remove a control from the array (does not delete the object)

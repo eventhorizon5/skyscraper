@@ -80,8 +80,6 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	Number = number;
 	Locked = false;
 	KeyID = 0;
-	up_control = 0;
-	down_control = 0;
 
 	//determine floor range of associated elevators
 	int bottomfloor = 0;
@@ -153,7 +151,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		names.push_back("off");
 		names.push_back("up");
 
-		up_control = panel->AddControl(sound_file, row, 1, 1, 1, 0, 0, 1, names, textures);
+		panel->AddControl(sound_file, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
 	if (DownExists == true)
 	{
@@ -168,7 +166,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		names.push_back("off");
 		names.push_back("down");
 
-		down_control = panel->AddControl(sound_file, row, 1, 1, 1, 0, 0, 1, names, textures);
+		panel->AddControl(sound_file, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
 
 	//set position of object
@@ -336,28 +334,32 @@ void CallButton::SetLights(int up, int down)
 		if (sbs->Verbose)
 			Report("SetLights: turning on up light");
 
-		up_control->SetSelectPosition(2);
+		if (GetUpControl())
+			GetUpControl()->SetSelectPosition(2);
 	}
 	if (up == 2 && UpExists == true)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning off up light");
 
-		up_control->SetSelectPosition(1);
+		if (GetUpControl())
+			GetUpControl()->SetSelectPosition(1);
 	}
 	if (down == 1 && DownExists == true)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning on down light");
 
-		down_control->SetSelectPosition(2);
+		if (GetDownControl())
+			GetDownControl()->SetSelectPosition(2);
 	}
 	if (down == 2 && DownExists == true)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning off down light");
 
-		down_control->SetSelectPosition(1);
+		if (GetDownControl())
+			GetDownControl()->SetSelectPosition(1);
 	}
 }
 
@@ -796,16 +798,32 @@ void CallButton::Timer::Notify()
 
 bool CallButton::GetUpStatus()
 {
-	if (up_control)
-		return (up_control->GetSelectPosition() == 2);
+	if (GetUpControl())
+		return (GetUpControl()->GetSelectPosition() == 2);
 	return false;
 }
 
 bool CallButton::GetDownStatus()
 {
-	if (down_control)
-		return (down_control->GetSelectPosition() == 2);
+	if (GetDownControl())
+		return (GetDownControl()->GetSelectPosition() == 2);
 	return false;
+}
+
+Control* CallButton::GetUpControl()
+{
+	return panel->GetControl(0);
+}
+
+Control* CallButton::GetDownControl()
+{
+	if (DownExists == false)
+		return 0;
+
+	if (UpExists == true)
+		return panel->GetControl(1);
+	else
+		return panel->GetControl(0);
 }
 
 }

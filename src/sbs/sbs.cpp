@@ -2592,14 +2592,7 @@ bool SBS::DeleteObject(Object *object)
 	else if (type == "Model")
 		deleted = true;
 	else if (type == "Control")
-	{
-		Object *top = object->GetParent()->GetParent();
-		if (top)
-		{
-			if (top->GetType() != "CallButton")
-				deleted = true;
-		}
-	}
+		deleted = true;
 	else if (type == "Trigger")
 		deleted = true;
 	else if (type == "DoorWrapper")

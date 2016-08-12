@@ -54,6 +54,7 @@ public:
 	void ChangeLight(int floor, bool value);
 	void ChangeAllLights(bool value);
 	Control* GetFloorButton(int floor);
+	Control* GetControl(int index);
 	void RemoveControl(Control *control);
 
 private:
