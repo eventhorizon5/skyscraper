@@ -80,6 +80,7 @@ namespace OgreBulletDynamics
     // -------------------------------------------------------------------------
     CharacterController::~CharacterController()
     {
+		removeFromWorld();
 		mShapeNode->detachAllObjects();
 		delete m_character;
 		getDynamicsWorld()->getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(0);
