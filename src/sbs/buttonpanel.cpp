@@ -36,7 +36,7 @@
 
 namespace SBS {
 
-ButtonPanel::ButtonPanel(ElevatorCar *car, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th) : Object(car)
+ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th) : Object(parent)
 {
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
@@ -45,8 +45,6 @@ ButtonPanel::ButtonPanel(ElevatorCar *car, int index, const std::string &texture
 	SetValues("ButtonPanel", "", false);
 
 	IsEnabled = true;
-	this->elevator = car->GetElevator()->Number;
-	this->car = car->Number;
 	Index = index;
 	Direction = direction;
 	ButtonWidth = buttonwidth;
@@ -67,29 +65,32 @@ ButtonPanel::ButtonPanel(ElevatorCar *car, int index, const std::string &texture
 	ButtonPanelMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//create panel back
-	sbs->GetTextureManager()->ResetTextureMapping(true);
-	if (Direction == "front")
+	if (texture != "")
 	{
-		sbs->DrawWalls(true, false, false, false, false, false);
-		AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th);
+		sbs->GetTextureManager()->ResetTextureMapping(true);
+		if (Direction == "front")
+		{
+			sbs->DrawWalls(true, false, false, false, false, false);
+			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th);
+		}
+		if (Direction == "back")
+		{
+			sbs->DrawWalls(false, true, false, false, false, false);
+			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th);
+		}
+		if (Direction == "left")
+		{
+			sbs->DrawWalls(true, false, false, false, false, false);
+			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
+		}
+		if (Direction == "right")
+		{
+			sbs->DrawWalls(false, true, false, false, false, false);
+			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
+		}
+		sbs->ResetWalls();
+		sbs->GetTextureManager()->ResetTextureMapping();
 	}
-	if (Direction == "back")
-	{
-		sbs->DrawWalls(false, true, false, false, false, false);
-		AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th);
-	}
-	if (Direction == "left")
-	{
-		sbs->DrawWalls(true, false, false, false, false, false);
-		AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
-	}
-	if (Direction == "right")
-	{
-		sbs->DrawWalls(false, true, false, false, false, false);
-		AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
-	}
-	sbs->ResetWalls();
-	sbs->GetTextureManager()->ResetTextureMapping();
 
 	//set position of object
 	Move(CenterX, voffset - (Height / 2), CenterZ);
@@ -117,9 +118,14 @@ ButtonPanel::~ButtonPanel()
 
 	if (sbs->FastDelete == false)
 	{
-		//unregister with parent floor object
+		//unregister with parent object
 		if (parent_deleting == false)
-			sbs->GetElevator(elevator)->GetCar(car)->RemovePanel(this);
+		{
+			std::string type = GetParent()->GetType();
+
+			if (type == "ElevatorCar")
+				static_cast<ElevatorCar*>(GetParent())->RemovePanel(this);
+		}
 
 		//remove associated actions
 		for (size_t i = 0; i < action_list.size(); i++)
@@ -207,7 +213,7 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 	//create control object
 	controls.resize(controls.size() + 1);
 	int control_index = (int)controls.size() - 1;
-	std::string name = "Button Panel " + ToString(elevator) + ":" + ToString(Index) + " Control " + ToString(control_index);
+	std::string name = GetName() + ": Control " + ToString(control_index);
 	TrimString(name);
 
 	//register actions
@@ -216,10 +222,9 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 
 	for (size_t i = 0; i < action_names.size(); i++)
 	{
-		std::string newname = sbs->GetElevator(elevator)->GetCar(car)->GetName();
-		newname += ":" + action_names[i];
+		std::string newname = GetParent()->GetName() + ":" + action_names[i];
 		std::vector<Object*> parents;
-		parents.push_back(sbs->GetElevator(elevator)->GetCar(car));
+		parents.push_back(GetParent());
 		if ((off_action == 0 && action_names[i] == "off") || action_names[i] != "off")
 		{
 			Action* action = sbs->AddAction(newname, parents, action_names[i]);

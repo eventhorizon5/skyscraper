@@ -177,6 +177,7 @@ bool Action::Run(Object *caller, Object *parent)
 	Floor *floor = dynamic_cast<Floor*>(parent);
 	Shaft *shaft = dynamic_cast<Shaft*>(parent);
 	Stairs *stairs = dynamic_cast<Stairs*>(parent);
+	CallButton *callbutton = dynamic_cast<CallButton*>(parent);
 
 	std::string caller_name = caller->GetName();
 	std::string caller_type = caller->GetType();
@@ -194,16 +195,15 @@ bool Action::Run(Object *caller, Object *parent)
 	else if (car)
 		elevator = car->GetElevator();
 
-	//numeric commands for elevator floor selections
-	if (IsNumeric(command_name) == true && elevator && car)
-	{
-		int floor = ToInt(command_name);
-		return elevator->SelectFloor(floor);
-	}
-
+	//elevator-specific commands
 	if (elevator && car)
 	{
-		//elevator-specific commands
+		//numeric commands for elevator floor selections
+		if (IsNumeric(command_name) == true)
+		{
+			int floor = ToInt(command_name);
+			return elevator->SelectFloor(floor);
+		}
 
 		//get first callbutton on recall floor
 		CallButton *callbutton = elevator->GetPrimaryCallButton();
@@ -573,6 +573,32 @@ bool Action::Run(Object *caller, Object *parent)
 					return elevator->SetHoistwayAccess(param, 0);
 			}
 			return false;
+		}
+	}
+
+	//callbutton-specific commands
+	if (callbutton)
+	{
+		if (command_name == "off")
+			return true;
+		if (command_name == "up")
+			return callbutton->Call(true);
+		if (command_name == "down")
+			return callbutton->Call(false);
+		if (command_name == "fire1off")
+		{
+			callbutton->FireService(0);
+			return true;
+		}
+		if (command_name == "fire1on")
+		{
+			callbutton->FireService(1);
+			return true;
+		}
+		if (command_name == "fire1bypass")
+		{
+			callbutton->FireService(2);
+			return true;
 		}
 	}
 

@@ -33,7 +33,7 @@ class SBSIMPEXP CallButton : public Object
 public:
 
 	//functions
-	CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~CallButton();
 	void Enabled(bool value);
 	bool Call(bool direction); //true is up, false is down
@@ -63,9 +63,9 @@ public:
 private:
 	void Process(int direction);
 
-	MeshObject* CallButtonMeshBack; //call button mesh object
-	MeshObject* CallButtonMeshUp; //call button mesh object
-	MeshObject* CallButtonMeshDown; //call button mesh object
+	ButtonPanel* panel; //button panel object
+	Control* up_control;
+	Control* down_control;
 
 	std::string UpTexture, UpTextureLit;
 	std::string DownTexture, DownTextureLit;
@@ -81,7 +81,6 @@ private:
 	std::vector<int> Elevators; //elevators this call button set is assigned to
 
 	Floor *floor; //floor this call button set is on
-	Sound *sound; //sound object
 
 	bool ProcessedUp;
 	bool ProcessedDown;

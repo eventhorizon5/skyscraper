@@ -2548,7 +2548,10 @@ bool SBS::DeleteObject(Object *object)
 	else if (type == "Elevator")
 		deleted = true;
 	else if (type == "ButtonPanel")
-		deleted = true;
+	{
+		if (object->GetParent()->GetType() == "ElevatorCar")
+			deleted = true;
+	}
 	else if (type == "CallButton")
 		deleted = true;
 	else if (type == "DirectionalIndicator")
@@ -2589,7 +2592,14 @@ bool SBS::DeleteObject(Object *object)
 	else if (type == "Model")
 		deleted = true;
 	else if (type == "Control")
-		deleted = true;
+	{
+		Object *top = object->GetParent()->GetParent();
+		if (top)
+		{
+			if (top->GetType() == "ElevatorCar")
+				deleted = true;
+		}
+	}
 	else if (type == "Trigger")
 		deleted = true;
 	else if (type == "DoorWrapper")
