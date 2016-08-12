@@ -433,20 +433,11 @@ bool Action::Run(Object *caller, Object *parent)
 		if (callbutton)
 		{
 			if (command_name == "fire1off")
-			{
-				callbutton->FireService(0);
-				return true;
-			}
+				return callbutton->FireService(0);
 			if (command_name == "fire1on")
-			{
-				callbutton->FireService(1);
-				return true;
-			}
+				return callbutton->FireService(1);
 			if (command_name == "fire1bypass")
-			{
-				callbutton->FireService(2);
-				return true;
-			}
+				return callbutton->FireService(2);
 		}
 
 		if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
@@ -586,20 +577,11 @@ bool Action::Run(Object *caller, Object *parent)
 		if (command_name == "down")
 			return callbutton->Call(false);
 		if (command_name == "fire1off")
-		{
-			callbutton->FireService(0);
-			return true;
-		}
+			return callbutton->FireService(0);
 		if (command_name == "fire1on")
-		{
-			callbutton->FireService(1);
-			return true;
-		}
+			return callbutton->FireService(1);
 		if (command_name == "fire1bypass")
-		{
-			callbutton->FireService(2);
-			return true;
-		}
+			return callbutton->FireService(2);
 	}
 
 	if (command_name == "changetexture")

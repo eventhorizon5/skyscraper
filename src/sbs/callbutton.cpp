@@ -596,7 +596,7 @@ int CallButton::GetKeyID()
 	return KeyID;
 }
 
-void CallButton::FireService(int value)
+bool CallButton::FireService(int value)
 {
 	//enables fire service phase 1 on all elevators associated with this call button
 
@@ -604,8 +604,9 @@ void CallButton::FireService(int value)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
-			elevator->EnableFireService1(value);
+			return elevator->EnableFireService1(value);
 	}
+	return false;
 }
 
 int CallButton::GetFloor()

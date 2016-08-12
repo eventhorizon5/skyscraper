@@ -48,7 +48,7 @@ public:
 	bool IsLocked();
 	bool ToggleLock(bool force = false);
 	int GetKeyID();
-	void FireService(int value);
+	bool FireService(int value);
 	int GetFloor();
 	void SetLightsGroup(int up, int down);
 	bool AddElevator(int elevator);
