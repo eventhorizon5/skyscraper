@@ -237,15 +237,18 @@ bool CallButton::Call(bool direction)
 		return false;
 
 	//exit if call has already been made
-	if (direction == true && GetUpStatus() == true)
+	if (timer->IsRunning() == true)
 	{
-		Report("Up call has already been made");
-		return true;
-	}
-	if (direction == false && GetDownStatus() == true)
-	{
-		Report("Down call has already been made");
-		return true;
+		if (direction == true && GetUpStatus() == true)
+		{
+			Report("Up call has already been made");
+			return true;
+		}
+		if (direction == false && GetDownStatus() == true)
+		{
+			Report("Down call has already been made");
+			return true;
+		}
 	}
 
 	//check to make sure elevator objects are valid
@@ -280,9 +283,8 @@ bool CallButton::Call(bool direction)
 	else
 		elevator_arrived_down = 0;
 
-	//register callback for this button
 	if (sbs->Verbose)
-		Report("Registering callback");
+		Report("Starting timer");
 
 	//start timer
 	timer->Start(50, true);
@@ -398,7 +400,7 @@ void CallButton::Process(int direction)
 	if (GetDownStatus() == false && direction == -1)
 		ActiveElevatorDown = 0;
 
-	//unregister callback if inactive
+	//stop timer if inactive
 	if (GetUpStatus() == false && GetDownStatus() == false)
 	{
 		if (sbs->Verbose)
