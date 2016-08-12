@@ -62,7 +62,7 @@ ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, 
 	//create mesh
 	std::string name = "Button Panel " + ToString(index);
 	SetName(name);
-	ButtonPanelMesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	mesh = new MeshObject(this, name, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//create panel back
 	if (texture != "")
@@ -109,12 +109,12 @@ ButtonPanel::~ButtonPanel()
 		controls[i] = 0;
 	}
 	//delete panel
-	if (ButtonPanelMesh)
+	if (mesh)
 	{
-		ButtonPanelMesh->parent_deleting = true;
-		delete ButtonPanelMesh;
+		mesh->parent_deleting = true;
+		delete mesh;
 	}
-	ButtonPanelMesh = 0;
+	mesh = 0;
 
 	if (sbs->FastDelete == false)
 	{
@@ -252,7 +252,7 @@ void ButtonPanel::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	ButtonPanelMesh->Enable(value);
+	mesh->Enable(value);
 
 	for (size_t i = 0; i < controls.size(); i++)
 	{
@@ -265,7 +265,7 @@ bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, f
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(this, ButtonPanelMesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	return sbs->AddWallMain(this, mesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
 void ButtonPanel::ChangeLight(int floor, bool value)

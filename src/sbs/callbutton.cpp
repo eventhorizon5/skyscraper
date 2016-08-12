@@ -130,7 +130,14 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		rows++;
 
 	//create button panel
-	panel = new ButtonPanel(this, 0, BackTexture, rows, 1, direction, 0, 0, BackWidth / 2, (BackHeight / 7) * 2, 0, BackHeight / 7, 0, tw, th);
+	float button_height = BackHeight / 3.5;
+	float button_width = BackWidth / 2;
+	float h_spacing = 0.5;
+	float v_spacing = 1.25;
+	if (UpExists == true && DownExists == true)
+		v_spacing = 0.5;
+
+	panel = new ButtonPanel(this, 0, BackTexture, rows, 1, direction, 0, 0, button_width, button_height, h_spacing, v_spacing, BackHeight / 2, tw, th);
 
 	//create controls
 	if (sbs->Verbose)
