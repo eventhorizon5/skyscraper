@@ -53,8 +53,8 @@ public:
 	void SetLightsGroup(int up, int down);
 	bool AddElevator(int elevator);
 	bool RemoveElevator(int elevator);
-	bool GetUpStatus() { return UpStatus; }
-	bool GetDownStatus() { return DownStatus; }
+	bool GetUpStatus();
+	bool GetDownStatus();
 	bool IsEnabled() { return is_enabled; }
 	void ElevatorArrived(int number, bool direction);
 	int GetElevatorArrived(bool direction);
@@ -64,16 +64,10 @@ private:
 	void Process(int direction);
 
 	ButtonPanel* panel; //button panel object
-	Control* up_control;
-	Control* down_control;
-
-	std::string UpTexture, UpTextureLit;
-	std::string DownTexture, DownTextureLit;
-	std::string Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
+	Control* up_control; //up button
+	Control* down_control; //down button
 
 	int Number; //call button index number (on the specified floor)
-	bool UpStatus; //status of up light
-	bool DownStatus; //status of down light
 	bool is_enabled;
 	int elevator_arrived_up;
 	int elevator_arrived_down;

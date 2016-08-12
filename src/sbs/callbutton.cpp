@@ -63,14 +63,6 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	for (size_t i = 0; i < elevators.size(); i++)
 		Elevators[i] = elevators[i];
 
-	//save texture names
-	UpTexture = UpButtonTexture;
-	UpTextureLit = UpButtonTexture_Lit;
-	DownTexture = DownButtonTexture;
-	DownTextureLit = DownButtonTexture_Lit;
-
-	UpStatus = false;
-	DownStatus = false;
 	ProcessedUp = false;
 	ProcessedDown = false;
 	UpExists = false;
@@ -86,9 +78,6 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 
 	//set variables
 	Number = number;
-	Direction = direction;
-	SetCase(Direction, false);
-	TrimString(Direction);
 	Locked = false;
 	KeyID = 0;
 	up_control = 0;
@@ -141,7 +130,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		rows++;
 
 	//create button panel
-	panel = new ButtonPanel(this, 0, BackTexture, rows, 1, Direction, 0, 0, BackWidth / 2, (BackHeight / 7) * 2, 0, BackHeight / 7, 0, tw, th);
+	panel = new ButtonPanel(this, 0, BackTexture, rows, 1, direction, 0, 0, BackWidth / 2, (BackHeight / 7) * 2, 0, BackHeight / 7, 0, tw, th);
 
 	//create controls
 	if (sbs->Verbose)
@@ -241,12 +230,12 @@ bool CallButton::Call(bool direction)
 		return false;
 
 	//exit if call has already been made
-	if (direction == true && UpStatus == true)
+	if (direction == true && GetUpStatus() == true)
 	{
 		Report("Up call has already been made");
 		return true;
 	}
-	if (direction == false && DownStatus == true)
+	if (direction == false && GetDownStatus() == true)
 	{
 		Report("Down call has already been made");
 		return true;
@@ -297,7 +286,7 @@ bool CallButton::Call(bool direction)
 void CallButton::UpLight(bool value)
 {
 	//turn on the 'up' directional light
-	if (value == UpStatus)
+	if (value == GetUpStatus())
 	{
 		if (sbs->Verbose)
 			Report("UpLight: already in requested status");
@@ -314,7 +303,7 @@ void CallButton::UpLight(bool value)
 void CallButton::DownLight(bool value)
 {
 	//turn on the 'down' directional light
-	if (value == DownStatus)
+	if (value == GetDownStatus())
 	{
 		if (sbs->Verbose)
 			Report("DownLight: already in requested status");
@@ -339,7 +328,6 @@ void CallButton::SetLights(int up, int down)
 			Report("SetLights: turning on up light");
 
 		up_control->SetSelectPosition(2);
-		UpStatus = true;
 	}
 	if (up == 2 && UpExists == true)
 	{
@@ -347,7 +335,6 @@ void CallButton::SetLights(int up, int down)
 			Report("SetLights: turning off up light");
 
 		up_control->SetSelectPosition(1);
-		UpStatus = false;
 	}
 	if (down == 1 && DownExists == true)
 	{
@@ -355,7 +342,6 @@ void CallButton::SetLights(int up, int down)
 			Report("SetLights: turning on down light");
 
 		down_control->SetSelectPosition(2);
-		DownStatus = true;
 	}
 	if (down == 2 && DownExists == true)
 	{
@@ -363,13 +349,7 @@ void CallButton::SetLights(int up, int down)
 			Report("SetLights: turning off down light");
 
 		down_control->SetSelectPosition(1);
-		DownStatus = false;
 	}
-
-	/*if (up > 0 && !CallButtonMeshUp && sbs->Verbose)
-		Report("SetLights: cannot change up light status");
-	if (down > 0 && !CallButtonMeshDown && sbs->Verbose)
-		Report("SetLights: cannot change down light status");*/
 }
 
 bool CallButton::ServicesElevator(int elevator)
@@ -406,13 +386,13 @@ void CallButton::Process(int direction)
 	SBS_PROFILE("CallButton::Process");
 
 	//reset active elevators
-	if (UpStatus == false && direction == 1)
+	if (GetUpStatus() == false && direction == 1)
 		ActiveElevatorUp = 0;
-	if (DownStatus == false && direction == -1)
+	if (GetDownStatus() == false && direction == -1)
 		ActiveElevatorDown = 0;
 
 	//unregister callback if inactive
-	if (UpStatus == false && DownStatus == false)
+	if (GetUpStatus() == false && GetDownStatus() == false)
 	{
 		if (sbs->Verbose)
 			Report("Deactivating timer");
@@ -458,7 +438,7 @@ void CallButton::Process(int direction)
 	//first exit if call button is not processing a call for the current direction
 	if (reprocess == false)
 	{
-		if ((UpStatus == false && direction == 1) || (DownStatus == false && direction == -1))
+		if ((GetUpStatus() == false && direction == 1) || (GetDownStatus() == false && direction == -1))
 			return;
 	}
 
@@ -678,9 +658,9 @@ void CallButton::ElevatorArrived(int number, bool direction)
 	//notify call button about an elevator arrival
 	//this also turns off the related direction light
 
-	if (UpStatus == true && direction == true)
+	if (GetUpStatus() == true && direction == true)
 		elevator_arrived_up = number;
-	else if (DownStatus == true && direction == false)
+	else if (GetDownStatus() == true && direction == false)
 		elevator_arrived_down = number;
 
 	if (direction == true)
@@ -802,6 +782,20 @@ int CallButton::FindClosestElevator(int direction)
 void CallButton::Timer::Notify()
 {
 	parent->Loop();
+}
+
+bool CallButton::GetUpStatus()
+{
+	if (up_control)
+		return (up_control->GetSelectPosition() == 2);
+	return false;
+}
+
+bool CallButton::GetDownStatus()
+{
+	if (down_control)
+		return (down_control->GetSelectPosition() == 2);
+	return false;
 }
 
 }
