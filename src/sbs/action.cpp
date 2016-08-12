@@ -576,11 +576,11 @@ bool Action::Run(Object *caller, Object *parent)
 			return callbutton->Call(true);
 		if (command_name == "down")
 			return callbutton->Call(false);
-		if (command_name == "fire1off")
+		if (command_name == "fireoff")
 			return callbutton->FireService(0);
-		if (command_name == "fire1on")
+		if (command_name == "fireon")
 			return callbutton->FireService(1);
-		if (command_name == "fire1bypass")
+		if (command_name == "firebypass")
 			return callbutton->FireService(2);
 	}
 

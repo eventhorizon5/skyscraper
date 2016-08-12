@@ -73,7 +73,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	elevator_arrived_down = 0;
 
 	//create object mesh
-	std::string base = "Call Panel " + ToString(floornum) + ":" + ToString(number);
+	std::string base = "Floor " + ToString(floornum) + ":Call Panel " + ToString(number);
 	SetName(base);
 
 	//set variables

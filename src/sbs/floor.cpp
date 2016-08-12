@@ -494,7 +494,7 @@ CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string
 		return 0;
 
 	//create call button
-	int Current = (int)CallButtonArray.size();
+	int Current = (int)CallButtonArray.size() + 1;
 	CallButton *button = new CallButton(this, elevators, Number, Current, sound_file, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	CallButtonArray.push_back(button);
 	return button;

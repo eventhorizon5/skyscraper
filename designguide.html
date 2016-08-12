@@ -1006,6 +1006,15 @@ wall plate.</p>
 the combined range of the elevators specified with the CallButtonElevators command
 (above).</p>
 
+<p align="left">Actions are automatically created for call buttons, and here's available action command names that can be used for custom controls:</p>
+
+<p align="left"><em>Off</em> (no action)<br>
+<em>Up</em> (press Up call button)<br>
+<em>Down</em> (press Down call button)<br>
+<em>FireOff</em> (set fire service phase 1 to Off for all elevators serviced by this call button)<br>
+<em>FireOn</em> (set fire service phase 1 to On for all elevators serviced by this call button)<br>
+<em>FireBypass</em> (set fire service phase 1 to Bypass for all elevators service by this call button)<br></p>
+
 <p align="left"><strong>14. AddStairs</strong> - creates a custom staircase at
 the specified location.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddStairs <em>number,
@@ -3238,9 +3247,9 @@ globally-unique name. If the same name is used for multiple actions, all of
 those actions will be run when an object uses that name. <em>Parent_object</em>
 is the object to use to perform the action on. Currently includes "Global",
 floors such as "Floor 2", elevators such as "Elevator 1", elevator cars such
-as "Elevator 1:Car 2", shafts like "Shaft 1"
-stairwells like "Stairwell 2", and can also be specified as a range of objects,
-such as "Floors 3 to 8".</p>
+as "Elevator 1:Car 2", shafts like "Shaft 1",
+stairwells like "Stairwell 2", call buttons such as "Floor 0:Call Panel 1",
+and can also be specified as a range of objects, such as "Floors 3 to 8".</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;">Commands and
 parameters:</p>
