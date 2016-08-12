@@ -582,43 +582,53 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	//object checks and actions
 
-	std::string type = obj->GetType();
-	Object *mesh_parent = 0;
+	//get original object (parent object of clicked mesh)
+	Object *mesh_parent = obj->GetParent();
 
-	if (obj->GetParent())
+	if (!mesh_parent)
+		return;
+
+	//if object is a wall, and parent is a mesh, get mesh's (parent's) parent
+	if (mesh_parent->GetType() == "Mesh")
 	{
-		std::string parent_type = obj->GetParent()->GetType();
+		mesh_parent = mesh_parent->GetParent();
 
-		//if object is a wall, and parent is a mesh, get mesh's (parent's) parent
-		if (parent_type == "Mesh")
-			mesh_parent = obj->GetParent()->GetParent();
-		else
-			mesh_parent = obj->GetParent();
+		if (!mesh_parent)
+			return;
 	}
 
-	//get original object (parent object of clicked mesh)
-	if (mesh_parent)
+	if (mesh_parent->GetType() == "ButtonPanel")
 	{
-		//delete object if ctrl and alt keys are pressed
-		if (ctrl == true && alt == true && shift == false && right == false)
+		//for call button panels, the object needs to be the third level
+		Object* callpanel = mesh_parent->GetParent();
+		if (callpanel)
 		{
-			sbs->DeleteObject(mesh_parent);
-			return;
+			if (callpanel->GetType() == "CallButton")
+				mesh_parent = callpanel;
+		}
+	}
+
+	//delete object if ctrl and alt keys are pressed
+	if (ctrl == true && alt == true && shift == false && right == false)
+	{
+		//delete a wall object, for certain parent objects
+		if (wall && obj->GetType() == "Wall")
+		{
+			std::string type = mesh_parent->GetType();
+			if (type == "Floor" || type == "ElevatorCar" || type == "Shaft" || type == "Stairs")
+			{
+				sbs->DeleteObject(obj);
+				return;
+			}
 		}
 
-		//call object's OnClick function
-		mesh_parent->OnClick(pos, shift, ctrl, alt, right);
-	}
-
-	//delete wall if ctrl and alt are pressed
-	if (ctrl == true && alt == true && shift == false && right == false && object_number > 0)
-	{
-		if (wall && type == "Wall")
-			sbs->DeleteObject(obj);
-		else
-			sbs->ReportError("Cannot delete object " + number);
+		//for standard objects, delete the mesh parent object
+		sbs->DeleteObject(mesh_parent);
 		return;
 	}
+
+	//call object's OnClick function
+	mesh_parent->OnClick(pos, shift, ctrl, alt, right);
 }
 
 std::string Camera::GetClickedMeshName()

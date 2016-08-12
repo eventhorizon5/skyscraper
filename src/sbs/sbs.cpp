@@ -2596,7 +2596,7 @@ bool SBS::DeleteObject(Object *object)
 		Object *top = object->GetParent()->GetParent();
 		if (top)
 		{
-			if (top->GetType() == "ElevatorCar")
+			if (top->GetType() != "CallButton")
 				deleted = true;
 		}
 	}
