@@ -32,7 +32,6 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "texture.h"
-#include "camera.h"
 #include "sound.h"
 #include "door.h"
 

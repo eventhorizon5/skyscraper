@@ -25,9 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "camera.h"
 #include "floor.h"
-#include "elevator.h"
 #include "elevatorcar.h"
 #include "soundsystem.h"
 #include "sound.h"

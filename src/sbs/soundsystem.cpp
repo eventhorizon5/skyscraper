@@ -26,9 +26,9 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
-#include "soundsystem.h"
 #include "sound.h"
 #include "profiler.h"
+#include "soundsystem.h"
 
 namespace SBS {
 

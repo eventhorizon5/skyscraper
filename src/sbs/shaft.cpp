@@ -34,10 +34,10 @@
 #include "door.h"
 #include "model.h"
 #include "light.h"
-#include "shaft.h"
 #include "camera.h"
 #include "control.h"
 #include "profiler.h"
+#include "shaft.h"
 
 namespace SBS {
 

@@ -30,8 +30,8 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "door.h"
-#include "manager.h"
 #include "dynamicmesh.h"
+#include "manager.h"
 
 namespace SBS {
 

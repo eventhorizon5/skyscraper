@@ -1,8 +1,8 @@
 #include <OgreBulletDynamicsWorld.h>
 #include "globals.h"
 #include "sbs.h"
-#include "profiler.h"
 #include "unix.h"
+#include "profiler.h"
 
 static oClock gProfileClock;
 

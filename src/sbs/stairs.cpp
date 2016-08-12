@@ -34,9 +34,8 @@
 #include "model.h"
 #include "texture.h"
 #include "light.h"
-#include "stairs.h"
-#include "camera.h"
 #include "profiler.h"
+#include "stairs.h"
 
 namespace SBS {
 

@@ -31,10 +31,10 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "camera.h"
-#include "action.h"
 #include "callbutton.h"
 #include "sound.h"
 #include "mesh.h"
+#include "action.h"
 
 namespace SBS {
 

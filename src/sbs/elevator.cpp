@@ -29,7 +29,6 @@
 #include "dynamicmesh.h"
 #include "mesh.h"
 #include "callbutton.h"
-#include "elevator.h"
 #include "camera.h"
 #include "shaft.h"
 #include "control.h"
@@ -37,6 +36,7 @@
 #include "elevatorcar.h"
 #include "timer.h"
 #include "profiler.h"
+#include "elevator.h"
 
 #include <time.h>
 

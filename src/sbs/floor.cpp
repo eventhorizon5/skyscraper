@@ -35,7 +35,6 @@
 #include "door.h"
 #include "model.h"
 #include "light.h"
-#include "floor.h"
 #include "camera.h"
 #include "route.h"
 #include "escalator.h"
@@ -47,6 +46,7 @@
 #include "directional.h"
 #include "sound.h"
 #include "profiler.h"
+#include "floor.h"
 
 namespace SBS {
 
