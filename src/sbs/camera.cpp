@@ -35,17 +35,10 @@
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
-#include "floorindicator.h"
-#include "directional.h"
 #include "model.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
-#include "door.h"
-#include "elevatordoor.h"
 #include "wall.h"
-#include "callbutton.h"
-#include "buttonpanel.h"
-#include "control.h"
 #include "profiler.h"
 #include "scenenode.h"
 #include "camera.h"
@@ -611,42 +604,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		{
 			sbs->DeleteObject(mesh_parent);
 			return;
-		}
-
-		//check call buttons
-		CallButton *callbutton = dynamic_cast<CallButton*>(mesh_parent);
-
-		if (callbutton && right == false)
-		{
-			size_t index = meshname.find(":");
-			size_t index2 = meshname.find(":", index + 1);
-
-			if (index != std::string::npos && index2 != std::string::npos)
-			{
-				std::string direction = meshname.substr(index2 + 1);
-				TrimString(direction);
-
-				//delete call button if ctrl and alt keys are pressed
-				if (ctrl == true && alt == true && shift == false)
-				{
-					sbs->DeleteObject(callbutton);
-					return;
-				}
-
-				if (ctrl == true && shift == true)
-				{
-					//if ctrl and shift are held, toggle lock
-					callbutton->ToggleLock();
-				}
-				else
-				{
-					//press button
-					if (direction == "Up")
-						callbutton->Call(true);
-					else
-						callbutton->Call(false);
-				}
-			}
 		}
 
 		//call object's OnClick function
