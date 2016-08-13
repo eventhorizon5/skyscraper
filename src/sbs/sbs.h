@@ -287,6 +287,7 @@ public:
 	bool GetConfigBool(const std::string &key, bool default_value);
 	float GetConfigFloat(const std::string &key, float default_value);
 	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value);
+	Ogre::Vector3 ComputeNormal(std::vector<Ogre::Vector3> &vertices, float &D);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
 	void AdvanceClock();
 	unsigned long GetCurrentTime();
