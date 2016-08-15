@@ -1171,7 +1171,10 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 			count = client_entries[0].vertex_count;
 
 		if (count != vertex_count)
+		{
+			delete [] mVertexElements;
 			return; //make sure vertex count is the same
+		}
 	}
 
 	Ogre::AxisAlignedBox box;
