@@ -1859,6 +1859,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	//handle end of floor section
 	if (linecheck == "<endfloor>" && config->RangeL == config->RangeH)
 	{
+		//when finishing a floor, make sure the altitude is valid
+		if (floor->AltitudeSet == false)
+			return ScriptError("Floor altitude or height has not been set");
+
 		config->SectionNum = 0;
 		config->Context = "None";
 		engine->Report("Finished floor");

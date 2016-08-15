@@ -52,6 +52,7 @@ public:
 	std::vector<int> Group; //floor group
 	bool EnabledGroup; //true if floor was enabled as part of a group, not directly
 	int EnabledGroup_Floor; //number of floor that enabled this floor as part of it's own group
+	bool AltitudeSet; //has altitude been set?
 
 	//functions
 	Floor(Object *parent, FloorManager *manager, int number);

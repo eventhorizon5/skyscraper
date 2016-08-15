@@ -85,6 +85,7 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	InterfloorHeight = 0;
 	EnabledGroup = false;
 	EnabledGroup_Floor = 0;
+	AltitudeSet = false;
 
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
@@ -1379,6 +1380,7 @@ void Floor::SetAltitude(float altitude)
 	//position object at altitude
 	SetPositionY(altitude);
 	Altitude = altitude;
+	AltitudeSet = true;
 }
 
 void Floor::ShowInfo(bool detailed, bool display_header)
