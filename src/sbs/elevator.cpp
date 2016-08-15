@@ -935,7 +935,7 @@ void Elevator::Loop()
 	{
 		for (int i = 1; i <= GetCarCount(); i++)
 		{
-			float y = GetCar(i)->SetHeight();
+			GetCar(i)->SetHeight();
 		}
 		HeightSet = true;
 	}

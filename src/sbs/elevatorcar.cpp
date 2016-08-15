@@ -1846,13 +1846,11 @@ Control* ElevatorCar::GetFloorButton(int floor)
 		return 0;
 	}
 
-	Control *control = 0;
-
 	if (PanelArray.empty() == false)
 	{
 		for (size_t i = 0; i < PanelArray.size(); i++)
 		{
-			control = PanelArray[i]->GetFloorButton(floor);
+			Control *control = PanelArray[i]->GetFloorButton(floor);
 			if (control)
 				return control;
 		}

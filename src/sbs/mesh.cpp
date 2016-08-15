@@ -1797,7 +1797,6 @@ Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	float esmall = 0;
 	float ebig = 0;
 	float tempnum = 0;
-	int i = 0;
 
 	//return 0,0 if coord value is out of range
 	if (coord < 1 || coord > 3)

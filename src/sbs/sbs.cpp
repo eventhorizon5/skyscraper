@@ -2110,7 +2110,6 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 	if (!timer)
 		return false;
 
-	int index = -1;
 	for (size_t i = 0; i < timercallbacks.size(); i++)
 	{
 		//unregister existing call button callback
@@ -3362,7 +3361,7 @@ std::vector<Object*> SBS::GetObjectRange(const std::string &expression)
 			type = "elevator";
 		else if (expression.substr(0, 6) == "Shafts")
 			type = "shaft";
-		else if (expression.substr(0, 6) == "Stairwells")
+		else if (expression.substr(0, 10) == "Stairwells")
 			type = "stairwell";
 		else
 		{

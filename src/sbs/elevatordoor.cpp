@@ -883,8 +883,6 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 	TrimString(Name);
 	buffer = "Elevator " + ToString(elev->Number) + ": Shaft Door " + ToString(car->Number) + ":" + ToString(Number) + ":" + ToString(floor) + ":" + Name;
 
-	Floor *floorobj = sbs->GetFloor(floor);
-
 	AddDoorComponent(ShaftDoors[index], name, buffer, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return ShaftDoors[index];
 }

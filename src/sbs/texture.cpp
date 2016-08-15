@@ -374,9 +374,6 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	if (mTex.isNull())
 		return false;
 
-	std::string Name = name;
-	std::string Filename = filename;
-
 	//set default values if specified
 	if (x == -1)
 		x = 0;
@@ -388,9 +385,9 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 		height = (int)mTex->getHeight();
 
 	if (x > (int)mTex->getWidth() || y > (int)mTex->getHeight())
-		return sbs->ReportError("LoadTextureCropped: invalid coordinates for '" + Name + "'");
+		return sbs->ReportError("LoadTextureCropped: invalid coordinates for '" + name + "'");
 	if (x + width > (int)mTex->getWidth() || y + height > (int)mTex->getHeight())
-		return sbs->ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
+		return sbs->ReportError("LoadTextureCropped: invalid size for '" + name + "'");
 
 	//determine pixel format
 	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
@@ -398,7 +395,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 		format = Ogre::PF_A8R8G8B8;
 
 	//create new empty texture
-	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + name;
 	Ogre::TexturePtr new_texture;
 	try
 	{
@@ -418,13 +415,13 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	CopyTexture(mTex, new_texture, source, dest);
 
 	//create a new material
-	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
+	Ogre::MaterialPtr mMat = CreateMaterial(name, "General");
 
 	//bind texture to material
 	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (sbs->Verbose)
-		sbs->Report("Loaded cropped texture '" + filename2 + "' as '" + Name + "'");
+		sbs->Report("Loaded cropped texture '" + filename2 + "' as '" + name + "'");
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
