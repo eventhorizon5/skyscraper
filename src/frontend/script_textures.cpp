@@ -25,6 +25,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
+#include "enginecontext.h"
 #include "texture.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
@@ -467,6 +468,16 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		}
 
 		texturemanager->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		return sNextLine;
+	}
+
+	//handle end of textures section
+	if (linecheck.substr(0, 13) == "<endtextures>")
+	{
+		Simcore->GetTextureManager()->FreeTextureImages();
+		config->SectionNum = 0;
+		config->Context = "None";
+		engine->Report("Finished textures");
 		return sNextLine;
 	}
 

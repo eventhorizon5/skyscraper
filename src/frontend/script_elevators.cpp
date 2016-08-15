@@ -548,6 +548,15 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	if (result != sContinue)
 		return result;
 
+	//handle end of elevator section
+	if (linecheck == "<endelevator>" && config->RangeL == config->RangeH)
+	{
+		config->SectionNum = 0;
+		config->Context = "None";
+		engine->Report("Finished elevator");
+		return sNextLine;
+	}
+
 	//handle elevator range
 	if (config->RangeL != config->RangeH && linecheck.substr(0, 12) == "<endelevator")
 	{

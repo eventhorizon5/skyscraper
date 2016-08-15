@@ -1175,18 +1175,6 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing globals...");
 		return sNextLine;
 	}
-	if (linecheck == "<endglobals>")
-	{
-		if (config->SectionNum != 1)
-		{
-			ScriptError("Not in global section");
-			return sError;
-		}
-		config->SectionNum = 0;
-		config->Context = "None";
-		engine->Report("Finished globals");
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 5) == "<end>")
 	{
 		config->SectionNum = 0;
@@ -1291,19 +1279,6 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing textures...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "<endtextures>")
-	{
-		if (config->SectionNum != 5)
-		{
-			ScriptError("Not in texture section");
-			return sError;
-		}
-		Simcore->GetTextureManager()->FreeTextureImages();
-		config->SectionNum = 0;
-		config->Context = "None";
-		engine->Report("Finished textures");
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
 	{
 		//end function and return to original line
@@ -1366,18 +1341,6 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing floor " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck == "<endfloor>" && config->RangeL == config->RangeH)
-	{
-		if (config->SectionNum != 2)
-		{
-			ScriptError("Not in floor section");
-			return sError;
-		}
-		config->SectionNum = 0;
-		config->Context = "None";
-		engine->Report("Finished floor");
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 10) == "<elevators")
 	{
 		if (config->SectionNum > 0)
@@ -1433,18 +1396,6 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing elevator " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck == "<endelevator>" && config->RangeL == config->RangeH)
-	{
-		if (config->SectionNum != 4)
-		{
-			ScriptError("Not in elevator section");
-			return sError;
-		}
-		config->SectionNum = 0;
-		config->Context = "None";
-		engine->Report("Finished elevator");
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 11) == "<buildings>")
 	{
 		//skip this section if reloading
@@ -1459,22 +1410,6 @@ int ScriptProcessor::ProcessSections()
 		config->SectionNum = 3;
 		config->Context = "Buildings";
 		engine->Report("Loading other buildings...");
-		return sNextLine;
-	}
-	if (linecheck.substr(0, 14) == "<endbuildings>")
-	{
-		//skip this section if reloading
-		if (engine->IsReloading() == true)
-			return sNextLine;
-
-		if (config->SectionNum != 3)
-		{
-			ScriptError("Not in buildings section");
-			return sError;
-		}
-		config->SectionNum = 0;
-		config->Context = "None";
-		engine->Report("Finished loading other buildings");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "<cars" && config->SectionNum == 4)
@@ -1547,25 +1482,6 @@ int ScriptProcessor::ProcessSections()
 
 		config->Context = "Elevator " + ToString(config->CurrentOld) + " Car " + ToString(config->Current);
 		engine->Report("Processing elevator " + ToString(config->CurrentOld) + " car " + ToString(config->Current) + "...");
-		return sNextLine;
-	}
-	if (linecheck == "<endcar>" && config->RangeL == config->RangeH)
-	{
-		if (config->SectionNum != 6)
-		{
-			ScriptError("Not in car section");
-			return sError;
-		}
-
-		//return to elevator section
-		config->SectionNum = 4;
-		config->Context = config->ContextOld;
-		config->Current = config->CurrentOld;
-		config->RangeL = config->RangeLOld;
-		config->RangeH = config->RangeHOld;
-		config->RangeStart = config->RangeStartOld;
-
-		engine->Report("Finished car");
 		return sNextLine;
 	}
 

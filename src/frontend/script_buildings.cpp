@@ -152,6 +152,15 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//handle end of buildings section
+	if (linecheck.substr(0, 14) == "<endbuildings>")
+	{
+		config->SectionNum = 0;
+		config->Context = "None";
+		engine->Report("Finished loading other buildings");
+		return sNextLine;
+	}
+
 	return sContinue;
 }
 

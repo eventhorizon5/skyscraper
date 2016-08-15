@@ -1856,9 +1856,22 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//handle end of floor section
+	if (linecheck == "<endfloor>" && config->RangeL == config->RangeH)
+	{
+		config->SectionNum = 0;
+		config->Context = "None";
+		engine->Report("Finished floor");
+		return sNextLine;
+	}
+
 	//handle floor range
 	if (config->RangeL != config->RangeH && linecheck.substr(0, 9) == "<endfloor")
 	{
+		//when finishing a floor, make sure the altitude is valid
+		if (floor->AltitudeSet == false)
+			return ScriptError("Floor altitude is invalid");
+
 		if (config->RangeL < config->RangeH)
 		{
 			if (config->Current < config->RangeH)

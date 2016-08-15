@@ -2026,6 +2026,21 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//handle end of car section
+	if (linecheck == "<endcar>" && config->RangeL == config->RangeH)
+	{
+		//return to elevator section
+		config->SectionNum = 4;
+		config->Context = config->ContextOld;
+		config->Current = config->CurrentOld;
+		config->RangeL = config->RangeLOld;
+		config->RangeH = config->RangeHOld;
+		config->RangeStart = config->RangeStartOld;
+
+		engine->Report("Finished car");
+		return sNextLine;
+	}
+
 	//handle car range
 	if (config->RangeL != config->RangeH && linecheck.substr(0, 7) == "<endcar")
 	{

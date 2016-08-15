@@ -239,6 +239,16 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 			Simcore->SetBounds(min, max);
 		return sNextLine;
 	}
+
+	//handle end of globals section
+	if (linecheck == "<endglobals>")
+	{
+		config->SectionNum = 0;
+		config->Context = "None";
+		engine->Report("Finished globals");
+		return sNextLine;
+	}
+
 	return sContinue;
 }
 
