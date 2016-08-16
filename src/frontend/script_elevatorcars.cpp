@@ -907,6 +907,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			}
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		//create floor
 		if (compat == true)
 			StoreCommand(car->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), config->ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
@@ -930,6 +934,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//create wall
 		StoreCommand(car->AddWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
@@ -977,6 +985,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			}
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		if (compat == false)
 			StoreCommand(car->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10])));
 		else
@@ -1004,8 +1016,13 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		car->SetShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		config->setshaftdoors = true;
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		car->SetShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		return sNextLine;
 	}
 
@@ -1058,6 +1075,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		bool result;
 		if (compat == 0)
@@ -1180,13 +1201,17 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
+		if (compat == 0)
+			parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Control* control;
 
 		if (compat == 0)
-		{
-			parent->CheckFile("data/" + tempdata[1]);
 			control = car->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
-		}
 		if (compat == 1)
 			control = car->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
@@ -1288,13 +1313,17 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
+		if (compat == 0)
+			parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Control* control;
 
 		if (compat == 0)
-		{
-			parent->CheckFile("data/" + tempdata[1]);
 			control = car->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
-		}
 		if (compat == 1)
 			control = car->GetPanel(ToInt(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
@@ -1343,6 +1372,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		Control* control = car->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 
@@ -1406,6 +1439,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Control* control = 0;
 		if (compat == true)
 			control = car->GetPanel(ToInt(tempdata[0]))->AddControl(tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), 1, action_array, tex_array);
@@ -1456,6 +1493,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			}
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		if (compat == false)
 			StoreCommand(car->AddFloorIndicator(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
 		else
@@ -1497,6 +1538,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		if (compat == false)
 			car->AddDirectionalIndicators(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
@@ -1618,6 +1663,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		if (compat == true)
 		{
 			if (partial == true)
@@ -1663,6 +1712,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		if (compat == true)
 			StoreCommand(car->AddDoorComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
 		else
@@ -1698,6 +1751,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		if (compat == true)
 			car->AddShaftDoorsComponent(ToInt(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 		else
@@ -1729,6 +1786,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		//check numeric values
 		if (!IsNumeric(tempdata[0]))
 			return ScriptError("Invalid value: " + tempdata[0]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		if (params == 1 || legacy == true)
 			StoreCommand(car->FinishDoors(ToInt(tempdata[0])));
@@ -1765,6 +1826,14 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (!IsNumeric(tempdata[0]))
 			return ScriptError("Invalid value: " + tempdata[0]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		bool result;
 		if (params == 1 || legacy == true)
 			result = car->FinishShaftDoors(ToInt(tempdata[0]));
@@ -1795,6 +1864,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		StoreCommand(car->AddDirectionalIndicator(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
 		return sNextLine;
@@ -1844,6 +1917,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//create door
 		Door* door;
@@ -1901,6 +1978,13 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+		{
+			config->setkey = false;
+			return sNextLine;
+		}
 
 		//create model
 		Model *model;
@@ -1961,6 +2045,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Control* control = 0;
 		if (compat == true)
 			control = car->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), 1, action_array, tex_array);
@@ -2002,6 +2090,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));

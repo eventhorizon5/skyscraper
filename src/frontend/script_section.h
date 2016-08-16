@@ -78,6 +78,7 @@ public:
 	bool ReverseAxis;
 	bool InWhile;
 	bool setshaftdoors;
+	bool CheckScript; //if true, quick-checks script execution, and exits
 };
 
 class ScriptProcessor::GlobalsSection : public ScriptProcessor::Section

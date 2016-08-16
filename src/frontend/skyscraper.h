@@ -103,6 +103,7 @@ public:
 	bool RenderOnStartup; //override SBS engine setting with same name
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 	bool Verbose;
+	bool CheckScript;
 
 	void Loop();
 	virtual bool OnInit(void);

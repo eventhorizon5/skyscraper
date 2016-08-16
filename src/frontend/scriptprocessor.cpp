@@ -111,6 +111,9 @@ void ScriptProcessor::Reset()
 	//reset configuration
 	config->Reset();
 
+	//set CheckScript state
+	config->CheckScript = engine->GetFrontend()->CheckScript;
+
 	//reset section objects
 	globals_section->Reset();
 	buildings_section->Reset();

@@ -142,6 +142,7 @@ bool Skyscraper::OnInit(void)
 	loaddialog = 0;
 	Verbose = false;
 	show_progress = false;
+	CheckScript = false;
 
 #if !defined(__WXMAC__)
 	//switch current working directory to executable's path, if needed
@@ -160,6 +161,9 @@ bool Skyscraper::OnInit(void)
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_SWITCH, "f", "fullscreen", "start up in full-screen mode",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+
+		{ wxCMD_LINE_SWITCH, "k", "check", "quickly check building script, and exit after",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_SWITCH, "m", "no-menu", "hide the main menu",
@@ -222,6 +226,10 @@ bool Skyscraper::OnInit(void)
 	//set verbose mode if specified
 	if (parser->Found(wxT("verbose")) == true)
 		Verbose = true;
+
+	//set CheckScript mode if specified
+	if (parser->Found(wxT("check")) == true)
+		CheckScript = true;
 
 	//load config file
 	try
@@ -773,6 +781,18 @@ void Skyscraper::Loop()
 	//exit if active engine is loading
 	if (active_engine->IsLoading() == true)
 		return;
+
+	//if in CheckScript mode, exit
+	if (CheckScript == true)
+	{
+		//if showmenu is true, unload simulator and return to main menu
+		if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
+			UnloadToMenu();
+		//otherwise exit app
+		else
+			Quit();
+		return;
+	}
 
 	//update Caelum
 	UpdateSky();

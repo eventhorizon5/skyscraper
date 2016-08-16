@@ -353,6 +353,11 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Simcore->SetLighting(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
@@ -370,6 +375,10 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (!IsNumeric(tempdata[1]))
 			return ScriptError("Invalid value: " + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		texturemanager->RotateTexture(tempdata[0], ToFloat(tempdata[1]));
 		return sNextLine;
 	}
@@ -386,6 +395,10 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		//check numeric value
 		if (!IsNumeric(tempdata[1]))
 			return ScriptError("Invalid value: " + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		texturemanager->RotateAnimTexture(tempdata[0], ToFloat(tempdata[1]));
 		return sNextLine;
@@ -407,6 +420,10 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		texturemanager->ScrollTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
@@ -426,6 +443,10 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		texturemanager->ScrollAnimTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
@@ -447,6 +468,10 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		texturemanager->ScaleTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
@@ -466,6 +491,10 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		texturemanager->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;

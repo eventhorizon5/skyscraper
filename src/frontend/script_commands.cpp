@@ -146,6 +146,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			}
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		//create triangle wall
 		StoreCommand(Simcore->AddTriangleWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), voffset3, ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 
@@ -174,6 +178,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (!mesh)
 			return ScriptError("Invalid object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//create wall
 		StoreCommand(Simcore->AddWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
@@ -223,6 +231,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!mesh)
 			return ScriptError("Invalid object");
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		//create floor
 		if (compat == true)
 			StoreCommand(Simcore->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
@@ -246,6 +258,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//create tiled ground
 		StoreCommand(Simcore->AddGround(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8])));
@@ -272,6 +288,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (!mesh)
 			return ScriptError("Invalid object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//perform cut
 		mesh->Cut(Ogre::Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), ToBool(tempdata[8]));
@@ -351,6 +371,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!mesh)
 			return ScriptError("Invalid object");
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		float voffset = ToFloat(tempdata[8]);
 
 		if (config->SectionNum == 2)
@@ -388,6 +412,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (!mesh)
 			return ScriptError("Invalid object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		float voffset = ToFloat(tempdata[8]);
 
@@ -438,6 +466,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!mesh)
 			return ScriptError("Invalid object");
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		float voffset = 0;
 
 		if (config->SectionNum == 2)
@@ -485,6 +517,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!mesh)
 			return ScriptError("Invalid object");
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		float altitude = ToFloat(tempdata[params - 3]);
 
 		if (config->SectionNum == 2)
@@ -528,6 +564,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (!wall)
 			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		float voffset = 0.0f;
 
@@ -631,6 +671,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		int shaftnum = ToInt(tempdata[0]);
 		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
 			return ScriptError("Invalid shaft " + tempdata[0]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		Simcore->GetShaft(shaftnum)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
@@ -871,6 +915,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		int stairwell = ToInt(tempdata[0]);
 		if (!Simcore->GetStairs(stairwell))
 			return ScriptError("Invalid stairwell");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		Simcore->GetStairs(stairwell)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
@@ -1149,6 +1197,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!mesh)
 			return ScriptError("Invalid object");
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Ogre::Vector3 isect = mesh->GetPoint(tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
 
 		buffer = LineData.substr(0, found) + ToString(isect.x) + ", " + ToString(isect.y) + ", " + ToString(isect.z) + LineData.substr(loc2 + 1);
@@ -1183,6 +1235,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Ogre::Vector2 startpoint (ToFloat(tempdata[0]), ToFloat(tempdata[1]));
 		Ogre::Vector2 endpoint = Simcore->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 
@@ -1213,6 +1269,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (!mesh)
 			return ScriptError("Invalid object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		if (meshname == "floor" && config->SectionNum == 2)
 			offset = mesh->GetPosition().y;
@@ -1302,6 +1362,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		//create floor auto area
 		Simcore->AddFloorAutoArea(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		return sNextLine;
@@ -1360,6 +1424,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		if (compat == true)
 		{
 			if (partial == true)
@@ -1416,6 +1484,13 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+		{
+			config->setkey = false;
+			return sNextLine;
+		}
 
 		//create model
 		Model* model;
@@ -1562,6 +1637,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Control* control = 0;
 		if (compat == true)
 			control = Simcore->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), 1, action_array, tex_array);
@@ -1603,6 +1682,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));

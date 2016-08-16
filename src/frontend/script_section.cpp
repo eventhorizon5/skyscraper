@@ -1171,6 +1171,7 @@ void ScriptProcessor::ConfigHandler::Reset()
 	ReverseAxis = false;
 	InWhile = false;
 	setshaftdoors = false;
+	CheckScript = false;
 }
 
 }

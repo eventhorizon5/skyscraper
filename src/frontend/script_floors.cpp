@@ -317,6 +317,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			}
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		//create floor
 		if (compat == true)
 			StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), config->ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true));
@@ -367,6 +371,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//create floor
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			if (compat == true)
 				StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddFloor(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 			else
@@ -419,6 +427,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//create floor
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			if (compat == true)
 				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddFloor(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 			else
@@ -464,6 +476,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			}
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		//create floor
 		if (compat == true)
 			StoreCommand(floor->AddInterfloorFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), config->ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
@@ -487,6 +503,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//create wall
 		StoreCommand(floor->AddWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToBool(tempdata[13])));
@@ -513,7 +533,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//create wall
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
+		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddWall(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+		}
 		else
 			return ScriptError("Invalid shaft");
 		return sNextLine;
@@ -539,7 +565,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//create wall
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
+		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddWall(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+		}
 		else
 			return ScriptError("Invalid stairwell");
 		return sNextLine;
@@ -560,6 +592,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//create wall
 		StoreCommand(floor->AddInterfloorWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
@@ -582,6 +618,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		StoreCommand(floor->ColumnWallBox(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13])));
 		return sNextLine;
 	}
@@ -601,6 +641,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		StoreCommand(floor->ColumnWallBox2(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13])));
 		return sNextLine;
@@ -683,6 +727,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			}
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		//create call button
 		CallButton* callbutton = 0;
 		if (compat == 1)
@@ -723,7 +771,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//create stairs
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
+		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddStairs(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+		}
 		else
 			return ScriptError("Invalid stairwell");
 		return sNextLine;
@@ -786,6 +840,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//create door
 		Door* door;
@@ -875,6 +933,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//create door
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			Door* door;
 
 			if (compat == 1)
@@ -921,6 +983,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//create door
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			Door* door = Simcore->GetShaft(ToInt(tempdata[0]))->AddDoor(config->Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
@@ -952,6 +1018,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[0]);
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//create door
 		Door* door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), true);
@@ -1006,6 +1076,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		int elevator, car;
 		if (!GetElevatorCar(tempdata[0], elevator, car))
 			return sError;
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		if (compat == true)
 			StoreCommand(floor->AddDirectionalIndicator(elevator, car, ToBool(tempdata[1]), false, ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
@@ -1072,6 +1146,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (!GetElevatorCar(tempdata[0], elevator, carnum))
 			return sError;
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Elevator *elev = Simcore->GetElevator(elevator);
 		ElevatorCar *car = elev->GetCar(carnum);
 
@@ -1121,6 +1199,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (!GetElevatorCar(tempdata[0], elevator, car))
 			return sError;
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		if (compat == false)
 			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
 		else
@@ -1150,6 +1232,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		if (compat == true)
 			floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), false);
@@ -1212,6 +1298,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		if (compat == true)
 		{
 			if (partial == true)
@@ -1261,6 +1351,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (!GetElevatorCar(tempdata[0], elevator, carnum))
 			return sError;
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Elevator *elev = Simcore->GetElevator(elevator);
 		ElevatorCar *car = elev->GetCar(carnum);
 
@@ -1302,6 +1396,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		int elevator, carnum;
 		if (!GetElevatorCar(tempdata[0], elevator, carnum))
 			return sError;
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		Elevator *elev = Simcore->GetElevator(elevator);
 		ElevatorCar *car = elev->GetCar(carnum);
@@ -1354,6 +1452,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+		{
+			config->setkey = false;
+			return sNextLine;
+		}
 
 		//create model
 		Model *model;
@@ -1413,6 +1518,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//create model
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+			{
+				config->setkey = false;
+				return sNextLine;
+			}
+
 			Model *model;
 
 			if (compat == true)
@@ -1474,6 +1586,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//create model
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+			{
+				config->setkey = false;
+				return sNextLine;
+			}
+
 			Model *model;
 			if (compat == true)
 				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(config->Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
@@ -1534,6 +1653,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		Control* control = 0;
 		if (compat == true)
@@ -1600,6 +1723,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			Control* control = 0;
 			if (compat == true)
 				control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
@@ -1668,6 +1795,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
+			//stop here if in Check mode
+			if (config->CheckScript == true)
+				return sNextLine;
+
 			Control* control = 0;
 			if (compat == true)
 				control = Simcore->GetStairs(ToInt(tempdata[0]))->AddControl(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
@@ -1713,6 +1844,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		StoreCommand(floor->AddTrigger(tempdata[0], tempdata[1], min, max, action_array));
@@ -1745,6 +1880,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
@@ -1782,6 +1921,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
@@ -1810,6 +1953,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
 		StoreCommand(floor->AddCameraTexture(tempdata[0], ToBool(tempdata[1]), ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		return sNextLine;
 	}
@@ -1829,6 +1976,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//perform cut on floor
 		floor->Cut(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToBool(tempdata[6]), ToBool(tempdata[7]), false);
@@ -1850,6 +2001,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
 
 		//perform cut on all objects related to the current floor
 		floor->CutAll(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToBool(tempdata[6]), ToBool(tempdata[7]));
