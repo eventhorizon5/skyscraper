@@ -143,6 +143,7 @@ bool Skyscraper::OnInit(void)
 	Verbose = false;
 	show_progress = false;
 	CheckScript = false;
+	ShowMenu = false;
 
 #if !defined(__WXMAC__)
 	//switch current working directory to executable's path, if needed
@@ -278,17 +279,16 @@ bool Skyscraper::OnInit(void)
 	else
 		filename = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
 
-	if (filename != "")
-		return Load(filename);
-
-	//show menu
-	bool showmenu = GetConfigBool("Skyscraper.Frontend.Menu.Show", true);
+	ShowMenu = GetConfigBool("Skyscraper.Frontend.Menu.Show", true);
 
 	//turn off menu if specified on command line
 	if (parser->Found(wxT("no-menu")) == true)
-		showmenu = false;
+		ShowMenu = false;
 
-	if (showmenu == true)
+	if (filename != "")
+		return Load(filename);
+
+	if (ShowMenu == true)
 	{
 		StartupRunning = true;
 		StartSound();
@@ -760,12 +760,7 @@ void Skyscraper::Loop()
 	if (Shutdown == true)
 	{
 		Shutdown = false;
-		//if showmenu is true, unload simulator and return to main menu
-		if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
-			UnloadToMenu();
-		//otherwise exit app
-		else
-			Quit();
+		UnloadToMenu();
 	}
 
 	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
@@ -785,12 +780,7 @@ void Skyscraper::Loop()
 	//if in CheckScript mode, exit
 	if (CheckScript == true)
 	{
-		//if showmenu is true, unload simulator and return to main menu
-		if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
-			UnloadToMenu();
-		//otherwise exit app
-		else
-			Quit();
+		UnloadToMenu();
 		return;
 	}
 
@@ -1463,6 +1453,10 @@ void Skyscraper::AllowResize(bool value)
 void Skyscraper::UnloadToMenu()
 {
 	//unload to main menu
+
+	//exit app if ShowMenu is false
+	if (ShowMenu == false)
+		Quit();
 
 	Pause = false;
 	UnloadSim();
