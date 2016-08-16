@@ -164,7 +164,7 @@ bool Skyscraper::OnInit(void)
 		{ wxCMD_LINE_SWITCH, "f", "fullscreen", "start up in full-screen mode",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
-		{ wxCMD_LINE_SWITCH, "k", "check", "quickly check building script, and exit after",
+		{ wxCMD_LINE_SWITCH, "k", "check-script", "quickly check building script, and exit after",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_SWITCH, "m", "no-menu", "hide the main menu",
@@ -229,7 +229,7 @@ bool Skyscraper::OnInit(void)
 		Verbose = true;
 
 	//set CheckScript mode if specified
-	if (parser->Found(wxT("check")) == true)
+	if (parser->Found(wxT("check-script")) == true)
 		CheckScript = true;
 
 	//load config file
