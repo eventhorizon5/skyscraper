@@ -253,9 +253,10 @@ bool Trigger::DoAction()
 	for (size_t i = 0; i < actionlist.size(); i++)
 	{
 		bool result2 = false;
+		bool hold = false; //not used
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction(this);
+			result2 = actionlist[i]->DoAction(this, hold);
 
 		if (result2 == true)
 			result = true;

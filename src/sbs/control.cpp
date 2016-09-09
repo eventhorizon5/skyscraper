@@ -60,6 +60,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	KeyID = 0;
 	light_status = false;
 	sound = 0;
+	action_hold = false;
 
 	//create object mesh
 	ControlMesh = new MeshObject(this, name2, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
@@ -376,7 +377,7 @@ bool Control::DoAction()
 		bool result2 = false;
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction(this);
+			result2 = actionlist[i]->DoAction(this, action_hold);
 
 		if (result2 == true)
 			result = true;
@@ -532,10 +533,15 @@ void Control::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, 
 
 void Control::OnUnclick(bool right)
 {
-	/*if (right == false)
+	if (action_hold == false)
+		return;
+
+	if (right == false)
 		PreviousSelectPosition();
 	else
-		NextSelectPosition();*/
+		NextSelectPosition();
+
+	action_hold = false;
 }
 
 }

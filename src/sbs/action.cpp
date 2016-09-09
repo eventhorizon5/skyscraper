@@ -79,7 +79,7 @@ std::string Action::GetCommandName()
 	return command_name;
 }
 
-bool Action::DoAction(Object *caller)
+bool Action::DoAction(Object *caller, bool &hold)
 {
 	//run action on all registered parents
 	//returns true if at least one action succeeded
@@ -91,14 +91,14 @@ bool Action::DoAction(Object *caller)
 		if (!parent_objects[i])
 			continue;
 
-		bool result2 = Run(caller, parent_objects[i]);
+		bool result2 = Run(caller, parent_objects[i], hold);
 		if (result2 == true)
 			result = true;
 	}
 	return result;
 }
 
-bool Action::Run(Object *caller, Object *parent)
+bool Action::Run(Object *caller, Object *parent, bool &hold)
 {
 	//Supported action names:
 
@@ -184,6 +184,8 @@ bool Action::Run(Object *caller, Object *parent)
 
 	std::string parent_name = parent->GetName();
 	std::string parent_type = parent->GetType();
+
+	hold = false;
 
 	//report the action used
 	sbs->Report("Action '" + GetName() + "': object '" + parent_name + "' using command '" + command_name + "'");
@@ -541,7 +543,10 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int param = 0;
 				if (IsNumeric(command_parameters[0], param))
+				{
+					hold = true;
 					return elevator->SetHoistwayAccess(param, -1);
+				}
 			}
 			return false;
 		}
@@ -551,7 +556,10 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int param = 0;
 				if (IsNumeric(command_parameters[0], param))
+				{
+					hold = true;
 					return elevator->SetHoistwayAccess(param, 1);
+				}
 			}
 			return false;
 		}

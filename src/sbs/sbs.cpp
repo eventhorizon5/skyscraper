@@ -3440,9 +3440,10 @@ bool SBS::RunAction(const std::string &name)
 	for (size_t i = 0; i < actionlist.size(); i++)
 	{
 		bool result2 = false;
+		bool hold = false; //not used
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction(this);
+			result2 = actionlist[i]->DoAction(this, hold);
 
 		if (result2 == false)
 			result = false;
@@ -3455,8 +3456,9 @@ bool SBS::RunAction(int index)
 	//run action by index number
 
 	Action *action = GetAction(index);
+	bool hold = false; //not used
 	if (action)
-		return action->DoAction(this);
+		return action->DoAction(this, hold);
 	return false;
 }
 

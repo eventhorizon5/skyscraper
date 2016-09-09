@@ -35,7 +35,7 @@ public:
 	Action(Object *parent, const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
 	Action(Object *parent, const std::string &name, std::vector<Object*> &action_parents, const std::string &command);
 	~Action();
-	bool DoAction(Object *caller);
+	bool DoAction(Object *caller, bool &hold);
 	std::string GetCommandName();
 	const Object *GetParent(int number);
 	std::string GetParentName(int number);
@@ -48,7 +48,7 @@ public:
 
 private:
 
-	bool Run(Object *caller, Object *parent);
+	bool Run(Object *caller, Object *parent, bool &hold);
 
 	std::string command_name;
 	std::vector<std::string> command_parameters;
