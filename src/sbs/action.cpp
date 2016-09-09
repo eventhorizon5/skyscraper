@@ -544,7 +544,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 				int param = 0;
 				if (IsNumeric(command_parameters[0], param))
 				{
-					hold = true;
+					hold = elevator->HoistwayAccessHold;
 					return elevator->SetHoistwayAccess(param, -1);
 				}
 			}
@@ -557,7 +557,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 				int param = 0;
 				if (IsNumeric(command_parameters[0], param))
 				{
-					hold = true;
+					hold = elevator->HoistwayAccessHold;
 					return elevator->SetHoistwayAccess(param, 1);
 				}
 			}

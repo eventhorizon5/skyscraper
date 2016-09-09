@@ -115,6 +115,7 @@ public:
 	bool AutoAdjustSound; //auto-adjust stopping sounds
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
 	bool ChimeOnArrival; //set to true for elevator to always chime on arrival, instead of just when responding to a hall call
+	bool HoistwayAccessHold; //if true, the user needs to hold the mouse button on the control, in Hoistway Access mode
 
 	//functions
 	Elevator(Object *parent, int number);

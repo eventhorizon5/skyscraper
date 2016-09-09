@@ -519,6 +519,14 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ReOpen = ToBool(value);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 18) == "hoistwayaccesshold")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		elev->HoistwayAccessHold = ToBool(value);
+		return sNextLine;
+	}
 
 	//CreateElevator command
 	if (linecheck.substr(0, 14) == "createelevator")

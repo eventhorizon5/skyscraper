@@ -179,6 +179,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ChimeOnArrival = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ChimeOnArrival", false);
 	HoistwayAccess = 0;
 	HoistwayAccessFloor = 0;
+	HoistwayAccessHold = sbs->GetConfigBool("Skyscraper.SBS.Elevator.HoistwayAccessHold", true);
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -1029,7 +1030,7 @@ void Elevator::Loop()
 	if (GoActive == true)
 		Go(GoActiveFloor, true);
 
-	if (HoistwayAccess != 0)
+	if (HoistwayAccess != 0 && HoistwayAccessHold == true)
 		SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);
 
 	//call queue processor
@@ -4233,7 +4234,7 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 	if (InspectionService == false)
 		return ReportError("Not in inspection service mode");
 
-	if (access == 0 || (HoistwayAccess != 0 && sbs->camera->MouseDown() == false))
+	if (access == 0 || (HoistwayAccessHold == true && HoistwayAccess != 0 && sbs->camera->MouseDown() == false))
 	{
 		//disable mode
 		HoistwayAccess = 0;
