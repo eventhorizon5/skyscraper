@@ -530,4 +530,12 @@ void Control::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, 
 		Press(right);
 }
 
+void Control::OnUnclick(bool right)
+{
+	/*if (right == false)
+		PreviousSelectPosition();
+	else
+		NextSelectPosition();*/
+}
+
 }

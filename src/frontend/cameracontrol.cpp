@@ -472,7 +472,7 @@ void CameraControl::Loop()
 	txtDesiredAngle->SetValue(TruncateNumber(Simcore->camera->desired_angle_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_angle_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_angle_velocity.z, 2));
 	txtAngle->SetValue(TruncateNumber(Simcore->camera->angle_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->angle_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->angle_velocity.z, 2));
 	txtSpeed->SetValue(TruncateNumber(Simcore->camera->speed, 2));
-	txtMouseDown->SetValue(BoolToString(Simcore->camera->MouseDown));
+	txtMouseDown->SetValue(BoolToString(Simcore->camera->MouseDown()));
 	txtStartFloor->SetValue(ToString(Simcore->camera->StartFloor));
 	txtStartPosition->SetValue(TruncateNumber(Simcore->camera->StartPositionX, 2) + wxT(", ") + TruncateNumber(Simcore->camera->StartPositionZ, 2));
 	txtGravityEnabled->SetValue(BoolToString(Simcore->camera->GetGravityStatus()));

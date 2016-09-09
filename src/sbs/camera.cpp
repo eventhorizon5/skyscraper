@@ -92,7 +92,8 @@ Camera::Camera(Object *parent) : Object(parent)
 	Collisions = 0;
 	lastfloor = 0;
 	lastfloorset = false;
-	MouseDown = false;
+	MouseLeftDown = false;
+	MouseRightDown = false;
 	ReportCollisions = sbs->GetConfigBool("Skyscraper.SBS.Camera.ReportCollisions", false);
 	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
 	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0f);
@@ -629,6 +630,37 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	//call object's OnClick function
 	mesh_parent->OnClick(pos, shift, ctrl, alt, right);
+}
+
+void Camera::UnclickedObject()
+{
+	//this function is called when a user releases the mouse button on an object
+
+	Object *obj = sbs->GetObject(object_number);
+
+	if (!obj)
+		return;
+
+	//get original object (parent object of clicked mesh)
+	Object *mesh_parent = obj->GetParent();
+
+	if (!mesh_parent)
+		return;
+
+	//if object is a wall, and parent is a mesh, get mesh's (parent's) parent
+	if (mesh_parent->GetType() == "Mesh")
+	{
+		mesh_parent = mesh_parent->GetParent();
+
+		if (!mesh_parent)
+			return;
+	}
+
+	//call object's OnUnclick function
+	mesh_parent->OnUnclick(MouseRightDown);
+
+	MouseLeftDown = false;
+	MouseRightDown = false;
 }
 
 std::string Camera::GetClickedMeshName()
@@ -1361,6 +1393,12 @@ void Camera::SetCameraState(const CameraState &state, bool set_floor)
 void Camera::RevertMovement()
 {
 	accum_movement = -prev_accum_movement;
+}
+
+bool Camera::MouseDown()
+{
+	//returns true if either mouse button is down
+	return (MouseLeftDown || MouseRightDown);
 }
 
 }

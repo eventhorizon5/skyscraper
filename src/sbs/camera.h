@@ -80,7 +80,8 @@ public:
 	Ogre::Vector3 desired_angle_velocity;
 	Ogre::Vector3 angle_velocity;
 	float speed; //movement speed base
-	bool MouseDown; //mouse status
+	bool MouseLeftDown; //mouse left button status
+	bool MouseRightDown; //mouse right button status
 	bool ReportCollisions; //if true, print collisions on console
 	std::string LastHitMesh; //name of last hit mesh
 	int LastHitMeshNumber; //object number of last hit mesh
@@ -119,6 +120,7 @@ public:
 	void CheckShaft();
 	void CheckStairwell();
 	void ClickedObject(bool shift, bool ctrl, bool alt, bool right);
+	void UnclickedObject();
 	std::string GetClickedMeshName();
 	std::string GetClickedWallName();
 	int GetClickedObjectNumber();
@@ -173,6 +175,7 @@ public:
 	void SetCameraState(const CameraState &state, bool set_floor = true);
 	void RevertMovement();
 	void FreelookMove(const Ogre::Vector3 &rotation);
+	bool MouseDown();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

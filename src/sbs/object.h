@@ -96,6 +96,7 @@ public:
 	virtual void OnMove(bool parent) {} //called when object is moved
 	virtual void OnRotate(bool parent) {} //called when object is rotated
 	virtual void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right) {} //called when object is clicked on
+	virtual void OnUnclick(bool right) {} //called when mouse is held and released on object
 	void NotifyMove(bool parent = false);
 	void NotifyRotate(bool parent = false);
 	virtual void ResetState() {} //resets the internal state of an object

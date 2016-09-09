@@ -592,10 +592,17 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 	bool right_dclick = event.RightDClick();
 
 	if (left == false && right == false && left_dclick == false && right_dclick == false)
-		camera->MouseDown = false;
+	{
+		camera->UnclickedObject();
+		camera->MouseLeftDown = false;
+		camera->MouseRightDown = false;
+	}
 	else
 	{
-		camera->MouseDown = true;
+		if (left == true)
+			camera->MouseLeftDown = true;
+		else
+			camera->MouseRightDown = true;
 		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick));
 	}
 }

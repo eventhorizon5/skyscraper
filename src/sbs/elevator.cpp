@@ -1029,6 +1029,9 @@ void Elevator::Loop()
 	if (GoActive == true)
 		Go(GoActiveFloor, true);
 
+	if (HoistwayAccess != 0)
+		SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);
+
 	//call queue processor
 	ProcessCallQueue();
 
@@ -2071,7 +2074,7 @@ bool Elevator::Go(int floor, bool hold)
 		}
 		MoveElevator = true;
 	}
-	else if (GoActive == true && hold == true && sbs->camera->MouseDown == false)
+	else if (GoActive == true && hold == true && sbs->camera->MouseDown() == false)
 	{
 		//stop go movement
 		GoActive = false;
@@ -3463,7 +3466,7 @@ bool Elevator::Up()
 		ManualMoveHold = true;
 		return Up(true);
 	}
-	else if (ManualMove == 1 && sbs->camera->MouseDown == false)
+	else if (ManualMove == 1 && sbs->camera->MouseDown() == false)
 	{
 		ManualMoveHold = false;
 		return Up(false);
@@ -3481,7 +3484,7 @@ bool Elevator::Down()
 		ManualMoveHold = true;
 		return Down(true);
 	}
-	else if (ManualMove == -1 && sbs->camera->MouseDown == false)
+	else if (ManualMove == -1 && sbs->camera->MouseDown() == false)
 	{
 		ManualMoveHold = false;
 		return Down(false);
@@ -4230,7 +4233,7 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 	if (InspectionService == false)
 		return ReportError("Not in inspection service mode");
 
-	if (access == 0)
+	if (access == 0 || (HoistwayAccess != 0 && sbs->camera->MouseDown() == false))
 	{
 		//disable mode
 		HoistwayAccess = 0;

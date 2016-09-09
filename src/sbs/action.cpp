@@ -209,7 +209,7 @@ bool Action::Run(Object *caller, Object *parent)
 		CallButton *callbutton = elevator->GetPrimaryCallButton();
 
 		//if called from a control and mouse button is held down, notify elevator
-		if (caller_type == "Control" && sbs->camera->MouseDown == true)
+		if (caller_type == "Control" && sbs->camera->MouseDown() == true)
 			car->ControlPressActive = true;
 
 		if (command_name == "off")

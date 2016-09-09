@@ -602,7 +602,7 @@ void ElevatorCar::Alarm()
 			alarm->Play();
 		}
 	}
-	else if (AlarmActive == true && sbs->camera->MouseDown == false)
+	else if (AlarmActive == true && sbs->camera->MouseDown() == false)
 	{
 		//stop alarm
 		AlarmActive = false;
@@ -1121,7 +1121,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 				ReportError("Invalid door " + ToString(i));
 		}
 	}
-	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
+	else if (doorhold_direction == 1 && sbs->camera->MouseDown() == false)
 	{
 		//require button to be held down to open doors
 
@@ -1166,7 +1166,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 
 		if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
 		{
-			if (sbs->camera->MouseDown == true)
+			if (sbs->camera->MouseDown() == true)
 			{
 				//hold doors while button is held down
 				HoldDoors(number);
@@ -1186,7 +1186,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 			}
 		}
 
-		if (sbs->camera->MouseDown == false)
+		if (sbs->camera->MouseDown() == false)
 		{
 			//reset persistent values
 			doorhold_direction = 0;
@@ -1238,7 +1238,7 @@ void ElevatorCar::CloseDoors(int number, int whichdoors, int floor, bool manual,
 			doorhold_manual = manual;
 		}
 	}
-	else if (doorhold_direction == -1 && sbs->camera->MouseDown == false)
+	else if (doorhold_direction == -1 && sbs->camera->MouseDown() == false)
 	{
 		bool openstate = false;
 		for (int i = start; i <= end; i++)
