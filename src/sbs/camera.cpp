@@ -584,19 +584,10 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	//object checks and actions
 
 	//get original object (parent object of clicked mesh)
-	Object *mesh_parent = obj->GetParent();
+	Object *mesh_parent = GetMeshParent(obj);
 
 	if (!mesh_parent)
 		return;
-
-	//if object is a wall, and parent is a mesh, get mesh's (parent's) parent
-	if (mesh_parent->GetType() == "Mesh")
-	{
-		mesh_parent = mesh_parent->GetParent();
-
-		if (!mesh_parent)
-			return;
-	}
 
 	if (mesh_parent->GetType() == "ButtonPanel")
 	{
@@ -642,10 +633,29 @@ void Camera::UnclickedObject()
 		return;
 
 	//get original object (parent object of clicked mesh)
-	Object *mesh_parent = obj->GetParent();
+	Object *mesh_parent = GetMeshParent(obj);
 
 	if (!mesh_parent)
 		return;
+
+	//call object's OnUnclick function
+	mesh_parent->OnUnclick(MouseRightDown);
+
+	MouseLeftDown = false;
+	MouseRightDown = false;
+}
+
+Object* Camera::GetMeshParent(Object *object)
+{
+	//get original object (parent object of clicked mesh)
+
+	if (!object)
+		return 0;
+
+	Object *mesh_parent = object->GetParent();
+
+	if (!mesh_parent)
+		return 0;
 
 	//if object is a wall, and parent is a mesh, get mesh's (parent's) parent
 	if (mesh_parent->GetType() == "Mesh")
@@ -653,14 +663,10 @@ void Camera::UnclickedObject()
 		mesh_parent = mesh_parent->GetParent();
 
 		if (!mesh_parent)
-			return;
+			return 0;
 	}
 
-	//call object's OnUnclick function
-	mesh_parent->OnUnclick(MouseRightDown);
-
-	MouseLeftDown = false;
-	MouseRightDown = false;
+	return mesh_parent;
 }
 
 std::string Camera::GetClickedMeshName()

@@ -121,6 +121,7 @@ public:
 	void CheckStairwell();
 	void ClickedObject(bool shift, bool ctrl, bool alt, bool right);
 	void UnclickedObject();
+	Object* GetMeshParent(Object *object);
 	std::string GetClickedMeshName();
 	std::string GetClickedWallName();
 	int GetClickedObjectNumber();
