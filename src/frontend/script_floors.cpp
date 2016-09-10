@@ -1074,7 +1074,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		int elevator, car;
-		if (!GetElevatorCar(tempdata[0], elevator, car))
+		if (!GetElevatorCar(tempdata[0], floor->Number, elevator, car))
 			return sError;
 
 		//stop here if in Check mode
@@ -1143,7 +1143,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			ScriptWarning("Syntax deprecated");
 
 		int elevator, carnum;
-		if (!GetElevatorCar(tempdata[0], elevator, carnum))
+		if (!GetElevatorCar(tempdata[0], floor->Number, elevator, carnum))
 			return sError;
 
 		//stop here if in Check mode
@@ -1196,7 +1196,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		int elevator, car;
-		if (!GetElevatorCar(tempdata[0], elevator, car))
+		if (!GetElevatorCar(tempdata[0], floor->Number, elevator, car))
 			return sError;
 
 		//stop here if in Check mode
@@ -1348,7 +1348,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		int elevator, carnum;
-		if (!GetElevatorCar(tempdata[0], elevator, carnum))
+		if (!GetElevatorCar(tempdata[0], floor->Number, elevator, carnum))
 			return sError;
 
 		//stop here if in Check mode
@@ -1394,7 +1394,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		int elevator, carnum;
-		if (!GetElevatorCar(tempdata[0], elevator, carnum))
+		if (!GetElevatorCar(tempdata[0], floor->Number, elevator, carnum))
 			return sError;
 
 		//stop here if in Check mode

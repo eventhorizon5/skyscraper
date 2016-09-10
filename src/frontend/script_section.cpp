@@ -1096,7 +1096,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 	return 0;
 }
 
-bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator, int &car)
+bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int floor, int &elevator, int &car)
 {
 	//returns an elevator and car number for the specified string
 	//for example, use "1" for Elevator 1
@@ -1113,6 +1113,14 @@ bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int &elevator,
 		}
 
 		car = 1;
+
+		if (Simcore->GetFloor(floor))
+		{
+			ElevatorCar *obj = Simcore->GetElevator(elevator)->GetCarForFloor(floor);
+			if (obj)
+				car = obj->Number;
+		}
+
 		return true;
 	}
 
