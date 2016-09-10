@@ -83,7 +83,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 		return;
 
 	bool in_elevator = false;
-	if (parent->GetType() == "Elevator")
+	if (parent->GetType() == "ElevatorCar")
 		in_elevator = true;
 
 	//create timer
