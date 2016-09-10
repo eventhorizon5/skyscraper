@@ -1,5 +1,44 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-fixes for reported issues with multi-car support
+-for the "Elevator:Car" script parameter, if just the elevator is specified, the code should find the car that services the floor, instead of just using the first car
+-added INI file and script "HoistwayAccessHold" option
+-added object OnUnclick function, which is called when a mouse button is released on an object
+-Hoistway Access mode now uses constant pressure on the switches to work, which can be turned off
+-actions can now have a "hold" state, which requires that a control have constant pressure to prevent it from reverting to (normally) an "off" position.  Used for Hoistway Access mode
+-fixes for ShowMenu behavior and command line "no-menu" option
+-added CheckScript mode, which allows scripts to be quickly checked for errors, instead of fully loading them
+-fix for the "Stairwells" string match in the GetObjectRange function
+-cleanups, found via cppcheck
+-memory leak fix for Dynamic Mesh system - the mVertexElements array needs to be deleted on return
+-(Scripts) added a check to ensure that a floor's altitude is properly set at the end of a Floor section
+-(Scripts) move end-of-section code into per-section functions
+-brought back ComputeNormal function, which was removed in revision 4679, due to precision issues causing certain walls to display improperly.  The issue appears to be due to Ogre's Plane function calculating in double-precision mode, with the ComputeNormal calculating in single-precision, so a workaround has to be found for Ogre.
+-character controller should remove itself from Bullet world on delete
+-call buttons should not store pointers to control objects; this fix now allows for the call button's controls to be deleted
+-call button actions can now be used from scripts, and details have been added to the guide
+-add note about how leaving the "texture" parameter blank for the button panel, will hide the back
+-revamped Call Button objects:
+--action system now supports Call Button actions
+--made Button Panel code generic (removed dependency on Elevator Cars), so that it can be used with multiple types of parents
+--switched Call Button object to use a Button Panel as it's button canvas
+-objects need to unregister their dynamic runloops on deletion
+-added virtual OnClick function for objects
+-shut down resource manager on exit
+-have character controller properly clean up objects when deleted
+-call button timer should quickly fire on the first shot, before waiting a longer interval for future processing
+-added support for dynamic runloops, which should help reduce per-frame loop overhead.  This functionality allows objects to optionally register themselves with their parents to activate/deactivate their runloops, and then the parent calls a LoopChildren() function to run all registered child loops
+-door movement now uses a standard parent runloop method, instead of a main simulator callback
+-have call buttons use a Timer object for processing the call loop (frequency set to 1 second), instead of using a callback entry in the simulator root
+-fixed a loop issue in the ProcessGotoFloor function that was causing some elevator cars to be skipped
+-fixed problem in FinishMove function, where the call button arrival notification was only checking the arrival direction of the primary floor call, not ones for other cars
+-when adding an elevator route, the car number should be reported if the elevator has more than 1 car
+-when enabling Hoistway Access, require shaft doors to be open on the specified floor
+-Hoistway Access switch should cause elevator to move, instead of separately using inspection service controls
+-add profiling to ElevatorCar loop
+-moved Camera loop code and timing code into standard Loop function
+-renamed SBS MainLoop to standard object "Loop", and moved camera loop call to end of SBS loop
+-have ResetBuilding function be used as the standard object's ResetState function, and have it also reset the camera state if the camera's active.  This allows the SBS engine root to be reset, to reset the building state.
 -removed SegmentPlane function
 -removed and replaced old Classify function with an AABB test
 -Cut function now skips polygons that are completely inside the cutting area, instead of needlessly processing over them and not getting cut results
