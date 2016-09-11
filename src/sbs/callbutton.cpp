@@ -602,13 +602,17 @@ bool CallButton::FireService(int value)
 {
 	//enables fire service phase 1 on all elevators associated with this call button
 
+	bool status = false, status2 = false;
+
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
-			return elevator->EnableFireService1(value);
+			status2 = elevator->EnableFireService1(value);
+		if (status2 == true)
+			status = true;
 	}
-	return false;
+	return status;
 }
 
 int CallButton::GetFloor()
