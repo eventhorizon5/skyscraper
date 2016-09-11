@@ -175,6 +175,10 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	//create timer
 	timer = new Timer("Call Timer", this);
 
+	//reset light status
+	UpLight(false);
+	DownLight(false);
+
 	if (sbs->Verbose)
 		Report("Created");
 }
@@ -293,12 +297,6 @@ bool CallButton::Call(bool direction)
 void CallButton::UpLight(bool value)
 {
 	//turn on the 'up' directional light
-	if (value == GetUpStatus())
-	{
-		if (sbs->Verbose)
-			Report("UpLight: already in requested status");
-		return;
-	}
 
 	//set light status
 	if (value == true)
@@ -310,12 +308,6 @@ void CallButton::UpLight(bool value)
 void CallButton::DownLight(bool value)
 {
 	//turn on the 'down' directional light
-	if (value == GetDownStatus())
-	{
-		if (sbs->Verbose)
-			Report("DownLight: already in requested status");
-		return;
-	}
 
 	//set light status
 	if (value == true)
@@ -329,37 +321,72 @@ void CallButton::SetLights(int up, int down)
 	//set status of call button lights
 	//values are 0 for no change, 1 for on, and 2 for off
 
-	if (up == 1 && UpExists == true)
+	if (UpExists == true)
 	{
-		if (sbs->Verbose)
-			Report("SetLights: turning on up light");
+		if (up == 1)
+		{
+			if (GetUpStatus() == true)
+			{
+				if (sbs->Verbose)
+					Report("SetLights: up light already in requested status");
+				return;
+			}
 
-		if (GetUpControl())
-			GetUpControl()->SetSelectPosition(2);
+			if (sbs->Verbose)
+				Report("SetLights: turning on up light");
+
+			if (GetUpControl())
+				GetUpControl()->SetSelectPosition(2);
+		}
+		if (up == 2)
+		{
+			if (GetUpStatus() == false)
+			{
+				if (sbs->Verbose)
+					Report("SetLights: up light already in requested status");
+				return;
+			}
+
+			if (sbs->Verbose)
+				Report("SetLights: turning off up light");
+
+			if (GetUpControl())
+				GetUpControl()->SetSelectPosition(1);
+		}
 	}
-	if (up == 2 && UpExists == true)
-	{
-		if (sbs->Verbose)
-			Report("SetLights: turning off up light");
 
-		if (GetUpControl())
-			GetUpControl()->SetSelectPosition(1);
-	}
-	if (down == 1 && DownExists == true)
+	if (DownExists == true)
 	{
-		if (sbs->Verbose)
-			Report("SetLights: turning on down light");
+		if (down == 1)
+		{
+			if (GetDownStatus() == true)
+			{
+				if (sbs->Verbose)
+					Report("SetLights: down light already in requested status");
+				return;
+			}
 
-		if (GetDownControl())
-			GetDownControl()->SetSelectPosition(2);
-	}
-	if (down == 2 && DownExists == true)
-	{
-		if (sbs->Verbose)
-			Report("SetLights: turning off down light");
+			if (sbs->Verbose)
+				Report("SetLights: turning on down light");
 
-		if (GetDownControl())
-			GetDownControl()->SetSelectPosition(1);
+			if (GetDownControl())
+				GetDownControl()->SetSelectPosition(2);
+		}
+		if (down == 2)
+		{
+			if (GetDownStatus() == false)
+			{
+				if (sbs->Verbose)
+					Report("SetLights: down light already in requested status");
+				return;
+			}
+
+			if (sbs->Verbose)
+				Report("SetLights: turning off down light");
+
+			if (GetDownControl())
+				GetDownControl()->SetSelectPosition(1);
+		}
 	}
 }
 
