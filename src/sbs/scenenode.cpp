@@ -43,7 +43,15 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 	//set up scene node
 	std::string node_name = GetNameBase() + name;
 
-	node = sbs->mSceneManager->createSceneNode(node_name);
+	try
+	{
+		node = sbs->mSceneManager->createSceneNode(node_name);
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error creating scene node:\n" + e.getDescription());
+		return;
+	}
 
 	//attach scene node to root, if no parent exists (for engine root object)
 	if (!parent->GetParent() && !parent->GetSceneNode())
