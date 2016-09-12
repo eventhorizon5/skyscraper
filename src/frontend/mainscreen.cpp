@@ -320,11 +320,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_F5)
 		{
 			//toggle freelook mode
-			camera->Freelook = !camera->Freelook;
-			if (camera->Freelook == true)
-				SetCursor(wxCURSOR_CROSS);
-			else
-				SetCursor(wxNullCursor);
+			EnableFreelook(!camera->Freelook);
 		}
 
 		if (key == WXK_F10)
@@ -659,6 +655,27 @@ void MainScreen::HandleMouseMovement()
 			ProcessMovement(engine, false, false, true);
 		}
 	}
+}
+
+void MainScreen::EnableFreelook(bool value)
+{
+	//enable or disable freelook mode
+
+	EngineContext *engine = frontend->GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = engine->GetSystem();
+
+	Camera *camera = Simcore->camera;
+
+	camera->Freelook = value;
+	if (value == true)
+		SetCursor(wxCURSOR_CROSS);
+	else
+		SetCursor(wxNullCursor);
 }
 
 }

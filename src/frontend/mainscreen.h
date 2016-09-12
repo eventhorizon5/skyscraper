@@ -44,6 +44,7 @@ public:
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
 	void OnMouseButton(wxMouseEvent& event);
+	void EnableFreelook(bool value);
 
 	bool Active;
 	bool InLoop;

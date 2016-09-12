@@ -1964,6 +1964,9 @@ void Skyscraper::SetActiveEngine(int number, bool switch_engines)
 	//apply camera state to new engine
 	if (switch_engines == true && state_set == true)
 		active_engine->SetCameraState(state, false);
+
+	//update mouse cursor for freelook mode
+	window->EnableFreelook(active_engine->GetSystem()->camera->Freelook);
 }
 
 bool Skyscraper::RunEngines()
