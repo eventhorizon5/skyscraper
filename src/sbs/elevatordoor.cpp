@@ -913,6 +913,13 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 		return 0;
 	}
 
+	//exit if no doors exist
+	if (wrapper->doors.empty() == true)
+	{
+		car->ReportError("FinishDoors: no door components have been created");
+		return 0;
+	}
+
 	//get full width and height of doors
 	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
 	bool firstrun = true;

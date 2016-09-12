@@ -1791,13 +1791,19 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		if (params == 1 || legacy == true)
-			StoreCommand(car->FinishDoors(ToInt(tempdata[0])));
-		else if (params == 2)
-			StoreCommand(car->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1])));
-		else
-			StoreCommand(car->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2])));
+		ElevatorDoor::DoorWrapper *wrapper = 0;
 
+		if (params == 1 || legacy == true)
+			wrapper = car->FinishDoors(ToInt(tempdata[0]));
+		else if (params == 2)
+			wrapper = car->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1]));
+		else
+			wrapper = car->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]));
+
+		if (!wrapper)
+			return ScriptError();
+
+		StoreCommand(wrapper);
 		return sNextLine;
 	}
 
