@@ -148,7 +148,14 @@ void ActionViewer::Loop()
 	if (Simcore->GetActionCount() != lastcount)
 	{
 		lastcount = Simcore->GetActionCount();
+
+		//clear values
 		ActionList->Clear();
+		tName->Clear();
+		tParentName->Clear();
+		tType->Clear();
+		tCommand->Clear();
+		tParameters->Clear();
 
 		for (int i = 0; i < Simcore->GetActionCount(); i++)
 			ActionList->Append(ToString(i + 1) + wxT(" - ") + Simcore->GetAction(i)->GetName());

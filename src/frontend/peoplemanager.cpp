@@ -312,6 +312,17 @@ void PeopleManager::BuildList(bool restore_selection)
 			else
 				PersonList->SetSelection(old_selection);
 		}
+		else
+		{
+			//clear values
+			tName->Clear();
+			tRouteActive->Clear();
+			tFloor->Clear();
+			tDestination->Clear();
+			tStatus->Clear();
+			chkRandom->SetValue(false);
+			chkService->SetValue(false);
+		}
 	}
 }
 
