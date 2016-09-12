@@ -241,12 +241,12 @@ bool CallButton::Call(bool direction)
 	//exit if call has already been made
 	if (timer->IsRunning() == true)
 	{
-		if (direction == true && GetUpStatus() == true)
+		if (direction == true && ProcessedUp == true)
 		{
 			Report("Up call has already been made");
 			return true;
 		}
-		if (direction == false && GetDownStatus() == true)
+		if (direction == false && ProcessedDown == true)
 		{
 			Report("Down call has already been made");
 			return true;
