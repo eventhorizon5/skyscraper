@@ -1,5 +1,9 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-FinishDoors function should show a script error if it fails
+-show an error if a scene node is not created properly
+-when freelook is enabled in an engine, the mouse cursor needs to be updated when switching engines.  This also consolidates the related freelook code into a function.
+-values need to be cleared when switching engines
 -fixes for reported issues with multi-car support
 -for the "Elevator:Car" script parameter, if just the elevator is specified, the code should find the car that services the floor, instead of just using the first car
 -added INI file and script "HoistwayAccessHold" option
