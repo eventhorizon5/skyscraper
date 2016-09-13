@@ -3740,7 +3740,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     LevelingOpen = 0.2
-    CreateElevator false, 9.289, 9, 0
+    CreateElevator false, 9.289, 9, 37
 <EndElevator>
 
 <Elevator 5>
@@ -3754,7 +3754,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     LevelingOpen = 0.2
-    CreateElevator false, 9.289, 0, 0
+    CreateElevator false, 9.289, 0, 37
 <EndElevator>
 
 <Elevator 6>
@@ -3768,7 +3768,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     LevelingOpen = 0.2
-    CreateElevator false, 9.289, -9, 0
+    CreateElevator false, 9.289, -9, 37
 <EndElevator>
 
 <Elevators 4 to 6>
@@ -3974,7 +3974,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 6
     LevelingOpen = 0.2
-    CreateElevator false, 36.956, 9, 0
+    CreateElevator false, 36.956, 9, 26
 <EndElevator>
 
 <Elevator 11>
@@ -3988,7 +3988,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 6
     LevelingOpen = 0.2
-    CreateElevator false, 36.956, 0, 0
+    CreateElevator false, 36.956, 0, 26
 <EndElevator>
 
 <Elevator 12>
@@ -4002,7 +4002,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 6
     LevelingOpen = 0.2
-    CreateElevator false, 36.956, -9, 0
+    CreateElevator false, 36.956, -9, 26
 <EndElevator>
 
 <Elevators 10 to 12>
@@ -4210,7 +4210,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 3
     LevelingOpen = 0.2
-    CreateElevator false, -18.377, 9, 0
+    CreateElevator false, -18.377, 9, 14
 <EndElevator>
 
 <Elevator 17>
@@ -4224,7 +4224,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 3
     LevelingOpen = 0.2
-    CreateElevator false, -18.377, 0, 0
+    CreateElevator false, -18.377, 0, 14
 <EndElevator>
 
 <Elevator 18>
@@ -4238,7 +4238,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 3
     LevelingOpen = 0.2
-    CreateElevator false, -18.377, -9, 0
+    CreateElevator false, -18.377, -9, 14
 <EndElevator>
 
 <Elevators 16 to 18>
@@ -5227,7 +5227,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 40 - 50
     AssignedShaft = 19
     LevelingOpen = 0.2
-    CreateElevator false, -19.25, -10.456, 40
+    CreateElevator false, -19.25, -10.456, 50
 <EndElevator>
 
 <Elevator 41>
@@ -5241,7 +5241,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 40 - 50
     AssignedShaft = 19
     LevelingOpen = 0.2
-    CreateElevator false, -10.25, -10.456, 40
+    CreateElevator false, -10.25, -10.456, 50
 <EndElevator>
 
 <Elevators 38 to 41>
@@ -5356,7 +5356,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
     LevelingOpen = 0.2
-    CreateElevator false, 28.583, -10.456, 40
+    CreateElevator false, 28.583, -10.456, 70
 <EndElevator>
 
 <Elevator 45>
@@ -5370,7 +5370,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
     LevelingOpen = 0.2
-    CreateElevator false, 37.583, -10.456, 40
+    CreateElevator false, 37.583, -10.456, 70
 <EndElevator>
 
 <Elevators 42 to 45>
@@ -5487,7 +5487,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
     LevelingOpen = 0.2
-    CreateElevator false, -19.25, 8.956, 40
+    CreateElevator false, -19.25, 8.956, 60
 <EndElevator>
 
 <Elevator 49>
@@ -5501,7 +5501,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
     LevelingOpen = 0.2
-    CreateElevator false, -10.25, 8.956, 40
+    CreateElevator false, -10.25, 8.956, 60
 <EndElevator>
 
 <Elevators 46 to 49>
@@ -5622,7 +5622,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 20
     MotorPosition = 0, Floor(79).Base + (Floor(79).Height / 2), 0
     LevelingOpen = 0.2
-    CreateElevator false, 28.583, 8.956, 40
+    CreateElevator false, 28.583, 8.956, 78
 <EndElevator>
 
 <Elevator 53>
@@ -5637,7 +5637,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 20
     MotorPosition = 0, Floor(79).Base + (Floor(79).Height / 2), 0
     LevelingOpen = 0.2
-    CreateElevator false, 37.583, 8.956, 40
+    CreateElevator false, 37.583, 8.956, 78
 <EndElevator>
 
 <Elevators 50 to 53>
@@ -5840,7 +5840,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 23
     LevelingOpen = 0.2
-    CreateElevator false, -19.167, -35.956, 80
+    CreateElevator false, -19.167, -35.956, 99
 <EndElevator>
 
 <Elevator 57>
@@ -5854,7 +5854,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 23
     LevelingOpen = 0.2
-    CreateElevator false, -10.167, -35.956, 80
+    CreateElevator false, -10.167, -35.956, 99
 <EndElevator>
 
 <Elevators 56 to 57>
@@ -6198,7 +6198,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 26
     LevelingOpen = 0.2
-    CreateElevator false, -19.25, -8.956, 100
+    CreateElevator false, -19.25, -8.956, 129
 <EndElevator>
 
 <Elevator 64>
@@ -6213,7 +6213,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 28
     MotorPosition = 0, Floor(119).Base + (Floor(119).Height / 2), 0
     LevelingOpen = 0.2
-    CreateElevator false, 10.25, -8.956, 100
+    CreateElevator false, 10.25, -8.956, 118
 <EndElevator>
 
 <Elevator 65>
@@ -6228,7 +6228,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 28
     MotorPosition = 0, Floor(119).Base + (Floor(119).Height / 2), 0
     LevelingOpen = 0.2
-    CreateElevator false, 19.25, -8.956, 100
+    CreateElevator false, 19.25, -8.956, 118
 <EndElevator>
 
 <Elevators 62 to 63>
