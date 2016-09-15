@@ -707,9 +707,15 @@ void CallButton::ElevatorArrived(int number, bool direction)
 		elevator_arrived_down = number;
 
 	if (direction == true)
+	{
 		UpLight(false);
+		ProcessedUp = false;
+	}
 	else
+	{
 		DownLight(false);
+		ProcessedDown = false;
+	}
 }
 
 int CallButton::GetElevatorArrived(bool direction)
