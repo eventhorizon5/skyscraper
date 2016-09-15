@@ -579,7 +579,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	if (callbutton)
 	{
 		if (command_name == "off")
-			return true;
+			return false;
 		if (command_name == "up")
 			return callbutton->Call(true);
 		if (command_name == "down")
