@@ -90,7 +90,7 @@ void Sound::OnMove(bool parent)
 {
 	Ogre::Vector3 global_position = sbs->ToGlobal(GetPosition());
 
-	FMOD_VECTOR pos = {global_position.x, global_position.y, global_position.z};
+	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
 	FMOD_VECTOR vel = { 0, 0, 0 };
 
 	//calculate sound velocity
@@ -152,7 +152,7 @@ void Sound::SetDirection(const Ogre::Vector3 &direction)
 {
 	Direction = direction;
 	Ogre::Vector3 global_direction = sbs->GetOrientation() * direction;
-	FMOD_VECTOR vec = { global_direction.x, global_direction.y, global_direction.z };
+	FMOD_VECTOR vec = { (float)global_direction.x, (float)global_direction.y, (float)global_direction.z };
 
 	if (channel)
 		channel->set3DConeOrientation(&vec);
