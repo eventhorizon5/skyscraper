@@ -589,7 +589,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	//show result
 	if (!wall)
-		sbs->Report("Clicked on object " + number + ": " + mesh_parent->GetName());
+		sbs->Report("Clicked on object " + number + ": " + mesh_parent->GetName()+ " - Mesh: " + meshname);
 
 	if (mesh_parent->GetType() == "ButtonPanel")
 	{
