@@ -574,6 +574,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	object_cmd = obj->command;
 	object_cmd_processed = obj->command_processed;
 
+	//show result
+	std::string number = ToString(object_number);
+	if (wall)
+		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
+
 	//object checks and actions
 
 	//get original object (parent object of clicked mesh)
@@ -583,10 +588,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		return;
 
 	//show result
-	std::string number = ToString(object_number);
-	if (wall)
-		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
-	else
+	if (!wall)
 		sbs->Report("Clicked on object " + number + ": " + mesh_parent->GetName());
 
 	if (mesh_parent->GetType() == "ButtonPanel")
