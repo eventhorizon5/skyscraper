@@ -1726,15 +1726,23 @@ void Elevator::FinishMove()
 
 		UpdateFloorIndicators();
 
+		ElevatorCar *cameracar = GetCarForFloor(sbs->camera->CurrentFloor);
+
+		if (!cameracar)
+			cameracar = GetCar(GotoFloorCar);
+
 		//turn on objects if user is in elevator
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && GetCar(GotoFloorCar)->CameraOffset < GetCar(GotoFloorCar)->Height)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && cameracar->CameraOffset < cameracar->Height)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning on objects");
 
 			//turn on floor
-			sbs->GetFloor(GotoFloor)->Enabled(true);
-			sbs->GetFloor(GotoFloor)->EnableGroup(true);
+			int floor = GotoFloor;
+			if (GotoFloor != sbs->camera->CurrentFloor)
+				floor = sbs->camera->CurrentFloor;
+			sbs->GetFloor(floor)->Enabled(true);
+			sbs->GetFloor(floor)->EnableGroup(true);
 
 			//Turn on sky, buildings, and landscape
 			sbs->EnableSkybox(true);
