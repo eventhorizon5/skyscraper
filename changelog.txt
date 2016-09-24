@@ -1,5 +1,8 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-FinishMove should turn on floor that the camera is active on, instead of the elevator's GotoFloor
+-update naming of directional indicator meshes
+-show main object name instead of mesh name, for click reports
 -FinishDoors function should show a script error if it fails
 -show an error if a scene node is not created properly
 -when freelook is enabled in an engine, the mouse cursor needs to be updated when switching engines.  This also consolidates the related freelook code into a function.
