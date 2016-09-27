@@ -1470,6 +1470,7 @@ void Skyscraper::UnloadToMenu()
 	SetFullScreen(false);
 	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
 	window->Center();
+	window->SetCursor(wxNullCursor);
 
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
