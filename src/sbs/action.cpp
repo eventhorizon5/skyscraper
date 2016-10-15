@@ -142,6 +142,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//UpPeakOff
 	//DownPeakOn
 	//DownPeakOff
+	//PeakOff
 	//IndOn
 	//IndOff
 	//InsOn
@@ -169,8 +170,17 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//SensorOn
 	//SensorOff
 	//SensorReset
-	//UpToggle
-	//DownToggle
+	//AccessDown
+	//AccessUp
+	//AccessOff
+
+	////CallButton actions:
+	//Off
+	//Up
+	//Down
+	//FireOff
+	//FireOn
+	//FireBypass
 
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
@@ -351,6 +361,12 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return elevator->EnableDownPeak(true);
 		if (command_name == "downpeakoff")
 			return elevator->EnableDownPeak(false);
+		if (command_name == "peakoff")
+		{
+			elevator->EnableDownPeak(false);
+			elevator->EnableUpPeak(false);
+			return true;
+		}
 		if (command_name == "indon")
 			return elevator->EnableIndependentService(true, car->Number);
 		if (command_name == "indoff")
