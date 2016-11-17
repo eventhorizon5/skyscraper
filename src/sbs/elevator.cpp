@@ -1817,14 +1817,22 @@ void Elevator::FinishMove()
 			if (Parking == false)
 				if (AutoDoors == true)
 				{
-					if ((OnRecallFloor() == true && FireServicePhase1 == 1) || OnPeakFloor() == true)
-						OpenDoors(); //automatically open doors in Fire Phase 1 and Peak modes
+					if (FireServicePhase2 == 1)
+					{
+						if (GetCar(FireServicePhase2Car))
+							GetCar(FireServicePhase2Car)->OpenDoors();
+					}
 					else
 					{
-						for (int i = 1; i <= GetCarCount(); i++)
+						if ((OnRecallFloor() == true && FireServicePhase1 == 1) || OnPeakFloor() == true)
+							OpenDoors(); //automatically open doors in Fire Phase 1 and Peak modes
+						else
 						{
-							if (GetCar(i)->GotoFloor == true)
-								GetCar(i)->OpenDoors();
+							for (int i = 1; i <= GetCarCount(); i++)
+							{
+								if (GetCar(i)->GotoFloor == true)
+									GetCar(i)->OpenDoors();
+							}
 						}
 					}
 				}
