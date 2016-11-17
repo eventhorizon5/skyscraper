@@ -1,5 +1,7 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-added "PeakOff" action, and updated documentation
+-reset mouse cursor when exiting to main menu
 -FinishMove should turn on floor that the camera is active on, instead of the elevator's GotoFloor
 -update naming of directional indicator meshes
 -show main object name instead of mesh name, for click reports
