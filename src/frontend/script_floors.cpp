@@ -2033,7 +2033,6 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[0]);
-		parent->CheckFile("data/" + tempdata[1]);
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)

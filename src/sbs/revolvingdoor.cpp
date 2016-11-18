@@ -80,6 +80,7 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	wall = DoorMesh->CreateWallObject(name);
 
 	Segments = segments;
+	width = width / 2;
 	if (Segments == 3)
 	{
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
