@@ -1,5 +1,8 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-added support for revolving doors
+-when in fire service phase 2 mode, only open phase 2's car doors on recall floor, not oth
+er cars
 -added "PeakOff" action, and updated documentation
 -reset mouse cursor when exiting to main menu
 -FinishMove should turn on floor that the camera is active on, instead of the elevator's GotoFloor
