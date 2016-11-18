@@ -156,6 +156,22 @@ private:
 	DynamicMesh *wrapper; //door dynamic mesh wrapper
 };
 
+class SBSIMPEXP RevolvingDoorManager : public Object
+{
+public:
+	RevolvingDoorManager(Object* parent);
+	~RevolvingDoorManager();
+	RevolvingDoor* AddDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	void RemoveDoor(RevolvingDoor *door);
+	int GetCount();
+	RevolvingDoor* GetIndex(int index);
+	void Loop();
+
+private:
+	std::vector<RevolvingDoor*> Array;
+	DynamicMesh *wrapper; //door dynamic mesh wrapper
+};
+
 }
 
 #endif

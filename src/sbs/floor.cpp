@@ -46,6 +46,7 @@
 #include "directional.h"
 #include "sound.h"
 #include "profiler.h"
+#include "revolvingdoor.h"
 #include "floor.h"
 
 namespace SBS {
@@ -1599,6 +1600,41 @@ Model* Floor::GetModel(std::string name)
 	{
 		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
 			return ModelArray[i];
+	}
+
+	return 0;
+}
+
+RevolvingDoor* Floor::AddRevolvingDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+{
+	int number = (int)RDoorArray.size();
+	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
+	RevolvingDoor* door = new RevolvingDoor(this, DoorWrapper, name, soundfile, texture, thickness, clockwise, segments, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+	RDoorArray.push_back(door);
+	return door;
+}
+
+void Floor::RemoveRevolvingDoor(RevolvingDoor *door)
+{
+	//remove a door from the array
+	//this does not delete the object
+	for (size_t i = 0; i < RDoorArray.size(); i++)
+	{
+		if (RDoorArray[i] == door)
+		{
+			RDoorArray.erase(RDoorArray.begin() + i);
+			return;
+		}
+	}
+}
+
+RevolvingDoor* Floor::GetRevolvingDoor(int number)
+{
+	//get door object
+	if (number < (int)RDoorArray.size())
+	{
+		if (RDoorArray[number])
+			return RDoorArray[number];
 	}
 
 	return 0;

@@ -126,24 +126,18 @@ RevolvingDoor::~RevolvingDoor()
 	DoorMesh = 0;
 
 	//unregister from parent
-	/*if (sbs->FastDelete == false)
+	if (sbs->FastDelete == false)
 	{
 		if (parent_deleting == false)
 		{
 			std::string type = GetParent()->GetType();
 
-			if (type == "ElevatorCar")
-				static_cast<ElevatorCar*>(GetParent())->RemoveDoor(this);
-			else if (type == "Floor")
-				static_cast<Floor*>(GetParent())->RemoveDoor(this);
-			else if (type == "Shaft")
-				static_cast<Shaft*>(GetParent())->RemoveDoor(this);
-			else if (type == "Stairs")
-				static_cast<Stairs*>(GetParent())->RemoveDoor(this);
+			if (type == "Floor")
+				static_cast<Floor*>(GetParent())->RemoveRevolvingDoor(this);
 			else if (type == "SBS")
-				sbs->GetDoorManager()->RemoveDoor(this);
+				sbs->GetRevolvingDoorManager()->RemoveDoor(this);
 		}
-	}*/
+	}
 }
 
 void RevolvingDoor::OnHit()
