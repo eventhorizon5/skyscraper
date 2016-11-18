@@ -42,7 +42,7 @@ public:
 	~RevolvingDoor();
 	void Enabled(bool value);
 	void MoveDoor();
-	void SetLocked(int keyid);
+	void SetLocked(bool value, int keyid);
 	bool IsLocked();
 	bool ToggleLock(bool force = false);
 	int GetKeyID();

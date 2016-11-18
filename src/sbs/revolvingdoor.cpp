@@ -207,9 +207,9 @@ void RevolvingDoor::MoveDoor()
 	Rotate(0, rotation, 0);
 }
 
-void RevolvingDoor::SetLocked(int keyid)
+void RevolvingDoor::SetLocked(bool value, int keyid)
 {
-	Locked = true;
+	Locked = value;
 	KeyID = keyid;
 }
 
