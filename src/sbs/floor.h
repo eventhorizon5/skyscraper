@@ -120,7 +120,7 @@ public:
 	ElevatorRoute* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
 	std::vector<int> GetDirectFloors(bool include_service);
 	Model* GetModel(std::string name);
-	RevolvingDoor* AddRevolvingDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external);
+	RevolvingDoor* AddRevolvingDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external);
 	void RemoveRevolvingDoor(RevolvingDoor *door);
 	RevolvingDoor* GetRevolvingDoor(int number);
 

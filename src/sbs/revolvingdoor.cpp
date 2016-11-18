@@ -34,7 +34,7 @@
 
 namespace SBS {
 
-RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th) : Object(parent)
+RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th) : Object(parent)
 {
 	//creates a revolving door
 	//wall cuts must be performed by the calling (parent) function
@@ -105,6 +105,8 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	}
 	sbs->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();
+
+	Rotate(GetRotation().x, rotation, GetRotation().z);
 }
 
 RevolvingDoor::~RevolvingDoor()

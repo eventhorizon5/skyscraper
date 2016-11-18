@@ -728,11 +728,11 @@ RevolvingDoorManager::~RevolvingDoorManager()
 	wrapper = 0;
 }
 
-RevolvingDoor* RevolvingDoorManager::AddDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+RevolvingDoor* RevolvingDoorManager::AddDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	int number = (int)Array.size();
 	std::string name = "Door " + ToString(number);
-	RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, soundfile, texture, thickness, clockwise, segments, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
 	Array.push_back(door);
 	return door;
 }

@@ -2018,11 +2018,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 17);
 
-		if (params != 14)
+		if (params != 15)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 2; i <= 12; i++)
+		for (int i = 2; i <= 13; i++)
 		{
 			if (i == 3)
 				i++;
@@ -2039,7 +2039,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create door
-		RevolvingDoor* door = floor->AddRevolvingDoor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToBool(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToBool(tempdata[13]));
+		RevolvingDoor* door = floor->AddRevolvingDoor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToBool(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]));
 
 		if (door)
 			door->SetLocked(config->lockvalue, config->keyvalue);
