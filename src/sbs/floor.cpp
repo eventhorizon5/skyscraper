@@ -185,6 +185,17 @@ Floor::~Floor()
 		DoorArray[i] = 0;
 	}
 
+	//delete revolving doors
+	for (size_t i = 0; i < RDoorArray.size(); i++)
+	{
+		if (RDoorArray[i])
+		{
+			RDoorArray[i]->parent_deleting = true;
+			delete RDoorArray[i];
+		}
+		RDoorArray[i] = 0;
+	}
+
 	if (DoorWrapper)
 		delete DoorWrapper;
 	DoorWrapper = 0;
