@@ -127,7 +127,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     SetAutoSize = true, false
     DrawWalls = true, false, false, false, false, false
     if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -13, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
@@ -141,7 +141,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     #Internal windows - this creates the transparent windows on the inside of each floor
     SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -15, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -13, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
     AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = true, false, false, false, false, false
