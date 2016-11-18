@@ -83,23 +83,23 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	if (Segments == 3)
 	{
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->AddWallMain(wall, name, texture, thickness, -width, -width, 0, 0, height, height, voffset, voffset, tw, th, false);
-		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, width, -width, height, height, voffset, voffset, tw, th, false);
+		sbs->AddWallMain(wall, name, texture, thickness, -width, -width, 0, 0, height, height, 0, 0, tw, th, false);
+		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, width, -width, height, height, 0, 0, tw, th, false);
 		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, voffset, voffset, tw, th, false);
+		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
 	}
 	else
 	{
 		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->AddWallMain(wall, name, texture, thickness, -width, 0, 0, 0, height, height, voffset, voffset, tw, th, false);
+		sbs->AddWallMain(wall, name, texture, thickness, -width, 0, 0, 0, height, height, 0, 0, tw, th, false);
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, width, 0, height, height, voffset, voffset, tw, th, false);
+		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, width, 0, height, height, 0, 0, tw, th, false);
 		if (Segments == 4)
 		{
 			sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-			sbs->AddWallMain(wall, name, texture, thickness, 0, -width, 0, 0, height, height, voffset, voffset, tw, th, false);
+			sbs->AddWallMain(wall, name, texture, thickness, 0, -width, 0, 0, height, height, 0, 0, tw, th, false);
 			sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-			sbs->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, voffset, voffset, tw, th, false);
+			sbs->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
 		}
 	}
 	sbs->ResetWalls();
