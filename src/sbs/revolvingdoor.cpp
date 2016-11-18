@@ -148,7 +148,8 @@ RevolvingDoor::~RevolvingDoor()
 
 void RevolvingDoor::OnHit()
 {
-	sbs->Report("Moving revolving door '" + GetName() + "'");
+	if (sbs->Verbose)
+		sbs->Report("Moving revolving door '" + GetName() + "'");
 
 	EnableLoop(true);
 
@@ -166,6 +167,7 @@ void RevolvingDoor::OnHit()
 	}
 
 	IsMoving = true;
+	brake = false;
 }
 
 void RevolvingDoor::Enabled(bool value)
@@ -188,14 +190,14 @@ void RevolvingDoor::Loop()
 void RevolvingDoor::MoveDoor()
 {
 	//door movement callback function
-	if (Clockwise == true || (Clockwise == false && brake == true))
+	if ((Clockwise == true && brake == false) || (Clockwise == false && brake == true))
 	{
 		if (rotation < Speed)
 			rotation += Speed * sbs->delta;
 		else
 			brake = !brake;
 	}
-	else if (Clockwise == false || (Clockwise == true && brake == true))
+	else if ((Clockwise == false && brake == false) || (Clockwise == true && brake == true))
 	{
 		if (rotation > -Speed)
 			rotation -= Speed * sbs->delta;
@@ -203,10 +205,13 @@ void RevolvingDoor::MoveDoor()
 			brake = !brake;
 	}
 
-	//if (brake == false)
-		//IsMoving = false;
+	if (brake == true)
+	{
+		if ((Clockwise == true && rotation <= 0) || (Clockwise == false && rotation >= 0))
+			IsMoving = false;
+	}
 
-	SetRotation(0, rotation, 0);
+	Rotate(0, rotation, 0);
 }
 
 void RevolvingDoor::SetLocked(int keyid)
