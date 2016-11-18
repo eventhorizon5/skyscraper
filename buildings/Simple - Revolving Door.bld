@@ -113,7 +113,6 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     InterfloorHeight = 2.24 #This is the height in feet of the interfloor space between floors
     #Floor 0 needs to have it's altitude manually set, since it's interfloor space is below the floor's base
     if[%floor% = 0] Altitude = -%interfloorheight%
-    if[%floor% > 1 & %floor% < 4] <EndFloors>
 
     #create a basic carpeted floor
     DrawWalls = false, true, false, false, false, false
@@ -128,7 +127,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     SetAutoSize = true, false
     DrawWalls = true, false, false, false, false, false
     if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    if[%floor% = 0] AddWall Front, MainWindows, 0, -13, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
@@ -142,7 +141,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     #Internal windows - this creates the transparent windows on the inside of each floor
     SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -13, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -15, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
     AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = true, false, false, false, false, false
@@ -463,7 +462,6 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 #Create the fire service button itself, and map the previously created actions with the textures FireOff, FireOn, and FireBypass
 <Floor 0>
     AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
-
     AddRevolvingDoor , MainWindowsInt, 0.2, false, 4, 0.2, -16.5, -20, 6, 8, 0, 1, 1, false
 <EndFloor>
 
