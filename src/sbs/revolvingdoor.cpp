@@ -45,7 +45,7 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 
 	is_enabled = true;
 	IsMoving = false;
-	rotation = 0;
+	this->rotation = 0;
 	this->soundfile = soundfile;
 	Speed = speed;
 	Locked = 0;
