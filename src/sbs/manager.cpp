@@ -30,6 +30,7 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "door.h"
+#include "revolvingdoor.h"
 #include "dynamicmesh.h"
 #include "manager.h"
 
@@ -695,6 +696,76 @@ Door* DoorManager::GetIndex(int index)
 }
 
 void DoorManager::Loop()
+{
+	LoopChildren();
+}
+
+RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Object(parent)
+{
+	//set up SBS object
+	SetValues("RevolvingDoorManager", "Revolving Door Manager", true);
+
+	//create a dynamic mesh for doors
+	wrapper = new DynamicMesh(this, GetSceneNode(), "Revolving Door Container", 0, true);
+	wrapper->force_combine = true;
+}
+
+RevolvingDoorManager::~RevolvingDoorManager()
+{
+	//delete doors
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i])
+		{
+			Array[i]->parent_deleting = true;
+			delete Array[i];
+		}
+		Array[i] = 0;
+	}
+
+	if (wrapper)
+		delete wrapper;
+	wrapper = 0;
+}
+
+RevolvingDoor* RevolvingDoorManager::AddDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+{
+	int number = (int)Array.size();
+	std::string name = "Door " + ToString(number);
+	RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
+	Array.push_back(door);
+	return door;
+}
+
+void RevolvingDoorManager::RemoveDoor(RevolvingDoor *door)
+{
+	//remove a door from the array
+	//this does not delete the object
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i] == door)
+		{
+			Array.erase(Array.begin() + i);
+			return;
+		}
+	}
+}
+
+int RevolvingDoorManager::GetCount()
+{
+	//return the number of doors
+	return (int)Array.size();
+}
+
+RevolvingDoor* RevolvingDoorManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index];
+}
+
+void RevolvingDoorManager::Loop()
 {
 	LoopChildren();
 }

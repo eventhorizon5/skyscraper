@@ -40,6 +40,7 @@
 #include "sound.h"
 #include "floorindicator.h"
 #include "door.h"
+#include "revolvingdoor.h"
 #include "directional.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
@@ -2008,6 +2009,42 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//perform cut on all objects related to the current floor
 		floor->CutAll(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToBool(tempdata[6]), ToBool(tempdata[7]));
+		return sNextLine;
+	}
+
+	//AddRevolvingDoor command
+	if (linecheck.substr(0, 17) == "addrevolvingdoor ")
+	{
+		//get data
+		int params = SplitData(LineData, 17);
+
+		if (params != 15)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 13; i++)
+		{
+			if (i == 3)
+				i++;
+
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//check to see if file exists
+		parent->CheckFile("data/" + tempdata[0]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//create door
+		RevolvingDoor* door = floor->AddRevolvingDoor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToBool(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]));
+
+		if (door)
+			door->SetLocked(config->lockvalue, config->keyvalue);
+
+		StoreCommand(door);
 		return sNextLine;
 	}
 

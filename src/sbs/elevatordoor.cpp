@@ -2076,6 +2076,19 @@ void ElevatorDoor::DoorWrapper::OnClick(Ogre::Vector3 &position, bool shift, boo
 	}
 }
 
+void ElevatorDoor::DoorWrapper::OnHit()
+{
+	//check elevator doors (door bumpers feature)
+
+	//make sure both internal and external doors are closing
+	if (parent->OpenDoor == -1 && parent->GetWhichDoors() == 1)
+	{
+		//either open doors if the hit door was an internal door or a shaft door on the elevator floor
+		if (IsShaftDoor == false || (IsShaftDoor == true && floor == parent->car->GetFloor()))
+			parent->car->OpenDoors(parent->Number, 1);
+	}
+}
+
 ElevatorDoor::DoorWrapper* ElevatorDoor::GetDoorWrapper()
 {
 	//return door wrapper object

@@ -120,6 +120,9 @@ public:
 	ElevatorRoute* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
 	std::vector<int> GetDirectFloors(bool include_service);
 	Model* GetModel(std::string name);
+	RevolvingDoor* AddRevolvingDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external);
+	void RemoveRevolvingDoor(RevolvingDoor *door);
+	RevolvingDoor* GetRevolvingDoor(int number);
 
 private:
 	//sound objects
@@ -127,6 +130,7 @@ private:
 
 	//doors
 	std::vector<Door*> DoorArray; //pointer array to door objects
+	std::vector<RevolvingDoor*> RDoorArray; //pointer array to revolving door objects
 	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//lights

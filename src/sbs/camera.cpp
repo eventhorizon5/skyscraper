@@ -774,23 +774,7 @@ void Camera::Loop()
 			if (obj)
 			{
 				if (obj->GetParent())
-				{
-					//check elevator doors (door bumpers feature)
-					ElevatorDoor::DoorWrapper *wrapper = dynamic_cast<ElevatorDoor::DoorWrapper*>(obj->GetParent());
-
-					if (wrapper)
-					{
-						ElevatorDoor* door = wrapper->parent;
-
-						//make sure both internal and external doors are closing
-						if (door->OpenDoor == -1 && door->GetWhichDoors() == 1)
-						{
-							//either open doors if the hit door was an internal door or a shaft door on the elevator floor
-							if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->car->GetFloor()))
-								door->car->OpenDoors(door->Number, 1);
-						}
-					}
-				}
+					obj->GetParent()->OnHit();
 			}
 		}
 	}

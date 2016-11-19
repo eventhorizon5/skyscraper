@@ -2557,6 +2557,8 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "Door")
 		deleted = true;
+	else if (type == "RevolvingDoor")
+		deleted = true;
 	else if (type == "ElevatorDoor")
 		deleted = true;
 	else if (type == "FloorIndicator")
@@ -4046,6 +4048,11 @@ DoorManager* SBS::GetDoorManager()
 TextureManager* SBS::GetTextureManager()
 {
 	return texturemanager;
+}
+
+RevolvingDoorManager* SBS::GetRevolvingDoorManager()
+{
+	return revolvingdoor_manager;
 }
 
 }

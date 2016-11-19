@@ -67,6 +67,7 @@ namespace SBS {
 	class StairsManager;
 	class DoorManager;
 	class TextureManager;
+	class RevolvingDoorManager;
 	class Polygon;
 	class Model;
 	class WallObject;
@@ -98,6 +99,7 @@ namespace SBS {
 	class SceneNode;
 	class TimerObject;
 	class RandomGen;
+	class RevolvingDoor;
 }
 
 #include "object.h"
@@ -366,6 +368,7 @@ public:
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
+	RevolvingDoorManager* GetRevolvingDoorManager();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -454,6 +457,9 @@ private:
 
 	//texture manager
 	TextureManager *texturemanager;
+
+	//revolving door manager'
+	RevolvingDoorManager *revolvingdoor_manager;
 
 	//sound system
 	SoundSystem *soundsystem;
