@@ -574,9 +574,6 @@ void SBS::Loop()
 		//process auto areas
 		CheckAutoAreas();
 
-		//process doors
-		door_manager->Loop();
-
 		//process child object dynamic runloops
 		LoopChildren();
 

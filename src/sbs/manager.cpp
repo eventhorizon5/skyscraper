@@ -638,6 +638,7 @@ DoorManager::DoorManager(Object* parent) : Object(parent)
 	//create a dynamic mesh for doors
 	wrapper = new DynamicMesh(this, GetSceneNode(), "Door Container", 0, true);
 	wrapper->force_combine = true;
+	EnableLoop(true);
 }
 
 DoorManager::~DoorManager()
@@ -708,6 +709,7 @@ RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Object(parent)
 	//create a dynamic mesh for doors
 	wrapper = new DynamicMesh(this, GetSceneNode(), "Revolving Door Container", 0, true);
 	wrapper->force_combine = true;
+	EnableLoop(true);
 }
 
 RevolvingDoorManager::~RevolvingDoorManager()
