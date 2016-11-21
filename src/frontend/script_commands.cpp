@@ -560,7 +560,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!mesh)
 			return ScriptError("Invalid mesh object");
 
-		WallObject *wall = mesh->GetWallByName(tempdata[1]);
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
 
 		if (!wall)
 			return ScriptError("Invalid wall object");

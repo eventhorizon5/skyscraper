@@ -133,7 +133,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	if (Direction == 3 || Direction == 4 || Direction == 7 || Direction == 8)
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
-	WallObject *wall;
+	Wall *wall;
 	wall = DoorMesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();

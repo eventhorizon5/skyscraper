@@ -33,7 +33,7 @@
 
 namespace SBS {
 
-WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Object(wrapper, temporary)
+Wall::Wall(MeshObject* wrapper, Object *proxy, bool temporary) : Object(wrapper, temporary)
 {
 	//wall object constructor
 	meshwrapper = wrapper;
@@ -45,7 +45,7 @@ WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Obj
 	sbs->WallCount++;
 }
 
-WallObject::~WallObject()
+Wall::~Wall()
 {
 	//wall object destructor
 
@@ -66,7 +66,7 @@ WallObject::~WallObject()
 	polygons.clear();
 }
 
-Polygon* WallObject::AddQuad(const std::string &name, const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
+Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
 {
 	//add a quad
 
@@ -80,7 +80,7 @@ Polygon* WallObject::AddQuad(const std::string &name, const std::string &texture
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
-Polygon* WallObject::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
+Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
 {
 	//create a generic polygon
 	Ogre::Matrix3 tm;
@@ -107,7 +107,7 @@ Polygon* WallObject::AddPolygon(const std::string &name, const std::string &text
 	return &polygons[index];
 }
 
-Polygon* WallObject::AddPolygon(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+Polygon* Wall::AddPolygon(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 	std::vector<Extents> index_extents;
@@ -129,7 +129,7 @@ Polygon* WallObject::AddPolygon(const std::string &name, const std::string &mate
 	return &polygons[index];
 }
 
-int WallObject::CreatePolygon(std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane)
+int Wall::CreatePolygon(std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 
@@ -140,7 +140,7 @@ int WallObject::CreatePolygon(std::vector<Triangle> &triangles, std::vector<Exte
 	return (int)polygons.size() - 1;
 }
 
-void WallObject::DeletePolygons(bool recreate_collider)
+void Wall::DeletePolygons(bool recreate_collider)
 {
 	//delete polygons
 
@@ -158,7 +158,7 @@ void WallObject::DeletePolygons(bool recreate_collider)
 	}
 }
 
-void WallObject::DeletePolygon(int index, bool recreate_colliders)
+void Wall::DeletePolygon(int index, bool recreate_colliders)
 {
 	//delete a single polygon
 
@@ -180,23 +180,23 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 	}
 }
 
-int WallObject::GetPolygonCount()
+int Wall::GetPolygonCount()
 {
 	return (int)polygons.size();
 }
 
-Polygon* WallObject::GetPolygon(int index)
+Polygon* Wall::GetPolygon(int index)
 {
 	if (index > -1 && index < (int)polygons.size())
 		return &polygons[index];
 	return 0;
 }
 
-int WallObject::FindPolygon(const std::string &name)
+int Wall::FindPolygon(const std::string &name)
 {
 	//find a polygon object by name
 
-	SBS_PROFILE("WallObject::FindPolygon");
+	SBS_PROFILE("Wall::FindPolygon");
 
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
@@ -206,7 +206,7 @@ int WallObject::FindPolygon(const std::string &name)
 	return -1;
 }
 
-void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Wall::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -222,11 +222,11 @@ void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> >
 	polygons[index].GetGeometry(vertices, firstonly, convert, rescale, relative, reverse);
 }
 
-bool WallObject::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 &isect, bool convert)
+bool Wall::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 &isect, bool convert)
 {
 	//check through polygons to see if the specified line intersects with this wall object
 
-	SBS_PROFILE("WallObject::IntersectsWall");
+	SBS_PROFILE("Wall::IntersectsWall");
 	float pr, best_pr = 2000000000.;
 	int best_i = -1;
 	Ogre::Vector3 cur_isect, normal;
@@ -256,7 +256,7 @@ bool WallObject::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Ve
 	return false;
 }
 
-void WallObject::Move(const Ogre::Vector3 &position, float speed)
+void Wall::Move(const Ogre::Vector3 &position, float speed)
 {
 	//move a wall object
 
@@ -272,17 +272,17 @@ void WallObject::Move(const Ogre::Vector3 &position, float speed)
 	meshwrapper->CreateCollider();
 }
 
-MeshObject* WallObject::GetMesh()
+MeshObject* Wall::GetMesh()
 {
 	return meshwrapper;
 }
 
-void WallObject::SetParentArray(std::vector<WallObject*> &array)
+void Wall::SetParentArray(std::vector<Wall*> &array)
 {
 	parent_array = &array;
 }
 
-Ogre::Vector3 WallObject::GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+Ogre::Vector3 Wall::GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
 	//do a line intersection with this wall, and return the intersection point
 
@@ -290,7 +290,7 @@ Ogre::Vector3 WallObject::GetPoint(const Ogre::Vector3 &start, const Ogre::Vecto
 	float distance = 2000000000.;
 	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
 
-	WallObject *result = meshwrapper->FindWallIntersect(sbs->ToRemote(start), sbs->ToRemote(end), isect, distance, normal, this);
+	Wall *result = meshwrapper->FindWallIntersect(sbs->ToRemote(start), sbs->ToRemote(end), isect, distance, normal, this);
 
 	if (result)
 		return sbs->ToLocal(isect);
@@ -298,7 +298,7 @@ Ogre::Vector3 WallObject::GetPoint(const Ogre::Vector3 &start, const Ogre::Vecto
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::Vector3 WallObject::GetWallExtents(float altitude, bool get_max)
+Ogre::Vector3 Wall::GetWallExtents(float altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut
 

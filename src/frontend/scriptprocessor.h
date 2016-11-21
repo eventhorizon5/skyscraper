@@ -102,7 +102,7 @@ private:
 		std::vector<std::string> Params;
 	};
 
-	SBS::WallObject *wall;
+	SBS::Wall *wall;
 	int startpos;
 	std::vector<std::string> BuildingData;
 	std::vector<std::string> BuildingDataOrig;

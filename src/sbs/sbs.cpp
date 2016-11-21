@@ -614,13 +614,13 @@ void SBS::CalculateFrameRate()
 
 bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
-	WallObject *object = new WallObject(mesh, parent, true);
+	Wall *object = new Wall(mesh, parent, true);
 	bool result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
 	delete object;
 	return result;
 }
 
-bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	//Adds a wall with the specified dimensions
 
@@ -853,13 +853,13 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 
 bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
 {
-	WallObject *object = new WallObject(mesh, parent, true);
+	Wall *object = new Wall(mesh, parent, true);
 	bool result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, autosize, legacy_behavior);
 	delete object;
 	return result;
 }
 
-bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
+bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
@@ -1113,7 +1113,7 @@ bool SBS::ReportError(const std::string &message)
 	return false;
 }
 
-WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls
 
@@ -1128,7 +1128,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 	}
 
 	//create wall object
-	WallObject *wall = mesh->CreateWallObject(name);
+	Wall *wall = mesh->CreateWallObject(name);
 
 	bool x_thickness = false, z_thickness = false;
 	std::string NewName, texture2 = texture;
@@ -1320,7 +1320,7 @@ WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const 
 	return wall;
 }
 
-WallObject* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+Wall* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls from a central point
 
@@ -1332,7 +1332,7 @@ WallObject* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const
 	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-void SBS::AddPolygon(WallObject* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+void SBS::AddPolygon(Wall* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
 {
 	//creates a polygon in the specified wall object
 
@@ -1384,7 +1384,7 @@ void SBS::AddPolygon(WallObject* wallobject, const std::string &texture, std::ve
 	}
 }
 
-WallObject* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 
@@ -1392,7 +1392,7 @@ WallObject* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const 
 		return 0;
 
 	//create wall object
-	WallObject *wall = mesh->CreateWallObject(name);
+	Wall *wall = mesh->CreateWallObject(name);
 
 	//create polygon in wall object
 	AddPolygon(wall, texture, varray, tw, th);
@@ -1400,7 +1400,7 @@ WallObject* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const 
 	return wall;
 }
 
-WallObject* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
+Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
 {
 	//Same as AddCustomWall, with only one altitude value value
 	std::vector<Ogre::Vector3> varray3;
@@ -1416,7 +1416,7 @@ WallObject* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const
 	return AddCustomWall(mesh, name, texture, varray3, tw, th);
 }
 
-WallObject* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
+Wall* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
 	std::vector<Ogre::Vector3> varray;
@@ -1490,7 +1490,7 @@ void SBS::CreateSky()
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0f;
 	texturemanager->ResetTextureMapping(true);
-	WallObject *wall = new WallObject(SkyBox, SkyBox, true);
+	Wall *wall = new Wall(SkyBox, SkyBox, true);
 
 	wall->AddQuad( //front
 		"SkyFront",
@@ -1811,7 +1811,7 @@ float SBS::FeetToMeters(float feet)
 	return feet / 3.2808399f;
 }
 
-WallObject* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, float tw, float th)
+Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, float tw, float th)
 {
 	//add joining doorway polygons if needed
 
@@ -1820,7 +1820,7 @@ WallObject* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, 
 
 	if (wall1a == true && wall2a == true)
 	{
-		WallObject *wall = mesh->CreateWallObject(wallname);
+		Wall *wall = mesh->CreateWallObject(wallname);
 
 		//convert extents to relative positioning
 		Ogre::Vector2 extents_x = wall_extents_x - wall->GetMesh()->GetPosition().x;
@@ -1866,33 +1866,33 @@ void SBS::ResetDoorwayWalls()
 	wall_extents_z = 0;
 }
 
-WallObject* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
 	//Adds a wall with the specified dimensions, to the specified mesh object
 
 	if (!mesh)
 		return 0;
 
-	WallObject *wall = mesh->CreateWallObject(name);
+	Wall *wall = mesh->CreateWallObject(name);
 
 	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
 	return wall;
 }
 
-WallObject* SBS::AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* SBS::AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset, to the specified mesh object
 
 	if (!mesh)
 		return 0;
 
-	WallObject *wall = mesh->CreateWallObject(name);
+	Wall *wall = mesh->CreateWallObject(name);
 
 	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
-WallObject* SBS::AddGround(const std::string &name, const std::string &texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z)
+Wall* SBS::AddGround(const std::string &name, const std::string &texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z)
 {
 	//Adds ground based on a tiled-floor layout, with the specified dimensions and vertical offset
 	//this does not support thickness
@@ -1923,7 +1923,7 @@ WallObject* SBS::AddGround(const std::string &name, const std::string &texture, 
 		maxz = z1;
 	}
 
-	WallObject *wall = Landscape->CreateWallObject(name);
+	Wall *wall = Landscape->CreateWallObject(name);
 
 	Report("Creating ground...");
 
@@ -2586,7 +2586,7 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "Wall")
 	{
-		WallObject *obj = static_cast<WallObject*>(object);
+		Wall *obj = static_cast<Wall*>(object);
 		obj->DeletePolygons(true);
 		deleted = true;
 	}
@@ -3600,7 +3600,7 @@ void SBS::DecrementEscalatorCount()
 	EscalatorCount--;
 }
 
-bool SBS::HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position)
+bool SBS::HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values

@@ -551,7 +551,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	ray.setDirection(sbs->GetOrientation().Inverse() * ray.getDirection());
 
 	MeshObject* mesh = 0;
-	WallObject* wall = 0;
+	Wall* wall = 0;
 
 	bool hit = sbs->HitBeam(ray, 1000.0f, mesh, wall, HitPosition);
 
@@ -1161,7 +1161,7 @@ bool Camera::PickUpModel()
 
 	Ogre::Vector3 hit_position;
 	MeshObject *mesh = 0;
-	WallObject *wall = 0;
+	Wall *wall = 0;
 	bool hit = false;
 
 	//do a raycast from the collider's position, in the forward direction

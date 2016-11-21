@@ -70,7 +70,7 @@ namespace SBS {
 	class RevolvingDoorManager;
 	class Polygon;
 	class Model;
-	class WallObject;
+	class Wall;
 	class Door;
 	class Floor;
 	class Elevator;
@@ -189,18 +189,18 @@ public:
 	void Initialize();
 	bool Start(Ogre::Camera *camera = 0);
 	void CreateSky();
-	bool AddWallMain(WallObject* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
+	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	bool AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
-	bool AddFloorMain(WallObject* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior = false);
+	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior = false);
 	bool AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior = false);
 	void CalculateFrameRate();
 	void Loop();
-	WallObject* CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
-	WallObject* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
-	WallObject* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
-	WallObject* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th);
-	WallObject* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th);
-	void AddPolygon(WallObject* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th);
+	Wall* CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
+	Wall* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
+	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
+	Wall* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th);
+	Wall* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th);
+	void AddPolygon(Wall* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th);
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);
@@ -228,10 +228,10 @@ public:
 	int GetDrawWallsCount();
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
-	WallObject* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, float tw, float th);
-	WallObject* AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
-	WallObject* AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
-	WallObject* AddGround(const std::string &name, const std::string &texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
+	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, float tw, float th);
+	Wall* AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
+	Wall* AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
+	Wall* AddGround(const std::string &name, const std::string &texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0, int stairsnumber = 0);
 	bool RegisterTimerCallback(TimerObject *timer);
 	bool UnregisterTimerCallback(TimerObject *timer);
@@ -282,7 +282,7 @@ public:
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	void AddModel(Model *model);
 	Ogre::Vector2 GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z = false);
-	void Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
+	void Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	Ogre::Vector3 GetPolygonDirection(std::vector<Ogre::Vector3> &polygon);
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
@@ -334,7 +334,7 @@ public:
 	int GetEscalatorCount();
 	void IncrementEscalatorCount();
 	void DecrementEscalatorCount();
-	bool HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
+	bool HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem();
 	bool IsObjectValid(Object* object, std::string type = "");

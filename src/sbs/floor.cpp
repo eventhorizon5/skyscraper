@@ -264,11 +264,11 @@ Floor::~Floor()
 		sbs->RemoveFloor(this);
 }
 
-WallObject* Floor::AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool isexternal, bool legacy_behavior)
+Wall* Floor::AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool isexternal, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
-	WallObject *wall;
+	Wall *wall;
 
 	if (isexternal == false)
 	{
@@ -283,20 +283,20 @@ WallObject* Floor::AddFloor(const std::string &name, const std::string &texture,
 	return wall;
 }
 
-WallObject* Floor::AddInterfloorFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* Floor::AddInterfloorFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
-	WallObject *wall = Interfloor->CreateWallObject(name);
+	Wall *wall = Interfloor->CreateWallObject(name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
-WallObject* Floor::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th, bool isexternal)
+Wall* Floor::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th, bool isexternal)
 {
 	//Adds a wall with the specified dimensions
 
-	WallObject *wall;
+	Wall *wall;
 	if (isexternal == false)
 	{
 		wall = Level->CreateWallObject(name);
@@ -310,11 +310,11 @@ WallObject* Floor::AddWall(const std::string &name, const std::string &texture, 
 	return wall;
 }
 
-WallObject* Floor::AddInterfloorWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
+Wall* Floor::AddInterfloorWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor wall with the specified dimensions
 
-	WallObject *wall = Interfloor->CreateWallObject(name);
+	Wall *wall = Interfloor->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
@@ -758,14 +758,14 @@ void Floor::EnableInterfloor(bool value)
 	IsInterfloorEnabled = value;
 }
 
-WallObject* Floor::ColumnWallBox(const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+Wall* Floor::ColumnWallBox(const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box
 
 	return sbs->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
-WallObject* Floor::ColumnWallBox2(const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+Wall* Floor::ColumnWallBox2(const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box from a central location
 
