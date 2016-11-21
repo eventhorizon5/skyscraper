@@ -86,6 +86,8 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
+
+	EnableLoop(true);
 }
 
 Stairs::~Stairs()
@@ -185,7 +187,7 @@ Stairs::~Stairs()
 		sbs->RemoveStairs(this);
 }
 
-WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
+Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
 {
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stair base is - front, back, left, or right.
@@ -198,7 +200,7 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 	}
 
 	//create wall object
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
+	Wall *wall = GetMeshObject(floor)->CreateWallObject(name);
 
 	std::string Name = name;
 	TrimString(Name);
@@ -296,7 +298,7 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 	return wall;
 }
 
-WallObject* Stairs::AddWall(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+Wall* Stairs::AddWall(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -305,12 +307,12 @@ WallObject* Stairs::AddWall(int floor, const std::string &name, const std::strin
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
+	Wall *wall = GetMeshObject(floor)->CreateWallObject(name);
 	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
 
-bool Stairs::AddWall(WallObject *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+bool Stairs::AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -319,7 +321,7 @@ bool Stairs::AddWall(WallObject *wall, int floor, const std::string &name, const
 	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
-WallObject* Stairs::AddFloor(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* Stairs::AddFloor(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -328,12 +330,12 @@ WallObject* Stairs::AddFloor(int floor, const std::string &name, const std::stri
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
+	Wall *wall = GetMeshObject(floor)->CreateWallObject(name);
 	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
 	return wall;
 }
 
-bool Stairs::AddFloor(WallObject *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+bool Stairs::AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)

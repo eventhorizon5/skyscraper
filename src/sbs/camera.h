@@ -177,6 +177,7 @@ public:
 	void RevertMovement();
 	void FreelookMove(const Ogre::Vector3 &rotation);
 	bool MouseDown();
+	void CheckObjects();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

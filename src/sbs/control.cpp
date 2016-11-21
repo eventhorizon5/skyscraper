@@ -71,7 +71,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	std::string texture = GetTexture(selection_position);
 
 	sbs->TexelOverride = true;
-	WallObject *wall;
+	Wall *wall;
 	if (Direction == "front")
 	{
 		float x = 0, y = width;

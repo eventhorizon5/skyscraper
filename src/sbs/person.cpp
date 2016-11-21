@@ -71,6 +71,7 @@ Person::Person(Object *parent, const std::string &name, int floor, bool service_
 	random_timer = new Timer("Random Timer", this);
 
 	SetFloor(floor);
+	EnableLoop(true);
 }
 
 Person::~Person()

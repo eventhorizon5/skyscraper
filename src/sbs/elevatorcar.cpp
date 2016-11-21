@@ -411,20 +411,20 @@ bool ElevatorCar::ReportError(const std::string &message)
 	return parent->ReportError(message);
 }
 
-WallObject* ElevatorCar::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+Wall* ElevatorCar::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds a wall with the specified dimensions
 
-	WallObject *wall = Mesh->CreateWallObject(name);
+	Wall *wall = Mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
 
-WallObject* ElevatorCar::AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* ElevatorCar::AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
-	WallObject *wall = Mesh->CreateWallObject(name);
+	Wall *wall = Mesh->CreateWallObject(name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }

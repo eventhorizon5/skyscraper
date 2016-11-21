@@ -808,7 +808,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, c
 
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
-	WallObject *wall;
+	Wall *wall;
 	wall = door->mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();

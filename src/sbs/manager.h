@@ -73,6 +73,7 @@ public:
 	Elevator* GetIndex(int index);
 	void Remove(Elevator *elevator);
 	void EnableAll(bool value);
+	void Loop();
 
 private:
 	struct Map
@@ -99,6 +100,7 @@ public:
 	Shaft* GetIndex(int index);
 	void Remove(Shaft *shaft);
 	void EnableAll(bool value);
+	void Loop();
 
 private:
 	struct Map
@@ -125,6 +127,7 @@ public:
 	Stairs* GetIndex(int index);
 	void Remove(Stairs *stairs);
 	void EnableAll(bool value);
+	void Loop();
 
 private:
 	struct Map

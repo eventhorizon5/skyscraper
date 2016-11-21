@@ -216,6 +216,7 @@ ElevatorManager::ElevatorManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
+	EnableLoop(true);
 }
 
 ElevatorManager::~ElevatorManager()
@@ -337,6 +338,12 @@ void ElevatorManager::EnableAll(bool value)
 	}
 }
 
+void ElevatorManager::Loop()
+{
+	if (sbs->ProcessElevators == true)
+		LoopChildren();
+}
+
 ShaftManager::ShaftManager(Object* parent) : Object(parent)
 {
 	//set up SBS object
@@ -344,6 +351,7 @@ ShaftManager::ShaftManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
+	EnableLoop(true);
 }
 
 ShaftManager::~ShaftManager()
@@ -484,6 +492,11 @@ void ShaftManager::EnableAll(bool value)
 		Array[i].object->EnableWholeShaft(value, true, true);
 }
 
+void ShaftManager::Loop()
+{
+	LoopChildren();
+}
+
 StairsManager::StairsManager(Object* parent) : Object(parent)
 {
 	//set up SBS object
@@ -491,6 +504,7 @@ StairsManager::StairsManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
+	EnableLoop(true);
 }
 
 StairsManager::~StairsManager()
@@ -630,6 +644,11 @@ void StairsManager::EnableAll(bool value)
 		Array[i].object->EnableWholeStairwell(value, true);
 }
 
+void StairsManager::Loop()
+{
+	LoopChildren();
+}
+
 DoorManager::DoorManager(Object* parent) : Object(parent)
 {
 	//set up SBS object
@@ -638,6 +657,7 @@ DoorManager::DoorManager(Object* parent) : Object(parent)
 	//create a dynamic mesh for doors
 	wrapper = new DynamicMesh(this, GetSceneNode(), "Door Container", 0, true);
 	wrapper->force_combine = true;
+	EnableLoop(true);
 }
 
 DoorManager::~DoorManager()
@@ -708,6 +728,7 @@ RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Object(parent)
 	//create a dynamic mesh for doors
 	wrapper = new DynamicMesh(this, GetSceneNode(), "Revolving Door Container", 0, true);
 	wrapper->force_combine = true;
+	EnableLoop(true);
 }
 
 RevolvingDoorManager::~RevolvingDoorManager()

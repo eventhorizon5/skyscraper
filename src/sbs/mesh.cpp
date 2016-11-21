@@ -94,7 +94,7 @@ Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, boo
 	return Ogre::Vector2(esmall, ebig);
 }
 
-void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
@@ -699,18 +699,18 @@ void MeshObject::EnableCollider(bool value)
 	sbs->camera->ResetCollisions();
 }
 
-WallObject* MeshObject::CreateWallObject(const std::string &name)
+Wall* MeshObject::CreateWallObject(const std::string &name)
 {
 	//create a new wall object in the given array
 
-	WallObject *wall = new WallObject(this);
+	Wall *wall = new Wall(this);
 	wall->SetParentArray(Walls);
 	wall->SetValues("Wall", name, false, false);
 	Walls.push_back(wall);
 	return wall;
 }
 
-WallObject* MeshObject::GetWallByName(std::string name)
+Wall* MeshObject::GetWallByName(std::string name)
 {
 	//find a wall object by name
 
@@ -781,7 +781,7 @@ bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string
 	return result;
 }
 
-WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, WallObject *wall)
+Wall* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, Wall *wall)
 {
 	//find a wall from a 3D point
 	//positions need to be in remote (Ogre) positioning
@@ -1735,7 +1735,7 @@ void MeshObject::DeleteWalls()
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
-		WallObject *wall = Walls[i];
+		Wall *wall = Walls[i];
 		if (wall)
 		{
 			wall->parent_deleting = true;
@@ -1751,7 +1751,7 @@ void MeshObject::DeleteWalls(Object *parent)
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
-		WallObject *wall = Walls[i];
+		Wall *wall = Walls[i];
 		if (wall)
 		{
 			if (wall->GetParent() == parent)
@@ -1771,7 +1771,7 @@ Ogre::Vector3 MeshObject::GetPoint(const std::string &wallname, const Ogre::Vect
 	//do a line intersection with a specified wall associated with this mesh object,
 	//and return the intersection point
 
-	WallObject *wall = GetWallByName(wallname);
+	Wall *wall = GetWallByName(wallname);
 
 	if (wall)
 		return wall->GetPoint(start, end);
@@ -1783,7 +1783,7 @@ Ogre::Vector3 MeshObject::GetWallExtents(const std::string &name, float altitude
 {
 	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
 
-	WallObject *wall = GetWallByName(name);
+	Wall *wall = GetWallByName(name);
 
 	if (wall)
 		return wall->GetWallExtents(altitude, get_max);
@@ -1841,7 +1841,7 @@ Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	return Ogre::Vector2(esmall, ebig);
 }
 
-WallObject* MeshObject::FindPolygon(const std::string &name, int &index)
+Wall* MeshObject::FindPolygon(const std::string &name, int &index)
 {
 	//finds a polygon by name in all associated wall objects
 	//returns associated wall object and polygon index

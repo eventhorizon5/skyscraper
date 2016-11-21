@@ -551,7 +551,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	ray.setDirection(sbs->GetOrientation().Inverse() * ray.getDirection());
 
 	MeshObject* mesh = 0;
-	WallObject* wall = 0;
+	Wall* wall = 0;
 
 	bool hit = sbs->HitBeam(ray, 1000.0f, mesh, wall, HitPosition);
 
@@ -1161,7 +1161,7 @@ bool Camera::PickUpModel()
 
 	Ogre::Vector3 hit_position;
 	MeshObject *mesh = 0;
-	WallObject *wall = 0;
+	Wall *wall = 0;
 	bool hit = false;
 
 	//do a raycast from the collider's position, in the forward direction
@@ -1391,6 +1391,19 @@ bool Camera::MouseDown()
 {
 	//returns true if either mouse button is down
 	return (MouseLeftDown || MouseRightDown);
+}
+
+void Camera::CheckObjects()
+{
+	//check if the user is in an elevator
+	if (sbs->ProcessElevators == true)
+		CheckElevator();
+
+	//check if the user is in a shaft
+	CheckShaft();
+
+	//check if the user is in a stairwell
+	CheckStairwell();
 }
 
 }
