@@ -534,27 +534,10 @@ void SBS::Loop()
 		//Determine floor that the camera is on
 		camera->UpdateCameraFloor();
 
-		//run elevator handlers
-		if (ProcessElevators == true)
-		{
-			for (int i = 1; i <= GetElevatorCount(); i++)
-			{
-				if (GetElevator(i))
-					GetElevator(i)->Loop();
-			}
-
-			//check if the user is in an elevator
-			camera->CheckElevator();
-		}
-
 		//process child object dynamic runloops
 		LoopChildren();
 
-		//check if the user is in a shaft
-		camera->CheckShaft();
-
-		//check if the user is in a stairwell
-		camera->CheckStairwell();
+		camera->CheckObjects();
 
 		//process misc operations on current floor
 		if (GetFloor(camera->CurrentFloor))

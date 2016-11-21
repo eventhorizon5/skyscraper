@@ -216,7 +216,7 @@ ElevatorManager::ElevatorManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
-	//EnableLoop(true);
+	EnableLoop(true);
 }
 
 ElevatorManager::~ElevatorManager()
@@ -340,7 +340,8 @@ void ElevatorManager::EnableAll(bool value)
 
 void ElevatorManager::Loop()
 {
-	LoopChildren();
+	if (sbs->ProcessElevators == true)
+		LoopChildren();
 }
 
 ShaftManager::ShaftManager(Object* parent) : Object(parent)

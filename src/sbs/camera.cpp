@@ -1393,4 +1393,17 @@ bool Camera::MouseDown()
 	return (MouseLeftDown || MouseRightDown);
 }
 
+void Camera::CheckObjects()
+{
+	//check if the user is in an elevator
+	if (sbs->ProcessElevators == true)
+		CheckElevator();
+
+	//check if the user is in a shaft
+	CheckShaft();
+
+	//check if the user is in a stairwell
+	CheckStairwell();
+}
+
 }
