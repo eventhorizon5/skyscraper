@@ -2042,7 +2042,12 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		RevolvingDoor* door = floor->AddRevolvingDoor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToBool(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]));
 
 		if (door)
-			door->SetLocked(config->lockvalue, config->keyvalue);
+		{
+			if (config->lockvalue == 0)
+				door->SetLocked(false, config->keyvalue);
+			else
+				door->SetLocked(true, config->keyvalue);
+		}
 
 		StoreCommand(door);
 		return sNextLine;
