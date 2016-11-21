@@ -216,6 +216,7 @@ ElevatorManager::ElevatorManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
+	//EnableLoop(true);
 }
 
 ElevatorManager::~ElevatorManager()
@@ -337,6 +338,11 @@ void ElevatorManager::EnableAll(bool value)
 	}
 }
 
+void ElevatorManager::Loop()
+{
+	LoopChildren();
+}
+
 ShaftManager::ShaftManager(Object* parent) : Object(parent)
 {
 	//set up SBS object
@@ -344,6 +350,7 @@ ShaftManager::ShaftManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
+	EnableLoop(true);
 }
 
 ShaftManager::~ShaftManager()
@@ -484,6 +491,11 @@ void ShaftManager::EnableAll(bool value)
 		Array[i].object->EnableWholeShaft(value, true, true);
 }
 
+void ShaftManager::Loop()
+{
+	LoopChildren();
+}
+
 StairsManager::StairsManager(Object* parent) : Object(parent)
 {
 	//set up SBS object
@@ -491,6 +503,7 @@ StairsManager::StairsManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
+	EnableLoop(true);
 }
 
 StairsManager::~StairsManager()
@@ -628,6 +641,11 @@ void StairsManager::EnableAll(bool value)
 	//enable or disable all stairwells
 	for (size_t i = 0; i < Array.size(); i++)
 		Array[i].object->EnableWholeStairwell(value, true);
+}
+
+void StairsManager::Loop()
+{
+	LoopChildren();
 }
 
 DoorManager::DoorManager(Object* parent) : Object(parent)

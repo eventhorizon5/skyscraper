@@ -547,19 +547,8 @@ void SBS::Loop()
 			camera->CheckElevator();
 		}
 
-		//run shaft loops
-		for (int i = 1; i <= GetShaftCount(); i++)
-		{
-			if (GetShaft(i))
-				GetShaft(i)->Loop();
-		}
-
-		//run stairwell loops
-		for (int i = 1; i <= GetStairsCount(); i++)
-		{
-			if (GetStairs(i))
-				GetStairs(i)->Loop();
-		}
+		//process child object dynamic runloops
+		LoopChildren();
 
 		//check if the user is in a shaft
 		camera->CheckShaft();
@@ -573,16 +562,6 @@ void SBS::Loop()
 
 		//process auto areas
 		CheckAutoAreas();
-
-		//process child object dynamic runloops
-		LoopChildren();
-
-		//process people
-		for (size_t i = 0; i < PersonArray.size(); i++)
-		{
-			if (PersonArray[i])
-				PersonArray[i]->Loop();
-		}
 
 		elapsed -= delta;
 	}

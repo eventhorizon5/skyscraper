@@ -104,6 +104,8 @@ Shaft::Shaft(Object *parent, int number, float CenterX, float CenterZ, int start
 
 	//create a dynamic mesh for doors
 	ShaftDoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Shaft Door Container", 0, true);
+
+	EnableLoop(true);
 }
 
 Shaft::~Shaft()

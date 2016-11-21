@@ -197,6 +197,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	DoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Door Container", 0, true);
 	DoorContainer->force_combine = true;
 
+	EnableLoop(true);
+
 	if (sbs->Verbose)
 		Report("elevator object created");
 }

@@ -86,6 +86,8 @@ Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int sta
 
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
+
+	EnableLoop(true);
 }
 
 Stairs::~Stairs()
