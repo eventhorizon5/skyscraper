@@ -240,6 +240,7 @@ void SBS::Initialize()
 	shaft_manager = new ShaftManager(this);
 	stairs_manager = new StairsManager(this);
 	door_manager = new DoorManager(this);
+	revolvingdoor_manager = new RevolvingDoorManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -336,6 +337,10 @@ SBS::~SBS()
 	if (door_manager)
 		delete door_manager;
 	door_manager = 0;
+
+	if (revolvingdoor_manager)
+		delete revolvingdoor_manager;
+	revolvingdoor_manager = 0;
 
 	//delete sounds
 	for (size_t i = 0; i < sounds.size(); i++)
