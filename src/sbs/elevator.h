@@ -181,6 +181,7 @@ public:
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);
 	bool ReturnToNearestFloor();
+	bool ReturnToBottomFloor();
 	bool IsLeveled();
 	bool Up();
 	bool Down();

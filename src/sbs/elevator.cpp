@@ -2429,7 +2429,7 @@ bool Elevator::EnableInspectionService(bool value)
 		if (IsMoving == true)
 			Stop();
 		else
-			ReturnToNearestFloor();
+			ReturnToBottomFloor();
 	}
 
 	return true;
@@ -3463,6 +3463,22 @@ bool Elevator::ReturnToNearestFloor()
 			AddRoute(floor, 1, 2);
 		else
 			AddRoute(floor, -1, 2);
+		return true;
+	}
+	return false;
+}
+
+bool Elevator::ReturnToBottomFloor()
+{
+	//return and relevel to bottom floor
+
+	if (IsIdle() == true && InServiceMode() == false)
+	{
+		int floor = GetCar(1)->GetBottomFloor();
+		Report("returning to bottom floor");
+		Parking = true; //enable parking mode to prevent arrival notification
+
+		AddRoute(floor, -1, 2);
 		return true;
 	}
 	return false;
