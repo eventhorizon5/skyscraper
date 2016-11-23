@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(Skyscraper)
  
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  set (CMAKE_CXX_FLAGS "-fPIC -DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
+  set (CMAKE_CXX_FLAGS "-std=c++11 -fPIC -DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 endif ()
 
 if(UNIX)
@@ -44,6 +44,9 @@ find_package(Bullet REQUIRED)
 #find Caelum
 find_package(Caelum REQUIRED)
 
+#find TBB
+find_package(TBB REQUIRED)
+
 file(GLOB FRONTEND_FILES
 	src/frontend/*.cpp
 )
@@ -76,6 +79,7 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${GTK2_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
+	${TBB_INCLUDE_DIR}
 	src/sbs
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
@@ -108,7 +112,7 @@ add_executable(skyscraper ${FRONTEND_FILES})
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${FMOD_LIBRARY})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${FMOD_LIBRARY} ${TBB_LIBRARY})
 
-target_link_libraries(skyscraper SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+target_link_libraries(skyscraper SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC} ${TBB_LIBRARY})
  
