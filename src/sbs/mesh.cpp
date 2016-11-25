@@ -32,6 +32,7 @@
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <math.h>
+#include <tbb/tbb.h>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -185,6 +186,13 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 				temppoly.push_back(origpolys[j][k]);
 				polybounds.merge(origpolys[j][k]);
 			}
+
+			tbb::concurrent_vector<Ogre::Vector3> vectest;
+			tbb::parallel_for (size_t(0), origpolys[j].size(), [&](size_t k)
+			{
+				vectest.push_back(origpolys[j][k]);
+				//polybounds.merge(origpolys[j][k]);
+			});
 
 			//skip if the polygon is completely inside the bounding box
 			if (bounds.contains(polybounds) == true)
