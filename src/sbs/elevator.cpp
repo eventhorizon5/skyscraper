@@ -2429,7 +2429,7 @@ bool Elevator::EnableInspectionService(bool value)
 		if (IsMoving == true)
 			Stop();
 		else
-			ReturnToBottomFloor();
+			ReturnToNearestFloor();
 	}
 
 	return true;
