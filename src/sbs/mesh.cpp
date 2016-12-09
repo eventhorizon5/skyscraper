@@ -187,11 +187,11 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 			}
 
 			//skip if the polygon is completely inside the bounding box
-			if (bounds.contains(polybounds) == true)
+			/*if (bounds.contains(polybounds) == true)
 			{
 				polycheck = true;
 				continue;
-			}
+			}*/
 
 			//make sure the polygon intersects bounds (is not outside the cut area)
 			if (bounds.intersects(polybounds) == true)
