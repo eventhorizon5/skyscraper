@@ -156,16 +156,57 @@ Major changes since the Alpha 9 release:
 
 Ogre 1.9 is now used instead of 1.8.1, which Alpha 9 used.  Model mesh files need to be upgraded to the newer format to prevent warning messages on startup - they'll still work fine though.
 
+Skyscraper now supports running multiple buildings simultaneously via the new Engine Contexts feature.  This makes the development of cities possible.
+
+Sky parameters can now be controlled via the Sky Control dialog.
+
+Virtual people are supported, to simulate elevator traffic.
+
+A new sound system has been added, which is more efficient than the previous one.
+
+A new Dynamic Meshes system has been added, which greatly improves the rendering efficiency of the simulator.
+
+See the forum and changelog for more information on the new changes and features.
+
+Command line options are now supported.
+
+Double-decker elevators (really multi-deck elevators) are now supported.
+
+Elevators now support hoistway access functions.
+
+Working revolving doors are supported.
+
+
 Modified keys:
 -------
+Number keys switch between engines, when multiple buildings are loaded.
 -------
 
 
 New commands/parameters:
+ListVisibleMeshes
+CreatewallObject
+AddPolygon
+AddExternalDoor
+ChimeOnArrival
+new Buildings and Car sections
+Position
+Bounds
+ShowLoadedSounds
+ShowPlayingSounds
 
 New elevator actions:
+PeakOff
+StopDoors
+SensorReset
 
-
+New call button actions:
+Off
+Up
+Down
+FireOff
+FireOn
+FireBypass
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
