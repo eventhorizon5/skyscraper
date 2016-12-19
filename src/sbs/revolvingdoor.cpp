@@ -76,8 +76,7 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 
-	Wall *wall;
-	wall = DoorMesh->CreateWallObject(name);
+	Wall *wall = DoorMesh->CreateWallObject(name);
 
 	Segments = segments;
 	width = width / 2;
