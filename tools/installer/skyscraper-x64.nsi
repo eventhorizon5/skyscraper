@@ -159,7 +159,7 @@ Section "Required libraries" SEC03
   SetOutPath "$INSTDIR"
   File "${LOCAL_FILES}\Caelum.dll"
   File "${LOCAL_FILES}\cg.dll"
-  File "${LOCAL_FILES}\fmodex64.dll"
+  File "${LOCAL_FILES}\fmod64.dll"
   File "${LOCAL_FILES}\OgreMain.dll"
   File "${LOCAL_FILES}\OgreOverlay.dll"
   File "${LOCAL_FILES}\Plugin_CgProgramManager.dll"
