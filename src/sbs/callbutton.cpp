@@ -128,7 +128,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		rows++;
 
 	//create button panel
-	float button_height = BackHeight / 3.5;
+	float button_height = BackHeight / 3.5f;
 	float button_width = BackWidth / 2;
 	float h_spacing = 0.5;
 	float v_spacing = 1.25;
