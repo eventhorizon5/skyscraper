@@ -435,6 +435,8 @@ bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
+	GetFloor(0)->AddEscalator("Escalator 1", true, true, "", "Brick", "front", -50, 0, 4, 1, 1, 10, 0, 1, 1);
+
 	//prepare 3D geometry for use
 	Prepare();
 
@@ -597,7 +599,7 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 
 	//determine axis of wall
 	int axis = 0;
-	if (fabsf(x1 - x2) > (fabsf(z1 - z2) + 0.00001))
+	if (std::abs(x1 - x2) > (std::abs(z1 - z2) + 0.00001))
 		//x axis
 		axis = 1;
 	else
@@ -839,7 +841,7 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 
 	//determine axis of floor
 	int axis = 0;
-	if (fabsf(x1 - x2) > (fabsf(z1 - z2) + 0.00001))
+	if (std::abs(x1 - x2) > (std::abs(z1 - z2) + 0.00001))
 		//x axis
 		axis = 1;
 	else
@@ -1569,11 +1571,11 @@ float SBS::GetDistance(float x1, float x2, float z1, float z2)
 	//returns the distance between 2 2D vectors
 
 	if (z1 == z2)
-		return fabsf(x1 - x2);
+		return std::abs(x1 - x2);
 	if (x1 == x2)
-		return fabsf(z1 - z2);
+		return std::abs(z1 - z2);
 	if ((x1 != x2) && (z2 != x2))
-		return sqrtf(powf(fabsf(x1 - x2), 2) + powf(fabsf(z1 - z2), 2)); //calculate diagonals
+		return sqrtf(powf(std::abs(x1 - x2), 2) + powf(std::abs(z1 - z2), 2)); //calculate diagonals
 	return 0;
 }
 
@@ -1793,7 +1795,7 @@ Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const 
 
 		//true if doorway is facing forward/backward
 		//false if doorway is facing left/right
-		bool direction = fabsf(extents_x.x - extents_x.y) > fabsf(extents_z.x - extents_z.y);
+		bool direction = std::abs(extents_x.x - extents_x.y) > std::abs(extents_z.x - extents_z.y);
 
 		DrawWalls(false, true, false, false, false, false);
 		if (direction == true)

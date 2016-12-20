@@ -1198,7 +1198,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//determine distance to destination floor
 		if (InspectionService == false && ManualMove == 0)
-			DistanceToTravel = fabsf(fabsf(Destination) - fabsf(ElevatorStart));
+			DistanceToTravel = std::abs(std::abs(Destination) - std::abs(ElevatorStart));
 		else
 		{
 			//otherwise if inspection service is on, choose the altitude of the top/bottom floor
@@ -1232,7 +1232,7 @@ void Elevator::MoveElevatorToFloor()
 					return;
 				}
 			}
-			DistanceToTravel = fabsf(fabsf(Destination) - fabsf(ElevatorStart));
+			DistanceToTravel = std::abs(std::abs(Destination) - std::abs(ElevatorStart));
 		}
 		CalculateStoppingDistance = true;
 
@@ -1511,7 +1511,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 	else if (Leveling == false && EmergencyStop == 0)
 	{
-		if (fabsf(ElevatorRate) <= LevelingSpeed)
+		if (std::abs(ElevatorRate) <= LevelingSpeed)
 		{
 			//turn on leveling if elevator's rate is less than or equal to the leveling speed value
 			if (sbs->Verbose)
@@ -1593,7 +1593,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//exit if elevator's running
-	if (fabsf(ElevatorRate) != 0)
+	if (std::abs(ElevatorRate) != 0)
 		return;
 
 	//start arrival timer
@@ -3884,7 +3884,7 @@ bool Elevator::IsManuallyStopped()
 {
 	//this will return true if elevator is stopped within 18 inches of the nearest landing
 
-	return (InServiceMode() == false && ManualStop == true && fabsf(GetCar(1)->GetDestinationAltitude(GetCar(1)->GetFloor()) - GetCar(1)->GetPosition().y) < 1.5);
+	return (InServiceMode() == false && ManualStop == true && std::abs(GetCar(1)->GetDestinationAltitude(GetCar(1)->GetFloor()) - GetCar(1)->GetPosition().y) < 1.5);
 }
 
 bool Elevator::CheckInterlocks(bool skip_current_floor)

@@ -150,6 +150,9 @@ void Escalator::Loop()
 		sound->SetLoopState(true);
 		sound->Play();
 	}
+
+	if (Run == true)
+		MoveSteps();
 }
 
 void Escalator::CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th)
@@ -251,6 +254,14 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	}
 	sbs->ResetWalls(true);
 	sbs->GetTextureManager()->ResetTextureMapping();
+}
+
+void Escalator::MoveSteps()
+{
+	for (size_t i = 0; i < Steps.size(); i++)
+	{
+
+	}
 }
 
 }

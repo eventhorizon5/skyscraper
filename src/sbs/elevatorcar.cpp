@@ -2850,7 +2850,7 @@ int ElevatorCar::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				nearest_difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
+				nearest_difference = std::abs(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
 				nearest = i;
 				firstrun = false;
 			}
@@ -2859,7 +2859,7 @@ int ElevatorCar::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				float difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
+				float difference = std::abs(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
 				if (difference < nearest_difference)
 				{
 					//mark closest

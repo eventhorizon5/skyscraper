@@ -87,7 +87,7 @@ bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t
 	//compute determinant of matrix
 	float det = m11 * m22 - m12 * m21;
 
-	if (fabsf(det) < SMALL_EPSILON)
+	if (std::abs(det) < SMALL_EPSILON)
 		return sbs->ReportError("ComputeTextureMap: Bad UV coordinates");
 	else
 	{
@@ -180,7 +180,7 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 	v = v_orig;
 
 	float det = m.Determinant();
-	if (fabsf(det) < SMALL_EPSILON)
+	if (std::abs(det) < SMALL_EPSILON)
 	{
 		//m = m.IDENTITY;
 		//return sbs->ReportError("Error computing texture space");
@@ -262,7 +262,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	if (axis == 2)
 		sideA = ptA.z - value;
 
-	if (fabsf(sideA) < SMALL_EPSILON)
+	if (std::abs(sideA) < SMALL_EPSILON)
 		sideA = 0;
 
 	for (int i = -1; ++i < (int)orig.size();)
@@ -275,7 +275,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 		if (axis == 2)
 			sideB = ptB.z - value;
 
-		if (fabsf(sideB) < SMALL_EPSILON)
+		if (std::abs(sideB) < SMALL_EPSILON)
 			sideB = 0;
 
 		if (sideB > 0)
@@ -407,7 +407,7 @@ bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vec
 	// If this vector is perpendicular to the plane of the polygon we
 	// need to catch this case here.
 	float dot2 = plane.d + plane.normal.x * end.x + plane.normal.y * end.y + plane.normal.z * end.z;
-	if (fabsf(dot1 - dot2) < SMALL_EPSILON)
+	if (std::abs(dot1 - dot2) < SMALL_EPSILON)
 		return false;
 
 	// Now we generate a plane between the starting point of the ray and
@@ -485,7 +485,7 @@ bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vect
 			plane.normal.y * (end.y - start.y) +
 			plane.normal.z * (end.z - start.z);
 
-	if (fabsf(denom) < SMALL_EPSILON)
+	if (std::abs(denom) < SMALL_EPSILON)
 		return false;  // Lines are parallel
 
 	float num = -(plane.normal.x * start.x +

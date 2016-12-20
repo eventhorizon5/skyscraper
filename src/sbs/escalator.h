@@ -48,6 +48,7 @@ private:
 	bool is_enabled;
 
 	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
+	void MoveSteps();
 };
 
 }

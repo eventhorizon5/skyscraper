@@ -1032,14 +1032,14 @@ float TextureManager::AutoSize(float n1, float n2, bool iswidth, float offset, b
 	if (iswidth == true)
 	{
 		if ((AutoX == true && enable_force == false) || (enable_force == true && force_mode == true))
-			return fabsf(n1 - n2) * offset;
+			return std::abs(n1 - n2) * offset;
 		else
 			return offset;
 	}
 	else
 	{
 		if ((AutoY == true && enable_force == false) || (enable_force == true && force_mode == true))
-			return fabsf(n1 - n2) * offset;
+			return std::abs(n1 - n2) * offset;
 		else
 			return offset;
 	}
@@ -1099,9 +1099,9 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 
 		direction = 0; //x; faces left/right
 
-		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
+		if (std::abs (normal.y) > std::abs (normal.x) && std::abs (normal.y) > std::abs (normal.z))
 			direction = 1; //y biggest; faces up/down
-		else if (fabsf (normal.z) > fabsf (normal.x))
+		else if (std::abs (normal.z) > std::abs (normal.x))
 			direction = 2; //z biggest; faces front/back
 		else if (normal.x == 0)
 			return false; //fail if normal vector is 0
@@ -1307,9 +1307,9 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 
 		direction = 0; //x; faces left/right
 
-		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
+		if (std::abs (normal.y) > std::abs (normal.x) && std::abs (normal.y) > std::abs (normal.z))
 			direction = 1; //y biggest; faces up/down
-		else if (fabsf (normal.z) > fabsf (normal.x))
+		else if (std::abs (normal.z) > std::abs (normal.x))
 			direction = 2; //z biggest; faces front/back
 		else if (normal.x == 0)
 			return false; //fail if normal vector is 0
@@ -1403,9 +1403,9 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 
 		direction = 0; //x; faces left/right
 
-		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
+		if (std::abs (normal.y) > std::abs (normal.x) && std::abs (normal.y) > std::abs (normal.z))
 			direction = 1; //y biggest; faces up/down
-		else if (fabsf (normal.z) > fabsf (normal.x))
+		else if (std::abs (normal.z) > std::abs (normal.x))
 			direction = 2; //z biggest; faces front/back
 		else if (normal.x == 0)
 			return false; //fail if normal vector is 0
@@ -1714,7 +1714,7 @@ Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filen
 		{
 			ColourValue pixCol = srcImg.getColourAt(x, y, 0);
 			ColourValue diffCol = pixCol - keyCol2;
-			pixCol.a = ((fabsf(diffCol.r) < threshold) && (fabsf(diffCol.g) < threshold) && (fabsf(diffCol.b) < threshold)) ? 0.0f : 1.0f;
+			pixCol.a = ((std::abs(diffCol.r) < threshold) && (std::abs(diffCol.g) < threshold) && (std::abs(diffCol.b) < threshold)) ? 0.0f : 1.0f;
 			Ogre::PixelUtil::packColour(pixCol, PF_A8R8G8B8, static_cast<void*>(pixelData + pxDataIndex));
 			pxDataIndex += pxDataIndexStep;
 		}

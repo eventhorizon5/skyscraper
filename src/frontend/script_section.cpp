@@ -610,7 +610,7 @@ int ScriptProcessor::Section::MathFunctions(std::string &LineData)
 		if (!IsNumeric(tempdata, value))
 			return ScriptError("Invalid value: " + tempdata);
 
-		result = fabsf(value);
+		result = std::abs(value);
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 

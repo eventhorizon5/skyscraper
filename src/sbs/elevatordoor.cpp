@@ -1624,7 +1624,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	}
 
 	//get distance from starting point
-	float difference = fabsf(tempposition - temporigin);
+	float difference = std::abs(tempposition - temporigin);
 
 	if (old_difference != 0 && manual == true && recheck_difference == true)
 	{
@@ -1674,7 +1674,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float mainwidth = wrapper->Width / 2;
 				if (parent->DoorDirection == false)
 				{
-					width = fabsf(extents_max.z - extents_min.z);
+					width = std::abs(extents_max.z - extents_min.z);
 					if (direction == 2)
 						offset = mainwidth + (extents_min.z - wrapper->Shift);
 					else
@@ -1682,7 +1682,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				}
 				else
 				{
-					width = fabsf(extents_max.x - extents_min.x);
+					width = std::abs(extents_max.x - extents_min.x);
 					if (direction == 2)
 						offset = mainwidth + (extents_min.x - wrapper->Shift);
 					else
@@ -1694,7 +1694,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			}
 			else
 			{
-				float height = fabsf(extents_max.y - extents_min.y);
+				float height = std::abs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
 					offset = wrapper->Height - extents_max.y;
@@ -1717,7 +1717,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float mainwidth = wrapper->Width / 2;
 				if (parent->DoorDirection == false)
 				{
-					width = fabsf(extents_max.z - extents_min.z);
+					width = std::abs(extents_max.z - extents_min.z);
 					if (direction == 2)
 						offset = mainwidth + (extents_min.z - wrapper->Shift);
 					else
@@ -1725,7 +1725,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				}
 				else
 				{
-					width = fabsf(extents_max.x - extents_min.x);
+					width = std::abs(extents_max.x - extents_min.x);
 					if (direction == 2)
 						offset = mainwidth + (extents_min.x - wrapper->Shift);
 					else
@@ -1736,7 +1736,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			}
 			else
 			{
-				float height = fabsf(extents_max.y - extents_min.y);
+				float height = std::abs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
 					offset = wrapper->Height - extents_max.y;
@@ -1908,7 +1908,7 @@ void ElevatorDoor::DoorObject::Reset(bool open)
 			float mainwidth = wrapper->Width / 2;
 			if (parent->DoorDirection == false)
 			{
-				float width = fabsf(extents_max.z - extents_min.z);
+				float width = std::abs(extents_max.z - extents_min.z);
 				if (direction == 2)
 					mesh->Move(Ogre::Vector3(0, 0, -(mainwidth + (width - mainwidth) + offset)));
 				else
@@ -1916,7 +1916,7 @@ void ElevatorDoor::DoorObject::Reset(bool open)
 			}
 			else
 			{
-				float width = fabsf(extents_max.x - extents_min.x);
+				float width = std::abs(extents_max.x - extents_min.x);
 				if (direction == 2)
 					mesh->Move(Ogre::Vector3(-(mainwidth + (width - mainwidth) + offset), 0, 0));
 				else
@@ -1926,7 +1926,7 @@ void ElevatorDoor::DoorObject::Reset(bool open)
 		else
 		{
 			float mainheight = wrapper->Height / 2;
-			float height = fabsf(extents_max.y - extents_min.y);
+			float height = std::abs(extents_max.y - extents_min.y);
 			if (direction == 0)
 				mesh->Move(Ogre::Vector3(0, mainheight + (height - mainheight) + offset, 0));
 			else
