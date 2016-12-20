@@ -195,65 +195,41 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		{
 			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
 			buffer = base + "-riser";
-			if (i != num_steps)
-				sbs->DrawWalls(true, true, true, true, false, true);
-			else
-				sbs->DrawWalls(true, true, false, false, false, false);
+			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, buffer, texture, thickness, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
-			if (i != num_steps)
-			{
-				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer, texture, 0, pos, -(width / 2), pos + treadsize, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
-			}
+			sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->AddFloorMain(wall, buffer, texture, 0, pos, -(width / 2), pos + treadsize, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
 		}
 		if (Direction == "left")
 		{
 			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
 			buffer = base + "-riser";
-			if (i != num_steps)
-				sbs->DrawWalls(true, true, true, true, false, true);
-			else
-				sbs->DrawWalls(true, true, false, false, false, false);
+			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, buffer, texture, thickness, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
-			if (i != num_steps)
-			{
-				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer, texture, 0, pos - treadsize, -(width / 2), pos, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
-			}
+			sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->AddFloorMain(wall, buffer, texture, 0, pos - treadsize, -(width / 2), pos, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
 		}
 		if (Direction == "back")
 		{
 			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
 			buffer = base + "-riser";
-			if (i != num_steps)
-				sbs->DrawWalls(true, true, true, true, false, true);
-			else
-				sbs->DrawWalls(true, true, false, false, false, false);
+			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, buffer, texture, thickness, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
-			if (i != num_steps)
-			{
-				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), pos, width / 2, pos + treadsize, risersize * i, risersize * i, false, false, tw, th, true);
-			}
+			sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), pos, width / 2, pos + treadsize, risersize * i, risersize * i, false, false, tw, th, true);
 		}
 		if (Direction == "front")
 		{
 			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
 			buffer = base + "-riser";
-			if (i != num_steps)
-				sbs->DrawWalls(true, true, true, true, false, true);
-			else
-				sbs->DrawWalls(true, true, false, false, false, false);
+			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, buffer, texture, thickness, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
-			if (i != num_steps)
-			{
-				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), pos - treadsize, width / 2, pos, risersize * i, risersize * i, false, false, tw, th, true);
-			}
+			sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), pos - treadsize, width / 2, pos, risersize * i, risersize * i, false, false, tw, th, true);
 		}
 	}
 	sbs->ResetWalls(true);
