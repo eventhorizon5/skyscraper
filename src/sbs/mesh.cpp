@@ -206,7 +206,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 					if (cutwalls == true)
 					{
 						//wall
-						if (fabsf(extentsx.x - extentsx.y) > fabsf(extentsz.x - extentsz.y))
+						if (std::abs(extentsx.x - extentsx.y) > std::abs(extentsz.x - extentsz.y))
 						{
 							//wall is facing forward/backward
 
@@ -434,10 +434,10 @@ void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre:
 					wall2b = true;
 				wall2a = true;
 				extent = GetExtents(polygon, 1).x + mesh_position.x;
-				if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.x) > fabsf(wall_extents_x.x - mesh_position.x)))
+				if (wall2b == false || (wall2b == true && std::abs(extent - mesh_position.x) > std::abs(wall_extents_x.x - mesh_position.x)))
 					wall_extents_x.x = extent;
 				extent = GetExtents(polygon, 3).x + mesh_position.z;
-				if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.z) > fabsf(wall_extents_z.x - mesh_position.z)))
+				if (wall2b == false || (wall2b == true && std::abs(extent - mesh_position.z) > std::abs(wall_extents_z.x - mesh_position.z)))
 					wall_extents_z.x = extent;
 				wall_extents_y = GetExtents(polygon, 2) + mesh_position.y;
 			}
@@ -448,10 +448,10 @@ void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre:
 					wall1b = true;
 				wall1a = true;
 				extent = GetExtents(polygon, 1).y + mesh_position.x;
-				if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.x) < fabsf(wall_extents_x.y - mesh_position.x)))
+				if (wall1b == false || (wall1b == true && std::abs(extent - mesh_position.x) < std::abs(wall_extents_x.y - mesh_position.x)))
 					wall_extents_x.y = extent;
 				extent = GetExtents(polygon, 3).y + mesh_position.z;
-				if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.z) < fabsf(wall_extents_z.y - mesh_position.z)))
+				if (wall1b == false || (wall1b == true && std::abs(extent - mesh_position.z) < std::abs(wall_extents_z.y - mesh_position.z)))
 					wall_extents_z.y = extent;
 			}
 		}
@@ -474,9 +474,9 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 
 	int largest_normal = 0; //x
 
-	if (fabsf(normal.y) >= fabsf(normal.x) && fabsf(normal.y) >= fabsf(normal.z))
+	if (std::abs(normal.y) >= std::abs(normal.x) && std::abs(normal.y) >= std::abs(normal.z))
 		largest_normal = 1; //y biggest
-	else if (fabsf(normal.z) > fabsf(normal.x))
+	else if (std::abs(normal.z) > std::abs(normal.x))
 		largest_normal = 2; //z biggest
 
 	if (largest_normal == 0)
