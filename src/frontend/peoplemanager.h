@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.10 Alpha - People Manager Dialog
+	Skyscraper 1.11 Alpha - People Manager Dialog
 	Copyright (C)2003-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

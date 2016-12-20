@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Person Object
-	The Skyscraper Project - Version 1.10 Alpha
+	The Skyscraper Project - Version 1.11 Alpha
 	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

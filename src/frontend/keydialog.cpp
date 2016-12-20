@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.10 Alpha - Control Reference Form
+	Skyscraper 1.11 Alpha - Control Reference Form
 	Copyright (C)2003-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
