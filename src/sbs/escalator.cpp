@@ -160,7 +160,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	//create steps
 	std::string Name = GetName();
 	TrimString(Name);
-	std::string Direction = direction;
+	Direction = direction;
 	SetCase(Direction, false);
 	int num_steps = (int)Steps.size();
 
@@ -177,7 +177,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		std::string buffer;
 
 		//create wall object
-		Wall *wall = Steps[i]->CreateWallObject(base);
+		Wall *wall = Steps[i - 1]->CreateWallObject(base);
 
 		float thickness = 0;
 		if (i < num_steps - 1)
@@ -190,6 +190,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		if (Direction == "right")
 		{
 			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
+			start.push_back(pos);
 			buffer = base + "-riser";
 			if (i != num_steps)
 				sbs->DrawWalls(true, true, true, true, false, true);
@@ -206,6 +207,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		if (Direction == "left")
 		{
 			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
+			start.push_back(pos);
 			buffer = base + "-riser";
 			if (i != num_steps)
 				sbs->DrawWalls(true, true, true, true, false, true);
@@ -222,6 +224,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		if (Direction == "back")
 		{
 			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
+			start.push_back(pos);
 			buffer = base + "-riser";
 			if (i != num_steps)
 				sbs->DrawWalls(true, true, true, true, false, true);
@@ -238,6 +241,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		if (Direction == "front")
 		{
 			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
+			start.push_back(pos);
 			buffer = base + "-riser";
 			if (i != num_steps)
 				sbs->DrawWalls(true, true, true, true, false, true);

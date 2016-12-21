@@ -46,6 +46,8 @@ private:
 	std::vector<MeshObject*> Steps;
 	Sound *sound; //sound object
 	bool is_enabled;
+	std::vector<float> start;
+	std::string Direction;
 
 	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
 	void MoveSteps();
