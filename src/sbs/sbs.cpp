@@ -435,8 +435,6 @@ bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
-	GetFloor(0)->AddEscalator("Escalator 1", true, true, "", "Brick", "front", -50, 0, 4, 1, 1, 10, 0, 1, 1);
-
 	//prepare 3D geometry for use
 	Prepare();
 
