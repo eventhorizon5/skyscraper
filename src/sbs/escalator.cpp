@@ -183,13 +183,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		//create wall object
 		Wall *wall = Steps[i - 1]->CreateWallObject(base);
 
-		float thickness = 0;
-		if (i < num_steps - 1)
-			thickness = treadsize * 2;
-		if (i == num_steps - 1)
-			thickness = treadsize;
-		if (i == num_steps)
-			thickness = 0;
+		float thickness = treadsize;
 
 		if (Direction == "right")
 		{
