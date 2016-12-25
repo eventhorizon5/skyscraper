@@ -47,7 +47,7 @@ private:
 	std::vector<MeshObject*> Steps;
 	Sound *sound; //sound object
 	bool is_enabled;
-	float start, end;
+	Ogre::Vector3 start, end;
 	std::string Direction;
 	float treadsize;
 
