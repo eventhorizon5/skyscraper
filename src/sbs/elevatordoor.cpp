@@ -1697,9 +1697,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float height = std::abs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
-					offset = wrapper->Height - extents_max.y;
+					offset = extents_max.y - wrapper->Height - wrapper->voffset;
 				else
-					offset = extents_min.y;
+					offset = extents_min.y - wrapper->voffset;
 
 				float newheight = height + offset;
 				marker1 = newheight / 4;
@@ -1739,9 +1739,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float height = std::abs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
-					offset = wrapper->Height - extents_max.y;
+					offset = extents_max.y - wrapper->Height - wrapper->voffset;
 				else
-					offset = extents_min.y;
+					offset = extents_min.y - wrapper->voffset;
 
 				marker1 = 0;
 				marker2 = mainheight + (height - mainheight) + offset;
