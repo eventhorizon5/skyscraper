@@ -1379,10 +1379,10 @@ CameraTexture* Floor::AddCameraTexture(const std::string &name, bool enabled, in
 	return cameratexture;
 }
 
-Escalator* Floor::AddEscalator(const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Escalator* Floor::AddEscalator(const std::string &name, bool run, bool run_direction, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
 	//add an escalator
-	Escalator* escalator = new Escalator(this, name, run, run_direction, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
+	Escalator* escalator = new Escalator(this, name, run, run_direction, speed, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
 	EscalatorArray.push_back(escalator);
 	return escalator;
 }

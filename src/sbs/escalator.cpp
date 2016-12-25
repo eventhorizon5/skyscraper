@@ -317,7 +317,6 @@ void Escalator::MoveSteps()
 		if (Direction == "front")
 		{
 			float pos = Steps[i]->GetPosition().z;
-			float y = Steps[i]->GetPosition().y;
 			if (pos > end.z)
 				Steps[i]->SetPosition(start);
 			else if (pos <= start.z + treadsize || pos >= end.z - treadsize)
