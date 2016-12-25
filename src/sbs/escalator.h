@@ -33,8 +33,9 @@ class SBSIMPEXP Escalator : public Object
 public:
 	bool Run;
 	bool RunDirection;
+	float Speed;
 
-	Escalator(Object *parent, const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
+	Escalator(Object *parent, const std::string &name, bool run, bool run_direction, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
 	~Escalator();
 	void Enabled(bool value);
 	void Report(const std::string &message);
@@ -46,8 +47,9 @@ private:
 	std::vector<MeshObject*> Steps;
 	Sound *sound; //sound object
 	bool is_enabled;
-	std::vector<float> start;
+	float start, end;
 	std::string Direction;
+	float treadsize;
 
 	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
 	void MoveSteps();
