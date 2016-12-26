@@ -45,6 +45,7 @@ public:
 
 private:
 	std::vector<MeshObject*> Steps;
+	DynamicMesh* StepContainer;
 	Sound *sound; //sound object
 	bool is_enabled;
 	Ogre::Vector3 start, end;

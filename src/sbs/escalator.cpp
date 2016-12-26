@@ -30,6 +30,7 @@
 #include "sound.h"
 #include "texture.h"
 #include "profiler.h"
+#include "dynamicmesh.h"
 #include "escalator.h"
 
 namespace SBS {
@@ -51,13 +52,15 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	start = 0;
 	end = 0;
 
+	StepContainer = new DynamicMesh(this, GetSceneNode(), name + " Step Container", 0, true);
+
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		MeshObject *mesh = new MeshObject(this, name);
+		MeshObject *mesh = new MeshObject(this, name, StepContainer);
 		Steps.push_back(mesh);
 	}
 
@@ -88,6 +91,10 @@ Escalator::~Escalator()
 		}
 		Steps[i] = 0;
 	}
+
+	if (StepContainer)
+		delete StepContainer;
+	StepContainer = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
