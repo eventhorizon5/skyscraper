@@ -31,11 +31,10 @@ namespace SBS {
 class SBSIMPEXP Escalator : public Object
 {
 public:
-	bool Run;
-	bool RunDirection;
+	int Run;
 	float Speed;
 
-	Escalator(Object *parent, const std::string &name, bool run, bool run_direction, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
+	Escalator(Object *parent, const std::string &name, bool run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
 	~Escalator();
 	void Enabled(bool value);
 	void Report(const std::string &message);
