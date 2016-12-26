@@ -189,10 +189,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		{
 			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
 			buffer = base + "-riser";
-			if (i != num_steps)
-				sbs->DrawWalls(true, true, true, true, false, true);
-			else
-				sbs->DrawWalls(true, true, false, false, false, false);
+			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, buffer, texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
 
 			buffer = base + "-tread";
@@ -201,8 +198,10 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
-			else if (i <= num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 2), 0));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 3), 0));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -213,10 +212,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		{
 			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
 			buffer = base + "-riser";
-			if (i != num_steps)
-				sbs->DrawWalls(true, true, true, true, false, true);
-			else
-				sbs->DrawWalls(true, true, false, false, false, false);
+			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, buffer, texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
 
 			buffer = base + "-tread";
@@ -225,8 +221,10 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
-			else if (i <= num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 2), 0));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 3), 0));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -237,10 +235,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		{
 			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
 			buffer = base + "-riser";
-			if (i != num_steps)
-				sbs->DrawWalls(true, true, true, true, false, true);
-			else
-				sbs->DrawWalls(true, true, false, false, false, false);
+			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, buffer, texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
 
 			buffer = base + "-tread";
@@ -249,8 +244,10 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
-			else if (i <= num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 2), pos));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 3), pos));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -261,10 +258,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		{
 			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
 			buffer = base + "-riser";
-			if (i != num_steps)
-				sbs->DrawWalls(true, true, true, true, false, true);
-			else
-				sbs->DrawWalls(true, true, false, false, false, false);
+			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, buffer, texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
 
 			buffer = base + "-tread";
@@ -273,8 +267,10 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
-			else if (i <= num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 2), pos));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 3), pos));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -293,9 +289,9 @@ void Escalator::MoveSteps()
 		if (Direction == "right")
 		{
 			float pos = Steps[i]->GetPosition().x;
-			if (pos < end.x)
+			if (pos < end.x - treadsize)
 				Steps[i]->SetPosition(start);
-			else if (pos >= start.x - treadsize|| pos <= end.x + treadsize)
+			else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
 				Steps[i]->Move(Ogre::Vector3(-Speed, 0, 0));
 			else if (pos > end.x + treadsize)
 				Steps[i]->Move(Ogre::Vector3(-Speed, Speed, 0));
@@ -303,9 +299,9 @@ void Escalator::MoveSteps()
 		if (Direction == "left")
 		{
 			float pos = Steps[i]->GetPosition().x;
-			if (pos > end.x)
+			if (pos > end.x + treadsize)
 				Steps[i]->SetPosition(start);
-			else if (pos <= start.x + treadsize || pos >= end.x - treadsize)
+			else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
 				Steps[i]->Move(Ogre::Vector3(Speed, 0, 0));
 			else if (pos < end.x - treadsize)
 				Steps[i]->Move(Ogre::Vector3(Speed, Speed, 0));
@@ -313,9 +309,9 @@ void Escalator::MoveSteps()
 		if (Direction == "back")
 		{
 			float pos = Steps[i]->GetPosition().z;
-			if (pos < end.z)
+			if (pos < end.z - treadsize)
 				Steps[i]->SetPosition(start);
-			else if (pos >= start.z - treadsize|| pos <= end.z + treadsize)
+			else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
 				Steps[i]->Move(Ogre::Vector3(0, 0, -Speed));
 			else if (pos > end.z + treadsize)
 				Steps[i]->Move(Ogre::Vector3(0, Speed, -Speed));
@@ -323,9 +319,9 @@ void Escalator::MoveSteps()
 		if (Direction == "front")
 		{
 			float pos = Steps[i]->GetPosition().z;
-			if (pos > end.z)
+			if (pos > end.z + treadsize)
 				Steps[i]->SetPosition(start);
-			else if (pos <= start.z + treadsize || pos >= end.z - treadsize)
+			else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
 				Steps[i]->Move(Ogre::Vector3(0, 0, Speed));
 			else if (pos < end.z - treadsize)
 				Steps[i]->Move(Ogre::Vector3(0, Speed, Speed));
