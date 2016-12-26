@@ -586,4 +586,16 @@ bool Object::SelfDestruct()
 	return sbs->DeleteObject(this);
 }
 
+void Object::Report(const std::string &message)
+{
+	//general reporting function
+	sbs->Report("Object " + ToString(Number) + ": " + message);
+}
+
+bool Object::ReportError(const std::string &message)
+{
+	//general reporting function
+	return sbs->ReportError("Object " + ToString(Number) + ": " + message);
+}
+
 }
