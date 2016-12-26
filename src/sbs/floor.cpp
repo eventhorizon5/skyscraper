@@ -330,6 +330,8 @@ void Floor::Enabled(bool value)
 	Level->Enable(value);
 	IsEnabled = value;
 
+	EnableLoop(value);
+
 	if (sbs->Verbose)
 	{
 		if (value == true)

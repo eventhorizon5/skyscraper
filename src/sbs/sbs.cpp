@@ -539,10 +539,6 @@ void SBS::Loop()
 
 		camera->CheckObjects();
 
-		//process misc operations on current floor
-		if (GetFloor(camera->CurrentFloor))
-			GetFloor(camera->CurrentFloor)->Loop();
-
 		//process auto areas
 		CheckAutoAreas();
 

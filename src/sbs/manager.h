@@ -42,6 +42,7 @@ public:
 	DynamicMesh* GetFloorDynMesh() { return floors; }
 	DynamicMesh* GetIFloorDynMesh() { return interfloors; }
 	DynamicMesh* GetColumnDynMesh() { return columnframes; }
+	void Loop();
 
 private:
 	struct Map
