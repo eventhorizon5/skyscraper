@@ -285,45 +285,91 @@ void Escalator::MoveSteps()
 {
 	for (size_t i = 0; i < Steps.size(); i++)
 	{
-		if (Direction == "right")
+		if (Run == 1)
 		{
-			float pos = Steps[i]->GetPosition().x;
-			if (pos < end.x - treadsize)
-				Steps[i]->SetPosition(start);
-			else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
-				Steps[i]->Move(Ogre::Vector3(-Speed * Run, 0, 0));
-			else if (pos > end.x + treadsize)
-				Steps[i]->Move(Ogre::Vector3(-Speed * Run, Speed * Run, 0));
+			if (Direction == "right")
+			{
+				float pos = Steps[i]->GetPosition().x;
+				if (pos < end.x - treadsize)
+					Steps[i]->SetPosition(start);
+				else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
+					Steps[i]->Move(Ogre::Vector3(-Speed * Run, 0, 0));
+				else if (pos > end.x + treadsize)
+					Steps[i]->Move(Ogre::Vector3(-Speed * Run, Speed * Run, 0));
+			}
+			if (Direction == "left")
+			{
+				float pos = Steps[i]->GetPosition().x;
+				if (pos > end.x + treadsize)
+					Steps[i]->SetPosition(start);
+				else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
+					Steps[i]->Move(Ogre::Vector3(Speed * Run, 0, 0));
+				else if (pos < end.x - treadsize)
+					Steps[i]->Move(Ogre::Vector3(Speed * Run, Speed * Run, 0));
+			}
+			if (Direction == "back")
+			{
+				float pos = Steps[i]->GetPosition().z;
+				if (pos < end.z - treadsize)
+					Steps[i]->SetPosition(start);
+				else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, 0, -Speed * Run));
+				else if (pos > end.z + treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, -Speed * Run));
+			}
+			if (Direction == "front")
+			{
+				float pos = Steps[i]->GetPosition().z;
+				if (pos > end.z + treadsize)
+					Steps[i]->SetPosition(start);
+				else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, 0, Speed * Run));
+				else if (pos < end.z - treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, Speed * Run));
+			}
 		}
-		if (Direction == "left")
+		else if (Run == -1)
 		{
-			float pos = Steps[i]->GetPosition().x;
-			if (pos > end.x + treadsize)
-				Steps[i]->SetPosition(start);
-			else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
-				Steps[i]->Move(Ogre::Vector3(Speed * Run, 0, 0));
-			else if (pos < end.x - treadsize)
-				Steps[i]->Move(Ogre::Vector3(Speed * Run, Speed * Run, 0));
-		}
-		if (Direction == "back")
-		{
-			float pos = Steps[i]->GetPosition().z;
-			if (pos < end.z - treadsize)
-				Steps[i]->SetPosition(start);
-			else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
-				Steps[i]->Move(Ogre::Vector3(0, 0, -Speed * Run));
-			else if (pos > end.z + treadsize)
-				Steps[i]->Move(Ogre::Vector3(0, Speed * Run, -Speed * Run));
-		}
-		if (Direction == "front")
-		{
-			float pos = Steps[i]->GetPosition().z;
-			if (pos > end.z + treadsize)
-				Steps[i]->SetPosition(start);
-			else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
-				Steps[i]->Move(Ogre::Vector3(0, 0, Speed * Run));
-			else if (pos < end.z - treadsize)
-				Steps[i]->Move(Ogre::Vector3(0, Speed * Run, Speed * Run));
+			if (Direction == "right")
+			{
+				float pos = Steps[i]->GetPosition().x;
+				if (pos > start.x + treadsize)
+					Steps[i]->SetPosition(end);
+				else if (pos <= end.x + (treadsize * 2) || pos >= start.x - treadsize)
+					Steps[i]->Move(Ogre::Vector3(-Speed * Run, 0, 0));
+				else if (pos < start.x - treadsize)
+					Steps[i]->Move(Ogre::Vector3(-Speed * Run, Speed * Run, 0));
+			}
+			if (Direction == "left")
+			{
+				float pos = Steps[i]->GetPosition().x;
+				if (pos < start.x - treadsize)
+					Steps[i]->SetPosition(end);
+				else if (pos >= end.x - (treadsize * 2) || pos <= start.x + treadsize)
+					Steps[i]->Move(Ogre::Vector3(Speed * Run, 0, 0));
+				else if (pos > start.x + treadsize)
+					Steps[i]->Move(Ogre::Vector3(Speed * Run, Speed * Run, 0));
+			}
+			if (Direction == "back")
+			{
+				float pos = Steps[i]->GetPosition().z;
+				if (pos > start.z + treadsize)
+					Steps[i]->SetPosition(end);
+				else if (pos <= end.z + (treadsize * 2) || pos >= start.z - treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, 0, -Speed * Run));
+				else if (pos < start.z - treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, -Speed * Run));
+			}
+			if (Direction == "front")
+			{
+				float pos = Steps[i]->GetPosition().z;
+				if (pos < start.z - treadsize)
+					Steps[i]->SetPosition(end);
+				else if (pos >= end.z - (treadsize * 2) || pos <= start.z + treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, 0, Speed * Run));
+				else if (pos > start.z + treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, Speed * Run));
+			}
 		}
 	}
 }
