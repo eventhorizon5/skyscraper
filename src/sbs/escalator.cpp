@@ -328,4 +328,19 @@ void Escalator::MoveSteps()
 	}
 }
 
+void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+{
+	//cycle run stages if shift-click is performed
+
+	if (shift == true)
+	{
+		if (Run == 1)
+			Run = -1;
+		else if (Run == -1)
+			Run = 0;
+		else if (Run == 0)
+			Run = 1;
+	}
+}
+
 }

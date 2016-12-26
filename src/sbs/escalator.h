@@ -41,6 +41,7 @@ public:
 	bool ReportError(const std::string &message);
 	void Loop();
 	bool IsEnabled() { return is_enabled; }
+	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 
 private:
 	std::vector<MeshObject*> Steps;
