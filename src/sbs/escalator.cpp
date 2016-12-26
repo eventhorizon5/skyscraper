@@ -34,7 +34,7 @@
 
 namespace SBS {
 
-Escalator::Escalator(Object *parent, const std::string &name, bool run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
+Escalator::Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
 {
 	//create a new escalator object
 	//run is either 1 for forward motion, -1 for reverse motion, 0 for stop

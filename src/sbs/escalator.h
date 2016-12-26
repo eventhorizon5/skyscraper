@@ -34,7 +34,7 @@ public:
 	int Run;
 	float Speed;
 
-	Escalator(Object *parent, const std::string &name, bool run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
+	Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
 	~Escalator();
 	void Enabled(bool value);
 	void Report(const std::string &message);
