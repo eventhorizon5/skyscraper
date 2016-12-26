@@ -42,6 +42,7 @@
 #include "door.h"
 #include "revolvingdoor.h"
 #include "directional.h"
+#include "escalator.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -2050,6 +2051,35 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		StoreCommand(door);
+		return sNextLine;
+	}
+
+	//AddEscalator command
+	if (linecheck.substr(0, 13) == "addescalator ")
+	{
+		//get data
+		int params = SplitData(LineData, 13);
+
+		if (params != 15)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 14; i++)
+		{
+			if (i == 2)
+				i = 6; //skip non-numeric parameters
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//create escalator
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		StoreCommand(floor->AddEscalator(tempdata[0], ToInt(tempdata[1]), ToFloat(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToInt(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
+
 		return sNextLine;
 	}
 
