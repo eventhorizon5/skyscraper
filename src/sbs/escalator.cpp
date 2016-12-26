@@ -199,7 +199,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, buffer, texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
 
-			Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 1), 0));
+			if (i < 3)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
+			else if (i <= num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 2), 0));
+
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
@@ -219,7 +223,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, buffer, texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
 
-			Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 1), 0));
+			if (i < 3)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
+			else if (i <= num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 2), 0));
+
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
@@ -239,7 +247,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
 
-			Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 1), pos));
+			if (i < 3)
+				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
+			else if (i <= num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 2), pos));
+
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
@@ -259,7 +271,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
 
-			Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 1), pos));
+			if (i < 3)
+				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
+			else if (i <= num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 2), pos));
+
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
