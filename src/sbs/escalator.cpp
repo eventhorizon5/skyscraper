@@ -141,7 +141,7 @@ void Escalator::Loop()
 
 	SBS_PROFILE("Escalator::Loop");
 
-	if (!IsEnabled() || !Run)
+	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
 			sound->Stop();
@@ -154,8 +154,7 @@ void Escalator::Loop()
 		sound->Play();
 	}
 
-	if (Run == true)
-		MoveSteps();
+	MoveSteps();
 }
 
 void Escalator::CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th)
