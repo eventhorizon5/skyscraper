@@ -196,11 +196,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->AddFloorMain(wall, buffer, texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
 
 			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
+				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
 			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 3), 0));
-			else if (i == num_steps)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -219,11 +219,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->AddFloorMain(wall, buffer, texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
 
 			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
+				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
 			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 3), 0));
-			else if (i == num_steps)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -242,11 +242,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
 
 			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
+				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
 			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 3), pos));
-			else if (i == num_steps)
 				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -265,11 +265,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
 
 			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
+				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
 			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 3), pos));
-			else if (i == num_steps)
 				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
