@@ -115,7 +115,7 @@ void Escalator::Enabled(bool value)
 	EnableLoop(value);
 
 	for (size_t i = 0; i < Steps.size(); i++)
-		Steps[i]->Enable(value);
+		Steps[i]->Enabled(value);
 
 	if (value == false && sound->IsPlaying() == true)
 		sound->Stop();

@@ -74,7 +74,7 @@ public:
 		~DoorWrapper();
 
 		DoorObject* CreateDoor(const std::string &doorname, const std::string &Direction, float OpenSpeed, float CloseSpeed);
-		void Enable(bool value);
+		void Enabled(bool value);
 		bool CheckDoorsOpen();
 		bool IsFinished();
 		void ResetFinished();
@@ -87,7 +87,7 @@ public:
 		std::vector<DoorObject*> doors;
 		std::string name;
 		bool Open;
-		bool Enabled;
+		bool IsEnabled;
 		float Width;
 		float Height;
 		float Thickness;

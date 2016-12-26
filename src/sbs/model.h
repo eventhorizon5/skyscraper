@@ -37,7 +37,7 @@ public:
 	Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~Model();
 	bool IsEnabled();
-	void Enable(bool value);
+	void Enabled(bool value);
 	bool IsKey();
 	int GetKeyID();
 	void SetKey(int keyid);

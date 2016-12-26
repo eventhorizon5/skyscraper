@@ -84,9 +84,9 @@ Model::~Model()
 		RemoveFromParent();
 }
 
-void Model::Enable(bool value)
+void Model::Enabled(bool value)
 {
-	mesh->Enable(value);
+	mesh->Enabled(value);
 	EnableLoop(value);
 }
 

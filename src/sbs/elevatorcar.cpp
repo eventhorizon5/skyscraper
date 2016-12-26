@@ -792,7 +792,7 @@ void ElevatorCar::Enabled(bool value)
 			Report("disabling car");
 	}
 
-	Mesh->Enable(value);
+	Mesh->Enabled(value);
 	EnableDoors(value);
 	IsEnabled = value;
 
@@ -854,7 +854,7 @@ void ElevatorCar::EnableObjects(bool value)
 	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
-			ModelArray[i]->Enable(value);
+			ModelArray[i]->Enabled(value);
 	}
 
 	//panels
@@ -1591,7 +1591,7 @@ void ElevatorCar::EnableDoors(bool value)
 			door->Enabled(value);
 	}
 
-	parent->DoorContainer->Enable(value);
+	parent->DoorContainer->Enabled(value);
 }
 
 void ElevatorCar::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)

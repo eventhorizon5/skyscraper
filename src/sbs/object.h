@@ -108,6 +108,7 @@ public:
 	virtual void Loop() {} //object runloop
 	void RegisterLoop(Object *object);
 	void UnregisterLoop(Object *object);
+	virtual void Enabled(bool value) {}
 
 	template <typename T> bool IsType()
 	{

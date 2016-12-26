@@ -89,7 +89,7 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	return true;
 }
 
-void DynamicMesh::Enable(bool value, MeshObject *client)
+void DynamicMesh::Enabled(bool value, MeshObject *client)
 {
 	if (client == 0 || meshes.size() == 1)
 	{
@@ -116,7 +116,7 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 
 		//enable all meshes if no client specified
 		for (size_t i = 0; i < meshes.size(); i++)
-			meshes[i]->Enable(value);
+			meshes[i]->Enabled(value);
 	}
 	else if (meshes.size() > 1)
 	{
@@ -125,7 +125,7 @@ void DynamicMesh::Enable(bool value, MeshObject *client)
 		int index = GetClientIndex(client);
 
 		if (index >= 0)
-			meshes[index]->Enable(value);
+			meshes[index]->Enabled(value);
 	}
 }
 
@@ -606,7 +606,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	//create and enable movable
 	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
 	//Movable->setCastShadows(true);
-	Enable(true);
+	Enabled(true);
 
 	//set maximum render distance
 	Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
@@ -627,7 +627,7 @@ DynamicMesh::Mesh::~Mesh()
 	MeshWrapper.setNull();
 }
 
-void DynamicMesh::Mesh::Enable(bool value)
+void DynamicMesh::Mesh::Enabled(bool value)
 {
 	//attach or detach from scenegraph
 
@@ -1071,8 +1071,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		//if a mesh was attached and was empty, it needs to be reattached to be visible
 		if (previous_count == 0 && enabled == true)
 		{
-			Enable(false);
-			Enable(true);
+			Enabled(false);
+			Enabled(true);
 		}
 	}
 

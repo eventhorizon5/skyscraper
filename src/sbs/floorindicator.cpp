@@ -116,7 +116,7 @@ void FloorIndicator::Enabled(bool value)
 	if (is_enabled == value)
 		return;
 
-	FloorIndicatorMesh->Enable(value);
+	FloorIndicatorMesh->Enabled(value);
 	is_enabled = value;
 }
 

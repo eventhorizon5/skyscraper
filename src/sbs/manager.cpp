@@ -205,9 +205,9 @@ void FloorManager::EnableAll(bool value)
 		Array[i].object->Enabled(value);
 
 	//enable/disable dynamic meshes
-	floors->Enable(value);
-	interfloors->Enable(value);
-	columnframes->Enable(value);
+	floors->Enabled(value);
+	interfloors->Enabled(value);
+	columnframes->Enabled(value);
 }
 
 void FloorManager::Loop()

@@ -170,7 +170,7 @@ void RevolvingDoor::Enabled(bool value)
 	if (is_enabled == value)
 		return;
 
-	DoorMesh->Enable(value);
+	DoorMesh->Enabled(value);
 	is_enabled = value;
 }
 

@@ -327,7 +327,7 @@ void Floor::Enabled(bool value)
 		return;
 
 	SBS_PROFILE("Floor::Enabled");
-	Level->Enable(value);
+	Level->Enabled(value);
 	IsEnabled = value;
 
 	EnableLoop(value);
@@ -421,7 +421,7 @@ void Floor::Enabled(bool value)
 	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
-			ModelArray[i]->Enable(value);
+			ModelArray[i]->Enabled(value);
 	}
 
 	//call buttons
@@ -437,7 +437,7 @@ void Floor::Enabled(bool value)
 		if (DoorArray[i])
 			DoorArray[i]->Enabled(value);
 	}
-	DoorWrapper->Enable(value);
+	DoorWrapper->Enabled(value);
 
 	//turn on/off directional indicators
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
@@ -749,14 +749,14 @@ bool Floor::CalculateAltitude()
 void Floor::EnableColumnFrame(bool value)
 {
 	//enable/disable columnframe mesh
-	ColumnFrame->Enable(value);
+	ColumnFrame->Enabled(value);
 	IsColumnFrameEnabled = value;
 }
 
 void Floor::EnableInterfloor(bool value)
 {
 	//enable/disable interfloor mesh
-	Interfloor->Enable(value);
+	Interfloor->Enabled(value);
 	IsInterfloorEnabled = value;
 }
 

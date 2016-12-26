@@ -184,7 +184,7 @@ void Control::Enabled(bool value)
 	if (is_enabled == value)
 		return;
 
-	ControlMesh->Enable(value);
+	ControlMesh->Enabled(value);
 	is_enabled = value;
 }
 

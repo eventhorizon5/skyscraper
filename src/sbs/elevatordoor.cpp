@@ -1223,7 +1223,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 	if (ShaftDoorsExist(floor) == false)
 		return;
 
-	ShaftDoors[index]->Enable(value);
+	ShaftDoors[index]->Enabled(value);
 }
 
 void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
@@ -1404,13 +1404,13 @@ void ElevatorDoor::Loop()
 
 void ElevatorDoor::Enabled(bool value)
 {
-	Doors->Enable(value);
+	Doors->Enabled(value);
 }
 
 bool ElevatorDoor::IsEnabled()
 {
 	//are doors enabled?
-	return Doors->Enabled;
+	return Doors->IsEnabled;
 }
 
 int ElevatorDoor::GetWhichDoors()
@@ -1531,7 +1531,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_ob
 {
 	parent = door_object;
 	Open = false;
-	Enabled = true;
+	IsEnabled = true;
 	Width = 0;
 	Height = 0;
 	Thickness = 0;
@@ -1575,17 +1575,17 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const std::strin
 	return door;
 }
 
-void ElevatorDoor::DoorWrapper::Enable(bool value)
+void ElevatorDoor::DoorWrapper::Enabled(bool value)
 {
 	//enable/disable door meshes
 
-	if (value == Enabled)
+	if (value == IsEnabled)
 		return;
 
 	for (size_t i = 0; i < doors.size(); i++)
-		doors[i]->mesh->Enable(value);
+		doors[i]->mesh->Enabled(value);
 
-	Enabled = value;
+	IsEnabled = value;
 }
 
 void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)

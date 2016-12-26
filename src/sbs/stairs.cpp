@@ -351,7 +351,7 @@ void Stairs::Enabled(int floor, bool value)
 	SBS_PROFILE("Stairs::Enabled");
 	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor)
 	{
-		GetMeshObject(floor)->Enable(value);
+		GetMeshObject(floor)->Enabled(value);
 		EnableArray[floor - startfloor] = value;
 
 		//doors
@@ -379,7 +379,7 @@ void Stairs::Enabled(int floor, bool value)
 		for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
 		{
 			if (ModelArray[floor - startfloor][i])
-				ModelArray[floor - startfloor][i]->Enable(value);
+				ModelArray[floor - startfloor][i]->Enabled(value);
 		}
 	}
 }
@@ -405,8 +405,8 @@ void Stairs::EnableWholeStairwell(bool value, bool force)
 	}
 
 	//enable/disable dynamic meshes
-	dynamic_mesh->Enable(value);
-	DoorWrapper->Enable(value);
+	dynamic_mesh->Enabled(value);
+	DoorWrapper->Enabled(value);
 
 	IsEnabled = value;
 }
