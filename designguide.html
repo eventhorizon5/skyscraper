@@ -1464,6 +1464,25 @@ Leave the sound field blank for no sounds to be played.<br>
 <em>Rotation</em> determines the starting rotation of the door.
 </p>
 
+<p align="left"><strong>36. AddEscalator</strong> - creates an escalator at
+the specified location.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddEscalator <em>name,
+run, speed, sound_file, texture, direction, CenterX, CenterZ, width, risersize,
+treadsize, num_steps, voffset, tw, th</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">AddEscalator MyEscalator,
+1, 1, 0.01, , Brick, left, 0, -10, 4, 1, 1, 15, 0, 1, 1</font></p>
+
+<p align="left">The <em>direction</em> parameter specifies the direction the
+escalator faces (where the bottom step is), and so if an escalator goes up from
+left to right, the direction would be <em>left</em>. <em>Width</em> specifies
+the step width; <em>risersize</em> specifies the height of each step riser
+(vertical portion); <em>treadsize</em> specifies the length of each step
+tread/run (horizontal portion); <em>num_stairs</em> specifies the total number
+of steps to create (including the above landing platform, but not including the
+base platform).  <em>Run</em> specifies the run state, where 1 equals forward,
+0 equals stopped, and -1 equals reverse.</p>
+
+
 <p align="left"><strong></strong></p>
 
 <br>

@@ -250,7 +250,7 @@ void ButtonPanel::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	mesh->Enable(value);
+	mesh->Enabled(value);
 
 	for (size_t i = 0; i < controls.size(); i++)
 	{

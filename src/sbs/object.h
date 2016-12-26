@@ -108,6 +108,9 @@ public:
 	virtual void Loop() {} //object runloop
 	void RegisterLoop(Object *object);
 	void UnregisterLoop(Object *object);
+	virtual void Enabled(bool value) {}
+	virtual void Report(const std::string &message);
+	virtual bool ReportError(const std::string &message);
 
 	template <typename T> bool IsType()
 	{

@@ -277,7 +277,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 	{
 		//turns shaft on/off for a specific floor
 
-		GetMeshObject(floor)->Enable(value);
+		GetMeshObject(floor)->Enabled(value);
 		EnableArray[floor - startfloor] = value;
 
 		//doors
@@ -305,7 +305,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 		for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
 		{
 			if (ModelArray[floor - startfloor][i])
-				ModelArray[floor - startfloor][i]->Enable(value);
+				ModelArray[floor - startfloor][i]->Enabled(value);
 		}
 
 		if (EnableShaftDoors == true)
@@ -352,9 +352,9 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 	}
 
 	//enable/disable dynamic meshes
-	dynamic_mesh->Enable(value);
-	ShaftDoorContainer->Enable(value);
-	DoorWrapper->Enable(value);
+	dynamic_mesh->Enabled(value);
+	ShaftDoorContainer->Enabled(value);
+	DoorWrapper->Enabled(value);
 
 	IsEnabled = value;
 	if (ShowFullShaft == true)

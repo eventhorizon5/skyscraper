@@ -443,6 +443,10 @@ bool Skyscraper::Initialize()
 		{
 			return ReportFatalError("Error initializing OGRE\nDetails: " + e.getDescription());
 		}
+		catch (...)
+		{
+			return ReportFatalError("Error initializing OGRE");
+		}
 	}
 
 	//set up overlay system

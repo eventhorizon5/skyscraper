@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Escalator Object
-	The Skyscraper Project - Version 1.10 Alpha
+	The Skyscraper Project - Version 1.11 Alpha
 	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -35,9 +35,10 @@
 
 namespace SBS {
 
-Escalator::Escalator(Object *parent, const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
+Escalator::Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
 {
 	//create a new escalator object
+	//run is either 1 for forward motion, -1 for reverse motion, 0 for stop
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stair base is - front, back, left, or right.
 
@@ -46,8 +47,10 @@ Escalator::Escalator(Object *parent, const std::string &name, bool run, bool run
 
 	is_enabled = true;
 	Run = run;
-	RunDirection = run_direction;
+	Speed = speed;
 	sbs->IncrementEscalatorCount();
+	start = 0;
+	end = 0;
 
 	StepContainer = new DynamicMesh(this, GetSceneNode(), name + " Step Container", 0, true);
 
@@ -119,7 +122,7 @@ void Escalator::Enabled(bool value)
 	EnableLoop(value);
 
 	for (size_t i = 0; i < Steps.size(); i++)
-		Steps[i]->Enable(value);
+		Steps[i]->Enabled(value);
 
 	if (value == false && sound->IsPlaying() == true)
 		sound->Stop();
@@ -145,7 +148,7 @@ void Escalator::Loop()
 
 	SBS_PROFILE("Escalator::Loop");
 
-	if (!IsEnabled() || !Run)
+	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
 			sound->Stop();
@@ -157,6 +160,8 @@ void Escalator::Loop()
 		sound->SetLoopState(true);
 		sound->Play();
 	}
+
+	MoveSteps();
 }
 
 void Escalator::CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th)
@@ -164,7 +169,8 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	//create steps
 	std::string Name = GetName();
 	TrimString(Name);
-	std::string Direction = direction;
+	Direction = direction;
+	this->treadsize = treadsize;
 	SetCase(Direction, false);
 	int num_steps = (int)Steps.size();
 
@@ -178,60 +184,207 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	{
 		float pos = 0;
 		std::string base = Name + " " + ToString(i);
-		std::string buffer;
 
 		//create wall object
 		Wall *wall = Steps[i - 1]->CreateWallObject(base);
 
-		float thickness = 0;
-		if (i < num_steps)
-			thickness = treadsize * 2;
-		if (i == num_steps)
-			thickness = treadsize;
+		float thickness = treadsize;
 
 		if (Direction == "right")
 		{
 			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
-			buffer = base + "-riser";
 			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, buffer, texture, thickness, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
-			buffer = base + "-tread";
+			sbs->AddWallMain(wall, base + "-riser", texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
+
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, buffer, texture, 0, pos, -(width / 2), pos + treadsize, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "tread", texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
+
+			if (i < 3)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
+
+			if (i == 1)
+				start = Steps[i - 1]->GetPosition();
+			if (i == num_steps)
+				end = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "left")
 		{
 			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
-			buffer = base + "-riser";
 			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, buffer, texture, thickness, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
-			buffer = base + "-tread";
+			sbs->AddWallMain(wall, base + "-riser", texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
+
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, buffer, texture, 0, pos - treadsize, -(width / 2), pos, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
+
+			if (i < 3)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
+
+			if (i == 1)
+				start = Steps[i - 1]->GetPosition();
+			if (i == num_steps)
+				end = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "back")
 		{
 			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
-			buffer = base + "-riser";
 			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, buffer, texture, thickness, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
-			buffer = base + "-tread";
+			sbs->AddWallMain(wall, base + "-riser", texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
+
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), pos, width / 2, pos + treadsize, risersize * i, risersize * i, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
+
+			if (i < 3)
+				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
+
+			if (i == 1)
+				start = Steps[i - 1]->GetPosition();
+			if (i == num_steps)
+				end = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "front")
 		{
 			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
-			buffer = base + "-riser";
 			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, buffer, texture, thickness, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
-			buffer = base + "-tread";
+			sbs->AddWallMain(wall, base + "riser", texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
+
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), pos - treadsize, width / 2, pos, risersize * i, risersize * i, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
+
+			if (i < 3)
+				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
+
+			if (i == 1)
+				start = Steps[i - 1]->GetPosition();
+			if (i == num_steps)
+				end = Steps[i - 1]->GetPosition();
 		}
 	}
 	sbs->ResetWalls(true);
 	sbs->GetTextureManager()->ResetTextureMapping();
+}
+
+void Escalator::MoveSteps()
+{
+	for (size_t i = 0; i < Steps.size(); i++)
+	{
+		if (Run == 1)
+		{
+			if (Direction == "right")
+			{
+				float pos = Steps[i]->GetPosition().x;
+				if (pos < end.x - treadsize)
+					Steps[i]->SetPosition(start);
+				else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
+					Steps[i]->Move(Ogre::Vector3(-Speed * Run, 0, 0));
+				else if (pos > end.x + treadsize)
+					Steps[i]->Move(Ogre::Vector3(-Speed * Run, Speed * Run, 0));
+			}
+			if (Direction == "left")
+			{
+				float pos = Steps[i]->GetPosition().x;
+				if (pos > end.x + treadsize)
+					Steps[i]->SetPosition(start);
+				else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
+					Steps[i]->Move(Ogre::Vector3(Speed * Run, 0, 0));
+				else if (pos < end.x - treadsize)
+					Steps[i]->Move(Ogre::Vector3(Speed * Run, Speed * Run, 0));
+			}
+			if (Direction == "back")
+			{
+				float pos = Steps[i]->GetPosition().z;
+				if (pos < end.z - treadsize)
+					Steps[i]->SetPosition(start);
+				else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, 0, -Speed * Run));
+				else if (pos > end.z + treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, -Speed * Run));
+			}
+			if (Direction == "front")
+			{
+				float pos = Steps[i]->GetPosition().z;
+				if (pos > end.z + treadsize)
+					Steps[i]->SetPosition(start);
+				else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, 0, Speed * Run));
+				else if (pos < end.z - treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, Speed * Run));
+			}
+		}
+		else if (Run == -1)
+		{
+			if (Direction == "right")
+			{
+				float pos = Steps[i]->GetPosition().x;
+				if (pos > start.x)
+					Steps[i]->SetPosition(end);
+				else if (pos <= end.x + treadsize || pos >= start.x - (treadsize * 2))
+					Steps[i]->Move(Ogre::Vector3(-Speed * Run, 0, 0));
+				else if (pos < start.x - treadsize)
+					Steps[i]->Move(Ogre::Vector3(-Speed * Run, Speed * Run, 0));
+			}
+			if (Direction == "left")
+			{
+				float pos = Steps[i]->GetPosition().x;
+				if (pos < start.x)
+					Steps[i]->SetPosition(end);
+				else if (pos >= end.x - treadsize || pos <= start.x + (treadsize * 2))
+					Steps[i]->Move(Ogre::Vector3(Speed * Run, 0, 0));
+				else if (pos > start.x + treadsize)
+					Steps[i]->Move(Ogre::Vector3(Speed * Run, Speed * Run, 0));
+			}
+			if (Direction == "back")
+			{
+				float pos = Steps[i]->GetPosition().z;
+				if (pos > start.z)
+					Steps[i]->SetPosition(end);
+				else if (pos <= end.z + treadsize || pos >= start.z - (treadsize * 2))
+					Steps[i]->Move(Ogre::Vector3(0, 0, -Speed * Run));
+				else if (pos < start.z - treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, -Speed * Run));
+			}
+			if (Direction == "front")
+			{
+				float pos = Steps[i]->GetPosition().z;
+				if (pos < start.z)
+					Steps[i]->SetPosition(end);
+				else if (pos >= end.z - treadsize || pos <= start.z + (treadsize * 2))
+					Steps[i]->Move(Ogre::Vector3(0, 0, Speed * Run));
+				else if (pos > start.z + treadsize)
+					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, Speed * Run));
+			}
+		}
+	}
+}
+
+void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+{
+	//cycle run stages if shift-click is performed
+
+	if (shift == true)
+	{
+		if (Run == 1)
+			Run = 0;
+		else if (Run == 0)
+			Run = -1;
+		else if (Run == -1)
+			Run = 1;
+	}
 }
 
 }

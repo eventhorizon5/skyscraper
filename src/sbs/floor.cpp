@@ -327,8 +327,10 @@ void Floor::Enabled(bool value)
 		return;
 
 	SBS_PROFILE("Floor::Enabled");
-	Level->Enable(value);
+	Level->Enabled(value);
 	IsEnabled = value;
+
+	EnableLoop(value);
 
 	if (sbs->Verbose)
 	{
@@ -419,7 +421,7 @@ void Floor::Enabled(bool value)
 	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
-			ModelArray[i]->Enable(value);
+			ModelArray[i]->Enabled(value);
 	}
 
 	//call buttons
@@ -435,7 +437,7 @@ void Floor::Enabled(bool value)
 		if (DoorArray[i])
 			DoorArray[i]->Enabled(value);
 	}
-	DoorWrapper->Enable(value);
+	DoorWrapper->Enabled(value);
 
 	//turn on/off directional indicators
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
@@ -747,14 +749,14 @@ bool Floor::CalculateAltitude()
 void Floor::EnableColumnFrame(bool value)
 {
 	//enable/disable columnframe mesh
-	ColumnFrame->Enable(value);
+	ColumnFrame->Enabled(value);
 	IsColumnFrameEnabled = value;
 }
 
 void Floor::EnableInterfloor(bool value)
 {
 	//enable/disable interfloor mesh
-	Interfloor->Enable(value);
+	Interfloor->Enabled(value);
 	IsInterfloorEnabled = value;
 }
 
@@ -1379,10 +1381,10 @@ CameraTexture* Floor::AddCameraTexture(const std::string &name, bool enabled, in
 	return cameratexture;
 }
 
-Escalator* Floor::AddEscalator(const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Escalator* Floor::AddEscalator(const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
 	//add an escalator
-	Escalator* escalator = new Escalator(this, name, run, run_direction, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
+	Escalator* escalator = new Escalator(this, name, run, speed, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
 	EscalatorArray.push_back(escalator);
 	return escalator;
 }

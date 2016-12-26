@@ -539,10 +539,6 @@ void SBS::Loop()
 
 		camera->CheckObjects();
 
-		//process misc operations on current floor
-		if (GetFloor(camera->CurrentFloor))
-			GetFloor(camera->CurrentFloor)->Loop();
-
 		//process auto areas
 		CheckAutoAreas();
 
@@ -1398,21 +1394,21 @@ Wall* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std:
 void SBS::EnableBuildings(bool value)
 {
 	//turns buildings on/off
-	Buildings->Enable(value);
+	Buildings->Enabled(value);
 	IsBuildingsEnabled = value;
 }
 
 void SBS::EnableLandscape(bool value)
 {
 	//turns landscape on/off
-	Landscape->Enable(value);
+	Landscape->Enabled(value);
 	IsLandscapeEnabled = value;
 }
 
 void SBS::EnableExternal(bool value)
 {
 	//turns external on/off
-	External->Enable(value);
+	External->Enabled(value);
 	IsExternalEnabled = value;
 }
 
@@ -1421,7 +1417,7 @@ void SBS::EnableSkybox(bool value)
 	//turns skybox on/off
 	if (SkyBox)
 	{
-		SkyBox->Enable(value);
+		SkyBox->Enabled(value);
 		IsSkyboxEnabled = value;
 	}
 	else

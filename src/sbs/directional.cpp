@@ -337,13 +337,13 @@ void DirectionalIndicator::Enabled(bool value)
 	if (value == is_enabled)
 		return;
 
-	DirectionalMeshBack->Enable(value);
+	DirectionalMeshBack->Enabled(value);
 	if (DirectionalMeshUp)
-		DirectionalMeshUp->Enable(value);
+		DirectionalMeshUp->Enabled(value);
 	if (DirectionalMeshDown)
-		DirectionalMeshDown->Enable(value);
+		DirectionalMeshDown->Enabled(value);
 	if (DirectionalMesh)
-		DirectionalMesh->Enable(value);
+		DirectionalMesh->Enabled(value);
 
 	is_enabled = value;
 }

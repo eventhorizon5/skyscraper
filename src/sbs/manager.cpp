@@ -46,6 +46,7 @@ FloorManager::FloorManager(Object* parent) : Object(parent)
 	floors = new DynamicMesh(this, GetSceneNode(), "Floor Container");
 	interfloors = new DynamicMesh(this, GetSceneNode(), "Interfloor Container");
 	columnframes = new DynamicMesh(this, GetSceneNode(), "Columnframe Container");
+	EnableLoop(true);
 }
 
 FloorManager::~FloorManager()
@@ -204,9 +205,14 @@ void FloorManager::EnableAll(bool value)
 		Array[i].object->Enabled(value);
 
 	//enable/disable dynamic meshes
-	floors->Enable(value);
-	interfloors->Enable(value);
-	columnframes->Enable(value);
+	floors->Enabled(value);
+	interfloors->Enabled(value);
+	columnframes->Enabled(value);
+}
+
+void FloorManager::Loop()
+{
+	LoopChildren();
 }
 
 ElevatorManager::ElevatorManager(Object* parent) : Object(parent)

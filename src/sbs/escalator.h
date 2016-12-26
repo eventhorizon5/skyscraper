@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Escalator Object
-	The Skyscraper Project - Version 1.10 Alpha
+	The Skyscraper Project - Version 1.11 Alpha
 	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -31,24 +31,29 @@ namespace SBS {
 class SBSIMPEXP Escalator : public Object
 {
 public:
-	bool Run;
-	bool RunDirection;
+	int Run;
+	float Speed;
 
-	Escalator(Object *parent, const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
+	Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
 	~Escalator();
 	void Enabled(bool value);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void Loop();
 	bool IsEnabled() { return is_enabled; }
+	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 
 private:
 	std::vector<MeshObject*> Steps;
+	DynamicMesh* StepContainer;
 	Sound *sound; //sound object
 	bool is_enabled;
-	DynamicMesh *StepContainer;
+	Ogre::Vector3 start, end;
+	std::string Direction;
+	float treadsize;
 
 	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
+	void MoveSteps();
 };
 
 }

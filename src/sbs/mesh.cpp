@@ -645,7 +645,7 @@ MeshObject::~MeshObject()
 	Bounds = 0;
 }
 
-void MeshObject::Enable(bool value)
+void MeshObject::Enabled(bool value)
 {
 	//enables or disables the mesh
 
@@ -663,7 +663,7 @@ void MeshObject::Enable(bool value)
 
 	SBS_PROFILE("MeshObject::Enable");
 
-	MeshWrapper->Enable(value, this);
+	MeshWrapper->Enabled(value, this);
 
 	EnableCollider(value);
 
@@ -1449,8 +1449,8 @@ void MeshObject::CreateCollider()
 				revert = true;
 			}
 
-			Enable(false);
-			Enable(true);
+			Enabled(false);
+			Enabled(true);
 
 			if (revert == true)
 				remove_on_disable = false;
