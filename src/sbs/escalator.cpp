@@ -397,7 +397,7 @@ void Escalator::Step::Move(const Ogre::Vector3 &vector, float speed)
 
 void Escalator::Step::OnHit()
 {
-	sbs->camera->MovePosition(vector, speed);
+	sbs->camera->MovePosition(vector * 1.675, speed);
 }
 
 }
