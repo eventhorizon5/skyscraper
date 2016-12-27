@@ -56,7 +56,7 @@ private:
 	class Step : public MeshObject
 	{
 	public:
-		Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper) {}
+		Step(Object* parent, const std::string &name, DynamicMesh* wrapper);
 		~Step() {}
 		void Move(const Ogre::Vector3 &vector, float speed = 1.0f);
 		void OnHit();
