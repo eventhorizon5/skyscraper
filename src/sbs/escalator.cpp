@@ -399,6 +399,17 @@ void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt
 	}
 }
 
+void Escalator::ResetState()
+{
+	//reset escalator state
+
+	Run = 0;
+	for (size_t i = 0; i < Steps.size(); i++)
+	{
+		Steps[i]->SetPosition(Steps[i]->start);
+	}
+}
+
 Escalator::Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper)
 {
 	vector = Ogre::Vector3::ZERO;
@@ -416,17 +427,6 @@ void Escalator::Step::Move(const Ogre::Vector3 &vector, float speed)
 void Escalator::Step::OnHit()
 {
 	sbs->camera->MovePosition(vector * 1.675, speed);
-}
-
-void Escalator::ResetState()
-{
-	//reset escalator state
-
-	Run = 0;
-	for (size_t i = 0; i < Steps.size(); i++)
-	{
-		Steps[i]->SetPosition(Steps[i]->start);
-	}
 }
 
 }
