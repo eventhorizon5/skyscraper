@@ -380,7 +380,14 @@ void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt
 	if (shift == true)
 	{
 		if (Run == 1)
+		{
 			Run = 0;
+			for (size_t i = 0; i < Steps.size(); i++)
+			{
+				Steps[i]->vector = 0;
+				Steps[i]->speed = 0;
+			}
+		}
 		else if (Run == 0)
 			Run = -1;
 		else if (Run == -1)
