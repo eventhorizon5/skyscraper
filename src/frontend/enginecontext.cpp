@@ -289,6 +289,10 @@ void EngineContext::StartSim()
 	if (frontend->Verbose == true)
 		Simcore->Verbose = true;
 
+	//set headless mode
+	if (frontend->Headless == true)
+		Simcore->Headless = true;
+
 	//Pause for 2 seconds, if first instance
 	if (instance == 0)
 	{

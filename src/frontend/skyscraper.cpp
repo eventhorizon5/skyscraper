@@ -144,6 +144,7 @@ bool Skyscraper::OnInit(void)
 	show_progress = false;
 	CheckScript = false;
 	ShowMenu = false;
+	Headless = false;
 
 #if !defined(__WXMAC__)
 	//switch current working directory to executable's path, if needed
@@ -174,6 +175,9 @@ bool Skyscraper::OnInit(void)
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_SWITCH, "p", "no-panel", "hide the control panel",
+			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+
+		{ wxCMD_LINE_SWITCH, "H", "headless", "run in headless mode",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
 		{ wxCMD_LINE_SWITCH, "v", "verbose", "enable verbose mode",
@@ -232,6 +236,10 @@ bool Skyscraper::OnInit(void)
 	if (parser->Found(wxT("check-script")) == true)
 		CheckScript = true;
 
+	//set headless mode if specified
+	if (parser->Found(wxT("headless")) == true)
+		Headless = true;
+
 	//load config file
 	try
 	{
@@ -254,10 +262,13 @@ bool Skyscraper::OnInit(void)
 		ShowConsole(false);
 
 	//Create main window and set size from INI file defaults
-	window = new MainScreen(this, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
-	//AllowResize(false);
-	window->ShowWindow();
-	window->CenterOnScreen();
+	//if (Headless == false)
+	//{
+		window = new MainScreen(this, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
+		//AllowResize(false);
+		window->ShowWindow();
+		window->CenterOnScreen();
+	//}
 
 	//start and initialize OGRE
 	if (!Initialize())
@@ -283,6 +294,9 @@ bool Skyscraper::OnInit(void)
 
 	//turn off menu if specified on command line
 	if (parser->Found(wxT("no-menu")) == true)
+		ShowMenu = false;
+
+	if (Headless == true)
 		ShowMenu = false;
 
 	if (filename != "")
@@ -403,6 +417,9 @@ void Skyscraper::Render()
 {
 	SBS_PROFILE_MAIN("Render");
 
+	if (Headless == true)
+		return;
+
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
 
@@ -500,19 +517,24 @@ bool Skyscraper::Initialize()
 	try
 	{
 		mRoot->initialise(false);
-		mRenderWindow = CreateRenderWindow();
+
+		if (Headless == false)
+			mRenderWindow = CreateRenderWindow();
 	}
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error initializing render window\nDetails: " + e.getDescription());
 	}
 
-	//get renderer info
-	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
+	if (Headless == false)
+	{
+		//get renderer info
+		Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
 
-	//shorten name
-	int loc = Renderer.find("Rendering Subsystem");
-	Renderer = Renderer.substr(0, loc - 1);
+		//shorten name
+		int loc = Renderer.find("Rendering Subsystem");
+		Renderer = Renderer.substr(0, loc - 1);
+	}
 
 	//load resource configuration
 	Ogre::ConfigFile cf;
@@ -573,15 +595,18 @@ bool Skyscraper::Initialize()
 	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
 
-	try
+	if (Headless == false)
 	{
-		mCamera = mSceneMgr->createCamera("Main Camera");
-		mViewport = mRenderWindow->addViewport(mCamera);
-		mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
+		try
+		{
+			mCamera = mSceneMgr->createCamera("Main Camera");
+			mViewport = mRenderWindow->addViewport(mCamera);
+			mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
+		}
+		catch (Ogre::Exception &e)
+		{
+			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
+		}
 	}
 
 	//setup texture filtering
@@ -1337,7 +1362,8 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 		mSceneMgr->clearScene();
 
 	//clear screen
-	mRenderWindow->update();
+	if (Headless == false)
+		mRenderWindow->update();
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
@@ -1611,6 +1637,9 @@ bool Skyscraper::InitSky(EngineContext *engine)
 
 	if (!engine)
 		return false;
+
+	if (Headless == true)
+		return true;
 
 	//ensure graphics card and render system are capable of Caelum's shaders
 	if (Renderer == "Direct3D9")
@@ -2136,7 +2165,9 @@ void Skyscraper::RefreshConsole()
 void Skyscraper::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
-	mViewport->_updateDimensions();
+
+	if (Headless == false)
+		mViewport->_updateDimensions();
 }
 
 void Skyscraper::SwitchEngines()
