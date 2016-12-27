@@ -193,7 +193,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 		if (Direction == "right")
 		{
-			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
+			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, base + "-riser", texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
 
@@ -214,7 +214,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		}
 		if (Direction == "left")
 		{
-			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
+			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, base + "-riser", texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
 
@@ -235,7 +235,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		}
 		if (Direction == "back")
 		{
-			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
+			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, base + "-riser", texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
 
@@ -256,7 +256,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		}
 		if (Direction == "front")
 		{
-			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
+			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, base + "riser", texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
 
