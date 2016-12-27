@@ -61,7 +61,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		Step *mesh = new Step(this, name, StepContainer);
+		Step *mesh = new Step(this, "Step " + ToString(i + 1), StepContainer);
 		Steps.push_back(mesh);
 	}
 
