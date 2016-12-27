@@ -31,6 +31,7 @@
 #include "texture.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
+#include "camera.h"
 #include "escalator.h"
 
 namespace SBS {
@@ -60,7 +61,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		MeshObject *mesh = new MeshObject(this, name, StepContainer);
+		Step *mesh = new Step(this, name, StepContainer);
 		Steps.push_back(mesh);
 	}
 
@@ -385,6 +386,17 @@ void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt
 		else if (Run == -1)
 			Run = 1;
 	}
+}
+
+void Escalator::Step::Move(const Ogre::Vector3 &vector, float speed)
+{
+	MeshObject::Move(vector, speed);
+	this->vector = vector;
+}
+
+void Escalator::Step::OnHit()
+{
+	sbs->camera->MovePosition(vector);
 }
 
 }

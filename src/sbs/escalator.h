@@ -26,6 +26,8 @@
 #ifndef _SBS_ESCALATOR_H
 #define _SBS_ESCALATOR_H
 
+#include "mesh.h"
+
 namespace SBS {
 
 class SBSIMPEXP Escalator : public Object
@@ -44,13 +46,25 @@ public:
 	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 
 private:
-	std::vector<MeshObject*> Steps;
 	DynamicMesh* StepContainer;
 	Sound *sound; //sound object
 	bool is_enabled;
 	Ogre::Vector3 start, end;
 	std::string Direction;
 	float treadsize;
+
+	class Step : public MeshObject
+	{
+	public:
+		Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper) {}
+		~Step() {}
+		void Move(const Ogre::Vector3 &vector, float speed = 1.0f);
+		void OnHit();
+
+		Ogre::Vector3 vector;
+	};
+
+	std::vector<Step*> Steps;
 
 	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
 	void MoveSteps();
