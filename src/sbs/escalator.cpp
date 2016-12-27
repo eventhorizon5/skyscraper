@@ -211,6 +211,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
 				end = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "left")
 		{
@@ -232,6 +233,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
 				end = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "back")
 		{
@@ -253,6 +255,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
 				end = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "front")
 		{
@@ -274,6 +277,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
 				end = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 	}
 	sbs->ResetWalls(true);
@@ -399,6 +403,7 @@ Escalator::Step::Step(Object* parent, const std::string &name, DynamicMesh* wrap
 {
 	vector = Ogre::Vector3::ZERO;
 	speed = 0;
+	start = Ogre::Vector3::ZERO;
 }
 
 void Escalator::Step::Move(const Ogre::Vector3 &vector, float speed)
@@ -411,6 +416,17 @@ void Escalator::Step::Move(const Ogre::Vector3 &vector, float speed)
 void Escalator::Step::OnHit()
 {
 	sbs->camera->MovePosition(vector * 1.675, speed);
+}
+
+void Escalator::ResetState()
+{
+	//reset escalator state
+
+	Run = 0;
+	for (size_t i = 0; i < Steps.size(); i++)
+	{
+		Steps[i]->SetPosition(Steps[i]->start);
+	}
 }
 
 }
