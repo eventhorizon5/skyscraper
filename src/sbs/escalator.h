@@ -62,6 +62,7 @@ private:
 		void OnHit();
 
 		Ogre::Vector3 vector;
+		float speed;
 	};
 
 	std::vector<Step*> Steps;

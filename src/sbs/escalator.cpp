@@ -292,9 +292,9 @@ void Escalator::MoveSteps()
 				if (pos < end.x - treadsize)
 					Steps[i]->SetPosition(start);
 				else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
-					Steps[i]->Move(Ogre::Vector3(-Speed * Run, 0, 0));
+					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 				else if (pos > end.x + treadsize)
-					Steps[i]->Move(Ogre::Vector3(-Speed * Run, Speed * Run, 0));
+					Steps[i]->Move(Ogre::Vector3(-Run, Run, 0), Speed);
 			}
 			if (Direction == "left")
 			{
@@ -302,9 +302,9 @@ void Escalator::MoveSteps()
 				if (pos > end.x + treadsize)
 					Steps[i]->SetPosition(start);
 				else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
-					Steps[i]->Move(Ogre::Vector3(Speed * Run, 0, 0));
+					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 				else if (pos < end.x - treadsize)
-					Steps[i]->Move(Ogre::Vector3(Speed * Run, Speed * Run, 0));
+					Steps[i]->Move(Ogre::Vector3(Run, Run, 0), Speed);
 			}
 			if (Direction == "back")
 			{
@@ -312,9 +312,9 @@ void Escalator::MoveSteps()
 				if (pos < end.z - treadsize)
 					Steps[i]->SetPosition(start);
 				else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, 0, -Speed * Run));
+					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 				else if (pos > end.z + treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, -Speed * Run));
+					Steps[i]->Move(Ogre::Vector3(0, Run, -Run), Speed);
 			}
 			if (Direction == "front")
 			{
@@ -322,9 +322,9 @@ void Escalator::MoveSteps()
 				if (pos > end.z + treadsize)
 					Steps[i]->SetPosition(start);
 				else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, 0, Speed * Run));
+					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 				else if (pos < end.z - treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, Speed * Run));
+					Steps[i]->Move(Ogre::Vector3(0, Run, Run), Speed);
 			}
 		}
 		else if (Run == -1)
@@ -335,9 +335,9 @@ void Escalator::MoveSteps()
 				if (pos > start.x)
 					Steps[i]->SetPosition(end);
 				else if (pos <= end.x + treadsize || pos >= start.x - (treadsize * 2))
-					Steps[i]->Move(Ogre::Vector3(-Speed * Run, 0, 0));
+					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 				else if (pos < start.x - treadsize)
-					Steps[i]->Move(Ogre::Vector3(-Speed * Run, Speed * Run, 0));
+					Steps[i]->Move(Ogre::Vector3(-Run, Run, 0), Speed);
 			}
 			if (Direction == "left")
 			{
@@ -345,9 +345,9 @@ void Escalator::MoveSteps()
 				if (pos < start.x)
 					Steps[i]->SetPosition(end);
 				else if (pos >= end.x - treadsize || pos <= start.x + (treadsize * 2))
-					Steps[i]->Move(Ogre::Vector3(Speed * Run, 0, 0));
+					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 				else if (pos > start.x + treadsize)
-					Steps[i]->Move(Ogre::Vector3(Speed * Run, Speed * Run, 0));
+					Steps[i]->Move(Ogre::Vector3(Run, Run, 0), Speed);
 			}
 			if (Direction == "back")
 			{
@@ -355,9 +355,9 @@ void Escalator::MoveSteps()
 				if (pos > start.z)
 					Steps[i]->SetPosition(end);
 				else if (pos <= end.z + treadsize || pos >= start.z - (treadsize * 2))
-					Steps[i]->Move(Ogre::Vector3(0, 0, -Speed * Run));
+					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 				else if (pos < start.z - treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, -Speed * Run));
+					Steps[i]->Move(Ogre::Vector3(0, Run, -Run), Speed);
 			}
 			if (Direction == "front")
 			{
@@ -365,9 +365,9 @@ void Escalator::MoveSteps()
 				if (pos < start.z)
 					Steps[i]->SetPosition(end);
 				else if (pos >= end.z - treadsize || pos <= start.z + (treadsize * 2))
-					Steps[i]->Move(Ogre::Vector3(0, 0, Speed * Run));
+					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 				else if (pos > start.z + treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Speed * Run, Speed * Run));
+					Steps[i]->Move(Ogre::Vector3(0, Run, Run), Speed);
 			}
 		}
 	}
@@ -392,11 +392,12 @@ void Escalator::Step::Move(const Ogre::Vector3 &vector, float speed)
 {
 	MeshObject::Move(vector, speed);
 	this->vector = vector;
+	this->speed = speed;
 }
 
 void Escalator::Step::OnHit()
 {
-	sbs->camera->MovePosition(vector);
+	sbs->camera->MovePosition(vector, speed);
 }
 
 }
