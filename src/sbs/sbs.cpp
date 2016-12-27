@@ -69,7 +69,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	sbs = this;
 	this->mSceneManager = mSceneManager;
 
-	version = "0.10.0." + std::string(SVN_REVSTR);
+	version = "0.10.1." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//root object needs to self-register
