@@ -770,9 +770,12 @@ void Camera::Loop()
 			//get SBS object
 			Object *obj = sbs->GetObject(LastHitMeshNumber);
 
-			//get original object (parent object of mesh)
 			if (obj)
 			{
+				//call hit on mesh object
+				obj->OnHit();
+
+				//call hit on original object (parent object of mesh)
 				if (obj->GetParent())
 					obj->GetParent()->OnHit();
 			}
