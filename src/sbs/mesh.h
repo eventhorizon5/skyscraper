@@ -71,7 +71,7 @@ public:
 	};
 
 	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
-	~MeshObject();
+	virtual ~MeshObject();
 	void Enabled(bool value);
 	void EnableCollider(bool value);
 	bool IsEnabled();
