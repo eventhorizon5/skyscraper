@@ -44,6 +44,7 @@ public:
 	void Loop();
 	bool IsEnabled() { return is_enabled; }
 	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void ResetState();
 
 private:
 	DynamicMesh* StepContainer;
@@ -56,13 +57,14 @@ private:
 	class Step : public MeshObject
 	{
 	public:
-		Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper) {}
+		Step(Object* parent, const std::string &name, DynamicMesh* wrapper);
 		~Step() {}
 		void Move(const Ogre::Vector3 &vector, float speed = 1.0f);
 		void OnHit();
 
 		Ogre::Vector3 vector;
 		float speed;
+		Ogre::Vector3 start;
 	};
 
 	std::vector<Step*> Steps;

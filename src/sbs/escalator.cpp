@@ -61,7 +61,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		Step *mesh = new Step(this, name, StepContainer);
+		Step *mesh = new Step(this, "Step " + ToString(i + 1), StepContainer);
 		Steps.push_back(mesh);
 	}
 
@@ -184,7 +184,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	for (int i = 1; i <= num_steps; i++)
 	{
 		float pos = 0;
-		std::string base = Name + " " + ToString(i);
+		std::string base = Name + ":" + ToString(i);
 
 		//create wall object
 		Wall *wall = Steps[i - 1]->CreateWallObject(base);
@@ -193,7 +193,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 		if (Direction == "right")
 		{
-			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
+			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, base + "-riser", texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
 
@@ -211,10 +211,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
 				end = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "left")
 		{
-			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
+			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, base + "-riser", texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
 
@@ -232,10 +233,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
 				end = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "back")
 		{
-			pos = ((treadsize * (num_steps - 1)) / 2) - (treadsize * i);
+			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, base + "-riser", texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
 
@@ -253,10 +255,11 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
 				end = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 		if (Direction == "front")
 		{
-			pos = -((treadsize * (num_steps - 1)) / 2) + (treadsize * i);
+			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
 			sbs->AddWallMain(wall, base + "riser", texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
 
@@ -274,6 +277,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				start = Steps[i - 1]->GetPosition();
 			if (i == num_steps)
 				end = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 	}
 	sbs->ResetWalls(true);
@@ -380,12 +384,37 @@ void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt
 	if (shift == true)
 	{
 		if (Run == 1)
+		{
 			Run = 0;
+			for (size_t i = 0; i < Steps.size(); i++)
+			{
+				Steps[i]->vector = 0;
+				Steps[i]->speed = 0;
+			}
+		}
 		else if (Run == 0)
 			Run = -1;
 		else if (Run == -1)
 			Run = 1;
 	}
+}
+
+void Escalator::ResetState()
+{
+	//reset escalator state
+
+	Run = 0;
+	for (size_t i = 0; i < Steps.size(); i++)
+	{
+		Steps[i]->SetPosition(Steps[i]->start);
+	}
+}
+
+Escalator::Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper)
+{
+	vector = Ogre::Vector3::ZERO;
+	speed = 0;
+	start = Ogre::Vector3::ZERO;
 }
 
 void Escalator::Step::Move(const Ogre::Vector3 &vector, float speed)
