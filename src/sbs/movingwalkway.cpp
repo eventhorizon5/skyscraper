@@ -48,7 +48,7 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 	is_enabled = true;
 	Run = run;
 	Speed = speed;
-	//sbs->IncrementEscalatorCount();
+	sbs->IncrementMovingWalkwayCount();
 	start = 0;
 	end = 0;
 

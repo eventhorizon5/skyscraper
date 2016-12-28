@@ -337,6 +337,9 @@ public:
 	int GetEscalatorCount();
 	void IncrementEscalatorCount();
 	void DecrementEscalatorCount();
+	int GetMovingWalkwayCount();
+	void IncrementMovingWalkwayCount();
+	void DecrementMovingWalkwayCount();
 	bool HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem();
@@ -485,6 +488,8 @@ private:
 	int ObjectCount; //number of simulator objects
 
 	int EscalatorCount; //number of escalators
+
+	int MovingWalkwayCount; //number of moving walkways
 
 	//internal clock
 	unsigned long current_time;
