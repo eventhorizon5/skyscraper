@@ -469,18 +469,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     AddMovingWalkway Walkway1, 1, 0.01, , Brick, left, 0, -10, 4, 1, 16, -0.01, 1, 1
 <EndFloor>
 
-<Floors 0 to 1>
-    Group = 0, 1
-<EndFloor>
-
 <Floor 0>
-    CutAll -7.5, 12, -12, 7.5, -1, -8, false, true
-    AddFloor floor, Carpet1, 0.1, -5.5, -12, 7.5, -8, 0, 0, false, false, 0, 0, false
-    CreateWallBox2 floor, inside, Ceiling1, 0, -10, 15, 4, %interfloorheight% + 0.6, %height% - 0.6, 0, 0, true, false, false, false
-<EndFloor>
-
-<Floor 1>
     CutAll -7.5, 5, -12, 7.5, -1, -8, false, true
 <EndFloor>
-
 

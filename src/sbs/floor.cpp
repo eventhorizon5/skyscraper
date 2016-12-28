@@ -475,6 +475,13 @@ void Floor::Enabled(bool value)
 			EscalatorArray[i]->Enabled(value);
 	}
 
+	//moving walkways
+	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
+	{
+		if (MovingWalkwayArray[i])
+			MovingWalkwayArray[i]->Enabled(value);
+	}
+
 	//sounds
 	for (size_t i = 0; i < sounds.size(); i++)
 	{
