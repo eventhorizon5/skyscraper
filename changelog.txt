@@ -1,3 +1,12 @@
+Version 1.10.1 (2.0 Alpha 10 - Update 1)
+-------------------------
+-added support for moving walkways
+-added support for escalators
+-added Headless Mode for future use
+-integrated reporting functions into Object
+-integrated Enabled() function into Object
+-fixes for vertical elevator door movement
+
 Version 1.10 (2.0 Alpha 10)
 -------------------------
 -added support for revolving doors
