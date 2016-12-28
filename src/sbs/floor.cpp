@@ -47,6 +47,7 @@
 #include "sound.h"
 #include "profiler.h"
 #include "revolvingdoor.h"
+#include "movingwalkway.h"
 #include "floor.h"
 
 namespace SBS {
@@ -96,6 +97,17 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 Floor::~Floor()
 {
 	//Destructor
+
+	//delete moving walkways
+	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
+	{
+		if (MovingWalkwayArray[i])
+		{
+			MovingWalkwayArray[i]->parent_deleting = true;
+			delete MovingWalkwayArray[i];
+		}
+		MovingWalkwayArray[i] = 0;
+	}
 
 	//delete escalators
 	for (size_t i = 0; i < EscalatorArray.size(); i++)
@@ -1308,6 +1320,19 @@ void Floor::RemoveEscalator(Escalator *escalator)
 	}
 }
 
+void Floor::RemoveMovingWalkway(MovingWalkway *walkway)
+{
+	//remove an escalator reference (does not delete the object itself)
+	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
+	{
+		if (MovingWalkwayArray[i] == walkway)
+		{
+			MovingWalkwayArray.erase(MovingWalkwayArray.begin() + i);
+			return;
+		}
+	}
+}
+
 Light* Floor::AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a light
@@ -1387,6 +1412,14 @@ Escalator* Floor::AddEscalator(const std::string &name, int run, float speed, co
 	Escalator* escalator = new Escalator(this, name, run, speed, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
 	EscalatorArray.push_back(escalator);
 	return escalator;
+}
+
+MovingWalkway* Floor::AddMovingWalkway(const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float treadsize, int num_steps, float voffset, float tw, float th)
+{
+	//add an escalator
+	MovingWalkway* walkway = new MovingWalkway(this, name, run, speed, sound_file, texture, direction, CenterX, CenterZ, width, treadsize, num_steps, GetBase(true) + voffset, tw, th);
+	MovingWalkwayArray.push_back(walkway);
+	return walkway;
 }
 
 void Floor::SetAltitude(float altitude)

@@ -100,6 +100,7 @@ namespace SBS {
 	class TimerObject;
 	class RandomGen;
 	class RevolvingDoor;
+	class MovingWalkway;
 }
 
 #include "object.h"

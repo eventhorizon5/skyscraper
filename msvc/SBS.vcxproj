@@ -288,6 +288,7 @@
     <ClCompile Include="..\src\sbs\manager.cpp" />
     <ClCompile Include="..\src\sbs\mesh.cpp" />
     <ClCompile Include="..\src\sbs\model.cpp" />
+    <ClCompile Include="..\src\sbs\movingwalkway.cpp" />
     <ClCompile Include="..\src\sbs\object.cpp" />
     <ClCompile Include="..\src\sbs\person.cpp" />
     <ClCompile Include="..\src\sbs\polygon.cpp" />
@@ -329,6 +330,7 @@
     <ClInclude Include="..\src\sbs\manager.h" />
     <ClInclude Include="..\src\sbs\mesh.h" />
     <ClInclude Include="..\src\sbs\model.h" />
+    <ClInclude Include="..\src\sbs\movingwalkway.h" />
     <ClInclude Include="..\src\sbs\object.h" />
     <ClInclude Include="..\src\sbs\person.h" />
     <ClInclude Include="..\src\sbs\polygon.h" />

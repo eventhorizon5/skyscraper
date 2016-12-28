@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Escalator Object
+	Scalable Building Simulator - Moving Walkway Object
 	The Skyscraper Project - Version 1.11 Alpha
 	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -32,23 +32,23 @@
 #include "profiler.h"
 #include "dynamicmesh.h"
 #include "camera.h"
-#include "escalator.h"
+#include "movingwalkway.h"
 
 namespace SBS {
 
-Escalator::Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
+MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
 {
-	//create a new escalator object
+	//create a new moving walkway object
 	//run is either 1 for forward motion, -1 for reverse motion, 0 for stop
 	//direction is where the stair base is - front, back, left, or right.
 
 	//set up SBS object
-	SetValues("Escalator", name, false);
+	SetValues("MovingWalkway", name, false);
 
 	is_enabled = true;
 	Run = run;
 	Speed = speed;
-	sbs->IncrementEscalatorCount();
+	//sbs->IncrementEscalatorCount();
 	start = 0;
 	end = 0;
 
@@ -69,10 +69,10 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	sound->Load(sound_file);
 
 	//create steps
-	CreateSteps(texture, direction, width, risersize, treadsize, tw, th);
+	CreateSteps(texture, direction, width, treadsize, tw, th);
 }
 
-Escalator::~Escalator()
+MovingWalkway::~MovingWalkway()
 {
 	if (sound)
 	{
@@ -107,12 +107,12 @@ Escalator::~Escalator()
 			std::string type = GetParent()->GetType();
 
 			if (type == "Floor")
-				static_cast<Floor*>(GetParent())->RemoveEscalator(this);
+				static_cast<Floor*>(GetParent())->RemoveMovingWalkway(this);
 		}
 	}
 }
 
-void Escalator::Enabled(bool value)
+void MovingWalkway::Enabled(bool value)
 {
 	//enable or disable escalator
 
@@ -130,23 +130,23 @@ void Escalator::Enabled(bool value)
 	is_enabled = value;
 }
 
-void Escalator::Report(const std::string &message)
+void MovingWalkway::Report(const std::string &message)
 {
 	//general reporting function
-	sbs->Report("Escalator " + GetName() + ": " + message);
+	sbs->Report("Moving Walkway " + GetName() + ": " + message);
 }
 
-bool Escalator::ReportError(const std::string &message)
+bool MovingWalkway::ReportError(const std::string &message)
 {
 	//general reporting function
-	return sbs->ReportError("Escalator " + GetName() + ": " + message);
+	return sbs->ReportError("Moving Walkway " + GetName() + ": " + message);
 }
 
-void Escalator::Loop()
+void MovingWalkway::Loop()
 {
 	//run loop
 
-	SBS_PROFILE("Escalator::Loop");
+	SBS_PROFILE("MovingWalkway::Loop");
 
 	if (!IsEnabled() || Run == 0)
 	{
@@ -164,7 +164,7 @@ void Escalator::Loop()
 	MoveSteps();
 }
 
-void Escalator::CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th)
+void MovingWalkway::CreateSteps(const std::string &texture, const std::string &direction, float width, float treadsize, float tw, float th)
 {
 	//create steps
 	std::string Name = GetName();
@@ -193,18 +193,15 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		if (Direction == "right")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
-
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "tread", texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "tread", texture, 0, 0, -(width / 2), treadsize, width / 2, 0, 0, false, false, tw, th, true);
 
 			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
+				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
 			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
+				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
 			else if (i == num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
+				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -215,18 +212,15 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		if (Direction == "left")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
-
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -treadsize, -(width / 2), 0, width / 2, 0, 0, false, false, tw, th, true);
 
 			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
+				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
 			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
+				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
 			else if (i == num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
+				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -237,18 +231,15 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		if (Direction == "back")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
-
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -(width / 2), 0, width / 2, treadsize, 0, 0, false, false, tw, th, true);
 
 			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
+				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
+				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 			else if (i == num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
+				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -259,18 +250,15 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		if (Direction == "front")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "riser", texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
-
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, 0, 0, false, false, tw, th, true);
 
 			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
+				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
+				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 			else if (i == num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
+				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -283,7 +271,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	sbs->GetTextureManager()->ResetTextureMapping();
 }
 
-void Escalator::MoveSteps()
+void MovingWalkway::MoveSteps()
 {
 	for (size_t i = 0; i < Steps.size(); i++)
 	{
@@ -297,7 +285,7 @@ void Escalator::MoveSteps()
 				else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
 					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 				else if (pos > end.x + treadsize)
-					Steps[i]->Move(Ogre::Vector3(-Run, Run, 0), Speed);
+					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 			}
 			if (Direction == "left")
 			{
@@ -307,7 +295,7 @@ void Escalator::MoveSteps()
 				else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
 					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 				else if (pos < end.x - treadsize)
-					Steps[i]->Move(Ogre::Vector3(Run, Run, 0), Speed);
+					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 			}
 			if (Direction == "back")
 			{
@@ -317,7 +305,7 @@ void Escalator::MoveSteps()
 				else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
 					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 				else if (pos > end.z + treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Run, -Run), Speed);
+					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 			}
 			if (Direction == "front")
 			{
@@ -327,7 +315,7 @@ void Escalator::MoveSteps()
 				else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
 					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 				else if (pos < end.z - treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Run, Run), Speed);
+					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 			}
 		}
 		else if (Run == -1)
@@ -340,7 +328,7 @@ void Escalator::MoveSteps()
 				else if (pos <= end.x + treadsize || pos >= start.x - (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 				else if (pos < start.x - treadsize)
-					Steps[i]->Move(Ogre::Vector3(-Run, Run, 0), Speed);
+					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 			}
 			if (Direction == "left")
 			{
@@ -350,7 +338,7 @@ void Escalator::MoveSteps()
 				else if (pos >= end.x - treadsize || pos <= start.x + (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 				else if (pos > start.x + treadsize)
-					Steps[i]->Move(Ogre::Vector3(Run, Run, 0), Speed);
+					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 			}
 			if (Direction == "back")
 			{
@@ -360,7 +348,7 @@ void Escalator::MoveSteps()
 				else if (pos <= end.z + treadsize || pos >= start.z - (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 				else if (pos < start.z - treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Run, -Run), Speed);
+					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 			}
 			if (Direction == "front")
 			{
@@ -370,13 +358,13 @@ void Escalator::MoveSteps()
 				else if (pos >= end.z - treadsize || pos <= start.z + (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 				else if (pos > start.z + treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Run, Run), Speed);
+					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 			}
 		}
 	}
 }
 
-void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+void MovingWalkway::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	//cycle run stages if shift-click is performed
 
@@ -398,7 +386,7 @@ void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt
 	}
 }
 
-void Escalator::ResetState()
+void MovingWalkway::ResetState()
 {
 	//reset escalator state
 
@@ -409,21 +397,21 @@ void Escalator::ResetState()
 	}
 }
 
-Escalator::Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper)
+MovingWalkway::Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper)
 {
 	vector = Ogre::Vector3::ZERO;
 	speed = 0;
 	start = Ogre::Vector3::ZERO;
 }
 
-void Escalator::Step::Move(const Ogre::Vector3 &vector, float speed)
+void MovingWalkway::Step::Move(const Ogre::Vector3 &vector, float speed)
 {
 	MeshObject::Move(vector, speed);
 	this->vector = vector;
 	this->speed = speed;
 }
 
-void Escalator::Step::OnHit()
+void MovingWalkway::Step::OnHit()
 {
 	sbs->camera->MovePosition(vector * 1.675, speed);
 }
