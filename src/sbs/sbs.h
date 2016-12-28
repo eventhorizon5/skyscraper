@@ -100,6 +100,8 @@ namespace SBS {
 	class TimerObject;
 	class RandomGen;
 	class RevolvingDoor;
+	class MovingWalkway;
+	class Step;
 }
 
 #include "object.h"
@@ -180,6 +182,7 @@ public:
 	bool RenderOnStartup; //render objects on startup
 	bool RandomActivity; //random activity is enabled
 	int InstanceNumber; //SBS engine instance number
+	bool Headless; //true if running in headless mode
 
 	//public functions
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
@@ -334,6 +337,9 @@ public:
 	int GetEscalatorCount();
 	void IncrementEscalatorCount();
 	void DecrementEscalatorCount();
+	int GetMovingWalkwayCount();
+	void IncrementMovingWalkwayCount();
+	void DecrementMovingWalkwayCount();
 	bool HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem();
@@ -482,6 +488,8 @@ private:
 	int ObjectCount; //number of simulator objects
 
 	int EscalatorCount; //number of escalators
+
+	int MovingWalkwayCount; //number of moving walkways
 
 	//internal clock
 	unsigned long current_time;

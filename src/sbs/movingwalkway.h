@@ -23,19 +23,19 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_ESCALATOR_H
-#define _SBS_ESCALATOR_H
+#ifndef _SBS_MOVINGWALKWAY_H
+#define _SBS_MOVINGWALKWAY_H
 
 namespace SBS {
 
-class SBSIMPEXP Escalator : public Object
+class SBSIMPEXP MovingWalkway : public Object
 {
 public:
 	int Run;
 	float Speed;
 
-	Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
-	~Escalator();
+	MovingWalkway(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float treadsize, int num_steps, float voffset, float tw, float th);
+	~MovingWalkway();
 	void Enabled(bool value);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
@@ -54,7 +54,7 @@ private:
 
 	std::vector<Step*> Steps;
 
-	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
+	void CreateSteps(const std::string &texture, const std::string &direction, float width, float treadsize, float tw, float th);
 	void MoveSteps();
 };
 

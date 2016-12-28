@@ -729,6 +729,9 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
+	if (sbs->Headless == true)
+		return true;
+
 	SBS_PROFILE("MeshObject::ChangeTexture");
 	std::string material = texture;
 	TrimString(material);
@@ -1968,6 +1971,9 @@ void MeshObject::CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool c
 bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh)
 {
 	//load mesh object from a file
+
+	if (sbs->Headless == true)
+		return true;
 
 	std::string filename1 = "data/";
 	filename1.append(filename);

@@ -1,0 +1,475 @@
+# $Id$
+	
+#This building is a bare-bones building designed to help others learn how to
+#make their own buildings in Skyscraper's scripting language.
+#All of the commands and parameters used in this file are documented in the
+#script guide (designguide.html) which comes with the program.
+
+#The first thing to learn is about comments - if you put a number sign (#) anywhere
+#in a line, all text after it will be ignored.  If a line starts with that sign, the whole
+#line is ignored.
+
+#What we'll do first is include some fancy elevator door functions for use later.
+#This gives us access to a bunch of pre-made elevator door types
+<Include data/scripts/elevator_doors.txt>
+
+#Then the thing you'll need to do when creating a building is define the global parameters.
+#These are contained inside the "Global" section.  The following code shows this building's
+#basic parameters:
+
+<Globals>
+    Name = My Building
+    Designer = Me
+    CameraFloor = 0
+    CameraPosition = 0, -60
+    CameraRotation = 0, 0, 0
+    Sky = noon
+    Bounds = -75, 0, -75, 75, 0, 75
+<EndGlobals>
+
+#In the above code, I named the building "My Building", and set the designer as "Me".
+#I'm also telling the camera to start on the first floor with the CameraFloor parameter.  In Skyscraper,
+#floor 0 is the first floor, floor 1 is the second, etc, and by setting the floor to "0" in that parameter,
+#I'm setting it to the first floor.  Floors were numbered that way in order to make the numbering between
+#below ground and above ground floors seamless - so they'd go from -2, -1, 0, 1, 2 instead of skipping 0.
+#I also set the camera's position to be in the center of the map horizontally (0), and 60 feet to the front
+#of the map (-60)
+
+#Next you'll have to define your textures. Most of these commands simply load a texture file and give it
+#a name.  At the bottom of the section you'll see code that adds text to existing textures.
+
+<Textures>
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/cutston.jpg, InterExt, 0.269, 0.25
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/metal1.jpg, ElevExt, 0.25, 0.25
+    Load data/door1.jpg, ElevDoors, 1, 1
+    Load data/door1.jpg, ElevDoors2, -1, 1
+    Load data/panel-back2.jpg, ElevExtPanels, 1, 1
+    Load data/marb148.jpg, ElevPanel, 1, 1
+    Load data/diamond18j.jpg, ElevWall, 1, 1
+    Load data/diamond18j.jpg, ElevPanelMain, 1, 1
+    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/servicedoor2.jpg, StairsDoor, 1, 1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
+    Load data/fire2keyoff.png, Fire2Off, 1, 1
+    Load data/fire2keyon.png, Fire2On, 1, 1
+    Load data/fire2keyhold.png, Fire2Hold, 1, 1
+    Load data/fire1keyoff.png, Fire1Off, 1, 1
+    Load data/fire1keyon.png, Fire1On, 1, 1
+    Load data/fire1keybypass.png, Fire1Bypass, 1, 1
+    Load data/runkey.png, RunKey, 1, 1
+    Load data/stopkey.png, StopKey, 1, 1
+    Load data/indservkeyon.png, IndOn, 1, 1
+    Load data/indservkeyoff.png, IndOff, 1, 1
+
+    Load data/black.jpg, Black, 1, 1
+    Load data/black_lit.jpg, BlackLit, 1, 1
+    AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
+    AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
+    AddTextRange 1, 10, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 10, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+<EndTextures>
+
+#Next you'll need to create the ground. The following code is the default ground code.
+#The second command is needed to cut a whole in the ground for the building.  In this
+#example I'm giving the building dimensions of 40x40 feet, so it needs to be cut from
+#-20 to 20 horizontally, and -20 to 20 depth-wise.
+
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
+
+#Now it's time to start making the building's floors.  If you're making basement levels, they must
+#be specified before floor 0 and the other above-ground floors, and must also be in decending
+#order (-1, -2, -3, etc).  In this example, I'm just going to make above-ground floors. The following
+#code creates 10 floors (0 to 9).  Note that math can be used inside commands to make things easier.
+
+<Floors 0 to 9>
+    #The ID of a floor is it's commonly-used number or symbol - this sets floor 0 to be known as "1", etc.
+    ID = %floor% + 1
+    Name = Floor (%floor% + 1)
+    Type = Office
+    Height = 10 #This is the height in feet of the floor
+    #the interfloor area represents the area used by trusses (floor supports), below the floor's base
+    InterfloorHeight = 2.24 #This is the height in feet of the interfloor space between floors
+    #Floor 0 needs to have it's altitude manually set, since it's interfloor space is below the floor's base
+    if[%floor% = 0] Altitude = -%interfloorheight%
+
+    #create a basic carpeted floor
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, False
+
+    #create a ceiling
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, false, false, 0, 0, False
+
+    #External windows - this creates the outside versions of the windows, and also the walls outside the
+    #interfloor areas
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Internal windows - this creates the transparent windows on the inside of each floor
+    SetAutoSize = true, false
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -15, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, false, false, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
+
+#Finally create the roof (11th floor), and add a square brick floor on it.
+<Floor 10>
+    ID = R
+    Name = Roof
+    Type = Roof
+    Height = 10
+    InterfloorHeight = 2.24
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Roof, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, True #roof
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+
+<Floor 0>
+    AddModel Couch, couch.mesh, true, 18.6, 0, -5, 0, 90, 0, 0, 0.7, false, 0, 0, 0
+    AddModel Couch, couch.mesh, true, 0, 0, -18.6, 0, 180, 0, 0, 0.7, true, 0.1, 0.5, 0.1
+
+    SetKey 1
+    AddModel Key, key.mesh, true, -10, 0, 0, 0, 90, 0, 0, 3, false, 0, 0, 0
+<EndFloor>
+
+#Now since the main portion of the building is done, it would be nice to have an elevator.
+#First we'll have to create an elevator shaft:
+
+AddShaft 1, 0, 6, 0, 9
+ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
+
+#in the above code, I added a regular shaft with the number of "1" at the position (0, 6), and told it to
+#span floors 0 to 9 (1 to 10).  The second command cuts a hole for the shaft in all the levels below, and
+#in that command the whole size of the shaft needs to be specified. You'll see that it spans horizontally
+#from -4 to 4 (it's 8 feet wide), and depth-wize from -4.125 + 0.33 to 4.125 (the 0.33 is there to provide
+#some floor area in front of the elevator door, and is the width of the external wall around the shaft.
+
+#Now for the walls inside and outside of the shaft.  A floor and ceiling will also need to be made inside
+#the shaft.  Notice that the commands such as AddShaftWall are based on the shaft's central position, while
+#AddWall is not.
+
+<Floors 0 to 9>
+	FloorOrientation = top
+	DrawWalls = false, true, false, false, false, false
+	if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -4, -4.125, 4, 4.125, 0, 0, false, false, 0, 0
+	DrawWalls = true, false, false, false, false, false
+	if[%floor% = 9] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -4.125, 4, 4.125, %fullheight%, %fullheight%, false, false, 0, 0
+	DrawWalls = true, true, false, false, false, false
+	WallOrientation = left
+	AddShaftWall 1, Shaft1Left, Brick, 0.33, -4, -4.125, -4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Front, Brick, 0.33, -4, -4.125, 4, -4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	WallOrientation = right
+	AddShaftWall 1, Shaft1Right, Brick, 0.33, 4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Back, Brick, 0.33, -4, 4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft1LeftE, Wall1, 0.33, -4, -4.125 + 6 - 0.33, -4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1FrontE, Wall1, 0.33, -4 - 0.33, -4.125 + 6, 4 + 0.33, -4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+	AddWall Shaft1RightE, Wall1, 0.33, 4, -4.125 + 6 - 0.33, 4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1BackE, Wall1, 0.33, -4 - 0.33, 4.125 + 6, 4 + 0.33, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+#The numbers can get complex, but for the Shaft1LeftE (external left wall), the X position is at -4,
+#and the Z starting position is -4.125 (negative half of the width of the shaft) plus 6 (central Z position
+#of the shaft) minus 0.33 (the width of the wall), and the Z ending position is 4.125 (positive
+#half of the shaft's width) plus 6 (central Z position again) plus 0.33 (the width of the wall again)
+
+#reset drawwalls
+DrawWalls = true, true, false, false, false, false
+
+#Now we create an elevator.  When creating one, first some basic parameters are defined and then
+#the CreateElevator command is used to create it.  After that, the floors/walls are created, and then
+#other objects such as panels, buttons, indicators, etc.
+
+<Elevator 1>
+    #standard elevator; 7 feet wide, 6 feet deep
+    
+    #First specify parameters
+    Name = My Elevator
+    Type = Local  #standard passenger/local elevator
+    Speed = 5
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0 - 9
+    AssignedShaft = 1
+    LevelingOpen = 0.2
+    
+    #then create the elevator at position (0, 5.706) on the first floor (0)
+    CreateElevator false, 0, 5.706, 0
+
+    #elevator's floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -3.5, -3, 3.5, 3, 0, 0, false, false, 0, 0
+    
+    #elevator's ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.5, -3, 3.5, 3, 8, 8, false, false, 0, 0 #ceiling
+    
+    #elevator's back and right walls
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall, 0.2, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 0, 0 #back wall
+    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall, 0.2, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 0, 0 #right wall
+    
+    #elevator's left wall
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall, 0.2, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 0, 0 #left wall
+
+    #elevator's panels
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 0, 0 #right panel
+    
+    #now the doors - this calls one of the functions defined in the data/scripts/elevator_doors.txt file
+    #that we included at the beginning.  That file provides a number of pre-made door styles, and for this
+    #we're going to use the standard center-open style.
+    #shaft doors can also be created later in the floor section for them to be made on a per-floor basis
+    
+    WallOrientation = right
+    elevdoor_center_classic(1, ElevDoors, Black, 0.2, 0, -3.01, 3.5, 8, front, 0.3, false)
+    elevdoor_center_classic(1, ElevDoors, Black, 0.2, 0, -3.301, 3.5, 8, front, 0.3, true)
+        
+    WallOrientation = left
+    SetAutoSize = true, true
+
+    #The positioning of the doors is the tricky part.  You'll see that I placed the car doors at position
+    #(0, -3.01) and the shaft doors at (0, -3.301).  If you look above at the panels, you'll notice that
+    #they're Z position is -3, so I made sure to place to car doors immediately after that (-3.01) so that
+    #they don't overlap the panels.  Since I gave them a depth size of 0.2, I need to place the shaft doors
+    #0.2 feet beyond them, at -3.301.
+    
+    #This creates the directional indicator outside the elevator
+    AddDirectionalIndicators true, false, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -3.301 - 0.2 - 0.66 - 0.001, 6, front, 0.5, 1, true, 0, 0
+    
+    #I made the positioning more obvious in that one using math.  I positioned it horizontally (X) at -3, and
+    #for the depth (Z) position, I took the shaft door position from above (-3.301), subtracted 0.2 from that
+    #(the depth of the shaft doors), subtracted 0.66 from that (the size of the shaft interior and exterior
+    #walls combined since each is 0.33), and finally subtracted an extra 0.001 to prevent it from interfering
+    #with the wall.
+    #0.75 + (0.3 * 6)
+
+    #floor signs
+    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
+
+    #panel
+    #for the panel, the depth (Z) position is the front edge of the elevator (-3), plus the depth of the
+    #panels (0.2), plus an extra 0.001 to prevent overlapping interference.
+    #For the horizontal position, since it's supposed to be on the left panel (right when you're turned around
+    #inside the elevator), I first put -1.75 (the right side of the left panel specified above), then subtracted
+    #0.875 from that (half of the panel's width, or 1.75 / 2), and added 0.1 to that to pull it closer to the
+    #door just a tiny bit.
+    
+    CreatePanel ElevPanel, 15, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
+    SetLock 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 3, 3, 9, 1, 1
+    SetLock 0, 0
+    AddButton 1, switch.wav, Button9, ButtonLit9, 4, 3, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 5, 3, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 6, 3, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 7, 3, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 8, 3, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 9, 3, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 10, 3, 2, 1, 1
+    AddButton 1, switch.wav, Button2, ButtonLit2, 11, 3, 1, 1, 1
+    AddButton 1, switch.wav, Button1, ButtonLit1, 12, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 13, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 13, 4, close, 1, 1
+    AddControl 1, switch.wav, 14, 2, 1, 1, 0, 0, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 14, 3, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 14, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator Button, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
+   
+<EndElevator>
+
+#Stairs
+#The stairs can be tricky, but make sense once you've worked with them a little bit.
+#First you need to create the stairwell and cut a whole in the floors for the new stairwell
+#(this is almost identical to creating a shaft) - in this we say that the stairwell is centered at
+#(10, 15) and is servicing floors 0 to 9 (1-10):
+
+CreateStairwell 1, 10, 15, 0, 9
+CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
+
+#Just like the shafts, the stairs need to be cut with the whole size specified - this stairwell is 17 feet
+#wide (-8.5 to 8.5) and 7 feet deep (-3.5 to 3.5).
+
+#Now for the actual stairs themselves, and the floors/walls
+<Floors 0 to 9>
+    #More info on stairs specifics at http://en.wikipedia.org/wiki/Stairwell
+    #maximum riser height allowed in real-world settings is 8.25 inches (0.6875 feet)
+    #minimum tread length allowed in real-world settings is 9 inches (0.75 feet)
+    
+    #first get the height of each riser.  More info on stairs specifics at http://en.wikipedia.org/wiki/Stairwell
+    #this takes the total height of a single staircase level (which is the height of the floor plus the above floor's interfloor height.
+    #then divide that value by the total number of stairs you're going to be using.  Make sure that the value it comes up with is not
+    #over the riser height limit (you can have it over the limit in Skyscraper, but it won't be realistic)
+    #So, in this example, I'm using 20 total stairs, which is 10 on each side.
+    
+    Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
+    
+    #now add the stairs themselves.  The parameters are explained in the design guide, but basically the lower stairs in this example
+    #start on the left (bottom) and end on the right (top), and so they face left.  The upper stairs are the opposite, so they face right.
+    #the important part of this is the tread size.  In this, it's specified as "10 / 9", since I'm wanting the stairs to be a total of 10 feet long,
+    #and there's 9 steps created (even though there's 10 stairs total - but like the design guide says, the top tread is not counted, since the top
+    #tread is the landing (specified later).  To calculate the height and length of the staircase (according to the design guide):
+    #the height is the number of stairs times the riser size (which would be 10 * %1%).
+    #The length is the number of stairs minus one, times the tread size - in this example it would be 9 * (10 / 9) which is 10.
+    
+    if[%floor% < 9] AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, %1%, 10 / 9, 10, 0, 0, 0
+    if[%floor% < 9] AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    FloorOrientation = top
+    
+    #For the landings, you need to know where the stairs start and end (the positions).  Since these stairs are located/centered at X position 0, you
+    #can find the left and right sides by taking the staircase length and dividing by 2.  In this example the stairs have a width of 10, and so it reaches
+    #5 feet in each direction (-5 to 5).  So the lower landing would reach from the left side of the staircase (-8.5) to the left side of the stairs (-5),
+    #and the upper landing would be the opposite (go from the stairs top, 5, to the right side of the staircase, 8.5).
+    
+    if[%floor% > 0] AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -5, 3.5, 0, 0, false, false, 1, 1
+    if[%floor% = 0] AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, 8.5, 3.5, 0, 0, false, false, 1, 1
+    if[%floor% < 9] AddStairsFloor 1, LandingUpper, Brick, 0.5, 5, -3.5, 8.5, 3.5, %1% * 10, %1% * 10, false, false, 1, 1
+
+    #the landing covers simply cover the portion of the landing that isn't covered up by the stairs.  You can see this cover if you're underneath a staircase,
+    #and it's the small wall piece just below it (fills in the gap between the lower floor's ceiling, and the landing above it).  In this example, the
+    #lower landing would need a cover going from Z values -3.5 to 0 (center), since the stairs in that section go from 0 to 3.5.  The upper landing is
+    #the opposite (0 to 3.5).
+    
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 1, LandingLowerCover, Brick, 0.1, -5, -3.5, -5, 0, 0.5, 0.5, -0.5, -0.5, 0, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    if[%floor% < 9] AddStairsWall 1, LandingUpperCover, Brick, 0.1, 5, 0, 5, 3.5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+    
+    #the stairs walls are simply the walls inside the stairwell
+    
+    SetAutoSize = true, false
+    WallOrientation = right
+    AddStairsWall 1, LeftWall, StairsWall, 0.3, -8.5, -3.5 - 0.3, -8.5, 3.5 + 0.3, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    AddStairsWall 1, FrontWall, StairsWall, 0.3, -8.5 - 0.3, -3.5, 8.5 + 0.3, -3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    WallOrientation = left
+    AddStairsWall 1, BackWall, StairsWall, 0.3, -8.5 - 0.3, 3.5, 8.5 + 0.3, 3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    AddStairsWall 1, RightWall, StairsWall, 0.3, 8.5, -3.5 - 0.3, 8.5, 3.5 + 0.3, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    SetAutoSize = true, true
+    
+    #This command adds a door, and automatically cuts the walls for you.
+    if[%floor% = 9] SetLock 2, 1
+    AddStairsDoor 1, , , False, StairsDoor, 0.2, 1, 0, -8.5, 0, 3.5, 8, 0, 1, 1
+    SetLock 0, 0
+
+    #Add filler walls around the door, to cover the gap caused by the cut
+    AddFillerWalls ConnectionWall, 0.3, 10 - 8.5 - 0.3, 15, 3.5, 8, 0, false, 1, 1, false
+
+<EndFloors>
+
+#Finally create some call buttons for the elevator, or you'll have a hard time getting into it (unless
+#of course you use the elevator editor, but that's not very realistic).
+#This code centers the buttons at the horizontal position of 3 feet.  The depth/Z position is figured out
+#using other values from above - first I took 6, which is the central Z position of the shaft. Then I
+#subtracted 4.125 (half of the shaft's depth) from that, then subtracted 0.33 (the shaft's external wall depth)
+#and then subtracted an extra 0.1 to keep it away from the wall itself to prevent interference.
+
+<Floors 0 to 9>
+    CallButtonElevators = 1
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+<EndFloors>
+
+#Now to add an external fire service button, we first create the fire service actions
+#these call the Fire1 modes on Elevator 1
+AddAction FireServiceOn, Elevator1, Fire1On
+AddAction FireServiceOff, Elevator1, Fire1Off
+AddAction FireServiceBypass, Elevator1, Fire1Bypass
+
+#Create the fire service button itself, and map the previously created actions with the textures FireOff, FireOn, and FireBypass
+<Floor 0>
+    AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
+<EndFloor>
+
+#Create a moving walkway on the first floor
+<Floor 0>
+    AddMovingWalkway Walkway1, 1, 0.01, , Brick, left, 0, -10, 4, 1, 16, -0.01, 1, 1
+<EndFloor>
+
+<Floor 0>
+    CutAll -7.5, 5, -12, 7.5, -1, -8, false, true
+<EndFloor>
+

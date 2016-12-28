@@ -288,6 +288,7 @@
     <ClCompile Include="..\src\sbs\manager.cpp" />
     <ClCompile Include="..\src\sbs\mesh.cpp" />
     <ClCompile Include="..\src\sbs\model.cpp" />
+    <ClCompile Include="..\src\sbs\movingwalkway.cpp" />
     <ClCompile Include="..\src\sbs\object.cpp" />
     <ClCompile Include="..\src\sbs\person.cpp" />
     <ClCompile Include="..\src\sbs\polygon.cpp" />
@@ -301,6 +302,7 @@
     <ClCompile Include="..\src\sbs\sound.cpp" />
     <ClCompile Include="..\src\sbs\soundsystem.cpp" />
     <ClCompile Include="..\src\sbs\stairs.cpp" />
+    <ClCompile Include="..\src\sbs\step.cpp" />
     <ClCompile Include="..\src\sbs\texmap.cpp" />
     <ClCompile Include="..\src\sbs\texture.cpp" />
     <ClCompile Include="..\src\sbs\timer.cpp" />
@@ -329,6 +331,7 @@
     <ClInclude Include="..\src\sbs\manager.h" />
     <ClInclude Include="..\src\sbs\mesh.h" />
     <ClInclude Include="..\src\sbs\model.h" />
+    <ClInclude Include="..\src\sbs\movingwalkway.h" />
     <ClInclude Include="..\src\sbs\object.h" />
     <ClInclude Include="..\src\sbs\person.h" />
     <ClInclude Include="..\src\sbs\polygon.h" />
@@ -342,6 +345,7 @@
     <ClInclude Include="..\src\sbs\sound.h" />
     <ClInclude Include="..\src\sbs\soundsystem.h" />
     <ClInclude Include="..\src\sbs\stairs.h" />
+    <ClInclude Include="..\src\sbs\step.h" />
     <ClInclude Include="..\src\sbs\texture.h" />
     <ClInclude Include="..\src\sbs\timer.h" />
     <ClInclude Include="..\src\sbs\triangle.h" />

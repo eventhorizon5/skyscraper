@@ -37,26 +37,20 @@
 #include "manager.h"
 #include "camera.h"
 #include "dynamicmesh.h"
-#include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
-#include "elevatordoor.h"
 #include "shaft.h"
 #include "stairs.h"
 #include "action.h"
 #include "person.h"
 #include "texture.h"
-#include "escalator.h"
-#include "polygon.h"
 #include "light.h"
 #include "wall.h"
-#include "callbutton.h"
 #include "control.h"
 #include "trigger.h"
 #include "soundsystem.h"
 #include "sound.h"
-#include "door.h"
 #include "model.h"
 #include "timer.h"
 #include "profiler.h"
@@ -171,7 +165,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 	EscalatorCount = 0;
+	MovingWalkwayCount = 0;
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
+	Headless = false;
 
 	camera = 0;
 	Buildings = 0;
@@ -459,6 +455,9 @@ bool SBS::Start(Ogre::Camera *camera)
 
 	//attach camera object
 	AttachCamera(camera);
+
+	//enable elevators
+	sbs->GetElevatorManager()->EnableAll(true);
 
 	//enable random activity if specified
 	if (RandomActivity == true)
@@ -2578,6 +2577,8 @@ bool SBS::DeleteObject(Object *object)
 
 		deleted = true;
 	}
+	else if (type == "MovingWalkway")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
@@ -3558,6 +3559,22 @@ void SBS::IncrementEscalatorCount()
 void SBS::DecrementEscalatorCount()
 {
 	EscalatorCount--;
+}
+
+int SBS::GetMovingWalkwayCount()
+{
+	//return total number of allocated sounds
+	return MovingWalkwayCount;
+}
+
+void SBS::IncrementMovingWalkwayCount()
+{
+	MovingWalkwayCount++;
+}
+
+void SBS::DecrementMovingWalkwayCount()
+{
+	MovingWalkwayCount--;
 }
 
 bool SBS::HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position)

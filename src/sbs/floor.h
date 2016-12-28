@@ -103,6 +103,7 @@ public:
 	void RemoveTrigger(Trigger *trigger);
 	void RemoveCameraTexture(CameraTexture *cameratexture);
 	void RemoveEscalator(Escalator *escalator);
+	void RemoveMovingWalkway(MovingWalkway *walkway);
 	Light* AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	void AddModel(Model *model);
@@ -111,6 +112,7 @@ public:
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	CameraTexture* AddCameraTexture(const std::string &name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
 	Escalator* AddEscalator(const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
+	MovingWalkway* AddMovingWalkway(const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float treadsize, int num_steps, float voffset, float tw, float th);
 	std::vector<Sound*> GetSound(const std::string &name);
 	void SetAltitude(float altitude);
 	void ShowInfo(bool detailed = true, bool display_header = true);
@@ -153,6 +155,9 @@ private:
 
 	//Escalators
 	std::vector<Escalator*> EscalatorArray;
+
+	//Moving walkways
+	std::vector<MovingWalkway*> MovingWalkwayArray;
 };
 
 }

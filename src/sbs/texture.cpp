@@ -122,6 +122,9 @@ TextureManager::~TextureManager()
 
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
+	if (sbs->Headless == true)
+		return true;
+
 	//first verify the filename
 	std::string filename2 = sbs->VerifyFile(filename);
 
@@ -151,6 +154,9 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 
 bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, float duration, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
+	if (sbs->Headless == true)
+		return true;
+
 	std::vector<std::string> filenames2;
 
 	size_t num_frames = filenames.size();
@@ -212,6 +218,9 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 
 bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
+	if (sbs->Headless == true)
+		return true;
+
 	//first verify the filenames
 	std::string filename2 = sbs->VerifyFile(filename);
 	std::string specular_filename2 = sbs->VerifyFile(specular_filename);
@@ -271,6 +280,9 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 
 bool TextureManager::LoadMaterial(const std::string &materialname, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
+	if (sbs->Headless == true)
+		return true;
+
 	//set verbosity level
 	Ogre::MaterialPtr mMat;
 	std::string matname = materialname;
@@ -360,6 +372,9 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 {
 	//loads only a portion of the specified texture
 
+	if (sbs->Headless == true)
+		return true;
+
 	Ogre::ColourValue alpha_color = Ogre::ColourValue::Black;
 	int mipmaps = -1;
 	bool use_alpha_color = false;
@@ -433,6 +448,9 @@ bool TextureManager::RotateTexture(const std::string &name, float angle)
 {
 	//set a fixed rotation value for a texture
 
+	if (sbs->Headless == true)
+		return true;
+
 	bool result;
 	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
@@ -461,6 +479,9 @@ bool TextureManager::RotateTexture(const std::string &name, float angle)
 bool TextureManager::RotateAnimTexture(const std::string &name, float speed)
 {
 	//set a rotation animation for a texture - speed is in revolutions per second
+
+	if (sbs->Headless == true)
+		return true;
 
 	bool result;
 	std::string texname = TrimStringCopy(name);
@@ -491,6 +512,9 @@ bool TextureManager::ScrollTexture(const std::string &name, float x_offset, floa
 {
 	//set a fixed scroll amount for a texture
 
+	if (sbs->Headless == true)
+		return true;
+
 	bool result;
 	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
@@ -519,6 +543,9 @@ bool TextureManager::ScrollTexture(const std::string &name, float x_offset, floa
 bool TextureManager::ScrollAnimTexture(const std::string &name, float x_speed, float y_speed)
 {
 	//set a scroll animation for a texture - speed is in revolutions per second
+
+	if (sbs->Headless == true)
+		return true;
 
 	bool result;
 	std::string texname = TrimStringCopy(name);
@@ -549,6 +576,9 @@ bool TextureManager::ScaleTexture(const std::string &name, float x_scale, float 
 {
 	//set a fixed scale amount for a texture
 
+	if (sbs->Headless == true)
+		return true;
+
 	bool result;
 	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
@@ -577,6 +607,9 @@ bool TextureManager::ScaleTexture(const std::string &name, float x_scale, float 
 bool TextureManager::TransformTexture(const std::string &name, const std::string &type, const std::string &wave_type, float base, float frequency, float phase, float amplitude)
 {
 	//set a transformation type for a texture
+
+	if (sbs->Headless == true)
+		return true;
 
 	bool result;
 	std::string texname = TrimStringCopy(name);
@@ -649,6 +682,9 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
+
+	if (sbs->Headless == true)
+		return true;
 
 	std::string hAlign = h_align;
 	std::string vAlign = v_align;
@@ -789,6 +825,9 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
+	if (sbs->Headless == true)
+		return true;
+
 	std::string Name = name;
 	std::string Origname = orig_texture;
 	std::string Overlay = overlay_texture;
@@ -883,6 +922,9 @@ std::string TextureManager::GetTextureMaterial(const std::string &name, bool &re
 
 	//use material_name value instead of name, if loaded as a material script instead of a direct texture
 	//if report is true and texture is not found, issue warning
+
+	if (sbs->Headless == true)
+		return "";
 
 	std::string matname = name;
 
@@ -1734,6 +1776,9 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	//justify is left 'l' by default - set to 'r' or 'c' for right or center
 	//vert_justify is top 't' by default - set to 'c' or 'b' for center or bottom
 
+	if (sbs->Headless == true)
+		return true;
+
 	using namespace Ogre;
 
 	if ((int)destTexture->getHeight() < destBottom - 1)
@@ -2169,6 +2214,9 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 {
 	//copy a source texture onto a destination texture using the full sizes
 
+	if (sbs->Headless == true)
+		return;
+
 	Ogre::Box srcbox (0, 0, 0, source->getWidth(), source->getHeight(), source->getDepth());
 	Ogre::Box dstbox (0, 0, 0, destination->getWidth(), destination->getHeight(), destination->getDepth());
 
@@ -2178,6 +2226,9 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox)
 {
 	//copy a source texture onto a destination texture using specified sizes
+
+	if (sbs->Headless == true)
+		return;
 
 	//if dimensions are the same, use standard copy method to prevent
 	//some crashes on systems with small npot textures

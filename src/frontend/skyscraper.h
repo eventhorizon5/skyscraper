@@ -105,6 +105,7 @@ public:
 	bool Verbose;
 	bool ShowMenu; //show main menu
 	bool CheckScript;
+	bool Headless;
 
 	void Loop();
 	virtual bool OnInit(void);
