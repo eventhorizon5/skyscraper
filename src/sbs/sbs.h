@@ -101,6 +101,7 @@ namespace SBS {
 	class RandomGen;
 	class RevolvingDoor;
 	class MovingWalkway;
+	class Step;
 }
 
 #include "object.h"

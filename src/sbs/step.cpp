@@ -1,0 +1,52 @@
+/* $Id$ */
+
+/*
+	Scalable Building Simulator - Moving Walkway Object
+	The Skyscraper Project - Version 1.11 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
+	http://www.skyscrapersim.com
+	http://sourceforge.net/projects/skyscraper
+	Contact - ryan@skyscrapersim.com
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+#include "globals.h"
+#include "sbs.h"
+#include "camera.h"
+#include "step.h"
+
+namespace SBS {
+
+Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper)
+{
+	vector = Ogre::Vector3::ZERO;
+	speed = 0;
+	start = Ogre::Vector3::ZERO;
+}
+
+void Step::Move(const Ogre::Vector3 &vector, float speed)
+{
+	MeshObject::Move(vector, speed);
+	this->vector = vector;
+	this->speed = speed;
+}
+
+void Step::OnHit()
+{
+	sbs->camera->MovePosition(vector * 1.675, speed);
+}
+
+}

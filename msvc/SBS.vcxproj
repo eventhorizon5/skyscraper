@@ -302,6 +302,7 @@
     <ClCompile Include="..\src\sbs\sound.cpp" />
     <ClCompile Include="..\src\sbs\soundsystem.cpp" />
     <ClCompile Include="..\src\sbs\stairs.cpp" />
+    <ClCompile Include="..\src\sbs\step.cpp" />
     <ClCompile Include="..\src\sbs\texmap.cpp" />
     <ClCompile Include="..\src\sbs\texture.cpp" />
     <ClCompile Include="..\src\sbs\timer.cpp" />
@@ -344,6 +345,7 @@
     <ClInclude Include="..\src\sbs\sound.h" />
     <ClInclude Include="..\src\sbs\soundsystem.h" />
     <ClInclude Include="..\src\sbs\stairs.h" />
+    <ClInclude Include="..\src\sbs\step.h" />
     <ClInclude Include="..\src\sbs\texture.h" />
     <ClInclude Include="..\src\sbs\timer.h" />
     <ClInclude Include="..\src\sbs\triangle.h" />

@@ -26,8 +26,6 @@
 #ifndef _SBS_ESCALATOR_H
 #define _SBS_ESCALATOR_H
 
-#include "mesh.h"
-
 namespace SBS {
 
 class SBSIMPEXP Escalator : public Object
@@ -53,19 +51,6 @@ private:
 	Ogre::Vector3 start, end;
 	std::string Direction;
 	float treadsize;
-
-	class Step : public MeshObject
-	{
-	public:
-		Step(Object* parent, const std::string &name, DynamicMesh* wrapper);
-		~Step() {}
-		void Move(const Ogre::Vector3 &vector, float speed = 1.0f);
-		void OnHit();
-
-		Ogre::Vector3 vector;
-		float speed;
-		Ogre::Vector3 start;
-	};
 
 	std::vector<Step*> Steps;
 

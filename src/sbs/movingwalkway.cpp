@@ -31,7 +31,7 @@
 #include "texture.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
-#include "camera.h"
+#include "step.h"
 #include "movingwalkway.h"
 
 namespace SBS {
@@ -336,25 +336,6 @@ void MovingWalkway::ResetState()
 	{
 		Steps[i]->SetPosition(Steps[i]->start);
 	}
-}
-
-MovingWalkway::Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper) : MeshObject(parent, name, wrapper)
-{
-	vector = Ogre::Vector3::ZERO;
-	speed = 0;
-	start = Ogre::Vector3::ZERO;
-}
-
-void MovingWalkway::Step::Move(const Ogre::Vector3 &vector, float speed)
-{
-	MeshObject::Move(vector, speed);
-	this->vector = vector;
-	this->speed = speed;
-}
-
-void MovingWalkway::Step::OnHit()
-{
-	sbs->camera->MovePosition(vector * 1.675, speed);
 }
 
 }
