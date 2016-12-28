@@ -197,7 +197,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->AddWallMain(wall, base + "-riser", texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
 
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "tread", texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "-tread", texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
 
 			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
@@ -260,10 +260,10 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "riser", texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
+			sbs->AddWallMain(wall, base + "-riser", texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
 
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
 
 			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
