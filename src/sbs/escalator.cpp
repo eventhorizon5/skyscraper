@@ -336,7 +336,7 @@ void Escalator::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().x;
 				if (pos > start.x)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x - treadsize, end.y, end.z));
 				else if (pos <= end.x + treadsize || pos >= start.x - (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 				else if (pos < start.x - treadsize)
@@ -346,7 +346,7 @@ void Escalator::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().x;
 				if (pos < start.x)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x + treadsize, end.y, end.z));
 				else if (pos >= end.x - treadsize || pos <= start.x + (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 				else if (pos > start.x + treadsize)
@@ -356,7 +356,7 @@ void Escalator::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().z;
 				if (pos > start.z)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z - treadsize));
 				else if (pos <= end.z + treadsize || pos >= start.z - (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 				else if (pos < start.z - treadsize)
@@ -366,7 +366,7 @@ void Escalator::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().z;
 				if (pos < start.z)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z + treadsize));
 				else if (pos >= end.z - treadsize || pos <= start.z + (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 				else if (pos > start.z + treadsize)

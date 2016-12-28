@@ -273,7 +273,7 @@ void MovingWalkway::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().x;
 				if (pos > start.x)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x - treadsize, end.y, end.z));
 				else
 					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 			}
@@ -281,7 +281,7 @@ void MovingWalkway::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().x;
 				if (pos < start.x)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x + treadsize, end.y, end.z));
 				else
 					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 			}
@@ -289,7 +289,7 @@ void MovingWalkway::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().z;
 				if (pos > start.z)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z - treadsize));
 				else
 					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 			}
@@ -297,7 +297,7 @@ void MovingWalkway::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().z;
 				if (pos < start.z)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z + treadsize));
 				else
 					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 			}
