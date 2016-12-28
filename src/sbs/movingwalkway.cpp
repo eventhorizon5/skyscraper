@@ -190,83 +190,40 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 
 		float thickness = treadsize;
 
+		sbs->DrawWalls(false, true, false, false, false, false);
+
 		if (Direction == "right")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, base + "tread", texture, 0, 0, -(width / 2), treadsize, width / 2, 0, 0, false, false, tw, th, true);
-
-			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
-			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
-			else if (i == num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
-
-			if (i == 1)
-				start = Steps[i - 1]->GetPosition();
-			if (i == num_steps)
-				end = Steps[i - 1]->GetPosition();
-			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
 		}
 		if (Direction == "left")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -treadsize, -(width / 2), 0, width / 2, 0, 0, false, false, tw, th, true);
-
-			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
-			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
-			else if (i == num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
-
-			if (i == 1)
-				start = Steps[i - 1]->GetPosition();
-			if (i == num_steps)
-				end = Steps[i - 1]->GetPosition();
-			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->Move(Ogre::Vector3(pos, 0, 0));
 		}
 		if (Direction == "back")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -(width / 2), 0, width / 2, treadsize, 0, 0, false, false, tw, th, true);
-
-			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
-			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
-			else if (i == num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
-
-			if (i == 1)
-				start = Steps[i - 1]->GetPosition();
-			if (i == num_steps)
-				end = Steps[i - 1]->GetPosition();
-			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 		}
 		if (Direction == "front")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, base + "tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, 0, 0, false, false, tw, th, true);
-
-			if (i < 3)
-				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
-			else if (i < num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
-			else if (i == num_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
-
-			if (i == 1)
-				start = Steps[i - 1]->GetPosition();
-			if (i == num_steps)
-				end = Steps[i - 1]->GetPosition();
-			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
+			Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 		}
+
+		if (i == 1)
+			start = Steps[i - 1]->GetPosition();
+		if (i == num_steps)
+			end = Steps[i - 1]->GetPosition();
+		Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 	}
+
 	sbs->ResetWalls(true);
 	sbs->GetTextureManager()->ResetTextureMapping();
 }
@@ -282,9 +239,7 @@ void MovingWalkway::MoveSteps()
 				float pos = Steps[i]->GetPosition().x;
 				if (pos < end.x - treadsize)
 					Steps[i]->SetPosition(start);
-				else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
-					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
-				else if (pos > end.x + treadsize)
+				else
 					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 			}
 			if (Direction == "left")
@@ -292,9 +247,7 @@ void MovingWalkway::MoveSteps()
 				float pos = Steps[i]->GetPosition().x;
 				if (pos > end.x + treadsize)
 					Steps[i]->SetPosition(start);
-				else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
-					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
-				else if (pos < end.x - treadsize)
+				else
 					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 			}
 			if (Direction == "back")
@@ -302,9 +255,7 @@ void MovingWalkway::MoveSteps()
 				float pos = Steps[i]->GetPosition().z;
 				if (pos < end.z - treadsize)
 					Steps[i]->SetPosition(start);
-				else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
-				else if (pos > end.z + treadsize)
+				else
 					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 			}
 			if (Direction == "front")
@@ -312,9 +263,7 @@ void MovingWalkway::MoveSteps()
 				float pos = Steps[i]->GetPosition().z;
 				if (pos > end.z + treadsize)
 					Steps[i]->SetPosition(start);
-				else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
-				else if (pos < end.z - treadsize)
+				else
 					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 			}
 		}
@@ -325,9 +274,7 @@ void MovingWalkway::MoveSteps()
 				float pos = Steps[i]->GetPosition().x;
 				if (pos > start.x)
 					Steps[i]->SetPosition(end);
-				else if (pos <= end.x + treadsize || pos >= start.x - (treadsize * 2))
-					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
-				else if (pos < start.x - treadsize)
+				else
 					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 			}
 			if (Direction == "left")
@@ -335,9 +282,7 @@ void MovingWalkway::MoveSteps()
 				float pos = Steps[i]->GetPosition().x;
 				if (pos < start.x)
 					Steps[i]->SetPosition(end);
-				else if (pos >= end.x - treadsize || pos <= start.x + (treadsize * 2))
-					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
-				else if (pos > start.x + treadsize)
+				else
 					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 			}
 			if (Direction == "back")
@@ -345,9 +290,7 @@ void MovingWalkway::MoveSteps()
 				float pos = Steps[i]->GetPosition().z;
 				if (pos > start.z)
 					Steps[i]->SetPosition(end);
-				else if (pos <= end.z + treadsize || pos >= start.z - (treadsize * 2))
-					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
-				else if (pos < start.z - treadsize)
+				else
 					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 			}
 			if (Direction == "front")
@@ -355,9 +298,7 @@ void MovingWalkway::MoveSteps()
 				float pos = Steps[i]->GetPosition().z;
 				if (pos < start.z)
 					Steps[i]->SetPosition(end);
-				else if (pos >= end.z - treadsize || pos <= start.z + (treadsize * 2))
-					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
-				else if (pos > start.z + treadsize)
+				else
 					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 			}
 		}
