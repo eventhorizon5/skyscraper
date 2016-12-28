@@ -89,7 +89,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	Brakes = false;
 	EmergencyStop = 0;
 	AssignedShaft = 0;
-	IsEnabled = false;
+	IsEnabled = true;
 	TempDeceleration = 0;
 	ErrorOffset = 0;
 	JerkRate = 0;
@@ -200,7 +200,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	if (sbs->Verbose)
 		Report("elevator object created");
 
-	Enabled(true);
+	EnableLoop(true);
 }
 
 Elevator::~Elevator()
