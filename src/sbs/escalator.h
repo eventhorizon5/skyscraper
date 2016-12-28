@@ -51,6 +51,7 @@ private:
 	Ogre::Vector3 start, end;
 	std::string Direction;
 	float treadsize;
+	float risersize;
 
 	std::vector<Step*> Steps;
 

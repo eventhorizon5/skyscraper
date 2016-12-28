@@ -2088,7 +2088,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 17) == "addmovingwalkway ")
 	{
 		//get data
-		int params = SplitData(LineData, 18);
+		int params = SplitData(LineData, 17);
 
 		if (params != 14)
 			return ScriptError("Incorrect number of parameters");

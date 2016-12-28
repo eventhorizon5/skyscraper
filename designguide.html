@@ -1477,11 +1477,28 @@ escalator faces (where the bottom step is), and so if an escalator goes up from
 left to right, the direction would be <em>left</em>. <em>Width</em> specifies
 the step width; <em>risersize</em> specifies the height of each step riser
 (vertical portion); <em>treadsize</em> specifies the length of each step
-tread/run (horizontal portion); <em>num_stairs</em> specifies the total number
-of steps to create (including the above landing platform, but not including the
-base platform).  <em>Run</em> specifies the run state, where 1 equals forward,
+tread/run (horizontal portion); <em>num_steps</em> specifies the total number
+of steps to create.
+<em>Run</em> specifies the run state, where 1 equals forward,
 0 equals stopped, and -1 equals reverse.</p>
 
+<p align="left"><strong>37. AddMovingWalkway</strong> - creates a moving walkway at
+the specified location.  This command is similar to AddEscalator.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddMovingWalkway <em>name,
+run, speed, sound_file, texture, direction, CenterX, CenterZ, width,
+treadsize, num_steps, voffset, tw, th</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">AddMovingWalkway MyWalkway,
+1, 1, 0.01, , Brick, left, 0, -10, 4, 1, 15, 0, 1, 1</font></p>
+
+<p align="left">The <em>direction</em> parameter specifies the direction the
+walkway faces (where the first step is), and so if a walkway goes from
+left to right, the direction would be <em>left</em>. <em>Width</em> specifies
+the step width;
+<em>treadsize</em> specifies the length of each step
+tread/run (horizontal portion); <em>num_steps</em> specifies the total number
+of steps to create.
+<em>Run</em> specifies the run state, where 1 equals forward,
+0 equals stopped, and -1 equals reverse.</p>
 
 <p align="left"><strong></strong></p>
 

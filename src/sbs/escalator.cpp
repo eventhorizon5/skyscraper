@@ -171,6 +171,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	TrimString(Name);
 	Direction = direction;
 	this->treadsize = treadsize;
+	this->risersize = risersize;
 	SetCase(Direction, false);
 	int num_steps = (int)Steps.size();
 
@@ -197,7 +198,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->AddWallMain(wall, base + "-riser", texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
 
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "tread", texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "-tread", texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
 
 			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
@@ -260,10 +261,10 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
 			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "riser", texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
+			sbs->AddWallMain(wall, base + "-riser", texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
 
 			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
+			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
 
 			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
@@ -297,7 +298,7 @@ void Escalator::MoveSteps()
 				else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
 					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 				else if (pos > end.x + treadsize)
-					Steps[i]->Move(Ogre::Vector3(-Run, Run, 0), Speed);
+					Steps[i]->Move(Ogre::Vector3(-Run, Run * (risersize / treadsize), 0), Speed);
 			}
 			if (Direction == "left")
 			{
@@ -307,7 +308,7 @@ void Escalator::MoveSteps()
 				else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
 					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 				else if (pos < end.x - treadsize)
-					Steps[i]->Move(Ogre::Vector3(Run, Run, 0), Speed);
+					Steps[i]->Move(Ogre::Vector3(Run, Run * (risersize / treadsize), 0), Speed);
 			}
 			if (Direction == "back")
 			{
@@ -317,7 +318,7 @@ void Escalator::MoveSteps()
 				else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
 					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 				else if (pos > end.z + treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Run, -Run), Speed);
+					Steps[i]->Move(Ogre::Vector3(0, Run * (risersize / treadsize), -Run), Speed);
 			}
 			if (Direction == "front")
 			{
@@ -327,7 +328,7 @@ void Escalator::MoveSteps()
 				else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
 					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 				else if (pos < end.z - treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Run, Run), Speed);
+					Steps[i]->Move(Ogre::Vector3(0, Run * (risersize / treadsize), Run), Speed);
 			}
 		}
 		else if (Run == -1)
@@ -336,41 +337,41 @@ void Escalator::MoveSteps()
 			{
 				float pos = Steps[i]->GetPosition().x;
 				if (pos > start.x)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x - treadsize, end.y, end.z));
 				else if (pos <= end.x + treadsize || pos >= start.x - (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(-Run, 0, 0), Speed);
 				else if (pos < start.x - treadsize)
-					Steps[i]->Move(Ogre::Vector3(-Run, Run, 0), Speed);
+					Steps[i]->Move(Ogre::Vector3(-Run, Run * (risersize / treadsize), 0), Speed);
 			}
 			if (Direction == "left")
 			{
 				float pos = Steps[i]->GetPosition().x;
 				if (pos < start.x)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x + treadsize, end.y, end.z));
 				else if (pos >= end.x - treadsize || pos <= start.x + (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(Run, 0, 0), Speed);
 				else if (pos > start.x + treadsize)
-					Steps[i]->Move(Ogre::Vector3(Run, Run, 0), Speed);
+					Steps[i]->Move(Ogre::Vector3(Run, Run * (risersize / treadsize), 0), Speed);
 			}
 			if (Direction == "back")
 			{
 				float pos = Steps[i]->GetPosition().z;
 				if (pos > start.z)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z - treadsize));
 				else if (pos <= end.z + treadsize || pos >= start.z - (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(0, 0, -Run), Speed);
 				else if (pos < start.z - treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Run, -Run), Speed);
+					Steps[i]->Move(Ogre::Vector3(0, Run * (risersize / treadsize), -Run), Speed);
 			}
 			if (Direction == "front")
 			{
 				float pos = Steps[i]->GetPosition().z;
 				if (pos < start.z)
-					Steps[i]->SetPosition(end);
+					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z + treadsize));
 				else if (pos >= end.z - treadsize || pos <= start.z + (treadsize * 2))
 					Steps[i]->Move(Ogre::Vector3(0, 0, Run), Speed);
 				else if (pos > start.z + treadsize)
-					Steps[i]->Move(Ogre::Vector3(0, Run, Run), Speed);
+					Steps[i]->Move(Ogre::Vector3(0, Run * (risersize / treadsize), Run), Speed);
 			}
 		}
 	}
