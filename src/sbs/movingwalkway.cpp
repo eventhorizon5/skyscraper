@@ -40,7 +40,7 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 {
 	//create a new moving walkway object
 	//run is either 1 for forward motion, -1 for reverse motion, 0 for stop
-	//direction is where the stair base is - front, back, left, or right.
+	//direction is where the step base is - front, back, left, or right.
 
 	//set up SBS object
 	SetValues("MovingWalkway", name, false);
@@ -114,7 +114,7 @@ MovingWalkway::~MovingWalkway()
 
 void MovingWalkway::Enabled(bool value)
 {
-	//enable or disable escalator
+	//enable or disable walkway
 
 	if (is_enabled == value)
 		return;
@@ -329,7 +329,7 @@ void MovingWalkway::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool
 
 void MovingWalkway::ResetState()
 {
-	//reset escalator state
+	//reset walkway state
 
 	Run = 0;
 	for (size_t i = 0; i < Steps.size(); i++)

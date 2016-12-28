@@ -40,7 +40,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 {
 	//create a new escalator object
 	//run is either 1 for forward motion, -1 for reverse motion, 0 for stop
-	//direction is where the stair base is - front, back, left, or right.
+	//direction is where the step base is - front, back, left, or right.
 
 	//set up SBS object
 	SetValues("Escalator", name, false);
