@@ -172,6 +172,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 	EscalatorCount = 0;
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
+	Headless = false;
 
 	camera = 0;
 	Buildings = 0;
