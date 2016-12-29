@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Core
-	The Skyscraper Project - Version 1.11 Alpha
+	The Skyscraper Project - Version 1.10 Alpha
 	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -63,7 +63,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	sbs = this;
 	this->mSceneManager = mSceneManager;
 
-	version = "0.11.0." + std::string(SVN_REVSTR);
+	version = "0.10.1." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//root object needs to self-register

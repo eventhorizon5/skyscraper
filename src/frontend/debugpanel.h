@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.11 Alpha - Debug Panel
+	Skyscraper 1.10 Alpha - Debug Panel
 	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

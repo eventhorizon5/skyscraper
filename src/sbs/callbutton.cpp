@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Call Button Object
-	The Skyscraper Project - Version 1.11 Alpha
+	The Skyscraper Project - Version 1.10 Alpha
 	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -128,7 +128,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		rows++;
 
 	//create button panel
-	float button_height = BackHeight / 3.5f;
+	float button_height = BackHeight / 3.5;
 	float button_width = BackWidth / 2;
 	float h_spacing = 0.5;
 	float v_spacing = 1.25;
