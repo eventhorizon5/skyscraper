@@ -1,3 +1,7 @@
+Version 1.10.2 (2.0 Alpha 10 - Update 2)
+-------------------------
+-fixes for escalator and moving walkway motion
+
 Version 1.10.1 (2.0 Alpha 10 - Update 1)
 -------------------------
 -added support for moving walkways
