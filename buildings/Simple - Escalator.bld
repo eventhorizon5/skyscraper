@@ -466,7 +466,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
 #Create an escalator on the first floor
 <Floor 0>
-    AddEscalator Escalator 1, 1, 0.01, , Brick, left, 0, -10, 4, 1, 1, 16, -0.01, 1, 1
+    AddEscalator Escalator 1, 1, 1, , Brick, left, 0, -10, 4, 1, 1, 16, -0.01, 1, 1
 <EndFloor>
 
 <Floors 0 to 1>
