@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-class Step : public MeshObject
+class SBSIMPEXP Step : public MeshObject
 {
 public:
 	Step(Object* parent, const std::string &name, DynamicMesh* wrapper);
