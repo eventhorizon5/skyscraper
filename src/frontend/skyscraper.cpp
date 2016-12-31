@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.11 Alpha - Simulation Frontend
+	Skyscraper 1.10 Alpha - Simulation Frontend
 	Copyright (C)2003-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -98,10 +98,10 @@ namespace Skyscraper {
 
 bool Skyscraper::OnInit(void)
 {
-	version = "1.11";
+	version = "1.10";
 	version_rev = SVN_REVSTR;
 	version_state = "Alpha";
-	version_frontend = version + ".0." + version_rev;
+	version_frontend = version + ".2." + version_rev;
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
