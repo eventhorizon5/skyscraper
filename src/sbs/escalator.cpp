@@ -133,13 +133,13 @@ void Escalator::Enabled(bool value)
 void Escalator::Report(const std::string &message)
 {
 	//general reporting function
-	sbs->Report("Escalator " + GetName() + ": " + message);
+	Object::Report("Escalator " + GetName() + ": " + message);
 }
 
 bool Escalator::ReportError(const std::string &message)
 {
 	//general reporting function
-	return sbs->ReportError("Escalator " + GetName() + ": " + message);
+	return Object::ReportError("Escalator " + GetName() + ": " + message);
 }
 
 void Escalator::Loop()

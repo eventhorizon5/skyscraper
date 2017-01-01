@@ -457,13 +457,13 @@ void ElevatorCar::DumpServicedFloors()
 	//dump serviced floors list
 
 	if (parent->GetCarCount() == 1)
-		sbs->Report("\n--- Elevator " + ToString(parent->Number) + "'s Serviced Floors ---\n");
+		Object::Report("\n--- Elevator " + ToString(parent->Number) + "'s Serviced Floors ---\n");
 	else
-		sbs->Report("\n--- Elevator " + ToString(parent->Number) + " Car " + ToString(Number) + "'s Serviced Floors ---\n");
+		Object::Report("\n--- Elevator " + ToString(parent->Number) + " Car " + ToString(Number) + "'s Serviced Floors ---\n");
 
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
-		sbs->Report(ToString((int)i) + " - " + ToString(ServicedFloors[i]));
-	sbs->Report("");
+		Object::Report(ToString((int)i) + " - " + ToString(ServicedFloors[i]));
+	Object::Report("");
 }
 
 bool ElevatorCar::AddServicedFloor(int number)

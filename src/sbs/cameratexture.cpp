@@ -92,11 +92,11 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
 
 		if (sbs->Verbose)
-			sbs->Report("Created camera texture '" + GetName() + "'");
+			Report("Created camera texture '" + GetName() + "'");
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating camera texture:\n" + e.getDescription());
+		ReportError("Error creating camera texture:\n" + e.getDescription());
 	}
 }
 

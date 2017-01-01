@@ -369,7 +369,7 @@ bool Control::DoAction()
 	else if (Actions.empty() == false)
 		actionlist.push_back(Actions[current_position - 1]);
 	else
-		return sbs->ReportError("No available actions for control '" + GetName() + "'");
+		return ReportError("No available actions for control '" + GetName() + "'");
 
 	bool result = false;
 	for (size_t i = 0; i < actionlist.size(); i++)
@@ -392,7 +392,7 @@ bool Control::Press(bool reverse)
 
 	//check lock state
 	if (IsLocked() == true)
-		return sbs->ReportError("Control '" + GetName() + "' is locked");
+		return ReportError("Control '" + GetName() + "' is locked");
 
 	//get action name of next position state
 	std::string name;
@@ -487,15 +487,15 @@ bool Control::ToggleLock(bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return sbs->ReportError("Need key " + ToString(KeyID) + " to lock/unlock control '" + GetName() + "'");
+			return ReportError("Need key " + ToString(KeyID) + " to lock/unlock control '" + GetName() + "'");
 	}
 
 	Locked = !Locked;
 
 	if (Locked == true)
-		sbs->Report("Locked control '" + GetName() + "'");
+		Report("Locked control '" + GetName() + "'");
 	else
-		sbs->Report("Unlocked control '" + GetName() + "'");
+		Report("Unlocked control '" + GetName() + "'");
 
 	return true;
 }

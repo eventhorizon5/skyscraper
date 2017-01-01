@@ -144,14 +144,14 @@ RevolvingDoor::~RevolvingDoor()
 void RevolvingDoor::OnHit()
 {
 	if (sbs->Verbose)
-		sbs->Report("Moving revolving door '" + GetName() + "'");
+		Report("Moving revolving door '" + GetName() + "'");
 
 	EnableLoop(true);
 
 	//check lock state
 	if (IsLocked() == true)
 	{
-		sbs->ReportError("Revolving door '" + GetName() + "' is locked");
+		ReportError("Revolving door '" + GetName() + "' is locked");
 		return;
 	}
 
@@ -224,15 +224,15 @@ bool RevolvingDoor::ToggleLock(bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return sbs->ReportError("Need key " + ToString(KeyID) + " to lock/unlock revolving door '" + GetName() + "'");
+			return ReportError("Need key " + ToString(KeyID) + " to lock/unlock revolving door '" + GetName() + "'");
 	}
 
 	Locked = !Locked;
 
 	if (Locked == true)
-		sbs->Report("Locked revolving door '" + GetName() + "'");
+		Report("Locked revolving door '" + GetName() + "'");
 	else
-		sbs->Report("Unlocked revolving door '" + GetName() + "'");
+		Report("Unlocked revolving door '" + GetName() + "'");
 
 	return true;
 }

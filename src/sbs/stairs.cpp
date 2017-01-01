@@ -685,13 +685,13 @@ bool Stairs::IsValidFloor(int floor)
 void Stairs::Report(const std::string &message)
 {
 	//general reporting function
-	sbs->Report("Stairwell " + ToString(StairsNum) + ": " + message);
+	Object::Report("Stairwell " + ToString(StairsNum) + ": " + message);
 }
 
 bool Stairs::ReportError(const std::string &message)
 {
 	//general reporting function
-	return sbs->ReportError("Stairwell " + ToString(StairsNum) + ": " + message);
+	return Object::ReportError("Stairwell " + ToString(StairsNum) + ": " + message);
 }
 
 void Stairs::RemoveDoor(Door *door)

@@ -1642,7 +1642,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		old_difference = tempposition - temporigin;
 
 	//debug - show current section as function is running
-	//sbs->Report("Door section: " + ToString(door_section));
+	//Report("Door section: " + ToString(door_section));
 
 	if (parent->door_changed == false && door_section == 0)
 	{
@@ -1852,7 +1852,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	}
 
 	//report on what section preceded the finishing code (should be 4)
-	//sbs->Report("Door section: " + ToString(door_section));
+	//Report("Door section: " + ToString(door_section));
 
 	//place doors in positions (fixes any overrun errors)
 	Reset(open);

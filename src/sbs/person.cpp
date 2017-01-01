@@ -362,13 +362,13 @@ void Person::ProcessRoute()
 void Person::Report(const std::string &message)
 {
 	//general reporting function
-	sbs->Report("Person " + GetName() + ": " + message);
+	Object::Report("Person " + GetName() + ": " + message);
 }
 
 bool Person::ReportError(const std::string &message)
 {
 	//general reporting function
-	return sbs->ReportError("Person " + GetName() + ": " + message);
+	return Object::ReportError("Person " + GetName() + ": " + message);
 }
 
 void Person::Timer::Notify()

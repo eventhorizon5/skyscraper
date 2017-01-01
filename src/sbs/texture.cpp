@@ -91,13 +91,13 @@ TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 	ResetTextureMapping(true);
 
 	//load default textures
-	sbs->Report("Loading default textures...");
+	Report("Loading default textures...");
 	sbs->SetLighting();
 	LoadTexture("data/default.png", "Default", 1, 1);
 	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
 	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	sbs->ResetLighting();
-	sbs->Report("Done");
+	Report("Done");
 }
 
 TextureManager::~TextureManager()
@@ -147,7 +147,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		sbs->Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
+		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
 }
@@ -185,7 +185,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 			has_alpha = true;
 
 		if (sbs->Verbose)
-			sbs->Report("Loaded texture " + filenames2[i]);
+			Report("Loaded texture " + filenames2[i]);
 	}
 
 	//create a new material
@@ -211,7 +211,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		sbs->Report("Loaded animated texture " + matname);
+		Report("Loaded animated texture " + matname);
 
 	return true;
 }
@@ -238,14 +238,14 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	mTex = LoadTexture(specular_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
 	if (mTex.isNull())
-		return sbs->ReportError("Error loading texture" + specular_filename2);
+		return ReportError("Error loading texture" + specular_filename2);
 	std::string specular_texturename = mTex->getName();
 
 	//load blend texture
 	mTex = LoadTexture(blend_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
 	if (mTex.isNull())
-		return sbs->ReportError("Error loading texture" + blend_filename2);
+		return ReportError("Error loading texture" + blend_filename2);
 	std::string blend_texturename = mTex->getName();
 
 	//create a new material
@@ -273,7 +273,7 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		sbs->Report("Loaded alpha blended texture '" + filename2 + "' as '" + matname + "'");
+		Report("Loaded alpha blended texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
 }
@@ -299,7 +299,7 @@ bool TextureManager::LoadMaterial(const std::string &materialname, const std::st
 	RegisterTextureInfo(name, materialname, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		sbs->Report("Loaded material " + matname);
+		Report("Loaded material " + matname);
 
 	return true;
 }
@@ -400,9 +400,9 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 		height = (int)mTex->getHeight();
 
 	if (x > (int)mTex->getWidth() || y > (int)mTex->getHeight())
-		return sbs->ReportError("LoadTextureCropped: invalid coordinates for '" + name + "'");
+		return ReportError("LoadTextureCropped: invalid coordinates for '" + name + "'");
 	if (x + width > (int)mTex->getWidth() || y + height > (int)mTex->getHeight())
-		return sbs->ReportError("LoadTextureCropped: invalid size for '" + name + "'");
+		return ReportError("LoadTextureCropped: invalid size for '" + name + "'");
 
 	//determine pixel format
 	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
@@ -420,7 +420,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
+		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 		return false;
 	}
 
@@ -436,7 +436,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (sbs->Verbose)
-		sbs->Report("Loaded cropped texture '" + filename2 + "' as '" + name + "'");
+		Report("Loaded cropped texture '" + filename2 + "' as '" + name + "'");
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
@@ -456,7 +456,7 @@ bool TextureManager::RotateTexture(const std::string &name, float angle)
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
-		return sbs->ReportError("RotateTexture: invalid texture " + texname + "\n");
+		return ReportError("RotateTexture: invalid texture " + texname + "\n");
 
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
@@ -488,7 +488,7 @@ bool TextureManager::RotateAnimTexture(const std::string &name, float speed)
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
-		return sbs->ReportError("RotateAnimTexture: invalid texture " + texname + "\n");
+		return ReportError("RotateAnimTexture: invalid texture " + texname + "\n");
 
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
@@ -520,7 +520,7 @@ bool TextureManager::ScrollTexture(const std::string &name, float x_offset, floa
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
-		return sbs->ReportError("ScrollTexture: invalid texture " + texname + "\n");
+		return ReportError("ScrollTexture: invalid texture " + texname + "\n");
 
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
@@ -552,7 +552,7 @@ bool TextureManager::ScrollAnimTexture(const std::string &name, float x_speed, f
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
-		return sbs->ReportError("ScrollAnimTexture: invalid texture " + texname + "\n");
+		return ReportError("ScrollAnimTexture: invalid texture " + texname + "\n");
 
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
@@ -584,7 +584,7 @@ bool TextureManager::ScaleTexture(const std::string &name, float x_scale, float 
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
-		return sbs->ReportError("ScaleTexture: invalid texture " + texname + "\n");
+		return ReportError("ScaleTexture: invalid texture " + texname + "\n");
 
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
@@ -621,7 +621,7 @@ bool TextureManager::TransformTexture(const std::string &name, const std::string
 	SetCase(wave, false);
 
 	if (!result)
-		return sbs->ReportError("TransformTexture: invalid texture " + texname + "\n");
+		return ReportError("TransformTexture: invalid texture " + texname + "\n");
 
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
@@ -721,19 +721,19 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 				Ogre::TextureManager::getSingleton().remove(fontname + "Texture");
 				Ogre::FontManager::getSingleton().remove(font->getHandle());
 			}
-			return sbs->ReportError("Error loading font " + fontname + "\n" + e.getDescription());
+			return ReportError("Error loading font " + fontname + "\n" + e.getDescription());
 		}
 	}
 
 	//get original texture
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
 	if (ptr.isNull())
-		return sbs->ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
+		return ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
 
 	std::string texname = GetTextureName(ptr);
 	Ogre::TexturePtr background = GetTextureByName(texname);
 	if (background.isNull())
-		return sbs->ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
+		return ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
 
 	bool has_alpha = background->hasAlpha();
 
@@ -761,7 +761,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
+		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 		return false;
 	}
 
@@ -814,7 +814,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		sbs->Report("AddTextToTexture: created texture '" + Name + "'");
+		Report("AddTextToTexture: created texture '" + Name + "'");
 
 	sbs->CacheFilename(Name, Name);
 	return true;
@@ -836,13 +836,13 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
 
 	if (ptr.isNull())
-		return sbs->ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
+		return ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
 
 	std::string texname = GetTextureName(ptr);
 	Ogre::TexturePtr image1 = GetTextureByName(texname);
 
 	if (image1.isNull())
-		return sbs->ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
+		return ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
 
 	bool has_alpha = image1->hasAlpha();
 
@@ -850,13 +850,13 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	ptr = GetMaterialByName(Overlay);
 
 	if (ptr.isNull())
-		return sbs->ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
+		return ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
 
 	texname = GetTextureName(ptr);
 	Ogre::TexturePtr image2 = GetTextureByName(texname);
 
 	if (image2.isNull())
-		return sbs->ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
+		return ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
 
 	//set default values if specified
 	if (x == -1)
@@ -869,9 +869,9 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 		height = (int)image2->getHeight();
 
 	if (x > (int)image1->getWidth() || y > (int)image1->getHeight())
-		return sbs->ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
+		return ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
 	if (x + width > (int)image1->getWidth() || y + height > (int)image1->getHeight())
-		return sbs->ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
+		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
 	//determine pixel format
 	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
@@ -889,7 +889,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
+		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 		return false;
 	}
 
@@ -907,7 +907,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (sbs->Verbose)
-		sbs->Report("AddTextureOverlay: created texture '" + Name + "'");
+		Report("AddTextureOverlay: created texture '" + Name + "'");
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
@@ -957,7 +957,7 @@ std::string TextureManager::GetTextureMaterial(const std::string &name, bool &re
 				message = "Texture '" + matname + "' not found for polygon '" + polygon_name + "'; using default material";
 			else
 				message = "Texture '" + matname + "' not found; using default material";
-			sbs->ReportError(message);
+			ReportError(message);
 		}
 
 		//set to default material
@@ -1793,7 +1793,7 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	}
 	catch (Ogre::Exception &e)
 	{
-		return sbs->ReportError("Error loading font " + font->getName() + "\n" + e.getDescription());
+		return ReportError("Error loading font " + font->getName() + "\n" + e.getDescription());
 	}
 
 	std::string texname = GetTextureName(font->getMaterial());
@@ -1986,7 +1986,7 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 				//abort - not enough space to draw
 				if ((cursorY + charheight) >= (int)destTexture->getHeight())
 				{
-					sbs->Report("Text '" + str + "' out of bounds\n");
+					Report("Text '" + str + "' out of bounds\n");
 					goto stop;
 				}
 				//printf("%d, %d\n", cursorX, cursorY);
@@ -2086,7 +2086,7 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 
 			if (mTex.isNull())
 			{
-				sbs->ReportError("Error loading texture" + filename2);
+				ReportError("Error loading texture" + filename2);
 				return mTex;
 			}
 			texturename = mTex->getName();
@@ -2107,7 +2107,7 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 
 			if (mTex.isNull())
 			{
-				sbs->ReportError("Error loading texture" + filename2);
+				ReportError("Error loading texture" + filename2);
 				return mTex;
 			}
 			has_alpha = true;
@@ -2120,7 +2120,7 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 		if (wrapper.get())
 			Ogre::TextureManager::getSingleton().remove(wrapper);
 
-		sbs->ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
+		ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
 		return mTex;
 	}
 

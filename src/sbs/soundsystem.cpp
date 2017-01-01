@@ -253,12 +253,12 @@ SoundData* SoundSystem::GetSoundData(std::string filename)
 
 void SoundSystem::Report(const std::string &message)
 {
-	sbs->Report("Sound System: " + message);
+	Object::Report("Sound System: " + message);
 }
 
 bool SoundSystem::ReportError(const std::string &message)
 {
-	return sbs->ReportError("Sound System: " + message);
+	return Object::ReportError("Sound System: " + message);
 }
 
 int SoundSystem::GetPlayingCount()
@@ -277,18 +277,18 @@ int SoundSystem::GetSoundCount()
 
 void SoundSystem::ShowLoadedSounds()
 {
-	sbs->Report("\n--- Loaded Sounds ---\n");
-	sbs->Report("Filename\t----\tSound Objects\t----\tChannels");
+	Object::Report("\n--- Loaded Sounds ---\n");
+	Object::Report("Filename\t----\tSound Objects\t----\tChannels");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
-		sbs->Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
+		Object::Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
 	}
-	sbs->Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
+	Object::Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
 }
 
 void SoundSystem::ShowPlayingSounds()
 {
-	sbs->Report("\n--- Playing Sounds ---\n");
+	Object::Report("\n--- Playing Sounds ---\n");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		bool first = true;
@@ -297,14 +297,14 @@ void SoundSystem::ShowPlayingSounds()
 			if (sounds[i]->handles[j]->IsPlaying() == true)
 			{
 				if (first == true)
-					sbs->Report(sounds[i]->filename + ":");
+					Object::Report(sounds[i]->filename + ":");
 				first = false;
 				Sound *sound = sounds[i]->handles[j];
-				sbs->Report("\t" + sound->GetName() + "\t----\tParent: " + sound->GetParent()->GetName());
+				Object::Report("\t" + sound->GetName() + "\t----\tParent: " + sound->GetParent()->GetName());
 			}
 		}
 	}
-	sbs->Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
+	Object::Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
 }
 
 SoundData::SoundData()

@@ -576,14 +576,14 @@ void CallButton::Report(const std::string &message)
 {
 	//general reporting function
 	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;
-	sbs->Report(msg);
+	Object::Report(msg);
 }
 
 bool CallButton::ReportError(const std::string &message)
 {
 	//general reporting function
 	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;
-	return sbs->ReportError(msg);
+	return Object::ReportError(msg);
 }
 
 void CallButton::SetLocked(bool value, int keyid)

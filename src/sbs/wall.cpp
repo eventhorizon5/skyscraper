@@ -90,7 +90,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
 	if (!meshwrapper->PolyMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles, converted_vertices))
 	{
-		sbs->ReportError("Error creating wall '" + name + "'");
+		ReportError("Error creating wall '" + name + "'");
 		return 0;
 	}
 
@@ -115,7 +115,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &material, 
 	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
 	if (!meshwrapper->PolyMesh(name, material, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
 	{
-		sbs->ReportError("Error creating wall '" + name + "'");
+		ReportError("Error creating wall '" + name + "'");
 		return 0;
 	}
 

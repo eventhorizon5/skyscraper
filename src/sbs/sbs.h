@@ -187,8 +187,6 @@ public:
 	//public functions
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	~SBS();
-	void Report(const std::string &message);
-	bool ReportError(const std::string &message);
 	void Initialize();
 	bool Start(Ogre::Camera *camera = 0);
 	void CreateSky();
@@ -385,6 +383,9 @@ public:
 	float AmbientR, AmbientG, AmbientB, OldAmbientR, OldAmbientG, OldAmbientB; //ambient colors
 	bool TexelOverride; //used for small square-shaped controls
 
+	//instance prompt string
+	std::string InstancePrompt;
+
 private:
 
 	//fps
@@ -526,9 +527,6 @@ private:
 
 	//sim engine area trigger
 	Trigger *area_trigger;
-
-	//instance prompt string
-	std::string InstancePrompt;
 };
 
 }

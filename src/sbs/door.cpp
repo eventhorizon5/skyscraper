@@ -188,7 +188,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	//position is the camera position, used to check if the door is locked
 	//if force is true, locking/position check will be bypassed
 
-	sbs->Report("Opening door '" + GetName() + "'");
+	Report("Opening door '" + GetName() + "'");
 
 	EnableLoop(true);
 
@@ -196,7 +196,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	{
 		//check lock state
 		if (IsLocked(position) == true)
-			return sbs->ReportError("Door '" + GetName() + "' is locked");
+			return ReportError("Door '" + GetName() + "' is locked");
 	}
 
 	OpenDoor = true;
@@ -215,7 +215,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 
 void Door::Close(bool playsound)
 {
-	sbs->Report("Closing door '" + GetName() + "'");
+	Report("Closing door '" + GetName() + "'");
 
 	EnableLoop(true);
 
@@ -319,7 +319,7 @@ bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return sbs->ReportError("Need key " + ToString(KeyID) + " to lock/unlock door '" + GetName() + "'");
+			return ReportError("Need key " + ToString(KeyID) + " to lock/unlock door '" + GetName() + "'");
 	}
 
 	if (GetSide(position) == false)
@@ -360,9 +360,9 @@ bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	}
 
 	if (replocked == true)
-		sbs->Report("Locked door '" + GetName() + "'");
+		Report("Locked door '" + GetName() + "'");
 	else
-		sbs->Report("Unlocked door '" + GetName() + "'");
+		Report("Unlocked door '" + GetName() + "'");
 
 	return true;
 }

@@ -23,6 +23,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreRoot.h>
 #include "globals.h"
 #include "sbs.h"
 #include "scenenode.h"
@@ -73,6 +74,19 @@ void ObjectBase::SetName(const std::string &name)
 {
 	//set object name
 	Name = name;
+}
+
+void ObjectBase::Report(const std::string &message)
+{
+	Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message);
+	sbs->LastNotification = message;
+}
+
+bool ObjectBase::ReportError(const std::string &message)
+{
+	Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message, Ogre::LML_CRITICAL);
+	sbs->LastError = message;
+	return false;
 }
 
 Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
@@ -584,18 +598,6 @@ bool Object::SelfDestruct()
 
 	sbs->Report("Self-destructing object " + ToString(Number));
 	return sbs->DeleteObject(this);
-}
-
-void Object::Report(const std::string &message)
-{
-	//general reporting function
-	sbs->Report("Object " + ToString(Number) + ": " + message);
-}
-
-bool Object::ReportError(const std::string &message)
-{
-	//general reporting function
-	return sbs->ReportError("Object " + ToString(Number) + ": " + message);
 }
 
 }

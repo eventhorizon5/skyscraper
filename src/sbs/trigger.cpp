@@ -244,7 +244,7 @@ bool Trigger::DoAction()
 	//result is true if at least one action in the list succeeded
 
 	if (Actions.empty() == true)
-		return sbs->ReportError("No available actions for trigger '" + GetName() + "'");
+		return ReportError("No available actions for trigger '" + GetName() + "'");
 
 	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
 
@@ -293,9 +293,9 @@ void Trigger::Loop()
 		if (sbs->Verbose == true)
 		{
 			if (is_inside == true)
-				sbs->Report("Inside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
+				Report("Inside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 			else
-				sbs->Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
+				Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 		}
 
 		//get action name of next position state

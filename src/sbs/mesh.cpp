@@ -845,7 +845,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 
 	//exit if this mesh is a loaded file
 	if (Filename != "")
-		return sbs->ReportError("PolyMesh: Cannot create geometry in a file-loaded mesh");
+		return ReportError("PolyMesh: Cannot create geometry in a file-loaded mesh");
 
 	//get texture material
 	std::string texname = texture;
@@ -867,7 +867,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 
 	//get texture mapping coordinates
 	if (!sbs->GetTextureManager()->GetTextureMapping(converted_vertices[0], v1, v2, v3, direction))
-		return sbs->ReportError("PolyMesh: Texture mapping error");
+		return ReportError("PolyMesh: Texture mapping error");
 
 	if (tw == 0)
 		tw = 1;
@@ -1461,7 +1461,7 @@ void MeshObject::CreateCollider()
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
+		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
 	}
 }
 
@@ -1518,7 +1518,7 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating model collider for '" + name + "'\n" + e.getDescription());
+		ReportError("Error creating model collider for '" + name + "'\n" + e.getDescription());
 	}
 }
 
@@ -1558,7 +1558,7 @@ void MeshObject::CreateBoxCollider()
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating box collider for '" + name + "'\n" + e.getDescription());
+		ReportError("Error creating box collider for '" + name + "'\n" + e.getDescription());
 	}
 }
 
@@ -1987,7 +1987,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 		matname = filename2.substr(0, filename2.length() - 5) + ".material";
 		std::string matname2 = sbs->VerifyFile(matname);
 		Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
-		sbs->Report("Loading material script " + matname2);
+		Report("Loading material script " + matname2);
 		Ogre::MaterialManager::getSingleton().parseScript(stream, path);
 
 		if(!stream.isNull())
@@ -2009,7 +2009,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 							Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
 							if (!materialPtr.isNull())
 							{
-								sbs->Report("Loading material " + match);
+								Report("Loading material " + match);
 								//materialPtr->compile();
 								materialPtr->load();
 								materialPtr->setLightingEnabled(false);
@@ -2024,7 +2024,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error loading material file " + matname + "\n" + e.getDescription());
+		ReportError("Error loading material file " + matname + "\n" + e.getDescription());
 	}
 
 	//load model
@@ -2045,7 +2045,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
+			ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
 		}
 	}
 

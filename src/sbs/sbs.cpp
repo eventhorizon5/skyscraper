@@ -1059,19 +1059,6 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 	return true;
 }
 
-void SBS::Report(const std::string &message)
-{
-	Ogre::LogManager::getSingleton().logMessage(InstancePrompt + message);
-	LastNotification = message;
-}
-
-bool SBS::ReportError(const std::string &message)
-{
-	Ogre::LogManager::getSingleton().logMessage(InstancePrompt + message, Ogre::LML_CRITICAL);
-	LastError = message;
-	return false;
-}
-
 Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls

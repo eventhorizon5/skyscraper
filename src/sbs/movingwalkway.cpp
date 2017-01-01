@@ -133,13 +133,13 @@ void MovingWalkway::Enabled(bool value)
 void MovingWalkway::Report(const std::string &message)
 {
 	//general reporting function
-	sbs->Report("Moving Walkway " + GetName() + ": " + message);
+	Object::Report("Moving Walkway " + GetName() + ": " + message);
 }
 
 bool MovingWalkway::ReportError(const std::string &message)
 {
 	//general reporting function
-	return sbs->ReportError("Moving Walkway " + GetName() + ": " + message);
+	return Object::ReportError("Moving Walkway " + GetName() + ": " + message);
 }
 
 void MovingWalkway::Loop()

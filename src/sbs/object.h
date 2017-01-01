@@ -43,6 +43,8 @@ public:
 	void SetName(const std::string &name);
 	const std::string& GetName();
 	std::string GetNameBase();
+	virtual void Report(const std::string &message);
+	virtual bool ReportError(const std::string &message);
 
 protected:
 	SBS *sbs; //engine root
@@ -109,8 +111,6 @@ public:
 	void RegisterLoop(Object *object);
 	void UnregisterLoop(Object *object);
 	virtual void Enabled(bool value) {}
-	virtual void Report(const std::string &message);
-	virtual bool ReportError(const std::string &message);
 
 	template <typename T> bool IsType()
 	{

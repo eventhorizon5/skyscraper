@@ -71,7 +71,7 @@ Action::Action(Object *parent, const std::string &name, std::vector<Object*> &ac
 Action::~Action()
 {
 	if (sbs->FastDelete == false)
-		sbs->Report("Deleted action '" + GetName() + "'");
+		Report("Deleted action '" + GetName() + "'");
 }
 
 std::string Action::GetCommandName()
@@ -198,7 +198,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	hold = false;
 
 	//report the action used
-	sbs->Report("Action '" + GetName() + "': object '" + parent_name + "' using command '" + command_name + "'");
+	Report("Action '" + GetName() + "': object '" + parent_name + "' using command '" + command_name + "'");
 
 	//if parent is an elevator object, also use default (first) car as car object
 	if (elevator)

@@ -761,13 +761,13 @@ MeshObject* Shaft::GetMeshObject(int floor)
 void Shaft::Report(const std::string &message)
 {
 	//general reporting function
-	sbs->Report("Shaft " + ToString(ShaftNumber) + ": " + message);
+	Object::Report("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
 bool Shaft::ReportError(const std::string &message)
 {
 	//general reporting function
-	return sbs->ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);
+	return Object::ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
 Light* Shaft::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)

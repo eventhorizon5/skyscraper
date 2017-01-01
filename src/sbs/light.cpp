@@ -71,7 +71,7 @@ Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 po
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating light:\n" + e.getDescription());
+		ReportError("Error creating light:\n" + e.getDescription());
 	}
 }
 

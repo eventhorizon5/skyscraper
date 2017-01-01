@@ -258,7 +258,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 
 			//print optimization report
 			//if (sbs->Verbose)
-				sbs->Report(this->GetName() + ": Combined: " + ToString(total) + "  - Separate (3): " + ToString(separate_total) + " - " + status);
+				Report(this->GetName() + ": Combined: " + ToString(total) + "  - Separate (3): " + ToString(separate_total) + " - " + status);
 		}
 		else
 			meshes_to_create = 1;

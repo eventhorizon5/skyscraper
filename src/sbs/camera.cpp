@@ -577,7 +577,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	//show result
 	std::string number = ToString(object_number);
 	if (wall)
-		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
+		Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
 
 	//object checks and actions
 
@@ -589,7 +589,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	//show result
 	if (!wall)
-		sbs->Report("Clicked on object " + number + ": " + mesh_parent->GetName()+ " - Mesh: " + meshname);
+		Report("Clicked on object " + number + ": " + mesh_parent->GetName()+ " - Mesh: " + meshname);
 
 	if (mesh_parent->GetType() == "ButtonPanel")
 	{
@@ -763,7 +763,7 @@ void Camera::Loop()
 	{
 		//report name of mesh
 		if (ReportCollisions == true)
-			sbs->Report(LastHitMesh);
+			Report(LastHitMesh);
 
 		if (LastHitMesh != "")
 		{

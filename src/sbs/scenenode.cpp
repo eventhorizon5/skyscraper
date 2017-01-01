@@ -49,7 +49,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating scene node:\n" + e.getDescription());
+		ReportError("Error creating scene node:\n" + e.getDescription());
 		return;
 	}
 
@@ -261,7 +261,7 @@ void SceneNode::AttachObject(Ogre::MovableObject *object)
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("Error attaching object:\n" + e.getDescription());
+			ReportError("Error attaching object:\n" + e.getDescription());
 		}
 	}
 }
@@ -278,7 +278,7 @@ void SceneNode::DetachObject(Ogre::MovableObject *object)
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("Error detaching object:\n" + e.getDescription());
+			ReportError("Error detaching object:\n" + e.getDescription());
 		}
 	}
 }
