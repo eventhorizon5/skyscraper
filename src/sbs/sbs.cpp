@@ -421,10 +421,10 @@ SBS::~SBS()
 		delete configfile;
 	configfile = 0;
 
+	Report("Exiting");
+
 	//clear self reference
 	sbs = 0;
-
-	Report("Exiting");
 }
 
 bool SBS::Start(Ogre::Camera *camera)
