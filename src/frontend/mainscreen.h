@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Main Screen
-	Copyright (C)2004-2016 Ryan Thoryk
+	Copyright (C)2004-2017 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com

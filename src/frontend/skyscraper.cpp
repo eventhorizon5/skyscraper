@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Simulation Frontend
-	Copyright (C)2003-2016 Ryan Thoryk
+	Copyright (C)2003-2017 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -636,7 +636,7 @@ bool Skyscraper::Initialize()
 	DisableSound = GetConfigBool("Skyscraper.Frontend.DisableSound", false);
 	if (DisableSound == false)
 	{
-		Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2016\n");
+		Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2017\n");
 
 		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)
