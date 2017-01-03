@@ -298,6 +298,11 @@ void Trigger::Loop()
 				Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 		}
 
+		if (is_inside == true)
+			OnEntry();
+		else
+			OnExit();
+
 		//get action name of next position state
 		std::string name = GetPositionAction(GetNextSelectPosition());
 

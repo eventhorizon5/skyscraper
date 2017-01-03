@@ -57,6 +57,8 @@ public:
 	Ogre::Vector3 GetMin();
 	Ogre::Vector3 GetMax();
 	bool IsOutside(Ogre::Vector3 v1, Ogre::Vector3 v2);
+	virtual void OnEntry() {}
+	virtual void OnExit() {}
 
 private:
 	Ogre::AxisAlignedBox *area_box;
