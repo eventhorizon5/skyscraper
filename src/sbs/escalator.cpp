@@ -206,6 +206,8 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
 			else if (i == num_steps)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
+			Steps[i - 1]->vector = Ogre::Vector3::ZERO;
+			Steps[1 - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -228,6 +230,8 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
 			else if (i == num_steps)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
+			Steps[i - 1]->vector = Ogre::Vector3::ZERO;
+			Steps[1 - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -250,6 +254,8 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
 			else if (i == num_steps)
 				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
+			Steps[i - 1]->vector = Ogre::Vector3::ZERO;
+			Steps[1 - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -272,6 +278,8 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
 			else if (i == num_steps)
 				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
+			Steps[i - 1]->vector = Ogre::Vector3::ZERO;
+			Steps[1 - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
