@@ -34,6 +34,8 @@
 #include "callbutton.h"
 #include "sound.h"
 #include "mesh.h"
+#include "escalator.h"
+#include "movingwalkway.h"
 #include "action.h"
 
 namespace SBS {
@@ -182,12 +184,19 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//FireOn
 	//FireBypass
 
+	//Escalator and MovingWalkway actions:
+	//Forward
+	//Reverse
+	//Stop
+
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
 	Floor *floor = dynamic_cast<Floor*>(parent);
 	Shaft *shaft = dynamic_cast<Shaft*>(parent);
 	Stairs *stairs = dynamic_cast<Stairs*>(parent);
 	CallButton *callbutton = dynamic_cast<CallButton*>(parent);
+	Escalator *escalator = dynamic_cast<Escalator*>(parent);
+	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
 
 	std::string caller_name = caller->GetName();
 	std::string caller_type = caller->GetType();
@@ -606,6 +615,48 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callbutton->FireService(1);
 		if (command_name == "firebypass")
 			return callbutton->FireService(2);
+	}
+
+	//escalator-specific commands
+	if (escalator)
+	{
+		if (command_name == "forward")
+		{
+			escalator->Run = 1;
+			return true;
+		}
+		if (command_name == "reverse")
+		{
+			escalator->Run = -1;
+			return true;
+		}
+		if (command_name == "stop")
+		{
+			escalator->Run = 0;
+			return true;
+		}
+
+	}
+
+	//moving walkway-specific commands
+	if (walkway)
+	{
+		if (command_name == "forward")
+		{
+			walkway->Run = 1;
+			return true;
+		}
+		if (command_name == "reverse")
+		{
+			walkway->Run = -1;
+			return true;
+		}
+		if (command_name == "stop")
+		{
+			walkway->Run = 0;
+			return true;
+		}
+
 	}
 
 	if (command_name == "changetexture")

@@ -469,6 +469,13 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     AddEscalator Escalator 1, 1, 1, , Brick, left, 0, -10, 4, 1, 1, 16, -0.01, 1, 1
 <EndFloor>
 
+AddAction EscStop, Floor0:Escalator1, Stop
+AddAction EscRun, Floor0:Escalator1, Forward
+
+<Floor 0>
+    AddActionControl EscSwitch, switch.wav, front, -3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, 2, EscStop, EscRun, StopKey, RunKey 
+<EndFloor>
+
 <Floors 0 to 1>
     Group = 0, 1
 <EndFloor>

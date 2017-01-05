@@ -43,7 +43,15 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 	//direction is where the step base is - front, back, left, or right.
 
 	//set up SBS object
-	SetValues("MovingWalkway", name, false);
+	SetValues("MovingWalkway", "", false);
+
+	std::string Name;
+	Floor *floor = dynamic_cast<Floor*>(parent);
+	if (floor)
+		Name = "Floor" + ToString(floor->Number) + ":"+ name;
+	else
+		Name = name;
+	SetName(Name);
 
 	is_enabled = true;
 	Run = run;

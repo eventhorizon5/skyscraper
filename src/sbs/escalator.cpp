@@ -42,8 +42,17 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	//run is either 1 for forward motion, -1 for reverse motion, 0 for stop
 	//direction is where the step base is - front, back, left, or right.
 
+	std::string Name;
+
 	//set up SBS object
-	SetValues("Escalator", name, false);
+	SetValues("Escalator", "", false);
+
+	Floor *floor = dynamic_cast<Floor*>(parent);
+	if (floor)
+		Name = "Floor" + ToString(floor->Number) + ":"+ name;
+	else
+		Name = name;
+	SetName(Name);
 
 	is_enabled = true;
 	Run = run;
