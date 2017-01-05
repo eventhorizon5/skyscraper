@@ -43,10 +43,18 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 	//direction is where the step base is - front, back, left, or right.
 
 	//set up SBS object
-	SetValues("MovingWalkway", name, false);
+	SetValues("MovingWalkway", "", false);
+
+	std::string Name;
+	Floor *floor = dynamic_cast<Floor*>(parent);
+	if (floor)
+		Name = "Floor" + ToString(floor->Number) + ":"+ name;
+	else
+		Name = name;
+	SetName(Name);
 
 	is_enabled = true;
-	Run = run;
+	SetRun(run);
 	Speed = speed;
 	sbs->IncrementMovingWalkwayCount();
 	start = 0;
@@ -129,6 +137,20 @@ void MovingWalkway::Enabled(bool value)
 		sound->Stop();
 
 	is_enabled = value;
+}
+
+void MovingWalkway::SetRun(int value)
+{
+	if (value == 0)
+	{
+		for (size_t i = 0; i < Steps.size(); i++)
+		{
+			Steps[i]->vector = Ogre::Vector3::ZERO;
+			Steps[i]->speed = 0;
+		}
+	}
+
+	Run = value;
 }
 
 void MovingWalkway::Report(const std::string &message)
