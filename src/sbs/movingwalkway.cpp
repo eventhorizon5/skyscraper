@@ -67,6 +67,7 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 	//create sound object
 	sound = new Sound(this, name, true);
 	sound->Load(sound_file);
+	sound->SetPosition(CenterX, voffset, CenterZ);
 
 	//create steps
 	CreateSteps(texture, direction, width, treadsize, tw, th);
