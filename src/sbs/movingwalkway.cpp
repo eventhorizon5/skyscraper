@@ -217,6 +217,8 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 			sbs->AddFloorMain(wall, base, texture, 0, -(width / 2), -treadsize, width / 2, 0, 0, 0, false, false, tw, th, true);
 			Steps[i - 1]->Move(Ogre::Vector3(0, 0, pos));
 		}
+		Steps[i - 1]->vector = Ogre::Vector3::ZERO;
+		Steps[1 - 1]->speed = 0;
 
 		if (i == 1)
 			start = Steps[i - 1]->GetPosition();
