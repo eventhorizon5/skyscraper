@@ -67,6 +67,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	//create sound object
 	sound = new Sound(this, name, true);
 	sound->Load(sound_file);
+	sound->SetPosition(CenterX, voffset, CenterZ);
 
 	//create steps
 	CreateSteps(texture, direction, width, risersize, treadsize, tw, th);
