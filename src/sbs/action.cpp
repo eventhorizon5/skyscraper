@@ -622,17 +622,17 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	{
 		if (command_name == "forward")
 		{
-			escalator->Run = 1;
+			escalator->SetRun(1);
 			return true;
 		}
 		if (command_name == "reverse")
 		{
-			escalator->Run = -1;
+			escalator->SetRun(-1);
 			return true;
 		}
 		if (command_name == "stop")
 		{
-			escalator->Run = 0;
+			escalator->SetRun(0);
 			return true;
 		}
 
@@ -643,17 +643,17 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	{
 		if (command_name == "forward")
 		{
-			walkway->Run = 1;
+			walkway->SetRun(1);
 			return true;
 		}
 		if (command_name == "reverse")
 		{
-			walkway->Run = -1;
+			walkway->SetRun(-1);
 			return true;
 		}
 		if (command_name == "stop")
 		{
-			walkway->Run = 0;
+			walkway->SetRun(0);
 			return true;
 		}
 

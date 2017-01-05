@@ -55,7 +55,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	SetName(Name);
 
 	is_enabled = true;
-	Run = run;
+	SetRun(run);
 	Speed = speed;
 	sbs->IncrementEscalatorCount();
 	start = 0;
@@ -139,6 +139,20 @@ void Escalator::Enabled(bool value)
 		sound->Stop();
 
 	is_enabled = value;
+}
+
+void Escalator::SetRun(int value)
+{
+	if (value == 0)
+	{
+		for (size_t i = 0; i < Steps.size(); i++)
+		{
+			Steps[i]->vector = Ogre::Vector3::ZERO;
+			Steps[i]->speed = 0;
+		}
+	}
+
+	Run = value;
 }
 
 void Escalator::Report(const std::string &message)

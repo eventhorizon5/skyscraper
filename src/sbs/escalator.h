@@ -31,7 +31,6 @@ namespace SBS {
 class SBSIMPEXP Escalator : public Object
 {
 public:
-	int Run;
 	float Speed;
 
 	Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
@@ -43,10 +42,13 @@ public:
 	bool IsEnabled() { return is_enabled; }
 	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void ResetState();
+	void SetRun(int value);
+	int GetRun() { return Run; }
 
 private:
 	DynamicMesh* StepContainer;
 	Sound *sound; //sound object
+	int Run; //-1 is reverse, 0 is stop, 1 is forward
 	bool is_enabled;
 	Ogre::Vector3 start, end;
 	std::string Direction;

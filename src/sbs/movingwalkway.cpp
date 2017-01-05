@@ -54,7 +54,7 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 	SetName(Name);
 
 	is_enabled = true;
-	Run = run;
+	SetRun(run);
 	Speed = speed;
 	sbs->IncrementMovingWalkwayCount();
 	start = 0;
@@ -137,6 +137,20 @@ void MovingWalkway::Enabled(bool value)
 		sound->Stop();
 
 	is_enabled = value;
+}
+
+void MovingWalkway::SetRun(int value)
+{
+	if (value == 0)
+	{
+		for (size_t i = 0; i < Steps.size(); i++)
+		{
+			Steps[i]->vector = Ogre::Vector3::ZERO;
+			Steps[i]->speed = 0;
+		}
+	}
+
+	Run = value;
 }
 
 void MovingWalkway::Report(const std::string &message)
