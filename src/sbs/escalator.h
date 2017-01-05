@@ -52,6 +52,7 @@ private:
 	std::string Direction;
 	float treadsize;
 	float risersize;
+	int buffer_zone_steps;
 
 	std::vector<Step*> Steps;
 
