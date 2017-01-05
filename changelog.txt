@@ -1,3 +1,11 @@
+Version 1.10.3 (2.0 Alpha 10 - Update 3)
+-------------------------
+-step movement states should be reset when switching off escalator/moving
+walkway
+-added action support for escalators and moving walkways
+-position sounds correctly for escalators and moving walkways
+-steps should reset values on startup
+
 Version 1.10.2 (2.0 Alpha 10 - Update 2)
 -------------------------
 -fixes for escalator and moving walkway motion
