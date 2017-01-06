@@ -21,9 +21,9 @@ VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
 VIAddVersionKey LegalCopyright "©2003-2016 Ryan Thoryk"
-VIAddVersionKey FileVersion "1.10.3.0"
-VIAddVersionKey ProductVersion "1.10.3.0"
-VIProductVersion 1.10.3.0
+VIAddVersionKey FileVersion "1.10.4.0"
+VIAddVersionKey ProductVersion "1.10.4.0"
+VIProductVersion 1.10.4.0
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -70,7 +70,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "skyscraper20alpha10u1-x64.exe"
+OutFile "skyscraper20alpha10u4-x64.exe"
 InstallDir "$PROGRAMFILES\Skyscraper"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
