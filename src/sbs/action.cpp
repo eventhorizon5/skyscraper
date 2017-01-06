@@ -797,10 +797,19 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			destination.y = ToFloat(command_parameters[1]);
 			destination.z = ToFloat(command_parameters[2]);
 
+			sbs->camera->GotoFloor(sbs->GetFloorNumber(destination.y));
 			sbs->camera->SetPosition(destination);
 			return true;
 		}
 		return false;
+	}
+
+	if (command_name == "gotofloor")
+	{
+		if ((int)command_parameters.size() == 1)
+		{
+			sbs->camera->GotoFloor(ToInt(command_parameters[0]));
+		}
 	}
 
 	return false;
