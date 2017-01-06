@@ -849,6 +849,9 @@ bool CallButton::GetDownStatus()
 
 Control* CallButton::GetUpControl()
 {
+	if (UpExists == false)
+		return 0;
+
 	return panel->GetControl(0);
 }
 
