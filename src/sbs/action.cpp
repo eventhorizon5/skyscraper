@@ -109,6 +109,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//PlaySound - param1: sound name, param2: loop (true/false)
 	//StopSound - param1: sound name
 	//Teleport - param1: X coordinate, param2: Y coordinate, param3; Z coordinate
+	//GotoFloor - param1: number
 
 	////Elevator actions:
 	//Off
