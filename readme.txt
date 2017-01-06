@@ -208,6 +208,11 @@ FireOff
 FireOn
 FireBypass
 
+New escalator/moving walkway actions:
+Forward
+Reverse
+Stop
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 7. Contact
