@@ -21,9 +21,9 @@ VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
 VIAddVersionKey LegalCopyright "©2003-2016 Ryan Thoryk"
-VIAddVersionKey FileVersion "1.10.0.0"
-VIAddVersionKey ProductVersion "1.10.0.0"
-VIProductVersion 1.10.0.0
+VIAddVersionKey FileVersion "1.10.3.0"
+VIAddVersionKey ProductVersion "1.10.3.0"
+VIProductVersion 1.10.3.0
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
