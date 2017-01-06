@@ -62,6 +62,8 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 		return;
 	}
 
+	Enabled(true);
+
 	//move to position and specified offset
 	Move(position);
 	SetRotation(rotation);
