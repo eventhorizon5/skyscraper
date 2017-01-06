@@ -434,8 +434,13 @@ Ogre::Vector3 Camera::GetStartRotation()
 
 void Camera::SetToStartPosition(bool disable_current_floor)
 {
-	SetPosition(Ogre::Vector3(StartPositionX, 0, StartPositionZ));
-	GotoFloor(StartFloor, disable_current_floor);
+	if (sbs->GetFloor(StartFloor))
+	{
+		SetPosition(Ogre::Vector3(StartPositionX, 0, StartPositionZ));
+		GotoFloor(StartFloor, disable_current_floor);
+	}
+	else
+		SetPosition(Ogre::Vector3(StartPositionX, GetHeight(), StartPositionZ));
 }
 
 void Camera::SetToStartDirection()
