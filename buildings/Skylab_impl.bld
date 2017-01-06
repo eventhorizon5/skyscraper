@@ -1,0 +1,144 @@
+# $Id$
+	
+<Globals>
+    Name = Skylab
+    Designer = Ryan Thoryk
+    CameraFloor = 0
+    CameraPosition = 0, -14.43
+    CameraRotation = 0, 0, 0
+    Sky = noon
+    Bounds = -75, 0, -75, 75, 100, 75
+    Position = 0, 1000, 0
+<EndGlobals>
+
+<Textures>
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/cutston.jpg, InterExt, 0.269, 0.25
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/metal1.jpg, ElevExt, 0.25, 0.25
+    Load data/door1.jpg, ElevDoors, 1, 1
+    Load data/door1.jpg, ElevDoors2, -1, 1
+    Load data/panel-back2.jpg, ElevExtPanels, 1, 1
+    Load data/marb148.jpg, ElevPanel, 1, 1
+    Load data/diamond18j.jpg, ElevWall, 1, 1
+    Load data/diamond18j.jpg, ElevPanelMain, 1, 1
+    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/servicedoor2.jpg, StairsDoor, 1, 1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
+    Load data/fire2keyoff.png, Fire2Off, 1, 1
+    Load data/fire2keyon.png, Fire2On, 1, 1
+    Load data/fire2keyhold.png, Fire2Hold, 1, 1
+    Load data/fire1keyoff.png, Fire1Off, 1, 1
+    Load data/fire1keyon.png, Fire1On, 1, 1
+    Load data/fire1keybypass.png, Fire1Bypass, 1, 1
+    Load data/runkey.png, RunKey, 1, 1
+    Load data/stopkey.png, StopKey, 1, 1
+    Load data/indservkeyon.png, IndOn, 1, 1
+    Load data/indservkeyoff.png, IndOff, 1, 1
+
+    Load data/black.jpg, Black, 1, 1
+    Load data/black_lit.jpg, BlackLit, 1, 1
+    AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
+    AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
+    AddTextRange 1, 10, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 10, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+<EndTextures>
+
+<Floor 0>
+    ID = %floor% + 1
+    Name = Floor (%floor% + 1)
+    Type = Office
+    Height = 10
+    InterfloorHeight = 2.24
+    if[%floor% = 0] Altitude = -%interfloorheight%
+
+    #create a basic carpeted floor
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, False
+
+    #create a ceiling
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, false, false, 0, 0, False
+
+    #External windows - this creates the outside versions of the windows, and also the walls outside the
+    #interfloor areas
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Internal windows - this creates the transparent windows on the inside of each floor
+    SetAutoSize = true, false
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -15, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, false, false, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+
+#Finally create the roof (11th floor), and add a square brick floor on it.
+<Floor 1>
+    ID = R
+    Name = Roof
+    Type = Roof
+    Height = 10
+    InterfloorHeight = 2.24
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Roof, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, True #roof
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+

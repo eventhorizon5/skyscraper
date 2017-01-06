@@ -1,0 +1,21 @@
+# $Id$
+	
+#Ground only
+
+<Globals>
+    Name = Ground
+    Designer = Me
+    CameraFloor = 0
+    CameraPosition = 0, -60
+    CameraRotation = 0, 0, 0
+    Sky = noon
+    Collisions = false
+    Gravity = false
+<EndGlobals>
+
+<Textures>
+    Load data/downtown.jpg, Downtown, 1, 1
+<EndTextures>
+
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+

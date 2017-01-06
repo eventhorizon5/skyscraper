@@ -194,6 +194,8 @@ Position
 Bounds
 ShowLoadedSounds
 ShowPlayingSounds
+Teleport
+GotoFloor
 
 New elevator actions:
 PeakOff

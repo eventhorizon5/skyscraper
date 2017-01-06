@@ -63,6 +63,8 @@ Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const 
 		sound = new Sound(this, name, true);
 		sound->Load(sound_file);
 	}
+
+	EnableLoop(true);
 }
 
 Trigger::~Trigger()
