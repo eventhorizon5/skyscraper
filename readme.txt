@@ -194,6 +194,8 @@ Position
 Bounds
 ShowLoadedSounds
 ShowPlayingSounds
+Teleport
+GotoFloor
 
 New elevator actions:
 PeakOff
@@ -207,6 +209,11 @@ Down
 FireOff
 FireOn
 FireBypass
+
+New escalator/moving walkway actions:
+Forward
+Reverse
+Stop
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
