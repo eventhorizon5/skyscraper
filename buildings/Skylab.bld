@@ -1,0 +1,32 @@
+# $Id$
+	
+<Buildings>
+    Load Skylab_impl.bld
+<EndBuildings>
+
+<Globals>
+    Name = Skylab
+    Designer = Ryan Thoryk
+    CameraFloor = 0
+    CameraPosition = 0, -60
+    CameraRotation = 0, 0, 0
+    Sky = noon
+<EndGlobals>
+
+<Textures>
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/black.jpg, Black, 1, 1
+    Load data/black_lit.jpg, BlackLit, 1, 1
+    AddText Black, ButtonT, nimbus_sans.ttf, 28, T, -1, -1, -1, -1, center, center, 255, 255, 255
+<EndTextures>
+
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+
+#Add teleporter actions
+AddAction teleport, Global, teleport, 0, 1005, -14.43
+
+#add a teleporter
+AddTrigger teleporter, switch.wav, -3, 0, -10, 3, 8, -4, teleport
+SetAutoSize = false, false
+AddFloor external, teleporter, ButtonT, 0, -3, -10, 3, -4, 0.1, 0.1, false, false, 1, 1
+
