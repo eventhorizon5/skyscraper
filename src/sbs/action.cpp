@@ -108,6 +108,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//ChangeTexture  - param1: oldtexture param2: newtexture
 	//PlaySound - param1: sound name, param2: loop (true/false)
 	//StopSound - param1: sound name
+	//Teleport - param1: X coordinate, param2: Y coordinate, param3; Z coordinate
 
 	////Elevator actions:
 	//Off
@@ -782,6 +783,21 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 				if (soundlist[i])
 					soundlist[i]->Stop();
 			}
+			return true;
+		}
+		return false;
+	}
+
+	if (command_name == "teleport")
+	{
+		if ((int)command_parameters.size() == 3)
+		{
+			Ogre::Vector3 destination;
+			destination.x = ToFloat(command_parameters[0]);
+			destination.y = ToFloat(command_parameters[1]);
+			destination.z = ToFloat(command_parameters[2]);
+
+			sbs->camera->SetPosition(destination);
 			return true;
 		}
 		return false;
