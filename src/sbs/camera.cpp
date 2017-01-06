@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Camera Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -283,9 +283,9 @@ void Camera::UpdateCameraFloor()
 	int newlastfloor;
 
 	if (lastfloorset == true)
-		newlastfloor = sbs->GetFloorNumber((float)GetPosition().y, lastfloor, true);
+		newlastfloor = sbs->GetFloorNumber(GetPosition().y, lastfloor, true);
 	else
-		newlastfloor = sbs->GetFloorNumber((float)GetPosition().y);
+		newlastfloor = sbs->GetFloorNumber(GetPosition().y);
 
 	//if camera moved to a different floor, update floor indicators
 	if ((lastfloor != newlastfloor) && sbs->GetFloor(newlastfloor))
@@ -375,9 +375,9 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, float speed)
 		RotationStopped = true;
 
 	//convert rotation values to degrees
-	float xdeg = (float)Ogre::Math::RadiansToDegrees(rotation.x) * speed; //X axis (up/down)
-	float ydeg = (float)Ogre::Math::RadiansToDegrees(rotation.y) * speed; //Y axis (left/right)
-	float zdeg = (float)Ogre::Math::RadiansToDegrees(rotation.z) * speed; //Z axis (clockwise/counterclockwise)
+	float xdeg = Ogre::Math::RadiansToDegrees(rotation.x) * speed; //X axis (up/down)
+	float ydeg = Ogre::Math::RadiansToDegrees(rotation.y) * speed; //Y axis (left/right)
+	float zdeg = Ogre::Math::RadiansToDegrees(rotation.z) * speed; //Z axis (clockwise/counterclockwise)
 	Rotation.x += xdeg;
 	Rotation.y += ydeg;
 	Rotation.z += zdeg;
@@ -577,7 +577,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	//show result
 	std::string number = ToString(object_number);
 	if (wall)
-		Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
+		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
 
 	//object checks and actions
 
@@ -589,7 +589,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	//show result
 	if (!wall)
-		Report("Clicked on object " + number + ": " + mesh_parent->GetName()+ " - Mesh: " + meshname);
+		sbs->Report("Clicked on object " + number + ": " + mesh_parent->GetName()+ " - Mesh: " + meshname);
 
 	if (mesh_parent->GetType() == "ButtonPanel")
 	{
@@ -763,7 +763,7 @@ void Camera::Loop()
 	{
 		//report name of mesh
 		if (ReportCollisions == true)
-			Report(LastHitMesh);
+			sbs->Report(LastHitMesh);
 
 		if (LastHitMesh != "")
 		{
@@ -932,7 +932,7 @@ void Camera::SetFOVAngle(float angle)
 
 	if (angle > 0 && angle < 179.63)
 	{
-		float ratio = (float)MainCamera->getAspectRatio();
+		float ratio = MainCamera->getAspectRatio();
 		if (ratio > 0)
 			MainCamera->setFOVy(Ogre::Degree(angle / ratio));
 	}
@@ -943,7 +943,7 @@ float Camera::GetFOVAngle()
 	if (!MainCamera)
 		return 0.0f;
 
-	return (float)(MainCamera->getFOVy().valueDegrees() * MainCamera->getAspectRatio());
+	return MainCamera->getFOVy().valueDegrees() * MainCamera->getAspectRatio();
 }
 
 void Camera::SetToDefaultFOV()
@@ -1170,7 +1170,7 @@ bool Camera::PickUpModel()
 	//do a raycast from the collider's position, in the forward direction
 	Ogre::Vector3 position = GetPosition();
 
-	for (int i = (int)GetPosition().y; i > 0; i--)
+	for (int i = GetPosition().y; i > 0; i--)
 	{
 		position.y = i;
 		Ogre::Ray ray (sbs->ToRemote(position), sbs->ToRemote(front, false));
@@ -1368,7 +1368,7 @@ void Camera::SetCameraState(const CameraState &state, bool set_floor)
 	if (set_floor == true)
 		GotoFloor(state.floor, true);
 	else
-		GotoFloor(sbs->GetFloorNumber((float)position.y));
+		GotoFloor(sbs->GetFloorNumber(position.y));
 	SetPosition(position);
 	SetRotation(state.rotation - sbs->GetRotation());
 	EnableCollisions(state.collisions);

@@ -2,8 +2,8 @@
 
 /*
 Scalable Building Simulator - Elevator Car Object
-The Skyscraper Project - Version 1.11 Alpha
-Copyright (C)2004-2017 Ryan Thoryk
+The Skyscraper Project - Version 1.10 Alpha
+Copyright (C)2004-2016 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
 Contact - ryan@skyscrapersim.com
@@ -457,13 +457,13 @@ void ElevatorCar::DumpServicedFloors()
 	//dump serviced floors list
 
 	if (parent->GetCarCount() == 1)
-		Object::Report("\n--- Elevator " + ToString(parent->Number) + "'s Serviced Floors ---\n");
+		sbs->Report("\n--- Elevator " + ToString(parent->Number) + "'s Serviced Floors ---\n");
 	else
-		Object::Report("\n--- Elevator " + ToString(parent->Number) + " Car " + ToString(Number) + "'s Serviced Floors ---\n");
+		sbs->Report("\n--- Elevator " + ToString(parent->Number) + " Car " + ToString(Number) + "'s Serviced Floors ---\n");
 
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
-		Object::Report(ToString((int)i) + " - " + ToString(ServicedFloors[i]));
-	Object::Report("");
+		sbs->Report(ToString((int)i) + " - " + ToString(ServicedFloors[i]));
+	sbs->Report("");
 }
 
 bool ElevatorCar::AddServicedFloor(int number)

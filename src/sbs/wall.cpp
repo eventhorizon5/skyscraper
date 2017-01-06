@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Wall Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -90,7 +90,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
 	if (!meshwrapper->PolyMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles, converted_vertices))
 	{
-		ReportError("Error creating wall '" + name + "'");
+		sbs->ReportError("Error creating wall '" + name + "'");
 		return 0;
 	}
 
@@ -115,7 +115,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &material, 
 	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
 	if (!meshwrapper->PolyMesh(name, material, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
 	{
-		ReportError("Error creating wall '" + name + "'");
+		sbs->ReportError("Error creating wall '" + name + "'");
 		return 0;
 	}
 

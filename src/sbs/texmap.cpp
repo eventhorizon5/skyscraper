@@ -88,7 +88,7 @@ bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t
 	float det = m11 * m22 - m12 * m21;
 
 	if (std::abs(det) < SMALL_EPSILON)
-		return ReportError("ComputeTextureMap: Bad UV coordinates");
+		return sbs->ReportError("ComputeTextureMap: Bad UV coordinates");
 	else
 	{
 		//invert matrix
@@ -183,7 +183,7 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 	if (std::abs(det) < SMALL_EPSILON)
 	{
 		//m = m.IDENTITY;
-		//return ReportError("Error computing texture space");
+		//return sbs->ReportError("Error computing texture space");
 
 		//alternate matrix inversion method
 		//(standard inversion breaks when using small numbers)

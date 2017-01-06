@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Sound Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -402,12 +402,12 @@ bool Sound::IsLoaded()
 
 void Sound::Report(const std::string &message)
 {
-	Object::Report("Sound '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
+	sbs->Report("Sound '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 bool Sound::ReportError(const std::string &message)
 {
-	return Object::ReportError("Sound '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
+	return sbs->ReportError("Sound '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 void Sound::PlayQueued(const std::string &filename, bool stop, bool loop)

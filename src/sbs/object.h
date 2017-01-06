@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Generic Object Class
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -43,8 +43,6 @@ public:
 	void SetName(const std::string &name);
 	const std::string& GetName();
 	std::string GetNameBase();
-	virtual void Report(const std::string &message);
-	virtual bool ReportError(const std::string &message);
 
 protected:
 	SBS *sbs; //engine root
@@ -111,6 +109,8 @@ public:
 	void RegisterLoop(Object *object);
 	void UnregisterLoop(Object *object);
 	virtual void Enabled(bool value) {}
+	virtual void Report(const std::string &message);
+	virtual bool ReportError(const std::string &message);
 
 	template <typename T> bool IsType()
 	{

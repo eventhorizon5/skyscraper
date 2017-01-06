@@ -20,10 +20,10 @@ SetCompressor lzma
 VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
-VIAddVersionKey LegalCopyright "©2003-2017 Ryan Thoryk"
-VIAddVersionKey FileVersion "1.10.0.0"
-VIAddVersionKey ProductVersion "1.10.0.0"
-VIProductVersion 1.10.0.0
+VIAddVersionKey LegalCopyright "©2003-2016 Ryan Thoryk"
+VIAddVersionKey FileVersion "1.10.3.0"
+VIAddVersionKey ProductVersion "1.10.3.0"
+VIProductVersion 1.10.3.0
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -70,7 +70,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "skyscraper20alpha10-x64.exe"
+OutFile "skyscraper20alpha10u1-x64.exe"
 InstallDir "$PROGRAMFILES\Skyscraper"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -159,7 +159,7 @@ Section "Required libraries" SEC03
   SetOutPath "$INSTDIR"
   File "${LOCAL_FILES}\Caelum.dll"
   File "${LOCAL_FILES}\cg.dll"
-  File "${LOCAL_FILES}\fmodex64.dll"
+  File "${LOCAL_FILES}\fmod64.dll"
   File "${LOCAL_FILES}\OgreMain.dll"
   File "${LOCAL_FILES}\OgreOverlay.dll"
   File "${LOCAL_FILES}\Plugin_CgProgramManager.dll"
@@ -172,11 +172,10 @@ Section "Required libraries" SEC03
   File "${LOCAL_FILES}\ogre.cfg"
   File "${LOCAL_FILES}\wxbase30u_vc_x64_custom.dll"
   File "${LOCAL_FILES}\wxmsw30u_core_vc_x64_custom.dll"
-  File "${LOCAL_FILES}\wxmsw30u_gl_vc_x64_custom.dll"
   File "${LOCAL_FILES}\D3DX9_43.dll"
   File "${LOCAL_FILES}\D3DCompiler_43.dll"
-  File "${LOCAL_FILES}\msvcp100.dll"
-  File "${LOCAL_FILES}\msvcr100.dll"
+  File "${LOCAL_FILES}\vcruntime140.dll"
+  File "${LOCAL_FILES}\msvcp140.dll"
   File "${LOCAL_FILES}\dbghelp.dll"
   SetOutPath "$INSTDIR\data\caelum"
   File /r "${LOCAL_FILES}\data\caelum\*.*"

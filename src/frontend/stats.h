@@ -1,8 +1,8 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.11 Alpha - Statistics Dialog
-	Copyright (C)2004-2017 Ryan Thoryk
+	Skyscraper 1.10 Alpha - Statistics Dialog
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com

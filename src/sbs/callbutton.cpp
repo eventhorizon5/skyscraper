@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Call Button Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -128,7 +128,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		rows++;
 
 	//create button panel
-	float button_height = BackHeight / 3.5f;
+	float button_height = BackHeight / 3.5;
 	float button_width = BackWidth / 2;
 	float h_spacing = 0.5;
 	float v_spacing = 1.25;
@@ -576,14 +576,14 @@ void CallButton::Report(const std::string &message)
 {
 	//general reporting function
 	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;
-	Object::Report(msg);
+	sbs->Report(msg);
 }
 
 bool CallButton::ReportError(const std::string &message)
 {
 	//general reporting function
 	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;
-	return Object::ReportError(msg);
+	return sbs->ReportError(msg);
 }
 
 void CallButton::SetLocked(bool value, int keyid)

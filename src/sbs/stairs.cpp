@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Stairwell Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -685,13 +685,13 @@ bool Stairs::IsValidFloor(int floor)
 void Stairs::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Stairwell " + ToString(StairsNum) + ": " + message);
+	sbs->Report("Stairwell " + ToString(StairsNum) + ": " + message);
 }
 
 bool Stairs::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Stairwell " + ToString(StairsNum) + ": " + message);
+	return sbs->ReportError("Stairwell " + ToString(StairsNum) + ": " + message);
 }
 
 void Stairs::RemoveDoor(Door *door)
