@@ -1410,4 +1410,14 @@ void Camera::CheckObjects()
 	CheckStairwell();
 }
 
+void Camera::Teleport(float X, float Y, float Z)
+{
+	//teleport/warp user to specified location
+
+	Ogre::Vector3 destination (X, Y, Z);
+
+	GotoFloor(sbs->GetFloorNumber(destination.y));
+	SetPosition(destination);
+}
+
 }

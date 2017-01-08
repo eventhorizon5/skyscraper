@@ -793,13 +793,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	{
 		if ((int)command_parameters.size() == 3)
 		{
-			Ogre::Vector3 destination;
-			destination.x = ToFloat(command_parameters[0]);
-			destination.y = ToFloat(command_parameters[1]);
-			destination.z = ToFloat(command_parameters[2]);
-
-			sbs->camera->GotoFloor(sbs->GetFloorNumber(destination.y));
-			sbs->camera->SetPosition(destination);
+			sbs->camera->Teleport(ToFloat(command_parameters[0]), ToFloat(command_parameters[1]), ToFloat(command_parameters[2]));
 			return true;
 		}
 		return false;

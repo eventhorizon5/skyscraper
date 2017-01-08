@@ -1820,13 +1820,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Ogre::Vector3 destination;
-		destination.x = ToFloat(tempdata[0]);
-		destination.y = ToFloat(tempdata[1]);
-		destination.z = ToFloat(tempdata[2]);
-
-		Simcore->camera->GotoFloor(Simcore->GetFloorNumber(destination.y));
-		Simcore->camera->SetPosition(destination);
+		Simcore->camera->Teleport(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 
 		return sNextLine;
 	}
