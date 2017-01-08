@@ -1804,6 +1804,33 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//Teleport command
+	if (linecheck.substr(0, 8) == "teleport")
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 2; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		Ogre::Vector3 destination;
+		destination.x = ToFloat(tempdata[0]);
+		destination.y = ToFloat(tempdata[1]);
+		destination.z = ToFloat(tempdata[2]);
+
+		Simcore->camera->GotoFloor(Simcore->GetFloorNumber(destination.y));
+		Simcore->camera->SetPosition(destination);
+
+		return sNextLine;
+	}
+
 	//GotoFloor command
 	if (linecheck.substr(0, 9) == "gotofloor")
 	{
