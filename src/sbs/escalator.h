@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Escalator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -54,7 +54,6 @@ private:
 	std::string Direction;
 	float treadsize;
 	float risersize;
-	int buffer_zone_steps;
 
 	std::vector<Step*> Steps;
 

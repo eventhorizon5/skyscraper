@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Core
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -63,7 +63,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	sbs = this;
 	this->mSceneManager = mSceneManager;
 
-	version = "0.11.0." + std::string(SVN_REVSTR);
+	version = "0.10.4." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//root object needs to self-register
@@ -421,10 +421,10 @@ SBS::~SBS()
 		delete configfile;
 	configfile = 0;
 
-	Report("Exiting");
-
 	//clear self reference
 	sbs = 0;
+
+	Report("Exiting");
 }
 
 bool SBS::Start(Ogre::Camera *camera)
@@ -472,7 +472,7 @@ void SBS::PrintBanner()
 {
 	Report("");
 	Report(" Scalable Building Simulator " + version + " " + version_state);
-	Report(" Copyright (C)2004-2017 Ryan Thoryk");
+	Report(" Copyright (C)2004-2016 Ryan Thoryk");
 	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report(" software, and you are welcome to redistribute it under certain");
 	Report(" conditions. For details, see the file gpl.txt\n");
@@ -1057,6 +1057,19 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 	texturemanager->SetPlanarRotate(old_planarrotate);
 
 	return true;
+}
+
+void SBS::Report(const std::string &message)
+{
+	Ogre::LogManager::getSingleton().logMessage(InstancePrompt + message);
+	LastNotification = message;
+}
+
+bool SBS::ReportError(const std::string &message)
+{
+	Ogre::LogManager::getSingleton().logMessage(InstancePrompt + message, Ogre::LML_CRITICAL);
+	LastError = message;
+	return false;
 }
 
 Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)

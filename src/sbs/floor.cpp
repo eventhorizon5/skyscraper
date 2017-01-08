@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Floor Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -1007,13 +1007,13 @@ std::vector<Sound*> Floor::GetSound(const std::string &name)
 void Floor::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Floor " + ToString(Number) + ": " + message);
+	sbs->Report("Floor " + ToString(Number) + ": " + message);
 }
 
 bool Floor::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Floor " + ToString(Number) + ": " + message);
+	return sbs->ReportError("Floor " + ToString(Number) + ": " + message);
 }
 
 float Floor::GetBase(bool relative)
@@ -1447,20 +1447,20 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 	//if display_header is true, show header/key along with listing
 
 	if (display_header == true)
-		Object::Report("\n--- Floor Information ---\n");
+		sbs->Report("\n--- Floor Information ---\n");
 
 	if (detailed == true)
 	{
-		Object::Report("Number: " + ToString(Number));
-		Object::Report("ID: " + ID);
-		Object::Report("Name: " + Name);
-		Object::Report("Type: " + FloorType);
-		Object::Report("Description: " + Description);
-		Object::Report("Height: " + ToString(Height));
-		Object::Report("InterfloorHeight: " + ToString(InterfloorHeight));
-		Object::Report("FullHeight: " + ToString(FullHeight()));
-		Object::Report("Altitude: " + ToString(Altitude));
-		Object::Report("Base: " + ToString(GetBase()));
+		sbs->Report("Number: " + ToString(Number));
+		sbs->Report("ID: " + ID);
+		sbs->Report("Name: " + Name);
+		sbs->Report("Type: " + FloorType);
+		sbs->Report("Description: " + Description);
+		sbs->Report("Height: " + ToString(Height));
+		sbs->Report("InterfloorHeight: " + ToString(InterfloorHeight));
+		sbs->Report("FullHeight: " + ToString(FullHeight()));
+		sbs->Report("Altitude: " + ToString(Altitude));
+		sbs->Report("Base: " + ToString(GetBase()));
 
 		std::vector<int> elevator_list, stairs_list, shaft_list;
 		GetElevatorList(elevator_list);
@@ -1474,7 +1474,7 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 			if (i < elevator_list.size() - 1)
 				elevs += ", ";
 		}
-		Object::Report("Elevators servicing: " + elevs);
+		sbs->Report("Elevators servicing: " + elevs);
 
 		std::string stairs;
 		for (size_t i = 0; i < stairs_list.size(); i++)
@@ -1483,7 +1483,7 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 			if (i < stairs_list.size() - 1)
 				stairs += ", ";
 		}
-		Object::Report("Stairwells spanning: " + stairs);
+		sbs->Report("Stairwells spanning: " + stairs);
 
 		std::string shafts;
 		for (size_t i = 0; i < shaft_list.size(); i++)
@@ -1492,17 +1492,17 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 			if (i < shaft_list.size() - 1)
 				shafts += ", ";
 		}
-		Object::Report("Shafts spanning: " + shafts);
+		sbs->Report("Shafts spanning: " + shafts);
 
 		if (display_header == true)
-			Object::Report("");
+			sbs->Report("");
 	}
 	else
 	{
 		if (display_header == true)
-			Object::Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tBase\t----\tDescription");
+			sbs->Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tBase\t----\tDescription");
 
-		Object::Report(ToString(Number) + "(" + ID + ")\t----\t" + Name + "\t----\t" + FloorType + "\t----\t" + ToString(Height) + "\t----\t" + ToString(InterfloorHeight) + "\t----\t" + ToString(Altitude) + "\t----\t" + ToString(GetBase()) + "\t----\t" + Description);
+		sbs->Report(ToString(Number) + "(" + ID + ")\t----\t" + Name + "\t----\t" + FloorType + "\t----\t" + ToString(Height) + "\t----\t" + ToString(InterfloorHeight) + "\t----\t" + ToString(Altitude) + "\t----\t" + ToString(GetBase()) + "\t----\t" + Description);
 	}
 }
 

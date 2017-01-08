@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - SceneNode Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -49,7 +49,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating scene node:\n" + e.getDescription());
+		sbs->ReportError("Error creating scene node:\n" + e.getDescription());
 		return;
 	}
 
@@ -261,7 +261,7 @@ void SceneNode::AttachObject(Ogre::MovableObject *object)
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportError("Error attaching object:\n" + e.getDescription());
+			sbs->ReportError("Error attaching object:\n" + e.getDescription());
 		}
 	}
 }
@@ -278,7 +278,7 @@ void SceneNode::DetachObject(Ogre::MovableObject *object)
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportError("Error detaching object:\n" + e.getDescription());
+			sbs->ReportError("Error detaching object:\n" + e.getDescription());
 		}
 	}
 }

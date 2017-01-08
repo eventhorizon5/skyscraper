@@ -2,8 +2,8 @@
 
 /*
         Scalable Building Simulator - Action Interface Class
-        The Skyscraper Project - Version 1.11 Alpha
-        Copyright (C)2004-2017 Ryan Thoryk
+        The Skyscraper Project - Version 1.10 Alpha
+        Copyright (C)2004-2016 Ryan Thoryk
         http://www.skyscrapersim.com
         http://sourceforge.net/projects/skyscraper
         Contact - ryan@skyscrapersim.com
@@ -73,7 +73,7 @@ Action::Action(Object *parent, const std::string &name, std::vector<Object*> &ac
 Action::~Action()
 {
 	if (sbs->FastDelete == false)
-		Report("Deleted action '" + GetName() + "'");
+		sbs->Report("Deleted action '" + GetName() + "'");
 }
 
 std::string Action::GetCommandName()
@@ -209,7 +209,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	hold = false;
 
 	//report the action used
-	Report("Action '" + GetName() + "': object '" + parent_name + "' using command '" + command_name + "'");
+	sbs->Report("Action '" + GetName() + "': object '" + parent_name + "' using command '" + command_name + "'");
 
 	//if parent is an elevator object, also use default (first) car as car object
 	if (elevator)

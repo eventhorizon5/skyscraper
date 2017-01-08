@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Control Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -369,7 +369,7 @@ bool Control::DoAction()
 	else if (Actions.empty() == false)
 		actionlist.push_back(Actions[current_position - 1]);
 	else
-		return ReportError("No available actions for control '" + GetName() + "'");
+		return sbs->ReportError("No available actions for control '" + GetName() + "'");
 
 	bool result = false;
 	for (size_t i = 0; i < actionlist.size(); i++)
@@ -392,7 +392,7 @@ bool Control::Press(bool reverse)
 
 	//check lock state
 	if (IsLocked() == true)
-		return ReportError("Control '" + GetName() + "' is locked");
+		return sbs->ReportError("Control '" + GetName() + "' is locked");
 
 	//get action name of next position state
 	std::string name;
@@ -487,15 +487,15 @@ bool Control::ToggleLock(bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return ReportError("Need key " + ToString(KeyID) + " to lock/unlock control '" + GetName() + "'");
+			return sbs->ReportError("Need key " + ToString(KeyID) + " to lock/unlock control '" + GetName() + "'");
 	}
 
 	Locked = !Locked;
 
 	if (Locked == true)
-		Report("Locked control '" + GetName() + "'");
+		sbs->Report("Locked control '" + GetName() + "'");
 	else
-		Report("Unlocked control '" + GetName() + "'");
+		sbs->Report("Unlocked control '" + GetName() + "'");
 
 	return true;
 }

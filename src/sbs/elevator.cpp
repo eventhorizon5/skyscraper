@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Elevator Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -1876,10 +1876,10 @@ void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
 
-	Object::Report("\n--- Elevator " + ToString(Number) + " Queues ---\n");
+	sbs->Report("\n--- Elevator " + ToString(Number) + " Queues ---\n");
 
 	if (UpQueue.size() > 0)
-		Object::Report("Up:");
+		sbs->Report("Up:");
 
 	for (size_t i = 0; i < UpQueue.size(); i++)
 	{
@@ -1893,11 +1893,11 @@ void Elevator::DumpQueues()
 		if (GetCarCount() > 1)
 			car = "\t-\tCar: " + ToString(UpQueue[i].car);
 
-		Object::Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(UpQueue[i].floor) + "\t-\tCall type: " + type + car);
+		sbs->Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(UpQueue[i].floor) + "\t-\tCall type: " + type + car);
 	}
 
 	if (DownQueue.size() > 0)
-		Object::Report("Down:");
+		sbs->Report("Down:");
 
 	for (size_t i = 0; i < DownQueue.size(); i++)
 	{
@@ -1911,9 +1911,9 @@ void Elevator::DumpQueues()
 		if (GetCarCount() > 1)
 			car = "\t-\tCar: " + ToString(DownQueue[i].car);
 
-		Object::Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(DownQueue[i].floor) + "\t-\tCall type: " + type + car);
+		sbs->Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(DownQueue[i].floor) + "\t-\tCall type: " + type + car);
 	}
-	Object::Report("");
+	sbs->Report("");
 }
 
 void Elevator::Enabled(bool value)
@@ -2955,13 +2955,13 @@ bool Elevator::BeyondDecelMarker(int direction, float destination)
 void Elevator::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Elevator " + ToString(Number) + ": " + message);
+	sbs->Report("Elevator " + ToString(Number) + ": " + message);
 }
 
 bool Elevator::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Elevator " + ToString(Number) + ": " + message);
+	return sbs->ReportError("Elevator " + ToString(Number) + ": " + message);
 }
 
 void Elevator::Timer::Notify()

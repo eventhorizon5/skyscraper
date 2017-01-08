@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Camera Texture Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -92,11 +92,11 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
 
 		if (sbs->Verbose)
-			Report("Created camera texture '" + GetName() + "'");
+			sbs->Report("Created camera texture '" + GetName() + "'");
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating camera texture:\n" + e.getDescription());
+		sbs->ReportError("Error creating camera texture:\n" + e.getDescription());
 	}
 }
 
