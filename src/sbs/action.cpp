@@ -810,7 +810,9 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		if ((int)command_parameters.size() == 1)
 		{
 			sbs->camera->GotoFloor(ToInt(command_parameters[0]));
+			return true;
 		}
+		return false;
 	}
 
 	return false;
