@@ -126,7 +126,6 @@ void FloorIndicator::Update()
 
 	SBS_PROFILE("FloorIndicator::Update");
 
-	std::string texture;
 	Elevator *elevator = sbs->GetElevator(elev);
 
 	if (!elevator)
@@ -137,7 +136,7 @@ void FloorIndicator::Update()
 	if (!car)
 		return;
 
-	texture = car->GetFloorDisplay();
+	std::string texture = car->GetFloorDisplay();
 
 	//don't update texture if no value
 	if (texture == "")
