@@ -71,6 +71,8 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	ActiveElevatorDown = 0;
 	elevator_arrived_up = 0;
 	elevator_arrived_down = 0;
+	dest_floor = 0;
+	use_destfloor = false;
 
 	//create object mesh
 	std::string base = "Floor " + ToString(floornum) + ":Call Panel " + ToString(number);
@@ -716,6 +718,7 @@ void CallButton::ElevatorArrived(int number, bool direction)
 		DownLight(false);
 		ProcessedDown = false;
 	}
+	use_destfloor = false;
 }
 
 int CallButton::GetElevatorArrived(bool direction)
@@ -778,7 +781,7 @@ int CallButton::FindClosestElevator(int direction)
 					if (recheck == true && elevator->Number == ActiveElevator)
 						result = 1; //if rechecking elevators, consider the active one
 					else
-						result = elevator->AvailableForCall(GetFloor(), direction, !recheck);
+						result = elevator->AvailableForCall(GetFloor(), direction, dest_floor, use_destfloor, !recheck);
 
 					if (result == 1) //available
 					{
@@ -812,6 +815,8 @@ int CallButton::FindClosestElevator(int direction)
 			UpLight(false);
 		else
 			DownLight(false);
+
+		use_destfloor = false;
 
 		return -1;
 	}
@@ -864,6 +869,24 @@ Control* CallButton::GetDownControl()
 		return panel->GetControl(1);
 	else
 		return panel->GetControl(0);
+}
+
+bool CallButton::SelectFloor(int floor)
+{
+	if (!sbs->GetFloor(floor))
+		return false;
+
+	dest_floor = floor;
+	use_destfloor = true;
+
+	if (dest_floor < GetFloor())
+		Call(true);
+	else if (dest_floor > GetFloor())
+		Call(false);
+	else
+		return false;
+
+	return true;
 }
 
 }

@@ -177,7 +177,7 @@ public:
 	void MoveObjects(float offset);
 	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
-	int AvailableForCall(int floor, int direction, bool report_on_failure = true);
+	int AvailableForCall(int floor, int direction, int destination_floor, bool use_destfloor, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);
 	bool ReturnToNearestFloor();
