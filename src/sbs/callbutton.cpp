@@ -880,9 +880,9 @@ bool CallButton::SelectFloor(int floor)
 	use_destfloor = true;
 
 	if (dest_floor < GetFloor())
-		Call(true);
-	else if (dest_floor > GetFloor())
 		Call(false);
+	else if (dest_floor > GetFloor())
+		Call(true);
 	else
 		return false;
 
