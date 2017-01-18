@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "camera.h"
 #include "mesh.h"
 #include "floor.h"
 #include "sound.h"
@@ -319,6 +320,9 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 void Escalator::MoveSteps()
 {
+	if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
+		return;
+
 	for (size_t i = 0; i < Steps.size(); i++)
 	{
 		if (Run == 1)
