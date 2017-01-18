@@ -46,7 +46,6 @@ public:
 	int GetRun() { return Run; }
 
 private:
-	DynamicMesh* StepContainer;
 	Sound *sound; //sound object
 	int Run; //-1 is reverse, 0 is stop, 1 is forward
 	bool is_enabled;
