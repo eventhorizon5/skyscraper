@@ -25,6 +25,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "camera.h"
 #include "mesh.h"
 #include "floor.h"
 #include "sound.h"
@@ -61,15 +62,13 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	start = 0;
 	end = 0;
 
-	StepContainer = new DynamicMesh(this, GetSceneNode(), name + " Step Container", 0, true);
-
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		Step *mesh = new Step(this, "Step " + ToString(i + 1), StepContainer);
+		Step *mesh = new Step(this, "Step " + ToString(i + 1), 0, 100);
 		Steps.push_back(mesh);
 	}
 
@@ -101,10 +100,6 @@ Escalator::~Escalator()
 		}
 		Steps[i] = 0;
 	}
-
-	if (StepContainer)
-		delete StepContainer;
-	StepContainer = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
@@ -318,6 +313,9 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 void Escalator::MoveSteps()
 {
+	if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
+		return;
+
 	for (size_t i = 0; i < Steps.size(); i++)
 	{
 		if (Run == 1)
