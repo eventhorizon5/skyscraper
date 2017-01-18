@@ -60,8 +60,6 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 	start = 0;
 	end = 0;
 
-	StepContainer = new DynamicMesh(this, GetSceneNode(), name + " Step Container", 0, true);
-
 	//create sound object
 	sound = new Sound(this, name, true);
 	sound->Load(sound_file);
@@ -72,7 +70,7 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		Step *mesh = new Step(this, "Step " + ToString(i + 1), StepContainer);
+		Step *mesh = new Step(this, "Step " + ToString(i + 1), 0, 100);
 		Steps.push_back(mesh);
 	}
 
@@ -99,10 +97,6 @@ MovingWalkway::~MovingWalkway()
 		}
 		Steps[i] = 0;
 	}
-
-	if (StepContainer)
-		delete StepContainer;
-	StepContainer = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
