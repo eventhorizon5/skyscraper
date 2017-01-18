@@ -62,6 +62,10 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 
 	StepContainer = new DynamicMesh(this, GetSceneNode(), name + " Step Container", 0, true);
 
+	//create sound object
+	sound = new Sound(this, name, true);
+	sound->Load(sound_file);
+
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
@@ -71,11 +75,6 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, f
 		Step *mesh = new Step(this, "Step " + ToString(i + 1), StepContainer);
 		Steps.push_back(mesh);
 	}
-
-	//create sound object
-	sound = new Sound(this, name, true);
-	sound->Load(sound_file);
-	sound->SetPosition(CenterX, voffset, CenterZ);
 
 	//create steps
 	CreateSteps(texture, direction, width, treadsize, tw, th);

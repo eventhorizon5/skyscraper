@@ -63,6 +63,10 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	end = 0;
 	buffer_zone_steps = 2;
 
+	//create sound object
+	sound = new Sound(this, name, true);
+	sound->Load(sound_file);
+
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
@@ -72,11 +76,6 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 		Step *mesh = new Step(this, "Step " + ToString(i + 1), 0, 100);
 		Steps.push_back(mesh);
 	}
-
-	//create sound object
-	sound = new Sound(this, name, true);
-	sound->Load(sound_file);
-	sound->SetPosition(CenterX, voffset, CenterZ);
 
 	//create steps
 	CreateSteps(texture, direction, width, risersize, treadsize, tw, th);
