@@ -63,15 +63,13 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	end = 0;
 	buffer_zone_steps = 2;
 
-	StepContainer = new DynamicMesh(this, GetSceneNode(), name + " Step Container", 0, true);
-
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		Step *mesh = new Step(this, "Step " + ToString(i + 1), StepContainer);
+		Step *mesh = new Step(this, "Step " + ToString(i + 1), 0, 100);
 		Steps.push_back(mesh);
 	}
 
@@ -103,10 +101,6 @@ Escalator::~Escalator()
 		}
 		Steps[i] = 0;
 	}
-
-	if (StepContainer)
-		delete StepContainer;
-	StepContainer = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
