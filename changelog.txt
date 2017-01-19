@@ -1,6 +1,14 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
 
+Version 1.10.5 (2.0 Alpha 10 - Update 5)
+-------------------------
+-properly position escalator and walkway sounds
+-use separate meshes for escalator and moving walkway steps
+-use maximum rendering distance of 100 for escalator and moving walkway steps
+-only move steps if near escalator or moving walkway
+-return fix for Gotofloor action
+
 Version 1.10.4 (2.0 Alpha 10 - Update 4)
 -------------------------
 -camera start position should not rely on a starting floor
