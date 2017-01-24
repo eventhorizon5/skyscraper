@@ -1310,6 +1310,8 @@ bool Camera::Attach(Ogre::Camera *camera, bool init_state)
 	Refresh();
 	Sync();
 
+	sbs->GetElevatorManager()->EnableAll(true);
+
 	return true;
 }
 
