@@ -456,9 +456,6 @@ bool SBS::Start(Ogre::Camera *camera)
 	//attach camera object
 	AttachCamera(camera);
 
-	//enable elevators
-	sbs->GetElevatorManager()->EnableAll(true);
-
 	//enable random activity if specified
 	if (RandomActivity == true)
 		EnableRandomActivity(true);
