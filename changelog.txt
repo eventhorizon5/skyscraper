@@ -1,3 +1,8 @@
+Version 1.10.6 (2.0 Alpha 10 - Update 6)
+-------------------------
+-removed extra elevator enable
+-elevators need to be enabled when camera attaches
+
 Version 1.10.5 (2.0 Alpha 10 - Update 5)
 -------------------------
 -properly position escalator and walkway sounds

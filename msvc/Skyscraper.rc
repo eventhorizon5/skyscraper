@@ -29,8 +29,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,10,5,SVN_REV
- PRODUCTVERSION 1,10,5,SVN_REV
+ FILEVERSION 1,10,6,SVN_REV
+ PRODUCTVERSION 1,10,6,SVN_REV
  FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
  FILEFLAGS (VS_FF_DEBUG|VS_FF_PRERELEASE)
@@ -48,12 +48,12 @@ BEGIN
             VALUE "Comments", "http://www.skyscrapersim.com\0"
             VALUE "CompanyName", "TLI Networks\0"
             VALUE "FileDescription", "Skyscraper\0"
-            VALUE "FileVersion", "1.10.5." SVN_REVSTR "\0"
+            VALUE "FileVersion", "1.10.6." SVN_REVSTR "\0"
             VALUE "InternalName", "Skyscraper\0"
             VALUE "LegalCopyright", "©2003-2016 Ryan Thoryk, released under the GPL\0"
             VALUE "OriginalFilename", "Skyscraper.exe\0"
             VALUE "ProductName", "Skyscraper\0"
-            VALUE "ProductVersion", "1.10.5." SVN_REVSTR "\0"
+            VALUE "ProductVersion", "1.10.6." SVN_REVSTR "\0"
         END
     END
     BLOCK "VarFileInfo"
