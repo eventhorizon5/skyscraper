@@ -1355,7 +1355,8 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 		return false;
 
 	//set sky name
-	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
+	if (GetEngineCount() == 0)
+		SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
 	//clear scene
 	if (GetEngineCount() == 0)
