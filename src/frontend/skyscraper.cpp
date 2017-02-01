@@ -1354,13 +1354,14 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	if (filename == "")
 		return false;
 
-	//set sky name
 	if (GetEngineCount() == 0)
+	{
+		//set sky name
 		SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
-	//clear scene
-	if (GetEngineCount() == 0)
+		//clear scene
 		mSceneMgr->clearScene();
+	}
 
 	//clear screen
 	if (Headless == false)
