@@ -274,9 +274,6 @@ bool Skyscraper::OnInit(void)
 	if (!Initialize())
 		return ReportError("Error initializing frontend");
 
-	//set sky name
-	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
-
 	//autoload a building file if specified
 	std::string filename;
 	if (parser->GetParamCount() > 0)
@@ -1356,6 +1353,9 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	//exit if no building specified
 	if (filename == "")
 		return false;
+
+	//set sky name
+	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
 	//clear scene
 	if (GetEngineCount() == 0)
