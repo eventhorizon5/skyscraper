@@ -1,11 +1,3 @@
-Version 1.11 (2.0 Alpha 11)
--------------------------
-
-Version 1.10.6 (2.0 Alpha 10 - Update 6)
--------------------------
--removed extra elevator enable
--elevators need to be enabled when camera attaches
-
 Version 1.10.5 (2.0 Alpha 10 - Update 5)
 -------------------------
 -properly position escalator and walkway sounds
@@ -31,7 +23,6 @@ walkway
 -added action support for escalators and moving walkways
 -position sounds correctly for escalators and moving walkways
 -steps should reset values on startup
-
 
 Version 1.10.2 (2.0 Alpha 10 - Update 2)
 -------------------------

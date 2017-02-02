@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Dynamic Mesh
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -258,7 +258,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 
 			//print optimization report
 			//if (sbs->Verbose)
-				Report(this->GetName() + ": Combined: " + ToString(total) + "  - Separate (3): " + ToString(separate_total) + " - " + status);
+				sbs->Report(this->GetName() + ": Combined: " + ToString(total) + "  - Separate (3): " + ToString(separate_total) + " - " + status);
 		}
 		else
 			meshes_to_create = 1;

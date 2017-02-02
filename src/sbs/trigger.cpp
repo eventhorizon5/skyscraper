@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Proximity Trigger Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -246,7 +246,7 @@ bool Trigger::DoAction()
 	//result is true if at least one action in the list succeeded
 
 	if (Actions.empty() == true)
-		return ReportError("No available actions for trigger '" + GetName() + "'");
+		return sbs->ReportError("No available actions for trigger '" + GetName() + "'");
 
 	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
 
@@ -295,15 +295,10 @@ void Trigger::Loop()
 		if (sbs->Verbose == true)
 		{
 			if (is_inside == true)
-				Report("Inside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
+				sbs->Report("Inside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 			else
-				Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
+				sbs->Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 		}
-
-		if (is_inside == true)
-			OnEntry();
-		else
-			OnExit();
 
 		//get action name of next position state
 		std::string name = GetPositionAction(GetNextSelectPosition());

@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Camera Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -178,7 +178,6 @@ public:
 	void FreelookMove(const Ogre::Vector3 &rotation);
 	bool MouseDown();
 	void CheckObjects();
-	void Teleport(float X, float Y, float Z);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

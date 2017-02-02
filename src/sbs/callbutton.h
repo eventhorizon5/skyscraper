@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Call Button Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -61,7 +61,6 @@ public:
 	int FindClosestElevator(int direction);
 	Control* GetUpControl();
 	Control* GetDownControl();
-	bool SelectFloor(int floor);
 
 private:
 	void Process(int direction);
@@ -76,8 +75,6 @@ private:
 	std::vector<int> Elevators; //elevators this call button set is assigned to
 
 	Floor *floor; //floor this call button set is on
-	int dest_floor; //optional destination floor
-	bool use_destfloor;
 
 	bool ProcessedUp;
 	bool ProcessedDown;

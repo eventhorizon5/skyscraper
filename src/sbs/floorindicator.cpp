@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Floor Indicator Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -126,6 +126,7 @@ void FloorIndicator::Update()
 
 	SBS_PROFILE("FloorIndicator::Update");
 
+	std::string texture;
 	Elevator *elevator = sbs->GetElevator(elev);
 
 	if (!elevator)
@@ -136,7 +137,7 @@ void FloorIndicator::Update()
 	if (!car)
 		return;
 
-	std::string texture = car->GetFloorDisplay();
+	texture = car->GetFloorDisplay();
 
 	//don't update texture if no value
 	if (texture == "")

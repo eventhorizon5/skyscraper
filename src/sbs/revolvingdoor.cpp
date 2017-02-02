@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Revolving Door Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -144,14 +144,14 @@ RevolvingDoor::~RevolvingDoor()
 void RevolvingDoor::OnHit()
 {
 	if (sbs->Verbose)
-		Report("Moving revolving door '" + GetName() + "'");
+		sbs->Report("Moving revolving door '" + GetName() + "'");
 
 	EnableLoop(true);
 
 	//check lock state
 	if (IsLocked() == true)
 	{
-		ReportError("Revolving door '" + GetName() + "' is locked");
+		sbs->ReportError("Revolving door '" + GetName() + "' is locked");
 		return;
 	}
 
@@ -224,15 +224,15 @@ bool RevolvingDoor::ToggleLock(bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return ReportError("Need key " + ToString(KeyID) + " to lock/unlock revolving door '" + GetName() + "'");
+			return sbs->ReportError("Need key " + ToString(KeyID) + " to lock/unlock revolving door '" + GetName() + "'");
 	}
 
 	Locked = !Locked;
 
 	if (Locked == true)
-		Report("Locked revolving door '" + GetName() + "'");
+		sbs->Report("Locked revolving door '" + GetName() + "'");
 	else
-		Report("Unlocked revolving door '" + GetName() + "'");
+		sbs->Report("Unlocked revolving door '" + GetName() + "'");
 
 	return true;
 }

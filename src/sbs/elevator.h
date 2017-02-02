@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Elevator Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -177,7 +177,7 @@ public:
 	void MoveObjects(float offset);
 	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
-	int AvailableForCall(int floor, int direction, int destination_floor, bool use_destfloor, bool report_on_failure = true);
+	int AvailableForCall(int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);
 	bool ReturnToNearestFloor();

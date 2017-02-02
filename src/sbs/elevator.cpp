@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Elevator Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -1876,10 +1876,10 @@ void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
 
-	Object::Report("\n--- Elevator " + ToString(Number) + " Queues ---\n");
+	sbs->Report("\n--- Elevator " + ToString(Number) + " Queues ---\n");
 
 	if (UpQueue.size() > 0)
-		Object::Report("Up:");
+		sbs->Report("Up:");
 
 	for (size_t i = 0; i < UpQueue.size(); i++)
 	{
@@ -1893,11 +1893,11 @@ void Elevator::DumpQueues()
 		if (GetCarCount() > 1)
 			car = "\t-\tCar: " + ToString(UpQueue[i].car);
 
-		Object::Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(UpQueue[i].floor) + "\t-\tCall type: " + type + car);
+		sbs->Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(UpQueue[i].floor) + "\t-\tCall type: " + type + car);
 	}
 
 	if (DownQueue.size() > 0)
-		Object::Report("Down:");
+		sbs->Report("Down:");
 
 	for (size_t i = 0; i < DownQueue.size(); i++)
 	{
@@ -1911,9 +1911,9 @@ void Elevator::DumpQueues()
 		if (GetCarCount() > 1)
 			car = "\t-\tCar: " + ToString(DownQueue[i].car);
 
-		Object::Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(DownQueue[i].floor) + "\t-\tCall type: " + type + car);
+		sbs->Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(DownQueue[i].floor) + "\t-\tCall type: " + type + car);
 	}
-	Object::Report("");
+	sbs->Report("");
 }
 
 void Elevator::Enabled(bool value)
@@ -2955,13 +2955,13 @@ bool Elevator::BeyondDecelMarker(int direction, float destination)
 void Elevator::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Elevator " + ToString(Number) + ": " + message);
+	sbs->Report("Elevator " + ToString(Number) + ": " + message);
 }
 
 bool Elevator::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Elevator " + ToString(Number) + ": " + message);
+	return sbs->ReportError("Elevator " + ToString(Number) + ": " + message);
 }
 
 void Elevator::Timer::Notify()
@@ -3227,11 +3227,10 @@ bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
 	return false;
 }
 
-int Elevator::AvailableForCall(int floor, int direction, int destination_floor, bool use_destfloor, bool report_on_failure)
+int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 {
 	//determines if the elevator is available for the specified hall call
 	//if report_on_failure is true, and verbose mode is enabled, report the reason for call rejection
-	//if
 
 	//return codes:
 	//0 - busy and will eventually be available
@@ -3277,18 +3276,9 @@ int Elevator::AvailableForCall(int floor, int direction, int destination_floor, 
 												//and if it's either going the same direction as the call, or queue is not active, or idle
 												if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle())
 												{
-													if (use_destfloor == false || (use_destfloor == true && IsServicedFloor(destination_floor, report_on_failure) == true))
-													{
-														if (sbs->Verbose)
-															Report("Available for call");
-														return 1;
-													}
-													else
-													{
-														if (sbs->Verbose == true && report_on_failure == true)
-															Report("Not available for call - does not serve destination floor");
-														return 0;
-													}
+													if (sbs->Verbose)
+														Report("Available for call");
+													return 1;
 												}
 												else
 												{
