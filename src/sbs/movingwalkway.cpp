@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Moving Walkway Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -150,13 +150,13 @@ void MovingWalkway::SetRun(int value)
 void MovingWalkway::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Moving Walkway " + GetName() + ": " + message);
+	sbs->Report("Moving Walkway " + GetName() + ": " + message);
 }
 
 bool MovingWalkway::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Moving Walkway " + GetName() + ": " + message);
+	return sbs->ReportError("Moving Walkway " + GetName() + ": " + message);
 }
 
 void MovingWalkway::Loop()

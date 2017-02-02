@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Escalator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -61,7 +61,6 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, float spe
 	sbs->IncrementEscalatorCount();
 	start = 0;
 	end = 0;
-	buffer_zone_steps = 2;
 
 	//create sound object
 	sound = new Sound(this, name, true);
@@ -152,13 +151,13 @@ void Escalator::SetRun(int value)
 void Escalator::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Escalator " + GetName() + ": " + message);
+	sbs->Report("Escalator " + GetName() + ": " + message);
 }
 
 bool Escalator::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Escalator " + GetName() + ": " + message);
+	return sbs->ReportError("Escalator " + GetName() + ": " + message);
 }
 
 void Escalator::Loop()
@@ -219,12 +218,12 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, base + "-tread", texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
 
-			if (i < (buffer_zone_steps + 1))
+			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
-			else if (i > num_steps - buffer_zone_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - (((buffer_zone_steps * 2) + 1) - (num_steps - i))), 0));
-			else
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - (buffer_zone_steps * 2)), 0));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
 			Steps[i - 1]->vector = Ogre::Vector3::ZERO;
 			Steps[1 - 1]->speed = 0;
 
@@ -243,12 +242,12 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
 
-			if (i < (buffer_zone_steps + 1))
+			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(pos, -risersize, 0));
-			else if (i > num_steps - buffer_zone_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - (((buffer_zone_steps * 2) + 1) - (num_steps - i))), 0));
-			else
-				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - (buffer_zone_steps * 2)), 0));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 4), 0));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(pos, risersize * (i - 5), 0));
 			Steps[i - 1]->vector = Ogre::Vector3::ZERO;
 			Steps[1 - 1]->speed = 0;
 
@@ -267,12 +266,12 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
 
-			if (i < (buffer_zone_steps + 1))
+			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
-			else if (i > num_steps - buffer_zone_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - (((buffer_zone_steps * 2) + 1) - (num_steps - i))), pos));
-			else
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - (buffer_zone_steps * 2)), pos));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
 			Steps[i - 1]->vector = Ogre::Vector3::ZERO;
 			Steps[1 - 1]->speed = 0;
 
@@ -291,12 +290,12 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 			sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddFloorMain(wall, base + "-tread", texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
 
-			if (i < (buffer_zone_steps + 1))
+			if (i < 3)
 				Steps[i - 1]->Move(Ogre::Vector3(0, -risersize, pos));
-			else if (i > num_steps - buffer_zone_steps)
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - (((buffer_zone_steps * 2) + 1) - (num_steps - i))), pos));
-			else
-				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - (buffer_zone_steps * 2)), pos));
+			else if (i < num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 4), pos));
+			else if (i == num_steps)
+				Steps[i - 1]->Move(Ogre::Vector3(0, risersize * (i - 5), pos));
 			Steps[i - 1]->vector = Ogre::Vector3::ZERO;
 			Steps[1 - 1]->speed = 0;
 

@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Elevator Door Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -1642,7 +1642,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		old_difference = tempposition - temporigin;
 
 	//debug - show current section as function is running
-	//Report("Door section: " + ToString(door_section));
+	//sbs->Report("Door section: " + ToString(door_section));
 
 	if (parent->door_changed == false && door_section == 0)
 	{
@@ -1852,7 +1852,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	}
 
 	//report on what section preceded the finishing code (should be 4)
-	//Report("Door section: " + ToString(door_section));
+	//sbs->Report("Door section: " + ToString(door_section));
 
 	//place doors in positions (fixes any overrun errors)
 	Reset(open);

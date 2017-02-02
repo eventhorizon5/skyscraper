@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Light Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -71,7 +71,7 @@ Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 po
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating light:\n" + e.getDescription());
+		sbs->ReportError("Error creating light:\n" + e.getDescription());
 	}
 }
 

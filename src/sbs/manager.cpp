@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Manager Classes
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -383,7 +383,7 @@ Shaft* ShaftManager::Create(int number, float CenterX, float CenterZ, int _start
 		if (Array[i].number == number)
 		{
 			std::string num = ToString(number);
-			ReportError("Shaft " + num + " already exists");
+			sbs->ReportError("Shaft " + num + " already exists");
 			return 0;
 		}
 	}
@@ -391,20 +391,20 @@ Shaft* ShaftManager::Create(int number, float CenterX, float CenterZ, int _start
 	//verify floor range
 	if (_startfloor > _endfloor)
 	{
-		ReportError("CreateShaft: starting floor is greater than ending floor");
+		sbs->ReportError("CreateShaft: starting floor is greater than ending floor");
 		return 0;
 	}
 
 	if (sbs->IsValidFloor(_startfloor) == false)
 	{
 		std::string num = ToString(_startfloor);
-		ReportError("CreateShaft: Invalid starting floor " + num);
+		sbs->ReportError("CreateShaft: Invalid starting floor " + num);
 		return 0;
 	}
 	if (sbs->IsValidFloor(_endfloor) == false)
 	{
 		std::string num = ToString(_endfloor);
-		ReportError("CreateShaft: Invalid ending floor " + num);
+		sbs->ReportError("CreateShaft: Invalid ending floor " + num);
 		return 0;
 	}
 
@@ -536,7 +536,7 @@ Stairs* StairsManager::Create(int number, float CenterX, float CenterZ, int _sta
 		if (Array[i].number == number)
 		{
 			std::string num = ToString(number);
-			ReportError("Stairwell " + num + " already exists");
+			sbs->ReportError("Stairwell " + num + " already exists");
 			return 0;
 		}
 	}
@@ -544,19 +544,19 @@ Stairs* StairsManager::Create(int number, float CenterX, float CenterZ, int _sta
 	//verify floor range
 	if (_startfloor > _endfloor)
 	{
-		ReportError("CreateStairwell: starting floor is greater than ending floor");
+		sbs->ReportError("CreateStairwell: starting floor is greater than ending floor");
 		return 0;
 	}
 	if (sbs->IsValidFloor(_startfloor) == false)
 	{
 		std::string num = ToString(_startfloor);
-		ReportError("CreateStairwell: Invalid starting floor " + num);
+		sbs->ReportError("CreateStairwell: Invalid starting floor " + num);
 		return 0;
 	}
 	if (sbs->IsValidFloor(_endfloor) == false)
 	{
 		std::string num = ToString(_endfloor);
-		ReportError("CreateStairwell: Invalid ending floor " + num);
+		sbs->ReportError("CreateStairwell: Invalid ending floor " + num);
 		return 0;
 	}
 

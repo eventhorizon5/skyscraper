@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Sound System
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -253,12 +253,12 @@ SoundData* SoundSystem::GetSoundData(std::string filename)
 
 void SoundSystem::Report(const std::string &message)
 {
-	Object::Report("Sound System: " + message);
+	sbs->Report("Sound System: " + message);
 }
 
 bool SoundSystem::ReportError(const std::string &message)
 {
-	return Object::ReportError("Sound System: " + message);
+	return sbs->ReportError("Sound System: " + message);
 }
 
 int SoundSystem::GetPlayingCount()
@@ -277,18 +277,18 @@ int SoundSystem::GetSoundCount()
 
 void SoundSystem::ShowLoadedSounds()
 {
-	Object::Report("\n--- Loaded Sounds ---\n");
-	Object::Report("Filename\t----\tSound Objects\t----\tChannels");
+	sbs->Report("\n--- Loaded Sounds ---\n");
+	sbs->Report("Filename\t----\tSound Objects\t----\tChannels");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
-		Object::Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
+		sbs->Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
 	}
-	Object::Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
+	sbs->Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
 }
 
 void SoundSystem::ShowPlayingSounds()
 {
-	Object::Report("\n--- Playing Sounds ---\n");
+	sbs->Report("\n--- Playing Sounds ---\n");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		bool first = true;
@@ -297,14 +297,14 @@ void SoundSystem::ShowPlayingSounds()
 			if (sounds[i]->handles[j]->IsPlaying() == true)
 			{
 				if (first == true)
-					Object::Report(sounds[i]->filename + ":");
+					sbs->Report(sounds[i]->filename + ":");
 				first = false;
 				Sound *sound = sounds[i]->handles[j];
-				Object::Report("\t" + sound->GetName() + "\t----\tParent: " + sound->GetParent()->GetName());
+				sbs->Report("\t" + sound->GetName() + "\t----\tParent: " + sound->GetParent()->GetName());
 			}
 		}
 	}
-	Object::Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
+	sbs->Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
 }
 
 SoundData::SoundData()

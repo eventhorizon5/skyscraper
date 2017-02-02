@@ -1,8 +1,8 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.11 Alpha - Main Screen
-	Copyright (C)2003-2017 Ryan Thoryk
+	Skyscraper 1.10 Alpha - Main Screen
+	Copyright (C)2003-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -68,7 +68,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	InLoop = false;
 	Center();
 	wxString title;
-	title = wxT("Skyscraper 1.11 Alpha");
+	title = wxT("Skyscraper 2.0 Alpha 10");
 	//title = wxT("Skyscraper " + frontend->version + " " + frontend->version_state);
 	SetTitle(title);
 	SetClientSize(width, height);

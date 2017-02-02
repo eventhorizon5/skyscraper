@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Shaft Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -761,13 +761,13 @@ MeshObject* Shaft::GetMeshObject(int floor)
 void Shaft::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Shaft " + ToString(ShaftNumber) + ": " + message);
+	sbs->Report("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
 bool Shaft::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);
+	return sbs->ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
 Light* Shaft::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)

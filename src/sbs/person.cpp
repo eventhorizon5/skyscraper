@@ -2,8 +2,8 @@
 
 /*
 	Scalable Building Simulator - Person Object
-	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	The Skyscraper Project - Version 1.10 Alpha
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -362,13 +362,13 @@ void Person::ProcessRoute()
 void Person::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Person " + GetName() + ": " + message);
+	sbs->Report("Person " + GetName() + ": " + message);
 }
 
 bool Person::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Person " + GetName() + ": " + message);
+	return sbs->ReportError("Person " + GetName() + ": " + message);
 }
 
 void Person::Timer::Notify()

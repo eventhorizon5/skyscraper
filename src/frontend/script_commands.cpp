@@ -1,8 +1,8 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.11 Alpha - Script Processor - Global Commands
-	Copyright (C)2003-2017 Ryan Thoryk
+	Skyscraper 1.10 Alpha - Script Processor - Global Commands
+	Copyright (C)2003-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -1800,27 +1800,6 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//run action
 		Simcore->RunAction(value);
-
-		return sNextLine;
-	}
-
-	//Teleport command
-	if (linecheck.substr(0, 8) == "teleport")
-	{
-		//get data
-		int params = SplitData(LineData, 9);
-
-		if (params != 3)
-			return ScriptError("Incorrect number of parameters");
-
-		//check numeric values
-		for (int i = 0; i <= 2; i++)
-		{
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
-		}
-
-		Simcore->camera->Teleport(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 
 		return sNextLine;
 	}
