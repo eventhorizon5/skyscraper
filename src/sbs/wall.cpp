@@ -83,6 +83,7 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
 {
 	//create a generic polygon
+
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Extents> index_extents;
@@ -110,6 +111,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 Polygon* Wall::AddPolygon(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
+
 	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
 	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
