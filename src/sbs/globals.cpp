@@ -41,7 +41,7 @@ bool IsEven(int Number)
 	//Determine if the passed number is even.
 	//If number divides evenly, return true
 
-	if (((float)Number / 2) == int((float)Number / 2))
+	if (((Real)Number / 2) == int((Real)Number / 2))
 		return true;
 	else
 		return false;
@@ -60,7 +60,7 @@ bool IsNumeric(const std::string &string)
 {
 	//test to see if a string is numeric
 
-	float num = 0;
+	Real num = 0;
 	return IsNumeric(string, num);
 }
 
@@ -68,7 +68,7 @@ bool IsNumeric(const std::string &string, int &number)
 {
 	//test to see if a string is numeric, and return number as integer
 
-	float num = 0;
+	Real num = 0;
 	bool result = IsNumeric(string, num);
 	number = (int)num;
 	return result;
@@ -108,19 +108,19 @@ std::string BoolToString(bool item)
 		return "false";
 }
 
-float RadiansToDegrees(float radians)
+Real RadiansToDegrees(Real radians)
 {
 	//convert from radians to degrees
 	return radians * (180 / pi);
 }
 
-float DegreesToRadians(float degrees)
+Real DegreesToRadians(Real degrees)
 {
 	//convert from degrees to radians
 	return degrees * (pi / 180);
 }
 
-float Min3(float a, float b, float c)
+Real Min3(Real a, Real b, Real c)
 {
 	//return smallest value
 	if (a <= b && a <= c)
@@ -130,7 +130,7 @@ float Min3(float a, float b, float c)
 	return c;
 }
 
-float Max3(float a, float b, float c)
+Real Max3(Real a, Real b, Real c)
 {
 	//return largest value
 	if (a >= b && a >= c)
@@ -140,7 +140,7 @@ float Max3(float a, float b, float c)
 	return c;
 }
 
-float Min4(float a, float b, float c, float d)
+Real Min4(Real a, Real b, Real c, Real d)
 {
 	//return smallest value
 	if (a <= b && a <= c && a <= d)
@@ -152,7 +152,7 @@ float Min4(float a, float b, float c, float d)
 	return d;
 }
 
-float Max4(float a, float b, float c, float d)
+Real Max4(Real a, Real b, Real c, Real d)
 {
 	//return largest value
 	if (a >= b && a >= c && a >= d)
@@ -306,6 +306,11 @@ float Log2(float number)
 	return logf(number) / logf(2.0f);
 }
 
+double Log2(double number)
+{
+	return log(number) / log(2.0);
+}
+
 float Round(float number, int decimal_places)
 {
 	//round float to specified decimal places
@@ -315,6 +320,18 @@ float Round(float number, int decimal_places)
 
 	float multiplier = powf(10.0f, (float)decimal_places);
 	float rounded = floorf((number * multiplier) + 0.5f) / multiplier;
+	return rounded;
+}
+
+double Round(double number, int decimal_places)
+{
+	//round float to specified decimal places
+
+	if (decimal_places <= 0)
+		return floor(number + 0.5);
+
+	float multiplier = pow(10.0, (float)decimal_places);
+	float rounded = floor((number * multiplier) + 0.5) / multiplier;
 	return rounded;
 }
 
@@ -345,9 +362,9 @@ bool IsBoolean(std::string string)
 	return (string == "true" || string == "false");
 }
 
-float ToFloat(const std::string &string)
+Real ToFloat(const std::string &string)
 {
-	return (float)atof(string.c_str());
+	return atof(string.c_str());
 }
 
 int ToInt(const std::string &string)
