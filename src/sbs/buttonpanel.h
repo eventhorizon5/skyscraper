@@ -34,23 +34,23 @@ public:
 
 	int Index; //index number of panel
 	std::string Direction;
-	float Width;
-	float Height;
-	float ButtonWidth;
-	float ButtonHeight;
-	float SpacingX;
-	float SpacingY;
+	Real Width;
+	Real Height;
+	Real ButtonWidth;
+	Real ButtonHeight;
+	Real SpacingX;
+	Real SpacingY;
 	int Rows;
 	int Columns;
 	bool IsEnabled;
 
 	//functions
-	ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th);
+	ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th);
 	~ButtonPanel();
-	Control* AddButton(const std::string &sound, const std::string &texture, const std::string &texture_lit, int row, int column, const std::string &type, float width, float height, float hoffset = 0, float voffset = 0);
-	Control* AddControl(const std::string &sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
+	Control* AddButton(const std::string &sound, const std::string &texture, const std::string &texture_lit, int row, int column, const std::string &type, Real width, Real height, Real hoffset = 0, Real voffset = 0);
+	Control* AddControl(const std::string &sound, int row, int column, Real bwidth, Real bheight, Real hoffset, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	void Enabled(bool value);
-	bool AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	bool AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
 	void ChangeLight(int floor, bool value);
 	void ChangeAllLights(bool value);
 	Control* GetFloorButton(int floor);

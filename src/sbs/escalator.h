@@ -31,9 +31,9 @@ namespace SBS {
 class SBSIMPEXP Escalator : public Object
 {
 public:
-	float Speed;
+	Real Speed;
 
-	Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
+	Escalator(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	~Escalator();
 	void Enabled(bool value);
 	void Report(const std::string &message);
@@ -51,13 +51,13 @@ private:
 	bool is_enabled;
 	Ogre::Vector3 start, end;
 	std::string Direction;
-	float treadsize;
-	float risersize;
+	Real treadsize;
+	Real risersize;
 	int buffer_zone_steps;
 
 	std::vector<Step*> Steps;
 
-	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
+	void CreateSteps(const std::string &texture, const std::string &direction, Real width, Real risersize, Real treadsize, Real tw, Real th);
 	void MoveSteps();
 };
 

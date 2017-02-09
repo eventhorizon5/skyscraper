@@ -37,7 +37,7 @@ Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper, int ma
 	start = Ogre::Vector3::ZERO;
 }
 
-void Step::Move(const Ogre::Vector3 &vector, float speed)
+void Step::Move(const Ogre::Vector3 &vector, Real speed)
 {
 	MeshObject::Move(vector, speed);
 	this->vector = vector;

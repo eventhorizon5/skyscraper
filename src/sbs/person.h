@@ -75,7 +75,7 @@ private:
 	Timer *random_timer;
 
 	int RandomProbability; //probability ratio of random activity, starting with 1 - higher is less frequent
-	float RandomFrequency; //speed in seconds to make each random action
+	Real RandomFrequency; //speed in seconds to make each random action
 };
 
 }

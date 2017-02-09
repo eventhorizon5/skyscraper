@@ -374,7 +374,7 @@ ShaftManager::~ShaftManager()
 	}
 }
 
-Shaft* ShaftManager::Create(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Shaft* ShaftManager::Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
 
@@ -527,7 +527,7 @@ StairsManager::~StairsManager()
 	}
 }
 
-Stairs* StairsManager::Create(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Stairs* StairsManager::Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor)
 {
 	//create a stairwell object
 
@@ -684,7 +684,7 @@ DoorManager::~DoorManager()
 	wrapper = 0;
 }
 
-Door* DoorManager::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* DoorManager::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	int number = (int)Array.size();
 	std::string name = "Door " + ToString(number);
@@ -755,7 +755,7 @@ RevolvingDoorManager::~RevolvingDoorManager()
 	wrapper = 0;
 }
 
-RevolvingDoor* RevolvingDoorManager::AddDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+RevolvingDoor* RevolvingDoorManager::AddDoor(const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	int number = (int)Array.size();
 	std::string name = "Door " + ToString(number);

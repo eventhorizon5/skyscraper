@@ -27,6 +27,7 @@
 #include <wx/intl.h>
 //*)
 
+#include "globals.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
 #include "loaddialog.h"
@@ -216,7 +217,7 @@ void LoadDialog::On_bSelect_Click(wxCommandEvent& event)
 void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 {
 	Ogre::Vector3 position, min, max;
-	float rotation;
+	Real rotation;
 
 	//get position values
 	if (!IsNumeric(tPosX->GetValue(), position.x))

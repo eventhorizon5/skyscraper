@@ -132,8 +132,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ParkingFloor = 0;
 	ParkingDelay = 0;
 	Leveling = false;
-	LevelingSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingSpeed", 0.2f);
-	LevelingOffset = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingOffset", 0.5f);
+	LevelingSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingSpeed", 0.2);
+	LevelingOffset = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingOffset", 0.5);
 	LevelingOpen = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingOpen", 0);
 	tmpDecelJerk = 0;
 	FinishedMove = false;
@@ -145,15 +145,15 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	Running = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Run", true);
 	Notified = false;
 	Parking = false;
-	DepartureDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0f);
-	ArrivalDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0f);
+	DepartureDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0);
+	ArrivalDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0);
 	WaitForTimer = false;
 	SoundsQueued = false;
 	HeightSet = false;
 	elevposition = 0;
 	ManualUp = false;
 	ManualDown = false;
-	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6f);
+	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
 	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", false);
 	UpQueueEmpty = false;
 	DownQueueEmpty = false;
@@ -171,7 +171,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	GoActiveFloor = 0;
 	FloorHold = sbs->GetConfigBool("Skyscraper.SBS.Elevator.FloorHold", false);
 	GoPending = false;
-	EmergencyStopSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.EmergencyStopSpeed", 3.0f);
+	EmergencyStopSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.EmergencyStopSpeed", 3.0);
 	MotorEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorEmergencyStopSound", "");
 	AutoAdjustSound = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 	SkipFloorSound = false;
@@ -269,7 +269,7 @@ Elevator::~Elevator()
 		sbs->RemoveElevator(this);
 }
 
-bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
+bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 {
 	//Creates elevator at specified location and floor
 	//x and z are the center coordinates
@@ -773,7 +773,7 @@ void Elevator::ProcessCallQueue()
 					{
 						if (car == GetCar(GotoFloorCar)) //make sure car is the same
 						{
-							float tmpdestination = GetDestinationAltitude(UpQueue[i].floor);
+							Real tmpdestination = GetDestinationAltitude(UpQueue[i].floor);
 							if (BeyondDecelMarker(1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
 							{
 								ActiveCall = UpQueue[i];
@@ -868,7 +868,7 @@ void Elevator::ProcessCallQueue()
 					{
 						if (car == GetCar(GotoFloorCar)) //make sure car is the same
 						{
-							float tmpdestination = GetDestinationAltitude(DownQueue[i].floor);
+							Real tmpdestination = GetDestinationAltitude(DownQueue[i].floor);
 							if (BeyondDecelMarker(-1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
 							{
 								ActiveCall = DownQueue[i];
@@ -1368,7 +1368,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//regular motion
-		float limit = 0;
+		Real limit = 0;
 		if (InspectionService == false)
 			limit = ElevatorSpeed;
 		else if (HoistwayAccess == 0)
@@ -1391,7 +1391,7 @@ void Elevator::MoveElevatorToFloor()
 		//check if the elevator rate is less than the amount that was stored in JerkPos
 		//(the elevator rate at the end of the JerkRate increments), adjusted to the ratio of acceljerk to deceljerk
 
-		float tmppos = JerkPos * (AccelJerk / DecelJerk);
+		Real tmppos = JerkPos * (AccelJerk / DecelJerk);
 		if ((Direction == -1 && ElevatorRate <= tmppos) || (Direction == 1 && ElevatorRate >= tmppos))
 		{
 			if (ElevatorRate != 0)
@@ -1500,7 +1500,7 @@ void Elevator::MoveElevatorToFloor()
 					ElevatorRate += (ElevatorSpeed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
 			}
 
-			if (ElevatorRate != 0.0f)
+			if (ElevatorRate != 0.0)
 			{
 				PlayStoppingSounds();
 
@@ -1527,7 +1527,7 @@ void Elevator::MoveElevatorToFloor()
 	//play floor beep and update indicators, if passing by or arriving at a floor
 	if ((GetCar(1)->GetFloor() != oldfloor && Leveling == false) || StartLeveling == true)
 	{
-		float alt = sbs->GetFloor(GetCar(1)->GetFloor())->Altitude;
+		Real alt = sbs->GetFloor(GetCar(1)->GetFloor())->Altitude;
 		bool pass = false;
 
 		//determine if elevator will pass floor, only for down movement
@@ -1678,7 +1678,7 @@ finish:
 	}
 }
 
-void Elevator::MoveObjects(float offset)
+void Elevator::MoveObjects(Real offset)
 {
 	//move elevator and objects vertically
 
@@ -1963,19 +1963,19 @@ ElevatorCar* Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 	return 0;
 }
 
-float Elevator::GetElevatorStart()
+Real Elevator::GetElevatorStart()
 {
 	//returns the internal elevator starting position
 	return ElevatorStart;
 }
 
-float Elevator::GetDestination()
+Real Elevator::GetDestination()
 {
 	//returns the internal destination value
 	return Destination;
 }
 
-float Elevator::GetStoppingDistance()
+Real Elevator::GetStoppingDistance()
 {
 	//returns the internal stopping distance value
 	return StoppingDistance;
@@ -2005,12 +2005,12 @@ void Elevator::UpdateFloorIndicators()
 	}
 }
 
-float Elevator::GetJerkRate()
+Real Elevator::GetJerkRate()
 {
 	return JerkRate;
 }
 
-float Elevator::GetJerkPosition()
+Real Elevator::GetJerkPosition()
 {
 	return JerkPos;
 }
@@ -2934,7 +2934,7 @@ bool Elevator::IsQueueActive()
 	return false;
 }
 
-bool Elevator::BeyondDecelMarker(int direction, float destination)
+bool Elevator::BeyondDecelMarker(int direction, Real destination)
 {
 	//return true if elevator is beyond the deceleration marker for the specified direction
 	//directions are 1 for up, -1 for down
@@ -3165,7 +3165,7 @@ bool Elevator::IsRunning()
 	return Running;
 }
 
-float Elevator::GetDestinationAltitude(int floor)
+Real Elevator::GetDestinationAltitude(int floor)
 {
 	//returns the destination altitude of the specified floor, based on shaft door positioning
 	//this adjusts the value based on the car offset, so that it returns the altitude that
@@ -3173,18 +3173,18 @@ float Elevator::GetDestinationAltitude(int floor)
 
 	ElevatorCar *car = GetCarForFloor(floor);
 	if (!car)
-		return 0.0f;
+		return 0.0;
 
 	return car->GetDestinationAltitude(floor) - GetCarOffset(car->Number);
 }
 
-float Elevator::GetDestinationOffset(int floor)
+Real Elevator::GetDestinationOffset(int floor)
 {
 	//returns the offset distance from the floor's base altitude the elevator destination is
 
 	ElevatorCar *car = GetCarForFloor(floor);
 	if (!car)
-		return 0.0f;
+		return 0.0;
 
 	return car->GetDestinationOffset(floor);
 }
@@ -4213,12 +4213,12 @@ void Elevator::EnableNudgeMode(bool value)
 	}
 }
 
-float Elevator::GetCarOffset(int number)
+Real Elevator::GetCarOffset(int number)
 {
 	//get vertical offset of specified car
 
 	if (!GetCar(GotoFloorCar))
-		return 0.0f;
+		return 0.0;
 
 	return GetCar(GotoFloorCar)->GetPosition().y - GetPosition().y;
 }

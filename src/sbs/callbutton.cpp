@@ -47,7 +47,7 @@ public:
 	virtual void Notify();
 };
 
-CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th) : Object(parent)
+CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th) : Object(parent)
 {
 	//create a set of call buttons
 
@@ -130,10 +130,10 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		rows++;
 
 	//create button panel
-	float button_height = BackHeight / 3.5f;
-	float button_width = BackWidth / 2;
-	float h_spacing = 0.5;
-	float v_spacing = 1.25;
+	Real button_height = BackHeight / 3.5;
+	Real button_width = BackWidth / 2;
+	Real h_spacing = 0.5;
+	Real v_spacing = 1.25;
 	if (UpExists == true && DownExists == true)
 		v_spacing = 0.5;
 

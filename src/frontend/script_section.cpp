@@ -351,7 +351,7 @@ int ScriptProcessor::Section::MathFunctions(std::string &LineData)
 	//functions for advanced math
 
 	int start, first, last;
-	float value, result;
+	Real value, result;
 	std::string tempdata;
 
 	int check = LineData.find("(", 0);
@@ -550,7 +550,7 @@ int ScriptProcessor::Section::MathFunctions(std::string &LineData)
 		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1));
 		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1));
 
-		float value1, value2;
+		Real value1, value2;
 		if (!IsNumeric(tempdata1, value1))
 			return ScriptError("Invalid value: " + tempdata1);
 		if (!IsNumeric(tempdata2, value2))
@@ -754,7 +754,7 @@ int ScriptProcessor::Section::MathFunctions(std::string &LineData)
 		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1));
 		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1));
 
-		float value1, value2;
+		Real value1, value2;
 		if (!IsNumeric(tempdata1, value1))
 			return ScriptError("Invalid value: " + tempdata1);
 		if (!IsNumeric(tempdata2, value2))
@@ -790,7 +790,7 @@ int ScriptProcessor::Section::MathFunctions(std::string &LineData)
 		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1));
 		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1));
 
-		float value1, value2;
+		Real value1, value2;
 		if (!IsNumeric(tempdata1, value1))
 			return ScriptError("Invalid value: " + tempdata1);
 		if (!IsNumeric(tempdata2, value2))

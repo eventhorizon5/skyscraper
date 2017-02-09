@@ -37,7 +37,7 @@
 
 namespace SBS {
 
-Escalator::Escalator(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
+Escalator::Escalator(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th) : Object(parent)
 {
 	//create a new escalator object
 	//run is either 1 for forward motion, -1 for reverse motion, 0 for stop
@@ -183,9 +183,10 @@ void Escalator::Loop()
 	MoveSteps();
 }
 
-void Escalator::CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th)
+void Escalator::CreateSteps(const std::string &texture, const std::string &direction, Real width, Real risersize, Real treadsize, Real tw, Real th)
 {
 	//create steps
+
 	std::string Name = GetName();
 	TrimString(Name);
 	Direction = direction;
@@ -202,13 +203,13 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 
 	for (int i = 1; i <= num_steps; i++)
 	{
-		float pos = 0;
+		Real pos = 0;
 		std::string base = Name + ":" + ToString(i);
 
 		//create wall object
 		Wall *wall = Steps[i - 1]->CreateWallObject(base);
 
-		float thickness = treadsize;
+		Real thickness = treadsize;
 
 		if (Direction == "right")
 		{
@@ -322,7 +323,7 @@ void Escalator::MoveSteps()
 		{
 			if (Direction == "right")
 			{
-				float pos = Steps[i]->GetPosition().x;
+				Real pos = Steps[i]->GetPosition().x;
 				if (pos < end.x - treadsize)
 					Steps[i]->SetPosition(start);
 				else if (pos >= start.x - (treadsize * 2) || pos <= end.x + treadsize)
@@ -332,7 +333,7 @@ void Escalator::MoveSteps()
 			}
 			if (Direction == "left")
 			{
-				float pos = Steps[i]->GetPosition().x;
+				Real pos = Steps[i]->GetPosition().x;
 				if (pos > end.x + treadsize)
 					Steps[i]->SetPosition(start);
 				else if (pos <= start.x + (treadsize * 2) || pos >= end.x - treadsize)
@@ -342,7 +343,7 @@ void Escalator::MoveSteps()
 			}
 			if (Direction == "back")
 			{
-				float pos = Steps[i]->GetPosition().z;
+				Real pos = Steps[i]->GetPosition().z;
 				if (pos < end.z - treadsize)
 					Steps[i]->SetPosition(start);
 				else if (pos >= start.z - (treadsize * 2) || pos <= end.z + treadsize)
@@ -352,7 +353,7 @@ void Escalator::MoveSteps()
 			}
 			if (Direction == "front")
 			{
-				float pos = Steps[i]->GetPosition().z;
+				Real pos = Steps[i]->GetPosition().z;
 				if (pos > end.z + treadsize)
 					Steps[i]->SetPosition(start);
 				else if (pos <= start.z + (treadsize * 2) || pos >= end.z - treadsize)
@@ -365,7 +366,7 @@ void Escalator::MoveSteps()
 		{
 			if (Direction == "right")
 			{
-				float pos = Steps[i]->GetPosition().x;
+				Real pos = Steps[i]->GetPosition().x;
 				if (pos > start.x)
 					Steps[i]->SetPosition(Ogre::Vector3(end.x - treadsize, end.y, end.z));
 				else if (pos <= end.x + treadsize || pos >= start.x - (treadsize * 2))
@@ -375,7 +376,7 @@ void Escalator::MoveSteps()
 			}
 			if (Direction == "left")
 			{
-				float pos = Steps[i]->GetPosition().x;
+				Real pos = Steps[i]->GetPosition().x;
 				if (pos < start.x)
 					Steps[i]->SetPosition(Ogre::Vector3(end.x + treadsize, end.y, end.z));
 				else if (pos >= end.x - treadsize || pos <= start.x + (treadsize * 2))
@@ -385,7 +386,7 @@ void Escalator::MoveSteps()
 			}
 			if (Direction == "back")
 			{
-				float pos = Steps[i]->GetPosition().z;
+				Real pos = Steps[i]->GetPosition().z;
 				if (pos > start.z)
 					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z - treadsize));
 				else if (pos <= end.z + treadsize || pos >= start.z - (treadsize * 2))
@@ -395,7 +396,7 @@ void Escalator::MoveSteps()
 			}
 			if (Direction == "front")
 			{
-				float pos = Steps[i]->GetPosition().z;
+				Real pos = Steps[i]->GetPosition().z;
 				if (pos < start.z)
 					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z + treadsize));
 				else if (pos >= end.z - treadsize || pos <= start.z + (treadsize * 2))

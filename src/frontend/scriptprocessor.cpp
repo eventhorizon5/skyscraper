@@ -747,9 +747,9 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one) == true && IsNumeric(two) == true)
 		{
-			float first = ToFloat(one);
-			float second = ToFloat(two);
-			float tmpnum = first + second;
+			Real first = ToFloat(one);
+			Real second = ToFloat(two);
+			Real tmpnum = first + second;
 			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -767,15 +767,15 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one) == true && IsNumeric(two) == true)
 		{
-			float first = ToFloat(one);
-			float second = ToFloat(two);
+			Real first = ToFloat(one);
+			Real second = ToFloat(two);
 			if (second == 0)
 			{
 				ScriptError("Division by zero in math operation: '" + tmpcalc + "' (might be nested)");
 				CalcError = true;
 				return tmpcalc;
 			}
-			float tmpnum = first / second;
+			Real tmpnum = first / second;
 			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -793,9 +793,9 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one) == true && IsNumeric(two) == true)
 		{
-			float first = ToFloat(one);
-			float second = ToFloat(two);
-			float tmpnum = first * second;
+			Real first = ToFloat(one);
+			Real second = ToFloat(two);
+			Real tmpnum = first * second;
 			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -813,9 +813,9 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one) == true && IsNumeric(two) == true)
 		{
-			float first = ToFloat(one);
-			float second = ToFloat(two);
-			float tmpnum = powf(first, second);
+			Real first = ToFloat(one);
+			Real second = ToFloat(two);
+			Real tmpnum = powf(first, second);
 			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -833,9 +833,9 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one) == true && IsNumeric(two) == true)
 		{
-			float first = ToFloat(one);
-			float second = ToFloat(two);
-			float tmpnum = first - second;
+			Real first = ToFloat(one);
+			Real second = ToFloat(two);
+			Real tmpnum = first - second;
 			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -1089,7 +1089,7 @@ void ScriptProcessor::ProcessFunctionParameters()
 	}
 	else if (show_percent == true)
 	{
-		int percent = ((float)line / (float)BuildingData.size()) * 100.0;
+		int percent = ((Real)line / (Real)BuildingData.size()) * 100.0;
 		std::string percent_s = ToString(percent);
 		int marker = percent / 10;
 		if (marker > progress_marker)

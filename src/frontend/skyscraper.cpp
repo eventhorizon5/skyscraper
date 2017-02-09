@@ -129,8 +129,8 @@ bool Skyscraper::OnInit(void)
 	console = 0;
 	new_location = false;
 	new_time = false;
-	latitude = 0.0f;
-	longitude = 0.0f;
+	latitude = 0.0;
+	longitude = 0.0;
 	datetime = 0.0;
 	active_engine = 0;
 	ConcurrentLoads = false;
@@ -849,7 +849,7 @@ void Skyscraper::DrawBackground()
 	for (int i = 0; i < buttoncount; i++)
 	{
 		std::string b1, b2, b3;
-		float x = 0, y = 0;
+		Real x = 0, y = 0;
 		bool center = false;
 		std::string number = ToString(i + 1);
 
@@ -858,8 +858,8 @@ void Skyscraper::DrawBackground()
 			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button1.Image", "button_triton.png");
 			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button1.Selected", "button_triton_selected.png");
 			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button1.Pressed", "button_triton_pressed.png");
-			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button1.X", 0.0f);
-			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button1.Y", -0.08f);
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button1.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button1.Y", -0.08);
 			center = GetConfigBool("Skyscraper.Frontend.Menu.Button1.Center", true);
 		}
 		if (i == 1)
@@ -867,8 +867,8 @@ void Skyscraper::DrawBackground()
 			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button2.Image", "button_glasstower.png");
 			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button2.Selected", "button_glasstower_selected.png");
 			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button2.Pressed", "button_glasstower_pressed.png");
-			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button2.X", 0.0f);
-			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button2.Y", 0.125f);
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button2.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button2.Y", 0.125);
 			center = GetConfigBool("Skyscraper.Frontend.Menu.Button2.Center", true);
 		}
 		if (i == 2)
@@ -876,8 +876,8 @@ void Skyscraper::DrawBackground()
 			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button3.Image", "button_searstower.png");
 			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button3.Selected", "button_searstower_selected.png");
 			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button3.Pressed", "button_searstower_pressed.png");
-			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button3.X", 0.0f);
-			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button3.Y", 0.333f);
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button3.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button3.Y", 0.333);
 			center = GetConfigBool("Skyscraper.Frontend.Menu.Button3.Center", true);
 		}
 		if (i == 3)
@@ -885,8 +885,8 @@ void Skyscraper::DrawBackground()
 			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button4.Image", "button_simple.png");
 			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button4.Selected", "button_simple_selected.png");
 			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button4.Pressed", "button_simple_pressed.png");
-			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button4.X", 0.0f);
-			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button4.Y", 0.541f);
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button4.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button4.Y", 0.541);
 			center = GetConfigBool("Skyscraper.Frontend.Menu.Button4.Center", true);
 		}
 		if (i == 4)
@@ -894,8 +894,8 @@ void Skyscraper::DrawBackground()
 			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button5.Image", "button_other.png");
 			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button5.Selected", "button_other_selected.png");
 			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button5.Pressed", "button_other_pressed.png");
-			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button5.X", 0.0f);
-			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button5.Y", 0.75f);
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button5.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button5.Y", 0.75);
 			center = GetConfigBool("Skyscraper.Frontend.Menu.Button5.Center", true);
 		}
 		if (i > 4)
@@ -903,8 +903,8 @@ void Skyscraper::DrawBackground()
 			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".Image", "");
 			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".Selected", "");
 			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".Pressed", "");
-			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button" + number + ".X", 0.0f);
-			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button" + number + ".Y", 0.0f);
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button" + number + ".X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button" + number + ".Y", 0.0);
 			center = GetConfigBool("Skyscraper.Frontend.Menu.Button" + number + ".Center", true);
 		}
 
@@ -912,13 +912,13 @@ void Skyscraper::DrawBackground()
 	}
 }
 
-void Skyscraper::DrawImage(const std::string &filename, buttondata *button, float x, float y, bool center, const std::string &filename_selected, const std::string &filename_pressed)
+void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected, const std::string &filename_pressed)
 {
 	//X and Y represent the image's top-left location.
 	//values are -1 for the top left, 1 for the top right, -1 for the top, and 1 for the bottom
 	//center is at 0, 0
 
-	float w, h;
+	Real w, h;
 	int w_orig = 0, h_orig = 0, w2 = 0, h2 = 0;
 	bool background = false;
 
@@ -972,8 +972,8 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, floa
 			h_orig = img.getHeight();
 
 			//round up image size to power-of-2 value
-			w2 = powf(2, ceilf(Log2((float)w_orig)));
-			h2 = powf(2, ceilf(Log2((float)h_orig)));
+			w2 = powf(2, ceilf(Log2((Real)w_orig)));
+			h2 = powf(2, ceilf(Log2((Real)h_orig)));
 
 			//create texture and blit image onto it - this solves texture quality issues on mainly D3D9
 			tex = Ogre::TextureManager::getSingleton().createManual(Filename, "General", Ogre::TEX_TYPE_2D, w2, h2, 0, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC);
@@ -989,7 +989,7 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, floa
 
 			//rescale texture
 			state->setTextureScale((Ogre::Real)w2 / (Ogre::Real)w_orig, (Ogre::Real)h2 / (Ogre::Real)h_orig);
-			state->setTextureScroll(-(Ogre::Real(w2 - w_orig) / (Ogre::Real)w2) / 2.0f, -(Ogre::Real(h2 - h_orig) / (Ogre::Real)h2) / 2.0f);
+			state->setTextureScroll(-(Ogre::Real(w2 - w_orig) / (Ogre::Real)w2) / 2.0, -(Ogre::Real(h2 - h_orig) / (Ogre::Real)h2) / 2.0);
 
 			if (tex->hasAlpha() == true && button)
 			{
@@ -1150,12 +1150,12 @@ void Skyscraper::GetMenuInput()
 	    //only process buttons if main window is selected
         if (window->Active != false)
         {
-			float mx = mouse_x;
-			float my = mouse_y;
-			float w = mx / window->GetClientSize().x;
-			float h = my / window->GetClientSize().y;
-			float mouse_x_rel = (w * 2) - 1;
-			float mouse_y_rel = (h * 2) - 1;
+			Real mx = mouse_x;
+			Real my = mouse_y;
+			Real w = mx / window->GetClientSize().x;
+			Real h = my / window->GetClientSize().y;
+			Real mouse_x_rel = (w * 2) - 1;
+			Real mouse_y_rel = (h * 2) - 1;
 
         	//change button status based on mouse position and button press status
         	if (mouse_x_rel > button->x && mouse_x_rel < button->x + button->size_x && mouse_y_rel > button->y && mouse_y_rel < button->y + button->size_y)
@@ -1292,7 +1292,7 @@ void Skyscraper::StartSound()
 	}
 
 	channel->setLoopCount(-1);
-	channel->setVolume(1.0f);
+	channel->setVolume(1.0);
 	channel->setPaused(false);
 }
 
@@ -1340,7 +1340,7 @@ std::string Skyscraper::SelectBuilding()
 	return filename;
 }
 
-bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -1627,7 +1627,7 @@ bool Skyscraper::GetConfigBool(const std::string &key, bool default_value)
 	return ToBool(result);
 }
 
-float Skyscraper::GetConfigFloat(const std::string &key, float default_value)
+Real Skyscraper::GetConfigFloat(const std::string &key, Real default_value)
 {
 	std::string result = configfile->getSetting(key, "", ToString(default_value));
 	return ToFloat(result);
@@ -1708,18 +1708,18 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	{
 		mCaelumSystem->attachViewport(mViewport);
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
-		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.FogMultiplier", 0.1f) / 1000);
+		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.FogMultiplier", 0.1) / 1000);
 		if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
 			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
 		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
 
 		//fix sky rotation
-		Ogre::Quaternion rot(Ogre::Degree(180.0f), Ogre::Vector3::UNIT_Y);
+		Ogre::Quaternion rot(Ogre::Degree(180.0), Ogre::Vector3::UNIT_Y);
 		mCaelumSystem->getCaelumGroundNode()->setOrientation(rot);
 		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
 
 		//have sky use SBS scaling factor
-		float scale = 1 / engine->GetSystem()->UnitScale;
+		Real scale = 1 / engine->GetSystem()->UnitScale;
 		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
 		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
 	}
@@ -1763,7 +1763,7 @@ void Skyscraper::UpdateSky()
 	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
 		mCaelumSystem->setTimeScale(SkyMult);
-		mCaelumSystem->updateSubcomponents(float(active_engine->GetSystem()->GetElapsedTime()) / 1000);
+		mCaelumSystem->updateSubcomponents(Real(active_engine->GetSystem()->GetElapsedTime()) / 1000);
 	}
 }
 
@@ -1849,7 +1849,7 @@ void Skyscraper::UpdateProgress()
 			current_percent += engines[i]->GetProgress();
 	}
 
-	int final = ((float)current_percent / (float)total_percent) * 100;
+	int final = ((Real)current_percent / (Real)total_percent) * 100;
 	progdialog->Update(final);
 }
 
@@ -1870,7 +1870,7 @@ void Skyscraper::SetFullScreen(bool enabled)
 #endif
 }
 
-void Skyscraper::SetLocation(float latitude, float longitude)
+void Skyscraper::SetLocation(Real latitude, Real longitude)
 {
 	this->latitude = latitude;
 	this->longitude = longitude;
@@ -1883,7 +1883,7 @@ void Skyscraper::SetDateTime(double julian_date_time)
 	new_time = true;
 }
 
-EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	EngineContext* engine = new EngineContext(parent, this, mSceneMgr, soundsys, position, rotation, area_min, area_max);
 	return engine;

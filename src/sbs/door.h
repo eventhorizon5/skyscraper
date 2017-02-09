@@ -37,11 +37,11 @@ public:
 	bool IsMoving; //is door moving?
 	bool OpenDoor; //open or close door?
 	bool Clockwise; //if door should rotate clockwise
-	float Speed; //rotation speed
+	Real Speed; //rotation speed
 	std::string OpenSound; //opening sound
 	std::string CloseSound; //closing sound
 
-	Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	~Door();
 	bool Open(Ogre::Vector3 &position, bool playsound = true, bool force = false);
 	void Close(bool playsound = true);
@@ -65,7 +65,7 @@ private:
 	Sound *sound;
 
 	bool is_enabled;
-	float rotation;
+	Real rotation;
 	int Locked;
 	int KeyID;
 };

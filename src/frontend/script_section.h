@@ -128,13 +128,13 @@ private:
 	bool floorcache_firstrun;
 	int cache_current;
 	std::string cache_current_s;
-	float cache_height;
+	Real cache_height;
 	std::string cache_height_s;
-	float cache_fullheight;
+	Real cache_fullheight;
 	std::string cache_fullheight_s;
-	float cache_interfloorheight;
+	Real cache_interfloorheight;
 	std::string cache_interfloorheight_s;
-	float cache_base;
+	Real cache_base;
 	std::string cache_base_s;
 };
 

@@ -38,7 +38,7 @@
 
 namespace SBS {
 
-Control::Control(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, float width, float height, bool center, int selection_position) : Object(parent)
+Control::Control(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, Real width, Real height, bool center, int selection_position) : Object(parent)
 {
 	//create a control at the specified location
 
@@ -74,7 +74,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	Wall *wall;
 	if (Direction == "front")
 	{
-		float x = 0, y = width;
+		Real x = 0, y = width;
 		if (center == true)
 		{
 			x = -width / 2;
@@ -86,7 +86,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	}
 	if (Direction == "back")
 	{
-		float x = 0, y = -width;
+		Real x = 0, y = -width;
 		if (center == true)
 		{
 			x = width / 2;
@@ -98,7 +98,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	}
 	if (Direction == "left")
 	{
-		float x = 0, y = -width;
+		Real x = 0, y = -width;
 		if (center == true)
 		{
 			x = width / 2;
@@ -110,7 +110,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	}
 	if (Direction == "right")
 	{
-		float x = 0, y = width;
+		Real x = 0, y = width;
 		if (center == true)
 		{
 			x = -width / 2;

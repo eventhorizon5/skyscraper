@@ -37,7 +37,7 @@
 
 namespace SBS {
 
-MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
+MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real treadsize, int num_steps, Real voffset, Real tw, Real th) : Object(parent)
 {
 	//create a new moving walkway object
 	//run is either 1 for forward motion, -1 for reverse motion, 0 for stop
@@ -181,7 +181,7 @@ void MovingWalkway::Loop()
 	MoveSteps();
 }
 
-void MovingWalkway::CreateSteps(const std::string &texture, const std::string &direction, float width, float treadsize, float tw, float th)
+void MovingWalkway::CreateSteps(const std::string &texture, const std::string &direction, Real width, Real treadsize, Real tw, Real th)
 {
 	//create steps
 	std::string Name = GetName();
@@ -199,13 +199,13 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 
 	for (int i = 1; i <= num_steps; i++)
 	{
-		float pos = 0;
+		Real pos = 0;
 		std::string base = Name + ":" + ToString(i);
 
 		//create wall object
 		Wall *wall = Steps[i - 1]->CreateWallObject(base);
 
-		float thickness = treadsize;
+		Real thickness = treadsize;
 
 		sbs->DrawWalls(false, true, false, false, false, false);
 
@@ -258,7 +258,7 @@ void MovingWalkway::MoveSteps()
 		{
 			if (Direction == "right")
 			{
-				float pos = Steps[i]->GetPosition().x;
+				Real pos = Steps[i]->GetPosition().x;
 				if (pos < end.x - treadsize)
 					Steps[i]->SetPosition(start);
 				else
@@ -266,7 +266,7 @@ void MovingWalkway::MoveSteps()
 			}
 			if (Direction == "left")
 			{
-				float pos = Steps[i]->GetPosition().x;
+				Real pos = Steps[i]->GetPosition().x;
 				if (pos > end.x + treadsize)
 					Steps[i]->SetPosition(start);
 				else
@@ -274,7 +274,7 @@ void MovingWalkway::MoveSteps()
 			}
 			if (Direction == "back")
 			{
-				float pos = Steps[i]->GetPosition().z;
+				Real pos = Steps[i]->GetPosition().z;
 				if (pos < end.z - treadsize)
 					Steps[i]->SetPosition(start);
 				else
@@ -282,7 +282,7 @@ void MovingWalkway::MoveSteps()
 			}
 			if (Direction == "front")
 			{
-				float pos = Steps[i]->GetPosition().z;
+				Real pos = Steps[i]->GetPosition().z;
 				if (pos > end.z + treadsize)
 					Steps[i]->SetPosition(start);
 				else
@@ -293,7 +293,7 @@ void MovingWalkway::MoveSteps()
 		{
 			if (Direction == "right")
 			{
-				float pos = Steps[i]->GetPosition().x;
+				Real pos = Steps[i]->GetPosition().x;
 				if (pos > start.x)
 					Steps[i]->SetPosition(Ogre::Vector3(end.x - treadsize, end.y, end.z));
 				else
@@ -301,7 +301,7 @@ void MovingWalkway::MoveSteps()
 			}
 			if (Direction == "left")
 			{
-				float pos = Steps[i]->GetPosition().x;
+				Real pos = Steps[i]->GetPosition().x;
 				if (pos < start.x)
 					Steps[i]->SetPosition(Ogre::Vector3(end.x + treadsize, end.y, end.z));
 				else
@@ -309,7 +309,7 @@ void MovingWalkway::MoveSteps()
 			}
 			if (Direction == "back")
 			{
-				float pos = Steps[i]->GetPosition().z;
+				Real pos = Steps[i]->GetPosition().z;
 				if (pos > start.z)
 					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z - treadsize));
 				else
@@ -317,7 +317,7 @@ void MovingWalkway::MoveSteps()
 			}
 			if (Direction == "front")
 			{
-				float pos = Steps[i]->GetPosition().z;
+				Real pos = Steps[i]->GetPosition().z;
 				if (pos < start.z)
 					Steps[i]->SetPosition(Ogre::Vector3(end.x, end.y, end.z + treadsize));
 				else

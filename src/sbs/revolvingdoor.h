@@ -34,11 +34,11 @@ public:
 
 	bool IsMoving; //is door moving?
 	bool Clockwise; //if door should rotate clockwise
-	float Speed; //rotation speed
+	Real Speed; //rotation speed
 	std::string soundfile; //sound
 	int Segments;
 
-	RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	~RevolvingDoor();
 	void Enabled(bool value);
 	void MoveDoor();
@@ -59,7 +59,7 @@ private:
 
 	bool brake;
 	bool is_enabled;
-	float rotation;
+	Real rotation;
 	bool Locked;
 	int KeyID;
 };

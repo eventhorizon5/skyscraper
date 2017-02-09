@@ -36,7 +36,7 @@
 
 namespace SBS {
 
-Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic) : Object(parent)
+Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic) : Object(parent)
 {
 	//creates a light object
 
@@ -99,7 +99,7 @@ Light::~Light()
 	}
 }
 
-void Light::SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b)
+void Light::SetColor(Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b)
 {
 	//set color of light
 	light->setDiffuseColour(color_r, color_g, color_b);

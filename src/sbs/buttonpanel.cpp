@@ -34,7 +34,7 @@
 
 namespace SBS {
 
-ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th) : Object(parent)
+ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th) : Object(parent)
 {
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
@@ -131,7 +131,7 @@ ButtonPanel::~ButtonPanel()
 	}
 }
 
-Control* ButtonPanel::AddButton(const std::string &sound, const std::string &texture, const std::string &texture_lit, int row, int column, const std::string &type, float width, float height, float hoffset, float voffset)
+Control* ButtonPanel::AddButton(const std::string &sound, const std::string &texture, const std::string &texture_lit, int row, int column, const std::string &type, Real width, Real height, Real hoffset, Real voffset)
 {
 	//create a standard button at specified row/column position
 	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%.
@@ -160,7 +160,7 @@ Control* ButtonPanel::AddButton(const std::string &sound, const std::string &tex
 	return AddControl(sound, row, column, width, height, hoffset, voffset, 1, names, textures);
 }
 
-Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, Real bwidth, Real bheight, Real hoffset, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//create an elevator control (button, switch, knob)
 
@@ -184,26 +184,26 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 		//half the width), plus total spacing to the left of it, plus total button spaces
 		//to the left of it, plus half of the extra width multiplier
 		position.x = (-Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
-		position.z = -0.01f;
+		position.z = -0.01;
 		position.x += hoffset * ButtonWidth;
 	}
 	if (Direction == "back")
 	{
 		//back
 		position.x = (Width / 2) - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
-		position.z = 0.01f;
+		position.z = 0.01;
 		position.x -= hoffset * ButtonWidth;
 	}
 	if (Direction == "left")
 	{
-		position.x = -0.01f;
+		position.x = -0.01;
 		position.z = (Width / 2) - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
 		position.z -= hoffset * ButtonWidth;
 	}
 	if (Direction == "right")
 	{
 		//right
-		position.x = 0.01f;
+		position.x = 0.01;
 		position.z = (-Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
 		position.z += hoffset * ButtonWidth;
 	}
@@ -259,7 +259,7 @@ void ButtonPanel::Enabled(bool value)
 	IsEnabled = value;
 }
 
-bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//Adds a wall with the specified dimensions
 

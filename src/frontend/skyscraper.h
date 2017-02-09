@@ -126,7 +126,7 @@ public:
 	void StartSound();
 	void StopSound();
 	std::string SelectBuilding();
-	bool Load(const std::string &filename, EngineContext *parent = 0, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	bool Load(const std::string &filename, EngineContext *parent = 0, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void UnloadToMenu();
@@ -134,7 +134,7 @@ public:
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
-	float GetConfigFloat(const std::string &key, float default_value);
+	Real GetConfigFloat(const std::string &key, Real default_value);
 	bool InitSky(EngineContext *engine);
 	void ShowConsole(bool send_button = true);
 	void CreateProgressDialog(const std::string &message);
@@ -142,11 +142,11 @@ public:
 	void UpdateProgress();
 	void SetFullScreen(bool enabled);
 	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
-	void SetLocation(float latitude, float longitude);
+	void SetLocation(Real latitude, Real longitude);
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
-	EngineContext* CreateEngine(EngineContext *parent = 0, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	EngineContext* CreateEngine(EngineContext *parent = 0, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount();
@@ -175,15 +175,15 @@ private:
 	//button locations
 	struct buttondata
 	{
-		float x;
-		float y;
-		float size_x;
-		float size_y;
+		Real x;
+		Real y;
+		Real size_x;
+		Real size_y;
 		std::string filename;
 		std::string filename_selected;
 		std::string filename_pressed;
-		float offset_x;
-		float offset_y;
+		Real offset_x;
+		Real offset_y;
 		bool drawn_selected, drawn_pressed;
 		int active_button;
 		Ogre::SceneNode* node;
@@ -195,7 +195,7 @@ private:
 	Ogre::Rectangle2D* background_rect;
 	Ogre::SceneNode* background_node;
 	std::string background_image;
-	void DrawImage(const std::string &filename, buttondata *button, float x, float y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
+	void DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
 	void Click(int index);
 	void UnloadSim();
 	void DeleteButtons();
@@ -231,7 +231,7 @@ private:
 	std::string prog_text;
 
 	bool new_location, new_time;
-	float latitude, longitude;
+	Real latitude, longitude;
 	double datetime;
 
 	EngineContext *active_engine;

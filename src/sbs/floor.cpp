@@ -276,7 +276,7 @@ Floor::~Floor()
 		sbs->RemoveFloor(this);
 }
 
-Wall* Floor::AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool isexternal, bool legacy_behavior)
+Wall* Floor::AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool isexternal, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
@@ -295,7 +295,7 @@ Wall* Floor::AddFloor(const std::string &name, const std::string &texture, float
 	return wall;
 }
 
-Wall* Floor::AddInterfloorFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* Floor::AddInterfloorFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
@@ -304,7 +304,7 @@ Wall* Floor::AddInterfloorFloor(const std::string &name, const std::string &text
 	return wall;
 }
 
-Wall* Floor::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th, bool isexternal)
+Wall* Floor::AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real voffset1, Real voffset2, Real tw, Real th, bool isexternal)
 {
 	//Adds a wall with the specified dimensions
 
@@ -322,7 +322,7 @@ Wall* Floor::AddWall(const std::string &name, const std::string &texture, float 
 	return wall;
 }
 
-Wall* Floor::AddInterfloorWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
+Wall* Floor::AddInterfloorWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//Adds an interfloor wall with the specified dimensions
 
@@ -498,13 +498,13 @@ void Floor::Enabled(bool value)
 	}
 }
 
-float Floor::FullHeight()
+Real Floor::FullHeight()
 {
 	//calculate full height of a floor
 	return InterfloorHeight + Height;
 }
 
-CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
 {
 	//adds call buttons
 
@@ -680,7 +680,7 @@ bool Floor::IsInGroup(int floor)
 	return false;
 }
 
-Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external)
+Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
 {
 	//interface to the SBS AddDoor function
 
@@ -690,7 +690,7 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 		return 0;
 	}
 
-	float x1, z1, x2, z2;
+	Real x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
 	{
@@ -707,7 +707,7 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 		z2 = CenterZ;
 	}
 
-	float base = 0.0f;
+	Real base = 0.0;
 	if (external == false)
 		base = GetBase(true);
 
@@ -779,21 +779,21 @@ void Floor::EnableInterfloor(bool value)
 	IsInterfloorEnabled = value;
 }
 
-Wall* Floor::ColumnWallBox(const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+Wall* Floor::ColumnWallBox(const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box
 
 	return sbs->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
-Wall* Floor::ColumnWallBox2(const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+Wall* Floor::ColumnWallBox2(const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box from a central location
 
 	return sbs->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
-FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
 {
 	//Creates a floor indicator at the specified location
 
@@ -889,15 +889,15 @@ CallButton* Floor::GetCallButton(int elevator)
 	return 0;
 }
 
-void Floor::AddFillerWalls(const std::string &texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th, bool isexternal)
+void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, bool direction, Real tw, Real th, bool isexternal)
 {
 	//convenience function for adding filler walls around doors
 	//direction is either "false" for a door that faces left/right, or "true" for one that faces front/back
 
-	float x1 = 0, x2 = 0, z1 = 0, z2 = 0, depth1 = 0, depth2 = 0;
+	Real x1 = 0, x2 = 0, z1 = 0, z2 = 0, depth1 = 0, depth2 = 0;
 
 	//exit if no height given
-	if (height == 0.0f)
+	if (height == 0.0)
 	{
 		ReportError("AddFillerWalls: no wall height specified");
 		return;
@@ -960,7 +960,7 @@ void Floor::AddFillerWalls(const std::string &texture, float thickness, float Ce
 	sbs->ResetWalls();
 }
 
-Sound* Floor::AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+Sound* Floor::AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
 
@@ -1016,7 +1016,7 @@ bool Floor::ReportError(const std::string &message)
 	return Object::ReportError("Floor " + ToString(Number) + ": " + message);
 }
 
-float Floor::GetBase(bool relative)
+Real Floor::GetBase(bool relative)
 {
 	//returns the base of the floor
 	//if Interfloor is on the bottom of the level (by default), the base is GetBase()
@@ -1037,7 +1037,7 @@ float Floor::GetBase(bool relative)
 	}
 }
 
-DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, int car, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, int car, bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
 {
 	//create a directional indicator on the specified floor, associated with a given elevator
 
@@ -1048,7 +1048,7 @@ DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, int car, bool
 	if (!elev)
 		return 0;
 
-	float x, z;
+	Real x, z;
 	if (relative == true)
 	{
 		x = elev->GetPosition().x + CenterX;
@@ -1340,7 +1340,7 @@ void Floor::RemoveMovingWalkway(MovingWalkway *walkway)
 	}
 }
 
-Light* Floor::AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* Floor::AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
 {
 	//add a light
 
@@ -1349,7 +1349,7 @@ Light* Floor::AddLight(const std::string &name, int type, Ogre::Vector3 position
 	return light;
 }
 
-Model* Floor::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* Floor::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position + Ogre::Vector3(0, GetBase(true), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -1386,7 +1386,7 @@ void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &new
 	ColumnFrame->ReplaceTexture(oldtexture, newtexture);
 }
 
-Control* Floor::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Floor::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
@@ -1405,7 +1405,7 @@ Trigger* Floor::AddTrigger(const std::string &name, const std::string &sound_fil
 	return trigger;
 }
 
-CameraTexture* Floor::AddCameraTexture(const std::string &name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
+CameraTexture* Floor::AddCameraTexture(const std::string &name, bool enabled, int quality, Real fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, enabled, quality, fov, GetBase(true) + position, use_rotation, rotation);
@@ -1413,7 +1413,7 @@ CameraTexture* Floor::AddCameraTexture(const std::string &name, bool enabled, in
 	return cameratexture;
 }
 
-Escalator* Floor::AddEscalator(const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Escalator* Floor::AddEscalator(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th)
 {
 	//add an escalator
 	Escalator* escalator = new Escalator(this, name, run, speed, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
@@ -1421,7 +1421,7 @@ Escalator* Floor::AddEscalator(const std::string &name, int run, float speed, co
 	return escalator;
 }
 
-MovingWalkway* Floor::AddMovingWalkway(const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float treadsize, int num_steps, float voffset, float tw, float th)
+MovingWalkway* Floor::AddMovingWalkway(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real treadsize, int num_steps, Real voffset, Real tw, Real th)
 {
 	//add an escalator
 	MovingWalkway* walkway = new MovingWalkway(this, name, run, speed, sound_file, texture, direction, CenterX, CenterZ, width, treadsize, num_steps, GetBase(true) + voffset, tw, th);
@@ -1429,7 +1429,7 @@ MovingWalkway* Floor::AddMovingWalkway(const std::string &name, int run, float s
 	return walkway;
 }
 
-void Floor::SetAltitude(float altitude)
+void Floor::SetAltitude(Real altitude)
 {
 	//position object at altitude
 	SetPositionY(altitude);
@@ -1658,7 +1658,7 @@ Model* Floor::GetModel(std::string name)
 	return 0;
 }
 
-RevolvingDoor* Floor::AddRevolvingDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th, bool external)
+RevolvingDoor* Floor::AddRevolvingDoor(const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
 {
 	//create an external (global) door if specified
 	if (external == true)

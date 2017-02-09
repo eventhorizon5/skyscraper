@@ -39,7 +39,7 @@
 
 namespace SBS {
 
-Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor) : Object(parent)
+Stairs::Stairs(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor) : Object(parent)
 {
 	//creates a stairwell in the location specified by CenterX and CenterZ
 	//and that spans the floor range specified by startfloor and endfloor
@@ -187,7 +187,7 @@ Stairs::~Stairs()
 		sbs->RemoveStairs(this);
 }
 
-Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
+Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th)
 {
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stair base is - front, back, left, or right.
@@ -215,11 +215,11 @@ Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &t
 
 	for (int i = 1; i <= num_stairs; i++)
 	{
-		float pos = 0;
+		Real pos = 0;
 		std::string base = Name + " " + ToString(i);
 		std::string buffer;
 
-		float thickness = 0;
+		Real thickness = 0;
 		if (i < num_stairs - 1)
 			thickness = treadsize * 2;
 		if (i == num_stairs - 1)
@@ -298,7 +298,7 @@ Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &t
 	return wall;
 }
 
-Wall* Stairs::AddWall(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+Wall* Stairs::AddWall(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -312,7 +312,7 @@ Wall* Stairs::AddWall(int floor, const std::string &name, const std::string &tex
 	return wall;
 }
 
-bool Stairs::AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+bool Stairs::AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -321,7 +321,7 @@ bool Stairs::AddWall(Wall *wall, int floor, const std::string &name, const std::
 	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
-Wall* Stairs::AddFloor(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* Stairs::AddFloor(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -335,7 +335,7 @@ Wall* Stairs::AddFloor(int floor, const std::string &name, const std::string &te
 	return wall;
 }
 
-bool Stairs::AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+bool Stairs::AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -425,8 +425,8 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 		return false;
 
 	bool hit = false;
-	float bottom = sbs->GetFloor(startfloor)->GetBase();
-	float top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
+	Real bottom = sbs->GetFloor(startfloor)->GetBase();
+	Real top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 
 	//determine floor
 	int floor;
@@ -446,7 +446,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 	if (position.y > bottom && position.y < top)
 	{
 		//check for hit with current floor
-		float distance = floorptr->FullHeight();
+		Real distance = floorptr->FullHeight();
 		if (IsValidFloor(floor))
 			hit = GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 
@@ -475,7 +475,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 	return hit;
 }
 
-Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//add a door
 
@@ -490,7 +490,7 @@ Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::strin
 	if (!floorptr)
 		return 0;
 
-	float x1, z1, x2, z2;
+	Real x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
 	{
@@ -511,13 +511,13 @@ Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::strin
 	sbs->ResetDoorwayWalls();
 	if (direction < 5)
 	{
-		Cut(1, floor, Ogre::Vector3(x1 - 0.5f, voffset, z1), Ogre::Vector3(x2 + 0.5f, voffset + height, z2), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5f, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5f, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
+		Cut(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
+		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
 	}
 	else
 	{
-		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5f), Ogre::Vector3(x2, voffset + height, z2 + 0.5f), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5f), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5f), true, false, true, 2);
+		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
+		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
 	}
 
 	//create doorway walls
@@ -534,13 +534,13 @@ Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::strin
 	return door;
 }
 
-void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset)
+void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
 	Report("cutting...");
 
-	float voffset1, voffset2;
+	Real voffset1, voffset2;
 	cutstart = start;
 	cutend = end;
 
@@ -774,7 +774,7 @@ void Stairs::RemoveTrigger(Trigger *trigger)
 	}*/
 }
 
-Light* Stairs::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* Stairs::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
 {
 	//add a global light
 
@@ -797,7 +797,7 @@ MeshObject* Stairs::GetMeshObject(int floor)
 	return StairArray[floor - startfloor];
 }
 
-Model* Stairs::AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* Stairs::AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 
@@ -835,7 +835,7 @@ void Stairs::AddModel(int floor, Model *model)
 	ModelArray[floor - startfloor].push_back(model);
 }
 
-Control* Stairs::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Stairs::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 

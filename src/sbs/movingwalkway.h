@@ -31,9 +31,9 @@ namespace SBS {
 class SBSIMPEXP MovingWalkway : public Object
 {
 public:
-	float Speed;
+	Real Speed;
 
-	MovingWalkway(Object *parent, const std::string &name, int run, float speed, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float treadsize, int num_steps, float voffset, float tw, float th);
+	MovingWalkway(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	~MovingWalkway();
 	void Enabled(bool value);
 	void Report(const std::string &message);
@@ -51,11 +51,11 @@ private:
 	bool is_enabled;
 	Ogre::Vector3 start, end;
 	std::string Direction;
-	float treadsize;
+	Real treadsize;
 
 	std::vector<Step*> Steps;
 
-	void CreateSteps(const std::string &texture, const std::string &direction, float width, float treadsize, float tw, float th);
+	void CreateSteps(const std::string &texture, const std::string &direction, Real width, Real treadsize, Real tw, Real th);
 	void MoveSteps();
 };
 

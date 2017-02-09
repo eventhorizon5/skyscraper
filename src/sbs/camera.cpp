@@ -65,29 +65,29 @@ Camera::Camera(Object *parent) : Object(parent)
 	desired_velocity = Ogre::Vector3(0, 0, 0);
 	angle_velocity = Ogre::Vector3(0, 0, 0);
 	desired_angle_velocity = Ogre::Vector3(0, 0, 0);
-	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 9.0f);
-	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040f);
-	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1f);
-	cfg_walk_maxspeed_mult = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0f);
-	cfg_walk_maxspeed_multreal = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_MultReal", 1.0f);
-	cfg_walk_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkBrake", 0.040f);
-	cfg_rotate_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateAccelerate", 0.005f);
-	cfg_rotate_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015f);
-	cfg_rotate_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015f);
-	cfg_body_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyHeight", 3.0f);
-	cfg_body_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64f);
-	cfg_legs_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsHeight", 3.0f);
-	cfg_legs_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312f);
-	cfg_lookspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0f);
-	cfg_turnspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.TurnSpeed", 100.0f);
-	cfg_spinspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SpinSpeed", 150.0f);
-	cfg_floatspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FloatSpeed", 140.0f);
-	cfg_stepspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StepSpeed", 70.0f);
-	cfg_strafespeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StrafeSpeed", 70.0f);
-	cfg_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.Speed", 1.0f);
-	cfg_speedfast = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0f);
-	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5f);
-	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2f);
+	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 9.0);
+	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
+	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
+	cfg_walk_maxspeed_mult = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0);
+	cfg_walk_maxspeed_multreal = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_MultReal", 1.0);
+	cfg_walk_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkBrake", 0.040);
+	cfg_rotate_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateAccelerate", 0.005);
+	cfg_rotate_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015);
+	cfg_rotate_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015);
+	cfg_body_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyHeight", 3.0);
+	cfg_body_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64);
+	cfg_legs_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsHeight", 3.0);
+	cfg_legs_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312);
+	cfg_lookspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0);
+	cfg_turnspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.TurnSpeed", 100.0);
+	cfg_spinspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SpinSpeed", 150.0);
+	cfg_floatspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FloatSpeed", 140.0);
+	cfg_stepspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StepSpeed", 70.0);
+	cfg_strafespeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StrafeSpeed", 70.0);
+	cfg_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.Speed", 1.0);
+	cfg_speedfast = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0);
+	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5);
+	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
 	speed = 1;
 	Collisions = 0;
 	lastfloor = 0;
@@ -96,9 +96,9 @@ Camera::Camera(Object *parent) : Object(parent)
 	MouseRightDown = false;
 	ReportCollisions = sbs->GetConfigBool("Skyscraper.SBS.Camera.ReportCollisions", false);
 	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
-	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0f);
-	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794f);
-	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0f);
+	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
+	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
+	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0);
 	object_number = 0;
 	object_line = 0;
 	HitPosition = 0;
@@ -109,7 +109,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	collision_reset = false;
 	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
 	use_startdirection = false;
-	BinocularsFOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BinocularsFOV", 10.0f);
+	BinocularsFOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BinocularsFOV", 10.0);
 	AttachedModel = 0;
 	prev_orientation = Ogre::Quaternion::ZERO;
 	prev_position = Ogre::Vector3::ZERO;
@@ -124,12 +124,12 @@ Camera::Camera(Object *parent) : Object(parent)
 	//set up camera and scene nodes
 
 	//set up collider character
-	float width = cfg_legs_width / 2;
+	Real width = cfg_legs_width / 2;
 	if (cfg_body_width > cfg_legs_width)
 		width = cfg_body_width / 2;
 
-	float height = (cfg_body_height + cfg_legs_height - 0.5f) - (width * 2);
-	float step_height = cfg_legs_height - 0.5f;
+	Real height = (cfg_body_height + cfg_legs_height - 0.5) - (width * 2);
+	Real step_height = cfg_legs_height - 0.5;
 
 	mCharacter = 0;
 	mShape = 0;
@@ -142,7 +142,7 @@ Camera::Camera(Object *parent) : Object(parent)
 
 	//other movement options
 	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
-	mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65f)));
+	mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65)));
 }
 
 Camera::~Camera()
@@ -298,7 +298,7 @@ void Camera::UpdateCameraFloor()
 		CurrentFloorID = sbs->GetFloor(CurrentFloor)->ID;
 }
 
-bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
+bool Camera::Move(Ogre::Vector3 vector, Real speed, bool flip)
 {
 	//moves the camera in a relative amount specified by a vector
 
@@ -334,7 +334,7 @@ bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 	return true;
 }
 
-bool Camera::MovePosition(Ogre::Vector3 vector, float speed)
+bool Camera::MovePosition(Ogre::Vector3 vector, Real speed)
 {
 	//moves the camera in a relative amount, using SetPosition, instead of character movement
 
@@ -348,7 +348,7 @@ bool Camera::MovePosition(Ogre::Vector3 vector, float speed)
 	return true;
 }
 
-void Camera::Rotate(const Ogre::Vector3 &rotation, float speed)
+void Camera::Rotate(const Ogre::Vector3 &rotation, Real speed)
 {
 	//rotates the camera in a relative amount in world space
 
@@ -359,7 +359,7 @@ void Camera::Rotate(const Ogre::Vector3 &rotation, float speed)
 	SetRotation(rot);
 }
 
-void Camera::RotateLocal(const Ogre::Vector3 &rotation, float speed)
+void Camera::RotateLocal(const Ogre::Vector3 &rotation, Real speed)
 {
 	//rotates the camera in a relative amount in local camera space
 
@@ -375,9 +375,9 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, float speed)
 		RotationStopped = true;
 
 	//convert rotation values to degrees
-	float xdeg = (float)Ogre::Math::RadiansToDegrees(rotation.x) * speed; //X axis (up/down)
-	float ydeg = (float)Ogre::Math::RadiansToDegrees(rotation.y) * speed; //Y axis (left/right)
-	float zdeg = (float)Ogre::Math::RadiansToDegrees(rotation.z) * speed; //Z axis (clockwise/counterclockwise)
+	Real xdeg = (float)Ogre::Math::RadiansToDegrees(rotation.x) * speed; //X axis (up/down)
+	Real ydeg = (float)Ogre::Math::RadiansToDegrees(rotation.y) * speed; //Y axis (left/right)
+	Real zdeg = (float)Ogre::Math::RadiansToDegrees(rotation.z) * speed; //Z axis (clockwise/counterclockwise)
 	Rotation.x += xdeg;
 	Rotation.y += ydeg;
 	Rotation.z += zdeg;
@@ -546,8 +546,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	if (width == 0 || height == 0)
 		return;
 
-	float x = (float)mouse_x / (float)width;
-	float y = (float)mouse_y / (float)height;
+	Real x = (float)mouse_x / (float)width;
+	Real y = (float)mouse_y / (float)height;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
@@ -557,7 +557,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	MeshObject* mesh = 0;
 	Wall* wall = 0;
 
-	bool hit = sbs->HitBeam(ray, 1000.0f, mesh, wall, HitPosition);
+	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
 
 	if (hit == false)
 		return;
@@ -726,7 +726,7 @@ void Camera::Loop()
 		timing = sbs->GetAverageTime();
 	else
 		timing = sbs->GetElapsedTime();
-	float delta = timing / 1000.0f;
+	Real delta = timing / 1000.0;
 
 	//reset collisions if needed
 	if (collision_reset == true && EnableBullet == true)
@@ -794,19 +794,19 @@ void Camera::Loop()
 	Sync();
 }
 
-void Camera::Strafe(float speed)
+void Camera::Strafe(Real speed)
 {
 	speed *= cfg_walk_maxspeed_multreal;
 	desired_velocity.x = -cfg_strafespeed * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
-void Camera::Step(float speed)
+void Camera::Step(Real speed)
 {
 	speed *= cfg_walk_maxspeed_multreal;
 	desired_velocity.z = cfg_stepspeed * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
-void Camera::Float(float speed)
+void Camera::Float(Real speed)
 {
 	speed *= cfg_walk_maxspeed_multreal;
 	desired_velocity.y = cfg_floatspeed * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
@@ -818,24 +818,24 @@ void Camera::Jump()
 		return;
 
 	//velocity.y = cfg_jumpspeed;
-	//desired_velocity.y = 0.0f;
+	//desired_velocity.y = 0.0;
 	if (mCharacter->getGravity() != 0 && EnableBullet == true)
 		mCharacter->jump();
 }
 
-void Camera::Look(float speed)
+void Camera::Look(Real speed)
 {
 	//look up/down by rotating camera on X axis
 	desired_angle_velocity.x = cfg_lookspeed * speed * cfg_rotate_maxspeed;
 }
 
-void Camera::Turn(float speed)
+void Camera::Turn(Real speed)
 {
 	//turn camera by rotating on Y axis
 	desired_angle_velocity.y = cfg_turnspeed * speed * cfg_rotate_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
-void Camera::Spin(float speed)
+void Camera::Spin(Real speed)
 {
 	//spin camera by rotating on Z axis
 	desired_angle_velocity.z = cfg_spinspeed * speed * cfg_rotate_maxspeed;
@@ -847,11 +847,11 @@ void Camera::FreelookMove(const Ogre::Vector3 &rotation)
 	angle_velocity = desired_angle_velocity;
 }
 
-void Camera::InterpolateMovement(float delta)
+void Camera::InterpolateMovement(Real delta)
 {
 	//calculate movement and rotation acceleration
 
-	delta *= 1700.0f;
+	delta *= 1700.0;
 
 	for (size_t i = 0; i < 3; i++)
 	{
@@ -886,7 +886,7 @@ void Camera::InterpolateMovement(float delta)
 	}
 }
 
-void Camera::SetGravity(float gravity, bool save_value, bool camera_only)
+void Camera::SetGravity(Real gravity, bool save_value, bool camera_only)
 {
 	if (save_value == true)
 		Gravity = gravity;
@@ -899,7 +899,7 @@ void Camera::SetGravity(float gravity, bool save_value, bool camera_only)
 	}
 }
 
-float Camera::GetGravity()
+Real Camera::GetGravity()
 {
 	return Gravity;
 }
@@ -927,7 +927,7 @@ bool Camera::GetGravityStatus()
 	return GravityStatus;
 }
 
-void Camera::SetFOVAngle(float angle)
+void Camera::SetFOVAngle(Real angle)
 {
 	//set camera FOV angle
 
@@ -936,16 +936,16 @@ void Camera::SetFOVAngle(float angle)
 
 	if (angle > 0 && angle < 179.63)
 	{
-		float ratio = (float)MainCamera->getAspectRatio();
+		Real ratio = (float)MainCamera->getAspectRatio();
 		if (ratio > 0)
 			MainCamera->setFOVy(Ogre::Degree(angle / ratio));
 	}
 }
 
-float Camera::GetFOVAngle()
+Real Camera::GetFOVAngle()
 {
 	if (!MainCamera)
-		return 0.0f;
+		return 0.0;
 
 	return (float)(MainCamera->getFOVy().valueDegrees() * MainCamera->getAspectRatio());
 }
@@ -956,7 +956,7 @@ void Camera::SetToDefaultFOV()
 	SetFOVAngle(FOV);
 }
 
-float Camera::GetHeight()
+Real Camera::GetHeight()
 {
 	//return camera's height
 
@@ -1039,7 +1039,7 @@ void Camera::Sync()
 	prev_orientation = orientation;
 }
 
-void Camera::SetMaxRenderDistance(float value)
+void Camera::SetMaxRenderDistance(Real value)
 {
 	//set distance of camera's far clipping plane - set to 0 for infinite
 
@@ -1050,7 +1050,7 @@ void Camera::SetMaxRenderDistance(float value)
 	FarClip = value;
 }
 
-float Camera::GetMaxRenderDistance()
+Real Camera::GetMaxRenderDistance()
 {
 	return FarClip;
 }
@@ -1179,7 +1179,7 @@ bool Camera::PickUpModel()
 		position.y = i;
 		Ogre::Ray ray (sbs->ToRemote(position), sbs->ToRemote(front, false));
 
-		hit = sbs->HitBeam(ray, 2.0f, mesh, wall, hit_position);
+		hit = sbs->HitBeam(ray, 2.0, mesh, wall, hit_position);
 
 		if (hit == true)
 			break;
@@ -1278,8 +1278,8 @@ bool Camera::Attach(Ogre::Camera *camera, bool init_state)
 		return false;
 
 	MainCamera = camera;
-	MainCamera->setNearClipDistance(0.1f);
-	MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0);
+	MainCamera->setNearClipDistance(0.1);
+	MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5) / 2), 0);
 	GetSceneNode()->AttachObject(MainCamera);
 
 	SetFOVAngle(FOV);
@@ -1288,7 +1288,7 @@ bool Camera::Attach(Ogre::Camera *camera, bool init_state)
 	//move camera to start location
 	if (FirstAttach == false)
 	{
-		SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
+		SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719), true, false); // 9.806 m/s/s
 
 		if (init_state == true)
 		{
@@ -1412,7 +1412,7 @@ void Camera::CheckObjects()
 	CheckStairwell();
 }
 
-void Camera::Teleport(float X, float Y, float Z)
+void Camera::Teleport(Real X, Real Y, Real Z)
 {
 	//teleport/warp user to specified location
 

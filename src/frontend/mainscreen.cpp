@@ -217,7 +217,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 	if (key == WXK_F2)
 	{
-		float fps = Simcore->FPS;
+		Real fps = Simcore->FPS;
 		Ogre::RenderSystem *rendersystem = frontend->mRoot->getRenderSystem();
 
 		int batches = (int)rendersystem->_getBatchCount();
@@ -339,14 +339,14 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_NUMPAD_SUBTRACT || key == (wxKeyCode)'[')
 		{
 			//increase FOV angle
-			float angle = camera->GetFOVAngle() + camera->cfg_zoomspeed;
+			Real angle = camera->GetFOVAngle() + camera->cfg_zoomspeed;
 			camera->SetFOVAngle(angle);
 		}
 
 		if (key == WXK_NUMPAD_ADD || key == (wxKeyCode)']')
 		{
 			//decrease FOV angle
-			float angle = camera->GetFOVAngle() - camera->cfg_zoomspeed;
+			Real angle = camera->GetFOVAngle() - camera->cfg_zoomspeed;
 			camera->SetFOVAngle(angle);
 		}
 
@@ -509,14 +509,14 @@ void MainScreen::ProcessMovement(EngineContext *engine, bool control, bool shift
 {
 	//process movement
 
-	float strafe = 0, floatval = 0, spin = 0, turn = 0, look = 0, step = 0;
+	Real strafe = 0, floatval = 0, spin = 0, turn = 0, look = 0, step = 0;
 
 	//get SBS camera
 	Camera *camera = engine->GetSystem()->camera;
 
-	float speed_normal = camera->cfg_speed;
-	float speed_fast = camera->cfg_speedfast;
-	float speed_slow = camera->cfg_speedslow;
+	Real speed_normal = camera->cfg_speed;
+	Real speed_fast = camera->cfg_speedfast;
+	Real speed_slow = camera->cfg_speedslow;
 
 	if (angle_only == false)
 	{
@@ -630,8 +630,8 @@ void MainScreen::HandleMouseMovement()
 	if (camera->Freelook == true)
 	{
 		//get window dimensions
-		float width = GetClientSize().GetWidth();
-		float height = GetClientSize().GetHeight();
+		Real width = GetClientSize().GetWidth();
+		Real height = GetClientSize().GetHeight();
 
 		//if mouse coordinates changed, and we're in freelook mode, rotate camera
 		if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
@@ -639,11 +639,11 @@ void MainScreen::HandleMouseMovement()
 			WarpPointer(width * 0.5, height * 0.5);
 
 			Ogre::Vector3 rotational;
-			rotational.x = -(((float)camera->mouse_y - (height / 2))) / (height * 2);
-			rotational.y = -((width / 2) - (float)camera->mouse_x) / (width * 2);
+			rotational.x = -(((Real)camera->mouse_y - (height / 2))) / (height * 2);
+			rotational.y = -((width / 2) - (Real)camera->mouse_x) / (width * 2);
 			rotational.z = 0;
 
-			float fps_adjust = Simcore->FPS / 60;
+			Real fps_adjust = Simcore->FPS / 60;
 			rotational *= fps_adjust;
 
 			//apply freelook rotation

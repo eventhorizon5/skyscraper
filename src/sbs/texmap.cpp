@@ -34,7 +34,7 @@ namespace SBS {
 #undef SMALL_EPSILON
 #define SMALL_EPSILON 0.000001f
 
-bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3, float tw, float th)
+bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3, Real tw, Real th)
 {
 	//this is modified code from the Crystal Space thingmesh system (SetTextureSpace function),
 	//from the "plugins/mesh/thing/object/polygon.cpp" file.
@@ -78,22 +78,22 @@ bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t
 	uv3.y = MapUV[2].y * th;
 
 	//set up 2D matrix
-	float m11, m12, m21, m22;
+	Real m11, m12, m21, m22;
 	m11 = uv2.x - uv1.x;
 	m12 = uv3.x - uv1.x;
 	m21 = uv2.y - uv1.y;
 	m22 = uv3.y - uv1.y;
 
 	//compute determinant of matrix
-	float det = m11 * m22 - m12 * m21;
+	Real det = m11 * m22 - m12 * m21;
 
 	if (std::abs(det) < SMALL_EPSILON)
 		return ReportError("ComputeTextureMap: Bad UV coordinates");
 	else
 	{
 		//invert matrix
-		float inv_det = 1 / (m11 * m22 - m12 * m21);
-		float tmp1, tmp2, tmp3, tmp4;
+		Real inv_det = 1 / (m11 * m22 - m12 * m21);
+		Real tmp1, tmp2, tmp3, tmp4;
 		tmp1 = m11;
 		tmp2 = m12;
 		tmp3 = m21;
@@ -129,13 +129,13 @@ bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t
 	//compute norms of vectors
 	Ogre::Vector3 len1 = pu - po;
 	Ogre::Vector3 len2 = pv - po;
-	float len1f = sqrtf(len1.x * len1.x + len1.y * len1.y + len1.z * len1.z);
-	float len2f = sqrtf(len2.x * len2.x + len2.y * len2.y + len2.z * len2.z);
+	Real len1f = sqrtf(len1.x * len1.x + len1.y * len1.y + len1.z * len1.z);
+	Real len2f = sqrtf(len2.x * len2.x + len2.y * len2.y + len2.z * len2.z);
 
 	return ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
 }
 
-bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
+bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, Real len1, const Ogre::Vector3 &v2, Real len2)
 {
 	//originally from Crystal Space's libs/csgeom/textrans.cpp file
 
@@ -155,13 +155,13 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 	 * Use 'v1' and 'len1' for the u-axis and 'v2' and 'len2' for the v-axis.
 	 */
 
-	float d = v_orig.squaredDistance(v1);
+	Real d = v_orig.squaredDistance(v1);
 	//get inverse square of d
-	float invl1 = 1 / sqrtf(d);
+	Real invl1 = 1 / sqrtf(d);
 
 	d = v_orig.squaredDistance(v2);
 	//get inverse square of d
-	float invl2 = (d) ? 1 / sqrtf(d) : 0;
+	Real invl2 = (d) ? 1 / sqrtf(d) : 0;
 
 	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
 	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
@@ -179,7 +179,7 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 
 	v = v_orig;
 
-	float det = m.Determinant();
+	Real det = m.Determinant();
 	if (std::abs(det) < SMALL_EPSILON)
 	{
 		//m = m.IDENTITY;
@@ -238,7 +238,7 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 	return true;
 }
 
-void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value)
+void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, Real value)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//axis is 0 for X, 1 for Y, 2 for Z
@@ -252,7 +252,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	poly2.reserve(orig.size());
 
 	Ogre::Vector3 ptB;
-	float sideA = 0, sideB = 0;
+	Real sideA = 0, sideB = 0;
 	Ogre::Vector3 ptA = orig[orig.size() - 1];
 
 	if (axis == 0)
@@ -289,7 +289,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 				Ogre::Vector3 v = ptB;
 				v -= ptA;
 
-				float sect = 0;
+				Real sect = 0;
 				if (axis == 0)
 					sect = -(ptA.x - value) / v.x;
 				if (axis == 1)
@@ -315,7 +315,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 				Ogre::Vector3 v = ptB;
 				v -= ptA;
 
-				float sect = 0;
+				Real sect = 0;
 				if (axis == 0)
 					sect = -(ptA.x - value) / v.x;
 				if (axis == 1)
@@ -341,16 +341,16 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	}
 }
 
-Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, float &D)
+Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//calculate polygon normal
 
-	float ayz = 0;
-	float azx = 0;
-	float axy = 0;
+	Real ayz = 0;
+	Real azx = 0;
+	Real axy = 0;
 	size_t i, i1;
-	float x1, y1, z1, x, y, z;
+	Real x1, y1, z1, x, y, z;
 
 	i1 = vertices.size() - 1;
 	x1 = vertices[i1].x;
@@ -369,8 +369,8 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, float &D)
 		z1 = z;
 	}
 
-	float sqd = ayz * ayz + azx * azx + axy * axy;
-	float invd;
+	Real sqd = ayz * ayz + azx * azx + axy * axy;
+	Real invd;
 	if (sqd < SMALL_EPSILON)
 		invd = 1.0f / SMALL_EPSILON;
 	else
@@ -400,13 +400,13 @@ bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vec
 
 	Ogre::Plane plane = GetAbsolutePlane();
 
-	float dot1 = plane.d + plane.normal.x * start.x + plane.normal.y * start.y + plane.normal.z * start.z;
+	Real dot1 = plane.d + plane.normal.x * start.x + plane.normal.y * start.y + plane.normal.z * start.z;
 	if (dot1 > 0)
 		return false;
 
 	// If this vector is perpendicular to the plane of the polygon we
 	// need to catch this case here.
-	float dot2 = plane.d + plane.normal.x * end.x + plane.normal.y * end.y + plane.normal.z * end.z;
+	Real dot2 = plane.d + plane.normal.x * end.x + plane.normal.y * end.y + plane.normal.z * end.z;
 	if (std::abs(dot1 - dot2) < SMALL_EPSILON)
 		return false;
 
@@ -431,7 +431,7 @@ bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vec
 	return true;
 }
 
-bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal)
+bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -456,7 +456,7 @@ bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &
 	return false;
 }
 
-bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal)
+bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -481,18 +481,18 @@ bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vect
 
 	Ogre::Plane plane = GetAbsolutePlane();
 
-	float denom = plane.normal.x * (end.x) +
+	Real denom = plane.normal.x * (end.x) +
 			plane.normal.y * (end.y - start.y) +
 			plane.normal.z * (end.z - start.z);
 
 	if (std::abs(denom) < SMALL_EPSILON)
 		return false;  // Lines are parallel
 
-	float num = -(plane.normal.x * start.x +
+	Real num = -(plane.normal.x * start.x +
 			plane.normal.y * start.y +
 			plane.normal.z * start.z +
 			plane.d);
-	float r = num / denom;
+	Real r = num / denom;
 
 	// Calculate 'r' and 'isect' even if the intersection point is
 	// not on the segment. That way we can use this function for testing

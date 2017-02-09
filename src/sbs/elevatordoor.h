@@ -35,7 +35,7 @@ public:
 	struct DoorWrapper;
 	struct DoorObject
 	{
-		DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, float OpenSpeed, float CloseSpeed);
+		DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, Real OpenSpeed, Real CloseSpeed);
 		~DoorObject();
 		void MoveDoors(bool open, bool manual);
 		void Move();
@@ -43,26 +43,26 @@ public:
 
 		MeshObject* mesh;
 		int direction; //direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
-		float open_speed;
-		float close_speed;
-		float active_speed;
-		float openchange;
+		Real open_speed;
+		Real close_speed;
+		Real active_speed;
+		Real openchange;
 		std::string name;
 		DoorWrapper *wrapper; //associated wrapper
 		ElevatorDoor *parent;
-		float marker1;
-		float marker2;
+		Real marker1;
+		Real marker2;
 		int door_section; //door movement section; used for both reversal tracking and debugging
-		float stopping_distance;
-		float temp_change;
+		Real stopping_distance;
+		Real temp_change;
 		bool accelerating;
 		bool is_open;
 		bool finished;
 		Ogre::Vector3 extents_min;
 		Ogre::Vector3 extents_max;
 		bool sign_changed;
-		float old_difference;
-		float offset;
+		Real old_difference;
+		Real offset;
 		bool recheck_difference;
 		bool reversed;
 	};
@@ -73,7 +73,7 @@ public:
 		DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor = 0);
 		~DoorWrapper();
 
-		DoorObject* CreateDoor(const std::string &doorname, const std::string &Direction, float OpenSpeed, float CloseSpeed);
+		DoorObject* CreateDoor(const std::string &doorname, const std::string &Direction, Real OpenSpeed, Real CloseSpeed);
 		void Enabled(bool value);
 		bool CheckDoorsOpen();
 		bool IsFinished();
@@ -88,24 +88,24 @@ public:
 		std::string name;
 		bool Open;
 		bool IsEnabled;
-		float Width;
-		float Height;
-		float Thickness;
+		Real Width;
+		Real Height;
+		Real Thickness;
 		ElevatorDoor *parent;
 		bool IsShaftDoor;
-		float Shift;
-		float voffset;
+		Real Shift;
+		Real voffset;
 		int floor;
 	};
 
 	int Number; //door instance number
 	Elevator *elev; //pointer to associated elevator object
 	ElevatorCar *car; //pointer to associated elevator car object
-	float OpenSpeed; //door opening/closing speed (for backwards-compatibility only)
+	Real OpenSpeed; //door opening/closing speed (for backwards-compatibility only)
 	bool DoorDirection; //if direction is false, doors are on the left/right side
 	int DoorTimer; //door autoclose timer value, in milliseconds
 	int QuickClose; //door quick close autotimer value, in milliseconds
-	float NudgeTimer; //wait time in seconds before enabling nudge mode
+	Real NudgeTimer; //wait time in seconds before enabling nudge mode
 	std::string OpenSound; //door open sound
 	std::string CloseSound; //door close sound
 	std::string UpChimeSound; //elevator up chime sound
@@ -113,10 +113,10 @@ public:
 	std::string NudgeSound; //nudge mode sound
 	std::string SensorSound; //door sensor sound
 	int OpenDoor; //1=open doors, -1=close doors, 2=open manual, -2=close manual
-	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command) - deprecated
+	Real ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command) - deprecated
 	Ogre::Vector3 ShaftDoorOrigin; //shaft door origin (deprecated)
-	float ManualSpeed; //manual speed multiplier
-	float SlowSpeed; //slow speed multiplier, mainly for nudge mode
+	Real ManualSpeed; //manual speed multiplier
+	Real SlowSpeed; //slow speed multiplier, mainly for nudge mode
 
 	ElevatorDoor(int number, ElevatorCar* car);
 	~ElevatorDoor();
@@ -133,22 +133,22 @@ public:
 	bool AreShaftDoorsClosed(bool skip_current_floor = false);
 	void Reset(bool sensor = false);
 	bool DoorsStopped();
-	DoorWrapper* AddDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	bool AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
-	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, float tw, float th);
-	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
+	DoorWrapper* AddDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, bool direction, Real tw, Real th);
+	bool AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
+	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th);
+	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
 	void Chime(int floor, bool direction);
 	void Loop();
 	void MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
 	void Enabled(bool value);
 	bool IsEnabled();
-	void SetShaftDoors(float thickness, float CenterX, float CenterZ);
+	void SetShaftDoors(Real thickness, Real CenterX, Real CenterZ);
 	bool ShaftDoorsExist(int floor);
 	int GetWhichDoors();
-	DoorObject* AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	DoorWrapper* AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	DoorWrapper* AddShaftDoorComponent(int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	void AddShaftDoorsComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	DoorObject* AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
+	DoorWrapper* AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
+	DoorWrapper* AddShaftDoorComponent(int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
+	void AddShaftDoorsComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	DoorWrapper* FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, bool DoorWalls = true, bool TrackWalls = true);
 	DoorWrapper* FinishDoors(bool DoorWalls = true, bool TrackWalls = true);
 	DoorWrapper* FinishShaftDoor(int floor, bool DoorWalls = true, bool TrackWalls = true);
@@ -159,7 +159,7 @@ public:
 	void EnableNudgeMode(bool value);
 	bool GetNudgeStatus();
 	int GetManualIndex(int floor);
-	float GetShaftDoorAltitude(int floor);
+	Real GetShaftDoorAltitude(int floor);
 	void CheckSensor();
 	void CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
 	bool AreDoorsMoving(int doors = 0, bool car_doors = true, bool shaft_doors = true);

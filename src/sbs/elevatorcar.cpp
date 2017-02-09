@@ -411,7 +411,7 @@ bool ElevatorCar::ReportError(const std::string &message)
 	return parent->ReportError(message);
 }
 
-Wall* ElevatorCar::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+Wall* ElevatorCar::AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//Adds a wall with the specified dimensions
 
@@ -420,7 +420,7 @@ Wall* ElevatorCar::AddWall(const std::string &name, const std::string &texture, 
 	return wall;
 }
 
-Wall* ElevatorCar::AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* ElevatorCar::AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
@@ -429,7 +429,7 @@ Wall* ElevatorCar::AddFloor(const std::string &name, const std::string &texture,
 	return wall;
 }
 
-FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
 {
 	//Creates a floor indicator at the specified location
 
@@ -438,7 +438,7 @@ FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix
 	return indicator;
 }
 
-ButtonPanel* ElevatorCar::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
+ButtonPanel* ElevatorCar::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th)
 {
 	//create a new button panel object and store the pointer
 
@@ -908,7 +908,7 @@ int ElevatorCar::GetBottomFloor()
 	return ServicedFloors[0];
 }
 
-void ElevatorCar::AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+void ElevatorCar::AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
 {
 	//create external directional indicators on all serviced floors
 
@@ -922,7 +922,7 @@ void ElevatorCar::AddDirectionalIndicators(bool relative, bool active_direction,
 	}
 }
 
-DirectionalIndicator* ElevatorCar::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator* ElevatorCar::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
 {
 	//create a directional indicator inside the elevator
 
@@ -1299,7 +1299,7 @@ void ElevatorCar::StopDoors(int number)
 	}
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, bool direction, Real tw, Real th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -1311,7 +1311,7 @@ ElevatorDoor::DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &
 	return 0;
 }
 
-bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoors function
@@ -1323,7 +1323,7 @@ bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, cons
 	return false;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1334,7 +1334,7 @@ ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, cons
 		return 0;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1594,7 +1594,7 @@ void ElevatorCar::EnableDoors(bool value)
 	parent->DoorContainer->Enabled(value);
 }
 
-void ElevatorCar::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)
+void ElevatorCar::SetShaftDoors(int number, Real thickness, Real CenterX, Real CenterZ)
 {
 	int start = number, end = number;
 	if (number == 0)
@@ -1611,12 +1611,12 @@ void ElevatorCar::SetShaftDoors(int number, float thickness, float CenterX, floa
 	}
 }
 
-bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
+bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
 {
 	//adds floor signs at the specified position and direction for each serviced floor,
 	//depending on if the given door number services the floor or not (unless door_number is 0)
 
-	float x, z;
+	Real x, z;
 	if (relative == true)
 	{
 		x = GetPosition().x + CenterX;
@@ -1643,7 +1643,7 @@ bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::strin
 	{
 		bool door_result = false;
 		int floor = ServicedFloors[i];
-		float base = GetDestinationOffset(floor);
+		Real base = GetDestinationOffset(floor);
 
 		if (door_number != 0)
 			door_result = ShaftDoorsExist(door_number, floor);
@@ -1711,7 +1711,7 @@ bool ElevatorCar::ShaftDoorsExist(int number, int floor)
 	return false;
 }
 
-Sound* ElevatorCar::AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+Sound* ElevatorCar::AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a sound object
 	Sound *sound = new Sound(this, name, false);
@@ -1763,7 +1763,7 @@ void ElevatorCar::ChangeLight(int floor, bool value)
 		PanelArray[i]->ChangeLight(floor, value);
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* ElevatorCar::AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//adds an elevator door component to the specified door at a relative central position (off of elevator origin)
 
@@ -1774,7 +1774,7 @@ ElevatorDoor::DoorWrapper* ElevatorCar::AddDoorComponent(int number, const std::
 	return 0;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//adds a single elevator shaft door component on the specified floor
 
@@ -1784,7 +1784,7 @@ ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoorComponent(int number, int fl
 		return 0;
 }
 
-void ElevatorCar::AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void ElevatorCar::AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//adds shaft's elevator door components specified at a relative central position (off of elevator origin)
 
@@ -1877,7 +1877,7 @@ void ElevatorCar::HoldDoors(int number, bool sensor)
 	}
 }
 
-Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//interface to the SBS AddDoor function
 
@@ -1887,7 +1887,7 @@ Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &clo
 		return 0;
 	}
 
-	/*float x1, z1, x2, z2;
+	/*Real x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
 	{
@@ -2133,7 +2133,7 @@ void ElevatorCar::ResetNudgeTimer(bool start, int number)
 	}
 }
 
-Light* ElevatorCar::AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* ElevatorCar::AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
 {
 	//add a global light
 
@@ -2142,7 +2142,7 @@ Light* ElevatorCar::AddLight(const std::string &name, int type, Ogre::Vector3 po
 	return light;
 }
 
-Model* ElevatorCar::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* ElevatorCar::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -2209,7 +2209,7 @@ std::string ElevatorCar::GetFloorDisplay()
 	return value;
 }
 
-Control* ElevatorCar::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* ElevatorCar::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
@@ -2655,7 +2655,7 @@ void ElevatorCar::PlayMovingSounds()
 	}
 }
 
-float ElevatorCar::SetHeight()
+Real ElevatorCar::SetHeight()
 {
 	//make sure height value is set
 	if (HeightSet == false)
@@ -2666,7 +2666,7 @@ float ElevatorCar::SetHeight()
 		{
 			for (size_t j = 0; j < Mesh->Submeshes[i].MeshGeometry.size(); j++)
 			{
-				float y = sbs->ToLocal(Mesh->Submeshes[i].MeshGeometry[j].vertex.y);
+				Real y = sbs->ToLocal(Mesh->Submeshes[i].MeshGeometry[j].vertex.y);
 
 				//set height value
 				if (y > Height)
@@ -2842,7 +2842,7 @@ int ElevatorCar::GetNearestServicedFloor()
 
 	bool firstrun = true;
 	size_t nearest = 0;
-	float nearest_difference = 0;
+	Real nearest_difference = 0;
 
 	for (size_t i = 0; i < ServicedFloors.size() - 1; i++)
 	{
@@ -2859,7 +2859,7 @@ int ElevatorCar::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				float difference = std::abs(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
+				Real difference = std::abs(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
 				if (difference < nearest_difference)
 				{
 					//mark closest
@@ -2873,20 +2873,20 @@ int ElevatorCar::GetNearestServicedFloor()
 	return ServicedFloors[nearest];
 }
 
-float ElevatorCar::GetDestinationAltitude(int floor)
+Real ElevatorCar::GetDestinationAltitude(int floor)
 {
 	//returns the destination altitude of the specified floor, based on shaft door positioning
 
 	if (IsServicedFloor(floor) == false)
-		return 0.0f;
+		return 0.0;
 
-	float result = 0;
+	Real result = 0;
 	bool found = false;
 	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i]->ShaftDoorsExist(floor) == true)
 		{
-			float altitude = DoorArray[i]->GetShaftDoorAltitude(floor);
+			Real altitude = DoorArray[i]->GetShaftDoorAltitude(floor);
 
 			if (altitude > result || found == false)
 			{
@@ -2904,24 +2904,24 @@ float ElevatorCar::GetDestinationAltitude(int floor)
 	return result;
 }
 
-float ElevatorCar::GetDestinationOffset(int floor)
+Real ElevatorCar::GetDestinationOffset(int floor)
 {
 	//returns the offset distance from the floor's base altitude the elevator destination is
 
 	if (IsServicedFloor(floor) == false)
-		return 0.0f;
+		return 0.0;
 
 	if (sbs->GetFloor(floor))
 		return GetDestinationAltitude(floor) - sbs->GetFloor(floor)->GetBase();
 
-	return 0.0f;
+	return 0.0;
 }
 
 void ElevatorCar::SetFloor(int floor, bool move_parent)
 {
 	//set car's altitude to specified floor
 
-	float altitude = 0;
+	Real altitude = 0;
 	if (!sbs->GetFloor(floor))
 		return;
 
@@ -2943,12 +2943,12 @@ bool ElevatorCar::IsLeveled()
 {
 	//return true if car is leveled at a serviced floor
 
-	float tolerance = 0.005f;
+	Real tolerance = 0.005;
 
 	int floor = GetFloor();
 	if (IsServicedFloor(floor) == true)
 	{
-		float altitude = GetDestinationAltitude(floor);
+		Real altitude = GetDestinationAltitude(floor);
 
 		if (GetPosition().y >= altitude - tolerance &&
 				GetPosition().y <= altitude + tolerance)

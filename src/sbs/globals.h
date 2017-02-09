@@ -55,9 +55,11 @@
 	#define SBSIMPEXP_DATA(type)
 #endif
 
+typedef Ogre::Real Real;
+
 namespace SBS {
 
-const float pi = 3.14159265f;
+const Real pi = 3.14159265;
 
 SBSIMPEXP bool IsEven(int Number);
 SBSIMPEXP bool IsNumeric(char character);
@@ -96,6 +98,7 @@ SBSIMPEXP std::string TruncateNumber(double value, int decimals);
 SBSIMPEXP std::string TruncateNumber(const std::string &number, int decimals);
 SBSIMPEXP void Swap(int &first, int &second);
 SBSIMPEXP void Swap(float &first, float &second);
+SBSIMPEXP void Swap(double &first, double &second);
 
 }
 

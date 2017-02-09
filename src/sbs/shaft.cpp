@@ -41,7 +41,7 @@
 
 namespace SBS {
 
-Shaft::Shaft(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor) : Object(parent)
+Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor) : Object(parent)
 {
 	//creates a shaft in the location specified by CenterX and CenterZ
 	//and that spans the floor range specified by startfloor and endfloor
@@ -211,7 +211,7 @@ Shaft::~Shaft()
 		sbs->RemoveShaft(this);
 }
 
-Wall* Shaft::AddWall(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+Wall* Shaft::AddWall(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -225,7 +225,7 @@ Wall* Shaft::AddWall(int floor, const std::string &name, const std::string &text
 	return wall;
 }
 
-bool Shaft::AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+bool Shaft::AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -234,7 +234,7 @@ bool Shaft::AddWall(Wall *wall, int floor, const std::string &name, const std::s
 	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
-Wall* Shaft::AddFloor(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* Shaft::AddFloor(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -248,14 +248,14 @@ Wall* Shaft::AddFloor(int floor, const std::string &name, const std::string &tex
 	return wall;
 }
 
-bool Shaft::AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+bool Shaft::AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 		return ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
 
 	//get shaft extents
-	float altitude = sbs->GetFloor(floor)->Altitude;
+	Real altitude = sbs->GetFloor(floor)->Altitude;
 
 	//recalculate shaft extents if needed
 	if (altitude + voffset1 < bottom)
@@ -394,13 +394,13 @@ bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 	return false;
 }
 
-void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset)
+void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
 	Report("cutting...");
 
-	float voffset1, voffset2;
+	Real voffset1, voffset2;
 	cutstart = start;
 	cutend = end;
 
@@ -770,7 +770,7 @@ bool Shaft::ReportError(const std::string &message)
 	return Object::ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
-Light* Shaft::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* Shaft::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
 {
 	//add a global light
 
@@ -783,7 +783,7 @@ Light* Shaft::AddLight(int floor, const std::string &name, int type, Ogre::Vecto
 	return light;
 }
 
-Model* Shaft::AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* Shaft::AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 
@@ -821,7 +821,7 @@ void Shaft::AddModel(int floor, Model *model)
 	ModelArray[floor - startfloor].push_back(model);
 }
 
-Control* Shaft::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Shaft::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 
@@ -868,7 +868,7 @@ void Shaft::OnInit()
 		EnableWholeShaft(true, true, true);
 }
 
-Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//add a door
 
@@ -883,7 +883,7 @@ Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string
 	if (!floorptr)
 		return 0;
 
-	float x1, z1, x2, z2;
+	Real x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
 	{
@@ -904,13 +904,13 @@ Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string
 	sbs->ResetDoorwayWalls();
 	if (direction < 5)
 	{
-		Cut(1, floor, Ogre::Vector3(x1 - 0.5f, voffset, z1), Ogre::Vector3(x2 + 0.5f, voffset + height, z2), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5f, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5f, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
+		Cut(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
+		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
 	}
 	else
 	{
-		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5f), Ogre::Vector3(x2, voffset + height, z2 + 0.5f), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5f), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5f), true, false, true, 2);
+		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
+		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
 	}
 
 	//create doorway walls

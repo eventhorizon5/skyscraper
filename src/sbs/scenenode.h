@@ -46,12 +46,12 @@ public:
 	void Update();
 	Ogre::Quaternion GetOrientation(bool relative = false);
 	void SetOrientation(const Ogre::Quaternion &q, bool relative = false);
-	void Move(const Ogre::Vector3 &vector, float speed = 1.0f);
+	void Move(const Ogre::Vector3 &vector, Real speed = 1.0);
 	void DetachAllObjects();
 	void AttachObject(Ogre::MovableObject *object);
 	void DetachObject(Ogre::MovableObject *object);
-	float GetScale();
-	void SetScale(float scale);
+	Real GetScale();
+	void SetScale(Real scale);
 	SceneNode* CreateChild(std::string name, const Ogre::Vector3 &offset = Ogre::Vector3::ZERO);
 	std::string GetFullName();
 	bool IsRoot();

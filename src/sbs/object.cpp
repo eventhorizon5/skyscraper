@@ -268,7 +268,7 @@ void Object::ShowBoundingBox(bool value)
 		node->ShowBoundingBox(value);
 }
 
-void Object::Move(const Ogre::Vector3 &vector, float speed)
+void Object::Move(const Ogre::Vector3 &vector, Real speed)
 {
 	//move an object
 
@@ -281,7 +281,7 @@ void Object::Move(const Ogre::Vector3 &vector, float speed)
 	NotifyMove();
 }
 
-void Object::Move(float X, float Y, float Z, float speed)
+void Object::Move(Real X, Real Y, Real Z, Real speed)
 {
 	Ogre::Vector3 pos (X, Y, Z);
 	Move(pos, speed);
@@ -314,19 +314,19 @@ void Object::SetPositionRelative(const Ogre::Vector3 &position)
 	NotifyMove();
 }
 
-void Object::SetPosition(float X, float Y, float Z)
+void Object::SetPosition(Real X, Real Y, Real Z)
 {
 	Ogre::Vector3 pos (X, Y, Z);
 	SetPosition(pos);
 }
 
-void Object::SetPositionRelative(float X, float Y, float Z)
+void Object::SetPositionRelative(Real X, Real Y, Real Z)
 {
 	Ogre::Vector3 pos (X, Y, Z);
 	SetPositionRelative(pos);
 }
 
-void Object::SetPositionY(float value)
+void Object::SetPositionY(Real value)
 {
 	//set position of only Y vector
 
@@ -358,13 +358,13 @@ void Object::SetRotation(const Ogre::Vector3 &rotation)
 	NotifyRotate();
 }
 
-void Object::SetRotation(float X, float Y, float Z)
+void Object::SetRotation(Real X, Real Y, Real Z)
 {
 	Ogre::Vector3 rot (X, Y, Z);
 	SetRotation(rot);
 }
 
-void Object::Rotate(const Ogre::Vector3 &vector, float speed)
+void Object::Rotate(const Ogre::Vector3 &vector, Real speed)
 {
 	//rotates object in a relative amount
 
@@ -372,7 +372,7 @@ void Object::Rotate(const Ogre::Vector3 &vector, float speed)
 	SetRotation(rot);
 }
 
-void Object::Rotate(float X, float Y, float Z, float speed)
+void Object::Rotate(Real X, Real Y, Real Z, Real speed)
 {
 	Ogre::Vector3 rot (X, Y, Z);
 	Rotate(rot, speed);

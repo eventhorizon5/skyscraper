@@ -37,8 +37,8 @@ public:
 	//functions
 	Wall(MeshObject* wrapper, Object *proxy = 0, bool temporary = false);
 	~Wall();
-	Polygon* AddQuad(const std::string &name, const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize);
-	Polygon* AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize);
+	Polygon* AddQuad(const std::string &name, const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, Real tw, Real th, bool autosize);
+	Polygon* AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize);
 	Polygon* AddPolygon(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector);
 	int CreatePolygon(std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane);
 	void DeletePolygons(bool recreate_collider = true);
@@ -48,11 +48,11 @@ public:
 	int FindPolygon(const std::string &name);
 	void GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 &isect, bool convert = true);
-	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
+	void Move(const Ogre::Vector3 &position, Real speed = 1.0);
 	MeshObject* GetMesh();
 	void SetParentArray(std::vector<Wall*> &array);
 	Ogre::Vector3 GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	Ogre::Vector3 GetWallExtents(float altitude, bool get_max);
+	Ogre::Vector3 GetWallExtents(Real altitude, bool get_max);
 
 private:
 	//mesh wrapper

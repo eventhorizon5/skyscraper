@@ -182,7 +182,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 		std::string str = Calc(value);
-		float alt;
+		Real alt;
 		if (!IsNumeric(str, alt))
 			return ScriptError("Invalid value");
 		floor->SetAltitude(alt);

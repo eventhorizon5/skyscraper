@@ -66,7 +66,7 @@ Wall::~Wall()
 	polygons.clear();
 }
 
-Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
+Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, Real tw, Real th, bool autosize)
 {
 	//add a quad
 
@@ -80,7 +80,7 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
-Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
+Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize)
 {
 	//create a generic polygon
 
@@ -229,7 +229,7 @@ bool Wall::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 
 	//check through polygons to see if the specified line intersects with this wall object
 
 	SBS_PROFILE("Wall::IntersectsWall");
-	float pr, best_pr = 2000000000.;
+	Real pr, best_pr = 2000000000.;
 	int best_i = -1;
 	Ogre::Vector3 cur_isect, normal;
 
@@ -258,7 +258,7 @@ bool Wall::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 
 	return false;
 }
 
-void Wall::Move(const Ogre::Vector3 &position, float speed)
+void Wall::Move(const Ogre::Vector3 &position, Real speed)
 {
 	//move a wall object
 
@@ -289,7 +289,7 @@ Ogre::Vector3 Wall::GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &en
 	//do a line intersection with this wall, and return the intersection point
 
 	Ogre::Vector3 isect;
-	float distance = 2000000000.;
+	Real distance = 2000000000.;
 	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
 
 	Wall *result = meshwrapper->FindWallIntersect(sbs->ToRemote(start), sbs->ToRemote(end), isect, distance, normal, this);
@@ -300,7 +300,7 @@ Ogre::Vector3 Wall::GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &en
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::Vector3 Wall::GetWallExtents(float altitude, bool get_max)
+Ogre::Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut
 
@@ -316,15 +316,15 @@ Ogre::Vector3 Wall::GetWallExtents(float altitude, bool get_max)
 
 		//if given altitude is outside of polygon's range, return 0
 		Ogre::Vector2 yextents = sbs->GetExtents(original, 2);
-		float tmpaltitude = altitude;
+		Real tmpaltitude = altitude;
 		if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 			return Ogre::Vector3(0, 0, 0);
 
 		//get upper
-		sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001f);
+		sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001);
 
 		//get lower part of upper
-		sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001f);
+		sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001);
 
 		Ogre::Vector3 result;
 		if (get_max == false)

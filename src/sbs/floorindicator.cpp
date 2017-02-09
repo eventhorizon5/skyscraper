@@ -34,7 +34,7 @@
 
 namespace SBS {
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset) : Object(parent)
+FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
 {
 	//creates a new floor indicator at the specified position
 

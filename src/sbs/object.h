@@ -81,18 +81,18 @@ public:
 	void SetNumber(int number);
 	bool IsTemporary();
 	void ShowBoundingBox(bool value);
-	virtual void Move(const Ogre::Vector3 &vector, float speed = 1.0f);
-	virtual void Move(float X, float Y, float Z, float speed = 1.0f);
+	virtual void Move(const Ogre::Vector3 &vector, Real speed = 1.0);
+	virtual void Move(Real X, Real Y, Real Z, Real speed = 1.0);
 	virtual void SetPosition(const Ogre::Vector3 &position);
 	void SetPositionRelative(const Ogre::Vector3 &position);
-	virtual void SetPosition(float X, float Y, float Z);
-	void SetPositionRelative(float X, float Y, float Z);
-	virtual void SetPositionY(float value);
+	virtual void SetPosition(Real X, Real Y, Real Z);
+	void SetPositionRelative(Real X, Real Y, Real Z);
+	virtual void SetPositionY(Real value);
 	virtual Ogre::Vector3 GetPosition(bool relative = false);
-	virtual void Rotate(const Ogre::Vector3 &vector, float speed = 1.0f);
-	virtual void Rotate(float X, float Y, float Z, float speed = 1.0f);
+	virtual void Rotate(const Ogre::Vector3 &vector, Real speed = 1.0);
+	virtual void Rotate(Real X, Real Y, Real Z, Real speed = 1.0);
 	virtual void SetRotation(const Ogre::Vector3 &rotation);
-	virtual void SetRotation(float X, float Y, float Z);
+	virtual void SetRotation(Real X, Real Y, Real Z);
 	virtual Ogre::Vector3 GetRotation();
 	Ogre::Quaternion GetOrientation(bool relative = false);
 	virtual void OnMove(bool parent) {} //called when object is moved

@@ -381,7 +381,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		float leveling;
+		Real leveling;
 		std::string str = Calc(value);
 		if (!IsNumeric(str, leveling))
 			return ScriptError("Invalid value");
@@ -392,7 +392,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		float leveling;
+		Real leveling;
 		std::string str = Calc(value);
 		if (!IsNumeric(str, leveling))
 			return ScriptError("Invalid value");
@@ -403,7 +403,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		float leveling;
+		Real leveling;
 		std::string str = Calc(value);
 		if (!IsNumeric(str, leveling))
 			return ScriptError("Invalid value");
@@ -414,7 +414,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		float notify;
+		Real notify;
 		std::string str = Calc(value);
 		if (!IsNumeric(str, notify))
 			return ScriptError("Invalid value");
@@ -425,7 +425,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		float delay;
+		Real delay;
 		std::string str = Calc(value);
 		if (!IsNumeric(str, delay))
 			return ScriptError("Invalid value");
@@ -436,7 +436,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		float delay;
+		Real delay;
 		std::string str = Calc(value);
 		if (!IsNumeric(str, delay))
 			return ScriptError("Invalid value");

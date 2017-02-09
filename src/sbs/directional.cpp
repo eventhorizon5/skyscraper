@@ -47,7 +47,7 @@ public:
 	virtual void Notify();
 };
 
-DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th) : Object(parent)
+DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th) : Object(parent)
 {
 	//create a directional indicator
 
@@ -137,17 +137,17 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 
 	if (Direction == "front" || Direction == "back")
 	{
-		float x1 = -BackWidth / 4;
-		float x2 = BackWidth / 4;
-		float offset;
+		Real x1 = -BackWidth / 4;
+		Real x2 = BackWidth / 4;
+		Real offset;
 		if (Direction == "front")
 		{
-			offset = -0.01f;
+			offset = -0.01;
 			sbs->DrawWalls(true, false, false, false, false, false);
 		}
 		else
 		{
-			offset = 0.01f;
+			offset = 0.01;
 			sbs->DrawWalls(false, true, false, false, false, false);
 		}
 		if (Single == false)
@@ -156,17 +156,17 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 			{
 				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true || in_elevator == true)
 				{
-					float height = (BackHeight / 7) * 2;
-					float altitude = (BackHeight / 7) * 4;
-					float altitude2 = BackHeight / 7;
+					Real height = (BackHeight / 7) * 2;
+					Real altitude = (BackHeight / 7) * 4;
+					Real altitude2 = BackHeight / 7;
 
 					sbs->AddWallMain(this, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 					sbs->AddWallMain(this, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit, 0, x1, offset, x2, offset, height, height, altitude2, altitude2, 1, 1, false);
 				}
 				else
 				{
-					float height = (BackHeight / 7) * 2;
-					float altitude = (BackHeight / 7) * 2.5f;
+					Real height = (BackHeight / 7) * 2;
+					Real altitude = (BackHeight / 7) * 2.5;
 					if (floor < topfloor)
 						sbs->AddWallMain(this, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
@@ -180,18 +180,18 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 				{
 					x1 = (-BackWidth / 2) + ((BackWidth / 7) * 4);
 					x2 = (-BackWidth / 2) + ((BackWidth / 7) * 6);
-					float x3 = (-BackWidth / 2) + (BackWidth / 7);
-					float x4 = (-BackWidth / 2) + ((BackWidth / 7) * 3);
-					float height = (BackHeight / 6) * 4;
-					float altitude = BackHeight / 6;
+					Real x3 = (-BackWidth / 2) + (BackWidth / 7);
+					Real x4 = (-BackWidth / 2) + ((BackWidth / 7) * 3);
+					Real height = (BackHeight / 6) * 4;
+					Real altitude = BackHeight / 6;
 
 					sbs->AddWallMain(this, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 					sbs->AddWallMain(this, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit, 0, x3, offset, x4, offset, height, height, altitude, altitude, 1, 1, false);
 				}
 				else
 				{
-					float height = (BackHeight / 7) * 2;
-					float altitude = (BackHeight / 7) * 2.5f;
+					Real height = (BackHeight / 7) * 2;
+					Real altitude = (BackHeight / 7) * 2.5;
 					if (floor < topfloor)
 						sbs->AddWallMain(this, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
@@ -201,26 +201,26 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 		}
 		else
 		{
-			float height = (BackHeight / 6) * 4;
-			float altitude = BackHeight / 6;
+			Real height = (BackHeight / 6) * 4;
+			Real altitude = BackHeight / 6;
 			sbs->AddWallMain(this, DirectionalMesh, "Directional", UpTextureUnlit, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 		}
 		sbs->ResetWalls();
 	}
 	else
 	{
-		float z1 = -BackWidth / 4;
-		float z2 = BackWidth / 4;
-		float offset;
+		Real z1 = -BackWidth / 4;
+		Real z2 = BackWidth / 4;
+		Real offset;
 		if (Direction == "left")
 		{
-			offset = -0.01f;
+			offset = -0.01;
 			sbs->DrawWalls(true, false, false, false, false, false);
 		}
 		else
 		{
 			//right
-			offset = 0.01f;
+			offset = 0.01;
 			sbs->DrawWalls(false, true, false, false, false, false);
 		}
 		if (Single == false)
@@ -229,16 +229,16 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 			{
 				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true || in_elevator == true)
 				{
-					float height = (BackHeight / 7) * 2;
-					float altitude = (BackHeight / 7) * 4;
-					float altitude2 = BackHeight / 7;
+					Real height = (BackHeight / 7) * 2;
+					Real altitude = (BackHeight / 7) * 4;
+					Real altitude2 = BackHeight / 7;
 					sbs->AddWallMain(this, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 					sbs->AddWallMain(this, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit, 0, offset, z1, offset, z2, height, height, altitude2, altitude2, 1, 1, false);
 				}
 				else
 				{
-					float height = (BackHeight / 7) * 2;
-					float altitude = (BackHeight / 7) * 2.5f;
+					Real height = (BackHeight / 7) * 2;
+					Real altitude = (BackHeight / 7) * 2.5;
 					if (floor < topfloor)
 						sbs->AddWallMain(this, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
@@ -252,17 +252,17 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 				{
 					z1 = (-BackWidth / 2) + ((BackWidth / 7) * 4);
 					z2 = (-BackWidth / 2) + ((BackWidth / 7) * 6);
-					float z3 = (-BackWidth / 2) + (BackWidth / 7);
-					float z4 = (-BackWidth / 2) + ((BackWidth / 7) * 3);
-					float height = (BackHeight / 6) * 4;
-					float altitude = BackHeight / 6;
+					Real z3 = (-BackWidth / 2) + (BackWidth / 7);
+					Real z4 = (-BackWidth / 2) + ((BackWidth / 7) * 3);
+					Real height = (BackHeight / 6) * 4;
+					Real altitude = BackHeight / 6;
 					sbs->AddWallMain(this, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 					sbs->AddWallMain(this, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit, 0, offset, z3, offset, z4, height, height, altitude, altitude, 1, 1, false);
 				}
 				else
 				{
-					float height = (BackHeight / 7) * 2;
-					float altitude = (BackHeight / 7) * 2.5f;
+					Real height = (BackHeight / 7) * 2;
+					Real altitude = (BackHeight / 7) * 2.5;
 					if (floor < topfloor)
 						sbs->AddWallMain(this, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
@@ -272,8 +272,8 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 		}
 		else
 		{
-			float height = (BackHeight / 6) * 4;
-			float altitude = BackHeight / 6;
+			Real height = (BackHeight / 6) * 4;
+			Real altitude = BackHeight / 6;
 			sbs->AddWallMain(this, DirectionalMesh, "Directional", UpTextureUnlit, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 		}
 		sbs->ResetWalls();

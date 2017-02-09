@@ -95,7 +95,7 @@ class SBSIMPEXP ShaftManager : public Object
 public:
 	ShaftManager(Object* parent);
 	~ShaftManager();
-	Shaft* Create(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Shaft* Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor);
 	int GetCount();
 	Shaft* Get(int number);
 	Shaft* GetIndex(int index);
@@ -122,7 +122,7 @@ class SBSIMPEXP StairsManager : public Object
 public:
 	StairsManager(Object* parent);
 	~StairsManager();
-	Stairs* Create(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Stairs* Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor);
 	int GetCount();
 	Stairs* Get(int number);
 	Stairs* GetIndex(int index);
@@ -149,7 +149,7 @@ class SBSIMPEXP DoorManager : public Object
 public:
 	DoorManager(Object* parent);
 	~DoorManager();
-	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	void RemoveDoor(Door *door);
 	int GetCount();
 	Door* GetIndex(int index);
@@ -165,7 +165,7 @@ class SBSIMPEXP RevolvingDoorManager : public Object
 public:
 	RevolvingDoorManager(Object* parent);
 	~RevolvingDoorManager();
-	RevolvingDoor* AddDoor(const std::string &soundfile, const std::string &texture, float thickness, bool clockwise, int segments, float speed, float rotation, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	RevolvingDoor* AddDoor(const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	void RemoveDoor(RevolvingDoor *door);
 	int GetCount();
 	RevolvingDoor* GetIndex(int index);

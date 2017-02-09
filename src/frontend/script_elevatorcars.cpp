@@ -1124,7 +1124,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (params < 7 || params > 11)
 			return ScriptError("Incorrect number of parameters");
 
-		float hoffset = 0, voffset = 0;
+		Real hoffset = 0, voffset = 0;
 		int compat = 0;
 
 		//check numeric values
@@ -1237,7 +1237,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (params < 7 || params > 11)
 			return ScriptError("Incorrect number of parameters");
 
-		float hoffset = 0, voffset = 0;
+		Real hoffset = 0, voffset = 0;
 		int compat = 0;
 
 		//check numeric values
@@ -1349,7 +1349,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (params != 9 && params != 11)
 			return ScriptError("Incorrect number of parameters");
 
-		float hoffset = 0, voffset = 0;
+		Real hoffset = 0, voffset = 0;
 
 		//check numeric values
 		for (int i = 1; i <= 8; i++)

@@ -58,7 +58,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -120,7 +120,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	DrawSidePOld = false;
 	DrawTopOld = false;
 	DrawBottomOld = false;
-	delta = 0.01f;
+	delta = 0.01;
 	wall1a = false;
 	wall1b = false;
 	wall2a = false;
@@ -191,7 +191,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Move(position);
 
 	//rotate engine
-	Rotate(0.0f, rotation, 0.0f);
+	Rotate(0.0, rotation, 0.0);
 
 	//create main engine area trigger
 	SetBounds(area_min, area_max);
@@ -490,12 +490,12 @@ void SBS::Loop()
 	else
 		timing = GetElapsedTime();
 
-	float elapsed = float(timing) / 1000.0f;
+	Real elapsed = Real(timing) / 1000.0;
 
 	//calculate start and running time
 	if (start_time == 0)
-		start_time = GetRunTime() / 1000.0f;
-	running_time = (GetRunTime() / 1000.0f) - start_time;
+		start_time = GetRunTime() / 1000.0;
+	running_time = (GetRunTime() / 1000.0) - start_time;
 
 	//move camera or update character movement
 	camera->MoveCharacter();
@@ -521,8 +521,8 @@ void SBS::Loop()
 	elapsed += remaining_delta;
 
 	//limit the elapsed value to prevent major slowdowns during debugging
-	if (elapsed > .5f)
-		elapsed = .5f;
+	if (elapsed > .5)
+		elapsed = .5;
 
 	ProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
@@ -562,13 +562,13 @@ void SBS::CalculateFrameRate()
 	fps_frame_count++;
 	if (fps_tottime > 500)
 	{
-		FPS = (float (fps_frame_count) * 1000.0f) / float (fps_tottime);
+		FPS = (Real (fps_frame_count) * 1000.) / Real (fps_tottime);
 		fps_frame_count = 0;
 		fps_tottime = 0;
 	}
 }
 
-bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
 {
 	Wall *object = new Wall(mesh, parent, true);
 	bool result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
@@ -576,7 +576,7 @@ bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name,
 	return result;
 }
 
-bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
 {
 	//Adds a wall with the specified dimensions
 
@@ -584,7 +584,7 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 	if (x1 == x2 && z1 == z2)
 		return ReportError("Invalid coordinates for wall '" + name + "'");
 
-	if (height_in1 == 0.0f && height_in2 == 0.0f)
+	if (height_in1 == 0.0f && height_in2 == 0.0)
 		return ReportError("No wall height specified for wall '" + name + "'");
 
 	//determine axis of wall
@@ -641,7 +641,7 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 		if (wall_orientation == 1)
 		{
 			//center
-			float half = thickness / 2;
+			Real half = thickness / 2;
 			v1.z -= half;
 			v2.z -= half;
 			v3.z -= half;
@@ -674,7 +674,7 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 		if (wall_orientation == 1)
 		{
 			//center
-			float half = thickness / 2;
+			Real half = thickness / 2;
 			v1.x -= half;
 			v2.x -= half;
 			v3.x -= half;
@@ -696,7 +696,7 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 
 	//create polygons and set names
 	std::string NewName, texture2 = texture;
-	float tw2 = tw, th2 = th;
+	Real tw2 = tw, th2 = th;
 
 	bool FlipTexture = texturemanager->FlipTexture;
 	bool TextureOverride = texturemanager->TextureOverride;
@@ -735,7 +735,7 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 		wallobject->AddQuad(NewName, texture2, v6, v5, v8, v7, tw2, th2, autosize); //back wall
 	}
 
-	if (thickness != 0.0f)
+	if (thickness != 0.0)
 	{
 		if (DrawSideN == true)
 		{
@@ -807,7 +807,7 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 	return true;
 }
 
-bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
+bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
 {
 	Wall *object = new Wall(mesh, parent, true);
 	bool result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, autosize, legacy_behavior);
@@ -815,7 +815,7 @@ bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name
 	return result;
 }
 
-bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
+bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
@@ -924,7 +924,7 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 	if (floor_orientation == 1)
 	{
 		//center
-		float half = thickness / 2;
+		Real half = thickness / 2;
 		v1.y -= half;
 		v2.y -= half;
 		v3.y -= half;
@@ -945,7 +945,7 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 
 	//create polygons and set names
 	std::string NewName, texture2 = texture;
-	float tw2 = tw, th2 = th;
+	Real tw2 = tw, th2 = th;
 
 	bool FlipTexture = texturemanager->FlipTexture;
 	bool TextureOverride = texturemanager->TextureOverride;
@@ -988,7 +988,7 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 		wallobject->AddQuad(NewName, texture2, v8, v7, v6, v5, tw2, th2, autosize); //top wall
 	}
 
-	if (thickness != 0.0f)
+	if (thickness != 0.0)
 	{
 		if (DrawSideN == true)
 		{
@@ -1056,7 +1056,7 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 	return true;
 }
 
-Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls
 
@@ -1263,19 +1263,19 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 	return wall;
 }
 
-Wall* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+Wall* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls from a central point
 
-	float x1 = CenterX - (WidthX / 2);
-	float x2 = CenterX + (WidthX / 2);
-	float z1 = CenterZ - (LengthZ / 2);
-	float z2 = CenterZ + (LengthZ / 2);
+	Real x1 = CenterX - (WidthX / 2);
+	Real x2 = CenterX + (WidthX / 2);
+	Real z1 = CenterZ - (LengthZ / 2);
+	Real z2 = CenterZ + (LengthZ / 2);
 
 	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-void SBS::AddPolygon(Wall* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+void SBS::AddPolygon(Wall* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, Real tw, Real th)
 {
 	//creates a polygon in the specified wall object
 
@@ -1327,7 +1327,7 @@ void SBS::AddPolygon(Wall* wallobject, const std::string &texture, std::vector<O
 	}
 }
 
-Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, Real tw, Real th)
 {
 	//Adds a wall from a specified array of 3D vectors
 
@@ -1343,7 +1343,7 @@ Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::s
 	return wall;
 }
 
-Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
+Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, Real altitude, Real tw, Real th)
 {
 	//Same as AddCustomWall, with only one altitude value value
 	std::vector<Ogre::Vector3> varray3;
@@ -1359,7 +1359,7 @@ Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::
 	return AddCustomWall(mesh, name, texture, varray3, tw, th);
 }
 
-Wall* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
+Wall* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th)
 {
 	//Adds a triangular wall with the specified dimensions
 	std::vector<Ogre::Vector3> varray;
@@ -1431,7 +1431,7 @@ void SBS::CreateSky()
 	SkyBox->no_collider = true;
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
-	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0f;
+	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
 	texturemanager->ResetTextureMapping(true);
 	Wall *wall = new Wall(SkyBox, SkyBox, true);
 
@@ -1482,7 +1482,7 @@ void SBS::CreateSky()
 	delete wall;
 }
 
-int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
+int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 {
 	//Returns floor number located at a specified altitude
 
@@ -1496,8 +1496,8 @@ int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 	//if checklastfloor is specified, compare altitude with lastfloor
 	if (checklastfloor == true && GetFloor(lastfloor))
 	{
-		float lastfloor_altitude = GetFloor(lastfloor)->Altitude;
-		float upperfloor_altitude;
+		Real lastfloor_altitude = GetFloor(lastfloor)->Altitude;
+		Real upperfloor_altitude;
 		if (lastfloor < Floors - 1)
 			upperfloor_altitude = GetFloor(lastfloor + 1)->Altitude;
 		else
@@ -1543,7 +1543,7 @@ int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 	return 0;
 }
 
-float SBS::GetDistance(float x1, float x2, float z1, float z2)
+Real SBS::GetDistance(Real x1, Real x2, Real z1, Real z2)
 {
 	//returns the distance between 2 2D vectors
 
@@ -1556,14 +1556,14 @@ float SBS::GetDistance(float x1, float x2, float z1, float z2)
 	return 0;
 }
 
-Shaft* SBS::CreateShaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
+Shaft* SBS::CreateShaft(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor)
 {
 	//create a shaft object
 
 	return shaft_manager->Create(number, CenterX, CenterZ, startfloor, endfloor);
 }
 
-Stairs* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
+Stairs* SBS::CreateStairwell(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor)
 {
 	//create a stairwell object
 
@@ -1742,19 +1742,19 @@ int SBS::GetDrawWallsCount()
 	return sides;
 }
 
-float SBS::MetersToFeet(float meters)
+Real SBS::MetersToFeet(Real meters)
 {
 	//converts meters to feet
-	return meters * 3.2808399f;
+	return meters * 3.2808399;
 }
 
-float SBS::FeetToMeters(float feet)
+Real SBS::FeetToMeters(Real feet)
 {
 	//converts feet to meters
-	return feet / 3.2808399f;
+	return feet / 3.2808399;
 }
 
-Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, float tw, float th)
+Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th)
 {
 	//add joining doorway polygons if needed
 
@@ -1809,7 +1809,7 @@ void SBS::ResetDoorwayWalls()
 	wall_extents_z = 0;
 }
 
-Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th)
 {
 	//Adds a wall with the specified dimensions, to the specified mesh object
 
@@ -1822,7 +1822,7 @@ Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string 
 	return wall;
 }
 
-Wall* SBS::AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+Wall* SBS::AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset, to the specified mesh object
 
@@ -1835,14 +1835,14 @@ Wall* SBS::AddFloor(MeshObject* mesh, const std::string &name, const std::string
 	return wall;
 }
 
-Wall* SBS::AddGround(const std::string &name, const std::string &texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z)
+Wall* SBS::AddGround(const std::string &name, const std::string &texture, Real x1, Real z1, Real x2, Real z2, Real altitude, int tile_x, int tile_z)
 {
 	//Adds ground based on a tiled-floor layout, with the specified dimensions and vertical offset
 	//this does not support thickness
 
 	Ogre::Vector3 v1, v2, v3, v4;
 
-	float minx, minz, maxx, maxz;
+	Real minx, minz, maxx, maxz;
 
 	//get min and max values
 	if (x1 < x2)
@@ -1871,21 +1871,21 @@ Wall* SBS::AddGround(const std::string &name, const std::string &texture, float 
 	Report("Creating ground...");
 
 	//create polygon tiles
-	for (float i = minx; i < maxx; i += tile_x)
+	for (Real i = minx; i < maxx; i += tile_x)
 	{
-		float sizex, sizez;
+		Real sizex, sizez;
 
 		if (i + tile_x > maxx)
 			sizex = maxx - i;
 		else
-			sizex = (float)tile_x;
+			sizex = (Real)tile_x;
 
-		for (float j = minz; j < maxz; j += tile_z)
+		for (Real j = minz; j < maxz; j += tile_z)
 		{
 			if (j + tile_z > maxz)
 				sizez = maxz - i;
 			else
-				sizez = (float)tile_z;
+				sizez = (Real)tile_z;
 
 			DrawWalls(true, true, false, false, false, false);
 			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, false, 1, 1, false);
@@ -2175,7 +2175,7 @@ int SBS::GetMeshCount()
 	return (int)meshes.size();
 }
 
-Sound* SBS::AddSound(const std::string &name, const std::string &filename, const Ogre::Vector3 &position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, const Ogre::Vector3 &direction)
+Sound* SBS::AddSound(const std::string &name, const std::string &filename, const Ogre::Vector3 &position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, const Ogre::Vector3 &direction)
 {
 	//create a looping sound object
 	Sound *sound = new Sound(this, name, false);
@@ -2234,7 +2234,7 @@ void SBS::DecrementSoundCount()
 	soundcount--;
 }
 
-float SBS::ToLocal(float remote_value)
+Real SBS::ToLocal(Real remote_value)
 {
 	//convert remote (OGRE) vertex positions to local (SBS) positions
 
@@ -2274,7 +2274,7 @@ Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value, bool rescale, bool
 		return newvalue;
 }
 
-float SBS::ToRemote(float local_value)
+Real SBS::ToRemote(Real local_value)
 {
 	//convert local (SBS) vertex positions to remote (OGRE) positions
 
@@ -2604,7 +2604,7 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool
 	return true;
 }
 
-bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool relative, bool X, bool Y, bool Z)
+bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, Real speed, bool relative, bool X, bool Y, bool Z)
 {
 	//rotate an object by reference
 	//if relative is false, the X, Y and Z values determine which position axes should be set
@@ -2875,7 +2875,7 @@ void SBS::Prepare(bool report)
 		Report("Finished prepare");
 }
 
-Light* SBS::AddLight(const std::string &name, int type, const Ogre::Vector3 &position, const Ogre::Vector3 &direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* SBS::AddLight(const std::string &name, int type, const Ogre::Vector3 &position, const Ogre::Vector3 &direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
 {
 	//add a global light
 
@@ -2912,7 +2912,7 @@ MeshObject* SBS::FindMeshObject(const std::string &name)
 	return 0;
 }
 
-Model* SBS::AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* SBS::AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -2958,7 +2958,7 @@ bool SBS::GetConfigBool(const std::string &key, bool default_value)
 	return ToBool(result);
 }
 
-float SBS::GetConfigFloat(const std::string &key, float default_value)
+Real SBS::GetConfigFloat(const std::string &key, Real default_value)
 {
 	std::string result = configfile->getSetting(key, "", ToString(default_value));
 	return ToFloat(result);
@@ -3087,7 +3087,7 @@ void SBS::CacheFilename(const std::string &filename, const std::string &result)
 	verify_results.push_back(verify);
 }
 
-void SBS::SetLighting(float red, float green, float blue)
+void SBS::SetLighting(Real red, Real green, Real blue)
 {
 	OldAmbientR = AmbientR;
 	OldAmbientG = AmbientG;
@@ -3104,7 +3104,7 @@ void SBS::ResetLighting()
 	AmbientB = OldAmbientB;
 }
 
-Control* SBS::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* SBS::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
@@ -3561,7 +3561,7 @@ void SBS::DecrementMovingWalkwayCount()
 	MovingWalkwayCount--;
 }
 
-bool SBS::HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position)
+bool SBS::HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
@@ -3598,7 +3598,7 @@ bool SBS::HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, W
 
 	//get wall object, if any
 	Ogre::Vector3 isect;
-	float distance = 2000000000.;
+	Real distance = 2000000000.;
 	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
 	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 

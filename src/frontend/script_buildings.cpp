@@ -126,7 +126,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		}
 
 		Ogre::Vector3 position (Ogre::Vector3::ZERO);
-		float rotation = 0.0f;
+		Real rotation = 0.0;
 		Ogre::Vector3 min (Ogre::Vector3::ZERO);
 		Ogre::Vector3 max (Ogre::Vector3::ZERO);
 

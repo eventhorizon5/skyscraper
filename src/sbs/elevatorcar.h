@@ -39,7 +39,7 @@ public:
 	std::string Name; //car name
 	std::vector<int> ServicedFloors; //list of floors this car services
 	int NumDoors; //number of elevator doors
-	float Height; //car height
+	Real Height; //car height
 	bool HeightSet;
 	bool Fan; //fan enabled status
 	Ogre::Vector3 MusicPosition; //music emitter position, relative of elevator center
@@ -71,7 +71,7 @@ public:
 	bool MusicOn; //music enabled status
 	bool MusicOnMove; //true if music should only play during move
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
-	float CameraOffset; //camera vertical offset
+	Real CameraOffset; //camera vertical offset
 	int StartingFloor; //car starting floor
 	bool Created; //has car been created with the CreateCar function?
 	int Offset; //floor number offset from the primary elevator
@@ -83,10 +83,10 @@ public:
 	Elevator* GetElevator();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	Wall* AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
-	Wall* AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
-	FloorIndicator* AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
-	ButtonPanel* CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
+	Wall* AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
+	Wall* AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
+	FloorIndicator* AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
+	ButtonPanel* CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real spacingX, Real spacingY, Real tw, Real th);
 	void DumpServicedFloors();
 	bool AddServicedFloor(int number);
 	void RemoveServicedFloor(int number);
@@ -104,8 +104,8 @@ public:
 	void UpdateFloorIndicators();
 	int GetTopFloor();
 	int GetBottomFloor();
-	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	DirectionalIndicator* AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
+	DirectionalIndicator* AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 	void SetDirectionalIndicators(int floor, bool UpLight, bool DownLight);
 	void UpdateDirectionalIndicators();
 	void EnableDirectionalIndicators(bool value);
@@ -123,29 +123,29 @@ public:
 	bool AreShaftDoorsClosed(bool skip_current_floor = false);
 	void ResetDoors(int number = 0, bool sensor = false);
 	bool DoorsStopped(int number = 0);
-	ElevatorDoor::DoorWrapper* AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	bool AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
-	ElevatorDoor::DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float tw, float th);
-	ElevatorDoor::DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
+	ElevatorDoor::DoorWrapper* AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, bool direction, Real tw, Real th);
+	bool AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
+	ElevatorDoor::DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th);
+	ElevatorDoor::DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
 	void Chime(int number, int floor, bool direction);
 	void EnableDoors(bool value);
-	bool AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
+	bool AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
 	int AreDoorsMoving(int number = 0, bool car_doors = true, bool shaft_doors = true);
 	bool AreDoorsOpening(int number = 0, bool car_doors = true, bool shaft_doors = true);
 	bool AreDoorsClosing(int number = 0, bool car_doors = true, bool shaft_doors = true);
-	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
+	void SetShaftDoors(int number, Real thickness, Real CenterX, Real CenterZ);
 	bool DoorExists(int number);
 	bool ShaftDoorsExist(int number, int floor);
-	Sound* AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop = true, float volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float doppler_level = 0.0, float cone_inside_angle = 360, float cone_outside_angle = 360, float cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
-	ElevatorDoor::DoorWrapper* AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	ElevatorDoor::DoorWrapper* AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	void AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	Sound* AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
+	ElevatorDoor::DoorWrapper* AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
+	ElevatorDoor::DoorWrapper* AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
+	void AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	ElevatorDoor::DoorWrapper* FinishDoors(int number, bool DoorWalls = true, bool TrackWalls = true);
 	ElevatorDoor::DoorWrapper* FinishShaftDoor(int number, int floor, bool DoorWalls = true, bool TrackWalls = true);
 	bool FinishShaftDoors(int number, bool DoorWalls = true, bool TrackWalls = true);
 	ButtonPanel* GetPanel(int index);
 	Control* GetFloorButton(int floor);
-	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	Door* GetStdDoor(int number);
 	void RemovePanel(ButtonPanel* panel);
 	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
@@ -159,11 +159,11 @@ public:
 	void RemoveTrigger(Trigger *trigger);
 	bool IsNudgeModeActive(int number = 0);
 	void EnableNudgeMode(bool value, int number = 0);
-	Light* AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
-	Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
+	Light* AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic);
+	Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
 	void AddDisplayFloor(int floor);
-	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
+	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	std::vector<Sound*> GetSound(const std::string &name);
@@ -183,7 +183,7 @@ public:
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
 	bool PlayMessageSound(bool type);
-	float SetHeight();
+	Real SetHeight();
 	bool IsInCar(const Ogre::Vector3 &position, bool camera = false);
 	bool Check(Ogre::Vector3 &position);
 	void StopCarSound();
@@ -192,8 +192,8 @@ public:
 	bool OnBottomFloor();
 	bool InCar();
 	int GetNearestServicedFloor();
-	float GetDestinationAltitude(int floor);
-	float GetDestinationOffset(int floor);
+	Real GetDestinationAltitude(int floor);
+	Real GetDestinationOffset(int floor);
 	void SetFloor(int floor, bool move_parent = true);
 	bool IsLeveled();
 	bool IsOnFloor(int floor, bool leveled = true);

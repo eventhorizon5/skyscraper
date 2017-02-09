@@ -236,7 +236,7 @@ void SceneNode::SetOrientation(const Ogre::Quaternion &q, bool relative)
 	Update();
 }
 
-void SceneNode::Move(const Ogre::Vector3 &vector, float speed)
+void SceneNode::Move(const Ogre::Vector3 &vector, Real speed)
 {
 	//move this scene node
 
@@ -283,16 +283,16 @@ void SceneNode::DetachObject(Ogre::MovableObject *object)
 	}
 }
 
-float SceneNode::GetScale()
+Real SceneNode::GetScale()
 {
 	//get scaling factor
 
 	if (node)
 		return node->getScale().x;
-	return 0.0f;
+	return 0.0;
 }
 
-void SceneNode::SetScale(float scale)
+void SceneNode::SetScale(Real scale)
 {
 	//set scaling factor
 

@@ -41,7 +41,7 @@
 
 namespace SBS {
 
-DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &name, float max_render_distance, bool dynamic_buffers) : ObjectBase(parent)
+DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &name, Real max_render_distance, bool dynamic_buffers) : ObjectBase(parent)
 {
 	//creates a new Dynamic Mesh object, which manages multiple sets of geometry data for efficiency.
 	//A MeshObject is a client of this object, which submits it's geometry data to be handled automatically
@@ -570,7 +570,7 @@ Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
 	return Ogre::AxisAlignedBox::BOX_NULL;
 }
 
-DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename, const std::string &path)
+DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
 	sbs = Parent->GetRoot();

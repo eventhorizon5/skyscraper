@@ -137,7 +137,7 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 	}
 }
 
-void Polygon::Move(const Ogre::Vector3 &position, float speed)
+void Polygon::Move(const Ogre::Vector3 &position, Real speed)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();
 

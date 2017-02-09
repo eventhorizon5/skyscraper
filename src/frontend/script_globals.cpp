@@ -106,7 +106,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 14) == "cameraposition")
 	{
-		float x, z;
+		Real x, z;
 		std::string str1 = value.substr(0, value.find(",", 0));
 		std::string str2 = value.substr(value.find(",", 0) + 1);
 		TrimString(str1);
@@ -122,7 +122,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	{
 		int loc1 = value.find(",", 0);
 		int loc2 = value.find(",", loc1 + 1);
-		float x, y, z;
+		Real x, y, z;
 		std::string str1 = value.substr(0, loc1);
 		std::string str2 = value.substr(loc1 + 1, loc2 - loc1 - 1);
 		std::string str3 = value.substr(loc2 + 1);
@@ -139,7 +139,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	{
 		int loc1 = value.find(",", 0);
 		int loc2 = value.find(",", loc1 + 1);
-		float x, y, z;
+		Real x, y, z;
 		std::string str1 = value.substr(0, loc1);
 		std::string str2 = value.substr(loc1 + 1, loc2 - loc1 - 1);
 		std::string str3 = value.substr(loc2 + 1);
@@ -160,7 +160,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 11) == "coordinates")
 	{
 		int loc = value.find(",", 0);
-		float latitude, longitude;
+		Real latitude, longitude;
 		std::string str1 = value.substr(0, loc);
 		std::string str2 = value.substr(loc + 1);
 		TrimString(str1);
@@ -207,11 +207,11 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 8) == "rotation")
 	{
-		float rotation;
+		Real rotation;
 		if (!IsNumeric(value, rotation))
 			return ScriptError("Invalid rotation");
 
-		Simcore->Rotate(0.0f, rotation, 0.0f);
+		Simcore->Rotate(0.0, rotation, 0.0);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "bounds")

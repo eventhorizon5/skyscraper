@@ -395,6 +395,7 @@ std::string TruncateNumber(double value, int decimals)
 std::string TruncateNumber(const std::string &value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
+
 	std::string number = value;
 
 	if (decimals < 1)
@@ -419,6 +420,15 @@ void Swap(float &first, float &second)
 	//swap values
 
 	float temp = first;
+	first = second;
+	second = temp;
+}
+
+void Swap(double &first, double &second)
+{
+	//swap values
+
+	double temp = first;
 	first = second;
 	second = temp;
 }

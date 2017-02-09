@@ -124,22 +124,22 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!mesh)
 			return ScriptError("Invalid object");
 
-		float voffset1 = ToFloat(tempdata[4]);
-		float voffset2 = ToFloat(tempdata[7]);
-		float voffset3 = ToFloat(tempdata[10]);
+		Real voffset1 = ToFloat(tempdata[4]);
+		Real voffset2 = ToFloat(tempdata[7]);
+		Real voffset3 = ToFloat(tempdata[10]);
 
 		if (config->SectionNum == 2)
 		{
 			if (meshname == "floor")
 			{
-				float base = Simcore->GetFloor(config->Current)->GetBase(true);
+				Real base = Simcore->GetFloor(config->Current)->GetBase(true);
 				voffset1 += base;
 				voffset2 += base;
 				voffset3 += base;
 			}
 			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
 			{
-				float base = Simcore->GetFloor(config->Current)->GetBase();
+				Real base = Simcore->GetFloor(config->Current)->GetBase();
 				voffset1 += base;
 				voffset2 += base;
 				voffset3 += base;
@@ -375,7 +375,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		float voffset = ToFloat(tempdata[8]);
+		Real voffset = ToFloat(tempdata[8]);
 
 		if (config->SectionNum == 2)
 		{
@@ -417,7 +417,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		float voffset = ToFloat(tempdata[8]);
+		Real voffset = ToFloat(tempdata[8]);
 
 		if (config->SectionNum == 2)
 		{
@@ -470,7 +470,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		float voffset = 0;
+		Real voffset = 0;
 
 		if (config->SectionNum == 2)
 		{
@@ -521,7 +521,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		float altitude = ToFloat(tempdata[params - 3]);
+		Real altitude = ToFloat(tempdata[params - 3]);
 
 		if (config->SectionNum == 2)
 		{
@@ -569,7 +569,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		float voffset = 0.0f;
+		Real voffset = 0.0;
 
 		if (config->SectionNum == 2)
 		{
@@ -1261,7 +1261,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!IsNumeric(tempdata[2]))
 			return ScriptError("Invalid value: " + tempdata[2]);
 
-		float offset = 0;
+		Real offset = 0;
 
 		std::string meshname = SetCaseCopy(tempdata[0], false);
 
@@ -1277,7 +1277,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (meshname == "floor" && config->SectionNum == 2)
 			offset = mesh->GetPosition().y;
 
-		float alt = ToFloat(tempdata[2]);
+		Real alt = ToFloat(tempdata[2]);
 
 		//GetWallExtents command requires relative position, so subtract altitude from value
 		alt -= offset;

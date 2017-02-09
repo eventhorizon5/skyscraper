@@ -41,18 +41,18 @@ public:
 	int QueuePositionDirection; //queue processing direction
 	int LastQueueDirection; //last queue processing direction
 	int LastQueueFloor[2]; //last route added to either queue; element 0 is the floor, and element 1 is the direction
-	float ElevatorSpeed; //maximum elevator speed
+	Real ElevatorSpeed; //maximum elevator speed
 	bool MoveElevator; //Tells elevator to start going to specified floor
 	int GotoFloor; //floor to move elevator to
 	int GotoFloorCar; //car that requested movement
-	float Acceleration; //percentage of speed increase
-	float Deceleration; //deceleration value; may be removed
-	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
-	float DecelJerk;
-	float TempDeceleration; //temporary deceleration value, used in overrun correction
-	float ErrorOffset;
-	float DistanceToTravel; //distance in Y to travel
-	float ElevatorRate;
+	Real Acceleration; //percentage of speed increase
+	Real Deceleration; //deceleration value; may be removed
+	Real AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
+	Real DecelJerk;
+	Real TempDeceleration; //temporary deceleration value, used in overrun correction
+	Real ErrorOffset;
+	Real DistanceToTravel; //distance in Y to travel
+	Real ElevatorRate;
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
@@ -86,20 +86,20 @@ public:
 	Ogre::Vector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
 	int ParkingFloor; //floor to automatically park the elevator on when idle
-	float ParkingDelay; //time to wait in idle mode before parking
+	Real ParkingDelay; //time to wait in idle mode before parking
 	bool Leveling; //is elevator in leveling mode?
-	float LevelingSpeed; //leveling speed
-	float LevelingOffset; //leveling offset factor
-	float LevelingOpen; //leveling door open offset
+	Real LevelingSpeed; //leveling speed
+	Real LevelingOffset; //leveling offset factor
+	Real LevelingOpen; //leveling door open offset
 	bool WaitForDoors; //set to true for the MoveElevatorToFloor() function to wait for the doors to close before running
 	int ActiveDirection; //variant of Direction that doesn't change during slowdown
 	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
 	bool Notified; //true if arrival notification has been performed
 	bool Parking; //is elevator parking?
-	float DepartureDelay; //delay in seconds between door closure and elevator departure
-	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
+	Real DepartureDelay; //delay in seconds between door closure and elevator departure
+	Real ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
-	float InspectionSpeed; //inspection service speed multiplier
+	Real InspectionSpeed; //inspection service speed multiplier
 	bool LimitQueue; //true to only allow floor selections in the same queue direction
 	bool ReOpen; //true if elevator should reopen doors if the same floor is selected
 	int LastChimeDirection; //direction of last arrival chime
@@ -111,7 +111,7 @@ public:
 	bool GoActive; //true if go function is in use (mouse hold is active)
 	bool FloorHold; //true if floor buttons need to be held for the elevator to proceed to the floor (modern manual mode)
 	bool GoPending; //true if Go() function is active
-	float EmergencyStopSpeed; //emergency stop deceleration multiplier
+	Real EmergencyStopSpeed; //emergency stop deceleration multiplier
 	bool AutoAdjustSound; //auto-adjust stopping sounds
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
 	bool ChimeOnArrival; //set to true for elevator to always chime on arrival, instead of just when responding to a hall call
@@ -120,7 +120,7 @@ public:
 	//functions
 	Elevator(Object *parent, int number);
 	~Elevator();
-	bool CreateElevator(bool relative, float x, float z, int floor);
+	bool CreateElevator(bool relative, Real x, Real z, int floor);
 	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);
 	bool RouteExists(bool direction, int floor);
@@ -131,14 +131,14 @@ public:
 	void DumpQueues();
 	void Enabled(bool value);
 	ElevatorCar* IsInElevator(const Ogre::Vector3 &position, bool camera = false);
-	float GetElevatorStart();
-	float GetDestination();
-	float GetStoppingDistance();
+	Real GetElevatorStart();
+	Real GetDestination();
+	Real GetStoppingDistance();
 	bool GetBrakeStatus();
 	int GetEmergencyStopStatus();
 	void UpdateFloorIndicators();
-	float GetJerkRate();
-	float GetJerkPosition();
+	Real GetJerkRate();
+	Real GetJerkPosition();
 	void SetFloorSkipText(const std::string &id);
 	std::string GetFloorSkipText();
 	bool InServiceMode();
@@ -167,14 +167,14 @@ public:
 	void ResetQueue(bool up, bool down, bool stop_if_empty = true);
 	void DeleteActiveRoute();
 	bool IsQueueActive();
-	bool BeyondDecelMarker(int direction, float destination);
+	bool BeyondDecelMarker(int direction, Real destination);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool IsQueued(int floor, int queue = 0);
 	void SetRunState(bool value);
 	bool IsRunning();
 	bool GetArrivalDirection(int floor);
-	void MoveObjects(float offset);
+	void MoveObjects(Real offset);
 	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 	int AvailableForCall(int floor, int direction, int destination_floor, bool use_destfloor, bool report_on_failure = true);
@@ -232,7 +232,7 @@ public:
 	int GetCarCount();
 	ElevatorCar* GetCarForFloor(int number, bool report_on_failure = false);
 	int GetFloorForCar(int car, int number);
-	float GetCarOffset(int number);
+	Real GetCarOffset(int number);
 
 private:
 
@@ -278,14 +278,14 @@ private:
 	std::vector<ElevatorCar*> Cars; //car objects
 	std::vector<QueueEntry> UpQueue; //up call queue
 	std::vector<QueueEntry> DownQueue; //down call queue
-	float ElevatorStart; //elevator vertical starting location
-	float Destination; //elevator destination Y value
-	float StoppingDistance; //distance needed to stop the elevator
+	Real ElevatorStart; //elevator vertical starting location
+	Real Destination; //elevator destination Y value
+	Real StoppingDistance; //distance needed to stop the elevator
 	bool CalculateStoppingDistance;
 	bool Brakes; //internal brake status
 	int EmergencyStop; //internal stop status; 0 for off, 1 for standard stop, 2 for emergency stop
-	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
-	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
+	Real JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
+	Real JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	QueueEntry ActiveCall; //active call (that the elevator's currently responding to)
 	bool FirstRun; //used for setting first-run items in the run loop
 	bool Running; //is elevator in run mode?
@@ -307,8 +307,8 @@ private:
 	void PlayMovingSounds();
 	void HandleDequeue(int direction, bool stop_if_empty = true);
 	void StopSounds();
-	float GetDestinationAltitude(int floor);
-	float GetDestinationOffset(int floor);
+	Real GetDestinationAltitude(int floor);
+	Real GetDestinationOffset(int floor);
 	void DirectionalIndicatorsOff();
 	void NotifyArrival();
 	void ProcessGotoFloor(int floor, int direction);
@@ -331,7 +331,7 @@ private:
 	bool ACPFloorSet;
 	bool RecallUnavailable; //true if recall floor is unavailable (alarm has been triggered on that floor)
 	Ogre::Vector3 elevposition;
-	float tmpDecelJerk;
+	Real tmpDecelJerk;
 	bool FinishedMove;
 	bool SoundsQueued;
 };

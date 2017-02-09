@@ -54,9 +54,9 @@ Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, boo
 	//first parameter must be a vertex array
 	//second must be either 1 (for x), 2 (for y) or 3 (for z)
 
-	float esmall = 0;
-	float ebig = 0;
-	float tempnum = 0;
+	Real esmall = 0;
+	Real ebig = 0;
+	Real tempnum = 0;
 	size_t i = 0;
 
 	//return 0,0 if coord value is out of range
@@ -104,19 +104,19 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 	//swap values if the first is greater than the second
 	if (start.x > end.x)
 	{
-		float tmp = start.x;
+		Real tmp = start.x;
 		start.x = end.x;
 		end.x = tmp;
 	}
 	if (start.y > end.y)
 	{
-		float tmp = start.y;
+		Real tmp = start.y;
 		start.y = end.y;
 		end.y = tmp;
 	}
 	if (start.z > end.z)
 	{
-		float tmp = start.z;
+		Real tmp = start.z;
 		start.z = end.z;
 		end.z = tmp;
 	}
@@ -423,7 +423,7 @@ void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre:
 	if (checknumber > 0 && checknumber < 3)
 	{
 		Ogre::Vector3 mesh_position = mesh->GetPosition();
-		float extent;
+		Real extent;
 
 		if (wall2a == false || wall2b == false)
 		{
@@ -505,15 +505,15 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance)
+Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real distance)
 {
 	//calculate 2D endpoint from given starting point, along with angle and distance (magnitude)
 	//angle is in degrees
 
 	angle -= 90;
-	float newangle = DegreesToRadians(angle);
-	float x = StartPoint.x + distance * cosf(newangle);
-	float y = -StartPoint.y + distance * sinf(newangle);
+	Real newangle = DegreesToRadians(angle);
+	Real x = StartPoint.x + distance * cosf(newangle);
+	Real y = -StartPoint.y + distance * sinf(newangle);
 	Ogre::Vector2 result (x, -y);
 	return result;
 
@@ -523,13 +523,13 @@ Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
 {
 	//compute plane from a set of given vertices
 
-	float det;
+	Real det;
 	Ogre::Vector3 normal = -ComputeNormal(vertices, det);
 	normal.normalise();
 	return Ogre::Plane(normal, det);
 }
 
-MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass) : Object(parent)
+MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Mesh", name, true);
@@ -784,15 +784,15 @@ bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string
 	return result;
 }
 
-Wall* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, Wall *wall)
+Wall* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real &distance, Ogre::Vector3 &normal, Wall *wall)
 {
 	//find a wall from a 3D point
 	//positions need to be in remote (Ogre) positioning
 	//if wall_number is 0 or greater, this will only check that specified wall
 
 	SBS_PROFILE("MeshObject::FindWallIntersect");
-	float pr, best_pr = 2000000000.;
-	float dist, best_dist = 2000000000.;
+	Real pr, best_pr = 2000000000.;
+	Real dist, best_dist = 2000000000.;
 	int best_i = -1;
 	Ogre::Vector3 cur_isect;
 	Ogre::Vector3 tmpnormal;
@@ -839,7 +839,7 @@ bool MeshObject::IsEnabled()
 	return enabled;
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<std::vector<Ogre::Vector3> > &converted_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<std::vector<Ogre::Vector3> > &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -881,8 +881,8 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 		sizing = sbs->GetTextureManager()->CalculateSizing(texture, sbs->ToLocal(v1), sbs->ToLocal(v2), sbs->ToLocal(v3), direction, tw, th);
 
 	//get texture tiling information
-	float tw2 = sizing.x, th2 = sizing.y;
-	float mw, mh;
+	Real tw2 = sizing.x, th2 = sizing.y;
+	Real mw, mh;
 	if (sbs->GetTextureManager()->GetTextureTiling(texname, mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
@@ -897,7 +897,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 	return PolyMesh(name, material, converted_vertices, t_matrix, t_vector, mesh_indices, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<std::vector<Ogre::Vector3> > &converted_vertices, float tw, float th, bool convert_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<std::vector<Ogre::Vector3> > &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -1008,7 +1008,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	return true;
 }
 
-Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th)
+Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, Real tw, Real th)
 {
 	//return texel array for specified texture transformation matrix and vector
 
@@ -1407,7 +1407,7 @@ void MeshObject::CreateCollider()
 		//initialize collider shape
 		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vcount, tricount * 3);
 
-		float scale = GetSceneNode()->GetScale();
+		Real scale = GetSceneNode()->GetScale();
 
 		//add vertices to shape
 		for (size_t i = 0; i < Submeshes.size(); i++)
@@ -1420,7 +1420,7 @@ void MeshObject::CreateCollider()
 				Ogre::Vector3 b = Submeshes[i].MeshGeometry[tri.b].vertex;
 				Ogre::Vector3 c = Submeshes[i].MeshGeometry[tri.c].vertex;
 
-				if (scale != 1.0f)
+				if (scale != 1.0)
 				{
 					a *= scale;
 					b *= scale;
@@ -1536,7 +1536,7 @@ void MeshObject::CreateBoxCollider()
 	try
 	{
 		//initialize collider shape
-		float scale = GetSceneNode()->GetScale();
+		Real scale = GetSceneNode()->GetScale();
 
 		if (Bounds->isNull() == true)
 			return;
@@ -1562,7 +1562,7 @@ void MeshObject::CreateBoxCollider()
 	}
 }
 
-float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, float max_distance)
+Real MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, Real max_distance)
 {
 	//cast a ray and return the collision distance to the mesh
 	//return -1 if no hit
@@ -1782,7 +1782,7 @@ Ogre::Vector3 MeshObject::GetPoint(const std::string &wallname, const Ogre::Vect
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::Vector3 MeshObject::GetWallExtents(const std::string &name, float altitude, bool get_max)
+Ogre::Vector3 MeshObject::GetWallExtents(const std::string &name, Real altitude, bool get_max)
 {
 	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
 
@@ -1800,9 +1800,9 @@ Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	//(x, y, or z) from the polygons of this mesh object.
 	//first parameter must be either 1 (for x), 2 (for y) or 3 (for z)
 
-	float esmall = 0;
-	float ebig = 0;
-	float tempnum = 0;
+	Real esmall = 0;
+	Real ebig = 0;
+	Real tempnum = 0;
 
 	//return 0,0 if coord value is out of range
 	if (coord < 1 || coord > 3)
@@ -1951,7 +1951,7 @@ void MeshObject::Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool
 
 void MeshObject::CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors)
 {
-	float limit = 1000000;
+	Real limit = 1000000;
 
 	Ogre::Vector3 left_min (-limit, -limit, -limit);
 	Ogre::Vector3 left_max (start.x, limit, limit);

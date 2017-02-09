@@ -34,7 +34,7 @@ public:
 
 	bool force_combine; //if set to true, forces combined meshes
 
-	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, float max_render_distance = 0, bool dynamic_buffers = false);
+	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, Real max_render_distance = 0, bool dynamic_buffers = false);
 	~DynamicMesh();
 	void Enabled(bool value, MeshObject *client = 0);
 	bool ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
@@ -70,7 +70,7 @@ private:
 	{
 		struct Submesh;
 
-		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, float max_render_distance, const std::string &filename = "", const std::string &path = "");
+		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename = "", const std::string &path = "");
 		~Mesh();
 		void Enabled(bool value);
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
@@ -115,7 +115,7 @@ private:
 
 	std::vector<Mesh*> meshes;
 	SceneNode *node;
-	float render_distance;
+	Real render_distance;
 	bool file_model;
 	std::vector<MeshObject*> clients;
 	std::vector<bool> client_enable;

@@ -41,7 +41,7 @@ struct SBSIMPEXP CameraState
 	Ogre::Vector3 desired_angle_velocity;
 	Ogre::Vector3 angle_velocity;
 	Ogre::Vector3 accum_movement;
-	float fov;
+	Real fov;
 };
 
 class SBSIMPEXP Camera : public Object
@@ -50,46 +50,46 @@ public:
 	int CurrentFloor; //floor camera's on
 	std::string CurrentFloorID; //indicator ID of camera's current floor
 	int StartFloor; //Starting floor
-	float StartPositionX; //starting position on X axis
-	float StartPositionZ; //starting position on Z axis
-	float cfg_jumpspeed; //Initial speed of jumping.
-	float cfg_walk_accelerate; //walk acceleration
-	float cfg_walk_maxspeed; //walk maximum speed
-	float cfg_walk_maxspeed_mult; //multiplier for max speed
-	float cfg_walk_maxspeed_multreal; //is multiplier used?
-	float cfg_walk_brake; //walk brake deceleration
-	float cfg_rotate_accelerate; //rotate acceleration
-	float cfg_rotate_maxspeed; //rotate maximum speed
-	float cfg_rotate_brake; //rotate brake deceleration
-	float cfg_body_height; //body height
-	float cfg_body_width; //body width
-	float cfg_legs_height; //legs height
-	float cfg_legs_width; //legs width
-	float cfg_lookspeed; //base look speed
-	float cfg_turnspeed; //base turn speed
-	float cfg_spinspeed; //base spin speed
-	float cfg_floatspeed; //base float speed
-	float cfg_stepspeed; //base step speed
-	float cfg_strafespeed; //base strafe speed
-	float cfg_speed; //camera speed multiplier
-	float cfg_speedfast; //camera fast speed multiplier
-	float cfg_speedslow; //camera slow speed multiplier
-	float cfg_zoomspeed; //camera zoom speed
+	Real StartPositionX; //starting position on X axis
+	Real StartPositionZ; //starting position on Z axis
+	Real cfg_jumpspeed; //Initial speed of jumping.
+	Real cfg_walk_accelerate; //walk acceleration
+	Real cfg_walk_maxspeed; //walk maximum speed
+	Real cfg_walk_maxspeed_mult; //multiplier for max speed
+	Real cfg_walk_maxspeed_multreal; //is multiplier used?
+	Real cfg_walk_brake; //walk brake deceleration
+	Real cfg_rotate_accelerate; //rotate acceleration
+	Real cfg_rotate_maxspeed; //rotate maximum speed
+	Real cfg_rotate_brake; //rotate brake deceleration
+	Real cfg_body_height; //body height
+	Real cfg_body_width; //body width
+	Real cfg_legs_height; //legs height
+	Real cfg_legs_width; //legs width
+	Real cfg_lookspeed; //base look speed
+	Real cfg_turnspeed; //base turn speed
+	Real cfg_spinspeed; //base spin speed
+	Real cfg_floatspeed; //base float speed
+	Real cfg_stepspeed; //base step speed
+	Real cfg_strafespeed; //base strafe speed
+	Real cfg_speed; //camera speed multiplier
+	Real cfg_speedfast; //camera fast speed multiplier
+	Real cfg_speedslow; //camera slow speed multiplier
+	Real cfg_zoomspeed; //camera zoom speed
 	Ogre::Vector3 desired_velocity;
 	Ogre::Vector3 velocity;
 	Ogre::Vector3 desired_angle_velocity;
 	Ogre::Vector3 angle_velocity;
-	float speed; //movement speed base
+	Real speed; //movement speed base
 	bool MouseLeftDown; //mouse left button status
 	bool MouseRightDown; //mouse right button status
 	bool ReportCollisions; //if true, print collisions on console
 	std::string LastHitMesh; //name of last hit mesh
 	int LastHitMeshNumber; //object number of last hit mesh
 	bool Freelook; //freelook (mouselook) is enabled/disabled
-	float Freelook_speed; //freelook speed
+	Real Freelook_speed; //freelook speed
 	Ogre::Vector3 HitPosition; //last hit position
 	bool EnableBullet;
-	float BinocularsFOV; //binoculars mode FOV
+	Real BinocularsFOV; //binoculars mode FOV
 	bool FirstAttach;
 
 	//mouse coordinates
@@ -105,10 +105,10 @@ public:
 	void GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top, bool global = false);
 	Ogre::Vector3 GetRotation();
 	void UpdateCameraFloor();
-	bool Move(Ogre::Vector3 vector, float speed = 1.0f, bool flip = true);
-	bool MovePosition(Ogre::Vector3 vector, float speed = 1.0f);
-	void Rotate(const Ogre::Vector3 &position, float speed = 1.0f);
-	void RotateLocal(const Ogre::Vector3 &position, float speed = 1.0f);
+	bool Move(Ogre::Vector3 vector, Real speed = 1.0, bool flip = true);
+	bool MovePosition(Ogre::Vector3 vector, Real speed = 1.0);
+	void Rotate(const Ogre::Vector3 &position, Real speed = 1.0);
+	void RotateLocal(const Ogre::Vector3 &position, Real speed = 1.0);
 	void SetStartDirection(const Ogre::Vector3 &direction);
 	Ogre::Vector3 GetStartDirection();
 	void SetStartRotation(const Ogre::Vector3 &rotation);
@@ -129,29 +129,29 @@ public:
 	std::string GetClickedObjectCommand();
 	std::string GetClickedObjectCommandP();
 	void Loop();
-	void Strafe(float speed = 1.0f);
-	void Step(float speed = 1.0f);
-	void Float(float speed = 1.0f);
+	void Strafe(Real speed = 1.0);
+	void Step(Real speed = 1.0);
+	void Float(Real speed = 1.0);
 	void Jump();
-	void Look(float speed = 1.0f);
-	void Turn(float speed = 1.0f);
-	void Spin(float speed = 1.0f);
-	void InterpolateMovement(float delta);
-	void SetGravity(float gravity, bool save_value = true, bool camera_only = true);
-	float GetGravity();
+	void Look(Real speed = 1.0);
+	void Turn(Real speed = 1.0);
+	void Spin(Real speed = 1.0);
+	void InterpolateMovement(Real delta);
+	void SetGravity(Real gravity, bool save_value = true, bool camera_only = true);
+	Real GetGravity();
 	void EnableGravity(bool value);
 	bool GetGravityStatus();
-	void SetFOVAngle(float angle);
-	float GetFOVAngle();
+	void SetFOVAngle(Real angle);
+	Real GetFOVAngle();
 	void SetToDefaultFOV();
-	float GetHeight();
+	Real GetHeight();
 	void SetViewMode(int mode);
 	void EnableCollisions(bool value);
 	bool CollisionsEnabled();
 	bool IsOnGround();
 	void Sync();
-	void SetMaxRenderDistance(float value);
-	float GetMaxRenderDistance();
+	void SetMaxRenderDistance(Real value);
+	Real GetMaxRenderDistance();
 	void ShowDebugShape(bool value);
 	void MoveCharacter();
 	void ResetCollisions();
@@ -178,7 +178,7 @@ public:
 	void FreelookMove(const Ogre::Vector3 &rotation);
 	bool MouseDown();
 	void CheckObjects();
-	void Teleport(float X, float Y, float Z);
+	void Teleport(Real X, Real Y, Real Z);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -191,16 +191,16 @@ private:
 	std::string object_cmd; //original script command of last clicked object
 	std::string object_cmd_processed; //processed script command of last clicked object
 	int FloorTemp; //previous floor check value
-	float Gravity;
+	Real Gravity;
 	bool GravityStatus;
 	int lastfloor;
 	bool lastfloorset;
-	float FOV; //default FOV angle
+	Real FOV; //default FOV angle
 	Ogre::Vector3 Rotation;
 	bool Collisions; //collision detection status
 	bool RotationStopped;
 	bool MovementStopped;
-	float FarClip;
+	Real FarClip;
 	Ogre::Vector3 accum_movement;
 	Ogre::Vector3 prev_accum_movement;
 	bool collision_reset;

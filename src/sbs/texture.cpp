@@ -120,7 +120,7 @@ TextureManager::~TextureManager()
 	manual_textures.clear();
 }
 
-bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	if (sbs->Headless == true)
 		return true;
@@ -152,7 +152,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	return true;
 }
 
-bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, float duration, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	if (sbs->Headless == true)
 		return true;
@@ -216,7 +216,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 	return true;
 }
 
-bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	if (sbs->Headless == true)
 		return true;
@@ -278,7 +278,7 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	return true;
 }
 
-bool TextureManager::LoadMaterial(const std::string &materialname, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode)
+bool TextureManager::LoadMaterial(const std::string &materialname, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode)
 {
 	if (sbs->Headless == true)
 		return true;
@@ -304,15 +304,15 @@ bool TextureManager::LoadMaterial(const std::string &materialname, const std::st
 	return true;
 }
 
-void TextureManager::RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, float widthmult, float heightmult, bool enable_force, bool force_mode)
+void TextureManager::RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode)
 {
 	//register texture for multipliers information
 	//see TextureInfo structure for more information
 
-	if (widthmult == 0.0f)
-		widthmult = 1.0f;
-	if (heightmult == 0.0f)
-		heightmult = 1.0f;
+	if (widthmult == 0.0)
+		widthmult = 1.0;
+	if (heightmult == 0.0)
+		heightmult = 1.0;
 
 	TextureInfo info;
 	info.name = TrimStringCopy(name);
@@ -368,7 +368,7 @@ bool TextureManager::UnloadMaterial(const std::string &name, const std::string &
 	return true;
 }
 
-bool TextureManager::LoadTextureCropped(const std::string &filename, const std::string &name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force, bool force_mode)
+bool TextureManager::LoadTextureCropped(const std::string &filename, const std::string &name, int x, int y, int width, int height, Real widthmult, Real heightmult, bool enable_force, bool force_mode)
 {
 	//loads only a portion of the specified texture
 
@@ -444,7 +444,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	return true;
 }
 
-bool TextureManager::RotateTexture(const std::string &name, float angle)
+bool TextureManager::RotateTexture(const std::string &name, Real angle)
 {
 	//set a fixed rotation value for a texture
 
@@ -476,7 +476,7 @@ bool TextureManager::RotateTexture(const std::string &name, float angle)
 	return true;
 }
 
-bool TextureManager::RotateAnimTexture(const std::string &name, float speed)
+bool TextureManager::RotateAnimTexture(const std::string &name, Real speed)
 {
 	//set a rotation animation for a texture - speed is in revolutions per second
 
@@ -508,7 +508,7 @@ bool TextureManager::RotateAnimTexture(const std::string &name, float speed)
 	return true;
 }
 
-bool TextureManager::ScrollTexture(const std::string &name, float x_offset, float y_offset)
+bool TextureManager::ScrollTexture(const std::string &name, Real x_offset, Real y_offset)
 {
 	//set a fixed scroll amount for a texture
 
@@ -540,7 +540,7 @@ bool TextureManager::ScrollTexture(const std::string &name, float x_offset, floa
 	return true;
 }
 
-bool TextureManager::ScrollAnimTexture(const std::string &name, float x_speed, float y_speed)
+bool TextureManager::ScrollAnimTexture(const std::string &name, Real x_speed, Real y_speed)
 {
 	//set a scroll animation for a texture - speed is in revolutions per second
 
@@ -572,7 +572,7 @@ bool TextureManager::ScrollAnimTexture(const std::string &name, float x_speed, f
 	return true;
 }
 
-bool TextureManager::ScaleTexture(const std::string &name, float x_scale, float y_scale)
+bool TextureManager::ScaleTexture(const std::string &name, Real x_scale, Real y_scale)
 {
 	//set a fixed scale amount for a texture
 
@@ -604,7 +604,7 @@ bool TextureManager::ScaleTexture(const std::string &name, float x_scale, float 
 	return true;
 }
 
-bool TextureManager::TransformTexture(const std::string &name, const std::string &type, const std::string &wave_type, float base, float frequency, float phase, float amplitude)
+bool TextureManager::TransformTexture(const std::string &name, const std::string &type, const std::string &wave_type, Real base, Real frequency, Real phase, Real amplitude)
 {
 	//set a transformation type for a texture
 
@@ -673,7 +673,7 @@ bool TextureManager::TransformTexture(const std::string &name, const std::string
 	return true;
 }
 
-bool TextureManager::AddTextToTexture(const std::string &origname, const std::string &name, const std::string &font_filename, float font_size, const std::string &text, int x1, int y1, int x2, int y2, const std::string &h_align, const std::string &v_align, int ColorR, int ColorG, int ColorB, bool enable_force, bool force_mode)
+bool TextureManager::AddTextToTexture(const std::string &origname, const std::string &name, const std::string &font_filename, Real font_size, const std::string &text, int x1, int y1, int x2, int y2, const std::string &h_align, const std::string &v_align, int ColorR, int ColorG, int ColorB, bool enable_force, bool force_mode)
 {
 	//adds text to the named texture, in the given box coordinates and alignment
 
@@ -738,7 +738,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	bool has_alpha = background->hasAlpha();
 
 	//get texture tiling info
-	float widthmult, heightmult;
+	Real widthmult, heightmult;
 	GetTextureTiling(origname, widthmult, heightmult);
 
 	//get height and width of texture
@@ -796,9 +796,9 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 		valign = 'b';
 
 	//write text
-	float red = (float)ColorR / 255;
-	float green = (float)ColorG / 255;
-	float blue = (float)ColorB / 255;
+	Real red = (Real)ColorR / 255;
+	Real green = (Real)ColorG / 255;
+	Real blue = (Real)ColorB / 255;
 
 	bool result = WriteToTexture(Text, texture, x1, y1, x2, y2, font, Ogre::ColourValue(red, green, blue, 1.0), align, valign);
 	if (result == false)
@@ -820,7 +820,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	return true;
 }
 
-bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const std::string &overlay_texture, const std::string &name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force, bool force_mode)
+bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const std::string &overlay_texture, const std::string &name, int x, int y, int width, int height, Real widthmult, Real heightmult, bool enable_force, bool force_mode)
 {
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
@@ -971,7 +971,7 @@ std::string TextureManager::GetTextureMaterial(const std::string &name, bool &re
 	return matname;
 }
 
-void TextureManager::ProcessTextureFlip(float tw, float th)
+void TextureManager::ProcessTextureFlip(Real tw, Real th)
 {
 	//process texture flip info
 
@@ -1014,7 +1014,7 @@ void TextureManager::ProcessTextureFlip(float tw, float th)
 	}
 }
 
-bool TextureManager::GetTextureTiling(const std::string &texture, float &tw, float &th)
+bool TextureManager::GetTextureTiling(const std::string &texture, Real &tw, Real &th)
 {
 	//get per-texture tiling values from the textureinfo array
 	for (size_t i = 0; i < textureinfo.size(); i++)
@@ -1064,7 +1064,7 @@ void TextureManager::FreeTextureImages()
 		//engine->GetTextureList()->Get(i)->SetImageFile(0);
 }
 
-float TextureManager::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode)
+Real TextureManager::AutoSize(Real n1, Real n2, bool iswidth, Real offset, bool enable_force, bool force_mode)
 {
 	//Texture autosizing formulas
 
@@ -1101,18 +1101,18 @@ void TextureManager::GetAutoSize(bool &x, bool &y)
 	y = AutoY;
 }
 
-Ogre::Vector2 TextureManager::CalculateSizing(const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, int direction, float tw, float th)
+Ogre::Vector2 TextureManager::CalculateSizing(const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, int direction, Real tw, Real th)
 {
 	//calculate texture autosizing based on polygon extents
 
 	//Call texture autosizing formulas
-	float tw2 = tw, th2 = th;
+	Real tw2 = tw, th2 = th;
 
 	bool force_enable = false, force_mode = false;
 	GetTextureForce(texture, force_enable, force_mode);
 
-	float width = v1.distance(v2);
-	float height = v2.distance(v3);
+	Real width = v1.distance(v2);
+	Real height = v2.distance(v3);
 
 	tw2 = AutoSize(0, width, true, tw, force_enable, force_mode);
 	th2 = AutoSize(0, height, false, th, force_enable, force_mode);
@@ -1655,7 +1655,7 @@ std::string TextureManager::ListTextures(bool show_filename)
  @return
      Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename)
  */
-Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
+Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, Real threshold)
 {
 	using namespace Ogre;
 	using std::fabs;

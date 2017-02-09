@@ -72,7 +72,7 @@ ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 	this->car = car;
 	elev = car->GetElevator();
 	OpenDoor = 0;
-	OpenSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3f);
+	OpenSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3);
 	WhichDoors = 0;
 	ShaftDoorFloor = 0;
 	DoorTimer = sbs->GetConfigInt("Skyscraper.SBS.Elevator.Door.Timer", 5000);
@@ -90,8 +90,8 @@ ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 	ShaftDoorThickness = 0;
 	ShaftDoorOrigin = 0;
 	nudge_enabled = false;
-	ManualSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.ManualSpeed", 0.2f);
-	SlowSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.SlowSpeed", 0.5f);
+	ManualSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.ManualSpeed", 0.2);
+	SlowSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.SlowSpeed", 0.5);
 	QuickClose = sbs->GetConfigInt("Skyscraper.SBS.Elevator.Door.QuickClose", 3000);
 	NudgeTimer = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.NudgeTimer", 30);
 	nudgesound_loaded = false;
@@ -746,13 +746,13 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	DoorIsRunning = false;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, bool direction, Real tw, Real th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator position)
 	//if direction is false, doors are on the left/right side; otherwise front/back
-	float x1, x2, x3, x4;
-	float z1, z2, z3, z4;
-	float spacing = 0.01f; //spacing between doors
+	Real x1, x2, x3, x4;
+	Real z1, z2, z3, z4;
+	Real spacing = 0.01; //spacing between doors
 
 	//set up coordinates
 	if (direction == false)
@@ -779,16 +779,16 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoors(const std::string &lefttexture
 	}
 
 	//create left door
-	AddDoorComponent("Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75f, x1, z1, x2, z2, height, 0, tw, th, tw, th);
+	AddDoorComponent("Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75, x1, z1, x2, z2, height, 0, tw, th, tw, th);
 
 	//create right door
-	AddDoorComponent("Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75f, x3, z3, x4, z4, height, 0, tw, th, tw, th);
+	AddDoorComponent("Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75, x3, z3, x4, z4, height, 0, tw, th, tw, th);
 
 	//finish doors
 	return FinishDoors();
 }
 
-ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//creates a door component - finish with FinishDoor()
 
@@ -848,7 +848,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, c
 	return door;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//adds an elevator door component; remake of AddDoors command
 
@@ -861,7 +861,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const std::string &nam
 	return Doors;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//adds a shaft door component; remake of AddShaftDoor command
 
@@ -887,7 +887,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 	return ShaftDoors[index];
 }
 
-void ElevatorDoor::AddShaftDoorsComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void ElevatorDoor::AddShaftDoorsComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
@@ -921,7 +921,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 	}
 
 	//get full width and height of doors
-	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
+	Real x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
 	bool firstrun = true;
 	for (size_t i = 0; i < wrapper->doors.size(); i++)
 	{
@@ -978,7 +978,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 	else
 		wrapper->voffset = y1;
 
-	float base = wrapper->voffset;
+	Real base = wrapper->voffset;
 
 	if (ShaftDoor == true)
 	{
@@ -1056,7 +1056,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 	//create door sensor
 	if (GetSensorStatus() == true && ShaftDoor == false && elev->AutoDoors == true)
 	{
-		float sensor_width = sbs->camera->cfg_body_width / 4;
+		Real sensor_width = sbs->camera->cfg_body_width / 4;
 		Ogre::Vector3 min (x1 - sensor_width, wrapper->voffset, z1 - sensor_width);
 		Ogre::Vector3 max (x2 + sensor_width, wrapper->voffset + wrapper->Height, z2 + sensor_width);
 		CreateSensor(min, max);
@@ -1110,7 +1110,7 @@ bool ElevatorDoor::FinishShaftDoors(bool DoorWalls, bool TrackWalls)
 	return true;
 }
 
-bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
@@ -1129,14 +1129,14 @@ bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::stri
 	return true;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//compatibility version of AddShaftDoor; please use newer implementation instead
 
 	return AddShaftDoor(floor, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1146,8 +1146,8 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::stri
 	if (!car->IsServicedFloor(floor))
 		return 0;
 
-	float x1, x2, x3, x4;
-	float z1, z2, z3, z4;
+	Real x1, x2, x3, x4;
+	Real z1, z2, z3, z4;
 	int index = car->GetFloorIndex(floor);
 
 	if (index == -1)
@@ -1180,10 +1180,10 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::stri
 	//create doors
 
 	//create left door
-	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75f, x1, z1, x2, z2, Doors->Height, voffset, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75, x1, z1, x2, z2, Doors->Height, voffset, tw, th, tw, th);
 
 	//create right door
-	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75f, x3, z3, x4, z4, Doors->Height, voffset, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75, x3, z3, x4, z4, Doors->Height, voffset, tw, th, tw, th);
 
 	//finish doors
 	DoorWrapper *wrapper = FinishShaftDoor(floor);
@@ -1191,7 +1191,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::stri
 	return wrapper;
 }
 
-void ElevatorDoor::SetShaftDoors(float thickness, float CenterX, float CenterZ)
+void ElevatorDoor::SetShaftDoors(Real thickness, Real CenterX, Real CenterZ)
 {
 	//notice - this function is deprecated - use newer AddShaftDoor command instead
 
@@ -1419,7 +1419,7 @@ int ElevatorDoor::GetWhichDoors()
 	return WhichDoors;
 }
 
-float ElevatorDoor::GetShaftDoorAltitude(int floor)
+Real ElevatorDoor::GetShaftDoorAltitude(int floor)
 {
 	//returns altitude of the shaft door on the specified floor
 
@@ -1473,7 +1473,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	return false;
 }
 
-ElevatorDoor::DoorObject::DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, float OpenSpeed, float CloseSpeed)
+ElevatorDoor::DoorObject::DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, Real OpenSpeed, Real CloseSpeed)
 {
 	name = doorname;
 	wrapper = Wrapper;
@@ -1566,7 +1566,7 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 		parent->RemoveShaftDoor(this);
 }
 
-ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, float OpenSpeed, float CloseSpeed)
+ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed)
 {
 	//initialize a door component
 
@@ -1604,7 +1604,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	SBS_PROFILE("ElevatorDoor::DoorObject::MoveDoors");
-	float tempposition, temporigin;
+	Real tempposition, temporigin;
 
 	if (finished == true)
 		return;
@@ -1624,7 +1624,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	}
 
 	//get distance from starting point
-	float difference = std::abs(tempposition - temporigin);
+	Real difference = std::abs(tempposition - temporigin);
 
 	if (old_difference != 0 && manual == true && recheck_difference == true)
 	{
@@ -1655,7 +1655,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		//marker2 is the position to start decelerating at (runs full speed until marker 2)
 		if (manual == false)
 		{
-			float speed;
+			Real speed;
 			if (open == true)
 				speed = open_speed;
 			else
@@ -1670,8 +1670,8 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				//get width and offset values (offset is the distance the door component
 				//is from the edge of the door frame)
-				float width;
-				float mainwidth = wrapper->Width / 2;
+				Real width;
+				Real mainwidth = wrapper->Width / 2;
 				if (parent->DoorDirection == false)
 				{
 					width = std::abs(extents_max.z - extents_min.z);
@@ -1688,20 +1688,20 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 					else
 						offset = mainwidth - (extents_max.x - wrapper->Shift);
 				}
-				float newwidth = width + offset;
+				Real newwidth = width + offset;
 				marker1 = newwidth / 4;
 				marker2 = (mainwidth + (width - mainwidth)) - marker1 + offset;
 			}
 			else
 			{
-				float height = std::abs(extents_max.y - extents_min.y);
-				float mainheight = wrapper->Height / 2;
+				Real height = std::abs(extents_max.y - extents_min.y);
+				Real mainheight = wrapper->Height / 2;
 				if (direction == 0)
 					offset = extents_max.y - wrapper->Height - wrapper->voffset;
 				else
 					offset = extents_min.y - wrapper->voffset;
 
-				float newheight = height + offset;
+				Real newheight = height + offset;
 				marker1 = newheight / 4;
 				marker2 = (mainheight + (height - mainheight)) - marker1 + offset;
 			}
@@ -1713,8 +1713,8 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			//door frame extents
 			if (direction > 1)
 			{
-				float width;
-				float mainwidth = wrapper->Width / 2;
+				Real width;
+				Real mainwidth = wrapper->Width / 2;
 				if (parent->DoorDirection == false)
 				{
 					width = std::abs(extents_max.z - extents_min.z);
@@ -1736,8 +1736,8 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			}
 			else
 			{
-				float height = std::abs(extents_max.y - extents_min.y);
-				float mainheight = wrapper->Height / 2;
+				Real height = std::abs(extents_max.y - extents_min.y);
+				Real mainheight = wrapper->Height / 2;
 				if (direction == 0)
 					offset = extents_max.y - wrapper->Height - wrapper->voffset;
 				else
@@ -1760,7 +1760,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		if (open == true)
 		{
 			//relocate marker 1 to the door's current position, in order to stop it
-			float offset = marker1 - difference;
+			Real offset = marker1 - difference;
 			if (difference >= marker1)
 				//place marker at door position
 				marker1 = difference;
@@ -1771,7 +1771,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		else //closing
 		{
 			//relocate marker 2 to the door's current position, in order to stop it
-			float offset = difference - marker2;
+			Real offset = difference - marker2;
 			if (difference <= marker2)
 				//place marker at door position
 				marker2 = difference;
@@ -1862,7 +1862,7 @@ void ElevatorDoor::DoorObject::Move()
 {
 	//move elevator doors
 
-	float speed = active_speed * parent->GetRoot()->delta;
+	Real speed = active_speed * parent->GetRoot()->delta;
 
 	//up movement
 	if (direction == 0)
@@ -1905,10 +1905,10 @@ void ElevatorDoor::DoorObject::Reset(bool open)
 		//move elevator doors
 		if (direction > 1)
 		{
-			float mainwidth = wrapper->Width / 2;
+			Real mainwidth = wrapper->Width / 2;
 			if (parent->DoorDirection == false)
 			{
-				float width = std::abs(extents_max.z - extents_min.z);
+				Real width = std::abs(extents_max.z - extents_min.z);
 				if (direction == 2)
 					mesh->Move(Ogre::Vector3(0, 0, -(mainwidth + (width - mainwidth) + offset)));
 				else
@@ -1916,7 +1916,7 @@ void ElevatorDoor::DoorObject::Reset(bool open)
 			}
 			else
 			{
-				float width = std::abs(extents_max.x - extents_min.x);
+				Real width = std::abs(extents_max.x - extents_min.x);
 				if (direction == 2)
 					mesh->Move(Ogre::Vector3(-(mainwidth + (width - mainwidth) + offset), 0, 0));
 				else
@@ -1925,8 +1925,8 @@ void ElevatorDoor::DoorObject::Reset(bool open)
 		}
 		else
 		{
-			float mainheight = wrapper->Height / 2;
-			float height = std::abs(extents_max.y - extents_min.y);
+			Real mainheight = wrapper->Height / 2;
+			Real height = std::abs(extents_max.y - extents_min.y);
 			if (direction == 0)
 				mesh->Move(Ogre::Vector3(0, mainheight + (height - mainheight) + offset, 0));
 			else

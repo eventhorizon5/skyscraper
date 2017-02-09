@@ -37,7 +37,7 @@
 
 namespace SBS {
 
-Model::Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass) : Object(parent)
+Model::Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass) : Object(parent)
 {
 	//loads a 3D model into the simulation
 
