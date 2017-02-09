@@ -346,11 +346,11 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D)
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//calculate polygon normal
 
-	Real ayz = 0;
-	Real azx = 0;
-	Real axy = 0;
+	float ayz = 0;
+	float azx = 0;
+	float axy = 0;
 	size_t i, i1;
-	Real x1, y1, z1, x, y, z;
+	float x1, y1, z1, x, y, z;
 
 	i1 = vertices.size() - 1;
 	x1 = vertices[i1].x;
@@ -369,8 +369,8 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D)
 		z1 = z;
 	}
 
-	Real sqd = ayz * ayz + azx * azx + axy * axy;
-	Real invd;
+	float sqd = ayz * ayz + azx * azx + axy * axy;
+	float invd;
 	if (sqd < SMALL_EPSILON)
 		invd = 1.0 / SMALL_EPSILON;
 	else
