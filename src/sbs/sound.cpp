@@ -40,9 +40,9 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 	//first set default values
 	system = sbs->GetSoundSystem();
 	Position = 0;
-	Volume = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Volume", 1.0);
-	MaxDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", 10000.0);
-	MinDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
+	Volume = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Volume", 1.0);
+	MaxDistance = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", 10000.0);
+	MinDistance =(float) sbs->GetConfigFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
 	Direction = 0;
 	SoundLoop = sbs->GetConfigBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->GetConfigInt("Skyscraper.SBS.Sound.Speed", 100);
@@ -51,7 +51,7 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 	sound = 0;
 	channel = 0;
 	default_speed = 0;
-	doppler_level = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
+	doppler_level = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 	position_queued = false;
 	SetVelocity = false;
 }
@@ -96,9 +96,9 @@ void Sound::OnMove(bool parent)
 	//calculate sound velocity
 	if (sbs->GetElapsedTime() > 0 && SetVelocity == true)
 	{
-		vel.x = (GetPosition().x - Position.x) * (1000 / sbs->GetElapsedTime());
-		vel.y = (GetPosition().y - Position.y) * (1000 / sbs->GetElapsedTime());
-		vel.z = (GetPosition().z - Position.z) * (1000 / sbs->GetElapsedTime());
+		vel.x = (float)(GetPosition().x - Position.x) * (1000 / sbs->GetElapsedTime());
+		vel.y = (float)(GetPosition().y - Position.y) * (1000 / sbs->GetElapsedTime());
+		vel.z = (float)(GetPosition().z - Position.z) * (1000 / sbs->GetElapsedTime());
 	}
 
 	Position = GetPosition();
@@ -118,9 +118,9 @@ void Sound::OnRotate(bool parent)
 void Sound::SetVolume(Real value)
 {
 	//set volume of sound
-	Volume = value;
+	Volume = (float)value;
 	if (channel)
-		channel->setVolume(value);
+		channel->setVolume((float)value);
 }
 
 Real Sound::GetVolume()
@@ -132,10 +132,10 @@ Real Sound::GetVolume()
 void Sound::SetDistances(Real min, Real max)
 {
 	//set minimum and maximum unattenuated distances
-	MinDistance = min;
-	MaxDistance = max;
+	MinDistance = (float)min;
+	MaxDistance = (float)max;
 	if (channel)
-		channel->set3DMinMaxDistance(min, max);
+		channel->set3DMinMaxDistance((float)min, (float)max);
 }
 
 Real Sound::GetMinimumDistance()
@@ -166,7 +166,7 @@ Ogre::Vector3 Sound::GetDirection()
 void Sound::SetConeSettings(Real inside_angle, Real outside_angle, Real outside_volume)
 {
 	if (channel)
-		channel->set3DConeSettings(inside_angle, outside_angle, outside_volume);
+		channel->set3DConeSettings((float)inside_angle, (float)outside_angle, (float)outside_volume);
 }
 
 void Sound::SetLoopState(bool value)
@@ -362,7 +362,7 @@ Real Sound::GetPlayPosition()
 	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
 
 	if (length > 0)
-		Percent = Real(position / length);
+		Percent = float(position / length);
 	return Percent;
 }
 
@@ -370,7 +370,7 @@ void Sound::SetPlayPosition(Real percent)
 {
 	//sets the current sound playback position, in percent (1 = 100%)
 
-	Percent = percent;
+	Percent = (float)percent;
 
 	if (channel)
 	{
@@ -389,10 +389,10 @@ void Sound::SetDopplerLevel(Real level)
 	if (level < 0 || level > 5)
 		return;
 
-	doppler_level = level;
+	doppler_level = (float)level;
 
 	if (channel)
-		channel->set3DDopplerLevel(level);
+		channel->set3DDopplerLevel((float)level);
 }
 
 bool Sound::IsLoaded()

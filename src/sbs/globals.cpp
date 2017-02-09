@@ -330,8 +330,8 @@ double Round(double number, int decimal_places)
 	if (decimal_places <= 0)
 		return floor(number + 0.5);
 
-	float multiplier = pow(10.0, (float)decimal_places);
-	float rounded = floor((number * multiplier) + 0.5) / multiplier;
+	double multiplier = pow(10.0, decimal_places);
+	double rounded = floor((number * multiplier) + 0.5) / multiplier;
 	return rounded;
 }
 

@@ -129,8 +129,8 @@ bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t
 	//compute norms of vectors
 	Ogre::Vector3 len1 = pu - po;
 	Ogre::Vector3 len2 = pv - po;
-	Real len1f = sqrtf(len1.x * len1.x + len1.y * len1.y + len1.z * len1.z);
-	Real len2f = sqrtf(len2.x * len2.x + len2.y * len2.y + len2.z * len2.z);
+	Real len1f = sqrt(len1.x * len1.x + len1.y * len1.y + len1.z * len1.z);
+	Real len2f = sqrt(len2.x * len2.x + len2.y * len2.y + len2.z * len2.z);
 
 	return ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
 }
@@ -157,11 +157,11 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 
 	Real d = v_orig.squaredDistance(v1);
 	//get inverse square of d
-	Real invl1 = 1 / sqrtf(d);
+	Real invl1 = 1 / sqrt(d);
 
 	d = v_orig.squaredDistance(v2);
 	//get inverse square of d
-	Real invl2 = (d) ? 1 / sqrtf(d) : 0;
+	Real invl2 = (d) ? 1 / sqrt(d) : 0;
 
 	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
 	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
@@ -372,9 +372,9 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D)
 	Real sqd = ayz * ayz + azx * azx + axy * axy;
 	Real invd;
 	if (sqd < SMALL_EPSILON)
-		invd = 1.0f / SMALL_EPSILON;
+		invd = 1.0 / SMALL_EPSILON;
 	else
-		invd = 1.0f / sqrtf(sqd);
+		invd = 1.0 / sqrt(sqd);
 	Ogre::Vector3 norm;
 	norm.x = ayz * invd;
 	norm.y = azx * invd;

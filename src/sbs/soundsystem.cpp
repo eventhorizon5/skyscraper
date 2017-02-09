@@ -98,18 +98,18 @@ void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
 	//calculate sound velocity
 	if (timing > 0)
 	{
-		listener_velocity.x = (position.x - Position.x) * (1000 / timing);
-		listener_velocity.y = (position.y - Position.y) * (1000 / timing);
-		listener_velocity.z = (position.z - Position.z) * (1000 / timing);
+		listener_velocity.x = (float)(position.x - Position.x) * (1000 / timing);
+		listener_velocity.y = (float)(position.y - Position.y) * (1000 / timing);
+		listener_velocity.z = (float)(position.z - Position.z) * (1000 / timing);
 	}
 
 	Position = position;
 
 	Ogre::Vector3 global_position = sbs->ToGlobal(position);
 
-	listener_position.x = global_position.x;
-	listener_position.y = global_position.y;
-	listener_position.z = global_position.z;
+	listener_position.x = (float)global_position.x;
+	listener_position.y = (float)global_position.y;
+	listener_position.z = (float)global_position.z;
 
 	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
@@ -118,12 +118,12 @@ void SoundSystem::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::V
 {
 	//set direction of sound listener object
 
-	listener_forward.x = front.x;
-	listener_forward.y = front.y;
-	listener_forward.z = front.z;
-	listener_up.x = top.x;
-	listener_up.y = top.y;
-	listener_up.z = top.z;
+	listener_forward.x = (float)front.x;
+	listener_forward.y = (float)front.y;
+	listener_forward.z = (float)front.z;
+	listener_up.x = (float)top.x;
+	listener_up.y = (float)top.y;
+	listener_up.z = (float)top.z;
 
 	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }

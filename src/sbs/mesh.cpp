@@ -512,8 +512,8 @@ Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real
 
 	angle -= 90;
 	Real newangle = DegreesToRadians(angle);
-	Real x = StartPoint.x + distance * cosf(newangle);
-	Real y = -StartPoint.y + distance * sinf(newangle);
+	Real x = StartPoint.x + distance * cos(newangle);
+	Real y = -StartPoint.y + distance * sin(newangle);
 	Ogre::Vector2 result (x, -y);
 	return result;
 

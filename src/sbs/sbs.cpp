@@ -1552,7 +1552,7 @@ Real SBS::GetDistance(Real x1, Real x2, Real z1, Real z2)
 	if (x1 == x2)
 		return std::abs(z1 - z2);
 	if ((x1 != x2) && (z2 != x2))
-		return sqrtf(powf(std::abs(x1 - x2), 2) + powf(std::abs(z1 - z2), 2)); //calculate diagonals
+		return sqrt(pow(std::abs(x1 - x2), 2) + pow(std::abs(z1 - z2), 2)); //calculate diagonals
 	return 0;
 }
 
