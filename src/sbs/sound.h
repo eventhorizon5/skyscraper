@@ -36,11 +36,11 @@ public:
 
 	Sound(Object *parent, const std::string &name, bool permanent);
 	~Sound();
-	void SetVolume(float value);
-	float GetVolume();
-	void SetDistances(float min, float max);
-	float GetMinimumDistance();
-	float GetMaximumDistance();
+	void SetVolume(Real value);
+	Real GetVolume();
+	void SetDistances(Real min, Real max);
+	Real GetMinimumDistance();
+	Real GetMaximumDistance();
 	void SetDirection(const Ogre::Vector3 &direction);
 	Ogre::Vector3 GetDirection();
 	void SetLoopState(bool value);
@@ -54,10 +54,10 @@ public:
 	int GetSpeed();
 	bool Load(const std::string &filename, bool force = false);
 	bool IsPlaying();
-	float GetPlayPosition();
-	void SetPlayPosition(float percent);
-	void SetConeSettings(float inside_angle = 360.0, float outside_angle = 360.0, float outside_volume = 1.0);
-	void SetDopplerLevel(float level);
+	Real GetPlayPosition();
+	void SetPlayPosition(Real percent);
+	void SetConeSettings(Real inside_angle = 360.0, Real outside_angle = 360.0, Real outside_volume = 1.0);
+	void SetDopplerLevel(Real level);
 	bool IsLoaded();
 	void PlayQueued(const std::string &filename, bool stop = true, bool loop = false);
 	void ProcessQueue();

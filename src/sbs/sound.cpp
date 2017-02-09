@@ -115,7 +115,7 @@ void Sound::OnRotate(bool parent)
 		OnMove(parent); //update position if parent object has been rotated
 }
 
-void Sound::SetVolume(float value)
+void Sound::SetVolume(Real value)
 {
 	//set volume of sound
 	Volume = value;
@@ -123,13 +123,13 @@ void Sound::SetVolume(float value)
 		channel->setVolume(value);
 }
 
-float Sound::GetVolume()
+Real Sound::GetVolume()
 {
 	//returns volume
 	return Volume;
 }
 
-void Sound::SetDistances(float min, float max)
+void Sound::SetDistances(Real min, Real max)
 {
 	//set minimum and maximum unattenuated distances
 	MinDistance = min;
@@ -138,12 +138,12 @@ void Sound::SetDistances(float min, float max)
 		channel->set3DMinMaxDistance(min, max);
 }
 
-float Sound::GetMinimumDistance()
+Real Sound::GetMinimumDistance()
 {
 	return MinDistance;
 }
 
-float Sound::GetMaximumDistance()
+Real Sound::GetMaximumDistance()
 {
 	return MaxDistance;
 }
@@ -163,7 +163,7 @@ Ogre::Vector3 Sound::GetDirection()
 	return Direction;
 }
 
-void Sound::SetConeSettings(float inside_angle, float outside_angle, float outside_volume)
+void Sound::SetConeSettings(Real inside_angle, Real outside_angle, Real outside_volume)
 {
 	if (channel)
 		channel->set3DConeSettings(inside_angle, outside_angle, outside_volume);
@@ -344,7 +344,7 @@ bool Sound::Load(const std::string &filename, bool force)
 	return false;
 }
 
-float Sound::GetPlayPosition()
+Real Sound::GetPlayPosition()
 {
 	//returns the current sound playback position, in percent (1 = 100%)
 
@@ -362,11 +362,11 @@ float Sound::GetPlayPosition()
 	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
 
 	if (length > 0)
-		Percent = float(position / length);
+		Percent = Real(position / length);
 	return Percent;
 }
 
-void Sound::SetPlayPosition(float percent)
+void Sound::SetPlayPosition(Real percent)
 {
 	//sets the current sound playback position, in percent (1 = 100%)
 
@@ -384,7 +384,7 @@ void Sound::SetPlayPosition(float percent)
 	}
 }
 
-void Sound::SetDopplerLevel(float level)
+void Sound::SetDopplerLevel(Real level)
 {
 	if (level < 0 || level > 5)
 		return;
