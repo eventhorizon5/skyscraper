@@ -881,14 +881,14 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 						vertex = mesh->Submeshes[index].MeshGeometry[i].vertex;
 
 					//add elements to array
-					mVertexElements[loc] = vertex.x;
-					mVertexElements[loc + 1] = vertex.y;
-					mVertexElements[loc + 2] = vertex.z;
-					mVertexElements[loc + 3] = element.normal.x;
-					mVertexElements[loc + 4] = element.normal.y;
-					mVertexElements[loc + 5] = element.normal.z;
-					mVertexElements[loc + 6] = element.texel.x;
-					mVertexElements[loc + 7] = element.texel.y;
+					mVertexElements[loc] = (float)vertex.x;
+					mVertexElements[loc + 1] = (float)vertex.y;
+					mVertexElements[loc + 2] = (float)vertex.z;
+					mVertexElements[loc + 3] = (float)element.normal.x;
+					mVertexElements[loc + 4] = (float)element.normal.y;
+					mVertexElements[loc + 5] = (float)element.normal.z;
+					mVertexElements[loc + 6] = (float)element.texel.x;
+					mVertexElements[loc + 7] = (float)element.texel.y;
 					client_box.merge(vertex);
 					radius = std::max(radius, vertex.length());
 					loc += 8;
@@ -1216,14 +1216,14 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 			Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
 
 			//add elements to array
-			mVertexElements[pos] = vertex2.x;
-			mVertexElements[pos + 1] = vertex2.y;
-			mVertexElements[pos + 2] = vertex2.z;
-			mVertexElements[pos + 3] = element.normal.x;
-			mVertexElements[pos + 4] = element.normal.y;
-			mVertexElements[pos + 5] = element.normal.z;
-			mVertexElements[pos + 6] = element.texel.x;
-			mVertexElements[pos + 7] = element.texel.y;
+			mVertexElements[pos] = (float)vertex2.x;
+			mVertexElements[pos + 1] = (float)vertex2.y;
+			mVertexElements[pos + 2] = (float)vertex2.z;
+			mVertexElements[pos + 3] = (float)element.normal.x;
+			mVertexElements[pos + 4] = (float)element.normal.y;
+			mVertexElements[pos + 5] = (float)element.normal.z;
+			mVertexElements[pos + 6] = (float)element.texel.x;
+			mVertexElements[pos + 7] = (float)element.texel.y;
 			box.merge(vertex2);
 			pos += 8;
 			add += 1;
