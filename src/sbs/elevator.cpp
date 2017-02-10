@@ -571,13 +571,16 @@ bool Elevator::Stop(bool emergency)
 {
 	//Tells elevator to stop moving, no matter where it is
 
-	//exit if in inspection mode
-	if (InspectionService == true && emergency == true)
-		return ReportError("cannot stop while in inspection service mode");
+	if (emergency == true)
+	{
+		//exit if in inspection mode
+		if (InspectionService == true)
+			return ReportError("cannot stop while in inspection service mode");
 
-	//exit if in fire service phase 1 recall
-	if (FireServicePhase1 == 1 && FireServicePhase2 == 0 && emergency == true)
-		return ReportError("cannot stop while in fire service 1 recall mode");
+		//exit if in fire service phase 1 recall
+		if (FireServicePhase1 == 1 && FireServicePhase2 == 0)
+			return ReportError("cannot stop while in fire service 1 recall mode");
+	}
 
 	if (IsMoving == false)
 	{
