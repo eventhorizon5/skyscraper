@@ -576,7 +576,7 @@ bool Elevator::Stop(bool emergency)
 		return ReportError("cannot stop while in inspection service mode");
 
 	//exit if in fire service phase 1 recall
-	if (FireServicePhase1 == 1 && FireServicePhase2 == 0)
+	if (FireServicePhase1 == 1 && FireServicePhase2 == 0 && emergency == true)
 		return ReportError("cannot stop while in fire service 1 recall mode");
 
 	if (IsMoving == false)
