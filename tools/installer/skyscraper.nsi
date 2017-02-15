@@ -178,6 +178,9 @@ Section "Required libraries" SEC03
   File "${LOCAL_FILES}\msvcp100.dll"
   File "${LOCAL_FILES}\msvcr100.dll"
   File "${LOCAL_FILES}\dbghelp.dll"
+  File "${LOCAL_FILES}\vc_redist.x86.exe"
+  ExecWait '"$INSTDIR\vc_redist.x86.exe" /Q'
+  Delete "${LOCAL_FILES}\vc_redist.x86.exe"
   SetOutPath "$INSTDIR\data\caelum"
   File /r "${LOCAL_FILES}\data\caelum\*.*"
 SectionEnd
