@@ -40,7 +40,7 @@ FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2015.
 
 2. Introduction
 
-Skyscraper is a 3D virtual building simulator written in C++ using the OGRE graphics engine
+Skyscraper is a 3D virtual building simulator written in C++ using the OGRE
 (previously Crystal Space) graphics engine.  The goal of the Skyscraper project is to create a
 fully-featured, modular, multiplatform 3D realtime building simulation engine, including
 gaming support (single and network multiplayer). Everything possible is planned to be simulated,
