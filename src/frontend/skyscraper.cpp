@@ -638,7 +638,7 @@ bool Skyscraper::Initialize()
 		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)
 		{
-			ReportFatalError("Error initializing sound");
+			ReportFatalError("Error initializing sound - reason " + ToString(result));
 			DisableSound = true;
 		}
 		else
@@ -647,7 +647,7 @@ bool Skyscraper::Initialize()
 			result = soundsys->init(100, FMOD_INIT_NORMAL, &name);
 			if (result != FMOD_OK)
 			{
-				ReportFatalError("Error initializing sound");
+				ReportFatalError("Error initializing sound  - reason " + ToString(result));
 				DisableSound = true;
 			}
 			else
