@@ -643,7 +643,7 @@ bool Skyscraper::Initialize()
 		}
 		else
 		{
-			char name [30] = "Skyscraper"; //set name for PulseAudio on Linux
+			char name [] = "Skyscraper"; //set name for PulseAudio on Linux
 			result = soundsys->init(100, FMOD_INIT_NORMAL, &name);
 			if (result != FMOD_OK)
 			{
