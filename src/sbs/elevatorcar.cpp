@@ -648,7 +648,7 @@ void ElevatorCar::Loop()
 	ControlPressActive = false;
 
 	//perform first-run tasks
-	if (FirstRun == true && parent->Running == true)
+	if (FirstRun == true)
 	{
 		FirstRun = false;
 
