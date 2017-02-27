@@ -1,5 +1,13 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-fix for OpenOnStart parameter, for it to work when an elevator is stopped on startup
+-added RunState elevator parameter
+-add error reason to sound init
+-allow non-emergency stop in fire phase 1 recall mode.  This fixes an issue where an elevator wouldn't recall when the mode is activated and the elevator is moving.
+-converted 'float' values to Ogre's Real type (defaults to type 'double' precision)
+-fixed an issue where the Caelum sky name wouldn't be reset for subsequent
+-added support for call button destination floors engines on startup (feature currently disabled)
+-Integrated all engine reporting into ObjectBase class
 
 Version 1.10.6 (2.0 Alpha 10 - Update 6)
 -------------------------
