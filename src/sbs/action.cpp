@@ -607,11 +607,11 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	if (callbutton)
 	{
 		//numeric commands for elevator floor selections
-		if (IsNumeric(command_name) == true)
+		/*if (IsNumeric(command_name) == true)
 		{
 			int floor = ToInt(command_name);
 			return callbutton->SelectFloor(floor);
-		}
+		}*/
 
 		if (command_name == "off")
 			return false;
