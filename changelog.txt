@@ -6,6 +6,7 @@ Version 1.11 (2.0 Alpha 11)
 -allow non-emergency stop in fire phase 1 recall mode.  This fixes an issue where an elevator wouldn't recall when the mode is activated and the elevator is moving.
 -converted 'float' values to Ogre's Real type (defaults to type 'double' precision)
 -fixed an issue where the Caelum sky name wouldn't be reset for subsequent
+engines on startup
 -added support for call button destination floors engines on startup (feature currently disabled)
 -Integrated all engine reporting into ObjectBase class
 
