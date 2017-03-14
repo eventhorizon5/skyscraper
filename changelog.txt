@@ -1,5 +1,7 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-partially reverted revision 4631; this fixes an issue where the nudge timer
+would fully reset every time the elevator doors re-open
 -fix for OpenOnStart parameter, for it to work when an elevator is stopped on startup
 -added RunState elevator parameter
 -add error reason to sound init
