@@ -2304,13 +2304,16 @@ bool ElevatorDoor::GetHoldStatus()
 
 void ElevatorDoor::ResetNudgeTimer(bool start)
 {
-	//switch off nudge mode timer if on
-	if (nudgetimer->IsRunning() == true)
-		nudgetimer->Stop();
+	if (AreDoorsOpen() == false || doors_stopped == true)
+	{
+		//switch off nudge mode timer if on
+		if (nudgetimer->IsRunning() == true)
+			nudgetimer->Stop();
 
-	//switch off nudge mode if on
-	if (GetNudgeStatus() == true)
-		EnableNudgeMode(false);
+		//switch off nudge mode if on
+		if (GetNudgeStatus() == true)
+			EnableNudgeMode(false);
+	}
 
 	//turn on nudge mode timer if doors are open
 	if (start == true)
