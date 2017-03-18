@@ -202,6 +202,7 @@ public:
 	bool IndependentServiceOnOtherCar();
 	int FirePhase2Active();
 	bool FirePhase2OnOtherCar();
+	void SetControls(const std::string &name, const std::string &dest_name);
 
 	MeshObject* Mesh; //car mesh object
 

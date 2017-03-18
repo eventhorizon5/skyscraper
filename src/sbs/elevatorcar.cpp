@@ -3038,4 +3038,12 @@ bool ElevatorCar::FirePhase2OnOtherCar()
 	return (parent->FireServicePhase2 > 0 && parent->FireServicePhase2Car != Number);
 }
 
+void ElevatorCar::SetControls(const std::string &name, const std::string &dest_name)
+{
+	for (size_t i = 0; i < PanelArray.size(); i++)
+	{
+		PanelArray[i]->SetControls(name, dest_name);
+	}
+}
+
 }

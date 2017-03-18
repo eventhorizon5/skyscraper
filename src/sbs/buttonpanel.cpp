@@ -290,17 +290,7 @@ Control* ButtonPanel::GetFloorButton(int floor)
 {
 	//return the first control found for the specified floor
 
-	std::string floornum = ToString(floor);
-
-	if (controls.empty() == false)
-	{
-		for (size_t i = 0; i < controls.size(); i++)
-		{
-			if (controls[i]->FindActionPosition(floornum) > 0)
-				return controls[i];
-		}
-	}
-	return 0;
+	return GetControl(ToString(floor));
 }
 
 Control* ButtonPanel::GetControl(int index)
@@ -309,6 +299,21 @@ Control* ButtonPanel::GetControl(int index)
 		return 0;
 
 	return controls[index];
+}
+
+Control* ButtonPanel::GetControl(const std::string &name)
+{
+	//return the first control found that has an action that matches 'name'
+
+	if (controls.empty() == false)
+	{
+		for (size_t i = 0; i < controls.size(); i++)
+		{
+			if (controls[i]->FindActionPosition(name) > 0)
+				return controls[i];
+		}
+	}
+	return 0;
 }
 
 void ButtonPanel::RemoveControl(Control *control)
@@ -320,6 +325,30 @@ void ButtonPanel::RemoveControl(Control *control)
 		{
 			controls.erase(controls.begin() + i);
 			return;
+		}
+	}
+}
+
+int ButtonPanel::GetControlCount()
+{
+	return (int)controls.size();
+}
+
+void ButtonPanel::SetControls(const std::string &name, const std::string &dest_name)
+{
+	//set all controls that have an action specified by 'name', to the selection
+	//position that matches the action 'dest_name'
+
+	if (controls.empty() == true)
+		return;
+
+	for (size_t i = 0; i < controls.size(); i++)
+	{
+		if (controls[i]->FindActionPosition(name) > 0)
+		{
+			int index = controls[i]->FindActionPosition(dest_name);
+			if (index > 0 && controls[i]->GetSelectPosition() != index)
+				controls[i]->SetSelectPosition(index);
 		}
 	}
 }

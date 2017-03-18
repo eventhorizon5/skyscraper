@@ -55,7 +55,10 @@ public:
 	void ChangeAllLights(bool value);
 	Control* GetFloorButton(int floor);
 	Control* GetControl(int index);
+	Control* GetControl(const std::string &name);
 	void RemoveControl(Control *control);
+	int GetControlCount();
+	void SetControls(const std::string &name, const std::string &dest_name);
 
 private:
 
