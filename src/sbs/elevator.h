@@ -225,7 +225,7 @@ public:
 	void EnableNudgeMode(bool value);
 	bool OnParkingFloor();
 	bool SetHoistwayAccess(int floor, int access);
-	void SetControls(const std::string &name, const std::string &dest_name);
+	void SetControls(const std::string &action_name);
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
@@ -322,17 +322,7 @@ private:
 	//mesh container for elevator doors (not shaft doors)
 	DynamicMesh *DoorContainer;
 
-	struct ControlSet
-	{
-		ControlSet(const std::string &name, const std::string &dest_name)
-		{
-			this->name = name;
-			this->dest_name = dest_name;
-		}
-		std::string name;
-		std::string dest_name;
-	};
-	std::queue<ControlSet> ControlQueue;
+	std::queue<std::string> ControlQueue;
 
 	//elevator misc internals
 	bool MovementRunning;

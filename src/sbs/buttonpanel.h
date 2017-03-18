@@ -58,7 +58,7 @@ public:
 	Control* GetControl(const std::string &name);
 	void RemoveControl(Control *control);
 	int GetControlCount();
-	void SetControls(const std::string &name, const std::string &dest_name);
+	void SetControls(const std::string &action_name);
 
 private:
 

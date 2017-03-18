@@ -334,22 +334,19 @@ int ButtonPanel::GetControlCount()
 	return (int)controls.size();
 }
 
-void ButtonPanel::SetControls(const std::string &name, const std::string &dest_name)
+void ButtonPanel::SetControls(const std::string &action_name)
 {
-	//set all controls that have an action specified by 'name', to the selection
-	//position that matches the action 'dest_name'
+	//set all controls that have an action specified by 'name',
+	//to that action's selection position
 
 	if (controls.empty() == true)
 		return;
 
 	for (size_t i = 0; i < controls.size(); i++)
 	{
-		if (controls[i]->FindActionPosition(name) > 0)
-		{
-			int index = controls[i]->FindActionPosition(dest_name);
-			if (index > 0 && controls[i]->GetSelectPosition() != index)
-				controls[i]->SetSelectPosition(index);
-		}
+		int index = controls[i]->FindActionPosition(action_name);
+		if (index > 0 && controls[i]->GetSelectPosition() != index)
+			controls[i]->SetSelectPosition(index);
 	}
 }
 

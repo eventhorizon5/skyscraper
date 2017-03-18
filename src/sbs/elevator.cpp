@@ -2185,12 +2185,12 @@ bool Elevator::EnableACP(bool value)
 
 	if (value == true)
 	{
-		SetControls("acpon", "acpon");
+		SetControls("acpon");
 		Report("ACP mode enabled");
 	}
 	else
 	{
-		SetControls("acpon", "acpoff");
+		SetControls("acpoff");
 		Report("ACP mode disabled");
 	}
 
@@ -2241,14 +2241,14 @@ bool Elevator::EnableUpPeak(bool value)
 				}
 			}
 		}
-		SetControls("uppeakon", "uppeakon");
+		SetControls("uppeakon");
 		Report("Up Peak mode enabled");
 	}
 	else
 	{
 		ResetDoors();
 		ResetNudgeTimers();
-		SetControls("uppeakon", "uppeakoff");
+		SetControls("uppeakoff");
 		Report("Up Peak mode disabled");
 	}
 
@@ -2299,14 +2299,14 @@ bool Elevator::EnableDownPeak(bool value)
 				}
 			}
 		}
-		SetControls("downpeakon", "downpeakon");
+		SetControls("downpeakon");
 		Report("Down Peak mode enabled");
 	}
 	else
 	{
 		ResetDoors();
 		ResetNudgeTimers();
-		SetControls("downpeakon", "downpeakoff");
+		SetControls("downpeakoff");
 		Report("Down Peak mode disabled");
 	}
 
@@ -2362,7 +2362,7 @@ bool Elevator::EnableIndependentService(bool value, int car_number)
 		if (IsMoving == false)
 			if (AutoDoors == true)
 				car->OpenDoors();
-		SetControls("indon", "indon");
+		SetControls("indon");
 		Report("Independent Service mode enabled for car " + ToString(car_number));
 	}
 	else
@@ -2372,7 +2372,7 @@ bool Elevator::EnableIndependentService(bool value, int car_number)
 		ResetQueue(true, true); //this will also stop the elevator
 		ResetDoors();
 		ResetNudgeTimers();
-		SetControls("indon", "indoff");
+		SetControls("indoff");
 		Report("Independent Service mode disabled");
 	}
 
@@ -2403,7 +2403,7 @@ bool Elevator::EnableInspectionService(bool value)
 		HoldDoors(); //turn off door timers
 		ResetNudgeTimers(false); //switch off nudge timer
 		DirectionalIndicatorsOff(); //switch off directional indicators on current floor
-		SetControls("inson", "inson");
+		SetControls("inson");
 		Report("Inspection Service mode enabled");
 		HoistwayAccess = 0;
 		HoistwayAccessFloor = 0;
@@ -2413,7 +2413,7 @@ bool Elevator::EnableInspectionService(bool value)
 	{
 		ResetDoors();
 		ResetNudgeTimers();
-		SetControls("inson", "insoff");
+		SetControls("insoff");
 		Report("Inspection Service mode disabled");
 
 		UpdateFloorIndicators();
@@ -2603,18 +2603,18 @@ bool Elevator::EnableFireService2(int value, int car_number, bool force)
 
 		if (value == 1)
 		{
-			SetControls("fire2on", "fire2on");
+			SetControls("fire2on");
 			Report("Fire Service Phase 2 mode set to On for car " + ToString(car_number));
 		}
 		else
 		{
-			SetControls("fire2hold", "fire2hold");
+			SetControls("fire2hold");
 			Report("Fire Service Phase 2 mode set to Hold for car " + ToString(car_number));
 		}
 	}
 	else
 	{
-		SetControls("fire2off", "fire2off");
+		SetControls("fire2off");
 		Report("Fire Service Phase 2 mode set to Off");
 
 		FireServicePhase2Car = 0;
@@ -2766,9 +2766,9 @@ bool Elevator::SetGoButton(bool value)
 	ManualGo = value;
 
 	if (value == true)
-		SetControls("goon", "goon");
+		SetControls("goon");
 	else
-		SetControls("gooff", "gooff");
+		SetControls("gooff");
 
 	if (sbs->Verbose)
 	{
@@ -2805,9 +2805,9 @@ bool Elevator::SetUpButton(bool value)
 	ManualUp = value;
 
 	if (value == true)
-		SetControls("upon", "upon");
+		SetControls("upon");
 	else
-		SetControls("upoff", "upoff");
+		SetControls("upoff");
 
 	if (sbs->Verbose)
 	{
@@ -2839,9 +2839,9 @@ bool Elevator::SetDownButton(bool value)
 	ManualDown = value;
 
 	if (value == true)
-		SetControls("downon", "downon");
+		SetControls("downon");
 	else
-		SetControls("downoff", "downoff");
+		SetControls("downoff");
 
 	if (sbs->Verbose)
 	{
@@ -3194,12 +3194,12 @@ void Elevator::SetRunState(bool value)
 
 	if (value == false)
 	{
-		SetControls("run", "stop");
+		SetControls("stop");
 		Report("Elevator stopped");
 	}
 	else
 	{
-		SetControls("run", "run");
+		SetControls("run");
 		Report("Elevator running");
 	}
 
@@ -4373,12 +4373,11 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 	return false;
 }
 
-void Elevator::SetControls(const std::string &name, const std::string &dest_name)
+void Elevator::SetControls(const std::string &action_name)
 {
 	//queue a setcontrols action
 
-	ControlSet set (name, dest_name);
-	ControlQueue.push(set);
+	ControlQueue.push(action_name);
 }
 
 void Elevator::DoSetControls()
@@ -4387,11 +4386,11 @@ void Elevator::DoSetControls()
 
 	while (ControlQueue.empty() == false)
 	{
-		ControlSet set = ControlQueue.front();
+		std::string action_name = ControlQueue.front();
 
 		for (size_t i = 0; i < Cars.size(); i++)
 		{
-			Cars[i]->SetControls(set.name, set.dest_name);
+			Cars[i]->SetControls(action_name);
 		}
 
 		ControlQueue.pop();
