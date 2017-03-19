@@ -1,5 +1,7 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-added more tooltips to the Elevator Editor
+-added support for updating status of all elevator controls either on startup or while running, so that the controls match the mode states
 -partially reverted revision 4631; this fixes an issue where the nudge timer
 would fully reset every time the elevator doors re-open
 -fix for OpenOnStart parameter, for it to work when an elevator is stopped on startup
