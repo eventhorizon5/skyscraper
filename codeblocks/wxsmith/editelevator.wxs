@@ -483,6 +483,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtNumber" variable="txtNumber" member="yes">
 													<size>75,-1</size>
+													<tooltip>Number</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -500,6 +501,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtName" variable="txtName" member="yes">
 													<size>75,-1</size>
+													<tooltip>Name</tooltip>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 												<border>5</border>
@@ -544,6 +546,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtEnabled" variable="txtEnabled" member="yes">
 													<size>75,-1</size>
+													<tooltip>Enabled Status</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -561,6 +564,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtShaft" variable="txtShaft" member="yes">
 													<size>75,-1</size>
+													<tooltip>Shaft Number</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -578,6 +582,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtHeight" variable="txtHeight" member="yes">
 													<size>75,-1</size>
+													<tooltip>Height</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -631,6 +636,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtDoorsOpen" variable="txtDoorsOpen" member="yes">
 													<size>75,-1</size>
+													<tooltip>Doors Open</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -648,6 +654,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtBrakes" variable="txtBrakes" member="yes">
 													<size>75,-1</size>
+													<tooltip>Brakes</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -685,6 +692,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtDoorTimer" variable="txtDoorTimer" member="yes">
 													<size>75,-1</size>
+													<tooltip>Door Timer</tooltip>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -711,6 +719,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQuickClose" variable="txtQuickClose" member="yes">
 													<size>75,-1</size>
+													<tooltip>Quick Close</tooltip>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -764,6 +773,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtAlarm" variable="txtAlarm" member="yes">
 													<size>75,-1</size>
+													<tooltip>Alarm On</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -915,6 +925,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtNotified" variable="txtNotified" member="yes">
 													<size>75,-1</size>
+													<tooltip>Notified</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -958,7 +969,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtLastChimeDirection" variable="txtLastChimeDirection" member="yes">
 													<size>75,-1</size>
-													<tooltip>LastChimeDirection</tooltip>
+													<tooltip>Last Chime Direction</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -1062,6 +1073,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtMusicOn" variable="txtMusicOn" member="yes">
 													<size>75,-1</size>
+													<tooltip>Music On</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1117,7 +1129,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtFloorSounds" variable="txtFloorSounds" member="yes">
 													<size>75,-1</size>
-													<tooltip>FloorSounds</tooltip>
+													<tooltip>Floor Sounds</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1145,7 +1157,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtFloorBeeps" variable="txtFloorBeeps" member="yes">
 													<size>75,-1</size>
-													<tooltip>FloorBeeps</tooltip>
+													<tooltip>Floor Beeps</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1173,7 +1185,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtMessageSounds" variable="txtMessageSounds" member="yes">
 													<size>75,-1</size>
-													<tooltip>MessageSounds</tooltip>
+													<tooltip>Message Sounds</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1201,6 +1213,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtAutoEnable" variable="txtAutoEnable" member="yes">
 													<size>75,-1</size>
+													<tooltip>Auto Enable</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1228,6 +1241,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtReOpen" variable="txtReOpen" member="yes">
 													<size>75,-1</size>
+													<tooltip>ReOpen</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1255,6 +1269,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtAutoDoors" variable="txtAutoDoors" member="yes">
 													<size>75,-1</size>
+													<tooltip>Auto Doors</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1282,7 +1297,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtOpenOnStart" variable="txtOpenOnStart" member="yes">
 													<size>75,-1</size>
-													<tooltip>OpenOnStart</tooltip>
+													<tooltip>Open On Start</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1305,6 +1320,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtInterlocks" variable="txtInterlocks" member="yes">
 													<size>75,-1</size>
+													<tooltip>Interlocks</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1351,6 +1367,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtFloor" variable="txtFloor" member="yes">
 													<size>100,-1</size>
+													<tooltip>Floor Number</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -1442,6 +1459,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtOnFloor" variable="txtOnFloor" member="yes">
 													<size>100,-1</size>
+													<tooltip>On Floor Number</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1459,6 +1477,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtMotor" variable="txtMotor" member="yes">
 													<size>100,-1</size>
+													<tooltip>Motor Position</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1494,6 +1513,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtMusicPosition" variable="txtMusicPosition" member="yes">
 													<size>100,-1</size>
+													<tooltip>Music Position</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1650,6 +1670,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtSpeed" variable="txtSpeed" member="yes">
 											<size>75,-1</size>
+											<tooltip>Speed</tooltip>
 										</object>
 										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 										<border>5</border>
@@ -1769,6 +1790,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtRate" variable="txtRate" member="yes">
 											<size>75,-1</size>
+											<tooltip>Rate</tooltip>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -1786,6 +1808,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDirection" variable="txtDirection" member="yes">
 											<size>75,-1</size>
+											<tooltip>Direction</tooltip>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -1828,6 +1851,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtJerkRate" variable="txtJerkRate" member="yes">
 											<size>75,-1</size>
+											<tooltip>Jerk Rate</tooltip>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1873,6 +1897,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtIsIdle" variable="txtIsIdle" member="yes">
 											<size>75,-1</size>
+											<tooltip>IsIdle</tooltip>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1895,6 +1920,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtManualGo" variable="txtManualGo" member="yes">
 											<size>75,-1</size>
+											<tooltip>Manual</tooltip>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1917,6 +1943,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtLeveling" variable="txtLeveling" member="yes">
 											<size>75,-1</size>
+											<tooltip>Leveling</tooltip>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1939,6 +1966,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtParking" variable="txtParking" member="yes">
 											<size>75,-1</size>
+											<tooltip>Parking</tooltip>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1961,6 +1989,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtManualMove" variable="txtManualMove" member="yes">
 											<size>75,-1</size>
+											<tooltip>Manual Move</tooltip>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -2078,6 +2107,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtDestFloor" variable="txtDestFloor" member="yes">
 													<size>75,-1</size>
+													<tooltip>Destination Floor</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -2099,6 +2129,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtIsMoving" variable="txtIsMoving" member="yes">
 													<size>75,-1</size>
+													<tooltip>IsMoving</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -2119,6 +2150,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtMoveElevator" variable="txtMoveElevator" member="yes">
 													<size>75,-1</size>
+													<tooltip>Move</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
