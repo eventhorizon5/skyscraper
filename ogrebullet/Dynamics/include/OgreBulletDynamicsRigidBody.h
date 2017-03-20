@@ -58,27 +58,27 @@ namespace OgreBulletDynamics
 
         void setShape(Ogre::SceneNode *node,
             OgreBulletCollisions::CollisionShape *shape,
-            const float      bodyRestitution,
-            const float      bodyFriction,
-            const float      bodyMass,
+            const Ogre::Real      bodyRestitution,
+            const Ogre::Real      bodyFriction,
+            const Ogre::Real      bodyMass,
 	    bool	     add = true);
 
         void setStaticShape(Ogre::SceneNode *node,
             OgreBulletCollisions::CollisionShape *shape,
-            const float      bodyRestitution,
-            const float      bodyFriction,
+            const Ogre::Real      bodyRestitution,
+            const Ogre::Real      bodyFriction,
 			bool			 movable,
 			bool			 add = true);
 
 
 		   /*void setStaticShape(btScaledBvhTriangleMeshShape *shape,
-		           const float      bodyRestitution,
-		           const float      bodyFriction);*/
+		           const Ogre::Real      bodyRestitution,
+		           const Ogre::Real      bodyFriction);*/
 
 
         void setStaticShape(OgreBulletCollisions::CollisionShape *shape,
-            const float      bodyRestitution,
-            const float      bodyFriction);
+            const Ogre::Real      bodyRestitution,
+            const Ogre::Real      bodyFriction);
 
 
 		void addToWorld();

@@ -51,9 +51,9 @@ namespace OgreBulletDynamics
 	    CharacterController(const Ogre::String &name,
 				  DynamicsWorld *world,
 				  Ogre::SceneNode *node,
-				  float width,
-				  float height,
-				  float stepHeight);
+				  Ogre::Real width,
+				  Ogre::Real height,
+				  Ogre::Real stepHeight);
 
 		virtual ~CharacterController();
 

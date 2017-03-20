@@ -800,7 +800,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	Real green = (Real)ColorG / 255;
 	Real blue = (Real)ColorB / 255;
 
-	bool result = WriteToTexture(Text, texture, x1, y1, x2, y2, font, Ogre::ColourValue(red, green, blue, 1.0), align, valign);
+	bool result = WriteToTexture(Text, texture, x1, y1, x2, y2, font, Ogre::ColourValue((float)red, (float)green, (float)blue, 1.0), align, valign);
 	if (result == false)
 		return false;
 

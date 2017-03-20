@@ -353,14 +353,14 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D)
 	float x1, y1, z1, x, y, z;
 
 	i1 = vertices.size() - 1;
-	x1 = vertices[i1].x;
-	y1 = vertices[i1].y;
-	z1 = vertices[i1].z;
+	x1 = (float)vertices[i1].x;
+	y1 = (float)vertices[i1].y;
+	z1 = (float)vertices[i1].z;
 	for (i = 0; i < vertices.size(); i++)
 	{
-		x = vertices[i].x;
-		y = vertices[i].y;
-		z = vertices[i].z;
+		x = (float)vertices[i].x;
+		y = (float)vertices[i].y;
+		z = (float)vertices[i].z;
 		ayz += (z1 + z) * (y - y1);
 		azx += (x1 + x) * (z - z1);
 		axy += (y1 + y) * (x - x1);
@@ -372,9 +372,9 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D)
 	float sqd = ayz * ayz + azx * azx + axy * axy;
 	float invd;
 	if (sqd < SMALL_EPSILON)
-		invd = 1.0 / SMALL_EPSILON;
+		invd = 1.0f / SMALL_EPSILON;
 	else
-		invd = 1.0 / sqrt(sqd);
+		invd = 1.0f / sqrt(sqd);
 	Ogre::Vector3 norm;
 	norm.x = ayz * invd;
 	norm.y = azx * invd;

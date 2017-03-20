@@ -63,9 +63,9 @@ namespace OgreBulletDynamics
     // -------------------------------------------------------------------------
     void RigidBody::setShape(Ogre::SceneNode *node,
         OgreBulletCollisions::CollisionShape *shape,
-        const float      bodyRestitution,
-        const float      bodyFriction,
-        const float      bodyMass,
+        const Ogre::Real      bodyRestitution,
+        const Ogre::Real      bodyFriction,
+        const Ogre::Real      bodyMass,
         bool			 add)
     {
 
@@ -106,8 +106,8 @@ namespace OgreBulletDynamics
     // -------------------------------------------------------------------------
     void RigidBody::setStaticShape(Ogre::SceneNode *node,
         OgreBulletCollisions::CollisionShape *shape,
-        const float      bodyRestitution,
-        const float      bodyFriction,
+        const Ogre::Real      bodyRestitution,
+        const Ogre::Real      bodyFriction,
 		bool			 movable,
 		bool			 add)
     {
@@ -142,8 +142,8 @@ namespace OgreBulletDynamics
 	}
 	// -------------------------------------------------------------------------
     /*void RigidBody::setStaticShape(btScaledBvhTriangleMeshShape *shape,
-        const float      bodyRestitution,
-        const float      bodyFriction)
+        const Ogre::Real      bodyRestitution,
+        const Ogre::Real      bodyFriction)
     {
         //mState = new ObjectState(this);
 
@@ -158,8 +158,8 @@ namespace OgreBulletDynamics
    }*/
     // -------------------------------------------------------------------------
     void RigidBody::setStaticShape(OgreBulletCollisions::CollisionShape *shape,
-        const float      bodyRestitution,
-        const float      bodyFriction)
+        const Ogre::Real      bodyRestitution,
+        const Ogre::Real      bodyFriction)
     {
         //mState = new ObjectState(this);
 

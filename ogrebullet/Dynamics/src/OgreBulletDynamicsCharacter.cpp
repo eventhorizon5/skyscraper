@@ -46,7 +46,7 @@ namespace OgreBulletDynamics
 {
 
     // -------------------------------------------------------------------------
-    CharacterController::CharacterController(const String &name, DynamicsWorld *world, Ogre::SceneNode *node, float width, float height, float stepHeight)
+    CharacterController::CharacterController(const String &name, DynamicsWorld *world, Ogre::SceneNode *node, Ogre::Real width, Ogre::Real height, Ogre::Real stepHeight)
         :
         Object(name, world, false)
     {

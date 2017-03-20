@@ -315,9 +315,9 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 				Elevator *elevator = sbs->GetElevator(elevators[i]);
 				if (elevator)
 				{
-					for (size_t j = 1; j <= elevator->GetCarCount(); j++)
+					for (int j = 1; j <= elevator->GetCarCount(); j++)
 					{
-						ElevatorCar *car = elevator->GetCar((int)j);
+						ElevatorCar *car = elevator->GetCar(j);
 
 						for (size_t k = 0; k < car->ServicedFloors.size(); k++)
 						{

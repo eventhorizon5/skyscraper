@@ -64,8 +64,8 @@ Person::Person(Object *parent, const std::string &name, int floor, bool service_
 	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Person.RandomFrequency", 5);
 
 	//initialize random number generators
-	rnd_time = new RandomGen(time(0) + GetNumber());
-	rnd_dest = new RandomGen(time(0) + GetNumber() + 1);
+	rnd_time = new RandomGen((unsigned int)(time(0) + GetNumber()));
+	rnd_dest = new RandomGen((unsigned int)(time(0) + GetNumber() + 1));
 
 	//create timer
 	random_timer = new Timer("Random Timer", this);

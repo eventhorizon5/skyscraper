@@ -748,7 +748,7 @@ void DynamicMesh::Mesh::DeleteSubMesh(int index)
 
 			if (used == false)
 			{
-				MeshWrapper->destroySubMesh(i);
+				MeshWrapper->destroySubMesh((unsigned short)i);
 				Submeshes.erase(Submeshes.begin() + i);
 				i--;
 			}

@@ -923,7 +923,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
 	size_t trimesh_size = converted_vertices.size();
 
-	for (int i = 0; i < trimesh_size; i++)
+	for (size_t i = 0; i < trimesh_size; i++)
 	{
 		//do a (very) simple triangulation
 		//this method also somewhat works with non-planar polygons
@@ -1178,7 +1178,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 	if (deleted_indices.size() == 0)
 		return;
 
-	if (submesh < 0 || submesh > Submeshes.size())
+	if (submesh < 0 || submesh > (int)Submeshes.size())
 		return;
 
 	//construct new sorted and compressed index array
@@ -1343,7 +1343,7 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 			if ((int)poly->triangles.capacity() < size)
 				poly->triangles.reserve(size);
 
-			for (int ii = 0; ii < size; ii++)
+			for (size_t ii = 0; ii < size; ii++)
 			{
 				//check if triangle indices are valid
 				if (valid[element] == true && valid[element + 1] == true && valid[element + 2] == true)
@@ -1582,7 +1582,7 @@ Real MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direc
 			Ogre::Vector3 &tri_b = Submeshes[i].MeshGeometry[tri.b].vertex;
 			Ogre::Vector3 &tri_c = Submeshes[i].MeshGeometry[tri.c].vertex;
 
-			std::pair<bool, float> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
+			std::pair<bool, Ogre::Real> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
 			if (result.first == true)
 			{
 				if (result.second <= sbs->ToRemote(max_distance))
