@@ -3278,7 +3278,7 @@ int Elevator::AvailableForCall(int floor, int direction, int destination_floor, 
 {
 	//determines if the elevator is available for the specified hall call
 	//if report_on_failure is true, and verbose mode is enabled, report the reason for call rejection
-	//if
+	//if use_destfloor is set, only report as available if the destination_floor is serviced
 
 	//return codes:
 	//0 - busy and will eventually be available
@@ -3324,6 +3324,7 @@ int Elevator::AvailableForCall(int floor, int direction, int destination_floor, 
 												//and if it's either going the same direction as the call, or queue is not active, or idle
 												if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle())
 												{
+													//and if use_destfloor is false, or the destination floor is a serviced floor
 													if (use_destfloor == false || (use_destfloor == true && IsServicedFloor(destination_floor, report_on_failure) == true))
 													{
 														if (sbs->Verbose)
