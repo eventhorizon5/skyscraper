@@ -61,7 +61,6 @@ public:
 	int FindClosestElevator(int direction);
 	Control* GetUpControl();
 	Control* GetDownControl();
-	bool SelectFloor(int floor);
 
 private:
 	void Process(int direction);
@@ -76,8 +75,6 @@ private:
 	std::vector<int> Elevators; //elevators this call button set is assigned to
 
 	Floor *floor; //floor this call button set is on
-	int dest_floor; //optional destination floor
-	bool use_destfloor;
 
 	bool ProcessedUp;
 	bool ProcessedDown;
