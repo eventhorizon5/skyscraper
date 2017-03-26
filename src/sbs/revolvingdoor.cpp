@@ -34,7 +34,7 @@
 
 namespace SBS {
 
-RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent)
+RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), Lock(this)
 {
 	//creates a revolving door
 	//wall cuts must be performed by the calling (parent) function
@@ -48,8 +48,6 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	this->rotation = 0;
 	this->soundfile = soundfile;
 	Speed = speed;
-	Locked = 0;
-	KeyID = 0;
 	sound = 0;
 	brake = false;
 
@@ -144,14 +142,14 @@ RevolvingDoor::~RevolvingDoor()
 void RevolvingDoor::OnHit()
 {
 	if (sbs->Verbose)
-		Report("Moving revolving door '" + GetName() + "'");
+		Report("Moving");
 
 	EnableLoop(true);
 
 	//check lock state
 	if (IsLocked() == true)
 	{
-		ReportError("Revolving door '" + GetName() + "' is locked");
+		ReportError("Is locked");
 		return;
 	}
 
@@ -209,44 +207,6 @@ void RevolvingDoor::MoveDoor()
 	Rotate(0, rotation, 0);
 }
 
-void RevolvingDoor::SetLocked(bool value, int keyid)
-{
-	Locked = value;
-	KeyID = keyid;
-}
-
-bool RevolvingDoor::ToggleLock(bool force)
-{
-	//toggle lock state of the related door side
-	//if force is true, bypass key check
-
-	//quit if user doesn't have key, if force is false
-	if (KeyID != 0)
-	{
-		if (sbs->CheckKey(KeyID) == false && force == false)
-			return ReportError("Need key " + ToString(KeyID) + " to lock/unlock revolving door '" + GetName() + "'");
-	}
-
-	Locked = !Locked;
-
-	if (Locked == true)
-		Report("Locked revolving door '" + GetName() + "'");
-	else
-		Report("Unlocked revolving door '" + GetName() + "'");
-
-	return true;
-}
-
-bool RevolvingDoor::IsLocked()
-{
-	return Locked;
-}
-
-int RevolvingDoor::GetKeyID()
-{
-	return KeyID;
-}
-
 void RevolvingDoor::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	if (right == false)
@@ -255,6 +215,18 @@ void RevolvingDoor::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool
 		if (ctrl == true && shift == true)
 			ToggleLock();
 	}
+}
+
+void RevolvingDoor::Report(const std::string &message)
+{
+	//general reporting function
+	Object::Report("Revolving Door " + GetName() + ": " + message);
+}
+
+bool RevolvingDoor::ReportError(const std::string &message)
+{
+	//general error reporting function
+	return Object::ReportError("Revolving Door " + GetName() + ": " + message);
 }
 
 }

@@ -102,6 +102,8 @@ namespace SBS {
 	class RevolvingDoor;
 	class MovingWalkway;
 	class Step;
+	class Lock;
+	class DoorLock;
 }
 
 #include "object.h"

@@ -26,9 +26,11 @@
 #ifndef _SBS_DOOR_H
 #define _SBS_DOOR_H
 
+#include "lock.h"
+
 namespace SBS {
 
-class SBSIMPEXP Door : public Object
+class SBSIMPEXP Door : public Object, public DoorLock
 {
 public:
 
@@ -48,15 +50,12 @@ public:
 	bool IsOpen();
 	void Enabled(bool value);
 	void MoveDoor();
-	void SetLocked(int side, int keyid);
-	bool GetSide(const Ogre::Vector3 &position);
-	bool IsLocked(const Ogre::Vector3 &position);
-	bool ToggleLock(const Ogre::Vector3 &position, bool force = false);
-	int GetKeyID();
 	bool IsEnabled() { return is_enabled; }
 	void Loop();
 	void ClickDoor(Ogre::Vector3 &position);
 	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 private:
 	MeshObject* DoorMesh; //door mesh
@@ -66,8 +65,6 @@ private:
 
 	bool is_enabled;
 	Real rotation;
-	int Locked;
-	int KeyID;
 };
 
 }

@@ -26,9 +26,11 @@
 #ifndef _SBS_REVOLVINGDOOR_H
 #define _SBS_REVOLVINGDOOR_H
 
+#include "lock.h"
+
 namespace SBS {
 
-class SBSIMPEXP RevolvingDoor : public Object
+class SBSIMPEXP RevolvingDoor : public Object, public Lock
 {
 public:
 
@@ -42,14 +44,12 @@ public:
 	~RevolvingDoor();
 	void Enabled(bool value);
 	void MoveDoor();
-	void SetLocked(bool value, int keyid);
-	bool IsLocked();
-	bool ToggleLock(bool force = false);
-	int GetKeyID();
 	bool IsEnabled() { return is_enabled; }
 	void Loop();
 	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void OnHit();
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 private:
 	MeshObject* DoorMesh; //door mesh
@@ -60,8 +60,6 @@ private:
 	bool brake;
 	bool is_enabled;
 	Real rotation;
-	bool Locked;
-	int KeyID;
 };
 
 }

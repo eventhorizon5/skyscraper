@@ -38,7 +38,7 @@
 
 namespace SBS {
 
-Control::Control(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, Real width, Real height, bool center, int selection_position) : Object(parent)
+Control::Control(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, Real width, Real height, bool center, int selection_position) : Object(parent), Lock(this)
 {
 	//create a control at the specified location
 
@@ -56,8 +56,6 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	Direction = direction;
 	is_enabled = true;
 	TextureArray = textures;
-	Locked = false;
-	KeyID = 0;
 	light_status = false;
 	sound = 0;
 	action_hold = false;
@@ -369,7 +367,7 @@ bool Control::DoAction()
 	else if (Actions.empty() == false)
 		actionlist.push_back(Actions[current_position - 1]);
 	else
-		return ReportError("No available actions for control '" + GetName() + "'");
+		return ReportError("No available actions");
 
 	bool result = false;
 	for (size_t i = 0; i < actionlist.size(); i++)
@@ -392,7 +390,7 @@ bool Control::Press(bool reverse)
 
 	//check lock state
 	if (IsLocked() == true)
-		return ReportError("Control '" + GetName() + "' is locked");
+		return ReportError("Is locked");
 
 	//get action name of next position state
 	std::string name;
@@ -471,45 +469,6 @@ void Control::ChangeLight(bool value)
 	light_status = value;
 }
 
-void Control::SetLocked(bool value, int keyid)
-{
-	//set locked state
-	Locked = value;
-	KeyID = keyid;
-}
-
-bool Control::ToggleLock(bool force)
-{
-	//toggle lock state
-	//if force is true, bypass key check
-
-	//quit if user doesn't have key, if force is false
-	if (KeyID != 0)
-	{
-		if (sbs->CheckKey(KeyID) == false && force == false)
-			return ReportError("Need key " + ToString(KeyID) + " to lock/unlock control '" + GetName() + "'");
-	}
-
-	Locked = !Locked;
-
-	if (Locked == true)
-		Report("Locked control '" + GetName() + "'");
-	else
-		Report("Unlocked control '" + GetName() + "'");
-
-	return true;
-}
-
-bool Control::IsLocked()
-{
-	return Locked;
-}
-
-int Control::GetKeyID()
-{
-	return KeyID;
-}
-
 void Control::RemoveAction(Action *action)
 {
 	for (size_t i = 0; i < Actions.size(); i++)
@@ -542,6 +501,18 @@ void Control::OnUnclick(bool right)
 		NextSelectPosition();
 
 	action_hold = false;
+}
+
+void Control::Report(const std::string &message)
+{
+	//general reporting function
+	Object::Report("Control " + GetName() + ": " + message);
+}
+
+bool Control::ReportError(const std::string &message)
+{
+	//general error reporting function
+	return Object::ReportError("Control " + GetName() + ": " + message);
 }
 
 }

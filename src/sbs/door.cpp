@@ -37,7 +37,7 @@
 
 namespace SBS {
 
-Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent)
+Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), DoorLock(this, direction)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -65,8 +65,6 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	OpenSound = open_sound;
 	CloseSound = close_sound;
 	Speed = speed;
-	Locked = 0;
-	KeyID = 0;
 	sound = 0;
 
 	//set speed to default value if invalid
@@ -188,7 +186,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	//position is the camera position, used to check if the door is locked
 	//if force is true, locking/position check will be bypassed
 
-	Report("Opening door '" + GetName() + "'");
+	Report("Opening");
 
 	EnableLoop(true);
 
@@ -196,7 +194,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	{
 		//check lock state
 		if (IsLocked(position) == true)
-			return ReportError("Door '" + GetName() + "' is locked");
+			return ReportError("Is locked");
 	}
 
 	OpenDoor = true;
@@ -215,7 +213,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 
 void Door::Close(bool playsound)
 {
-	Report("Closing door '" + GetName() + "'");
+	Report("Closing");
 
 	EnableLoop(true);
 
@@ -293,115 +291,6 @@ void Door::MoveDoor()
 	SetRotation(0, rotation, 0);
 }
 
-void Door::SetLocked(int side, int keyid)
-{
-	//lock table:
-	//0 = unlocked
-	//1 = negative (left/front) side locked
-	//2 = positive (right/back) side locked
-	//3 = both sides locked
-
-	if (side < 0 || side > 3)
-		return;
-
-	Locked = side;
-	KeyID = keyid;
-}
-
-bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
-{
-	//toggle lock state of the related door side
-	//if force is true, bypass key check
-
-	bool replocked = false;
-
-	//quit if user doesn't have key, if force is false
-	if (KeyID != 0)
-	{
-		if (sbs->CheckKey(KeyID) == false && force == false)
-			return ReportError("Need key " + ToString(KeyID) + " to lock/unlock door '" + GetName() + "'");
-	}
-
-	if (GetSide(position) == false)
-	{
-		if (Locked == 0)
-		{
-			Locked = 1;
-			replocked = true;
-		}
-		else if (Locked == 1)
-		{
-			Locked = 0;
-			replocked = false;
-		}
-		else if (Locked == 2)
-		{
-			Locked = 3;
-			replocked = true;
-		}
-	}
-	else
-	{
-		if (Locked == 0)
-		{
-			Locked = 2;
-			replocked = true;
-		}
-		else if (Locked == 1)
-		{
-			Locked = 3;
-			replocked = true;
-		}
-		else if (Locked == 2)
-		{
-			Locked = 1;
-			replocked = false;
-		}
-	}
-
-	if (replocked == true)
-		Report("Locked door '" + GetName() + "'");
-	else
-		Report("Unlocked door '" + GetName() + "'");
-
-	return true;
-}
-
-bool Door::GetSide(const Ogre::Vector3 &position)
-{
-	//return which side of the door the position is (false for negative/left/front, true for positive/right/back)
-
-	if ((Direction >= 1 && Direction <= 4) && position.x > GetPosition().x)
-		return true;
-
-	if ((Direction >= 5 && Direction <= 8) && position.z > GetPosition().z)
-		return true;
-
-	return false;
-}
-
-bool Door::IsLocked(const Ogre::Vector3 &position)
-{
-	//returns if the door's side (in relation to the given position) is locked or not
-
-	if (Locked == 0)
-		return false;
-
-	if (Locked == 3)
-		return true;
-
-	bool side = GetSide(position);
-
-	if ((Locked == 1 && side == false) || (Locked == 2 && side == true))
-		return true;
-	return false;
-}
-
-int Door::GetKeyID()
-{
-	return KeyID;
-}
-
 void Door::ClickDoor(Ogre::Vector3 &position)
 {
 	//code that runs when a user clicks on a door
@@ -433,6 +322,18 @@ void Door::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, boo
 		else
 			ClickDoor(position);
 	}
+}
+
+void Door::Report(const std::string &message)
+{
+	//general reporting function
+	Object::Report("Door " + GetName() + ": " + message);
+}
+
+bool Door::ReportError(const std::string &message)
+{
+	//general error reporting function
+	return Object::ReportError("Door " + GetName() + ": " + message);
 }
 
 }

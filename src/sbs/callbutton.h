@@ -26,9 +26,11 @@
 #ifndef _SBS_CALLBUTTON_H
 #define _SBS_CALLBUTTON_H
 
+#include "lock.h"
+
 namespace SBS {
 
-class SBSIMPEXP CallButton : public Object
+class SBSIMPEXP CallButton : public Object, public Lock
 {
 public:
 
@@ -44,10 +46,6 @@ public:
 	void Loop();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	void SetLocked(bool value, int keyid);
-	bool IsLocked();
-	bool ToggleLock(bool force = false);
-	int GetKeyID();
 	bool FireService(int value);
 	int GetFloor();
 	void SetLightsGroup(int up, int down);

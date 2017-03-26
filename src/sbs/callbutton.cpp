@@ -47,7 +47,7 @@ public:
 	virtual void Notify();
 };
 
-CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th) : Object(parent)
+CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th) : Object(parent), Lock(this)
 {
 	//create a set of call buttons
 
@@ -584,45 +584,6 @@ bool CallButton::ReportError(const std::string &message)
 	//general reporting function
 	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;
 	return Object::ReportError(msg);
-}
-
-void CallButton::SetLocked(bool value, int keyid)
-{
-	//set locked state
-	Locked = value;
-	KeyID = keyid;
-}
-
-bool CallButton::ToggleLock(bool force)
-{
-	//toggle lock state
-	//if force is true, bypass key check
-
-	//quit if user doesn't have key, if force is false
-	if (KeyID != 0)
-	{
-		if (sbs->CheckKey(KeyID) == false && force == false)
-			return ReportError("Need key " + ToString(KeyID) + "to lock/unlock");
-	}
-
-	Locked = !Locked;
-
-	if (Locked == true)
-		Report("Locked");
-	else
-		Report("Unlocked");
-
-	return true;
-}
-
-bool CallButton::IsLocked()
-{
-	return Locked;
-}
-
-int CallButton::GetKeyID()
-{
-	return KeyID;
 }
 
 bool CallButton::FireService(int value)

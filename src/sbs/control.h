@@ -26,9 +26,11 @@
 #ifndef _SBS_CONTROL_H
 #define _SBS_CONTROL_H
 
+#include "lock.h"
+
 namespace SBS {
 
-class SBSIMPEXP Control : public Object
+class SBSIMPEXP Control : public Object, public Lock
 {
 public:
 	std::string Direction;
@@ -56,15 +58,13 @@ public:
 	bool Press(bool reverse = false);
 	void ChangeFloorLight(int floor, bool value);
 	void ChangeLight(bool value);
-	void SetLocked(bool value, int keyid);
-	bool IsLocked();
-	bool ToggleLock(bool force = false);
-	int GetKeyID();
 	void RemoveAction(Action *action);
 	bool IsEnabled() { return is_enabled; }
 	bool GetLightStatus() { return light_status; }
 	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void OnUnclick(bool right);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 private:
 	MeshObject* ControlMesh; //control mesh object
@@ -74,8 +74,6 @@ private:
 	std::vector<Action*> Actions; //control actions (faster and for static controls, uses pointer storage)
 
 	Sound *sound; //sound object
-	bool Locked;
-	int KeyID;
 	bool light_status; //light on/off value, used for floor buttons
 	bool is_enabled;
 	bool action_hold; //storage for current position action's "hold" value
