@@ -36,11 +36,6 @@ Lock::Lock(Object *parent)
 	this->Parent = parent;
 }
 
-Lock::~Lock()
-{
-
-}
-
 void Lock::SetLocked(bool value, int keyid)
 {
 	//set locked state
@@ -87,12 +82,6 @@ DoorLock::DoorLock(Object *parent, int direction)
 	KeyID = 0;
 	this->Parent = parent;
 }
-
-DoorLock::~DoorLock()
-{
-
-}
-
 
 void DoorLock::SetLocked(int side, int keyid)
 {
