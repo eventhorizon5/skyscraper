@@ -813,7 +813,7 @@ Control* CallButton::GetUpControl()
 	if (UpExists == false)
 		return 0;
 
-	return panel->GetControl(0);
+	return panel->GetControl("up");
 }
 
 Control* CallButton::GetDownControl()
@@ -821,10 +821,7 @@ Control* CallButton::GetDownControl()
 	if (DownExists == false)
 		return 0;
 
-	if (UpExists == true)
-		return panel->GetControl(1);
-	else
-		return panel->GetControl(0);
+	return panel->GetControl("down");
 }
 
 }
