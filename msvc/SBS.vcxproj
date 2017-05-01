@@ -285,6 +285,7 @@
     <ClCompile Include="..\src\sbs\floorindicator.cpp" />
     <ClCompile Include="..\src\sbs\globals.cpp" />
     <ClCompile Include="..\src\sbs\light.cpp" />
+    <ClCompile Include="..\src\sbs\lock.cpp" />
     <ClCompile Include="..\src\sbs\manager.cpp" />
     <ClCompile Include="..\src\sbs\mesh.cpp" />
     <ClCompile Include="..\src\sbs\model.cpp" />
@@ -328,6 +329,7 @@
     <ClInclude Include="..\src\sbs\floorindicator.h" />
     <ClInclude Include="..\src\sbs\globals.h" />
     <ClInclude Include="..\src\sbs\light.h" />
+    <ClInclude Include="..\src\sbs\lock.h" />
     <ClInclude Include="..\src\sbs\manager.h" />
     <ClInclude Include="..\src\sbs\mesh.h" />
     <ClInclude Include="..\src\sbs\model.h" />
