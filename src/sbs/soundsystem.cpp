@@ -163,10 +163,6 @@ SoundData* SoundSystem::Load(const std::string &filename)
 	if (filename == "")
 		return 0;
 
-	//exit if mp3 file specified
-	if (FindWithCase(filename, false, ".mp3", (int)filename.size() - 4) > 0)
-		return 0;
-
 	//return existing data element if file is already loaded
 	SoundData *existing = GetSoundData(filename);
 	if (existing)
