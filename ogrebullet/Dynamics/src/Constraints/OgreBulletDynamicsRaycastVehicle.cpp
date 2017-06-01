@@ -78,7 +78,7 @@ namespace OgreBulletDynamics
         }
     }
     // -------------------------------------------------------------------------
-    RaycastVehicle::RaycastVehicle(WheeledRigidBody *body,  
+    RaycastVehicle::RaycastVehicle(WheeledRigidBody *body,
                                 VehicleTuning *vt,
                                 VehicleRayCaster *caster) :
         ActionInterface(body),
@@ -90,12 +90,14 @@ namespace OgreBulletDynamics
 
         btRaycastVehicle *v = new btRaycastVehicle(
                 *(mTuning->getBulletTuning()),
-                body->getBulletRigidBody (), 
+                body->getBulletRigidBody (),
                 mRayCaster->getBulletVehicleRayCaster()
                 );
         mActionInterface = v;
         mWorld->addVehicle(this);
         body->setVehicle (this);
+        mChassisBody = body;
+        mNode = body->getSceneNode();
     }
     // -------------------------------------------------------------------------
     RaycastVehicle::~RaycastVehicle()
@@ -115,7 +117,7 @@ namespace OgreBulletDynamics
                                   const Ogre::Real suspensionRestLength,
                                   const Ogre::Real wheelRadius,
                                   const bool isFrontWheel,
-                                  
+
                                   const Ogre::Real wheelFriction,
                                   const Ogre::Real rollInfluence)
     {
@@ -126,7 +128,7 @@ namespace OgreBulletDynamics
                         OgreBulletCollisions::OgreBtConverter::to(wheelDirection),
                         OgreBulletCollisions::OgreBtConverter::to(wheelAxle),
                         suspensionRestLength,
-                        wheelRadius, 
+                        wheelRadius,
                         *(mTuning->getBulletTuning ()),
                         isFrontWheel));
 
