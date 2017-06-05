@@ -1,5 +1,12 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-ensure that font texture coordinates are valid, to prevent a crash
+-removed support for Windows XP
+-update to Visual Studio 2017
+-support decoding of MP3 files, since the patent has expired
+-GetUpControl and GetDownControl should search for control's action name instead of index number
+-moved lock code to separate files
+-build warning fixes
 -added more tooltips to the Elevator Editor
 -added support for updating status of all elevator controls either on startup or while running, so that the controls match the mode states
 -partially reverted revision 4631; this fixes an issue where the nudge timer
