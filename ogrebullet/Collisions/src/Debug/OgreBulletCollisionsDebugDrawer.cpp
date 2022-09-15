@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "Utils/OgreBulletConverter.h"
 
 using namespace OgreBulletCollisions;
-using namespace Ogre;
 
 //------------------------------------------------------------------------------------------------
 DebugDrawer::DebugDrawer() :
@@ -196,28 +195,28 @@ void DebugDrawer::drawAabb (const Ogre::Vector3& from,const Ogre::Vector3& to,co
 {
     if (mDebugMode & btIDebugDraw::DBG_DrawAabb)
     {
-        Vector3 halfExtents = (to-from)* 0.5f;
-        Vector3 center = (to+from) *0.5f;
+        Ogre::Vector3 halfExtents = (to-from)* 0.5f;
+        Ogre::Vector3 center = (to+from) *0.5f;
         int i,j;
 
-        Vector3 edgecoord(1.f,1.f,1.f),pa,pb;
+        Ogre::Vector3 edgecoord(1.f,1.f,1.f),pa,pb;
         for (i=0;i<4;i++)
         {
             for (j=0;j<3;j++)
             {
-                pa = Vector3(edgecoord[0]*halfExtents[0], edgecoord[1]*halfExtents[1],		
+                pa = Ogre::Vector3(edgecoord[0]*halfExtents[0], edgecoord[1]*halfExtents[1],		
                     edgecoord[2]*halfExtents[2]);
                 pa+=center;
 
                 int othercoord = j%3;
                 edgecoord[othercoord]*=-1.f;
-                pb = Vector3(edgecoord[0]*halfExtents[0], edgecoord[1]*halfExtents[1],	
+                pb = Ogre::Vector3(edgecoord[0]*halfExtents[0], edgecoord[1]*halfExtents[1],	
                     edgecoord[2]*halfExtents[2]);
                 pb+=center;
 
                 drawLine(pa,pb,color);
             }
-            edgecoord = Vector3(-1.f,-1.f,-1.f);
+            edgecoord = Ogre::Vector3(-1.f,-1.f,-1.f);
             if (i<3)
                 edgecoord[i]*=-1.f;
         }
@@ -233,7 +232,7 @@ void DebugDrawer::drawLine(const Ogre::Vector3& from,const Ogre::Vector3& to,con
 }
 //------------------------------------------------------------------------------------------------
 void DebugDrawer::drawContactPoint(const Ogre::Vector3& PointOnB,const Ogre::Vector3& normalOnB,
-                                   Real distance,int lifeTime,const Ogre::Vector3& color)
+                                   Ogre::Real distance,int lifeTime,const Ogre::Vector3& color)
 {
     if (mDebugMode & btIDebugDraw::DBG_DrawContactPoints)
     {

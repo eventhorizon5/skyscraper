@@ -55,19 +55,23 @@ void DebugCollisionShape::setStatemode(DebugCollisionShape::Mode mode)
 	if (mode != mStatemode)
 	{
 		mStatemode = mode;
+		Ogre::MaterialPtr material;
 		switch(mStatemode)
 		{
 			case DebugCollisionShape::Mode_Enabled:
-				setMaterial("OgreBulletCollisionsDebugLines/Enabled");
+				material = Ogre::MaterialManager::getSingleton().getByName("OgreBulletCollisionsDebugLines/Enabled");
+				setMaterial(material);
 			break;
 
 			case DebugCollisionShape::Mode_Disabled:
-				setMaterial("OgreBulletCollisionsDebugLines/Disabled");
+				material = Ogre::MaterialManager::getSingleton().getByName("OgreBulletCollisionsDebugLines/Disabled");
+				setMaterial(material);
 
 			break;
 
 			case DebugCollisionShape::Mode_Static:
-				setMaterial("OgreBulletCollisionsDebugLines/Static");
+				material = Ogre::MaterialManager::getSingleton().getByName("OgreBulletCollisionsDebugLines/Static");
+				setMaterial(material);
 			break;
 		}
 	}
