@@ -39,11 +39,11 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 
 	//first set default values
 	system = sbs->GetSoundSystem();
-	Position = 0;
+	Position = Ogre::Vector3::ZERO;
 	Volume = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Volume", 1.0);
 	MaxDistance = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", 10000.0);
 	MinDistance =(float) sbs->GetConfigFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
-	Direction = 0;
+	Direction = Ogre::Vector3::ZERO;
 	SoundLoop = sbs->GetConfigBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->GetConfigInt("Skyscraper.SBS.Sound.Speed", 100);
 	Percent = 0;

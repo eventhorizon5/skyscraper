@@ -58,8 +58,8 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, R
 	SetRun(run);
 	Speed = speed;
 	sbs->IncrementMovingWalkwayCount();
-	start = 0;
-	end = 0;
+	start = Ogre::Vector3::ZERO;
+	end = Ogre::Vector3::ZERO;
 
 	//create sound object
 	sound = new Sound(this, name, true);
@@ -338,7 +338,7 @@ void MovingWalkway::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool
 			Run = 0;
 			for (size_t i = 0; i < Steps.size(); i++)
 			{
-				Steps[i]->vector = 0;
+				Steps[i]->vector = Ogre::Vector3::ZERO;
 				Steps[i]->speed = 0;
 			}
 		}

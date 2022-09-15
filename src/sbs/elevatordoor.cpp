@@ -88,7 +88,7 @@ ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 	NudgeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.NudgeSound", "buzz.wav");
 	doors_stopped = false;
 	ShaftDoorThickness = 0;
-	ShaftDoorOrigin = 0;
+	ShaftDoorOrigin = Ogre::Vector3::ZERO;
 	nudge_enabled = false;
 	ManualSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.ManualSpeed", 0.2);
 	SlowSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.SlowSpeed", 0.5);

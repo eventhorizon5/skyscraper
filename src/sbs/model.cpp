@@ -43,7 +43,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 
 	//set up SBS object
 	SetValues("Model", name, false);
-	Offset = 0;
+	Offset = Ogre::Vector3::ZERO;
 	is_key = false;
 	KeyID = 0;
 	global = IsGlobal();

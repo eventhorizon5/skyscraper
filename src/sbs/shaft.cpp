@@ -63,8 +63,8 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	IsEnabled = true;
 	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 	bottom = sbs->GetFloor(startfloor)->Altitude;
-	cutstart = 0;
-	cutend = 0;
+	cutstart = Ogre::Vector2::ZERO;
+	cutend = Ogre::Vector2::ZERO;
 	ShowFloors = 0;
 	ShowOutside = false;
 	ShowInterfloors = false;
@@ -72,7 +72,7 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	EnableCheck = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = 0;
+	lastposition = Ogre::Vector3::ZERO;
 	InElevator = false;
 	ShowFloorsFull_Enabled = false;
 

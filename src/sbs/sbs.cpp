@@ -1851,9 +1851,9 @@ void SBS::ResetDoorwayWalls()
 	wall1b = false;
 	wall2a = false;
 	wall2b = false;
-	wall_extents_x = 0;
-	wall_extents_y = 0;
-	wall_extents_z = 0;
+	wall_extents_x = Ogre::Vector2::ZERO;
+	wall_extents_y = Ogre::Vector2::ZERO;
+	wall_extents_z = Ogre::Vector2::ZERO;
 }
 
 Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th)
@@ -2801,11 +2801,22 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 		}
 	}
 
-#if OGRE_VERSION >= 0x00010900
-	Ogre::FileSystemArchive filesystem(".", "FileSystem", false);
-#else
-	Ogre::FileSystemArchive filesystem(".", "FileSystem");
-#endif
+	//get filesystem archive
+	Ogre::Archive *filesystem = 0;
+	Ogre::ArchiveManager::ArchiveMapIterator it = Ogre::ArchiveManager::getSingleton().getArchiveIterator();
+	while(it.hasMoreElements())
+	{
+		const std::string& key = it.peekNextKey();
+		Ogre::Archive* arch = it.getNext();
+		if(key == ".")
+		{
+			filesystem = arch;
+			break;
+		}
+	}
+
+	if (!filesystem)
+		return "";
 
 	//check for a mount point
 	Ogre::StringVectorPtr listing;
@@ -2816,7 +2827,7 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 	{
 		//for the General group, check the native filesystem
 
-		if (filesystem.exists(filename) == true)
+		if (filesystem->exists(filename) == true)
 		{
 			//if exact filename exists, cache and exit
 			CacheFilename(filename, filename);
@@ -2826,7 +2837,7 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 
 		//otherwise get listing of files to check
 		if (filesystem_listing.isNull())
-			filesystem_listing = filesystem.list();
+			filesystem_listing = filesystem->list();
 		listing = filesystem_listing;
 	}
 	else

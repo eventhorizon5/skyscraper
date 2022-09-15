@@ -59,8 +59,8 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 	SetRun(run);
 	Speed = speed;
 	sbs->IncrementEscalatorCount();
-	start = 0;
-	end = 0;
+	start = Ogre::Vector3::ZERO;
+	end = Ogre::Vector3::ZERO;
 	buffer_zone_steps = 2;
 
 	//create sound object
@@ -419,7 +419,7 @@ void Escalator::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt
 			Run = 0;
 			for (size_t i = 0; i < Steps.size(); i++)
 			{
-				Steps[i]->vector = 0;
+				Steps[i]->vector = Ogre::Vector3::ZERO;
 				Steps[i]->speed = 0;
 			}
 		}

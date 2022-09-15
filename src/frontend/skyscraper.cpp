@@ -485,7 +485,7 @@ bool Skyscraper::Initialize()
 			if(!mRoot->restoreConfig())
 			{
 				//show dialog if load failed
-				mRoot->showConfigDialog();
+				mRoot->showConfigDialog(0);
 			}
 		}
 	}
@@ -498,7 +498,7 @@ bool Skyscraper::Initialize()
 	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
 	if (rendersystem)
 	{
-		Ogre::ConfigOptionMap& CurrentRendererOptions = mRoot->getRenderSystem()->getConfigOptions();
+		Ogre::ConfigOptionMap CurrentRendererOptions = mRoot->getRenderSystem()->getConfigOptions();
 		Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
 
 		for (; configItr != CurrentRendererOptions.end(); configItr++)
@@ -673,7 +673,7 @@ bool Skyscraper::Initialize()
 		Report("Sound Disabled");
 
 	//load Caelum plugin
-	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+	/*if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
 	{
 		try
 		{
@@ -684,7 +684,7 @@ bool Skyscraper::Initialize()
 		{
 			return ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
 		}
-	}
+	}*/
 
 	//set platform name
 	std::string arch;
@@ -1107,7 +1107,8 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 		//create rectangle
 		Ogre::Rectangle2D* rect = new Ogre::Rectangle2D(true);
 		rect->setCorners(x, -y, x + w, -(y + h));
-		rect->setMaterial(material);
+		Ogre::MaterialPtr materialptr = Ogre::MaterialManager::getSingleton().getByName(material);
+		rect->setMaterial(materialptr);
 		if (background == true)
 			rect->setRenderQueueGroup(Ogre::RENDER_QUEUE_BACKGROUND);
 
@@ -1580,7 +1581,7 @@ const std::string Skyscraper::getOgreHandle() const
 	// grab the window object
 	GdkWindow* gdkWin = gtk_widget_get_window((GtkWidget*)window->GetHandle());
 	Display* display = GDK_WINDOW_XDISPLAY(gdkWin);
-	Window wid = GDK_WINDOW_XWINDOW(gdkWin);
+	Window wid = GDK_WINDOW_XID(gdkWin);
 
 	// screen (returns "display.screen")
 	std::string screenStr = DisplayString(display);

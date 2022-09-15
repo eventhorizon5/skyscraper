@@ -128,7 +128,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	RecallUnavailable = false;
 	ManualGo = false;
 	Created = false;
-	MotorPosition = 0;
+	MotorPosition = Ogre::Vector3::ZERO;
 	QueueResets = sbs->GetConfigBool("Skyscraper.SBS.Elevator.QueueResets", false);
 	FirstRun = true;
 	ParkingFloor = 0;
@@ -152,7 +152,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WaitForTimer = false;
 	SoundsQueued = false;
 	HeightSet = false;
-	elevposition = 0;
+	elevposition = Ogre::Vector3::ZERO;
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);

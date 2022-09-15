@@ -70,8 +70,8 @@ TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 	{
 		MapIndex[i] = 0;
 		OldMapIndex[i] = 0;
-		OldMapUV[i] = 0;
-		MapUV[i] = 0;
+		OldMapUV[i] = Ogre::Vector2::ZERO;
+		MapUV[i] = Ogre::Vector2::ZERO;
 	}
 	DefaultMapper = sbs->GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	texturecount = 0;
@@ -700,7 +700,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	font = Ogre::FontManager::getSingleton().getByName(fontname, "General");
 
 	//load if font is not already loaded
-	if (font.isNull())
+	if (!font)
 	{
 		try
 		{

@@ -50,15 +50,15 @@ Stairs::Stairs(Object *parent, int number, Real CenterX, Real CenterZ, int start
 	StairsNum = number;
 	this->startfloor = startfloor;
 	this->endfloor = endfloor;
-	cutstart = 0;
-	cutend = 0;
+	cutstart = Ogre::Vector2::ZERO;
+	cutend = Ogre::Vector2::ZERO;
 	InsideStairwell = false;
 	IsEnabled = true;
 	lastfloor = 0;
 	lastfloorset = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = 0;
+	lastposition = Ogre::Vector3::ZERO;
 	ShowFloors = false;
 	ShowFullStairs = 0;
 

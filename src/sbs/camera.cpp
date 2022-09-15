@@ -100,11 +100,11 @@ Camera::Camera(Object *parent) : Object(parent)
 	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0);
 	object_number = 0;
 	object_line = 0;
-	HitPosition = 0;
+	HitPosition = Ogre::Vector3::ZERO;
 	RotationStopped = false;
 	MovementStopped = false;
-	accum_movement = 0;
-	prev_accum_movement = 0;
+	accum_movement = Ogre::Vector3::ZERO;
+	prev_accum_movement = Ogre::Vector3::ZERO;
 	collision_reset = false;
 	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
 	use_startdirection = false;
@@ -1077,7 +1077,7 @@ void Camera::MoveCharacter()
 	else
 		MainCamera->move(accum_movement);
 	prev_accum_movement = accum_movement;
-	accum_movement = 0;
+	accum_movement = Ogre::Vector3::ZERO;
 }
 
 void Camera::ResetCollisions()

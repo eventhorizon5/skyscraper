@@ -69,7 +69,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	DirMessageSound = false;
 	DoorMessageSound = false;
 	Fan = true;
-	MusicPosition = 0;
+	MusicPosition = Ogre::Vector3::ZERO;
 	Height = 0;
 	HeightSet = false;
 	lastdoor_result = 0;
@@ -100,7 +100,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	FirstRun = true;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = 0;
+	lastposition = Ogre::Vector3::ZERO;
 	lastfloor = 0;
 	lastfloorset = false;
 	StartingFloor = 0;

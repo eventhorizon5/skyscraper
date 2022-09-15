@@ -27,6 +27,9 @@
 #include "globals.h"
 #include "sbs.h"
 #include <OgreFileSystem.h>
+#include <OgreArchive.h>
+#include <OgreArchiveManager.h>
+#include <OgreException.h>
 #include <stdlib.h>
 #include <cmath>
 #include "skyscraper.h"
@@ -292,17 +295,14 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	if (Simcore->Verbose)
 		Simcore->Report("Filename: '" + Filename + "'");
 
-	//load file
-#if OGRE_VERSION >= 0x00010900
-	Ogre::FileSystemArchive filesystem(".", "FileSystem", true);
-#else
-	Ogre::FileSystemArchive filesystem(".", "FileSystem");
-#endif
+	Ogre::FileSystemArchiveFactory *factory = new Ogre::FileSystemArchiveFactory();
+        Ogre::Archive *filesystem = factory->createInstance(".", true);
+        Ogre::ArchiveManager::getSingleton().addArchiveFactory(factory);
 
 	Ogre::DataStreamPtr filedata;
 	try
 	{
-		filedata = filesystem.open(Filename, true);
+		filedata = filesystem->open(Filename, true);
 	}
 	catch (Ogre::Exception &e)
 	{
