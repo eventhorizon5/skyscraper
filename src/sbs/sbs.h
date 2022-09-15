@@ -26,6 +26,8 @@
 #ifndef _SBS_H
 #define _SBS_H
 
+#include <deque>
+#include <queue>
 #include "OgrePrerequisites.h"
 #include "OgreSharedPtr.h"
 
@@ -47,7 +49,7 @@ namespace OgreBulletCollisions {
 namespace Ogre {
 	class ConfigFile;
 	struct Box;
-	typedef vector<String>::type StringVector;
+	typedef std::vector<String> StringVector;
 	typedef SharedPtr<StringVector> StringVectorPtr;
 }
 
