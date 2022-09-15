@@ -935,7 +935,7 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 
 	Ogre::TextureManager::getSingleton().setVerbose(false);
 	Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(Filename);
-	if (tex.isNull() == false)
+	if (tex)
 		material = Filename;
 
 	//load image data from file, if not already preloaded

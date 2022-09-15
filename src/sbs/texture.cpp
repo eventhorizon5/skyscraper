@@ -112,7 +112,7 @@ TextureManager::~TextureManager()
 	//remove manually-created textures
 	for (size_t i = 0; i < manual_textures.size(); i++)
 	{
-		if (manual_textures[i].isNull() == false)
+		if (manual_textures[i])
 		{
 			Ogre::TextureManager::getSingleton().remove(manual_textures[i]->getHandle());
 		}
@@ -132,7 +132,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	bool has_alpha = false;
 	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	if (mTex.isNull())
+	if (!mTex)
 		return false;
 	std::string texturename = mTex->getName();
 
@@ -177,7 +177,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 		//load texture
 		Ogre::TexturePtr mTex = LoadTexture(filenames2[i], mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
-		if (mTex.isNull())
+		if (!mTex)
 			return false;
 		std::string texturename = mTex->getName();
 
@@ -230,21 +230,21 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	bool has_alpha = false, has_alpha2 = false;
 	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	if (mTex.isNull())
+	if (!mTex)
 		return false;
 	std::string texturename = mTex->getName();
 
 	//load specular texture
 	mTex = LoadTexture(specular_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
-	if (mTex.isNull())
+	if (!mTex)
 		return ReportError("Error loading texture" + specular_filename2);
 	std::string specular_texturename = mTex->getName();
 
 	//load blend texture
 	mTex = LoadTexture(blend_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
-	if (mTex.isNull())
+	if (!mTex)
 		return ReportError("Error loading texture" + blend_filename2);
 	std::string blend_texturename = mTex->getName();
 
@@ -289,7 +289,7 @@ bool TextureManager::LoadMaterial(const std::string &materialname, const std::st
 
 	mMat = GetMaterialByName(matname, "Materials");
 
-	if (mMat.isNull())
+	if (!mMat)
 		return false;
 
 	//show only clockwise side of material
@@ -347,7 +347,7 @@ bool TextureManager::UnloadTexture(const std::string &name, const std::string &g
 	//unloads a texture
 
 	Ogre::ResourcePtr wrapper = GetTextureByName(name, group);
-	if (wrapper.isNull())
+	if (!wrapper)
 		return false;
 	Ogre::TextureManager::getSingleton().remove(wrapper);
 	DecrementTextureCount();
@@ -360,7 +360,7 @@ bool TextureManager::UnloadMaterial(const std::string &name, const std::string &
 	//unloads a material
 
 	Ogre::ResourcePtr wrapper = GetMaterialByName(name, group);
-	if (wrapper.isNull())
+	if (!wrapper)
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(wrapper);
 	DecrementMaterialCount();
@@ -386,7 +386,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	bool has_alpha = false;
 	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	if (mTex.isNull())
+	if (!mTex)
 		return false;
 
 	//set default values if specified
@@ -461,7 +461,7 @@ bool TextureManager::RotateTexture(const std::string &name, Real angle)
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	if (mMat.isNull())
+	if (!mMat)
 		return false;
 
 	//get texture unit state
@@ -493,7 +493,7 @@ bool TextureManager::RotateAnimTexture(const std::string &name, Real speed)
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	if (mMat.isNull())
+	if (!mMat)
 		return false;
 
 	//get texture unit state
@@ -525,7 +525,7 @@ bool TextureManager::ScrollTexture(const std::string &name, Real x_offset, Real 
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	if (mMat.isNull())
+	if (!mMat)
 		return false;
 
 	//get texture unit state
@@ -557,7 +557,7 @@ bool TextureManager::ScrollAnimTexture(const std::string &name, Real x_speed, Re
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	if (mMat.isNull())
+	if (!mMat)
 		return false;
 
 	//get texture unit state
@@ -589,7 +589,7 @@ bool TextureManager::ScaleTexture(const std::string &name, Real x_scale, Real y_
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	if (mMat.isNull())
+	if (!mMat)
 		return false;
 
 	//get texture unit state
@@ -626,7 +626,7 @@ bool TextureManager::TransformTexture(const std::string &name, const std::string
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	if (mMat.isNull())
+	if (!mMat)
 		return false;
 
 	//get texture unit state
@@ -715,7 +715,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 		}
 		catch (Ogre::Exception &e)
 		{
-			if (!font.isNull())
+			if (font)
 			{
 				//unload texture and font, if an error occurred
 				Ogre::TextureManager::getSingleton().remove(fontname + "Texture");
@@ -727,12 +727,12 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	//get original texture
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
-	if (ptr.isNull())
+	if (!ptr)
 		return ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
 
 	std::string texname = GetTextureName(ptr);
 	Ogre::TexturePtr background = GetTextureByName(texname);
-	if (background.isNull())
+	if (!background)
 		return ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
 
 	bool has_alpha = background->hasAlpha();
@@ -835,13 +835,13 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	//get original texture
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
 
-	if (ptr.isNull())
+	if (!ptr)
 		return ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
 
 	std::string texname = GetTextureName(ptr);
 	Ogre::TexturePtr image1 = GetTextureByName(texname);
 
-	if (image1.isNull())
+	if (!image1)
 		return ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
 
 	bool has_alpha = image1->hasAlpha();
@@ -849,13 +849,13 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	//get overlay texture
 	ptr = GetMaterialByName(Overlay);
 
-	if (ptr.isNull())
+	if (!ptr)
 		return ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
 
 	texname = GetTextureName(ptr);
 	Ogre::TexturePtr image2 = GetTextureByName(texname);
 
-	if (image2.isNull())
+	if (!image2)
 		return ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
 
 	//set default values if specified
@@ -1799,7 +1799,7 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	std::string texname = GetTextureName(font->getMaterial());
 	TexturePtr fontTexture = GetTextureByName(texname);
 
-	if (fontTexture.isNull())
+	if (!fontTexture)
 		return false;
 
 	//output glyph map to file
@@ -2081,13 +2081,13 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 			mTex = GetTextureByName(filename2, path);
 
 			//if not found, load new texture
-			if (mTex.isNull())
+			if (!mTex)
 			{
 				mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
 				IncrementTextureCount();
 			}
 
-			if (mTex.isNull())
+			if (!mTex)
 			{
 				ReportError("Error loading texture" + filename2);
 				return mTex;
@@ -2105,10 +2105,10 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 			mTex = GetTextureByName(texturename, path);
 
 			//if not found, load new texture
-			if (mTex.isNull())
+			if (!mTex)
 				mTex = loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
 
-			if (mTex.isNull())
+			if (!mTex)
 			{
 				ReportError("Error loading texture" + filename2);
 				return mTex;

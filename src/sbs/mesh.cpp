@@ -588,7 +588,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			Ogre::Vector3* vertices;
 			long unsigned int* indices;
 			Ogre::AxisAlignedBox box;
-			GetMeshInformation(collidermesh.getPointer(), vertex_count, vertices, index_count, indices, box);
+			GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
 			delete[] indices;
@@ -1999,7 +1999,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 		Report("Loading material script " + matname2);
 		Ogre::MaterialManager::getSingleton().parseScript(stream, path);
 
-		if(!stream.isNull())
+		if(stream)
 		{
 			stream->seek(0);
 			while(!stream->eof())
@@ -2008,15 +2008,15 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 				TrimString(line);
 				if (StartsWith(line, "material", true) == true)
 				{
-					Ogre::vector<Ogre::String>::type vec = Ogre::StringUtil::split(line," \t:");
-					for (Ogre::vector<Ogre::String>::type::iterator it = vec.begin(); it < vec.end(); ++it)
+					std::vector<Ogre::String> vec = Ogre::StringUtil::split(line," \t:");
+					for (std::vector<Ogre::String>::iterator it = vec.begin(); it < vec.end(); ++it)
 					{
 						std::string match = (*it);
 						TrimString(match);
 						if (!match.empty())
 						{
 							Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
-							if (!materialPtr.isNull())
+							if (materialPtr)
 							{
 								Report("Loading material " + match);
 								//materialPtr->compile();

@@ -79,7 +79,7 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	Mesh* mesh = new Mesh(this, "", node, render_distance, filename, path);
 
 	//if load failed
-	if (mesh->MeshWrapper.isNull())
+	if (!mesh->MeshWrapper)
 	{
 		delete mesh;
 		return false;
@@ -601,7 +601,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		catch (Ogre::Exception &e)
 		{
 			sbs->ReportError("Error loading model " + filename + "\n" + e.getDescription());
-			MeshWrapper.setNull();
+			MeshWrapper = 0;
 			return;
 		}
 	}
@@ -625,9 +625,9 @@ DynamicMesh::Mesh::~Mesh()
 	}
 	client_entries.clear();
 
-	if (MeshWrapper.get())
+	if (MeshWrapper)
 		Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
-	MeshWrapper.setNull();
+	MeshWrapper = 0;
 }
 
 void DynamicMesh::Mesh::Enabled(bool value)
@@ -1116,7 +1116,7 @@ bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 		return false;
 
 	Ogre::AxisAlignedBox Bounds = MeshWrapper->getBounds();
-	if (Bounds.isNull() == true)
+	if (Bounds.isNull())
 		return false;
 
 	Ogre::Vector3 min = Bounds.getMinimum();

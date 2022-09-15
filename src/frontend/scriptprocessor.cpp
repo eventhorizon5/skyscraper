@@ -315,7 +315,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	}
 
 	//exit if an error occurred while loading
-	if(filedata.isNull())
+	if(!filedata)
 	{
 		std::string msg = "Error loading building file";
 		if (insert == false)

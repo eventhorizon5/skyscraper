@@ -28,7 +28,7 @@
 #include <wx/app.h>
 #include <OgrePrerequisites.h>
 #include <OgreCommon.h>
-#include <OgreVector3.h>
+#include <Ogre.h>
 #include <OgreLog.h>
 
 //wxWidgets definitions

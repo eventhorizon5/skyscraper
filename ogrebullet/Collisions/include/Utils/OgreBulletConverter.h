@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 #include "OgreBulletCollisionsPreRequisites.h"
 
-#include "OgreVector3.h"
+#include "Ogre.h"
 #include "OgreQuaternion.h"
 
 namespace OgreBulletCollisions

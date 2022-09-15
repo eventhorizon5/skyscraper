@@ -53,7 +53,7 @@ DebugLines::DebugLines() : SimpleRenderable()
     if (group_exists == true)
     {
     	MaterialPtr test = MaterialManager::getSingleton().getByName("OgreBulletCollisionsDebugLines/Enabled", "OgreBulletCollisions");
-    	if (!test.isNull())
+    	if (test)
     		materials_created = true;
     }
 

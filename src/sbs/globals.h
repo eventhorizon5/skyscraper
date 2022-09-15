@@ -28,8 +28,9 @@
 
 #include <string>
 #include <vector>
-#include <OgreVector2.h>
-#include <OgreVector3.h>
+//#include <OgreVector2.h>
+//#include <OgreVector3.h>
+#include <Ogre.h>
 
 //DLL Exporting
 #ifdef _WIN32

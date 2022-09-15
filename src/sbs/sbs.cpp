@@ -2836,7 +2836,7 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 		}
 
 		//otherwise get listing of files to check
-		if (filesystem_listing.isNull())
+		if (!filesystem_listing)
 			filesystem_listing = filesystem->list();
 		listing = filesystem_listing;
 	}
