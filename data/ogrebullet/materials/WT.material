@@ -1,0 +1,42 @@
+material DT__default__
+{
+	technique
+	{
+		pass
+		{
+			//lighting off
+			diffuse vertexcolour
+		}
+	}
+}
+material Material/SOLID/TEX/box.jpg/VertCol
+{
+	technique
+	{
+		pass
+		{
+			//diffuse vertexcolour
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture box.jpg
+			}
+		}
+	}
+}
+
+material "1 - Default"
+{
+    technique
+	{
+		pass
+		{
+			//diffuse vertexcolour
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture box.jpg
+			}
+		}
+	}
+}

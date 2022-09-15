@@ -1,0 +1,25 @@
+material testmat
+{
+        receive_shadows on
+        technique
+        {
+                pass
+                {
+                        texture_unit
+                        {
+                                texture data/materials/windows11h.jpg
+                        }
+                        texture_unit
+                        {
+                                texture data/materials/windows11hspec.jpg
+                                colour_op alpha_blend
+                        }
+                        texture_unit
+                        {
+                        texture data/materials/sky3.jpg
+                        colour_op_ex blend_current_alpha src_texture src_current
+                                env_map spherical
+                }
+                }
+        }
+}

@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{899501B5-1571-4301-B4D0-5FAADAE2A607}</ProjectGuid>
+    <RootNamespace>Skyscraper</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v141_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\Skyscraper\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\Skyscraper\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\Skyscraper\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\Skyscraper\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>erase ..\src\frontend\revmain.h
+..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
+
+</Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/Skyscraper.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\src\sbs;$(BULLET_HOME)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME)\include;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\Components\Overlay\include;$(WXWIN)\\lib\vc_dll\mswu;$(WXWIN)\include;$(FMOD_HOME)\api\lowlevel\inc;$(CAELUM_HOME)\main\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;_UNICODE;UNICODE;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Release/Skyscraper.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>..\Skyscraper.pdb</ProgramDataBaseFileName>
+      <BrowseInformation>false</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>SBS.lib;OgreMain.lib;OgreOverlay.lib;wxbase30u.lib;wxmsw30u_core.lib;wxmsw30u_gl.lib;fmod_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../Skyscraper.exe</OutputFile>
+      <Version>
+      </Version>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>..\;.\Release;$(OGRE_HOME)\lib\release;$(WXWIN)\lib\vc_dll;$(FMOD_HOME)\api\lowlevel\lib;$(CAELUM_HOME)\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>..\Skyscraper.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/Skyscraper.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PreBuildEvent>
+      <Command>erase ..\src\frontend\revmain.h
+..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
+
+</Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\Release/Skyscraper.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\src\sbs;$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\Components\Overlay\include;$(WXWIN_64)\\lib\vc_x64_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\lowlevel\inc;$(CAELUM_HOME_64)\main\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;_UNICODE;UNICODE;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Release/Skyscraper.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>..\Skyscraper.pdb</ProgramDataBaseFileName>
+      <BrowseInformation>false</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>SBS.lib;OgreMain.lib;OgreOverlay.lib;wxbase30u.lib;wxmsw30u_core.lib;wxmsw30u_gl.lib;fmod64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../Skyscraper.exe</OutputFile>
+      <Version>
+      </Version>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>..\;.\Release;$(OGRE_HOME_64)\lib\release;$(WXWIN_64)\lib\vc_x64_dll;$(FMOD_HOME)\api\lowlevel\lib;$(CAELUM_HOME_64)\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>..\Skyscraper.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/Skyscraper.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command>erase ..\src\frontend\revmain.h
+..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
+</Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/Skyscraper.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\src\sbs;$(BULLET_HOME)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME)\include;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\Components\Overlay\include;$(WXWIN)\\lib\vc_dll\mswu;$(WXWIN)\include;$(FMOD_HOME)\api\lowlevel\inc;$(CAELUM_HOME)\main\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;_UNICODE;UNICODE;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Debug/Skyscraper.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_gl.lib;fmod_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../Skyscraper.exe</OutputFile>
+      <Version>
+      </Version>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>..\;.\Debug;$(OGRE_HOME)\lib\debug;$(WXWIN)\lib\vc_dll;$(FMOD_HOME)\api\lowlevel\lib;$(CAELUM_HOME)\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/Skyscraper.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/Skyscraper.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PreBuildEvent>
+      <Command>erase ..\src\frontend\revmain.h
+..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
+</Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\Debug/Skyscraper.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\src\sbs;$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\Components\Overlay\include;$(WXWIN_64)\\lib\vc_x64_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\lowlevel\inc;$(CAELUM_HOME_64)\main\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;_UNICODE;UNICODE;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Debug/Skyscraper.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_gl.lib;fmod64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../Skyscraper.exe</OutputFile>
+      <Version>
+      </Version>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>..\;.\Debug;$(OGRE_HOME_64)\lib\debug;$(WXWIN_64)\lib\vc_x64_dll;$(FMOD_HOME)\api\lowlevel\lib;$(CAELUM_HOME_64)\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/Skyscraper.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/Skyscraper.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\frontend\actionviewer.cpp" />
+    <ClCompile Include="..\src\frontend\cameracontrol.cpp" />
+    <ClCompile Include="..\src\frontend\console.cpp" />
+    <ClCompile Include="..\src\frontend\createobject.cpp" />
+    <ClCompile Include="..\src\frontend\debugpanel.cpp" />
+    <ClCompile Include="..\src\frontend\editelevator.cpp" />
+    <ClCompile Include="..\src\frontend\enginecontext.cpp" />
+    <ClCompile Include="..\src\frontend\enginemanager.cpp" />
+    <ClCompile Include="..\src\frontend\keydialog.cpp" />
+    <ClCompile Include="..\src\frontend\loaddialog.cpp" />
+    <ClCompile Include="..\src\frontend\mainscreen.cpp" />
+    <ClCompile Include="..\src\frontend\meshcontrol.cpp" />
+    <ClCompile Include="..\src\frontend\moveobject.cpp" />
+    <ClCompile Include="..\src\frontend\objectinfo.cpp" />
+    <ClCompile Include="..\src\frontend\parameterviewer.cpp" />
+    <ClCompile Include="..\src\frontend\peoplemanager.cpp" />
+    <ClCompile Include="..\src\frontend\profilergui.cpp" />
+    <ClCompile Include="..\src\frontend\skycontrol.cpp" />
+    <ClCompile Include="..\src\frontend\skyscraper.cpp" />
+    <ClCompile Include="..\src\frontend\stackwalker.cpp" />
+    <ClCompile Include="..\src\frontend\stats.cpp" />
+    <ClCompile Include="..\src\frontend\textwindow.cpp" />
+    <ClCompile Include="..\src\frontend\scriptprocessor.cpp" />
+    <ClCompile Include="..\src\frontend\script_globals.cpp" />
+    <ClCompile Include="..\src\frontend\script_buildings.cpp" />
+    <ClCompile Include="..\src\frontend\script_textures.cpp" />
+    <ClCompile Include="..\src\frontend\script_commands.cpp" />
+    <ClCompile Include="..\src\frontend\script_floors.cpp" />
+    <ClCompile Include="..\src\frontend\script_elevators.cpp" />
+    <ClCompile Include="..\src\frontend\script_elevatorcars.cpp" />
+    <ClCompile Include="..\src\frontend\script_section.cpp" />
+    <ClCompile Include="..\src\frontend\script_vehicles.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\frontend\actionviewer.h" />
+    <ClInclude Include="..\src\frontend\cameracontrol.h" />
+    <ClInclude Include="..\src\frontend\console.h" />
+    <ClInclude Include="..\src\frontend\createobject.h" />
+    <ClInclude Include="..\src\frontend\debugpanel.h" />
+    <ClInclude Include="..\src\frontend\editelevator.h" />
+    <ClInclude Include="..\src\frontend\enginecontext.h" />
+    <ClInclude Include="..\src\frontend\enginemanager.h" />
+    <ClInclude Include="..\src\frontend\scriptprocessor.h" />
+    <ClInclude Include="..\src\frontend\keydialog.h" />
+    <ClInclude Include="..\src\frontend\loaddialog.h" />
+    <ClInclude Include="..\src\frontend\mainscreen.h" />
+    <ClInclude Include="..\src\frontend\meshcontrol.h" />
+    <ClInclude Include="..\src\frontend\moveobject.h" />
+    <ClInclude Include="..\src\frontend\objectinfo.h" />
+    <ClInclude Include="..\src\frontend\parameterviewer.h" />
+    <ClInclude Include="..\src\frontend\peoplemanager.h" />
+    <ClInclude Include="..\src\frontend\profilergui.h" />
+    <ClInclude Include="..\src\frontend\skycontrol.h" />
+    <ClInclude Include="..\src\frontend\skyscraper.h" />
+    <ClInclude Include="..\src\frontend\stackwalker.h" />
+    <ClInclude Include="..\src\frontend\stats.h" />
+    <ClInclude Include="..\src\frontend\textwindow.h" />
+    <ClInclude Include="..\src\frontend\uexception.h" />
+    <ClInclude Include="..\src\frontend\script_section.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\skyscraper.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Skyscraper.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="SBS.vcxproj">
+      <Project>{1164eb58-f768-469d-9ac2-8a940b3b1bfd}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

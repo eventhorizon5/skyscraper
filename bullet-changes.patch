@@ -1,0 +1,149 @@
+diff -urN bullet.orig/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp bullet.new/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp
+--- bullet.orig/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp	2014-01-10 15:49:31.000000000 -0600
++++ bullet.new/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp	2015-03-26 20:16:59.766935213 -0500
+@@ -51,7 +51,7 @@
+ m_ignoreMargin(false),
+ m_lastUsedMethod(-1),
+ m_catchDegeneracies(1),
+-m_fixContactNormalDirection(1)
++m_fixContactNormalDirection(0)
+ {
+ }
+ btGjkPairDetector::btGjkPairDetector(const btConvexShape* objectA,const btConvexShape* objectB,int shapeTypeA,int shapeTypeB,btScalar marginA, btScalar marginB, btSimplexSolverInterface* simplexSolver,btConvexPenetrationDepthSolver*	penetrationDepthSolver)
+@@ -67,7 +67,7 @@
+ m_ignoreMargin(false),
+ m_lastUsedMethod(-1),
+ m_catchDegeneracies(1),
+-m_fixContactNormalDirection(1)
++m_fixContactNormalDirection(0)
+ {
+ }
+ 
+diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.cpp bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.cpp
+--- bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2015-03-26 13:15:36.992897379 -0500
++++ bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2015-12-22 17:59:06.345343465 -0600
+@@ -136,6 +136,7 @@
+        m_upAxis = upAxis;
+        m_addedMargin = 0.02;
+        m_walkDirection.setValue(0,0,0);
++       m_normalizedDirection.setValue(0,0,0);
+        m_useGhostObjectSweepTest = true;
+        m_ghostObject = ghostObject;
+        m_stepHeight = stepHeight;
+@@ -187,7 +188,7 @@
+ 
+ 	collisionWorld->getDispatcher()->dispatchAllCollisionPairs(m_ghostObject->getOverlappingPairCache(), collisionWorld->getDispatchInfo(), collisionWorld->getDispatcher());
+ 
+-	m_currentPosition = m_ghostObject->getWorldTransform().getOrigin();
++	//m_currentPosition = m_ghostObject->getWorldTransform().getOrigin();
+ 	
+ 	btScalar maxPen = btScalar(0.0);
+ 	for (int i = 0; i < m_ghostObject->getOverlappingPairCache()->getNumOverlappingPairs(); i++)
+@@ -234,10 +235,13 @@
+ 			//manifold->clearManifold();
+ 		}
+ 	}
+-	btTransform newTrans = m_ghostObject->getWorldTransform();
+-	newTrans.setOrigin(m_currentPosition);
+-	m_ghostObject->setWorldTransform(newTrans);
+-//	printf("m_touchingNormal = %f,%f,%f\n",m_touchingNormal[0],m_touchingNormal[1],m_touchingNormal[2]);
++	if (penetration == true)
++	{
++		btTransform newTrans = m_ghostObject->getWorldTransform();
++		newTrans.setOrigin(m_currentPosition);
++		m_ghostObject->setWorldTransform(newTrans);
++		//printf("m_touchingNormal = %f,%f,%f\n",m_touchingNormal[0],m_touchingNormal[1],m_touchingNormal[2]);
++	}
+ 	return penetration;
+ }
+ 
+@@ -338,17 +342,19 @@
+ 	btScalar distance2 = (m_currentPosition-m_targetPosition).length2();
+ //	printf("distance2=%f\n",distance2);
+ 
+-	if (m_touchingContact)
++	/*if (m_touchingContact)
+ 	{
+ 		if (m_normalizedDirection.dot(m_touchingNormal) > btScalar(0.0))
+ 		{
+ 			//interferes with step movement
+-			//updateTargetPositionBasedOnCollision (m_touchingNormal);
++			updateTargetPositionBasedOnCollision (m_touchingNormal);
+ 		}
+-	}
++	}*/
+ 
+ 	int maxIter = 10;
+ 
++	doPenetrationRecovery(collisionWorld);
++
+ 	while (fraction > btScalar(0.01) && maxIter-- > 0)
+ 	{
+ 		start.setOrigin (m_currentPosition);
+@@ -607,24 +613,9 @@
+ void btKinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
+ {
+ 	
+-	int numPenetrationLoops = 0;
+-	m_touchingContact = false;
+-	while (recoverFromPenetration (collisionWorld))
+-	{
+-		numPenetrationLoops++;
+-		m_touchingContact = true;
+-		if (numPenetrationLoops > 4)
+-		{
+-			//printf("character could not recover from penetration = %d\n", numPenetrationLoops);
+-			break;
+-		}
+-	}
+-
+ 	m_currentPosition = m_ghostObject->getWorldTransform().getOrigin();
+ 	m_targetPosition = m_currentPosition;
+ //	printf("m_targetPosition=%f,%f,%f\n",m_targetPosition[0],m_targetPosition[1],m_targetPosition[2]);
+-
+-	
+ }
+ 
+ #include <stdio.h>
+@@ -768,3 +759,20 @@
+ {
+ 	m_interpolateUp = value;
+ }
++
++void btKinematicCharacterController::doPenetrationRecovery(btCollisionWorld* collisionWorld)
++{
++	int numPenetrationLoops = 0;
++	m_touchingContact = false;
++
++	while (recoverFromPenetration (collisionWorld))
++	{
++		numPenetrationLoops++;
++		m_touchingContact = true;
++		if (numPenetrationLoops > 4)
++		{
++			//printf("character could not recover from penetration = %d\n", numPenetrationLoops);
++			break; +		}
++	}
++}
+diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.h bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.h
+--- bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.h	2015-03-26 13:15:36.992897379 -0500
++++ bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.h	2015-03-26 01:23:54.895928312 -0500
+@@ -94,6 +94,7 @@
+ 	void updateTargetPositionBasedOnCollision (const btVector3& hit_normal, btScalar tangentMag = btScalar(0.0), btScalar normalMag = btScalar(1.0));
+ 	void stepForwardAndStrafe (btCollisionWorld* collisionWorld, const btVector3& walkMove);
+ 	void stepDown (btCollisionWorld* collisionWorld, btScalar dt);
++	void doPenetrationRecovery(btCollisionWorld* collisionWorld);
+ public:
+ 
+ 	BT_DECLARE_ALIGNED_ALLOCATOR();
+@@ -162,6 +163,10 @@
+	{
+                m_useGhostObjectSweepTest = useGhostObjectSweepTest;
+        }
+
+        bool onGround () const;
+        void setUpInterpolate (bool value);
++	void setShape(btConvexShape* shape)
++       {
++               m_convexShape = shape;
++       }

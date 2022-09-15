@@ -1,0 +1,1532 @@
+Version 1.11 (2.0 Alpha 11)
+-------------------------
+-call buttons now fail the active elevator if it encounters a movement processing error, fixing an issue where the call button would hang if an error occurred
+-for controls, OnUnclick should not reverse the selection position if the previous action failed, since the reversal already took place
+-added function name to SetHoistwayAccess errors
+-(Sears Tower) removed the floor on 108
+-(Sears Tower) shaft fixes
+-(Sears Tower) switched freight elevator doors to center dualspeed
+-(Sears Tower) interfloor fixes
+-(Sears Tower) added freight elevators 4 to 6
+-(Sears Tower) added freight elevators 2 and 3
+-(Sears Tower) added additional freight elevator shafts, and others
+-reset new_time variable when unloading sky system
+-have sky system reload if the primary engine/building is reloaded
+-added coordinates for Sears Tower
+-added more deprecation warnings
+-added separate riser texture and tread texture options for Stairs and Escalator objects, to help fix texture issues
+-added INI file option to use the system time as default, if not specified in a building file
+-put SkyName into Caelum INI file section
+-trim off second's decimal point
+-added a button to the Sky Control window to get the system time
+-added ability to use system time as the DateTime value for buildings
+-added ability to set the time scale (using the TimeScale value) for buildings
+-elevator doors should not automatically enable nudge mode timer when Fire Service Phase 2 is on
+-renamed Min/Max functions to simplify
+-switch Swap usage to std::swap
+-add missing parent_deleting flags
+-properly store shaft cut values
+-(Triton Center) added new objects to building
+-added support for creating elevator and counterweight rails
+-added CounterweightStartSound, CounterweightMoveSound and CounterweightStopSound elevator parameters
+-added counterweight and rope textures
+-added RopePosition and RopeTexture elevator parameters
+-added GetExtents and ChangeHeight polygon functions
+-(Simple building) extended shaft above building roof
+-added CreateCounterweight function
+-(Vehicle) the 'created' variable needs to be initialized
+-require chassis to be created when creating vehicle
+-added more checks to prevent crashes on vehicle creation
+-make sure errors are reported when trying to recreate a vehicle with the same number
+-(doxygen) disabled RTF and Man page formats
+-allow deleting of walls in meshes such as "external" where SBS is the parent object
+-don't create colliders for rope meshes - this also fixes the variable that switches off automatic collider creation
+-added more profiler probes
+-switched profiler box to text box
+-added INI file keyboard configuration
+-split keyboard configuration off to separate file
+-check existence of camera object - this fixes a crash that happened when driving a vehicle to another sim engine
+-DeleteWalls needs to clear Walls array when finished
+-DeleteWalls needs to delete polygons before deleting wall object
+-added GetBounds function
+-added vehicle demo building
+-font name fix
+-added support for separate up and down elevator movement speeds
+-don't report a generic error message when creating the primary car.  This allows the specific error messages on car creation to be reported.
+-added vehicle support
+-added OgreBullet data
+-added VehicleManager object
+-adding support for crouching
+-ensure that font texture coordinates are valid, to prevent a crash
+-update to Visual Studio 2017
+-support decoding of MP3 files, since the patent has expired
+-GetUpControl and GetDownControl should search for control's action name instead of index number
+-moved lock code to separate files
+-build warning fixes
+-added more tooltips to the Elevator Editor
+-added support for updating status of all elevator controls either on startup or while running, so that the controls match the mode states
+-partially reverted revision 4631; this fixes an issue where the nudge timer
+would fully reset every time the elevator doors re-open
+-fix for OpenOnStart parameter, for it to work when an elevator is stopped on startup
+-added RunState elevator parameter
+-add error reason to sound init
+-allow non-emergency stop in fire phase 1 recall mode.  This fixes an issue where an elevator wouldn't recall when the mode is activated and the elevator is moving.
+-converted 'float' values to Ogre's Real type (defaults to type 'double' precision)
+-fixed an issue where the Caelum sky name wouldn't be reset for subsequent
+engines on startup
+-added support for call button destination floors engines on startup (feature currently disabled)
+-Integrated all engine reporting into ObjectBase class
+
+Version 1.10.6 (2.0 Alpha 10 - Update 6)
+-------------------------
+-removed extra elevator enable
+-elevators need to be enabled when camera attaches
+
+Version 1.10.5 (2.0 Alpha 10 - Update 5)
+-------------------------
+-properly position escalator and walkway sounds
+-use separate meshes for escalator and moving walkway steps
+-use maximum rendering distance of 100 for escalator and moving walkway steps
+-only move steps if near escalator or moving walkway
+-return fix for Gotofloor action
+
+Version 1.10.4 (2.0 Alpha 10 - Update 4)
+-------------------------
+-camera start position should not rely on a starting floor
+-added Skylab building set
+-added Ground building map
+-runloop fixes
+-added GotoFloor action support
+-added teleporter action support
+-fixed issue where a call panel would call in both directions if only a single down control was available
+
+Version 1.10.3 (2.0 Alpha 10 - Update 3)
+-------------------------
+-step movement states should be reset when switching off escalator/moving
+walkway
+-added action support for escalators and moving walkways
+-position sounds correctly for escalators and moving walkways
+-steps should reset values on startup
+
+
+Version 1.10.2 (2.0 Alpha 10 - Update 2)
+-------------------------
+-fixes for escalator and moving walkway motion
+
+Version 1.10.1 (2.0 Alpha 10 - Update 1)
+-------------------------
+-added support for moving walkways
+-added support for escalators
+-added Headless Mode for future use
+-integrated reporting functions into Object
+-integrated Enabled() function into Object
+-fixes for vertical elevator door movement
+
+Version 1.10 (2.0 Alpha 10)
+-------------------------
+-added support for revolving doors
+-when in fire service phase 2 mode, only open phase 2's car doors on recall floor, not oth
+er cars
+-added "PeakOff" action, and updated documentation
+-reset mouse cursor when exiting to main menu
+-FinishMove should turn on floor that the camera is active on, instead of the elevator's GotoFloor
+-update naming of directional indicator meshes
+-show main object name instead of mesh name, for click reports
+-FinishDoors function should show a script error if it fails
+-show an error if a scene node is not created properly
+-when freelook is enabled in an engine, the mouse cursor needs to be updated when switching engines.  This also consolidates the related freelook code into a function.
+-values need to be cleared when switching engines
+-fixes for reported issues with multi-car support
+-for the "Elevator:Car" script parameter, if just the elevator is specified, the code should find the car that services the floor, instead of just using the first car
+-added INI file and script "HoistwayAccessHold" option
+-added object OnUnclick function, which is called when a mouse button is released on an object
+-Hoistway Access mode now uses constant pressure on the switches to work, which can be turned off
+-actions can now have a "hold" state, which requires that a control have constant pressure to prevent it from reverting to (normally) an "off" position.  Used for Hoistway Access mode
+-fixes for ShowMenu behavior and command line "no-menu" option
+-added CheckScript mode, which allows scripts to be quickly checked for errors, instead of fully loading them
+-fix for the "Stairwells" string match in the GetObjectRange function
+-cleanups, found via cppcheck
+-memory leak fix for Dynamic Mesh system - the mVertexElements array needs to be deleted on return
+-(Scripts) added a check to ensure that a floor's altitude is properly set at the end of a Floor section
+-(Scripts) move end-of-section code into per-section functions
+-brought back ComputeNormal function, which was removed in revision 4679, due to precision issues causing certain walls to display improperly.  The issue appears to be due to Ogre's Plane function calculating in double-precision mode, with the ComputeNormal calculating in single-precision, so a workaround has to be found for Ogre.
+-character controller should remove itself from Bullet world on delete
+-call buttons should not store pointers to control objects; this fix now allows for the call button's controls to be deleted
+-call button actions can now be used from scripts, and details have been added to the guide
+-add note about how leaving the "texture" parameter blank for the button panel, will hide the back
+-revamped Call Button objects:
+--action system now supports Call Button actions
+--made Button Panel code generic (removed dependency on Elevator Cars), so that it can be used with multiple types of parents
+--switched Call Button object to use a Button Panel as it's button canvas
+-objects need to unregister their dynamic runloops on deletion
+-added virtual OnClick function for objects
+-shut down resource manager on exit
+-have character controller properly clean up objects when deleted
+-call button timer should quickly fire on the first shot, before waiting a longer interval for future processing
+-added support for dynamic runloops, which should help reduce per-frame loop overhead.  This functionality allows objects to optionally register themselves with their parents to activate/deactivate their runloops, and then the parent calls a LoopChildren() function to run all registered child loops
+-door movement now uses a standard parent runloop method, instead of a main simulator callback
+-have call buttons use a Timer object for processing the call loop (frequency set to 1 second), instead of using a callback entry in the simulator root
+-fixed a loop issue in the ProcessGotoFloor function that was causing some elevator cars to be skipped
+-fixed problem in FinishMove function, where the call button arrival notification was only checking the arrival direction of the primary floor call, not ones for other cars
+-when adding an elevator route, the car number should be reported if the elevator has more than 1 car
+-when enabling Hoistway Access, require shaft doors to be open on the specified floor
+-Hoistway Access switch should cause elevator to move, instead of separately using inspection service controls
+-add profiling to ElevatorCar loop
+-moved Camera loop code and timing code into standard Loop function
+-renamed SBS MainLoop to standard object "Loop", and moved camera loop call to end of SBS loop
+-have ResetBuilding function be used as the standard object's ResetState function, and have it also reset the camera state if the camera's active.  This allows the SBS engine root to be reset, to reset the building state.
+-removed SegmentPlane function
+-removed and replaced old Classify function with an AABB test
+-Cut function now skips polygons that are completely inside the cutting area, instead of needlessly processing over them and not getting cut results
+-removed old point-on-polygon/findwall code
+-removed old ComputeNormal function
+-intersection functions need to convert the polygon's relative plane to absolute positioning
+-fixed computing of stored polygon plane, and polygon intersection functions now used the stored plane instead of computing one
+-engines shouldn't automatically make themselves the active engine on entry, if they're an ancestor of the active engine.  This fixes issues where overlapping engines' activations would bounce back and forth, causing colliders to fall through the ground, and wrong engines being selected
+-moved shared script section variables into a separate Config Handler object, mainly to fix an issue where the shared variables were never reset on script interpreter shutdown/startup
+-make sure elevator's CreateElevator function returns with error if the primary car has an error
+-added key switch textures for Hoistway Access
+-added "selection_position" parameter to Control object (AddControl and AddActionControl commands), which allows you to specify the starting selection position
+-added "Simple - Hoistway Access" building
+-Move Object window needs to keep the SBS engine pointer current, otherwise a crash can happen when reloading a building
+-split Script Processor out into multiple files and classes
+-added Hoistway Access mode feature
+-added missing ReOpen elevator parameter to script interpreter, and fixed script guide
+-fixed an issue where nudge mode would not activate properly when an elevator in Fire Phase 2 mode was recalled to the lobby
+-added top-level Ogre exception handler, which should help with error reports
+-(Sears Tower) Express elevators are now real double-decker elevators
+-added "Simple - Double Decker" building
+-added elevator double-decker (multi-car) support
+-fixed issue where an elevator in Fire Service Phase 2 mode wouldn't put doors into nudge mode, when recalled from lobby (Phase 1 mode re-enabled)
+-added elevator ChimeOnArrival parameter
+-make sure profiler is cleaned up when window exits
+-update profiler statistics every 10 frames instead of continuously
+-added more performance metrics for the Profiler
+-properly group radio buttons in Elevator Editor
+-CameraState should store FOV value, so that the camera's FOV will be persistent when switching engines
+-added "Simple - Top Box" building
+-if a texture load fails, the texture resource needs to be removed afterwards.  This fixes an issue where the failed texture would show up as loaded, during a reload
+-if elevator doors are open due to the elevator waiting in a peak mode, don't reset the door timers when a call button on the same floor is pressed
+-(OpenGL only) use standard texture copy method if dimensions are the same, to try to remedy texture copy crashes mainly on systems with Intel graphics, with small non-pow2 textures
+-set name of FMod audio client, used with PulseAudio on Linux
+-enhanced setting of adjusted floor 0 altitudes
+-if floor 0 is created after floor -1, adjust floor 0 based on floor -1's altitude
+-when creating basement floors, if floor 0 is created first, properly calculate floor -1's altitude offset based on floor 0, instead of assuming a default value
+-frontend size_t migrations, to simplify loop code
+-disable double-buffer fps fix in Windows, due to an issue where the screen turns black on fullscreen
+-removed old Windows-only CodeBlocks file, and rename Linux one
+-added converted Mac icon, and added Mac bundle data into tools folder
+-queue the creation of the progress dialog, to fix an issue on Mac where the main window would freeze if a building is autoloaded
+-DeleteButtons should be run in Load function
+-added building "open with" load support for Mac systems
+-app should switch current working directory to executable's directory on start, which allows double-clicking on building files outside of the app to start
+-added command line options for fullscreen and no-panel modes
+-added command line options to disable the intro music, show version and enable verbose mode
+-added command line options for showing/hiding the console and main menu
+-added command line option support
+-enabled large address flag for 32-bit builds, and also included the disabling of inline function expansions
+-have GetLineInformation function also return function name
+-have crash report show script interpreter state, if a script is loading
+-moved global door code into new DoorManager object, to fix positioning issues
+-CutAll function needs to remove floor's base offset for it to cut stairwell walls properly
+-(Simple) added filler walls for the stairs doors
+-fixed cut voffset for AddFillerWalls
+-fixed Triton Center external filler walls, and added mention in script guide about the voffset value
+-added "isexternal" parameter to AddFillerWalls script command
+-(Triton Center) have exterior doors use new External Doors feature
+-fix for AddShaftStdDoor command
+-added AddExternalDoor script command
+-(Glass Tower) service elevator button arrangement fix
+-floor indicators need to use proper texture prefix when created
+-when elevator doors are being manually opened (shift-click), shift-clicking again will stop the doors
+-when an elevator checks if it's available for a call, the interlock check should skip the current elevator floor to prevent issues, since that check is done later
+-disable the door sensor if the elevator is waiting in a peak mode
+-elevator interlock check should be skipped if the elevator is waiting in a peak mode
+-added an "always" value to the ShowFullStairs command, which allows a stairwell to always be fully shown, like the ShowFullShaft command does with shafts
+-added INI file option to switch off the Dynamic Mesh's auto combiner
+-wxWidgets string cleanups
+-SwitchEngines function should try to switch to active engine's parent, if possible
+-elevator doors should only set "hold" option if not moving manually
+-for door re-openings, only issue a re-open on doors that are moving
+-position command in Globals section needs to recursively move child engines when run
+-fixed an issue where the Position command in the Globals script section wouldn't work for buildings loaded in nested Buildings sections
+-have CutForEngine function pass engine cut operation to parent, mainly so that nested Buildings sections in code will cut the top-level engine properly
+-child engine positions need to be set relative of their parent engine
+-elevators should report that they're unavailable for a call if the interlock check fails.  This fixes a potential call button lockup
+-fixed triangle reindexing by adding proper validity checks, to fix a problem that arose when switching to an unsigned int type
+-(Triton Center) added LevelingOpen parameter to elevators
+-(Triton Center) use standard height measurements for doors and elevators, currently on hotel levels
+-fixed an issue where the dynamic mesh's Prepare flag wasn't being handled properly
+-(dynamic meshes) added support for automatically re-preparing meshes when changing textures, if multiple clients are referencing a specific submesh, to fix an issue where changing a texture would affect multiple client meshes
+-active elevator status should be reset if active elevator becomes unavailable
+-IsLeveled function needs to do a fuzzy check for the elevator's position, to overcome very slight differences with floor altitudes
+-manually-created textures need to be removed on engine shutdown
+-(Triton Center) fixed top of East Stairwell (on 141-142)
+-manual texture creation calls should check for exceptions
+-elevators should reset queues when switching off Independent Service mode
+-use default pixel formats for textures, and automatically determine the type when creating a manual texture
+-when changing a texture, the associated polygons need to have their material names updated, which fixes crashes related to failed geometry and submesh references
+-prevent duplicate texture loads
+-removed Caelum test material
+-use default (write-only) texture type, for functions where reading is not needed
+-make sure that the emergency stop status is cleared, in a situation where it could be initiated after the run of FinishMove()
+-merged "Separate Vertices" branch, which separates out the SBS MeshObject's vertex tables into per-submesh tables
+-reset elevator camera offset if outside vertical range
+-build fixes for Ogre 1.10
+-show renderer in Windows crash reports
+-console will turn autoscroll off if user clicks at a location to stay at in the text box, and scroll will reenable when the "Auto Scroll" button is clicked
+-fixed an issue where physical models would not properly stay in elevators
+-header rework, to improve compiling performance
+-created new TextureManager object, for texture-related functions
+-added a Move button to the Engine Manager dialog, to allow moving sim engines
+-show the control reference when pressing the F1 key
+-changed 'faces' to 'triangles' for F2 key function
+-added new Dynamic Meshes system, which automatically combines grouped mesh objects into a single mesh, if needed, to greatly improve performance
+-when elevator number is changed, properly update the door count slider
+-fixed typo in SetRotation code, causing X and Z issues during Y axis rotation
+-added missing F8 key to docs
+-merged divide-by-zero fixes - fixes a reported issue in the elevator deceleration (jerk rate calculation) code
+-control panel needs to properly unregister on exit
+-(OgreBullet) add proper isInWorld check to base collision object, instead of a rigid body variable
+-(OgreBullet) manually update static collider bounding boxes, to improve performance
+-adjust freelook speed for frame rate
+-moved mainscreen code into separate file
+-added event-driven keyboard and mouse input system
+-reworked code that handles persistent shaft doors, so that they only stay persistent when the camera is active in that engine
+-removed extra shaft door disable code, since mesh disabling code should be run after the simulator startup, to prevent new colliders being added to disabled meshes
+-simplified triangle index array in PolyMesh system, to prevent an extra vertex copy operation.  This removes the TriangleMesh type and reuses TriangleIndices instead
+-moved Triangle code into separate header file, and added operator functions
+-renamed TriangleType to Triangle, due to SBS namespace addition
+-disable elevators in shafts that have ShowFloors disabled, when leaving/resetting building
+-turn off shafts and stairwells when resetting building
+-make sure destobject-specified models are custom models, not loaded models
+-disable Caelum sky system when switching to wireframe mode, to hide the sky triangles
+-added mention of subfolders for Buildings section Load command
+-when switching to fullscreen on Windows, enable double-buffering on the window to fix performance issues
+-have Global AddWall/AddFloor commands use a specified mesh object directly instead of processing a string internally - this also fixes a crash if no valid mesh was found in the functions.
+-have AddGround also draw underside of landscape
+-when inserting another script file, script should be loaded and inserted as a single block, instead of calling insert() for each line, which causes performance problems
+-preallocate memory for script file data
+-Floor or Elevator script section loops should report when they're finished
+-global models can now be transported in elevators, since they now properly change parents
+-added "Simple - Custom Models" building
+-fixed issue where AddShaftModel and AddStairsModel commands were doing a file check for the wrong parameter, causing false error messages
+-added support for custom models to be specified as a "DestObject" value, in global/floor/elevator sections, and even as part of a shaft or stairwell.
+-added the ability to use the floor's Interfloor and ColumnFrame meshes, and also Shaft and Stairwell meshes as a script "destobject"
+-added a "RelativeY" option to the AddCustomWall command, to allow for relative Y offsets in a floor section, making it compatible with other similar commands
+-SetKey state wasn't being properly reset in the script interpreter
+-objects created after the simulator start should be initialized properly
+-added model centering code to OnInit function, to support custom model centering
+-fixed an issue where AddTriangleWall wasn't adding the floor's offset to the 3rd Y value
+-added support for creating custom models
+-added scaling support for SBS geometry meshes
+-prevent run of geometry processor if the mesh is a loaded model, and added more error message details
+-fixed menu screen button corruption with double-precision Ogre
+-replaced the old file selection dialog with a simplified building list dialog, which also fixes Mac issues associated with the old dialog
+-modal windows should be created on the stack instead (fix for some object memory leaks)
+-added Load Building dialog for the Engine Manager
+-added bounds views to Engine Manager dialog
+-clean up empty engine slots at the end of the list, when deleting an engine
+-GetPoint and GetWallExtents functions should iterate through all wall polygons, instead of searching by name
+-fixed a matching issue with the FindPolygon function, and moved their code into the Wall object
+-engines should re-cut for child engines on reload
+-moved RenderOnStartup override into Engine Context, to allow the option when reloading a building
+-if a user walks outside of all engine boundaries, revert their movement so they stay within the active engine
+-lots of fixes to support deleting engines.  The system now keeps instance slots open when an engine is deleted, which can be reused later.
+-fixed a major vector preallocation bug in the ProcessSubMesh function, causing severe slowdowns with EG881's Landscapes test
+-added CreateWallObject and AddPolygon script commands
+-have CreateWallBox and AddDoorwayWalls functions automatically create wall objects
+-fixed an issue where the AddCustomWall, AddCustomFloor and AddTriangleWall commands were double-adjusting the stored per-texture sizing info.  This bug appeared during the CS 1.8 development, and so is not present in Alpha 7.
+-made new AddPolygon function, and moved the AddCustomWall functionality into it
+-the AddTriangleWall, CreateWallBox and CreateWallBox2 commands weren't working properly when Elevator meshes were specified, due to being disabled from a Genmesh transition in 2010.
+-Prepare() function should create 32-bit index buffers if the number of vertices goes outside of the 16-bit range, and especially to prevent a short integer overflow (fix for EG881's 'Landscapes' test)
+-only have the primary engine create the old skybox
+-have sound system properly handle engine offsets and rotations
+-added parent/child support for engines, and added the ability for a parent engine to be cut for a child engine's bounds
+-Font code needs to unload the generated texture and font, if an error occurs during font load. This fixes a crash that happens if a missing font's file is added after building load, and the building is reloaded.
+-switch to other engines when entering their bounds, instead of waiting to leave the active engine's bounds
+-added ToGlobal and FromGlobal functions (C++)
+-fixed crashes in the Object Manager and Move Object windows, which were caused by the SBS pointer not being updated properly when a building is reloaded
+-HitBeam function fixes for engine offsets
+-added support for rotating SBS engines
+-added support for relative orientations
+-skip Buildings script section when reloading building
+-added Swap functions (C++)
+-fixed top interior wall of CreateWallBox function, which wasn't displaying properly (this bug appeared during the Ogre transition)
+-added Texture Override support to the CreateWallBox commands
+-reset camera position if attaching to an engine where the engine's camera is outside of it's bounds
+-report when setting an active engine
+-added building resets when moving between buildings
+-added support for exporting and importing the camera state, to reapply camera settings when walking between engines
+-added support for walking between engines, with automatic context switching
+-make sure progress dialog is deleted on shutdown
+-sync camera when attaching
+-added "City Demo" building.
+-have SBS engine and Engine Contexts report instance numbers on console
+-only pause for SBS banner for the first instance
+-if concurrent loading is off, make sure buildings load in order properly
+-added the "Simple - Multiple Buildings" and "Simple - Concurrent" multi-building demos.
+-added Position and Bounds script global commands
+-added Buildings section to the script interpreter, for loading multiple buildings
+-if trigger's Y values are both 0, essentially ignore the Y factors when testing for proximity
+-add double type to ToString function - now builds with Ogre in double-precision mode
+-removed the shift-click call button status change
+-when the sim engine is moved, the camera needs to update itself properly so that it can move along with it
+-sound objects in controls, triggers, callbuttons and doors are now only created if a sound file is specified
+-discard wall objects that are created outside of engine boundaries
+-added position-based IsInside function to Trigger object
+-added support for cutting outside engine bounds
+-added bounds variables and main proximity trigger to engine
+-have manual modes not allow new movement if the elevator is already moving - fixes an issue where the elevator would suddenly come to a standstill if the direction button was pressed while stopping
+-removed 'k' engine shutdown key assignment
+-added support for manual elevator up/down movement switches, which use the same UpOn/UpOff and DownOn/DownOff commands as Inspection Mode, along with a demo building based on the original Simple Manual
+-status indicators in the Elevator Editor window should update when the mode is changed, instead of when the -values are refreshed or changed from the window
+-added the IsOnFloor and OnRecallFloor functions
+-some fixes for issues with elevator Peak modes causing doors to fully close and re-open when call buttons are pressed
+-(Regression fix for rev 4066) - properly reset Active Elevator variable when call button is no longer active
+-(Regression fix for rev 4066) - call buttons should have separate Active Elevator variables for each call direction
+-fixed an issue where an elevator wouldn't stop and open on the recall floor, if on that floor but not leveled
+-elevators should have a separate status flag for manual stops, to prevent a conflict with the new stop-on-dequeue feature
+-added CopyTexture functions, that use new code for blitting texture data, fixing issues with flickering and darker textures when loading additional buildings
+-(Elevator Editor) Active Hall Direction box now shows the direction text along with the call type
+-(Elevator Editor) combined Door Height and Door Width boxes into a single Door Size
+-(Elevator Editor) added Type box
+-(Elevator Editor) removed the Origin box (no longer used)
+-(Bullet) updated with a minor initialization fix
+-person object should use floor ID text instead of number
+-cleanups of Object Information window - this also fixes some serious object initialization bugs
+-cleaned up singleton variables in frontend; moved them into the object classes
+-control panel windows should be created on-demand (performance improvement)
+-have only main screen handle idle events - this and the previous change should result in minor performance improvements
+-pause the control panel's timer when the progress bar is visible (performance improvement)
+-when taking over a hall call, if elevator's routes are empty, stop the elevator when cancelling the hall call response
+-added support for elevators that are closer and become available during an active hall call, to take over the call response.
+-added function (C++) to cancel an elevator's hall call response route, if no related floor button has been pressed
+-added function (C++) to return control/button light status
+-in the control panel, timer object should be reinitialized, not deleted and recreated from the OnInit call in the timer notify function.  This fixes an issue where the timer object was deleted and then code continued to run in it's Notify function
+-fixed an issue where elevator service mode controls would get stuck if an elevator was switched into a different service mode, while the controls were set.  This change has the elevator mode setting functions succeed instead of fail, if the mode is the same.
+-person should update their Current Floor setting while riding in an elevator
+-have person wait until doors are open before exiting elevator
+-more status reporting for Person object
+-have person stop route if hall call fails
+-if a person presses a call button, and the call status becomes invalid while they're waiting (the button light switches off), have them stop their route
+-if a person is in an elevator that switches into a service mode, have them exit that elevator and try the hall call again
+-if fire phase 1 mode is enabled while a person is in an elevator, have them exit at the recall floor instead of their original destination, and cancel all routes
+-(Triton Center) motor position fixes
+-added GetDirectFloors function (C++), along with code to find some routes that would fail with previous tests
+-have route functions keep track of direct connections; this improves performance
+-added an indirect local elevator check, if a person needs to take a local elevator before reaching direct route elevators
+-shutdown fix - the system was exiting to the main menu if the active engine was shut down, when it's supposed to switch to another engine
+-fix to properly reset values in People Manager window, when selecting a different person
+-if person is riding in elevator, show riding status
+-for Person object, wait for elevator doors to open before pressing floor button
+-fix person list refreshing when switching engines
+-array size fix for GetPerson function - fixes a crash when the list only contains 1 person, and the user switches to a different engine
+-new People Manager dialog
+-script errors now show the engine context number of the error, if more than one engine is running
+-script errors now show the building filename instead of the section number, which isn't needed due to the script context string
+-new Engine Contexts system, along with the Engine Manager dialog, which allows multiple buildings to be loaded and run in parallel
+-elevators should continue checking elevator availability in a QueuePending stage, if the elevator is on the same floor as the call, and the doors are open or opening/closing.  This lets the elevator take the call and re-open in that situation
+-objects without parent scenenodes should attach to engine scenenode, not scene root node
+-moved scenenode-related code out into separate SceneNode object
+-added OgreBullet project files to main solution, to simplify building process on Windows.  The separate OgreBullet solution is no longer needed.
+-make sure building is specified before trying to load building
+-call buttons should update arrival notification if elevator is on same floor and opened
+-call buttons should reprocess call if the elevator that is handling the active call becomes unavailable during movement
+-Random Activity now uses the new people code, and the old functionality has been removed
+-added routing functions, for Person object to find an elevator route to a floor
+-have elevators notify call buttons on arrival
+-added object validity functions
+-switched to FMOD Studio for sound
+-ToRemote/ToLocal functions should support turning off the Z-flip (for rescaling only)
+-created ObjectBase class for lightweight objects (currently Actions and Polygons)
+-removed singleton pointer and properly propagate and store engine pointer, through object parent parameters
+-added Person object
+-added elevator type parameter, and added to main building files
+-added ShowLoadedSounds and ShowPlayingSounds script commands
+-cache file listing in VerifyFile function, to fix a major performance bottleneck when a building is missing lots of files along with a large data folder existing
+-print FMOD version number on initialization
+-new Sound System code, which provides more efficient sound management
+-timers and meshes should be permanent by default
+-call buttons should reject call if related button does not exist
+-added Cloudy and Overcast sky types
+-have Caelum use SBS scaling factor
+-converted elevator door movement to relative positioning; also fixes an issue with vertically-moving shaft doors from working properly
+-cleanups for HitBeam function
+-converted elevator door movement to relative positioning; also fixes an issue with vertically-moving shaft doors from working properly
+-sound support should not be switched off when IntroMusic is set to false in the INI file
+-fixed console reporting of missing files
+-added sound unload function
+-don't load main elevator sounds on first loop run, load right before playing
+-if sound is disabled in frontend, sound in engine should also be disabled properly
+-object removal functions in Shaft and Stairs objects were using a wrong index value
+-reworked object array method for Door objects, in stairwell and shaft objects
+-reject mp3 files on load
+-fixed FindWithCase function
+-reworked and cleaned up call button code
+-fixed an issue in call button processing that prevented engine callbacks from being removed
+-don't run elevator checks if elevator is disabled
+-disable objects when disabling elevator
+-don't try to create a collider scenenode if it already exists
+-made a proper fix for an issue involving graphics corruption on Windows after a reload.  The viewport needs to be updated properly on a reload.
+-SBS should call Prepare() on engine start, not frontend
+-set location and date/time for Triton Center and Glass Tower buildings
+-added Coordinates and DateTime global options
+-resized couches to be more realistic
+-model offset needs to be adjusted according to the scale multiplier
+-for models, box colliders are now centered properly, and use a separate scene node to make it work
+-SBS now calls a cascading init on all objects from the Start() function
+-renamed any standard object runloops to Loop()
+-renamed Sound's Loop() function to SetLoopState
+-made standard inherited OnInit and Loop object functions
+-OgreBullet should be checking for existence of resource group and loaded names directly instead of keeping a file-based existence flag.  This fixes an issue where debug colliders (F7 key) would not enable when reloading a building.
+-camera object needs to run loops of attached models
+-camera needs to run NotifyMove and NotifyRotate functions, to properly update carried objects (child objects)
+-object destructor was removing scenenode from parent twice, causing a crash - I reworked the code in this function
+-moved functionality of camera's view and state resets (F3 and F6) into camera class
+-re-enable main system meshes when doing a position reset (F6)
+-restore absolute positioning and orientation of object scenenode when changing parent object
+-fixed issue in RemoveChild function, that caused the scene node removal portion to be skipped
+-consolidated FileExists function code into VerifyFile function
+-overhaul of VerifyFile function, to check for files within mount points properly
+-cleanup and fix of GetMountPath function
+-have functions use SBS conversion functions instead of others
+-added ToBool function
+-removed Sky Time Multiplier from Camera Control window
+-new arrangement for control panel buttons
+-added Sky Controller dialog
+-prevent DirectX on 32-bit Windows from switching into single-point floating point precision, which was causing the Bullet-related bounce issues
+-model meshes now update parent (main) object scenenode on physics-related position update
+-don't try to create a new submesh when deleting indices
+-added ToFloat and ToInt global functions
+-consolidated global functions; ToString2 is now just ToString
+-input string in RemoveAction function needs to have whitespace removed for compatibility
+-switched from c-strings to std::strings for function parameters and return types
+-DeleteObject function can delete generic object directly, instead of recasting
+-added new ConvertTo function to Object
+-added template-based IsType() function to Object
+-removed object's "raw_object" value, which is no longer needed due to previous change
+-objects now use static_cast or dynamic_cast instead of c-style casts
+-fixed bad return in FindWallIntersect function
+-consolidated camera's mesh hit beam code into main SBS object
+-code cleanups
+-added support for picking up models
+-mesh HitBeam function should be converting direction to remote Ogre value, without a rescale
+-objects can now report if they are global objects (children of engine object)
+-added ability for non-global physics-enabled models to be moved into elevators, and to move along with the elevator, by dynamically changing parent object of model from floor to elevator, and vice versa
+-added Shaft, Stairs and Model runloops
+-added functions for dynamic removal/addition of models
+-added ability for objects to switch parents
+-IsInElevator function now optionally sets CameraOffset value
+-added check for model's physics state
+-added debugging options file for Visual C++
+-updated project files for Visual C++ 2015
+-rewrote GIF control extension detection code; fixes additional transparency issues.  The previous code was not ensuring that the three values were adjacent, and was matching for non-adjacent values, causing malfunctions.
+-functions that create new sim objects should return full type, instead of just a generic object
+-removed unnecessary conversion in Freelook mode code
+-have camera only disable camera gravity value, instead of physics gravity also
+-camera delta values were being used twice causing erratic movement behavior when using Bullet.  Have Bullet use a single variable timestep, to prevent movement skipping issues
+-simplified camera movement code
+-camera movement vector needs to be flipped on X axis if Bullet is disabled
+-object OnMove and OnRotate functions now have a "parent" flag, to determine if a parent object called the update
+-rotations should update collider position also - this fixes an issue where parent objects would rotate, and child colliders would not be updated with the new derived position
+-make sure Ogre log manager has been created before trying to call it
+-simplified use of frontend and SBS singleton variables
+-moved frontend into "Skyscraper" namespace
+-return type fix for OnRecallFloor() function
+-WallPolygon class has been renamed Polygon
+-cleanups and initialization fixes
+-moved SBS system into it's own namespace
+-(Sears Tower) added Freight Elevator 1, along with minor wall fixes
+-(Sears Tower) split off upper service elevator into separate shaft, and fixed positioning of shafts 29, 30 and the new 32
+-(Sears Tower) adjustments to shaft starting/ending levels
+-updated Codeblocks project
+-moved elevator recall floor check into separate function, and added a check for the "recall unavailable" flag - this fixes an issue where an elevator on the alternate recall floor would not recall to the standard recall floor along with other elevators
+-fixed crash in elevator's DumpQueues function, due to wrong queue being used for Down Queue info
+-moved direction status variable to SetLights function in both callbutton and directional indicator objects
+-call buttons need to set all lights in group for each light change - this fixes an issue where a call button light would be switched off later due to elevators rejecting the call, but other lights in the group would remain on
+-added escalator textures from EG881's Escalator2011 package
+-elevators should accept hall calls if waiting in UpPeak or DownPeak mode
+-new Escalator object
+-added Relative Position item to Move Object window, and realigned text boxes
+-elevator motor sounds are now children of shafts, fixing movement issues, where they were moving along with the elevator (due to new positioning system)
+-misc positioning fixes and cleanups
+-elevator music sound is now positioned properly on startup, instead of at start of play
+-elevator object positioning cleanups
+-fixed typo (extra '-1') in IntersectRay function, fixes wall click issues
+-fixes to elevator CameraOffset value, to allow user to move on top of an elevator while it's moving
+-elevators now use move functions to set altitude; user can now jump and move vertically in elevator
+-added camera movement function that uses SetPosition instead of character movement
+-more GIF transparency fixes; added parsing of packed field to properly get transparency flag
+-removed Mac screen adjustment code, due to fixes in Ogre 1.9
+-prevent GTK checks on OSX
+-fixed issues with Mount command
+-(Triton Center) transfer hallway fixes
+-(Triton Center) column frame work
+-ComputeTextureMap function now rounds vector results, to prevent precision malfunctions in ComputeTextureSpace function
+-added vector rounding functions
+-added support for rounding numbers to a specified decimal place
+-elevator's 'manualstop' setting should not enable if in a service mode
+-an error dialog is now shown if messages can't be written to log
+-fixed GIF transparency detection; should scan for extension marker instead of accessing directly
+-(Sears Tower) shaft range fixes, and fixed issues with Zone 2 42-49 locals
+-(Sears Tower) new exterior textures
+-(Sears Tower) separated exterior into window frames and interfloor segments
+-(Sears Tower) misc tweaks
+-added references to floor slab heights to designguide.html
+-add floor base to list report
+-(Sears Tower) adjusted standard slab heights to be 12' 10" according to steel frame diagram
+-(Sears Tower) repositioned stop buttons
+-floor description fixes for Sears Tower and Observation Tower buildings
+-(Sears Tower) zone 1 mechanical fixes
+-(Sears Tower) increased interfloor heights to 3ft
+-(Sears Tower) removed extra Call Cancel buttons
+-visible mesh listing now shows submesh count
+-added ListVisibleMeshes function and script command
+-added description variable for floors
+-added floorname, floorid and floortype variables to the floor section of the script interpreter
+-added option to reset object state to the Object Information window, and made inactive Save Script button hidden
+-removed separate Name variables, to use Object name instead
+-removed redundant SetPolygonName function
+-move polygon-specific code into polygon class
+-made certain elements private in wall object
+-rename "object" to "raw_object" in Object's SetValues function
+-rename reference of "handle" to "polygon"
+-moved polygon code to separate file
+-added basic movement support to wall objects, which works by modifying vertices
+-fixed a divide-by-zero issue in the elevator braking code
+-make sure parent_deleting flag is set properly in destructors for all child objects
+-elevator shaft door wrappers can now be deleted separately
+-delay creation of elevator shaft door wrappers
+-floor info now reports which stairwells and shafts span the floor
+-moved floor info code into floor object
+-floor information now shows a list of elevators that service the floor
+-(Sears Tower) updated elevator button/control commands
+-(Sears Tower) floors 90 and 100-102 are now locked
+-(Sears Tower) split off separate upper service elevator, for floors 90-106
+-ResetState functionality is now abstracted from the core Object class, and the implementation has been simplified
+-added ability to reset elevator door states, mainly in case of door malfunction
+-(Triton Center) lower level wall fixes
+-(Triton Center) lobby positioning fixes
+-(Glass Tower) fix extra instance of interior windows on 137
+-found that the ObjectCount value wasn't being initialized before registering SBS root object
+-simplified object system; object type is now inherited by sim objects
+-don't turn on starting and ending floor shaft doors during elevator init
+-elevator sounds need to be positioned from elevator center
+-fixed positioning issue in stairs controls
+-stairwell objects (models, action controls, etc) need to be offset of the floor base, not altitude
+-MaxSmallRenderDistance now works due to new positioning system
+-new object positioning system
+-report error if no height specified in AddWallMain function
+-report error and exit if no height specified when calling AddFillerWalls
+-fixed invalid coordinate check in AddFloorMain function
+-default texture tiling to 1.0 if 0 is specified during texture load
+-wxWidgets 3.0 support
+-added CameraTexture object
+-added FindPolygon mesh function and simplified code
+-moved GetPoint, GetWallExtents, and GetExtents functions to the MeshObject class
+-elevator and floor creation should return created object
+-don't leave top and bottom levels of shafts on - this doesn't appear to be needed anymore, and should increase rendering efficiency
+
+Version 1.9.2 (2.0 Alpha 9 - Update 2)
+-------------------------
+-fix TriangleType element names
+-turn off directional indicators if elevator is switching into a service mode, or is being switched off
+-startup functions no longer crash if CreateElevator is never specified
+-positioned elevator sounds properly
+-need to initialize motor idle sound (fixes potential crashes)
+-elevator door and chime sounds are now positioned properly at the door
+-removed change_light parameter of AddRoute function, since the call type now handles this
+-elevators now set queue-related call status for each call (car, hall and system), and they no longer chime if a related hall call is not active on that floor
+-elevator queues can now store call-related information in addition to floor number
+-(Glass Tower) added remaining interior atrium windows
+-removed "SetUpIndicator" and "SetDownIndicator" buttons from elevator editor
+-elevator door sensors are now set permanent to prevent crashes
+-controls and triggers can now be made permanent
+-AreDoorsMoving function now supports checking separate door types
+-fixed an issue where the car idle (fan) sound would play when only shaft doors were opening
+-elevator door name fixes
+-door/sensor reset is now only done if doors are opened normally
+-sensor and nudge modes are now switched off when manually opening doors
+-for manual elevator doors, interlock error needs to reset direction value, otherwise a lockup may occur
+-interior directional indicators are given the floor number to check for the existence of shaft doors
+-elevator interior and exterior directional indicators are now controlled together from elevator's SetDirectionalIndicators function
+-elevator should switch off directional indicators if leaving that floor
+-added ShaftDoorsExist function to elevator
+-added a shut-off timer to the directional indicator object, which will only start if associated elevator's AutoDoors is false, or no shaft doors exist on that floor
+-rewrote ReplaceAll function, to work directly on the string reference to avoid copies
+-in IfProc function, keep character references for performance
+-optimization to the Cut function - only do name string copies when necessary
+-sensor status variables need to be initialized first
+-added more CS information to the texmap.cpp file
+-GetPoint/isect functions are now working
+-removed unnecessary vertex array copy from planar texture mapper
+-wall object's plane calculations need to use full vertex list - this is the same issue as r3356
+-added new ComputePlane function
+-added StopDoors action
+-fixed length values for a number of action names - fixes issues where door number parameters don't work
+-fixed elevator's DoorsStopped function
+-elevator will no longer move if doors are stopped and interlocks are enabled
+-hold code in elevator's OpenDoor function will now only enable if an associated control has just been pressed
+-caller objects are now passed to actions when running
+-cleaned up elevator number text code for reports
+-elevator doors now report if no timer reset will be performed due to blocked sensor
+-triggers can now report their "inside" status
+-elevator doors no longer reset door timers if sensors are blocked/triggered
+-elevator door code cleanups
+-control/trigger variable check_state was being handled in reverse
+-added references to missing elevator action names
+-in CreateWallBox function, don't try to create side walls if there's no thickness
+
+Version 1.9.1 (2.0 Alpha 9 - Update 1)
+-------------------------
+-play elevator door open/close and message sounds on reversal
+-change to Go function in rev 3171 broke FloorHold feature; relocated code to fix
+-added more breaks and other cleanups
+-cleanups to elevator functions involving door lookups
+-prevent nudge mode from enabling if elevator doors were manually moved and stopped
+-elevator door open buttons now can be held down to hold doors and released to reset door timer
+-in DoorExists function, can't mix GetDoor and array (this was causing the DoorExists function to potentially malfunction)
+-reordered section information area in script interpreter for the other changes to be made possible
+-user variables now work in section lines such as "<Floors>", due to code reordering
+-removed unneeded fire phase 1 check in call button code
+-reordered call availability code, to properly report service and nudge modes
+-overhauled nudge mode to enable timer when the situation allows it
+-if mesh physics is enabled, use a box collider by default
+-if model physics is enabled, mesh code should not try to load collider model
+-(Bullet) position update is no longer needed in penetration recovery function, and causes issues
+-(Bullet) turn off contact normal direction fix, which inverts some polygon normals incorrectly
+-(Bullet) fixed penetration recovery by running it in the forward movement function, right after the setting of the original position, to prevent interference with stairs
+-have call availability check properly report busy if doors are held, instead of for other reason
+-elevator doors can now report their hold status
+-added more "Invalid Door" errors to nudge and sensor functions
+-reworked door sensor code to split into separate persistent enabled/disabled state, and temporary activated/deactivated state
+-changed Alarm button in elevator editor to Hold Doors
+-elevator door sensor and nudge functions now properly select door object
+-NewElevator and NewFloor functions should use GetFloor function instead of their own check, for performance
+-some functions in Shaft and Stairwell code weren't checking validity of floors
+-in Calc function, lowered precedence of subtraction operator due to order conflicts with other operators
+-cut function should flip coordinates if out of order
+-F6 key would cause a crash if current camera floor was invalid (mainly in empty buildings)
+-elevator sensor status is now only shown after startup or in verbose mode
+-car idle, motor idle and music sounds now load sounds on first run if not loaded yet, instead of in CreateElevator function
+-added motor idle sound code, which was started in rev 1603 but never finished
+-don't try to create wall/floor sides and top if thickness is 0
+-cleaned up wall/floor function return codes and some legacy stuff
+-added checks to AddWallMain and AddFloorMain functions to print an error if coordinates are invalid
+-added a zero normal check to the texture mapper
+-planar mapper should be computing normal based on full polygon, not just first three vertices.  This fixes some texture mapping errors
+-reverted behavior change to ShaftShowOutside command from revision 3194
+-make sure that floors grouped with the current camera floor are not switched off as part of the shaft and stairwell ShowFloors code
+-(C++) SplitData function now verifies length of string properly
+-reverted and remade the fix to prevent crashes if no parameters are specified for certain commands
+-moved the missing file report to after the raising of the main window, to prevent it from being hidden on startup
+-in Calc function, handle a calculation error as a silent error instead of ignoring it, to prevent infinite loops
+-fixed an issue where clicks on call button panels would trigger a down call
+-reworked elevator call availability code, to return busy or an error, to prevent call buttons from looping if all elevators won't service the call
+-fixed an issue where DeleteRoute would report even if a route is not deleted
+-in the Reload code, since the Load function can unload the simulator if it encounters an error, exit to the main menu if this happens to prevent a crash
+-ensure that the Reload flag is turned off after a reload, which prevents future startup issues
+-system meshes should be created on engine startup, not separately in script interpreter.  This fixes startup crashes that happen if no valid data is in the script file
+-door resets now report in verbose mode
+-(C++) renamed ResetDoorTimer functions to Reset and ResetDoors
+-sensors will only enable if using automatic doors (AutoDoors is true)
+-added a new action "sensorreset" as part of previous fix
+-fixed issue where door sensors would reset door holds.  Door hold and reset functions now disable and re-enable sensors, and leave the sensor alone if the sensor is calling those functions.
+-in Calc function, allow decimal numbers without 0's at start
+-fixed a click position offset in Freelook mode on Mac, and also did minor cleanups to the related code
+-reworked the floor indicator code, consolidating and separating it properly
+-elevator indicators should be enabled/disabled along with the elevator
+-floor and directional indicators can now be deleted by ctrl-alt-click
+-fixed mesh name of floor indicators
+-minor code cleanups
+-fixed an issue where all related elevator shaft doors would respond to door bumper code, instead of just the elevator's floor.  Also cleaned up the code.
+-added missing dbghelp.dll file (Windows packaging)
+-F2 key now prints more detailed render statistics
+-fixed length of floating point output in ToString functions, for Visual C++
+-don't treat textures in ChangeTexture function as filenames, just material names - this fixes a lot of performance problems
+-(Triton Center) Hotel wall positioning fixes
+-for call buttons, if all associated elevators are in a service mode, don't continue to search for more elevators; reset the call button instead
+-fixed last report line from elevator's DumpQueues and DumpServicedFloors functions
+-fixed an issue where floors listed in the ShowFloors or ShowOutside lists would be switched off when stopping and continuing at a floor
+-fixed a crash that would occur if the Move button was pressed in the Object Manager if no selection was made
+
+Version 1.9 (2.0 Alpha 9)
+-------------------------
+-added new Underground building
+-cleanups in relation to ShowFloors arrays
+-fixed a conflict between Group listings and ShowFloors lists, and cleaned up EnableFloorRange function
+-the print command can now be specified by itself, to print a blank line
+-many script commands would crash if given no parameters; this fixes the issue
+-(Triton Center) 135th floor description fix
+-made new floor list report and FloorInfo command, and migrated the ListAltitudes feature into that
+-added Floor Information button to the control panel
+-added current floor name to the control panel
+-fixed an interior window positioning issue in the Simple building
+-prevent shaft door reset if full shaft is enabled
+-EnableGroup function in floor object will no longer touch shaft or stair objects if they're currently fully enabled
+-disabled some warnings on Visual C++
+-fixes to action array checks of Control and Trigger objects, to prevent crashes if no actions are associated with the object
+-more elevator object checks for elevator editor
+-reset door reference in elevator editor, to prevent issues if elevator is deleted
+-added Mac key hints to control reference and readme
+-the elevator editor's floor selector now only shows the related serviced floors
+-(c++)reworked shaft door and elevator door ClickedObject code to newer design
+-(c++)elevator shaft door wrapper objects now store associated floor number
+-(c++)remade call button code in ClickedObject function, to remove legacy code
+-call buttons can now be deleted using ctrl-alt-click
+-controls can now be deleted by ctrl-alt-click
+-objects are now deleted by ctrl-alt-click instead of just ctrl-click, to prevent interference with ctrl walking modifier
+-added reporting to elevator door sensors
+-added new actions for enabling and disabling elevator door sensors
+-reworked action run code, to prevent duplicates
+-call buttons now check if elevator objects are valid, to report accordingly
+-brought back shift-click call button functionality, to change light status
+-objects are now locked/unlocked by holding ctrl-shift and clicking instead of just shift-click, which fixes conflicts with using shift for running
+-added transparent button background texture (transparent.png)
+-elevators now update floor indicators and floor beep sounds when either passing a floor altitude, or beginning to level at a floor
+-prevent elevators from updating floor number during leveling mode
+-added more verbose file load error messages
+-year update
+-fixed Visual C++ 64-bit build options
+-updated Visual C++ 2010 build parameters
+-added message sound status checks, to prevent repeats
+-removed Palace Hotel on author's request
+-added support for sounds in call button objects
+-added numeric checks to the Calc function, to fix issues with the Calc function hanging on filenames.  Also removed the related work-around code for skipping parameters.
+-fixes and cleanups to verbose output
+-replaced elevator's message sound and floor sound objects with a single announcement sound object, and sounds using this are now queued to prevent overlapping
+-added sound queuing support, using PlayQueued and ProcessQueue functions
+-added reporting functions to Sound class
+-elevators no longer play floor sounds (floor announcements) if on the same floor as hall call
+-fixed crash that happened if the object move window was visible while the object was deleted
+-(Triton Center) Shaft 17 (core utility shaft) now displays interfloors, bottom floor while inside it, and lights
+-added ShaftShowInterfloors command
+-Object Information window now displays correct line number information (adjusted for includes), and also related include filename
+-split line number calculation portion of script error code into a separate function
+-added List Textures button to control panel
+-added script commands ListAltitudes and ListTextures
+-texture listing now supports showing filename
+-added more verbose output for texture loading functions
+-fixed texture overrides; texture functions now unload previous material if a new one of the same name is specified
+-(C++) added UnloadMaterial function and fixed UnloadTexture function
+-(C++) split off texture multipler registration into separate functions
+-(Triton Center) Residential service elevator texture orientation fix
+-added emergency stop motor sound
+-queued sound position option in sound code, to prevent repeat applies of the setting
+-fixes for SetPlayPosition and GetPlayPosition in sound code for fmod, used by AutoAdjustSound
+-added the AutoAdjustSound to the INI file, originally added in rev 1824
+-added support for separate car and motor emergency stop sounds
+-uninitialized value fixes (meshobject rotation)
+-during an emergency stop, the car stop sound is played if an emergency stop sound isn't specified
+-verbose mode now reports details on exactly which car/motor sounds are played, for start, move, and stop
+-reworked elevator car/motor sound code and moved into separate functions
+-renamed the "mainsound" sound object to "carsound"
+-added support for a separate emergency stop car sound and speed multiplier
+-fixed an issue where the elevator editor would display too much call button output in verbose mode
+-split the create_walls option in the FinishDoors commands into separate doors_walls and track_walls options, and updated guide
+-fixed issue where elevator nudge mode would become active if elevator was in fire phase 2 mode on alternate recall floor
+-partial floor range in ShaftShowFloors command is now shown regardless of elevator moving
+-added IsBoolean function (C++)
+-enhancements to the ShaftShowFloors command
+-button title fix (elevator editor)
+-fixed issue where FinishDoors function was not properly reverting the DrawWalls state
+-removed bounding box check in stairs code, since it was failing on stairwell floors that contained no geometry, but were still valid
+-fixed "InStairwell" status
+-interfloors are now shown for adjacent floors, in order to match the original design concept
+-fixed columnframe and interfloor checkboxes in the mesh control dialog
+-added Mesh Control dialog option to enable/disable interfloors
+-added functions to enable/disable interfloors
+-fixed main filename case
+-fixed Caelum sky rotation
+-changed Caelum start time to 10am instead of noon
+-removed SkyMult INI file parameter, and the Caelum sky.os file now configures this
+-added a check to make sure elevator serviced floors are valid for the associated shaft
+-added basic group state check to floor object, to prevent repeated enables/disables during ShowFloors functionality
+-floors now report in verbose mode when they're enabled/disabled
+-fixed an issue where the ShaftShowFloors command would cause the destination floor to become disabled
+-check floor enabled state before enabling/disabling floor and group
+-mentioned reverse floor ranges in script guide
+-fixed an issue where sound objects were playing during startup, and cleaned up related code
+-removed full screen stay-on-top flag
+-fixed an issue restoring fullscreen mode on Windows after a reload (using ctrl-r)
+-added info on 'b' key FOV reset
+-added binoculars FOV setting to the camera control window
+-fixed a typo for the reload feature in the control reference
+-added binoculars mode
+-(Triton Center) fixed crossbracing texture tiling and some mechanical interfloors
+-removed the Cut function's "checkstring" functionality, which reverts a "fix" from 2783 which broke filler walls in many existing buildings' elevators.  The original functionality never really worked, and the removal of it appears to work fine
+-data type fix for negative dest values.  Also fixes an assertion in debug mode
+-fixes to automatic filler walls function, to prevent z-fighting issues
+-right-clicking controls now reverses direction of selection
+-all shaft doors must now be fully closed for an elevator to move, when interlocks are enabled
+-actions now return the status of the commands run
+-controls and triggers will now only change position if the action succeeds
+-controls/triggers with multiple parents or actions succeed if at least one action succeeds
+-control/trigger sounds now only play if the position changes
+-fixed a message loop in verbose mode if certain elevator sounds can't be loaded
+-added more return codes and "loaded" status to sound code
+-cleaned up elevator mode switching, so that certain modes must be explicitly disabled before enabling another mode
+-ACP mode now uses standard queuing instead of Go function, which fixes a malfunction if used while another call is being handled
+-the elevator Go function will now exit if elevator is already moving
+-added floor ID reporting to Go function
+-floor signs now take the shaft door offset into account when created
+-added Renderer entry to Stats dialog
+-fixed an issue where shaft doors would stay disabled if pressing F6 (resetting position) while in an elevator
+-fixed logic behind 'force' parameter for shaft and stairs enable checks
+-changed Glass Tower 138 floor sign to say "R", and also minor wall fix
+-reload function now restores camera floor, gravity, collisions, and freelook options
+-added elevator floor signs to the Glass Tower
+-when deleting shafts, they must have associated elevators deleted manually first
+-sensor actions created by elevator doors are now removed along with the doors
+-floor deletions now fail if a shaft or stairwell depends on that floor
+-fixes to GetFloorNumber function to allow deleting the current floor
+-lots of reporting fixes and cleanups
+-added shaft and stairs existence checks to EnableFloorRange
+-elevators can now be deleted during runtime
+-call buttons are now created with directions based on the combined range of all elevators, instead of just the first one specified.
+-added a forced resize during a building reload for Linux - fixes rendering issues
+-camera rotation values are now updated properly.  This fixes the rotation display in the control panel, and also fixes rotations during a building reload
+-call shutdown() on Ogre root instead of delete, to fix a crash on certain systems during shutdown
+-fixed malfunction in trigger code due to an uninitialized position value
+-fixed setback positionings in Sears Tower model in Triton Center
+-added antennas to Sears Tower model in Triton Center
+-tiling fix for Triton Center top (143) interfloor
+-added missing keys to control reference
+-added explanation of interfloor areas to script guide
+-floor skip text can now be disabled by setting it with an empty value
+-nudge setting in elevator editor now works properly on a per-door basis
+-added door sensor item to elevator editor
+-added "sides" graphic for script guide
+-some needed fixes to the Observation Tower
+-added floor signs to Simple building
+-trim whitespace on GetAction() input string
+-added option to change nudge option for door hold command, used by Sensor action
+-added Sensor and Reset actions, used by sensors
+-added support for elevator door sensors
+-elevator parameters now properly calculate numbers
+-repositioned Glass Tower's rooftop elevator motor
+-moved Glass Tower roof structures to external mesh
+-added use of VerifyFile to building file loader, to fix filename case sensitivity on Linux and Mac
+-removed "starting time" entry from stats dialog
+-fixed parameter count checks in script interpreter
+-script includes now use VerifyFile which fixes case sensitivity issues on Linux and Mac
+-file not found errors for script includes now handle exceptions properly
+-moved Triton Center mech penthouse roof to separate floor
+-fixed issue with cutstairwell and cutshaft commands introduced in rev 2047 (in Alpha 7), that caused external meshes to cut a floor too high
+-removed unnecessary pauses
+-added support for function nesting (calling functions within other functions)
+-reworked the script error reporting code, to fix reported line number breakage when using nested includes
+-updated guide to explain include and function behavior
+-a warning is now shown in the console when a function is defined again, and the redefinition is skipped
+-return empty strings instead of nulls for c-string functions.  Fixes some crashes
+-added atrium floor spacing in Glass Tower
+-added progress dialog for script load
+-added EndPoint function
+-moved Print command to end, which allows certain command results to be printed properly
+-added AddCustomFloor command
+-(Glass Tower) added basic Peerless building and ground based on spotting blueprint from movie
+-(major) fixed an issue where the submesh processor would skip, leaving unused triangle data.  This was causing Prepare() to malfunction and sometimes visible corruption
+-Action Viewer now displays multiple parents
+-added ability to delete actions from the Action Viewer window, and fixed some cleanup issues involved in the deletions
+-added AddActionParent and RemoveActionParent commands
+-action viewer now refreshes list
+-actions created by button panels are now deleted along with the panels
+-walls of root object (SBS) meshes are now children of those meshes instead of root
+-fixed a vector overrun in RemoveFloor function (element was removed before accessed)
+-do not process geometry buffers if no data exists - fixes a crash on Windows
+-manually deleting floors now deletes any walls created in the "external" mesh
+-reset collisions when deleting objects, and clear last_collision value - this allows objects the user is touching (or standing on) to be deleted
+-added check to prevent floors from being deleted out of order
+-elevator doors can now be deleted properly during runtime
+-added round math function
+-added new math functions log2, ceil, flr, and rnd
+-fix for texture distortion issues on main menu
+-added option to turn off automatic filler/connection walls for elevator doors
+-math function fix - removed the need for a space before the function names
+-fixed default locale setting - this solves script error issues when running on machines with different locale settings
+-texture functions now report in verbose mode only
+-fixed StartsWith() function
+-added advanced math functions to script interpreter
+-added power-of operator to Calc function in script interpreter
+-added Ogre 1.9 compatibility
+-combined floors 65 and 66 in the Glass Tower
+-cmake and source fixes for Ogre 1.9 compatibility
+-orientation fix for old sky system
+-added RenderOnStartup option, which renders the building as the script is processing on startup
+-fixed an issue where most new meshes would need to be disabled and re-enabled to be visible
+-cmake script fixes, and svnrev is now run automatically
+-fixes to main window sizing
+-fixed issues with main menu and mouse clicks being off on Mac, due to client size being different than window size
+-fixed shutdown crash due to MainScreen::OnClose being called twice (mainly on Mac)
+-made missing files dialog larger
+-fixed issue where rotational degree values would show 360 instead of 0
+-added OpenMessage and CloseMessage elevator parameters
+-script processor now using main frontend loop for processing
+-fixed an issue where main window would not resize back when exiting from fullscreen to main menu
+-object list in objectinfo dialog now refreshes automatically
+-switched DisableSound to a frontend option, which now changes it for the whole app
+-removed unused options from INI file
+-WalkBrake and RotateBrake options now work
+-removed LookAccelerate, BodyDepth, LegsDepth options
+-fixed GetObjectPosition() for elevator doors, so now their position shows up in the MoveObject window
+-fixed Camera::Rotate() function; relative rotations now work in camera control window
+-Bullet: disabled penetration recovery, which fixes issues with stairs stepping
+-added frame smoothing feature, configurable in the INI file
+-removal of wxWidgets code from the SBS library
+-new SBS timer system
+-added while statements
+-added delete command
+-added runaction command
+-action names with spaces now work from scripts
+-functions can now be called properly from IF/While statements
+-added duplicate function check
+-keycode fix for Mac version - fixes some key recognition errors
+-switched to in-app console window
+-control panel sizing fix
+-removed unused RenderOnly and InputOnly options
+-script viewer no longer shows included code
+-rename and cleanups of collider recreation when adding/deleting objects during runtime
+-fixed issue where meshes wouldn't be immediately visible if walls were added to them during runtime
+-fixed an issue where control panel buttons failed to work upon a building reload
+-command box in console now clears on send
+-added echo option to console window (displays typed commands)
+-fixed an issue with the main window not raising properly on startup
+-fixed a startup clear screen issue
+-switched log output to new in-app console window
+-addition of main console text box in console window
+-moved system over to Ogre logging facility
+-all logging is now written to skyscraper.log
+-debug console (text) output can be turned on and off by INI file parameter
+-script processor is now persistent
+-added missing note about ctrl-r reloading current building to key commands list
+-added script deprecation warnings, which can be enabled in the INI file
+-removed unused GetWallExtents function since the command version is more useful
+-script interpreter cleanups
+-fixed a parameter check for parameters specified after equals signs; would previously treat empty text as a single parameter
+-updated syntax in Simple building
+-added ReverseAxis parameters to the script guide, which were missing
+-added ability to disable Bullet for testing
+-fail and switch to old sky system if Caelum fails to init
+-disabled elevator arrival notifications and floor sounds/beeps when in service modes
+-disabled elevator door open/close functions while in Fire Phase 1 recall
+-added needed object existence checks to functions that use the object array directly - without this, crashes were happening when doing an object scan after an object had been deleted
+-ACP mode now uses the elevator's Go function, and now works properly
+-elevator "Go" function now turns off elevator floor light when reaching destination
+-fixed some door closing issues in Fire Phase 1 mode
+-added exterior up/down controls to Simple - Manual building, and interlock switch for testing
+-added support for modern manual lifts, that require the floor button to be held to proceed to that floor, via the FloorHold parameter
+-script interpreter section reordering and cleanups, fixes variable processing issues, and duplicate functions have been removed
+-added fire switch keys to Simple, Triton Center and Glass Tower elevators
+-added landing zone area for automatic releasing of interlocks
+-added new section of items to elevator editor, and added some other misc things
+-added basic elevator interlocks, along with actions
+-fixed button/control texture multipliers - this fix will break previous buildings' buttons and controls if they use size multipliers other than 0 or 1.  Previously changing the size would mess up the button positioning
+-updated Simple building with internal and external fire switches
+-added more texture content
+-added fire service enable function to call button code; switching one elevator to fire service phase 1 now switches all elevators in same bank (all being serviced by the first call button on recall floor) into fire service mode
+-added elevator door open/close button hold feature (constant pressure support), for certain modes such as independent service and fire modes
+-renamed CancelLastRoute to CallCancel
+-major reworking of fire service modes to make them more realistic
+-added reversals to door opening, used in fire modes to reclose the doors if open button is released
+-major Glass Tower lobby changes; atrium base is now the Atrium level (previously mezzanine) to match movie depictions of the Hyatt Regency and Bank of America buildings
+-added full support for manual elevators
+-fixed issue where floor would turn off when closing shaft doors even if ShaftShowFloors is enabled
+-added "0 to disable" options for DoorTimer and QuickClose parameters
+-added AutoOpen parameter
+-added OpenOnStart parameter
+-added new Simple building with manual doors
+-added OpenExt and CloseExt actions
+-added more elevator and shaft door actions
+-updated to OGRE 1.8, and updated meshes to newer format
+-Glass Tower texture mapping fix for top of front setback pinnacle
+-fixed camera control X axis reversal
+-fixed action control centering
+-added functions to support elevator returning/releveling to nearest floor after disabling inspection mode
+-added 'return' function in elevator actions list which returns to the nearest floor after a stop
+-added more checks to door "in use" status - fixes issues where elevator doors would misbehave if automatically moving and a manual open/close was run
+-removed OIS requirement from cmake
+-minor correction to local elevator range in Sears Tower
+-fixed Glass Tower floor height typo in the floors 80 to 85 section (it erroneously added an extra foot to those floors)
+-added dialog for moving objects
+-fixed "hold" option for camera relative rotation in dialog
+-fixed rotation quirk in dialog that allowed values outside of correct range
+-array cache tweaks
+-fixed DynamicSky script parameter
+-added additional check to elevator service modes to prevent random activity
+-elevator parking is no longer run while in a service mode
+-fixed elevator availability check for LimitQueue
+-added elevator queue reversal when arriving at top/bottom floor; fixes call quirks on those floors
+-fixed issue in elevator_doors.txt script that prevented dual-speed left doors from closing properly
+-switched user variable system over to named variables
+-extended range of characters supported by the text-to-texture system
+-Updated Visual Studio project files for VS2010
+-added popup error messages for sound errors
+-added gpu program checks for Caelum initialization; should switch off Caelum on problematic graphics cards to prevent reported crashes
+-moved SBS initialization code into contructor
+-removed obsolete shaders variables
+-fixed issue where some wall handles wouldn't be deleted, due to a changing handle array size
+-centralized number conversion into new ToString functions
+-fix for textureoverride/textureflip states
+-console output fix
+-INI parameter fixes
+-AddFloor parameter fix
+-removed tchar for wxwidgets unicode compatibility
+-random activity is now ignored if related elevator is in service mode
+-added parking notification
+-script interpreter performance improvements
+-performance fix for GetTextureMaterial function
+-fix for material polygon reporting
+-fixed misuse of vector preallocation, performance improvement (fixes bottleneck when creating thousands of floors)
+-function speed improvements in script interpreter
+-added function name and calling line to script error message
+-misc performance tweaks and cleanups
+-old sky is now used if Caelum fails to start (previously the sky would end up being black in this case)
+-fixed crash that would happen if Caelum wasn't initialized properly
+-swimming pool model material fixes
+-turned off texture lighting option by default
+-added calc ignore checks for other filename parameters
+-added StairsShowFloors and ShowFullStairs commands
+-moved stairs, shaft and elevator checks into respective classes
+-some tweaks to IsInStairwell checks
+-removed some obsolete stuff (including shaft type parameter)
+-added ShowFullStairs to Triton Center's West Stairwell
+-added railings to Triton Center
+-fix for disabling old skybox
+-added ability to delete models and doors with ctrl-click
+-added pool to Triton Center
+-fixed a defect in the CutAll floors operation - was cutting through all floors associated with shafts/stairwells - now only cuts through current floor as described
+-added check to prevent crashes when deleting an object user is standing on
+-fixed creation of collider body which was causing crashes when loading collider meshes
+-added support for skipping calculations on model filenames - fixes an infinite loop
+
+Version 1.8 (2.0 Alpha 8)
+-------------------------
+-elevators now report as available if on the same floor as the call and not moving, regardless of the door state - fixes an issue where pressing call buttons more than once would open additional elevators
+-fixed TruncateNumber function, to return correct floating point precision without exponent
+-dialog text box resizes
+-remade queueresets feature
+-floor announcement sound is now played along with the other arrival notifications, and so is affected by NotifyEarly
+-up/down message sounds now play according to last chime direction
+-elevator now chimes the previous chime direction if doors reopen (if applicable)
+-turned off queue reversals if NotifyEarly is on
+-added ReOpen elevator parameter
+-added AutoEnable option to turn on and off automatic enabling/disabling of elevator interior objects
+-added queue pending state flag - fixes issue where pressing both call buttons in a 2-elevator shaft would call the same elevator for both
+-switched to standard elevator availability check for single-elevator call buttons
+-major work on elevator queue/arrival notification code
+-call button behavior fixes
+-changed freelook crosshair to cross
+-added elevator queue limit, to prevent calls opposite of queue direction from being placed
+-removed same-floor check in call button code, which broke calls when elevator was moving past current floor
+-decreased classic elevator door spacing
+-fixed logic that caused down calls to alternate chime direction
+-added inspection service speed multiplier setting
+-elevators now ignore the leveling offset if brakes are turned on while beyond that offset
+-fixed a floor check and positioning issue with in-elevator directional indicators, which caused only single indicators to be created
+-added default/error texture
+-added support for configuring the main menu from the INI file
+-reversed the Sears Tower and Glass Tower menu entries
+-shift-clicking on doors now locks them
+-added new command SetKey, which allows models to be specified as keys
+-added new command SetLock, which sets lock parameters when creating doors, controls and call buttons
+-fixed elevator door bumpers
+-added actions for inspection service up/down/go toggle options
+-added support for multiple parents per action
+-added ip20112.5 update for "The Spire" building
+-new Glass Tower roof, based on movie blueprints
+-fixed a name check bug in the cut function, which was causing elevator door filler walls (done by FinishDoor()) to sometimes fail
+-added support for elevator door vertical offsets
+-elevators now stop according to the shaft door's voffset instead of the floor's base, where applicable
+-added note to script guide mentioning that automatic filler walls needs all related walls to contain the word "shaft" for it to work
+-changed camera speed to half, for a more realistic walking speed
+-fixed texture autosizing quirks (diagonal walls/floors are now autosized correctly)
+-added ability to delete models, controls and triggers
+-limited object prepare on delete, speeds up object deletion
+-added a fog multiplier setting in the INI file (changes fog density)
+-Glass Tower - new test service elevator serving most floors
+-Glass Tower - changed executive elevator to use floors in movie depiction
+-new stairwells in Glass Tower, along with railings
+-work done on Glass Tower floors 135-137
+-updated AddFloor command, which fixes a number of issues with the old command
+-fixes for planar texture mapper's autoflip functionality - now appears to work properly (but might potentially cause minor breakage of existing buildings - need to check)
+-added ReverseAxis and texture direction parameters to AddFloor
+-added rotate option to the planar texture mapper (which the texture direction parameter now uses)
+-added GotoFloor function (mainly in camera controller window)
+-added percentage indicator to script startup
+-added note to the script guide about custom texture mapping and automatic reversals
+-new glass elevators in Glass Tower
+-fixed issue preventing custom walls from being made in elevators
+-separated elevator motor sounds between up and down movements
+-added comments in script guide about leaving sound fields blank
+-performance improvements
+-fixed volume bug in AddSound - volume parameter was specified as an int, preventing fractional volume values
+-added lobby ambient sound to Triton Center
+-added support for split car up/down elevator sounds
+-added support for playing multiple sounds with the same name from an action
+-added support for running multiple actions with the same name
+-added couch model to Simple building, with physics enabled
+-added centering support to models, and added parameter to AddModel commands
+-added second couch to Simple building, and couch to top of Triton Center
+-fixed object parent values for some new objects
+-some fixes to cascading object deletion
+-Triton Center antenna tiling fix
+-added texture animation
+-added support for direct loading of ogre materials in data/materials
+-added caching to GetFloor() and related functions
+-Triton Center external windows overhaul, using alpha blending
+-Glass Tower overhaul
+-added Action and Trigger objects
+-added action viewer (control panel window)
+-fixed global AddSound command which was overriding the per-object ones
+-updated AddSound command for FMOD and added loop option for new control/trigger commands
+-fixed texture and material counters
+-added changetexture, playsound and stopsound actions
+-disabled doppler effect (sounds) by default
+-default main sim window size now changed to 800x600, menu window size separated and kept at 640x480 (configurable)
+-added internal skip for wildcards in filenames (*) (fixes those bogus error messages)
+-started in-sim object creation (code constructor)
+-added building startup options to turn on/off collisions and gravity (listed in the designguide)
+-disable basement number conformity (fixes Cliveden Desmond Wharf)
+-added a file check for the include section (loading now fails if an included file cannot be found - this prevents serious and hard-to-diagnose errors later on)
+-added Empty building (not working properly, but is used to create buildings from scratch)
+-object colliders are now removed by default (for running performance) except for elevator doors (due to slowdowns when entering Triton Center elevators)
+-disabled backface polygons for ground
+-object info listbox now updates if you exit that window and re-enter
+-added new control aliases, mostly for Mac users
+-added support for setting the default sky time speed in the INI file for Caelum, and changed the default to 25 (you can now easily see the clouds moving, and a day moves much faster so you can more quickly see sunrises and sunsets)
+-switched Mac frontend to use Cocoa
+-switched from normal flipping to standard texture flip (for ogre coordinate system compatibility)
+-added the Caelum sky system
+-lowered default texture filtering anisotropy level to 4 (from 8 )
+-switched to 16-bit hardware indices; should fix geometry corruption on some older cards, and should improve performance somewhat
+-if a cut operation eliminated an entire polygon, the original polygon would not be deleted
+-added ability to only play elevator music while moving, and updated related INI file parameters
+-added advanced option to profiler
+-added profiler system
+-added check for duplicate entries in missing files list
+-added proper error reporting (and OGRE exception handling) to frontend initializer
+-fix for operational conflict between floor grouping and ShaftShowFloors command
+-added DisplayFloors parameters
+-added texel override
+-added physics support for models
+-added support for model colliders
+-added support for Ogre meshes (using converters for Google Sketchup)
+-added checks to ensure that starting floors are less than ending floors in AddShaft and AddStairwell commands
+-gravity reset fix and fix for IsInShaft() distance check
+-fixed an issue where shaft would rapidly turn on and off if on top of elevator
+-fixed issue involving reversed polygon faces resulting in some textures being reversed.  Put in a precision workaround for Alpha 7 compatibility.
+-sound fixes, added ability to view camera collider via F7, and fixed a line skip issue in the script interpreter
+-filler wall reset fix
+-added support for different open/close speeds for elevator doors
+-wxwidgets compatibility fix
+-added proper failures on numeric checks to report errors and prevent loops
+-added texture filtering options, and switched default to anisotropic (previously bilinear)
+-added ability to switch on and off collision detection and visible colliders via F7
+-split SBS into shared object on Linux, and restructured source files
+-removed AddGenWall and migrated items using it to AddWallMain
+-switched translator code to OGRE's right-hand coordinate system (SBS uses left-hand)
+-switched to FMOD for sound
+-switched to OGRE for graphics
+-switched to Bullet for collisions and physics
+-Triton Center renovation
+-fixed door filler walls
+-object deletion fixes
+-added geometry deletion support
+-fix crash that only happens if shafts are created out of order
+-new internal mesh object system (Skyscraper now generates it's own 3D geometry)
+-new horizon distance setting
+-added render distance limits for small objects
+
+Version 1.7 (2.0 Alpha 7)
+-------------------------
+-added braille fonts
+-added support for elevator panel switches and knobs
+-added elevator fan toggle
+-door open and close buttons now support specific doors
+-added door hold feature
+-elevator now resets queue search direction if last entry in active queue is in the opposite movement direction
+-elevator doors no longer try to open if you press the call button as it's passing the floor
+-floor buttons now properly add floor route if pressed on the same floor as elevator is moving
+-Fix for vertically-moving elevator doors' offset calculations
+-Elevators now properly sync camera offsets if a person boards a moving elevator
+-Fixed an issue where the random activity system wouldn't select the top serviced floor
+-added standard doors to elevator objects
+-added sound support to doors
+-fixed a crash that occurred if ServicedFloors included an invalid floor number
+-added internal error reporting system
+-new object tree browser
+-elevator parking fixes
+-call cancel now only works in fire phase 2 mode
+-elevators now reroute properly if switched to fire phase 1 mode while moving
+-added object deletion support
+-added elevator run/stop states
+-arrival notification can now be performed at the start of leveling or at deceleration
+-Added adjacent floor check - eliminates crashes related to trying to create floors in the wrong order
+-Elevator doors no longer open when parking
+-some interior elevator objects now stay enabled while user is outside elevator
+-grouped floors now also enable stairwells and shafts
+-Added braille callbuttons
+-Elevator beep sounds now support floor number substitution
+-added support for direction message sounds
+-added separate folder for screenshots, and switched format to jpeg
+-added support for elevator music
+-ShaftCut and CutStairwell commands now cut external objects
+-Added support for displaying last clicked 3D position
+-Added Housing Estate building
+-Added support for changing door speeds
+-added SVN versioning info
+-Elevator objects can now be used in certain global commands
+-fixed a peak mode dispatch issue
+-Added case insensitivity support for file loading
+-Internal indicator vertical positioning fix
+-App now displays missing files after building load
+-Texture rendering fixes
+-added "open" parameter to doors
+-added DepartureDelay and ArrivalDelay elevator parameters
+-Error reporting system is now more verbose about certain errors
+-added sign textures
+-added nudge mode
+
+Version 1.6 (2.0 Alpha 6)
+-------------------------
+-added current floor ID to the control panel's main and camera control windows
+-added support for forcing autosizing on or off on a per-texture basis
+-added support for floor arrival sounds
+-added more camera speed config parameters
+-added full camera reset (respawn) triggered by F6
+-added elevator motor sound object
+-added support for exiting back to the main screen
+-added support for per-door elevator floor signs
+-added new simulator/building statistics dialog
+-moved button code into separate control class
+-added support for elevator button lighting
+-fixed issue involving elevator door sound playing for non-serviced doors
+-added script console
+-text-to-texture objects now support transparency
+-fixed floor sign autosizing issues
+-many elevator queue fixes
+-fixed call cancel button
+-app now properly exits to the main menu if a building fails to load
+-added custom sound objects
+-added new Simple building with basements
+-more comments added to the Simple building
+-elevators can now be named
+-call buttons now light up in groups
+-added Schindler MT textures and sounds
+-added verbose mode
+-control panel can now be reopened by pressing F12
+-fixed blank canvas issue on Mac
+-elevator modes can now be set from building scripts and the INI file
+-fixed ACP mode
+-fixed other service modes
+-added SetTextureMapping2 command
+-created new planar texture mapper
+-added the GetWallExtents and Print commands
+-added InterfloorOnTop global parameter and base variable
+-made new SetPlanarMapping command which is an extended version of the old ReverseExtents command
+-new planar texture mapper is now the default
+-added object information dialog
+-added support for file includes
+-added support for script functions
+-added support for user-defined elevator and shaft doors
+-added automatic elevator parking support
+-added button sound support
+-elevator and motor sounds now start at a position based on the elevator's speed
+-elevators now support an unlimited number of button panels
+-added CutAll command
+-added support for internal elevator directional indicators
+-directional indicators can now show active (running) elevator direction
+-fixed some quirks with elevator movement
+-added elevator leveling support
+-Lines with both functions and IF statements now process the IF statement first
+-door cutting uses CutAll function, which now makes it cut stairs, shafts, external, etc
+-Texture flipping now works properly with zero tw/th values
+-call buttons are now only created if any of the given elevators serves the floor
+-ACP mode now works in conjunction with peak modes
+-added experimental random elevator traffic
+
+Version 1.5 (2.0 Alpha 5)
+-------------------------
+-clicking on shaft doors and elevator doors while holding down shift now causes them to manually open/close
+-manually opening shaft doors causes the related floor to turn on if user is
+in a shaft or an elevator
+-added new buildings
+-added support for multiple floor indicators per elevator
+-floors can now have floor indicators
+-added support for elevator floor beeps
+-added support for separate up/down chimes
+-added support for per-door textures on elevator/shaft doors
+-added elevator door collision sensors
+-added last collision indicator to control panel
+-added support for call button lighting
+-major fixes to the elevator queue and call processing
+-fixes to some elevator parameters, where they would error out if used in a different block than the CreateElevator command
+-sound support is now optional and will switch off automatically if not available
+-some new script checks for valid floor ranges
+-added basic glass elevators to the Glass Tower
+-simultaneous door movements are now supported
+-call button monitor added, to realistically wait for an available elevator during a call
+-call button light status can now be changed by shift-clicking the button
+-elevator panel buttons now support position offsets
+-fixed manual sizing parameters of the panel buttons
+-added support for mounting zipfiles into virtual directories
+-added the ability to spin the camera (Z-axis rotation)
+-startup screen now works on Linux and Mac
+-added mouse look (freelook) mode, activated by F5
+-new Camera Control window
+-split chimes sounds into up and down versions
+-added support for writing text onto a texture with the AddText command
+-fixed a memory leak involving floor beeps
+-added support for texture name prefixes, used with floor indicators and signs
+-added support for cropping and overlaying textures with the LoadCropped and AddOverlay commands
+-added configuration file support
+-added support for zooming in and out (FOV angles)
+-added support for starting up without the control panel
+-added fullscreen support, activated by F10
+-fixed an issue where walls along the Z axis would have the side negative and
+positives switched
+-height element can now be chosen from the script's object parameters
+-added parking ramps to the Triton Center
+-added AddFloorAutoArea command, which enables and disables floors within a specified area
+-fixed texture flipping
+-removed ReverseExtents command (was broken since early 2007)
+-added SetTextureMapping and ResetTextureMapping commands (replaces ReverseExtents) to allow manual setting of UV texture coordinate data
+-added AddFillerWalls command which is a convenience function used in creating doors
+-added hotel rooms to the Triton Center
+-added control reference (for keyboard commands, etc) to the control panel
+
+Version 1.4.1 (2.0 Alpha 4.1)
+-------------------------
+-Linux build fix
+-fixed a shaft door regression
+
+Version 1.4 (2.0 Alpha 4)
+-------------------------
+-added syntax checking and error notification to the script processor
+-fixed an old bug that could crash the sim if the floor ID matched a non-existent texture
+-added support (and FloorSkipText parameter) for showing express zone indicators during floor skips
+-added ACP, Up Peak, Down Peak, Independent Service, Inspection Service, and Fire Service phases 1 and 2 modes to elevators (not all work yet)
+-remade manual/emergency door open/close methods
+-added door stop function for doors in manual/emergency mode
+-elevator doors no longer open during an emergency stop (except for a manual open)
+-manual opens during an emergency stop will only open the elevator car doors
+-fixed a crash that involved trying to open shaft doors on a non-serviced floor
+-added shaft tops to the Triton Center and Simple elevator shafts
+-lots of memory leak fixes
+-simulator now pauses when main window is minimized
+-Sears Tower skydeck elevator crash fixed
+-performance enhancements
+-call selection fix
+-half of express elevators in both the Triton Center and Sears Tower buildings
+are now stationed at the top
+-fixed ShowFullShaft command
+-added support for elevator directional indicators
+-added alarm sounds
+-added support for multiple elevator doors
+-added support for specifying shaft doors on a per-floor basis
+-added AddFloorSigns command that creates floor signs on all floors served by an elevator
+-numerous Triton Center fixes
+-split Triton Center topside mechanical into 2 floors, added stairs to the roof, and did roof/penthouse work
+-moved Triton Center's skydeck entrance to LL1
+-Triton Center's pool express elevator now only serves lobbies instead of upper residential floors in addition to lobbies
+-fontserver fix
+-added wireframe mode and screenshot keys
+-and lots more
+
+Version 1.3 (2.0 Alpha 3)
+-------------------------
+-added door framework
+-fixed a range bug that caused ranges to fail if the first value was negative
+-added basement levels to Triton Center
+-added ShaftShowFloors, ShaftShowOutside, and ShowFullShaft commands
+-fixed a bug involving certain variables not being processed
+-fixed up sign generator script
+-new floor signs (floors 151 to 300, and floors CC and PL for the Sears Tower)
+-fixed sound code
+-new elevator sounds
+-added script parameters for specifying elevator sounds
+-fixed door sound location and movement
+-moved main Crystal Space code out of SBS core into frontend
+-fixed an infinite loop condition when processing multiple and/or operators
+-more Sears Tower work; currently have all express and local elevators in place
+-added TextureFlip command
+-elevator editor's floor scrollbar now supports negative floors
+-fixed a bug where the elevator doors would immediately close (and the current floor would turn off) if going to next floor in queue
+-increased elevator door speeds to match new sounds
+-added basement levels to the Triton Center
+-new intro screen (doesn't work yet on Linux)
+-major performance improvements
+-added keys w, a, s and d for movement
+-input is now only processed if main window is selected
+
+Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
+-------------------------
+-added missing DLL for CS, and fixed installer
+-added AddGround command, for creating tile grid-based grounds (fixes ground interference issue in 1.1)
+
+Version 1.1 (2.0 Alpha 1) - Jan 6, 2009
+-------------------------
+-complete rewrite from scratch, using C++ and the Crystal Space graphics engine
+-numerous features added that were not found in the 1.0 release
+
+
+Changelog from old 1.0 tree:
+
+Version 1.0
+1.0 is being released now due to the massive overhauls and redesigns that have
+rendered the main development Skyscraper tree unstable, and uncompilable at the moment.
+1.0 is not complete in any way, and is still a primitive release.
+1.0 is a fork of the stable 0.96 code, while the 0.97 code (renamed 1.1 alpha) is under development.
+-----------
+-fixed up shaft and pipe shaft issues
+-bundled with new installer
+
+Version 0.96 (build 161)
+-------------
+-cleaned up elevator button code, and made it into a nice little algorithm
+-fixed falling issue
+-added error detection during startup, for the absence of the TrueVision engine
+-fixed bugs in the Object Manager
+-fixed up 134th floor, and reworked the pool
+-rewrote elevator queuing system
+-collision detection failure bug fixed
+-reworked pipe shafts and crawl spaces
+-new cinematic intro added (will be enhanced later)
+-new functionality added to the simulator control panel
+-automation added to the simulator control panel
+-new buildings added
+-building texture resolutions fixed
+-ModelViewer application added
+
+Version 0.95b (build 144)
+-------------
+-minor code changes
+-adapted for the new TrueVision3D 6.2 engine
+
+Version 0.95 (build 140)
+------------
+Changelog begins during 0.95 development.
+-Date change
+-Shaft wall put over stairwell wall
+-Shaft ceilings raised to next floor
+-Fixed mezzanine walls and shafts somewhat
+-Fixed shaft floors
+-Fixed mezzanine to work with queues
+-Fixed mezzanine call buttons
+-Stopped elevator doors from opening if on a different floor
+-Large chunk of useless code deleted from DrawElevatorWalls2
+-Support for 4 stairwells added
+-Pipeshafts fixed, 4 total
+-Elevator call issue fixed (elevators didn't initally set currentfloorexact value to corresponding floor)
+-Massive bugs introduced with new features fixed
+-Elevator call queues added
+-Stairs creation moved into realtime
+-integrated with TrueVision3D 6.1b	
+-Tons of bugfixes and features
+-Elevator grouping support
+
+Versions 0.94 (build 125) and below
+-----------------------
+Zillions of changes...
+

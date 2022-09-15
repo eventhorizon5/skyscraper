@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="0.9">
+  <dict>
+    <key>CFBundleDevelopmentRegion</key>	<string>English</string>
+    <key>CFBundleName</key>		<string>Skyscraper</string>
+    <key>CFBundleExecutable</key>	<string>skyscraper</string>
+    <key>CFResourcesFileMapped</key>	<true/>
+    <key>CFBundleInfoDictionaryVersion</key>	<string>6.0</string>
+    <key>CFBundlePackageType</key>	<string>APPL</string>
+    <key>CFBundleSignature</key>	<string>????</string>
+    <key>CFBundleVersion</key>		<string>1.10.0</string>
+    <key>CFBundleShortVersionString</key>	<string>1.10.0</string>
+    <key>CFBundleIdentifier</key>	<string>com.skyscrapersim.skyscraper</string>
+    <key>CFBundleIconFile</key>		<string>skyscraper.icns</string>
+    <key>NSPrincipalClass</key>		<string>NSApplication</string>
+
+    <key>CFBundleDocumentTypes</key>
+    <array>
+	<dict>
+		<key>CFBundleTypeExtensions</key>
+		<array>
+			<string>'bld'</string>
+		</array>
+		<key>CFBundleTypeName</key>	<string>Building File</string>
+		<key>CFBundleTypeRole</key>	<string>Viewer</string>
+	</dict>
+    </array>
+
+  </dict>
+</plist>

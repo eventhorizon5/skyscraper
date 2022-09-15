@@ -1,0 +1,57 @@
+diff -urN orig/OgreMain/src/OgreScriptCompiler.cpp new/OgreMain/src/OgreScriptCompiler.cpp
+--- orig/OgreMain/src/OgreScriptCompiler.cpp	2012-09-02 00:27:15.000000000 -0500
++++ new/OgreMain/src/OgreScriptCompiler.cpp	2013-10-23 10:04:19.914107738 -0500
+@@ -1459,7 +1459,7 @@
+                 }
+                 else
+                 {
+-                    mCompiler->addError(CE_UNEXPECTEDTOKEN, impl->file, impl->line, "token class, " + impl->cls + ", unrecognized.");
++                    //mCompiler->addError(CE_UNEXPECTEDTOKEN, impl->file, impl->line, "token class, " + impl->cls + ", unrecognized.");
+                 }
+ 
+ 				asn = AbstractNodePtr(impl);
+diff -urN orig/RenderSystems/Direct3D11/src/OgreD3D11RenderSystem.cpp new/RenderSystems/Direct3D11/src/OgreD3D11RenderSystem.cpp
+--- orig/RenderSystems/Direct3D11/src/OgreD3D11RenderSystem.cpp	2012-09-02 00:27:15.000000000 -0500
++++ new/RenderSystems/Direct3D11/src/OgreD3D11RenderSystem.cpp	2013-10-23 10:04:19.918107781 -0500
+@@ -549,7 +549,7 @@
+ 
+ 
+ 			UINT deviceFlags = 0;
+-			if (D3D11Device::D3D_NO_EXCEPTION != D3D11Device::getExceptionsErrorLevel())
++			if (D3D11Device::D3D_NO_EXCEPTION != D3D11Device::getExceptionsErrorLevel() && OGRE_DEBUG_MODE)
+ 			{
+ 				deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+ 			}
+diff -urN orig/RenderSystems/Direct3D9/src/OgreD3D9GpuProgram.cpp new/RenderSystems/Direct3D9/src/OgreD3D9GpuProgram.cpp
+--- orig/RenderSystems/Direct3D9/src/OgreD3D9GpuProgram.cpp	2012-09-02 00:27:15.000000000 -0500
++++ new/RenderSystems/Direct3D9/src/OgreD3D9GpuProgram.cpp	2013-10-23 10:03:36.357635192 -0500
+@@ -204,7 +204,7 @@
+ 		// Create the shader
+ 		// Assemble source into microcode
+ 		LPD3DXBUFFER microcode;
+-		LPD3DXBUFFER errors;
++		LPD3DXBUFFER errors = 0;
+ 		HRESULT hr = D3DXAssembleShader(
+ 			mSource.c_str(),
+ 			static_cast<UINT>(mSource.length()),
+@@ -216,9 +216,17 @@
+ 
+ 		if (FAILED(hr))
+ 		{
+-			String message = "Cannot assemble D3D9 shader " + mName + " Errors:\n" +
+-				static_cast<const char*>(errors->GetBufferPointer());
+-			errors->Release();
++			String message;
++			if (errors)
++			{
++				message = "Cannot assemble D3D9 shader " + mName + " Errors:\n" +
++					static_cast<const char*>(errors->GetBufferPointer());
++				errors->Release();
++			}
++			else
++			{
++				message = "Cannot assemble D3D9 shader " + mName + " - DirectX update needed";
++			}
+ 			OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, message,
+ 				"D3D9GpuProgram::loadFromSource");
+ 		}

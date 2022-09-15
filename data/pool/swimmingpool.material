@@ -1,0 +1,365 @@
+
+material swimmingpool/YELLOW_EGG_YOLK
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.615686 0.411765 0.0313726 1
+			diffuse 0.615686 0.411765 0.0313726 1
+			cull_hardware none
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/yellow.jpg
+                        }
+		}
+
+	}
+
+}
+
+material swimmingpool/WHITE_PLASTIC_2S
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.462745 0.462745 0.462745 1
+			diffuse 0.462745 0.462745 0.462745 1
+			cull_hardware none
+		}
+
+	}
+
+}
+
+material swimmingpool/GRAY_(DARK)_NS2S
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.0784314 0.0784314 0.0784314 1
+			diffuse 0.0784314 0.0784314 0.0784314 1
+			cull_hardware none
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/gray2-sm.jpg
+                        }
+		}
+
+	}
+
+}
+
+material swimmingpool/GREY_ROUGH
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.137255 0.137255 0.137255 1
+			diffuse 0.137255 0.137255 0.137255 1
+			cull_hardware none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/EVITEXT2.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/CONCRETE_DECK
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.568627 0.427451 0.305882 1
+			diffuse 0.568627 0.427451 0.305882 1
+			cull_hardware none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/EVITEXT5.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/DIRT-6
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.258824 0.168627 0.0941177 1
+			diffuse 0.258824 0.168627 0.0941177 1
+			cull_hardware none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/EVITEXT5.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/0_WHITE_PLASTIC
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.6 0.6 0.6 1
+			diffuse 0.6 0.6 0.6 1
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/gray3.jpg
+                        }
+		}
+
+	}
+
+}
+
+material swimmingpool/0_SEAT_CUSH
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.533333 0.533333 0.533333 1
+			diffuse 0.533333 0.533333 0.533333 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/SEATCUSH.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/0_TOWEL
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.12549 0.12549 0.12549 1
+			diffuse 0.12549 0.12549 0.12549 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/TOWEL.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/0_UMBRELLA
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.568627 0.568627 0.568627 1
+			diffuse 0.568627 0.568627 0.568627 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/UMBRELLA.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/0_BANA_LEAF
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.596078 0.596078 0.596078 1
+			diffuse 0.596078 0.596078 0.596078 1
+			cull_hardware none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/BANALEAF.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/DARK_BROWN_MATTE
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.113725 0.0196078 0.00392157 1
+			diffuse 0.113725 0.0196078 0.00392157 1
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/gray2-sm.jpg
+                        }
+		}
+
+	}
+
+}
+
+material swimmingpool/BLACK_MATTE
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.0470588 0.0470588 0.0470588 1
+			diffuse 0.0470588 0.0470588 0.0470588 1
+			cull_hardware none
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/gray3.jpg
+                        }
+		}
+
+	}
+
+}
+
+material swimmingpool/0_BANA_LEAF3
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.290196 0.290196 0.290196 1
+			diffuse 0.290196 0.290196 0.290196 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/BANLEAF3.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/0_BANA_LEAF2
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.290196 0.290196 0.290196 1
+			diffuse 0.290196 0.290196 0.290196 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/BANLEAF2.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/AQUIFER-BUMP
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.141176 0.611765 0.65098 1
+			diffuse 0.141176 0.611765 0.65098 0.75
+			scene_blend alpha_blend
+			depth_write off
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/WATER02.png
+			}
+		}
+
+	}
+
+}
+
+material swimmingpool/GRAY_(MED)_NS2S
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.254902 0.254902 0.254902 1
+			diffuse 0.254902 0.254902 0.254902 1
+			cull_hardware none
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/stucco3.jpg
+                        }
+		}
+
+	}
+
+}
+
+material swimmingpool/0_BEACH_BALL
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0 0 0 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture data/pool/BEACHBAL.png
+			}
+		}
+
+	}
+
+}
