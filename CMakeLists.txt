@@ -35,7 +35,7 @@ find_package(FMOD REQUIRED)
 
 #find GTK
 if(NOT APPLE)
-find_package(GTK2 COMPONENTS gtk REQUIRED)
+find_package(GTK3 3.0 REQUIRED gtk)
 endif ()
 
 #find BULLET
@@ -73,7 +73,7 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
-	${GTK2_INCLUDE_DIRS}
+	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
 	src/sbs
@@ -110,5 +110,5 @@ target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIB
 
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${FMOD_LIBRARY})
 
-target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  
