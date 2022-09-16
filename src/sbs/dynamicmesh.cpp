@@ -625,8 +625,15 @@ DynamicMesh::Mesh::~Mesh()
 	}
 	client_entries.clear();
 
-	if (MeshWrapper)
-		Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
+	try
+	{
+		if (MeshWrapper)
+			Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error unloading mesh: " + e.getDescription());
+	}
 	MeshWrapper = 0;
 }
 
