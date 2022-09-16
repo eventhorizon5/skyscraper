@@ -192,18 +192,18 @@ namespace OgreBulletCollisions
             Ogre::MaterialManager::getSingleton().remove(mName + "Material"); 
         }
 
-        if (mFontName != fontName || mpMaterial.isNull() || !mpFont)
+        if (mFontName != fontName || !mpMaterial || !mpFont)
         {
             mFontName = fontName;
-            mpFont = (Font *)FontManager::getSingleton().getByName(mFontName).getPointer();
+            mpFont = (Font *)FontManager::getSingleton().getByName(mFontName).get();
             if (!mpFont)
                 Exception(Exception::ERR_ITEM_NOT_FOUND, "Could not find font " + fontName, "DebugContact::setFontName");
 
             mpFont->load();
-            if (!mpMaterial.isNull())
+            if (mpMaterial)
             {
                 MaterialManager::getSingletonPtr()->remove(mpMaterial->getName());
-                mpMaterial.setNull();
+                mpMaterial = 0;
             }
 
             mpMaterial = mpFont->getMaterial()->clone(mName + "Material");
@@ -280,7 +280,7 @@ namespace OgreBulletCollisions
     //------------------------------------------------------------------------------------------------
     void DebugContactText::showOnTop(bool show)
     {
-        if( mOnTop != show && !mpMaterial.isNull() )
+        if( mOnTop != show && mpMaterial )
         {
             mOnTop = show;
             mpMaterial->setDepthBias(0,!mOnTop);
@@ -292,7 +292,7 @@ namespace OgreBulletCollisions
     void DebugContactText::_setupGeometry()
     {
         assert(mpFont);
-        assert(!mpMaterial.isNull());
+        assert(mpMaterial);
 
         unsigned int vertexCount = static_cast<unsigned int>(mCaption.size() * 6);
 
@@ -573,7 +573,7 @@ namespace OgreBulletCollisions
     void DebugContactText::_updateColors(void)
     {
         assert(mpFont);
-        assert(!mpMaterial.isNull());
+        assert(mpMaterial);
 
         // Convert to system-specific
         RGBA color;
