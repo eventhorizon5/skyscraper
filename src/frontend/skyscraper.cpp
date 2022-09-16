@@ -1574,7 +1574,7 @@ const std::string Skyscraper::getOgreHandle() const
 	GtkWidget* privHandle = window->m_wxwindow;
 
 	// prevents flickering
-	gtk_widget_set_double_buffered(privHandle, false);
+	//gtk_widget_set_double_buffered(privHandle, false);
 
 	gtk_widget_realize(privHandle);
 
