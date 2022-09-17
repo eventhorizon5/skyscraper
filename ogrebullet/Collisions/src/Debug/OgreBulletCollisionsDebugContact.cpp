@@ -577,7 +577,7 @@ namespace OgreBulletCollisions
 
         // Convert to system-specific
         RGBA color;
-        Root::getSingleton().convertColourValue(mColor, &color);
+	color = mColor.getAsBYTE();
         HardwareVertexBufferSharedPtr vbuf = mRenderOp.vertexData->vertexBufferBinding->getBuffer(COLOUR_BINDING);
         RGBA *pDest = static_cast<RGBA*>(vbuf->lock(HardwareBuffer::HBL_DISCARD));
         for (unsigned int i = 0; i < mRenderOp.vertexData->vertexCount; ++i)
