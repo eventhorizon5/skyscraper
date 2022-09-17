@@ -578,7 +578,7 @@ bool Skyscraper::Initialize()
 	//create scene manager
 	try
 	{
-		mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
+		mSceneMgr = mRoot->createSceneManager();
 	}
 	catch (Ogre::Exception &e)
 	{
