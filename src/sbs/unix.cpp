@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Unix STL Globals
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2018 Ryan Thoryk
+	Copyright (C)2004-2022 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com

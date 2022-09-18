@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Edit Elevator Form
-	Copyright (C)2003-2018 Ryan Thoryk
+	Copyright (C)2003-2022 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
