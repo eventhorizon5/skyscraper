@@ -669,7 +669,7 @@ bool Skyscraper::Initialize()
 		Report("Sound Disabled");
 
 	//load Caelum plugin
-	/*if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
 	{
 		try
 		{
@@ -680,7 +680,7 @@ bool Skyscraper::Initialize()
 		{
 			return ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
 		}
-	}*/
+	}
 
 	//set platform name
 	std::string arch;
