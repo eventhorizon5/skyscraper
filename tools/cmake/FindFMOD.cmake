@@ -20,11 +20,12 @@ FIND_PATH(FMOD_INCLUDE_DIR
   /opt/local/include
   /opt/csw/include
   /opt/include
-  PATH_SUFFIXES fmod fmodex
+  "C:/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/core/inc"
+  PATH_SUFFIXES fmod
 )
 
 FIND_LIBRARY(FMOD_LIBRARY
-  NAMES fmod libfmod fmodex libfmodex fmodex64 libfmodex64
+  NAMES fmod libfmod fmod_vc
   PATHS
   $ENV{FMOD_DIR}/lib
   /usr/local/lib
@@ -36,6 +37,7 @@ FIND_LIBRARY(FMOD_LIBRARY
   /opt/csw/lib
   /opt/lib
   /usr/freeware/lib64
+  "C:/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/core/lib/x64"
 )
 
 IF(FMOD_LIBRARY AND FMOD_INCLUDE_DIR)

@@ -6,12 +6,12 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set (CMAKE_CXX_FLAGS "-fPIC -DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 endif ()
 
-if(UNIX)
-	set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
-	if(NOT APPLE)
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
+if(NOT APPLE)
+	if(UNIX)
 		set(FRONTENDGLINC "-lGL")
 	endif()
-endif(UNIX)
+endif()
  
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
@@ -35,8 +35,10 @@ find_package(FMOD REQUIRED)
 
 #find GTK
 if(NOT APPLE)
-find_package(GTK3 3.0 REQUIRED gtk)
-endif ()
+	if(UNIX)
+		find_package(GTK3 3.0 REQUIRED gtk)
+	endif ()
+endif()
 
 #find BULLET
 find_package(Bullet REQUIRED)
