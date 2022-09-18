@@ -22,30 +22,30 @@
     <ProjectGuid>{022634CE-F06A-4F71-AA07-3CE7BB1841AE}</ProjectGuid>
     <RootNamespace>OgreBulletDynamics</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -186,7 +186,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>Dynamics\include;Collisions\include;$(BULLET_HOME_64)\src;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(OGRE_HOME_64)\Components\Overlay\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Dynamics\include;Collisions\include;$(BULLET_HOME_64)\src;$(OGRE_HOME_64)\include\OGRE;$(OGRE_HOME_64)\include\OGRE\Overlay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_OGREBULLET_EXPORTS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -202,9 +202,9 @@
       <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain.lib;OgreOverlay.lib;OgreBulletCollisions.lib;bulletcollision.lib;bulletdynamics.lib;linearmath.lib;convexdecomposition.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;OgreOverlay.lib;OgreBulletCollisions.lib;BulletCollision_RelWithDebugInfo.lib;bulletdynamics_RelWithDebugInfo.lib;linearmath_RelWithDebugInfo.lib;convexdecomposition_RelWithDebugInfo.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\OgreBulletDynamics.dll</OutputFile>
-      <AdditionalLibraryDirectories>..\;$(BULLET_HOME_64)\lib\$(Configuration);$(OGRE_HOME_64)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\;$(BULLET_HOME_64)\out\lib\RelWithDebInfo\;$(OGRE_HOME_64)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>..\OgreBulletDynamics.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
