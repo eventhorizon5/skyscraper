@@ -168,7 +168,7 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\src\sbs;$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\include\OGRE;$(OGRE_HOME_64)\include\OGRE\Overlay;$(WXWIN_64)\\lib\vc_x64_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\core\inc;$(CAELUM_HOME_64)\main\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\src\sbs;$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\include\OGRE;$(OGRE_HOME_64)\include\OGRE\Overlay;$(WXWIN_64)\\lib\vc_x64_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\core\inc;$(CAELUM_HOME_64)\main\include;$(CAELUM_HOME_64)\out\main\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;_UNICODE;UNICODE;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
