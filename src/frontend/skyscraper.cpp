@@ -673,8 +673,8 @@ bool Skyscraper::Initialize()
 	{
 		try
 		{
-			if (!Caelum::CaelumPlugin::getSingletonPtr())
-				mRoot->installPlugin(new Caelum::CaelumPlugin());
+			new Caelum::CaelumPlugin();
+			Caelum::CaelumPlugin::getSingleton().initialise();
 		}
 		catch (Ogre::Exception &e)
 		{
