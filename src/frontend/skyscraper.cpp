@@ -968,6 +968,9 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 			//create new material
 			Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
 
+			//create RTSS shader
+			Ogre::RTShader::ShaderGenerator::getSingleton().createShaderBasedTechnique(*mat, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+
 			//load image data from file
 			Ogre::Image img;
 			try
