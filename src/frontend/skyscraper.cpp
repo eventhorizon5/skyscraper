@@ -39,6 +39,7 @@
 #include <OgreConfigFile.h>
 #include <OgreFontManager.h>
 #include <OgreRectangle2D.h>
+#include <OgreRTShaderSystem.h>
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "globals.h"
@@ -589,6 +590,11 @@ bool Skyscraper::Initialize()
 	mSceneMgr->addRenderQueueListener(mOverlaySystem);
 #endif
 
+	//Enable the RT Shader System
+	Ogre::RTShader::ShaderGenerator::initialize();
+	Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
+	shaderGenerator->addSceneManager(mSceneMgr);
+
 	//set ambient light
 	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
@@ -606,6 +612,9 @@ bool Skyscraper::Initialize()
 			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
 		}
 	}
+
+	//set up default material shader scheme
+	mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 
 	//setup texture filtering
 	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
