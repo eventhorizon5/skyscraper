@@ -595,6 +595,12 @@ bool Skyscraper::Initialize()
 	Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
 	shaderGenerator->addSceneManager(mSceneMgr);
 
+	Ogre::RTShader::RenderState* RenderState = shaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	//Add per pixel lighting sub render state to the global scheme render state.
+	//It will override the default FFP lighting sub render state.
+	Ogre::RTShader::PerPixelLighting* perPixelLightModel = shaderGenerator->createSubRenderState<Ogre::RTShader::PerPixelLighting>();
+	RenderState->addTemplateSubRenderState(perPixelLightModel);
+
 	//set ambient light
 	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
