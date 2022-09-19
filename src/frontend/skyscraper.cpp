@@ -53,6 +53,7 @@
 #include "mainscreen.h"
 #include "loaddialog.h"
 #include "profiler.h"
+#include "shaderresolver.h"
 #include "revmain.h"
 
 #if OGRE_VERSION >= 0x00010900
@@ -591,15 +592,21 @@ bool Skyscraper::Initialize()
 #endif
 
 	//Enable the RT Shader System
-	Ogre::RTShader::ShaderGenerator::initialize();
-	Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-	shaderGenerator->addSceneManager(mSceneMgr);
+	if (Ogre::RTShader::ShaderGenerator::initialize())
+	{
+		Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
+		shaderGenerator->addSceneManager(mSceneMgr);
 
-	Ogre::RTShader::RenderState* RenderState = shaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
-	//Add per pixel lighting sub render state to the global scheme render state.
-	//It will override the default FFP lighting sub render state.
-	Ogre::RTShader::PerPixelLighting* perPixelLightModel = shaderGenerator->createSubRenderState<Ogre::RTShader::PerPixelLighting>();
-	RenderState->addTemplateSubRenderState(perPixelLightModel);
+	    // forward scheme not found events to the RTSS
+	    SGTechniqueResolverListener* schemeNotFoundHandler = new SGTechniqueResolverListener(shaderGenerator);
+	    Ogre::MaterialManager::getSingleton().addListener(schemeNotFoundHandler);
+
+		/*Ogre::RTShader::RenderState* RenderState = shaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		//Add per pixel lighting sub render state to the global scheme render state.
+		//It will override the default FFP lighting sub render state.
+		Ogre::RTShader::PerPixelLighting* perPixelLightModel = shaderGenerator->createSubRenderState<Ogre::RTShader::PerPixelLighting>();
+		RenderState->addTemplateSubRenderState(perPixelLightModel);*/
+	}
 
 	//set ambient light
 	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
@@ -967,9 +974,6 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 
 			//create new material
 			Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
-
-			//create RTSS shader
-			Ogre::RTShader::ShaderGenerator::getSingleton().createShaderBasedTechnique(*mat, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 
 			//load image data from file
 			Ogre::Image img;

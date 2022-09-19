@@ -2140,9 +2140,6 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	//create new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(ToString(sbs->InstanceNumber) + ":" + name, path);
 
-	//create RTSS shader
-	Ogre::RTShader::ShaderGenerator::getSingleton().createShaderBasedTechnique(*mMat, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
-
 	IncrementMaterialCount();
 	mMat->setLightingEnabled(false);
 	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
