@@ -366,6 +366,7 @@
     <ClCompile Include="..\src\frontend\parameterviewer.cpp" />
     <ClCompile Include="..\src\frontend\peoplemanager.cpp" />
     <ClCompile Include="..\src\frontend\profilergui.cpp" />
+    <ClCompile Include="..\src\frontend\shaderresolver.cpp" />
     <ClCompile Include="..\src\frontend\skycontrol.cpp" />
     <ClCompile Include="..\src\frontend\skyscraper.cpp" />
     <ClCompile Include="..\src\frontend\stackwalker.cpp" />
@@ -401,6 +402,7 @@
     <ClInclude Include="..\src\frontend\parameterviewer.h" />
     <ClInclude Include="..\src\frontend\peoplemanager.h" />
     <ClInclude Include="..\src\frontend\profilergui.h" />
+    <ClInclude Include="..\src\frontend\shaderresolver.h" />
     <ClInclude Include="..\src\frontend\skycontrol.h" />
     <ClInclude Include="..\src\frontend\skyscraper.h" />
     <ClInclude Include="..\src\frontend\stackwalker.h" />
