@@ -25,7 +25,7 @@ if(NOT OGRE_FOUND)
   message(SEND_ERROR "Failed to find OGRE.")
 endif()
  
-set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES})
+set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES})
 
 #find wxWidgets
 find_package(wxWidgets COMPONENTS core base gl REQUIRED)
@@ -74,6 +74,7 @@ file (GLOB OGREBULLET_DYN_FILES
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
+        ${OGRE_RTShaderSystem_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
