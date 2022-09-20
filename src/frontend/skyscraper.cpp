@@ -546,22 +546,17 @@ bool Skyscraper::Initialize()
 	{
 		return ReportFatalError("Error loading resources.cfg\nDetails: " + e.getDescription());
 	}
-	Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
 	//add resource locations
 	try
 	{
-		std::string secName, typeName, archName;
-		while(seci.hasMoreElements())
-		{
-			secName = seci.peekNextKey();
-			Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
-			Ogre::ConfigFile::SettingsMultiMap::iterator i;
-			for(i = settings->begin(); i != settings->end(); ++i)
-			{
-				typeName = i->first;
-				archName = i->second;
-				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+		std::string name, locationType;
+		Ogre::ConfigFile::SettingsBySection_ settingsBySection = cf.getSettingsBySection();
+		for (const auto& p : settingsBySection) {
+			for (const auto& r : p.second) {
+				locationType = r.first;
+				name = r.second;
+				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(name, locationType);
 			}
 		}
 
