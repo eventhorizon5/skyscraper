@@ -79,9 +79,7 @@ public:
 	Ogre::Viewport* mViewport;
 	Ogre::SceneManager* mSceneMgr;
 	Ogre::Camera* mCamera;
-#if OGRE_VERSION >= 0x00010900
 	Ogre::OverlaySystem* mOverlaySystem;
-#endif
 
 	std::string version;
 	std::string version_rev;

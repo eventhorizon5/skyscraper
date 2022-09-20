@@ -56,9 +56,7 @@
 #include "shaderresolver.h"
 #include "revmain.h"
 
-#if OGRE_VERSION >= 0x00010900
 #include <OgreOverlaySystem.h>
-#endif
 
 #if defined(__WXGTK__)
    // NOTE: Find the GTK install config with `pkg-config --cflags gtk+-2.0`
@@ -109,9 +107,7 @@ bool Skyscraper::OnInit(void)
 	Pause = false;
 	FullScreen = false;
 	Shutdown = false;
-#if OGRE_VERSION >= 0x00010900
 	mOverlaySystem = 0;
-#endif
 	mRoot = 0;
 	mRenderWindow = 0;
 	mViewport = 0;
@@ -367,9 +363,7 @@ int Skyscraper::OnExit()
 		delete parser;
 	parser = 0;
 
-#if OGRE_VERSION >= 0x00010900
 	delete mOverlaySystem;
-#endif
 
 	Ogre::ResourceGroupManager::getSingleton().shutdownAll();
 
@@ -467,7 +461,6 @@ bool Skyscraper::Initialize()
 	}
 
 	//set up overlay system
-#if OGRE_VERSION >= 0x00010900
 	try
 	{
 		mOverlaySystem = new Ogre::OverlaySystem();
@@ -476,7 +469,6 @@ bool Skyscraper::Initialize()
 	{
 		return ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription());
 	}
-#endif
 
 	//configure render system
 	try
@@ -582,9 +574,7 @@ bool Skyscraper::Initialize()
 		return ReportFatalError("Error creating scene manager\nDetails: " + e.getDescription());
 	}
 
-#if OGRE_VERSION >= 0x00010900
 	mSceneMgr->addRenderQueueListener(mOverlaySystem);
-#endif
 
 	//Enable the RT Shader System
 	if (Ogre::RTShader::ShaderGenerator::initialize())
