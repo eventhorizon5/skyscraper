@@ -719,6 +719,12 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 			if (font)
 			{
 				//unload texture and font, if an error occurred
+				if (Ogre::TextureManager::getSingleton().getByName(fontname + "Texture"))
+					return ReportError("Error loading font " + fontname + "\n" + e.getDescription());
+
+				if (Ogre::FontManager::getSingleton().getByHandle(font->getHandle()))
+					return ReportError("Error loading font " + fontname + "\n" + e.getDescription());
+
 				Ogre::TextureManager::getSingleton().remove(fontname + "Texture");
 				Ogre::FontManager::getSingleton().remove(font->getHandle());
 			}
