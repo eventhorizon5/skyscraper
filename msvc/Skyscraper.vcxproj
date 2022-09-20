@@ -301,7 +301,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\src\sbs;$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\Components\Overlay\include;$(WXWIN_64)\\lib\vc_x64_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\lowlevel\inc;$(CAELUM_HOME_64)\main\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\src\sbs;$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\include\OGRE;$(OGRE_HOME_64)\include\OGRE\RTShaderSystem;$(OGRE_HOME_64)\include\OGRE\Overlay;$(WXWIN_64)\\lib\vc_x64_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\core\inc;$(CAELUM_HOME_64)\main\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;_UNICODE;UNICODE;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -329,12 +329,12 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_gl.lib;fmod64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_gl.lib;fmod_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../Skyscraper.exe</OutputFile>
       <Version>
       </Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\;.\Debug;$(OGRE_HOME_64)\lib\debug;$(WXWIN_64)\lib\vc_x64_dll;$(FMOD_HOME)\api\lowlevel\lib;$(CAELUM_HOME_64)\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\;.\Debug;$(OGRE_HOME_64)\lib;$(WXWIN_64)\lib\vc_x64_dll;$(FMOD_HOME)\api\core\lib\x64;$(CAELUM_HOME_64)\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/Skyscraper.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
