@@ -5,7 +5,7 @@ Install required stuff:
 
 Debian 8:
 ---
-sudo apt-get install subversion cmake gcc g++ gcc-doc wx3.0-headers libwxgtk3.0-dev freeglut3-dev zlib1g-dev libfreeimage-dev libfreetype6-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev nvidia-cg-toolkit libgtk2.0-dev libboost-dev cmake-curses-gui
+sudo apt-get install subversion cmake gcc g++ gcc-doc wx3.0-headers libwxgtk3.0-gtk3-dev freeglut3-dev zlib1g-dev libfreeimage-dev libfreetype6-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev nvidia-cg-toolkit libgtk2.0-dev libboost-dev cmake-curses-gui
 ---
 
 If you have a multi-core system, at the step that says to type "make", you can instead type "make -j2" to build using 2 cores, or "make -j4" for 4 cores.
@@ -14,7 +14,7 @@ Step 1 - build and install Bullet
 ----------
 Get Bullet source (my custom-patched version):
 ---
-wget http://www.skyscrapersim.com/downloads/dev/other_apps/bullet.tar.bz2
+wget http://skyscraper.tliquest.net/downloads/dev/other_apps/bullet.tar.bz2
 ---
 
 Extract Bullet:
@@ -42,7 +42,7 @@ http://www.fmod.org/download/
 (Get the FMOD Studio Programmer's API for Linux)
 ---
 tar xfvz fmodstudioapi10703linux.tar.gz
-cd fmodstudioapi10703linux/api/lowlevel
+cd fmodstudioapi10703linux/api/core
 sudo mkdir /usr/local/include/fmod
 sudo cp -a inc/* /usr/local/include/fmod/
 sudo cp -a lib/x86_64/* /usr/local/lib/
@@ -55,21 +55,16 @@ Step 3 - build and install OGRE
 
 First get the source:
 ---
-wget http://www.skyscrapersim.com/downloads/dev/other_apps/ogre_src_1.9-skyscraper.tar.bz2
-tar xfvj ogre_src_1.9-skyscraper.tar.bz2
-cd ogre-1.9
-cmake -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release
+https://skyscraper.tliquest.net/downloads/dev/other_apps/ogre-1.12-skyscraper.tar.gz
+tar xfvz ogre-1.12-skyscraper.tar.gz
+cd ogre-1.12.13
+cmake -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0
 make
 sudo make install
 cd
 ---
 
 (if you want to install the OGRE samples, for the cmake line above do "cmake -DINSTALL_SAMPLES=ON" instead)
-
-On an Ubuntu 14.04 test system, the "cmake" command was failing for Ogre due to an issue with Freetype.  This line fixes the issue:
----
-cmake -DFREETYPE_INCLUDE_DIR=/usr/include/freetype2 -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release
----
 
 
 Step 4 - build and install Caelum (sky system)
@@ -78,7 +73,7 @@ This one you can pull from SVN, and I have custom-modified source code.
 So pull the source from SVN, and build:
 
 ---
-svn co http://svn.tliquest.net/skyscraper/caelum/trunk caelum
+git clone https://github.com/OGRECave/ogre-caelum.git caelum
 cd caelum
 cmake -DCMAKE_BUILD_TYPE=Release
 make
@@ -87,28 +82,14 @@ cd
 ---
 
 
-Step 5 - build and install the Ogre Procedural Geometry library
------------
-This is a new addition, and I have custom-modified source in SVN.
-So pull the source from SVN, and build:
-
----
-svn co http://svn.tliquest.net/skyscraper/ogre-procedural ogre-procedural
-cd ogre-procedural
-cmake .
-make
-sudo make install
----
-
-
-Step 6 - build Skyscraper (this also builds the built-in OgreBullet libraries)
+Step 5 - build Skyscraper (this also builds the built-in OgreBullet libraries)
 -----------
 First grab the source via SVN, and build.
 
 ---
-svn co http://svn.tliquest.net/skyscraper/skyscraper/trunk skyscraper
+git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
 cd skyscraper
-wget http://www.skyscrapersim.com/downloads/dev/other_apps/plugins.cfg
+wget http://skyscraper.tliquest.net/downloads/dev/other_apps/plugins.cfg
 cmake .
 make
 ---
@@ -120,16 +101,14 @@ Finally, run Skyscraper:
 
 To update the app in the future, first do an SVN update, rebuild and run:
 ---
-svn update
-./svnrev.sh
+git pull
 make
 ./skyscraper
 ---
 
 If any files were added in SVN, you'll have to run Cmake before the "make" command, or else it'll have linking errors:
 ---
-svn update
-./svnrev.sh
+git pull
 cmake .
 make
 ./skyscraper
