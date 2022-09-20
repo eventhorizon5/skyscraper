@@ -2235,25 +2235,33 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 	if (sbs->Headless == true)
 		return;
 
-	//if dimensions are the same, use standard copy method to prevent
-	//some crashes on systems with small npot textures
-	//note - this currently doesn't work properly on DirectX, needs fixing
-	if (srcBox.getWidth() == dstBox.getWidth() &&
-		srcBox.getHeight() == dstBox.getHeight() &&
-		srcBox.getDepth() == dstBox.getDepth() &&
-		sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem")
+	try
 	{
-		source->copyToTexture(destination);
+		//if dimensions are the same, use standard copy method to prevent
+		//some crashes on systems with small npot textures
+		//note - this currently doesn't work properly on DirectX, needs fixing
+		if (srcBox.getWidth() == dstBox.getWidth() &&
+			srcBox.getHeight() == dstBox.getHeight() &&
+			srcBox.getDepth() == dstBox.getDepth() &&
+			sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem")
+		{
+			source->copyToTexture(destination);
+			return;
+		}
+
+		Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
+
+		buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
+		const Ogre::PixelBox& pb = buffer->getCurrentLock();
+
+		destination->getBuffer()->blitFromMemory(pb, dstBox);
+		buffer->unlock();
+	}
+	catch (Ogre::Exception& e)
+	{
+		ReportError("Error copying texture\n" + e.getDescription());
 		return;
 	}
-
-	Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
-
-	buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
-	const Ogre::PixelBox &pb = buffer->getCurrentLock();
-
-	destination->getBuffer()->blitFromMemory(pb, dstBox);
-	buffer->unlock();
 }
 
 void TextureManager::FreeTextureBoxes()
