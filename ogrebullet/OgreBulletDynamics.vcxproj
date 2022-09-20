@@ -204,7 +204,7 @@
     <Link>
       <AdditionalDependencies>OgreMain.lib;OgreOverlay.lib;OgreBulletCollisions.lib;BulletCollision_RelWithDebugInfo.lib;bulletdynamics_RelWithDebugInfo.lib;linearmath_RelWithDebugInfo.lib;convexdecomposition_RelWithDebugInfo.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\OgreBulletDynamics.dll</OutputFile>
-      <AdditionalLibraryDirectories>..\;$(BULLET_HOME_64)\out\lib\RelWithDebInfo\;$(OGRE_HOME_64)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\;$(BULLET_HOME_64)\lib\RelWithDebInfo\;$(OGRE_HOME_64)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>..\OgreBulletDynamics.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
