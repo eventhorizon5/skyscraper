@@ -2138,7 +2138,16 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 		UnregisterTextureInfo(name);
 
 	//create new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(ToString(sbs->InstanceNumber) + ":" + name, path);
+	Ogre::MaterialPtr mMat;
+	try
+	{
+		mMat = Ogre::MaterialManager::getSingleton().create(ToString(sbs->InstanceNumber) + ":" + name, path);
+	}
+	catch (Ogre::Exception& e)
+	{
+		ReportError("Error creating material for texture " + name + "\n" + e.getDescription());
+		return 0;
+	}
 
 	IncrementMaterialCount();
 	mMat->setLightingEnabled(false);

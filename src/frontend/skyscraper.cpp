@@ -973,7 +973,16 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 				Filename = filename_pressed;
 
 			//create new material
-			Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
+			Ogre::MaterialPtr mat;
+			try
+			{
+				mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
+			}
+			catch (Ogre::Exception& e)
+			{
+				ReportError("Error creating material for texture " + Filename + "\n" + e.getDescription());
+				return;
+			}
 
 			//load image data from file
 			Ogre::Image img;
