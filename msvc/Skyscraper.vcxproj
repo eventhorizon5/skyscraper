@@ -329,7 +329,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_gl.lib;fmod_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;OgreRTShaderSystem_d.lib;wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_gl.lib;fmod_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../Skyscraper.exe</OutputFile>
       <Version>
       </Version>
