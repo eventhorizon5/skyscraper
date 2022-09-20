@@ -32,7 +32,6 @@
 #include <OgreFontManager.h>
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreResourceGroupManager.h>
-#include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
