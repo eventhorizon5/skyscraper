@@ -123,7 +123,7 @@ CameraTexture::~CameraTexture()
 void CameraTexture::LookAt(const Ogre::Vector3 &point)
 {
 	Ogre::Vector3 newpoint = sbs->ToRemote(point);
-	camera->lookAt(newpoint.x, newpoint.y, newpoint.z);
+	//GetSceneNode()->GetRawSceneNode()->lookAt(Ogre::Vector3(newpoint.x, newpoint.y, newpoint.z));
 }
 
 void CameraTexture::Enabled(bool value)
