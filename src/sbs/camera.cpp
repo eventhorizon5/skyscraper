@@ -1286,11 +1286,11 @@ bool Camera::Attach(Ogre::Camera *camera, bool init_state)
 
 	MainCamera = camera;
 	MainCameraNode = new SceneNode(this, "CameraNode");
+	GetSceneNode()->AddChild(MainCameraNode);
 	MainCameraNode->AttachObject(MainCamera);
 
 	MainCamera->setNearClipDistance(0.1);
 	MainCameraNode->SetPosition(Ogre::Vector3(0, (cfg_body_height + cfg_legs_height + 0.5) / 2, 0));
-	GetSceneNode()->AddChild(MainCameraNode);
 
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
