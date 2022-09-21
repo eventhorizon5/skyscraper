@@ -421,11 +421,6 @@ void Skyscraper::Render()
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
-
-#if defined(__WXGTK__)
-	if (mRenderWindow)
-		mRenderWindow->update(true);
-#endif
 }
 
 bool Skyscraper::Initialize()
