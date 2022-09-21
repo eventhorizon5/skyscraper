@@ -628,7 +628,10 @@ DynamicMesh::Mesh::~Mesh()
 	try
 	{
 		if (MeshWrapper)
-			Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
+		{
+			if (Ogre::MeshManager::getSingleton().getByHandle(MeshWrapper->getHandle()))
+				Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
+		}
 	}
 	catch (Ogre::Exception &e)
 	{
