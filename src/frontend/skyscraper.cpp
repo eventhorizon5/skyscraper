@@ -1545,7 +1545,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	else
 		params["vsync"] = "false";
 	params["vsyncInterval"] = "1";
-	params["parentWindowHandle"] = getOgreHandle();
+	params["externalWindowHandle"] = getOgreHandle();
 
 #if defined(__WXMAC__)
 	params["macAPI"] = "cocoa";
