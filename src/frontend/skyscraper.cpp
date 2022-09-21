@@ -270,7 +270,7 @@ bool Skyscraper::OnInit(void)
 	//Create main window and set size from INI file defaults
 	//if (Headless == false)
 	//{
-		window = new MainScreen(this, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
+		window = new MainScreen(this, GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
 		//AllowResize(false);
 		window->ShowWindow();
 		window->CenterOnScreen();
