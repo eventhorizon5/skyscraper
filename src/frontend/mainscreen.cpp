@@ -68,8 +68,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	InLoop = false;
 	Center();
 	wxString title;
-	title = wxT("Skyscraper 1.11 Alpha");
-	//title = wxT("Skyscraper " + frontend->version + " " + frontend->version_state);
+	title = wxT("Skyscraper " + frontend->version + " " + frontend->version_state);
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
