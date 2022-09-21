@@ -89,6 +89,11 @@ int main (int argc, char* argv[])
 	Skyscraper::InitUnhandledExceptionFilter();
 #endif
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	//force X11 if on Wayland
+	setenv("GDK_BACKEND", "x11", false);
+#endif
+
 	//main wxWidgets entry point
 	wxEntry(argc, argv);
 
