@@ -1443,7 +1443,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		if (FullScreen == false)
 		{
 			window->SetBackgroundColour(*wxBLACK);
-			window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
+			window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 1024), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 768));
 			window->Center();
 		}
 	}
