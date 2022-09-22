@@ -122,7 +122,6 @@ Camera::Camera(Object *parent) : Object(parent)
 	inside_vehicle = false;
 	vehicle = 0;
 	old_freelook_mode = false;
-	MainCameraNode = 0;
 
 	//set up camera and scene nodes
 
@@ -162,9 +161,6 @@ Camera::~Camera()
 
 	if (mCharacter)
 		delete mCharacter;
-
-	if (MainCameraNode)
-		delete MainCameraNode;
 
 	//detach the camera
 	Detach();
@@ -1333,7 +1329,7 @@ bool Camera::Detach()
 	if (MainCamera->isAttached() == false)
 		return false;
 
-	MainCameraNode->DetachObject(MainCamera);
+	GetSceneNode()->DetachObject(MainCamera);
 	MainCamera = 0;
 
 	return true;
