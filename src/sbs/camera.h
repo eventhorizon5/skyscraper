@@ -188,7 +188,6 @@ public:
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
-	SceneNode *MainCameraNode; //scenenode for MainCamera
 	Ogre::Vector3 StartDirection; //direction camera faces on start
 	Ogre::Vector3 StartRotation; //camera's startup rotation
 	std::string meshname; //last clicked mesh name
