@@ -144,7 +144,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 
 	//print instructions
 	twindow->tMain->WriteText(wxT("\n--------------------------\n"));
-	twindow->tMain->WriteText(wxString("Copy and paste the above information (select it and press CTRL-C)\nand either post it to the Skyscraper forum at http://forum.skyscrapersim.com\nor email to ryan@skyscrapersim.com\n\nPress OK to close Skyscraper\n"));
+	twindow->tMain->WriteText(wxString("Copy and paste the above information (select it and press CTRL-C)\nand either post it to the Skyscraper forum at http://forum.skyscrapersim.net\nor email to ryan@thoryk.com\n\nPress OK to close Skyscraper\n"));
 	twindow->ShowModal();
 
 	if (twindow)

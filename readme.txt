@@ -1,6 +1,6 @@
 Skyscraper 2.0 Alpha 11 
 Copyright (C)2003-2022 Ryan Thoryk
-http://www.skyscrapersim.net
+https://www.skyscrapersim.net
 https://github.com/eventhorizon5/skyscraper
 https://sourceforge.net/projects/skyscraper/
 
@@ -145,7 +145,7 @@ This release has a very large amount of bug fixes and stability fixes, which res
 Most objects can be deleted by pressing Ctrl and Alt together, and clicking on the object.  On a Mac, the keys are Command and Option.
 
 Skyscraper has supported loading standard OGRE mesh models since the Alpha 8 release.  A couple couches and keys are loaded in the Simple building as an example, and there is a couch on the roof of the Triton Center to demonstrate physics.  See this forum thread on how to create models using Google Sketchup:
-http://forum.skyscrapersim.com/index.php?topic=5556.0
+http://forum.skyscrapersim.net/index.php?topic=5556.0
 
 To optimize rendering speed, the main thing that will cause overall slowdowns is the type of texture filtering used.  The better the filtering, the better the visual quality but the slower the app.  Skyscraper defaults to anisotropic filtering at level 4.  Lower-quality filtering is available too in the forms of bilinear and trilinear filtering, so to improve rendering performance, either lower the anisotropic level in the INI file or switch to a different filtering method.  Also, the Vsync option normally locks the FPS at 60, but can cause abnormal slowdowns that can decrease the framerate below what it should (such as an FPS reading of 30 with vsync on, while one of 40 with it off).  These options can all be set in the INI file.
 

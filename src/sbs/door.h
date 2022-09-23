@@ -4,9 +4,9 @@
 	Scalable Building Simulator - Door Object
 	The Skyscraper Project - Version 1.11 Alpha
 	Copyright (C)2004-2022 Ryan Thoryk
-	http://www.skyscrapersim.com
-	http://sourceforge.net/projects/skyscraper
-	Contact - ryan@skyscrapersim.com
+	https://www.skyscrapersim.net
+	https://sourceforge.net/projects/skyscraper/
+	Contact - ryan@thoryk.com
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License

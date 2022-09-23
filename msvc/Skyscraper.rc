@@ -45,12 +45,12 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "http://www.skyscrapersim.com\0"
+            VALUE "Comments", "https://www.skyscrapersim.net\0"
             VALUE "CompanyName", "TLI Networks\0"
             VALUE "FileDescription", "Skyscraper\0"
             VALUE "FileVersion", "1.11.0." SVN_REVSTR "\0"
             VALUE "InternalName", "Skyscraper\0"
-            VALUE "LegalCopyright", "©2003-2018 Ryan Thoryk, released under the GPL\0"
+            VALUE "LegalCopyright", "ï¿½2003-2018 Ryan Thoryk, released under the GPL\0"
             VALUE "OriginalFilename", "Skyscraper.exe\0"
             VALUE "ProductName", "Skyscraper\0"
             VALUE "ProductVersion", "1.11.0." SVN_REVSTR "\0"

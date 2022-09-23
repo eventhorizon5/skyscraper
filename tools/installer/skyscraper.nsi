@@ -4,7 +4,7 @@
 !define PRODUCT_NAME "Skyscraper"
 !define PRODUCT_VERSION "2.0 Alpha 10"
 !define PRODUCT_PUBLISHER "Ryan Thoryk"
-!define PRODUCT_WEB_SITE "http://www.skyscrapersim.com"
+!define PRODUCT_WEB_SITE "https://www.skyscrapersim.net"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Skyscraper.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -20,7 +20,7 @@ SetCompressor lzma
 VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
-VIAddVersionKey LegalCopyright "©2003-2018 Ryan Thoryk"
+VIAddVersionKey LegalCopyright "ï¿½2003-2018 Ryan Thoryk"
 VIAddVersionKey FileVersion "1.10.0.0"
 VIAddVersionKey ProductVersion "1.10.0.0"
 VIProductVersion 1.10.0.0
