@@ -1,11 +1,11 @@
-Skyscraper OGRE version source build instructions for Debian Linux
+Skyscraper source build instructions for Debian Linux
 -------------------------------------
 
 Install required stuff:
 
-Debian 8:
+Debian 11:
 ---
-sudo apt-get install subversion cmake gcc g++ gcc-doc wx3.0-headers libwxgtk3.0-gtk3-dev freeglut3-dev zlib1g-dev libfreeimage-dev libfreetype6-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev nvidia-cg-toolkit libgtk2.0-dev libboost-dev cmake-curses-gui
+sudo apt-get install git cmake gcc g++ gcc-doc wx3.0-headers libwxgtk3.0-gtk3-dev freeglut3-dev zlib1g-dev libfreeimage-dev libfreetype-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev nvidia-cg-toolkit libgtk2.0-dev libboost-dev cmake-curses-gui
 ---
 
 If you have a multi-core system, at the step that says to type "make", you can instead type "make -j2" to build using 2 cores, or "make -j4" for 4 cores.
@@ -41,8 +41,8 @@ http://www.fmod.org/download/
 
 (Get the FMOD Studio Programmer's API for Linux)
 ---
-tar xfvz fmodstudioapi10703linux.tar.gz
-cd fmodstudioapi10703linux/api/core
+tar xfvz fmodstudioapi20208linux.tar.gz
+cd fmodstudioapi20208linux/api/core
 sudo mkdir /usr/local/include/fmod
 sudo cp -a inc/* /usr/local/include/fmod/
 sudo cp -a lib/x86_64/* /usr/local/lib/
@@ -82,15 +82,26 @@ cd
 ---
 
 
-Step 5 - build Skyscraper (this also builds the built-in OgreBullet libraries)
+Step 5 - build a legacy wxWidgets with GTK2 support (this is until the GTK3 rendering issue gets fixed)
 -----------
-First grab the source via SVN, and build.
+wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxWidgets-3.0.5.tar.bz2
+tar xfvj wxWidgets-3.0.5.tar.bz2
+cd wxWidgets-3.0.5
+./configure --prefix=/opt/wx
+make
+sudo make install
+cd
+
+
+Step 6 - build Skyscraper (this also builds the built-in OgreBullet libraries)
+-----------
+First grab the source via git, and build, using the wxWidgets we just built.
 
 ---
 git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
 cd skyscraper
 wget http://skyscraper.tliquest.net/downloads/dev/other_apps/plugins.cfg
-cmake .
+cmake . -DwxWidgets_CONFIG_EXECUTABLE=/opt/wx/bin/wx-config
 make
 ---
 
@@ -99,14 +110,14 @@ Finally, run Skyscraper:
 ./skyscraper
 ---
 
-To update the app in the future, first do an SVN update, rebuild and run:
+To update the app in the future, first update git, rebuild and run:
 ---
 git pull
 make
 ./skyscraper
 ---
 
-If any files were added in SVN, you'll have to run Cmake before the "make" command, or else it'll have linking errors:
+If any files were added in git, you'll have to run CMake before the "make" command, or else it'll have linking errors:
 ---
 git pull
 cmake .
