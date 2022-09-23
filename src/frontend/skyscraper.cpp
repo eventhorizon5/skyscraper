@@ -1508,7 +1508,7 @@ void Skyscraper::UnloadToMenu()
 
 	//return to main menu
 	SetFullScreen(false);
-	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
+	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.Menu.Width", 800), GetConfigInt("Skyscraper.Frontend.Menu.Height", 600));
 	window->Center();
 	window->SetCursor(wxNullCursor);
 
