@@ -175,7 +175,10 @@ void FloorIndicator::Flash(bool enabled)
 	if (enabled == true)
 		flash_timer->Start(500, false);
 	else
+	{
 		flash_timer->Stop();
+		Update(false); //refresh indicator
+	}
 }
 
 void FloorIndicator::Timer::Notify()
