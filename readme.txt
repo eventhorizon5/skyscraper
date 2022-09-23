@@ -1,7 +1,8 @@
 Skyscraper 2.0 Alpha 11 
 Copyright (C)2003-2022 Ryan Thoryk
-http://www.skyscrapersim.com
-http://sourceforge.net/projects/skyscraper
+http://www.skyscrapersim.net
+https://github.com/eventhorizon5/skyscraper
+https://sourceforge.net/projects/skyscraper/
 
 Contents
 1. Legal Notices
@@ -221,7 +222,6 @@ Stop
 
 7. Contact
 
-Bug-Reports, suggestions, and requests should be posted to
-the Skyscraper forum at http://forum.skyscrapersim.com
-I can be contacted directly at ryan at skyscrapersim.com
+Bug-Reports, suggestions, and requests should be posted to GitHub
+I can be contacted directly at ryan@thoryk.com
 
