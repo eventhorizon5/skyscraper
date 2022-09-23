@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Script Processor - Elevator Car Section
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -1406,7 +1406,12 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		int end = 8;
 		if (compat == true)
+		{
 			end = 7;
+
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		//check numeric values
 		for (int i = 1; i <= end; i++)
@@ -1466,15 +1471,17 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 18);
 
-		if (params != 6 && params != 7)
+		if (params < 6 && params > 8)
 			return ScriptError("Incorrect number of parameters");
 
-		bool compat = false;
+		int compat = 0;
 		if (params == 6)
-			compat = true; //1.4 compatibility mode
+			compat = 1; //1.4 compatibility mode
+		if (params == 7)
+			compat = 2;
 
 		//check numeric values
-		if (compat == true)
+		if (compat == 1)
 		{
 			for (int i = 1; i <= 5; i++)
 			{
@@ -1484,9 +1491,17 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
 		}
-		else
+		else if (compat == 2)
 		{
 			for (int i = 2; i <= 6; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+		}
+		else
+		{
+			for (int i = 3; i <= 7; i++)
 			{
 				if (!IsNumeric(tempdata[i]))
 					return ScriptError("Invalid value: " + tempdata[i]);
@@ -1497,10 +1512,12 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		if (compat == false)
-			StoreCommand(car->AddFloorIndicator(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
-		else
-			StoreCommand(car->AddFloorIndicator("Button", tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+		if (compat == 0)
+			StoreCommand(car->AddFloorIndicator(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+		else if (compat == 1)
+			StoreCommand(car->AddFloorIndicator("Button", "", tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+		else if (compat == 2)
+			StoreCommand(car->AddFloorIndicator(tempdata[0], "", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
 		return sNextLine;
 	}
 
@@ -2023,7 +2040,12 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		int end = 8;
 		if (compat == true)
+		{
 			end = 7;
+
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		//check numeric values
 		for (int i = 3; i <= end; i++)

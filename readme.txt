@@ -1,5 +1,5 @@
 Skyscraper 2.0 Alpha 10 
-Copyright (C)2003-2017 Ryan Thoryk
+Copyright (C)2003-2018 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
 
@@ -118,8 +118,10 @@ Esc - exit to main menu
 V - Toggle noclip mode (gravity and collisions off)
 B - Binoculars mode (hold down), and reset FOV to default
 C - Pick up object (physics-enabled models)
+X - Crouch
 ; - (semicolon) - Load an additional building
 1 to 0 - (number keys) - Switch active camera to engine instance number (ex. 2 for building engine 2)
+E - Enter/Exit a vehicle
 Ctrl-R - Reload current building
 Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 

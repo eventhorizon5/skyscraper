@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Camera Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -41,12 +41,11 @@
 #include "wall.h"
 #include "profiler.h"
 #include "scenenode.h"
+#include "manager.h"
+#include "vehicle.h"
 #include "camera.h"
 
 namespace SBS {
-
-#undef SMALL_EPSILON
-#define SMALL_EPSILON 0.000001f
 
 Camera::Camera(Object *parent) : Object(parent)
 {
@@ -120,6 +119,9 @@ Camera::Camera(Object *parent) : Object(parent)
 	LastHitMeshNumber = -1;
 	mouse_x = 0;
 	mouse_y = 0;
+	inside_vehicle = false;
+	vehicle = 0;
+	old_freelook_mode = false;
 
 	//set up camera and scene nodes
 
@@ -613,7 +615,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		if (wall && obj->GetType() == "Wall")
 		{
 			std::string type = mesh_parent->GetType();
-			if (type == "Floor" || type == "ElevatorCar" || type == "Shaft" || type == "Stairs")
+			if (type == "Floor" || type == "ElevatorCar" || type == "Shaft" || type == "Stairs" || type == "SBS")
 			{
 				sbs->DeleteObject(obj);
 				return;
@@ -664,7 +666,8 @@ Object* Camera::GetMeshParent(Object *object)
 		return 0;
 
 	//if object is a wall, and parent is a mesh, get mesh's (parent's) parent
-	if (mesh_parent->GetType() == "Mesh")
+	//or if object is a mesh, and parent is a scenenode, get scenenode's parent
+	if (mesh_parent->GetType() == "Mesh" || mesh_parent->GetType() == "SceneNode")
 	{
 		mesh_parent = mesh_parent->GetParent();
 
@@ -1420,6 +1423,99 @@ void Camera::Teleport(Real X, Real Y, Real Z)
 
 	GotoFloor(sbs->GetFloorNumber(destination.y));
 	SetPosition(destination);
+}
+
+void Camera::Drive(bool left, bool right, bool down, bool up, bool key_down)
+{
+	if (!vehicle)
+		return;
+
+	if (key_down == true)
+		vehicle->KeyPressed(left, right, down, up);
+	else
+		vehicle->KeyReleased(left, right, down, up);
+}
+
+void Camera::Crouch(bool value)
+{
+	if (mCharacter)
+		mCharacter->crouch(value);
+}
+
+void Camera::SetOrientation(const Ogre::Quaternion &orientation)
+{
+	//set orientation of main camera object, not collider
+
+	if (MainCamera)
+		MainCamera->setOrientation(orientation);
+}
+
+void Camera::AttachToVehicle(bool value)
+{
+	//attach/detach camera from a vehicle
+
+	if (!MainCamera)
+		return;
+
+	if (vehicle && value == false)
+	{
+		Ogre::Vector3 newpos = GetPosition() + (vehicle->GetOrientation() * Ogre::Vector3(vehicle->GetWidth(), 0, 0));
+		SetPosition(newpos);
+
+		Freelook = old_freelook_mode;
+		inside_vehicle = false;
+		vehicle->AttachCamera(false);
+		vehicle = 0;
+		EnableCollisions(true);
+		MainCamera->setOrientation(old_camera_orientation);
+		mCharacter->setOrientation(old_character_orientation);
+	}
+	else if (value == true)
+	{
+		//search for a vehicle
+
+		Ogre::Vector3 direction, other;
+		GetDirection(direction, other);
+		Ogre::Ray ray = Ogre::Ray(sbs->ToRemote(GetPosition()), direction);
+
+		MeshObject* mesh = 0;
+		Wall* wall = 0;
+
+		bool hit = sbs->HitBeam(ray, 50, mesh, wall, HitPosition);
+
+		if (hit == false)
+		{
+			ReportError("AttachToVehicle: No vehicles found");
+			return;
+		}
+
+		meshname = mesh->GetName();
+		Object *obj = mesh;
+
+		//get original object (parent object of clicked mesh)
+		Object *mesh_parent = GetMeshParent(obj);
+
+		if (mesh_parent->GetType() == "Vehicle")
+		{
+			//if a vehicle is found, attach to it
+
+			Vehicle *v = dynamic_cast<Vehicle*> (mesh_parent);
+
+			if (v)
+			{
+				vehicle = v;
+				old_freelook_mode = Freelook;
+				Freelook = true;
+				inside_vehicle = true;
+				EnableCollisions(false);
+				old_camera_orientation = MainCamera->getOrientation();
+				old_character_orientation = mCharacter->getWorldOrientation();
+				vehicle->AttachCamera(true);
+			}
+		}
+		else
+			ReportError("AttachToVehicle: No vehicles found");
+	}
 }
 
 }

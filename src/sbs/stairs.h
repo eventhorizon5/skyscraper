@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Stairwell Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -44,7 +44,7 @@ public:
 
 	Stairs(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	~Stairs();
-	Wall* AddStairs(int floor, const std::string &name, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th);
+	Wall* AddStairs(int floor, const std::string &name, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th);
 	Wall* AddWall(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
 	bool AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
 	Wall* AddFloor(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);

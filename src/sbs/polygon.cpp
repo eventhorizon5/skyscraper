@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Polygon Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -177,6 +177,66 @@ Ogre::Plane Polygon::GetAbsolutePlane()
 	//convert to an absolute plane
 	Ogre::Plane plane2(this->plane.normal, sbs->ToRemote(mesh->GetPosition()));
 	return Ogre::Plane(this->plane.normal, -(this->plane.d + plane2.d));
+}
+
+Ogre::Vector2 Polygon::GetExtents(int coord)
+{
+	//returns the extents of a polygon
+	//coord must be either 1 (for x), 2 (for y) or 3 (for z)
+
+	//return 0,0 if coord value is out of range
+	if (coord < 1 || coord > 3)
+		return Ogre::Vector2(0, 0);
+
+	std::vector<std::vector<Ogre::Vector3> > poly;
+	GetGeometry(poly);
+
+	//get polygon extents
+	Ogre::Vector2 extents;
+	bool firstrun = true;
+	for (size_t i = 0; i < poly.size(); i++)
+	{
+		Ogre::Vector2 extents2 = sbs->GetExtents(poly[i], coord);
+		if (extents2.x < extents.x || firstrun == true)
+			extents.x = extents2.x;
+		if (extents2.y > extents.y || firstrun == true)
+			extents.y = extents2.y;
+		firstrun = false;
+	}
+
+	return extents;
+}
+
+void Polygon::ChangeHeight(Real newheight)
+{
+	bool dynamic = mesh->UsingDynamicBuffers();
+
+	Ogre::Vector2 extents = GetExtents(2);
+
+	//modify polygon data
+	int submesh = mesh->FindMatchingSubMesh(material);
+
+	if (submesh == -1)
+		return;
+
+	for (size_t i = 0; i < index_extents.size(); i++)
+	{
+		unsigned int min = index_extents[i].min;
+		unsigned int max = index_extents[i].max;
+
+		for (unsigned int index = min; index <= max; index++)
+		{
+			MeshObject::Geometry &data = mesh->Submeshes[submesh].MeshGeometry[index];
+			if (data.vertex.y == sbs->ToRemote(extents.y))
+			{
+				data.vertex.y = sbs->ToRemote(extents.x + newheight);
+
+				//update vertices in render buffer, if using dynamic buffers
+				if (dynamic == true)
+					mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
+			}
+		}
+	}
 }
 
 }

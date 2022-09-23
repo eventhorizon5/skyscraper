@@ -380,6 +380,7 @@
     <ClCompile Include="..\src\frontend\script_elevators.cpp" />
     <ClCompile Include="..\src\frontend\script_elevatorcars.cpp" />
     <ClCompile Include="..\src\frontend\script_section.cpp" />
+    <ClCompile Include="..\src\frontend\script_vehicles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\frontend\actionviewer.h" />

@@ -309,28 +309,50 @@ namespace OgreBulletDynamics
     void WheeledRigidBody::setPosition(const btVector3 &pos)
     {
         //should update wheels as well ?
-        mRootNode->setPosition(pos[0], pos[1], pos[2]);
+	    Ogre::Vector3 position = Ogre::Vector3(pos[0], pos[1], pos[2]);
+
+	   if (update_parent == true)
+        {
+     	   Ogre::SceneNode *object_node = mRootNode->getParentSceneNode(); //SBS object scene node (parent)
+     	   if (!object_node)
+     		   return;
+
+     	   object_node->_setDerivedPosition(position); //object scenenode
+        }
+
+        mRootNode->_setDerivedPosition(position);
     };
     // -------------------------------------------------------------------------
     void WheeledRigidBody::setOrientation(const btQuaternion &quat)
     {
-        mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
+	    Ogre::Quaternion q = Ogre::Quaternion(quat.getW(), quat.getX(), quat.getY(), quat.getZ());
+
+	    if (update_parent == true)
+	    {
+     	   Ogre::SceneNode *object_node = mRootNode->getParentSceneNode(); //SBS object scene node (parent)
+     	   if (!object_node)
+     		   return;
+
+     	   object_node->_setDerivedOrientation(q);
+	    }
+
+        mRootNode->_setDerivedOrientation(q);
     };
     // -------------------------------------------------------------------------
     void WheeledRigidBody::setTransform(const btVector3 &pos, const btQuaternion &quat)
     {
-        mRootNode->setPosition(pos[0], pos[1], pos[2]);
-        mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
+	    setPosition(pos);
+	    setOrientation(quat);
 
-        mVehicle->setTransform();
+	    mVehicle->setTransform();
     }
     // -------------------------------------------------------------------------
     void WheeledRigidBody::setTransform(const btTransform& worldTrans)
     {
-        mRootNode->setPosition(worldTrans.getOrigin()[0], worldTrans.getOrigin()[1],worldTrans.getOrigin()[2]);
-        mRootNode->setOrientation(worldTrans.getRotation().getW(),worldTrans.getRotation().getX(), worldTrans.getRotation().getY(), worldTrans.getRotation().getZ());
+	    btVector3 pos = btVector3(worldTrans.getOrigin());
+	    btQuaternion q = btQuaternion(worldTrans.getRotation());
 
-        mVehicle->setTransform();
+	    setTransform(pos, q);
     }
 }
 

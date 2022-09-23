@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Simulation Frontend
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -33,6 +33,7 @@
 #include "wx/stdpaths.h"
 #endif
 #include <locale>
+#include <time.h>
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreConfigFile.h>
@@ -245,6 +246,8 @@ bool Skyscraper::OnInit(void)
 	{
 		configfile = new Ogre::ConfigFile();
 		configfile->load("skyscraper.ini");
+		keyconfigfile = new Ogre::ConfigFile();
+		keyconfigfile->load("keyboard.ini");
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -354,6 +357,10 @@ int Skyscraper::OnExit()
 		delete configfile;
 	configfile = 0;
 
+	if (keyconfigfile)
+		delete keyconfigfile;
+	keyconfigfile = 0;
+
 	if (parser)
 		delete parser;
 	parser = 0;
@@ -377,14 +384,8 @@ void Skyscraper::UnloadSim()
 		delete dpanel;
 	dpanel = 0;
 
-	if (mCaelumSystem)
-	{
-		mCaelumSystem->clear();
-		mCaelumSystem->detachAllViewports();
-		delete mCaelumSystem;
-		mCaelumSystem = 0;
-		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
-	}
+	//unload sky system
+	UnloadSky();
 
 	if (console)
 		console->bSend->Enable(false);
@@ -1357,7 +1358,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	if (GetEngineCount() == 0)
 	{
 		//set sky name
-		SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
+		SkyName = GetConfigString("Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
 
 		//clear scene
 		mSceneMgr->clearScene();
@@ -1408,13 +1409,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (engine == active_engine)
 	{
 		//the sky needs to be created before Prepare() is called
-		bool sky_result = false;
-		if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
-			sky_result = InitSky(engine);
-
-		//create old sky if Caelum is turned off, or failed to initialize
-		if (sky_result == false)
-			Simcore->CreateSky();
+		CreateSky(engine);
 
 		//switch to fullscreen mode if specified
 		bool fullscreen = GetConfigBool("Skyscraper.Frontend.FullScreen", false);
@@ -1633,6 +1628,11 @@ Real Skyscraper::GetConfigFloat(const std::string &key, Real default_value)
 	return ToFloat(result);
 }
 
+std::string Skyscraper::GetKeyConfigString(const std::string &key, const std::string &default_value)
+{
+	return keyconfigfile->getSetting(key, "", default_value);
+}
+
 bool Skyscraper::InitSky(EngineContext *engine)
 {
 	//initialize sky
@@ -1708,10 +1708,10 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	{
 		mCaelumSystem->attachViewport(mViewport);
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
-		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.FogMultiplier", 0.1) / 1000);
-		if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
+		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
+		if (GetConfigBool("Skyscraper.Frontend.Caelum.EnableFog", true) == false)
 			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
-		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
+		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.Caelum.ModifyAmbient", false));
 
 		//fix sky rotation
 		Ogre::Quaternion rot(Ogre::Degree(180.0), Ogre::Vector3::UNIT_Y);
@@ -1743,6 +1743,10 @@ bool Skyscraper::InitSky(EngineContext *engine)
 		mCaelumSystem->setObserverLongitude(Ogre::Degree(longitude));
 		new_location = false;
 	}
+
+	//use system time if specified
+	if (GetConfigBool("Skyscraper.Frontend.Caelum.UseSystemTime", false) == true && new_time == false)
+		SetDateTimeNow();
 
 	//set date/time if specified
 	if (new_time == true)
@@ -1877,10 +1881,30 @@ void Skyscraper::SetLocation(Real latitude, Real longitude)
 	new_location = true;
 }
 
+void Skyscraper::SetDateTimeNow()
+{
+	//set date and time to current time in UTC
+
+	//get current time
+	time_t now = time(0);
+
+	//convert time to GMT
+	tm* gmtm = gmtime(&now);
+	if (gmtm == NULL)
+		return;
+
+	//convert time to Julian and set it
+	double julian = Caelum::Astronomy::getJulianDayFromGregorianDateTime(gmtm->tm_year + 1900, gmtm->tm_mon + 1, gmtm->tm_mday, gmtm->tm_hour, gmtm->tm_min, gmtm->tm_sec);
+	SetDateTime(julian);
+}
+
 void Skyscraper::SetDateTime(double julian_date_time)
 {
 	datetime = julian_date_time;
 	new_time = true;
+
+	if (mCaelumSystem)
+		mCaelumSystem->setJulianDay(datetime);
 }
 
 EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
@@ -2118,8 +2142,16 @@ void Skyscraper::HandleReload()
 		{
 			if (engines[i]->Reload == true)
 			{
+				//unload sky system if primary engine
+				if (i == 0)
+					UnloadSky();
+
 				Pause = false;
-				engines[i]->DoReload();
+				engines[i]->DoReload(); //handle engine reload
+
+				//create sky system if primary engine
+				if (i == 0)
+					CreateSky(engines[i]);
 			}
 		}
 	}
@@ -2307,6 +2339,35 @@ void Skyscraper::MacOpenFile(const wxString &filename)
 	wxFileName file (filename);
 
 	Load(file.GetFullName().ToStdString());
+}
+
+void Skyscraper::UnloadSky()
+{
+	//unload Caelum sky system
+
+	new_time = false;
+
+	if (mCaelumSystem)
+	{
+		mCaelumSystem->clear();
+		mCaelumSystem->detachAllViewports();
+		delete mCaelumSystem;
+		mCaelumSystem = 0;
+		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
+	}
+}
+
+void Skyscraper::CreateSky(EngineContext *engine)
+{
+	//create sky system
+
+	bool sky_result = false;
+	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+		sky_result = InitSky(engine);
+
+	//create old sky if Caelum is turned off, or failed to initialize
+	if (sky_result == false)
+		engine->GetSystem()->CreateSky();
 }
 
 }

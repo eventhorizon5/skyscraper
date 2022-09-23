@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Elevator Door Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -717,7 +717,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	if (manual == false && open == true)
 	{
 		//reset and enable nudge timer
-		ResetNudgeTimer();
+		if (elev->FireServicePhase2 == 0)
+			ResetNudgeTimer();
 
 		//turn on autoclose timer
 		if ((elev->InServiceMode() == false || elev->WaitForDoors == true) &&
@@ -2158,12 +2159,14 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 		nudgesound->SetLoopState(true);
 		nudgesound->Play();
 		CloseDoors();
+		car->FlashIndicators(true);
 	}
 	else if (nudge_enabled == true)
 	{
 		car->Report("Doors" + GetNumberText() + ": nudge mode disabled");
 		nudge_enabled = false;
 		nudgesound->Stop();
+		car->FlashIndicators(false);
 	}
 }
 

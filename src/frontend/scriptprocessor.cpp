@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - File I/O and Script Processing Routines
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -61,6 +61,7 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	floor_section = new FloorSection(this);
 	elevator_section = new ElevatorSection(this);
 	elevatorcar_section = new ElevatorCarSection(this);
+	vehicle_section = new VehicleSection(this);
 
 	Reset();
 }
@@ -83,6 +84,8 @@ ScriptProcessor::~ScriptProcessor()
 		delete elevator_section;
 	if (elevatorcar_section)
 		delete elevatorcar_section;
+	if (vehicle_section)
+		delete vehicle_section;
 }
 
 void ScriptProcessor::Reset()
@@ -122,6 +125,7 @@ void ScriptProcessor::Reset()
 	floor_section->Reset();
 	elevator_section->Reset();
 	elevatorcar_section->Reset();
+	vehicle_section->Reset();
 }
 
 bool ScriptProcessor::Run()
@@ -208,6 +212,10 @@ recalc:
 		//process elevator cars
 		else if (config->SectionNum == 6)
 			returncode = elevatorcar_section->Run(LineData);
+
+		//process vehicles
+		else if (config->SectionNum == 7)
+			returncode = vehicle_section->Run(LineData);
 
 		//Global commands
 		if (returncode == sContinue)
@@ -876,6 +884,8 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->context = "Elevator " + current;
 	if (config->SectionNum == 6)
 		object->context = "Elevator " + ToString(config->CurrentOld) + " Car " + current;
+	if (config->SectionNum == 7)
+		object->context = "Vehicle " + current;
 }
 
 bool ScriptProcessor::FunctionProc()
@@ -1485,6 +1495,61 @@ int ScriptProcessor::ProcessSections()
 
 		config->Context = "Elevator " + ToString(config->CurrentOld) + " Car " + ToString(config->Current);
 		engine->Report("Processing elevator " + ToString(config->CurrentOld) + " car " + ToString(config->Current) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "<vehicles")
+	{
+		if (config->SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		config->SectionNum = 7;
+		int loc = linecheck.find("to", 9);
+		if (loc < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		std::string str1 = LineData.substr(10, loc - 11);
+		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, config->RangeL) || !IsNumeric(str2, config->RangeH))
+		{
+			ScriptError("Invalid range");
+			return sError;
+		}
+		config->Context = "Vehicle range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
+		config->Current = config->RangeL;
+		config->RangeStart = line;
+		engine->Report("Processing vehicles " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "<vehicle ")
+	{
+		if (config->SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		config->SectionNum = 7;
+		config->RangeL = 0;
+		config->RangeH = 0;
+		std::string str = LineData.substr(9, LineData.length() - 10);
+		TrimString(str);
+		if (!IsNumeric(str, config->Current))
+		{
+			ScriptError("Invalid vehicle");
+			return sError;
+		}
+		if (config->Current < 1 || config->Current > Simcore->GetVehicleCount() + 1)
+		{
+			ScriptError("Invalid vehicle");
+			return sError;
+		}
+		config->Context = "Vehicle " + ToString(config->Current);
+		engine->Report("Processing vehicle " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 

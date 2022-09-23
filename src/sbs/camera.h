@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Camera Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -91,6 +91,8 @@ public:
 	bool EnableBullet;
 	Real BinocularsFOV; //binoculars mode FOV
 	bool FirstAttach;
+	bool inside_vehicle; //is user inside a vehicle?
+	Vehicle *vehicle; //vehicle object, if user is inside
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
@@ -179,6 +181,10 @@ public:
 	bool MouseDown();
 	void CheckObjects();
 	void Teleport(Real X, Real Y, Real Z);
+	void Drive(bool left, bool right, bool down, bool up, bool key_down);
+	void Crouch(bool value);
+	void SetOrientation(const Ogre::Quaternion &orientation);
+	void AttachToVehicle(bool value);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -214,6 +220,11 @@ private:
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;
 	OgreBulletCollisions::CollisionShape* mShape;
+
+	//used for restoring values when exiting vehicle
+	Ogre::Quaternion old_camera_orientation;
+	Ogre::Quaternion old_character_orientation;
+	bool old_freelook_mode;
 };
 
 }

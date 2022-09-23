@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Mesh Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -103,23 +103,11 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 
 	//swap values if the first is greater than the second
 	if (start.x > end.x)
-	{
-		Real tmp = start.x;
-		start.x = end.x;
-		end.x = tmp;
-	}
+		std::swap(start.x, end.x);
 	if (start.y > end.y)
-	{
-		Real tmp = start.y;
-		start.y = end.y;
-		end.y = tmp;
-	}
+		std::swap(start.y, end.y);
 	if (start.z > end.z)
-	{
-		Real tmp = start.z;
-		start.z = end.z;
-		end.z = tmp;
-	}
+		std::swap(start.z, end.z);
 
 	std::vector<Ogre::Vector3> temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 
@@ -529,7 +517,7 @@ Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
 	return Ogre::Plane(normal, det);
 }
 
-MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass) : Object(parent)
+MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Mesh", name, true);
@@ -542,7 +530,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	this->restitution = restitution;
 	this->friction = friction;
 	this->mass = mass;
-	no_collider = false;
+	this->create_collider = create_collider;
 	collider_node = 0;
 	Filename = filename;
 	remove_on_disable = true;
@@ -564,7 +552,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	if (wrapper == 0)
 	{
 		wrapper_selfcreate = true;
-		MeshWrapper = new DynamicMesh(this, GetSceneNode(), name, max_render_distance);
+		MeshWrapper = new DynamicMesh(this, GetSceneNode(), name, max_render_distance, dynamic_buffers);
 	}
 	else
 		MeshWrapper = wrapper;
@@ -591,7 +579,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	sbs->AddMeshHandle(this);
 
 	//set up collider for model (if mesh loaded from a filename)
-	if (filename != "")
+	if (filename != "" && create_collider == true)
 	{
 		if (collidermesh.get())
 		{
@@ -609,7 +597,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 		else
 		{
 			//create generic box collider if separate mesh collider isn't available
-			*Bounds = MeshWrapper->GetBounds(this);
+			GetBounds();
 			CreateBoxCollider();
 		}
 	}
@@ -643,6 +631,11 @@ MeshObject::~MeshObject()
 	if (Bounds)
 		delete Bounds;
 	Bounds = 0;
+}
+
+void MeshObject::GetBounds()
+{
+	*Bounds = MeshWrapper->GetBounds(this);
 }
 
 void MeshObject::Enabled(bool value)
@@ -1383,6 +1376,11 @@ void MeshObject::CreateCollider()
 {
 	//set up triangle collider based on raw SBS mesh geometry
 
+	SBS_PROFILE("MeshObject::CreateCollider");
+
+	if (create_collider == false)
+		return;
+
 	//exit if collider already exists
 	if (mBody)
 		return;
@@ -1469,6 +1467,8 @@ void MeshObject::DeleteCollider()
 {
 	//delete mesh collider
 
+	SBS_PROFILE("MeshObject::DeleteCollider");
+
 	//exit if collider doesn't exist
 	if (!mBody)
 		return;
@@ -1485,6 +1485,9 @@ void MeshObject::DeleteCollider()
 void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices)
 {
 	//set up triangle collider based on loaded model geometry
+
+	if (create_collider == false)
+		return;
 
 	//exit of collider already exists
 	if (mBody)
@@ -1525,6 +1528,9 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 void MeshObject::CreateBoxCollider()
 {
 	//set up a box collider for full extents of a mesh
+
+	if (create_collider == false)
+		return;
 
 	//exit of collider already exists
 	if (mBody)
@@ -1742,10 +1748,13 @@ void MeshObject::DeleteWalls()
 		if (wall)
 		{
 			wall->parent_deleting = true;
+			if (sbs->FastDelete == false)
+				wall->DeletePolygons();
 			delete wall;
 			Walls[i] = 0;
 		}
 	}
+	Walls.clear();
 }
 
 void MeshObject::DeleteWalls(Object *parent)
@@ -2088,6 +2097,18 @@ unsigned int MeshObject::GetTriangleCount(int submesh)
 bool MeshObject::UsingDynamicBuffers()
 {
 	return MeshWrapper->UseDynamicBuffers();
+}
+
+void MeshObject::ChangeHeight(Real newheight)
+{
+	//change height of all walls associated with this mesh object
+
+	SBS_PROFILE("MeshObject::ChangeHeight");
+
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		Walls[i]->ChangeHeight(newheight);
+	}
 }
 
 }

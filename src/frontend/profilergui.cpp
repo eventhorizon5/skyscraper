@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Profiler GUI
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -30,14 +30,15 @@
 #include "skyscraper.h"
 
 //(*InternalHeaders(Profiler)
-#include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 //*)
 
 namespace Skyscraper {
 
 //(*IdInit(Profiler)
 const long Profiler::ID_chkAdvanced = wxNewId();
+const long Profiler::ID_chkCapture = wxNewId();
 const long Profiler::ID_txtMain = wxNewId();
 //*)
 
@@ -49,9 +50,9 @@ END_EVENT_TABLE()
 Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(Profiler)
+	wxFlexGridSizer* FlexGridSizer1;
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
-	wxFlexGridSizer* FlexGridSizer1;
 
 	Create(parent, wxID_ANY, _("Profiler"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
@@ -60,9 +61,12 @@ Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSiz
 	chkAdvanced = new wxCheckBox(this, ID_chkAdvanced, _("Advanced Profiling"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAdvanced"));
 	chkAdvanced->SetValue(false);
 	BoxSizer2->Add(chkAdvanced, 1, wxALIGN_TOP, 5);
+	chkCapture = new wxCheckBox(this, ID_chkCapture, _("Capture"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkCapture"));
+	chkCapture->SetValue(true);
+	BoxSizer2->Add(chkCapture, 1, wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
-	txtMain = new wxStaticText(this, ID_txtMain, wxEmptyString, wxDefaultPosition, wxSize(400,400), 0, _T("ID_txtMain"));
-	FlexGridSizer1->Add(txtMain, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
+	txtMain = new wxTextCtrl(this, ID_txtMain, wxEmptyString, wxDefaultPosition, wxSize(640,480), wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL, wxDefaultValidator, _T("ID_txtMain"));
+	FlexGridSizer1->Add(txtMain, 1, wxALL|wxEXPAND, 5);
 	BoxSizer1->Add(FlexGridSizer1, 1, wxALIGN_TOP, 5);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
@@ -97,14 +101,20 @@ void Profiler::Loop()
 		SBS::ProfileManager::dumpRecursive(output, profileIterator, 0);
 		SBS::ProfileManager::Release_Iterator(profileIterator);*/
 
-		SBS::ProfileManager::dumpAll(output);
-
-		txtMain->SetLabelText(output);
+		if (chkCapture->GetValue() == true)
+		{
+			SBS::ProfileManager::dumpAll(output);
+			txtMain->SetValue(output);
+		}
 	}
 	count++;
 
 	if (count == 10)
 		count = 0;
+}
+
+void Profiler::OnResize(wxSizeEvent& event)
+{
 }
 
 }

@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Elevator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -41,8 +41,9 @@ public:
 	int QueuePositionDirection; //queue processing direction
 	int LastQueueDirection; //last queue processing direction
 	int LastQueueFloor[2]; //last route added to either queue; element 0 is the floor, and element 1 is the direction
-	Real ElevatorSpeed; //maximum elevator speed
-	bool MoveElevator; //Tells elevator to start going to specified floor
+	Real UpSpeed; //maximum up elevator speed
+	Real DownSpeed; //maximum down elevator speed
+	bool MoveElevator; //tells elevator to start going to specified floor
 	int GotoFloor; //floor to move elevator to
 	int GotoFloorCar; //car that requested movement
 	Real Acceleration; //percentage of speed increase
@@ -116,11 +117,20 @@ public:
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
 	bool ChimeOnArrival; //set to true for elevator to always chime on arrival, instead of just when responding to a hall call
 	bool HoistwayAccessHold; //if true, the user needs to hold the mouse button on the control, in Hoistway Access mode
+	Ogre::Vector3 RopePosition; //position of rope
+	std::string RopeTexture; //texture for rope
+	std::string CounterweightStartSound; //counterweight starting sound
+	std::string CounterweightMoveSound; //counterweight moving sound
+	std::string CounterweightStopSound; //counterweight stopping sound
+	bool Counterweight; //if true, elevator has a counterweight
+	bool Error; //true if an error occurred during movement processing
 
 	//functions
 	Elevator(Object *parent, int number);
 	~Elevator();
 	bool CreateElevator(bool relative, Real x, Real z, int floor);
+	Wall* CreateCounterweight(const std::string &frame_texture, const std::string &weight_texture, Real x, Real z, const Ogre::Vector3 &size, Real weight_voffset);
+	void AddRails(const std::string &main_texture, const std::string &edge_texture, Real x, Real z, bool orientation, Real rail_distance, Real rail_width);
 	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);
 	bool RouteExists(bool direction, int floor);
@@ -319,10 +329,18 @@ private:
 	Sound *motorsound;
 	Sound *motoridlesound;
 
+	//counterweight sound
+	Sound *counterweightsound;
+
 	//mesh container for elevator doors (not shaft doors)
 	DynamicMesh *DoorContainer;
 
 	std::queue<std::string> ControlQueue;
+
+	MeshObject* WeightMesh; //counterweight mesh object
+	MeshObject* WeightRopeMesh; //counterweight rope mesh
+	Ogre::Vector3 weight_size; //counterweight size
+	MeshObject* RopeMesh; //rope mesh
 
 	//elevator misc internals
 	bool MovementRunning;

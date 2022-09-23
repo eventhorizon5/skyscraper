@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Elevator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -36,6 +36,7 @@
 #include "elevatorcar.h"
 #include "timer.h"
 #include "profiler.h"
+#include "texture.h"
 #include "elevator.h"
 
 #include <time.h>
@@ -71,7 +72,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	LastQueueDirection = 0;
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
-	ElevatorSpeed = 0;
+	UpSpeed = 0;
+	DownSpeed = 0;
 	MoveElevator = false;
 	GotoFloor = 0;
 	GotoFloorCar = 0;
@@ -180,6 +182,16 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	HoistwayAccess = 0;
 	HoistwayAccessFloor = 0;
 	HoistwayAccessHold = sbs->GetConfigBool("Skyscraper.SBS.Elevator.HoistwayAccessHold", true);
+	RopePosition = Ogre::Vector3::ZERO;
+	CounterweightStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightStartSound", "");
+	CounterweightMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightMoveSound", "");
+	CounterweightStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightStopSound", "");
+	counterweightsound = 0;
+	Counterweight = false;
+	WeightMesh = 0;
+	WeightRopeMesh = 0;
+	RopeMesh = 0;
+	Error = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -205,6 +217,31 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 
 Elevator::~Elevator()
 {
+	//delete counterweight and rope meshes
+	if (sbs->Verbose)
+		Report("deleting meshes");
+
+	if (WeightMesh)
+	{
+		WeightMesh->parent_deleting = true;
+		delete WeightMesh;
+	}
+	WeightMesh = 0;
+
+	if (WeightRopeMesh)
+	{
+		WeightRopeMesh->parent_deleting = true;
+		delete WeightRopeMesh;
+	}
+	WeightRopeMesh = 0;
+
+	if (RopeMesh)
+	{
+		RopeMesh->parent_deleting = true;
+		delete RopeMesh;
+	}
+	RopeMesh = 0;
+
 	//delete timers
 	if (sbs->Verbose)
 		Report("deleting timers");
@@ -237,7 +274,10 @@ Elevator::~Elevator()
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
 		if (Cars[i])
+		{
+			Cars[i]->parent_deleting = true;
 			delete Cars[i];
+		}
 		Cars[i] = 0;
 	}
 	Cars.clear();
@@ -264,6 +304,13 @@ Elevator::~Elevator()
 	}
 	motoridlesound = 0;
 
+	if (counterweightsound)
+	{
+		counterweightsound->parent_deleting = true;
+		delete counterweightsound;
+	}
+	counterweightsound = 0;
+
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
 		sbs->RemoveElevator(this);
@@ -280,7 +327,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 		return ReportError("Has already been created");
 
 	//make sure required values are set
-	if (ElevatorSpeed <= 0)
+	if (UpSpeed <= 0 || DownSpeed <= 0)
 		return ReportError("Speed not set or invalid");
 
 	if (Acceleration <= 0)
@@ -355,11 +402,119 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 
 	//set up primary car
 	if (!GetCar(1)->CreateCar(floor))
-		return ReportError("Error creating primary car");
+		return false;
 
 	elevposition = GetPosition();
 
 	return true;
+}
+
+Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std::string &weight_texture, Real x, Real z, const Ogre::Vector3 &size, Real weight_voffset)
+{
+	//create a counterweight and ropes for this elevator
+
+	for (int i = 0; i < GetCarCount(); i++)
+	{
+		if (GetCar(i)->Created == false)
+		{
+			ReportError("Car " + ToString(i) + " not created yet");
+			return 0;
+		}
+	}
+
+	//create counterweight and rope meshes
+	WeightMesh = new MeshObject(this, GetName() + " Counterweight");
+	WeightRopeMesh = new MeshObject(this, GetName() + " Counterweight Rope", 0, "", 0, 1, false, 0, 0, 0, false, false);
+	RopeMesh = new MeshObject(this, GetName() + " Rope", 0, "", 0, 1, false, 0, 0, 0, false, false);
+
+	//save and change autosizing
+	bool autosize_x, autosize_y;
+	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
+	sbs->GetTextureManager()->SetAutoSize(false, false);
+
+	Wall *frame = sbs->CreateWallBox(WeightMesh, "Counterweight Frame", frame_texture, -size.x / 2, size.x / 2, -size.z / 2, size.z / 2, size.y, 0, 1, 1, true, true, false, false, false);
+	Wall *counterweight = sbs->CreateWallBox(WeightMesh, "Counterweight", weight_texture, (-size.x / 2) + 0.01, (size.x / 2) - 0.01, (-size.z / 2) + 0.01, (size.z / 2) - 0.01, size.y / 2, weight_voffset, 1, 1);
+
+	Floor *topfloor, *carfloor, *topcarfloor, *bottomfloor;
+	topfloor = sbs->GetFloor(GetTopFloor());
+	carfloor = sbs->GetFloor(GetCar(1)->GetFloor());
+	topcarfloor = sbs->GetFloor(GetCar(GetCarCount() - 1)->GetFloor());
+	bottomfloor = sbs->GetFloor(GetBottomFloor());
+
+	x += GetCar(1)->GetPosition().x;
+	z += GetCar(1)->GetPosition().z;
+
+	WeightMesh->SetPosition(Ogre::Vector3(x, topfloor->GetBase() - (carfloor->GetBase() - bottomfloor->GetBase()), z));
+	WeightRopeMesh->SetPosition(Ogre::Vector3(x, WeightMesh->GetPosition().y + (size.y - 0.5), z));
+	RopeMesh->SetPosition(GetCar(GetCarCount() - 1)->GetPosition() + RopePosition);
+
+	Real counterweight_rope_height = MotorPosition.y - (WeightMesh->GetPosition().y + (size.y - 0.5));
+	Wall *c_rope;
+	if (size.x > size.z)
+		c_rope = sbs->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
+	else
+		c_rope = sbs->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
+
+	Real rope_height = MotorPosition.y - RopeMesh->GetPosition().y;
+	Wall *rope;
+	if (size.x > size.z)
+		rope = sbs->AddWall(RopeMesh, "Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, rope_height, rope_height, 0, 0, 1, 1);
+	else
+		rope = sbs->AddWall(RopeMesh, "Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, rope_height, rope_height, 0, 0, 1, 1);
+
+	counterweightsound = new Sound(WeightMesh, "Counterweight Sound", true);
+
+	weight_size = size;
+
+	//restore autosize
+	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
+
+	Counterweight = true;
+	return counterweight;
+}
+
+void Elevator::AddRails(const std::string &main_texture, const std::string &edge_texture, Real x, Real z, bool orientation, Real rail_distance, Real rail_width)
+{
+	//creates rails for the elevator cars or counterweight
+	//if orientation is false, create rails along the X axis, otherwise the Z axis
+
+	Ogre::Vector3 offset;
+	offset = GetPosition() - GetShaft()->GetPosition();
+
+	int MotorRoom = sbs->GetFloorNumber(MotorPosition.y);
+
+	for (int i = GetShaft()->startfloor; i <= MotorRoom; i++)
+	{
+		Real height = sbs->GetFloor(i)->FullHeight();
+
+		if (i == MotorRoom)
+			height = MotorPosition.y - sbs->GetFloor(i)->Altitude;
+
+		if (orientation == false)
+		{
+			//left side
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails L1", edge_texture, -rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails L2", main_texture, -rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails L3", main_texture, -rail_distance + x + offset.x - (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
+
+			//right side
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails R1", edge_texture, rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails R2", main_texture, rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails R3", main_texture, rail_distance + x + offset.x + (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
+		}
+		else
+		{
+			//front side
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails F1", edge_texture, x + offset.x, -rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails F2", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails F3", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
+
+			//back side
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails B1", edge_texture, x + offset.x, rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails B2", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+			sbs->CreateWallBox2(GetShaft()->GetMeshObject(i), "Rails B3", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
+		}
+	}
 }
 
 bool Elevator::AddRoute(int floor, int direction, int call_type)
@@ -1067,6 +1222,7 @@ void Elevator::MoveElevatorToFloor()
 
 	Ogre::Vector3 movement = Ogre::Vector3(0, 0, 0);
 	bool StartLeveling = false;
+	Error = false;
 
 	//wait until doors are fully closed if WaitForDoors is true
 	if (WaitForDoors == true)
@@ -1089,6 +1245,7 @@ void Elevator::MoveElevatorToFloor()
 		Direction = 0;
 		MoveElevator = false;
 		MovementRunning = false;
+		Error = true;
 		DeleteActiveRoute();
 		return;
 	}
@@ -1098,6 +1255,7 @@ void Elevator::MoveElevatorToFloor()
 		if (Running == false)
 		{
 			ReportError("Elevator not running");
+			Error = true;
 			return;
 		}
 
@@ -1128,6 +1286,7 @@ void Elevator::MoveElevatorToFloor()
 			ReportError("Destination floor does not exist");
 			MoveElevator = false;
 			MovementRunning = false;
+			Error = true;
 			DeleteActiveRoute();
 			return;
 		}
@@ -1138,6 +1297,7 @@ void Elevator::MoveElevatorToFloor()
 			ReportError("Destination floor not a serviced floor");
 			MoveElevator = false;
 			MovementRunning = false;
+			Error = true;
 			DeleteActiveRoute();
 			return;
 		}
@@ -1149,6 +1309,7 @@ void Elevator::MoveElevatorToFloor()
 			MoveElevator = false;
 			MovementRunning = false;
 			SkipFloorSound = true; //don't play floor announcement if on same floor
+			Error = true;
 			DeleteActiveRoute();
 			goto finish; //skip main processing and run cleanup section
 		}
@@ -1196,6 +1357,7 @@ void Elevator::MoveElevatorToFloor()
 			ReportError("Doors must be closed before moving when interlocks are enabled");
 			MoveElevator = false;
 			MovementRunning = false;
+			Error = true;
 			Direction = 0;
 			DeleteActiveRoute();
 			return;
@@ -1218,6 +1380,7 @@ void Elevator::MoveElevatorToFloor()
 					Direction = 0;
 					MoveElevator = false;
 					MovementRunning = false;
+					Error = true;
 					DeleteActiveRoute();
 					return;
 				}
@@ -1233,6 +1396,7 @@ void Elevator::MoveElevatorToFloor()
 					Direction = 0;
 					MoveElevator = false;
 					MovementRunning = false;
+					Error = true;
 					DeleteActiveRoute();
 					return;
 				}
@@ -1375,16 +1539,32 @@ void Elevator::MoveElevatorToFloor()
 		//regular motion
 		Real limit = 0;
 		if (InspectionService == false)
-			limit = ElevatorSpeed;
+		{
+			if (ActiveDirection == 1)
+				limit = UpSpeed;
+			else
+				limit = DownSpeed;
+		}
 		else if (HoistwayAccess == 0)
-			limit = ElevatorSpeed * InspectionSpeed;
+		{
+			if (ActiveDirection == 1)
+				limit = UpSpeed * InspectionSpeed;
+			else
+				limit = DownSpeed * InspectionSpeed;
+		}
 		else
 			limit = LevelingSpeed; //if hoistway access is on, run at leveling speed
 
+		Real Speed;
+		if (ActiveDirection == 1)
+			Speed = UpSpeed;
+		else
+			Speed = DownSpeed;
+
 		if (Direction == 1 && ElevatorRate < limit)
-			ElevatorRate += ElevatorSpeed * ((Acceleration * JerkRate) * sbs->delta);
+			ElevatorRate += Speed * ((Acceleration * JerkRate) * sbs->delta);
 		else if (Direction == -1 && ElevatorRate > -limit)
-			ElevatorRate -= ElevatorSpeed * ((Acceleration * JerkRate) * sbs->delta);
+			ElevatorRate -= Speed * ((Acceleration * JerkRate) * sbs->delta);
 		else
 			CalculateStoppingDistance = false;
 	}
@@ -1413,10 +1593,16 @@ void Elevator::MoveElevatorToFloor()
 			ElevatorRate = 0;
 		}
 
+		Real Speed;
+		if (ActiveDirection == 1)
+			Speed = UpSpeed;
+		else
+			Speed = DownSpeed;
+
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+			ElevatorRate += Speed * ((TempDeceleration * JerkRate) * sbs->delta);
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+			ElevatorRate -= Speed * ((TempDeceleration * JerkRate) * sbs->delta);
 	}
 
 	//prevent the rate from going beyond 0
@@ -1473,10 +1659,16 @@ void Elevator::MoveElevatorToFloor()
 				//start deceleration
 				Direction = -1;
 				Brakes = true;
-				if (InspectionService == false)
-					ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+				Real Speed;
+				if (ActiveDirection == 1)
+					Speed = UpSpeed;
 				else
-					ElevatorRate -= (ElevatorSpeed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
+					Speed = DownSpeed;
+
+				if (InspectionService == false)
+					ElevatorRate -= Speed * ((TempDeceleration * JerkRate) * sbs->delta);
+				else
+					ElevatorRate -= (Speed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
 			}
 			//down movement
 			else if (Direction == -1)
@@ -1499,10 +1691,16 @@ void Elevator::MoveElevatorToFloor()
 				//start deceleration
 				Direction = 1;
 				Brakes = true;
-				if (InspectionService == false)
-					ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+				Real Speed;
+				if (ActiveDirection == 1)
+					Speed = UpSpeed;
 				else
-					ElevatorRate += (ElevatorSpeed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
+					Speed = DownSpeed;
+
+				if (InspectionService == false)
+					ElevatorRate += Speed * ((TempDeceleration * JerkRate) * sbs->delta);
+				else
+					ElevatorRate += (Speed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
 			}
 
 			if (ElevatorRate != 0.0)
@@ -1598,7 +1796,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//exit if elevator's running
-	if (std::abs(ElevatorRate) != 0)
+	if (ElevatorRate != 0)
 		return;
 
 	//start arrival timer
@@ -1687,10 +1885,24 @@ void Elevator::MoveObjects(Real offset)
 {
 	//move elevator and objects vertically
 
+	SBS_PROFILE("Elevator::MoveObjects");
+
 	Ogre::Vector3 vector (0, offset, 0);
 
 	Move(vector);
 	elevposition.y = GetPosition().y;
+
+	//move counterweight
+	if (WeightMesh)
+	{
+		WeightMesh->Move(-vector * 2);
+		WeightRopeMesh->Move(-vector * 2);
+		Floor *topfloor = sbs->GetFloor(GetTopFloor());
+		Real counterweight_rope_height = MotorPosition.y - (WeightMesh->GetPosition().y + (weight_size.y - 0.5));
+		WeightRopeMesh->ChangeHeight(counterweight_rope_height);
+		Real rope_height = MotorPosition.y - RopeMesh->GetPosition().y;
+		RopeMesh->ChangeHeight(rope_height);
+	}
 
 	//move camera
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
@@ -1881,7 +2093,7 @@ void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
 
-	Object::Report("\n--- Elevator " + ToString(Number) + " Queues ---\n");
+	Object::Report("\n--- " + GetName() + "'s Queues ---\n");
 
 	if (UpQueue.size() > 0)
 		Object::Report("Up:");
@@ -2996,13 +3208,13 @@ bool Elevator::BeyondDecelMarker(int direction, Real destination)
 void Elevator::Report(const std::string &message)
 {
 	//general reporting function
-	Object::Report("Elevator " + ToString(Number) + ": " + message);
+	Object::Report(GetName() + ": " + message);
 }
 
 bool Elevator::ReportError(const std::string &message)
 {
 	//general reporting function
-	return Object::ReportError("Elevator " + ToString(Number) + ": " + message);
+	return Object::ReportError(GetName() + ": " + message);
 }
 
 void Elevator::Timer::Notify()
@@ -3283,6 +3495,8 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 	//0 - busy and will eventually be available
 	//1 - available for call
 	//2 - unavailable due to a service mode or error
+
+	SBS_PROFILE("Elevator::AvailableForCall");
 
 	ElevatorCar *car = GetCarForFloor(floor, report_on_failure);
 
@@ -3707,6 +3921,21 @@ void Elevator::PlayStartingSounds()
 		motorsound->SetLoopState(false);
 		motorsound->Play();
 	}
+
+	//counterweight sound
+	if (counterweightsound)
+	{
+		counterweightsound->Stop();
+		if (CounterweightStartSound.empty() == false && CounterweightStartSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing counterweight start sound");
+
+			counterweightsound->Load(CounterweightStartSound);
+			counterweightsound->SetLoopState(false);
+			counterweightsound->Play();
+		}
+	}
 }
 
 void Elevator::PlayStoppingSounds(bool emergency)
@@ -3766,17 +3995,39 @@ void Elevator::PlayStoppingSounds(bool emergency)
 
 		//set play position to current percent of the total speed
 		if (AutoAdjustSound == true)
-			motorsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
+		{
+			if (ActiveDirection == 1)
+				motorsound->SetPlayPosition(1 - (ElevatorRate / UpSpeed));
+			else
+				motorsound->SetPlayPosition(1 - (ElevatorRate / DownSpeed));
+		}
 		else
 			motorsound->Reset();
 
 		motorsound->Play(false);
+	}
+
+	//counterweight sound
+	if (counterweightsound)
+	{
+		counterweightsound->Stop();
+		if (CounterweightStopSound.empty() == false && CounterweightStopSound != "")
+		{
+			if (sbs->Verbose)
+				Report("[playing counterweight stop sound");
+
+			counterweightsound->Load(CounterweightStopSound);
+			counterweightsound->SetLoopState(false);
+			counterweightsound->Play();
+		}
 	}
 }
 
 void Elevator::PlayMovingSounds()
 {
 	//play elevator movement sounds
+
+	SBS_PROFILE("Elevator::PlayMovingSounds");
 
 	//car sounds
 	for (size_t i = 0; i < Cars.size(); i++)
@@ -3804,6 +4055,19 @@ void Elevator::PlayMovingSounds()
 			motorsound->Load(MotorDownRunSound);
 			motorsound->SetLoopState(true);
 			motorsound->Play();
+		}
+	}
+
+	//counterweight sound
+	if (counterweightsound)
+	{
+		if (counterweightsound->IsPlaying() == false && CounterweightMoveSound.empty() == false && CounterweightMoveSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing counterweight move sound");
+			counterweightsound->Load(CounterweightMoveSound);
+			counterweightsound->SetLoopState(true);
+			counterweightsound->Play();
 		}
 	}
 }
@@ -4312,10 +4576,10 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 	//at leveling speed, in that direction while the shaft doors are open
 
 	if (Running == false)
-		return ReportError("Elevator not running");
+		return ReportError("SetHoistwayAccess: Elevator not running");
 
 	if (InspectionService == false)
-		return ReportError("Not in inspection service mode");
+		return ReportError("SetHoistwayAccess: Not in inspection service mode");
 
 	if (access == 0 || (HoistwayAccessHold == true && HoistwayAccess != 0 && sbs->camera->MouseDown() == false))
 	{

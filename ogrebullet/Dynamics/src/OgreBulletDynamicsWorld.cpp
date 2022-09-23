@@ -238,6 +238,19 @@ namespace OgreBulletDynamics
         //mVehicles.push_back(v);
     }
     // -------------------------------------------------------------------------
+    void DynamicsWorld::removeVehicle(RaycastVehicle *v)
+    {
+	    getBulletDynamicsWorld()->removeVehicle(v->getBulletVehicle());
+	    for (size_t i = 0; i < mActionInterface.size(); i++)
+	    {
+		    if (mActionInterface[i] == static_cast<ActionInterface*>(v))
+		    {
+			    mActionInterface.erase(mActionInterface.begin() + i);
+			    i--;
+		    }
+	    }
+    }
+    // -------------------------------------------------------------------------
     bool DynamicsWorld::isConstraintRegistered(TypedConstraint *constraint) const
     {
         std::deque <TypedConstraint*>::const_iterator it = mConstraints.begin();

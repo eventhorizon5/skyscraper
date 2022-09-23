@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Generic Object Class
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -27,6 +27,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "scenenode.h"
+#include "profiler.h"
 #include "object.h"
 
 namespace SBS {
@@ -272,6 +273,8 @@ void Object::Move(const Ogre::Vector3 &vector, Real speed)
 {
 	//move an object
 
+	SBS_PROFILE("Object::Move");
+
 	if (!node)
 		return;
 
@@ -349,6 +352,8 @@ void Object::SetRotation(const Ogre::Vector3 &rotation)
 {
 	//rotate object
 
+	SBS_PROFILE("Object::Rotate");
+
 	if (!node)
 		return;
 
@@ -408,8 +413,8 @@ void Object::NotifyMove(bool parent)
 	if (parent == true)
 		node->Update();
 
-	OnMove(parent);
 	NotifyChildren(true, false);
+	OnMove(parent);
 }
 
 void Object::NotifyRotate(bool parent)
@@ -424,13 +429,15 @@ void Object::NotifyRotate(bool parent)
 	if (parent == true)
 		node->Update();
 
-	OnRotate(parent);
 	NotifyChildren(false, true);
+	OnRotate(parent);
 }
 
 void Object::NotifyChildren(bool move, bool rotate)
 {
 	//notify child objects about a parent move or rotate
+
+	SBS_PROFILE("Object::NotifyChildren");
 
 	int count = GetChildrenCount();
 

@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -237,6 +237,7 @@ void SBS::Initialize()
 	stairs_manager = new StairsManager(this);
 	door_manager = new DoorManager(this);
 	revolvingdoor_manager = new RevolvingDoorManager(this);
+	vehicle_manager = new VehicleManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -315,28 +316,53 @@ SBS::~SBS()
 
 	//delete manager objects
 	if (floor_manager)
+	{
+		floor_manager->parent_deleting = true;
 		delete floor_manager;
+	}
 	floor_manager = 0;
 
 	if (elevator_manager)
+	{
+		elevator_manager->parent_deleting = true;
 		delete elevator_manager;
+	}
 	elevator_manager = 0;
 
 	if (shaft_manager)
+	{
+		shaft_manager->parent_deleting = true;
 		delete shaft_manager;
+	}
 	shaft_manager = 0;
 
 	if (stairs_manager)
+	{
+		stairs_manager->parent_deleting = true;
 		delete stairs_manager;
+	}
 	stairs_manager = 0;
 
 	if (door_manager)
+	{
+		door_manager->parent_deleting = true;
 		delete door_manager;
+	}
 	door_manager = 0;
 
 	if (revolvingdoor_manager)
+	{
+		revolvingdoor_manager->parent_deleting = true;
 		delete revolvingdoor_manager;
+	}
 	revolvingdoor_manager = 0;
+
+	if (vehicle_manager)
+	{
+		vehicle_manager->parent_deleting = true;
+		delete vehicle_manager;
+	}
+	vehicle_manager = 0;
 
 	//delete sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -388,7 +414,10 @@ SBS::~SBS()
 
 	//delete sound system
 	if (soundsystem)
+	{
+		soundsystem->parent_deleting = true;
 		delete soundsystem;
+	}
 	soundsystem = 0;
 
 	//delete texture manager
@@ -398,7 +427,10 @@ SBS::~SBS()
 
 	//delete main area trigger
 	if (area_trigger)
+	{
+		area_trigger->parent_deleting = true;
 		delete area_trigger;
+	}
 	area_trigger = 0;
 
 	//delete physics objects
@@ -469,7 +501,7 @@ void SBS::PrintBanner()
 {
 	Report("");
 	Report(" Scalable Building Simulator " + version + " " + version_state);
-	Report(" Copyright (C)2004-2017 Ryan Thoryk");
+	Report(" Copyright (C)2004-2018 Ryan Thoryk");
 	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report(" software, and you are welcome to redistribute it under certain");
 	Report(" conditions. For details, see the file gpl.txt\n");
@@ -600,10 +632,10 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 	if ((x1 > x2 && axis == 1) || (z1 < z2 && axis == 2))
 	{
 		//reverse coordinates
-		Swap(x1, x2);
-		Swap(z1, z2);
-		Swap(altitude1, altitude2);
-		Swap(height_in1, height_in2);
+		std::swap(x1, x2);
+		std::swap(z1, z2);
+		std::swap(altitude1, altitude2);
+		std::swap(height_in1, height_in2);
 	}
 
 	//map coordinates
@@ -844,17 +876,17 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 
 		if (x1 > x2)
 		{
-			Swap(x1, x2);
+			std::swap(x1, x2);
 
 			if (reverse_axis == true)
-				Swap(altitude1, altitude2);
+				std::swap(altitude1, altitude2);
 		}
 		if (z1 > z2)
 		{
-			Swap(z1, z2);
+			std::swap(z1, z2);
 
 			if (reverse_axis == false)
-				Swap(altitude1, altitude2);
+				std::swap(altitude1, altitude2);
 		}
 	}
 	else
@@ -864,9 +896,9 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 		if ((x1 > x2 && axis == 1) || (z1 > z2 && axis == 2))
 		{
 			//reverse coordinates if the difference between x or z coordinates is greater
-			Swap(x1, x2);
-			Swap(z1, z2);
-			Swap(altitude1, altitude2);
+			std::swap(x1, x2);
+			std::swap(z1, z2);
+			std::swap(altitude1, altitude2);
 		}
 	}
 
@@ -1083,10 +1115,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 
 	//swap values if the first is greater than the second
 	if (x1 > x2)
-		Swap(x1, x2);
+		std::swap(x1, x2);
 
 	if (z1 > z2)
-		Swap(z1, z2);
+		std::swap(z1, z2);
 
 	bool TextureOverride = texturemanager->TextureOverride;
 
@@ -1300,13 +1332,8 @@ void SBS::AddPolygon(Wall* wallobject, const std::string &texture, std::vector<O
 
 	//if the polygon is facing right, down or to the back, reverse faces
 	//to keep the vertices clockwise
-	std::vector<Ogre::Vector3> tmppoly;
 	if (direction.x == 1 || direction.y == -1 || direction.z == 1)
-	{
-		tmppoly = varray1;
-		varray1 = varray2;
-		varray2 = tmppoly;
-	}
+		std::swap(varray1, varray2);
 
 	std::string name = wallobject->GetName();
 
@@ -1428,7 +1455,7 @@ void SBS::CreateSky()
 	ResetLighting();
 
 	SkyBox = new MeshObject(this, "SkyBox");
-	SkyBox->no_collider = true;
+	SkyBox->create_collider = false;
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
@@ -1584,10 +1611,23 @@ Floor* SBS::NewFloor(int number)
 	return floor_manager->Create(number);
 }
 
+Vehicle* SBS::NewVehicle(int number)
+{
+	//create a new vehicle object
+
+	return vehicle_manager->Create(number);
+}
+
 int SBS::GetElevatorCount()
 {
 	//return the number of elevators
 	return elevator_manager->GetCount();
+}
+
+int SBS::GetVehicleCount()
+{
+	//return the number of vehicles
+	return vehicle_manager->GetCount();
 }
 
 int SBS::GetTotalFloors()
@@ -1634,6 +1674,13 @@ Stairs* SBS::GetStairs(int number)
 	//return pointer to stairs object
 
 	return stairs_manager->Get(number);
+}
+
+Vehicle* SBS::GetVehicle(int number)
+{
+	//return pointer to vehicle object
+
+	return vehicle_manager->Get(number);
 }
 
 bool SBS::SetWallOrientation(std::string direction)
@@ -2563,6 +2610,8 @@ bool SBS::DeleteObject(Object *object)
 	}
 	else if (type == "MovingWalkway")
 		deleted = true;
+	else if (type == "Vehicle")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
@@ -3144,12 +3193,20 @@ std::vector<Action*> SBS::GetAction(std::string name)
 {
 	//get action by name
 	ReplaceAll(name, " ", "");
+
+	//for an action that references an elevator's "Car 1", create
+	//a second check with the "Car 1" part removed for compatibility
+	std::string name2;
+	size_t pos = name.find("Car1");
+	if (name.substr(0, 8) == "Elevator" && pos != std::string::npos)
+		name2 = name.substr(0, pos - 1) + name.substr(name.find(":", pos));
+
 	std::vector<Action*> actionlist;
 	for (size_t i = 0; i < ActionArray.size(); i++)
 	{
 		std::string actionname = ActionArray[i]->GetName();
 		ReplaceAll(actionname, " ", "");
-		if (actionname == name)
+		if (actionname == name || actionname == name2)
 			actionlist.push_back(ActionArray[i]);
 	}
 	return actionlist;
@@ -3586,7 +3643,11 @@ bool SBS::HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wa
 		return false;
 
 	//get name of collision object's grandparent scenenode (which is the same name as the mesh object)
-	std::string meshname = object->getRootNode()->getParentSceneNode()->getName();
+	std::string meshname;
+	if (dynamic_cast<OgreBulletDynamics::WheeledRigidBody*>(object) == 0)
+		meshname = object->getRootNode()->getParentSceneNode()->getName();
+	else
+		meshname = object->getRootNode()->getChild(0)->getName(); //for vehicles, the child of the root node is the mesh
 
 	//get hit/intersection position
 	hit_position = ToLocal(callback.getCollisionPoint());
@@ -4014,6 +4075,11 @@ TextureManager* SBS::GetTextureManager()
 RevolvingDoorManager* SBS::GetRevolvingDoorManager()
 {
 	return revolvingdoor_manager;
+}
+
+VehicleManager* SBS::GetVehicleManager()
+{
+	return vehicle_manager;
 }
 
 }

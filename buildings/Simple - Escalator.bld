@@ -394,8 +394,8 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
     #the height is the number of stairs times the riser size (which would be 10 * %1%).
     #The length is the number of stairs minus one, times the tread size - in this example it would be 9 * (10 / 9) which is 10.
     
-    if[%floor% < 9] AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, %1%, 10 / 9, 10, 0, 0, 0
-    if[%floor% < 9] AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    if[%floor% < 9] AddStairs 1, StairsLower, Stairs, Stairs, left, 0, -1.75, 3.5, %1%, 10 / 9, 10, 0, 0, 0
+    if[%floor% < 9] AddStairs 1, StairsUpper, Stairs, Stairs, right, 0, 1.75, 3.5, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     
     #For the landings, you need to know where the stairs start and end (the positions).  Since these stairs are located/centered at X position 0, you
@@ -466,7 +466,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
 #Create an escalator on the first floor
 <Floor 0>
-    AddEscalator Escalator 1, 1, 1, , Brick, left, 0, -10, 4, 1, 1, 16, -0.01, 1, 1
+    AddEscalator Escalator 1, 1, 1, , Brick, Brick, left, 0, -10, 4, 1, 1, 16, -0.01, 1, 1
 <EndFloor>
 
 AddAction EscStop, Floor0:Escalator1, Stop

@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Floor Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -793,13 +793,13 @@ Wall* Floor::ColumnWallBox2(const std::string &name, const std::string &texture,
 	return sbs->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
-FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
+FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
 {
 	//Creates a floor indicator at the specified location
 
 	if (relative == false)
 	{
-		FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
+		FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
 		FloorIndicatorArray.push_back(ind);
 		return ind;
 	}
@@ -808,7 +808,7 @@ FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, c
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
+			FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, blank_texture, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
 			FloorIndicatorArray.push_back(ind);
 			return ind;
 		}
@@ -1413,10 +1413,10 @@ CameraTexture* Floor::AddCameraTexture(const std::string &name, bool enabled, in
 	return cameratexture;
 }
 
-Escalator* Floor::AddEscalator(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th)
+Escalator* Floor::AddEscalator(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th)
 {
 	//add an escalator
-	Escalator* escalator = new Escalator(this, name, run, speed, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
+	Escalator* escalator = new Escalator(this, name, run, speed, sound_file, riser_texture, tread_texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
 	EscalatorArray.push_back(escalator);
 	return escalator;
 }

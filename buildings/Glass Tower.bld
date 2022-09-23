@@ -65,7 +65,7 @@ SetPlanarMapping true, false, false, false
     Load data/otis4_aluminumdoor.jpg, ElevDoors, 1, 1
     Load data/otis4_aluminumdoor.jpg, ElevDoors2, -1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
-    Load data/otis4_buttonpanel.jpg, ElevPanel, 1, 1
+    Load data/otis4_buttonpanel.jpg, ElevPanel, 1, 1, false
     Load data/otis4_woodwall.jpg, ElevWall, 1, 1
     Load data/glasselevator1.gif, ElevWallGlass, 1, 1
     Load data/glasselevator1.gif, Railing, 0.25, 1

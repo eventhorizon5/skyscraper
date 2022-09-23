@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Mesh Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -46,7 +46,7 @@ class SBSIMPEXP MeshObject : public Object
 {
 public:
 	std::string name; //mesh name
-	bool no_collider; //set to true if collider shouldn't be automatically generated
+	bool create_collider; //set to false if collider shouldn't be automatically generated
 	bool tricollider; //collider type; box if false, triangle if true
 	bool remove_on_disable; //if true (the default), remove the collider from world when disabling mesh
 
@@ -70,7 +70,7 @@ public:
 		std::string Name;
 	};
 
-	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
+	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0, bool create_collider = true, bool dynamic_buffers = false);
 	virtual ~MeshObject();
 	void Enabled(bool value);
 	void EnableCollider(bool value);
@@ -112,6 +112,8 @@ public:
 	unsigned int GetVertexCount(int submesh = -1);
 	unsigned int GetTriangleCount(int submesh = -1);
 	bool UsingDynamicBuffers();
+	void GetBounds();
+	void ChangeHeight(Real newheight);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<SubMesh> Submeshes; //submeshes

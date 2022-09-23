@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Elevator Button Panel Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -45,12 +45,12 @@ public:
 	bool IsEnabled;
 
 	//functions
-	ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th);
+	ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th, bool autosize = true);
 	~ButtonPanel();
 	Control* AddButton(const std::string &sound, const std::string &texture, const std::string &texture_lit, int row, int column, const std::string &type, Real width, Real height, Real hoffset = 0, Real voffset = 0);
 	Control* AddControl(const std::string &sound, int row, int column, Real bwidth, Real bheight, Real hoffset, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	void Enabled(bool value);
-	bool AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
+	bool AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th, bool autosize);
 	void ChangeLight(int floor, bool value);
 	void ChangeAllLights(bool value);
 	Control* GetFloorButton(int floor);

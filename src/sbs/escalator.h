@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Escalator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -33,7 +33,7 @@ class SBSIMPEXP Escalator : public Object
 public:
 	Real Speed;
 
-	Escalator(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
+	Escalator(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	~Escalator();
 	void Enabled(bool value);
 	void Report(const std::string &message);
@@ -57,7 +57,7 @@ private:
 
 	std::vector<Step*> Steps;
 
-	void CreateSteps(const std::string &texture, const std::string &direction, Real width, Real risersize, Real treadsize, Real tw, Real th);
+	void CreateSteps(const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real width, Real risersize, Real treadsize, Real tw, Real th);
 	void MoveSteps();
 };
 

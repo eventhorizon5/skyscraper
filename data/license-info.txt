@@ -62,6 +62,7 @@ textures:
 -marble5 and marble6 from www.public-domain-image.com
 -fire1 and fire2 textures by inskeemr
 -textures in 'escalator' folder by escalatorgeek881
+-counterweight.png and counterweight_frame.png from http://www.gtechelevators.com/portfolio/elevator-installation-company-nj.shtml
 
 sounds:
 -chime1.wav made by me
@@ -81,4 +82,4 @@ models:
 -key.mesh originally Key.skp by 50210, from the Sketchup 3D Warehouse
 -couch.mesh originally "modern sofa.skp" by Lori Bozievich, from the Sketchup 3D Warehouse
 -swimmingpool.mesh originally "swimming pool" by 1, at www.3dxtras.com
-
+-all files in the data/ogrebullet folder are part of OgreBullet

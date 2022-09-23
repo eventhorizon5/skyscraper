@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Script Processor - Global Commands
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -1609,7 +1609,12 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		int end = 8;
 		if (compat == true)
+		{
 			end = 7;
+
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		//check numeric values
 		for (int i = 3; i <= end; i++)

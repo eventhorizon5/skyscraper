@@ -10,7 +10,7 @@
 <div align="center">
 <p><strong><font size="+2">Skyscraper 1.11<br>
 Building Design Guide<br>
-</font></strong>Copyright (C)2005-2017 Ryan Thoryk</p>
+</font></strong>Copyright (C)2005-2018 Ryan Thoryk</p>
 <hr>
 
 <p align="left">This document describes how to create your own buildings for
@@ -44,6 +44,8 @@ also allow the user to view the building in 3D as it's being created.</p>
 <p align="center"><a href="#Functions">Predefined Functions</a></p>
 
 <p align="center"><a href="#Buildings">Buildings Section</a></p>
+
+<p align="center"><a href="#Vehicles">Vehicles Section</a></p>
 
 <p align="center"><a href="#Example">Example Building</a></p>
 
@@ -404,20 +406,24 @@ true</font></p>
 <font face="Courier New, Courier, mono" size="2">Gravity = false</font></p>
 
 <p align="left"><strong>15. Coordinates</strong> - set latitude and longitude of building (for sky system)<br>
-<font face="Courier New, Courier, mono" size="2">Location = 41.883, -87.629</font></p>
+<font face="Courier New, Courier, mono" size="2">Coordinates = 41.883, -87.629</font></p>
 
-<p align="left"><strong>16. DateTime</strong> - set UTC date/time on startup (in Julian value), for sky system<br>
-<font face="Courier New, Courier, mono" size="2">DateTime = 2457197.1254</font></p>
+<p align="left"><strong>16. DateTime</strong> - set UTC date/time on startup (in Julian value), for sky system, or set to "now" to use the current system time<br>
+<font face="Courier New, Courier, mono" size="2">DateTime = 2457197.1254</font><br>
+<font face="Courier New, Courier, mono" size="2">DateTime = now</font></p>
 
-<p align="left"><strong>17. Position</strong> - set the 3D position of this building, used when loading multiple buildings.  See the Load command in the Buildings section for more information.<br>
+<p align="left"><strong>17. TimeScale</strong> - sets the time multiplier for the sky system.  The default is 25.  Set to 1 for real-time.<br>
+<font face="Courier New, Courier, mono" size="2">TimeScale = 1</font><br>
+
+<p align="left"><strong>18. Position</strong> - set the 3D position of this building, used when loading multiple buildings.  See the Load command in the Buildings section for more information.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Position = <em>X, Y, Z</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Position = 100, 0, 100</font></p>
 
-<p align="left"><strong>18. Rotation</strong> - set the 3D rotation (Y axis, which is left/right), in degrees, of this building, used when loading multiple buildings.  See the Load command in the Buildings section for more information.<br>
+<p align="left"><strong>19. Rotation</strong> - set the 3D rotation (Y axis, which is left/right), in degrees, of this building, used when loading multiple buildings.  See the Load command in the Buildings section for more information.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Rotation = <em>value</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Rotation = 90</font></p>
 
-<p align="left"><strong>19. Bounds</strong> - set the 3D boundaries of this building, which is only used if loading multiple buildings, and if this building is not the first (primary) building.  If both Y values are 0, the Y values are set to be unlimited.  See the Load command in the Buildings section for more information.<br>
+<p align="left"><strong>20. Bounds</strong> - set the 3D boundaries of this building, which is only used if loading multiple buildings, and if this building is not the first (primary) building.  If both Y values are 0, the Y values are set to be unlimited.  See the Load command in the Buildings section for more information.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Bounds = <em>MinX, MinY, MinZ, MaxX, MaxY, MaxZ</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Bounds = -100, 0, -100, 100, 0, 100</font></p>
 
@@ -1018,7 +1024,7 @@ the combined range of the elevators specified with the CallButtonElevators comma
 <p align="left"><strong>14. AddStairs</strong> - creates a custom staircase at
 the specified location.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddStairs <em>number,
-name, texture, direction, CenterX, CenterZ, width, risersize, treadsize,
+name, riser_texture, tread_texture, direction, CenterX, CenterZ, width, risersize, treadsize,
 num_stairs, voffset, tw, th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddStairs 1,
 TestStairs, Brick, left, 10, 15, 5, 0.5, 0.5, 10, 0, 0, 0</font></p>
@@ -1204,7 +1210,7 @@ elevator car to use (see the AddDirectionalIndicator command for more informatio
 <p align="left"><strong>21. AddFloorIndicator</strong> - creates a floor
 indicator associated with a specific elevator<br>
 Syntax: <font face="Courier New, Courier, mono"
-size="2">AddFloorIndicator<em> elevator:car, relative, texture_prefix, direction,
+size="2">AddFloorIndicator<em> elevator:car, relative, texture_prefix, blank_texture, direction,
 CenterX, CenterZ, width, height, voffset</em></font> </p>
 
 <p align="left">The AddFloorIndicator command creates a floor indicator at the
@@ -1217,7 +1223,8 @@ direction the indicator faces, and can be either "left", "right", "front" or
 command can be given multiple times to create multiple indicators.
 <em>Texture_prefix</em> is the base name of the texture to load when displaying
 a floor ID; for example if the indicator is on floor 3, and you specify a
-prefix of "Button", it'll load the "Button3" texture.</p>
+prefix of "Button", it'll load the "Button3" texture.  Blank_texture specifies
+a texture to be used when the indicator is blank.</p>
 
 <p align="left"><strong>22. Cut</strong> - performs a manual box cut on an area
 within the current floor<br>
@@ -1467,7 +1474,7 @@ Leave the sound field blank for no sounds to be played.<br>
 <p align="left"><strong>36. AddEscalator</strong> - creates an escalator at
 the specified location.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddEscalator <em>name,
-run, speed, sound_file, texture, direction, CenterX, CenterZ, width, risersize,
+run, speed, sound_file, riser_texture, tread_texture, direction, CenterX, CenterZ, width, risersize,
 treadsize, num_steps, voffset, tw, th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddEscalator MyEscalator,
 1, 1, 1.0, , Brick, left, 0, -10, 4, 1, 1, 15, 0, 1, 1</font></p>
@@ -1553,7 +1560,7 @@ Elevator</font></p>
 <p align="left"><strong>2. Type</strong> - sets the type of the elevator.  Available types are "Local" for a standard local passenger elevator (the default), "Express" for an express elevator, "Service" for a service elevator, and "Freight" for a freight elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">Type = Express</font></p>
 
-<p align="left"><strong>3. Speed</strong> - maximum speed of the elevator, in
+<p align="left"><strong>3. Speed, UpSpeed, DownSpeed</strong> - maximum speed of the elevator, for either both up and down movements (Speed), or for each individual movement direction (UpSpeed and DownSpeed), in
 feet per second<br>
 Example: <font face="Courier New, Courier, mono" size="2">Speed = 20</font></p>
 
@@ -1798,6 +1805,33 @@ RunState</strong> - if this is set to false, the elevator starts in a stopped st
 Example: <font face="Courier New, Courier, mono" size="2">RunState =
 false</font></p>
 
+<p align="left"><strong>41. RopePosition</strong> - sets the position of the
+rope connection with the elevator.  All values are relative of the elevator center.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">RopePosition = <em>x,
+y, z</em><br>
+</font>Example: <font face="Courier New, Courier, mono" size="2">RopePosition
+= 0, 8, 0</font></p>
+
+<p align="left"><strong>42. RopeTexture</strong> - the texture to use for the
+elevator rope.<br>
+Example: <font face="Courier New, Courier, mono" size="2">RopeTexture =
+Rope</font></p>
+
+<p align="left"><strong>43. CounterweightStartSound</strong> - the sound file to play
+for the counterweight when starting movement.<br>
+Example: <font face="Courier New, Courier, mono" size="2">CounterweightStartSound =
+weight_start.wav</font></p>
+
+<p align="left"><strong>44. CounterweightMoveSound</strong> - the sound file to play
+for the counterweight during movement.<br>
+Example: <font face="Courier New, Courier, mono" size="2">CounterweightMoveSound =
+weight_move.wav</font></p>
+
+<p align="left"><strong>45. CounterweightStopSound</strong> - the sound file to play
+for the counterweight when stopping movement.<br>
+Example: <font face="Courier New, Courier, mono" size="2">CounterweightStopSound =
+weight_stop.wav</font></p>
+
 <br>
 
 <p align="left"><strong>Commands:</strong></p>
@@ -1813,6 +1847,26 @@ CreateElevator false, 0, 10, 0</font></p>
 the shaft center, or if they're absolute, <em>X</em> and <em>Z </em>are the
 coordinates to place the center of the elevator at, and <em>Floor</em> is the
 floor to place the elevator on.</p>
+
+<p align="left"><strong>2. CreateCounterweight</strong> - creates an elevator counterweight
+at the specified location.  This should normally be used at the end of the Elevator section, after all cars are created.
+This command not only creates the counterweight, but also creates the counterweight and elevator ropes.  The rope texture
+is specified in the <em>RopeTexture</em> parameter.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">CreateCounterweight
+<em>frame_texture, weight_texture, x</em>, <em>z</em>, <em>size_x, size_y, size_z, weight_voffset<br>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"><em></em>
+CreateCounterweight CounterweightFrame, Counterweight, 0, 3.5, 2, 6, 0.5, 0.5</font></p>
+
+<p align="left">
+<em>X</em> and <em>Z </em>are the
+coordinates to place the center of the counterweight at, relative of the elevator center, <em>size_x, size_y, size_z</em> are the size of the counterweight,
+and <em>weight_voffset</em> is the vertical offset the weight should be at.</p>
+
+<p align="left"><strong>3. AddRails</strong> - creates rails on all relevant floors of a shaft, for either an elevator or counterweight.  X and Z are relative of the elevator center.  Orientation is either false to create the rails along X, or true to create them along Z.  Rail_distance is the distance between the rail and the center of the elevator, and rail_width is the size of the rail.  This command must be specified after the MotorPosition parameter.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddRails
+<em>main_texture, edge_texture, x</em>, <em>z</em>, <em>orientation, rail_distance, rail_width<br>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"><em></em>
+AddRails Rails, RailsEdge, 0, 3.5, false, 1 + 0.06, 0.1</font></p>
 
 <p align="left"></p>
 
@@ -2367,7 +2421,7 @@ elevator car opens it's doors.<br>
 <br>
 <strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
 Syntax: <font face="Courier New, Courier, mono"
-size="2">AddFloorIndicator<em> texture_prefix, direction, CenterX, CenterZ,
+size="2">AddFloorIndicator<em> texture_prefix, blank_texture, direction, CenterX, CenterZ,
 width, height, voffset</em></font> </p>
 
 <p align="left">The AddFloorIndicator command creates a floor indicator at the
@@ -2377,7 +2431,8 @@ can be either "left", "right", "front" or "back". This command can be given
 multiple times to create multiple indicators. <em>Texture_prefix</em> is the
 base name of the texture to load when displaying a floor ID; for example if the
 elevator car is on floor 3, and you specify a prefix of "Button", it'll load the
-"Button3" texture.</p>
+"Button3" texture.  Blank_texture specifies a texture to be used when the
+indicator is blank.</p>
 
 <p align="left"><strong>10. AddDirectionalIndicator</strong> - creates an
 internal directional indicator/lantern<br>
@@ -3727,7 +3782,90 @@ Example 4: <font face="Courier New, Courier, mono" size="2">Load myfolder/mybuil
 
 <p align="left"> </p>
 
-<p align="left"><strong><font size="+1"><a name="Example"></a>11. Small Example
+<div align="center">
+<p align="left"><strong><font size="+1"><a name="Vehicles"></a>11. The
+<em>Vehicles</em> Section</font></strong></p>
+
+<p align="left">The <em>Vehicles</em> section allows you to create vehicles 
+for your building. Vehicles are numbered, starting with 1.</p>
+
+<p align="left">The section headers and footers are similar to the ones in the
+<em>Floor</em> section.<br>
+To specify a single vehicle, you would type something like:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;Vehicle 1&gt;</font><br>
+and end it with:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;EndVehicle&gt;</font><br>
+<br>
+For a range of vehicles, you would use something like:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;Vehicles 2 to
+10&gt;</font><br>
+and end with:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;EndVehicles&gt;</font></p>
+
+<p align="left"><strong>Variables:</strong></p>
+
+<p align="left"><font face="Courier New, Courier, mono"
+size="2"><strong>%vehicle%</strong></font> - number of the current vehicle</p>
+
+<p align="left"><strong>Parameters</strong>:</p>
+
+<p align="left"><strong>1. Name </strong> - sets the name of the vehicle.<br>
+Example: <font face="Courier New, Courier, mono" size="2">Name = Car</font></p>
+
+<p align="left"><strong>2. MaxEngineForce</strong> - sets the maximum engine force.  Default is 3000<br>
+
+<p align="left"><strong>3. SteeringIncrement</strong> - sets the steering increment.  Default is 0.04<br>
+
+<p align="left"><strong>4. SteeringClamp</strong> - sets the steering clamp, which is the maximum steering value.  Default is 0.8.<br>
+
+<p align="left"><strong>5. WheelFriction</strong> - sets the wheel friction value.  Default is 1e30<br>
+
+<p align="left"><strong>6. SuspensionStiffness</strong> - sets the suspension stiffness value.  Default is 20<br>
+
+<p align="left"><strong>7. SuspensionDamping</strong> - sets the suspension damping value.  Default is 2.3<br>
+
+<p align="left"><strong>8. SuspensionCompression</strong> - sets the suspension compression.  Default is 4.4<br>
+
+<p align="left"><strong>9. RollInfluence</strong> - sets the roll influence value.  Default is 0.1<br>
+
+<p align="left"><strong>10. SuspensionRestLength</strong> - sets the suspension rest length.  Default is 0.6<br>
+
+<p align="left"><strong>11. MaxSuspensionTravelCm</strong> - sets the maximum suspension travel.  Default is 500<br>
+
+<p align="left"><strong>12. FrictionSlip</strong> - sets the friction slip value.  Default is 10.5<br>
+
+<p align="left"><strong>13. ChassisShift</strong> - sets the vehicle's chassis offset, in X, Y and Z values.<br>
+<font face="Courier New, Courier, mono" size="2">ChassisShift = 0, 1, 0</font><br>
+
+<p align="left"><strong>14. ChassisMesh</strong> - defines the mesh file to use for the chassis<br>
+<font face="Courier New, Courier, mono" size="2">ChassisMesh = ogrebullet/models/chassis.mesh</font><br>
+
+<p align="left"><strong>15. WheelMesh</strong> - defines the mesh file to use for the wheels<br>
+<font face="Courier New, Courier, mono" size="2">ChassisMesh = ogrebullet/models/wheel.mesh</font><br>
+
+<p align="left"><strong>16. ChassisScale</strong> - sets the scaling factor for the chassis mesh<br>
+<font face="Courier New, Courier, mono" size="2">ChassisScale = 4</font><br>
+
+<p align="left"><strong>17. WheelScale</strong> - sets the scaling factor for the wheel mesh<br>
+<font face="Courier New, Courier, mono" size="2">WheelScale = 4</font><br>
+
+<p align="left"><strong>Commands:</strong></p>
+
+<p align="left"><strong>1. CreateVehicle</strong> - creates the vehicle at the specified location.  Use this command after the CreateChassis and AddWheel commands.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">CreateVehicle <em>X, Y, Z</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">CreateVehicle -50, 0, 0</font><br>
+
+<p align="left"><strong>2. CreateChassis</strong> - creates the vehicle's cahssis.  The parameters are physics options that are used when creating the rigid body<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">CreateChassis <em>restitution, friction, mass, linear_dampening, angular_dampening</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">CreateChassis 0.6, 0.6, 800, 0.2, 0.2</font><br>
+
+<p align="left"><strong>3. AddWheel</strong> - adds a wheel to this vehicle.  If <em>engine</em> is true, the wheel is powered by the engine.  If <em>steerable</em> is true, the wheel is controlled by the steering wheel.  The ConnectionPoint values specify the point at which to connect the wheel to the chassis.  The Direction and Axle values are optional, and the defaults for those are "0, 01, 0" for the Direction, and "-1, 0, 0" for the Axle.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddWheel <em>engine, steerable, IsFrontWheel, radius, ConnectionPointX, ConnectionPointY, ConnectionPointZ</em>[, <em>DirectionX, DirectionY, DirectionZ, AxleX, AxleY, AxleZ</em>]</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">AddWheel true, true, true, 0.3, -1, 0, 0</font><br>
+
+<p align="left"> </p>
+
+<p align="left"><strong><font size="+1"><a name="Example"></a>12. Small Example
 Building</font></strong></p>
 
 <p align="left">To see an example of a small simplistic building in code, look

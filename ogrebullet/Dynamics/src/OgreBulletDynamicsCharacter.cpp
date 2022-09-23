@@ -65,6 +65,7 @@ namespace OgreBulletDynamics
 		callback = new btGhostPairCallback();
 		getDynamicsWorld()->getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(callback);
 		capsule = new btCapsuleShape(width, height);
+		capsule_crouch = new btCapsuleShape(width, 0);
 		mObject->setCollisionShape (capsule);
 		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 		mObject->setContactProcessingThreshold(0.0);
@@ -87,6 +88,7 @@ namespace OgreBulletDynamics
 		delete callback;
 		mObject->setCollisionShape(0);
 		delete capsule;
+		delete capsule_crouch;
     }
 	void CharacterController::addToWorld()
 	{
@@ -191,6 +193,21 @@ namespace OgreBulletDynamics
 			getDynamicsWorld()->getBulletDynamicsWorld()->addCollisionObject(mObject,btBroadphaseProxy::CharacterFilter, 0);
 		getDynamicsWorld()->getBulletDynamicsWorld()->addAction(m_character);
 		resetLastCollision();
+	}
+	void CharacterController::crouch(bool value)
+	{
+		if (value == false)
+		{
+			//stand up
+			mObject->setCollisionShape(capsule);
+			m_character->setShape(capsule);
+		}
+		else
+		{
+			//crouch
+			mObject->setCollisionShape(capsule_crouch);
+			m_character->setShape(capsule_crouch);
+		}
 	}
 }
 

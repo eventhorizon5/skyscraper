@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Script Processor - Script Section
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -151,6 +151,14 @@ class ScriptProcessor::ElevatorCarSection : public ScriptProcessor::Section
 public:
 	ElevatorCarSection(ScriptProcessor* parent);
 	~ElevatorCarSection() {}
+	int Run(std::string &LineData);
+};
+
+class ScriptProcessor::VehicleSection : public ScriptProcessor::Section
+{
+public:
+	VehicleSection(ScriptProcessor* parent);
+	~VehicleSection() {}
 	int Run(std::string &LineData);
 };
 

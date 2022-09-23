@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Shaft Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -401,8 +401,17 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	Report("cutting...");
 
 	Real voffset1, voffset2;
-	cutstart = start;
-	cutend = end;
+
+	if (relative == true)
+	{
+		cutstart = start;
+		cutend = end;
+	}
+	else
+	{
+		cutstart = Ogre::Vector2(start.x - GetPosition().x, start.y - GetPosition().z);
+		cutend =  Ogre::Vector2(end.x - GetPosition().x, end.y - GetPosition().z);
+	}
 
 	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
 		return;

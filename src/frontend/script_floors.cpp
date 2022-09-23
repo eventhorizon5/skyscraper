@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Script Processor - Floor Section
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -760,16 +760,36 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 10);
 
-		if (params != 13)
+		if (params < 13 || params > 14)
 			return ScriptError("Incorrect number of parameters");
 
+		bool compat = false;
+		if (params == 13)
+			compat = true;
+
 		//check numeric values
-		for (int i = 0; i <= 12; i++)
+		if (params == 13)
 		{
-			if (i == 1)
-				i = 4; //skip non-numeric parameters
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
+			for (int i = 0; i <= 12; i++)
+			{
+				if (i == 1)
+					i = 4; //skip non-numeric parameters
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
+		else
+		{
+			for (int i = 0; i <= 13; i++)
+			{
+				if (i == 1)
+					i = 5; //skip non-numeric parameters
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
 		}
 
 		//create stairs
@@ -779,7 +799,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
-			StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddStairs(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+			if (compat == true)
+				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddStairs(config->Current, tempdata[1], tempdata[2], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+			else
+				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddStairs(config->Current, tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToInt(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
 			return ScriptError("Invalid stairwell");
@@ -1171,15 +1194,17 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 18);
 
-		if (params != 8 && params != 9)
+		if (params < 8 && params > 10)
 			return ScriptError("Incorrect number of parameters");
 
-		bool compat = false;
+		int compat = 0;
 		if (params == 8)
-			compat = true; //1.4 compatibility mode
+			compat = 1; //1.4 compatibility mode
+		if (params == 9)
+			compat = 2;
 
 		//check numeric values
-		if (compat == true)
+		if (compat == 1)
 		{
 			for (int i = 3; i <= 7; i++)
 			{
@@ -1189,9 +1214,17 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
 		}
-		else
+		else if (compat == 2)
 		{
 			for (int i = 4; i <= 8; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+		}
+		else
+		{
+			for (int i = 5; i <= 9; i++)
 			{
 				if (!IsNumeric(tempdata[i]))
 					return ScriptError("Invalid value: " + tempdata[i]);
@@ -1206,10 +1239,12 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		if (compat == false)
-			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
-		else
-			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), "Button", tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+		if (compat == 0)
+			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), tempdata[2], "", tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
+		else if (compat == 1)
+			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), "Button", "", tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+		else if (compat == 2)
+			StoreCommand(floor->AddFloorIndicator(elevator, car, ToBool(tempdata[1]), tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		return sNextLine;
 	}
 
@@ -1625,7 +1660,12 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//set backwards compatibility
 		bool compat = false;
 		if (IsNumeric(tempdata[8]) == false)
+		{
 			compat = true;
+
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		int end = 8;
 		if (compat == true)
@@ -1690,7 +1730,12 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//set backwards compatibility
 		bool compat = false;
 		if (IsNumeric(tempdata[9]) == false)
+		{
 			compat = true;
+
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		int end = 9;
 		if (compat == true)
@@ -1762,7 +1807,12 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//set backwards compatibility
 		bool compat = false;
 		if (IsNumeric(tempdata[9]) == false)
+		{
 			compat = true;
+
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		int end = 9;
 		if (compat == true)
@@ -2061,16 +2111,37 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 13);
 
-		if (params != 15)
+		if (params < 15 || params > 16)
 			return ScriptError("Incorrect number of parameters");
 
-		//check numeric values
-		for (int i = 1; i <= 14; i++)
+		bool compat = false;
+		if (params == 15)
+			compat = true;
+
+		if (params == 15)
 		{
-			if (i == 2)
-				i = 6; //skip non-numeric parameters
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
+			//check numeric values
+			for (int i = 1; i <= 14; i++)
+			{
+				if (i == 2)
+					i = 6; //skip non-numeric parameters
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
+		else
+		{
+			//check numeric values
+			for (int i = 1; i <= 15; i++)
+			{
+				if (i == 2)
+					i = 7; //skip non-numeric parameters
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
 		}
 
 		//create escalator
@@ -2079,7 +2150,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		StoreCommand(floor->AddEscalator(tempdata[0], ToInt(tempdata[1]), ToFloat(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToInt(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
+		if (compat == true)
+			StoreCommand(floor->AddEscalator(tempdata[0], ToInt(tempdata[1]), ToFloat(tempdata[2]), tempdata[3], tempdata[4], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToInt(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
+		else
+			StoreCommand(floor->AddEscalator(tempdata[0], ToInt(tempdata[1]), ToFloat(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToInt(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15])));
 
 		return sNextLine;
 	}

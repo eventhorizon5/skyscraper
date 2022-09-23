@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Floor Indicator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -30,11 +30,25 @@
 #include "elevatorcar.h"
 #include "profiler.h"
 #include "floor.h"
+#include "timer.h"
 #include "floorindicator.h"
 
 namespace SBS {
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
+class FloorIndicator::Timer : public TimerObject
+{
+public:
+	FloorIndicator *indicator;
+	bool on;
+	Timer(const std::string &name, FloorIndicator *parent) : TimerObject(parent, name)
+	{
+		indicator = parent;
+		on = false;
+	}
+	virtual void Notify();
+};
+
+FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
 {
 	//creates a new floor indicator at the specified position
 
@@ -45,6 +59,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	elev = elevator;
 	this->car = car;
 	Prefix = texture_prefix;
+	Blank = blank_texture;
 
 	//move object
 	Move(CenterX, voffset, CenterZ);
@@ -86,6 +101,8 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
+
+	flash_timer = new Timer("Flash Timer", this);
 }
 
 FloorIndicator::~FloorIndicator()
@@ -120,11 +137,17 @@ void FloorIndicator::Enabled(bool value)
 	is_enabled = value;
 }
 
-void FloorIndicator::Update()
+void FloorIndicator::Update(bool blank)
 {
 	//update indicator display with elevator's current floor identifier
 
 	SBS_PROFILE("FloorIndicator::Update");
+
+	if (blank == true && Blank != "")
+	{
+		FloorIndicatorMesh->ChangeTexture(Blank);
+		return;
+	}
 
 	Elevator *elevator = sbs->GetElevator(elev);
 
@@ -145,6 +168,29 @@ void FloorIndicator::Update()
 	texture.insert(0, Prefix);
 
 	FloorIndicatorMesh->ChangeTexture(texture);
+}
+
+void FloorIndicator::Flash(bool enabled)
+{
+	if (enabled == true)
+		flash_timer->Start(500, false);
+	else
+		flash_timer->Stop();
+}
+
+void FloorIndicator::Timer::Notify()
+{
+	if (on == false)
+	{
+		indicator->Update(false);
+		on = true;
+	}
+	else
+	{
+		indicator->Update(true);
+		on = false;
+	}
+
 }
 
 }

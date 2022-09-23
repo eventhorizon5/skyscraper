@@ -3,7 +3,7 @@
 /*
 Scalable Building Simulator - Elevator Car Object
 The Skyscraper Project - Version 1.11 Alpha
-Copyright (C)2004-2017 Ryan Thoryk
+Copyright (C)2004-2018 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
 Contact - ryan@skyscrapersim.com
@@ -85,7 +85,7 @@ public:
 	bool ReportError(const std::string &message);
 	Wall* AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
 	Wall* AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
-	FloorIndicator* AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
+	FloorIndicator* AddFloorIndicator(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
 	ButtonPanel* CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real spacingX, Real spacingY, Real tw, Real th);
 	void DumpServicedFloors();
 	bool AddServicedFloor(int number);
@@ -203,6 +203,7 @@ public:
 	int FirePhase2Active();
 	bool FirePhase2OnOtherCar();
 	void SetControls(const std::string &action_name);
+	void FlashIndicators(bool value);
 
 	MeshObject* Mesh; //car mesh object
 

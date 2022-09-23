@@ -117,8 +117,8 @@ namespace OgreBulletDynamics
         // update wheels when needed.
         void setTransform();
 
-        void applyEngineForce (float engineForce, int wheel);
-        void setSteeringValue(float steering, int wheel);
+        void applyEngineForce (Ogre::Real engineForce, int wheel);
+        void setSteeringValue(Ogre::Real steering, int wheel);
 
      protected:
          VehicleTuning                   *mTuning;

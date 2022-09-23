@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Control Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -77,6 +77,7 @@ private:
 	bool light_status; //light on/off value, used for floor buttons
 	bool is_enabled;
 	bool action_hold; //storage for current position action's "hold" value
+	bool action_result; //value of last DoAction result
 };
 
 }

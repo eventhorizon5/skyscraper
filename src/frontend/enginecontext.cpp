@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Engine Context
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -526,12 +526,12 @@ void EngineContext::CutForEngine(EngineContext *engine)
 	d = Simcore->FromGlobal(d);
 
 	//get new cutting bounds (get min/max values)
-	newmin.x = Min4(a.x, b.x, c.x, d.x);
-	newmin.y = Min4(a.y, b.y, c.y, d.y);
-	newmin.z = Min4(a.z, b.z, c.z, d.z);
-	newmax.x = Max4(a.x, b.x, c.x, d.x);
-	newmax.y = Max4(a.y, b.y, c.y, d.y);
-	newmax.z = Max4(a.z, b.z, c.z, d.z);
+	newmin.x = Min(a.x, b.x, c.x, d.x);
+	newmin.y = Min(a.y, b.y, c.y, d.y);
+	newmin.z = Min(a.z, b.z, c.z, d.z);
+	newmax.x = Max(a.x, b.x, c.x, d.x);
+	newmax.y = Max(a.y, b.y, c.y, d.y);
+	newmax.z = Max(a.z, b.z, c.z, d.z);
 
 	//cut for new bounds
 	Simcore->DeleteColliders = true;

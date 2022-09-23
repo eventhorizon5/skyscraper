@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Control Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -315,7 +315,6 @@ std::string Control::GetTexture(int position)
 		return "";
 
 	return TextureArray[position - 1];
-
 }
 
 int Control::GetPositions()
@@ -410,15 +409,15 @@ bool Control::Press(bool reverse)
 		PreviousSelectPosition();
 
 	//run action
-	bool result = DoAction();
+	action_result = DoAction();
 
 	//play sound if action succeeded
 	//or always if the name is numeric (elevator is on the same floor, and doors are reopened)
-	if (result == true || IsNumeric(name))
+	if (action_result == true || IsNumeric(name))
 		PlaySound();
 
 	//change back to original selection if result is false
-	if (result == false)
+	if (action_result == false)
 	{
 		if (reverse == false)
 			PreviousSelectPosition();
@@ -426,7 +425,7 @@ bool Control::Press(bool reverse)
 			NextSelectPosition();
 	}
 
-	return result;
+	return action_result;
 }
 
 void Control::ChangeFloorLight(int floor, bool value)
@@ -492,7 +491,12 @@ void Control::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, 
 
 void Control::OnUnclick(bool right)
 {
+	//exit if not in Hold mode
 	if (action_hold == false)
+		return;
+
+	//exit if previous action failed
+	if (action_result == false)
 		return;
 
 	if (right == false)

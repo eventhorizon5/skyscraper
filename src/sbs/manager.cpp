@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Manager Classes
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -32,6 +32,7 @@
 #include "door.h"
 #include "revolvingdoor.h"
 #include "dynamicmesh.h"
+#include "vehicle.h"
 #include "manager.h"
 
 namespace SBS {
@@ -686,7 +687,7 @@ DoorManager::~DoorManager()
 
 Door* DoorManager::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
-	int number = (int)Array.size();
+	int number = (int)Array.size() + 1;
 	std::string name = "Door " + ToString(number);
 	Door* door = new Door(this, wrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	Array.push_back(door);
@@ -757,7 +758,7 @@ RevolvingDoorManager::~RevolvingDoorManager()
 
 RevolvingDoor* RevolvingDoorManager::AddDoor(const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
-	int number = (int)Array.size();
+	int number = (int)Array.size() + 1;
 	std::string name = "Door " + ToString(number);
 	RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
 	Array.push_back(door);
@@ -793,6 +794,125 @@ RevolvingDoor* RevolvingDoorManager::GetIndex(int index)
 }
 
 void RevolvingDoorManager::Loop()
+{
+	LoopChildren();
+}
+
+VehicleManager::VehicleManager(Object* parent) : Object(parent)
+{
+	//set up SBS object
+	SetValues("VehicleManager", "Vehicle Manager", true);
+
+	get_result = 0;
+	get_number = 0;
+	EnableLoop(true);
+}
+
+VehicleManager::~VehicleManager()
+{
+	//delete vehicles
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i].object)
+		{
+			Array[i].object->parent_deleting = true;
+			delete Array[i].object;
+		}
+		Array[i].object = 0;
+	}
+}
+
+Vehicle* VehicleManager::Create(int number)
+{
+	//create a new vehicle object
+
+	if (Get(number))
+		return 0;
+
+	Map v;
+	v.number = number;
+	v.object = new Vehicle(this, number);
+	Array.push_back(v);
+	return v.object;
+}
+
+int VehicleManager::GetCount()
+{
+	//return the number of vehicles
+	return (int)Array.size();
+}
+
+Vehicle* VehicleManager::Get(int number)
+{
+	//return pointer to vehicle object
+
+	if (number < 1 || number > GetCount())
+		return 0;
+
+	if (get_number == number && get_result)
+		return get_result;
+
+	if ((int)Array.size() > number - 1)
+	{
+		//quick prediction
+		if (Array[number - 1].number == number)
+		{
+			if (Array[number - 1].object)
+			{
+				get_number = number;
+				get_result = Array[number - 1].object;
+				return get_result;
+			}
+			else
+			{
+				get_number = 0;
+				get_result = 0;
+				return 0;
+			}
+		}
+	}
+
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i].number == number)
+		{
+			get_number = number;
+			get_result = Array[i].object;
+			return get_result;
+		}
+	}
+
+	get_number = 0;
+	get_result = 0;
+	return 0;
+}
+
+Vehicle* VehicleManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index].object;
+}
+
+void VehicleManager::Remove(Vehicle *vehicle)
+{
+	//remove a vehicle (does not delete the object)
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i].object == vehicle)
+		{
+			Array.erase(Array.begin() + i);
+
+			//clear cached values
+			get_result = 0;
+			get_number = 0;
+			return;
+		}
+	}
+}
+
+void VehicleManager::Loop()
 {
 	LoopChildren();
 }

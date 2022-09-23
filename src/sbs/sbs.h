@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -68,6 +68,7 @@ namespace SBS {
 	class DoorManager;
 	class TextureManager;
 	class RevolvingDoorManager;
+	class VehicleManager;
 	class Polygon;
 	class Model;
 	class Wall;
@@ -102,6 +103,7 @@ namespace SBS {
 	class RevolvingDoor;
 	class MovingWalkway;
 	class Step;
+	class Vehicle;
 }
 
 #include "object.h"
@@ -212,14 +214,17 @@ public:
 	Stairs* CreateStairwell(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	Elevator* NewElevator(int number);
 	Floor* NewFloor(int number);
+	Vehicle* NewVehicle(int number);
 	int GetElevatorCount();
 	int GetTotalFloors(); //all floors including basements
 	int GetShaftCount();
 	int GetStairsCount();
+	int GetVehicleCount();
 	Floor* GetFloor(int number);
 	Elevator* GetElevator(int number);
 	Shaft* GetShaft(int number);
 	Stairs* GetStairs(int number);
+	Vehicle* GetVehicle(int number);
 	bool SetWallOrientation(std::string direction);
 	int GetWallOrientation();
 	bool SetFloorOrientation(std::string direction);
@@ -373,6 +378,7 @@ public:
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
 	RevolvingDoorManager* GetRevolvingDoorManager();
+	VehicleManager* GetVehicleManager();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -422,6 +428,7 @@ private:
 	ShaftManager* shaft_manager;
 	StairsManager* stairs_manager;
 	DoorManager* door_manager;
+	VehicleManager* vehicle_manager;
 
 	//dynamic meshes
 	std::vector<DynamicMesh*> dynamic_meshes;

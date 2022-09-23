@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Main Screen
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -90,6 +90,21 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	look_down = false;
 	step_forward = false;
 	step_backward = false;
+
+	key_right = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Right", "D")[0];
+	key_left = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Left", "A")[0];
+	key_up = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Up", "W")[0];
+	key_down = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Down", "S")[0];
+	key_lookup = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.LookUp", "P")[0];
+	key_lookdown = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.LookDown", "L")[0];
+	key_binoculars = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Binoculars", "B")[0];
+	key_crouch = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Crouch", "X")[0];
+	key_floatup = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.FloatUp", "O")[0];
+	key_floatdown = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.FloatDown", "K")[0];
+	key_noclip = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.NoClip", "V")[0];
+	key_pickup = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.PickUp", "C")[0];
+	key_load = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Load", ";")[0];
+	key_enter = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Enter", "E")[0];
 
 	//create panel, for keyboard events
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(0, 0), wxNO_BORDER);
@@ -242,7 +257,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 				camera->Jump();
 		}
 
-		if (key == (wxKeyCode)'V')
+		if (key == (wxKeyCode)key_noclip)
 		{
 			bool status = camera->GetGravityStatus();
 
@@ -351,7 +366,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		}
 
 		//model pick-up
-		if (key == (wxKeyCode)'C')
+		if (key == (wxKeyCode)key_pickup)
 		{
 			if (camera->IsModelAttached() == false)
 				camera->PickUpModel();
@@ -360,7 +375,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		}
 
 		//load a new additional building
-		if (key == (wxKeyCode)';')
+		if (key == (wxKeyCode)key_load)
 		{
 			if (!frontend->loaddialog)
 				frontend->loaddialog = new LoadDialog(frontend->dpanel, this, -1);
@@ -410,6 +425,13 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		{
 			frontend->SetActiveEngine(9);
 		}
+
+		//enter and exit a vehicle
+		if (key == (wxKeyCode)key_enter)
+		{
+			//enter or exit a vehicle
+			camera->AttachToVehicle(!camera->inside_vehicle);
+		}
 	}
 
 	GetKeyStates(engine, event, true);
@@ -442,66 +464,85 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 	if (event.AltDown())
 	{
 		//strafe movement
-		if (key == WXK_RIGHT || key == (wxKeyCode)'D')
+		if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
 			strafe_right = down;
 
-		else if (key == WXK_LEFT || key == (wxKeyCode)'A')
+		else if (key == WXK_LEFT || key == (wxKeyCode)key_left)
 			strafe_left = down;
 
-		else if (key == WXK_UP || key == (wxKeyCode)'W')
+		else if (key == WXK_UP || key == (wxKeyCode)key_up)
 			float_up = down;
 
-		else if (key == WXK_DOWN || key == (wxKeyCode)'S')
+		else if (key == WXK_DOWN || key == (wxKeyCode)key_down)
 			float_down = down;
 
-		else if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
+		else if (key == WXK_PAGEUP || key == (wxKeyCode)key_lookup)
 			spin_up = down;
 
-		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
+		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)key_lookdown)
 			spin_down = down;
 	}
 	else
 	{
 		if (camera->Freelook == false)
 		{
-			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
+			if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
 				turn_right = down;
 
-			if (key == WXK_LEFT || key == (wxKeyCode)'A')
+			if (key == WXK_LEFT || key == (wxKeyCode)key_left)
 				turn_left = down;
 		}
 		else
 		{
-			if (key == WXK_RIGHT || key == (wxKeyCode)'D')
+			if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
 				strafe_right = down;
 
-			if (key == WXK_LEFT || key == (wxKeyCode)'A')
+			if (key == WXK_LEFT || key == (wxKeyCode)key_left)
 				strafe_left = down;
 		}
 
-		if (key == WXK_PAGEUP || key == (wxKeyCode)'P')
+		if (key == WXK_PAGEUP || key == (wxKeyCode)key_lookup)
 			look_up = down;
 
-		if (key == WXK_PAGEDOWN || key == (wxKeyCode)'L')
+		if (key == WXK_PAGEDOWN || key == (wxKeyCode)key_lookdown)
 			look_down = down;
 
-		if (key == WXK_UP || key == (wxKeyCode)'W')
+		if (key == WXK_UP || key == (wxKeyCode)key_up)
 			step_forward = down;
 
-		if (key == WXK_DOWN || key == (wxKeyCode)'S')
+		if (key == WXK_DOWN || key == (wxKeyCode)key_down)
 			step_backward = down;
 
 		//binoculars
-		if (key == (wxKeyCode)'B')
+		if (key == (wxKeyCode)key_binoculars)
 		{
 			camera->Binoculars(down);
 		}
 
+		//crouch
+		if (key == (wxKeyCode)key_crouch)
+		{
+			camera->Crouch(down);
+		}
+
 		//values from old version
-		if (key == WXK_HOME || key == (wxKeyCode)'O')
+		if (key == WXK_HOME || key == (wxKeyCode)key_floatup)
 			float_up = down;
-		if (key == WXK_END || key == (wxKeyCode)'K')
+		if (key == WXK_END || key == (wxKeyCode)key_floatdown)
 			float_down = down;
+
+		//drive functions, when user is inside a vehicle
+		if (camera->Freelook == true && camera->inside_vehicle == true)
+		{
+			if (key == WXK_LEFT || key == (wxKeyCode)key_left)
+				engine->GetSystem()->camera->Drive(true, false, false, false, down);
+			if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
+				engine->GetSystem()->camera->Drive(false, true, false, false, down);
+			if (key == WXK_DOWN || key == (wxKeyCode)key_down)
+				engine->GetSystem()->camera->Drive(false, false, true, false, down);
+			if (key == WXK_UP || key == (wxKeyCode)key_up)
+				engine->GetSystem()->camera->Drive(false, false, false, true, down);
+		}
 	}
 }
 

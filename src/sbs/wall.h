@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Wall Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -53,6 +53,7 @@ public:
 	void SetParentArray(std::vector<Wall*> &array);
 	Ogre::Vector3 GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	Ogre::Vector3 GetWallExtents(Real altitude, bool get_max);
+	void ChangeHeight(Real newheight);
 
 private:
 	//mesh wrapper

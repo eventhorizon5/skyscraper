@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Global Functions
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -70,10 +70,10 @@ SBSIMPEXP bool IsNumeric(const std::string &string, double &number);
 SBSIMPEXP std::string BoolToString(bool item);
 SBSIMPEXP Real RadiansToDegrees(Real radians);
 SBSIMPEXP Real DegreesToRadians(Real degrees);
-SBSIMPEXP Real Min3(Real a, Real b, Real c);
-SBSIMPEXP Real Max3(Real a, Real b, Real c);
-SBSIMPEXP Real Min4(Real a, Real b, Real c, Real d);
-SBSIMPEXP Real Max4(Real a, Real b, Real c, Real d);
+SBSIMPEXP Real Min(Real a, Real b, Real c);
+SBSIMPEXP Real Max(Real a, Real b, Real c);
+SBSIMPEXP Real Min(Real a, Real b, Real c, Real d);
+SBSIMPEXP Real Max(Real a, Real b, Real c, Real d);
 SBSIMPEXP std::string SetCaseCopy(std::string string, bool uppercase);
 SBSIMPEXP void SetCase(std::string &string, bool uppercase);
 SBSIMPEXP int FindWithCase(const std::string &string, bool uppercase, const std::string &key, int offset);
@@ -98,9 +98,6 @@ SBSIMPEXP bool ToBool(std::string string);
 SBSIMPEXP std::string TruncateNumber(float value, int decimals);
 SBSIMPEXP std::string TruncateNumber(double value, int decimals);
 SBSIMPEXP std::string TruncateNumber(const std::string &number, int decimals);
-SBSIMPEXP void Swap(int &first, int &second);
-SBSIMPEXP void Swap(float &first, float &second);
-SBSIMPEXP void Swap(double &first, double &second);
 
 }
 

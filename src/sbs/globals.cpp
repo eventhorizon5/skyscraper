@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Global Functions
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -120,7 +120,7 @@ Real DegreesToRadians(Real degrees)
 	return degrees * (pi / 180);
 }
 
-Real Min3(Real a, Real b, Real c)
+Real Min(Real a, Real b, Real c)
 {
 	//return smallest value
 	if (a <= b && a <= c)
@@ -130,7 +130,7 @@ Real Min3(Real a, Real b, Real c)
 	return c;
 }
 
-Real Max3(Real a, Real b, Real c)
+Real Max(Real a, Real b, Real c)
 {
 	//return largest value
 	if (a >= b && a >= c)
@@ -140,7 +140,7 @@ Real Max3(Real a, Real b, Real c)
 	return c;
 }
 
-Real Min4(Real a, Real b, Real c, Real d)
+Real Min(Real a, Real b, Real c, Real d)
 {
 	//return smallest value
 	if (a <= b && a <= c && a <= d)
@@ -152,7 +152,7 @@ Real Min4(Real a, Real b, Real c, Real d)
 	return d;
 }
 
-Real Max4(Real a, Real b, Real c, Real d)
+Real Max(Real a, Real b, Real c, Real d)
 {
 	//return largest value
 	if (a >= b && a >= c && a >= d)
@@ -421,33 +421,6 @@ std::string TruncateNumber(const std::string &value, int decimals)
 	if (number.at(number.length() - 1) == '.')
 		number = number.substr(0, number.length() - 1); //strip of extra decimal point if even
 	return number;
-}
-
-void Swap(int &first, int &second)
-{
-	//swap values
-
-	int temp = first;
-	first = second;
-	second = temp;
-}
-
-void Swap(float &first, float &second)
-{
-	//swap values
-
-	float temp = first;
-	first = second;
-	second = temp;
-}
-
-void Swap(double &first, double &second)
-{
-	//swap values
-
-	double temp = first;
-	first = second;
-	second = temp;
 }
 
 }

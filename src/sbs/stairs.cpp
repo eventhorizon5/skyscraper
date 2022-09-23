@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Stairwell Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -187,7 +187,7 @@ Stairs::~Stairs()
 		sbs->RemoveStairs(this);
 }
 
-Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th)
+Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th)
 {
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stair base is - front, back, left, or right.
@@ -235,12 +235,12 @@ Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &t
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, riser_texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, floor, buffer, tread_texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "left")
@@ -251,12 +251,12 @@ Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &t
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, riser_texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, floor, buffer, tread_texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "back")
@@ -267,12 +267,12 @@ Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &t
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, riser_texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, floor, buffer, tread_texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "front")
@@ -283,12 +283,12 @@ Wall* Stairs::AddStairs(int floor, const std::string &name, const std::string &t
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, riser_texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, floor, buffer, tread_texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 	}

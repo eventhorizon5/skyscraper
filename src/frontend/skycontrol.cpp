@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Sky Control Dialog
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -25,8 +25,8 @@
 //(*InternalHeaders(SkyControl)
 #include <wx/string.h>
 #include <wx/intl.h>
-#include <wx/object.h>
 //*)
+#include <wx/object.h>
 
 #include "Caelum.h"
 #include "globals.h"
@@ -61,6 +61,7 @@ const long SkyControl::ID_tMinute = wxNewId();
 const long SkyControl::ID_STATICTEXT8 = wxNewId();
 const long SkyControl::ID_tSecond = wxNewId();
 const long SkyControl::ID_bSet = wxNewId();
+const long SkyControl::ID_bGetSystemTime = wxNewId();
 const long SkyControl::ID_STATICTEXT9 = wxNewId();
 const long SkyControl::ID_tMultiplier = wxNewId();
 const long SkyControl::ID_bSetMultiplier = wxNewId();
@@ -99,7 +100,7 @@ SkyControl::SkyControl(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	FlexGridSizer2->Add(tLongitude, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetLongitude = new wxButton(this, ID_bSetLongitude, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLongitude"));
 	FlexGridSizer2->Add(bSetLongitude, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer1->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxVERTICAL, this, _("Date and Time"));
 	FlexGridSizer5 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -109,9 +110,9 @@ SkyControl::SkyControl(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	tJulian = new wxTextCtrl(this, ID_tJulian, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tJulian"));
 	FlexGridSizer4->Add(tJulian, 1, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticLine1 = new wxStaticLine(this, ID_STATICLINE1, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE1"));
-	FlexGridSizer4->Add(StaticLine1, 1, wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(StaticLine1, 1, wxBOTTOM|wxEXPAND, 5);
 	StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
-	FlexGridSizer4->Add(StaticLine2, 1, wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(StaticLine2, 1, wxBOTTOM|wxEXPAND, 5);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Year:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer4->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tYear = new wxTextCtrl(this, ID_tYear, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tYear"));
@@ -139,11 +140,13 @@ SkyControl::SkyControl(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	FlexGridSizer5->Add(FlexGridSizer4, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSet = new wxToggleButton(this, ID_bSet, _("Set"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSet"));
 	FlexGridSizer5->Add(bSet, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bGetSystemTime = new wxButton(this, ID_bGetSystemTime, _("Get System Time"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bGetSystemTime"));
+	FlexGridSizer5->Add(bGetSystemTime, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer2->Add(FlexGridSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(StaticBoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxVERTICAL, this, _("Misc Options"));
 	FlexGridSizer6 = new wxFlexGridSizer(0, 3, 0, 0);
-	StaticText9 = new wxStaticText(this, ID_STATICTEXT9, _("Time Multiplier:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
+	StaticText9 = new wxStaticText(this, ID_STATICTEXT9, _("Time Scale:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
 	FlexGridSizer6->Add(StaticText9, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tMultiplier = new wxTextCtrl(this, ID_tMultiplier, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tMultiplier"));
 	FlexGridSizer6->Add(tMultiplier, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -159,6 +162,7 @@ SkyControl::SkyControl(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	Connect(ID_bSetLatitude,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetLatitude_Click);
 	Connect(ID_bSetLongitude,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetLongitude_Click);
 	Connect(ID_bSet,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSet_Toggle);
+	Connect(ID_bGetSystemTime,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bGetSystemTime_Click);
 	Connect(ID_bSetMultiplier,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetMultiplier_Click);
 	//*)
 	panel = parent;
@@ -187,12 +191,16 @@ void SkyControl::OnInit()
 
 void SkyControl::Loop()
 {
+	if (system != panel->GetRoot()->GetCaelumSystem())
+		OnInit();
+
 	if (!system)
 		return;
 
 	Caelum::LongReal julian = system->getJulianDay(), second;
 	int year, month, day, hour, minute;
 	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, second);
+	second = (int)second;
 
 	if (bSet->GetValue() == false)
 	{
@@ -279,6 +287,11 @@ void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
 void SkyControl::On_bSetMultiplier_Click(wxCommandEvent& event)
 {
 	panel->GetRoot()->SkyMult = atof(tMultiplier->GetValue());
+}
+
+void SkyControl::On_bGetSystemTime_Click(wxCommandEvent& event)
+{
+	panel->GetRoot()->SetDateTimeNow();
 }
 
 }

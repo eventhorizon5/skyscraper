@@ -122,8 +122,7 @@ diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterControlle
 +		if (numPenetrationLoops > 4)
 +		{
 +			//printf("character could not recover from penetration = %d\n", numPenetrationLoops);
-+			break;
-+		}
++			break; +		}
 +	}
 +}
 diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.h bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.h
@@ -137,3 +136,14 @@ diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterControlle
  public:
  
  	BT_DECLARE_ALIGNED_ALLOCATOR();
+@@ -162,6 +163,10 @@
+	{
+                m_useGhostObjectSweepTest = useGhostObjectSweepTest;
+        }
+
+        bool onGround () const;
+        void setUpInterpolate (bool value);
++	void setShape(btConvexShape* shape)
++       {
++               m_convexShape = shape;
++       }

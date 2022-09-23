@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Manager Classes
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -174,6 +174,32 @@ public:
 private:
 	std::vector<RevolvingDoor*> Array;
 	DynamicMesh *wrapper; //door dynamic mesh wrapper
+};
+
+class SBSIMPEXP VehicleManager : public Object
+{
+public:
+	VehicleManager(Object* parent);
+	~VehicleManager();
+	Vehicle* Create(int number);
+	int GetCount();
+	Vehicle* Get(int number);
+	Vehicle* GetIndex(int index);
+	void Remove(Vehicle *elevator);
+	void Loop();
+
+private:
+	struct Map
+	{
+		int number; //vehicle number
+		Vehicle* object; //vehicle object reference
+	};
+
+	std::vector<Map> Array; //vehicle object array
+
+	//function caching
+	Vehicle* get_result;
+	int get_number;
 };
 
 }

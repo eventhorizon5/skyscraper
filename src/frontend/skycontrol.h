@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Sky Control Dialog
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -64,6 +64,7 @@ class SkyControl: public wxDialog {
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText2;
 		wxTextCtrl* tYear;
+		wxButton* bGetSystemTime;
 		wxStaticText* StaticText6;
 		wxTextCtrl* tSecond;
 		wxTextCtrl* tMinute;
@@ -99,6 +100,7 @@ class SkyControl: public wxDialog {
 		static const long ID_STATICTEXT8;
 		static const long ID_tSecond;
 		static const long ID_bSet;
+		static const long ID_bGetSystemTime;
 		static const long ID_STATICTEXT9;
 		static const long ID_tMultiplier;
 		static const long ID_bSetMultiplier;
@@ -113,6 +115,7 @@ class SkyControl: public wxDialog {
 		void On_bSetLongitude_Click(wxCommandEvent& event);
 		void On_bSet_Toggle(wxCommandEvent& event);
 		void On_bSetMultiplier_Click(wxCommandEvent& event);
+		void On_bGetSystemTime_Click(wxCommandEvent& event);
 		//*)
 		DebugPanel *panel;
 		Caelum::CaelumSystem* system;

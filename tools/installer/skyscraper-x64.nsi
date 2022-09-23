@@ -20,7 +20,7 @@ SetCompressor lzma
 VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
-VIAddVersionKey LegalCopyright "©2003-2017 Ryan Thoryk"
+VIAddVersionKey LegalCopyright "©2003-2018 Ryan Thoryk"
 VIAddVersionKey FileVersion "1.10.0.0"
 VIAddVersionKey ProductVersion "1.10.0.0"
 VIProductVersion 1.10.0.0

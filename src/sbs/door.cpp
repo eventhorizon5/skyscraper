@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Door Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -175,7 +175,7 @@ Door::~Door()
 				static_cast<Shaft*>(GetParent())->RemoveDoor(this);
 			else if (type == "Stairs")
 				static_cast<Stairs*>(GetParent())->RemoveDoor(this);
-			else if (type == "SBS")
+			else if (type == "DoorManager")
 				sbs->GetDoorManager()->RemoveDoor(this);
 		}
 	}

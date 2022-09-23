@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Edit Elevator Form
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -209,8 +209,11 @@ const long editelevator::ID_STATICTEXT69 = wxNewId();
 const long editelevator::ID_txtLimitQueue = wxNewId();
 const long editelevator::ID_bResetQueues = wxNewId();
 const long editelevator::ID_STATICTEXT21 = wxNewId();
-const long editelevator::ID_txtSpeed = wxNewId();
-const long editelevator::ID_bSetSpeed = wxNewId();
+const long editelevator::ID_txtUpSpeed = wxNewId();
+const long editelevator::ID_bSetUpSpeed = wxNewId();
+const long editelevator::ID_STATICTEXT16 = wxNewId();
+const long editelevator::ID_txtDownSpeed = wxNewId();
+const long editelevator::ID_bSetDownSpeed = wxNewId();
 const long editelevator::ID_STATICTEXT22 = wxNewId();
 const long editelevator::ID_txtAcceleration = wxNewId();
 const long editelevator::ID_bSetAcceleration = wxNewId();
@@ -780,13 +783,20 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	BoxSizer3->Add(BoxSizer10, 0, wxBOTTOM|wxRIGHT|wxALIGN_TOP, 5);
 	StaticBoxSizer7 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Motion"));
 	FlexGridSizer6 = new wxFlexGridSizer(0, 3, 0, 0);
-	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("Speed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT21"));
+	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("UpSpeed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT21"));
 	FlexGridSizer6->Add(StaticText21, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
-	txtSpeed = new wxTextCtrl(this, ID_txtSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtSpeed"));
-	txtSpeed->SetToolTip(_("Speed"));
-	FlexGridSizer6->Add(txtSpeed, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	bSetSpeed = new wxButton(this, ID_bSetSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetSpeed"));
-	FlexGridSizer6->Add(bSetSpeed, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
+	txtUpSpeed = new wxTextCtrl(this, ID_txtUpSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtUpSpeed"));
+	txtUpSpeed->SetToolTip(_("Up Speed"));
+	FlexGridSizer6->Add(txtUpSpeed, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bSetUpSpeed = new wxButton(this, ID_bSetUpSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetUpSpeed"));
+	FlexGridSizer6->Add(bSetUpSpeed, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
+	StaticText16 = new wxStaticText(this, ID_STATICTEXT16, _("DownSpeed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT16"));
+	FlexGridSizer6->Add(StaticText16, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtDownSpeed = new wxTextCtrl(this, ID_txtDownSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtDownSpeed"));
+	txtDownSpeed->SetToolTip(_("Down Speed"));
+	FlexGridSizer6->Add(txtDownSpeed, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bSetDownSpeed = new wxButton(this, ID_bSetDownSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetDownSpeed"));
+	FlexGridSizer6->Add(bSetDownSpeed, 1, wxALIGN_RIGHT|wxALIGN_TOP, 5);
 	StaticText22 = new wxStaticText(this, ID_STATICTEXT22, _("Accel:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT22"));
 	FlexGridSizer6->Add(StaticText22, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	txtAcceleration = new wxTextCtrl(this, ID_txtAcceleration, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtAcceleration"));
@@ -1078,7 +1088,8 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bSetAutoDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAutoDoors_Click);
 	Connect(ID_bInterlocks,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bInterlocks_Click);
 	Connect(ID_bResetQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bResetQueues_Click);
-	Connect(ID_bSetSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetSpeed_Click);
+	Connect(ID_bSetUpSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetUpSpeed_Click);
+	Connect(ID_bSetDownSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDownSpeed_Click);
 	Connect(ID_bSetAcceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAcceleration_Click);
 	Connect(ID_bSetDeceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDeceleration_Click);
 	Connect(ID_bSetAccelJerk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAccelJerk_Click);
@@ -1180,12 +1191,6 @@ void editelevator::On_bSetName_Click(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->Name = txtName->GetValue();
-}
-
-void editelevator::On_bSetSpeed_Click(wxCommandEvent& event)
-{
-	if (elevator)
-		 elevator->ElevatorSpeed = atof(txtSpeed->GetValue());
 }
 
 void editelevator::On_bSetAcceleration_Click(wxCommandEvent& event)
@@ -1452,7 +1457,8 @@ void editelevator::SetMainValues()
 		txtSlowSpeed->SetValue(TruncateNumber(door->SlowSpeed, 4));
 		txtManualSpeed->SetValue(TruncateNumber(door->ManualSpeed, 4));
 	}
-	txtSpeed->SetValue(TruncateNumber(elevator->ElevatorSpeed, 4));
+	txtUpSpeed->SetValue(TruncateNumber(elevator->UpSpeed, 4));
+	txtDownSpeed->SetValue(TruncateNumber(elevator->DownSpeed, 4));
 	txtAcceleration->SetValue(TruncateNumber(elevator->Acceleration, 4));
 	txtDeceleration->SetValue(TruncateNumber(elevator->Deceleration, 4));
 	txtAccelJerk->SetValue(TruncateNumber(elevator->AccelJerk, 4));
@@ -1838,6 +1844,18 @@ void editelevator::On_bSetType_Click(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->Type = txtType->GetValue();
+}
+
+void editelevator::On_bSetUpSpeed_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		 elevator->UpSpeed = atof(txtUpSpeed->GetValue());
+}
+
+void editelevator::On_bSetDownSpeed_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		 elevator->DownSpeed = atof(txtDownSpeed->GetValue());
 }
 
 }

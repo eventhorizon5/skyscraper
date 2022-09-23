@@ -81,6 +81,7 @@ namespace OgreBulletDynamics
 		void sync();
 		void enableCollisions(bool value);
 		void resetCollisions();
+		void crouch(bool value);
 
 	protected:
 		short mCollisionGroup;
@@ -89,7 +90,7 @@ namespace OgreBulletDynamics
 		bool collisions_enabled;
 		btKinematicCharacterController *m_character;
 		btGhostPairCallback *callback;
-		btConvexShape *capsule;
+		btConvexShape *capsule, *capsule_crouch;
     };
     // -------------------------------------------------------------------------
     inline DynamicsWorld*       CharacterController::getDynamicsWorld()

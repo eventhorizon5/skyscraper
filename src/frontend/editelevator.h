@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Edit Elevator Form
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -213,8 +213,11 @@ class editelevator: public wxDialog
 		static const long ID_txtLimitQueue;
 		static const long ID_bResetQueues;
 		static const long ID_STATICTEXT21;
-		static const long ID_txtSpeed;
-		static const long ID_bSetSpeed;
+		static const long ID_txtUpSpeed;
+		static const long ID_bSetUpSpeed;
+		static const long ID_STATICTEXT16;
+		static const long ID_txtDownSpeed;
+		static const long ID_bSetDownSpeed;
 		static const long ID_STATICTEXT22;
 		static const long ID_txtAcceleration;
 		static const long ID_bSetAcceleration;
@@ -317,7 +320,6 @@ class editelevator: public wxDialog
 		void On_bStop_Click(wxCommandEvent& event);
 		void On_bHoldDoors_Click(wxCommandEvent& event);
 		void On_bSetName_Click(wxCommandEvent& event);
-		void On_bSetSpeed_Click(wxCommandEvent& event);
 		void On_bSetAcceleration_Click(wxCommandEvent& event);
 		void On_bSetDeceleration_Click(wxCommandEvent& event);
 		void On_bSetOpenSpeed_Click(wxCommandEvent& event);
@@ -380,6 +382,8 @@ class editelevator: public wxDialog
 		void On_bSetNudge_Click(wxCommandEvent& event);
 		void On_bDoorSensor_Click(wxCommandEvent& event);
 		void On_bSetType_Click(wxCommandEvent& event);
+		void On_bSetUpSpeed_Click(wxCommandEvent& event);
+		void On_bSetDownSpeed_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -409,6 +413,7 @@ class editelevator: public wxDialog
 		wxBoxSizer* BoxSizer10;
 		wxButton* bOpenShaftDoor;
 		wxTextCtrl* txtMusicOn;
+		wxButton* bSetDownSpeed;
 		wxTextCtrl* txtOriginFloor;
 		wxStaticText* StaticText83;
 		wxButton* bDoorSensor;
@@ -420,6 +425,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtSlowSpeed;
 		wxStaticBoxSizer* StaticBoxSizer1;
 		wxCheckBox* chkVisible;
+		wxTextCtrl* txtUpSpeed;
 		wxToggleButton* bUpPeak;
 		wxStaticText* StaticText82;
 		wxStaticText* StaticText20;
@@ -510,15 +516,14 @@ class editelevator: public wxDialog
 		wxScrollBar* sDoor;
 		wxTextCtrl* txtNotifyEarly;
 		wxFlexGridSizer* FlexGridSizer1;
-		wxButton* bSetSpeed;
 		wxStaticText* StaticText80;
 		wxRadioButton* Fire2On;
-		wxTextCtrl* txtSpeed;
 		wxFlexGridSizer* FlexGridSizer3;
 		wxStaticText* StaticText44;
 		wxStaticText* StaticText64;
 		wxButton* bSetName;
 		wxTextCtrl* txtDepartureDelay;
+		wxStaticText* StaticText16;
 		wxStaticText* StaticText39;
 		wxButton* bSetMusicOnMove;
 		wxTextCtrl* txtEnabled;
@@ -589,6 +594,7 @@ class editelevator: public wxDialog
 		wxButton* bSetType;
 		wxTextCtrl* txtWaitForTimer;
 		wxTextCtrl* txtReOpen;
+		wxTextCtrl* txtDownSpeed;
 		wxTextCtrl* txtJerkRate;
 		wxButton* bLevelingOpen;
 		wxStaticText* StaticText53;
@@ -612,6 +618,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtIsIdle;
 		wxToggleButton* bDown;
 		wxStaticText* StaticText70;
+		wxButton* bSetUpSpeed;
 		wxStaticText* StaticText77;
 		wxStaticText* StaticText72;
 		wxButton* bSetRecallAlternate;

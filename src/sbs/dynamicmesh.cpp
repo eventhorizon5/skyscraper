@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Dynamic Mesh
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -35,6 +35,7 @@
 #include "triangle.h"
 #include "texture.h"
 #include "scenenode.h"
+#include "profiler.h"
 #include "dynamicmesh.h"
 
 //this file includes function implementations of the low-level SBS geometry and mesh code
@@ -215,6 +216,8 @@ bool DynamicMesh::IsVisible(Ogre::Camera *camera, int mesh_index)
 
 void DynamicMesh::Prepare(MeshObject *client)
 {
+	SBS_PROFILE("DynamicMesh::Prepare");
+
 	if (file_model == true || prepared == true)
 		return;
 
@@ -650,6 +653,8 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	//re-prepare mesh to move client's triangles into the proper new submesh,
 	//to prevent changing (and interfering with) other clients' textures
 
+	SBS_PROFILE("DynamicMesh::Mesh::ChangeTexture");
+
 	//get new material
 	Ogre::MaterialPtr newmat = sbs->GetTextureManager()->GetMaterialByName(new_texture, "General");
 
@@ -771,6 +776,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
+
+	SBS_PROFILE("DynamicMesh::Mesh::Prepare");
 
 	if (prepared == true || !node)
 		return;
@@ -1123,6 +1130,8 @@ bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, unsigned int index, bool single)
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
+
+	SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
 
 	if (Parent->UseDynamicBuffers() == false || !node)
 		return;

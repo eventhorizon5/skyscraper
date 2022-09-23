@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Polygon Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -53,13 +53,15 @@ public:
 	~Polygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	int GetSubMesh();
-	void GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
+	void GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal);
 	bool IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	bool IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal);
 	void Move(const Ogre::Vector3 &position, Real speed = 1.0);
 	void Delete();
 	Ogre::Plane GetAbsolutePlane();
+	Ogre::Vector2 GetExtents(int coord);
+	void ChangeHeight(Real newheight);
 };
 
 }

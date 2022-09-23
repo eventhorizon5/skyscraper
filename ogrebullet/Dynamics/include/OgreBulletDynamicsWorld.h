@@ -93,6 +93,7 @@ namespace OgreBulletDynamics
         bool isConstraintRegistered(TypedConstraint *constraint) const;
 
         void addVehicle(RaycastVehicle *v);
+        void removeVehicle(RaycastVehicle *v);
 	void setAllowedCcdPenetration(float value);
 
     private:

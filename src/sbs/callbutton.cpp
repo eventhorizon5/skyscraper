@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Call Button Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -135,7 +135,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	if (UpExists == true && DownExists == true)
 		v_spacing = 0.5;
 
-	panel = new ButtonPanel(this, 1, BackTexture, rows, 1, direction, 0, 0, button_width, button_height, h_spacing, v_spacing, BackHeight / 2, tw, th);
+	panel = new ButtonPanel(this, 1, BackTexture, rows, 1, direction, 0, 0, button_width, button_height, h_spacing, v_spacing, BackHeight / 2, tw, th, false);
 
 	//create controls
 	if (sbs->Verbose)
@@ -737,7 +737,19 @@ int CallButton::FindClosestElevator(int direction)
 				{
 					//see if elevator is available for the call
 					if (recheck == true && elevator->Number == ActiveElevator)
-						result = 1; //if rechecking elevators, consider the active one
+					{
+						if (elevator->Error == true)
+						{
+							Report("Failing active elevator " + ToString(elevator->Number) + " due to movement error");
+							result = 2; //fail active elevator if it had a movement processing error
+							if (direction == 1)
+								ActiveElevatorUp = 0;
+							else
+								ActiveElevatorDown = 0;
+						}
+						else
+							result = 1; //if rechecking elevators, consider the active one
+					}
 					else
 						result = elevator->AvailableForCall(GetFloor(), direction, !recheck);
 

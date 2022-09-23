@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Engine Manager Dialog
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com

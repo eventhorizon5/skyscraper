@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Floor Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -76,7 +76,7 @@ public:
 	void EnableInterfloor(bool value);
 	Wall* ColumnWallBox(const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom);
 	Wall* ColumnWallBox2(const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom);
-	FloorIndicator* AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
+	FloorIndicator* AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
 	void UpdateFloorIndicators(int elevator);
 	void UpdateFloorIndicators();
 	void UpdateDirectionalIndicators(int elevator);
@@ -111,7 +111,7 @@ public:
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	CameraTexture* AddCameraTexture(const std::string &name, bool enabled, int quality, Real fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
-	Escalator* AddEscalator(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
+	Escalator* AddEscalator(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	MovingWalkway* AddMovingWalkway(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	std::vector<Sound*> GetSound(const std::string &name);
 	void SetAltitude(Real altitude);

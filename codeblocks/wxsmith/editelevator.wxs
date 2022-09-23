@@ -1663,25 +1663,52 @@
 									<cols>3</cols>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT21" variable="StaticText21" member="yes">
-											<label>Speed:</label>
+											<label>UpSpeed:</label>
 										</object>
 										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_txtSpeed" variable="txtSpeed" member="yes">
+										<object class="wxTextCtrl" name="ID_txtUpSpeed" variable="txtUpSpeed" member="yes">
 											<size>75,-1</size>
-											<tooltip>Speed</tooltip>
+											<tooltip>Up Speed</tooltip>
 										</object>
 										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 										<border>5</border>
 									</object>
 									<object class="sizeritem">
-										<object class="wxButton" name="ID_bSetSpeed" variable="bSetSpeed" member="yes">
+										<object class="wxButton" name="ID_bSetUpSpeed" variable="bSetUpSpeed" member="yes">
 											<label>Set</label>
 											<style>wxBU_EXACTFIT</style>
-											<handler function="On_bSetSpeed_Click" entry="EVT_BUTTON" />
+											<handler function="On_bSetUpSpeed_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT16" variable="StaticText16" member="yes">
+											<label>DownSpeed:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDownSpeed" variable="txtDownSpeed" member="yes">
+											<size>75,-1</size>
+											<tooltip>Down Speed</tooltip>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetDownSpeed" variable="bSetDownSpeed" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetDownSpeed_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText22" member="yes">

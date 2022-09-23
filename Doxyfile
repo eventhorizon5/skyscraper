@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = Skyscraper
-PROJECT_NUMBER         = 1.9
+PROJECT_NUMBER         = 1.11
 OUTPUT_DIRECTORY       = docs
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -217,7 +217,7 @@ LATEX_HIDE_INDICES     = NO
 #---------------------------------------------------------------------------
 # configuration options related to the RTF output
 #---------------------------------------------------------------------------
-GENERATE_RTF           = YES
+GENERATE_RTF           = NO
 RTF_OUTPUT             = rtf
 COMPACT_RTF            = NO
 RTF_HYPERLINKS         = NO
@@ -226,7 +226,7 @@ RTF_EXTENSIONS_FILE    =
 #---------------------------------------------------------------------------
 # configuration options related to the man page output
 #---------------------------------------------------------------------------
-GENERATE_MAN           = YES
+GENERATE_MAN           = NO
 MAN_OUTPUT             = man
 MAN_EXTENSION          = .3
 MAN_LINKS              = NO

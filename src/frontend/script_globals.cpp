@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Script Processor - Globals Section
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -173,12 +173,25 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 8) == "datetime")
 	{
-		double data;
-		if (!IsNumeric(value, data))
-			return ScriptError("Invalid Julian date/time");
+		if (value == "now")
+			engine->GetFrontend()->SetDateTimeNow();
+		else
+		{
+			double data;
+			if (!IsNumeric(value, data))
+				return ScriptError("Invalid Julian date/time");
 
-		engine->GetFrontend()->SetDateTime(data);
+			engine->GetFrontend()->SetDateTime(data);
+		}
 		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "timescale")
+	{
+		int data;
+		if (!IsNumeric(value, data))
+			return ScriptError("Invalid time scale value");
+
+		engine->GetFrontend()->SkyMult = data;
 	}
 	if (linecheck.substr(0, 8) == "position")
 	{

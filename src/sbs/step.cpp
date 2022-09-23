@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Step Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -39,6 +39,8 @@ Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper, int ma
 
 void Step::Move(const Ogre::Vector3 &vector, Real speed)
 {
+	//move step according to vector and speed
+
 	MeshObject::Move(vector, speed);
 	this->vector = vector;
 	this->speed = speed;
@@ -46,6 +48,8 @@ void Step::Move(const Ogre::Vector3 &vector, Real speed)
 
 void Step::OnHit()
 {
+	//move camera along with step, when user is on it
+
 	sbs->camera->MovePosition(vector * 1.675, speed);
 }
 

@@ -110,5 +110,5 @@ target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIB
 
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${FMOD_LIBRARY})
 
-target_link_libraries(skyscraper SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  

@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Profiler GUI
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -26,10 +26,10 @@
 #define PROFILERGUI_H
 
 //(*Headers(Profiler)
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
+#include <wx/sizer.h>
+#include <wx/textctrl.h>
 //*)
 
 namespace Skyscraper {
@@ -43,20 +43,23 @@ class Profiler: public wxDialog
 		void Loop();
 
 		//(*Declarations(Profiler)
-		wxStaticText* txtMain;
+		wxTextCtrl* txtMain;
 		wxCheckBox* chkAdvanced;
+		wxCheckBox* chkCapture;
 		//*)
 
 	protected:
 
 		//(*Identifiers(Profiler)
 		static const long ID_chkAdvanced;
+		static const long ID_chkCapture;
 		static const long ID_txtMain;
 		//*)
 
 	private:
 
 		//(*Handlers(Profiler)
+		void OnResize(wxSizeEvent& event);
 		//*)
 
 		bool advanced;

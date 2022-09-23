@@ -1,7 +1,63 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-call buttons now fail the active elevator if it encounters a movement processing error, fixing an issue where the call button would hang if an error occurred
+-for controls, OnUnclick should not reverse the selection position if the previous action failed, since the reversal already took place
+-added function name to SetHoistwayAccess errors
+-(Sears Tower) removed the floor on 108
+-(Sears Tower) shaft fixes
+-(Sears Tower) switched freight elevator doors to center dualspeed
+-(Sears Tower) interfloor fixes
+-(Sears Tower) added freight elevators 4 to 6
+-(Sears Tower) added freight elevators 2 and 3
+-(Sears Tower) added additional freight elevator shafts, and others
+-reset new_time variable when unloading sky system
+-have sky system reload if the primary engine/building is reloaded
+-added coordinates for Sears Tower
+-added more deprecation warnings
+-added separate riser texture and tread texture options for Stairs and Escalator objects, to help fix texture issues
+-added INI file option to use the system time as default, if not specified in a building file
+-put SkyName into Caelum INI file section
+-trim off second's decimal point
+-added a button to the Sky Control window to get the system time
+-added ability to use system time as the DateTime value for buildings
+-added ability to set the time scale (using the TimeScale value) for buildings
+-elevator doors should not automatically enable nudge mode timer when Fire Service Phase 2 is on
+-renamed Min/Max functions to simplify
+-switch Swap usage to std::swap
+-add missing parent_deleting flags
+-properly store shaft cut values
+-(Triton Center) added new objects to building
+-added support for creating elevator and counterweight rails
+-added CounterweightStartSound, CounterweightMoveSound and CounterweightStopSound elevator parameters
+-added counterweight and rope textures
+-added RopePosition and RopeTexture elevator parameters
+-added GetExtents and ChangeHeight polygon functions
+-(Simple building) extended shaft above building roof
+-added CreateCounterweight function
+-(Vehicle) the 'created' variable needs to be initialized
+-require chassis to be created when creating vehicle
+-added more checks to prevent crashes on vehicle creation
+-make sure errors are reported when trying to recreate a vehicle with the same number
+-(doxygen) disabled RTF and Man page formats
+-allow deleting of walls in meshes such as "external" where SBS is the parent object
+-don't create colliders for rope meshes - this also fixes the variable that switches off automatic collider creation
+-added more profiler probes
+-switched profiler box to text box
+-added INI file keyboard configuration
+-split keyboard configuration off to separate file
+-check existence of camera object - this fixes a crash that happened when driving a vehicle to another sim engine
+-DeleteWalls needs to clear Walls array when finished
+-DeleteWalls needs to delete polygons before deleting wall object
+-added GetBounds function
+-added vehicle demo building
+-font name fix
+-added support for separate up and down elevator movement speeds
+-don't report a generic error message when creating the primary car.  This allows the specific error messages on car creation to be reported.
+-added vehicle support
+-added OgreBullet data
+-added VehicleManager object
+-adding support for crouching
 -ensure that font texture coordinates are valid, to prevent a crash
--removed support for Windows XP
 -update to Visual Studio 2017
 -support decoding of MP3 files, since the patent has expired
 -GetUpControl and GetDownControl should search for control's action name instead of index number

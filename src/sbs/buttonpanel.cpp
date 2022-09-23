@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Elevator Button Panel Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -34,7 +34,7 @@
 
 namespace SBS {
 
-ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th) : Object(parent)
+ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th, bool autosize) : Object(parent)
 {
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
@@ -69,22 +69,22 @@ ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, 
 		if (Direction == "front")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th);
+			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "back")
 		{
 			sbs->DrawWalls(false, true, false, false, false, false);
-			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th);
+			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "left")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
+			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "right")
 		{
 			sbs->DrawWalls(false, true, false, false, false, false);
-			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
+			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th, autosize);
 		}
 		sbs->ResetWalls();
 		sbs->GetTextureManager()->ResetTextureMapping();
@@ -259,11 +259,11 @@ void ButtonPanel::Enabled(bool value)
 	IsEnabled = value;
 }
 
-bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
+bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th, bool autosize)
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(this, mesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	return sbs->AddWallMain(this, mesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, autosize);
 }
 
 void ButtonPanel::ChangeLight(int floor, bool value)

@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Main Screen
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -66,6 +66,10 @@ private:
 	bool turn_left, turn_right;
 	bool look_up, look_down;
 	bool step_forward, step_backward;
+
+	char key_right, key_left, key_up, key_down, key_lookup, key_lookdown;
+	char key_binoculars, key_crouch, key_floatup, key_floatdown, key_noclip;
+	char key_pickup, key_load, key_enter;
 
 	DECLARE_EVENT_TABLE()
 };

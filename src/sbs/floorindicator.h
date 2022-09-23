@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Floor Indicator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -35,17 +35,24 @@ public:
 	int elev; //elevator this indicator is assigned to
 	int car; //elevator car this indicator is assigned to
 	std::string Prefix; //texture name prefix
+	std::string Blank; //blank texture name
 
 	//functions
-	FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real altitude);
+	FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real altitude);
 	~FloorIndicator();
 	void Enabled(bool value);
-	void Update();
+	void Update(bool blank = false);
 	bool IsEnabled() { return is_enabled; }
+	void Flash(bool enabled);
 
 private:
 	MeshObject* FloorIndicatorMesh; //indicator mesh object
 	bool is_enabled;
+
+	class Timer; //internal timer class
+
+	//flash timer object
+	Timer *flash_timer;
 };
 
 }

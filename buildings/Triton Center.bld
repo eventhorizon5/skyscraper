@@ -1,7 +1,7 @@
 # $Id$
 
 #The Triton Center
-#Copyright (C)2002-2016 Ryan Thoryk
+#Copyright (C)2002-2017 Ryan Thoryk
 
 #This program is free software; you can redistribute it and/or
 #modify it under the terms of the GNU General Public License
@@ -118,6 +118,11 @@
     Load data/indservkeyon.png, IndOn, 1, 1
     Load data/indservkeyoff.png, IndOff, 1, 1
     Load data/dcircle_lit.gif, ShaftLight, 1, 1, false
+    Load data/counterweight.png, Counterweight, 1, 1
+    Load data/counterweight_frame.png, CounterweightFrame, 1, 1
+    Load data/ropes.png, Ropes, 1, 1
+    Load data/metal080.jpg, Rails, 1, 1
+    Load data/metal1.jpg, RailsEdge, 1, 1
 
     #signs
     Load data/triton_signs/2-14.png, Sign2-14, 1, 1
@@ -2389,6 +2394,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 38] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 38] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %interfloorheight% + (%height% / 2), %interfloorheight% + (%height% / 2), 0, 0
     WallOrientation = left
     AddShaftWall 1, Shaft1Front, Brick, 0.33, -4.25, -13.5, 4.25, -13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 1, Shaft1Left, Brick, 0.33, -4.25, -13.5, -4.25, 13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2404,6 +2410,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 38] AddShaftFloor 2, Shaft2Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 38] AddShaftFloor 2, Shaft2Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %interfloorheight% + (%height% / 2), %interfloorheight% + (%height% / 2), 0, 0
     WallOrientation = left
     AddShaftWall 2, Shaft2Front, Brick, 0.33, -4.25, -13.5, 4.25, -13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 2, Shaft2Left, Brick, 0.33, -4.25, -13.5, -4.25, 13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2451,6 +2458,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 16] AddShaftFloor 3, Shaft3Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 16] AddShaftFloor 3, Shaft3Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 3, Shaft3Front, Brick, 0.33, -4.25, -13.5, 4.25, -13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 3, Shaft3Left, Brick, 0.33, -4.25, -13.5, -4.25, 13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2465,6 +2473,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 16] AddShaftFloor 5, Shaft5Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 16] AddShaftFloor 5, Shaft5Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 5, Shaft5Front, Brick, 0.33, -4.25, -13.5, 4.25, -13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 5, Shaft5Left, Brick, 0.33, -4.25, -13.5, -4.25, 13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2506,6 +2515,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 28] AddShaftFloor 4, Shaft4Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 28] AddShaftFloor 4, Shaft4Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 4, Shaft4Front, Brick, 0.33, -4.25, -13.5, 4.25, -13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 4, Shaft4Left, Brick, 0.33, -4.25, -13.5, -4.25, 13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2520,6 +2530,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 28] AddShaftFloor 6, Shaft6Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 28] AddShaftFloor 6, Shaft6Top, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 6, Shaft6Front, Brick, 0.33, -4.25, -13.5, 4.25, -13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 6, Shaft6Left, Brick, 0.33, -4.25, -13.5, -4.25, 13.5, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2567,6 +2578,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 42] AddShaftFloor 7, Shaft7Top, Brick, 0.5, -4.75, -14.75, 4.75, 14.75, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 42] AddShaftFloor 7, Shaft7Top, Brick, 0.5, -4.75, -14.75, 4.75, 14.75, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 7, Shaft7Front, Brick, 0.33, -4.75, -14.75, 4.75, -14.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 7, Shaft7Left, Brick, 0.33, -4.75, -14.75, -4.75, 14.75, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2581,6 +2593,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 42] AddShaftFloor 8, Shaft8Top, Brick, 0.5, -4.75, -14.75, 4.75, 14.75, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 42] AddShaftFloor 8, Shaft8Top, Brick, 0.5, -4.75, -14.75, 4.75, 14.75, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 8, Shaft8Front, Brick, 0.33, -4.75, -14.75, 4.75, -14.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 8, Shaft8Left, Brick, 0.33, -4.75, -14.75, -4.75, 14.75, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2627,6 +2640,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 2] AddShaftFloor 9, Shaft9Top, Brick, 0.5, -4.25, -9, 4.25, 9, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 2] AddShaftFloor 9, Shaft9Top, Brick, 0.5, -4.25, -9, 4.25, 9, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 9, Shaft9Front, Brick, 0.33, -4.25, -9, 4.25, -9, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 9, Shaft9Left, Brick, 0.33, -4.25, -9, -4.25, 9, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2641,6 +2655,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 2] AddShaftFloor 10, Shaft10Top, Brick, 0.5, -4.25, -9, 4.25, 9, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 2] AddShaftFloor 10, Shaft10Top, Brick, 0.5, -4.25, -9, 4.25, 9, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 10, Shaft10Front, Brick, 0.33, -4.25, -9, 4.25, -9, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 10, Shaft10Left, Brick, 0.33, -4.25, -9, -4.25, 9, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2693,6 +2708,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 102] AddShaftFloor 11, Shaft11Top, Brick, 0.5, -4.75, -9.87, 4.75, 9.87, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 102] AddShaftFloor 11, Shaft11Top, Brick, 0.5, -4.75, -9.87, 4.75, 9.87, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 11, Shaft11Front, Brick, 0.33, -4.75, -9.87, 4.75, -9.87, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 11, Shaft11Left, Brick, 0.33, -4.75, -9.87, -4.75, 9.87, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2707,6 +2723,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 102] AddShaftFloor 12, Shaft12Top, Brick, 0.5, -4.75, -9.87, 4.75, 9.87, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 102] AddShaftFloor 12, Shaft12Top, Brick, 0.5, -4.75, -9.87, 4.75, 9.87, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 12, Shaft12Front, Brick, 0.33, -4.75, -9.87, 4.75, -9.87, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 12, Shaft12Left, Brick, 0.33, -4.75, -9.87, -4.75, 9.87, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2764,6 +2781,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 82] AddShaftFloor 13, Shaft13Top, Brick, 0.5, -9.75, -4.75, 9.75, 4.75, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 82] AddShaftFloor 13, Shaft13Top, Brick, 0.5, -9.75, -4.75, 9.75, 4.75, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 13, Shaft13Front, Brick, 0.33, -9.75, -4.75, 9.75, -4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 13, Shaft13Left, Brick, 0.33, -9.75, -4.75, -9.75, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2810,6 +2828,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 142] AddShaftFloor 14, Shaft14Top, Brick, 0.5, -4.92, -16.75, 4.92, 16.75, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 142] AddShaftFloor 14, Shaft14Top, Brick, 0.5, -4.92, -16.75, 4.92, 16.75, %interfloorheight% + (%height% / 2), %interfloorheight% + (%height% / 2), 0, 0
     WallOrientation = left
     AddShaftWall 14, Shaft14Front, Brick, 0.33, -4.92, -16.75, 4.92, -16.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 14, Shaft14Left, Brick, 0.33, -4.92, -16.75, -4.92, 16.75, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2825,6 +2844,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 81] AddShaftFloor 16, Shaft16Top, Brick, 0.5, -5.04, -5.08, 5.04, 5.08, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 81] AddShaftFloor 16, Shaft16Top, Brick, 0.5, -5.04, -5.08, 5.04, 5.08, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     if[%floor% < 82] AddShaftWall 16, Shaft16Front, Brick, 0.33, -5.04, -5.08, 5.04, -5.08, %fullheight%, %fullheight%, 0, 0, 0, 0
     if[%floor% < 82] AddShaftWall 16, Shaft16Left, Brick, 0.33, -5.04, -5.08, -5.04, 5.08, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2925,6 +2945,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 142] AddShaftFloor 15, Shaft15Top, Brick, 0.5, -4.75, -9.833, 4.75, 9.833, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 142] AddShaftFloor 15, Shaft15Top, Brick, 0.5, -4.75, -9.833, 4.75, 9.833, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 15, Shaft15Front, Brick, 0.33, -4.75, -9.833, 4.75, -9.833, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 15, Shaft15Left, Brick, 0.33, -4.75, -9.833, -4.75, 9.833, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2962,6 +2983,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 62] AddShaftFloor 18, Shaft18Top, Brick, 0.5, -18, -4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 62] AddShaftFloor 18, Shaft18Top, Brick, 0.5, -18, -4.25, 18, 4.25, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 18, Shaft18Front, Brick, 0.33, -18, -4.25, 18, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 18, Shaft18Left, Brick, 0.33, -18, -4.25, -18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -2997,6 +3019,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 52] AddShaftFloor 19, Shaft19Top, Brick, 0.5, -18, -4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 52] AddShaftFloor 19, Shaft19Top, Brick, 0.5, -18, -4.25, 18, 4.25, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 19, Shaft19Front, Brick, 0.33, -18, -4.25, 18, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 19, Shaft19Left, Brick, 0.33, -18, -4.25, -18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3033,6 +3056,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 79] AddShaftFloor 20, Shaft20Top, Brick, 0.5, -18, -4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 79] AddShaftFloor 20, Shaft20Top, Brick, 0.5, -18, -4.25, 18, 4.25, %interfloorheight% + (%height% / 2), %interfloorheight% + (%height% / 2), 0, 0
     WallOrientation = left
     AddShaftWall 20, Shaft20Front, Brick, 0.33, -18, -4.25, 18, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 20, Shaft20Left, Brick, 0.33, -18, -4.25, -18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3068,6 +3092,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 72] AddShaftFloor 21, Shaft21Top, Brick, 0.5, -18, -4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 72] AddShaftFloor 21, Shaft21Top, Brick, 0.5, -18, -4.25, 18, 4.25, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 21, Shaft21Front, Brick, 0.33, -18, -4.25, 18, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 21, Shaft21Left, Brick, 0.33, -18, -4.25, -18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3105,6 +3130,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 101] AddShaftFloor 22, Shaft22Top, Brick, 0.5, -9, -4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 101] AddShaftFloor 22, Shaft22Top, Brick, 0.5, -9, -4.25, 9, 4.25, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 22, Shaft22Front, Brick, 0.33, -9, -4.25, 9, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 22, Shaft22Left, Brick, 0.33, -9, -4.25, -9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3119,6 +3145,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 101] AddShaftFloor 23, Shaft23Top, Brick, 0.5, -9, -4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 101] AddShaftFloor 23, Shaft23Top, Brick, 0.5, -9, -4.25, 9, 4.25, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 23, Shaft23Front, Brick, 0.33, -9, -4.25, 9, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 23, Shaft23Left, Brick, 0.33, -9, -4.25, -9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3167,6 +3194,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 134] AddShaftFloor 24, Shaft24Top, Brick, 0.5, -4.5, -4.25, 4.5, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 134] AddShaftFloor 24, Shaft24Top, Brick, 0.5, -4.5, -4.25, 4.5, 4.25, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 24, Shaft24Front, Brick, 0.33, -4.5, -4.25, 4.5, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 24, Shaft24Left, Brick, 0.33, -4.5, -4.25, -4.5, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3205,6 +3233,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 131] AddShaftFloor 25, Shaft25Top, Brick, 0.5, -4.5, -4.25, 4.5, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 131] AddShaftFloor 25, Shaft25Top, Brick, 0.5, -4.5, -4.25, 4.5, 4.25, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 25, Shaft25Front, Brick, 0.33, -4.5, -4.25, 4.5, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 25, Shaft25Left, Brick, 0.33, -4.5, -4.25, -4.5, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3219,6 +3248,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 131] AddShaftFloor 26, Shaft26Top, Brick, 0.5, -9, -4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 131] AddShaftFloor 26, Shaft26Top, Brick, 0.5, -9, -4.25, 9, 4.25, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 26, Shaft26Front, Brick, 0.33, -9, -4.25, 9, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 26, Shaft26Left, Brick, 0.33, -9, -4.25, -9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3267,6 +3297,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 119] AddShaftFloor 27, Shaft27Top, Brick, 0.5, -9, -4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 119] AddShaftFloor 27, Shaft27Top, Brick, 0.5, -9, -4.25, 9, 4.25, %interfloorheight% + (%height% / 2), %interfloorheight% + (%height% / 2), 0, 0
     WallOrientation = left
     AddShaftWall 27, Shaft27Front, Brick, 0.33, -9, -4.25, 9, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 27, Shaft27Left, Brick, 0.33, -9, -4.25, -9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3281,6 +3312,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 119] AddShaftFloor 28, Shaft28Top, Brick, 0.5, -9, -4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 119] AddShaftFloor 28, Shaft28Top, Brick, 0.5, -9, -4.25, 9, 4.25, %interfloorheight% + (%height% / 2), %interfloorheight% + (%height% / 2), 0, 0
     WallOrientation = left
     AddShaftWall 28, Shaft28Front, Brick, 0.33, -9, -4.25, 9, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 28, Shaft28Left, Brick, 0.33, -9, -4.25, -9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3333,6 +3365,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 119] AddShaftFloor 29, Shaft29Top, Brick, 0.5, -4.75, -4.167, 4.75, 4.167, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 119] AddShaftFloor 29, Shaft29Top, Brick, 0.5, -4.75, -4.167, 4.75, 4.167, %interfloorheight% + (%height% / 2), %interfloorheight% + (%height% / 2), 0, 0
     WallOrientation = left
     AddShaftWall 29, Shaft29Front, Brick, 0.33, -4.75, -4.167, 4.75, -4.167, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 29, Shaft29Left, Brick, 0.33, -4.75, -4.167, -4.75, 4.167, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3415,6 +3448,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 42] AddShaftFloor 31, Shaft31Top, Brick, 0.5, -2.46, -14.75, 2.46, 14.75, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 42] AddShaftFloor 31, Shaft31Top, Brick, 0.5, -2.46, -14.75, 2.46, 14.75, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 31, Shaft31Front, Brick, 0.33, -2.46, -14.75, 2.46, -14.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 31, Shaft31Left, Brick, 0.33, -2.46, -14.75, -2.46, 14.75, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3429,6 +3463,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 42] AddShaftFloor 32, Shaft32Top, Brick, 0.5, -2.46, -14.75, 2.46, 14.75, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 42] AddShaftFloor 32, Shaft32Top, Brick, 0.5, -2.46, -14.75, 2.46, 14.75, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 32, Shaft32Front, Brick, 0.33, -2.46, -14.75, 2.46, -14.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 32, Shaft32Left, Brick, 0.33, -2.46, -14.75, -2.46, 14.75, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3481,6 +3516,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 39] AddShaftFloor 33, Shaft33Top, Brick, 0.5, -4.5, -3.792, 4.5, 3.792, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 39] AddShaftFloor 33, Shaft33Top, Brick, 0.5, -4.5, -3.792, 4.5, 3.792, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 33, Shaft33Front, Brick, 0.33, -4.5, -3.792, 4.5, -3.792, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 33, Shaft33Left, Brick, 0.33, -4.5, -3.792, -4.5, 3.792, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3495,6 +3531,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 39] AddShaftFloor 34, Shaft34Top, Brick, 0.5, -4.5, -3.792, 4.5, 3.792, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 39] AddShaftFloor 34, Shaft34Top, Brick, 0.5, -4.5, -3.792, 4.5, 3.792, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 34, Shaft34Front, Brick, 0.33, -4.5, -3.792, 4.5, -3.792, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 34, Shaft34Left, Brick, 0.33, -4.5, -3.792, -4.5, 3.792, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3543,6 +3580,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 79] AddShaftFloor 35, Shaft35Base, Brick, 0.5, -9.71 - 0.33, -4.5 - 0.33, 9.71, 4.5, %3%, %3%, 0, 0
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 101] AddShaftFloor 35, Shaft35Top, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, %fullheight%, %fullheight%, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    if[%floor% = 101] AddShaftFloor 35, Shaft35Top, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddShaftWall 35, Shaft35Front, Brick, 0.33, 0.297, -4.5, 9.71, -4.5, %fullheight% - %3%, %fullheight% - %3%, %3%, %3%, 0, 0
@@ -3584,6 +3623,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 142] AddShaftFloor 36, Shaft36Top, Brick, 0.5, -5.04, -5.08, 5.04, 5.08, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
+    if[%floor% = 142] AddShaftFloor 36, Shaft36Top, Brick, 0.5, -5.04, -5.08, 5.04, 5.08, %interfloorheight%, %interfloorheight%, 0, 0
     WallOrientation = left
     AddShaftWall 36, Shaft36Front, Brick, 0.33, -5.04, -5.08, 5.04, -5.08, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 36, Shaft36Left, Brick, 0.33, -5.04, -5.08, -5.04, 5.08, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3624,6 +3664,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 1
     LevelingOpen = 0.2
+    MotorPosition = 0, Floor(38).Base + (Floor(38).Height/ 2), 0
     CreateElevator false, -9.289, 9, 0
 <EndElevator>
 
@@ -3638,6 +3679,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 1
     LevelingOpen = 0.2
+    MotorPosition = 0, Floor(38).Base + (Floor(38).Height/ 2), 0
     CreateElevator false, -9.289, 0, 0
 <EndElevator>
 
@@ -3652,6 +3694,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 1
     LevelingOpen = 0.2
+    MotorPosition = 0, Floor(38).Base + (Floor(38).Height/ 2), 0
     CreateElevator false, -9.289, -9, 0
 <EndElevator>
 
@@ -3727,6 +3770,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.125 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.125 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 <Elevator 4>
@@ -3740,6 +3794,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     LevelingOpen = 0.2
+    MotorPosition = 0, Floor(38).Base + (Floor(38).Height/ 2), 0
     CreateElevator false, 9.289, 9, 37
 <EndElevator>
 
@@ -3754,6 +3809,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     LevelingOpen = 0.2
+    MotorPosition = 0, Floor(38).Base + (Floor(38).Height/ 2), 0
     CreateElevator false, 9.289, 0, 37
 <EndElevator>
 
@@ -3768,6 +3824,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     LevelingOpen = 0.2
+    MotorPosition = 0, Floor(38).Base + (Floor(38).Height/ 2), 0
     CreateElevator false, 9.289, -9, 37
 <EndElevator>
 
@@ -3842,6 +3899,17 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 3.125 + 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 3.125 + 0.5, 0, true, 1 + 0.06, 0.1
 
 <EndElevators>
 
@@ -3961,6 +4029,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.125 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.125 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 <Elevator 10>
@@ -4077,6 +4156,17 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 3.125 + 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 3.125 + 0.5, 0, true, 1 + 0.06, 0.1
 
 <EndElevators>
 
@@ -4197,6 +4287,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.125 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.125 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 <Elevator 16>
@@ -4315,6 +4416,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 3.125 + 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 3.125 + 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -4423,6 +4535,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.75 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.916 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.75 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 <Elevator 22>
@@ -4530,6 +4653,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator right, -3.75 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 3.75 + 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.916 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 3.75 + 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -4632,6 +4766,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.125 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.125 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 <Elevator 27>
@@ -4733,6 +4878,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 3.125 + 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 3.125 + 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -4826,6 +4982,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.75 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.916 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.75 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 <Elevator 31>
@@ -4917,6 +5084,17 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator right, -3.75 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 3.75 + 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.916 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 3.75 + 0.5, 0, true, 1 + 0.06, 0.1
 
 <EndElevators>
 
@@ -5013,6 +5191,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.75 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 3.916 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.75 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -5107,6 +5296,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator front, 1.75 + 1.083 - 0.1, 3.75 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, -3.75 - 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.916 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, -3.75 - 0.5, false, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -5123,6 +5323,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 14
     DisplayFloors = -1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 137
     LevelingOpen = 0.2
+    MotorPosition = 0, Floor(142).Base + (Floor(142).Height / 2), 0
     CreateElevator false, -9.166, 42.879, -1
 
     #floor
@@ -5183,6 +5384,17 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator front, 1.75 + 1.083 - 0.1, 3.75 - 0.2 - 0.001, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, -3.75 - 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.916 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, -3.75 - 0.5, false, 1 + 0.06, 0.1
 
 <EndElevator>
 
@@ -5312,6 +5524,17 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, -3.125 - 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, -3.125 - 0.5, false, 1 + 0.06, 0.1
 
 <EndElevators>
 
@@ -5444,6 +5667,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, -3.125 - 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, -3.125 - 0.5, false, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -5575,6 +5809,17 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, 3.125 + 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, 3.125 + 0.5, false, 1 + 0.06, 0.1
 
 <EndElevators>
 
@@ -5710,6 +5955,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, 3.125 + 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, 3.125 + 0.5, false, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -5827,6 +6083,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, 3.125 + 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, 3.125 + 0.5, false, 1 + 0.06, 0.1
+
 <EndElevators>
 
 <Elevator 56>
@@ -5942,6 +6209,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, -3.125 - 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, -3.125 - 0.5, false, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -6021,6 +6299,17 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, 3.125 + 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, 3.125 + 0.5, false, 1 + 0.06, 0.1
 
 <EndElevator>
 
@@ -6170,6 +6459,17 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, 3.125 + 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, 3.125 + 0.5, false, 1 + 0.06, 0.1
 
 <EndElevators>
 
@@ -6334,6 +6634,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 0, -3.125 - 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.75 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 0, -3.125 - 0.5, false, 1 + 0.06, 0.1
+
 <EndElevators>
 
 
@@ -6477,6 +6788,18 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator left, 3.625 - 0.2 - 0.001, -1.75 - 1.1875 + 0.1, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.625 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 4.125 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.625 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevator>
 
 <Elevator 67>
@@ -6644,6 +6967,18 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875 - 0.1, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 3.625 + 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 4.125 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 3.625 + 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevator>
 
 
@@ -6885,6 +7220,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator left, 3.917 - 0.2 - 0.001, -2.25 - 1.9375 + 0.1, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, -3.917 - 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 6.125 + 0.06, 0.1
+    AddRails Rails, RailsEdge, -3.917 - 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevator>
 
 #Hotel Service
@@ -6994,6 +7340,17 @@ DrawWalls = true, true, false, false, false, false
     #Floor Indicator
     AddFloorIndicator front, 1.75 + 1.083 - 0.1, 3.75 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    #CreateCounterweight CounterweightFrame, Counterweight, 0, -3.75 - 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, false, 3.916 + 0.06, 0.1
+    #AddRails Rails, RailsEdge, 0, -3.75 - 0.5, false, 1 + 0.06, 0.1
+
 <EndElevators>
 
 #Residential service
@@ -7097,6 +7454,18 @@ DrawWalls = true, true, false, false, false, false
 
     #Floor Indicator
     AddFloorIndicator right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875 - 0.1, 0.7, 0.5, 6.5
+
+    #Rope
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    CreateCounterweight CounterweightFrame, Counterweight, 3.625 + 0.5, 0, 0.5, 6, 2, 0.5
+
+    #Rails
+    AddRails Rails, RailsEdge, 0, 0, true, 4.125 + 0.06, 0.1
+    AddRails Rails, RailsEdge, 3.625 + 0.5, 0, true, 1 + 0.06, 0.1
+
 <EndElevator>
 
 

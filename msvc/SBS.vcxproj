@@ -309,6 +309,7 @@
     <ClCompile Include="..\src\sbs\timer.cpp" />
     <ClCompile Include="..\src\sbs\trigger.cpp" />
     <ClCompile Include="..\src\sbs\unix.cpp" />
+    <ClCompile Include="..\src\sbs\vehicle.cpp" />
     <ClCompile Include="..\src\sbs\wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +354,7 @@
     <ClInclude Include="..\src\sbs\triangle.h" />
     <ClInclude Include="..\src\sbs\trigger.h" />
     <ClInclude Include="..\src\sbs\unix.h" />
+    <ClInclude Include="..\src\sbs\vehicle.h" />
     <ClInclude Include="..\src\sbs\wall.h" />
   </ItemGroup>
   <ItemGroup>

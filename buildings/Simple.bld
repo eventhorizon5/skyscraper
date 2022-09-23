@@ -78,6 +78,11 @@
     Load data/stopkey.png, StopKey, 1, 1
     Load data/indservkeyon.png, IndOn, 1, 1
     Load data/indservkeyoff.png, IndOff, 1, 1
+    Load data/counterweight.png, Counterweight, 1, 1
+    Load data/counterweight_frame.png, CounterweightFrame, 1, 1
+    Load data/ropes.png, Ropes, 1, 1
+    Load data/metal080.jpg, Rails, 1, 1
+    Load data/metal1.jpg, RailsEdge, 1, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -195,11 +200,11 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 #Now since the main portion of the building is done, it would be nice to have an elevator.
 #First we'll have to create an elevator shaft:
 
-AddShaft 1, 0, 6, 0, 9
+AddShaft 1, 0, 6, 0, 10
 ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 
 #in the above code, I added a regular shaft with the number of "1" at the position (0, 6), and told it to
-#span floors 0 to 9 (1 to 10).  The second command cuts a hole for the shaft in all the levels below, and
+#span floors 0 to 10 (1 to 11).  The second command cuts a hole for the shaft in all the levels below, and
 #in that command the whole size of the shaft needs to be specified. You'll see that it spans horizontally
 #from -4 to 4 (it's 8 feet wide), and depth-wize from -4.125 + 0.33 to 4.125 (the 0.33 is there to provide
 #some floor area in front of the elevator door, and is the width of the external wall around the shaft.
@@ -208,12 +213,12 @@ ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 #the shaft.  Notice that the commands such as AddShaftWall are based on the shaft's central position, while
 #AddWall is not.
 
-<Floors 0 to 9>
+<Floors 0 to 10>
 	FloorOrientation = top
 	DrawWalls = false, true, false, false, false, false
 	if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -4, -4.125, 4, 4.125, 0, 0, false, false, 0, 0
-	DrawWalls = true, false, false, false, false, false
-	if[%floor% = 9] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -4.125, 4, 4.125, %fullheight%, %fullheight%, false, false, 0, 0
+	DrawWalls = true, true, false, false, false, false
+	if[%floor% > 8] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -4.125, 4, 4.125, %fullheight%, %fullheight%, false, false, 0, 0
 	DrawWalls = true, true, false, false, false, false
 	WallOrientation = left
 	AddShaftWall 1, Shaft1Left, Brick, 0.33, -4, -4.125, -4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -224,12 +229,12 @@ ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 	
 	WallOrientation = right
 	DrawWalls = true, false, false, false, false, false
-	AddWall Shaft1LeftE, Wall1, 0.33, -4, -4.125 + 6 - 0.33, -4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-	AddWall Shaft1FrontE, Wall1, 0.33, -4 - 0.33, -4.125 + 6, 4 + 0.33, -4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	if[%floor% < 10] AddWall Shaft1LeftE, Wall1, 0.33, -4, -4.125 + 6 - 0.33, -4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	if[%floor% < 10] AddWall Shaft1FrontE, Wall1, 0.33, -4 - 0.33, -4.125 + 6, 4 + 0.33, -4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
 	WallOrientation = left
 	DrawWalls = false, true, false, false, false, false
-	AddWall Shaft1RightE, Wall1, 0.33, 4, -4.125 + 6 - 0.33, 4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-	AddWall Shaft1BackE, Wall1, 0.33, -4 - 0.33, 4.125 + 6, 4 + 0.33, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	if[%floor% < 10] AddWall Shaft1RightE, Wall1, 0.33, 4, -4.125 + 6 - 0.33, 4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	if[%floor% < 10] AddWall Shaft1BackE, Wall1, 0.33, -4 - 0.33, 4.125 + 6, 4 + 0.33, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 #The numbers can get complex, but for the Shaft1LeftE (external left wall), the X position is at -4,
@@ -335,7 +340,7 @@ DrawWalls = true, true, false, false, false, false
     #door just a tiny bit.
     
     CreatePanel ElevPanel, 15, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, 1, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
     SetLock 1, 1
     AddButton 1, switch.wav, Button10, ButtonLit10, 3, 3, 9, 1, 1
@@ -351,13 +356,27 @@ DrawWalls = true, true, false, false, false, false
     AddButton 1, switch.wav, Button1, ButtonLit1, 12, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 13, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 13, 4, close, 1, 1
-    AddControl 1, switch.wav, 14, 2, 1, 1, 0, 0, run, stop, RunKey, StopKey
-    AddControl 1, switch.wav, 14, 3, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
+    AddControl 1, switch.wav, 14, 2, 1, 1, 0, 0, 1, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 14, 3, 1, 1, 0, 0, 1, IndOff, IndOn, IndOff, IndOn
     AddButton 1, , ButtonAlarm, ButtonAlarm, 14, 4, alarm, 1, 1
 
     #Floor Indicator
-    AddFloorIndicator Button, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
+    AddFloorIndicator Button, Black, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
    
+    #Rope
+    #define the rope to be at the top center of the elevator
+    RopePosition = 0, 8, 0
+    RopeTexture = Ropes
+
+    #Counterweight
+    #create a counterweight in back of the elevator.  This also creates the ropes
+    CreateCounterweight CounterweightFrame, Counterweight, 0, 3 + 0.5, 2, 6, 0.5, 0.5
+
+    #Rails
+    #create rails for the elevator car
+    AddRails Rails, RailsEdge, 0, 0, false, 3.5 + 0.06, 0.1
+    #and also for the counterweight
+    AddRails Rails, RailsEdge, 0, 3 + 0.5, false, 1 + 0.06, 0.1
 <EndElevator>
 
 #Stairs
@@ -394,8 +413,8 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
     #the height is the number of stairs times the riser size (which would be 10 * %1%).
     #The length is the number of stairs minus one, times the tread size - in this example it would be 9 * (10 / 9) which is 10.
     
-    if[%floor% < 9] AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, %1%, 10 / 9, 10, 0, 0, 0
-    if[%floor% < 9] AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    if[%floor% < 9] AddStairs 1, StairsLower, Stairs, Stairs, left, 0, -1.75, 3.5, %1%, 10 / 9, 10, 0, 0, 0
+    if[%floor% < 9] AddStairs 1, StairsUpper, Stairs, Stairs, right, 0, 1.75, 3.5, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     
     #For the landings, you need to know where the stairs start and end (the positions).  Since these stairs are located/centered at X position 0, you
@@ -450,7 +469,7 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
 
 <Floors 0 to 9>
     CallButtonElevators = 1
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons , ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Now to add an external fire service button, we first create the fire service actions
@@ -461,6 +480,6 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
 #Create the fire service button itself, and map the previously created actions with the textures FireOff, FireOn, and FireBypass
 <Floor 0>
-    AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
+    AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, 1, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 

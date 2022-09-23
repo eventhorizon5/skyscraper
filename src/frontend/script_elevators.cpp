@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Script Processor - Elevator Section
-	Copyright (C)2003-2017 Ryan Thoryk
+	Copyright (C)2003-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -27,6 +27,7 @@
 #include "skyscraper.h"
 #include "enginecontext.h"
 #include "elevator.h"
+#include "wall.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -93,7 +94,28 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 		std::string str = Calc(value);
-		if (!IsNumeric(str, elev->ElevatorSpeed))
+		Real Speed;
+		if (!IsNumeric(str, Speed))
+			return ScriptError("Invalid value");
+		elev->UpSpeed = Speed;
+		elev->DownSpeed = Speed;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 7) == "upspeed")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		std::string str = Calc(value);
+		if (!IsNumeric(str, elev->UpSpeed))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "downspeed")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		std::string str = Calc(value);
+		if (!IsNumeric(str, elev->DownSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -535,6 +557,63 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetRunState(ToBool(value));
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 12) == "ropeposition")
+	{
+		int params = SplitAfterEquals(LineData);
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 2; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		elev->RopePosition = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "ropetexture")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		elev->RopeTexture = value;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 23) == "counterweightstartsound")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		elev->CounterweightStartSound = value;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 22) == "counterweightmovesound")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		elev->CounterweightMoveSound = value;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 22) == "counterweightstopsound")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		elev->CounterweightStopSound = value;
+		return sNextLine;
+	}
 
 	//CreateElevator command
 	if (linecheck.substr(0, 14) == "createelevator")
@@ -556,6 +635,49 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		if (result == false)
 			return ScriptError();
 		StoreCommand(elev);
+		return sNextLine;
+	}
+
+	//CreateCounterweight command
+	if (linecheck.substr(0, 19) == "createcounterweight")
+	{
+		//get data
+		int params = SplitData(LineData, 20);
+
+		if (params != 8)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 7; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		Ogre::Vector3 size = Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		StoreCommand(elev->CreateCounterweight(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), size, ToFloat(tempdata[7])));
+		return sNextLine;
+	}
+
+	//AddRails command
+	if (linecheck.substr(0, 8) == "addrails")
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 7)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 6; i++)
+		{
+			if (i == 4)
+				i++;
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		elev->AddRails(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
 	}
 

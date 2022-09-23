@@ -1,7 +1,7 @@
 # $Id$
 	
 #The Sears Tower
-#Model Copyright (C)2006-2016 Ryan Thoryk
+#Model Copyright (C)2006-2018 Ryan Thoryk
 #Original building by SOM; architect Bruce Graham and structural engineer Fazlur Khan
 
 #This program is free software; you can redistribute it and/or
@@ -18,6 +18,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+<Include data/scripts/elevator_doors.txt>
+
 <Globals>
     Name = Sears Tower
     Designer = Skidmore, Owings and Merrill
@@ -28,6 +30,7 @@
     CameraPosition = -100, 0
     CameraRotation = 0, 90, 0
     Bounds = -150, 0, -150, 150, 0, 150
+    Coordinates = 41.8789, -87.6359
 <EndGlobals>
 
 <Textures>
@@ -68,6 +71,12 @@
     Load data/darrow_unlit.gif, ArrowDown, 1, -1
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
+    Load data/fire2keyoff.png, Fire2Off, 1, 1
+    Load data/fire2keyon.png, Fire2On, 1, 1
+    Load data/fire2keyhold.png, Fire2Hold, 1, 1
+    Load data/fire1keyoff.png, Fire1Off, 1, 1
+    Load data/fire1keyon.png, Fire1On, 1, 1
+    Load data/fire1keybypass.png, Fire1Bypass, 1, 1
 
     #floor indicator/button pictures
     Load data/black.jpg, Black, 1, 1
@@ -80,6 +89,7 @@
     AddText Black, ButtonL1, nimbus_sans.ttf, 47, L1, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonL2, nimbus_sans.ttf, 47, L2, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonL3, nimbus_sans.ttf, 47, L3, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonM3, nimbus_sans.ttf, 47, M3, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -88,6 +98,7 @@
     AddText BlackLit, ButtonLitL1, nimbus_sans.ttf, 47, L1, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitL2, nimbus_sans.ttf, 47, L2, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitL3, nimbus_sans.ttf, 47, L3, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitM3, nimbus_sans.ttf, 47, M3, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonEX, nimbus_sans.ttf, 47, EX, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -706,22 +717,28 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Interfloor bottom
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 63] AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorFloor IFloor1, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorFloor IFloor2, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorFloor IFloor3, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    if[%floor% = 63] AddInterfloorFloor ITop, Brick, 0.5, -63, -70, 63, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    if[%floor% = 63] AddInterfloorFloor ITop1, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    if[%floor% = 63] AddInterfloorFloor ITop2, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    if[%floor% = 63] AddInterfloorFloor ITop3, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 63] AddInterfloorWall IFront, Brick, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    if[%floor% = 63] AddInterfloorWall ILeft, Brick, 0.5, -63, -70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    WallOrientation = right
+    if[%floor% = 63] AddInterfloorWall IFront1, IntExt, 0, -112.5, -112.5, 37.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall ILeft1, IntExt, 0, -112.5, -112.5, -112.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall IBack1, IntExt, 0, -37.5, 37.5, -37.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall IRight1, IntExt, 0, 37.5, -37.5, 112.5, -37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     DrawWalls = true, false, false, false, false, false
-    if[%floor% = 63] AddInterfloorWall IRight, Brick, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    if[%floor% = 63] AddInterfloorWall IBack, Brick, 0.5, -63, 70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall IFront2, IntExt, 0, 37.5, -112.5, 37.5, -37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall ILeft2, IntExt, 0, -112.5, 37.5, -37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall IBack2, IntExt, 0, -37.5, 112.5, 112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall IRight2, IntExt, 0, 112.5, -37.5, 112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 <Floor 63>
@@ -1211,7 +1228,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    if[%floor% = 106] AddFloor Ceiling, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    #if[%floor% = 106] AddFloor Ceiling, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls for interfloor
     SetAutoSize = true, false
@@ -1283,7 +1300,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
+    #AddFloor Floor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -1317,12 +1334,12 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Interfloor bottom
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
+    #AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    #AddInterfloorFloor ITop, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1472,6 +1489,18 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
 #Freight Elevator 1 shaft
 AddShaft 33, 2, -13.183, -14.031, -3, 103
 ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
+
+#Freight Elevator 3 shaft
+AddShaft 34, 4.295, -10.935, -3, 103
+ShaftCut 34, -4.835 + 0.33, -6.815, 4.835, 6.815, 0, 5
+
+#Freight Elevator 2 shaft
+AddShaft 35, 4.295, -22.675, -3, 63
+ShaftCut 35, -4.835 + 0.33, -4.925 - 0.33, 4.835, 4.925, 0, 5
+
+#Shaft 36
+AddShaft 36, 4.295, 13, -1, 63
+ShaftCut 36, -4.835 + 0.33, -14.8, 4.835, 14.8, 0, 5
 
 #zone 1 express shafts
 <Floors -1 to 35>
@@ -2444,6 +2473,103 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
+#Freight Elevator 3 shaft
+<Floors -3 to 103>
+    Set 5 = Wall1
+    Set 6 = 4.835 #width
+
+    #shaft 34
+    Set 10 = 34 #shaft number
+    Set 7 = 6.815 #length
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = -3] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #external shaft walls
+    Set 3 = %height%
+    Set 4 = 0
+
+    #shaft 34
+    Set 8 = 4.295 #xpos
+    Set 9 = -10.935 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+<EndFloors>
+
+#Freight Elevator 2 shaft
+<Floors -3 to 63>
+    Set 5 = Wall1
+    Set 6 = 4.835 #width
+
+    #shaft 35
+    Set 10 = 35 #shaft number
+    Set 7 = 4.925 #length
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = -3] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #external shaft walls
+    Set 3 = %height%
+    Set 4 = 0
+
+    #shaft 35
+    Set 8 = 4.295 #xpos
+    Set 9 = -22.675 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.66, -%6% + %8%, %7% + %9% - 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9% - 0.33, %6% + %8%, -%7% + %9% - 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+<EndFloors>
+
+#Shaft 36
+<Floors -1 to 63>
+    Set 5 = Wall1
+    Set 6 = 4.835 #width
+
+    #shaft 36
+    Set 10 = 36 #shaft number
+    Set 7 = 14.8 #length
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = -1] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #external shaft walls
+    Set 3 = %height%
+    Set 4 = 0
+
+    #shaft 36
+    Set 8 = 4.295 #xpos
+    Set 9 = 13 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9%, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%ExtE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 2 - 0.33, -%6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+<EndFloors>
 
 #Zone 1 Express (double decker)
 <Elevator 1>
@@ -5392,6 +5518,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 <EndElevators>
 
+#Freight Elevator 1
 <Elevator 80>
     Type = Freight
     Speed = 12
@@ -5408,8 +5535,8 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Floor, ElevFloor, 0.2, -2.95, -3.45, 2.95, 3.45, 0, 0, 0, 0
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ServiceElevFloor, 0.2, -2.95, -3.45, 2.95, 3.45, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
@@ -5419,34 +5546,34 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, OfficeElevWall, 0.2, -2.95, 3.45, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ServiceElevWall, 0.2, -2.95, 3.45, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, OfficeElevWall, 0.2, -2.95, -3.45, 2.95, -3.45, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, OfficeElevWall, 0.2, -2.95, -3.45, -2.95, 3.45, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ServiceElevWall, 0.2, -2.95, -3.45, 2.95, -3.45, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ServiceElevWall, 0.2, -2.95, -3.45, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, 2.95, -3.45, 2.95, -2, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, 2.95, 2, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
     SetAutoSize = true, true
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 2.95 + 0.001, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors, 0.2, 2.95 + 0.001, 0, 4, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoors, 0.2, 2.95 + 0.001 + 0.3, 0, 0, 0 #shaft doors
 
     #panel
-    CreatePanel ElevPanel, 15, 6, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 15, 6, left, 2.95 - 0.2 - 0.001, -2 - 0.725 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     #AddButton 1, switch.wav, Black, Black, 2, 5, off, 1, 1
     #AddButton 1, switch.wav, Black, Black, 2, 4, off, 1, 1
     AddButton 1, switch.wav, Button102, ButtonLit102, 2, 3, 101, 1, 1
@@ -5501,7 +5628,485 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 14, 5, alarm, 1, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 2.95 - 0.2 - 0.001, -2 - 0.725 + 0.1, 0.7, 0.5, 6.5
+
+<EndElevator>
+
+#Freight Elevator 3
+<Elevator 81>
+    Type = Freight
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = -1 - 1, 2-28, 30, 32-63, 66-87, 89-101
+    AssignedShaft = 34
+    CreateElevator false, 3.791, -10.935, 0
+
+    FloorSkipText = EX
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.51, -6, 3.909, 6, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.51, -6, 3.909, 6, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ServiceElevWall, 0.2, -3.51, 6, 3.909, 6, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ServiceElevWall, 0.2, 3.909, -6, 3.909, 6, 8, 8, 0, 0, 0, 0
+
+    #front wall
+    WallOrientation = left
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ServiceElevWall, 0.2, -3.51, -6, 3.909, -6, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, -3.51, -6, -3.51, -4, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, -3.51, 4, -3.51, 6, 8, 8, 0, 0, 0, 0
+
+    SetAutoSize = true, true
+
+    #doors
+    elevdoor_center_dualspeed(1, ElevDoors, ElevDoors, 0.2, -3.51 - 0.1 - 0.001, 0, 8, 8, left, 0.3, false)
+    elevdoor_center_dualspeed(1, ElevDoors, ElevDoors, 0.2, -3.51 - 0.1 - 0.001 - 0.3, 0, 8, 8, left, 0.3, true)
+
+    #panel
+    CreatePanel ElevPanel, 29, 5, right, -3.51 + 0.2 + 0.001, 5, 0.1, 0.1, 0.3, 0.45, 4, 0, 0
+    #AddButton 1, switch.wav, Black, Black, 2, 5, off, 1, 1
+    #AddButton 1, switch.wav, Black, Black, 2, 4, off, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 1, 1, alarm, 1, 1
+    AddControl 1, switch.wav, 1, 3, 1, 1, 0, 0, Fire2Off, Fire2On, Fire2Off, Fire2On
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 1, 5, stop, 1, 1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 3, 3, 101, 1, 1
+    AddButton 1, switch.wav, Button101, ButtonLit101, 3, 2, 100, 1, 1
+    AddButton 1, switch.wav, Button100, ButtonLit100, 3, 1, 99, 1, 1
+    AddButton 1, switch.wav, Button99, ButtonLit99, 4, 5, 98, 1, 1
+    AddButton 1, switch.wav, Button98, ButtonLit98, 4, 4, 97, 1, 1
+    AddButton 1, switch.wav, Button97, ButtonLit97, 4, 3, 96, 1, 1
+    AddButton 1, switch.wav, Button96, ButtonLit96, 4, 2, 95, 1, 1
+    AddButton 1, switch.wav, Button95, ButtonLit95, 4, 1, 94, 1, 1
+    AddButton 1, switch.wav, Button94, ButtonLit94, 5, 5, 93, 1, 1
+    AddButton 1, switch.wav, Button93, ButtonLit93, 5, 4, 92, 1, 1
+    AddButton 1, switch.wav, Button92, ButtonLit92, 5, 3, 91, 1, 1
+    AddButton 1, switch.wav, Button91, ButtonLit91, 5, 2, 90, 1, 1
+    AddButton 1, switch.wav, Button90, ButtonLit90, 5, 1, 89, 1, 1
+    AddButton 1, switch.wav, Button88, ButtonLit88, 6, 4, 87, 1, 1
+    AddButton 1, switch.wav, Button87, ButtonLit87, 6, 3, 86, 1, 1
+    AddButton 1, switch.wav, Button86, ButtonLit86, 6, 2, 85, 1, 1
+    AddButton 1, switch.wav, Button85, ButtonLit85, 6, 1, 84, 1, 1
+    AddButton 1, switch.wav, Button84, ButtonLit84, 7, 5, 83, 1, 1
+    AddButton 1, switch.wav, Button83, ButtonLit83, 7, 4, 82, 1, 1
+    AddButton 1, switch.wav, Button82, ButtonLit82, 7, 3, 81, 1, 1
+    AddButton 1, switch.wav, Button81, ButtonLit81, 7, 2, 80, 1, 1
+    AddButton 1, switch.wav, Button80, ButtonLit80, 7, 1, 79, 1, 1
+    AddButton 1, switch.wav, Button79, ButtonLit79, 8, 5, 78, 1, 1
+    AddButton 1, switch.wav, Button78, ButtonLit78, 8, 4, 77, 1, 1
+    AddButton 1, switch.wav, Button77, ButtonLit77, 8, 3, 76, 1, 1
+    AddButton 1, switch.wav, Button76, ButtonLit76, 8, 2, 75, 1, 1
+    AddButton 1, switch.wav, Button75, ButtonLit75, 8, 1, 74, 1, 1
+    AddButton 1, switch.wav, Button74, ButtonLit74, 9, 5, 73, 1, 1
+    AddButton 1, switch.wav, Button73, ButtonLit73, 9, 4, 72, 1, 1
+    AddButton 1, switch.wav, Button72, ButtonLit72, 9, 3, 71, 1, 1
+    AddButton 1, switch.wav, Button71, ButtonLit71, 9, 2, 70, 1, 1
+    AddButton 1, switch.wav, Button70, ButtonLit70, 9, 1, 69, 1, 1
+    AddButton 1, switch.wav, Button69, ButtonLit69, 10, 5, 68, 1, 1
+    AddButton 1, switch.wav, Button68, ButtonLit68, 10, 4, 67, 1, 1
+    AddButton 1, switch.wav, Button67, ButtonLit67, 10, 3, 66, 1, 1
+    AddButton 1, switch.wav, Button66, ButtonLit66, 10, 2, 65, 1, 1
+
+    AddButton 1, switch.wav, Button64, ButtonLit64, 12, 5, 63, 1, 1
+    AddButton 1, switch.wav, Button63, ButtonLit63, 12, 4, 62, 1, 1
+    AddButton 1, switch.wav, Button62, ButtonLit62, 12, 3, 61, 1, 1
+    AddButton 1, switch.wav, Button61, ButtonLit61, 12, 2, 60, 1, 1
+    AddButton 1, switch.wav, Button60, ButtonLit60, 12, 1, 59, 1, 1
+    AddButton 1, switch.wav, Button59, ButtonLit59, 13, 5, 58, 1, 1
+    AddButton 1, switch.wav, Button58, ButtonLit58, 13, 4, 57, 1, 1
+    AddButton 1, switch.wav, Button57, ButtonLit57, 13, 3, 56, 1, 1
+    AddButton 1, switch.wav, Button56, ButtonLit56, 13, 2, 55, 1, 1
+    AddButton 1, switch.wav, Button55, ButtonLit55, 13, 1, 54, 1, 1
+    AddButton 1, switch.wav, Button54, ButtonLit54, 14, 5, 53, 1, 1
+    AddButton 1, switch.wav, Button53, ButtonLit53, 14, 4, 52, 1, 1
+    AddButton 1, switch.wav, Button52, ButtonLit52, 14, 3, 51, 1, 1
+    AddButton 1, switch.wav, Button51, ButtonLit51, 14, 2, 50, 1, 1
+    AddButton 1, switch.wav, Button50, ButtonLit50, 14, 1, 49, 1, 1
+    AddButton 1, switch.wav, Button49, ButtonLit49, 15, 5, 48, 1, 1
+    AddButton 1, switch.wav, Button48, ButtonLit48, 15, 4, 47, 1, 1
+    AddButton 1, switch.wav, Button47, ButtonLit47, 15, 3, 46, 1, 1
+    AddButton 1, switch.wav, Button46, ButtonLit46, 15, 2, 45, 1, 1
+    AddButton 1, switch.wav, Button45, ButtonLit45, 15, 1, 44, 1, 1
+    AddButton 1, switch.wav, Button44, ButtonLit44, 16, 5, 43, 1, 1
+    AddButton 1, switch.wav, Button43, ButtonLit43, 16, 4, 42, 1, 1
+    AddButton 1, switch.wav, Button42, ButtonLit42, 16, 3, 41, 1, 1
+    AddButton 1, switch.wav, Button41, ButtonLit41, 16, 2, 40, 1, 1
+    AddButton 1, switch.wav, Button40, ButtonLit40, 16, 1, 39, 1, 1
+    AddButton 1, switch.wav, Button39, ButtonLit39, 17, 5, 38, 1, 1
+    AddButton 1, switch.wav, Button38, ButtonLit38, 17, 4, 37, 1, 1
+    AddButton 1, switch.wav, Button37, ButtonLit37, 17, 3, 36, 1, 1
+    AddButton 1, switch.wav, Button36, ButtonLit36, 17, 2, 35, 1, 1
+    AddButton 1, switch.wav, Button35, ButtonLit35, 17, 1, 34, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 18, 5, 33, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 18, 4, 32, 1, 1
+  
+    AddButton 1, switch.wav, Button31, ButtonLit31, 20, 2, 30, 1, 1
+
+    AddButton 1, switch.wav, Button29, ButtonLit29, 21, 5, 28, 1, 1
+    AddButton 1, switch.wav, Button28, ButtonLit28, 21, 4, 27, 1, 1
+    AddButton 1, switch.wav, Button27, ButtonLit27, 21, 3, 26, 1, 1
+    AddButton 1, switch.wav, Button26, ButtonLit26, 21, 2, 25, 1, 1
+    AddButton 1, switch.wav, Button25, ButtonLit25, 21, 1, 24, 1, 1
+    AddButton 1, switch.wav, Button24, ButtonLit24, 22, 5, 23, 1, 1
+    AddButton 1, switch.wav, Button23, ButtonLit23, 22, 4, 22, 1, 1
+    AddButton 1, switch.wav, Button22, ButtonLit22, 22, 3, 21, 1, 1
+    AddButton 1, switch.wav, Button21, ButtonLit21, 22, 2, 20, 1, 1
+    AddButton 1, switch.wav, Button20, ButtonLit20, 22, 1, 19, 1, 1
+    AddButton 1, switch.wav, Button19, ButtonLit19, 23, 5, 18, 1, 1
+    AddButton 1, switch.wav, Button18, ButtonLit18, 23, 4, 17, 1, 1
+    AddButton 1, switch.wav, Button17, ButtonLit17, 23, 3, 16, 1, 1
+    AddButton 1, switch.wav, Button16, ButtonLit16, 23, 2, 15, 1, 1
+    AddButton 1, switch.wav, Button15, ButtonLit15, 23, 1, 14, 1, 1
+    AddButton 1, switch.wav, Button14, ButtonLit14, 24, 5, 13, 1, 1
+    AddButton 1, switch.wav, Button13, ButtonLit13, 24, 4, 12, 1, 1
+    AddButton 1, switch.wav, Button12, ButtonLit12, 24, 3, 11, 1, 1
+    AddButton 1, switch.wav, Button11, ButtonLit11, 24, 2, 10, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 24, 1, 9, 1, 1
+    AddButton 1, switch.wav, Button9, ButtonLit9, 25, 5, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 25, 4, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 25, 3, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 25, 2, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 25, 1, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 26, 5, 3, 1, 1
+    AddButton 1, switch.wav, ButtonM3, ButtonLitM3, 26, 4, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 26, 3, 2, 1, 1
+    AddButton 1, switch.wav, ButtonR, ButtonLitR, 26, 2, 1, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 26, 1, 0, 1, 1
+
+    AddButton 1, switch.wav, ButtonL1, ButtonLitL1, 27, 3, -1, 1, 1
+
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 28, 3, open, 1, 1
+
+    AddButton 1, switch.wav, ButtonUp, ButtonUpLit, 29, 1, up, 1, 1
+    AddButton 1, switch.wav, ButtonDown, ButtonDownLit, 29, 3, down, 1, 1
+    AddButton 1, switch.wav, Black, Black, 29, 5, off, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator right, -3.51 + 0.2 + 0.001, 5, 0.7, 0.5, 6.5
+
+<EndElevator>
+
+#Freight Elevator 2
+<Elevator 82>
+    Type = Freight
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = -3 - 1, 32-62
+    AssignedShaft = 35
+    CreateElevator false, 3.791, -22.675, 0
+
+    FloorSkipText = EX
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.51, -4, 3.51, 4, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.51, -4, 3.51, 4, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ServiceElevWall, 0.2, -3.51, 4, 3.51, 4, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ServiceElevWall, 0.2, 3.51, -4, 3.51, 4, 8, 8, 0, 0, 0, 0
+
+    #front wall
+    WallOrientation = left
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ServiceElevWall, 0.2, -3.51, -4, 3.51, -4, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, -3.51, -4, -3.51, -2.5, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, -3.51, 2.5, -3.51, 4, 8, 8, 0, 0, 0, 0
+
+    SetAutoSize = true, true
+
+    #doors
+    WallOrientation = right
+    elevdoor_center_dualspeed(1, ElevDoors, ElevDoors, 0.2, -3.51 - 0.1 - 0.001, 0, 5, 8, left, 0.3, false)
+    elevdoor_center_dualspeed(1, ElevDoors, ElevDoors, 0.2, -3.51 - 0.1 - 0.001 - 0.3, 0, 5, 8, left, 0.3, true)
+
+    #panel
+    CreatePanel ElevPanel, 15, 5, right, -3.51 + 0.2 + 0.001, 2.5 + 0.75 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    #AddButton 1, switch.wav, Black, Black, 2, 5, off, 1, 1
+    #AddButton 1, switch.wav, Black, Black, 2, 4, off, 1, 1
+    AddButton 1, switch.wav, Button63, ButtonLit63, 2, 4, 62, 1, 1
+    AddButton 1, switch.wav, Button62, ButtonLit62, 2, 3, 61, 1, 1
+    AddButton 1, switch.wav, Button61, ButtonLit61, 2, 2, 60, 1, 1
+    AddButton 1, switch.wav, Button60, ButtonLit60, 3, 4, 59, 1, 1
+    AddButton 1, switch.wav, Button59, ButtonLit59, 3, 3, 58, 1, 1
+    AddButton 1, switch.wav, Button58, ButtonLit58, 3, 2, 57, 1, 1
+    AddButton 1, switch.wav, Button57, ButtonLit57, 4, 4, 56, 1, 1
+    AddButton 1, switch.wav, Button56, ButtonLit56, 4, 3, 55, 1, 1
+    AddButton 1, switch.wav, Button55, ButtonLit55, 4, 2, 54, 1, 1
+    AddButton 1, switch.wav, Button54, ButtonLit54, 5, 4, 53, 1, 1
+    AddButton 1, switch.wav, Button53, ButtonLit53, 5, 3, 52, 1, 1
+    AddButton 1, switch.wav, Button52, ButtonLit52, 5, 2, 51, 1, 1
+    AddButton 1, switch.wav, Button51, ButtonLit51, 6, 4, 50, 1, 1
+    AddButton 1, switch.wav, Button50, ButtonLit50, 6, 3, 49, 1, 1
+    AddButton 1, switch.wav, Button49, ButtonLit49, 6, 2, 48, 1, 1
+    AddButton 1, switch.wav, Button48, ButtonLit48, 7, 4, 47, 1, 1
+    AddButton 1, switch.wav, Button47, ButtonLit47, 7, 3, 46, 1, 1
+    AddButton 1, switch.wav, Button46, ButtonLit46, 7, 2, 45, 1, 1
+    AddButton 1, switch.wav, Button45, ButtonLit45, 8, 4, 44, 1, 1
+    AddButton 1, switch.wav, Button44, ButtonLit44, 8, 3, 43, 1, 1
+    AddButton 1, switch.wav, Button43, ButtonLit43, 8, 2, 42, 1, 1
+    AddButton 1, switch.wav, Button42, ButtonLit42, 9, 4, 41, 1, 1
+    AddButton 1, switch.wav, Button41, ButtonLit41, 9, 3, 40, 1, 1
+    AddButton 1, switch.wav, Button40, ButtonLit40, 9, 2, 39, 1, 1
+    AddButton 1, switch.wav, Button39, ButtonLit39, 10, 4, 38, 1, 1
+    AddButton 1, switch.wav, Button38, ButtonLit38, 10, 3, 37, 1, 1
+    AddButton 1, switch.wav, Button37, ButtonLit37, 10, 2, 36, 1, 1
+    AddButton 1, switch.wav, Button36, ButtonLit36, 11, 4, 35, 1, 1
+    AddButton 1, switch.wav, Button35, ButtonLit35, 11, 3, 34, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 11, 2, 33, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 12, 4, 32, 1, 1
+    AddButton 1, switch.wav, ButtonR, ButtonLitR, 12, 3, 3, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 12, 2, 2, 0, 1
+    AddButton 1, switch.wav, ButtonL1, ButtonLitL1, 13, 4, -1, 1, 1
+    AddButton 1, switch.wav, ButtonL2, ButtonLitL2, 13, 3, -2, 1, 1
+    AddButton 1, switch.wav, ButtonL3, ButtonLitL3, 13, 2, -3, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 14, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 14, 3, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 14, 4, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 14, 5, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator right, -3.51 + 0.2 + 0.001, 2.5 + 0.75 - 0.1, 0.7, 0.5, 6.5
+
+<EndElevator>
+
+#Freight Elevator 4
+<Elevator 83>
+    Type = Freight
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 32 - 62
+    AssignedShaft = 36
+    CreateElevator false, 3.791, 3.2, 32
+
+    FloorSkipText = EX
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.51, -4, 3.51, 4, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.51, -4, 3.51, 4, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ServiceElevWall, 0.2, -3.51, 4, 3.51, 4, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ServiceElevWall, 0.2, 3.51, -4, 3.51, 4, 8, 8, 0, 0, 0, 0
+
+    #front wall
+    WallOrientation = left
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ServiceElevWall, 0.2, -3.51, -4, 3.51, -4, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, -3.51, -4, -3.51, -2.5, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, -3.51, 2.5, -3.51, 4, 8, 8, 0, 0, 0, 0
+
+    SetAutoSize = true, true
+
+    #doors
+    WallOrientation = right
+    elevdoor_center_dualspeed(1, ElevDoors, ElevDoors, 0.2, -3.51 - 0.1 - 0.001, 0, 5, 8, left, 0.3, false)
+    elevdoor_center_dualspeed(1, ElevDoors, ElevDoors, 0.2, -3.51 - 0.1 - 0.001 - 0.3, 0, 5, 8, left, 0.3, true)
+    
+    #panel
+    CreatePanel ElevPanel, 14, 5, right, -3.51 + 0.2 + 0.001, 2.5 + 0.75 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    #AddButton 1, switch.wav, Black, Black, 2, 5, off, 1, 1
+    #AddButton 1, switch.wav, Black, Black, 2, 4, off, 1, 1
+    AddButton 1, switch.wav, Button63, ButtonLit63, 2, 4, 62, 1, 1
+    AddButton 1, switch.wav, Button62, ButtonLit62, 2, 3, 61, 1, 1
+    AddButton 1, switch.wav, Button61, ButtonLit61, 2, 2, 60, 1, 1
+    AddButton 1, switch.wav, Button60, ButtonLit60, 3, 4, 59, 1, 1
+    AddButton 1, switch.wav, Button59, ButtonLit59, 3, 3, 58, 1, 1
+    AddButton 1, switch.wav, Button58, ButtonLit58, 3, 2, 57, 1, 1
+    AddButton 1, switch.wav, Button57, ButtonLit57, 4, 4, 56, 1, 1
+    AddButton 1, switch.wav, Button56, ButtonLit56, 4, 3, 55, 1, 1
+    AddButton 1, switch.wav, Button55, ButtonLit55, 4, 2, 54, 1, 1
+    AddButton 1, switch.wav, Button54, ButtonLit54, 5, 4, 53, 1, 1
+    AddButton 1, switch.wav, Button53, ButtonLit53, 5, 3, 52, 1, 1
+    AddButton 1, switch.wav, Button52, ButtonLit52, 5, 2, 51, 1, 1
+    AddButton 1, switch.wav, Button51, ButtonLit51, 6, 4, 50, 1, 1
+    AddButton 1, switch.wav, Button50, ButtonLit50, 6, 3, 49, 1, 1
+    AddButton 1, switch.wav, Button49, ButtonLit49, 6, 2, 48, 1, 1
+    AddButton 1, switch.wav, Button48, ButtonLit48, 7, 4, 47, 1, 1
+    AddButton 1, switch.wav, Button47, ButtonLit47, 7, 3, 46, 1, 1
+    AddButton 1, switch.wav, Button46, ButtonLit46, 7, 2, 45, 1, 1
+    AddButton 1, switch.wav, Button45, ButtonLit45, 8, 4, 44, 1, 1
+    AddButton 1, switch.wav, Button44, ButtonLit44, 8, 3, 43, 1, 1
+    AddButton 1, switch.wav, Button43, ButtonLit43, 8, 2, 42, 1, 1
+    AddButton 1, switch.wav, Button42, ButtonLit42, 9, 4, 41, 1, 1
+    AddButton 1, switch.wav, Button41, ButtonLit41, 9, 3, 40, 1, 1
+    AddButton 1, switch.wav, Button40, ButtonLit40, 9, 2, 39, 1, 1
+    AddButton 1, switch.wav, Button39, ButtonLit39, 10, 4, 38, 1, 1
+    AddButton 1, switch.wav, Button38, ButtonLit38, 10, 3, 37, 1, 1
+    AddButton 1, switch.wav, Button37, ButtonLit37, 10, 2, 36, 1, 1
+    AddButton 1, switch.wav, Button36, ButtonLit36, 11, 4, 35, 1, 1
+    AddButton 1, switch.wav, Button35, ButtonLit35, 11, 3, 34, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 11, 2, 33, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 12, 3, 32, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 13, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 13, 3, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 13, 4, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 13, 5, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator right, -3.51 + 0.2 + 0.001, 2.5 + 0.75 - 0.1, 0.7, 0.5, 6.5
+
+<EndElevator>
+
+#Freight Elevators 5-6
+<Elevators 84 to 85>
+    Type = Freight
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0 - 30
+    AssignedShaft = 36
+    if [%elevator% = 84] CreateElevator false, 3.791, 13.1, 0
+    if [%elevator% = 85] CreateElevator false, 3.791, 23, 0
+
+    FloorSkipText = EX
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.51, -4, 3.51, 4, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.51, -4, 3.51, 4, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ServiceElevWall, 0.2, -3.51, 4, 3.51, 4, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ServiceElevWall, 0.2, 3.51, -4, 3.51, 4, 8, 8, 0, 0, 0, 0
+
+    #front wall
+    WallOrientation = left
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ServiceElevWall, 0.2, -3.51, -4, 3.51, -4, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, -3.51, -4, -3.51, -2.5, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, -3.51, 2.5, -3.51, 4, 8, 8, 0, 0, 0, 0
+
+    SetAutoSize = true, true
+
+    #doors
+    WallOrientation = right
+    elevdoor_center_dualspeed(1, ElevDoors, ElevDoors, 0.2, -3.51 - 0.1 - 0.001, 0, 5, 8, left, 0.3, false)
+    elevdoor_center_dualspeed(1, ElevDoors, ElevDoors, 0.2, -3.51 - 0.1 - 0.001 - 0.3, 0, 5, 8, left, 0.3, true)
+
+    #panel
+    CreatePanel ElevPanel, 17, 5, right, -3.51 + 0.2 + 0.001, 2.5 + 0.75 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    #AddButton 1, switch.wav, Black, Black, 2, 5, off, 1, 1
+    #AddButton 1, switch.wav, Black, Black, 2, 4, off, 1, 1
+    AddButton 1, switch.wav, Button30, ButtonLit30, 2, 4, 29, 1, 1
+    AddButton 1, switch.wav, Button29, ButtonLit29, 2, 3, 28, 1, 1
+    AddButton 1, switch.wav, Button28, ButtonLit28, 2, 2, 27, 1, 1
+    AddButton 1, switch.wav, Button27, ButtonLit27, 3, 4, 26, 1, 1
+    AddButton 1, switch.wav, Button26, ButtonLit26, 3, 3, 25, 1, 1
+    AddButton 1, switch.wav, Button25, ButtonLit25, 3, 2, 24, 1, 1
+    AddButton 1, switch.wav, Button24, ButtonLit24, 4, 4, 23, 1, 1
+    AddButton 1, switch.wav, Button23, ButtonLit23, 4, 3, 22, 1, 1
+    AddButton 1, switch.wav, Button22, ButtonLit22, 4, 2, 21, 1, 1
+    AddButton 1, switch.wav, Button21, ButtonLit21, 5, 4, 20, 1, 1
+    AddButton 1, switch.wav, Button20, ButtonLit20, 5, 3, 19, 1, 1
+    AddButton 1, switch.wav, Button19, ButtonLit19, 5, 2, 18, 1, 1
+    AddButton 1, switch.wav, Button18, ButtonLit18, 6, 4, 17, 1, 1
+    AddButton 1, switch.wav, Button17, ButtonLit17, 6, 3, 16, 1, 1
+    AddButton 1, switch.wav, Button16, ButtonLit16, 6, 2, 15, 1, 1
+    AddButton 1, switch.wav, Button15, ButtonLit15, 7, 4, 14, 1, 1
+    AddButton 1, switch.wav, Button14, ButtonLit14, 7, 3, 13, 1, 1
+    AddButton 1, switch.wav, Button13, ButtonLit13, 7, 2, 12, 1, 1
+    AddButton 1, switch.wav, Button12, ButtonLit12, 8, 4, 11, 1, 1
+    AddButton 1, switch.wav, Button11, ButtonLit11, 8, 3, 10, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 8, 2, 9, 1, 1
+    AddButton 1, switch.wav, Button9, ButtonLit9, 9, 4, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 9, 3, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 9, 2, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 10, 4, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 10, 3, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 10, 2, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 11, 4, 2, 1, 1
+    AddButton 1, switch.wav, ButtonR, ButtonLitR, 11, 3, 1, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 11, 2, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 12, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 12, 3, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 12, 4, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 12, 5, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator right, -3.51 + 0.2 + 0.001, 2.5 + 0.75 - 0.1, 0.7, 0.5, 6.5
 
 <EndElevator>
 
@@ -5686,9 +6291,21 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -42.08 - 5.312 - 0.33 - 0.1, -7.39, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
-#Freight Elevator 1
+#Freight Elevators
 <Floors -3 to 101>
     CallButtonElevators = 80
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.183 + 4.28 + 0.33 + 0.1, -11.5, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.183 + 4.28 + 0.33 + 0.1, -11, 4, right, 0.5, 1, true, 0, 0
+
+    CallButtonElevators = 81
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.295 - 4.835 - 0.33 - 0.1, -16, 4, left, 0.5, 1, true, 0, 0
+
+    CallButtonElevators = 82
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.295 - 4.835 - 0.33 - 0.1, -26, 4, left, 0.5, 1, true, 0, 0
+
+    CallButtonElevators = 83
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.295 - 4.835 - 0.33 - 0.1, 0, 4, left, 0.5, 1, true, 0, 0
+
+    CallButtonElevators = 84, 85
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.295 - 4.835 - 0.33 - 0.1, 18, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 

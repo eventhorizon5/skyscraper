@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Revolving Door Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -133,7 +133,7 @@ RevolvingDoor::~RevolvingDoor()
 
 			if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveRevolvingDoor(this);
-			else if (type == "SBS")
+			else if (type == "RevolvingDoorManager")
 				sbs->GetRevolvingDoorManager()->RemoveDoor(this);
 		}
 	}

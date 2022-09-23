@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.11 Alpha - Simulation Frontend
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -135,6 +135,7 @@ public:
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
 	Real GetConfigFloat(const std::string &key, Real default_value);
+	std::string GetKeyConfigString(const std::string &key, const std::string &default_value);
 	bool InitSky(EngineContext *engine);
 	void ShowConsole(bool send_button = true);
 	void CreateProgressDialog(const std::string &message);
@@ -143,6 +144,7 @@ public:
 	void SetFullScreen(bool enabled);
 	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
 	void SetLocation(Real latitude, Real longitude);
+	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
@@ -165,6 +167,8 @@ public:
 	void UpdateSky();
 	void UnregisterDebugPanel() { dpanel = 0; }
 	virtual void MacOpenFile(const wxString &filename);
+	void UnloadSky();
+	void CreateSky(EngineContext* engine);
 
 private:
 	//sound data
@@ -208,6 +212,7 @@ private:
 	void ShowProgressDialog();
 
 	Ogre::ConfigFile *configfile;
+	Ogre::ConfigFile *keyconfigfile;
 	Caelum::CaelumSystem *mCaelumSystem;
 	Ogre::LogManager* logger;
 	bool showconsole;

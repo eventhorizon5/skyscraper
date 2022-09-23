@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Wall Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2017 Ryan Thoryk
+	Copyright (C)2004-2018 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@skyscrapersim.com
@@ -344,6 +344,22 @@ Ogre::Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 	}
 
 	return Ogre::Vector3(0, 0, 0);
+}
+
+void Wall::ChangeHeight(Real newheight)
+{
+	//change height of a wall object
+
+	for (size_t i = 0; i < polygons.size(); i++)
+	{
+		polygons[i].ChangeHeight(newheight);
+	}
+
+	//prepare mesh
+	if (meshwrapper->UsingDynamicBuffers() == false)
+		meshwrapper->Prepare(true);
+	meshwrapper->DeleteCollider();
+	meshwrapper->CreateCollider();
 }
 
 }

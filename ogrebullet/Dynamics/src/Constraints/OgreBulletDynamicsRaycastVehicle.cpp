@@ -102,6 +102,7 @@ namespace OgreBulletDynamics
     // -------------------------------------------------------------------------
     RaycastVehicle::~RaycastVehicle()
     {
+	    mWorld->removeVehicle(this);
     }
     // -------------------------------------------------------------------------
     void RaycastVehicle::setCoordinateSystem(int rightIndex,int upIndex,int forwardIndex)
@@ -179,18 +180,19 @@ namespace OgreBulletDynamics
             //draw wheels (cylinders)
             const btTransform &w = getBulletVehicle()->getWheelInfo(i).m_worldTransform;
 
-            mWheelNodes[i]->setPosition (w.getOrigin()[0], w.getOrigin()[1], w.getOrigin()[2]);
-            mWheelNodes[i]->setOrientation (w.getRotation().getW(), w.getRotation().getX(), w.getRotation().getY(), w.getRotation().getZ());
-
+            Ogre::Vector3 p = Ogre::Vector3(w.getOrigin()[0], w.getOrigin()[1], w.getOrigin()[2]);
+            Ogre::Quaternion q = Ogre::Quaternion(w.getRotation().getW(), w.getRotation().getX(), w.getRotation().getY(), w.getRotation().getZ());
+            mWheelNodes[i]->_setDerivedPosition (p);
+            mWheelNodes[i]->_setDerivedOrientation (q);
         }
     }
     // -------------------------------------------------------------------------
-    void RaycastVehicle::applyEngineForce (float engineForce, int wheel)
+    void RaycastVehicle::applyEngineForce (Ogre::Real engineForce, int wheel)
     {
         getBulletVehicle()->applyEngineForce (engineForce, wheel);
     }
     // -------------------------------------------------------------------------
-    void RaycastVehicle::setSteeringValue(float steering, int wheel)
+    void RaycastVehicle::setSteeringValue(Ogre::Real steering, int wheel)
     {
         getBulletVehicle()->setSteeringValue (steering, wheel);
     }

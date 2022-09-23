@@ -19,17 +19,26 @@
 								<border>5</border>
 								<option>1</option>
 							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkCapture" variable="chkCapture" member="yes">
+									<label>Capture</label>
+									<checked>1</checked>
+								</object>
+								<flag>wxALIGN_TOP</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 						</object>
 						<flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_txtMain" variable="txtMain" member="yes">
-							<label></label>
-							<size>400,400</size>
+						<object class="wxTextCtrl" name="ID_txtMain" variable="txtMain" member="yes">
+							<size>640,480</size>
+							<style>wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL</style>
 						</object>
-						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+						<flag>wxALL|wxEXPAND</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>

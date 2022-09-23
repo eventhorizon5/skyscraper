@@ -3,7 +3,7 @@
 /*
 Scalable Building Simulator - Elevator Car Object
 The Skyscraper Project - Version 1.11 Alpha
-Copyright (C)2004-2017 Ryan Thoryk
+Copyright (C)2004-2018 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
 Contact - ryan@skyscrapersim.com
@@ -429,11 +429,11 @@ Wall* ElevatorCar::AddFloor(const std::string &name, const std::string &texture,
 	return wall;
 }
 
-FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
+FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
 {
 	//Creates a floor indicator at the specified location
 
-	FloorIndicator* indicator = new FloorIndicator(this, parent->Number, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicator* indicator = new FloorIndicator(this, parent->Number, Number, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray.push_back(indicator);
 	return indicator;
 }
@@ -2620,7 +2620,12 @@ void ElevatorCar::PlayStoppingSounds(bool emergency)
 
 		//set play position to current percent of the total speed
 		if (parent->AutoAdjustSound == true)
-			carsound->SetPlayPosition(1 - (parent->ElevatorRate / parent->ElevatorSpeed));
+		{
+			if (parent->Direction == 1)
+				carsound->SetPlayPosition(1 - (parent->ElevatorRate / parent->UpSpeed));
+			else
+				carsound->SetPlayPosition(1 - (parent->ElevatorRate / parent->DownSpeed));
+		}
 		else
 			carsound->Reset();
 
@@ -3044,6 +3049,13 @@ void ElevatorCar::SetControls(const std::string &action_name)
 	{
 		PanelArray[i]->SetControls(action_name);
 	}
+}
+
+void ElevatorCar::FlashIndicators(bool value)
+{
+	//flash all floor indicators if supported
+	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
+		FloorIndicatorArray[i]->Flash(value);
 }
 
 }
