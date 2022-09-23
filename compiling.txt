@@ -14,7 +14,7 @@ Step 1 - build and install Bullet
 ----------
 Get Bullet source (my custom-patched version):
 ---
-wget http://skyscraper.tliquest.net/downloads/dev/other_apps/bullet.tar.bz2
+wget https://www.skyscrapersim.net/downloads/dev/other_apps/bullet.tar.bz2
 ---
 
 Extract Bullet:
@@ -55,7 +55,7 @@ Step 3 - build and install OGRE
 
 First get the source:
 ---
-https://skyscraper.tliquest.net/downloads/dev/other_apps/ogre-1.12-skyscraper.tar.gz
+https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-1.12-skyscraper.tar.gz
 tar xfvz ogre-1.12-skyscraper.tar.gz
 cd ogre-1.12.13
 cmake -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0
@@ -100,7 +100,7 @@ First grab the source via git, and build, using the wxWidgets we just built.
 ---
 git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
 cd skyscraper
-wget http://skyscraper.tliquest.net/downloads/dev/other_apps/plugins.cfg
+wget https://www.skyscrapersim.net/downloads/dev/other_apps/plugins.cfg
 cmake . -DwxWidgets_CONFIG_EXECUTABLE=/opt/wx/bin/wx-config
 make
 ---
