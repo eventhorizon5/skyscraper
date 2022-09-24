@@ -1002,7 +1002,7 @@ void Camera::Sync()
 		mCharacter->sync();
 
 	//notify on movement or rotation
-	Ogre::Vector3 position = sbs->ToRemote(GetPosition());
+	Ogre::Vector3 position = GetPosition();
 	Ogre::Quaternion orientation = GetOrientation();
 
 	if (prev_position.positionEquals(position) == false)
@@ -1258,7 +1258,7 @@ bool Camera::Attach(Ogre::Camera *remote_camera, bool init_state)
 	if (remote_camera->isAttached() == true)
 		return false;
 
-	camera->SetPosition(0, (cfg_body_height + cfg_legs_height + 0.5) / 2, 0);
+	camera->Move(0, (cfg_body_height + cfg_legs_height + 0.5) / 2, 0);
 	camera->Attach(remote_camera);
 
 	SetFOVAngle(FOV);
