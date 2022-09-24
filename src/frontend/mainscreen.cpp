@@ -129,8 +129,9 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 	{
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
-#endif
+#else
 		frontend->mRenderWindow->windowMovedOrResized();
+#endif
 	}
 	if (frontend->mCamera)
 		frontend->mCamera->setAspectRatio(Ogre::Real(frontend->mViewport->getActualWidth()) / Ogre::Real(frontend->mViewport->getActualHeight()));
