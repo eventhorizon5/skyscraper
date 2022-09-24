@@ -24,6 +24,8 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
+#include "corecamera.h"
+
 namespace SBS {
 
 struct SBSIMPEXP CameraState
@@ -216,7 +218,6 @@ private:
 	Model*	AttachedModel;
 
 	//Core Camera object
-	class CoreCamera;
 	CoreCamera* core_camera;
 
 	//collision/physics
@@ -227,34 +228,6 @@ private:
 	Ogre::Quaternion old_camera_orientation;
 	Ogre::Quaternion old_character_orientation;
 	bool old_freelook_mode;
-
-	class CoreCamera : public Object
-	{
-
-	public:
-
-		//functions
-		CoreCamera(Object *parent);
-		~CoreCamera();
-		bool IsAttached();
-		Ogre::Viewport* GetViewport();
-		void Pitch(Real &degree);
-		void Roll(Real &degree);
-		void SetViewMode(int mode);
-		bool Attach(Ogre::Camera *camera);
-		bool Detach();
-		Ogre::Quaternion GetDerivedOrientation();
-		Ogre::Ray GetViewportRay(Real x, Real y);
-		Real GetAspectRatio();
-		bool IsMeshVisible(MeshObject *mesh);
-		bool IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index);
-		void SetFarClipDistance(Real value);
-		void SetFOVAngle(Real angle);
-		Real GetFOVAngle();
-
-	private:
-		Ogre::Camera* MainCamera; //main first-person view camera
-	};
 };
 
 

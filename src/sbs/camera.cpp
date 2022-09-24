@@ -21,7 +21,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreCamera.h>
 #include <OgreBulletDynamicsCharacter.h>
 #include <OgreBulletCollisionsRay.h>
 #include <OgreBulletCollisionsCapsuleShape.h>
@@ -39,7 +38,6 @@
 #include "wall.h"
 #include "profiler.h"
 #include "scenenode.h"
-#include "manager.h"
 #include "vehicle.h"
 #include "camera.h"
 
@@ -1493,154 +1491,6 @@ void Camera::AttachToVehicle(bool value)
 bool Camera::IsAttached()
 {
 	return core_camera->IsAttached();
-}
-
-Camera::CoreCamera::CoreCamera(Object *parent) : Object(parent)
-{
-	//set up SBS object
-	SetValues("Camera", "Camera", true);
-
-	MainCamera = 0;
-}
-
-Camera::CoreCamera::~CoreCamera()
-{
-	Detach();
-}
-
-bool Camera::CoreCamera::IsAttached()
-{
-	return (MainCamera != 0);
-}
-
-Ogre::Viewport* Camera::CoreCamera::GetViewport()
-{
-	if (MainCamera)
-		return MainCamera->getViewport();
-	else
-		return 0;
-}
-
-void Camera::CoreCamera::Pitch(Real &degree)
-{
-	GetSceneNode()->Pitch(degree);
-}
-
-void Camera::CoreCamera::Roll(Real &degree)
-{
-	GetSceneNode()->Roll(degree);
-}
-
-void Camera::CoreCamera::SetViewMode(int mode)
-{
-	//set view mode of camera:
-	//0 - solid polygons (normal)
-	//1 - wireframe mode
-	//2 - point mode
-
-	if (!IsAttached())
-		return;
-
-	if (mode == 0)
-		MainCamera->setPolygonMode(Ogre::PM_SOLID);
-	if (mode == 1)
-		MainCamera->setPolygonMode(Ogre::PM_WIREFRAME);
-	if (mode == 2)
-		MainCamera->setPolygonMode(Ogre::PM_POINTS);
-}
-
-bool Camera::CoreCamera::Attach(Ogre::Camera *camera)
-{
-	//attach an OGRE camera
-
-	if (camera->isAttached() == true)
-		return false;
-
-	MainCamera = camera;
-	MainCamera->setNearClipDistance(0.1);
-	GetSceneNode()->AttachObject(MainCamera);
-	return true;
-}
-
-bool Camera::CoreCamera::Detach()
-{
-	//detach an OGRE camera
-
-	if (!IsAttached())
-		return false;
-
-	if (MainCamera->isAttached() == false)
-		return false;
-
-	GetSceneNode()->DetachObject(MainCamera);
-	MainCamera = 0;
-
-	return true;
-}
-
-Ogre::Quaternion Camera::CoreCamera::GetDerivedOrientation()
-{
-	return GetSceneNode()->GetDerivedOrientation();
-}
-
-Ogre::Ray Camera::CoreCamera::GetViewportRay(Real x, Real y)
-{
-	if (!IsAttached())
-		return Ogre::Ray();
-
-	return MainCamera->getCameraToViewportRay(x, y);
-}
-
-Real Camera::CoreCamera::GetAspectRatio()
-{
-	if (!IsAttached())
-		return 0;
-
-	return MainCamera->getAspectRatio();
-}
-
-bool Camera::CoreCamera::IsMeshVisible(MeshObject *mesh)
-{
-	//returns if a mesh object is visible in the camera's view frustum or not
-
-	if (!mesh || !IsAttached())
-		return false;
-
-	return mesh->IsVisible(MainCamera);
-}
-
-bool Camera::CoreCamera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
-{
-	if (!mesh || !IsAttached())
-		return false;
-
-	return mesh->IsVisible(MainCamera, mesh_index);
-}
-
-void Camera::CoreCamera::SetFarClipDistance(Real value)
-{
-	if (!IsAttached())
-		return;
-
-	MainCamera->setFarClipDistance(sbs->ToRemote(value));
-}
-
-void Camera::CoreCamera::SetFOVAngle(Real angle)
-{
-	if (!IsAttached())
-		return;
-
-	if (angle > 0 && angle < 179.63)
-	{
-		Real ratio = (float)GetAspectRatio();
-		if (ratio > 0)
-			MainCamera->setFOVy(Ogre::Degree(angle / ratio));
-	}
-}
-
-Real Camera::CoreCamera::GetFOVAngle()
-{
-	return (float)(MainCamera->getFOVy().valueDegrees() * GetAspectRatio());
 }
 
 }
