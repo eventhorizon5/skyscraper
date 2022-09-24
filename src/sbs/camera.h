@@ -170,7 +170,7 @@ public:
 	void ResetView();
 	bool IsActive() { return IsAttached(); }
 	void Refresh();
-	bool Attach(Ogre::Camera *camera, bool init_state = true);
+	bool Attach(Ogre::Camera *remote_camera, bool init_state = true);
 	bool Detach();
 	void OnMove(bool parent);
 	void OnRotate(bool parent);

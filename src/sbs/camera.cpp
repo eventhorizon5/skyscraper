@@ -1253,13 +1253,13 @@ void Camera::Refresh()
 		mCharacter->resetLastCollision();
 }
 
-bool Camera::Attach(Ogre::Camera *camera, bool init_state)
+bool Camera::Attach(Ogre::Camera *remote_camera, bool init_state)
 {
-	if (camera->isAttached() == true)
+	if (remote_camera->isAttached() == true)
 		return false;
 
 	camera->SetPosition(0, (cfg_body_height + cfg_legs_height + 0.5) / 2, 0);
-	camera->Attach(camera);
+	camera->Attach(remote_camera);
 
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
