@@ -82,26 +82,15 @@ cd
 ---
 
 
-Step 5 - build a legacy wxWidgets with GTK2 support (this is until the GTK3 rendering issue gets fixed)
+Step 5 - build Skyscraper (this also builds the built-in OgreBullet libraries)
 -----------
-wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxWidgets-3.0.5.tar.bz2
-tar xfvj wxWidgets-3.0.5.tar.bz2
-cd wxWidgets-3.0.5
-./configure --prefix=/opt/wx
-make
-sudo make install
-cd
-
-
-Step 6 - build Skyscraper (this also builds the built-in OgreBullet libraries)
------------
-First grab the source via git, and build, using the wxWidgets we just built.
+First grab the source via git, and build.
 
 ---
 git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
 cd skyscraper
 wget https://www.skyscrapersim.net/downloads/dev/other_apps/plugins.cfg
-cmake . -DwxWidgets_CONFIG_EXECUTABLE=/opt/wx/bin/wx-config
+cmake .
 make
 ---
 
