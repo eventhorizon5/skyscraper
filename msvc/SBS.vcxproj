@@ -80,8 +80,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
-      <Command>erase ..\src\sbs\revsbs.h
-..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.h
+      <Command>
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -129,8 +128,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
-      <Command>erase ..\src\sbs\revsbs.h
-..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.h
+      <Command>
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -177,8 +175,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Command>erase ..\src\sbs\revsbs.h
-..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.h
+      <Command>
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -224,8 +221,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
-      <Command>erase ..\src\sbs\revsbs.h
-..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.h
+      <Command>
 </Command>
     </PreBuildEvent>
     <ClCompile>

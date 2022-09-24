@@ -79,9 +79,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
-      <Command>erase ..\src\frontend\revmain.h
-..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
-
+      <Command>
 </Command>
     </PreBuildEvent>
     <Midl>
@@ -151,9 +149,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
-      <Command>erase ..\src\frontend\revmain.h
-..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
-
+      <Command>
 </Command>
     </PreBuildEvent>
     <Midl>
@@ -220,8 +216,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Command>erase ..\src\frontend\revmain.h
-..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
+      <Command>
 </Command>
     </PreBuildEvent>
     <Midl>
@@ -287,8 +282,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
-      <Command>erase ..\src\frontend\revmain.h
-..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
+      <Command>
 </Command>
     </PreBuildEvent>
     <Midl>

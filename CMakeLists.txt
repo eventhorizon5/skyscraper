@@ -54,10 +54,6 @@ file(GLOB SBS_FILES
 	src/sbs/*.cpp
 )
  
-file(GLOB SVNREV_FILES
-	svnrev/*.c
-)
-
 file(GLOB OGREBULLET_COLL_FILES
 	ogrebullet/Collisions/src/*.cpp
 	ogrebullet/Collisions/src/Debug/*.cpp
@@ -90,13 +86,6 @@ include_directories( ${OIS_INCLUDE_DIRS}
 )
  
 include(${wxWidgets_USE_FILE})
-
-#svnrev
-add_executable(svnrev/svnrev ${SVNREV_FILES})
-if(UNIX)
-	add_custom_target(MakeRev ALL ./svnrev.sh)
-	add_dependencies(MakeRev svnrev/svnrev)
-endif()
 
 #ogrebullet libraries
 add_library(OgreBulletCol SHARED ${OGREBULLET_COLL_FILES})
