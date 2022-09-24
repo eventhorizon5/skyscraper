@@ -218,10 +218,11 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	Ogre::Quaternion camrot = x * z;
 	Ogre::Quaternion bodyrot = y;
 	Rotation = vector;
-	camera->SetOrientation(camrot);
 
 	if (EnableBullet == true)
 		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
+
+	camera->SetOrientation(camrot);
 
 	OnRotate(false);
 }
