@@ -222,7 +222,7 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	if (EnableBullet == true)
 		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
 
-	camera->SetOrientation(camrot);
+	SetOrientation(camrot);
 
 	OnRotate(false);
 }
