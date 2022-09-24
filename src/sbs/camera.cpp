@@ -432,7 +432,7 @@ void Camera::SetToStartPosition(bool disable_current_floor)
 		GotoFloor(StartFloor, disable_current_floor);
 	}
 	else
-		SetPosition(Ogre::Vector3(StartPositionX, GetHeight(), StartPositionZ));
+		SetPosition(Ogre::Vector3(StartPositionX, GetHeight() / 2, StartPositionZ));
 }
 
 void Camera::SetToStartDirection()
@@ -1091,7 +1091,7 @@ void Camera::GotoFloor(int floor, bool disable_current)
 		if (floorobj)
 		{
 			Ogre::Vector3 pos = GetPosition();
-			pos.y = floorobj->GetBase() + GetHeight();
+			pos.y = floorobj->GetBase() + (GetHeight() / 2);
 			SetPosition(pos);
 			floorobj->Enabled(true);
 			floorobj->EnableGroup(true);
