@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Scalable Building Simulator - Wall Object
 	The Skyscraper Project - Version 1.11 Alpha

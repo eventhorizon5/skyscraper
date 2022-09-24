@@ -1,5 +1,3 @@
-# $Id$
-	
 #This building demonstrates simulating a small city, with existing
 #Skyscraper buildings, each running in a separate sim engine.
 

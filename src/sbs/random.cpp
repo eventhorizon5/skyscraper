@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
     This random number generator originally appeared in "Toward a Universal
     Random Number Generator" by George Marsaglia and Arif Zaman.

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Scalable Building Simulator - Dynamic Mesh
 	The Skyscraper Project - Version 1.11 Alpha

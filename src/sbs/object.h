@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Scalable Building Simulator - Generic Object Class
 	The Skyscraper Project - Version 1.11 Alpha

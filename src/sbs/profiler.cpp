@@ -1,5 +1,3 @@
-/* $Id$ */
-#include <OgreBulletDynamicsWorld.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"

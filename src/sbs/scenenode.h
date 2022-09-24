@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Scalable Building Simulator - SceneNode Object
 	The Skyscraper Project - Version 1.11 Alpha

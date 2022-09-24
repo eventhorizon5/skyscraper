@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	This code was originally part of Crystal Space
 	Available at http://www.crystalspace3d.org

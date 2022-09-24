@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Skyscraper 1.11 Alpha - Main Screen
 	Copyright (C)2004-2022 Ryan Thoryk

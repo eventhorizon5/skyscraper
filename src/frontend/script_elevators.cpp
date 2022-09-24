@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Skyscraper 1.11 Alpha - Script Processor - Elevator Section
 	Copyright (C)2003-2022 Ryan Thoryk

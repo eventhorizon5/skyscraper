@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Skyscraper 1.11 Alpha - Debug Panel
 	Copyright (C)2004-2022 Ryan Thoryk

@@ -1,5 +1,3 @@
-# $Id$
-
 #Simple Door Component
 <Include data/scripts/elevator_doors.txt>
 

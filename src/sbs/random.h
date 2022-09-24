@@ -1,5 +1,3 @@
-/* $Id$ */
-
 #ifndef _SBS_RANDOM_H
 #define _SBS_RANDOM_H
 

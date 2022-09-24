@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Scalable Building Simulator - Proximity Trigger Object
 	The Skyscraper Project - Version 1.11 Alpha

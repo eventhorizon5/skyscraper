@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Skyscraper 1.11 Alpha - Object Creation Dialog
 	Copyright (C)2003-2022 Ryan Thoryk

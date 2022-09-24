@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Scalable Building Simulator - Stairwell Object
 	The Skyscraper Project - Version 1.11 Alpha

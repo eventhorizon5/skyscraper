@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
 	Scalable Building Simulator - Lock and DoorLock Classes
 	The Skyscraper Project - Version 1.11 Alpha
