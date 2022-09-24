@@ -244,6 +244,7 @@ private:
 		void SetViewMode(int mode);
 		bool Attach(Ogre::Camera *camera);
 		bool Detach();
+		Ogre::Quaternion GetDerivedOrientation();
 
 	private:
 		Ogre::Camera* MainCamera; //main first-person view camera

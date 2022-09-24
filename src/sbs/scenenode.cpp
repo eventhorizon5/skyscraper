@@ -135,7 +135,7 @@ Ogre::Vector3 SceneNode::GetPosition(bool relative)
 
 	if (relative == false)
 	{
-		Ogre::Vector3 pos = sbs->ToLocal(node->_getDerivedPosition());
+		Ogre::Vector3 pos = GetDerivedPosition();
 		if (IsRoot() == false)
 			return sbs->FromGlobal(pos);
 		else
@@ -203,9 +203,9 @@ Ogre::Quaternion SceneNode::GetOrientation(bool relative)
 		if (relative == false)
 		{
 			if (IsRoot() == false)
-				return sbs->FromGlobal(node->_getDerivedOrientation());
+				return sbs->FromGlobal(GetDerivedOrientation());
 			else
-				return node->_getDerivedOrientation();
+				return GetDerivedOrientation();
 		}
 		else
 			return node->getOrientation();
@@ -333,14 +333,27 @@ void SceneNode::Pitch(Real &degree)
 {
 	//rotate on X axis
 
-	GetRawSceneNode()->pitch(Ogre::Degree(degree));
+	node->pitch(Ogre::Degree(degree));
 }
 
 void SceneNode::Roll(Real &degree)
 {
 	//rotate on Z axis
 
-	GetRawSceneNode()->roll(Ogre::Degree(degree));
+	node->roll(Ogre::Degree(degree));
+}
+
+Ogre::Vector3 SceneNode::GetDerivedPosition()
+{
+	//gets the position of the node as derived from all parents
+	return sbs->ToLocal(node->_getDerivedPosition());
+}
+
+Ogre::Quaternion SceneNode::GetDerivedOrientation()
+{
+	//gets the orientation of the node as derived from all parents
+
+	return node->_getDerivedOrientation();
 }
 
 }

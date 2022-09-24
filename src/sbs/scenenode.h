@@ -55,6 +55,8 @@ public:
 	bool IsRoot();
 	void Pitch(Real &degree);
 	void Roll(Real &degree);
+	Ogre::Vector3 GetDerivedPosition();
+	Ogre::Quaternion GetDerivedOrientation();
 
 private:
 

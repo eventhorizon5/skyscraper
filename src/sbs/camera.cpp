@@ -246,14 +246,11 @@ void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top, bool global)
 	if (!IsAttached())
 		return;
 
-/* THIS NEEDS TO BE CHECKED */
 	Ogre::Quaternion dir;
 	if (global == false)
-		//dir = sbs->FromGlobal(MainCamera->getDerivedOrientation());
-		dir = sbs->FromGlobal(core_camera->GetOrientation());
+		dir = sbs->FromGlobal(core_camera->GetDerivedOrientation());
 	else
-		//dir = MainCamera->getDerivedOrientation();
-		dir = core_camera->GetOrientation();
+		dir = core_camera->GetDerivedOrientation();
 
 	front = dir.zAxis();
 	front.x = -front.x; //convert to left-hand coordinate system
@@ -317,7 +314,7 @@ bool Camera::Move(Ogre::Vector3 vector, Real speed, bool flip)
 	Ogre::Quaternion orientation;
 
 	if (EnableBullet == true)
-		orientation = GetSceneNode()->GetRawSceneNode()->_getDerivedOrientation();
+		orientation = GetSceneNode()->GetDerivedOrientation();
 	else
 		orientation = core_camera->GetOrientation();
 
@@ -1592,6 +1589,11 @@ bool Camera::CoreCamera::Detach()
 	MainCamera = 0;
 
 	return true;
+}
+
+Ogre::Quaternion Camera::CoreCamera::GetDerivedOrientation()
+{
+	return GetSceneNode()->GetDerivedOrientation();
 }
 
 }
