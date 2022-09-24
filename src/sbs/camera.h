@@ -215,7 +215,7 @@ private:
 	//Models
 	Model*	AttachedModel;
 
-	//Ogre Camera
+	//Core Camera object
 	class CoreCamera;
 	CoreCamera* core_camera;
 
@@ -240,11 +240,17 @@ private:
 		Ogre::Viewport* GetViewport();
 		void Pitch(Real &degree);
 		void Roll(Real &degree);
-		Ogre::Camera* GetMainCamera();
 		void SetViewMode(int mode);
 		bool Attach(Ogre::Camera *camera);
 		bool Detach();
 		Ogre::Quaternion GetDerivedOrientation();
+		Ogre::Ray GetViewportRay(Real x, Real y);
+		Real GetAspectRatio();
+		bool IsMeshVisible(MeshObject *mesh);
+		bool IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index);
+		void SetFarClipDistance(Real value);
+		void SetFOVAngle(Real angle);
+		Real GetFOVAngle();
 
 	private:
 		Ogre::Camera* MainCamera; //main first-person view camera

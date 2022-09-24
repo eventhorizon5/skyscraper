@@ -540,7 +540,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	Real x = (float)mouse_x / (float)width;
 	Real y = (float)mouse_y / (float)height;
-	Ogre::Ray ray = core_camera->GetMainCamera()->getCameraToViewportRay(x, y);
+	Ogre::Ray ray = core_camera->GetViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
 	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
@@ -927,12 +927,7 @@ void Camera::SetFOVAngle(Real angle)
 	if (!IsAttached())
 		return;
 
-	if (angle > 0 && angle < 179.63)
-	{
-		Real ratio = (float)core_camera->GetMainCamera()->getAspectRatio();
-		if (ratio > 0)
-			core_camera->GetMainCamera()->setFOVy(Ogre::Degree(angle / ratio));
-	}
+	core_camera->SetFOVAngle(angle);
 }
 
 Real Camera::GetFOVAngle()
@@ -940,7 +935,7 @@ Real Camera::GetFOVAngle()
 	if (!IsAttached())
 		return 0.0;
 
-	return (float)(core_camera->GetMainCamera()->getFOVy().valueDegrees() * core_camera->GetMainCamera()->getAspectRatio());
+	return core_camera->GetFOVAngle();
 }
 
 void Camera::SetToDefaultFOV()
@@ -1034,7 +1029,7 @@ void Camera::SetMaxRenderDistance(Real value)
 	if (!IsAttached())
 		return;
 
-	core_camera->GetMainCamera()->setFarClipDistance(sbs->ToRemote(value));
+	core_camera->SetFarClipDistance(value);
 	FarClip = value;
 }
 
@@ -1119,7 +1114,7 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 	if (!mesh || !IsAttached())
 		return false;
 
-	return mesh->IsVisible(core_camera->GetMainCamera());
+	return core_camera->IsMeshVisible(mesh);
 }
 
 bool Camera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
@@ -1127,7 +1122,7 @@ bool Camera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
 	if (!mesh || !IsAttached())
 		return false;
 
-	return mesh->IsVisible(core_camera->GetMainCamera(), mesh_index);
+	return core_camera->IsDynamicMeshVisible(mesh, mesh_index);
 }
 
 void Camera::AttachModel(Model *model)
@@ -1536,11 +1531,6 @@ void Camera::CoreCamera::Roll(Real &degree)
 	GetSceneNode()->Roll(degree);
 }
 
-Ogre::Camera* Camera::CoreCamera::GetMainCamera()
-{
-	return MainCamera;
-}
-
 void Camera::CoreCamera::SetViewMode(int mode)
 {
 	//set view mode of camera:
@@ -1591,6 +1581,66 @@ bool Camera::CoreCamera::Detach()
 Ogre::Quaternion Camera::CoreCamera::GetDerivedOrientation()
 {
 	return GetSceneNode()->GetDerivedOrientation();
+}
+
+Ogre::Ray Camera::CoreCamera::GetViewportRay(Real x, Real y)
+{
+	if (!IsAttached())
+		return Ogre::Ray();
+
+	return MainCamera->getCameraToViewportRay(x, y);
+}
+
+Real Camera::CoreCamera::GetAspectRatio()
+{
+	if (!IsAttached())
+		return 0;
+
+	return MainCamera->getAspectRatio();
+}
+
+bool Camera::CoreCamera::IsMeshVisible(MeshObject *mesh)
+{
+	//returns if a mesh object is visible in the camera's view frustum or not
+
+	if (!mesh || !IsAttached())
+		return false;
+
+	return mesh->IsVisible(MainCamera);
+}
+
+bool Camera::CoreCamera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
+{
+	if (!mesh || !IsAttached())
+		return false;
+
+	return mesh->IsVisible(MainCamera, mesh_index);
+}
+
+void Camera::CoreCamera::SetFarClipDistance(Real value)
+{
+	if (!IsAttached())
+		return;
+
+	MainCamera->setFarClipDistance(sbs->ToRemote(value));
+}
+
+void Camera::CoreCamera::SetFOVAngle(Real angle)
+{
+	if (!IsAttached())
+		return;
+
+	if (angle > 0 && angle < 179.63)
+	{
+		Real ratio = (float)GetAspectRatio();
+		if (ratio > 0)
+			MainCamera->setFOVy(Ogre::Degree(angle / ratio));
+	}
+}
+
+Real Camera::CoreCamera::GetFOVAngle()
+{
+	return (float)(MainCamera->getFOVy().valueDegrees() * GetAspectRatio());
 }
 
 }
