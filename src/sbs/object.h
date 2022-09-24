@@ -95,6 +95,7 @@ public:
 	virtual void SetRotation(Real X, Real Y, Real Z);
 	virtual Ogre::Vector3 GetRotation();
 	Ogre::Quaternion GetOrientation(bool relative = false);
+	void SetOrientation(const Ogre::Quaternion &q, bool relative = false);
 	virtual void OnMove(bool parent) {} //called when object is moved
 	virtual void OnRotate(bool parent) {} //called when object is rotated
 	virtual void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right) {} //called when object is clicked on

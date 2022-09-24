@@ -28,6 +28,8 @@
 
 namespace SBS {
 
+class OgreCamera;
+
 struct SBSIMPEXP CameraState
 {
 	Ogre::Vector3 position;
@@ -168,7 +170,7 @@ public:
 	bool IsModelAttached();
 	void ResetState();
 	void ResetView();
-	bool IsActive() { return (MainCamera != 0); }
+	bool IsActive() { return IsAttached(); }
 	void Refresh();
 	bool Attach(Ogre::Camera *camera, bool init_state = true);
 	bool Detach();
@@ -185,9 +187,9 @@ public:
 	void Crouch(bool value);
 	void SetOrientation(const Ogre::Quaternion &orientation);
 	void AttachToVehicle(bool value);
+	bool IsAttached();
 
 private:
-	Ogre::Camera* MainCamera; //main first-person view camera
 	Ogre::Vector3 StartDirection; //direction camera faces on start
 	Ogre::Vector3 StartRotation; //camera's startup rotation
 	std::string meshname; //last clicked mesh name
@@ -217,6 +219,9 @@ private:
 	//Models
 	Model*	AttachedModel;
 
+	//Ogre Camera
+	OgreCamera* CoreCamera;
+
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;
 	OgreBulletCollisions::CollisionShape* mShape;
@@ -225,6 +230,28 @@ private:
 	Ogre::Quaternion old_camera_orientation;
 	Ogre::Quaternion old_character_orientation;
 	bool old_freelook_mode;
+};
+
+class SBSIMPEXP OgreCamera : public Object
+{
+
+public:
+
+	//functions
+	OgreCamera(Object *parent);
+	~OgreCamera();
+	bool IsAttached();
+	Ogre::Viewport* GetViewport();
+	void Pitch(Real &deg);
+	void Roll(Real &deg);
+	Ogre::Camera* GetMainCamera();
+	void SetViewMode(int mode);
+	bool Attach(Ogre::Camera *camera);
+	bool Detach();
+
+private:
+	Ogre::Camera* MainCamera; //main first-person view camera
+
 };
 
 }

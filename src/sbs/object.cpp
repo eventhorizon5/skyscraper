@@ -401,6 +401,14 @@ Ogre::Quaternion Object::GetOrientation(bool relative)
 	return node->GetOrientation(relative);
 }
 
+void Object::SetOrientation(const Ogre::Quaternion &q, bool relative)
+{
+	if (!node)
+		return;
+
+	return node->SetOrientation(q, relative);
+}
+
 void Object::NotifyMove(bool parent)
 {
 	//notify about a move
