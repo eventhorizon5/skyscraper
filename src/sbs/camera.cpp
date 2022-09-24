@@ -177,10 +177,7 @@ void Camera::SetPosition(const Ogre::Vector3 &position)
 	if (!IsAttached())
 		return;
 
-	if (EnableBullet == true)
-		GetSceneNode()->SetPosition(position - core_camera->GetPosition());
-	else
-		core_camera->SetPosition(position);
+	GetSceneNode()->SetPosition(position);
 
 	OnMove(false);
 }
