@@ -26,8 +26,6 @@
 
 namespace SBS {
 
-class OgreCamera;
-
 struct SBSIMPEXP CameraState
 {
 	Ogre::Vector3 position;
@@ -218,7 +216,8 @@ private:
 	Model*	AttachedModel;
 
 	//Ogre Camera
-	OgreCamera* CoreCamera;
+	class CoreCamera;
+	CoreCamera* core_camera;
 
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;
@@ -228,29 +227,29 @@ private:
 	Ogre::Quaternion old_camera_orientation;
 	Ogre::Quaternion old_character_orientation;
 	bool old_freelook_mode;
+
+	class CoreCamera : public Object
+	{
+
+	public:
+
+		//functions
+		CoreCamera(Object *parent);
+		~CoreCamera();
+		bool IsAttached();
+		Ogre::Viewport* GetViewport();
+		void Pitch(Real &deg);
+		void Roll(Real &deg);
+		Ogre::Camera* GetMainCamera();
+		void SetViewMode(int mode);
+		bool Attach(Ogre::Camera *camera);
+		bool Detach();
+
+	private:
+		Ogre::Camera* MainCamera; //main first-person view camera
+	};
 };
 
-class SBSIMPEXP OgreCamera : public Object
-{
-
-public:
-
-	//functions
-	OgreCamera(Object *parent);
-	~OgreCamera();
-	bool IsAttached();
-	Ogre::Viewport* GetViewport();
-	void Pitch(Real &deg);
-	void Roll(Real &deg);
-	Ogre::Camera* GetMainCamera();
-	void SetViewMode(int mode);
-	bool Attach(Ogre::Camera *camera);
-	bool Detach();
-
-private:
-	Ogre::Camera* MainCamera; //main first-person view camera
-
-};
 
 }
 

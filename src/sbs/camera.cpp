@@ -110,7 +110,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	AttachedModel = 0;
 	prev_orientation = Ogre::Quaternion::ZERO;
 	prev_position = Ogre::Vector3::ZERO;
-	CoreCamera = new OgreCamera(this);
+	core_camera = new CoreCamera(this);
 	Gravity = 0;
 	GravityStatus = false;
 	FirstAttach = false;
@@ -178,9 +178,9 @@ void Camera::SetPosition(const Ogre::Vector3 &position)
 		return;
 
 	if (EnableBullet == true)
-		GetSceneNode()->SetPosition(position - CoreCamera->GetPosition());
+		GetSceneNode()->SetPosition(position - core_camera->GetPosition());
 	else
-		CoreCamera->SetPosition(position);
+		core_camera->SetPosition(position);
 
 	OnMove(false);
 }
@@ -223,7 +223,7 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	Ogre::Quaternion camrot = x * z;
 	Ogre::Quaternion bodyrot = y;
 	Rotation = vector;
-	CoreCamera->SetOrientation(camrot);
+	core_camera->SetOrientation(camrot);
 
 	if (EnableBullet == true)
 		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
@@ -238,8 +238,8 @@ Ogre::Vector3 Camera::GetPosition(bool relative)
 
 	Ogre::Vector3 cameraposition = Ogre::Vector3::ZERO;
 
-	if (CoreCamera->GetMainCamera())
-		cameraposition = CoreCamera->GetPosition();
+	if (core_camera->GetMainCamera())
+		cameraposition = core_camera->GetPosition();
 
 	return GetSceneNode()->GetPosition() + cameraposition;
 }
@@ -255,10 +255,10 @@ void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top, bool global)
 	Ogre::Quaternion dir;
 	if (global == false)
 		//dir = sbs->FromGlobal(MainCamera->getDerivedOrientation());
-		dir = sbs->FromGlobal(CoreCamera->GetOrientation());
+		dir = sbs->FromGlobal(core_camera->GetOrientation());
 	else
 		//dir = MainCamera->getDerivedOrientation();
-		dir = CoreCamera->GetOrientation();
+		dir = core_camera->GetOrientation();
 
 	front = dir.zAxis();
 	front.x = -front.x; //convert to left-hand coordinate system
@@ -324,7 +324,7 @@ bool Camera::Move(Ogre::Vector3 vector, Real speed, bool flip)
 	if (EnableBullet == true)
 		orientation = GetSceneNode()->GetRawSceneNode()->_getDerivedOrientation();
 	else
-		orientation = CoreCamera->GetOrientation();
+		orientation = core_camera->GetOrientation();
 
 	//flip X axis
 	vector *= Ogre::Vector3(-1, 1, 1);
@@ -405,11 +405,11 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, Real speed)
 		mCharacter->setOrientation(sbs->ToGlobal(rot));
 
 		//rotate camera
-		CoreCamera->Pitch(xdeg);
-		CoreCamera->Roll(zdeg);
+		core_camera->Pitch(xdeg);
+		core_camera->Roll(zdeg);
 	}
 	else
-		CoreCamera->SetOrientation(rot);
+		core_camera->SetOrientation(rot);
 
 	OnRotate(false);
 }
@@ -543,15 +543,15 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	Ogre::Vector3 pos = GetPosition();
 
 	//cast a ray from the camera in the direction of the clicked position
-	int width = CoreCamera->GetViewport()->getActualWidth();
-	int height = CoreCamera->GetViewport()->getActualHeight();
+	int width = core_camera->GetViewport()->getActualWidth();
+	int height = core_camera->GetViewport()->getActualHeight();
 
 	if (width == 0 || height == 0)
 		return;
 
 	Real x = (float)mouse_x / (float)width;
 	Real y = (float)mouse_y / (float)height;
-	Ogre::Ray ray = CoreCamera->GetMainCamera()->getCameraToViewportRay(x, y);
+	Ogre::Ray ray = core_camera->GetMainCamera()->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
 	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
@@ -940,9 +940,9 @@ void Camera::SetFOVAngle(Real angle)
 
 	if (angle > 0 && angle < 179.63)
 	{
-		Real ratio = (float)CoreCamera->GetMainCamera()->getAspectRatio();
+		Real ratio = (float)core_camera->GetMainCamera()->getAspectRatio();
 		if (ratio > 0)
-			CoreCamera->GetMainCamera()->setFOVy(Ogre::Degree(angle / ratio));
+			core_camera->GetMainCamera()->setFOVy(Ogre::Degree(angle / ratio));
 	}
 }
 
@@ -951,7 +951,7 @@ Real Camera::GetFOVAngle()
 	if (!IsAttached())
 		return 0.0;
 
-	return (float)(CoreCamera->GetMainCamera()->getFOVy().valueDegrees() * CoreCamera->GetMainCamera()->getAspectRatio());
+	return (float)(core_camera->GetMainCamera()->getFOVy().valueDegrees() * core_camera->GetMainCamera()->getAspectRatio());
 }
 
 void Camera::SetToDefaultFOV()
@@ -977,7 +977,7 @@ void Camera::SetViewMode(int mode)
 	if (!IsAttached())
 		return;
 
-	CoreCamera->SetViewMode(mode);
+	core_camera->SetViewMode(mode);
 }
 
 void Camera::EnableCollisions(bool value)
@@ -1045,7 +1045,7 @@ void Camera::SetMaxRenderDistance(Real value)
 	if (!IsAttached())
 		return;
 
-	CoreCamera->GetMainCamera()->setFarClipDistance(sbs->ToRemote(value));
+	core_camera->GetMainCamera()->setFarClipDistance(sbs->ToRemote(value));
 	FarClip = value;
 }
 
@@ -1071,7 +1071,7 @@ void Camera::MoveCharacter()
 	if (EnableBullet == true)
 		mCharacter->setWalkDirection(accum_movement, 1);
 	else
-		CoreCamera->Move(sbs->ToLocal(accum_movement));
+		core_camera->Move(sbs->ToLocal(accum_movement));
 	prev_accum_movement = accum_movement;
 	accum_movement = Ogre::Vector3::ZERO;
 }
@@ -1130,7 +1130,7 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 	if (!mesh || !IsAttached())
 		return false;
 
-	return mesh->IsVisible(CoreCamera->GetMainCamera());
+	return mesh->IsVisible(core_camera->GetMainCamera());
 }
 
 bool Camera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
@@ -1138,7 +1138,7 @@ bool Camera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
 	if (!mesh || !IsAttached())
 		return false;
 
-	return mesh->IsVisible(CoreCamera->GetMainCamera(), mesh_index);
+	return mesh->IsVisible(core_camera->GetMainCamera(), mesh_index);
 }
 
 void Camera::AttachModel(Model *model)
@@ -1276,8 +1276,8 @@ bool Camera::Attach(Ogre::Camera *camera, bool init_state)
 	if (camera->isAttached() == true)
 		return false;
 
-	CoreCamera->SetPosition(0, (cfg_body_height + cfg_legs_height + 0.5) / 2, 0);
-	CoreCamera->Attach(camera);
+	core_camera->SetPosition(0, (cfg_body_height + cfg_legs_height + 0.5) / 2, 0);
+	core_camera->Attach(camera);
 
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
@@ -1317,7 +1317,7 @@ bool Camera::Detach()
 	if (!IsAttached())
 		return false;
 
-	return CoreCamera->Detach();
+	return core_camera->Detach();
 }
 
 void Camera::OnMove(bool parent)
@@ -1435,7 +1435,7 @@ void Camera::SetOrientation(const Ogre::Quaternion &orientation)
 	//set orientation of main camera object, not collider
 
 	if (IsAttached())
-		CoreCamera->SetOrientation(orientation);
+		core_camera->SetOrientation(orientation);
 }
 
 void Camera::AttachToVehicle(bool value)
@@ -1455,7 +1455,7 @@ void Camera::AttachToVehicle(bool value)
 		vehicle->AttachCamera(false);
 		vehicle = 0;
 		EnableCollisions(true);
-		CoreCamera->SetOrientation(old_camera_orientation);
+		core_camera->SetOrientation(old_camera_orientation);
 		mCharacter->setOrientation(old_character_orientation);
 	}
 	else if (value == true)
@@ -1496,7 +1496,7 @@ void Camera::AttachToVehicle(bool value)
 				Freelook = true;
 				inside_vehicle = true;
 				EnableCollisions(false);
-				old_camera_orientation = CoreCamera->GetOrientation();
+				old_camera_orientation = core_camera->GetOrientation();
 				old_character_orientation = mCharacter->getWorldOrientation();
 				vehicle->AttachCamera(true);
 			}
@@ -1508,10 +1508,10 @@ void Camera::AttachToVehicle(bool value)
 
 bool Camera::IsAttached()
 {
-	return CoreCamera->IsAttached();
+	return core_camera->IsAttached();
 }
 
-OgreCamera::OgreCamera(Object *parent) : Object(parent)
+Camera::CoreCamera::CoreCamera(Object *parent) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Camera", "Camera", true);
@@ -1519,17 +1519,17 @@ OgreCamera::OgreCamera(Object *parent) : Object(parent)
 	MainCamera = 0;
 }
 
-OgreCamera::~OgreCamera()
+Camera::CoreCamera::~CoreCamera()
 {
-
+	Detach();
 }
 
-bool OgreCamera::IsAttached()
+bool Camera::CoreCamera::IsAttached()
 {
 	return (MainCamera != 0);
 }
 
-Ogre::Viewport* OgreCamera::GetViewport()
+Ogre::Viewport* Camera::CoreCamera::GetViewport()
 {
 	if (MainCamera)
 		return MainCamera->getViewport();
@@ -1537,22 +1537,22 @@ Ogre::Viewport* OgreCamera::GetViewport()
 		return 0;
 }
 
-void OgreCamera::Pitch(Real &deg)
+void Camera::CoreCamera::Pitch(Real &deg)
 {
 	GetSceneNode()->GetRawSceneNode()->pitch(Ogre::Degree(deg));
 }
 
-void OgreCamera::Roll(Real &deg)
+void Camera::CoreCamera::Roll(Real &deg)
 {
 	GetSceneNode()->GetRawSceneNode()->roll(Ogre::Degree(deg));
 }
 
-Ogre::Camera* OgreCamera::GetMainCamera()
+Ogre::Camera* Camera::CoreCamera::GetMainCamera()
 {
 	return MainCamera;
 }
 
-void OgreCamera::SetViewMode(int mode)
+void Camera::CoreCamera::SetViewMode(int mode)
 {
 	//set view mode of camera:
 	//0 - solid polygons (normal)
@@ -1570,7 +1570,7 @@ void OgreCamera::SetViewMode(int mode)
 		MainCamera->setPolygonMode(Ogre::PM_POINTS);
 }
 
-bool OgreCamera::Attach(Ogre::Camera *camera)
+bool Camera::CoreCamera::Attach(Ogre::Camera *camera)
 {
 	//attach an OGRE camera
 
@@ -1583,8 +1583,10 @@ bool OgreCamera::Attach(Ogre::Camera *camera)
 	return true;
 }
 
-bool OgreCamera::Detach()
+bool Camera::CoreCamera::Detach()
 {
+	//detach an OGRE camera
+
 	if (!IsAttached())
 		return false;
 
