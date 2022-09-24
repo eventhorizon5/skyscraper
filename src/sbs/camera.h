@@ -218,7 +218,7 @@ private:
 	Model*	AttachedModel;
 
 	//Core Camera object
-	CoreCamera* core_camera;
+	CoreCamera* camera;
 
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;
