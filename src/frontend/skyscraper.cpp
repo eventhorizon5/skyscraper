@@ -573,21 +573,30 @@ bool Skyscraper::Initialize()
 
 	mSceneMgr->addRenderQueueListener(mOverlaySystem);
 
-	//Enable the RT Shader System
-	if (Ogre::RTShader::ShaderGenerator::initialize())
+	std::string renderer = mRoot->getRenderSystem()->getName();
+
+	bool rtss = false;
+	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem")
+		rtss = true;
+
+	if (rtss == true)
 	{
-		Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-		shaderGenerator->addSceneManager(mSceneMgr);
+		//Enable the RT Shader System
+		if (Ogre::RTShader::ShaderGenerator::initialize())
+		{
+			Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
+			shaderGenerator->addSceneManager(mSceneMgr);
 
-	    // forward scheme not found events to the RTSS
-	    SGTechniqueResolverListener* schemeNotFoundHandler = new SGTechniqueResolverListener(shaderGenerator);
-	    Ogre::MaterialManager::getSingleton().addListener(schemeNotFoundHandler);
+			// forward scheme not found events to the RTSS
+			SGTechniqueResolverListener* schemeNotFoundHandler = new SGTechniqueResolverListener(shaderGenerator);
+			Ogre::MaterialManager::getSingleton().addListener(schemeNotFoundHandler);
 
-		/*Ogre::RTShader::RenderState* RenderState = shaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
-		//Add per pixel lighting sub render state to the global scheme render state.
-		//It will override the default FFP lighting sub render state.
-		Ogre::RTShader::PerPixelLighting* perPixelLightModel = shaderGenerator->createSubRenderState<Ogre::RTShader::PerPixelLighting>();
-		RenderState->addTemplateSubRenderState(perPixelLightModel);*/
+			/*Ogre::RTShader::RenderState* RenderState = shaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+			//Add per pixel lighting sub render state to the global scheme render state.
+			//It will override the default FFP lighting sub render state.
+			Ogre::RTShader::PerPixelLighting* perPixelLightModel = shaderGenerator->createSubRenderState<Ogre::RTShader::PerPixelLighting>();
+			RenderState->addTemplateSubRenderState(perPixelLightModel);*/
+		}
 	}
 
 	//set ambient light
@@ -609,7 +618,8 @@ bool Skyscraper::Initialize()
 	}
 
 	//set up default material shader scheme
-	mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	if (rtss == true)
+		mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 
 	//setup texture filtering
 	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
