@@ -329,4 +329,18 @@ bool SceneNode::IsRoot()
 	 return (this == sbs->GetSceneNode());
 }
 
+void SceneNode::Pitch(Real &degree)
+{
+	//rotate on X axis
+
+	GetRawSceneNode()->pitch(Ogre::Degree(degree));
+}
+
+void SceneNode::Roll(Real &degree)
+{
+	//rotate on Z axis
+
+	GetRawSceneNode()->roll(Ogre::Degree(degree));
+}
+
 }

@@ -238,8 +238,8 @@ private:
 		~CoreCamera();
 		bool IsAttached();
 		Ogre::Viewport* GetViewport();
-		void Pitch(Real &deg);
-		void Roll(Real &deg);
+		void Pitch(Real &degree);
+		void Roll(Real &degree);
 		Ogre::Camera* GetMainCamera();
 		void SetViewMode(int mode);
 		bool Attach(Ogre::Camera *camera);

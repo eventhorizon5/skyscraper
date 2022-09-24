@@ -1537,14 +1537,14 @@ Ogre::Viewport* Camera::CoreCamera::GetViewport()
 		return 0;
 }
 
-void Camera::CoreCamera::Pitch(Real &deg)
+void Camera::CoreCamera::Pitch(Real &degree)
 {
-	GetSceneNode()->GetRawSceneNode()->pitch(Ogre::Degree(deg));
+	GetSceneNode()->Pitch(degree);
 }
 
-void Camera::CoreCamera::Roll(Real &deg)
+void Camera::CoreCamera::Roll(Real &degree)
 {
-	GetSceneNode()->GetRawSceneNode()->roll(Ogre::Degree(deg));
+	GetSceneNode()->Roll(degree);
 }
 
 Ogre::Camera* Camera::CoreCamera::GetMainCamera()

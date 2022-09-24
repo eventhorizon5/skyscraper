@@ -53,6 +53,8 @@ public:
 	SceneNode* CreateChild(std::string name, const Ogre::Vector3 &offset = Ogre::Vector3::ZERO);
 	std::string GetFullName();
 	bool IsRoot();
+	void Pitch(Real &degree);
+	void Roll(Real &degree);
 
 private:
 
