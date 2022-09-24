@@ -52,7 +52,6 @@
 #include "model.h"
 #include "timer.h"
 #include "profiler.h"
-#include "revsbs.h"
 
 namespace SBS {
 
@@ -61,7 +60,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	sbs = this;
 	this->mSceneManager = mSceneManager;
 
-	version = "0.11.0." + std::string(SVN_REVSTR);
+	version = "0.11.0.0";
 	version_state = "Alpha";
 
 	//root object needs to self-register

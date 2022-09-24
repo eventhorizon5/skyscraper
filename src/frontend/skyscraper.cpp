@@ -52,7 +52,6 @@
 #include "loaddialog.h"
 #include "profiler.h"
 #include "shaderresolver.h"
-#include "revmain.h"
 
 #include <OgreOverlaySystem.h>
 
@@ -103,7 +102,7 @@ namespace Skyscraper {
 bool Skyscraper::OnInit(void)
 {
 	version = "1.11";
-	version_rev = SVN_REVSTR;
+	version_rev = "0";
 	version_state = "Alpha";
 	version_frontend = version + ".0." + version_rev;
 	StartupRunning = false;

@@ -42,7 +42,6 @@
 		<Unit filename="../src/frontend/peoplemanager.h" />
 		<Unit filename="../src/frontend/profilergui.cpp" />
 		<Unit filename="../src/frontend/profilergui.h" />
-		<Unit filename="../src/frontend/revmain.h" />
 		<Unit filename="../src/frontend/skycontrol.cpp" />
 		<Unit filename="../src/frontend/skycontrol.h" />
 		<Unit filename="../src/frontend/skyscraper.cpp" />
@@ -98,7 +97,6 @@
 		<Unit filename="../src/sbs/profiler.h" />
 		<Unit filename="../src/sbs/random.cpp" />
 		<Unit filename="../src/sbs/random.h" />
-		<Unit filename="../src/sbs/revsbs.h" />
 		<Unit filename="../src/sbs/sbs.cpp" />
 		<Unit filename="../src/sbs/sbs.h" />
 		<Unit filename="../src/sbs/shaft.cpp" />
