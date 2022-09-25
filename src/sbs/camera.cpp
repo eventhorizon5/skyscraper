@@ -219,18 +219,22 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	if (vector.z < 0)
 		vector.z += 360;
 
-	Ogre::Quaternion x(Ogre::Degree(vector.x), Ogre::Vector3::UNIT_X);
 	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion camrot = x * z;
-	Ogre::Quaternion bodyrot = y;
+	Ogre::Quaternion roty = y;
 	Rotation = vector;
 
-	SetOrientation(camrot);
-	camera->SetOrientation(camrot);
-
 	if (EnableBullet == true)
-		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
+	{
+		mCharacter->setOrientation(sbs->ToGlobal(roty));
+		mCharacter->getSceneNode()->pitch(Ogre::Degree(Rotation.x));
+		mCharacter->getSceneNode()->roll(Ogre::Degree(Rotation.z));
+	}
+	else
+	{
+		camera->SetOrientation(roty);
+		camera->Pitch(Rotation.x);
+		camera->Roll(Rotation.z);
+	}
 
 	OnRotate(false);
 }
@@ -394,18 +398,19 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, Real speed)
 	if (Rotation.z < 0)
 		Rotation.z += 360;
 
-	Ogre::Quaternion rot(Ogre::Degree(Rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::Quaternion roty(Ogre::Degree(Rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	if (EnableBullet == true)
 	{
-		//rotate character collider
-		mCharacter->setOrientation(sbs->ToGlobal(rot));
-
-		//rotate camera
-		camera->Pitch(xdeg);
-		camera->Roll(zdeg);
+		mCharacter->setOrientation(sbs->ToGlobal(roty));
+		mCharacter->getSceneNode()->pitch(Ogre::Degree(Rotation.x));
+		mCharacter->getSceneNode()->roll(Ogre::Degree(Rotation.z));
 	}
 	else
-		camera->SetOrientation(rot);
+	{
+		camera->SetOrientation(roty);
+		camera->Pitch(Rotation.x);
+		camera->Roll(Rotation.z);
+	}
 
 	OnRotate(false);
 }
