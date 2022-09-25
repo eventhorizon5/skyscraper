@@ -24,9 +24,9 @@
 #define OBJECTINFO_H
 
 //(*Headers(ObjectInfo)
+#include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -43,39 +43,39 @@ class ObjectInfo: public wxDialog
 		virtual ~ObjectInfo();
 
 		//(*Declarations(ObjectInfo)
-		wxTextCtrl* tType;
-		wxButton* bReset;
-		wxTextCtrl* tScriptCommand;
-		wxTextCtrl* tParent;
-		wxTextCtrl* tScriptCommand2;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText10;
-		wxTextCtrl* tNumber;
-		wxTreeCtrl* ObjectTree;
-		wxStaticText* StaticText3;
-		wxTextCtrl* tContext;
-		wxTextCtrl* tLineNum;
-		wxStaticLine* StaticLine1;
-		wxStaticText* StaticText8;
-		wxStaticText* StaticText12;
-		wxTextCtrl* tParentType;
-		wxStaticText* StaticText7;
-		wxButton* bSave;
-		wxTextCtrl* tPermanent;
-		wxTextCtrl* tName;
-		wxButton* bViewScript;
-		wxStaticText* StaticText4;
-		wxButton* bDelete;
-		wxStaticText* StaticText5;
-		wxStaticText* StaticText2;
 		wxButton* bCreate;
-		wxStaticText* StaticText6;
-		wxButton* bOK;
-		wxTextCtrl* tParentName;
-		wxStaticText* StaticText9;
-		wxTextCtrl* tIncludeFile;
-		wxStaticText* StaticText11;
+		wxButton* bDelete;
 		wxButton* bMove;
+		wxButton* bOK;
+		wxButton* bReset;
+		wxButton* bSave;
+		wxButton* bViewScript;
+		wxStaticLine* StaticLine1;
+		wxStaticText* StaticText10;
+		wxStaticText* StaticText11;
+		wxStaticText* StaticText12;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* StaticText4;
+		wxStaticText* StaticText5;
+		wxStaticText* StaticText6;
+		wxStaticText* StaticText7;
+		wxStaticText* StaticText8;
+		wxStaticText* StaticText9;
+		wxTextCtrl* tContext;
+		wxTextCtrl* tIncludeFile;
+		wxTextCtrl* tLineNum;
+		wxTextCtrl* tName;
+		wxTextCtrl* tNumber;
+		wxTextCtrl* tParent;
+		wxTextCtrl* tParentName;
+		wxTextCtrl* tParentType;
+		wxTextCtrl* tPermanent;
+		wxTextCtrl* tScriptCommand2;
+		wxTextCtrl* tScriptCommand;
+		wxTextCtrl* tType;
+		wxTreeCtrl* ObjectTree;
 		//*)
 		void Loop();
 		void PopulateTree();

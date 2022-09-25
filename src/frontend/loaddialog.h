@@ -24,10 +24,10 @@
 #define LOADDIALOG_H
 
 //(*Headers(LoadDialog)
+#include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -43,37 +43,37 @@ class LoadDialog: public wxDialog
 		virtual ~LoadDialog();
 
 		//(*Declarations(LoadDialog)
-		wxTextCtrl* tMaxZ;
-		wxTextCtrl* tMinX;
-		wxTextCtrl* tMaxX;
-		wxTextCtrl* tMinY;
-		wxStaticLine* StaticLine2;
-		wxTextCtrl* tMinZ;
-		wxCheckBox* chkCutLandscape;
-		wxCheckBox* chkCutExternal;
-		wxCheckBox* chkCutFloors;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText10;
-		wxTextCtrl* tPosX;
-		wxTextCtrl* tPosZ;
-		wxStaticText* StaticText3;
-		wxTextCtrl* tMaxY;
-		wxStaticLine* StaticLine1;
-		wxStaticText* StaticText8;
-		wxStaticLine* StaticLine3;
-		wxStaticText* StaticText7;
-		wxTextCtrl* tRotation;
-		wxStaticText* StaticText4;
-		wxStaticText* StaticText5;
-		wxStaticText* StaticText2;
-		wxTextCtrl* tFilename;
-		wxStaticText* StaticText6;
-		wxStaticLine* StaticLine4;
-		wxTextCtrl* tPosY;
-		wxCheckBox* chkCutBuildings;
-		wxStaticText* StaticText9;
 		wxButton* bLoad;
 		wxButton* bSelect;
+		wxCheckBox* chkCutBuildings;
+		wxCheckBox* chkCutExternal;
+		wxCheckBox* chkCutFloors;
+		wxCheckBox* chkCutLandscape;
+		wxStaticLine* StaticLine1;
+		wxStaticLine* StaticLine2;
+		wxStaticLine* StaticLine3;
+		wxStaticLine* StaticLine4;
+		wxStaticText* StaticText10;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* StaticText4;
+		wxStaticText* StaticText5;
+		wxStaticText* StaticText6;
+		wxStaticText* StaticText7;
+		wxStaticText* StaticText8;
+		wxStaticText* StaticText9;
+		wxTextCtrl* tFilename;
+		wxTextCtrl* tMaxX;
+		wxTextCtrl* tMaxY;
+		wxTextCtrl* tMaxZ;
+		wxTextCtrl* tMinX;
+		wxTextCtrl* tMinY;
+		wxTextCtrl* tMinZ;
+		wxTextCtrl* tPosX;
+		wxTextCtrl* tPosY;
+		wxTextCtrl* tPosZ;
+		wxTextCtrl* tRotation;
 		//*)
 
 	protected:

@@ -24,10 +24,10 @@
 #define MESHCONTROL_H
 
 //(*Headers(MeshControl)
+#include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 //*)
 
 namespace Skyscraper {
@@ -82,24 +82,24 @@ class MeshControl: public wxDialog
 		void OnInit();
 
 		//(*Declarations(MeshControl)
-		wxCheckBox* chkAllShafts;
-		wxCheckBox* chkAllStairs;
-		wxCheckBox* chkSky;
-		wxCheckBox* chkExternal;
-		wxBoxSizer* BoxSizer2;
-		wxCheckBox* chkInterfloor;
-		wxCheckBox* chkElevators;
-		wxCheckBox* chkBuildings;
-		wxCheckBox* chkAllInterfloors;
-		wxButton* bOk;
-		wxCheckBox* chkLandscape;
-		wxCheckBox* chkColumnFrame;
-		wxCheckBox* chkStairs;
 		wxBoxSizer* BoxSizer1;
-		wxCheckBox* chkShafts;
+		wxBoxSizer* BoxSizer2;
+		wxButton* bOk;
 		wxCheckBox* chkAllColumnFrames;
 		wxCheckBox* chkAllFloors;
+		wxCheckBox* chkAllInterfloors;
+		wxCheckBox* chkAllShafts;
+		wxCheckBox* chkAllStairs;
+		wxCheckBox* chkBuildings;
+		wxCheckBox* chkColumnFrame;
+		wxCheckBox* chkElevators;
+		wxCheckBox* chkExternal;
 		wxCheckBox* chkFloor;
+		wxCheckBox* chkInterfloor;
+		wxCheckBox* chkLandscape;
+		wxCheckBox* chkShafts;
+		wxCheckBox* chkSky;
+		wxCheckBox* chkStairs;
 		//*)
 
 	private:

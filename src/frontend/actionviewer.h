@@ -24,12 +24,12 @@
 #define ACTIONVIEWER_H
 
 //(*Headers(ActionViewer)
-#include <wx/dialog.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
+#include <wx/dialog.h>
+#include <wx/listbox.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/listbox.h>
 //*)
 
 namespace Skyscraper {
@@ -42,20 +42,20 @@ class ActionViewer: public wxDialog
 		virtual ~ActionViewer();
 
 		//(*Declarations(ActionViewer)
-		wxTextCtrl* tType;
-		wxTextCtrl* tParameters;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText3;
+		wxButton* bDelete;
+		wxButton* bOK;
+		wxButton* bRun;
 		wxListBox* ActionList;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* StaticText4;
+		wxStaticText* StaticText5;
 		wxTextCtrl* tCommand;
 		wxTextCtrl* tName;
-		wxStaticText* StaticText4;
-		wxButton* bDelete;
-		wxButton* bRun;
-		wxStaticText* StaticText5;
-		wxStaticText* StaticText2;
-		wxButton* bOK;
+		wxTextCtrl* tParameters;
 		wxTextCtrl* tParentName;
+		wxTextCtrl* tType;
 		//*)
 		void Loop();
 

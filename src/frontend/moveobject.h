@@ -24,11 +24,11 @@
 #define MOVEOBJECT_H
 
 //(*Headers(MoveObject)
+#include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
-#include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/radiobut.h>
+#include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -123,46 +123,46 @@ class MoveObject: public wxDialog
 		void OnInit();
 
 		//(*Declarations(MoveObject)
-		wxStaticText* StaticText24;
-		wxButton* bPositionY;
-		wxStaticText* StaticText22;
-		wxButton* bRotationY;
-		wxStaticLine* StaticLine2;
-		wxCheckBox* chkHold;
-		wxTextCtrl* txtRotationY;
-		wxStaticText* StaticText28;
 		wxButton* bPositionX;
-		wxRadioButton* rPosition;
-		wxStaticText* lblRotation;
-		wxButton* bZNeg;
-		wxButton* bXPlus;
-		wxStaticText* lblPosition;
-		wxButton* bYNeg;
-		wxStaticText* lblRelPosition;
-		wxStaticText* StaticText20;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText16;
-		wxButton* bRotationZ;
-		wxStaticText* StaticText3;
-		wxTextCtrl* txtRotationX;
-		wxStaticText* StaticText23;
-		wxButton* bXNeg;
-		wxTextCtrl* txtPositionX;
-		wxStaticLine* StaticLine1;
-		wxStaticLine* StaticLine3;
-		wxButton* bRotationX;
-		wxButton* bYPlus;
-		wxTextCtrl* txtRotationZ;
-		wxTextCtrl* txtPositionZ;
-		wxButton* bZPlus;
-		wxStaticText* StaticText2;
-		wxStaticText* StaticText27;
-		wxTextCtrl* txtMoveSpeed;
-		wxStaticText* StaticText26;
-		wxTextCtrl* txtPositionY;
-		wxStaticText* StaticText25;
+		wxButton* bPositionY;
 		wxButton* bPositionZ;
+		wxButton* bRotationX;
+		wxButton* bRotationY;
+		wxButton* bRotationZ;
+		wxButton* bXNeg;
+		wxButton* bXPlus;
+		wxButton* bYNeg;
+		wxButton* bYPlus;
+		wxButton* bZNeg;
+		wxButton* bZPlus;
+		wxCheckBox* chkHold;
+		wxRadioButton* rPosition;
 		wxRadioButton* rRotation;
+		wxStaticLine* StaticLine1;
+		wxStaticLine* StaticLine2;
+		wxStaticLine* StaticLine3;
+		wxStaticText* StaticText16;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText20;
+		wxStaticText* StaticText22;
+		wxStaticText* StaticText23;
+		wxStaticText* StaticText24;
+		wxStaticText* StaticText25;
+		wxStaticText* StaticText26;
+		wxStaticText* StaticText27;
+		wxStaticText* StaticText28;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* lblPosition;
+		wxStaticText* lblRelPosition;
+		wxStaticText* lblRotation;
+		wxTextCtrl* txtMoveSpeed;
+		wxTextCtrl* txtPositionX;
+		wxTextCtrl* txtPositionY;
+		wxTextCtrl* txtPositionZ;
+		wxTextCtrl* txtRotationX;
+		wxTextCtrl* txtRotationY;
+		wxTextCtrl* txtRotationZ;
 		//*)
 		Ogre::Vector3 hold_vector;
 		SBS::Object *object;

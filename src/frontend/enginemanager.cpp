@@ -21,8 +21,8 @@
 */
 
 //(*InternalHeaders(EngineManager)
-#include <wx/string.h>
 #include <wx/intl.h>
+#include <wx/string.h>
 //*)
 #include "globals.h"
 #include "sbs.h"
@@ -67,26 +67,26 @@ END_EVENT_TABLE()
 EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(EngineManager)
+	wxBoxSizer* BoxSizer1;
+	wxBoxSizer* BoxSizer2;
+	wxBoxSizer* BoxSizer4;
+	wxBoxSizer* BoxSizer5;
+	wxBoxSizer* BoxSizer6;
+	wxBoxSizer* BoxSizer7;
+	wxBoxSizer* BoxSizer8;
+	wxBoxSizer* BoxSizer9;
 	wxFlexGridSizer* FlexGridSizer1;
 	wxFlexGridSizer* FlexGridSizer2;
-	wxBoxSizer* BoxSizer7;
-	wxBoxSizer* BoxSizer2;
 	wxFlexGridSizer* FlexGridSizer4;
-	wxBoxSizer* BoxSizer9;
-	wxBoxSizer* BoxSizer4;
-	wxBoxSizer* BoxSizer8;
-	wxBoxSizer* BoxSizer1;
 	wxFlexGridSizer* FlexGridSizer5;
-	wxBoxSizer* BoxSizer6;
-	wxBoxSizer* BoxSizer5;
 
 	Create(parent, wxID_ANY, _("Engine Manager"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer5 = new wxFlexGridSizer(0, 2, 0, 0);
 	BoxSizer8 = new wxBoxSizer(wxVERTICAL);
 	EngineList = new wxListBox(this, ID_EngineList, wxDefaultPosition, wxSize(175,150), 0, 0, 0, wxDefaultValidator, _T("ID_EngineList"));
-	BoxSizer8->Add(EngineList, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
-	FlexGridSizer5->Add(BoxSizer8, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer8->Add(EngineList, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
+	FlexGridSizer5->Add(BoxSizer8, 1, wxALL|wxEXPAND, 5);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 2, 0, 0);
@@ -115,11 +115,11 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	tState = new wxTextCtrl(this, ID_tState, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tState"));
 	tState->SetMinSize(wxSize(125,-1));
 	FlexGridSizer2->Add(tState, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer4->Add(FlexGridSizer2, 1, wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(FlexGridSizer2, 1, wxBOTTOM|wxEXPAND, 5);
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
-	BoxSizer4->Add(StaticLine2, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer4->Add(BoxSizer4, 1, wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer4->Add(StaticLine2, 1, wxEXPAND, 5);
+	FlexGridSizer4->Add(BoxSizer4, 1, wxBOTTOM|wxEXPAND, 5);
 	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
 	chkCLoads = new wxCheckBox(this, ID_CLoads, _("Concurrent Loading"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CLoads"));
 	chkCLoads->SetValue(false);
@@ -143,9 +143,9 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	bShutdown = new wxButton(this, ID_bShutdown, _("Shutdown"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bShutdown"));
 	BoxSizer6->Add(bShutdown, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer4->Add(BoxSizer2, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(BoxSizer2, 1, wxEXPAND, 5);
 	BoxSizer1->Add(FlexGridSizer4, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer5->Add(BoxSizer1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer5->Add(BoxSizer1, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer1->Add(FlexGridSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
 	bOk = new wxButton(this, ID_bOk, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOk"));

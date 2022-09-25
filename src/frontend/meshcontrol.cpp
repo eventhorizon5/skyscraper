@@ -21,8 +21,8 @@
 */
 
 //(*InternalHeaders(MeshControl)
-#include <wx/string.h>
 #include <wx/intl.h>
+#include <wx/string.h>
 //*)
 #include "globals.h"
 #include "sbs.h"
@@ -64,10 +64,10 @@ END_EVENT_TABLE()
 MeshControl::MeshControl(DebugPanel* parent,wxWindowID id)
 {
 	//(*Initialize(MeshControl)
-	wxStaticBoxSizer* StaticBoxSizer2;
 	wxBoxSizer* BoxSizer3;
-	wxStaticBoxSizer* StaticBoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer1;
+	wxStaticBoxSizer* StaticBoxSizer2;
+	wxStaticBoxSizer* StaticBoxSizer3;
 
 	Create(parent, wxID_ANY, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -75,56 +75,56 @@ MeshControl::MeshControl(DebugPanel* parent,wxWindowID id)
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxVERTICAL, this, _("Global Objects"));
 	chkExternal = new wxCheckBox(this, ID_chkExternal, _("External"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkExternal"));
 	chkExternal->SetValue(false);
-	StaticBoxSizer1->Add(chkExternal, 0, wxTOP|wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer1->Add(chkExternal, 0, wxTOP|wxBOTTOM|wxALIGN_LEFT, 5);
 	chkBuildings = new wxCheckBox(this, ID_chkBuildings, _("Buildings"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkBuildings"));
 	chkBuildings->SetValue(false);
-	StaticBoxSizer1->Add(chkBuildings, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer1->Add(chkBuildings, 0, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkLandscape = new wxCheckBox(this, ID_chkLandscape, _("Landscape"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_chkLandscape"));
 	chkLandscape->SetValue(false);
-	StaticBoxSizer1->Add(chkLandscape, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer1->Add(chkLandscape, 0, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkSky = new wxCheckBox(this, ID_chkSky, _("Sky"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkSky"));
 	chkSky->SetValue(false);
-	StaticBoxSizer1->Add(chkSky, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer1->Add(chkSky, 0, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkElevators = new wxCheckBox(this, ID_chkElevators, _("Elevators"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkElevators"));
 	chkElevators->SetValue(false);
-	StaticBoxSizer1->Add(chkElevators, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer2->Add(StaticBoxSizer1, 1, wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
+	StaticBoxSizer1->Add(chkElevators, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	BoxSizer2->Add(StaticBoxSizer1, 1, wxALIGN_TOP, 5);
 	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxVERTICAL, this, _("Per-Floor Objects"));
 	chkFloor = new wxCheckBox(this, ID_chkFloor, _("Level"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFloor"));
 	chkFloor->SetValue(false);
-	StaticBoxSizer2->Add(chkFloor, 0, wxTOP|wxBOTTOM|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer2->Add(chkFloor, 0, wxTOP|wxBOTTOM|wxEXPAND, 5);
 	chkShafts = new wxCheckBox(this, ID_chkShafts, _("Shafts"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkShafts"));
 	chkShafts->SetValue(false);
-	StaticBoxSizer2->Add(chkShafts, 1, wxBOTTOM|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer2->Add(chkShafts, 1, wxBOTTOM|wxEXPAND, 5);
 	chkStairs = new wxCheckBox(this, ID_chkStairs, _("Stairs"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkStairs"));
 	chkStairs->SetValue(false);
-	StaticBoxSizer2->Add(chkStairs, 1, wxBOTTOM|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer2->Add(chkStairs, 1, wxBOTTOM|wxEXPAND, 5);
 	chkInterfloor = new wxCheckBox(this, ID_chkInterfloor, _("Interfloor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkInterfloor"));
 	chkInterfloor->SetValue(false);
-	StaticBoxSizer2->Add(chkInterfloor, 1, wxBOTTOM|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer2->Add(chkInterfloor, 1, wxBOTTOM|wxEXPAND, 5);
 	chkColumnFrame = new wxCheckBox(this, ID_chkColumnFrame, _("Column Frame"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkColumnFrame"));
 	chkColumnFrame->SetValue(false);
-	StaticBoxSizer2->Add(chkColumnFrame, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer3->Add(StaticBoxSizer2, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer2->Add(chkColumnFrame, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	BoxSizer3->Add(StaticBoxSizer2, 1, wxEXPAND, 5);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxVERTICAL, this, _("Grouped Objects"));
 	chkAllFloors = new wxCheckBox(this, ID_chkAllFloors, _("All Floors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAllFloors"));
 	chkAllFloors->SetValue(false);
-	StaticBoxSizer3->Add(chkAllFloors, 1, wxTOP|wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer3->Add(chkAllFloors, 1, wxTOP|wxBOTTOM|wxALIGN_LEFT, 5);
 	chkAllShafts = new wxCheckBox(this, ID_chkAllShafts, _("All Shafts"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAllShafts"));
 	chkAllShafts->SetValue(false);
-	StaticBoxSizer3->Add(chkAllShafts, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer3->Add(chkAllShafts, 1, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkAllStairs = new wxCheckBox(this, ID_chkAllStairs, _("All Stairs"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAllStairs"));
 	chkAllStairs->SetValue(false);
-	StaticBoxSizer3->Add(chkAllStairs, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer3->Add(chkAllStairs, 1, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkAllInterfloors = new wxCheckBox(this, ID_chkAllInterfloors, _("All Interfloors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAllInterfloors"));
 	chkAllInterfloors->SetValue(false);
-	StaticBoxSizer3->Add(chkAllInterfloors, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer3->Add(chkAllInterfloors, 1, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkAllColumnFrames = new wxCheckBox(this, ID_chkAllColumnFrames, _("All Column Frames"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAllColumnFrames"));
 	chkAllColumnFrames->SetValue(false);
-	StaticBoxSizer3->Add(chkAllColumnFrames, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer3->Add(StaticBoxSizer3, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer2->Add(BoxSizer3, 1, wxLEFT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer3->Add(chkAllColumnFrames, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	BoxSizer3->Add(StaticBoxSizer3, 1, wxEXPAND, 5);
+	BoxSizer2->Add(BoxSizer3, 1, wxLEFT|wxEXPAND, 5);
 	BoxSizer1->Add(BoxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	bOk = new wxButton(this, ID_bOk, _("OK"), wxPoint(75,145), wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOk"));
 	BoxSizer1->Add(bOk, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);

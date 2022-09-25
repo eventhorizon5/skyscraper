@@ -24,13 +24,13 @@
 #define SKYCONTROL_H
 
 //(*Headers(SkyControl)
+#include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/statline.h>
-#include <wx/tglbtn.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/tglbtn.h>
 //*)
 
 namespace Skyscraper {
@@ -42,33 +42,33 @@ class SkyControl: public wxDialog {
 		virtual ~SkyControl();
 
 		//(*Declarations(SkyControl)
-		wxTextCtrl* tJulian;
-		wxStaticLine* StaticLine2;
-		wxToggleButton* bSet;
+		wxButton* bGetSystemTime;
+		wxButton* bSetLatitude;
 		wxButton* bSetLongitude;
-		wxTextCtrl* tDay;
-		wxTextCtrl* tHour;
-		wxTextCtrl* tMultiplier;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText3;
 		wxButton* bSetMultiplier;
 		wxStaticLine* StaticLine1;
-		wxTextCtrl* tLatitude;
-		wxStaticText* StaticText8;
-		wxTextCtrl* tLongitude;
-		wxStaticText* StaticText7;
-		wxStaticText* StaticText4;
-		wxTextCtrl* tMonth;
-		wxStaticText* StaticText5;
-		wxStaticText* StaticText2;
-		wxTextCtrl* tYear;
-		wxButton* bGetSystemTime;
-		wxStaticText* StaticText6;
-		wxTextCtrl* tSecond;
-		wxTextCtrl* tMinute;
-		wxStaticText* StaticText9;
+		wxStaticLine* StaticLine2;
 		wxStaticText* StaticText11;
-		wxButton* bSetLatitude;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* StaticText4;
+		wxStaticText* StaticText5;
+		wxStaticText* StaticText6;
+		wxStaticText* StaticText7;
+		wxStaticText* StaticText8;
+		wxStaticText* StaticText9;
+		wxTextCtrl* tDay;
+		wxTextCtrl* tHour;
+		wxTextCtrl* tJulian;
+		wxTextCtrl* tLatitude;
+		wxTextCtrl* tLongitude;
+		wxTextCtrl* tMinute;
+		wxTextCtrl* tMonth;
+		wxTextCtrl* tMultiplier;
+		wxTextCtrl* tSecond;
+		wxTextCtrl* tYear;
+		wxToggleButton* bSet;
 		//*)
 		void Loop();
 

@@ -30,11 +30,11 @@
 #endif
 
 //(*Headers(DebugPanel)
-#include <wx/checkbox.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
-#include <wx/panel.h>
+#include <wx/checkbox.h>
 #include <wx/frame.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 //*)
 #include <wx/timer.h>
@@ -162,58 +162,58 @@ class DebugPanel: public wxFrame
 		void OnInit();
 
 		//(*Declarations(DebugPanel)
-		wxButton* bEngineManager;
-		wxButton* bSkyControl;
-		wxPanel* Panel1;
-		wxStaticText* t_framerate;
-		wxCheckBox* chkCollisionDetection;
-		wxButton* bFloorList;
-		wxButton* bTextures;
-		wxStaticText* t_elevnumber;
-		wxButton* bPeopleManager;
-		wxStaticText* t_camerap;
-		wxStaticText* t_elevfloor;
-		wxCheckBox* chkVerbose;
-		wxBoxSizer* BoxSizer7;
-		wxCheckBox* chkAutoStairs;
-		wxCheckBox* chkFrameLimiter;
-		wxButton* bFloorInfo;
-		wxCheckBox* chkAutoShafts;
-		wxButton* bControlReference;
-		wxButton* bCameraControl;
-		wxBoxSizer* BoxSizer2;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText10;
-		wxButton* bActionViewer;
-		wxStaticText* StaticText3;
-		wxButton* bStats;
-		wxButton* bProfiler;
-		wxButton* bObjectInfo;
-		wxStaticText* t_floorname;
-		wxStaticText* StaticText8;
-		wxBoxSizer* BoxSizer4;
-		wxCheckBox* chkGravity;
-		wxButton* bKeys;
-		wxStaticText* StaticText7;
-		wxStaticText* t_collision;
-		wxStaticText* StaticText4;
 		wxBoxSizer* BoxSizer1;
-		wxStaticText* StaticText5;
-		wxStaticText* StaticText2;
-		wxStaticText* t_clickposition;
-		wxStaticText* t_object;
-		wxStaticText* StaticText6;
+		wxBoxSizer* BoxSizer2;
+		wxBoxSizer* BoxSizer4;
+		wxBoxSizer* BoxSizer5;
+		wxBoxSizer* BoxSizer6;
+		wxBoxSizer* BoxSizer7;
+		wxButton* bActionViewer;
+		wxButton* bCameraControl;
+		wxButton* bConsole;
+		wxButton* bControlReference;
 		wxButton* bEditElevator;
-		wxStaticText* t_camerafloor;
-		wxStaticText* t_rotation;
+		wxButton* bEngineManager;
+		wxButton* bFloorInfo;
+		wxButton* bFloorList;
+		wxButton* bKeys;
+		wxButton* bMeshControl;
+		wxButton* bObjectInfo;
+		wxButton* bPeopleManager;
+		wxButton* bProfiler;
+		wxButton* bSkyControl;
+		wxButton* bStats;
+		wxButton* bTextures;
+		wxCheckBox* chkAutoShafts;
+		wxCheckBox* chkAutoStairs;
+		wxCheckBox* chkCollisionDetection;
+		wxCheckBox* chkFrameLimiter;
+		wxCheckBox* chkGravity;
 		wxCheckBox* chkProcessElevators;
 		wxCheckBox* chkRandom;
-		wxStaticText* StaticText9;
-		wxBoxSizer* BoxSizer6;
-		wxButton* bConsole;
+		wxCheckBox* chkVerbose;
+		wxPanel* Panel1;
+		wxStaticText* StaticText10;
 		wxStaticText* StaticText11;
-		wxBoxSizer* BoxSizer5;
-		wxButton* bMeshControl;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* StaticText4;
+		wxStaticText* StaticText5;
+		wxStaticText* StaticText6;
+		wxStaticText* StaticText7;
+		wxStaticText* StaticText8;
+		wxStaticText* StaticText9;
+		wxStaticText* t_camerafloor;
+		wxStaticText* t_camerap;
+		wxStaticText* t_clickposition;
+		wxStaticText* t_collision;
+		wxStaticText* t_elevfloor;
+		wxStaticText* t_elevnumber;
+		wxStaticText* t_floorname;
+		wxStaticText* t_framerate;
+		wxStaticText* t_object;
+		wxStaticText* t_rotation;
 		//*)
 
 	private:

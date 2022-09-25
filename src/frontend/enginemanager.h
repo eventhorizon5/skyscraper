@@ -24,14 +24,14 @@
 #define ENGINEMANAGER_H
 
 //(*Headers(EngineManager)
+#include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
+#include <wx/listbox.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/listbox.h>
 //*)
 
 namespace Skyscraper {
@@ -44,26 +44,26 @@ class EngineManager: public wxDialog
 		virtual ~EngineManager();
 
 		//(*Declarations(EngineManager)
-		wxButton* bSetActive;
-		wxTextCtrl* tState;
-		wxStaticLine* StaticLine2;
-		wxTextCtrl* tBoundsMax;
-		wxTextCtrl* tPosition;
-		wxCheckBox* chkCLoads;
-		wxButton* bShutdown;
-		wxTextCtrl* tActive;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText3;
-		wxTextCtrl* tBoundsMin;
-		wxButton* bOk;
-		wxButton* bReload;
-		wxStaticText* StaticText4;
-		wxStaticText* StaticText5;
-		wxListBox* EngineList;
-		wxStaticText* StaticText2;
-		wxCheckBox* chkRender;
 		wxButton* bLoad;
 		wxButton* bMove;
+		wxButton* bOk;
+		wxButton* bReload;
+		wxButton* bSetActive;
+		wxButton* bShutdown;
+		wxCheckBox* chkCLoads;
+		wxCheckBox* chkRender;
+		wxListBox* EngineList;
+		wxStaticLine* StaticLine2;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* StaticText4;
+		wxStaticText* StaticText5;
+		wxTextCtrl* tActive;
+		wxTextCtrl* tBoundsMax;
+		wxTextCtrl* tBoundsMin;
+		wxTextCtrl* tPosition;
+		wxTextCtrl* tState;
 		//*)
 		void Loop();
 

@@ -24,9 +24,9 @@
 #define PARAMETERVIEWER_H
 
 //(*Headers(ParameterViewer)
+#include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 //*)
@@ -41,53 +41,53 @@ class ParameterViewer: public wxDialog
 		virtual ~ParameterViewer();
 
 		//(*Declarations(ParameterViewer)
-		wxStaticText* l7;
-		wxTextCtrl* t7;
-		wxTextCtrl* t20;
-		wxButton* bTextures;
-		wxTextCtrl* t9;
-		wxStaticText* l15;
-		wxStaticText* l20;
-		wxStaticText* l4;
-		wxTextCtrl* t14;
-		wxTextCtrl* t13;
-		wxTextCtrl* t19;
-		wxTextCtrl* t15;
-		wxStaticText* l2;
 		wxButton* bCancel;
-		wxTextCtrl* t12;
-		wxTextCtrl* t1;
-		wxStaticText* l17;
+		wxButton* bOK;
+		wxButton* bTextures;
 		wxStaticText* StaticText1;
 		wxStaticText* l10;
 		wxStaticText* l11;
-		wxStaticText* l3;
-		wxStaticText* l1;
-		wxStaticText* l9;
-		wxTextCtrl* t11;
-		wxStaticText* l13;
 		wxStaticText* l12;
-		wxTextCtrl* t16;
-		wxStaticText* l6;
-		wxTextCtrl* t18;
-		wxStaticText* l16;
-		wxTextCtrl* t5;
-		wxTextCtrl* t17;
-		wxTextCtrl* t6;
-		wxTextCtrl* t10;
-		wxTextCtrl* tCommand;
-		wxStaticText* l8;
-		wxTextCtrl* t8;
-		wxTextCtrl* t2;
+		wxStaticText* l13;
 		wxStaticText* l14;
-		wxTextCtrl* t3;
-		wxStaticText* tDesc;
-		wxButton* bOK;
-		wxStaticText* tVariables;
-		wxTextCtrl* t4;
-		wxStaticText* l5;
+		wxStaticText* l15;
+		wxStaticText* l16;
+		wxStaticText* l17;
 		wxStaticText* l18;
 		wxStaticText* l19;
+		wxStaticText* l1;
+		wxStaticText* l20;
+		wxStaticText* l2;
+		wxStaticText* l3;
+		wxStaticText* l4;
+		wxStaticText* l5;
+		wxStaticText* l6;
+		wxStaticText* l7;
+		wxStaticText* l8;
+		wxStaticText* l9;
+		wxStaticText* tDesc;
+		wxStaticText* tVariables;
+		wxTextCtrl* t10;
+		wxTextCtrl* t11;
+		wxTextCtrl* t12;
+		wxTextCtrl* t13;
+		wxTextCtrl* t14;
+		wxTextCtrl* t15;
+		wxTextCtrl* t16;
+		wxTextCtrl* t17;
+		wxTextCtrl* t18;
+		wxTextCtrl* t19;
+		wxTextCtrl* t1;
+		wxTextCtrl* t20;
+		wxTextCtrl* t2;
+		wxTextCtrl* t3;
+		wxTextCtrl* t4;
+		wxTextCtrl* t5;
+		wxTextCtrl* t6;
+		wxTextCtrl* t7;
+		wxTextCtrl* t8;
+		wxTextCtrl* t9;
+		wxTextCtrl* tCommand;
 		//*)
 		wxString objecttype;
 		wxString objectparent;

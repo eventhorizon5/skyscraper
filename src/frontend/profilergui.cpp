@@ -28,8 +28,8 @@
 #include "skyscraper.h"
 
 //(*InternalHeaders(Profiler)
-#include <wx/string.h>
 #include <wx/intl.h>
+#include <wx/string.h>
 //*)
 
 namespace Skyscraper {
@@ -48,9 +48,9 @@ END_EVENT_TABLE()
 Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(Profiler)
-	wxFlexGridSizer* FlexGridSizer1;
-	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
+	wxBoxSizer* BoxSizer2;
+	wxFlexGridSizer* FlexGridSizer1;
 
 	Create(parent, wxID_ANY, _("Profiler"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);

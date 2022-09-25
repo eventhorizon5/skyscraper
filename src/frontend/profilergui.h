@@ -41,9 +41,9 @@ class Profiler: public wxDialog
 		void Loop();
 
 		//(*Declarations(Profiler)
-		wxTextCtrl* txtMain;
 		wxCheckBox* chkAdvanced;
 		wxCheckBox* chkCapture;
+		wxTextCtrl* txtMain;
 		//*)
 
 	protected:

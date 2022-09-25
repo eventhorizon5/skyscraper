@@ -24,9 +24,9 @@
 #define STATS_H
 
 //(*Headers(Stats)
+#include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 //*)
@@ -41,57 +41,57 @@ class Stats: public wxDialog
 		virtual ~Stats();
 
 		//(*Declarations(Stats)
-		wxTextCtrl* tInStairwell;
-		wxStaticText* StaticText24;
-		wxTextCtrl* tTextures;
-		wxStaticText* StaticText22;
-		wxStaticText* StaticText21;
+		wxButton* bOK;
+		wxStaticText* StaticText10;
+		wxStaticText* StaticText11;
+		wxStaticText* StaticText12;
 		wxStaticText* StaticText13;
-		wxTextCtrl* tSounds;
 		wxStaticText* StaticText14;
 		wxStaticText* StaticText15;
-		wxTextCtrl* tSBSVersion;
+		wxStaticText* StaticText16;
 		wxStaticText* StaticText17;
-		wxTextCtrl* tRenderer;
-		wxTextCtrl* tElevators;
-		wxTextCtrl* tVersion;
-		wxTextCtrl* tStairs;
-		wxStaticText* StaticText20;
-		wxTextCtrl* tDesigner;
 		wxStaticText* StaticText18;
 		wxStaticText* StaticText1;
-		wxStaticText* StaticText10;
-		wxStaticText* StaticText16;
-		wxTextCtrl* tDescription;
-		wxStaticText* StaticText3;
-		wxTextCtrl* tObjects;
-		wxTextCtrl* tInShaft;
+		wxStaticText* StaticText20;
+		wxStaticText* StaticText21;
+		wxStaticText* StaticText22;
 		wxStaticText* StaticText23;
-		wxTextCtrl* tPolygons;
-		wxTextCtrl* tRunningTime;
-		wxTextCtrl* tActions;
-		wxTextCtrl* tBasements;
-		wxStaticText* StaticText8;
-		wxStaticText* StaticText12;
-		wxTextCtrl* tFrontendVersion;
-		wxStaticText* StaticText7;
-		wxTextCtrl* tFloors;
-		wxTextCtrl* tInElevator;
-		wxTextCtrl* tName;
+		wxStaticText* StaticText24;
+		wxStaticText* StaticText25;
+		wxStaticText* StaticText26;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
-		wxTextCtrl* tLocation;
-		wxStaticText* StaticText2;
-		wxTextCtrl* tWalls;
-		wxTextCtrl* tMeshes;
-		wxTextCtrl* tPlatform;
-		wxStaticText* StaticText26;
 		wxStaticText* StaticText6;
-		wxTextCtrl* tShafts;
-		wxButton* bOK;
+		wxStaticText* StaticText7;
+		wxStaticText* StaticText8;
 		wxStaticText* StaticText9;
-		wxStaticText* StaticText11;
-		wxStaticText* StaticText25;
+		wxTextCtrl* tActions;
+		wxTextCtrl* tBasements;
+		wxTextCtrl* tDescription;
+		wxTextCtrl* tDesigner;
+		wxTextCtrl* tElevators;
+		wxTextCtrl* tFloors;
+		wxTextCtrl* tFrontendVersion;
+		wxTextCtrl* tInElevator;
+		wxTextCtrl* tInShaft;
+		wxTextCtrl* tInStairwell;
+		wxTextCtrl* tLocation;
+		wxTextCtrl* tMeshes;
+		wxTextCtrl* tName;
+		wxTextCtrl* tObjects;
+		wxTextCtrl* tPlatform;
+		wxTextCtrl* tPolygons;
+		wxTextCtrl* tRenderer;
+		wxTextCtrl* tRunningTime;
+		wxTextCtrl* tSBSVersion;
+		wxTextCtrl* tShafts;
+		wxTextCtrl* tSounds;
+		wxTextCtrl* tStairs;
+		wxTextCtrl* tTextures;
+		wxTextCtrl* tVersion;
+		wxTextCtrl* tWalls;
 		//*)
 		void Loop();
 

@@ -24,9 +24,9 @@
 #define CREATEOBJECT_H
 
 //(*Headers(CreateObject)
+#include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 //*)
 
 namespace Skyscraper {
@@ -39,37 +39,37 @@ class CreateObject: public wxDialog
 		virtual ~CreateObject();
 
 		//(*Declarations(CreateObject)
-		wxButton* bFloorCut;
-		wxButton* bShaftDoorComponent;
-		wxButton* bAddShaftWall;
-		wxButton* bAddWall;
-		wxButton* bColumnWallBox;
+		wxButton* bAddDirectionalIndicator;
+		wxButton* bAddDoor;
+		wxButton* bAddFillerWalls;
+		wxButton* bAddFloor;
+		wxButton* bAddFloorIndicator;
+		wxButton* bAddInterfloorFloor;
+		wxButton* bAddInterfloorWall;
+		wxButton* bAddShaftDoor;
+		wxButton* bAddShaftFloor;
+		wxButton* bAddShaftModel;
 		wxButton* bAddShaftStdDoor;
+		wxButton* bAddShaftWall;
+		wxButton* bAddStairs;
+		wxButton* bAddStairsDoor;
+		wxButton* bAddStairsFloor;
+		wxButton* bAddStairsModel;
+		wxButton* bAddStairsWall;
+		wxButton* bAddWall;
+		wxButton* bColumnWallBox2;
+		wxButton* bColumnWallBox;
+		wxButton* bCreateCallButtons;
+		wxButton* bElevator;
+		wxButton* bFinishShaftDoor;
+		wxButton* bFloor;
 		wxButton* bFloorAddModel;
 		wxButton* bFloorAddSound;
-		wxButton* bFinishShaftDoor;
-		wxButton* bAddDoor;
+		wxButton* bFloorCut;
 		wxButton* bFloorCutAll;
-		wxButton* bAddFloorIndicator;
-		wxButton* bShaft;
-		wxButton* bAddStairsDoor;
-		wxButton* bAddFillerWalls;
-		wxButton* bAddShaftDoor;
-		wxButton* bCreateCallButtons;
 		wxButton* bLoadTexture;
-		wxButton* bAddDirectionalIndicator;
-		wxButton* bAddShaftModel;
-		wxButton* bAddStairs;
-		wxButton* bColumnWallBox2;
-		wxButton* bAddFloor;
-		wxButton* bAddStairsModel;
-		wxButton* bAddStairsFloor;
-		wxButton* bAddInterfloorFloor;
-		wxButton* bFloor;
-		wxButton* bElevator;
-		wxButton* bAddShaftFloor;
-		wxButton* bAddInterfloorWall;
-		wxButton* bAddStairsWall;
+		wxButton* bShaft;
+		wxButton* bShaftDoorComponent;
 		//*)
 
 	protected:

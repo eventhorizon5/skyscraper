@@ -24,14 +24,14 @@
 #define PEOPLEMANAGER_H
 
 //(*Headers(PeopleManager)
+#include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
+#include <wx/listbox.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/listbox.h>
 //*)
 
 namespace Skyscraper {
@@ -44,27 +44,27 @@ class PeopleManager: public wxDialog
 		virtual ~PeopleManager();
 
 		//(*Declarations(PeopleManager)
-		wxButton* bGo;
-		wxStaticLine* StaticLine2;
-		wxButton* bSetName;
-		wxCheckBox* chkService;
-		wxButton* bStop;
-		wxButton* bNew;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText3;
-		wxButton* bSetFloor;
-		wxStaticLine* StaticLine1;
-		wxTextCtrl* tRouteActive;
-		wxStaticLine* StaticLine3;
-		wxTextCtrl* tDestination;
-		wxTextCtrl* tName;
 		wxButton* bDelete;
-		wxStaticText* StaticText5;
-		wxStaticText* StaticText2;
+		wxButton* bGo;
+		wxButton* bNew;
 		wxButton* bOK;
-		wxTextCtrl* tFloor;
-		wxListBox* PersonList;
+		wxButton* bSetFloor;
+		wxButton* bSetName;
+		wxButton* bStop;
 		wxCheckBox* chkRandom;
+		wxCheckBox* chkService;
+		wxListBox* PersonList;
+		wxStaticLine* StaticLine1;
+		wxStaticLine* StaticLine2;
+		wxStaticLine* StaticLine3;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* StaticText5;
+		wxTextCtrl* tDestination;
+		wxTextCtrl* tFloor;
+		wxTextCtrl* tName;
+		wxTextCtrl* tRouteActive;
 		wxTextCtrl* tStatus;
 		//*)
 		void Loop();

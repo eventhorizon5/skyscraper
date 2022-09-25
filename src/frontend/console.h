@@ -24,11 +24,11 @@
 #define CONSOLE_H
 
 //(*Headers(Console)
-#include <wx/checkbox.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
-#include <wx/panel.h>
+#include <wx/checkbox.h>
 #include <wx/frame.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
 #include <wx/textctrl.h>
 //*)
 
@@ -42,12 +42,12 @@ class Console: public wxFrame
 		virtual ~Console();
 
 		//(*Declarations(Console)
-		wxPanel* Panel1;
-		wxTextCtrl* tConsole;
 		wxButton* bAutoScroll;
-		wxCheckBox* chkEcho;
 		wxButton* bSend;
+		wxCheckBox* chkEcho;
+		wxPanel* Panel1;
 		wxTextCtrl* tCommand;
+		wxTextCtrl* tConsole;
 		//*)
 		void Write(const std::string &message);
 

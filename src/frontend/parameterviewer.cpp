@@ -21,8 +21,8 @@
 */
 
 //(*InternalHeaders(ParameterViewer)
-#include <wx/string.h>
 #include <wx/intl.h>
+#include <wx/string.h>
 //*)
 #include <wx/filedlg.h>
 #include <wx/app.h>
@@ -98,11 +98,11 @@ END_EVENT_TABLE()
 ParameterViewer::ParameterViewer(DebugPanel* root, wxWindow* parent, wxString object_type, wxString object_parent, bool createobject, wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(ParameterViewer)
+	wxBoxSizer* BoxSizer1;
+	wxBoxSizer* BoxSizer2;
 	wxFlexGridSizer* FlexGridSizer1;
 	wxFlexGridSizer* FlexGridSizer2;
-	wxBoxSizer* BoxSizer2;
 	wxFlexGridSizer* FlexGridSizer3;
-	wxBoxSizer* BoxSizer1;
 
 	Create(parent, wxID_ANY, _("Parameter Viewer"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -120,40 +120,40 @@ ParameterViewer::ParameterViewer(DebugPanel* root, wxWindow* parent, wxString ob
 	l2 = new wxStaticText(this, ID_STATICTEXT2, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	FlexGridSizer2->Add(l2, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t2 = new wxTextCtrl(this, ID_TEXTCTRL2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL2"));
-	FlexGridSizer2->Add(t2, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(t2, 1, wxEXPAND, 5);
 	l3 = new wxStaticText(this, ID_STATICTEXT3, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer2->Add(l3, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t3 = new wxTextCtrl(this, ID_TEXTCTRL3, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL3"));
-	FlexGridSizer2->Add(t3, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(t3, 1, wxEXPAND, 5);
 	l4 = new wxStaticText(this, ID_STATICTEXT4, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer2->Add(l4, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t4 = new wxTextCtrl(this, ID_TEXTCTRL4, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL4"));
-	FlexGridSizer2->Add(t4, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(t4, 1, wxEXPAND, 5);
 	l5 = new wxStaticText(this, ID_STATICTEXT5, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	FlexGridSizer2->Add(l5, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t5 = new wxTextCtrl(this, ID_TEXTCTRL5, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL5"));
-	FlexGridSizer2->Add(t5, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(t5, 1, wxEXPAND, 5);
 	l6 = new wxStaticText(this, ID_STATICTEXT6, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
 	FlexGridSizer2->Add(l6, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t6 = new wxTextCtrl(this, ID_TEXTCTRL6, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL6"));
-	FlexGridSizer2->Add(t6, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(t6, 1, wxEXPAND, 5);
 	l7 = new wxStaticText(this, ID_STATICTEXT7, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
 	FlexGridSizer2->Add(l7, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t7 = new wxTextCtrl(this, ID_TEXTCTRL7, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL7"));
-	FlexGridSizer2->Add(t7, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(t7, 1, wxEXPAND, 5);
 	l8 = new wxStaticText(this, ID_STATICTEXT8, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
 	FlexGridSizer2->Add(l8, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t8 = new wxTextCtrl(this, ID_TEXTCTRL8, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL8"));
-	FlexGridSizer2->Add(t8, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(t8, 1, wxEXPAND, 5);
 	l9 = new wxStaticText(this, ID_STATICTEXT9, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
 	FlexGridSizer2->Add(l9, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t9 = new wxTextCtrl(this, ID_TEXTCTRL9, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL9"));
-	FlexGridSizer2->Add(t9, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(t9, 1, wxEXPAND, 5);
 	l10 = new wxStaticText(this, ID_STATICTEXT10, _("1"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
 	FlexGridSizer2->Add(l10, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t10 = new wxTextCtrl(this, ID_TEXTCTRL10, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL10"));
-	FlexGridSizer2->Add(t10, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	BoxSizer2->Add(FlexGridSizer2, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
+	FlexGridSizer2->Add(t10, 1, wxEXPAND, 5);
+	BoxSizer2->Add(FlexGridSizer2, 1, wxALL|wxALIGN_TOP, 5);
 	FlexGridSizer3 = new wxFlexGridSizer(0, 2, 0, 0);
 	l11 = new wxStaticText(this, ID_l11, _("1"), wxDefaultPosition, wxSize(150,-1), 0, _T("ID_l11"));
 	FlexGridSizer3->Add(l11, 1, wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -205,19 +205,19 @@ ParameterViewer::ParameterViewer(DebugPanel* root, wxWindow* parent, wxString ob
 	t20 = new wxTextCtrl(this, ID_t20, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_t20"));
 	t20->SetMinSize(wxSize(200,-1));
 	FlexGridSizer3->Add(t20, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
-	BoxSizer2->Add(FlexGridSizer3, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer2->Add(FlexGridSizer3, 1, wxALL|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT11, _("Script Command:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
 	FlexGridSizer1->Add(StaticText1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	tCommand = new wxTextCtrl(this, ID_tCommand, _("Command"), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tCommand"));
-	FlexGridSizer1->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
+	FlexGridSizer1->Add(tCommand, 1, wxALL|wxEXPAND, 5);
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	bCancel = new wxButton(this, ID_bCancel, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCancel"));
-	BoxSizer1->Add(bCancel, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer1->Add(bCancel, 1, wxALL|wxALIGN_TOP, 5);
 	bTextures = new wxButton(this, ID_bTextures, _("List Textures"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bTextures"));
-	BoxSizer1->Add(bTextures, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer1->Add(bTextures, 1, wxALL|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
-	BoxSizer1->Add(bOK, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer1->Add(bOK, 1, wxALL|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);

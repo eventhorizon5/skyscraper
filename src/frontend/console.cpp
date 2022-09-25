@@ -29,8 +29,8 @@
 #include "console.h"
 
 //(*InternalHeaders(Console)
-#include <wx/string.h>
 #include <wx/intl.h>
+#include <wx/string.h>
 //*)
 
 namespace Skyscraper {
@@ -52,10 +52,10 @@ END_EVENT_TABLE()
 Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(Console)
+	wxBoxSizer* BoxSizer1;
 	wxFlexGridSizer* FlexGridSizer1;
 	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* FlexGridSizer3;
-	wxBoxSizer* BoxSizer1;
 
 	Create(parent, id, _("Console"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
 	SetClientSize(wxDefaultSize);
@@ -68,26 +68,26 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	FlexGridSizer3->AddGrowableCol(0);
 	FlexGridSizer3->AddGrowableRow(0);
 	tConsole = new wxTextCtrl(Panel1, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY, wxDefaultValidator, _T("ID_tConsole"));
-	FlexGridSizer3->Add(tConsole, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer3->Add(tConsole, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(1, 2, 0, 0);
 	FlexGridSizer2->AddGrowableCol(0);
 	FlexGridSizer2->AddGrowableRow(0);
 	tCommand = new wxTextCtrl(Panel1, ID_tCommand, wxEmptyString, wxDefaultPosition, wxSize(500,100), wxTE_MULTILINE, wxDefaultValidator, _T("ID_tCommand"));
-	FlexGridSizer2->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(tCommand, 1, wxALL|wxEXPAND, 5);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	bSend = new wxButton(Panel1, ID_bSend, _("Send"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSend"));
-	BoxSizer1->Add(bSend, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	bAutoScroll = new wxButton(Panel1, ID_bAutoScroll, _("Auto Scroll"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAutoScroll"));
+	BoxSizer1->Add(bSend, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT, 5);
+	bAutoScroll = new wxButton(Panel1, ID_bAutoScroll, _("Fix Scroll"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAutoScroll"));
 	BoxSizer1->Add(bAutoScroll, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkEcho = new wxCheckBox(Panel1, ID_chkEcho, _("Echo"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkEcho"));
 	chkEcho->SetValue(false);
-	BoxSizer1->Add(chkEcho, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer1->Add(chkEcho, 1, wxALL|wxALIGN_LEFT, 5);
 	FlexGridSizer2->Add(BoxSizer1, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer3->Add(FlexGridSizer2, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer3->Add(FlexGridSizer2, 1, wxEXPAND, 5);
 	Panel1->SetSizer(FlexGridSizer3);
 	FlexGridSizer3->Fit(Panel1);
 	FlexGridSizer3->SetSizeHints(Panel1);
-	FlexGridSizer1->Add(Panel1, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer1->Add(Panel1, 1, wxEXPAND, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
