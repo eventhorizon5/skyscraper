@@ -1054,7 +1054,7 @@ void Camera::MoveCharacter()
 	if (EnableBullet == true)
 		mCharacter->setWalkDirection(accum_movement, 1);
 	else
-		camera->Move(sbs->ToLocal(accum_movement));
+		GetSceneNode()->Move(sbs->ToLocal(accum_movement));
 	prev_accum_movement = accum_movement;
 	accum_movement = Ogre::Vector3::ZERO;
 }
