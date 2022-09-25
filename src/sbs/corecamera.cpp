@@ -34,7 +34,7 @@ namespace SBS {
 CoreCamera::CoreCamera(Object *parent) : Object(parent)
 {
 	//set up SBS object
-	SetValues("Camera", "Camera", true);
+	SetValues("CoreCamera", "CoreCamera", true);
 
 	MainCamera = 0;
 }
