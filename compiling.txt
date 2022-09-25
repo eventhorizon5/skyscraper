@@ -91,7 +91,7 @@ make
 make install
 
 
-Step 5 - build Skyscraper (this also builds the built-in OgreBullet libraries)
+Step 6 - build Skyscraper (this also builds the built-in OgreBullet libraries)
 -----------
 First grab the source via git, and build, pointing it to the wxWidgets you just built.
 
