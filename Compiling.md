@@ -32,6 +32,7 @@ If you want to play around with the Bullet demos, remove the "-DBUILD_DEMOS=OFF"
 
 Step 2 - install the FMOD sound system
 ----------
+
 #### Get the related Linux package from:
 http://www.fmod.org/download/
 
@@ -43,6 +44,7 @@ http://www.fmod.org/download/
     sudo cp -a inc/* /usr/local/include/fmod/
     sudo cp -a lib/x86_64/* /usr/local/lib/
     cd
+
 
 Step 3 - build and install OGRE
 -----------
@@ -93,17 +95,17 @@ First grab the source via git, and build, pointing it to the wxWidgets you just 
     cmake . -DwxWidgets_CONFIG_EXECUTABLE=/opt/wx/bin/wx-config
     make
 
-#### Finally, run Skyscraper:
+##### Finally, run Skyscraper:
 
     ./skyscraper
 
-#### To update the app in the future, first update git, rebuild and run:
+##### To update the app in the future, first update git, rebuild and run:
 
     git pull
     make
     ./skyscraper
 
-#### If any files were added in git, you'll have to run CMake before the "make" command, or else it'll have linking errors:
+##### If any files were added in git, you'll have to run CMake before the "make" command, or else it'll have linking errors:
 
     git pull
     cmake .
