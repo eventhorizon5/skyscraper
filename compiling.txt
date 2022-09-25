@@ -82,15 +82,24 @@ cd
 ---
 
 
+Step 5 - build wxWidgets
+-----------
+wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.1/wxWidgets-3.2.1.tar.bz2
+cd wxWidgets-3.2.1
+cmake . --prefix=/opt/wx
+make
+make install
+
+
 Step 5 - build Skyscraper (this also builds the built-in OgreBullet libraries)
 -----------
-First grab the source via git, and build.
+First grab the source via git, and build, pointing it to the wxWidgets you just built.
 
 ---
 git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
 cd skyscraper
 wget https://www.skyscrapersim.net/downloads/dev/other_apps/plugins.cfg
-cmake .
+cmake . -DwxWidgets_CONFIG_EXECUTABLE=/opt/wx/bin/wx-config
 make
 ---
 
