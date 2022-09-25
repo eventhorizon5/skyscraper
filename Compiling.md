@@ -35,7 +35,7 @@ Step 2 - install the FMOD sound system
 #### Get the related Linux package from:
 http://www.fmod.org/download/
 
-#### (Get the FMOD Studio Programmer's API for Linux)
+###### (Get the FMOD Studio Programmer's API for Linux)
 
     tar xfvz fmodstudioapi20208linux.tar.gz
     cd fmodstudioapi20208linux/api/core
