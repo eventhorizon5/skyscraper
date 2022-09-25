@@ -164,11 +164,15 @@ Camera::~Camera()
 	//detach the camera
 	Detach();
 
-	if (GetSceneNode()->GetRawSceneNode()->numChildren() > 0)
+	if (camera)
+		delete camera;
+	camera = 0;
+
+	/*if (GetSceneNode()->GetRawSceneNode()->numChildren() > 0)
 	{
 		std::string nodename = GetSceneNode()->GetRawSceneNode()->getChild(0)->getName();
 		sbs->mSceneManager->destroySceneNode(nodename);
-	}
+	}*/
 }
 
 void Camera::SetPosition(const Ogre::Vector3 &position)
