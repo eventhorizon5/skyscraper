@@ -132,15 +132,18 @@ Camera::Camera(Object *parent) : Object(parent)
 	mCharacter = 0;
 	mShape = 0;
 
-	mCharacter = new OgreBulletDynamics::CharacterController(GetSceneNode()->GetFullName() + " Character", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
+	if (EnableBullet == true)
+	{
+		mCharacter = new OgreBulletDynamics::CharacterController(GetSceneNode()->GetFullName() + " Character", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 
-	//create debug shape
-	mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(width), sbs->ToRemote(height), Ogre::Vector3::UNIT_Y);
-	mCharacter->setShape(mShape);
+		//create debug shape
+		mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(width), sbs->ToRemote(height), Ogre::Vector3::UNIT_Y);
+		mCharacter->setShape(mShape);
 
-	//other movement options
-	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
-	mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65)));
+		//other movement options
+		mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
+		mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65)));
+	}
 }
 
 Camera::~Camera()
@@ -811,8 +814,11 @@ void Camera::Jump()
 
 	//velocity.y = cfg_jumpspeed;
 	//desired_velocity.y = 0.0;
-	if (mCharacter->getGravity() != 0 && EnableBullet == true)
-		mCharacter->jump();
+	if (EnableBullet == true)
+	{
+		if (mCharacter->getGravity() != 0)
+			mCharacter->jump();
+	}
 }
 
 void Camera::Look(Real speed)
@@ -1439,7 +1445,8 @@ void Camera::AttachToVehicle(bool value)
 		vehicle = 0;
 		EnableCollisions(true);
 		camera->SetOrientation(old_camera_orientation);
-		mCharacter->setOrientation(old_character_orientation);
+		if (EnableBullet == true)
+			mCharacter->setOrientation(old_character_orientation);
 	}
 	else if (value == true)
 	{
@@ -1480,7 +1487,8 @@ void Camera::AttachToVehicle(bool value)
 				inside_vehicle = true;
 				EnableCollisions(false);
 				old_camera_orientation = camera->GetOrientation();
-				old_character_orientation = mCharacter->getWorldOrientation();
+				if (EnableBullet == true)
+					old_character_orientation = mCharacter->getWorldOrientation();
 				vehicle->AttachCamera(true);
 			}
 		}
