@@ -80,7 +80,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
       <Command>
-</Command>
+      </Command>
     </PreBuildEvent>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -150,7 +150,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
       <Command>
-</Command>
+      </Command>
     </PreBuildEvent>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -195,7 +195,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SBS.lib;OgreMain.lib;OgreOverlay.lib;OgreRTShaderSystem.lib;wxbase30u.lib;wxmsw30u_core.lib;wxmsw30u_gl.lib;fmod_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SBS.lib;OgreMain.lib;OgreOverlay.lib;OgreRTShaderSystem.lib;wxbase32u.lib;wxmsw32u_core.lib;fmod_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../Skyscraper.exe</OutputFile>
       <Version>
       </Version>
@@ -217,7 +217,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
       <Command>
-</Command>
+      </Command>
     </PreBuildEvent>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -283,7 +283,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
       <Command>
-</Command>
+      </Command>
     </PreBuildEvent>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
