@@ -38,6 +38,7 @@
 #include <OgreFontManager.h>
 #include <OgreRectangle2D.h>
 #include <OgreRTShaderSystem.h>
+#include <OgreBitesConfigDialog.h>
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "globals.h"
@@ -476,7 +477,7 @@ bool Skyscraper::Initialize()
 			if(!mRoot->restoreConfig())
 			{
 				//show dialog if load failed
-				mRoot->showConfigDialog(0);
+				mRoot->showConfigDialog(OgreBites::getNativeConfigDialog());
 			}
 		}
 	}
