@@ -226,10 +226,11 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	Ogre::Quaternion bodyrot = y;
 	Rotation = vector;
 
+	SetOrientation(camrot);
+	camera->SetOrientation(camrot);
+
 	if (EnableBullet == true)
 		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
-
-	SetOrientation(camrot * bodyrot);
 
 	OnRotate(false);
 }
@@ -1425,10 +1426,7 @@ void Camera::Crouch(bool value)
 
 void Camera::SetOrientation(const Ogre::Quaternion &orientation)
 {
-	//set orientation of main camera object, not collider
-
-	if (IsAttached())
-		camera->SetOrientation(orientation);
+	GetSceneNode()->SetOrientation(orientation);
 }
 
 void Camera::AttachToVehicle(bool value)
