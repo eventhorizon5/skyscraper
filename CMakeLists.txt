@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.2)
  
 project(Skyscraper)
  
@@ -25,7 +25,7 @@ if(NOT OGRE_FOUND)
   message(SEND_ERROR "Failed to find OGRE.")
 endif()
  
-set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES})
+set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES} ${OGRE_Bites_LIBRARIES})
 
 #find wxWidgets
 find_package(wxWidgets COMPONENTS core base gl REQUIRED)
@@ -67,10 +67,10 @@ file (GLOB OGREBULLET_DYN_FILES
 	ogrebullet/Dynamics/src/Prefab/*.cpp
 )
 
-include_directories( ${OIS_INCLUDE_DIRS}
-	${OGRE_INCLUDE_DIRS}
+include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
         ${OGRE_RTShaderSystem_INCLUDE_DIRS}
+	${OGRE_Bites_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
@@ -100,7 +100,7 @@ add_executable(skyscraper ${FRONTEND_FILES})
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${FMOD_LIBRARY})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
-target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  
