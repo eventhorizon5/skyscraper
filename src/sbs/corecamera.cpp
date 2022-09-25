@@ -57,16 +57,6 @@ Ogre::Viewport* CoreCamera::GetViewport()
 		return 0;
 }
 
-void CoreCamera::Pitch(Real &degree)
-{
-	GetSceneNode()->Pitch(degree);
-}
-
-void CoreCamera::Roll(Real &degree)
-{
-	GetSceneNode()->Roll(degree);
-}
-
 void CoreCamera::SetViewMode(int mode)
 {
 	//set view mode of camera:

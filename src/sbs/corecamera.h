@@ -36,8 +36,6 @@ public:
 	~CoreCamera();
 	bool IsAttached();
 	Ogre::Viewport* GetViewport();
-	void Pitch(Real &degree);
-	void Roll(Real &degree);
 	void SetViewMode(int mode);
 	bool Attach(Ogre::Camera *camera);
 	bool Detach();
