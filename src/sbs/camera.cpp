@@ -224,17 +224,12 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	Rotation = vector;
 
 	if (EnableBullet == true)
-	{
 		mCharacter->setOrientation(sbs->ToGlobal(roty));
-		mCharacter->getSceneNode()->pitch(Ogre::Degree(Rotation.x));
-		mCharacter->getSceneNode()->roll(Ogre::Degree(Rotation.z));
-	}
 	else
-	{
-		camera->SetOrientation(roty);
-		camera->Pitch(Rotation.x);
-		camera->Roll(Rotation.z);
-	}
+		SetOrientation(roty);
+
+	Pitch(Rotation.x);
+	Roll(Rotation.z);
 
 	OnRotate(false);
 }
@@ -402,15 +397,11 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, Real speed)
 	if (EnableBullet == true)
 	{
 		mCharacter->setOrientation(sbs->ToGlobal(roty));
-		mCharacter->getSceneNode()->pitch(Ogre::Degree(Rotation.x));
-		mCharacter->getSceneNode()->roll(Ogre::Degree(Rotation.z));
 	}
 	else
-	{
-		camera->SetOrientation(roty);
-		camera->Pitch(Rotation.x);
-		camera->Roll(Rotation.z);
-	}
+		SetOrientation(roty);
+	Pitch(Rotation.x);
+	Roll(Rotation.z);
 
 	OnRotate(false);
 }
@@ -1507,6 +1498,20 @@ void Camera::AttachToVehicle(bool value)
 bool Camera::IsAttached()
 {
 	return camera->IsAttached();
+}
+
+void Camera::Pitch(Real &degree)
+{
+	//rotate on X axis
+
+	GetSceneNode()->Pitch(degree);
+}
+
+void Camera::Roll(Real &degree)
+{
+	//rotate on Z axis
+
+	GetSceneNode()->Roll(degree);
 }
 
 }

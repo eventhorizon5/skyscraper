@@ -186,6 +186,8 @@ public:
 	void SetOrientation(const Ogre::Quaternion &orientation);
 	void AttachToVehicle(bool value);
 	bool IsAttached();
+	void Pitch(Real &degree);
+	void Roll(Real &degree);
 
 private:
 	Ogre::Vector3 StartDirection; //direction camera faces on start
