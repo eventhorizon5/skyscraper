@@ -219,9 +219,6 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	Ogre::Quaternion bodyrot = y;
 	Rotation = vector;
 
-	if (EnableBullet == true)
-		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
-
 	SetOrientation(camrot);
 
 	OnRotate(false);
