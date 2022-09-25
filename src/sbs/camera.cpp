@@ -1266,7 +1266,7 @@ bool Camera::Attach(Ogre::Camera *remote_camera, bool init_state)
 	if (remote_camera->isAttached() == true)
 		return false;
 
-	camera->Move(0, (cfg_body_height + cfg_legs_height + 0.5) / 2, 0);
+	camera->SetPositionY((cfg_body_height + cfg_legs_height + 0.5) / 2);
 	camera->Attach(remote_camera);
 
 	SetFOVAngle(FOV);
