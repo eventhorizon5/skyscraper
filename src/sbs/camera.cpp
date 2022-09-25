@@ -319,7 +319,7 @@ bool Camera::Move(Ogre::Vector3 vector, Real speed, bool flip)
 	if (EnableBullet == true)
 		orientation = GetSceneNode()->GetDerivedOrientation();
 	else
-		orientation = camera->GetOrientation();
+		orientation = GetOrientation();
 
 	//flip X axis
 	vector *= Ogre::Vector3(-1, 1, 1);
@@ -1442,7 +1442,7 @@ void Camera::AttachToVehicle(bool value)
 		vehicle->AttachCamera(false);
 		vehicle = 0;
 		EnableCollisions(true);
-		camera->SetOrientation(old_camera_orientation);
+		SetOrientation(old_camera_orientation);
 		if (EnableBullet == true)
 			mCharacter->setOrientation(old_character_orientation);
 	}
@@ -1484,7 +1484,7 @@ void Camera::AttachToVehicle(bool value)
 				Freelook = true;
 				inside_vehicle = true;
 				EnableCollisions(false);
-				old_camera_orientation = camera->GetOrientation();
+				old_camera_orientation = GetOrientation();
 				if (EnableBullet == true)
 					old_character_orientation = mCharacter->getWorldOrientation();
 				vehicle->AttachCamera(true);
