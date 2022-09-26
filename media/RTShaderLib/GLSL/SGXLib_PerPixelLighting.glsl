@@ -37,13 +37,28 @@ THE SOFTWARE.
 
 #define M_PI 3.141592654
 
-//-----------------------------------------------------------------------------
-void SGX_FetchNormal(in sampler2D s,
-				   in vec2 uv,
-				   out vec3 vOut)
+#ifdef OGRE_HLSL
+void SGX_Flip_Backface_Normal(in float triArea, in float targetFlipped, inout vec3 normal)
 {
-	vOut = 2.0 * texture2D(s, uv).xyz - 1.0;
+#if OGRE_HLSL == 3
+	triArea *= -1.0;
+#endif
+	triArea *= targetFlipped;
+	if(triArea < 0.0)
+		normal *= -1.0;
 }
+#else
+void SGX_Flip_Backface_Normal(in bool frontFacing, in float targetFlipped, inout vec3 normal)
+{
+#ifdef VULKAN
+	targetFlipped *= -1.0;
+#endif
+	if(targetFlipped < 0.0)
+		frontFacing = !frontFacing;
+	if(!frontFacing)
+		normal *= -1.0;
+}
+#endif
 
 //-----------------------------------------------------------------------------
 void SGX_Light_Directional_Diffuse(
@@ -62,7 +77,7 @@ void SGX_Light_Directional_Diffuse(
 //-----------------------------------------------------------------------------
 void SGX_Light_Directional_DiffuseSpecular(
 					in vec3 vNormal,
-					in vec3 vViewDir,
+					in vec3 vViewPos,
 					in vec3 vLightDirView,
 					in vec3 vDiffuseColour, 
 					in vec3 vSpecularColour, 
@@ -72,7 +87,7 @@ void SGX_Light_Directional_DiffuseSpecular(
 {
 	vec3 vNormalView = normalize(vNormal);		
 	float nDotL		   = dot(vNormalView, -vLightDirView);
-	vec3 vView       = normalize(vViewDir);
+	vec3 vView       = -normalize(vViewPos);
 	vec3 vHalfWay    = normalize(vView + -vLightDirView);
 	float nDotH        = dot(vNormalView, vHalfWay);
 	
@@ -91,11 +106,13 @@ void SGX_Light_Directional_DiffuseSpecular(
 //-----------------------------------------------------------------------------
 void SGX_Light_Point_Diffuse(
 				    in vec3 vNormal,
-				    in vec3 vLightView,
+				    in vec3 vViewPos,
+				    in vec3 vLightPos,
 				    in vec4 vAttParams,
 				    in vec3 vDiffuseColour, 
 				    inout vec3 vOut)
 {
+	vec3 vLightView    = vLightPos - vViewPos;
 	float fLightD      = length(vLightView);
 	vec3 vNormalView = normalize(vNormal);
 	float nDotL        = dot(vNormalView, normalize(vLightView));
@@ -114,8 +131,8 @@ void SGX_Light_Point_Diffuse(
 //-----------------------------------------------------------------------------
 void SGX_Light_Point_DiffuseSpecular(
 				    in vec3 vNormal,
-				    in vec3 vViewDir,
-				    in vec3 vLightView,
+				    in vec3 vViewPos,
+				    in vec3 vLightPos,
 				    in vec4 vAttParams,
 				    in vec3 vDiffuseColour, 
 				    in vec3 vSpecularColour, 
@@ -123,6 +140,7 @@ void SGX_Light_Point_DiffuseSpecular(
 					inout vec3 vOutDiffuse,
 					inout vec3 vOutSpecular)
 {
+	vec3 vLightView    = vLightPos - vViewPos;
 	float fLightD      = length(vLightView);
 	vLightView		   = normalize(vLightView);	
 	vec3 vNormalView = normalize(vNormal);
@@ -130,7 +148,7 @@ void SGX_Light_Point_DiffuseSpecular(
 		
 	if (nDotL > 0.0 && fLightD <= vAttParams.x)
 	{					
-		vec3 vView       = normalize(vViewDir);
+		vec3 vView       = -normalize(vViewPos);
 		vec3 vHalfWay    = normalize(vView + vLightView);		
 		float nDotH        = dot(vNormalView, vHalfWay);
 		float fAtten	   = 1.0 / (vAttParams.y + vAttParams.z*fLightD + vAttParams.w*fLightD*fLightD);					
@@ -149,13 +167,15 @@ void SGX_Light_Point_DiffuseSpecular(
 //-----------------------------------------------------------------------------
 void SGX_Light_Spot_Diffuse(
 				    in vec3 vNormal,
-				    in vec3 vLightView,
+				    in vec3 vViewPos,
+				    in vec3 vLightPos,
 				    in vec3 vLightDirView,
 				    in vec4 vAttParams,
 				    in vec3 vSpotParams,
 				    in vec3 vDiffuseColour, 
 				    inout vec3 vOut)
 {
+	vec3 vLightView    = vLightPos - vViewPos;
 	float fLightD      = length(vLightView);
 	vLightView		   = normalize(vLightView);
 	vec3 vNormalView = normalize(vNormal);
@@ -176,8 +196,8 @@ void SGX_Light_Spot_Diffuse(
 //-----------------------------------------------------------------------------
 void SGX_Light_Spot_DiffuseSpecular(
 				    in vec3 vNormal,
-				    in vec3 vViewDir,
-				    in vec3 vLightView,
+				    in vec3 vViewPos,
+				    in vec3 vLightPos,
 				    in vec3 vLightDirView,
 				    in vec4 vAttParams,
 				    in vec3 vSpotParams,
@@ -187,6 +207,7 @@ void SGX_Light_Spot_DiffuseSpecular(
 					inout vec3 vOutDiffuse,
 					inout vec3 vOutSpecular)
 {
+	vec3 vLightView    = vLightPos - vViewPos;
 	float fLightD      = length(vLightView);
 	vLightView		   = normalize(vLightView);
 	vec3 vNormalView = normalize(vNormal);
@@ -195,7 +216,7 @@ void SGX_Light_Spot_DiffuseSpecular(
 	
 	if (nDotL > 0.0 && fLightD <= vAttParams.x)
 	{
-		vec3 vView       = normalize(vViewDir);
+		vec3 vView       = -normalize(vViewPos);
 		vec3 vHalfWay    = normalize(vView + vLightView);				
 		float nDotH        = dot(vNormalView, vHalfWay);
 		float fAtten	= 1.0 / (vAttParams.y + vAttParams.z*fLightD + vAttParams.w*fLightD*fLightD);

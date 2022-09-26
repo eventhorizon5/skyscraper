@@ -41,6 +41,11 @@ THE SOFTWARE.
 STATIC vec3 pssm_lod_info = vec3(0.0, 0.0, 0.0);
 #endif
 
+// default to 2x2 PCF
+#ifndef PCF_XSAMPLES
+#define PCF_XSAMPLES 2.0
+#endif
+
 //-----------------------------------------------------------------------------
 void SGX_ApplyShadowFactor_Diffuse(in vec4 ambient, 
 					  in vec4 lightSum, 
@@ -72,27 +77,24 @@ float sampleDepth(in SAMPLER_TYPE shadowMap, vec2 uv, float depth)
 void SGX_ShadowPCF4(in SAMPLER_TYPE shadowMap, in vec4 shadowMapPos, in vec2 invTexSize, out float c)
 {
 	shadowMapPos = shadowMapPos / shadowMapPos.w;
-#if !defined(OGRE_REVERSED_Z) && !defined(OGRE_HLSL)
+#if !defined(OGRE_REVERSED_Z) && !defined(OGRE_HLSL) && !defined(VULKAN)
 	shadowMapPos.z = shadowMapPos.z * 0.5 + 0.5; // convert -1..1 to 0..1
 #endif
 	vec2 uv = shadowMapPos.xy;
-	vec3 o = vec3(invTexSize, -invTexSize.x) * 0.5;
 
     // depth must be clamped to support floating-point depth formats. This is to avoid comparing a
     // value from the depth texture (which is never greater than 1.0) with a greater-than-one
     // comparison value (which is possible with floating-point formats).
 	float depth = clamp(shadowMapPos.z, 0.0, 1.0);
 
-	// Note: We using 2x2 PCF. Good enough and is a lot faster.
-	c =	 sampleDepth(shadowMap, uv.xy - o.xy, depth); // top left
-	c += sampleDepth(shadowMap, uv.xy + o.xy, depth); // bottom right
-	c += sampleDepth(shadowMap, uv.xy + o.zy, depth); // bottom left
-	c += sampleDepth(shadowMap, uv.xy - o.zy, depth); // top right
-		
-	c /= 4.0;
-#ifdef OGRE_REVERSED_Z
-    c = 1.0 - c;
-#endif
+	c = 0.0;
+	float scale = 1.0;
+	float offset = (PCF_XSAMPLES / 2.0 - 0.5) * scale;
+	for (float y = -offset; y <= offset; y += scale)
+		for (float x = -offset; x <= offset; x += scale)
+			c += sampleDepth(shadowMap, uv + invTexSize * vec2(x, y), depth);
+
+	c /= PCF_XSAMPLES * PCF_XSAMPLES;
 }
 
 //-----------------------------------------------------------------------------
@@ -116,17 +118,34 @@ void SGX_ComputeShadowFactor_PSSM3(in float fDepth,
 							in vec2 invShadowMapSize3,
 							out float oShadowFactor)
 {
+#if defined(PROJ_SPACE_SPLITS) && !defined(OGRE_REVERSED_Z) && !defined(OGRE_HLSL) && !defined(VULKAN)
+	vSplitPoints = vSplitPoints * 0.5 + 0.5; // convert -1..1 to 0..1
+#endif
+
+#ifdef OGRE_REVERSED_Z
+	vSplitPoints = vec4_splat(1.0) - vSplitPoints;
+	fDepth = 1.0 - fDepth;
+#endif
+
 	if (fDepth  <= vSplitPoints.x)
-	{									
+	{
+#ifdef PSSM_SAMPLE_COLOUR
+		oShadowFactor = texture2DProj(shadowMap0, lightPosition0).x;
+#else
 		SGX_ShadowPCF4(shadowMap0, lightPosition0, invShadowMapSize0, oShadowFactor);
+#endif
 #ifdef DEBUG_PSSM
         pssm_lod_info.r = 1.0;
 #endif
 	}
 #if PSSM_NUM_SPLITS > 2
 	else if (fDepth <= vSplitPoints.y)
-	{									
+	{
+#ifdef PSSM_SAMPLE_COLOUR
+		oShadowFactor = texture2DProj(shadowMap1, lightPosition1).x;
+#else
 		SGX_ShadowPCF4(shadowMap1, lightPosition1, invShadowMapSize1, oShadowFactor);
+#endif
 #ifdef DEBUG_PSSM
         pssm_lod_info.g = 1.0;
 #endif
@@ -135,18 +154,31 @@ void SGX_ComputeShadowFactor_PSSM3(in float fDepth,
 #if PSSM_NUM_SPLITS > 3
 	else if (fDepth <= vSplitPoints.z)
 	{
+#ifdef PSSM_SAMPLE_COLOUR
+		oShadowFactor = texture2DProj(shadowMap2, lightPosition2).x;
+#else
 		SGX_ShadowPCF4(shadowMap2, lightPosition2, invShadowMapSize2, oShadowFactor);
+#endif
 #ifdef DEBUG_PSSM
 		pssm_lod_info.r = 1.0;
         pssm_lod_info.g = 1.0;
 #endif
 	}
 #endif
-	else
+	else if (fDepth <= vSplitPoints.w)
 	{
+#ifdef PSSM_SAMPLE_COLOUR
+		oShadowFactor = texture2DProj(shadowMap3, lightPosition3).x;
+#else
 		SGX_ShadowPCF4(shadowMap3, lightPosition3, invShadowMapSize3, oShadowFactor);
+#endif
 #ifdef DEBUG_PSSM
         pssm_lod_info.b = 1.0;
 #endif
+	}
+	else
+	{
+		// behind far distance
+		oShadowFactor = 1.0;
 	}
 }
