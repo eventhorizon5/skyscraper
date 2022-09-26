@@ -336,6 +336,13 @@ void SceneNode::Pitch(Real &degree)
 	node->pitch(Ogre::Degree(degree));
 }
 
+void SceneNode::Yaw(Real &degree)
+{
+	//rotate on Y axis
+
+	node->yaw(Ogre::Degree(-degree));
+}
+
 void SceneNode::Roll(Real &degree)
 {
 	//rotate on Z axis

@@ -1507,6 +1507,13 @@ void Camera::Pitch(Real &degree)
 	GetSceneNode()->Pitch(degree);
 }
 
+void Camera::Yaw(Real &degree)
+{
+	//rotate on Y axis
+
+	GetSceneNode()->Yaw(degree);
+}
+
 void Camera::Roll(Real &degree)
 {
 	//rotate on Z axis

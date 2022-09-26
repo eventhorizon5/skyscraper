@@ -54,6 +54,7 @@ public:
 	std::string GetFullName();
 	bool IsRoot();
 	void Pitch(Real &degree);
+	void Yaw(Real &degree);
 	void Roll(Real &degree);
 	Ogre::Vector3 GetDerivedPosition();
 	Ogre::Quaternion GetDerivedOrientation();

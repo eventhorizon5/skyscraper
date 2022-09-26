@@ -187,6 +187,7 @@ public:
 	void AttachToVehicle(bool value);
 	bool IsAttached();
 	void Pitch(Real &degree);
+	void Yaw(Real &degree);
 	void Roll(Real &degree);
 
 private:
