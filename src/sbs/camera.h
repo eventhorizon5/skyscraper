@@ -24,8 +24,6 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
-#include "corecamera.h"
-
 namespace SBS {
 
 struct SBSIMPEXP CameraState
@@ -168,9 +166,9 @@ public:
 	bool IsModelAttached();
 	void ResetState();
 	void ResetView();
-	bool IsActive() { return IsAttached(); }
+	bool IsActive() { return (MainCamera != 0); }
 	void Refresh();
-	bool Attach(Ogre::Camera *remote_camera, bool init_state = true);
+	bool Attach(Ogre::Camera *camera, bool init_state = true);
 	bool Detach();
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
@@ -185,12 +183,9 @@ public:
 	void Crouch(bool value);
 	void SetOrientation(const Ogre::Quaternion &orientation);
 	void AttachToVehicle(bool value);
-	bool IsAttached();
-	void Pitch(Real &degree);
-	void Yaw(Real &degree);
-	void Roll(Real &degree);
 
 private:
+	Ogre::Camera* MainCamera; //main first-person view camera
 	Ogre::Vector3 StartDirection; //direction camera faces on start
 	Ogre::Vector3 StartRotation; //camera's startup rotation
 	std::string meshname; //last clicked mesh name
@@ -220,9 +215,6 @@ private:
 	//Models
 	Model*	AttachedModel;
 
-	//Core Camera object
-	CoreCamera* camera;
-
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;
 	OgreBulletCollisions::CollisionShape* mShape;
@@ -232,7 +224,6 @@ private:
 	Ogre::Quaternion old_character_orientation;
 	bool old_freelook_mode;
 };
-
 
 }
 
