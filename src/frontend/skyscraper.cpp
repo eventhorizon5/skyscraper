@@ -39,6 +39,7 @@
 #include <OgreRectangle2D.h>
 #include <OgreRTShaderSystem.h>
 #include <OgreBitesConfigDialog.h>
+#include <OgreSGTechniqueResolverListener.h>
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "globals.h"
@@ -52,7 +53,6 @@
 #include "mainscreen.h"
 #include "loaddialog.h"
 #include "profiler.h"
-#include "shaderresolver.h"
 
 #include <OgreOverlaySystem.h>
 
@@ -589,7 +589,7 @@ bool Skyscraper::Initialize()
 			shaderGenerator->addSceneManager(mSceneMgr);
 
 			// forward scheme not found events to the RTSS
-			SGTechniqueResolverListener* schemeNotFoundHandler = new SGTechniqueResolverListener(shaderGenerator);
+			OgreBites::SGTechniqueResolverListener* schemeNotFoundHandler = new OgreBites::SGTechniqueResolverListener(shaderGenerator);
 			Ogre::MaterialManager::getSingleton().addListener(schemeNotFoundHandler);
 
 			/*Ogre::RTShader::RenderState* RenderState = shaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
