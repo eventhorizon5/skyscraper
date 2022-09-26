@@ -1,0 +1,8 @@
+Information on the Git repository history:
+
+Master contains all history from the switch of the Ogre branch to the SVN trunk, to now.  This doesn't contain the full history.
+
+The Ogre branch contains the main history, and then the early Ogre version development code.
+
+The CrystalSpace branch contains the main history, and then the CrystalSpace stable code that was made during the Ogre version development.
+
