@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.2)
 project(Skyscraper)
  
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-  set (CMAKE_CXX_FLAGS "-fPIC -DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
+  set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 endif ()
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
@@ -13,6 +13,13 @@ if(NOT APPLE)
 	endif()
 endif()
  
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+#set proper rpath on Mac
+if (APPLE)
+	set (CMAKE_INSTALL_RPATH "@executable_path/../../../")
+
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
   # differentiation between debug and release builds.
