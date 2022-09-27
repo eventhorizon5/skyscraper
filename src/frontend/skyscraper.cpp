@@ -249,11 +249,18 @@ bool Skyscraper::OnInit(void)
 		configfile->load("skyscraper.ini");
 		keyconfigfile = new Ogre::ConfigFile();
 		keyconfigfile->load("keyboard.ini");
+		Ogre::ConfigFile *plugins = new Ogre::ConfigFile();
+		plugins->load("plugins.cfg");
+		delete plugins;
+		plugins = new Ogre::ConfigFile();
+		plugins->load("resources.cfg");
+		delete plugins;
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error loading skyscraper.ini file\nDetails: " + e.getDescription());
+		return ReportFatalError("Error loading configuration files\nDetails: " + e.getDescription());
 	}
+
 
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
 
