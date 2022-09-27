@@ -41,16 +41,15 @@ void SGX_FetchNormal(in sampler2D s,
 }
 
 //-----------------------------------------------------------------------------
-void SGX_TransformNormal(in vec3 vNormal,
-				         in vec3 vTangent,
-						 inout vec3 vNormalTS)
+void SGX_ConstructTBNMatrix(in vec3 vNormal,
+				   in vec3 vTangent,
+				   out mat3 vOut)
 {
 	// use non-normalised post-interpolation values as in mikktspace
 	// resulting normal will be normalised by lighting
 	vec3 vBinormal = cross(vNormal, vTangent);
 	// direction: from tangent space to world
-	mat3 TBN = mtxFromCols(vTangent, vBinormal, vNormal);
-	vNormalTS = mul(TBN, vNormalTS);
+	vOut = mtxFromCols(vTangent, vBinormal, vNormal);
 }
 
 //-----------------------------------------------------------------------------
