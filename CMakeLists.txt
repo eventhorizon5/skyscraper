@@ -18,7 +18,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 #set proper rpath on Mac
 if (APPLE)
-	set (CMAKE_INSTALL_RPATH "@executable_path/../../../")
+	set (CMAKE_INSTALL_RPATH "@executable_path/../Libs/")
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
