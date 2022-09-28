@@ -30,6 +30,7 @@
 #include <OgreFontManager.h>
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreResourceGroupManager.h>
+#include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
@@ -137,6 +138,9 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//create a new material
 	std::string matname = TrimStringCopy(name);
 	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
+
+	if (mMat == 0)
+		return false;
 
 	//bind texture to material
 	BindTextureToMaterial(mMat, texturename, has_alpha);
@@ -2159,7 +2163,28 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
+	//create default material scheme
+	/*Ogre::RTShader::ShaderGenerator *shadergen = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
+	bool created = shadergen->createShaderBasedTechnique(*mMat, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, "ShaderGeneratorDefaultScheme");
+	if (!created)
+		return 0;
+	shadergen->validateMaterial("ShaderGeneratorDefaultScheme", *mMat);
+
+	// Grab the generated technique.
+	Ogre::Material::Techniques::const_iterator it;
+	Ogre::Technique* curTech = 0;
+	for(it = mMat->getTechniques().begin(); it != mMat->getTechniques().end(); ++it)
+	{
+		curTech = *it;
+
+		if (curTech->getSchemeName() == "ShaderGeneratorDefaultScheme")
+		{
+			break;
+		}
+	}*/
+
 	//setup tessellation
+	//Ogre::Pass *pass = curTech->getPass(0);
 	Ogre::Pass *pass = mMat->getTechnique(0)->getPass(0);
 	pass->setVertexProgram("Ogre/Tessellation/VertexProgram");
 	pass->setTessellationHullProgram("Ogre/Tessellation/TessellationHullProgram");
