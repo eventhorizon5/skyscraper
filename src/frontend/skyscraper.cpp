@@ -608,20 +608,6 @@ bool Skyscraper::Initialize()
 		}
 	}
 
-	if (RTSS == true)
-	{
-		if (GetConfigBool("Skyscraper.SBS.Tessellation", true))
-		{
-			const Ogre::RenderSystemCapabilities *caps = mRoot->getRenderSystem()->getCapabilities();
-			if (!caps->hasCapability(Ogre::RSC_TESSELLATION_HULL_PROGRAM) || !caps->hasCapability(Ogre::RSC_TESSELLATION_DOMAIN_PROGRAM))
-			{
-				ReportFatalError("Your graphics card does not support tessellation shaders.");
-			}
-			if (!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("glsl400"))
-				return ReportFatalError("Your system does not support GL 4.0 shaders");
-		}
-	}
-
 	//set ambient light
 	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);

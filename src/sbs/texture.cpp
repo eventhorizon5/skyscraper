@@ -2163,38 +2163,6 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
-	if (sbs->GetConfigBool("Skyscraper.SBS.Tessellation", true))
-	{
-		//create default material scheme
-		/*Ogre::RTShader::ShaderGenerator *shadergen = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-		bool created = shadergen->createShaderBasedTechnique(*mMat, Ogre::MaterialManager::DEFAULT_SCHEME_NAME, "ShaderGeneratorDefaultScheme");
-		if (!created)
-			return 0;
-		shadergen->validateMaterial("ShaderGeneratorDefaultScheme", *mMat);
-
-		// Grab the generated technique.
-		Ogre::Material::Techniques::const_iterator it;
-		Ogre::Technique* curTech = 0;
-		for(it = mMat->getTechniques().begin(); it != mMat->getTechniques().end(); ++it)
-		{
-			curTech = *it;
-
-			if (curTech->getSchemeName() == "ShaderGeneratorDefaultScheme")
-			{
-			break;
-			}
-		}*/
-
-		//setup tessellation
-		//Ogre::Pass *pass = curTech->getPass(0);
-		Ogre::Pass *pass = mMat->getTechnique(0)->getPass(0);
-		pass->setVertexProgram("Ogre/Tessellation/VertexProgram");
-		pass->setTessellationHullProgram("Ogre/Tessellation/TessellationHullProgram");
-		pass->getTessellationHullProgramParameters()->setNamedConstant("g_fTessellationFactor", (float)5);
-		pass->setTessellationDomainProgram("Ogre/Tessellation/TessellationDomainProgram");
-		pass->setFragmentProgram("Ogre/Tessellation/FragmentProgram");
-	}
-
 	return mMat;
 }
 
