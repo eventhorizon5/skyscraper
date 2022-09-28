@@ -609,19 +609,22 @@ bool Skyscraper::Initialize()
 
 	if (rtss == true)
 	{
-		const Ogre::RenderSystemCapabilities *caps = mRoot->getRenderSystem()->getCapabilities();
-        if (!caps->hasCapability(Ogre::RSC_TESSELLATION_HULL_PROGRAM) || !caps->hasCapability(Ogre::RSC_TESSELLATION_DOMAIN_PROGRAM))
-        {
-            ReportFatalError("Your graphics card does not support tessellation shaders.");
-        }
-        /*if (!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("vs_5_0") &&
-            !Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("hs_5_0") &&
-            !Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("ds_5_0") &&
-            !Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("ps_5_0") &&
-            !Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("hlsl"))
-        {
-            ReportFatalError("Your card does not support the shader model 5.0 needed");
-        }*/
+		GetConfigBool("Skyscraper.SBS.Tessellation", true);
+		{
+			const Ogre::RenderSystemCapabilities *caps = mRoot->getRenderSystem()->getCapabilities();
+			if (!caps->hasCapability(Ogre::RSC_TESSELLATION_HULL_PROGRAM) || !caps->hasCapability(Ogre::RSC_TESSELLATION_DOMAIN_PROGRAM))
+			{
+				ReportFatalError("Your graphics card does not support tessellation shaders.");
+			}
+			/*if (!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("vs_5_0") &&
+            	!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("hs_5_0") &&
+            	!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("ds_5_0") &&
+            	!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("ps_5_0") &&
+            	!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("hlsl"))
+        	{
+            	ReportFatalError("Your card does not support the shader model 5.0 needed");
+        	}*/
+		}
 	}
 
 	//set ambient light
