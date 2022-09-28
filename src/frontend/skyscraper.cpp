@@ -599,12 +599,6 @@ bool Skyscraper::Initialize()
 			// forward scheme not found events to the RTSS
 			OgreBites::SGTechniqueResolverListener* schemeNotFoundHandler = new OgreBites::SGTechniqueResolverListener(shaderGenerator);
 			Ogre::MaterialManager::getSingleton().addListener(schemeNotFoundHandler);
-
-			/*Ogre::RTShader::RenderState* RenderState = shaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
-			//Add per pixel lighting sub render state to the global scheme render state.
-			//It will override the default FFP lighting sub render state.
-			Ogre::RTShader::PerPixelLighting* perPixelLightModel = shaderGenerator->createSubRenderState<Ogre::RTShader::PerPixelLighting>();
-			RenderState->addTemplateSubRenderState(perPixelLightModel);*/
 		}
 	}
 
