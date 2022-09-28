@@ -606,7 +606,15 @@ bool Skyscraper::Initialize()
 	if (GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
 	{
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
-		//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+
+		/*try
+		{
+			mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+		}
+		catch (Ogre::Exception &e)
+		{
+			return ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription());
+		}*/
 	}
 
 	if (Headless == false)
