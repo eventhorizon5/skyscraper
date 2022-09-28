@@ -609,7 +609,7 @@ bool Skyscraper::Initialize()
 
 	if (rtss == true)
 	{
-		GetConfigBool("Skyscraper.SBS.Tessellation", true);
+		if (GetConfigBool("Skyscraper.SBS.Tessellation", true))
 		{
 			const Ogre::RenderSystemCapabilities *caps = mRoot->getRenderSystem()->getCapabilities();
 			if (!caps->hasCapability(Ogre::RSC_TESSELLATION_HULL_PROGRAM) || !caps->hasCapability(Ogre::RSC_TESSELLATION_DOMAIN_PROGRAM))
