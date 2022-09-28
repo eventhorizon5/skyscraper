@@ -87,6 +87,7 @@ public:
 	std::string Platform;
 	std::string SkyName;
 	std::string Renderer;
+	std::string Architecture;
 
 	bool StartupRunning;
 	bool Pause; //pause simulator

@@ -725,23 +725,33 @@ bool Skyscraper::Initialize()
 	}
 
 	//set platform name
-	std::string arch;
+	std::string bits;
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-	arch = "32-bit";
+	bits = "32-bit";
 #endif
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
-	arch = "64-bit";
+	bits = "64-bit";
+#endif
+
+#if OGRE_CPU == OGRE_CPU_X86
+	Architecture = "x86";
+#elif OGRE_CPU == OGRE_CPU_PPC
+	Architecture = "PPC";
+#elif OGRE_CPU == OGRE_CPU_ARM
+	Architecture = "ARM";
+#elif OGRE_CPU == OGRE_CPU_MIPS
+	Architecture = "MIPS";
+#elif OGRE_CPU == OGRE_CPU_UNKNOWN
+	Architecture = "Unknown";
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Platform = "Windows " + arch;
-#endif
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	Platform = "Linux " + arch;
-#endif
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	Platform = "MacOS " + arch;
+	Platform = "Windows " + Architecture + " " + bits;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	Platform = "Linux " + Architecture + " " + bits;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	Platform = "MacOS " + Architecture + " " + bits;
 #endif
 
 	return true;
