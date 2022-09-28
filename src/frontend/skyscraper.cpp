@@ -261,7 +261,6 @@ bool Skyscraper::OnInit(void)
 		return ReportFatalError("Error loading configuration files\nDetails: " + e.getDescription());
 	}
 
-
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
 
 	//turn off console if specified on command line
