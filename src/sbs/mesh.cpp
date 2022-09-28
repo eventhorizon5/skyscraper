@@ -2019,6 +2019,9 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 								Report("Loading material " + match);
 								//materialPtr->compile();
 								materialPtr->load();
+
+								//set lighting
+								materialPtr->setLightingEnabled(false);
 								if (sbs->GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
 								{
 									materialPtr->setLightingEnabled(true);
