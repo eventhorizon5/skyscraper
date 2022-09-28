@@ -403,6 +403,7 @@ void Skyscraper::UnloadSim()
 	Ogre::MeshManager::getSingleton().removeAll();
 
 	//remove all materials
+	Ogre::RTShader::ShaderGenerator::getSingleton().removeAllShaderBasedTechniques();
 	Ogre::MaterialManager::getSingleton().removeAll();
 	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
 
