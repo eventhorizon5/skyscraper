@@ -2159,6 +2159,13 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
+	//set tessellation
+	Ogre::Pass *pass = mMat->getTechnique(0)->getPass(0);
+	pass->setVertexProgram("Ogre/Tessellation/VertexProgram");
+	pass->setTessellationHullProgram("Ogre/Tessellation/TessellationHullProgram");
+	pass->setTessellationDomainProgram("Ogre/Tessellation/TessellationDomainProgram");
+	pass->setFragmentProgram("Ogre/Tessellation/FragmentProgram");
+	pass->getTessellationHullProgramParameters()->setNamedConstant("g_fTessellationFactor", (float)16);
 	return mMat;
 }
 
