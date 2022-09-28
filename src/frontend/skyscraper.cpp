@@ -603,8 +603,11 @@ bool Skyscraper::Initialize()
 	}
 
 	//set ambient light
-	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
-	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+	if (GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
+	{
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+		//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+	}
 
 	if (Headless == false)
 	{
