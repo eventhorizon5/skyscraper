@@ -103,6 +103,7 @@ public:
 	bool ShowMenu; //show main menu
 	bool CheckScript;
 	bool Headless;
+	bool RTSS;
 
 	void Loop();
 	virtual bool OnInit(void);

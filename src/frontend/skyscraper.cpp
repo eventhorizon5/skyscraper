@@ -147,6 +147,7 @@ bool Skyscraper::OnInit(void)
 	CheckScript = false;
 	ShowMenu = false;
 	Headless = false;
+	RTSS = false;
 
 #if !defined(__WXMAC__)
 	//switch current working directory to executable's path, if needed
@@ -403,7 +404,8 @@ void Skyscraper::UnloadSim()
 	Ogre::MeshManager::getSingleton().removeAll();
 
 	//remove all materials
-	Ogre::RTShader::ShaderGenerator::getSingleton().removeAllShaderBasedTechniques();
+	if (RTSS)
+		Ogre::RTShader::ShaderGenerator::getSingleton().removeAllShaderBasedTechniques();
 	Ogre::MaterialManager::getSingleton().removeAll();
 	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
 
@@ -583,11 +585,10 @@ bool Skyscraper::Initialize()
 
 	std::string renderer = mRoot->getRenderSystem()->getName();
 
-	bool rtss = false;
 	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem")
-		rtss = true;
+		RTSS = true;
 
-	if (rtss == true)
+	if (RTSS == true)
 	{
 		//Enable the RT Shader System
 		if (Ogre::RTShader::ShaderGenerator::initialize())
@@ -607,7 +608,7 @@ bool Skyscraper::Initialize()
 		}
 	}
 
-	if (rtss == true)
+	if (RTSS == true)
 	{
 		if (GetConfigBool("Skyscraper.SBS.Tessellation", true))
 		{
@@ -616,14 +617,8 @@ bool Skyscraper::Initialize()
 			{
 				ReportFatalError("Your graphics card does not support tessellation shaders.");
 			}
-			/*if (!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("vs_5_0") &&
-            	!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("hs_5_0") &&
-            	!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("ds_5_0") &&
-            	!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("ps_5_0") &&
-            	!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("hlsl"))
-        	{
-            	ReportFatalError("Your card does not support the shader model 5.0 needed");
-        	}*/
+			if (!Ogre::GpuProgramManager::getSingleton().isSyntaxSupported("glsl400"))
+				return ReportFatalError("Your system does not support GL 4.0 shaders");
 		}
 	}
 
@@ -646,7 +641,7 @@ bool Skyscraper::Initialize()
 	}
 
 	//set up default material shader scheme
-	if (rtss == true)
+	if (RTSS == true)
 		mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 
 	//setup texture filtering
