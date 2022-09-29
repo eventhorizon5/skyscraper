@@ -149,10 +149,13 @@ bool Skyscraper::OnInit(void)
 	Headless = false;
 	RTSS = false;
 
-#if !defined(__WXMAC__)
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
 	wxString app_path = wxPathOnly(exefile); //strip off filename
+#if defined(__WXMAC__)
+	wxSetWorkingDirectory(app_path + wxT("/../Resources"));
+	printf("Dir: %s\n", (const char*)app_path.mb_str());
+#else
 	wxSetWorkingDirectory(app_path); //set working directory to path
 #endif
 
