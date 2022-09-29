@@ -158,8 +158,7 @@ bool Skyscraper::OnInit(void)
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
 	wxString app_path = wxPathOnly(exefile); //strip off filename
 #if defined(__WXMAC__)
-	wxSetWorkingDirectory(app_path + wxT("/../Resources"));
-	printf("Dir: %s\n", (const char*)app_path.mb_str());
+	wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
 #else
 	wxSetWorkingDirectory(app_path); //set working directory to path
 #endif

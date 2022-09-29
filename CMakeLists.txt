@@ -16,11 +16,6 @@ endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-#set proper rpath on Mac
-if (APPLE)
-	set (CMAKE_INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/Libs")
-endif()
-
 if (CMAKE_BUILD_TYPE STREQUAL "")
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
   # differentiation between debug and release builds.
@@ -112,3 +107,8 @@ target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_L
 
 target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  
+if (APPLE)
+set_target_properties(skyscraper PROPERTIES BUILD_WITH_INSTALL_RPATH 1
+		INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/Libs")
+endif()
+
