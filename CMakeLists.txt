@@ -36,7 +36,7 @@ endif()
 set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES} ${OGRE_Bites_LIBRARIES})
 
 #find wxWidgets
-find_package(wxWidgets COMPONENTS core base gl REQUIRED)
+find_package(wxWidgets COMPONENTS core base REQUIRED)
 
 #find FMOD
 find_package(FMOD REQUIRED)
