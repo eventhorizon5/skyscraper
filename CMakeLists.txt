@@ -18,7 +18,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 #set proper rpath on Mac
 if (APPLE)
-	set (CMAKE_INSTALL_RPATH "@executable_path/Libs")
+	set (CMAKE_INSTALL_RPATH "@executable_path/../Frameworks;@executable_path")
 endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
