@@ -148,6 +148,11 @@ bool Skyscraper::OnInit(void)
 	ShowMenu = false;
 	Headless = false;
 	RTSS = false;
+	background_rect = 0;
+	background_node = 0;
+	configfile = 0;
+	keyconfigfile = 0;
+	parser = 0;
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
