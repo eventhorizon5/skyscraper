@@ -51,7 +51,7 @@ Step 3 - build and install OGRE
 
 #### First get the source:
     
-    wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-1.13-skyscraper.tar.bz2
+    wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-13-skyscraper.tar.bz2
     tar xfvz ogre-13-skyscraper.tar.bz2
     cd ogre-13.4.3
     cmake -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON
