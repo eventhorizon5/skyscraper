@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Determine what directory we are running from
+scriptsrc=`readlink -f "$0" || echo "$0"`
+run_path=`dirname "$scriptsrc" || echo .`
+echo "Run path: $run_path"
+cd "$run_path"
+
+export LD_LIBRARY_PATH="$run_path/lib:$LD_LIBRARY_PATH"
+
+./bin/skyscraper
+

@@ -22,6 +22,12 @@ if (CMAKE_BUILD_TYPE STREQUAL "")
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif ()
  
+if (UNIX AND NOT APPLE)
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+endif ()
+
 find_package(OGRE REQUIRED)
  
 if(NOT OGRE_FOUND)
@@ -110,5 +116,10 @@ target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES BUILD_WITH_INSTALL_RPATH 1
 		INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/Libs")
+endif()
+
+if (UNIX AND NOT APPLE)
+	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tools/scripts/skyscraper
+	     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 

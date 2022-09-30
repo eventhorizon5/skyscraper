@@ -159,8 +159,10 @@ bool Skyscraper::OnInit(void)
 	wxString app_path = wxPathOnly(exefile); //strip off filename
 #if defined(__WXMAC__)
 	wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
+#elif defined (__WXGTK__)
+	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory
 #else
-	wxSetWorkingDirectory(app_path); //set working directory to path
+	wxSetWorkingDirectory(app_path); //set working directory
 #endif
 
 	//define command line options
