@@ -1,0 +1,7 @@
+# ignore eclipse project files
+.project
+.cproject
+
+bin/
+lib/
+
