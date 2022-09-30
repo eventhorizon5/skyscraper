@@ -8,5 +8,5 @@ cd "$run_path"
 
 export LD_LIBRARY_PATH="$run_path/lib:$LD_LIBRARY_PATH"
 
-./bin/skyscraper
+./bin/skyscraper "$@"
 
