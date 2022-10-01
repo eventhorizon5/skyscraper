@@ -124,6 +124,9 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
+	if (panel)
+		panel->SetSize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+
 	if (frontend->mRenderWindow)
 	{
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -134,9 +137,6 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 	}
 	if (frontend->mCamera)
 		frontend->mCamera->setAspectRatio(Ogre::Real(frontend->mViewport->getActualWidth()) / Ogre::Real(frontend->mViewport->getActualHeight()));
-
-	if (panel)
-		panel->SetSize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
