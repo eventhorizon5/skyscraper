@@ -64,13 +64,13 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	frontend = parent;
 	Active = false;
 	InLoop = false;
+	panel = 0;
 	Center();
 	wxString title;
 	title = wxT("Skyscraper " + frontend->version + " " + frontend->version_state);
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
-	panel = 0;
 
 	//reset input states
 	boxes = false;
