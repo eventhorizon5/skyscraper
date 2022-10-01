@@ -104,7 +104,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	key_enter = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Enter", "E")[0];
 
 	//create panel, for keyboard events
-	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(0, 0), wxNO_BORDER);
+	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
 	panel->Connect(wxID_ANY, wxEVT_KEY_DOWN, wxKeyEventHandler(MainScreen::OnKeyDown), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_KEY_UP, wxKeyEventHandler(MainScreen::OnKeyUp), NULL, this);
 }
@@ -133,6 +133,9 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 	}
 	if (frontend->mCamera)
 		frontend->mCamera->setAspectRatio(Ogre::Real(frontend->mViewport->getActualWidth()) / Ogre::Real(frontend->mViewport->getActualHeight()));
+
+	if (panel)
+		panel->SetSize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
