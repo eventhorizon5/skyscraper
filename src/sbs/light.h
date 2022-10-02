@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Light : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	int Type;

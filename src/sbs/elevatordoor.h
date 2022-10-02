@@ -31,6 +31,8 @@ struct DoorComponent;
 
 class SBSIMPEXP ElevatorDoor : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	int Number; //door instance number
 	Elevator *elev; //pointer to associated elevator object

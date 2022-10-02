@@ -41,6 +41,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Elevator, 0, 0)
+
 //elevator parking timer
 class Elevator::Timer : public TimerObject
 {

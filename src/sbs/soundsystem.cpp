@@ -31,6 +31,9 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(SoundSystem, 0, 0)
+IMPLEMENT_ALLOCATOR(SoundData, 0, 0)
+
 SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(parent)
 {
 	SetValues("SoundSystem", "Sound System", true, false);

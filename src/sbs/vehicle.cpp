@@ -51,6 +51,8 @@ This source file is not LGPL, it's public source code that you can reuse.
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Vehicle, 0, 0)
+
 Vehicle::Vehicle(Object *parent, const int number) : Object(parent)
 {
 	//set up SBS object

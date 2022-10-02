@@ -34,6 +34,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Light, 0, 0)
+
 Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 {
 	//creates a light object

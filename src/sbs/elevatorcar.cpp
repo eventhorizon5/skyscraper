@@ -47,6 +47,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(ElevatorCar, 0, 0)
+
 ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 {
 	//set up SBS object

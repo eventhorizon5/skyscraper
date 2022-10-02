@@ -34,6 +34,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(FloorIndicator, 0, 0)
+
 class FloorIndicator::Timer : public TimerObject
 {
 public:

@@ -35,6 +35,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Model, 0, 0)
+
 Model::Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass) : Object(parent)
 {
 	//loads a 3D model into the simulation

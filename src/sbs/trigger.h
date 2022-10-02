@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Trigger : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	//functions

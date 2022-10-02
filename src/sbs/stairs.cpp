@@ -39,6 +39,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Stairs, 0, 0)
+
 Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor) : Object(parent)
 {
 	//creates a stairwell in the location specified by CenterX and CenterZ

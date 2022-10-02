@@ -36,6 +36,14 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(FloorManager, 0, 0)
+IMPLEMENT_ALLOCATOR(ElevatorManager, 0, 0)
+IMPLEMENT_ALLOCATOR(ShaftManager, 0, 0)
+IMPLEMENT_ALLOCATOR(StairsManager, 0, 0)
+IMPLEMENT_ALLOCATOR(DoorManager, 0, 0)
+IMPLEMENT_ALLOCATOR(RevolvingDoorManager, 0, 0)
+IMPLEMENT_ALLOCATOR(VehicleManager, 0, 0)
+
 FloorManager::FloorManager(Object* parent) : Object(parent)
 {
 	//set up SBS object

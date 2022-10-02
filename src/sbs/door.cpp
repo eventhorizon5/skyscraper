@@ -37,6 +37,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Door, 0, 0)
+
 //auto-close timer
 class Door::Timer : public TimerObject
 {

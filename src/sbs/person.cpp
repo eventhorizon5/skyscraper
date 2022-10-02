@@ -36,6 +36,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Person, 0, 0)
+
 //random call timer
 class Person::Timer : public TimerObject
 {

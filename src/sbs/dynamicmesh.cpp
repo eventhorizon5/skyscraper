@@ -41,6 +41,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(DynamicMesh, 0, 0)
+
 DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &name, Real max_render_distance, bool dynamic_buffers) : ObjectBase(parent)
 {
 	//creates a new Dynamic Mesh object, which manages multiple sets of geometry data for efficiency.

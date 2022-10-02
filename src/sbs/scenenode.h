@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP SceneNode: public ObjectBase
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	SceneNode(Object *parent, std::string name);

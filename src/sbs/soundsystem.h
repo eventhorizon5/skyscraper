@@ -34,6 +34,8 @@ namespace SBS {
 
 class SBSIMPEXP SoundSystem : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	SoundSystem(Object *parent, FMOD::System *fmodsystem);
@@ -74,6 +76,10 @@ private:
 
 struct SBSIMPEXP SoundData
 {
+	DECLARE_ALLOCATOR
+
+public:
+
 	SoundData();
 	~SoundData();
 	void AddHandle(Sound *handle);

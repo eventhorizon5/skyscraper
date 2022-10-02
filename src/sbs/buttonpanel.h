@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP ButtonPanel : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	int Index; //index number of panel

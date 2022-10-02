@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Stairwell : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	class Level;
 

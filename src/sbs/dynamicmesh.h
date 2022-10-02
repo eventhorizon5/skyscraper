@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP DynamicMesh : public ObjectBase
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	bool force_combine; //if set to true, forces combined meshes

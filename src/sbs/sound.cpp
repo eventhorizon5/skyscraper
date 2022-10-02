@@ -31,6 +31,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Sound, 0, 0)
+
 Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(parent)
 {
 	//set up SBS object

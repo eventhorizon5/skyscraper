@@ -32,6 +32,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Wall, 0, 0)
+
 Wall::Wall(MeshObject* wrapper, Object *proxy, bool temporary) : Object(wrapper, temporary)
 {
 	//wall object constructor
