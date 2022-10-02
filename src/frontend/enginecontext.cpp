@@ -27,6 +27,7 @@
 #include "debugpanel.h"
 #include "scriptprocessor.h"
 #include "enginecontext.h"
+#include "malloc.h"
 
 using namespace SBS;
 
@@ -320,6 +321,11 @@ void EngineContext::UnloadSim()
 	running = false;
 	raised = false;
 	Moved = false;
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	//release free memory to OS on Linux
+	malloc_trim(0);
+#endif
 }
 
 bool EngineContext::Start(Ogre::Camera *camera)

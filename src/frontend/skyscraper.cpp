@@ -425,11 +425,17 @@ void Skyscraper::UnloadSim()
 	//remove all textures
 	Ogre::TextureManager::getSingleton().removeAll();
 
+	//clear scene manager
+	mSceneMgr->clearScene();
+
 	//free unused hardware buffers
 	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
-	//clear scene manager
-	mSceneMgr->clearScene();
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	//release free memory to OS on Linux
+	malloc_trim(0);
+#endif
+
 }
 
 void Skyscraper::Render()
@@ -1562,11 +1568,6 @@ void Skyscraper::UnloadToMenu()
 
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	//release free memory to OS on Linux
-	malloc_trim(0);
-#endif
 
 	StartSound();
 	StartupRunning = true;
