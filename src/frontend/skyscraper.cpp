@@ -533,6 +533,10 @@ bool Skyscraper::Initialize()
 	{
 		return ReportFatalError("Error initializing render window\nDetails: " + e.getDescription());
 	}
+	catch (...)
+	{
+                return ReportFatalError("Error initializing render window");
+	}
 
 	if (Headless == false)
 	{
@@ -1594,7 +1598,6 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 
 	//create the render window
 	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();
 
