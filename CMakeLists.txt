@@ -61,7 +61,6 @@ file(GLOB FRONTEND_FILES
  
 file(GLOB SBS_FILES
 	src/sbs/*.cpp
-	src/sbs/allocator/*.cpp
 )
  
 file(GLOB OGREBULLET_COLL_FILES

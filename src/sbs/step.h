@@ -30,8 +30,6 @@ namespace SBS {
 
 class SBSIMPEXP Step : public MeshObject
 {
-	DECLARE_ALLOCATOR
-
 public:
 	Step(Object* parent, const std::string &name, DynamicMesh* wrapper, int max_render_distance = 0);
 	~Step() {}

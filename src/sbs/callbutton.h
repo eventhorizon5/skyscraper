@@ -30,8 +30,6 @@ namespace SBS {
 
 class SBSIMPEXP CallButton : public Object, public Lock
 {
-	DECLARE_ALLOCATOR
-
 public:
 
 	//functions

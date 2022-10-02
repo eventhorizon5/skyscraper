@@ -28,8 +28,6 @@ namespace SBS {
 
 class SBSIMPEXP Sound : public Object
 {
-	DECLARE_ALLOCATOR
-
 public:
 
 	bool SetVelocity; //set sound velocity on move

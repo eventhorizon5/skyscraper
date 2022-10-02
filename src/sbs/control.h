@@ -30,8 +30,6 @@ namespace SBS {
 
 class SBSIMPEXP Control : public Object, public Lock
 {
-	DECLARE_ALLOCATOR
-
 public:
 	std::string Direction;
 

@@ -28,8 +28,6 @@ namespace SBS {
 
 class SBSIMPEXP FloorIndicator : public Object
 {
-	DECLARE_ALLOCATOR
-
 public:
 
 	int elev; //elevator this indicator is assigned to

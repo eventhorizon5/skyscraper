@@ -35,8 +35,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(MovingWalkway, 0, 0)
-
 MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real treadsize, int num_steps, Real voffset, Real tw, Real th) : Object(parent)
 {
 	//create a new moving walkway object

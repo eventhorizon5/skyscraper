@@ -29,8 +29,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(SceneNode, 0, 0)
-
 SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 {
 	SetName(name);

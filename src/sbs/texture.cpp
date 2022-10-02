@@ -37,8 +37,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(TextureManager, 0, 0)
-
 TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 {
 	SetName("Texture Manager");

@@ -28,8 +28,6 @@ namespace SBS {
 
 class SBSIMPEXP Person : public Object
 {
-	DECLARE_ALLOCATOR
-
 public:
 
 	RandomGen *rnd_time, *rnd_dest;

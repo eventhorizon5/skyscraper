@@ -30,8 +30,6 @@ namespace SBS {
 
 class SBSIMPEXP Door : public Object, public DoorLock
 {
-	DECLARE_ALLOCATOR
-
 public:
 
 	int Direction;

@@ -36,8 +36,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(Trigger, 0, 0)
-
 Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Ogre::Vector3 area_min, Ogre::Vector3 area_max, const std::vector<std::string> &action_names) : Object(parent)
 {
 	//create a proximity trigger at the specified location

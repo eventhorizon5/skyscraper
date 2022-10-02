@@ -28,8 +28,6 @@ namespace SBS {
 
 class SBSIMPEXP DirectionalIndicator : public Object
 {
-	DECLARE_ALLOCATOR
-
 public:
 
 	int elevator; //elevator this indicator is assigned to

@@ -28,8 +28,6 @@ namespace SBS {
 
 class SBSIMPEXP Elevator : public Object
 {
-	DECLARE_ALLOCATOR
-
 	friend class ElevatorDoor;
 	friend class ElevatorCar;
 

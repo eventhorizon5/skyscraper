@@ -37,8 +37,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(CameraTexture, 0, 0)
-
 CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabled, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation) : Object(parent)
 {
 	//creates a CameraTexture object

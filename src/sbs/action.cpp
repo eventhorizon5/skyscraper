@@ -38,8 +38,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(Action, 0, 0)
-
 Action::Action(Object *parent, const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters) : ObjectBase(parent)
 {
 	//create an action

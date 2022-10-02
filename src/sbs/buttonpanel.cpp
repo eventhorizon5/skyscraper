@@ -32,8 +32,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(ButtonPanel, 0, 0)
-
 ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th, bool autosize) : Object(parent)
 {
 	//Create an elevator button panel

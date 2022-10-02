@@ -28,8 +28,6 @@ namespace SBS {
 
 class SBSIMPEXP Floor : public Object
 {
-	DECLARE_ALLOCATOR
-
 public:
 	MeshObject *Level; //level mesh
 	MeshObject *Interfloor; //interfloor mesh

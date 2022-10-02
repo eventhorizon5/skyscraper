@@ -35,8 +35,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(Escalator, 0, 0)
-
 Escalator::Escalator(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th) : Object(parent)
 {
 	//create a new escalator object

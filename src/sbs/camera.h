@@ -44,8 +44,6 @@ struct SBSIMPEXP CameraState
 
 class SBSIMPEXP Camera : public Object
 {
-	DECLARE_ALLOCATOR
-
 public:
 	int CurrentFloor; //floor camera's on
 	std::string CurrentFloorID; //indicator ID of camera's current floor

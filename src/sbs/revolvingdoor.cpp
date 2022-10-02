@@ -32,8 +32,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(RevolvingDoor, 0, 0)
-
 RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), Lock(this)
 {
 	//creates a revolving door

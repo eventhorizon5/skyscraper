@@ -28,8 +28,6 @@ namespace SBS {
 
 class SBSIMPEXP CameraTexture : public Object
 {
-	DECLARE_ALLOCATOR
-
 public:
 
 	//functions

@@ -28,8 +28,6 @@ namespace SBS {
 
 class SBSIMPEXP MovingWalkway : public Object
 {
-	DECLARE_ALLOCATOR
-
 public:
 	Real Speed;
 

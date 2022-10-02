@@ -33,8 +33,6 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(DirectionalIndicator, 0, 0)
-
 //shut-off timer
 class DirectionalIndicator::Timer : public TimerObject
 {
