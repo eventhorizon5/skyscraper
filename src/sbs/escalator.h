@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Escalator : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	Real Speed;
 

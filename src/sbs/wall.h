@@ -30,6 +30,8 @@ namespace SBS {
 
 class SBSIMPEXP Wall : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	//functions

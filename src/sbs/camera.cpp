@@ -45,6 +45,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Camera, 0, 0)
+
 Camera::Camera(Object *parent) : Object(parent)
 {
 	//set up SBS object

@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Action : public ObjectBase
 {
+	DECLARE_ALLOCATOR
+
 public:
 	//functions
 	Action(Object *parent, const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);

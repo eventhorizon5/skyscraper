@@ -116,6 +116,8 @@ extern bool SBSIMPEXP enable_advanced_profiling;
 //SBS class
 class SBSIMPEXP SBS : public Object
 {
+	DECLARE_ALLOCATOR
+
 	friend class MeshObject;
 public:
 

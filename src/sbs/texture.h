@@ -32,6 +32,8 @@ namespace SBS {
 
 class SBSIMPEXP TextureManager : public ObjectBase
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()

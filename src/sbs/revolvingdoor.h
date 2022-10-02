@@ -30,6 +30,8 @@ namespace SBS {
 
 class SBSIMPEXP RevolvingDoor : public Object, public Lock
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	bool IsMoving; //is door moving?

@@ -35,6 +35,8 @@ namespace SBS {
 
 class SBSIMPEXP Vehicle : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	int Number; //vehicle number
 	std::string Name; //vehicle name

@@ -33,6 +33,8 @@ namespace SBS {
 
 class SBSIMPEXP Polygon : public ObjectBase
 {
+	DECLARE_ALLOCATOR
+
 public:
 	MeshObject* mesh;
 	std::vector<Triangle> triangles;

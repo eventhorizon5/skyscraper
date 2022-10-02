@@ -28,11 +28,17 @@ namespace SBS {
 
 class SBSIMPEXP ElevatorDoor : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	//door component object
 	struct DoorWrapper;
 	struct DoorObject
 	{
+		DECLARE_ALLOCATOR
+
+	public:
+
 		DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, Real OpenSpeed, Real CloseSpeed);
 		~DoorObject();
 		void MoveDoors(bool open, bool manual);
@@ -68,6 +74,10 @@ public:
 	//wrapper that represents the entire set of doors
 	struct DoorWrapper : public Object
 	{
+		DECLARE_ALLOCATOR
+
+	public:
+
 		DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor = 0);
 		~DoorWrapper();
 

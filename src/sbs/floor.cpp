@@ -50,6 +50,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Floor, 0, 0)
+
 Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 {
 	//set up SBS object

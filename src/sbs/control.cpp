@@ -36,6 +36,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Control, 0, 0)
+
 Control::Control(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, Real width, Real height, bool center, int selection_position) : Object(parent), Lock(this)
 {
 	//create a control at the specified location

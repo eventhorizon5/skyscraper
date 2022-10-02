@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Stairs : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	int StairsNum; //number

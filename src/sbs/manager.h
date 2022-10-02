@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP FloorManager : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	FloorManager(Object* parent);
 	~FloorManager();
@@ -63,6 +65,8 @@ private:
 
 class SBSIMPEXP ElevatorManager : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	ElevatorManager(Object* parent);
 	~ElevatorManager();
@@ -90,6 +94,8 @@ private:
 
 class SBSIMPEXP ShaftManager : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	ShaftManager(Object* parent);
 	~ShaftManager();
@@ -117,6 +123,8 @@ private:
 
 class SBSIMPEXP StairsManager : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	StairsManager(Object* parent);
 	~StairsManager();
@@ -144,6 +152,8 @@ private:
 
 class SBSIMPEXP DoorManager : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	DoorManager(Object* parent);
 	~DoorManager();
@@ -160,6 +170,8 @@ private:
 
 class SBSIMPEXP RevolvingDoorManager : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	RevolvingDoorManager(Object* parent);
 	~RevolvingDoorManager();
@@ -176,6 +188,8 @@ private:
 
 class SBSIMPEXP VehicleManager : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	VehicleManager(Object* parent);
 	~VehicleManager();

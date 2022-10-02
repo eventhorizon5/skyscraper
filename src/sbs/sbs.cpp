@@ -55,6 +55,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(SBS, 0, 0)
+
 SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
 {
 	sbs = this;

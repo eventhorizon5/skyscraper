@@ -34,6 +34,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(CallButton, 0, 0)
+
 class CallButton::Timer : public TimerObject
 {
 public:

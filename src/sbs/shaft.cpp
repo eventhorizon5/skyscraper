@@ -39,6 +39,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Shaft, 0, 0)
+
 Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor) : Object(parent)
 {
 	//creates a shaft in the location specified by CenterX and CenterZ

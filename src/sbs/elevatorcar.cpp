@@ -45,6 +45,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(ElevatorCar, 0, 0)
+
 ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 {
 	//set up SBS object

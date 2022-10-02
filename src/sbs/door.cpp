@@ -35,6 +35,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(Door, 0, 0)
+
 Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), DoorLock(this, direction)
 {
 	//creates a door

@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Shaft : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	int ShaftNumber; //shaft number

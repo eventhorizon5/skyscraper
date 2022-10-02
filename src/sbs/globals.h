@@ -24,6 +24,7 @@
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H
 
+#include "allocator/allocator.h"
 #include <string>
 #include <vector>
 //#include <OgreVector2.h>

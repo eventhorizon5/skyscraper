@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Model : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	bool load_error;
 
