@@ -6,8 +6,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-static int allocations = 0;
-
 //------------------------------------------------------------------------------
 // Constructor
 //------------------------------------------------------------------------------
@@ -64,8 +62,6 @@ Allocator::~Allocator()
 void* Allocator::Allocate(size_t size)
 {
     assert(size <= m_objectSize);
-
-    allocations++;
 
     //printf("Allocate:: Name: %s - size: %d\n", m_name, size);
 
