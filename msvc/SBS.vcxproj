@@ -265,7 +265,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\sbs\action.cpp" />
-    <ClCompile Include="..\src\sbs\allocator\allocator.cpp" />
     <ClCompile Include="..\src\sbs\buttonpanel.cpp" />
     <ClCompile Include="..\src\sbs\callbutton.cpp" />
     <ClCompile Include="..\src\sbs\camera.cpp" />
@@ -311,8 +310,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sbs\action.h" />
-    <ClInclude Include="..\src\sbs\allocator\allocator.h" />
-    <ClInclude Include="..\src\sbs\allocator\datatypes.h" />
     <ClInclude Include="..\src\sbs\buttonpanel.h" />
     <ClInclude Include="..\src\sbs\callbutton.h" />
     <ClInclude Include="..\src\sbs\camera.h" />
