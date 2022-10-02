@@ -425,6 +425,9 @@ void Skyscraper::UnloadSim()
 	//remove all textures
 	Ogre::TextureManager::getSingleton().removeAll();
 
+	//free unused hardware buffers
+	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
+
 	//clear scene manager
 	mSceneMgr->clearScene();
 }
