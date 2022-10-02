@@ -53,6 +53,7 @@
 #include "mainscreen.h"
 #include "loaddialog.h"
 #include "profiler.h"
+#include "malloc.h"
 
 #include <OgreOverlaySystem.h>
 
@@ -1558,6 +1559,11 @@ void Skyscraper::UnloadToMenu()
 
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	//release free memory to OS on Linux
+	malloc_trim(0);
+#endif
 
 	StartSound();
 	StartupRunning = true;
