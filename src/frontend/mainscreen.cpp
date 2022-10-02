@@ -48,15 +48,6 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
   EVT_ACTIVATE(MainScreen::OnActivate)
-  EVT_LEFT_DOWN(MainScreen::OnMouseButton)
-  EVT_LEFT_UP(MainScreen::OnMouseButton)
-  EVT_LEFT_DCLICK(MainScreen::OnMouseButton)
-  EVT_MIDDLE_DOWN(MainScreen::OnMouseButton)
-  EVT_MIDDLE_UP(MainScreen::OnMouseButton)
-  EVT_MIDDLE_DCLICK(MainScreen::OnMouseButton)
-  EVT_RIGHT_DOWN(MainScreen::OnMouseButton)
-  EVT_RIGHT_UP(MainScreen::OnMouseButton)
-  EVT_RIGHT_DCLICK(MainScreen::OnMouseButton)
 END_EVENT_TABLE()
 
 MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -108,6 +99,15 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
 	panel->Connect(wxID_ANY, wxEVT_KEY_DOWN, wxKeyEventHandler(MainScreen::OnKeyDown), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_KEY_UP, wxKeyEventHandler(MainScreen::OnKeyUp), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_LEFT_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_MIDDLE_DOWN, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_MIDDLE_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_RIGHT_DOWN, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_RIGHT_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_RIGHT_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
