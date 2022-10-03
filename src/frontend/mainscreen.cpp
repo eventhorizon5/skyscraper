@@ -372,7 +372,6 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			else
 			{
 				for (auto srs : schemRenderState->getSubRenderStates()) {
-					// This is the per pixel sub render state -> remove it.
 					if (srs->getType() == "FFP_Lighting") {
 						schemRenderState->removeSubRenderState(srs);
 						break;
