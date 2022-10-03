@@ -244,6 +244,9 @@ SBS::~SBS()
 {
 	//engine destructor
 
+	//reset view mode on shutdown
+	camera->SetViewMode(0);
+
 	Report("Deleting simulator objects...");
 
 	FastDelete = true;
