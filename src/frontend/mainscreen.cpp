@@ -28,6 +28,7 @@
 #include <OgreRenderWindow.h>
 #include <OgreViewport.h>
 #include <OgreCamera.h>
+#include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -351,6 +352,37 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			//show mesh bounding boxes
 			Simcore->ShowBoundingBoxes(!boxes);
 			boxes = !boxes;
+		}
+
+		if (key == WXK_F9)
+		{
+			Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
+
+			Ogre::RTShader::RenderState* schemRenderState = shaderGenerator->getRenderState(Ogre::MSN_SHADERGEN);
+			static bool useFFPLighting;
+			useFFPLighting = !useFFPLighting;
+
+			if (useFFPLighting)
+			{
+				auto perPixelLightModel = shaderGenerator->createSubRenderState("FFP_Lighting");
+				Ogre::RTShader::SubRenderStateList list = schemRenderState->getSubRenderStates();
+				schemRenderState->addTemplateSubRenderState(perPixelLightModel);
+				frontend->Report("Using FFP Lighting");
+			}
+			else
+			{
+				for (auto srs : schemRenderState->getSubRenderStates()) {
+					// This is the per pixel sub render state -> remove it.
+					if (srs->getType() == "FFP_Lighting") {
+						schemRenderState->removeSubRenderState(srs);
+						break;
+					}
+				}
+				frontend->Report("Using Per Pixel Lighting");
+			}
+
+			shaderGenerator->invalidateScheme(Ogre::MSN_SHADERGEN);
+
 		}
 
 		if (key == WXK_NUMPAD_SUBTRACT || key == (wxKeyCode)'[')
