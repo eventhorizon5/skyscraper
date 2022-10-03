@@ -356,6 +356,9 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 		if (key == WXK_F9)
 		{
+			if (frontend->RTSS == false)
+				return;
+
 			Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
 
 			Ogre::RTShader::RenderState* schemRenderState = shaderGenerator->getRenderState(Ogre::MSN_SHADERGEN);
