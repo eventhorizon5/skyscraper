@@ -53,7 +53,10 @@
 #include "mainscreen.h"
 #include "loaddialog.h"
 #include "profiler.h"
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include "malloc.h"
+#endif
 
 #include <OgreOverlaySystem.h>
 

@@ -27,7 +27,10 @@
 #include "debugpanel.h"
 #include "scriptprocessor.h"
 #include "enginecontext.h"
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include "malloc.h"
+#endif
 
 using namespace SBS;
 
