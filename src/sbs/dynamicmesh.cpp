@@ -605,7 +605,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	}
 
 	//create and enable movable
-	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
+	Movable = sbs->mSceneManager->createEntity(node->GetNameBase() + name, MeshWrapper);
 	//Movable->setCastShadows(true);
 	Enabled(true);
 
