@@ -157,6 +157,7 @@ bool Skyscraper::OnInit(void)
 	configfile = 0;
 	keyconfigfile = 0;
 	parser = 0;
+	sky_error = 0;
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -1763,14 +1764,19 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	catch (Ogre::Exception &e)
 	{
 		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
+		sky_error = true;
 	}
 	catch (...)
 	{
 		ReportFatalError("Error initializing Caelum");
+		sky_error = true;
 	}
 
 	if (!mCaelumSystem)
+	{
+		sky_error = true;
 		return false;
+	}
 
 	//attach caelum to running viewport
 	try
@@ -1795,10 +1801,12 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	catch (Ogre::Exception &e)
 	{
 		ReportFatalError("Error setting Caelum parameters:\nDetails: " + e.getDescription());
+		sky_error = true;
 	}
 	catch (...)
 	{
 		ReportFatalError("Error setting Caelum parameters");
+		sky_error = true;
 	}
 
 	//set sky time multiplier if not already set
@@ -2430,7 +2438,13 @@ void Skyscraper::CreateSky(EngineContext *engine)
 {
 	//create sky system
 
-	bool sky_result = false;
+	if (sky_error == true)
+	{
+		engine->GetSystem()->CreateSky();
+		return;
+	}
+
+	bool sky_result = true;
 	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
 		sky_result = InitSky(engine);
 

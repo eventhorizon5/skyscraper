@@ -236,6 +236,7 @@ private:
 	bool new_location, new_time;
 	Real latitude, longitude;
 	double datetime;
+	bool sky_error;
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
