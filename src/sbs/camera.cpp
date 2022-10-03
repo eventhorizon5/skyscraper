@@ -152,6 +152,9 @@ Camera::~Camera()
 {
 	//Destructor
 
+	//reset view mode on shutdown
+	SetViewMode(0);
+
 	//delete model
 	if (AttachedModel)
 	{
