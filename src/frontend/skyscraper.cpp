@@ -723,20 +723,6 @@ bool Skyscraper::Initialize()
 	else
 		Report("Sound Disabled");
 
-	//load Caelum plugin
-	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
-	{
-		try
-		{
-			new Caelum::CaelumPlugin();
-			Caelum::CaelumPlugin::getSingleton().initialise();
-		}
-		catch (Ogre::Exception &e)
-		{
-			return ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
-		}
-	}
-
 	//set platform name
 	std::string bits;
 
@@ -2426,11 +2412,14 @@ void Skyscraper::UnloadSky()
 
 	if (mCaelumSystem)
 	{
+		Caelum::CaelumPlugin* ptr = Caelum::CaelumPlugin::getSingletonPtr();
 		mCaelumSystem->clear();
 		mCaelumSystem->detachAllViewports();
 		delete mCaelumSystem;
 		mCaelumSystem = 0;
 		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
+		Caelum::CaelumPlugin::getSingleton().shutdown();
+		delete ptr;
 	}
 }
 
@@ -2438,11 +2427,26 @@ void Skyscraper::CreateSky(EngineContext *engine)
 {
 	//create sky system
 
-	if (sky_error == true)
+	//load Caelum plugin
+	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+	{
+		try
+		{
+			new Caelum::CaelumPlugin();
+			Caelum::CaelumPlugin::getSingleton().initialise();
+		}
+		catch (Ogre::Exception &e)
+		{
+			ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
+			return;
+		}
+	}
+
+	/*(if (sky_error == true)
 	{
 		engine->GetSystem()->CreateSky();
 		return;
-	}
+	}*/
 
 	bool sky_result = true;
 	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
