@@ -612,6 +612,16 @@ bool Skyscraper::Initialize()
 
 	std::string renderer = mRoot->getRenderSystem()->getName();
 
+	//enable shadows
+	/*try
+	{
+		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription());
+	}*/
+
 	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem")
 		RTSS = true;
 
@@ -627,21 +637,6 @@ bool Skyscraper::Initialize()
 			OgreBites::SGTechniqueResolverListener* schemeNotFoundHandler = new OgreBites::SGTechniqueResolverListener(shaderGenerator);
 			Ogre::MaterialManager::getSingleton().addListener(schemeNotFoundHandler);
 		}
-	}
-
-	//set ambient light
-	if (GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
-	{
-		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
-
-		/*try
-		{
-			mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
-		}
-		catch (Ogre::Exception &e)
-		{
-			return ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription());
-		}*/
 	}
 
 	if (Headless == false)
@@ -1514,6 +1509,10 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	RefreshViewport();
+
+	//set ambient light
+	if (GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 
 	//run simulation
 	Report("Running simulation...");
