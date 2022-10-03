@@ -1105,8 +1105,13 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	//set values and draw button
 	if (material != "")
 	{
-		w = w_orig / (mRenderWindow->getWidth() / 2.0);
-		h = h_orig / (mRenderWindow->getHeight() / 2.0);
+		#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+			double scale = window->GetContentScaleFactor();
+		#else
+			double scale = 1.0;
+		#endif
+		w = w_orig / (mRenderWindow->getWidth() / 2.0 / scale);
+		h = h_orig / (mRenderWindow->getHeight() / 2.0 / scale);
 		if (button)
 		{
 			//delete previous object

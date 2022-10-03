@@ -676,7 +676,12 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 			camera->MouseLeftDown = true;
 		else
 			camera->MouseRightDown = true;
-		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick));
+		#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+			double scale = frontend->window->GetContentScaleFactor();
+		#else
+			double scale = 1.0;
+		#endif
+		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick), scale);
 	}
 }
 

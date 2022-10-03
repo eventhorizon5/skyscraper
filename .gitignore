@@ -5,3 +5,15 @@
 bin/
 lib/
 
+# CMake Cache
+**/CMakeCache.txt
+**/CMakeFiles
+*.dylib
+skyscraper
+plugins.cfg
+**/cmake_install.cmake
+**/install_manifest.txt
+Makefile
+
+# macOS App
+Skyscraper.app

@@ -116,6 +116,7 @@ target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES BUILD_WITH_INSTALL_RPATH 1
 		INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/Libs")
+install(CODE "execute_process(COMMAND bash \".macos_app.sh\" \"${OGRE_LIBRARY_DIRS}/macosx/release\")")
 endif()
 
 if (UNIX AND NOT APPLE)
