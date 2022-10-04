@@ -209,7 +209,7 @@ int Wall::FindPolygon(const std::string &name)
 	return -1;
 }
 
-void Wall::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Wall::GetGeometry(int index, std::vector<Ogre::Vector3> &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -307,13 +307,13 @@ Ogre::Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
-		std::vector<std::vector<Ogre::Vector3> > origpolys;
-		GetGeometry(i, origpolys, true);
+		std::vector<Ogre::Vector3> origpoly;
+		GetGeometry(i, origpoly, true);
 
 		std::vector<Ogre::Vector3> original, tmp1, tmp2;
-		original.reserve(origpolys[0].size());
-		for (size_t i = 0; i < origpolys[0].size(); i++)
-			original.push_back(origpolys[0][i]);
+		original.reserve(origpoly.size());
+		for (size_t i = 0; i < origpoly.size(); i++)
+			original.push_back(origpoly[i]);
 
 		//if given altitude is outside of polygon's range, return 0
 		Ogre::Vector2 yextents = sbs->GetExtents(original, 2);

@@ -139,236 +139,230 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 		Polygon *polygon = wall->GetPolygon(i);
 
 		//get original vertices
-		std::vector<std::vector<Ogre::Vector3> > origpolys;
+		std::vector<Ogre::Vector3> origpoly;
 		std::vector<std::vector<Ogre::Vector3> > newpolys;
 
-		polygon->GetGeometry(origpolys);
-
-		//skip empty meshes
-		if (origpolys.size() == 0)
-			continue;
+		polygon->GetGeometry(origpoly);
 
 		//cut all polygons within range
-		for (size_t j = 0; j < origpolys.size(); j++)
+
+		//skip null geometry
+		if (origpoly.size() == 0)
+			continue;
+
+		temppoly.clear();
+		temppoly2.clear();
+		temppoly3.clear();
+		temppoly4.clear();
+		temppoly5.clear();
+		worker.clear();
+		Ogre::Vector2 extentsx, extentsy, extentsz;
+		Ogre::AxisAlignedBox bounds (start, end);
+		Ogre::AxisAlignedBox polybounds;
+		bool polycheck2 = false;
+
+		//copy source polygon vertices
+		for (size_t j = 0; j < origpoly.size(); j++)
 		{
-			//skip null geometry
-			if (origpolys[j].size() == 0)
-				continue;
+			temppoly.push_back(origpoly[j]);
+			polybounds.merge(origpoly[j]);
+		}
 
-			temppoly.clear();
-			temppoly2.clear();
-			temppoly3.clear();
-			temppoly4.clear();
-			temppoly5.clear();
-			worker.clear();
-			Ogre::Vector2 extentsx, extentsy, extentsz;
-			Ogre::AxisAlignedBox bounds (start, end);
-			Ogre::AxisAlignedBox polybounds;
-			bool polycheck2 = false;
+		//skip if the polygon is completely inside the bounding box
+		/*if (bounds.contains(polybounds) == true)
+		{
+			polycheck = true;
+			continue;
+		}*/
 
-			//copy source polygon vertices
-			for (size_t k = 0; k < origpolys[j].size(); k++)
+		//make sure the polygon intersects bounds (is not outside the cut area)
+		if (bounds.intersects(polybounds) == true)
+		{
+			extentsx = GetExtents(temppoly, 1);
+			extentsy = GetExtents(temppoly, 2);
+			extentsz = GetExtents(temppoly, 3);
+
+			//is polygon a wall?
+			if (extentsy.x != extentsy.y)
 			{
-				temppoly.push_back(origpolys[j][k]);
-				polybounds.merge(origpolys[j][k]);
-			}
-
-			//skip if the polygon is completely inside the bounding box
-			/*if (bounds.contains(polybounds) == true)
-			{
-				polycheck = true;
-				continue;
-			}*/
-
-			//make sure the polygon intersects bounds (is not outside the cut area)
-			if (bounds.intersects(polybounds) == true)
-			{
-				extentsx = GetExtents(temppoly, 1);
-				extentsy = GetExtents(temppoly, 2);
-				extentsz = GetExtents(temppoly, 3);
-
-				//is polygon a wall?
-				if (extentsy.x != extentsy.y)
+				if (cutwalls == true)
 				{
-					if (cutwalls == true)
+					//wall
+					if (std::abs(extentsx.x - extentsx.y) > std::abs(extentsz.x - extentsz.y))
 					{
-						//wall
-						if (std::abs(extentsx.x - extentsx.y) > std::abs(extentsz.x - extentsz.y))
-						{
-							//wall is facing forward/backward
+						//wall is facing forward/backward
 
-							//get left side
-							worker = temppoly;
-							SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
-							worker.clear();
+						//get left side
+						worker = temppoly;
+						SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+						worker.clear();
 
-							//get right side
-							if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else
-								worker = temppoly;
-							SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
-							worker.clear();
-
-							//get lower
-							if (temppoly3.size() > 0)
-								worker = temppoly3;
-							else if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else if (temppoly.size() > 0)
-								worker = temppoly;
-							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
-							worker.clear();
-
-							//get upper
-							if (temppoly4.size() > 0)
-								worker = temppoly4;
-							else if (temppoly3.size() > 0)
-								worker = temppoly3;
-							else if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else if (temppoly.size() > 0)
-								worker = temppoly;
-							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
-							worker.clear();
-						}
+						//get right side
+						if (temppoly2.size() > 0)
+							worker = temppoly2;
 						else
-						{
-							//wall is facing left/right
-
-							//get left side
 							worker = temppoly;
-							SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
-							worker.clear();
+						SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+						worker.clear();
 
-							//get right side
-							if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else
-								worker = temppoly;
-							SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
-							worker.clear();
+						//get lower
+						if (temppoly3.size() > 0)
+							worker = temppoly3;
+						else if (temppoly2.size() > 0)
+							worker = temppoly2;
+						else if (temppoly.size() > 0)
+							worker = temppoly;
+						SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+						worker.clear();
 
-							//get lower
-							if (temppoly3.size() > 0)
-								worker = temppoly3;
-							else if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else if (temppoly.size() > 0)
-								worker = temppoly;
-							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
-							worker.clear();
-
-							//get upper
-							if (temppoly4.size() > 0)
-								worker = temppoly4;
-							else if (temppoly3.size() > 0)
-								worker = temppoly3;
-							else if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else if (temppoly.size() > 0)
-								worker = temppoly;
-							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
-							worker.clear();
-						}
-						polycheck = true;
-						polycheck2 = true;
-
-						//store extents of temppoly5 for door sides if needed
-						GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly5);
+						//get upper
+						if (temppoly4.size() > 0)
+							worker = temppoly4;
+						else if (temppoly3.size() > 0)
+							worker = temppoly3;
+						else if (temppoly2.size() > 0)
+							worker = temppoly2;
+						else if (temppoly.size() > 0)
+							worker = temppoly;
+						SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+						worker.clear();
 					}
-				}
-				else if (cutfloors == true)
-				{
-					//floor
-
-					//get left side
-					worker = temppoly;
-					SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
-					worker.clear();
-
-					//get right side
-					if (temppoly2.size() > 0)
-						worker = temppoly2;
 					else
-						worker = temppoly;
-					SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
-					worker.clear();
+					{
+						//wall is facing left/right
 
-					//get lower
-					if (temppoly3.size() > 0)
-						worker = temppoly3;
-					else if (temppoly2.size() > 0)
-						worker = temppoly2;
-					else if (temppoly.size() > 0)
+						//get left side
 						worker = temppoly;
-					SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
-					worker.clear();
+						SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
+						worker.clear();
 
-					//get upper
-					if (temppoly4.size() > 0)
-						worker = temppoly4;
-					else if (temppoly3.size() > 0)
-						worker = temppoly3;
-					else if (temppoly2.size() > 0)
-						worker = temppoly2;
-					else if (temppoly.size() > 0)
-						worker = temppoly;
-					SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
-					worker.clear();
-					temppoly5.clear();
+						//get right side
+						if (temppoly2.size() > 0)
+							worker = temppoly2;
+						else
+							worker = temppoly;
+						SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
+						worker.clear();
 
+						//get lower
+						if (temppoly3.size() > 0)
+							worker = temppoly3;
+						else if (temppoly2.size() > 0)
+							worker = temppoly2;
+						else if (temppoly.size() > 0)
+							worker = temppoly;
+						SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+						worker.clear();
+
+						//get upper
+						if (temppoly4.size() > 0)
+							worker = temppoly4;
+						else if (temppoly3.size() > 0)
+							worker = temppoly3;
+						else if (temppoly2.size() > 0)
+							worker = temppoly2;
+						else if (temppoly.size() > 0)
+							worker = temppoly;
+						SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+						worker.clear();
+					}
 					polycheck = true;
 					polycheck2 = true;
-				}
 
-				//create split polygons
-				if (polycheck2 == true)
-				{
-					if (temppoly.size() > 2)
-					{
-						newpolys.resize(newpolys.size() + 1);
-						if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
-							newpolys[newpolys.size() - 1].reserve(temppoly.size());
-						for (size_t k = 0; k < temppoly.size(); k++)
-							newpolys[newpolys.size() - 1].push_back(temppoly[k]);
-					}
-					if (temppoly2.size() > 2)
-					{
-						newpolys.resize(newpolys.size() + 1);
-						if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
-							newpolys[newpolys.size() - 1].reserve(temppoly2.size());
-						for (size_t k = 0; k < temppoly2.size(); k++)
-							newpolys[newpolys.size() - 1].push_back(temppoly2[k]);
-					}
-					if (temppoly3.size() > 2)
-					{
-						newpolys.resize(newpolys.size() + 1);
-						if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
-							newpolys[newpolys.size() - 1].reserve(temppoly3.size());
-						for (size_t k = 0; k < temppoly3.size(); k++)
-							newpolys[newpolys.size() - 1].push_back(temppoly3[k]);
-					}
-					if (temppoly4.size() > 2)
-					{
-						newpolys.resize(newpolys.size() + 1);
-						if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
-							newpolys[newpolys.size() - 1].reserve(temppoly4.size());
-						for (size_t k = 0; k < temppoly4.size(); k++)
-							newpolys[newpolys.size() - 1].push_back(temppoly4[k]);
-					}
-
-					temppoly.clear();
-					temppoly2.clear();
-					temppoly3.clear();
-					temppoly4.clear();
+					//store extents of temppoly5 for door sides if needed
+					GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly5);
 				}
 			}
-			else
+			else if (cutfloors == true)
 			{
-				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
-				newpolys.push_back(origpolys[j]);
+				//floor
+
+				//get left side
+				worker = temppoly;
+				SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+				worker.clear();
+
+				//get right side
+				if (temppoly2.size() > 0)
+					worker = temppoly2;
+				else
+					worker = temppoly;
+				SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+				worker.clear();
+
+				//get lower
+				if (temppoly3.size() > 0)
+					worker = temppoly3;
+				else if (temppoly2.size() > 0)
+					worker = temppoly2;
+				else if (temppoly.size() > 0)
+					worker = temppoly;
+				SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
+				worker.clear();
+
+				//get upper
+				if (temppoly4.size() > 0)
+					worker = temppoly4;
+				else if (temppoly3.size() > 0)
+					worker = temppoly3;
+				else if (temppoly2.size() > 0)
+					worker = temppoly2;
+				else if (temppoly.size() > 0)
+					worker = temppoly;
+				SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
+				worker.clear();
+				temppoly5.clear();
+
+				polycheck = true;
+				polycheck2 = true;
 			}
+
+			//create split polygons
+			if (polycheck2 == true)
+			{
+				if (temppoly.size() > 2)
+				{
+					newpolys.resize(newpolys.size() + 1);
+					if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
+						newpolys[newpolys.size() - 1].reserve(temppoly.size());
+					for (size_t k = 0; k < temppoly.size(); k++)
+						newpolys[newpolys.size() - 1].push_back(temppoly[k]);
+				}
+				if (temppoly2.size() > 2)
+				{
+					newpolys.resize(newpolys.size() + 1);
+					if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
+						newpolys[newpolys.size() - 1].reserve(temppoly2.size());
+					for (size_t k = 0; k < temppoly2.size(); k++)
+						newpolys[newpolys.size() - 1].push_back(temppoly2[k]);
+				}
+				if (temppoly3.size() > 2)
+				{
+					newpolys.resize(newpolys.size() + 1);
+					if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
+						newpolys[newpolys.size() - 1].reserve(temppoly3.size());
+					for (size_t k = 0; k < temppoly3.size(); k++)
+						newpolys[newpolys.size() - 1].push_back(temppoly3[k]);
+				}
+				if (temppoly4.size() > 2)
+				{
+					newpolys.resize(newpolys.size() + 1);
+					if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
+						newpolys[newpolys.size() - 1].reserve(temppoly4.size());
+					for (size_t k = 0; k < temppoly4.size(); k++)
+						newpolys[newpolys.size() - 1].push_back(temppoly4[k]);
+				}
+
+				temppoly.clear();
+				temppoly2.clear();
+				temppoly3.clear();
+				temppoly4.clear();
+			}
+		}
+		else
+		{
+			//otherwise put original polygon into array (will only be used if the related submesh is recreated)
+			newpolys.push_back(origpoly);
 		}
 
 		//create new polygon
@@ -934,17 +928,16 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	{
 		unsigned int j = 0;
 
+		unsigned int min = j;
 		for (size_t i = 0; i < converted_vertices.size(); i++)
 		{
-			unsigned int min = i;
 			geometry[j].normal = geometry[j].vertex = converted_vertices[i];
 			geometry[j].normal.normalise();
 			geometry[j].texel = table[j];
 			j++;
-
-			unsigned int max = j - 1;
-			mesh_indices.push_back(Extents(min, max));
 		}
+		unsigned int max = j - 1;
+		mesh_indices.push_back(Extents(min, max));
 	}
 
 	//delete texel array

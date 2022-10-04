@@ -443,14 +443,11 @@ bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &
 	if (!IntersectSegmentPlane(start, end, isect, pr, normal))
 		return false;
 
-	std::vector<std::vector<Ogre::Vector3> > vertices;
+	std::vector<Ogre::Vector3> vertices;
 	GetGeometry(vertices, false, false, false, false, true);
 
-	for (size_t i = 0; i < vertices.size(); i++)
-	{
-		if (IntersectRay(vertices[i], start, end))
-			return true;
-	}
+	if (IntersectRay(vertices, start, end))
+		return true;
 
 	return false;
 }

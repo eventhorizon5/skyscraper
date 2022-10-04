@@ -59,7 +59,7 @@ int Polygon::GetSubMesh()
 	return  mesh->FindMatchingSubMesh(material);
 }
 
-void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Polygon::GetGeometry(std::vector<Ogre::Vector3> &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -68,8 +68,6 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 	//if rescale is true (along with convert), rescales vertices with UnitScale multiplier
 	//if relative is true, vertices are relative of mesh center, otherwise they use absolute/global positioning
 	//if reverse is false, process extents table in ascending order, otherwise descending order
-
-	vertices.resize(index_extents.size());
 
 	Ogre::Vector3 mesh_position;
 	if (convert == true)
@@ -88,8 +86,8 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 	{
 		int min = index_extents[i].min;
 		int max = index_extents[i].max;
-		int newsize = (int)vertices[i].size() + max - min + 1;
-		vertices[i].reserve(newsize);
+		int newsize = (int)vertices.size() + max - min + 1;
+		vertices.reserve(newsize);
 		if (reverse == false)
 		{
 			for (int j = min; j <= max; j++)
@@ -97,16 +95,16 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 				if (relative == true)
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
+						vertices.push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
 					else
-						vertices[i].push_back(submesh.MeshGeometry[j].vertex);
+						vertices.push_back(submesh.MeshGeometry[j].vertex);
 				}
 				else
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
+						vertices.push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
 					else
-						vertices[i].push_back(submesh.MeshGeometry[j].vertex + mesh_position);
+						vertices.push_back(submesh.MeshGeometry[j].vertex + mesh_position);
 				}
 			}
 		}
@@ -117,16 +115,16 @@ void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bo
 				if (relative == true)
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
+						vertices.push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
 					else
-						vertices[i].push_back(submesh.MeshGeometry[j].vertex);
+						vertices.push_back(submesh.MeshGeometry[j].vertex);
 				}
 				else
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
+						vertices.push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
 					else
-						vertices[i].push_back(submesh.MeshGeometry[j].vertex + mesh_position);
+						vertices.push_back(submesh.MeshGeometry[j].vertex + mesh_position);
 				}
 			}
 		}
@@ -186,21 +184,17 @@ Ogre::Vector2 Polygon::GetExtents(int coord)
 	if (coord < 1 || coord > 3)
 		return Ogre::Vector2(0, 0);
 
-	std::vector<std::vector<Ogre::Vector3> > poly;
+	std::vector<Ogre::Vector3> poly;
 	GetGeometry(poly);
 
 	//get polygon extents
 	Ogre::Vector2 extents;
-	bool firstrun = true;
-	for (size_t i = 0; i < poly.size(); i++)
-	{
-		Ogre::Vector2 extents2 = sbs->GetExtents(poly[i], coord);
-		if (extents2.x < extents.x || firstrun == true)
-			extents.x = extents2.x;
-		if (extents2.y > extents.y || firstrun == true)
-			extents.y = extents2.y;
-		firstrun = false;
-	}
+
+	Ogre::Vector2 extents2 = sbs->GetExtents(poly, coord);
+	if (extents2.x < extents.x)
+		extents.x = extents2.x;
+	if (extents2.y > extents.y)
+		extents.y = extents2.y;
 
 	return extents;
 }
