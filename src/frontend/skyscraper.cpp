@@ -1899,7 +1899,7 @@ void Skyscraper::CloseProgressDialog()
 void Skyscraper::ShowProgressDialog()
 {
 	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, window, wxPD_AUTO_HIDE);
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, window);
 
 	show_progress = false;
 }
