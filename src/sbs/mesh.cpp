@@ -830,7 +830,7 @@ bool MeshObject::IsEnabled()
 	return enabled;
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<Ogre::Vector3> &converted_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, Extents &mesh_indices, std::vector<Triangle> &triangles, std::vector<Ogre::Vector3> &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -886,7 +886,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 	return PolyMesh(name, material, converted_vertices, t_matrix, t_vector, mesh_indices, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<Ogre::Vector3> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, std::vector<Ogre::Vector3> &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<Ogre::Vector3> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Extents &mesh_indices, std::vector<Triangle> &triangles, std::vector<Ogre::Vector3> &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -937,7 +937,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 			j++;
 		}
 		unsigned int max = j - 1;
-		mesh_indices.push_back(Extents(min, max));
+		mesh_indices = Extents(min, max);
 	}
 
 	//delete texel array
@@ -965,12 +965,9 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 
 	if (index >= 0)
 	{
-		for (size_t i = 0; i < mesh_indices.size(); i++)
-		{
-			unsigned int size = Submeshes[index].MeshGeometry.size() - geometry.size();
-			mesh_indices[i].min += size;
-			mesh_indices[i].max += size;
-		}
+		unsigned int size = Submeshes[index].MeshGeometry.size() - geometry.size();
+		mesh_indices.min += size;
+		mesh_indices.max += size;
 	}
 
 	//recreate colliders if specified
@@ -1325,16 +1322,12 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 			//reindex extents, used for getting original geometry
 			for (int k = deleted_size - 1; k >= 0; k--)
 			{
-				size_t size = poly->index_extents.size();
-				for (size_t m = 0; m < size; m++)
-				{
-					Extents extents = poly->index_extents[m];
-					if (deleted[k] < extents.min)
-						extents.min--;
-					if (deleted[k] < extents.max)
-						extents.max--;
-					poly->index_extents[m] = extents;
-				}
+				Extents extents = poly->index_extents;
+				if (deleted[k] < extents.min)
+					extents.min--;
+				if (deleted[k] < extents.max)
+					extents.max--;
+				poly->index_extents = extents;
 			}
 			delete [] elements;
 			delete [] valid;

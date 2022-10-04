@@ -84,7 +84,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
-	std::vector<Extents> index_extents;
+	Extents index_extents;
 	std::vector<Triangle> triangles;
 	std::vector<Ogre::Vector3> converted_vertices;
 	if (!meshwrapper->PolyMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles, converted_vertices))
@@ -112,7 +112,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 
 	//add a set of polygons, providing the original material and texture mapping
 
-	std::vector<Extents> index_extents;
+	Extents index_extents;
 	std::vector<Triangle> triangles;
 	std::vector<Ogre::Vector3> converted_vertices;
 
@@ -132,7 +132,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	return &polygons[index];
 }
 
-int Wall::CreatePolygon(std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane)
+int Wall::CreatePolygon(std::vector<Triangle> &triangles, Extents &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 
