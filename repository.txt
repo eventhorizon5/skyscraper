@@ -1,8 +1,10 @@
 Information on the Git repository history:
 
-Master contains all history from the switch of the Ogre branch to the SVN trunk, to now.  This doesn't contain the full history.
+Master contains all history from the switch of the Ogre branch to the SVN trunk, to now.  This doesn't contain the full history, and stops in early 2011.
 
-The Ogre branch contains the main history, and then the early Ogre version development code.
+The Ogre branch contains the history of the early Ogre code which eventually became trunk/master, from late 2010/early 2011.
 
-The CrystalSpace branch contains the main history, and then the CrystalSpace stable code that was made during the Ogre version development.
+The CrystalSpace branch contains the original history starting by the creation of the C++ version in mid 2005, and then the CrystalSpace stable code that was made during the Ogre version development.  This is the history that starts immediately before the Master's start.
+
+The MAIN branch contains the Visual Basic code that predates the C++ version, starting with Skyscraper 0.2 from December 2002 until 0.96, where the project splits into a stable release (1.0) and development release (0.97, later 1.1 Alpha), this repository doesn't have the stable release but has the development version up until the creation of the original CVS repository in 2005.  The Visual Basic version was developed until mid 2006, but the history doesn't seem to exist for that portion of time anymore.  The last VB version in there is Build 179 in the v1.1 branch.
 
