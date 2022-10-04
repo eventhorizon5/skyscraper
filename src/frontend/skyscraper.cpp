@@ -1105,8 +1105,11 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	//set values and draw button
 	if (material != "")
 	{
-		w = w_orig / (mRenderWindow->getWidth() / 2.0);
-		h = h_orig / (mRenderWindow->getHeight() / 2.0);
+		//apply content scaling factor, fixes issues for example on Retina displays
+		Real scale = window->GetContentScaleFactor();
+
+		w = w_orig / (mRenderWindow->getWidth() / 2.0 / scale);
+		h = h_orig / (mRenderWindow->getHeight() / 2.0 / scale);
 		if (button)
 		{
 			//delete previous object

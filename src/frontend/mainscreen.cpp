@@ -676,7 +676,11 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 			camera->MouseLeftDown = true;
 		else
 			camera->MouseRightDown = true;
-		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick));
+
+		//apply content scaling factor, fixes issues for example on Retina displays
+		Real scale = frontend->window->GetContentScaleFactor();
+
+		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick), scale);
 	}
 }
 

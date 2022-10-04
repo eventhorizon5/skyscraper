@@ -534,7 +534,7 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
+void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale)
 {
 	//get mesh object that the user clicked on, and perform related work
 
@@ -552,8 +552,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	if (width == 0 || height == 0)
 		return;
 
-	Real x = (float)mouse_x / (float)width;
-	Real y = (float)mouse_y / (float)height;
+	Real x = (float)mouse_x / (float)width * scale;
+	Real y = (float)mouse_y / (float)height * scale;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
