@@ -676,11 +676,10 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 			camera->MouseLeftDown = true;
 		else
 			camera->MouseRightDown = true;
-		#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-			double scale = frontend->window->GetContentScaleFactor();
-		#else
-			double scale = 1.0;
-		#endif
+
+		//apply content scaling factor, fixes issues for example on Retina displays
+		Real scale = frontend->window->GetContentScaleFactor();
+
 		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick), scale);
 	}
 }

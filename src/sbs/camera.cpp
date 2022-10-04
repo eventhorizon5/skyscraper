@@ -531,7 +531,7 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, double scale)
+void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale)
 {
 	//get mesh object that the user clicked on, and perform related work
 

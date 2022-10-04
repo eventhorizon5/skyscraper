@@ -119,7 +119,7 @@ public:
 	void CheckElevator();
 	void CheckShaft();
 	void CheckStairwell();
-	void ClickedObject(bool shift, bool ctrl, bool alt, bool right, double scale);
+	void ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale);
 	void UnclickedObject();
 	Object* GetMeshParent(Object *object);
 	std::string GetClickedMeshName();
