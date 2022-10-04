@@ -385,12 +385,9 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 			polygon = 0;
 
 			//create new polygons
-			if (newpolys.size() > 0)
+			for (int i = 0; i < newpolys.size(); i++)
 			{
-				for (int i = 0; i < newpolys.size(); i++)
-				{
-					wall->AddPolygon(name + ToString(i), oldmat, newpolys[i], mapping, oldvector);
-				}
+				wall->AddPolygon(name + ToString(i), oldmat, newpolys[i], mapping, oldvector);
 			}
 
 			//reset search position
@@ -867,7 +864,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 	Ogre::Vector2 sizing (tw, th);
 
 	if (autosize == true)
-		sizing = sbs->GetTextureManager()->CalculateSizing(texture, sbs->ToLocal(v1), sbs->ToLocal(v2), sbs->ToLocal(v3), direction, tw, th);
+		sizing = sbs->GetTextureManager()->CalculateSizing(texname, sbs->ToLocal(v1), sbs->ToLocal(v2), sbs->ToLocal(v3), direction, tw, th);
 
 	//get texture tiling information
 	Real tw2 = sizing.x, th2 = sizing.y;
@@ -924,6 +921,9 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	//initialize geometry arrays
 	geometry.resize(converted_vertices.size());
 
+	//calculate normal
+	Ogre::Vector3 normal = sbs->ComputePlane(converted_vertices).normal;
+
 	//populate vertices, normals, and texels for mesh data
 	{
 		unsigned int j = 0;
@@ -931,8 +931,8 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 		unsigned int min = j;
 		for (size_t i = 0; i < converted_vertices.size(); i++)
 		{
-			geometry[j].normal = geometry[j].vertex = converted_vertices[i];
-			geometry[j].normal.normalise();
+			geometry[j].vertex = converted_vertices[i];
+			geometry[j].normal = normal;
 			geometry[j].texel = table[j];
 			j++;
 		}

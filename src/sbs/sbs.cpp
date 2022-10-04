@@ -490,9 +490,7 @@ bool SBS::Start(Ogre::Camera *camera)
 		EnableRandomActivity(true);
 
 	//add a test light
-	GetFloor(0)->AddLight("Main1", 0, Ogre::Vector3(-10, 5, -5), Ogre::Vector3(0, 0, 0), 1, 1, 1, 0, 0, 0);
-	GetFloor(0)->AddLight("Main2", 0, Ogre::Vector3(0, 5, -5), Ogre::Vector3(0, 0, 0), 1, 1, 1, 0, 0, 0);
-	GetFloor(0)->AddLight("Main3", 0, Ogre::Vector3(10, 5, -5), Ogre::Vector3(0, 0, 0), 1, 1, 1, 0, 0, 0);
+	GetFloor(0)->AddLight("Main", 0, Ogre::Vector3(0, 5, -5), Ogre::Vector3(0, 0, 0), 1, 1, 1, 0, 0, 0);
 
 	IsRunning = true;
 

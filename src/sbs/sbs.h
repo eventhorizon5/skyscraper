@@ -296,6 +296,8 @@ public:
 	Real GetConfigFloat(const std::string &key, Real default_value);
 	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, Real value);
 	Ogre::Vector3 ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D);
+	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices);
+	Ogre::Vector3 PlaneNormal(std::vector<Ogre::Vector3> &vertices);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
 	void AdvanceClock();
 	unsigned long GetCurrentTime();

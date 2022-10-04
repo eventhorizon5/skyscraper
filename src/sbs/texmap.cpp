@@ -2,7 +2,7 @@
 	This code was originally part of Crystal Space
 	Available at http://www.crystalspace3d.org
 	Copyright (C) 1998-2005 by Jorrit Tyberghein
-	Modifications Copyright (C)2010 Ryan Thoryk
+	Modifications Copyright (C)2010, 2022 Ryan Thoryk
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -506,6 +506,54 @@ bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vect
 
 	normal = plane.normal;
 	return true;
+}
+
+Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
+{
+	float A, B, C, D;
+	Ogre::Vector3 normal = PlaneNormal(vertices);
+	A = normal.x;
+	B = normal.y;
+	C = normal.z;
+	D = -A * vertices[0].x - B * vertices[0].y - C * vertices[0].z;
+
+	// By default the world space normal is equal to the object space normal.
+	Ogre::Plane plane = Ogre::Plane(A, B, C, D);
+	return plane;
+}
+
+Ogre::Vector3 SBS::PlaneNormal(std::vector<Ogre::Vector3> &vertices)
+{
+	float ayz = 0;
+	float azx = 0;
+	float axy = 0;
+	int i, i1;
+	float x1, y1, z1, x, y, z;
+
+	i1 = vertices.size() - 1;
+	for (i = 0; i < vertices.size(); i++)
+	{
+		x = vertices[i].x;
+		y = vertices[i].y;
+		z = vertices[i].z;
+		x1 = vertices[i1].x;
+		y1 = vertices[i1].y;
+		z1 = vertices[i1].z;
+		ayz += (z1 + z) * (y - y1);
+		azx += (x1 + x) * (z - z1);
+		axy += (y1 + y) * (x - x1);
+		i1 = i;
+	}
+
+	float sqd = ayz * ayz + azx * azx + axy * axy;
+	float invd;
+	if (sqd < SMALL_EPSILON)
+		invd = 1.0f / SMALL_EPSILON;
+	else
+		invd = 1.0f / sqrtf(sqd);
+
+	Ogre::Vector3 normal = Ogre::Vector3(ayz * invd, azx * invd, axy * invd);
+	return normal;
 }
 
 }
