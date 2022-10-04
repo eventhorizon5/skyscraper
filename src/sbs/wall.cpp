@@ -106,7 +106,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	return &polygons[index];
 }
 
-Polygon* Wall::AddPolygon(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 

@@ -391,7 +391,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 
 			//create new polygon
 			if (newpolys.size() > 0)
-				wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
+				wall->AddPolygonSet(name, oldmat, newpolys, mapping, oldvector);
 
 			//reset search position
 			i--;
