@@ -508,7 +508,7 @@ bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vect
 	return true;
 }
 
-Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
+Ogre::Plane SBS::ComputePlane2(std::vector<Ogre::Vector3> &vertices)
 {
 	float A, B, C, D;
 	Ogre::Vector3 normal = PlaneNormal(vertices);

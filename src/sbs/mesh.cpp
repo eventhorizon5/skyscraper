@@ -922,7 +922,8 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	geometry.resize(converted_vertices.size());
 
 	//calculate normal
-	Ogre::Vector3 normal = sbs->ComputePlane(converted_vertices).normal;
+	Ogre::Vector3 normal = sbs->ComputePlane2(converted_vertices).normal;
+	normal.normalise();
 
 	//populate vertices, normals, and texels for mesh data
 	{
