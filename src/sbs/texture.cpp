@@ -148,8 +148,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
-	if (sbs->Verbose)
-		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
+	Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
 }
