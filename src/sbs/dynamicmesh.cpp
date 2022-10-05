@@ -606,7 +606,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 	//create and enable movable
 	Movable = sbs->mSceneManager->createEntity(node->GetNameBase() + name, MeshWrapper);
-	//Movable->setCastShadows(true);
+	Movable->setCastShadows(true);
 	Enabled(true);
 
 	//set maximum render distance

@@ -454,7 +454,14 @@ void Skyscraper::Render()
 		return;
 
 	// Render to the frame buffer
-	mRoot->renderOneFrame();
+	try
+	{
+		mRoot->renderOneFrame();
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error in render operation\nDetails: " + e.getDescription());
+	}
 
 	//update frame statistics
 	Ogre::FrameEvent a;
@@ -623,17 +630,17 @@ bool Skyscraper::Initialize()
 
 	mSceneMgr->addRenderQueueListener(mOverlaySystem);
 
-	std::string renderer = mRoot->getRenderSystem()->getName();
-
 	//enable shadows
-	/*try
+	try
 	{
-		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 	}
 	catch (Ogre::Exception &e)
 	{
 		ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription());
-	}*/
+	}
+
+	std::string renderer = mRoot->getRenderSystem()->getName();
 
 	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem")
 		RTSS = true;
@@ -737,7 +744,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error starting tray manager:\n" + e.getDescription());
+		ReportFatalError("Error starting tray manager:\nDetails: " + e.getDescription());
 	}
 
 	if (mTrayMgr)
