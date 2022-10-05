@@ -2556,7 +2556,7 @@ void Skyscraper::ReInit()
 	//reinit tray manager
 	try
 	{
-		mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindow);
+		mTrayMgr = new OgreBites::TrayManager("Tray", mRenderWindow);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -2567,6 +2567,8 @@ void Skyscraper::ReInit()
 	{
 		mTrayMgr->hideCursor();
 	}
+
+	show_stats = -1;
 }
 
 }
