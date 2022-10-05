@@ -631,13 +631,17 @@ bool Skyscraper::Initialize()
 	mSceneMgr->addRenderQueueListener(mOverlaySystem);
 
 	//enable shadows
-	try
+	if (GetConfigBool("Skyscraper.Frontend.Shadows", false) == true)
 	{
-		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-	}
-	catch (Ogre::Exception &e)
-	{
-		ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription());
+		try
+		{
+			Report("Enabling shadows");
+			mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+		}
+		catch (Ogre::Exception &e)
+		{
+			ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription());
+		}
 	}
 
 	std::string renderer = mRoot->getRenderSystem()->getName();
