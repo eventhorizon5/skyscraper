@@ -48,7 +48,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 
 	Floor *floor = dynamic_cast<Floor*>(parent);
 	if (floor)
-		Name = "Floor" + ToString(floor->Number) + ":"+ name;
+		Name = "Floor" + ToString(floor->Number) + ":" + name;
 	else
 		Name = name;
 	SetName(Name);

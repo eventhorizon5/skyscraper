@@ -376,8 +376,8 @@ bool ElevatorCar::CreateCar(int floor)
 	CurrentFloor = StartingFloor;
 
 	//create test light
-	//Light *light = AddLight("light", 0);
-	//light->Move(Ogre::Vector3(0, 6, 0));
+	Light *light = AddLight("light", 0);
+	light->Move(Ogre::Vector3(0, 6, 0));
 
 	Created = true;
 

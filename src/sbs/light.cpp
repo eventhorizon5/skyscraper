@@ -50,7 +50,7 @@ Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 
 	try
 	{
-		light = sbs->mSceneManager->createLight(name);
+		light = sbs->mSceneManager->createLight(GetSceneNode()->GetFullName());
 		GetSceneNode()->AttachObject(light);
 
 		if (type == 0)
@@ -64,13 +64,21 @@ Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 	{
 		ReportError("Error creating light:\n" + e.getDescription());
 	}
+
+	std::string type_name = "point";
+	if (type == 1)
+		type_name = "directional";
+	if (type == 2)
+		type_name = "spotlight";
+
+	Report("Light '" + name + "' created as type " + type_name);
 }
 
 Light::~Light()
 {
 	if (light)
 		GetSceneNode()->DetachObject(light);
-	sbs->mSceneManager->destroyLight(GetName());
+	sbs->mSceneManager->destroyLight(GetSceneNode()->GetFullName());
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
