@@ -596,6 +596,7 @@ bool Skyscraper::Initialize()
 		}
 
 		//add app's directory to resource manager
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("General");
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
 
 		//add materials group, and autoload
