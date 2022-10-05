@@ -30,6 +30,7 @@
 #include "timer.h"
 #include "buttonpanel.h"
 #include "control.h"
+#include "texture.h"
 #include "callbutton.h"
 
 namespace SBS {
@@ -146,6 +147,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 
 		textures.push_back(UpButtonTexture);
 		textures.push_back(UpButtonTexture_Lit);
+		sbs->GetTextureManager()->EnableLighting(UpButtonTexture_Lit, false);
 		names.push_back("off");
 		names.push_back("up");
 
@@ -161,6 +163,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 
 		textures.push_back(DownButtonTexture);
 		textures.push_back(DownButtonTexture_Lit);
+		sbs->GetTextureManager()->EnableLighting(DownButtonTexture_Lit, false);
 		names.push_back("off");
 		names.push_back("down");
 

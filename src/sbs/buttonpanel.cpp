@@ -147,6 +147,8 @@ Control* ButtonPanel::AddButton(const std::string &sound, const std::string &tex
 
 	textures.push_back(texture);
 	textures.push_back(texture_lit);
+	sbs->GetTextureManager()->EnableLighting(texture_lit, false);
+
 	if (IsNumeric(newtype) == true)
 	{
 		names.push_back("off");

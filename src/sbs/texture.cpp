@@ -2157,17 +2157,29 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 
 	IncrementMaterialCount();
 
-	mMat->setLightingEnabled(false);
-	if (sbs->GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
-	{
-		mMat->setLightingEnabled(true);
-		mMat->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
-	}
+	EnableLighting(name, true);
 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	return mMat;
+}
+
+void TextureManager::EnableLighting(const std::string &material_name, bool value)
+{
+	//enable or disable lighting on a material
+
+	Ogre::MaterialPtr mat = GetMaterialByName(material_name);
+
+	if (mat)
+	{
+		mat->setLightingEnabled(false);
+		if (sbs->GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
+		{
+			mat->setLightingEnabled(value);
+			mat->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
+		}
+	}
 }
 
 Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, const std::string &group)

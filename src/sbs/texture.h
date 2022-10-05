@@ -94,6 +94,7 @@ public:
 	void SetPlanarRotate(bool value);
 	bool GetPlanarRotate();
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3, Real tw, Real th);
+	void EnableLighting(const std::string &material_name, bool value);
 
 	//override textures
 	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;

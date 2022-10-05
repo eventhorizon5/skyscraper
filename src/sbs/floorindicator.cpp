@@ -29,6 +29,7 @@
 #include "profiler.h"
 #include "floor.h"
 #include "timer.h"
+#include "texture.h"
 #include "floorindicator.h"
 
 namespace SBS {
@@ -77,6 +78,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 		return;
 
 	std::string texture = Prefix + sbs->GetFloor(Car->StartingFloor)->ID;
+	sbs->GetTextureManager()->EnableLighting(texture, false);
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
@@ -166,6 +168,7 @@ void FloorIndicator::Update(bool blank)
 	texture.insert(0, Prefix);
 
 	FloorIndicatorMesh->ChangeTexture(texture);
+	sbs->GetTextureManager()->EnableLighting(texture, false);
 }
 
 void FloorIndicator::Flash(bool enabled)

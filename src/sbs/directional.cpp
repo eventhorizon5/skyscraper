@@ -91,6 +91,9 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
+	sbs->GetTextureManager()->EnableLighting(UpTextureLit, false);
+	sbs->GetTextureManager()->EnableLighting(DownTextureLit, false);
+
 	//create object mesh
 	SetName("Directional Indicator " + ToString(elevator) + ":" + ToString(car) + ":" + ToString(floor));
 	DirectionalMeshBack = new MeshObject(this, "Back", 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
