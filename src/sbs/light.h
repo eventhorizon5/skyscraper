@@ -40,6 +40,9 @@ public:
 	void SetAttenuation(Real att_range = 100000.f, Real att_constant = 1.f, Real att_linear = 0.f, Real att_quadratic = 0.f);
 	void SetSpotlightRange(Real spot_inner_angle = 30.f, Real spot_outer_angle = 40.f, Real spot_falloff = 1.f);
 	void SetDirection(const Ogre::Vector3 &direction);
+	void SetRenderingDistance(Real distance);
+	void Enabled(bool value);
+	bool IsEnabled();
 
 private:
 

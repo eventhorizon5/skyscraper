@@ -59,6 +59,8 @@ Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 			light->setType(Ogre::Light::LT_DIRECTIONAL);
 		if (type == 2)
 			light->setType(Ogre::Light::LT_SPOTLIGHT);
+
+		SetRenderingDistance(100);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -123,6 +125,21 @@ void Light::SetSpotlightRange(Real spot_inner_angle, Real spot_outer_angle, Real
 void Light::SetDirection(const Ogre::Vector3 &direction)
 {
 	GetSceneNode()->SetDirection(direction);
+}
+
+void Light::SetRenderingDistance(Real distance)
+{
+	light->setRenderingDistance(sbs->ToRemote(distance));
+}
+
+void Light::Enabled(bool value)
+{
+	light->setVisible(value);
+}
+
+bool Light::IsEnabled()
+{
+	return light->getVisible();
 }
 
 }

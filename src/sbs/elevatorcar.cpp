@@ -726,6 +726,30 @@ void ElevatorCar::Loop()
 		}
 	}
 
+	//turn on lights if in elevator, or if doors are open
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (lights[i]->IsEnabled() == false)
+		{
+			if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
+			{
+				if (sbs->Verbose)
+					Report("enabling lights");
+
+				lights[i]->Enabled(true);
+			}
+		}
+		else
+		{
+			if (InCar() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
+			{
+				if (sbs->Verbose)
+					Report("disabling lights");
+				lights[i]->Enabled(false);
+			}
+		}
+	}
+
 	//process alarm
 	if (AlarmActive == true)
 		Alarm();
@@ -2138,6 +2162,7 @@ Light* ElevatorCar::AddLight(const std::string &name, int type)
 
 	Light* light = new Light(this, name, type);
 	lights.push_back(light);
+	light->Enabled(false);
 	return light;
 }
 

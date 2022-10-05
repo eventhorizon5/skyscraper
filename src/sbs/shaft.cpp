@@ -306,6 +306,13 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 				ModelArray[floor - startfloor][i]->Enabled(value);
 		}
 
+		//lights
+		for (size_t i = 0; i < lights[floor - startfloor].size(); i++)
+		{
+			if (lights[floor - startfloor][i])
+				lights[floor - startfloor][i]->Enabled(value);
+		}
+
 		if (EnableShaftDoors == true)
 		{
 			for (size_t i = 0; i < elevators.size(); i++)

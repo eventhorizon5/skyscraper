@@ -494,6 +494,13 @@ void Floor::Enabled(bool value)
 			}
 		}
 	}
+
+	//lights
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (lights[i])
+			lights[i]->Enabled(value);
+	}
 }
 
 Real Floor::FullHeight()

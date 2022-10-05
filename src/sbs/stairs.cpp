@@ -73,6 +73,7 @@ Stairs::Stairs(Object *parent, int number, Real CenterX, Real CenterZ, int start
 	ModelArray.resize(endfloor - startfloor + 1);
 	ControlArray.resize(endfloor - startfloor + 1);
 	//TriggerArray.resize(endfloor - startfloor + 1);
+	lights.resize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -378,6 +379,13 @@ void Stairs::Enabled(int floor, bool value)
 		{
 			if (ModelArray[floor - startfloor][i])
 				ModelArray[floor - startfloor][i]->Enabled(value);
+		}
+
+		//lights
+		for (size_t i = 0; i < lights[floor - startfloor].size(); i++)
+		{
+			if (lights[floor - startfloor][i])
+				lights[floor - startfloor][i]->Enabled(value);
 		}
 	}
 }
