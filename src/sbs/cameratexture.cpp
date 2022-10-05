@@ -74,7 +74,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		if (use_rotation == true)
 			SetRotation(rotation);
 		else
-			LookAt(rotation);
+			GetSceneNode()->LookAt(rotation);
 
 		//attach camera viewport to texture
 		renderTexture->addViewport(camera);
@@ -116,12 +116,6 @@ CameraTexture::~CameraTexture()
 		sbs->GetTextureManager()->DecrementTextureCount();
 		sbs->GetTextureManager()->DecrementMaterialCount();
 	}
-}
-
-void CameraTexture::LookAt(const Ogre::Vector3 &point)
-{
-	Ogre::Vector3 newpoint = sbs->ToRemote(point);
-	//camera->lookAt(newpoint.x, newpoint.y, newpoint.z);
 }
 
 void CameraTexture::Enabled(bool value)

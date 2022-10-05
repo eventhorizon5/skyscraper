@@ -363,4 +363,14 @@ Ogre::Quaternion SceneNode::GetDerivedOrientation()
 	return node->_getDerivedOrientation();
 }
 
+void SceneNode::SetDirection(const Ogre::Vector3 &direction)
+{
+	node->setDirection(sbs->ToRemote(direction));
+}
+
+void SceneNode::LookAt(const Ogre::Vector3 &point)
+{
+	node->lookAt(sbs->ToRemote(point), Ogre::Node::TS_PARENT);
+}
+
 }

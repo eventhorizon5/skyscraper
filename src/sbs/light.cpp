@@ -34,7 +34,7 @@
 
 namespace SBS {
 
-Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic) : Object(parent)
+Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 {
 	//creates a light object
 
@@ -59,13 +59,6 @@ Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 po
 			light->setType(Ogre::Light::LT_DIRECTIONAL);
 		if (type == 2)
 			light->setType(Ogre::Light::LT_SPOTLIGHT);
-
-		SetColor(color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b);
-		Move(position);
-		//light->setDirection(sbs->ToRemote(direction, false));
-		if (Type == 2)
-			light->setSpotlightRange(Ogre::Degree(spot_inner_angle), Ogre::Degree(spot_outer_angle), spot_falloff);
-		light->setAttenuation(sbs->ToRemote(att_range), att_constant, att_linear, att_quadratic);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -97,11 +90,31 @@ Light::~Light()
 	}
 }
 
-void Light::SetColor(Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b)
+void Light::SetColor(Real color_r, Real color_g, Real color_b)
 {
 	//set color of light
 	light->setDiffuseColour(color_r, color_g, color_b);
-	light->setSpecularColour(spec_color_r, spec_color_g, spec_color_b);
+}
+
+void Light::SetSpecularColor(Real color_r, Real color_g, Real color_b)
+{
+	light->setSpecularColour(color_r, color_g, color_b);
+}
+
+void Light::SetAttenuation(Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
+{
+	light->setAttenuation(sbs->ToRemote(att_range), att_constant, att_linear, att_quadratic);
+}
+
+void Light::SetSpotlightRange(Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff)
+{
+	if (Type == 2)
+		light->setSpotlightRange(Ogre::Degree(spot_inner_angle), Ogre::Degree(spot_outer_angle), spot_falloff);
+}
+
+void Light::SetDirection(const Ogre::Vector3 &direction)
+{
+	GetSceneNode()->SetDirection(direction);
 }
 
 }

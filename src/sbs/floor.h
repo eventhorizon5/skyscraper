@@ -102,7 +102,7 @@ public:
 	void RemoveCameraTexture(CameraTexture *cameratexture);
 	void RemoveEscalator(Escalator *escalator);
 	void RemoveMovingWalkway(MovingWalkway *walkway);
-	Light* AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle = 30.f, Real spot_outer_angle = 40.f, Real spot_falloff = 1.f, Real att_range = 100000.f, Real att_constant = 1.f, Real att_linear = 0.f, Real att_quadratic = 0.f);
+	Light* AddLight(const std::string &name, int type);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);

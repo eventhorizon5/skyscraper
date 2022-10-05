@@ -33,9 +33,13 @@ public:
 	int Type;
 
 	//functions
-	Light(Object *parent, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle = 30.f, Real spot_outer_angle = 40.f, Real spot_falloff = 1.f, Real att_range = 100000.f, Real att_constant = 1.f, Real att_linear = 0.f, Real att_quadratic = 0.f);
+	Light(Object *parent, const std::string &name, int type);
 	~Light();
-	void SetColor(Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b);
+	void SetColor(Real color_r = 1.0f, Real color_g = 1.0f, Real color_b = 1.0f);
+	void SetSpecularColor(Real color_r = 0.0f, Real color_g = 0.0f, Real color_b = 0.0f);
+	void SetAttenuation(Real att_range = 100000.f, Real att_constant = 1.f, Real att_linear = 0.f, Real att_quadratic = 0.f);
+	void SetSpotlightRange(Real spot_inner_angle = 30.f, Real spot_outer_angle = 40.f, Real spot_falloff = 1.f);
+	void SetDirection(const Ogre::Vector3 &direction);
 
 private:
 

@@ -58,6 +58,8 @@ public:
 	void Roll(Real &degree);
 	Ogre::Vector3 GetDerivedPosition();
 	Ogre::Quaternion GetDerivedOrientation();
+	void SetDirection(const Ogre::Vector3 &direction);
+	void LookAt(const Ogre::Vector3 &point);
 
 private:
 

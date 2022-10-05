@@ -33,7 +33,6 @@ public:
 	//functions
 	CameraTexture(Object *parent, const std::string &name, bool enabled, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
 	~CameraTexture();
-	void LookAt(const Ogre::Vector3 &point);
 	void Enabled(bool value);
 
 private:

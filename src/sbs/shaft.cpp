@@ -777,7 +777,7 @@ bool Shaft::ReportError(const std::string &message)
 	return Object::ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
-Light* Shaft::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
+Light* Shaft::AddLight(int floor, const std::string &name, int type)
 {
 	//add a global light
 
@@ -785,7 +785,7 @@ Light* Shaft::AddLight(int floor, const std::string &name, int type, Ogre::Vecto
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(GetMeshObject(floor), name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(GetMeshObject(floor), name, type);
 	lights[floor - startfloor].push_back(light);
 	return light;
 }

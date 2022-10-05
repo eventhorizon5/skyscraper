@@ -376,7 +376,8 @@ bool ElevatorCar::CreateCar(int floor)
 	CurrentFloor = StartingFloor;
 
 	//create test light
-	//AddLight("light", 0, Ogre::Vector3(0, 6, 0), Ogre::Vector3(0, 0, 0), 1, 1, 1, 1, 1, 1, 0, 0, 0, 1000, 1, 1, 1);
+	//Light *light = AddLight("light", 0);
+	//light->Move(Ogre::Vector3(0, 6, 0));
 
 	Created = true;
 
@@ -2131,11 +2132,11 @@ void ElevatorCar::ResetNudgeTimer(bool start, int number)
 	}
 }
 
-Light* ElevatorCar::AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, Real color_r, Real color_g, Real color_b, Real spec_color_r, Real spec_color_g, Real spec_color_b, Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff, Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
+Light* ElevatorCar::AddLight(const std::string &name, int type)
 {
 	//add a global light
 
-	Light* light = new Light(this, name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(this, name, type);
 	lights.push_back(light);
 	return light;
 }
