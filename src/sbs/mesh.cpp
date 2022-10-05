@@ -512,6 +512,16 @@ Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
 	return Ogre::Plane(normal, det);
 }
 
+Ogre::Plane SBS::ComputePlane2(std::vector<Ogre::Vector3> &vertices)
+{
+	//compute plane from a set of given vertices
+
+	Real det;
+	Ogre::Vector3 normal = ComputeNormal(vertices, det);
+	normal.normalise();
+	return Ogre::Plane(normal, det);
+}
+
 MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
 {
 	//set up SBS object
@@ -923,7 +933,6 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 
 	//calculate normal
 	Ogre::Vector3 normal = sbs->ComputePlane2(converted_vertices).normal;
-	normal.normalise();
 
 	//populate vertices, normals, and texels for mesh data
 	{

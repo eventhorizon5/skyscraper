@@ -296,8 +296,6 @@ public:
 	Real GetConfigFloat(const std::string &key, Real default_value);
 	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, Real value);
 	Ogre::Vector3 ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D);
-	Ogre::Plane ComputePlane2(std::vector<Ogre::Vector3> &vertices);
-	Ogre::Vector3 PlaneNormal(std::vector<Ogre::Vector3> &vertices);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
 	void AdvanceClock();
 	unsigned long GetCurrentTime();
@@ -335,6 +333,7 @@ public:
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real distance);
 	void ShowFloorList();
 	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices);
+	Ogre::Plane ComputePlane2(std::vector<Ogre::Vector3> &vertices);
 	void ShowSceneNodes(bool value);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon);
 	void ShowBoundingBoxes(bool value);
