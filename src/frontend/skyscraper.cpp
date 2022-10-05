@@ -437,8 +437,7 @@ void Skyscraper::UnloadSim()
 	//free unused hardware buffers
 	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
-	Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
-	Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+	ReInit();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	//release free memory to OS on Linux
@@ -1591,8 +1590,6 @@ void Skyscraper::UnloadToMenu()
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
 
-	EnableStats(false);
-
 	StartSound();
 	StartupRunning = true;
 }
@@ -2520,6 +2517,55 @@ void Skyscraper::EnableStats(bool value)
 	{
 		show_stats = 1;
 		ToggleStats();
+	}
+}
+
+void Skyscraper::ReInit()
+{
+	EnableStats(false);
+
+	delete mTrayMgr;
+	mTrayMgr = 0;
+
+	//reinit overlay system
+	try
+	{
+		mSceneMgr->removeRenderQueueListener(mOverlaySystem);
+		delete mOverlaySystem;
+		mOverlaySystem = new Ogre::OverlaySystem();
+		mSceneMgr->addRenderQueueListener(mOverlaySystem);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription());
+	}
+
+	//initialize system resources
+	try
+	{
+		Ogre::ResourceGroupManager::getSingleton().clearResourceGroup("Materials");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
+		Ogre::ResourceGroupManager::getSingleton().clearResourceGroup("Trays");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error initializing resources\nDetails:" + e.getDescription());
+	}
+
+	//reinit tray manager
+	try
+	{
+		mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindow);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error starting tray manager:\n" + e.getDescription());
+	}
+
+	if (mTrayMgr)
+	{
+		mTrayMgr->hideCursor();
 	}
 }
 

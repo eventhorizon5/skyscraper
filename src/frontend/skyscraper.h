@@ -211,6 +211,7 @@ private:
 	void HandleReload();
 	int GetFreeInstanceNumber();
 	void ShowProgressDialog();
+	void ReInit();
 
 	Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;
