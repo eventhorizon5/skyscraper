@@ -28,6 +28,7 @@
 #include <OgreCommon.h>
 #include <Ogre.h>
 #include <OgreLog.h>
+#include <OgreTrays.h>
 
 //wxWidgets definitions
 class wxCmdLineParser;
@@ -167,6 +168,8 @@ public:
 	virtual void MacOpenFile(const wxString &filename);
 	void UnloadSky();
 	void CreateSky(EngineContext* engine);
+	void ToggleStats();
+	void EnableStats(bool value);
 
 private:
 	//sound data
@@ -216,6 +219,8 @@ private:
 	bool showconsole;
 	wxProgressDialog *progdialog;
 	wxCmdLineParser *parser;
+	OgreBites::TrayManager* mTrayMgr;
+	int show_stats;
 
 	//control panel
 	DebugPanel *dpanel;

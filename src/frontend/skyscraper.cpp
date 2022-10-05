@@ -158,6 +158,8 @@ bool Skyscraper::OnInit(void)
 	keyconfigfile = 0;
 	parser = 0;
 	sky_error = 0;
+	mTrayMgr = 0;
+	show_stats = -1;
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -435,6 +437,9 @@ void Skyscraper::UnloadSim()
 	//free unused hardware buffers
 	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
+	Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
+	Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	//release free memory to OS on Linux
 	malloc_trim(0);
@@ -451,6 +456,11 @@ void Skyscraper::Render()
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
+
+	//update frame statistics
+	Ogre::FrameEvent a;
+	if (mTrayMgr)
+		mTrayMgr->frameRendered(a);
 }
 
 bool Skyscraper::Initialize()
@@ -592,6 +602,9 @@ bool Skyscraper::Initialize()
 		//add materials group, and autoload
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/materials", "FileSystem", "Materials", true);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
+
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("media/packs/SdkTrays.zip", "Zip", "Trays", true);
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -717,6 +730,20 @@ bool Skyscraper::Initialize()
 	}
 	else
 		Report("Sound Disabled");
+
+	try
+	{
+		mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindow);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error starting tray manager:\n" + e.getDescription());
+	}
+
+	if (mTrayMgr)
+	{
+		mTrayMgr->hideCursor();
+	}
 
 	//set platform name
 	std::string bits;
@@ -1517,6 +1544,9 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 
+	//show frame stats
+	EnableStats(true);
+
 	//run simulation
 	Report("Running simulation...");
 	StopSound();
@@ -1560,6 +1590,8 @@ void Skyscraper::UnloadToMenu()
 
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
+
+	EnableStats(false);
 
 	StartSound();
 	StartupRunning = true;
@@ -2457,6 +2489,38 @@ void Skyscraper::CreateSky(EngineContext *engine)
 	//create old sky if Caelum is turned off, or failed to initialize
 	if (sky_result == false)
 		engine->GetSystem()->CreateSky();
+}
+
+void Skyscraper::ToggleStats()
+{
+	show_stats++;
+
+	if (show_stats == 0)
+	{
+		mTrayMgr->showFrameStats(OgreBites::TrayLocation::TL_TOPRIGHT);
+		mTrayMgr->toggleAdvancedFrameStats();
+	}
+	else if (show_stats == 1)
+		mTrayMgr->toggleAdvancedFrameStats();
+	else if (show_stats == 2)
+	{
+		mTrayMgr->hideFrameStats();
+		show_stats = -1;
+	}
+}
+
+void Skyscraper::EnableStats(bool value)
+{
+	if (value == true)
+	{
+		show_stats = -1;
+		ToggleStats();
+	}
+	else
+	{
+		show_stats = 1;
+		ToggleStats();
+	}
 }
 
 }
