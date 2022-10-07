@@ -60,6 +60,7 @@ public:
 	int GetSubMeshCount(int mesh_index);
 	std::string GetMeshName(int mesh_index);
 	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
+	void EnableShadows(bool value);
 
 private:
 
@@ -83,6 +84,7 @@ private:
 		void UpdateVertices(int client, const std::string &material, unsigned int index = 0, bool single = false);
 		void Detach();
 		void UpdateBoundingBox();
+		void EnableShadows(bool value);
 
 		struct ClientEntry
 		{
@@ -109,6 +111,7 @@ private:
 		::SBS::SBS *sbs;
 		bool enabled;
 		bool prepared;
+		bool auto_shadows;
 	};
 
 	std::vector<Mesh*> meshes;

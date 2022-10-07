@@ -2088,4 +2088,11 @@ void MeshObject::ChangeHeight(Real newheight)
 	}
 }
 
+void MeshObject::EnableShadows(bool value)
+{
+	//enable shadows
+
+	MeshWrapper->EnableShadows(value);
+}
+
 }

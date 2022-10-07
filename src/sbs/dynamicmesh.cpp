@@ -571,6 +571,14 @@ Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
 	return Ogre::AxisAlignedBox::BOX_NULL;
 }
 
+void DynamicMesh::EnableShadows(bool value)
+{
+	//enable shadows
+
+	for (int i = 0; i < meshes.size(); i++)
+		meshes[i]->EnableShadows(value);
+}
+
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename, const std::string &path)
 {
 	Parent = parent;
@@ -579,6 +587,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	enabled = false;
 	prepared = false;
 	Movable = 0;
+	auto_shadows = true;
 
 	if (filename == "")
 	{
@@ -606,7 +615,6 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 	//create and enable movable
 	Movable = sbs->mSceneManager->createEntity(node->GetNameBase() + name, MeshWrapper);
-	Movable->setCastShadows(true);
 	Enabled(true);
 
 	//set maximum render distance
@@ -649,6 +657,9 @@ void DynamicMesh::Mesh::Enabled(bool value)
 		node->DetachObject(Movable);
 	else
 		node->AttachObject(Movable);
+
+	if (auto_shadows == true)
+		Movable->setCastShadows(value);
 
 	enabled = value;
 }
@@ -1330,6 +1341,14 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 		MeshWrapper->_setBounds(*client_entries[0].bounds);
 		MeshWrapper->_setBoundingSphereRadius(client_entries[0].radius);
 	}
+}
+
+void DynamicMesh::Mesh::EnableShadows(bool value)
+{
+	//enable shadows, overriding automatic setting
+
+	auto_shadows = false;
+	Movable->setCastShadows(value);
 }
 
 }

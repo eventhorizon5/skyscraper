@@ -2158,6 +2158,7 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	IncrementMaterialCount();
 
 	EnableLighting(name, true);
+	EnableShadows(name, true);
 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
@@ -2316,6 +2317,15 @@ void TextureManager::SetPlanarRotate(bool value)
 bool TextureManager::GetPlanarRotate()
 {
 	return PlanarRotate;
+}
+
+void TextureManager::EnableShadows(const std::string &material_name, bool value)
+{
+	//enable shadows
+
+	Ogre::MaterialPtr mMat = GetMaterialByName(material_name);
+	if (mMat)
+		mMat->setReceiveShadows(value);
 }
 
 }
