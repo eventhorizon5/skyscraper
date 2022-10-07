@@ -2273,9 +2273,10 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 		//if dimensions are the same, use standard copy method to prevent
 		//some crashes on systems with small npot textures
 		//note - this currently doesn't work properly on DirectX, needs fixing
-		if (srcBox.getWidth() == dstBox.getWidth() &&
-			srcBox.getHeight() == dstBox.getHeight() &&
-			srcBox.getDepth() == dstBox.getDepth() &&
+		if (srcBox.left == dstBox.left &&
+			srcBox.right == dstBox.right &&
+			srcBox.bottom == dstBox.bottom &&
+			srcBox.top == dstBox.top &&
 			sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem")
 		{
 			source->copyToTexture(destination);
