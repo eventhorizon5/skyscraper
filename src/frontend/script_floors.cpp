@@ -42,6 +42,7 @@
 #include "directional.h"
 #include "escalator.h"
 #include "movingwalkway.h"
+#include "light.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -2181,6 +2182,164 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return sNextLine;
 
 		StoreCommand(floor->AddMovingWalkway(tempdata[0], ToInt(tempdata[1]), ToFloat(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToInt(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+
+		return sNextLine;
+	}
+
+	//AddLight command
+	if (linecheck.substr(0, 9) == "addlight ")
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		if (!IsNumeric(tempdata[1]))
+			return ScriptError("Invalid value: " + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//create light
+		StoreCommand(floor->AddLight(tempdata[0], ToInt(tempdata[1])));
+
+		return sNextLine;
+	}
+
+	//LightColor command
+	if (linecheck.substr(0, 11) == "lightcolor ")
+	{
+		//get data
+		int params = SplitData(LineData, 11);
+
+		if (params != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 3; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//modify light
+		Light *light = floor->GetLight(tempdata[0]);
+		light->SetColor(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+
+		return sNextLine;
+	}
+
+	//LightSpecular command
+	if (linecheck.substr(0, 14) == "lightspecular ")
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 3; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//modify light
+		Light *light = floor->GetLight(tempdata[0]);
+		light->SetSpecularColor(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+
+		return sNextLine;
+	}
+
+	//LightAttenuation command
+	if (linecheck.substr(0, 17) == "lightattenuation ")
+	{
+		//get data
+		int params = SplitData(LineData, 17);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//modify light
+		Light *light = floor->GetLight(tempdata[0]);
+		light->SetAttenuation(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
+
+		return sNextLine;
+	}
+
+	//SpotlightRange command
+	if (linecheck.substr(0, 15) == "spotlightrange ")
+	{
+		//get data
+		int params = SplitData(LineData, 15);
+
+		if (params != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 3; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//modify light
+		Light *light = floor->GetLight(tempdata[0]);
+		light->SetSpotlightRange(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+
+		return sNextLine;
+	}
+
+	//LightDirection command
+	if (linecheck.substr(0, 15) == "lightdirection ")
+	{
+		//get data
+		int params = SplitData(LineData, 15);
+
+		if (params != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 3; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//modify light
+		Light *light = floor->GetLight(tempdata[0]);
+		light->SetDirection(Ogre::Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])));
 
 		return sNextLine;
 	}
