@@ -797,6 +797,20 @@ Light* Shaft::AddLight(int floor, const std::string &name, int type)
 	return light;
 }
 
+Light* Shaft::GetLight(int floor, const std::string &name)
+{
+	//exit if floor is invalid
+	if (!IsValidFloor(floor))
+		return 0;
+
+	for (int i = 0; i < lights[floor - startfloor].size(); i++)
+	{
+		if (lights[floor - startfloor][i]->GetName() == name)
+			return lights[floor - startfloor][i];
+	}
+	return 0;
+}
+
 Model* Shaft::AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model

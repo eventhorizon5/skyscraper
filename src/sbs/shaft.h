@@ -77,6 +77,7 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	Light* AddLight(int floor, const std::string &name, int type);
+	Light* GetLight(int floor, const std::string &name);
 	Model* AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(int floor, Model *model);
 	Control* AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);

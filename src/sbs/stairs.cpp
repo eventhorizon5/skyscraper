@@ -793,6 +793,20 @@ Light* Stairs::AddLight(int floor, const std::string &name, int type)
 	return light;
 }
 
+Light* Stairs::GetLight(int floor, const std::string &name)
+{
+	//exit if floor is invalid
+	if (!IsValidFloor(floor))
+		return 0;
+
+	for (int i = 0; i < lights[floor - startfloor].size(); i++)
+	{
+		if (lights[floor - startfloor][i]->GetName() == name)
+			return lights[floor - startfloor][i];
+	}
+	return 0;
+}
+
 MeshObject* Stairs::GetMeshObject(int floor)
 {
 	//returns the mesh object for the specified floor

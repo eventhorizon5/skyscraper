@@ -2166,6 +2166,16 @@ Light* ElevatorCar::AddLight(const std::string &name, int type)
 	return light;
 }
 
+Light* ElevatorCar::GetLight(const std::string &name)
+{
+	for (int i = 0; i < lights.size(); i++)
+	{
+		if (lights[i]->GetName() == name)
+			return lights[i];
+	}
+	return 0;
+}
+
 Model* ElevatorCar::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
