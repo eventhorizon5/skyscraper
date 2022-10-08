@@ -1094,7 +1094,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 	return 0;
 }
 
-Object* ScriptProcessor::Section::GetObject(const std::string &name, int &floor_or_car)
+Object* ScriptProcessor::Section::GetObject(std::string name, int &floor_or_car)
 {
 	//return object by name, such as:
 	//"Floor 1"
@@ -1111,7 +1111,9 @@ Object* ScriptProcessor::Section::GetObject(const std::string &name, int &floor_
 			return object;
 	}
 
-	if (name.substr(0, 11) == "ElevatorCar")
+	SetCase(name, false);
+
+	if (name.substr(0, 11) == "elevatorcar")
 	{
 		std::string num, carnumber;
 
@@ -1148,7 +1150,7 @@ Object* ScriptProcessor::Section::GetObject(const std::string &name, int &floor_
 			return 0;
 	}
 
-	if (name.substr(0, 5) == "Shaft")
+	if (name.substr(0, 5) == "shaft")
 	{
 		std::string num, shaftfloor;
 
@@ -1185,7 +1187,7 @@ Object* ScriptProcessor::Section::GetObject(const std::string &name, int &floor_
 			return 0;
 	}
 
-	if (name.substr(0, 9) == "Stairwell")
+	if (name.substr(0, 9) == "stairwell")
 	{
 		std::string num, stairsfloor;
 
