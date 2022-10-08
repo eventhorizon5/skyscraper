@@ -1004,7 +1004,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				modelname = name.substr(marker + 1);
 
 			if (marker > 0)
-				num = name.substr(5, (int)name.length() - marker - 5 - 1);
+				num = name.substr(5, (int)name.length() - marker - 1);
 			else
 				num = name.substr(5);
 
@@ -1044,7 +1044,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				modelname = name.substr(marker + 1);
 
 			if (marker > 0)
-				num = name.substr(9, (int)name.length() - marker - 5 - 1);
+				num = name.substr(9, (int)name.length() - marker - 1);
 			else
 				num = name.substr(9);
 
