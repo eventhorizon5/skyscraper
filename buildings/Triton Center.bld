@@ -9479,3 +9479,9 @@ AddFloorAutoArea -76.5, Floor(-7).Altitude, 100, -16, 0, 220
     AddModel PoolModel, pool/swimmingpool.mesh, 9.45, -0.45, -38.05, 0, 90, 0, 0, 0.1, false, 0, 0, 0
 <EndFloor>
 
+<Elevators 1 to 71>
+    #Light, this only works if lighting is enabled
+    AddLight Elevator %elevator%, ElevLight, 0
+    MoveLight Elevator %elevator%, ElevLight, 0, 6, 0
+<EndElevators>
+
