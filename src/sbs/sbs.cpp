@@ -3360,6 +3360,27 @@ Object* SBS::GetObject(std::string name)
 	return 0;
 }
 
+Object* SBS::GetObjectNoCase(std::string name)
+{
+	//get object by name
+
+	ReplaceAll(name, " ", "");
+	SetCase(name, false);
+
+	for (size_t i = 0; i < ObjectArray.size(); i++)
+	{
+		if (ObjectArray[i])
+		{
+			std::string tmpname = ObjectArray[i]->GetName();
+			ReplaceAll(tmpname, " ", "");
+			SetCase(tmpname, false);
+			if (tmpname == name)
+				return ObjectArray[i];
+		}
+	}
+	return 0;
+}
+
 std::vector<Object*> SBS::GetObjectRange(const std::string &expression)
 {
 	//get object by name range expression (ex. "Floors 1 to 3")

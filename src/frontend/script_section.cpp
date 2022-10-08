@@ -1094,6 +1094,137 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 	return 0;
 }
 
+Object* ScriptProcessor::Section::GetObject(const std::string &name, int &floor_or_car)
+{
+	//return object by name, such as:
+	//"Floor 1"
+	//or
+	//"Shaft 1:5"
+
+	floor_or_car = 0;
+
+	//do a simple search first
+	Object *object = Simcore->GetObjectNoCase(name);
+	if (object)
+	{
+		if (object->GetType() != "Mesh")
+			return object;
+	}
+
+	if (name.substr(0, 11) == "ElevatorCar")
+	{
+		std::string num, carnumber;
+
+		//get the shaft floor
+		int marker = (int)name.find(":");
+		if (marker > 0)
+			carnumber = name.substr(marker + 1);
+		else
+			return 0;
+
+		//get the car number
+		if (marker > 0)
+			num = name.substr(11, (int)name.length() - marker - 1);
+		else
+			num = name.substr(11);
+
+		TrimString(num);
+		TrimString(carnumber);
+
+		int number;
+		if (!IsNumeric(num, number))
+			return 0;
+
+		if (!IsNumeric(carnumber, floor_or_car))
+			return 0;
+
+		Elevator *elevator = Simcore->GetElevator(number);
+		if (!elevator)
+			return 0;
+
+		if (elevator->GetCar(floor_or_car))
+			return elevator->GetCar(floor_or_car);
+		else
+			return 0;
+	}
+
+	if (name.substr(0, 5) == "Shaft")
+	{
+		std::string num, shaftfloor;
+
+		//get the shaft floor
+		int marker = (int)name.find(":");
+		if (marker > 0)
+			shaftfloor = name.substr(marker + 1);
+		else
+			return 0;
+
+		//get the shaft number
+		if (marker > 0)
+			num = name.substr(5, (int)name.length() - marker - 1);
+		else
+			num = name.substr(5);
+
+		TrimString(num);
+		TrimString(shaftfloor);
+
+		int number;
+		if (!IsNumeric(num, number))
+			return 0;
+
+		if (!IsNumeric(shaftfloor, floor_or_car))
+			return 0;
+
+		Shaft *shaft = Simcore->GetShaft(number);
+		if (!shaft)
+			return 0;
+
+		if (shaft->IsValidFloor(floor_or_car) == true)
+			return shaft;
+		else
+			return 0;
+	}
+
+	if (name.substr(0, 9) == "Stairwell")
+	{
+		std::string num, stairsfloor;
+
+		//get the shaft floor
+		int marker = (int)name.find(":");
+		if (marker > 0)
+			stairsfloor = name.substr(marker + 1);
+		else
+			return 0;
+
+		//get the shaft number
+		if (marker > 0)
+			num = name.substr(9, (int)name.length() - marker - 1);
+		else
+			num = name.substr(9);
+
+		TrimString(num);
+		TrimString(stairsfloor);
+
+		int number;
+		if (!IsNumeric(num, number))
+			return 0;
+
+		if (!IsNumeric(stairsfloor, floor_or_car))
+			return 0;
+
+		Stairs *stairs = Simcore->GetStairs(number);
+		if (!stairs)
+			return 0;
+
+		if (stairs->IsValidFloor(floor_or_car) == true)
+			return stairs;
+		else
+			return 0;
+	}
+
+	return 0;
+}
+
 bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int floor, int &elevator, int &car)
 {
 	//returns an elevator and car number for the specified string

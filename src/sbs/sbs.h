@@ -259,6 +259,7 @@ public:
 	int GetObjectCount();
 	Object* GetObject(int number);
 	Object* GetObject(std::string name);
+	Object* GetObjectNoCase(std::string name);
 	std::vector<Object*> GetObjectRange(const std::string &expression);
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);

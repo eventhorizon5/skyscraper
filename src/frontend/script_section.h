@@ -20,6 +20,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef SCRIPTSECTION_H
+#define SCRIPTSECTION_H
+
 namespace Skyscraper {
 
 class ScriptProcessor::Section
@@ -42,6 +45,7 @@ public:
 	int MathFunctions(std::string &LineData);
 	::SBS::MeshObject* GetMeshObject(std::string name);
 	bool GetElevatorCar(std::string &value, int floor, int &elevator, int &car);
+	::SBS::Object* GetObject(const std::string &name, int &floor_or_car);
 
 protected:
 	ScriptProcessor *parent;
@@ -161,3 +165,5 @@ public:
 };
 
 }
+
+#endif
