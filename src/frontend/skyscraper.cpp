@@ -1553,7 +1553,10 @@ bool Skyscraper::Start(EngineContext *engine)
 
 	//set ambient light
 	if (GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
-		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+	{
+		Real value = GetConfigFloat("Skyscraper.SBS.AmbientLight", 0.5);
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(value, value, value));
+	}
 
 	//show frame stats
 	EnableStats(true);
