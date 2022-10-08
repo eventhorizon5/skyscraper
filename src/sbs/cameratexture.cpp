@@ -46,6 +46,10 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	//set up SBS object
 	SetValues("CameraTexture", name, false);
 
+	FOV = fov;
+	camera = 0;
+	renderTexture = 0;
+
 	unsigned int texture_size = 256;
 	if (quality == 2)
 		texture_size = 512;
@@ -55,8 +59,8 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	try
 	{
 		//create a new render texture
-		std::string texturename = ToString(sbs->InstanceNumber) + ":" + name;
-		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
+		texturename = ToString(sbs->InstanceNumber) + ":" + name;
+		Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
 		sbs->GetTextureManager()->IncrementTextureCount();
 		renderTexture = texture->getBuffer()->getRenderTarget();
 
@@ -65,6 +69,8 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 		camera->setNearClipDistance(0.1);
 		camera->setFarClipDistance(0.0);
 		camera->setAspectRatio(1.0);
+
+		SetFOVAngle(fov);
 
 		//attach camera to scene node
 		GetSceneNode()->AttachObject(camera);
@@ -83,7 +89,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 		Enabled(true);
 
 		//create a new material
-		material = sbs->GetTextureManager()->CreateMaterial(name, "General");
+		Ogre::MaterialPtr material = sbs->GetTextureManager()->CreateMaterial(name, "General");
 		sbs->GetTextureManager()->BindTextureToMaterial(material, texturename, false);
 
 		//add texture multipliers
@@ -107,20 +113,46 @@ CameraTexture::~CameraTexture()
 		sbs->mSceneManager->destroyCamera(camera);
 	}
 
-	Ogre::MaterialManager::getSingleton().remove(material->getHandle());
-	Ogre::TextureManager::getSingleton().remove(texture->getHandle());
+	sbs->GetTextureManager()->UnloadMaterial(texturename, "General");
+	sbs->GetTextureManager()->UnloadTexture(texturename, "General");
 
 	if (sbs->FastDelete == false)
 	{
 		sbs->GetTextureManager()->UnregisterTextureInfo(GetName());
-		sbs->GetTextureManager()->DecrementTextureCount();
-		sbs->GetTextureManager()->DecrementMaterialCount();
 	}
 }
 
 void CameraTexture::Enabled(bool value)
 {
 	renderTexture->setActive(value);
+}
+
+bool CameraTexture::IsEnabled()
+{
+	return renderTexture->isActive();
+}
+
+void CameraTexture::SetFOVAngle(Real angle)
+{
+	//set camera FOV angle
+
+	if (angle > 0 && angle < 179.63)
+	{
+		Real ratio = (float)camera->getAspectRatio();
+		if (ratio > 0)
+			camera->setFOVy(Ogre::Degree(angle / ratio));
+	}
+}
+
+Real CameraTexture::GetFOVAngle()
+{
+	return (float)(camera->getFOVy().valueDegrees() * camera->getAspectRatio());
+}
+
+void CameraTexture::SetToDefaultFOV()
+{
+	//set to default FOV angle value
+	SetFOVAngle(FOV);
 }
 
 }

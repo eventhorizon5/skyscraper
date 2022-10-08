@@ -34,12 +34,17 @@ public:
 	CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
 	~CameraTexture();
 	void Enabled(bool value);
+	bool IsEnabled();
+	void SetFOVAngle(Real angle);
+	Real GetFOVAngle();
+	void SetToDefaultFOV();
 
 private:
 
+	float FOV;
+
 	Ogre::Camera *camera;
-	Ogre::TexturePtr texture;
-	Ogre::MaterialPtr material;
+	std::string texturename;
 	Ogre::RenderTexture *renderTexture;
 };
 
