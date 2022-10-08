@@ -26,7 +26,7 @@
 
 namespace SBS {
 
-class SBSIMPEXP Stairs : public Object
+class SBSIMPEXP Stairwell : public Object
 {
 public:
 
@@ -35,21 +35,21 @@ public:
 	int endfloor; //ending floor
 	Ogre::Vector2 cutstart; //cut starting vector
 	Ogre::Vector2 cutend; //cut ending vector
-	bool InsideStairwell; //true if user/camera is in the stairwell
+	bool Inside; //true if user/camera is in the stairwell
 	bool IsEnabled; //true if the entire stairwell has been enabled
 	bool ShowFloors; //true if floors should be shown while inside the stairwell; floor list in ShowFloorsList
 	int ShowFullStairs; //if 1, always show full stairwell while inside instead of only a selected range, and always show whole stairwell if 2
 
-	Stairs(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
-	~Stairs();
+	Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
+	~Stairwell();
 	Wall* AddStairs(int floor, const std::string &name, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th);
 	Wall* AddWall(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
 	bool AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
 	Wall* AddFloor(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
 	bool AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
 	void Enabled(int floor, bool value);
-	void EnableWholeStairwell(bool value, bool force = false);
-	bool IsInStairwell(const Ogre::Vector3 &position);
+	void EnableWhole(bool value, bool force = false);
+	bool IsInside(const Ogre::Vector3 &position);
 	Door* AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset);
 	bool Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0);

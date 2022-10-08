@@ -889,7 +889,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Stairs *stairs = Simcore->CreateStairwell(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]));
+		Stairwell *stairs = Simcore->CreateStairwell(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]));
 		if (!stairs)
 			return ScriptError();
 
@@ -914,14 +914,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		int stairwell = ToInt(tempdata[0]);
-		if (!Simcore->GetStairs(stairwell))
+		if (!Simcore->GetStairwell(stairwell))
 			return ScriptError("Invalid stairwell");
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Simcore->GetStairs(stairwell)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		Simcore->GetStairwell(stairwell)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
 	}
 
@@ -938,10 +938,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
 
-		if (stairnum < 1 || stairnum > Simcore->GetStairsCount())
+		if (stairnum < 1 || stairnum > Simcore->GetStairwellCount())
 			return ScriptError("Invalid stairwell number");
 
-		Simcore->GetStairs(stairnum)->ShowFloors = true;
+		Simcore->GetStairwell(stairnum)->ShowFloors = true;
 
 		int params = SplitAfterEquals(LineData, false);
 		if (params < 1)
@@ -968,14 +968,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				}
 
 				for (int k = start; k <= end; k++)
-					Simcore->GetStairs(stairnum)->AddShowFloor(k);
+					Simcore->GetStairwell(stairnum)->AddShowFloor(k);
 			}
 			else
 			{
 				int showfloor;
 				if (!IsNumeric(tempdata[line], showfloor))
 					return ScriptError("Invalid value");
-				Simcore->GetStairs(stairnum)->AddShowFloor(showfloor);
+				Simcore->GetStairwell(stairnum)->AddShowFloor(showfloor);
 			}
 		}
 		return sNextLine;
@@ -993,7 +993,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		TrimString(str);
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
-		if (stairnum < 1 || stairnum > Simcore->GetStairsCount())
+		if (stairnum < 1 || stairnum > Simcore->GetStairwellCount())
 			return ScriptError("Invalid stairwell number");
 
 		//get text after equal sign
@@ -1017,7 +1017,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + strvalue);
 		}
 
-		Simcore->GetStairs(stairnum)->SetShowFull(value);
+		Simcore->GetStairwell(stairnum)->SetShowFull(value);
 		return sNextLine;
 	}
 
@@ -1724,7 +1724,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
 		Shaft *shaftobj = 0;
-		Stairs *stairsobj = 0;
+		Stairwell *stairsobj = 0;
 
 		//get parent object of light
 		if (obj->GetType() == "Floor")
@@ -1735,8 +1735,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
 		if (obj->GetType() == "Shaft")
 			shaftobj = static_cast<Shaft*>(obj);
-		if (obj->GetType() == "Stairs")
-			stairsobj = static_cast<Stairs*>(obj);
+		if (obj->GetType() == "Stairwell")
+			stairsobj = static_cast<Stairwell*>(obj);
 
 		if (elevatorobj)
 			elevatorcarobj = elevatorobj->GetCar(0);
@@ -1788,7 +1788,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
 		Shaft *shaftobj = 0;
-		Stairs *stairsobj = 0;
+		Stairwell *stairsobj = 0;
 
 		//get parent object
 		if (obj->GetType() == "Floor")
@@ -1799,8 +1799,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
 		if (obj->GetType() == "Shaft")
 			shaftobj = static_cast<Shaft*>(obj);
-		if (obj->GetType() == "Stairs")
-			stairsobj = static_cast<Stairs*>(obj);
+		if (obj->GetType() == "Stairwell")
+			stairsobj = static_cast<Stairwell*>(obj);
 
 		if (elevatorobj)
 			elevatorcarobj = elevatorobj->GetCar(0);
@@ -1857,7 +1857,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
 		Shaft *shaftobj = 0;
-		Stairs *stairsobj = 0;
+		Stairwell *stairsobj = 0;
 
 		//get parent object
 		if (obj->GetType() == "Floor")
@@ -1868,8 +1868,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
 		if (obj->GetType() == "Shaft")
 			shaftobj = static_cast<Shaft*>(obj);
-		if (obj->GetType() == "Stairs")
-			stairsobj = static_cast<Stairs*>(obj);
+		if (obj->GetType() == "Stairwell")
+			stairsobj = static_cast<Stairwell*>(obj);
 
 		if (elevatorobj)
 			elevatorcarobj = elevatorobj->GetCar(0);
@@ -1926,7 +1926,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
 		Shaft *shaftobj = 0;
-		Stairs *stairsobj = 0;
+		Stairwell *stairsobj = 0;
 
 		//get parent object
 		if (obj->GetType() == "Floor")
@@ -1937,8 +1937,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
 		if (obj->GetType() == "Shaft")
 			shaftobj = static_cast<Shaft*>(obj);
-		if (obj->GetType() == "Stairs")
-			stairsobj = static_cast<Stairs*>(obj);
+		if (obj->GetType() == "Stairwell")
+			stairsobj = static_cast<Stairwell*>(obj);
 
 		if (elevatorobj)
 			elevatorcarobj = elevatorobj->GetCar(0);
@@ -1995,7 +1995,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
 		Shaft *shaftobj = 0;
-		Stairs *stairsobj = 0;
+		Stairwell *stairsobj = 0;
 
 		//get parent object
 		if (obj->GetType() == "Floor")
@@ -2006,8 +2006,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
 		if (obj->GetType() == "Shaft")
 			shaftobj = static_cast<Shaft*>(obj);
-		if (obj->GetType() == "Stairs")
-			stairsobj = static_cast<Stairs*>(obj);
+		if (obj->GetType() == "Stairwell")
+			stairsobj = static_cast<Stairwell*>(obj);
 
 		if (elevatorobj)
 			elevatorcarobj = elevatorobj->GetCar(0);
@@ -2064,7 +2064,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
 		Shaft *shaftobj = 0;
-		Stairs *stairsobj = 0;
+		Stairwell *stairsobj = 0;
 
 		//get parent object
 		if (obj->GetType() == "Floor")
@@ -2075,8 +2075,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
 		if (obj->GetType() == "Shaft")
 			shaftobj = static_cast<Shaft*>(obj);
-		if (obj->GetType() == "Stairs")
-			stairsobj = static_cast<Stairs*>(obj);
+		if (obj->GetType() == "Stairwell")
+			stairsobj = static_cast<Stairwell*>(obj);
 
 		if (elevatorobj)
 			elevatorcarobj = elevatorobj->GetCar(0);
@@ -2133,7 +2133,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
 		Shaft *shaftobj = 0;
-		Stairs *stairsobj = 0;
+		Stairwell *stairsobj = 0;
 
 		//get parent object
 		if (obj->GetType() == "Floor")
@@ -2144,8 +2144,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
 		if (obj->GetType() == "Shaft")
 			shaftobj = static_cast<Shaft*>(obj);
-		if (obj->GetType() == "Stairs")
-			stairsobj = static_cast<Stairs*>(obj);
+		if (obj->GetType() == "Stairwell")
+			stairsobj = static_cast<Stairwell*>(obj);
 
 		if (elevatorobj)
 			elevatorcarobj = elevatorobj->GetCar(0);

@@ -126,8 +126,8 @@ void Model::RemoveFromParent()
 		static_cast<Floor*>(GetParent())->RemoveModel(this);
 	else if (type == "Shaft")
 		static_cast<Shaft*>(GetParent())->RemoveModel(this);
-	else if (type == "Stairs")
-		static_cast<Stairs*>(GetParent())->RemoveModel(this);
+	else if (type == "Stairwell")
+		static_cast<Stairwell*>(GetParent())->RemoveModel(this);
 	else if (type == "SBS")
 		sbs->RemoveModel(this);
 }
@@ -147,8 +147,8 @@ void Model::AddToParent()
 		static_cast<Floor*>(GetParent())->AddModel(this);
 	else if (type == "Shaft")
 		static_cast<Shaft*>(GetParent())->AddModel(floor, this);
-	else if (type == "Stairs")
-		static_cast<Stairs*>(GetParent())->AddModel(floor, this);
+	else if (type == "Stairwell")
+		static_cast<Stairwell*>(GetParent())->AddModel(floor, this);
 	else if (type == "SBS")
 		sbs->AddModel(this);
 }

@@ -165,8 +165,8 @@ Control::~Control()
 				static_cast<Floor*>(GetParent())->RemoveControl(this);
 			else if (type == "Shaft")
 				static_cast<Shaft*>(GetParent())->RemoveControl(this);
-			else if (type == "Stairs")
-				static_cast<Stairs*>(GetParent())->RemoveControl(this);
+			else if (type == "Stairwell")
+				static_cast<Stairwell*>(GetParent())->RemoveControl(this);
 			else if (type == "SBS")
 				sbs->RemoveControl(this);
 		}

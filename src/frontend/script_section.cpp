@@ -1053,7 +1053,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 			if (!IsNumeric(num, number))
 				return 0;
 
-			Stairs *stairs = Simcore->GetStairs(number);
+			Stairwell *stairs = Simcore->GetStairwell(number);
 			if (!stairs)
 				return 0;
 
@@ -1217,7 +1217,7 @@ Object* ScriptProcessor::Section::GetObject(std::string name, int &floor_or_car)
 		if (!IsNumeric(stairsfloor, floor_or_car))
 			return 0;
 
-		Stairs *stairs = Simcore->GetStairs(number);
+		Stairwell *stairs = Simcore->GetStairwell(number);
 		if (!stairs)
 			return 0;
 

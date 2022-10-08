@@ -231,7 +231,7 @@ void SBS::Initialize()
 	floor_manager = new FloorManager(this);
 	elevator_manager = new ElevatorManager(this);
 	shaft_manager = new ShaftManager(this);
-	stairs_manager = new StairsManager(this);
+	stairwell_manager = new StairwellManager(this);
 	door_manager = new DoorManager(this);
 	revolvingdoor_manager = new RevolvingDoorManager(this);
 	vehicle_manager = new VehicleManager(this);
@@ -333,12 +333,12 @@ SBS::~SBS()
 	}
 	shaft_manager = 0;
 
-	if (stairs_manager)
+	if (stairwell_manager)
 	{
-		stairs_manager->parent_deleting = true;
-		delete stairs_manager;
+		stairwell_manager->parent_deleting = true;
+		delete stairwell_manager;
 	}
-	stairs_manager = 0;
+	stairwell_manager = 0;
 
 	if (door_manager)
 	{
@@ -1594,11 +1594,11 @@ Shaft* SBS::CreateShaft(int number, Real CenterX, Real CenterZ, int startfloor, 
 	return shaft_manager->Create(number, CenterX, CenterZ, startfloor, endfloor);
 }
 
-Stairs* SBS::CreateStairwell(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor)
+Stairwell* SBS::CreateStairwell(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor)
 {
 	//create a stairwell object
 
-	return stairs_manager->Create(number, CenterX, CenterZ, startfloor, endfloor);
+	return stairwell_manager->Create(number, CenterX, CenterZ, startfloor, endfloor);
 }
 
 Elevator* SBS::NewElevator(int number)
@@ -1646,10 +1646,10 @@ int SBS::GetShaftCount()
 	return shaft_manager->GetCount();
 }
 
-int SBS::GetStairsCount()
+int SBS::GetStairwellCount()
 {
 	//return the number of stairs
-	return stairs_manager->GetCount();
+	return stairwell_manager->GetCount();
 }
 
 Floor* SBS::GetFloor(int number)
@@ -1673,11 +1673,11 @@ Shaft* SBS::GetShaft(int number)
 	return shaft_manager->Get(number);
 }
 
-Stairs* SBS::GetStairs(int number)
+Stairwell* SBS::GetStairwell(int number)
 {
 	//return pointer to stairs object
 
-	return stairs_manager->Get(number);
+	return stairwell_manager->Get(number);
 }
 
 Vehicle* SBS::GetVehicle(int number)
@@ -1974,12 +1974,12 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 		additionalfloors = 0;
 
 	Shaft *shaft = 0;
-	Stairs *stairs = 0;
+	Stairwell *stairwell = 0;
 
 	if (shaftnumber > 0)
 		shaft = GetShaft(shaftnumber);
 	if (stairsnumber > 0)
-		stairs = GetStairs(stairsnumber);
+		stairwell = GetStairwell(stairsnumber);
 
 	//disable floors 1 floor outside of range, unless part of group
 	if (value == true)
@@ -2035,12 +2035,12 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 					}
 				}
 			}
-			else if (stairs)
+			else if (stairwell)
 			{
 				//if a stairwell is specified, only show the floor if it is in the related stairwell's ShowFloorsList array
-				if (stairs->ShowFloors == true)
+				if (stairwell->ShowFloors == true)
 				{
-					bool showfloor = stairs->IsShowFloor(i);
+					bool showfloor = stairwell->IsShowFloor(i);
 
 					if (showfloor == true && value == true)
 					{
@@ -2057,7 +2057,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 						if (floorobj->EnabledGroup == true)
 						{
 							//for now check to see if the group floor is a ShowFloor
-							if (stairs->IsShowFloor(floorobj->EnabledGroup_Floor) == true)
+							if (stairwell->IsShowFloor(floorobj->EnabledGroup_Floor) == true)
 								return;
 						}
 
@@ -2519,13 +2519,13 @@ bool SBS::DeleteObject(Object *object)
 		}
 
 		//make sure no stairwell is dependent on this floor
-		for (int i = 0; i < stairs_manager->GetCount(); i++)
+		for (int i = 0; i < stairwell_manager->GetCount(); i++)
 		{
-			Stairs *stairs = stairs_manager->GetIndex(i);
-			if (stairs)
+			Stairwell *stairwell = stairwell_manager->GetIndex(i);
+			if (stairwell)
 			{
-				if (stairs->IsValidFloor(floor->Number) == true)
-					return ReportError("Cannot delete floor " + ToString(floor->Number) + " - in use by stairwell " + ToString(stairs->StairsNum));
+				if (stairwell->IsValidFloor(floor->Number) == true)
+					return ReportError("Cannot delete floor " + ToString(floor->Number) + " - in use by stairwell " + ToString(stairwell->StairsNum));
 			}
 		}
 
@@ -2576,7 +2576,7 @@ bool SBS::DeleteObject(Object *object)
 	}
 	else if (type == "Sound")
 		deleted = true;
-	else if (type == "Stairs")
+	else if (type == "Stairwell")
 		deleted = true;
 	else if (type == "Wall")
 	{
@@ -2704,11 +2704,11 @@ void SBS::RemoveShaft(Shaft *shaft)
 	shaft_manager->Remove(shaft);
 }
 
-void SBS::RemoveStairs(Stairs *stairs)
+void SBS::RemoveStairwell(Stairwell *stairs)
 {
 	//remove a stairs object (does not delete the object)
 
-	stairs_manager->Remove(stairs);
+	stairwell_manager->Remove(stairs);
 }
 
 void SBS::RemoveSound(Sound *sound)
@@ -3770,11 +3770,11 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 				return true;
 		}
 	}
-	else if (type == "Stairs")
+	else if (type == "Stairwell")
 	{
-		for (int i = 0; i < stairs_manager->GetCount(); i++)
+		for (int i = 0; i < stairwell_manager->GetCount(); i++)
 		{
-			if (stairs_manager->GetIndex(i) == static_cast<Stairs*>(object))
+			if (stairwell_manager->GetIndex(i) == static_cast<Stairwell*>(object))
 				return true;
 		}
 	}
@@ -3994,7 +3994,7 @@ void SBS::ResetState()
 	//turn off interior objects
 	floor_manager->EnableAll(false);
 	shaft_manager->EnableAll(false);
-	stairs_manager->EnableAll(false);
+	stairwell_manager->EnableAll(false);
 	elevator_manager->EnableAll(false);
 
 	//reset camera state
@@ -4095,9 +4095,9 @@ ShaftManager* SBS::GetShaftManager()
 	return shaft_manager;
 }
 
-StairsManager* SBS::GetStairsManager()
+StairwellManager* SBS::GetStairwellManager()
 {
-	return stairs_manager;
+	return stairwell_manager;
 }
 
 DoorManager* SBS::GetDoorManager()

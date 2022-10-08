@@ -193,7 +193,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
 	Floor *floor = dynamic_cast<Floor*>(parent);
 	Shaft *shaft = dynamic_cast<Shaft*>(parent);
-	Stairs *stairs = dynamic_cast<Stairs*>(parent);
+	Stairwell *stairs = dynamic_cast<Stairwell*>(parent);
 	CallButton *callbutton = dynamic_cast<CallButton*>(parent);
 	Escalator *escalator = dynamic_cast<Escalator*>(parent);
 	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
@@ -697,7 +697,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 				}
 				return false;
 			}
-			if (parent_type == "Stairs")
+			if (parent_type == "Stairwell")
 			{
 				if (stairs)
 				{
