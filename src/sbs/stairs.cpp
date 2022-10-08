@@ -86,6 +86,8 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 
+	Report("created at " + TruncateNumber(CenterX, 4) + ", " + TruncateNumber(CenterZ, 4));
+
 	EnableLoop(true);
 }
 
