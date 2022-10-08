@@ -3346,7 +3346,6 @@ Object* SBS::GetObject(std::string name)
 	//get object by name
 
 	ReplaceAll(name, " ", "");
-	SetCase(name, false);
 
 	for (size_t i = 0; i < ObjectArray.size(); i++)
 	{
@@ -3354,7 +3353,6 @@ Object* SBS::GetObject(std::string name)
 		{
 			std::string tmpname = ObjectArray[i]->GetName();
 			ReplaceAll(tmpname, " ", "");
-			SetCase(tmpname, false);
 			if (tmpname == name)
 				return ObjectArray[i];
 		}
