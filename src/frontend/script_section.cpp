@@ -1100,6 +1100,9 @@ Object* ScriptProcessor::Section::GetObject(std::string name, int &floor_or_car)
 	//"Floor 1"
 	//or
 	//"Shaft 1:5"
+	//
+	//if a shaft or stairwell is specified and floor given, the shaft/stairwell object
+	//will be returned and the floor stored in floor_or_car
 
 	floor_or_car = 0;
 
