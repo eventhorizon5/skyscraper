@@ -496,11 +496,15 @@ DynamicMesh* Stairwell::GetDynamicMesh()
 Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 {
 	//set up SBS object
-	SetValues("Stairwell Level", "", false);
+	SetValues("Stairwell Level", "", true);
 
 	enabled = true;
 	floornum = number;
 	this->parent = parent;
+
+	std::string name;
+	name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(number);
+	SetName(name);
 
 	//Create level mesh
 	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
