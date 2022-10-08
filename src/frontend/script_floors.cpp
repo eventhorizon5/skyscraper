@@ -27,7 +27,6 @@
 #include "floor.h"
 #include "wall.h"
 #include "model.h"
-#include "cameratexture.h"
 #include "trigger.h"
 #include "callbutton.h"
 #include "shaft.h"
@@ -2040,33 +2039,6 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return ScriptError("Invalid stairwell");
 		return sNextLine;
 	}*/
-
-	//AddCameraTexture command
-	if (linecheck.substr(0, 16) == "addcameratexture")
-	{
-		//get data
-		int params = SplitData(LineData, 17);
-
-		if (params != 11)
-			return ScriptError("Incorrect number of parameters");
-
-		//check numeric values
-		for (int i = 2; i <= 10; i++)
-		{
-			if (i == 7)
-				i++;
-
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
-		}
-
-		//stop here if in Check mode
-		if (config->CheckScript == true)
-			return sNextLine;
-
-		StoreCommand(floor->AddCameraTexture(tempdata[0], ToBool(tempdata[1]), ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
-		return sNextLine;
-	}
 
 	//Cut command
 	if (linecheck.substr(0, 4) == "cut ")

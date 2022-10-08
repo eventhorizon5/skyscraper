@@ -39,6 +39,7 @@
 #include "light.h"
 #include "elevator.h"
 #include "elevatorcar.h"
+#include "cameratexture.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -2164,6 +2165,65 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//move light
 		light->Move(Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+
+		return sNextLine;
+	}
+
+	//AddCameraTexture command
+	if (linecheck.substr(0, 16) == "addcameratexture")
+	{
+		//get data
+		int params = SplitData(LineData, 17);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 11; i++)
+		{
+			if (i == 8)
+				i++;
+
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		if (floorobj)
+			StoreCommand(floorobj->AddCameraTexture(tempdata[1], ToBool(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToBool(tempdata[8]), Ogre::Vector3(ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]))));
+		else
+			return ScriptError("Invalid object");
 
 		return sNextLine;
 	}
