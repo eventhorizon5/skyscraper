@@ -33,6 +33,7 @@
 #include "texture.h"
 #include "light.h"
 #include "profiler.h"
+#include "cameratexture.h"
 #include "stairs.h"
 
 namespace SBS {
@@ -570,6 +571,17 @@ Stairwell::Level::~Level()
 		DoorArray[i] = 0;
 	}
 
+	//delete camera textures
+	for (size_t i = 0; i < CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i])
+		{
+			CameraTextureArray[i]->parent_deleting = true;
+			delete CameraTextureArray[i];
+		}
+		CameraTextureArray[i] = 0;
+	}
+
 	if (mesh)
 		delete mesh;
 	mesh = 0;
@@ -1055,6 +1067,14 @@ void Stairwell::Level::Loop()
 	SBS_PROFILE("Stairwell::Level::Loop");
 
 	LoopChildren();
+}
+
+CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+{
+	//add a camera texture
+	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
+	CameraTextureArray.push_back(cameratexture);
+	return cameratexture;
 }
 
 }

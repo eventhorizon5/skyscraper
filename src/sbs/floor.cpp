@@ -1433,10 +1433,10 @@ Trigger* Floor::AddTrigger(const std::string &name, const std::string &sound_fil
 	return trigger;
 }
 
-CameraTexture* Floor::AddCameraTexture(const std::string &name, bool enabled, int quality, Real fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
+CameraTexture* Floor::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
 {
 	//add a camera texture
-	CameraTexture* cameratexture = new CameraTexture(this, name, enabled, quality, fov, GetBase(true) + position, use_rotation, rotation);
+	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, GetBase(true) + position, use_rotation, rotation);
 	CameraTextureArray.push_back(cameratexture);
 	return cameratexture;
 }

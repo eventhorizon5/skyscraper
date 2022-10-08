@@ -2175,13 +2175,13 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 17);
 
-		if (params != 12)
+		if (params != 11)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i <= 11; i++)
+		for (int i = 2; i <= 10; i++)
 		{
-			if (i == 8)
+			if (i == 7)
 				i++;
 
 			if (!IsNumeric(tempdata[i]))
@@ -2221,7 +2221,13 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		if (floorobj)
-			StoreCommand(floorobj->AddCameraTexture(tempdata[1], ToBool(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToBool(tempdata[8]), Ogre::Vector3(ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]))));
+			StoreCommand(floorobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		else if (elevatorcarobj)
+			StoreCommand(elevatorcarobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		else if (shaftobj)
+			StoreCommand(shaftobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		else if (stairsobj)
+			StoreCommand(stairsobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		else
 			return ScriptError("Invalid object");
 

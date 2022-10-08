@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "dynamicmesh.h"
 #include "texture.h"
 #include "profiler.h"
+#include "cameratexture.h"
 #include "elevatorcar.h"
 
 namespace SBS {
@@ -236,6 +237,17 @@ ElevatorCar::~ElevatorCar()
 			delete StdDoorArray[i];
 		}
 		StdDoorArray[i] = 0;
+	}
+
+	//delete camera textures
+	for (size_t i = 0; i < CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i])
+		{
+			CameraTextureArray[i]->parent_deleting = true;
+			delete CameraTextureArray[i];
+		}
+		CameraTextureArray[i] = 0;
 	}
 
 	if (sbs->Verbose)
@@ -3086,6 +3098,14 @@ void ElevatorCar::FlashIndicators(bool value)
 	//flash all floor indicators if supported
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 		FloorIndicatorArray[i]->Flash(value);
+}
+
+CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+{
+	//add a camera texture
+	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
+	CameraTextureArray.push_back(cameratexture);
+	return cameratexture;
 }
 
 }

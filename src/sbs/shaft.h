@@ -107,6 +107,7 @@ public:
 		Model* GetModel(std::string name);
 		int GetFloor();
 		void Loop();
+		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
 
 		bool enabled;
 
@@ -127,6 +128,9 @@ public:
 
 		//Triggers
 		//std::vector<Trigger*> TriggerArray;
+
+		//CameraTextures
+		std::vector<CameraTexture*> CameraTextureArray;
 
 		int floornum;
 		Shaft* parent;

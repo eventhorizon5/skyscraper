@@ -35,6 +35,7 @@
 #include "camera.h"
 #include "control.h"
 #include "profiler.h"
+#include "cameratexture.h"
 #include "shaft.h"
 
 namespace SBS {
@@ -739,6 +740,17 @@ Shaft::Level::~Level()
 		DoorArray[i] = 0;
 	}
 
+	//delete camera textures
+	for (size_t i = 0; i < CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i])
+		{
+			CameraTextureArray[i]->parent_deleting = true;
+			delete CameraTextureArray[i];
+		}
+		CameraTextureArray[i] = 0;
+	}
+
 	if (mesh)
 		delete mesh;
 	mesh = 0;
@@ -1146,6 +1158,14 @@ void Shaft::Level::RemoveDoor(Door *door)
 			return;
 		}
 	}
+}
+
+CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+{
+	//add a camera texture
+	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
+	CameraTextureArray.push_back(cameratexture);
+	return cameratexture;
 }
 
 }

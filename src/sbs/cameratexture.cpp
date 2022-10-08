@@ -37,7 +37,7 @@
 
 namespace SBS {
 
-CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabled, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation) : Object(parent)
+CameraTexture::CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation) : Object(parent)
 {
 	//creates a CameraTexture object
 
@@ -70,7 +70,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		GetSceneNode()->AttachObject(camera);
 
 		//set camera position and rotation
-		SetPosition(position);
+		Move(position);
 		if (use_rotation == true)
 			SetRotation(rotation);
 		else

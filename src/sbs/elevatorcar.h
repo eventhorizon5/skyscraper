@@ -203,6 +203,7 @@ public:
 	bool FirePhase2OnOtherCar();
 	void SetControls(const std::string &action_name);
 	void FlashIndicators(bool value);
+	CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
 
 	MeshObject* Mesh; //car mesh object
 
@@ -250,6 +251,9 @@ private:
 
 	//Triggers
 	std::vector<Trigger*> TriggerArray;
+
+	//CameraTextures
+	std::vector<CameraTexture*> CameraTextureArray;
 
 	//internal simulation data
 	int CurrentFloor; //current car floor
