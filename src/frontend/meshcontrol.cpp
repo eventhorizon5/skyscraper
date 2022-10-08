@@ -243,7 +243,11 @@ void MeshControl::On_chkStairs_Click(wxCommandEvent& event)
 	for (int i = 1; i <= Simcore->GetStairwellCount(); i++)
 	{
 		if (Simcore->GetStairwell(i))
-			Simcore->GetStairwell(i)->Enabled(Simcore->camera->CurrentFloor, chkStairs->GetValue());
+		{
+			::SBS::Stairwell::Level *level = Simcore->GetStairwell(i)->GetLevel(Simcore->camera->CurrentFloor);
+			if (level)
+				level->Enabled(chkStairs->GetValue());
+		}
 	}
 }
 
@@ -275,7 +279,10 @@ void MeshControl::On_chkAllStairs_Click(wxCommandEvent& event)
 		for (int j = -Simcore->Basements; j <= Simcore->Floors; j++)
 		{
 			if (Simcore->GetStairwell(i))
-				Simcore->GetStairwell(i)->Enabled(j, chkAllStairs->GetValue());
+			{
+				::SBS::Stairwell::Level *level = Simcore->GetStairwell(i)->GetLevel(j);
+				level->Enabled(chkAllStairs->GetValue());
+			}
 		}
 	}
 }

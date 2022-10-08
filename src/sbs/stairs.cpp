@@ -67,11 +67,9 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 
 	dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
 
-	LevelArray.resize(endfloor - startfloor + 1);
-
 	for (int i = startfloor; i <= endfloor; i++)
 	{
-		LevelArray[endfloor - startfloor + 1] = new Level(this, i);
+		LevelArray.push_back(new Level(this, i));
 	}
 
 	//create a dynamic mesh for doors
@@ -490,6 +488,11 @@ void Stairwell::Loop()
 	LoopChildren();
 }
 
+DynamicMesh* Stairwell::GetDynamicMesh()
+{
+	return dynamic_mesh;
+}
+
 Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 {
 	//set up SBS object
@@ -500,7 +503,7 @@ Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 	this->parent = parent;
 
 	//Create level mesh
-	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->dynamic_mesh);
+	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
 	SetPositionY(sbs->GetFloor(number)->GetBase());
 }
 

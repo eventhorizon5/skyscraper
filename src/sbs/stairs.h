@@ -59,6 +59,7 @@ public:
 	void SetShowFull(int value);
 	Level* GetLevel(int floor);
 	bool IsValidFloor(int floor);
+	DynamicMesh* GetDynamicMesh();
 
 	class Level : public Object
 	{

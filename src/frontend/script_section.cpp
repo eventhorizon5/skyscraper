@@ -1059,7 +1059,11 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 
 			if (marker > 0)
 			{
-				Model *model = stairs->GetModel(config->Current, modelname);
+				Model *model = 0;
+
+				if (stairs->GetLevel(config->Current))
+					model = stairs->GetLevel(config->Current)->GetModel(modelname);
+
 				if (model)
 				{
 					if (model->IsCustom() == true)
@@ -1068,7 +1072,12 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				return 0;
 			}
 			else
-				return stairs->GetMeshObject(config->Current);
+			{
+				if (stairs->GetLevel(config->Current))
+					return stairs->GetLevel(config->Current)->GetMeshObject();
+				else
+					return 0;
+			}
 		}
 		return 0;
 	}
@@ -1222,7 +1231,7 @@ Object* ScriptProcessor::Section::GetObject(std::string name, int &floor_or_car)
 			return 0;
 
 		if (stairs->IsValidFloor(floor_or_car) == true)
-			return stairs;
+			return stairs->GetLevel(floor_or_car);
 		else
 			return 0;
 	}
