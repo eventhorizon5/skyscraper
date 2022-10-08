@@ -505,6 +505,8 @@ Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 	//Create level mesh
 	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
 	SetPositionY(sbs->GetFloor(number)->GetBase());
+
+	EnableLoop(true);
 }
 
 Stairwell::Level::~Level()
@@ -1040,6 +1042,15 @@ void Stairwell::Level::ReplaceTexture(const std::string &oldtexture, const std::
 int Stairwell::Level::GetFloor()
 {
 	return floornum;
+}
+
+void Stairwell::Level::Loop()
+{
+	//level runloop
+
+	SBS_PROFILE("Stairwell::Level::Loop");
+
+	LoopChildren();
 }
 
 }

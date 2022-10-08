@@ -90,6 +90,7 @@ public:
 		Model* GetModel(std::string name);
 		void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 		int GetFloor();
+		void Loop();
 
 		bool enabled;
 
