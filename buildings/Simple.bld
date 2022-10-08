@@ -125,6 +125,10 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, false, false, 0, 0, False
 
+    #add a light, this only works if lighting is enabled
+    AddLight Floor %floor%, RoomLight, 0
+    MoveLight Floor %floor%, RoomLight, 0, 5, -5
+
     #External windows - this creates the outside versions of the windows, and also the walls outside the
     #interfloor areas
     SetAutoSize = true, false
@@ -375,6 +379,10 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 0, 0, false, 3.5 + 0.06, 0.1
     #and also for the counterweight
     AddRails Rails, RailsEdge, 0, 3 + 0.5, false, 1 + 0.06, 0.1
+
+    #Light, this only works if lighting is enabled
+    AddLight Elevator 1, ElevLight, 0
+    MoveLight Elevator1, ElevLight, 0, 6, 0
 <EndElevator>
 
 #Stairs

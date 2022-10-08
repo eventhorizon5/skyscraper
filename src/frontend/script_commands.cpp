@@ -1726,6 +1726,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Shaft *shaftobj = 0;
 		Stairs *stairsobj = 0;
 
+		//get parent object of light
 		if (obj->GetType() == "Floor")
 			floorobj = static_cast<Floor*>(obj);
 		if (obj->GetType() == "Elevator")
@@ -1789,6 +1790,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Shaft *shaftobj = 0;
 		Stairs *stairsobj = 0;
 
+		//get parent object
 		if (obj->GetType() == "Floor")
 			floorobj = static_cast<Floor*>(obj);
 		if (obj->GetType() == "Elevator")
@@ -1807,6 +1809,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
+		//get light object
 		Light *light = 0;
 		if (floorobj)
 			light = floorobj->GetLight(tempdata[1]);
@@ -1856,6 +1859,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Shaft *shaftobj = 0;
 		Stairs *stairsobj = 0;
 
+		//get parent object
 		if (obj->GetType() == "Floor")
 			floorobj = static_cast<Floor*>(obj);
 		if (obj->GetType() == "Elevator")
@@ -1874,6 +1878,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
+		//get light object
 		Light *light = 0;
 		if (floorobj)
 			light = floorobj->GetLight(tempdata[1]);
@@ -1923,6 +1928,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Shaft *shaftobj = 0;
 		Stairs *stairsobj = 0;
 
+		//get parent object
 		if (obj->GetType() == "Floor")
 			floorobj = static_cast<Floor*>(obj);
 		if (obj->GetType() == "Elevator")
@@ -1941,6 +1947,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
+		//get light object
 		Light *light = 0;
 		if (floorobj)
 			light = floorobj->GetLight(tempdata[1]);
@@ -1990,6 +1997,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Shaft *shaftobj = 0;
 		Stairs *stairsobj = 0;
 
+		//get parent object
 		if (obj->GetType() == "Floor")
 			floorobj = static_cast<Floor*>(obj);
 		if (obj->GetType() == "Elevator")
@@ -2008,6 +2016,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
+		//get light object
 		Light *light = 0;
 		if (floorobj)
 			light = floorobj->GetLight(tempdata[1]);
@@ -2057,6 +2066,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Shaft *shaftobj = 0;
 		Stairs *stairsobj = 0;
 
+		//get parent object
 		if (obj->GetType() == "Floor")
 			floorobj = static_cast<Floor*>(obj);
 		if (obj->GetType() == "Elevator")
@@ -2075,6 +2085,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
+		//get light object
 		Light *light = 0;
 		if (floorobj)
 			light = floorobj->GetLight(tempdata[1]);
@@ -2090,6 +2101,75 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//modify light
 		light->SetDirection(Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+
+		return sNextLine;
+	}
+
+	//MoveLight command
+	if (linecheck.substr(0, 10) == "movelight ")
+	{
+		//get data
+		int params = SplitData(LineData, 10);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		int floor;
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = GetObject(name, floor);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft *shaftobj = 0;
+		Stairs *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft")
+			shaftobj = static_cast<Shaft*>(obj);
+		if (obj->GetType() == "Stairs")
+			stairsobj = static_cast<Stairs*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get light object
+		Light *light = 0;
+		if (floorobj)
+			light = floorobj->GetLight(tempdata[1]);
+		if (elevatorcarobj)
+			light = elevatorcarobj->GetLight(tempdata[1]);
+		if (shaftobj)
+			light = shaftobj->GetLight(floor, tempdata[1]);
+		if (stairsobj)
+			light = stairsobj->GetLight(floor, tempdata[1]);
+
+		if (!light)
+			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
+
+		//move light
+		light->Move(Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
 
 		return sNextLine;
 	}
