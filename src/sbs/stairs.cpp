@@ -490,7 +490,7 @@ void Stairwell::Loop()
 	LoopChildren();
 }
 
-Stairwell::Level::Level(Stairwell *parent, int number)
+Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Stairwell Level", "", false);
@@ -728,7 +728,7 @@ void Stairwell::Level::Enabled(bool value)
 	//turns stairwell on/off for a specific floor
 
 	SBS_PROFILE("Stairwell::Level::Enabled");
-	if (IsEnabled() != value && floor >= startfloor && floor <= endfloor)
+	if (IsEnabled() != value)
 	{
 		mesh->Enabled(value);
 		enabled = value;
@@ -819,9 +819,9 @@ Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string
 	sbs->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
 
 	std::string num = ToString((int)DoorArray.size());
-	std::string name = "Stairwell " + ToString(StairsNum) + ":Door " + ToString(floornum) + ":" + num;
+	std::string name = "Stairwell " + ToString(parent->StairsNum) + ":Door " + ToString(floornum) + ":" + num;
 
-	Door* door = new Door(mesh, DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Door* door = new Door(mesh, parent->DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	DoorArray.push_back(door);
 
 	floorptr = 0;
@@ -863,10 +863,7 @@ bool Stairwell::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre
 
 bool Stairwell::Level::IsEnabled()
 {
-	if (floor >= startfloor && floor <= endfloor)
-		return enabled;
-	else
-		return false;
+	return enabled;
 }
 
 void Stairwell::Level::RemoveDoor(Door *door)

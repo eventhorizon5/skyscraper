@@ -28,9 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP Stairwell : public Object
 {
-	class Level;
-	friend class Level;
 public:
+	class Level;
 
 	int StairsNum; //number
 	int startfloor; //starting floor

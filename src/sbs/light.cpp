@@ -94,8 +94,8 @@ Light::~Light()
 			static_cast<Floor*>(GetParent())->RemoveLight(this);
 		else if (type == "Shaft")
 			static_cast<Shaft*>(GetParent())->RemoveLight(this);
-		else if (type == "Stairwell")
-			static_cast<Stairwell*>(GetParent())->RemoveLight(this);
+		else if (type == "Stairwell Level")
+			static_cast<Stairwell::Level*>(GetParent())->RemoveLight(this);
 		else if (type == "SBS")
 			sbs->RemoveLight(this);
 	}

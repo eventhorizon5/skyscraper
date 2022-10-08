@@ -171,8 +171,8 @@ Door::~Door()
 				static_cast<Floor*>(GetParent())->RemoveDoor(this);
 			else if (type == "Shaft")
 				static_cast<Shaft*>(GetParent())->RemoveDoor(this);
-			else if (type == "Stairwell")
-				static_cast<Stairwell*>(GetParent())->RemoveDoor(this);
+			else if (type == "Stairwell Level")
+				static_cast<Stairwell::Level*>(GetParent())->RemoveDoor(this);
 			else if (type == "DoorManager")
 				sbs->GetDoorManager()->RemoveDoor(this);
 		}

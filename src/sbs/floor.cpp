@@ -583,7 +583,10 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 	for (int i = 1; i <= sbs->GetStairwellCount(); i++)
 	{
 		if (sbs->GetStairwell(i))
-			sbs->GetStairwell(i)->Cut(false, Number, start - offset, end - offset, cutwalls, cutfloors);
+		{
+			if (sbs->GetStairwell(i)->GetLevel(Number))
+				sbs->GetStairwell(i)->GetLevel(Number)->Cut(false, start - offset, end - offset, cutwalls, cutfloors);
+		}
 	}
 
 	//cut external
@@ -662,7 +665,10 @@ void Floor::EnableGroup(bool value)
 					if (stairs)
 					{
 						if (stairs->IsEnabled == false)
-							stairs->Enabled(Group[i], value);
+						{
+							if (stairs->GetLevel(Group[i]))
+								stairs->GetLevel(Group[i])->Enabled(value);
+						}
 					}
 				}
 			}

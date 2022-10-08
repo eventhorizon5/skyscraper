@@ -91,8 +91,8 @@ Trigger::~Trigger()
 				static_cast<Floor*>(GetParent())->RemoveTrigger(this);
 			else if (type == "Shaft")
 				static_cast<Shaft*>(GetParent())->RemoveTrigger(this);
-			else if (type == "Stairwell")
-				static_cast<Stairwell*>(GetParent())->RemoveTrigger(this);
+			else if (type == "Stairwell Level")
+				static_cast<Stairwell::Level*>(GetParent())->RemoveTrigger(this);
 			else if (type == "SBS")
 				sbs->RemoveTrigger(this);
 		}
