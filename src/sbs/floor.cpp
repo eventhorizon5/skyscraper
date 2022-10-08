@@ -1725,4 +1725,12 @@ RevolvingDoor* Floor::GetRevolvingDoor(int number)
 	return 0;
 }
 
+CameraTexture* Floor::GetCameraTexture(int number)
+{
+	if (number < CameraTextureArray.size())
+		return CameraTextureArray[number];
+	else
+		return 0;
+}
+
 }
