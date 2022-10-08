@@ -117,7 +117,7 @@ public:
 	};
 
 private:
-	std::vector<Level*> LevelArray;
+	std::vector<Level*> Levels;
 	std::vector<int> ShowFloorsList; //list of floors to enable while inside the stairwell
 
 	int lastfloor;

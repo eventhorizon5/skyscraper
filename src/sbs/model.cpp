@@ -124,8 +124,8 @@ void Model::RemoveFromParent()
 		static_cast<ElevatorCar*>(GetParent())->RemoveModel(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->RemoveModel(this);
-	else if (type == "Shaft")
-		static_cast<Shaft*>(GetParent())->RemoveModel(this);
+	else if (type == "Shaft Level")
+		static_cast<Shaft::Level*>(GetParent())->RemoveModel(this);
 	else if (type == "Stairwell Level")
 		static_cast<Stairwell::Level*>(GetParent())->RemoveModel(this);
 	else if (type == "SBS")
@@ -134,19 +134,14 @@ void Model::RemoveFromParent()
 
 void Model::AddToParent()
 {
-	int floor = 0;
-
-	if (IsMovable() == true)
-		floor = sbs->GetFloorNumber(GetPosition().y);
-
 	std::string type = GetParent()->GetType();
 
 	if (type == "ElevatorCar")
 		static_cast<ElevatorCar*>(GetParent())->AddModel(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->AddModel(this);
-	else if (type == "Shaft")
-		static_cast<Shaft*>(GetParent())->AddModel(floor, this);
+	else if (type == "Shaft Level")
+		static_cast<Shaft::Level*>(GetParent())->AddModel(this);
 	else if (type == "Stairwell Level")
 		static_cast<Stairwell::Level*>(GetParent())->AddModel(this);
 	else if (type == "SBS")

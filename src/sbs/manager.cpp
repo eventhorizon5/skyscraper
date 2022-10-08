@@ -494,7 +494,7 @@ void ShaftManager::EnableAll(bool value)
 {
 	//enable or disable all shafts
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWholeShaft(value, true, true);
+		Array[i].object->EnableWhole(value, true, true);
 }
 
 void ShaftManager::Loop()

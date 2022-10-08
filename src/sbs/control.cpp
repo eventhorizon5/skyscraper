@@ -163,8 +163,8 @@ Control::~Control()
 				static_cast<ElevatorCar*>(GetParent())->RemoveControl(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveControl(this);
-			else if (type == "Shaft")
-				static_cast<Shaft*>(GetParent())->RemoveControl(this);
+			else if (type == "Shaft Level")
+				static_cast<Shaft::Level*>(GetParent())->RemoveControl(this);
 			else if (type == "Stairwell Level")
 				static_cast<Stairwell::Level*>(GetParent())->RemoveControl(this);
 			else if (type == "SBS")

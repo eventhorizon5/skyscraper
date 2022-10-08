@@ -574,7 +574,10 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 	for (int i = 1; i <= sbs->GetShaftCount(); i++)
 	{
 		if (sbs->GetShaft(i))
-			sbs->GetShaft(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
+		{
+			if (sbs->GetShaft(i)->GetLevel(Number))
+				sbs->GetShaft(i)->GetLevel(Number)->Cut(false, start, end, cutwalls, cutfloors);
+		}
 	}
 
 	Ogre::Vector3 offset (0, GetBase(true), 0);
@@ -656,7 +659,10 @@ void Floor::EnableGroup(bool value)
 					if (shaft)
 					{
 						if (shaft->IsEnabled == false)
-							shaft->Enabled(Group[i], value, true);
+						{
+							if (shaft->GetLevel(Group[i]))
+								shaft->GetLevel(Group[i])->Enabled(value, true);
+						}
 					}
 				}
 				for (int j = 1; j <= sbs->GetStairwellCount(); j++)

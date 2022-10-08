@@ -45,7 +45,7 @@ public:
 	int MathFunctions(std::string &LineData);
 	::SBS::MeshObject* GetMeshObject(std::string name);
 	bool GetElevatorCar(std::string &value, int floor, int &elevator, int &car);
-	::SBS::Object* GetObject(std::string name, int &floor_or_car);
+	::SBS::Object* GetObject(std::string name);
 
 protected:
 	ScriptProcessor *parent;

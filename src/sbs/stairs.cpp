@@ -69,7 +69,7 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
-		LevelArray.push_back(new Level(this, i));
+		Levels.push_back(new Level(this, i));
 	}
 
 	//create a dynamic mesh for doors
@@ -83,11 +83,11 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 Stairwell::~Stairwell()
 {
 	//delete levels
-	for (int i = 0; i < LevelArray.size(); i++)
+	for (int i = 0; i < Levels.size(); i++)
 	{
-		if (LevelArray[i])
-			delete LevelArray[i];
-		LevelArray[i] = 0;
+		if (Levels[i])
+			delete Levels[i];
+		Levels[i] = 0;
 	}
 
 	if (DoorWrapper)
@@ -106,10 +106,10 @@ Stairwell::~Stairwell()
 
 Stairwell::Level* Stairwell::GetLevel(int floor)
 {
-	for (int i = 0; i < LevelArray.size(); i++)
+	for (int i = 0; i < Levels.size(); i++)
 	{
-		if (LevelArray[i]->GetFloor() == floor)
-			return LevelArray[i];
+		if (Levels[i]->GetFloor() == floor)
+			return Levels[i];
 	}
 	return 0;
 }
@@ -338,8 +338,8 @@ bool Stairwell::ReportError(const std::string &message)
 
 void Stairwell::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	for (int i = 0; i < LevelArray.size(); i++)
-		LevelArray[i]->ReplaceTexture(oldtexture, newtexture);
+	for (int i = 0; i < Levels.size(); i++)
+		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
 void Stairwell::OnInit()

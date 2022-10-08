@@ -1712,10 +1712,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!IsNumeric(tempdata[2]))
 			return ScriptError("Invalid value: " + tempdata[1]);
 
-		int floor;
+		//int floor;
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name, floor);
+		Object *obj = GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1723,7 +1723,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
-		Shaft *shaftobj = 0;
+		Shaft::Level *shaftobj = 0;
 		Stairwell::Level *stairsobj = 0;
 
 		//get parent object of light
@@ -1733,8 +1733,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorobj = static_cast<Elevator*>(obj);
 		if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft")
-			shaftobj = static_cast<Shaft*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
 		if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
 
@@ -1751,7 +1751,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		else if (elevatorcarobj)
 			StoreCommand(elevatorcarobj->AddLight(tempdata[1], ToInt(tempdata[2])));
 		else if (shaftobj)
-			StoreCommand(shaftobj->AddLight(floor, tempdata[1], ToInt(tempdata[2])));
+			StoreCommand(shaftobj->AddLight(tempdata[1], ToInt(tempdata[2])));
 		else if (stairsobj)
 			StoreCommand(stairsobj->AddLight(tempdata[1], ToInt(tempdata[2])));
 		else
@@ -1776,10 +1776,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		int floor;
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name, floor);
+		Object *obj = GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1787,7 +1786,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
-		Shaft *shaftobj = 0;
+		Shaft::Level *shaftobj = 0;
 		Stairwell::Level *stairsobj = 0;
 
 		//get parent object
@@ -1797,8 +1796,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorobj = static_cast<Elevator*>(obj);
 		if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft")
-			shaftobj = static_cast<Shaft*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
 		if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
 
@@ -1816,7 +1815,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (elevatorcarobj)
 			light = elevatorcarobj->GetLight(tempdata[1]);
 		if (shaftobj)
-			light = shaftobj->GetLight(floor, tempdata[1]);
+			light = shaftobj->GetLight(tempdata[1]);
 		if (stairsobj)
 			light = stairsobj->GetLight(tempdata[1]);
 
@@ -1845,10 +1844,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		int floor;
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name, floor);
+		Object *obj = GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1856,7 +1854,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
-		Shaft *shaftobj = 0;
+		Shaft::Level *shaftobj = 0;
 		Stairwell::Level *stairsobj = 0;
 
 		//get parent object
@@ -1866,8 +1864,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorobj = static_cast<Elevator*>(obj);
 		if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft")
-			shaftobj = static_cast<Shaft*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
 		if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
 
@@ -1885,7 +1883,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (elevatorcarobj)
 			light = elevatorcarobj->GetLight(tempdata[1]);
 		if (shaftobj)
-			light = shaftobj->GetLight(floor, tempdata[1]);
+			light = shaftobj->GetLight(tempdata[1]);
 		if (stairsobj)
 			light = stairsobj->GetLight(tempdata[1]);
 
@@ -1914,10 +1912,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		int floor;
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name, floor);
+		Object *obj = GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1925,7 +1922,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
-		Shaft *shaftobj = 0;
+		Shaft::Level *shaftobj = 0;
 		Stairwell::Level *stairsobj = 0;
 
 		//get parent object
@@ -1935,8 +1932,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorobj = static_cast<Elevator*>(obj);
 		if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft")
-			shaftobj = static_cast<Shaft*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
 		if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
 
@@ -1954,7 +1951,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (elevatorcarobj)
 			light = elevatorcarobj->GetLight(tempdata[1]);
 		if (shaftobj)
-			light = shaftobj->GetLight(floor, tempdata[1]);
+			light = shaftobj->GetLight(tempdata[1]);
 		if (stairsobj)
 			light = stairsobj->GetLight(tempdata[1]);
 
@@ -1983,10 +1980,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		int floor;
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name, floor);
+		Object *obj = GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1994,7 +1990,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
-		Shaft *shaftobj = 0;
+		Shaft::Level *shaftobj = 0;
 		Stairwell::Level *stairsobj = 0;
 
 		//get parent object
@@ -2004,8 +2000,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorobj = static_cast<Elevator*>(obj);
 		if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft")
-			shaftobj = static_cast<Shaft*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
 		if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
 
@@ -2023,7 +2019,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (elevatorcarobj)
 			light = elevatorcarobj->GetLight(tempdata[1]);
 		if (shaftobj)
-			light = shaftobj->GetLight(floor, tempdata[1]);
+			light = shaftobj->GetLight(tempdata[1]);
 		if (stairsobj)
 			light = stairsobj->GetLight(tempdata[1]);
 
@@ -2052,10 +2048,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		int floor;
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name, floor);
+		Object *obj = GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -2063,7 +2058,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
-		Shaft *shaftobj = 0;
+		Shaft::Level *shaftobj = 0;
 		Stairwell::Level *stairsobj = 0;
 
 		//get parent object
@@ -2073,8 +2068,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorobj = static_cast<Elevator*>(obj);
 		if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft")
-			shaftobj = static_cast<Shaft*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
 		if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
 
@@ -2092,7 +2087,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (elevatorcarobj)
 			light = elevatorcarobj->GetLight(tempdata[1]);
 		if (shaftobj)
-			light = shaftobj->GetLight(floor, tempdata[1]);
+			light = shaftobj->GetLight(tempdata[1]);
 		if (stairsobj)
 			light = stairsobj->GetLight(tempdata[1]);
 
@@ -2121,10 +2116,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		int floor;
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name, floor);
+		Object *obj = GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -2132,7 +2126,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
-		Shaft *shaftobj = 0;
+		Shaft::Level *shaftobj = 0;
 		Stairwell::Level *stairsobj = 0;
 
 		//get parent object
@@ -2142,8 +2136,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			elevatorobj = static_cast<Elevator*>(obj);
 		if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft")
-			shaftobj = static_cast<Shaft*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
 		if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
 
@@ -2161,7 +2155,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (elevatorcarobj)
 			light = elevatorcarobj->GetLight(tempdata[1]);
 		if (shaftobj)
-			light = shaftobj->GetLight(floor, tempdata[1]);
+			light = shaftobj->GetLight(tempdata[1]);
 		if (stairsobj)
 			light = stairsobj->GetLight(tempdata[1]);
 

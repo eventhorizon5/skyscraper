@@ -169,8 +169,8 @@ Door::~Door()
 				static_cast<ElevatorCar*>(GetParent())->RemoveDoor(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveDoor(this);
-			else if (type == "Shaft")
-				static_cast<Shaft*>(GetParent())->RemoveDoor(this);
+			else if (type == "Shaft Level")
+				static_cast<Shaft::Level*>(GetParent())->RemoveDoor(this);
 			else if (type == "Stairwell Level")
 				static_cast<Stairwell::Level*>(GetParent())->RemoveDoor(this);
 			else if (type == "DoorManager")

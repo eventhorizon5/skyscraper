@@ -1019,7 +1019,11 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 
 			if (marker > 0)
 			{
-				Model *model = shaft->GetModel(config->Current, modelname);
+				Model *model = 0;
+
+				if (shaft->GetLevel(config->Current))
+					model = shaft->GetLevel(config->Current)->GetModel(modelname);
+
 				if (model)
 				{
 					if (model->IsCustom() == true)
@@ -1028,7 +1032,12 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				return 0;
 			}
 			else
-				return shaft->GetMeshObject(config->Current);
+			{
+				if (shaft->GetLevel(config->Current))
+					return shaft->GetLevel(config->Current)->GetMeshObject();
+				else
+					return 0;
+			}
 		}
 		return 0;
 	}
@@ -1103,7 +1112,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 	return 0;
 }
 
-Object* ScriptProcessor::Section::GetObject(std::string name, int &floor_or_car)
+Object* ScriptProcessor::Section::GetObject(std::string name)
 {
 	//return object by name, such as:
 	//"Floor 1"
@@ -1113,7 +1122,7 @@ Object* ScriptProcessor::Section::GetObject(std::string name, int &floor_or_car)
 	//if a shaft or stairwell is specified and floor given, the shaft/stairwell object
 	//will be returned and the floor stored in floor_or_car
 
-	floor_or_car = 0;
+	int floor_or_car = 0;
 
 	//do a simple search first
 	Object *object = Simcore->GetObjectNoCase(name);

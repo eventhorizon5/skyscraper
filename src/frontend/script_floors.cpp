@@ -377,10 +377,15 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				ScriptError("Invalid level");
+
 			if (compat == true)
-				StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddFloor(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
+				StoreCommand(level->AddFloor(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 			else
-				StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddFloor(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+				StoreCommand(level->AddFloor(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
 			return ScriptError("Invalid shaft");
@@ -545,7 +550,12 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
-			StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddWall(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				ScriptError("Invalid level");
+
+			StoreCommand(level->AddWall(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
 			return ScriptError("Invalid shaft");
@@ -1032,7 +1042,12 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
-			Door* door = Simcore->GetShaft(ToInt(tempdata[0]))->AddDoor(config->Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				ScriptError("Invalid level");
+
+			Door* door = level->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
 				door->SetLocked(config->lockvalue, config->keyvalue);
@@ -1655,11 +1670,16 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return sNextLine;
 			}
 
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				ScriptError("Invalid level");
+
 			Model *model;
 			if (compat == true)
-				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(config->Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+				model = level->AddModel(tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 			else
-				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(config->Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
+				model = level->AddModel(tempdata[1], tempdata[2], ToBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
 			if (config->setkey == true && model)
 				model->SetKey(config->keyvalue);
@@ -1799,11 +1819,16 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				ScriptError("Invalid level");
+
 			Control* control = 0;
 			if (compat == true)
-				control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
+				control = level->AddControl(tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
 			else
-				control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), action_array, tex_array);
+				control = level->AddControl(tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), action_array, tex_array);
 
 			if (control)
 			{

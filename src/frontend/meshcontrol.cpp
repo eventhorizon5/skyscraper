@@ -234,7 +234,11 @@ void MeshControl::On_chkShafts_Click(wxCommandEvent& event)
 	for (int i = 1; i <= Simcore->GetShaftCount(); i++)
 	{
 		if (Simcore->GetShaft(i))
-			Simcore->GetShaft(i)->Enabled(Simcore->camera->CurrentFloor, chkShafts->GetValue(), true);
+		{
+			::SBS::Shaft::Level *level = Simcore->GetShaft(i)->GetLevel(Simcore->camera->CurrentFloor);
+			if (level)
+				level->Enabled(chkShafts->GetValue(), true);
+		}
 	}
 }
 
@@ -265,7 +269,7 @@ void MeshControl::On_chkAllShafts_Click(wxCommandEvent& event)
 	for (int i = 1; i <= Simcore->GetShaftCount(); i++)
 	{
 		if (Simcore->GetShaft(i))
-			Simcore->GetShaft(i)->EnableWholeShaft(chkAllShafts->GetValue(), true, true);
+			Simcore->GetShaft(i)->EnableWhole(chkAllShafts->GetValue(), true, true);
 	}
 }
 
