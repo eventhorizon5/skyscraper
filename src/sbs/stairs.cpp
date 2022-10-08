@@ -67,20 +67,11 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 
 	dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
 
-	StairArray.resize(endfloor - startfloor + 1);
-	EnableArray.resize(endfloor - startfloor + 1);
-	DoorArray.resize(endfloor - startfloor + 1);
-	ModelArray.resize(endfloor - startfloor + 1);
-	ControlArray.resize(endfloor - startfloor + 1);
-	//TriggerArray.resize(endfloor - startfloor + 1);
-	lights.resize(endfloor - startfloor + 1);
+	LevelArray.resize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
-		//Create stairwell meshes
-		StairArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i), dynamic_mesh);
-		StairArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->GetBase());
-		EnableArray[i - startfloor] = true;
+		LevelArray[endfloor - startfloor + 1] = new Level(this, i);
 	}
 
 	//create a dynamic mesh for doors
@@ -93,90 +84,17 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 
 Stairwell::~Stairwell()
 {
-	//delete controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
+	//delete levels
+	for (int i = 0; i < LevelArray.size(); i++)
 	{
-		for (size_t j = 0; j < ControlArray[i].size(); j++)
-		{
-			if (ControlArray[i][j])
-			{
-				ControlArray[i][j]->parent_deleting = true;
-				delete ControlArray[i][j];
-			}
-			ControlArray[i][j] = 0;
-		}
-	}
-
-	//delete triggers
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		for (size_t j = 0; j < TriggerArray[i].size(); j++)
-		{
-			if (TriggerArray[i][j])
-			{
-				TriggerArray[i][j]->parent_deleting = true;
-				delete TriggerArray[i][j];
-			}
-			TriggerArray[i][j] = 0;
-		}
-	}*/
-
-	//delete models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		for (size_t j = 0; j < ModelArray[i].size(); j++)
-		{
-			if (ModelArray[i][j])
-			{
-				ModelArray[i][j]->parent_deleting = true;
-				delete ModelArray[i][j];
-			}
-			ModelArray[i][j] = 0;
-		}
-	}
-
-	//delete lights
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		for (size_t j = 0; j < lights[i].size(); j++)
-		{
-			if (lights[i][j])
-			{
-				lights[i][j]->parent_deleting = true;
-				delete lights[i][j];
-			}
-			lights[i][j] = 0;
-		}
-	}
-
-	//delete doors
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		for (size_t j = 0; j < DoorArray[i].size(); j++)
-		{
-			if (DoorArray[i][j])
-			{
-				DoorArray[i][j]->parent_deleting = true;
-				delete DoorArray[i][j];
-			}
-			DoorArray[i][j] = 0;
-		}
+		if (LevelArray[i])
+			delete LevelArray[i];
+		LevelArray[i] = 0;
 	}
 
 	if (DoorWrapper)
 		delete DoorWrapper;
 	DoorWrapper = 0;
-
-	//delete mesh array objects
-	for (size_t i = 0; i < StairArray.size(); i++)
-	{
-		if (StairArray[i])
-		{
-			StairArray[i]->parent_deleting = true;
-			delete StairArray[i];
-		}
-		StairArray[i] = 0;
-	}
 
 	//delete dynamic mesh
 	if (dynamic_mesh)
@@ -188,20 +106,30 @@ Stairwell::~Stairwell()
 		sbs->RemoveStairwell(this);
 }
 
-Wall* Stairwell::AddStairs(int floor, const std::string &name, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th)
+Stairwell::Level* Stairwell::GetLevel(int floor)
+{
+	for (int i = 0; i < LevelArray.size(); i++)
+	{
+		if (LevelArray[i]->GetFloor() == floor)
+			return LevelArray[i];
+	}
+	return 0;
+}
+
+Wall* Stairwell::Level::AddStairs(const std::string &name, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th)
 {
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stair base is - front, back, left, or right.
 
 	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
+	/*if (IsValid() == false)
 	{
-		ReportError("AddStairs: Floor " + ToString(floor) + " out of range");
+		parent->ReportError("AddStairs: Floor " + ToString(floornum) + " out of range");
 		return 0;
-	}
+	}*/
 
 	//create wall object
-	Wall *wall = GetMeshObject(floor)->CreateWallObject(name);
+	Wall *wall = mesh->CreateWallObject(name);
 
 	std::string Name = name;
 	TrimString(Name);
@@ -236,12 +164,12 @@ Wall* Stairwell::AddStairs(int floor, const std::string &name, const std::string
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, riser_texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, buffer, riser_texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, tread_texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, buffer, tread_texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "left")
@@ -252,12 +180,12 @@ Wall* Stairwell::AddStairs(int floor, const std::string &name, const std::string
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, riser_texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, buffer, riser_texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, tread_texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, buffer, tread_texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "back")
@@ -268,12 +196,12 @@ Wall* Stairwell::AddStairs(int floor, const std::string &name, const std::string
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, riser_texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, buffer, riser_texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, tread_texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, buffer, tread_texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "front")
@@ -284,12 +212,12 @@ Wall* Stairwell::AddStairs(int floor, const std::string &name, const std::string
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, riser_texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, buffer, riser_texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, tread_texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, buffer, tread_texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 	}
@@ -299,95 +227,95 @@ Wall* Stairwell::AddStairs(int floor, const std::string &name, const std::string
 	return wall;
 }
 
-Wall* Stairwell::AddWall(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
+Wall* Stairwell::Level::AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
+	/*if (IsValid() == false)
 	{
-		ReportError("AddWall: Floor " + ToString(floor) + " out of range");
+		parent->ReportError("AddWall: Floor " + ToString(floornum) + " out of range");
 		return 0;
-	}
+	}*/
 
-	Wall *wall = GetMeshObject(floor)->CreateWallObject(name);
-	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
+	Wall *wall = mesh->CreateWallObject(name);
+	AddWall(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
 
-bool Stairwell::AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
+bool Stairwell::Level::AddWall(Wall *wall, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-		return ReportError("AddWall: Floor " + ToString(floor) + " out of range");
+	//if (IsValid() == false)
+		//return parent->ReportError("AddWall: Floor " + ToString(floornum) + " out of range");
 
 	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
-Wall* Stairwell::AddFloor(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
+Wall* Stairwell::Level::AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
+	/*if (IsValid() == false)
 	{
-		ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
+		parent->ReportError("AddFloor: Floor " + ToString(floornum) + " out of range");
 		return 0;
-	}
+	}*/
 
-	Wall *wall = GetMeshObject(floor)->CreateWallObject(name);
-	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
+	Wall *wall = mesh->CreateWallObject(name);
+	AddFloor(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
 	return wall;
 }
 
-bool Stairwell::AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
+bool Stairwell::Level::AddFloor(Wall *wall, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-		return ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
+	//if (IsValid() == false)
+		//return parent->ReportError("AddFloor: Floor " + ToString(floornum) + " out of range");
 
 	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
-void Stairwell::Enabled(int floor, bool value)
+void Stairwell::Level::Enabled(bool value)
 {
 	//turns stairwell on/off for a specific floor
 
-	SBS_PROFILE("Stairwell::Enabled");
-	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor)
+	SBS_PROFILE("Stairwell::Level::Enabled");
+	if (IsEnabled() != value && floor >= startfloor && floor <= endfloor)
 	{
-		GetMeshObject(floor)->Enabled(value);
-		EnableArray[floor - startfloor] = value;
+		mesh->Enabled(value);
+		enabled = value;
 
 		//doors
-		for (size_t i = 0; i < DoorArray[floor - startfloor].size(); i++)
+		for (size_t i = 0; i < DoorArray.size(); i++)
 		{
-			if (DoorArray[floor - startfloor][i])
-				DoorArray[floor - startfloor][i]->Enabled(value);
+			if (DoorArray[i])
+				DoorArray[i]->Enabled(value);
 		}
 
 		//controls
-		for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
+		for (size_t i = 0; i < ControlArray.size(); i++)
 		{
-			if (ControlArray[floor - startfloor][i])
-				ControlArray[floor - startfloor][i]->Enabled(value);
+			if (ControlArray[i])
+				ControlArray[i]->Enabled(value);
 		}
 
 		//triggers
-		/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
+		/*for (size_t i = 0; i < TriggerArray.size(); i++)
 		{
-			if (TriggerArray[floor - startfloor][i])
-				TriggerArray[floor - startfloor][i]->Enabled(value);
+			if (TriggerArray[i])
+				TriggerArray[i]->Enabled(value);
 		}*/
 
 		//models
-		for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
+		for (size_t i = 0; i < ModelArray.size(); i++)
 		{
-			if (ModelArray[floor - startfloor][i])
-				ModelArray[floor - startfloor][i]->Enabled(value);
+			if (ModelArray[i])
+				ModelArray[i]->Enabled(value);
 		}
 
 		//lights
-		for (size_t i = 0; i < lights[floor - startfloor].size(); i++)
+		for (size_t i = 0; i < lights.size(); i++)
 		{
-			if (lights[floor - startfloor][i])
-				lights[floor - startfloor][i]->Enabled(value);
+			if (lights[i])
+				lights[i]->Enabled(value);
 		}
 	}
 }
@@ -407,8 +335,8 @@ void Stairwell::EnableWhole(bool value, bool force)
 		for (int i = startfloor; i <= endfloor; i++)
 		{
 			if (force == true)
-				EnableArray[i - startfloor] = !value;
-			Enabled(i, value);
+				GetLevel(i)->enabled = !value;
+			GetLevel(i)->Enabled(value);
 		}
 	}
 
@@ -455,22 +383,22 @@ bool Stairwell::IsInside(const Ogre::Vector3 &position)
 	{
 		//check for hit with current floor
 		Real distance = floorptr->FullHeight();
-		if (IsValidFloor(floor))
-			hit = GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+		if (GetLevel(floor))
+			hit = GetLevel(floor)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 
 		//if no hit, check hit against lower floor
 		if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
 		{
 			distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
-			if (IsValidFloor(floor - 1))
-				hit = GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			if (GetLevel(floor - 1))
+				hit = GetLevel(floor - 1)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
 
 		//if no hit, check hit against starting floor
 		if (hit == false && sbs->GetFloor(startfloor))
 		{
 			distance = position.y - sbs->GetFloor(startfloor)->Altitude;
-			hit = GetMeshObject(startfloor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			hit = GetLevel(startfloor)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
 	}
 	floorptr = 0;
@@ -483,18 +411,18 @@ bool Stairwell::IsInside(const Ogre::Vector3 &position)
 	return hit;
 }
 
-Door* Stairwell::AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//add a door
 
 	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
+	/*if (IsValid() == false)
 	{
-		ReportError("AddDoor: Floor " + ToString(floor) + " out of range");
+		parent->ReportError("AddDoor: Floor " + ToString(floornum) + " out of range");
 		return 0;
-	}
+	}*/
 
-	Floor *floorptr = sbs->GetFloor(floor);
+	Floor *floorptr = sbs->GetFloor(floornum);
 	if (!floorptr)
 		return 0;
 
@@ -519,24 +447,23 @@ Door* Stairwell::AddDoor(int floor, const std::string &open_sound, const std::st
 	sbs->ResetDoorwayWalls();
 	if (direction < 5)
 	{
-		Cut(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
+		Cut(1, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
 		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
 	}
 	else
 	{
-		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
+		Cut(1, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
 		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
 	}
 
 	//create doorway walls
-	sbs->AddDoorwayWalls(GetMeshObject(floor), "Connection Walls", "ConnectionWall", 0, 0);
+	sbs->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
 
-	int index = floor - startfloor;
-	std::string num = ToString((int)DoorArray[index].size());
-	std::string name = "Stairwell " + ToString(StairsNum) + ":Door " + ToString(floor) + ":" + num;
+	std::string num = ToString((int)DoorArray.size());
+	std::string name = "Stairwell " + ToString(StairsNum) + ":Door " + ToString(floornum) + ":" + num;
 
-	Door* door = new Door(GetMeshObject(floor), DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
-	DoorArray[index].push_back(door);
+	Door* door = new Door(mesh, DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	DoorArray.push_back(door);
 
 	floorptr = 0;
 	return door;
@@ -588,34 +515,34 @@ void Stairwell::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre:
 	}
 }
 
-bool Stairwell::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
+bool Stairwell::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's base
 
 	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
+	/*if (IsValid() == false)
 	{
 		if (sbs->Verbose)
-			ReportError("Cut: Floor " + ToString(floor) + " out of range");
+			parent->ReportError("Cut: Floor " + ToString(floornum) + " out of range");
 		else
-			sbs->LastError = "Cut: Floor " + ToString(floor) + " out of range";
+			sbs->LastError = "Cut: Floor " + ToString(floornum) + " out of range";
 		return false;
-	}
+	}*/
 
-	if (!sbs->GetFloor(floor))
+	if (!sbs->GetFloor(floornum))
 		return false;
 
-	for (size_t i = 0; i < GetMeshObject(floor)->Walls.size(); i++)
+	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->Cut(mesh->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 		else
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Ogre::Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->Cut(mesh->Walls[i], Ogre::Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Ogre::Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 
 	return true;
@@ -652,12 +579,12 @@ void Stairwell::EnableRange(int floor, int range, bool value)
 		if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
 		{
 			if (sbs->GetFloor(floor)->IsInGroup(floor - additionalfloors - 1) == false) //only disable if not in group
-				Enabled(floor - additionalfloors - 1, false);
+				GetLevel(floor - additionalfloors - 1)->Enabled(false);
 		}
 		if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
 		{
 			if (sbs->GetFloor(floor)->IsInGroup(floor + additionalfloors + 1) == false) //only disable if not in group
-				Enabled(floor + additionalfloors + 1, false);
+				GetLevel(floor + additionalfloors + 1)->Enabled(false);
 		}
 	}
 
@@ -665,14 +592,14 @@ void Stairwell::EnableRange(int floor, int range, bool value)
 	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
 	{
 		if (i >= startfloor && i <= endfloor)
-			Enabled(i, value);
+			GetLevel(i)->Enabled(value);
 	}
 }
 
-bool Stairwell::IsEnabledFloor(int floor)
+bool Stairwell::Level::IsEnabled()
 {
 	if (floor >= startfloor && floor <= endfloor)
-		return EnableArray[floor - startfloor];
+		return enabled;
 	else
 		return false;
 }
@@ -684,7 +611,7 @@ bool Stairwell::IsValidFloor(int floor)
 	if (floor < startfloor || floor > endfloor)
 		return false;
 
-	if (!StairArray[floor - startfloor])
+	if (!GetLevel(floor))
 		return false;
 
 	return true;
@@ -702,66 +629,54 @@ bool Stairwell::ReportError(const std::string &message)
 	return Object::ReportError("Stairwell " + ToString(StairsNum) + ": " + message);
 }
 
-void Stairwell::RemoveDoor(Door *door)
+void Stairwell::Level::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
 	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
-		for (size_t j = 0; j < DoorArray[i].size(); j++)
+		if (DoorArray[i] == door)
 		{
-			if (DoorArray[i][j] == door)
-			{
-				DoorArray[i].erase(DoorArray[i].begin() + j);
-				return;
-			}
+			DoorArray.erase(DoorArray.begin() + i);
+			return;
 		}
 	}
 }
 
-void Stairwell::RemoveLight(Light *light)
+void Stairwell::Level::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
 	for (size_t i = 0; i < lights.size(); i++)
 	{
-		for (size_t j = 0; j < lights[i].size(); j++)
+		if (lights[i] == light)
 		{
-			if (lights[i][j] == light)
-			{
-				lights[i].erase(lights[i].begin() + j);
-				return;
-			}
+			lights.erase(lights.begin() + i);
+			return;
 		}
 	}
 }
 
-void Stairwell::RemoveModel(Model *model)
+void Stairwell::Level::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
 	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
-		for (size_t j = 0; j < ModelArray[i].size(); j++)
+		if (ModelArray[i] == model)
 		{
-			if (ModelArray[i][j] == model)
-			{
-				ModelArray[i].erase(ModelArray[i].begin() + j);
-				return;
-			}
+			ModelArray.erase(ModelArray.begin() + i);
+			return;
 		}
 	}
 }
 
-void Stairwell::RemoveControl(Control *control)
+void Stairwell::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
 	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
-		for (size_t j = 0; j < ControlArray[i].size(); j++)
+		if (ControlArray[i] == control)
 		{
-			if (ControlArray[i][j] == control)
-			{
-				ControlArray[i].erase(ControlArray[i].begin() + j);
-				return;
-			}
+			ControlArray.erase(ControlArray.begin() + i);
+			return;
 		}
 	}
 }
@@ -771,127 +686,101 @@ void Stairwell::RemoveTrigger(Trigger *trigger)
 	//remove a trigger reference (does not delete the object itself)
 	/*for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
-		for (size_t j = 0; j < TriggerArray[i].size(); j++)
+		if (TriggerArray[i] == trigger)
 		{
-			if (TriggerArray[i][j] == trigger)
-			{
-				TriggerArray[i].erase(TriggerArray[i].begin() + j);
-				return;
-			}
+			TriggerArray.erase(TriggerArray.begin() + i);
+			return;
 		}
 	}*/
 }
 
-Light* Stairwell::AddLight(int floor, const std::string &name, int type)
+Light* Stairwell::Level::AddLight(const std::string &name, int type)
 {
 	//add a global light
 
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
-	Light* light = new Light(GetMeshObject(floor), name, type);
-	lights[floor - startfloor].push_back(light);
+	Light* light = new Light(mesh, name, type);
+	lights.push_back(light);
 	return light;
 }
 
-Light* Stairwell::GetLight(int floor, const std::string &name)
+Light* Stairwell::Level::GetLight(const std::string &name)
 {
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
-	for (int i = 0; i < lights[floor - startfloor].size(); i++)
+	for (int i = 0; i < lights.size(); i++)
 	{
-		if (lights[floor - startfloor][i]->GetName() == name)
-			return lights[floor - startfloor][i];
+		if (lights[i]->GetName() == name)
+			return lights[i];
 	}
 	return 0;
 }
 
-MeshObject* Stairwell::GetMeshObject(int floor)
+MeshObject* Stairwell::Level::GetMeshObject()
 {
 	//returns the mesh object for the specified floor
 
-	if (!IsValidFloor(floor))
-		return 0;
-
-	return StairArray[floor - startfloor];
+	return mesh;
 }
 
-Model* Stairwell::AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
+Model* Stairwell::Level::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
-	Model* model = new Model(GetMeshObject(floor), name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(mesh, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
 		return 0;
 	}
-	ModelArray[floor - startfloor].push_back(model);
+	ModelArray.push_back(model);
 	return model;
 }
 
-void Stairwell::AddModel(int floor, Model *model)
+void Stairwell::Level::AddModel(Model *model)
 {
 	//add a model reference
 
 	if (!model)
 		return;
 
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return;
-
-	for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
-		if (ModelArray[floor - startfloor][i] == model)
+		if (ModelArray[i] == model)
 			return;
 	}
 
-	ModelArray[floor - startfloor].push_back(model);
+	ModelArray.push_back(model);
 }
 
-Control* Stairwell::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Stairwell::Level::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
+	Control* control = new Control(mesh, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, voffset, CenterZ);
-	ControlArray[floor - startfloor].push_back(control);
+	ControlArray.push_back(control);
 	return control;
 }
 
-Trigger* Stairwell::AddTrigger(int floor, const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* Stairwell::Level::AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//triggers are disabled for now
 
 	//add a trigger
 
 	//exit if floor is invalid
-	/*if (!IsValidFloor(floor))
+	/*if (!IsValid())
 		return 0;
 
-	Trigger* trigger = new Trigger(GetMeshObject(floor), name, false, sound_file, area_min, area_max, action_names);
-	TriggerArray[floor - startfloor].push_back(trigger);
+	Trigger* trigger = new Trigger(mesh, name, false, sound_file, area_min, area_max, action_names);
+	TriggerArray.push_back(trigger);
 	return trigger;*/
 	return 0;
 }
 
 void Stairwell::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	for (int i = startfloor; i <= endfloor; i++)
-		GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
+	for (int i = 0; i < LevelArray.size(); i++)
+		LevelArray[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
 void Stairwell::OnInit()
@@ -1040,22 +929,16 @@ void Stairwell::Loop()
 	LoopChildren();
 }
 
-Model* Stairwell::GetModel(int floor, std::string name)
+Model* Stairwell::Level::GetModel(std::string name)
 {
 	//get a model by name
 
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
 	SetCase(name, false);
 
-	int index = floor - startfloor;
-
-	for (size_t i = 0; i < ModelArray[index].size(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
-		if (SetCaseCopy(ModelArray[index][i]->GetName(), false) == name)
-			return ModelArray[index][i];
+		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
+			return ModelArray[i];
 	}
 
 	return 0;
@@ -1071,6 +954,92 @@ void Stairwell::SetShowFull(int value)
 		dynamic_mesh->force_combine = true;
 		DoorWrapper->force_combine = true;
 	}
+}
+
+Stairwell::Level::Level(Stairwell *parent, int number)
+{
+	//set up SBS object
+	SetValues("Stairwell Level", "", false);
+
+	enabled = true;
+	floornum = number;
+	this->parent = parent;
+
+	//Create level mesh
+	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->dynamic_mesh);
+	SetPositionY(sbs->GetFloor(number)->GetBase());
+}
+
+Stairwell::Level::~Level()
+{
+	//delete controls
+	for (size_t i = 0; i < ControlArray.size(); i++)
+	{
+		if (ControlArray[i])
+		{
+			ControlArray[i]->parent_deleting = true;
+			delete ControlArray[i];
+		}
+		ControlArray[i] = 0;
+	}
+
+	//delete triggers
+	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+		{
+			TriggerArray[i]->parent_deleting = true;
+			delete TriggerArray[i];
+		}
+		TriggerArray[i] = 0;
+	}*/
+
+	//delete models
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i])
+		{
+			ModelArray[i]->parent_deleting = true;
+			delete ModelArray[i];
+		}
+		ModelArray[i] = 0;
+	}
+
+	//delete lights
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (lights[i])
+		{
+			lights[i]->parent_deleting = true;
+			delete lights[i];
+		}
+		lights[i] = 0;
+	}
+
+	//delete doors
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+		{
+			DoorArray[i]->parent_deleting = true;
+			delete DoorArray[i];
+		}
+		DoorArray[i] = 0;
+	}
+
+	if (mesh)
+		delete mesh;
+	mesh = 0;
+}
+
+void Stairwell::Level::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	mesh->ReplaceTexture(oldtexture, newtexture);
+}
+
+int Stairwell::Level::GetFloor()
+{
+	return floornum;
 }
 
 }
