@@ -58,6 +58,12 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 
 	try
 	{
+		if (sbs->GetTextureManager()->GetTextureByName(name, "General") || sbs->GetTextureManager()->GetMaterialByName(name, "General"))
+		{
+			ReportError("Error creating camera texture:\nTexture with the name '" + name + "' already exists.");
+			return;
+		}
+
 		//create a new render texture
 		texturename = ToString(sbs->InstanceNumber) + ":" + name;
 		Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
@@ -95,8 +101,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 		//add texture multipliers
 		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
 
-		if (sbs->Verbose)
-			Report("Created camera texture '" + GetName() + "'");
+		Report("Created camera texture '" + GetName() + "'");
 	}
 	catch (Ogre::Exception &e)
 	{
