@@ -116,6 +116,456 @@ Stairwell::Level* Stairwell::GetLevel(int floor)
 	return 0;
 }
 
+void Stairwell::SetShowFull(int value)
+{
+	ShowFullStairs = value;
+
+	//force the combining of dynamic meshes, since they'll be fully shown
+	if (value == 2)
+	{
+		dynamic_mesh->force_combine = true;
+		DoorWrapper->force_combine = true;
+	}
+}
+
+void Stairwell::EnableWhole(bool value, bool force)
+{
+	//turn on/off entire stairwell
+
+	if (value == false && ShowFullStairs == 2)
+		return;
+
+	if (force == true)
+		IsEnabled = !value;
+
+	if (IsEnabled == !value)
+	{
+		for (int i = startfloor; i <= endfloor; i++)
+		{
+			if (force == true)
+				GetLevel(i)->enabled = !value;
+			GetLevel(i)->Enabled(value);
+		}
+	}
+
+	//enable/disable dynamic meshes
+	dynamic_mesh->Enabled(value);
+	DoorWrapper->Enabled(value);
+
+	IsEnabled = value;
+}
+
+bool Stairwell::IsInside(const Ogre::Vector3 &position)
+{
+	//determine if user is in the stairwell
+
+	//SBS_PROFILE("Stairwell::IsInStairwell");
+
+	//if last position is the same as new, return previous result
+	if (position.positionEquals(lastposition) == true && checkfirstrun == false)
+		return lastcheckresult;
+
+	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
+		return false;
+
+	bool hit = false;
+	Real bottom = sbs->GetFloor(startfloor)->GetBase();
+	Real top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
+
+	//determine floor
+	int floor;
+
+	if (lastfloorset == true)
+		floor = sbs->GetFloorNumber(position.y, lastfloor, true);
+	else
+		floor = sbs->GetFloorNumber(position.y);
+
+	lastfloor = floor;
+	lastfloorset = true;
+
+	Floor *floorptr = sbs->GetFloor(floor);
+	if (!floorptr)
+		return false;
+
+	if (position.y > bottom && position.y < top)
+	{
+		//check for hit with current floor
+		Real distance = floorptr->FullHeight();
+		if (GetLevel(floor))
+			hit = GetLevel(floor)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+
+		//if no hit, check hit against lower floor
+		if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
+		{
+			distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
+			if (GetLevel(floor - 1))
+				hit = GetLevel(floor - 1)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+		}
+
+		//if no hit, check hit against starting floor
+		if (hit == false && sbs->GetFloor(startfloor))
+		{
+			distance = position.y - sbs->GetFloor(startfloor)->Altitude;
+			hit = GetLevel(startfloor)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+		}
+	}
+	floorptr = 0;
+
+	//cache values
+	checkfirstrun = false;
+	lastcheckresult = hit;
+	lastposition = position;
+
+	return hit;
+}
+
+void Stairwell::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset)
+{
+	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
+
+	Report("cutting...");
+
+	Real voffset1, voffset2;
+	cutstart = start;
+	cutend = end;
+
+	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
+		return;
+
+	for (int i = startfloor; i <= endfloor; i++)
+	{
+		Floor *floorptr = sbs->GetFloor(i);
+		if (!floorptr)
+			continue;
+
+		voffset1 = 0;
+		voffset2 = sbs->GetFloor(i)->FullHeight() + 1;
+
+		if (i == startfloor)
+			voffset1 = startvoffset;
+		else if (i == endfloor)
+			voffset2 = endvoffset;
+
+		if (relative == true)
+			floorptr->Cut(Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true, false);
+		else
+			floorptr->Cut(Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, false);
+		floorptr = 0;
+	}
+
+	//cut external
+	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
+	voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
+	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
+	{
+		if (relative == true)
+			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
+		else
+			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true);
+	}
+}
+
+void Stairwell::EnableRange(int floor, int range, bool value)
+{
+	//turn on a range of floors
+	//if range is 3, show stairwell on current floor (floor), and 1 floor below and above (3 total floors)
+	//if range is 1, show only the current floor (floor)
+
+	if (!sbs->GetFloor(floor))
+		return;
+
+	SBS_PROFILE("Stairwell::EnableRange");
+
+	//range must be greater than 0
+	if (range < 1)
+		range = 1;
+
+	//range must be an odd number; if it's even, then add 1
+	if (IsEven(range) == true)
+		range++;
+
+	int additionalfloors;
+	if (range > 1)
+		additionalfloors = (range - 1) / 2;
+	else
+		additionalfloors = 0;
+
+	//disable floors 1 floor outside of range
+	if (value == true)
+	{
+		if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
+		{
+			if (sbs->GetFloor(floor)->IsInGroup(floor - additionalfloors - 1) == false) //only disable if not in group
+				GetLevel(floor - additionalfloors - 1)->Enabled(false);
+		}
+		if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
+		{
+			if (sbs->GetFloor(floor)->IsInGroup(floor + additionalfloors + 1) == false) //only disable if not in group
+				GetLevel(floor + additionalfloors + 1)->Enabled(false);
+		}
+	}
+
+	//enable floors within range
+	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
+	{
+		if (i >= startfloor && i <= endfloor)
+			GetLevel(i)->Enabled(value);
+	}
+}
+
+bool Stairwell::IsValidFloor(int floor)
+{
+	//return true if the stairwell services the specified floor
+
+	if (floor < startfloor || floor > endfloor)
+		return false;
+
+	if (!GetLevel(floor))
+		return false;
+
+	return true;
+}
+
+void Stairwell::Report(const std::string &message)
+{
+	//general reporting function
+	Object::Report("Stairwell " + ToString(StairsNum) + ": " + message);
+}
+
+bool Stairwell::ReportError(const std::string &message)
+{
+	//general reporting function
+	return Object::ReportError("Stairwell " + ToString(StairsNum) + ": " + message);
+}
+
+void Stairwell::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	for (int i = 0; i < LevelArray.size(); i++)
+		LevelArray[i]->ReplaceTexture(oldtexture, newtexture);
+}
+
+void Stairwell::OnInit()
+{
+	//startup initialization of stairs
+
+	if (ShowFullStairs == 2)
+		EnableWhole(true);
+	else
+		EnableWhole(false);
+}
+
+void Stairwell::AddShowFloor(int floor)
+{
+	//adds a floor number to the ShowFloors array
+
+	if (IsShowFloor(floor))
+		return;
+
+	ShowFloorsList.push_back(floor);
+	std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
+}
+
+void Stairwell::RemoveShowFloor(int floor)
+{
+	//removes a floor number from the ShowFloors array
+
+	for (size_t i = 0; i < ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+		{
+			ShowFloorsList.erase(ShowFloorsList.begin() + i);
+			return;
+		}
+	}
+}
+
+bool Stairwell::IsShowFloor(int floor)
+{
+	//return true if a floor is in the ShowFloors list
+
+	for (size_t i = 0; i < ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+			return true;
+	}
+	return false;
+}
+
+void Stairwell::Check(Ogre::Vector3 position, int current_floor, int previous_floor)
+{
+	//check to see if user (camera) is in the stairwell
+
+	SBS_PROFILE("Stairwell::Check");
+
+	if (IsInside(position) == true)
+	{
+		if (Inside == false)
+		{
+			Inside = true;
+			sbs->InStairwell = true;
+
+			//turn on entire stairwell if ShowFullStairs is not 0
+			if (ShowFullStairs > 0)
+				EnableWhole(true);
+		}
+
+		//show specified stairwell range while in the stairwell
+		if (ShowFullStairs == 0)
+			EnableRange(current_floor, sbs->StairsDisplayRange, true);
+
+		//if user walked to a different floor, enable new floor and disable previous
+		if (current_floor != previous_floor)
+		{
+			if (sbs->GetFloor(current_floor)->IsInGroup(previous_floor) == false)
+			{
+				//only disable other floor if it's not in a group list
+				sbs->GetFloor(previous_floor)->Enabled(false);
+				sbs->GetFloor(previous_floor)->EnableGroup(false);
+			}
+			sbs->GetFloor(current_floor)->Enabled(true);
+			sbs->GetFloor(current_floor)->EnableGroup(true);
+
+			//turn on related floors if ShowFloors is true
+			if (ShowFloors == true)
+			{
+				for (size_t i = 0; i < ShowFloorsList.size(); i++)
+				{
+					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
+					if (floor->IsEnabled == false)
+					{
+						floor->Enabled(true);
+						//floor->EnableGroup(true);
+					}
+				}
+			}
+		}
+	}
+	else if (Inside == true)
+	{
+		Inside = false;
+		sbs->InStairwell = false;
+
+		//turn off stairwell if ShowFullStairs is 1
+		if (ShowFullStairs == 1)
+			EnableWhole(false);
+
+		//turn off related floors if outside stairwell
+		if (ShowFloors == true)
+		{
+			for (size_t i = 0; i < ShowFloorsList.size(); i++)
+			{
+				if (ShowFloorsList[i] != current_floor)
+				{
+					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
+					if (floor->IsEnabled == true && floor->IsInGroup(current_floor) == false)
+					{
+						floor->Enabled(false);
+						//floor->EnableGroup(false);
+					}
+				}
+			}
+		}
+	}
+	else if (Inside == false)
+	{
+		if (ShowFullStairs == 2)
+		{
+			//show full stairwell if specified
+			EnableWhole(true);
+		}
+		else
+		{
+			//show specified stairwell range if outside the stairwell
+			EnableRange(current_floor, sbs->StairsOutsideDisplayRange, true);
+		}
+	}
+}
+
+void Stairwell::Loop()
+{
+	//stairwell runloop
+
+	SBS_PROFILE("Stairwell::Loop");
+
+	LoopChildren();
+}
+
+Stairwell::Level::Level(Stairwell *parent, int number)
+{
+	//set up SBS object
+	SetValues("Stairwell Level", "", false);
+
+	enabled = true;
+	floornum = number;
+	this->parent = parent;
+
+	//Create level mesh
+	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->dynamic_mesh);
+	SetPositionY(sbs->GetFloor(number)->GetBase());
+}
+
+Stairwell::Level::~Level()
+{
+	//delete controls
+	for (size_t i = 0; i < ControlArray.size(); i++)
+	{
+		if (ControlArray[i])
+		{
+			ControlArray[i]->parent_deleting = true;
+			delete ControlArray[i];
+		}
+		ControlArray[i] = 0;
+	}
+
+	//delete triggers
+	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+		{
+			TriggerArray[i]->parent_deleting = true;
+			delete TriggerArray[i];
+		}
+		TriggerArray[i] = 0;
+	}*/
+
+	//delete models
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i])
+		{
+			ModelArray[i]->parent_deleting = true;
+			delete ModelArray[i];
+		}
+		ModelArray[i] = 0;
+	}
+
+	//delete lights
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (lights[i])
+		{
+			lights[i]->parent_deleting = true;
+			delete lights[i];
+		}
+		lights[i] = 0;
+	}
+
+	//delete doors
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+		{
+			DoorArray[i]->parent_deleting = true;
+			delete DoorArray[i];
+		}
+		DoorArray[i] = 0;
+	}
+
+	if (mesh)
+		delete mesh;
+	mesh = 0;
+}
+
 Wall* Stairwell::Level::AddStairs(const std::string &name, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_stairs, Real voffset, Real tw, Real th)
 {
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
@@ -320,97 +770,6 @@ void Stairwell::Level::Enabled(bool value)
 	}
 }
 
-void Stairwell::EnableWhole(bool value, bool force)
-{
-	//turn on/off entire stairwell
-
-	if (value == false && ShowFullStairs == 2)
-		return;
-
-	if (force == true)
-		IsEnabled = !value;
-
-	if (IsEnabled == !value)
-	{
-		for (int i = startfloor; i <= endfloor; i++)
-		{
-			if (force == true)
-				GetLevel(i)->enabled = !value;
-			GetLevel(i)->Enabled(value);
-		}
-	}
-
-	//enable/disable dynamic meshes
-	dynamic_mesh->Enabled(value);
-	DoorWrapper->Enabled(value);
-
-	IsEnabled = value;
-}
-
-bool Stairwell::IsInside(const Ogre::Vector3 &position)
-{
-	//determine if user is in the stairwell
-
-	//SBS_PROFILE("Stairwell::IsInStairwell");
-
-	//if last position is the same as new, return previous result
-	if (position.positionEquals(lastposition) == true && checkfirstrun == false)
-		return lastcheckresult;
-
-	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
-		return false;
-
-	bool hit = false;
-	Real bottom = sbs->GetFloor(startfloor)->GetBase();
-	Real top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
-
-	//determine floor
-	int floor;
-
-	if (lastfloorset == true)
-		floor = sbs->GetFloorNumber(position.y, lastfloor, true);
-	else
-		floor = sbs->GetFloorNumber(position.y);
-
-	lastfloor = floor;
-	lastfloorset = true;
-
-	Floor *floorptr = sbs->GetFloor(floor);
-	if (!floorptr)
-		return false;
-
-	if (position.y > bottom && position.y < top)
-	{
-		//check for hit with current floor
-		Real distance = floorptr->FullHeight();
-		if (GetLevel(floor))
-			hit = GetLevel(floor)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
-
-		//if no hit, check hit against lower floor
-		if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
-		{
-			distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
-			if (GetLevel(floor - 1))
-				hit = GetLevel(floor - 1)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
-		}
-
-		//if no hit, check hit against starting floor
-		if (hit == false && sbs->GetFloor(startfloor))
-		{
-			distance = position.y - sbs->GetFloor(startfloor)->Altitude;
-			hit = GetLevel(startfloor)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
-		}
-	}
-	floorptr = 0;
-
-	//cache values
-	checkfirstrun = false;
-	lastcheckresult = hit;
-	lastposition = position;
-
-	return hit;
-}
-
 Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//add a door
@@ -469,52 +828,6 @@ Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string
 	return door;
 }
 
-void Stairwell::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset)
-{
-	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
-
-	Report("cutting...");
-
-	Real voffset1, voffset2;
-	cutstart = start;
-	cutend = end;
-
-	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
-		return;
-
-	for (int i = startfloor; i <= endfloor; i++)
-	{
-		Floor *floorptr = sbs->GetFloor(i);
-		if (!floorptr)
-			continue;
-
-		voffset1 = 0;
-		voffset2 = sbs->GetFloor(i)->FullHeight() + 1;
-
-		if (i == startfloor)
-			voffset1 = startvoffset;
-		else if (i == endfloor)
-			voffset2 = endvoffset;
-
-		if (relative == true)
-			floorptr->Cut(Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true, false);
-		else
-			floorptr->Cut(Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, false);
-		floorptr = 0;
-	}
-
-	//cut external
-	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
-	voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
-	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
-	{
-		if (relative == true)
-			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
-		else
-			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true);
-	}
-}
-
 bool Stairwell::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
 {
 	//Cut through a wall segment
@@ -548,85 +861,12 @@ bool Stairwell::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre
 	return true;
 }
 
-void Stairwell::EnableRange(int floor, int range, bool value)
-{
-	//turn on a range of floors
-	//if range is 3, show stairwell on current floor (floor), and 1 floor below and above (3 total floors)
-	//if range is 1, show only the current floor (floor)
-
-	if (!sbs->GetFloor(floor))
-		return;
-
-	SBS_PROFILE("Stairwell::EnableRange");
-
-	//range must be greater than 0
-	if (range < 1)
-		range = 1;
-
-	//range must be an odd number; if it's even, then add 1
-	if (IsEven(range) == true)
-		range++;
-
-	int additionalfloors;
-	if (range > 1)
-		additionalfloors = (range - 1) / 2;
-	else
-		additionalfloors = 0;
-
-	//disable floors 1 floor outside of range
-	if (value == true)
-	{
-		if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
-		{
-			if (sbs->GetFloor(floor)->IsInGroup(floor - additionalfloors - 1) == false) //only disable if not in group
-				GetLevel(floor - additionalfloors - 1)->Enabled(false);
-		}
-		if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
-		{
-			if (sbs->GetFloor(floor)->IsInGroup(floor + additionalfloors + 1) == false) //only disable if not in group
-				GetLevel(floor + additionalfloors + 1)->Enabled(false);
-		}
-	}
-
-	//enable floors within range
-	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
-	{
-		if (i >= startfloor && i <= endfloor)
-			GetLevel(i)->Enabled(value);
-	}
-}
-
 bool Stairwell::Level::IsEnabled()
 {
 	if (floor >= startfloor && floor <= endfloor)
 		return enabled;
 	else
 		return false;
-}
-
-bool Stairwell::IsValidFloor(int floor)
-{
-	//return true if the stairwell services the specified floor
-
-	if (floor < startfloor || floor > endfloor)
-		return false;
-
-	if (!GetLevel(floor))
-		return false;
-
-	return true;
-}
-
-void Stairwell::Report(const std::string &message)
-{
-	//general reporting function
-	Object::Report("Stairwell " + ToString(StairsNum) + ": " + message);
-}
-
-bool Stairwell::ReportError(const std::string &message)
-{
-	//general reporting function
-	return Object::ReportError("Stairwell " + ToString(StairsNum) + ": " + message);
 }
 
 void Stairwell::Level::RemoveDoor(Door *door)
@@ -681,7 +921,7 @@ void Stairwell::Level::RemoveControl(Control *control)
 	}
 }
 
-void Stairwell::RemoveTrigger(Trigger *trigger)
+void Stairwell::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
 	/*for (size_t i = 0; i < TriggerArray.size(); i++)
@@ -777,158 +1017,6 @@ Trigger* Stairwell::Level::AddTrigger(const std::string &name, const std::string
 	return 0;
 }
 
-void Stairwell::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
-{
-	for (int i = 0; i < LevelArray.size(); i++)
-		LevelArray[i]->ReplaceTexture(oldtexture, newtexture);
-}
-
-void Stairwell::OnInit()
-{
-	//startup initialization of stairs
-
-	if (ShowFullStairs == 2)
-		EnableWhole(true);
-	else
-		EnableWhole(false);
-}
-
-void Stairwell::AddShowFloor(int floor)
-{
-	//adds a floor number to the ShowFloors array
-
-	if (IsShowFloor(floor))
-		return;
-
-	ShowFloorsList.push_back(floor);
-	std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
-}
-
-void Stairwell::RemoveShowFloor(int floor)
-{
-	//removes a floor number from the ShowFloors array
-
-	for (size_t i = 0; i < ShowFloorsList.size(); i++)
-	{
-		if (ShowFloorsList[i] == floor)
-		{
-			ShowFloorsList.erase(ShowFloorsList.begin() + i);
-			return;
-		}
-	}
-}
-
-bool Stairwell::IsShowFloor(int floor)
-{
-	//return true if a floor is in the ShowFloors list
-
-	for (size_t i = 0; i < ShowFloorsList.size(); i++)
-	{
-		if (ShowFloorsList[i] == floor)
-			return true;
-	}
-	return false;
-}
-
-void Stairwell::Check(Ogre::Vector3 position, int current_floor, int previous_floor)
-{
-	//check to see if user (camera) is in the stairwell
-
-	SBS_PROFILE("Stairwell::Check");
-
-	if (IsInside(position) == true)
-	{
-		if (Inside == false)
-		{
-			Inside = true;
-			sbs->InStairwell = true;
-
-			//turn on entire stairwell if ShowFullStairs is not 0
-			if (ShowFullStairs > 0)
-				EnableWhole(true);
-		}
-
-		//show specified stairwell range while in the stairwell
-		if (ShowFullStairs == 0)
-			EnableRange(current_floor, sbs->StairsDisplayRange, true);
-
-		//if user walked to a different floor, enable new floor and disable previous
-		if (current_floor != previous_floor)
-		{
-			if (sbs->GetFloor(current_floor)->IsInGroup(previous_floor) == false)
-			{
-				//only disable other floor if it's not in a group list
-				sbs->GetFloor(previous_floor)->Enabled(false);
-				sbs->GetFloor(previous_floor)->EnableGroup(false);
-			}
-			sbs->GetFloor(current_floor)->Enabled(true);
-			sbs->GetFloor(current_floor)->EnableGroup(true);
-
-			//turn on related floors if ShowFloors is true
-			if (ShowFloors == true)
-			{
-				for (size_t i = 0; i < ShowFloorsList.size(); i++)
-				{
-					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-					if (floor->IsEnabled == false)
-					{
-						floor->Enabled(true);
-						//floor->EnableGroup(true);
-					}
-				}
-			}
-		}
-	}
-	else if (Inside == true)
-	{
-		Inside = false;
-		sbs->InStairwell = false;
-
-		//turn off stairwell if ShowFullStairs is 1
-		if (ShowFullStairs == 1)
-			EnableWhole(false);
-
-		//turn off related floors if outside stairwell
-		if (ShowFloors == true)
-		{
-			for (size_t i = 0; i < ShowFloorsList.size(); i++)
-			{
-				if (ShowFloorsList[i] != current_floor)
-				{
-					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-					if (floor->IsEnabled == true && floor->IsInGroup(current_floor) == false)
-					{
-						floor->Enabled(false);
-						//floor->EnableGroup(false);
-					}
-				}
-			}
-		}
-	}
-	else if (Inside == false)
-	{
-		if (ShowFullStairs == 2)
-		{
-			//show full stairwell if specified
-			EnableWhole(true);
-		}
-		else
-		{
-			//show specified stairwell range if outside the stairwell
-			EnableRange(current_floor, sbs->StairsOutsideDisplayRange, true);
-		}
-	}
-}
-
-void Stairwell::Loop()
-{
-	//stairwell runloop
-
-	SBS_PROFILE("Stairwell::Loop");
-
-	LoopChildren();
-}
-
 Model* Stairwell::Level::GetModel(std::string name)
 {
 	//get a model by name
@@ -942,94 +1030,6 @@ Model* Stairwell::Level::GetModel(std::string name)
 	}
 
 	return 0;
-}
-
-void Stairwell::SetShowFull(int value)
-{
-	ShowFullStairs = value;
-
-	//force the combining of dynamic meshes, since they'll be fully shown
-	if (value == 2)
-	{
-		dynamic_mesh->force_combine = true;
-		DoorWrapper->force_combine = true;
-	}
-}
-
-Stairwell::Level::Level(Stairwell *parent, int number)
-{
-	//set up SBS object
-	SetValues("Stairwell Level", "", false);
-
-	enabled = true;
-	floornum = number;
-	this->parent = parent;
-
-	//Create level mesh
-	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->dynamic_mesh);
-	SetPositionY(sbs->GetFloor(number)->GetBase());
-}
-
-Stairwell::Level::~Level()
-{
-	//delete controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i])
-		{
-			ControlArray[i]->parent_deleting = true;
-			delete ControlArray[i];
-		}
-		ControlArray[i] = 0;
-	}
-
-	//delete triggers
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-		{
-			TriggerArray[i]->parent_deleting = true;
-			delete TriggerArray[i];
-		}
-		TriggerArray[i] = 0;
-	}*/
-
-	//delete models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-		{
-			ModelArray[i]->parent_deleting = true;
-			delete ModelArray[i];
-		}
-		ModelArray[i] = 0;
-	}
-
-	//delete lights
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i])
-		{
-			lights[i]->parent_deleting = true;
-			delete lights[i];
-		}
-		lights[i] = 0;
-	}
-
-	//delete doors
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i])
-		{
-			DoorArray[i]->parent_deleting = true;
-			delete DoorArray[i];
-		}
-		DoorArray[i] = 0;
-	}
-
-	if (mesh)
-		delete mesh;
-	mesh = 0;
 }
 
 void Stairwell::Level::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
