@@ -1716,7 +1716,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//int floor;
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name);
+		Object *obj = Simcore->GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1779,7 +1779,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name);
+		Object *obj = Simcore->GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1847,7 +1847,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name);
+		Object *obj = Simcore->GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1915,7 +1915,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name);
+		Object *obj = Simcore->GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -1983,7 +1983,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name);
+		Object *obj = Simcore->GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -2051,7 +2051,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name);
+		Object *obj = Simcore->GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -2119,7 +2119,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name);
+		Object *obj = Simcore->GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);
@@ -2190,7 +2190,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string name = tempdata[0];
 		TrimString(name);
-		Object *obj = GetObject(name);
+		Object *obj = Simcore->GetObject(name);
 
 		if (!obj)
 			return ScriptError("Invalid object " + name);

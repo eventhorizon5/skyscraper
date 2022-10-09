@@ -44,7 +44,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	//if use_rotation is true, the rotation vector is a standard rotation, otherwise that vector represents a point in space to look at
 
 	//set up SBS object
-	SetValues("CameraTexture", "CameraTexture " + name, false);
+	SetValues("CameraTexture", name, false);
 
 	FOV = fov;
 	camera = 0;

@@ -490,17 +490,17 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 <EndFloor>
 
 #Add a camera texture
-AddCameraTexture Floor 0, Camera, 1, 71, 0, 5, -10, true, 0, 0, 0
+AddCameraTexture Floor 0, Camera1, 1, 71, 0, 5, -10, true, 0, 0, 0
 
 #Add a TV to display the camera texture
 <Floors 0 to 9>
     SetAutoSize = false, false
-    AddWall TV, Camera, 0.1, -14, 5, -9, 5, 5, 5, 3, 3, 1, 1, false
+    AddWall TV, Camera1, 0.1, -14, 5, -9, 5, 5, 5, 3, 3, 1, 1, false
     SetAutoSize = true, true
 
     #add a trigger for the camera, to only have it turn on when user is nearby
-    AddAction CamStop, CameraTexture Camera, Disable
-    AddAction CamStart, CameraTexture Camera, Enable
+    AddAction CamStop, Camera1, Disable
+    AddAction CamStart, Camera1, Enable
     AddTrigger CamEnable, , -20, 0, -20, 10, 10, 5, CamStop, CamStart
 <EndFloors>
 

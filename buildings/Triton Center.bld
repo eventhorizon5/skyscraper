@@ -509,8 +509,8 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddWall Security TV, Camera1, 0.1, 3.9, 30, 3.9, 27, 3, 3, 4, 4, 1, 1, false
 
     #add a trigger for the camera, to only have it turn on when user is nearby
-    AddAction CamStop, CameraTexture Camera1, Disable
-    AddAction CamStart, CameraTexture Camera1, Enable
+    AddAction CamStop, Camera1, Disable
+    AddAction CamStart, Camera1, Enable
     AddTrigger CamEnable, , -4, 0, 20, 4, 10, 35, CamStop, CamStart
 
     SetAutoSize = true, true
