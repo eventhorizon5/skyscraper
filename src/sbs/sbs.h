@@ -258,8 +258,7 @@ public:
 	Ogre::Vector3 ToRemote(const Ogre::Vector3& local_value, bool rescale = true, bool flip_z = true);
 	int GetObjectCount();
 	Object* GetObject(int number);
-	Object* GetObject(std::string name);
-	Object* GetObjectNoCase(std::string name);
+	Object* GetObject(std::string name, bool case_sensitive = true);
 	std::vector<Object*> GetObjectRange(const std::string &expression);
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);

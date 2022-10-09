@@ -1125,7 +1125,7 @@ Object* ScriptProcessor::Section::GetObject(std::string name)
 	int floor_or_car = 0;
 
 	//do a simple search first
-	Object *object = Simcore->GetObjectNoCase(name);
+	Object *object = Simcore->GetObject(name);
 	if (object)
 	{
 		if (object->GetType() != "Mesh")

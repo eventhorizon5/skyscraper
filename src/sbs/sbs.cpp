@@ -3341,7 +3341,7 @@ bool SBS::RemoveAction(Action *action)
 	return result;
 }
 
-Object* SBS::GetObject(std::string name)
+Object* SBS::GetObject(std::string name, bool case_sensitive)
 {
 	//get object by name
 
@@ -3351,61 +3351,29 @@ Object* SBS::GetObject(std::string name)
 	{
 		if (ObjectArray[i])
 		{
-			{
-				//get by object name
-				std::string tmpname = ObjectArray[i]->GetName();
-				ReplaceAll(tmpname, " ", "");
-				if (tmpname == name)
-					return ObjectArray[i];
-			}
+			std::string tmpname = ObjectArray[i]->GetName();
+			ReplaceAll(tmpname, " ", "");
+			if (case_sensitive == false)
+				SetCase(tmpname, false);
+
+			//get by object name
+			if (tmpname == name)
+				return ObjectArray[i];
+
 			if (ObjectArray[i]->GetParent())
 			{
-				//get by "parent:objectname"
-				std::string tmpname = ObjectArray[i]->GetName();
 				std::string parent_name = ObjectArray[i]->GetParent()->GetName();
-				ReplaceAll(tmpname, " ", "");
 				ReplaceAll(parent_name, " ", "");
+				if (case_sensitive == false)
+					SetCase(parent_name, false);
+
+				//get by "parentname:objectname"
 				if (name == parent_name + ":" + tmpname)
 					return ObjectArray[i];
 			}
 		}
 	}
 
-	return 0;
-}
-
-Object* SBS::GetObjectNoCase(std::string name)
-{
-	//get object by name
-
-	ReplaceAll(name, " ", "");
-	SetCase(name, false);
-
-	for (size_t i = 0; i < ObjectArray.size(); i++)
-	{
-		if (ObjectArray[i])
-		{
-			{
-				std::string tmpname = ObjectArray[i]->GetName();
-				ReplaceAll(tmpname, " ", "");
-				SetCase(tmpname, false);
-				if (tmpname == name)
-					return ObjectArray[i];
-			}
-			if (ObjectArray[i]->GetParent())
-			{
-				//get by "parent:objectname"
-				std::string tmpname = ObjectArray[i]->GetName();
-				std::string parent_name = ObjectArray[i]->GetParent()->GetName();
-				ReplaceAll(tmpname, " ", "");
-				ReplaceAll(parent_name, " ", "");
-				SetCase(tmpname, false);
-				SetCase(parent_name, false);
-				if (name == parent_name + ":" + tmpname)
-					return ObjectArray[i];
-			}
-		}
-	}
 	return 0;
 }
 
