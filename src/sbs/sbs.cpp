@@ -3351,12 +3351,26 @@ Object* SBS::GetObject(std::string name)
 	{
 		if (ObjectArray[i])
 		{
-			std::string tmpname = ObjectArray[i]->GetName();
-			ReplaceAll(tmpname, " ", "");
-			if (tmpname == name)
-				return ObjectArray[i];
+			{
+				//get by object name
+				std::string tmpname = ObjectArray[i]->GetName();
+				ReplaceAll(tmpname, " ", "");
+				if (tmpname == name)
+					return ObjectArray[i];
+			}
+			if (ObjectArray[i]->GetParent())
+			{
+				//get by "parent:objectname"
+				std::string tmpname = ObjectArray[i]->GetName();
+				std::string parent_name = ObjectArray[i]->GetParent()->GetName();
+				ReplaceAll(tmpname, " ", "");
+				ReplaceAll(parent_name, " ", "");
+				if (name == parent_name + ":" + tmpname)
+					return ObjectArray[i];
+			}
 		}
 	}
+
 	return 0;
 }
 
@@ -3371,11 +3385,25 @@ Object* SBS::GetObjectNoCase(std::string name)
 	{
 		if (ObjectArray[i])
 		{
-			std::string tmpname = ObjectArray[i]->GetName();
-			ReplaceAll(tmpname, " ", "");
-			SetCase(tmpname, false);
-			if (tmpname == name)
-				return ObjectArray[i];
+			{
+				std::string tmpname = ObjectArray[i]->GetName();
+				ReplaceAll(tmpname, " ", "");
+				SetCase(tmpname, false);
+				if (tmpname == name)
+					return ObjectArray[i];
+			}
+			if (ObjectArray[i]->GetParent())
+			{
+				//get by "parent:objectname"
+				std::string tmpname = ObjectArray[i]->GetName();
+				std::string parent_name = ObjectArray[i]->GetParent()->GetName();
+				ReplaceAll(tmpname, " ", "");
+				ReplaceAll(parent_name, " ", "");
+				SetCase(tmpname, false);
+				SetCase(parent_name, false);
+				if (name == parent_name + ":" + tmpname)
+					return ObjectArray[i];
+			}
 		}
 	}
 	return 0;
