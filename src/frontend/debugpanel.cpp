@@ -47,6 +47,7 @@
 #include "objectinfo.h"
 #include "enginemanager.h"
 #include "peoplemanager.h"
+#include "camtex.h"
 
 namespace Skyscraper {
 
@@ -88,6 +89,7 @@ const long DebugPanel::ID_bControlReference = wxNewId();
 const long DebugPanel::ID_bStats = wxNewId();
 const long DebugPanel::ID_bEngineManager = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
+const long DebugPanel::ID_bCameraTexture = wxNewId();
 const long DebugPanel::ID_bObjectInfo = wxNewId();
 const long DebugPanel::ID_bActionViewer = wxNewId();
 const long DebugPanel::ID_bPeopleManager = wxNewId();
@@ -121,25 +123,25 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	BoxSizer6 = new wxBoxSizer(wxVERTICAL);
 	StaticText1 = new wxStaticText(Panel1, ID_STATICTEXT1, _("Camera Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
-	BoxSizer6->Add(StaticText1, 0, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText1, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText10 = new wxStaticText(Panel1, ID_STATICTEXT12, _("Floor Name:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT12"));
-	BoxSizer6->Add(StaticText10, 1, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText10, 1, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText2 = new wxStaticText(Panel1, ID_STATICTEXT2, _("Camera Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-	BoxSizer6->Add(StaticText2, 0, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText2, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText7 = new wxStaticText(Panel1, ID_STATICTEXT8, _("Camera Rotation:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
-	BoxSizer6->Add(StaticText7, 1, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText7, 1, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText3 = new wxStaticText(Panel1, ID_STATICTEXT3, _("Elevator Number:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-	BoxSizer6->Add(StaticText3, 0, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText3, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText4 = new wxStaticText(Panel1, ID_STATICTEXT4, _("Elevator Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
-	BoxSizer6->Add(StaticText4, 0, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText4, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText5 = new wxStaticText(Panel1, ID_STATICTEXT5, _("Selected Object:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
-	BoxSizer6->Add(StaticText5, 0, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText5, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText9 = new wxStaticText(Panel1, ID_STATICTEXT10, _("Clicked Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
-	BoxSizer6->Add(StaticText9, 1, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText9, 1, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText8 = new wxStaticText(Panel1, ID_STATICTEXT9, _("Last Collision:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
-	BoxSizer6->Add(StaticText8, 1, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText8, 1, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText6 = new wxStaticText(Panel1, ID_STATICTEXT6, _("Framerate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
-	BoxSizer6->Add(StaticText6, 1, wxBOTTOM, 5);
+	BoxSizer6->Add(StaticText6, 1, wxBOTTOM|wxALIGN_RIGHT, 5);
 	BoxSizer4->Add(BoxSizer6, 0, wxRIGHT|wxALIGN_TOP, 5);
 	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
 	t_camerafloor = new wxStaticText(Panel1, ID_t_camerafloor, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_camerafloor"));
@@ -213,6 +215,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer9->Add(bEngineManager, 1, wxEXPAND, 5);
 	bConsole = new wxButton(Panel1, ID_bConsole, _("Console"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bConsole"));
 	BoxSizer9->Add(bConsole, 1, wxEXPAND, 5);
+	bCameraTexture = new wxButton(Panel1, ID_bCameraTexture, _("CameraTexture Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraTexture"));
+	BoxSizer9->Add(bCameraTexture, 1, wxEXPAND, 5);
 	BoxSizer8->Add(BoxSizer9, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
 	bObjectInfo = new wxButton(Panel1, ID_bObjectInfo, _("Object Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bObjectInfo"));
@@ -257,6 +261,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
 	Connect(ID_bEngineManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEngineManager_Click);
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
+	Connect(ID_bCameraTexture,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraTexture_Click);
 	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
 	Connect(ID_bActionViewer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
 	Connect(ID_bPeopleManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bPeopleManager_Click);
@@ -279,6 +284,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	skycontrol = 0;
 	emanager = 0;
 	pmanager = 0;
+	camtex = 0;
 	timer = 0;
 
 	OnInit();
@@ -328,6 +334,9 @@ DebugPanel::~DebugPanel()
 	if (pmanager)
 		pmanager->Destroy();
 	pmanager = 0;
+	if (camtex)
+		camtex->Destroy();
+	camtex = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -502,6 +511,12 @@ void DebugPanel::Loop()
 	{
 		if (pmanager->IsShown() == true)
 			pmanager->Loop();
+	}
+
+	if (camtex)
+	{
+		if (camtex->IsShown() == true)
+			camtex->Loop();
 	}
 }
 
@@ -706,5 +721,13 @@ bool IsNumeric(const wxString &string, double &number)
 	return SBS::IsNumeric(s, number);
 }
 
+void DebugPanel::On_bCameraTexture_Click(wxCommandEvent& event)
+{
+	if (!camtex)
+		camtex = new CameraTextureControl(this, -1);
+
+	camtex->CenterOnScreen();
+	camtex->Show();
 }
 
+}

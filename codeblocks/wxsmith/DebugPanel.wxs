@@ -22,14 +22,14 @@
 													<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
 														<label>Camera Floor:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT12" variable="StaticText10" member="yes">
 														<label>Floor Name:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -37,14 +37,14 @@
 													<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
 														<label>Camera Position:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText7" member="yes">
 														<label>Camera Rotation:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -52,28 +52,28 @@
 													<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
 														<label>Elevator Number:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
 														<label>Elevator Floor:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
 														<label>Selected Object:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText9" member="yes">
 														<label>Clicked Position:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -81,7 +81,7 @@
 													<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText8" member="yes">
 														<label>Last Collision:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -89,12 +89,12 @@
 													<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
 														<label>Framerate:</label>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_RIGHT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
 											</object>
-											<flag>wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+											<flag>wxRIGHT|wxALIGN_TOP</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -106,7 +106,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
@@ -115,7 +115,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -125,7 +125,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
@@ -134,7 +134,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -144,7 +144,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
@@ -153,7 +153,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
@@ -162,7 +162,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
@@ -171,7 +171,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -181,7 +181,7 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -191,16 +191,16 @@
 														<size>150,-1</size>
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
-													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
 											</object>
-											<flag>wxALIGN_RIGHT|wxALIGN_TOP</flag>
+											<flag>wxALIGN_TOP</flag>
 											<border>5</border>
 										</object>
 									</object>
-									<flag>wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									<flag>wxRIGHT|wxALIGN_TOP</flag>
 									<border>10</border>
 								</object>
 								<object class="sizeritem">
@@ -218,7 +218,7 @@
 												<label>Collision Detection</label>
 												<handler function="On_chkCollisionDetection_Click" entry="EVT_CHECKBOX" />
 											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -226,7 +226,7 @@
 												<label>Gravity</label>
 												<handler function="On_chkGravity_Click" entry="EVT_CHECKBOX" />
 											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -237,7 +237,7 @@
 												<hidden>1</hidden>
 												<handler function="On_chkFrameLimiter_Click" entry="EVT_CHECKBOX" />
 											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -245,7 +245,7 @@
 												<label>Process Elevators</label>
 												<handler function="On_chkProcessElevators_Click" entry="EVT_CHECKBOX" />
 											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -253,7 +253,7 @@
 												<label>Automatic Shafts</label>
 												<handler function="On_chkAutoShafts_Click" entry="EVT_CHECKBOX" />
 											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -261,7 +261,7 @@
 												<label>Automatic Stairs</label>
 												<handler function="On_chkAutoStairs_Click" entry="EVT_CHECKBOX" />
 											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -270,7 +270,7 @@
 												<label>Random Activity</label>
 												<handler function="On_chkRandom_Click" entry="EVT_CHECKBOX" />
 											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -279,12 +279,12 @@
 												<label>Verbose Mode</label>
 												<handler function="On_chkVerbose_Click" entry="EVT_CHECKBOX" />
 											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
 									</object>
-									<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+									<flag>wxALL|wxALIGN_TOP</flag>
 								</object>
 							</object>
 							<flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -300,7 +300,7 @@
 												<label>Floor List</label>
 												<handler function="On_bFloorList_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -308,7 +308,7 @@
 												<label>Realtime Object Control</label>
 												<handler function="On_bMeshControl_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -316,7 +316,7 @@
 												<label>Camera Control</label>
 												<handler function="On_bCameraControl_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -324,7 +324,7 @@
 												<label>Elevator Editor</label>
 												<handler function="On_bEditElevator_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -332,7 +332,7 @@
 												<label>Control Reference</label>
 												<handler function="On_bControlReference_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -341,7 +341,7 @@
 												<label>Simulator Statistics</label>
 												<handler function="On_bStats_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -350,7 +350,7 @@
 												<label>Engine Manager</label>
 												<handler function="On_bEngineManager_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -359,7 +359,16 @@
 												<label>Console</label>
 												<handler function="On_bConsole_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bCameraTexture" variable="bCameraTexture" member="yes">
+												<label>CameraTexture Control</label>
+												<handler function="On_bCameraTexture_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -376,7 +385,7 @@
 												<label>Object Manager</label>
 												<handler function="On_bObjectInfo_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -385,7 +394,7 @@
 												<label>Action Viewer</label>
 												<handler function="On_bActionViewer_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -394,7 +403,7 @@
 												<label>People Manager</label>
 												<handler function="On_bPeopleManager_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -403,7 +412,7 @@
 												<label>Sky Control</label>
 												<handler function="On_bSkyControl_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -412,7 +421,7 @@
 												<label>Profiler</label>
 												<handler function="On_bProfiler_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -421,7 +430,7 @@
 												<label>List Keys</label>
 												<handler function="On_bKeys_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -430,7 +439,7 @@
 												<label>List Textures</label>
 												<handler function="On_bTextures_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -439,7 +448,7 @@
 												<label>Floor Information</label>
 												<handler function="On_bFloorInfo_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
