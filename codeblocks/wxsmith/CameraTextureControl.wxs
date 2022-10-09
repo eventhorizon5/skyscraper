@@ -12,7 +12,7 @@
 							<object class="sizeritem">
 								<object class="wxListBox" name="ID_CameraList" variable="CameraList" member="yes">
 									<default>-1</default>
-									<size>150,150</size>
+									<size>200,150</size>
 								</object>
 								<flag>wxALL|wxEXPAND</flag>
 								<border>5</border>

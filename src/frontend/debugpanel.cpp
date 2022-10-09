@@ -98,6 +98,7 @@ const long DebugPanel::ID_bProfiler = wxNewId();
 const long DebugPanel::ID_bKeys = wxNewId();
 const long DebugPanel::ID_bTextures = wxNewId();
 const long DebugPanel::ID_bFloorInfo = wxNewId();
+const long DebugPanel::ID_bLightControl = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -235,6 +236,9 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bTextures, 1, wxEXPAND, 5);
 	bFloorInfo = new wxButton(Panel1, ID_bFloorInfo, _("Floor Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorInfo"));
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND, 5);
+	bLightControl = new wxButton(Panel1, ID_bLightControl, _("Light Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bLightControl"));
+	bLightControl->Disable();
+	BoxSizer10->Add(bLightControl, 1, wxEXPAND, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -270,6 +274,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_bKeys,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bKeys_Click);
 	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
 	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
+	Connect(ID_bLightControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bLightControl_Click);
 	//*)
 	Simcore = 0;
 	skyscraper = root;
@@ -728,6 +733,10 @@ void DebugPanel::On_bCameraTexture_Click(wxCommandEvent& event)
 
 	camtex->CenterOnScreen();
 	camtex->Show();
+}
+
+void DebugPanel::On_bLightControl_Click(wxCommandEvent& event)
+{
 }
 
 }
