@@ -64,7 +64,7 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
-	CameraList = new wxListBox(this, ID_CameraList, wxDefaultPosition, wxSize(150,150), 0, 0, 0, wxDefaultValidator, _T("ID_CameraList"));
+	CameraList = new wxListBox(this, ID_CameraList, wxDefaultPosition, wxSize(200,150), 0, 0, 0, wxDefaultValidator, _T("ID_CameraList"));
 	BoxSizer2->Add(CameraList, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer2->Add(BoxSizer2, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer3 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -218,7 +218,10 @@ void CameraTextureControl::BuildList(bool restore_selection)
 		CameraList->Clear();
 
 		for (int i = 0; i < count; i++)
-			CameraList->Append(SBS::ToString(i + 1) + wxT(": ") + Simcore->GetCameraTexture(i)->GetName());
+		{
+			::SBS::CameraTexture *cam = Simcore->GetCameraTexture(i);
+			CameraList->Append(SBS::ToString(i + 1) + wxT(": ") + cam->GetName() + wxT(" (") + cam->GetParent()->GetName() + wxT(")"));
+		}
 
 		if (count > 0)
 		{
