@@ -35,6 +35,7 @@
 #include "escalator.h"
 #include "movingwalkway.h"
 #include "cameratexture.h"
+#include "light.h"
 #include "action.h"
 
 namespace SBS {
@@ -194,6 +195,10 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//Enable
 	//Disable
 
+	//Light actions:
+	//On
+	//Off
+
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
 	Floor *floor = dynamic_cast<Floor*>(parent);
@@ -203,6 +208,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	Escalator *escalator = dynamic_cast<Escalator*>(parent);
 	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
 	CameraTexture *camtex = dynamic_cast<CameraTexture*>(parent);
+	Light *light = dynamic_cast<Light*>(parent);
 
 	std::string caller_name = caller->GetName();
 	std::string caller_type = caller->GetType();
@@ -674,6 +680,21 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		if (command_name == "disable")
 		{
 			camtex->Enabled(false);
+			return true;
+		}
+	}
+
+	//light-specific commands
+	if (light)
+	{
+		if (command_name == "on")
+		{
+			light->Enabled(true);
+			return true;
+		}
+		if (command_name == "off")
+		{
+			light->Enabled(false);
 			return true;
 		}
 	}
