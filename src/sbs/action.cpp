@@ -34,6 +34,7 @@
 #include "mesh.h"
 #include "escalator.h"
 #include "movingwalkway.h"
+#include "cameratexture.h"
 #include "action.h"
 
 namespace SBS {
@@ -189,6 +190,10 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//Reverse
 	//Stop
 
+	//CameraTexture actions:
+	//Enable
+	//Disable
+
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
 	Floor *floor = dynamic_cast<Floor*>(parent);
@@ -197,6 +202,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	CallButton *callbutton = dynamic_cast<CallButton*>(parent);
 	Escalator *escalator = dynamic_cast<Escalator*>(parent);
 	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
+	CameraTexture *camtex = dynamic_cast<CameraTexture*>(parent);
 
 	std::string caller_name = caller->GetName();
 	std::string caller_type = caller->GetType();
@@ -635,7 +641,6 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			escalator->SetRun(0);
 			return true;
 		}
-
 	}
 
 	//moving walkway-specific commands
@@ -656,7 +661,21 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			walkway->SetRun(0);
 			return true;
 		}
+	}
 
+	//cameratexture-specific commands
+	if (camtex)
+	{
+		if (command_name == "enable")
+		{
+			camtex->Enabled(true);
+			return true;
+		}
+		if (command_name == "disable")
+		{
+			camtex->Enabled(false);
+			return true;
+		}
 	}
 
 	if (command_name == "changetexture")

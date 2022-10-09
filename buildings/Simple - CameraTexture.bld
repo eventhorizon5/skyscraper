@@ -497,5 +497,10 @@ AddCameraTexture Floor 0, Camera, 1, 71, 0, 5, -10, true, 0, 0, 0
     SetAutoSize = false, false
     AddWall TV, Camera, 0.1, -14, 5, -9, 5, 5, 5, 3, 3, 1, 1, false
     SetAutoSize = true, true
+
+    #add a trigger for the camera, to only have it turn on when user is nearby
+    AddAction CamStop, CameraTexture Camera, Disable
+    AddAction CamStart, CameraTexture Camera, Enable
+    AddTrigger CamEnable, , -20, 0, -20, 10, 10, 5, CamStop, CamStart
 <EndFloors>
 
