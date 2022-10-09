@@ -380,6 +380,10 @@ public:
 	TextureManager* GetTextureManager();
 	RevolvingDoorManager* GetRevolvingDoorManager();
 	VehicleManager* GetVehicleManager();
+	void RegisterCameraTexture(CameraTexture *camtex);
+	void UnregisterCameraTexture(CameraTexture *camtex);
+	int GetCameraTextureCount();
+	CameraTexture* GetCameraTexture(int number);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -535,6 +539,9 @@ private:
 
 	//sim engine area trigger
 	Trigger *area_trigger;
+
+	//camera texture references
+	std::vector<CameraTexture*> camtexarray;
 };
 
 }

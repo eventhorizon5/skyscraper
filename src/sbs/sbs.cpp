@@ -4120,4 +4120,37 @@ VehicleManager* SBS::GetVehicleManager()
 	return vehicle_manager;
 }
 
+void SBS::RegisterCameraTexture(CameraTexture *camtex)
+{
+	//register a camera texture
+
+	camtexarray.push_back(camtex);
+}
+
+void SBS::UnregisterCameraTexture(CameraTexture *camtex)
+{
+	//unregister a camera texture
+
+	for (size_t i = 0; i < camtexarray.size(); i++)
+	{
+		if (camtexarray[i] == camtex)
+		{
+			camtexarray.erase(camtexarray.begin() + i);
+			return;
+		}
+	}
+}
+
+int SBS::GetCameraTextureCount()
+{
+	return (int)camtexarray.size();
+}
+
+CameraTexture* SBS::GetCameraTexture(int number)
+{
+	if (number < camtexarray.size())
+		return camtexarray[number];
+	return 0;
+}
+
 }

@@ -102,6 +102,9 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 		//add texture multipliers
 		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
 
+		//register with system
+		sbs->RegisterCameraTexture(this);
+
 		Report("Created camera texture '" + GetName() + "'");
 	}
 	catch (Ogre::Exception &e)
@@ -125,6 +128,7 @@ CameraTexture::~CameraTexture()
 	if (sbs->FastDelete == false)
 	{
 		sbs->GetTextureManager()->UnregisterTextureInfo(GetName());
+		sbs->UnregisterCameraTexture(this);
 	}
 }
 
@@ -159,6 +163,11 @@ void CameraTexture::SetToDefaultFOV()
 {
 	//set to default FOV angle value
 	SetFOVAngle(FOV);
+}
+
+void CameraTexture::LookAt(const Ogre::Vector3 &position)
+{
+	GetSceneNode()->LookAt(position);
 }
 
 }

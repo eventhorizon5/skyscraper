@@ -75,9 +75,7 @@ PeopleManager::PeopleManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	wxFlexGridSizer* FlexGridSizer3;
 	wxFlexGridSizer* FlexGridSizer4;
 
-	Create(parent, id, _("People Manager"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
-	SetClientSize(wxDefaultSize);
-	Move(wxDefaultPosition);
+	Create(parent, wxID_ANY, _("People Manager"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 2, 0, 0);
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);

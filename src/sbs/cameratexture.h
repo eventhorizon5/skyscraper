@@ -38,6 +38,7 @@ public:
 	void SetFOVAngle(Real angle);
 	Real GetFOVAngle();
 	void SetToDefaultFOV();
+	void LookAt(const Ogre::Vector3 &position);
 
 private:
 
