@@ -58,6 +58,7 @@
 										<object class="sizeritem">
 											<object class="wxCheckBox" name="ID_chkEcho" variable="chkEcho" member="yes">
 												<label>Echo</label>
+												<checked>1</checked>
 											</object>
 											<flag>wxALL|wxALIGN_LEFT</flag>
 											<border>5</border>
