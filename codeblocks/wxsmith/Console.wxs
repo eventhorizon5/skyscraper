@@ -22,7 +22,7 @@
 						<object class="sizeritem">
 							<object class="wxTextCtrl" name="ID_tConsole" variable="tConsole" member="yes">
 								<size>600,400</size>
-								<style>wxTE_MULTILINE|wxTE_READONLY</style>
+								<style>wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL</style>
 							</object>
 							<flag>wxALL|wxEXPAND</flag>
 							<border>5</border>
