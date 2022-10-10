@@ -40,7 +40,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tName" variable="tName" member="yes" />
+										<object class="wxTextCtrl" name="ID_tName" variable="tName" member="yes">
+											<minsize>90,-1</minsize>
+										</object>
 										<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
@@ -64,7 +66,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tFloor" variable="tFloor" member="yes" />
+										<object class="wxTextCtrl" name="ID_tFloor" variable="tFloor" member="yes">
+											<minsize>90,-1</minsize>
+										</object>
 										<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
@@ -88,7 +92,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tDestination" variable="tDestination" member="yes" />
+										<object class="wxTextCtrl" name="ID_tDestination" variable="tDestination" member="yes">
+											<minsize>90,-1</minsize>
+										</object>
 										<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
@@ -113,6 +119,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tRouteActive" variable="tRouteActive" member="yes">
+											<minsize>90,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
