@@ -62,7 +62,10 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 DynamicMesh::~DynamicMesh()
 {
 	for (size_t i = 0; i < meshes.size(); i++)
+	{
+		meshes[i]->parent_deleting = true;
 		delete meshes[i];
+	}
 	meshes.clear();
 
 	if (sbs->FastDelete == false)
@@ -588,6 +591,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	prepared = false;
 	Movable = 0;
 	auto_shadows = true;
+	parent_deleting = false;
 
 	if (filename == "")
 	{
@@ -1300,7 +1304,8 @@ void DynamicMesh::Mesh::Detach()
 
 	if (Movable)
 	{
-		node->DetachObject(Movable);
+		if (parent_deleting == false)
+			node->DetachObject(Movable);
 		sbs->mSceneManager->destroyEntity(Movable);
 	}
 	Movable = 0;

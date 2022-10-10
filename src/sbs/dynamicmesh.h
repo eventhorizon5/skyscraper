@@ -112,6 +112,7 @@ private:
 		bool enabled;
 		bool prepared;
 		bool auto_shadows;
+		bool parent_deleting;
 	};
 
 	std::vector<Mesh*> meshes;
