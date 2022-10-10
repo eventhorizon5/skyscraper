@@ -66,6 +66,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_PosX" variable="tPosX" member="yes">
 															<value>0</value>
+															<minsize>90,-1</minsize>
 															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -83,6 +84,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_tPosY" variable="tPosY" member="yes">
 															<value>0</value>
+															<minsize>90,-1</minsize>
 															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -100,6 +102,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_tPosZ" variable="tPosZ" member="yes">
 															<value>0</value>
+															<minsize>90,-1</minsize>
 															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -110,7 +113,7 @@
 														<object class="wxStaticLine" name="ID_STATICLINE3" variable="StaticLine3" member="yes">
 															<size>10,-1</size>
 														</object>
-														<flag>wxLEFT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<flag>wxLEFT|wxEXPAND</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
@@ -118,7 +121,7 @@
 														<object class="wxStaticLine" name="ID_STATICLINE4" variable="StaticLine4" member="yes">
 															<size>10,-1</size>
 														</object>
-														<flag>wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<flag>wxRIGHT|wxEXPAND</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
@@ -133,6 +136,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_tRotation" variable="tRotation" member="yes">
 															<value>0</value>
+															<minsize>90,-1</minsize>
 															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -140,12 +144,12 @@
 														<option>1</option>
 													</object>
 												</object>
-												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -159,7 +163,7 @@
 														<object class="wxCheckBox" name="ID_chkCutLandscape" variable="chkCutLandscape" member="yes">
 															<label>Cut Landscape</label>
 														</object>
-														<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<flag>wxEXPAND</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
@@ -167,7 +171,7 @@
 														<object class="wxCheckBox" name="ID_chkCutBuildings" variable="chkCutBuildings" member="yes">
 															<label>Cut Buildings</label>
 														</object>
-														<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<flag>wxEXPAND</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
@@ -175,7 +179,7 @@
 														<object class="wxCheckBox" name="ID_chkCutExternal" variable="chkCutExternal" member="yes">
 															<label>Cut External</label>
 														</object>
-														<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<flag>wxEXPAND</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
@@ -183,17 +187,17 @@
 														<object class="wxCheckBox" name="ID_chkCutFloors" variable="chkCutFloors" member="yes">
 															<label>Cut Floors</label>
 														</object>
-														<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<flag>wxEXPAND</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
 												</object>
-												<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALL|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -219,6 +223,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tMinX" variable="tMinX" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 													<style>wxTE_CENTRE</style>
 												</object>
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -236,6 +241,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tMinY" variable="tMinY" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 													<style>wxTE_CENTRE</style>
 												</object>
 												<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -253,6 +259,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tMinZ" variable="tMinZ" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 													<style>wxTE_CENTRE</style>
 												</object>
 												<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -263,7 +270,7 @@
 												<object class="wxStaticLine" name="ID_STATICLINE1" variable="StaticLine1" member="yes">
 													<size>10,-1</size>
 												</object>
-												<flag>wxLEFT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxLEFT|wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -271,7 +278,7 @@
 												<object class="wxStaticLine" name="ID_STATICLINE2" variable="StaticLine2" member="yes">
 													<size>10,-1</size>
 												</object>
-												<flag>wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxRIGHT|wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -286,6 +293,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tMaxX" variable="tMaxX" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 													<style>wxTE_CENTRE</style>
 												</object>
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -303,6 +311,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tMaxY" variable="tMaxY" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 													<style>wxTE_CENTRE</style>
 												</object>
 												<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -320,6 +329,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tMaxZ" variable="tMaxZ" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 													<style>wxTE_CENTRE</style>
 												</object>
 												<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
