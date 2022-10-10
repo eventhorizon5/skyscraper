@@ -107,6 +107,11 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 
 FloorIndicator::~FloorIndicator()
 {
+	//delete timer
+	if (flash_timer)
+		delete flash_timer;
+	flash_timer = 0;
+
 	if (FloorIndicatorMesh)
 	{
 		FloorIndicatorMesh->parent_deleting = true;
