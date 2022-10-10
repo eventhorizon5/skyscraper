@@ -291,6 +291,7 @@
         Syntax: <font size="2" face="Courier New, Courier, mono">CameraPosition
 
 
+
           = <em>X</em>, <em>Z</em></font><br>
         <font size="2" face="Courier New, Courier, mono">CameraPosition
           = 0, -10</font><br>
@@ -306,6 +307,7 @@
         left/right, and Z is spin. Default is "0, 0, 0", and the example
         makes the camera face right.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">CameraRotation
+
 
 
           = <em>X</em>, <em>Y</em>, <em>Z</em></font><br>
@@ -325,6 +327,7 @@
           RainWind<br>
         </font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">Available
+
 
 
         sky types in data/caelum/sky.os file:<br>
@@ -385,8 +388,10 @@
         Syntax: <font size="2" face="Courier New, Courier, mono">Position
 
 
+
           = <em>X, Y, Z</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">Position
+
 
 
           = 100, 0, 100</font></p>
@@ -397,8 +402,10 @@
         Syntax: <font size="2" face="Courier New, Courier, mono">Rotation
 
 
+
           = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">Rotation
+
 
 
           = 90</font></p>
@@ -411,6 +418,7 @@
         Syntax: <font size="2" face="Courier New, Courier, mono">Bounds
           = <em>MinX, MinY, MinZ, MaxX, MaxY, MaxZ</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">Bounds
+
 
 
           = -100, 0, -100, 100, 0, 100</font></p>
@@ -443,9 +451,11 @@
         Syntax: <font size="2" face="Courier New, Courier, mono">LoadRange
 
 
+
           <em>startnumber</em>, <em>endnumber</em>, <em>filename</em>,
           <em>name</em>, <em>tile_x</em>, <em>tile_y[, force] </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">LoadRange
+
 
 
           2, 138, data\floorindicators\%number%.jpg, Button%number%, 1,
@@ -463,9 +473,11 @@
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>3.
 
 
+
           LoadAnimated</strong> - loads a set of textures to use as a
         single animated texture<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">LoadAnimated
+
 
 
           <em>filename1, filename2, ..., name, duration, tile_x,
@@ -490,10 +502,12 @@
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>4.
 
 
+
           LoadAlphaBlend</strong> - loads a texture with a specular mask
         texture and blending texture, used to make things like
         reflection effects<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">LoadAlphaBlend
+
 
 
           <em>filename, specular_filename, blend_filename, name,
@@ -519,9 +533,11 @@
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>5.
 
 
+
           LoadMaterial</strong> - loads a custom OGRE material, used for
         advanced/specific texture definitions<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">LoadMaterial
+
 
 
           <em>material_name, name, </em><em><em>tile_x, tile_y[, force]<br>
@@ -542,6 +558,7 @@
 manual's
 
 
+
           "Material Scripts" section</a>.</p>
       <p align="left"><strong>6. AddText</strong> - draws text onto a
         texture - this only creates a new texture during runtime (in
@@ -550,9 +567,11 @@ manual's
         Syntax: <font size="2" face="Courier New, Courier, mono">AddText
 
 
+
           <em>texture_name, name, font_filename, font_size, text, x1,
             y1, x2, y2, h_align, v_align, ColorR, ColorG, ColorB[, force</em></font><em>]<br>
         </em>Example: <font size="2" face="Courier New, Courier, mono">AddText
+
 
 
           Black, Button100, nimbus_sans.ttf, 47, 100, -1, -1, -1, -1,
@@ -584,10 +603,12 @@ manual's
         Syntax: <font size="2" face="Courier New, Courier, mono">AddText
 
 
+
           <em>startnumber, endnumber, texture_name, name, font_filename,
             font_size, text, x1, y1, x2, y2, h_align, v_align, ColorR,
             ColorG, ColorB[, force</em></font><em>]<br>
         </em>Example: <font size="2" face="Courier New, Courier, mono">AddText
+
 
 
           1, 100, Black, Button%number%, nimbus_sans.ttf, 47, %number%,
@@ -597,10 +618,12 @@ manual's
         Syntax: <font size="2" face="Courier New, Courier, mono">LoadCropped
 
 
+
           <em>filename, name, x, y, width, height, tile_x, tile_y[,
             force</em></font><em>]<br>
         </em>Example: <font size="2" face="Courier New, Courier, mono">LoadCropped
 data\brick1.jpg,
+
 
 
           Brick2, 10, 10, 20, 20, 1, 1</font></p>
@@ -618,10 +641,12 @@ data\brick1.jpg,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddOverlay
 
 
+
           <em>texture_name, overlay_texture_name, name, x, y, width,
             height, tile_x, tile_y[, force]</em></font><em><br>
         </em>Example: <font size="2" face="Courier New, Courier, mono">AddOverlay
 Brick1,
+
 
 
           Brick2, NewBrick, 25, 25, 50, 50, 1, 1</font></p>
@@ -655,9 +680,11 @@ Brick1,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>11.
 
 
+
           RotateAnim</strong> - applies rotation animation to a texture.
         This can be used with other texture modifiers.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">RotateAnim
+
 
 
           <em>name, speed<br>
@@ -668,6 +695,7 @@ Brick1,
         example, the Brick1 texture's rotation animation is set to 0.2
         rotations per second.</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>12.
+
 
 
           Scroll</strong> - set's a texture's fixed scrolling value.
@@ -682,9 +710,11 @@ Brick1,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>13.
 
 
+
           ScrollAnim</strong> - applies scrolling animation to a
         texture. This can be used with other texture modifiers.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">ScrollAnim
+
 
 
           <em>name, x_speed, y_speed<br>
@@ -694,6 +724,7 @@ Brick1,
         scrolls per second. In the example, the Brick1 texture will
         scroll to the right once per second, and up once per second.</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>14.
+
 
 
           Scale</strong> - sets a texture's scaling factor. This can be
@@ -707,11 +738,13 @@ Brick1,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>15.
 
 
+
           Transform</strong> - sets an advanced transformation method on
         the texture. This can be used with other texture modifiers, and
         also can be used multiple times to create multiple
         transformations.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Transform
+
 
 
           <em>name, type, wave_type, base, frequency, phase, amplitude<br>
@@ -834,6 +867,7 @@ Brick1,
         <font size="2" face="Courier New, Courier, mono">InterfloorHeight
 
 
+
           = 2.24</font></p>
       <p align="left"><strong>7. Altitude</strong> - this parameter is
         optional and is only recommended if the first level has an
@@ -861,11 +895,13 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor
 
 
+
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th,
             isexternal</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddFloor
+
 
 
           My Floor, Brick, 0.5, -10, -10, 10, 10, 0, 0, False, False, 0,
@@ -891,11 +927,13 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddWall
 
 
+
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>height1</em>, <em>height2</em>,
           <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em>,
           <em>isexternal</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
           My Wall, Brick, 0.5, -10, -10, 10, 10, 10, 10, 0, 0, 0, 0,
@@ -915,10 +953,12 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorFloor
 
 
+
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddInterfloorFloor
+
 
 
           My IFloor, Brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0</font></p>
@@ -929,6 +969,7 @@ Brick1,
       <p align="left"><strong>5. AddInterfloorWall</strong> - adds a
         textured wall below the floor of the current floor/level<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorWall
+
 
 
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
@@ -942,10 +983,12 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftFloor
 
 
+
           <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddShaftFloor
+
 
 
           1, My Floor, Brick, 0.5, -10, -10, 10, 10, 0, 0, false, false,
@@ -958,6 +1001,7 @@ Brick1,
       <p align="left"><strong>7. AddShaftWall</strong> - adds a textured
         wall to the specified shaft, on the current floor<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftWall
+
 
 
           <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
@@ -973,10 +1017,12 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsFloor
 
 
+
           <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddStairsFloor
+
 
 
           1, My Floor, Brick, 0.5, -10, -10, 10, 10, 0, 0, false, false,
@@ -987,6 +1033,7 @@ Brick1,
       <p align="left"><strong>9. AddStairsWall</strong> - adds a
         textured wall to the specified stairwell, on the current floor<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsWall
+
 
 
           <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
@@ -1003,10 +1050,12 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">ColumnWallBox
 
 
+
           <em>name, texturename</em>, <em>x1</em>, <em>x2</em>, <em>z1</em>,
           <em>z2</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>,
           <em>th, inside, outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ColumnWallBox
+
 
 
           My Box, Brick, -10, 10, -10, 10, 15, 0, 0, 0, true, true,
@@ -1020,10 +1069,12 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">ColumnWallBox2
 
 
+
           <em>name, texturename</em>, <em>centerx</em>, <em>centerz</em>,
           <em>widthx</em>, <em>lengthz</em>, <em>height</em>, <em>voffset</em>,
           <em>tw</em>, <em>th</em><em>, inside, outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ColumnWallBox2
+
 
 
           My Box, Brick, 0, 0, 10, 10, 15, 0, 0, 0, false, true, false,
@@ -1038,10 +1089,12 @@ Brick1,
         Example: <font size="2" face="Courier New, Courier, mono">CallButtonElevators
 
 
+
           = 1, 2, 3, 4</font></p>
       <p align="left"><strong>13. CreateCallButtons</strong> - creates a
         call button set<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">CreateCallButtons
+
 
 
           <em>Sound</em>, <em>BackTexture</em>, <em>UpButtonTexture</em>,
@@ -1097,10 +1150,12 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddStairs
 
 
+
           <em>number, name, riser_texture, tread_texture, direction,
             CenterX, CenterZ, width, risersize, treadsize, num_stairs,
             voffset, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddStairs
+
 
 
           1, TestStairs, Brick, left, 10, 15, 5, 0.5, 0.5, 10, 0, 0, 0</font></p>
@@ -1125,6 +1180,7 @@ Brick1,
         door in the specified location, and performs a wall cut on that
         area (this must be called after the associated wall is created)<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor
+
 
 
           <em>opensound, closesound, open, texturename, thickness</em>,
@@ -1158,6 +1214,7 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsDoor
 
 
+
           <em>number, opensound, closesound, open, texturename,
             thickness</em>, <em>direction, speed, CenterX</em>, <em>CenterZ</em>,
           <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>,
@@ -1170,6 +1227,7 @@ Brick1,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>17.
 
 
+
           AddShaftStdDoor</strong> - adds a standard textured door for
         the specified shaft, in a location relative to the shaft's
         center. This also performs a wall cut on that area (this must be
@@ -1177,6 +1235,7 @@ Brick1,
         confused with the AddShaftDoor command, which creates elevator
         shaft doors.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftStdDoor
+
 
 
           <em>number, opensound, closesound, open, texturename,
@@ -1196,6 +1255,7 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddExternalDoor
 
 
+
           <em>opensound, closesound, open, texturename, thickness</em>,
           <em>direction, speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>,
           <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th<br>
@@ -1207,6 +1267,7 @@ Brick1,
         creates a single elevator directional indicator/lantern on the
         current floor (similar to the CreateCallButtons command) <br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicator<em>&nbsp;Elevator:Car,
+
 
 
             Relative, ActiveDirection, Single, Vertical, BackTexture</em>,
@@ -1269,10 +1330,12 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoor<em>&nbsp;elevator:car,
 
 
+
             number, lefttexture, righttexture</em>, <em>thickness,
             CenterX, CenterZ, voffset, tw, th</em></font><br>
         Syntax (with old SetShaftDoors command): <font size="2"
           face="Courier New, Courier, mono">AddShaftDoor<em>&nbsp;elevator,
+
 
 
             number, lefttexture, righttexture</em>, <em>tw, th</em></font></p>
@@ -1305,6 +1368,7 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em>&nbsp;elevator:car,
 
 
+
             relative, texture_prefix, blank_texture, direction, CenterX,
             CenterZ, width, height, voffset</em></font> </p>
       <p align="left">The AddFloorIndicator command creates a floor
@@ -1324,6 +1388,7 @@ Brick1,
       <p align="left"><strong>22. Cut</strong> - performs a manual box
         cut on an area within the current floor<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Cut <em>x1,
+
 
 
             y1, z1, x2, y2, z2, cutwalls, cutfloors</em><br>
@@ -1355,6 +1420,7 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFillerWalls
 
 
+
           <em>texture, thickness, CenterX, CenterZ, width, height,
             voffset, direction, tw, th, isexternal</em><br>
         </font>Example: <font size="2" face="Courier New, Courier,
@@ -1372,11 +1438,13 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddSound
 
 
+
           <em>name, filename, x, y, z, loop[, volume, speed,
             min_distance, max_distance, doppler_level,
             cone_inside_angle, cone_outside_angle, cone_outside_volume,
             direction_x, direction_y, direction_z]</em></font><br>
         Example 1: <font size="2" face="Courier New, Courier, mono">AddSound
+
 
 
           MySound, sound.wav, 10, 100, 5, true<br>
@@ -1392,6 +1460,7 @@ Brick1,
         creates a single shaft door component, used for creating custom
         door styles<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorComponent
+
 
 
           <em>elevator:car, number, name, texture, sidetexture,
@@ -1415,12 +1484,14 @@ Brick1,
         Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoor<em>&nbsp;elevator:car,
 
 
+
             number[, door_walls, track_walls]</em></font></p>
       <p align="left">This command is almost identical to the
         FinishDoors command (in the elevator section below - see that
         for more information) except that it's used for finishing a
         shaft door.</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>28.
+
 
 
           AddModel</strong> - adds a 3D model to the floor. If a
@@ -1436,6 +1507,7 @@ Brick1,
 filename,
 
 
+
             center, CenterX, CenterY, CenterZ, RotationX, RotationY,
             RotationZ, MaxRenderDistance, ScaleMultiplier,
             EnablePhysics, Restitution, Friction, Mass</em><em><br>
@@ -1445,9 +1517,11 @@ filename,
         Example 2:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
 
 
+
           MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1,
           0.5, 0.1</font><br>
         Example 3:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
+
 
 
           MyModel, , false, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1</font></p>
@@ -1474,6 +1548,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsModel<em>&nbsp;number,
 
 
+
             name, filename, center, CenterX, CenterY, CenterZ,
             RotationX, RotationY, RotationZ, MaxRenderDistance,
             ScaleMultiplier, EnablePhysics, Restitution, Friction, Mass</em><em><br>
@@ -1488,6 +1563,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftModel<em>&nbsp;number,
 
 
+
             name, filename, center, CenterX, CenterY, CenterZ,
             RotationX, RotationY, RotationZ, MaxRenderDistance,
             ScaleMultiplier, EnablePhysics, Restitution, Friction, Mass</em><em><br>
@@ -1499,9 +1575,11 @@ filename,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>31.
 
 
+
           AddActionControl</strong> - creates a custom control that uses
         a specific action defined by AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddActionControl
+
 
 
           <em>name, sound, direction, centerx, centerz, width, height,
@@ -1528,10 +1606,12 @@ filename,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
 
 
+
           AddShaftActionControl</strong> - creates a custom control in a
         specified shaft that uses a specific action defined by
         AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftActionControl
+
 
 
           <em>number, name, sound, direction, centerx, centerz, width,
@@ -1558,10 +1638,12 @@ filename,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
 
 
+
           AddStairsActionControl</strong> - creates a custom control in
         a specified stairwell that uses a specific action defined by
         AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsActionControl
+
 
 
           <em>number, name, sound, direction, centerx, centerz, width,
@@ -1588,10 +1670,12 @@ filename,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
 
 
+
           AddTrigger</strong> - creates a trigger that is used to signal
         an action when the user's camera enters or leaves the defined
         area.<br>
         Syntax:&nbsp;<font size="2" face="Courier New, Courier, mono">AddTrigger
+
 
 
           <em>name, sound, start_x, start_y, start_z, end_x, end_y,
@@ -1614,6 +1698,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor
 
 
+
           <em>sound, texturename, thickness</em>, <em>clockwise,
             segments, speed, rotation, CenterX</em>, <em>CenterZ</em>,
           <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>,
@@ -1632,10 +1717,12 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddEscalator
 
 
+
           <em>name, run, speed, sound_file, riser_texture,
             tread_texture, direction, CenterX, CenterZ, width,
             risersize, treadsize, num_steps, voffset, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddEscalator
+
 
 
           MyEscalator, 1, 1, 1.0, , Brick, left, 0, -10, 4, 1, 1, 15, 0,
@@ -1661,9 +1748,11 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddMovingWalkway
 
 
+
           <em>name, run, speed, sound_file, texture, direction, CenterX,
             CenterZ, width, treadsize, num_steps, voffset, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddMovingWalkway
+
 
 
           MyWalkway, 1, 1, 1.0, , Brick, left, 0, -10, 4, 1, 15, 0, 1, 1</font></p>
@@ -1732,16 +1821,19 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">Acceleration
 
 
+
           = 0.015</font></p>
       <p align="left"><strong>5. Deceleration</strong> - deceleration
         speed of the elevator, in feet per second<br>
         Example: <font size="2" face="Courier New, Courier, mono">Deceleration
 
 
+
           = 0.0075</font></p>
       <p align="left"><strong>6. AssignedShaft</strong> - the shaft
         number this elevator is in<br>
         Example: <font size="2" face="Courier New, Courier, mono">AssignedShaft
+
 
 
           = 1</font></p>
@@ -1755,6 +1847,7 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">MotorStartSound
 
 
+
           = start.wav</font></p>
       <p align="left"><strong>8. MotorRunSound, MotorUpRunSound,
           MotorDownRunSound</strong> - the sound file to play while the
@@ -1764,6 +1857,7 @@ filename,
         specifies both up and down sounds, while the others are for
         either upwards movement or downwards movement.<br>
         Example: <font size="2" face="Courier New, Courier, mono">MotorRunSound
+
 
 
           = run.wav</font></p>
@@ -1777,11 +1871,13 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">MotorStopSound
 
 
+
           = stop.wav</font></p>
       <p align="left"><strong>10. MotorIdleSound</strong> - the sound
         file to play when the elevator motor is idling. There is no
         default yet. Leave the filename field blank for no sound. <br>
         Example: <font size="2" face="Courier New, Courier, mono">MotorIdleSound
+
 
 
           = idle.wav</font></p>
@@ -1796,11 +1892,13 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">FloorSkipText
 
 
+
           = EZ </font></p>
       <p align="left"><strong>12. RecallFloor</strong> - sets the floor
         the elevator will recall to during fire service phase 1 mode.
         Default is the lowest serviced floor. <br>
         Example: <font size="2" face="Courier New, Courier, mono">RecallFloor
+
 
 
           = 5</font></p>
@@ -1809,6 +1907,7 @@ filename,
         service phase 1 mode. Default is the highest serviced floor. <br>
         Example: <font size="2" face="Courier New, Courier, mono">AlternateRecallFloor
 =
+
 
 
           6</font></p>
@@ -1822,6 +1921,7 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">ACPFloor
 
 
+
           = 5</font></p>
       <p align="left"><strong>16. MotorPosition</strong> - sets the
         position of the motor sound emitter; if this command is not
@@ -1829,6 +1929,7 @@ filename,
         of the highest floor in the corresponding shaft. The X and Z
         values are relative of the elevator center.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">MotorPosition
+
 
 
           = <em>x, y, z</em><br>
@@ -1845,6 +1946,7 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">QueueResets
 
 
+
           = true</font></p>
       <p align="left"><strong>18. LimitQueue</strong> - set this to true
         to only allow floor selections in the same direction as the
@@ -1856,10 +1958,12 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">LimitQueue
 
 
+
           = true</font></p>
       <p align="left"><strong>19. UpPeak</strong> - enables up peak mode
         for this elevator.<br>
         Example: <font size="2" face="Courier New, Courier, mono">UpPeak
+
 
 
           = true</font></p>
@@ -1868,14 +1972,17 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">DownPeak
 
 
+
           = true</font></p>
       <p align="left"><strong>21. InspectionService</strong> - enables
         inspection service mode for this elevator.<br>
         Example: <font size="2" face="Courier New, Courier, mono">InspectionService
 
 
+
           = true</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
+
 
 
           InspectionSpeed</strong> - speed multiplier for inspection
@@ -1883,8 +1990,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">InspectionSpeed
 
 
+
           = <em>multiplier</em></font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>23.
+
 
 
           Parking</strong> - enables automatic elevator parking. If this
@@ -1894,10 +2003,12 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">Parking
 
 
+
           = <em>floor, delay</em></font></p>
       <p align="left"><strong>24. LevelingSpeed</strong> - elevator's
         leveling speed. Default is 0.2<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">LevelingSpeed
+
 
 
           = <em>speed</em></font></p>
@@ -1907,11 +2018,13 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">LevelingOffset
 
 
+
           = <em>distance</em></font></p>
       <p align="left"><strong>26. LevelingOpen</strong> - distance in
         feet from the destination floor that the elevator will open the
         doors. Default is 0.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">LevelingOpen
+
 
 
           = <em>distance</em></font></p>
@@ -1924,11 +2037,13 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">NotifyEarly
 
 
+
           = <em>value</em></font></p>
       <p align="left"><strong>28. DepartureDelay</strong> - sets the
         time in seconds that the elevator waits before proceeding to the
         next floor. Default is 0.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">DepartureDelay
+
 
 
           = <em>1</em> </font></p>
@@ -1939,6 +2054,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">ArrivalDelay
 
 
+
           = <em>0.5</em></font></p>
       <p align="left"><strong>30. FireService1</strong> - sets the fire
         service phase 1 mode that the elevator will start with. Default
@@ -1946,8 +2062,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">FireService1
 
 
+
           = 2</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>31.
+
 
 
           AutoDoors</strong> - if this is set to true, the elevator
@@ -1957,8 +2075,10 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">AutoDoors
 
 
+
           = false</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
+
 
 
           OpenOnStart</strong> - if this is set to true, the elevator
@@ -1966,8 +2086,10 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">OpenOnStart
 
 
+
           = false</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
+
 
 
           Interlocks</strong> - if this is set to true, the elevator
@@ -1978,8 +2100,10 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">Interlocks
 
 
+
           = false</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
+
 
 
           FloorHold</strong> - if this is set to true, the user must
@@ -1990,6 +2114,7 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">FloorHold
 
 
+
           = true</font></p>
       <p align="left"><strong>35. MotorEmergencyStopSound</strong> - the
         sound file to play for the elevator motor when an emergency stop
@@ -1998,11 +2123,13 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">MotorEmergencyStopSound
 
 
+
           = emergstop.wav</font></p>
       <p align="left"><strong>36. EmergencyStopSpeed</strong> - the
         speed multiplier to use for an emergency stop. A value of 3, the
         default, would mean 3 times the normal deceleration rate.<br>
         Example: <font size="2" face="Courier New, Courier, mono">EmergencyStopSpeed
+
 
 
           = 2.5</font></p>
@@ -2013,8 +2140,10 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">ChimeOnArrival
 
 
+
           = true</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>38.
+
 
 
           ReOpen</strong> - if this is set to true, if the elevator is
@@ -2023,8 +2152,10 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">ReOpen
 
 
+
           = false</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>39.
+
 
 
           HoistwayAccessHold</strong> - if this is set to true, the
@@ -2034,8 +2165,10 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">HoistwayAccessHold
 
 
+
           = false</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>40.
+
 
 
           RunState</strong> - if this is set to false, the elevator
@@ -2043,11 +2176,13 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">RunState
 
 
+
           = false</font></p>
       <p align="left"><strong>41. RopePosition</strong> - sets the
         position of the rope connection with the elevator. All values
         are relative of the elevator center.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">RopePosition
+
 
 
           = <em>x, y, z</em><br>
@@ -2058,10 +2193,12 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">RopeTexture
 
 
+
           = Rope</font></p>
       <p align="left"><strong>43. CounterweightStartSound</strong> - the
         sound file to play for the counterweight when starting movement.<br>
         Example: <font size="2" face="Courier New, Courier, mono">CounterweightStartSound
+
 
 
           = weight_start.wav</font></p>
@@ -2070,10 +2207,12 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">CounterweightMoveSound
 
 
+
           = weight_move.wav</font></p>
       <p align="left"><strong>45. CounterweightStopSound</strong> - the
         sound file to play for the counterweight when stopping movement.<br>
         Example: <font size="2" face="Courier New, Courier, mono">CounterweightStopSound
+
 
 
           = weight_stop.wav</font></p>
@@ -2082,6 +2221,7 @@ filename,
       <p align="left"><strong>1. CreateElevator</strong> - creates an
         elevator at the specified location<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator
+
 
 
           <em>relative, x</em>, <em>z</em>, <em>floor<br>
@@ -2102,7 +2242,9 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">CreateCounterweight
 
 
+
           <em>frame_texture, weight_texture, x</em>, <em>z</em>, <em>size_x,
+
 
 
             size_y, size_z, weight_voffset<br>
@@ -2125,7 +2267,9 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddRails
 
 
+
           <em>main_texture, edge_texture, x</em>, <em>z</em>, <em>orientation,
+
 
 
             rail_distance, rail_width<br>
@@ -2175,8 +2319,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">OpenSpeed
 
 
+
           <em>doornumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed
+
 
 
           1 = 0.2</font></p>
@@ -2188,8 +2334,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">SlowSpeed
 
 
+
           <em>doornumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SlowSpeed
+
 
 
           1 = 0.2</font></p>
@@ -2200,8 +2348,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">ManualSpeed
 
 
+
           <em>doornumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ManualSpeed
+
 
 
           1 = 0.2</font></p>
@@ -2210,6 +2360,7 @@ filename,
         Ranges can also be specified by putting a "-" between the
         numbers. Please note that each car must serve different floors.<br>
         Example: <font size="2" face="Courier New, Courier, mono">ServicedFloors
+
 
 
           = 0, 5, 6, 7-30, 31</font></p>
@@ -2221,8 +2372,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">DoorTimer
 
 
+
           <em>doornumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">DoorTimer
+
 
 
           1 = 10000</font></p>
@@ -2234,8 +2387,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">QuickClose
 
 
+
           <em>doornumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">QuickClose
+
 
 
           1 = 10000</font></p>
@@ -2247,8 +2402,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">NudgeTimer
 
 
+
           <em>doornumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">NudgeTimer
+
 
 
           1 = 10</font></p>
@@ -2259,8 +2416,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">OpenSound
 
 
+
           <em>doornumber</em> = <em>filename</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">OpenSound
+
 
 
           1 = open.wav</font></p>
@@ -2271,8 +2430,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">CloseSound
 
 
+
           <em>doornumber</em> = <em>filename</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CloseSound
+
 
 
           1 = close.wav</font></p>
@@ -2283,6 +2444,7 @@ filename,
         command specifies both up and down sounds, while the others are
         for either upwards movement or downwards movement.<br>
         Example: <font size="2" face="Courier New, Courier, mono">CarStartSound
+
 
 
           = start.wav</font></p>
@@ -2296,6 +2458,7 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">CarMoveSound
 
 
+
           = move.wav</font></p>
       <p align="left"><strong>13. CarStopSound, CarUpStopSound,
           CarDownStopSound</strong> - the sound file to play when the
@@ -2306,12 +2469,14 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">CarStopSound
 
 
+
           = stop.wav</font></p>
       <p align="left"><strong>14. CarIdleSound</strong> - the sound file
         to play when the elevator car is idle (generally the fan sound).
         Default is <em>elevidle.wav</em>. Leave the filename field
         blank for no sound. <br>
         Example: <font size="2" face="Courier New, Courier, mono">CarIdleSound
+
 
 
           = idle.wav</font></p>
@@ -2323,8 +2488,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">ChimeSound
 
 
+
           <em>doornumber</em> = <em>filename</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ChimeSound
+
 
 
           1 = chime.wav</font></p>
@@ -2336,8 +2503,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">UpChimeSound
 
 
+
           <em>doornumber</em> = <em>filename</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">UpChimeSound
+
 
 
           1 = chime.wav</font></p>
@@ -2349,8 +2518,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">DownChimeSound
 
 
+
           <em>doornumber</em> = <em>filename</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">DownChimeSound
+
 
 
           1 = chime.wav</font></p>
@@ -2361,11 +2532,13 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">AlarmSound
 
 
+
           = bell2.wav</font></p>
       <p align="left"><strong>19. AlarmSoundStop</strong> - the sound
         file to play when the elevator car's alarm button is released.
         Leave the filename field blank for no sound. Default is <em>bell1-stop.wav</em>.<br>
         Example: <font size="2" face="Courier New, Courier, mono">AlarmSoundStop
+
 
 
           = bell2-stop.wav</font></p>
@@ -2375,6 +2548,7 @@ filename,
         enabled. If an asterisk (*) is specified, it is replaced with
         the current floor number.<br>
         Example: <font size="2" face="Courier New, Courier, mono">BeepSound
+
 
 
           = beep.wav</font></p>
@@ -2387,6 +2561,7 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">FloorSound
 
 
+
           = floor*.wav</font></p>
       <p align="left"><strong>22. UpMessage</strong> - the notification
         sound file(s) to play after the elevator car arrives at a floor
@@ -2395,6 +2570,7 @@ filename,
         be automatically enabled. If an asterisk (*) is specified, it is
         replaced with the current floor number.<br>
         Example: <font size="2" face="Courier New, Courier, mono">UpMessage
+
 
 
           = goingup.wav</font></p>
@@ -2408,6 +2584,7 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">DownMessage
 
 
+
           = goingdown.wav</font></p>
       <p align="left"><strong>24. OpenMessage</strong> - the
         notification sound file(s) to play when the elevator doors begin
@@ -2418,6 +2595,7 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">OpenMessage
 
 
+
           = doorsopening.wav</font></p>
       <p align="left"><strong>25. CloseMessage</strong> - the
         notification sound file(s) to play when the elevator doors begin
@@ -2426,6 +2604,7 @@ filename,
         automatically enabled. If an asterisk (*) is specified, it is
         replaced with the current floor number.<br>
         Example: <font size="2" face="Courier New, Courier, mono">CloseMessage
+
 
 
           = doorsclosing.wav</font></p>
@@ -2442,8 +2621,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">NudgeSound
 
 
+
           <em>doornumber</em> = <em>filename</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">NudgeSound
+
 
 
           1 = buzz.wav</font></p>
@@ -2459,12 +2640,14 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">MusicPosition
 
 
+
           = <em>x, y, z</em><br>
         </font>Example: <font size="2" face="Courier New, Courier,
           mono">MusicPosition = 0, 8, 0</font></p>
       <p align="left"><strong>30. MusicOn</strong> - Enables or disables
         music on start. Default is true.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">MusicOn
+
 
 
           = false</font></p>
@@ -2474,6 +2657,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">MusicOnMove
 
 
+
           = true</font></p>
       <p align="left"><strong>32. DisplayFloors</strong> - sets the
         floors that will be displayed by the elevator car's indicators.
@@ -2481,14 +2665,17 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">DisplayFloors
 
 
+
           = <em>0, 9, 19, 29</em></font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
+
 
 
           AutoEnable</strong> - Determines if interior objects should
         automatically be enabled or disabled when the user enters/exits
         the elevator car (set to false for glass elevators).<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AutoEnable
+
 
 
           = false</font></p>
@@ -2503,8 +2690,10 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">DoorSensor
 
 
+
           <em>doornumber</em> = <em>enable[, filename]</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">DoorSensor
+
 
 
           1 = true, click.wav</font><br>
@@ -2524,11 +2713,13 @@ filename,
         Example: <font size="2" face="Courier New, Courier, mono">CarEmergencyStopSound
 
 
+
           = emergstop_car.wav</font></p>
       <p align="left"><strong>36. IndependentService</strong> - enables
         independent service mode for the elevator, and makes this car
         the active car for the mode.<br>
         Example: <font size="2" face="Courier New, Courier, mono">IndependentService
+
 
 
           = true</font></p>
@@ -2537,6 +2728,7 @@ filename,
         makes this car the active car for the mode. Default is 0. Values
         are 0 for off, 1 for on, 2 for hold.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">FireService2
+
 
 
           = 1</font></p>
@@ -2550,6 +2742,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">CreateCar
 
 
+
           <em>floor<br>
           </em></font>Example:<font size="2" face="Courier New, Courier,
           mono"><em></em> CreateCar 1</font></p>
@@ -2558,10 +2751,12 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor
 
 
+
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddFloor
+
 
 
           Floor1, Wood2, 0.5, -3.5, -3, 3.5, 3, 0, 0, false, false, 0, 0</font></p>
@@ -2570,10 +2765,12 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddWall
 
 
+
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, z2, <em>height1</em>, <em>height2</em>, <em>voffset1</em>,
           <em>voffset2, </em><em>tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
           Wall1, Wood1, 0.5, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2</font></p>
@@ -2582,6 +2779,7 @@ filename,
       <p align="left"><strong>4. AddDoors</strong> - creates elevator
         car doors<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDoors
+
 
 
           <em>number, lefttexture, righttexture</em>, <em>thickness,
@@ -2600,6 +2798,7 @@ filename,
       <p align="left"><strong>5. AddShaftDoors</strong> - creates
         elevator shaft doors<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoors
+
 
 
           <em>number, lefttexture, righttexture</em>, <em>thickness,
@@ -2624,6 +2823,7 @@ filename,
       <p align="left"><strong>6. CreatePanel</strong> - creates a button
         panel<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel
+
 
 
           <em>texturename</em>, <em>rows, columns, direction, CenterX,
@@ -2654,13 +2854,16 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddButton
 
 
+
           <em>panel_number, sound, texture_unlit</em>, <em>texture_lit,
             row, column, floor/type, width, height[, hoffset, voffset]</em></font><br>
         Example 1: <font size="2" face="Courier New, Courier, mono">AddButton
 
 
+
           1, switch.wav, Button5, ButtonLit5, 7, 3, 4, 1, 1</font><br>
         Example 2: <font size="2" face="Courier New, Courier, mono">AddButton
+
 
 
           1, , Button5, ButtonLit5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
@@ -2690,6 +2893,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddControl
 
 
+
           <em>panel_number, sound, row, column, width, height, hoffset,
             voffset, selection_position, command_name(s),
             texture_name(s)<br>
@@ -2699,14 +2903,17 @@ filename,
         Example 2: <font size="2" face="Courier New, Courier, mono">AddControl
 
 
+
           1, switch.wav, 7, 3, 1, 1, 0, 0, 1, FanOff, FanOn,
           SwitchFanOff, SwitchFanOn</font><br>
         Example 3: <font size="2" face="Courier New, Courier, mono">AddControl
 
 
+
           1, switch.wav, 7, 3, 1, 1, 0, 0, 1, Off, 4, Button5,
           ButtonLit5</font><br>
         Example 4: <font size="2" face="Courier New, Courier, mono">AddControl
+
 
 
           1, switch.wav, 7, 3, 1, 1, 0, 0, 1, Fire2Off, Fire2On,
@@ -2822,6 +3029,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em>&nbsp;texture_prefix,
 
 
+
             blank_texture, direction, CenterX, CenterZ, width, height,
             voffset</em></font> </p>
       <p align="left">The AddFloorIndicator command creates a floor
@@ -2840,7 +3048,9 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicator<em>&nbsp;ActiveDirection,
 
 
+
             Single, Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit,
+
 
 
             DownTexture, DownTextureLit, CenterX, CenterZ, voffset,
@@ -2890,6 +3100,7 @@ filename,
         exterior directional indicator/lanterns (similar to the
         CreateCallButtons command) <br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicators<em>&nbsp;Relative,
+
 
 
             ActiveDirection, Single, Vertical, BackTexture</em>, <em>UpTexture</em>,
@@ -2957,6 +3168,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorSigns<em>&nbsp;door_number,
 
 
+
             relative, texture_prefix, direction, CenterX, CenterZ,
             width, height, voffset</em></font> </p>
       <p align="left">The AddFloorSigns command creates floor signs
@@ -2976,11 +3188,13 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddSound
 
 
+
           <em>name, filename, x, y, z, loop[, volume, speed,
             min_distance, max_distance, doppler_level,
             cone_inside_angle, cone_outside_angle, cone_outside_volume,
             direction_x, direction_y, direction_z]</em></font><br>
         Example 1: <font size="2" face="Courier New, Courier, mono">AddSound
+
 
 
           MySound, sound.wav, 10, 100, 5, true<br>
@@ -2996,6 +3210,7 @@ filename,
         single elevator car door component, used for creating custom
         door styles<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDoorComponent
+
 
 
           <em>number, name, texture, sidetexture, thickness, direction,
@@ -3030,6 +3245,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorsComponent
 
 
+
           <em>number, name, texture, sidetexture, thickness, direction,
             openspeed, closespeed, x1, z1, x2, z2, height, voffset, tw,
             th, side_tw, side_th</em></font></p>
@@ -3043,6 +3259,7 @@ filename,
         elevator car door creation - use this after all related
         AddDoorComponent commands are used.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">FinishDoors
+
 
 
           <em>number[, door_walls, track_walls]</em></font></p>
@@ -3062,6 +3279,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoors
 
 
+
           <em>number[, door_walls, track_walls]</em></font></p>
       <p align="left">This command is almost identical to the
         FinishDoors command except that it's used for finishing shaft
@@ -3070,6 +3288,7 @@ filename,
         door in the specified location, which moves with the elevator
         car<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor
+
 
 
           <em>opensound, closesound, texturename, open, thickness</em>,
@@ -3092,6 +3311,7 @@ filename,
 filename,
 
 
+
             center, CenterX, CenterY, CenterZ, RotationX, RotationY,
             RotationZ, MaxRenderDistance, ScaleMultiplier,
             EnablePhysics, Restitution, Friction, Mass</em><em><br>
@@ -3101,9 +3321,11 @@ filename,
         Example 2:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
 
 
+
           MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1,
           0.5, 0.1</font><br>
         Example 3:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
+
 
 
           MyModel, , false, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1</font></p>
@@ -3124,9 +3346,11 @@ filename,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>21.
 
 
+
           AddActionControl</strong> - creates a custom control that uses
         a specific action defined by AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddActionControl
+
 
 
           <em>name, sound, direction, centerx, centerz, width, height,
@@ -3153,10 +3377,12 @@ filename,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
 
 
+
           AddTrigger</strong> - creates a trigger that is used to signal
         an action when the user's camera enters or leaves the defined
         area.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;AddTrigger
+
 
 
           <em>name, sound, start_x, start_y, start_z, end_x, end_y,
@@ -3212,6 +3438,7 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddTriangleWall
 
 
+
           <em>destobject, name, texturename</em>, <em>x1</em>, <em>y1</em>,
           <em>z1</em>, <em>x2</em>, <em>y2</em>, <em>z2</em>, <em>x3</em>,
           <em>y3</em>, <em>z3</em>, <em>tw</em>, <em>th</em></font><br>
@@ -3219,15 +3446,18 @@ filename,
 external,
 
 
+
           My Triangle, Brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0</font></p>
       <p align="left"><strong>b. AddWall</strong> - adds a textured wall<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
           <em>destobject, name, texturename</em>, <em>thickness, x1</em>,
           <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, <em>height2</em>,
           <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
           buildings, Wall1, Brick, 0.5, -10, -10, 10, 10, 15, 15,
@@ -3240,6 +3470,7 @@ external,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor
 
 
+
           <em>destobject, name, texturename</em>, <em>thickness, x1</em>,
           <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>altitude1</em>,
           <em>altitude2</em>, reverse_axis, texture_direction, <em>tw</em>,
@@ -3250,6 +3481,7 @@ external,
       <p align="left"><strong>d. AddGround</strong> - adds a tile-based
         ground<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddGround
+
 
 
           <em>name, texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>,
@@ -3272,11 +3504,13 @@ external,
         Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox
 
 
+
           <em>destobject</em>, <em>name, texturename</em>, <em>x1</em>,
           <em>x2</em>, <em>z1</em>, <em>z2</em>, <em>height</em>, <em>voffset</em>,
           <em>tw</em>, <em>th, inside, outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox
 external,
+
 
 
           My Box, Brick, -10, 10, -10, 10, 15, 0, 0, 0, true, true,
@@ -3293,6 +3527,7 @@ external,
         Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox2
 
 
+
           <em>destobject</em>, <em>name, texturename</em>, <em>centerx</em>,
           <em>centerz</em>, <em>widthx</em>, <em>lengthz</em>, <em>height</em>,
           <em>voffset</em>, <em>tw</em>, <em>th</em></font><font
@@ -3300,6 +3535,7 @@ external,
             outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox2
 external,
+
 
 
           My Box, Brick, 0, 0, 10, 10, 15, 0, 0, 0, false, true, false,
@@ -3323,16 +3559,19 @@ external,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddCustomWall
 
 
+
           <em>destobject, name, texturename[, RelativeY], x1, y1, z1,
             x2, y2, z2, x3, y3, z3, ..., tw, th</em></font><br>
         Example 1: <font size="2" face="Courier New, Courier, mono">AddCustomWall
 external,
 
 
+
           My Wall, Brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 15, 5, 0, 10, 0,
           0, 0, 0</font><br>
         Example 2: <font size="2" face="Courier New, Courier, mono">AddCustomWall
 external,
+
 
 
           My Wall, Brick, true, 0, 0, 0, 0, 10, 0, 10, 10, 0, 15, 5, 0,
@@ -3344,10 +3583,12 @@ external,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddCustomFloor
 
 
+
           <em>destobject, name, texturename, x1, z1, x2, z2, x3, z3,
             ..., altitude, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddCustomFloor
 external,
+
 
 
           My Wall, Brick, 0, 0, 0, 10, 10, 10, 10, 0, 0, 0, 0</font></p>
@@ -3356,8 +3597,10 @@ external,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaft
 
 
+
           <em>number, centerx, centerz, startfloor, endfloor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddShaft
+
 
 
           1, 10, 10, 0, 9</font></p>
@@ -3372,8 +3615,10 @@ external,
         Syntax: <font size="2" face="Courier New, Courier, mono">CreateStairwell
 
 
+
           <em>number, centerx, centerz, startfloor, endfloor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateStairwell
+
 
 
           1, 10, 10, 0, 9</font></p>
@@ -3388,8 +3633,10 @@ external,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;WallOrientation
 
 
+
           = <em>direction</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">WallOrientation
+
 
 
           = left</font></p>
@@ -3415,8 +3662,10 @@ external,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;FloorOrientation
 
 
+
           = <em>direction</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">FloorOrientation
+
 
 
           = bottom</font></p>
@@ -3434,9 +3683,11 @@ external,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;DrawWalls
 
 
+
           = <em>MainNegative, MainPositive, SideNegative, SidePositive,
             Top, Bottom</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">DrawWalls
+
 
 
           = true, true, false, false, false, false</font></p>
@@ -3457,9 +3708,11 @@ external,
         Syntax:&nbsp;<font size="2" face="Courier New, Courier, mono">SetPlanarMapping
 
 
+
           <em>Flat, FlipX, FlipY, FlipZ, Rotate</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetPlanarMapping
 false,
+
 
 
           false, false, true, false</font></p>
@@ -3498,8 +3751,10 @@ false,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;SetTextureMapping
 
 
+
           <em>vertex1, u1, v1, vertex2, u2, v2, vertex3, u3, v3</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetTextureMapping
+
 
 
           0, 0, 0, 1, 1, 0, 2, 1, 1</font></p>
@@ -3530,6 +3785,7 @@ false,
         <font size="2" face="Courier New, Courier, mono">SetTextureMapping
 
 
+
           0, 0.25, 0.25, 1, 0.75, 0.25, 2, 0.75, 0.75</font></p>
       <p align="left">Here's an easier way to see the example above:</p>
       <p align="left"><font size="2" face="Courier New, Courier, mono">0
@@ -3549,10 +3805,12 @@ false,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;SetTextureMapping2
 
 
+
           <em>v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y,
             v3z, u3, v3</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetTextureMapping2
 x0,
+
 
 
           y0, z0, 0, 0, x1, y1, z1, 1, 0, x2, y2, z2, 1, 1</font></p>
@@ -3574,6 +3832,7 @@ x0,
       <p align="left"><font size="2" face="Courier New, Courier, mono">x0,
 
 
+
           y0, z0 -&gt; 0, 0<br>
           x1, y1, z1 -&gt; 1, 0<br>
           x2, y2, z2 -&gt; 1, 1</font></p>
@@ -3583,8 +3842,10 @@ x0,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;ResetTextureMapping
 
 
+
           = <em>default</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ResetTextureMapping
+
 
 
           = true </font></p>
@@ -3604,6 +3865,7 @@ x0,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;ReverseAxis
 
 
+
           = <em>value</em></font></p>
       <p align="left"><strong>s. ShaftCut</strong> - used in conjunction
         with a shaft object - performs a vertical box cut on all floor
@@ -3612,9 +3874,11 @@ x0,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;ShaftCut
 
 
+
           <em>number, startx, startz, endx, endz, start_voffset,
             end_voffset</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftCut
+
 
 
           1, -4, -3.5, 4, 3.5, 0, 5</font></p>
@@ -3640,6 +3904,7 @@ x0,
         Example: <font size="2" face="Courier New, Courier, mono">CutStairwell
 
 
+
           1, -4, -3.5, 4, 3.5, 0, 5</font></p>
       <p align="left"><strong>u. Isect</strong> - the Isect function
         calculates the position that a line intersects with a certain
@@ -3649,9 +3914,11 @@ x0,
 objectname,
 
 
+
             startx, starty, startz, endx, endy, endz</em>)</font><br>
         Example: <font size="2" face="Courier New, Courier, mono">isect(external,
 wall1,
+
 
 
           10, 10, 0, -10, 10, 0)</font><br>
@@ -3678,8 +3945,10 @@ wall1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;SetAutoSize
 
 
+
           = <em>AutoWidth, AutoHeight </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetAutoSize
+
 
 
           = true, true</font></p>
@@ -3706,11 +3975,13 @@ wall1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;TextureOverride
 
 
+
           <em>MainNegativeTex, MainPositiveTex, SideNegativeTex,
             SidePositiveTex, TopTex, Bottom</em></font><font size="2"
           face="Courier New, Courier, mono"><em>Tex</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">TextureOverride
 Metal1,
+
 
 
           ElevFloor, Metal1, Metal1, Metal1, Metal1</font></p>
@@ -3725,12 +3996,15 @@ Metal1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;ShaftShowFloors
 
 
+
           <em>ShaftNumber</em> = <em>range/list[, full]</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowFloors
 
 
+
           1 = 1 - 10</font><br>
         Example 2: <font size="2" face="Courier New, Courier, mono">ShaftShowFloors
+
 
 
           1 = 1 - 10, true</font></p>
@@ -3759,8 +4033,10 @@ Metal1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;ShaftShowInterfloors
 
 
+
           <em>ShaftNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowInterfloors
+
 
 
           1 = 1 - 10</font></p>
@@ -3771,8 +4047,10 @@ Metal1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;ShaftShowOutside
 
 
+
           <em>ShaftNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowOutside
+
 
 
           1 = 1 - 10</font></p>
@@ -3794,12 +4072,15 @@ Metal1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;ShowFullShaft
 
 
+
           <em>ShaftNumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShowFullShaft
 
 
+
           1 = true</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ab.
+
 
 
           StairsShowFloors</strong> - allows a range of floors to be
@@ -3807,8 +4088,10 @@ Metal1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;StairsShowFloors
 
 
+
           <em>StairwellNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">StairsShowFloors
+
 
 
           1 = 1 - 10</font><br>
@@ -3821,6 +4104,7 @@ Metal1,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ac.
 
 
+
           ShowFullStairs</strong> - determines if an entire stairwell
         should be shown. If set to "true" or "inside", the full
         stairwell is shown only when the user is inside the stairwell.
@@ -3830,8 +4114,10 @@ Metal1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;ShowFullStairs
 
 
+
           <em>StairwellNumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShowFullStairs
+
 
 
           1 = inside</font></p>
@@ -3843,9 +4129,11 @@ Metal1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;TextureFlip
 
 
+
           <em>MainNegative, MainPositive, SideNegative, SidePositive,
             Top, Bottom</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">TextureFlip
+
 
 
           1, 1, 0, 0, 0, 0</font></p>
@@ -3859,6 +4147,7 @@ Metal1,
         cut on an object<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Cut <em>destobject,
 x1,
+
 
 
             y1, z1, x2, y2, z2, cutwalls, cutfloors</em><br>
@@ -3884,9 +4173,11 @@ x1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorAutoArea
 
 
+
           <em>x1, y1, z1, x2, y2, z2</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddFloorAutoArea
 -100,
+
 
 
           0, -100, 100, 100, 100</font></p>
@@ -3895,11 +4186,13 @@ x1,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddSound
 
 
+
           <em>name, filename, x, y, z, loop[, volume, speed,
             min_distance, max_distance, doppler_level,
             cone_inside_angle, cone_outside_angle, cone_outside_volume,
             direction_x, direction_y, direction_z]</em></font><br>
         Example 1: <font size="2" face="Courier New, Courier, mono">AddSound
+
 
 
           MySound, sound.wav, 10, 100, 5, true<br>
@@ -3935,9 +4228,11 @@ x1,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;GetWallExtents
 
 
+
           <em>destobject, wallname, altitude</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">GetWallExtents
 external,
+
 
 
           wall1:front, 10</font></p>
@@ -3963,9 +4258,11 @@ external,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aj.
 
 
+
           AddAction</strong> - defines an action, to be used by custom
         controls and triggers.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;AddAction
+
 
 
           <em>name, parent_object, command[, parameters</em></font><em>]<br>
@@ -3973,9 +4270,11 @@ external,
 MyAction,
 
 
+
           Floor 2, ChangeTexture, OldTexture, NewTexture</font><br>
         Example:<font size="2" face="Courier New, Courier, mono">&nbsp;AddAction
 MySoundAction,
+
 
 
           Floor 2, PlaySound, Sound1, false</font><br>
@@ -3993,6 +4292,7 @@ MySoundAction,
         0:Call Panel 1", and can also be specified as a range of
         objects, such as "Floors 3 to 8".</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">Commands
+
 
 
         and parameters:</p>
@@ -4035,11 +4335,13 @@ MySoundAction,
 example,
 
 
+
         to open elevator 1's shaft doors on floor 2:</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono">AddAction
           MyDoorOpen, Elevator 1, OpenShaftDoor, 0, 2</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">PlaySound
+
 
 
         example, to play sound FireAlarm created using the AddSound
@@ -4062,9 +4364,11 @@ example,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ak.
 
 
+
           AddActionControl</strong> - creates a custom control that uses
         a specific action defined by AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddActionControl
+
 
 
           <em>name, sound, direction, centerx, centerz, width, height,
@@ -4090,10 +4394,12 @@ example,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>al.
 
 
+
           AddTrigger</strong> - creates a trigger that is used to signal
         an action when the user's camera enters or leaves the defined
         area.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;AddTrigger
+
 
 
           <em>name, sound, start_x, start_y, start_z, end_x, end_y,
@@ -4114,6 +4420,7 @@ example,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
 
 
+
           AddModel</strong> - adds a global 3D model. If a filename is
         specified, the model's textures/materials must be defined in a
         separate ".material" file, and a separate collider mesh
@@ -4127,6 +4434,7 @@ example,
 filename,
 
 
+
             center, CenterX, CenterY, CenterZ, RotationX, RotationY,
             RotationZ, MaxRenderDistance, ScaleMultiplier,
             EnablePhysics, Restitution, Friction, Mass</em><em><br>
@@ -4136,9 +4444,11 @@ filename,
         Example 2:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
 
 
+
           MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1,
           0.5, 0.1</font><br>
         Example 3:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
+
 
 
           MyModel, , false, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1</font></p>
@@ -4161,6 +4471,7 @@ filename,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an.
 
 
+
           CreateWallObject</strong> - creates a custom wall object, in
         the specified mesh object. Wall objects are used to contain a
         number of polygons, to represent a wall structure, and are
@@ -4169,12 +4480,15 @@ filename,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;CreateWallObject
 
 
+
           <em>destobject, name</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateWallObject
 
 
+
           landscape, mywall</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
+
 
 
           AddPolygon</strong> - this is the same as the AddCustomWall
@@ -4189,14 +4503,17 @@ filename,
         Syntax: <font size="2" face="Courier New, Courier, mono">AddPolygon
 
 
+
           <em>destobject, wallname, texturename, x1, y1, z1, x2, y2, z2,
             x3, y3, z3, ..., tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddPolygon
 landscape,
 
 
+
           mywall, Brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0, 0</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
+
 
 
           SetKey</strong> - specifies that the next created model will
@@ -4207,12 +4524,15 @@ landscape,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;SetKey
 
 
+
           <em>keyid</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetKey
 
 
+
           1</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
+
 
 
           SetLock</strong> - sets the lock and key parameters for
@@ -4221,8 +4541,10 @@ landscape,
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;SetLock
 
 
+
           <em>locked</em>, <em>keyid</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetLock
+
 
 
           1, 3</font></p>
@@ -4247,6 +4569,7 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ar.
 
 
+
           Print</strong> - prints the contents of a line to the console.
         This command will still convert variables and even math
         expressions, and output the results.<br>
@@ -4258,6 +4581,7 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>as.
 
 
+
           Delete</strong> - deletes an object. This command is normally
         used after a building has loaded.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Delete
@@ -4265,9 +4589,11 @@ landscape,
         Example: <font size="2" face="Courier New, Courier, mono">Delete
 
 
+
           12</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>at.
+
 
 
           RunAction</strong> - runs an action by name. This command is
@@ -4275,8 +4601,10 @@ landscape,
         Syntax: <font size="2" face="Courier New, Courier, mono">RunAction
 
 
+
           <em>name</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">RunAction
+
 
 
           myaction</font></p>
@@ -4284,9 +4612,11 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>au.
 
 
+
           AddActionParent</strong> - adds a parent object to an existing
         action. See the AddAction command for details on parent objects<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddActionParent
+
 
 
           <em>name, object</em></font><br>
@@ -4294,14 +4624,17 @@ landscape,
 myaction,
 
 
+
           Elevator 2</font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddActionParent
 myaction,
 
 
+
           Floors 2 to 5</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>av.
+
 
 
           RemoveActionParent</strong> - removes a parent object from an
@@ -4311,9 +4644,11 @@ myaction,
         Syntax: <font size="2" face="Courier New, Courier, mono">RemoveActionParent
 
 
+
           <em>name, object</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">RemoveActionParent
 myaction,
+
 
 
           Elevator 2</font><br>
@@ -4321,9 +4656,11 @@ myaction,
 myaction,
 
 
+
           Floors 2 to 5</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aw.
+
 
 
           GotoFloor</strong> - jumps the user to the specified floor.
@@ -4331,8 +4668,10 @@ myaction,
         Syntax: <font size="2" face="Courier New, Courier, mono">GotoFloor
 
 
+
           <em>floor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">GotoFloor
+
 
 
           3</font></p>
@@ -4344,8 +4683,10 @@ myaction,
 starty,
 
 
+
             angle, distance</em>)</font><br>
         Example: <font size="2" face="Courier New, Courier, mono">endpoint(-150,
+
 
 
           150, 180, 20)</font><br>
@@ -4355,18 +4696,22 @@ starty,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ay.
 
 
+
           FloorInfo</strong> - show information on all floors or
         optionally a specified floor<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">FloorInfo
+
 
 
           <em>[number]</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">FloorInfo
 
 
+
           3</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>az.
+
 
 
           ListTextures</strong> - list the loaded texture names
@@ -4376,11 +4721,13 @@ starty,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ba.
 
 
+
           ListVisibleMeshes</strong> - list the mesh objects currently
         visible by the camera<br>
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bb.
+
 
 
           ShowLoadedSounds</strong> - show the sounds currently loaded
@@ -4391,6 +4738,7 @@ starty,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bc.
 
 
+
           ShowPlayingSounds</strong> - show the sounds currently playing
         in the sound system, with each filename followed by a listing of
         playing sound objects<br>
@@ -4399,13 +4747,16 @@ starty,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bd.
 
 
+
           Teleport</strong> - warps the user to the specified location.
         This command is normally used after a building has loaded.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Teleport
 
 
+
           <em>X, Y, Z</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">Teleport
+
 
 
           3, 5, 10</font></p>
@@ -4463,10 +4814,10 @@ starty,
             ColorR, ColorG, ColorB</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">SetLightColor</font></font><font
           size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
-          0, 0, 1</font><br>
+          0.5, 0, 1</font><br>
       </p>
       <p align="left">The example will set the color of "My Light" to
-        blue.<br>
+        a shade of purple.<br>
       </p>
       <p align="left"> <strong>c. SetLightSpecular</strong> - sets the
         specular color of a light.&nbsp; The default is black.<br>
@@ -4478,15 +4829,16 @@ starty,
           1, 1, 1</font><br>
       </p>
       <p align="left">The example will set the specular color of My
-        Light to white.</p>
+        Light to white.<br>
+      </p>
       <p align="left"><br>
         <strong>d. SetLightAttenuation</strong> - sets the attenuation
         of the specified light.&nbsp; This has no effect on directional
         lights.<br>
-        Syntax: <font size="2"><font face="Courier New, Courier, mono">AddLight</font></font><font
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">SetLightAttenuation</font></font><font
           size="2" face="Courier New, Courier, mono"> <em>parent, name,
             range, constant, linear, quadratic</em></font><br>
-        Example: <font size="2"><font face="Courier New, Courier, mono">AddLight</font></font><font
+        Example: <font size="2"><font face="Courier New, Courier, mono">SetLightAttenuation</font></font><font
           size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
           100000, 1, 0, 0</font><br>
       </p>
@@ -4502,7 +4854,7 @@ starty,
         Syntax: <font size="2"><font face="Courier New, Courier, mono">SetSpotlightRange</font></font><font
           size="2" face="Courier New, Courier, mono"> <em>parent, name,
             inner_angle, outer_angle, falloff</em></font><br>
-        Example: <font size="2"><font face="Courier New, Courier, mono">AddLight</font></font><font
+        Example: <font size="2"><font face="Courier New, Courier, mono">SetSpotlightRange</font></font><font
           size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
           30, 40, 1</font><br>
       </p>
@@ -4518,6 +4870,7 @@ starty,
           size="2" face="Courier New, Courier, mono"> <em>parent, name,
             X, Y, Z</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">SetLightDirection
+
 
             Floor 0, My Light, 10, 50, 20</font></font><font size="2"
           face="Courier New, Courier, mono"><br>
@@ -4593,12 +4946,14 @@ starty,
       <p align="left"><font size="2" face="Courier New, Courier, mono">&lt;Include
 
 
+
           data/scripts/elevator_doors.txt&gt;</font></p>
       <p align="left">You'll then be able to use some predefined door
         functions:</p>
       <p align="left"><strong>1. elevdoor_single</strong> - creates a
         single-slide elevator door.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_single(<em>door_number,
+
 
 
             texture, side_texture, thickness, CenterX, CenterZ, width,
@@ -4613,12 +4968,14 @@ starty,
         Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_center(<em>door_number,
 
 
+
             texture, side_texture, thickness, CenterX, CenterZ, width,
             height, door_direction, speed, is_shaft_door</em>)</font></p>
       <p align="left"><strong>3. elevdoor_center_classic</strong> -
         creates a center-open elevator door with a partially open
         interior door.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_center_classic(<em>door_number,
+
 
 
             texture, side_texture, thickness, CenterX, CenterZ, width,
@@ -4628,11 +4985,13 @@ starty,
         Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_dualspeed_left(<em>door_number,
 
 
+
             texture, side_texture, thickness, CenterX, CenterZ, width,
             height, door_direction, speed, is_shaft_door</em>)</font></p>
       <p align="left"><strong>5. </strong><strong>elevdoor_dualspeed_right</strong>
         - creates a dual-speed door that opens to the right<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_dualspeed_right(<em>door_number,
+
 
 
             texture, side_texture, thickness, CenterX, CenterZ, width,
@@ -4642,11 +5001,13 @@ starty,
         Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_center_dualspeed(<em>door_number,
 
 
+
             texture, side_texture, thickness, CenterX, CenterZ, width,
             height, door_direction, speed, is_shaft_door</em>)</font></p>
       <p align="left">&nbsp;</p>
       <div align="center">
         <p align="left"><strong><font size="+1"><a name="Buildings"></a>12.
+
 
 
               The <em>Buildings</em> Section</font></strong></p>
@@ -4678,6 +5039,7 @@ starty,
           set to true, load all buildings simultaneously. Default is
           false, which loads each building in order.<br>
           Example: <font size="2" face="Courier New, Courier, mono">ConcurrentLoads
+
 
 
             = true</font></p>
@@ -4733,20 +5095,25 @@ starty,
             <em>filename</em>[, <em>X, Y, Z, Rotation</em>][, <em>MinX,
 
 
+
               MinY, MinZ, MaxX, MaxY, MaxZ</em>]</font><br>
           Example 1: <font size="2" face="Courier New, Courier, mono">Load
+
 
 
             Simple.bld</font><br>
           Example 2: <font size="2" face="Courier New, Courier, mono">Load
 
 
+
             Simple.bld, 200, 0, 200, 0</font><br>
           Example 3: <font size="2" face="Courier New, Courier, mono">Load
 
 
+
             Simple.bld, 200, 0, 200, 0, -100, 0, -100, 100, 0, 100</font><br>
           Example 4: <font size="2" face="Courier New, Courier, mono">Load
+
 
 
             myfolder/mybuilding.bld</font><br>
@@ -4754,6 +5121,7 @@ starty,
         <p align="left">&nbsp;</p>
         <div align="center">
           <p align="left"><strong><font size="+1"><a name="Vehicles"></a>13.
+
 
 
                 The <em>Vehicles</em> Section</font></strong></p>
@@ -4772,6 +5140,7 @@ starty,
             <font size="2" face="Courier New, Courier, mono">&lt;Vehicles
 
 
+
               2 to 10&gt;</font><br>
             and end with:<br>
             <font size="2" face="Courier New, Courier, mono">&lt;EndVehicles&gt;</font></p>
@@ -4783,6 +5152,7 @@ starty,
           <p align="left"><strong>1. Name </strong> - sets the name of
             the vehicle.<br>
             Example: <font size="2" face="Courier New, Courier, mono">Name
+
 
 
               = Car</font></p>
@@ -4825,6 +5195,7 @@ starty,
             <font size="2" face="Courier New, Courier, mono">ChassisShift
 
 
+
               = 0, 1, 0</font><br>
           </p>
           <p align="left"><strong>14. ChassisMesh</strong> - defines the
@@ -4842,6 +5213,7 @@ starty,
             <font size="2" face="Courier New, Courier, mono">ChassisScale
 
 
+
               = 4</font><br>
           </p>
           <p align="left"><strong>17. WheelScale</strong> - sets the
@@ -4856,8 +5228,10 @@ starty,
             Syntax: <font size="2" face="Courier New, Courier, mono">CreateVehicle
 
 
+
               <em>X, Y, Z</em></font><br>
             Example: <font size="2" face="Courier New, Courier, mono">CreateVehicle
+
 
 
               -50, 0, 0</font><br>
@@ -4868,9 +5242,11 @@ starty,
             Syntax: <font size="2" face="Courier New, Courier, mono">CreateChassis
 
 
+
               <em>restitution, friction, mass, linear_dampening,
                 angular_dampening</em></font><br>
             Example: <font size="2" face="Courier New, Courier, mono">CreateChassis
+
 
 
               0.6, 0.6, 800, 0.2, 0.2</font><br>
@@ -4886,8 +5262,10 @@ starty,
             Syntax: <font size="2" face="Courier New, Courier, mono">AddWheel
 
 
+
               <em>engine, steerable, IsFrontWheel, radius,
                 ConnectionPointX, ConnectionPointY, ConnectionPointZ</em>[,
+
 
 
               <em>DirectionX, DirectionY, DirectionZ, AxleX, AxleY,
@@ -4895,10 +5273,12 @@ starty,
             Example: <font size="2" face="Courier New, Courier, mono">AddWheel
 
 
+
               true, true, true, 0.3, -1, 0, 0</font><br>
           </p>
           <p align="left">&nbsp;</p>
           <p align="left"><strong><font size="+1"><a name="Example"></a>14.
+
 
 
                 Small Example Building</font></strong></p>
