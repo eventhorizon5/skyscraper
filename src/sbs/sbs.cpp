@@ -489,13 +489,6 @@ bool SBS::Start(Ogre::Camera *camera)
 	if (RandomActivity == true)
 		EnableRandomActivity(true);
 
-	//add a test light
-	if (GetFloor(0))
-	{
-		Light *light = GetFloor(0)->AddLight("Main", 0);
-		light->Move(Ogre::Vector3(0, 5, -5));
-	}
-
 	IsRunning = true;
 
 	return true;
