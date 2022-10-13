@@ -882,7 +882,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		for (int num = start; num <= end; num++)
 		{
 			MeshObject *mesh = Parent->GetClient(num);
-			Ogre::AxisAlignedBox client_box;
+			Ogre::AxisAlignedBox client_box = Ogre::AxisAlignedBox::BOX_NULL;
 			Ogre::Real radius = 0;
 
 			ClientEntry entry;
@@ -1212,7 +1212,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 		}
 	}
 
-	Ogre::AxisAlignedBox box;
+	Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
 
 	//fill array with vertex's data
 	unsigned int pos = 0;
@@ -1326,7 +1326,7 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 
 	if (Parent->GetMeshCount() == 1)
 	{
-		Ogre::AxisAlignedBox box;
+		Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
 		Ogre::Real radius = 0;
 
 		if (Parent->GetClientCount() != (int)client_entries.size())

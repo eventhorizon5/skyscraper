@@ -182,7 +182,7 @@ Ogre::Vector2 Polygon::GetExtents(int coord)
 	GetGeometry(poly);
 
 	//get polygon extents
-	Ogre::Vector2 extents;
+	Ogre::Vector2 extents = Ogre::Vector2::ZERO;
 
 	Ogre::Vector2 extents2 = sbs->GetExtents(poly, coord);
 	if (extents2.x < extents.x)
