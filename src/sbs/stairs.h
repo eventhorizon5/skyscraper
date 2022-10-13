@@ -61,7 +61,7 @@ public:
 	bool IsValidFloor(int floor);
 	DynamicMesh* GetDynamicMesh();
 
-	class Level : public Object
+	class SBSIMPEXP Level : public Object
 	{
 	public:
 		Level(Stairwell *parent, int number);

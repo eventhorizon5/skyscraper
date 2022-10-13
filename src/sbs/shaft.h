@@ -77,7 +77,7 @@ public:
 	DynamicMesh* GetDynamicMesh();
 	DynamicMesh* GetDoorWrapper();
 
-	class Level : public Object
+	class SBSIMPEXP Level : public Object
 	{
 	public:
 
