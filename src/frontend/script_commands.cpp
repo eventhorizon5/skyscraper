@@ -916,7 +916,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		int stairwell = ToInt(tempdata[0]);
 		if (!Simcore->GetStairwell(stairwell))
-			return ScriptError("Invalid stairwell");
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)
