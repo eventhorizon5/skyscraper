@@ -2285,11 +2285,14 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 
 		Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
 
-		buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
-		const Ogre::PixelBox& pb = buffer->getCurrentLock();
+		//old method:
+		//buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
+		//const Ogre::PixelBox& pb = buffer->getCurrentLock();
+		//destination->getBuffer()->blitFromMemory(pb, dstBox);
+		//buffer->unlock();
 
-		destination->getBuffer()->blitFromMemory(pb, dstBox);
-		buffer->unlock();
+		//new method:
+		destination->getBuffer()->blit(buffer, srcBox, dstBox);
 	}
 	catch (Ogre::Exception& e)
 	{
