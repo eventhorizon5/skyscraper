@@ -88,6 +88,7 @@ public:
 	Ogre::Vector3 HitPosition; //last hit position
 	bool EnableBullet;
 	Real BinocularsFOV; //binoculars mode FOV
+	bool RestrictRotation;
 	bool FirstAttach;
 	bool inside_vehicle; //is user inside a vehicle?
 	Vehicle *vehicle; //vehicle object, if user is inside
