@@ -2158,6 +2158,7 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	IncrementMaterialCount();
 
 	EnableLighting(name, true);
+	EnableShadows(name, true);
 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
@@ -2272,9 +2273,10 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 		//if dimensions are the same, use standard copy method to prevent
 		//some crashes on systems with small npot textures
 		//note - this currently doesn't work properly on DirectX, needs fixing
-		if (srcBox.getWidth() == dstBox.getWidth() &&
-			srcBox.getHeight() == dstBox.getHeight() &&
-			srcBox.getDepth() == dstBox.getDepth() &&
+		if (srcBox.getWidth() == source->getWidth() &&
+			srcBox.getHeight() == source->getHeight() &&
+			dstBox.getWidth() == destination->getWidth() &&
+			dstBox.getHeight() == destination->getHeight() &&
 			sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem")
 		{
 			source->copyToTexture(destination);
@@ -2283,11 +2285,14 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 
 		Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
 
-		buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
-		const Ogre::PixelBox& pb = buffer->getCurrentLock();
+		//old method:
+		//buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
+		//const Ogre::PixelBox& pb = buffer->getCurrentLock();
+		//destination->getBuffer()->blitFromMemory(pb, dstBox);
+		//buffer->unlock();
 
-		destination->getBuffer()->blitFromMemory(pb, dstBox);
-		buffer->unlock();
+		//new method:
+		destination->getBuffer()->blit(buffer, srcBox, dstBox);
 	}
 	catch (Ogre::Exception& e)
 	{
@@ -2316,6 +2321,15 @@ void TextureManager::SetPlanarRotate(bool value)
 bool TextureManager::GetPlanarRotate()
 {
 	return PlanarRotate;
+}
+
+void TextureManager::EnableShadows(const std::string &material_name, bool value)
+{
+	//enable shadows
+
+	Ogre::MaterialPtr mMat = GetMaterialByName(material_name);
+	if (mMat)
+		mMat->setReceiveShadows(value);
 }
 
 }

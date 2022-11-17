@@ -103,19 +103,20 @@ public:
 	void RemoveEscalator(Escalator *escalator);
 	void RemoveMovingWalkway(MovingWalkway *walkway);
 	Light* AddLight(const std::string &name, int type);
+	Light* GetLight(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
-	CameraTexture* AddCameraTexture(const std::string &name, bool enabled, int quality, Real fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
+	CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
 	Escalator* AddEscalator(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	MovingWalkway* AddMovingWalkway(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	std::vector<Sound*> GetSound(const std::string &name);
 	void SetAltitude(Real altitude);
 	void ShowInfo(bool detailed = true, bool display_header = true);
 	void GetElevatorList(std::vector<int> &listing, bool get_locals = true, bool get_express = true, bool get_service = true);
-	void GetStairsList(std::vector<int> &listing);
+	void GetStairwellList(std::vector<int> &listing);
 	void GetShaftList(std::vector<int> &listing);
 	ElevatorRoute* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
 	std::vector<int> GetDirectFloors(bool include_service);
@@ -123,6 +124,7 @@ public:
 	RevolvingDoor* AddRevolvingDoor(const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external);
 	void RemoveRevolvingDoor(RevolvingDoor *door);
 	RevolvingDoor* GetRevolvingDoor(int number);
+	CameraTexture* GetCameraTexture(int number);
 
 private:
 	//sound objects

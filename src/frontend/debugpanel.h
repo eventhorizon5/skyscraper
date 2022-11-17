@@ -56,6 +56,7 @@ class PeopleManager;
 class ParameterViewer;
 class CreateObject;
 class MoveObject;
+class CameraTextureControl;
 
 class DebugPanel: public wxFrame
 {
@@ -103,6 +104,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bStats;
 		static const long ID_bEngineManager;
 		static const long ID_bConsole;
+		static const long ID_bCameraTexture;
 		static const long ID_bObjectInfo;
 		static const long ID_bActionViewer;
 		static const long ID_bPeopleManager;
@@ -111,6 +113,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bKeys;
 		static const long ID_bTextures;
 		static const long ID_bFloorInfo;
+		static const long ID_bLightControl;
 		static const long ID_PANEL1;
 		//*)
 		void EnableTimer(bool value);
@@ -158,6 +161,8 @@ class DebugPanel: public wxFrame
 		void On_bSkyControl_Click(wxCommandEvent& event);
 		void On_bEngineManager_Click(wxCommandEvent& event);
 		void On_bPeopleManager_Click(wxCommandEvent& event);
+		void On_bCameraTexture_Click(wxCommandEvent& event);
+		void On_bLightControl_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -170,6 +175,7 @@ class DebugPanel: public wxFrame
 		wxBoxSizer* BoxSizer7;
 		wxButton* bActionViewer;
 		wxButton* bCameraControl;
+		wxButton* bCameraTexture;
 		wxButton* bConsole;
 		wxButton* bControlReference;
 		wxButton* bEditElevator;
@@ -177,6 +183,7 @@ class DebugPanel: public wxFrame
 		wxButton* bFloorInfo;
 		wxButton* bFloorList;
 		wxButton* bKeys;
+		wxButton* bLightControl;
 		wxButton* bMeshControl;
 		wxButton* bObjectInfo;
 		wxButton* bPeopleManager;
@@ -229,6 +236,7 @@ class DebugPanel: public wxFrame
 		SkyControl *skycontrol;
 		EngineManager *emanager;
 		PeopleManager *pmanager;
+		CameraTextureControl *camtex;
 
 		DECLARE_EVENT_TABLE()
 };

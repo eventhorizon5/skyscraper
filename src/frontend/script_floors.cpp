@@ -27,7 +27,6 @@
 #include "floor.h"
 #include "wall.h"
 #include "model.h"
-#include "cameratexture.h"
 #include "trigger.h"
 #include "callbutton.h"
 #include "shaft.h"
@@ -42,6 +41,7 @@
 #include "directional.h"
 #include "escalator.h"
 #include "movingwalkway.h"
+#include "light.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -376,13 +376,18 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for shaft " + tempdata[0]);
+
 			if (compat == true)
-				StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddFloor(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
+				StoreCommand(level->AddFloor(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 			else
-				StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddFloor(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+				StoreCommand(level->AddFloor(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
-			return ScriptError("Invalid shaft");
+			return ScriptError("Invalid shaft " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -426,19 +431,24 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		//create floor
-		if (Simcore->GetStairs(ToInt(tempdata[0])))
+		if (Simcore->GetStairwell(ToInt(tempdata[0])))
 		{
 			//stop here if in Check mode
 			if (config->CheckScript == true)
 				return sNextLine;
 
+			::SBS::Stairwell::Level *level = Simcore->GetStairwell(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for stairwell " + tempdata[0]);
+
 			if (compat == true)
-				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddFloor(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
+				StoreCommand(level->AddFloor(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 			else
-				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddFloor(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+				StoreCommand(level->AddFloor(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
-			return ScriptError("Invalid stairwell");
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -539,10 +549,15 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
-			StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddWall(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for shaft " + tempdata[0]);
+
+			StoreCommand(level->AddWall(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
-			return ScriptError("Invalid shaft");
+			return ScriptError("Invalid shaft " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -565,16 +580,21 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		//create wall
-		if (Simcore->GetStairs(ToInt(tempdata[0])))
+		if (Simcore->GetStairwell(ToInt(tempdata[0])))
 		{
 			//stop here if in Check mode
 			if (config->CheckScript == true)
 				return sNextLine;
 
-			StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddWall(config->Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+			::SBS::Stairwell::Level *level = Simcore->GetStairwell(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for stairwell " + tempdata[0]);
+
+			StoreCommand(level->AddWall(tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
-			return ScriptError("Invalid stairwell");
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -791,19 +811,24 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		//create stairs
-		if (Simcore->GetStairs(ToInt(tempdata[0])))
+		if (Simcore->GetStairwell(ToInt(tempdata[0])))
 		{
 			//stop here if in Check mode
 			if (config->CheckScript == true)
 				return sNextLine;
 
+			::SBS::Stairwell::Level *level = Simcore->GetStairwell(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for stairwell " + tempdata[0]);
+
 			if (compat == true)
-				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddStairs(config->Current, tempdata[1], tempdata[2], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+				StoreCommand(level->AddStairs(tempdata[1], tempdata[2], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 			else
-				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddStairs(config->Current, tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToInt(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+				StoreCommand(level->AddStairs(tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToInt(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
-			return ScriptError("Invalid stairwell");
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -955,22 +980,27 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			ScriptWarning("Syntax deprecated");
 
 		//create door
-		if (Simcore->GetStairs(ToInt(tempdata[0])))
+		if (Simcore->GetStairwell(ToInt(tempdata[0])))
 		{
 			//stop here if in Check mode
 			if (config->CheckScript == true)
 				return sNextLine;
 
-			Door* door;
+			::SBS::Stairwell::Level *level = Simcore->GetStairwell(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for stairwell " + tempdata[0]);
+
+			Door* door = 0;
 
 			if (compat == 1)
-				door = Simcore->GetStairs(ToInt(tempdata[0]))->AddDoor(config->Current, "", "", false, tempdata[1], ToFloat(tempdata[2]), ToInt(tempdata[3]), 0, ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]));
+				door = level->AddDoor("", "", false, tempdata[1], ToFloat(tempdata[2]), ToInt(tempdata[3]), 0, ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]));
 			if (compat == 2)
-				door = Simcore->GetStairs(ToInt(tempdata[0]))->AddDoor(config->Current, tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
+				door = level->AddDoor(tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 			if (compat == 3)
-				door = Simcore->GetStairs(ToInt(tempdata[0]))->AddDoor(config->Current, tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+				door = level->AddDoor(tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 			if (compat == 0)
-				door = Simcore->GetStairs(ToInt(tempdata[0]))->AddDoor(config->Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+				door = level->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
 				door->SetLocked(config->lockvalue, config->keyvalue);
@@ -978,7 +1008,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			StoreCommand(door);
 		}
 		else
-			return ScriptError("Invalid stairwell");
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -1011,7 +1041,12 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
-			Door* door = Simcore->GetShaft(ToInt(tempdata[0]))->AddDoor(config->Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for shaft " + tempdata[0]);
+
+			Door* door = level->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
 				door->SetLocked(config->lockvalue, config->keyvalue);
@@ -1019,7 +1054,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			StoreCommand(door);
 		}
 		else
-			return ScriptError("Invalid shaft");
+			return ScriptError("Invalid shaft " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -1552,7 +1587,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		parent->CheckFile("data/" + tempdata[2]);
 
 		//create model
-		if (Simcore->GetStairs(ToInt(tempdata[0])))
+		if (Simcore->GetStairwell(ToInt(tempdata[0])))
 		{
 			//stop here if in Check mode
 			if (config->CheckScript == true)
@@ -1561,12 +1596,17 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return sNextLine;
 			}
 
-			Model *model;
+			::SBS::Stairwell::Level *level = Simcore->GetStairwell(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for stairwell " + tempdata[0]);
+
+			Model *model = 0;
 
 			if (compat == true)
-				model = Simcore->GetStairs(ToInt(tempdata[0]))->AddModel(config->Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+				model = level->AddModel(tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 			else
-				model = Simcore->GetStairs(ToInt(tempdata[0]))->AddModel(config->Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
+				model = level->AddModel(tempdata[1], tempdata[2], ToBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
 			if (config->setkey == true && model)
 				model->SetKey(config->keyvalue);
@@ -1575,7 +1615,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			StoreCommand(model);
 		}
 		else
-			return ScriptError("Invalid stairwell");
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -1629,11 +1669,16 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return sNextLine;
 			}
 
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for shaft " + tempdata[0]);
+
 			Model *model;
 			if (compat == true)
-				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(config->Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+				model = level->AddModel(tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 			else
-				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(config->Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
+				model = level->AddModel(tempdata[1], tempdata[2], ToBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
 			if (config->setkey == true && model)
 				model->SetKey(config->keyvalue);
@@ -1642,7 +1687,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			StoreCommand(model);
 		}
 		else
-			return ScriptError("Invalid shaft");
+			return ScriptError("Invalid shaft " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -1773,11 +1818,16 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			if (config->CheckScript == true)
 				return sNextLine;
 
+			::SBS::Shaft::Level *level = Simcore->GetShaft(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for shaft " + tempdata[0]);
+
 			Control* control = 0;
 			if (compat == true)
-				control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
+				control = level->AddControl(tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
 			else
-				control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), action_array, tex_array);
+				control = level->AddControl(tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), action_array, tex_array);
 
 			if (control)
 			{
@@ -1789,7 +1839,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			StoreCommand(control);
 		}
 		else
-			return ScriptError("Invalid shaft");
+			return ScriptError("Invalid shaft " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -1844,17 +1894,22 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
 
-		if (Simcore->GetStairs(ToInt(tempdata[0])))
+		if (Simcore->GetStairwell(ToInt(tempdata[0])))
 		{
 			//stop here if in Check mode
 			if (config->CheckScript == true)
 				return sNextLine;
 
+			::SBS::Stairwell::Level *level = Simcore->GetStairwell(ToInt(tempdata[0]))->GetLevel(config->Current);
+
+			if (!level)
+				return ScriptError("Invalid level " + ToString(config->Current) + " for stairwell " + tempdata[0]);
+
 			Control* control = 0;
 			if (compat == true)
-				control = Simcore->GetStairs(ToInt(tempdata[0]))->AddControl(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
+				control = level->AddControl(tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 1, action_array, tex_array);
 			else
-				control = Simcore->GetStairs(ToInt(tempdata[0]))->AddControl(config->Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), action_array, tex_array);
+				control = level->AddControl(tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), action_array, tex_array);
 
 			if (control)
 			{
@@ -1866,7 +1921,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			StoreCommand(control);
 		}
 		else
-			return ScriptError("Invalid stairwell");
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -1941,7 +1996,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 			StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddTrigger(Current, tempdata[1], tempdata[2], min, max, action_array));
 		else
-			return ScriptError("Invalid shaft");
+			return ScriptError("Invalid shaft " + tempdata[0]);
 		return sNextLine;
 	}
 
@@ -1981,36 +2036,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 			StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddTrigger(Current, tempdata[1], tempdata[2], min, max, action_array));
 		else
-			return ScriptError("Invalid stairwell");
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 		return sNextLine;
 	}*/
-
-	//AddCameraTexture command
-	if (linecheck.substr(0, 16) == "addcameratexture")
-	{
-		//get data
-		int params = SplitData(LineData, 17);
-
-		if (params != 11)
-			return ScriptError("Incorrect number of parameters");
-
-		//check numeric values
-		for (int i = 2; i <= 10; i++)
-		{
-			if (i == 7)
-				i++;
-
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
-		}
-
-		//stop here if in Check mode
-		if (config->CheckScript == true)
-			return sNextLine;
-
-		StoreCommand(floor->AddCameraTexture(tempdata[0], ToBool(tempdata[1]), ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
-		return sNextLine;
-	}
 
 	//Cut command
 	if (linecheck.substr(0, 4) == "cut ")

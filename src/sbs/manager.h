@@ -115,16 +115,16 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP StairsManager : public Object
+class SBSIMPEXP StairwellManager : public Object
 {
 public:
-	StairsManager(Object* parent);
-	~StairsManager();
-	Stairs* Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor);
+	StairwellManager(Object* parent);
+	~StairwellManager();
+	Stairwell* Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor);
 	int GetCount();
-	Stairs* Get(int number);
-	Stairs* GetIndex(int index);
-	void Remove(Stairs *stairs);
+	Stairwell* Get(int number);
+	Stairwell* GetIndex(int index);
+	void Remove(Stairwell *stairs);
 	void EnableAll(bool value);
 	void Loop();
 
@@ -132,13 +132,13 @@ private:
 	struct Map
 	{
 		int number; //stairwell number
-		Stairs* object; //stairwell object reference
+		Stairwell* object; //stairwell object reference
 	};
 
 	std::vector<Map> Array; //stairs object array
 
 	//function caching
-	Stairs* get_result;
+	Stairwell* get_result;
 	int get_number;
 };
 

@@ -37,7 +37,7 @@
 
 namespace SBS {
 
-CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabled, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation) : Object(parent)
+CameraTexture::CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation) : Object(parent)
 {
 	//creates a CameraTexture object
 
@@ -45,6 +45,10 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 
 	//set up SBS object
 	SetValues("CameraTexture", name, false);
+
+	FOV = fov;
+	camera = 0;
+	renderTexture = 0;
 
 	unsigned int texture_size = 256;
 	if (quality == 2)
@@ -54,9 +58,15 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 
 	try
 	{
+		if (sbs->GetTextureManager()->GetTextureByName(name, "General") || sbs->GetTextureManager()->GetMaterialByName(name, "General"))
+		{
+			ReportError("Error creating camera texture:\nTexture with the name '" + name + "' already exists.");
+			return;
+		}
+
 		//create a new render texture
-		std::string texturename = ToString(sbs->InstanceNumber) + ":" + name;
-		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
+		texturename = ToString(sbs->InstanceNumber) + ":" + name;
+		Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
 		sbs->GetTextureManager()->IncrementTextureCount();
 		renderTexture = texture->getBuffer()->getRenderTarget();
 
@@ -66,11 +76,13 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		camera->setFarClipDistance(0.0);
 		camera->setAspectRatio(1.0);
 
+		SetFOVAngle(fov);
+
 		//attach camera to scene node
 		GetSceneNode()->AttachObject(camera);
 
 		//set camera position and rotation
-		SetPosition(position);
+		Move(position);
 		if (use_rotation == true)
 			SetRotation(rotation);
 		else
@@ -83,14 +95,20 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		Enabled(true);
 
 		//create a new material
-		material = sbs->GetTextureManager()->CreateMaterial(name, "General");
+		Ogre::MaterialPtr material = sbs->GetTextureManager()->CreateMaterial(name, "General");
 		sbs->GetTextureManager()->BindTextureToMaterial(material, texturename, false);
+		material->setLightingEnabled(false);
 
 		//add texture multipliers
 		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
 
-		if (sbs->Verbose)
-			Report("Created camera texture '" + GetName() + "'");
+		//register with system
+		sbs->RegisterCameraTexture(this);
+
+		//disable by default
+		Enabled(false);
+
+		Report("Created camera texture '" + GetName() + "'");
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -107,20 +125,52 @@ CameraTexture::~CameraTexture()
 		sbs->mSceneManager->destroyCamera(camera);
 	}
 
-	Ogre::MaterialManager::getSingleton().remove(material->getHandle());
-	Ogre::TextureManager::getSingleton().remove(texture->getHandle());
+	sbs->GetTextureManager()->UnloadMaterial(texturename, "General");
+	sbs->GetTextureManager()->UnloadTexture(texturename, "General");
 
 	if (sbs->FastDelete == false)
 	{
 		sbs->GetTextureManager()->UnregisterTextureInfo(GetName());
-		sbs->GetTextureManager()->DecrementTextureCount();
-		sbs->GetTextureManager()->DecrementMaterialCount();
+		sbs->UnregisterCameraTexture(this);
 	}
 }
 
 void CameraTexture::Enabled(bool value)
 {
 	renderTexture->setActive(value);
+}
+
+bool CameraTexture::IsEnabled()
+{
+	return renderTexture->isActive();
+}
+
+void CameraTexture::SetFOVAngle(Real angle)
+{
+	//set camera FOV angle
+
+	if (angle > 0 && angle < 179.63)
+	{
+		Real ratio = (float)camera->getAspectRatio();
+		if (ratio > 0)
+			camera->setFOVy(Ogre::Degree(angle / ratio));
+	}
+}
+
+Real CameraTexture::GetFOVAngle()
+{
+	return (float)(camera->getFOVy().valueDegrees() * camera->getAspectRatio());
+}
+
+void CameraTexture::SetToDefaultFOV()
+{
+	//set to default FOV angle value
+	SetFOVAngle(FOV);
+}
+
+void CameraTexture::LookAt(const Ogre::Vector3 &position)
+{
+	GetSceneNode()->LookAt(position);
 }
 
 }

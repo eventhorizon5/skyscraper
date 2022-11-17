@@ -1,5 +1,74 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-Exit with a script error if specifying an invalid level, this fixes a number of crashes
+-Mention stairwell number in error messages
+-Added more verbose error messages, and fixed another crash
+-Added functions to enable/disable shadows on meshes and textures
+-Fix for LoadTextureCropped command, the CopyTexture() function was doing a full-size texture copy when it was supposed to only copy a portion.
+-Fixed a bug in GetMeshObject() where the shaft or stairwell number would be invalid if a model number was specified
+-Added INI file option for ambient lighting
+-Added lights to elevators in the Triton Center, and only have light creation message in verbose mode
+-Renamed Stairs object to Stairwell
+-Report on Shaft and Stairwell creation
+-Switched Shaft and Stairwell objects over to Levels design
+-Added a Simple CameraTexture demo building
+-Added an elevator shaft security camera to the Triton Center
+-Added CameraTextureControl dialog
+-Added Action support for CameraTexture object, and added Triggers to both buildings to only turn on the camera when nearby the screen
+-Added Action support for lights
+-GetObject() will now search for the object name, and the "parent name:object name" combination to find a result
+-Fixed a crash that would happen if a DynamicMesh mesh object was deleted after the related client's scenenode was deleted
+-Have Echo option checked by default in Console window
+-Delete flash timer in destructor
+-Text box sizing fixes for Mac
+-Show horizontal scrollbar in Console window
+-Added Clear button to Console
+-Fixed some initialization issues
+-Added an INI option for shadows, and disabled by default
+-Shadows are now working, but have a render error on startup
+-Added an Ogre frame statistics bar
+-Disable dynamic lighting on lit textures, in order to retain the lighting effect such as on indicators
+-simplified light functions
+-added SetDirection and LookAt scenenode functions, these need to be tested
+-Properly compute normals for 3D geometry, this partially fixes lighting issues.
+-Report loaded textures, no need for it to only be in verbose mode
+-cleaned up the PolyMesh geometry system, mostly to remove the double-vector (multi-polygon) structures
+-Removed Console's ability to hold positions, due to problems.  Fixed the text display, and removed the "Fix Scroll" button.
+-Changes for macOS (#8) (this was the first 3rd-party contribution to Skyscraper ever, I modified their changes and committed), this mainly fixes an issue with Retina displays.
+-Reset view mode on SBS shutdown
+-added a test light for the first floor, and one for each elevator
+-Fix for a crash that would happen when Caelum fails to load, the user exits to the main menu and loads another building.  In this, the default skybox will be loaded on that restart situation.
+-Run malloc_trim to free memory to OS on individual sim engine shutdown also
+-Free unused hardware buffers in UnloadSim()
+-On Linux, release as much free memory as possible when exiting to the main menu, using malloc_trim()
+-fixed an issue where the app would hang on Mac
+-enhanced build system for Linux
+-Mac version is now packaged properly
+-make sure lighting is off by default on models
+-added CPU architecture to Stats window
+-updated Caelum resources to work with GL3+ renderer
+-updated build system, mostly for Mac
+-allow lighting to be turned on from INI file, as an experimental feature
+-upgraded wxWidgets (the windowing system) from 3.0.2 to 3.2.1
+-upgraded Ogre (the graphics rendering engine) from version 1.9 to 13 (aka 1.13)
+-upgraded the FMod soundsystem
+-enhanced Linux build system
+-put source code on GitHub, with most of the development history
+-removed svnrev (this added the svn revision to the Skyscraper version, removed due to the move to Git)
+-increased size of main menu, and added a new background image (this may change in the near future)
+-increased size of main window
+-updated Linux build instructions
+-removed the DirectX9 rendersystem plugin, because it doesn't work anymore, use OpenGL instead.
+-Mesh needs to catch exceptions on unload, to prevent certain crashes
+-Don't use deprecated double buffering function
+-Removed compatibility support for Ogre 1.8
+-Fix for mesh removal on shutdown
+-Enable auto title
+-Added support for running under Wayland (Xwayland)
+-removed SVN ID tags
+-Don't create Bullet character and shape if turned off
+
+2018 and earlier development:
 -call buttons now fail the active elevator if it encounters a movement processing error, fixing an issue where the call button would hang if an error occurred
 -for controls, OnUnclick should not reverse the selection position if the previous action failed, since the reversal already took place
 -added function name to SetHoistwayAccess errors

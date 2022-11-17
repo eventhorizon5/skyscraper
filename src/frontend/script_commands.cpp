@@ -36,6 +36,10 @@
 #include "model.h"
 #include "stairs.h"
 #include "shaft.h"
+#include "light.h"
+#include "elevator.h"
+#include "elevatorcar.h"
+#include "cameratexture.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -886,7 +890,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Stairs *stairs = Simcore->CreateStairwell(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]));
+		Stairwell *stairs = Simcore->CreateStairwell(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]));
 		if (!stairs)
 			return ScriptError();
 
@@ -911,14 +915,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		int stairwell = ToInt(tempdata[0]);
-		if (!Simcore->GetStairs(stairwell))
-			return ScriptError("Invalid stairwell");
+		if (!Simcore->GetStairwell(stairwell))
+			return ScriptError("Invalid stairwell " + tempdata[0]);
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Simcore->GetStairs(stairwell)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		Simcore->GetStairwell(stairwell)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
 	}
 
@@ -935,10 +939,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
 
-		if (stairnum < 1 || stairnum > Simcore->GetStairsCount())
+		if (stairnum < 1 || stairnum > Simcore->GetStairwellCount())
 			return ScriptError("Invalid stairwell number");
 
-		Simcore->GetStairs(stairnum)->ShowFloors = true;
+		Simcore->GetStairwell(stairnum)->ShowFloors = true;
 
 		int params = SplitAfterEquals(LineData, false);
 		if (params < 1)
@@ -965,14 +969,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				}
 
 				for (int k = start; k <= end; k++)
-					Simcore->GetStairs(stairnum)->AddShowFloor(k);
+					Simcore->GetStairwell(stairnum)->AddShowFloor(k);
 			}
 			else
 			{
 				int showfloor;
 				if (!IsNumeric(tempdata[line], showfloor))
 					return ScriptError("Invalid value");
-				Simcore->GetStairs(stairnum)->AddShowFloor(showfloor);
+				Simcore->GetStairwell(stairnum)->AddShowFloor(showfloor);
 			}
 		}
 		return sNextLine;
@@ -990,7 +994,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		TrimString(str);
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
-		if (stairnum < 1 || stairnum > Simcore->GetStairsCount())
+		if (stairnum < 1 || stairnum > Simcore->GetStairwellCount())
 			return ScriptError("Invalid stairwell number");
 
 		//get text after equal sign
@@ -1014,7 +1018,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + strvalue);
 		}
 
-		Simcore->GetStairs(stairnum)->SetShowFull(value);
+		Simcore->GetStairwell(stairnum)->SetShowFull(value);
 		return sNextLine;
 	}
 
@@ -1693,6 +1697,540 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		StoreCommand(Simcore->AddTrigger(tempdata[0], tempdata[1], min, max, action_array));
+		return sNextLine;
+	}
+
+	//AddLight command
+	if (linecheck.substr(0, 9) == "addlight ")
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		if (!IsNumeric(tempdata[2]))
+			return ScriptError("Invalid value: " + tempdata[1]);
+
+		//int floor;
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//create light
+		if (floorobj)
+			StoreCommand(floorobj->AddLight(tempdata[1], ToInt(tempdata[2])));
+		else if (elevatorcarobj)
+			StoreCommand(elevatorcarobj->AddLight(tempdata[1], ToInt(tempdata[2])));
+		else if (shaftobj)
+			StoreCommand(shaftobj->AddLight(tempdata[1], ToInt(tempdata[2])));
+		else if (stairsobj)
+			StoreCommand(stairsobj->AddLight(tempdata[1], ToInt(tempdata[2])));
+		else
+			return ScriptError("Invalid object " + name);
+
+		return sNextLine;
+	}
+
+	//SetLightColor command
+	if (linecheck.substr(0, 14) == "setlightcolor ")
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get light object
+		Light *light = 0;
+		if (floorobj)
+			light = floorobj->GetLight(tempdata[1]);
+		if (elevatorcarobj)
+			light = elevatorcarobj->GetLight(tempdata[1]);
+		if (shaftobj)
+			light = shaftobj->GetLight(tempdata[1]);
+		if (stairsobj)
+			light = stairsobj->GetLight(tempdata[1]);
+
+		if (!light)
+			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
+
+		//modify light
+		light->SetColor(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
+
+		return sNextLine;
+	}
+
+	//SetLightSpecular command
+	if (linecheck.substr(0, 17) == "setlightspecular ")
+	{
+		//get data
+		int params = SplitData(LineData, 17);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get light object
+		Light *light = 0;
+		if (floorobj)
+			light = floorobj->GetLight(tempdata[1]);
+		if (elevatorcarobj)
+			light = elevatorcarobj->GetLight(tempdata[1]);
+		if (shaftobj)
+			light = shaftobj->GetLight(tempdata[1]);
+		if (stairsobj)
+			light = stairsobj->GetLight(tempdata[1]);
+
+		if (!light)
+			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
+
+		//modify light
+		light->SetSpecularColor(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
+
+		return sNextLine;
+	}
+
+	//SetLightAttenuation command
+	if (linecheck.substr(0, 20) == "setlightattenuation ")
+	{
+		//get data
+		int params = SplitData(LineData, 20);
+
+		if (params != 6)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 5; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get light object
+		Light *light = 0;
+		if (floorobj)
+			light = floorobj->GetLight(tempdata[1]);
+		if (elevatorcarobj)
+			light = elevatorcarobj->GetLight(tempdata[1]);
+		if (shaftobj)
+			light = shaftobj->GetLight(tempdata[1]);
+		if (stairsobj)
+			light = stairsobj->GetLight(tempdata[1]);
+
+		if (!light)
+			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
+
+		//modify light
+		light->SetAttenuation(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+
+		return sNextLine;
+	}
+
+	//SetSpotlightRange command
+	if (linecheck.substr(0, 18) == "setspotlightrange ")
+	{
+		//get data
+		int params = SplitData(LineData, 18);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get light object
+		Light *light = 0;
+		if (floorobj)
+			light = floorobj->GetLight(tempdata[1]);
+		if (elevatorcarobj)
+			light = elevatorcarobj->GetLight(tempdata[1]);
+		if (shaftobj)
+			light = shaftobj->GetLight(tempdata[1]);
+		if (stairsobj)
+			light = stairsobj->GetLight(tempdata[1]);
+
+		if (!light)
+			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
+
+		//modify light
+		light->SetSpotlightRange(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
+
+		return sNextLine;
+	}
+
+	//SetLightDirection command
+	if (linecheck.substr(0, 18) == "setlightdirection ")
+	{
+		//get data
+		int params = SplitData(LineData, 18);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get light object
+		Light *light = 0;
+		if (floorobj)
+			light = floorobj->GetLight(tempdata[1]);
+		if (elevatorcarobj)
+			light = elevatorcarobj->GetLight(tempdata[1]);
+		if (shaftobj)
+			light = shaftobj->GetLight(tempdata[1]);
+		if (stairsobj)
+			light = stairsobj->GetLight(tempdata[1]);
+
+		if (!light)
+			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
+
+		//modify light
+		light->SetDirection(Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+
+		return sNextLine;
+	}
+
+	//MoveLight command
+	if (linecheck.substr(0, 10) == "movelight ")
+	{
+		//get data
+		int params = SplitData(LineData, 10);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get light object
+		Light *light = 0;
+		if (floorobj)
+			light = floorobj->GetLight(tempdata[1]);
+		if (elevatorcarobj)
+			light = elevatorcarobj->GetLight(tempdata[1]);
+		if (shaftobj)
+			light = shaftobj->GetLight(tempdata[1]);
+		if (stairsobj)
+			light = stairsobj->GetLight(tempdata[1]);
+
+		if (!light)
+			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
+
+		//move light
+		light->Move(Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+
+		return sNextLine;
+	}
+
+	//AddCameraTexture command
+	if (linecheck.substr(0, 16) == "addcameratexture")
+	{
+		//get data
+		int params = SplitData(LineData, 17);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 10; i++)
+		{
+			if (i == 7)
+				i++;
+
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		if (floorobj)
+			StoreCommand(floorobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		else if (elevatorcarobj)
+			StoreCommand(elevatorcarobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		else if (shaftobj)
+			StoreCommand(shaftobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		else if (stairsobj)
+			StoreCommand(stairsobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		else
+			return ScriptError("Invalid object");
+
 		return sNextLine;
 	}
 

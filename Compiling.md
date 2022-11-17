@@ -27,7 +27,7 @@ Step 1 - build and install Bullet
 #### Build and install Bullet:
 
     cd bullet-svn
-    cmake -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release
+    cmake . -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release
     make
     sudo make install
     cd
@@ -59,7 +59,7 @@ Step 3 - build and install OGRE
     wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-13-skyscraper.tar.bz2
     tar xfvz ogre-13-skyscraper.tar.bz2
     cd ogre-13.4.3
-    cmake -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON OGRE_BUILD_COMPONENT_BULLET=OFF
+    cmake . -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON OGRE_BUILD_COMPONENT_BULLET=OFF
     make
     sudo make install
     cd
@@ -74,7 +74,7 @@ So pull the source from Git, and build:
 
     git clone https://github.com/OGRECave/ogre-caelum.git caelum
     cd caelum
-    cmake -DCMAKE_BUILD_TYPE=Release
+    cmake . -DCMAKE_BUILD_TYPE=Release
     make
     sudo make install
     cd
@@ -140,7 +140,7 @@ Step 1 - build and install OGRE
     wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-13-skyscraper.tar.bz2
     tar xfvz ogre-13-skyscraper.tar.bz2
     cd ogre-13.4.3
-    cmake -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON -DOGRE_BUILD_COMPONENT_BULLET=OFF -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX=/usr/local/ -DOGRE_BUILD_RENDERSYSTEM_METAL=ON
+    cmake . -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON -DOGRE_BUILD_COMPONENT_BULLET=OFF -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX=/usr/local/ -DOGRE_BUILD_RENDERSYSTEM_METAL=ON
     make
     sudo make install
     cd
@@ -160,7 +160,7 @@ Step 2 - build and install Bullet
 #### Build and install Bullet:
 
     cd bullet-svn
-    cmake -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64"
+    cmake . -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64"
     make
     sudo make install
     cd
@@ -190,7 +190,7 @@ So pull the source from Git, and build:
 
     git clone https://github.com/OGRECave/ogre-caelum.git caelum
     cd caelum
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-I/usr/local/include -arch arm64 -std=c++11"
+    cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-I/usr/local/include -arch arm64 -std=c++11"
     make
     sudo make install
     cd

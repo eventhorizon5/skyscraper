@@ -494,7 +494,7 @@ void ShaftManager::EnableAll(bool value)
 {
 	//enable or disable all shafts
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWholeShaft(value, true, true);
+		Array[i].object->EnableWhole(value, true, true);
 }
 
 void ShaftManager::Loop()
@@ -502,19 +502,19 @@ void ShaftManager::Loop()
 	LoopChildren();
 }
 
-StairsManager::StairsManager(Object* parent) : Object(parent)
+StairwellManager::StairwellManager(Object* parent) : Object(parent)
 {
 	//set up SBS object
-	SetValues("StairsManager", "Stairs Manager", true, false);
+	SetValues("StairwellManager", "Stairwell Manager", true, false);
 
 	get_result = 0;
 	get_number = 0;
 	EnableLoop(true);
 }
 
-StairsManager::~StairsManager()
+StairwellManager::~StairwellManager()
 {
-	//delete stairs
+	//delete stairwell
 	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object)
@@ -526,7 +526,7 @@ StairsManager::~StairsManager()
 	}
 }
 
-Stairs* StairsManager::Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor)
+Stairwell* StairwellManager::Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor)
 {
 	//create a stairwell object
 
@@ -561,18 +561,18 @@ Stairs* StairsManager::Create(int number, Real CenterX, Real CenterZ, int _start
 
 	Map stairs;
 	stairs.number = number;
-	stairs.object = new Stairs(this, number, CenterX, CenterZ, _startfloor, _endfloor);
+	stairs.object = new Stairwell(this, number, CenterX, CenterZ, _startfloor, _endfloor);
 	Array.push_back(stairs);
 	return stairs.object;
 }
 
-int StairsManager::GetCount()
+int StairwellManager::GetCount()
 {
 	//return the number of stairwells
 	return (int)Array.size();
 }
 
-Stairs* StairsManager::Get(int number)
+Stairwell* StairwellManager::Get(int number)
 {
 	//return pointer to stairs object
 
@@ -617,7 +617,7 @@ Stairs* StairsManager::Get(int number)
 	return 0;
 }
 
-Stairs* StairsManager::GetIndex(int index)
+Stairwell* StairwellManager::GetIndex(int index)
 {
 	if (index < 0 || index >= (int)Array.size())
 		return 0;
@@ -625,7 +625,7 @@ Stairs* StairsManager::GetIndex(int index)
 	return Array[index].object;
 }
 
-void StairsManager::Remove(Stairs *stairs)
+void StairwellManager::Remove(Stairwell *stairs)
 {
 	//remove a stairs object (does not delete the object)
 	for (size_t i = 0; i < Array.size(); i++)
@@ -642,14 +642,14 @@ void StairsManager::Remove(Stairs *stairs)
 	}
 }
 
-void StairsManager::EnableAll(bool value)
+void StairwellManager::EnableAll(bool value)
 {
 	//enable or disable all stairwells
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWholeStairwell(value, true);
+		Array[i].object->EnableWhole(value, true);
 }
 
-void StairsManager::Loop()
+void StairwellManager::Loop()
 {
 	LoopChildren();
 }

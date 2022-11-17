@@ -356,35 +356,8 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 		if (key == WXK_F9)
 		{
-			if (frontend->RTSS == false)
-				return;
-
-			Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-
-			Ogre::RTShader::RenderState* schemRenderState = shaderGenerator->getRenderState(Ogre::MSN_SHADERGEN);
-			static bool useFFPLighting;
-			useFFPLighting = !useFFPLighting;
-
-			if (useFFPLighting)
-			{
-				auto perPixelLightModel = shaderGenerator->createSubRenderState("FFP_Lighting");
-				Ogre::RTShader::SubRenderStateList list = schemRenderState->getSubRenderStates();
-				schemRenderState->addTemplateSubRenderState(perPixelLightModel);
-				frontend->Report("Using FFP Lighting");
-			}
-			else
-			{
-				for (auto srs : schemRenderState->getSubRenderStates()) {
-					if (srs->getType() == "FFP_Lighting") {
-						schemRenderState->removeSubRenderState(srs);
-						break;
-					}
-				}
-				frontend->Report("Using Per Pixel Lighting");
-			}
-
-			shaderGenerator->invalidateScheme(Ogre::MSN_SHADERGEN);
-
+			//toggle statistics bar
+			frontend->ToggleStats();
 		}
 
 		if (key == WXK_NUMPAD_SUBTRACT || key == (wxKeyCode)'[')

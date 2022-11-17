@@ -29,6 +29,7 @@ namespace SBS {
 class SBSIMPEXP Shaft : public Object
 {
 public:
+	class Level;
 
 	int ShaftNumber; //shaft number
 	int startfloor; //starting floor
@@ -43,20 +44,14 @@ public:
 	int ShowFloors; //determines if floors should be shown while inside the shaft/elevator; 0 is off, 1 shows a portion at a time, 2 shows all in list - floor list in ShowFloorsList
 	bool ShowOutside; //true if outside should be shown while inside the shaft/elevator; floor list in ShowOutsideList
 	bool ShowInterfloors; //true if interfloors should be shown while inside the shaft/elevator
+	bool EnableCheck;
 
 	Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	~Shaft();
-	Wall* AddWall(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
-	bool AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
-	Wall* AddFloor(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
-	bool AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
-	void Enabled(int floor, bool value, bool EnableShaftDoors);
-	void EnableWholeShaft(bool value, bool EnableShaftDoors, bool force = false);
-	bool IsInShaft(const Ogre::Vector3 &position);
+	void EnableWhole(bool value, bool EnableShaftDoors, bool force = false);
+	bool IsInside(const Ogre::Vector3 &position);
 	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset);
-	bool Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0);
 	void EnableRange(int floor, int range, bool value, bool EnableShaftDoors);
-	bool IsEnabledFloor(int floor);
 	void AddShowFloor(int floor);
 	void RemoveShowFloor(int floor);
 	bool IsShowFloor(int floor);
@@ -69,37 +64,87 @@ public:
 	bool IsValidFloor(int floor);
 	void AddElevator(int number);
 	void RemoveElevator(int number);
-	void RemoveLight(Light *light);
-	void RemoveModel(Model *model);
-	void RemoveControl(Control *control);
-	void RemoveTrigger(Trigger *trigger);
-	MeshObject* GetMeshObject(int floor);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	Light* AddLight(int floor, const std::string &name, int type);
-	Model* AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
-	void AddModel(int floor, Model *model);
-	Control* AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
-	Trigger* AddTrigger(int floor, const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	void OnInit();
-	Door* AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
-	void RemoveDoor(Door *door);
 	void Check(Ogre::Vector3 position, int current_floor);
 	void Loop();
-	Model* GetModel(int floor, std::string name);
 	DynamicMesh* GetShaftDoorContainer() { return ShaftDoorContainer; }
 	void SetShowFull(bool value);
 	bool GetShowFull() { return ShowFullShaft; }
+	Level* GetLevel(int floor);
+	DynamicMesh* GetDynamicMesh();
+	DynamicMesh* GetDoorWrapper();
+
+	class SBSIMPEXP Level : public Object
+	{
+	public:
+
+		Level(Shaft *parent, int number);
+		~Level();
+		Wall* AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
+		bool AddWall(Wall *wall, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
+		Wall* AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
+		bool AddFloor(Wall *wall, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
+		void Enabled(bool value, bool EnableShaftDoors);
+		bool Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0);
+		bool IsEnabled();
+		void RemoveLight(Light *light);
+		void RemoveModel(Model *model);
+		void RemoveControl(Control *control);
+		void RemoveTrigger(Trigger *trigger);
+		MeshObject* GetMeshObject();
+		Light* AddLight(const std::string &name, int type);
+		Light* GetLight(const std::string &name);
+		Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
+		void AddModel(Model *model);
+		Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
+		Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
+		void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
+		Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
+		void RemoveDoor(Door *door);
+		Model* GetModel(std::string name);
+		int GetFloor();
+		void Loop();
+		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
+
+		bool enabled;
+
+	private:
+		MeshObject* mesh; //level mesh
+
+		//Doors
+		std::vector<Door*> DoorArray;
+
+		//Lights
+		std::vector<Light*> lights;
+
+		//Models
+		std::vector<Model*> ModelArray;
+
+		//Controls
+		std::vector<Control*> ControlArray;
+
+		//Triggers
+		//std::vector<Trigger*> TriggerArray;
+
+		//CameraTextures
+		std::vector<CameraTexture*> CameraTextureArray;
+
+		int floornum;
+		Shaft* parent;
+	};
 
 private:
-	std::vector<MeshObject*> ShaftArray; //shaft mesh array
-	std::vector<bool> EnableArray;
-	bool EnableCheck;
+	std::vector<Level*> Levels;
 	std::vector<int> ShowFloorsList; //list of floors to enable while inside the shaft/elevator
 	std::vector<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	std::vector<int> ShowInterfloorsList; //list of interfloors to enable while inside the shaft/elevator
 	bool ShowFullShaft; //if true, always show full shaft instead of only a selected range
+
+	//Doors
+	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//mesh container for shaft doors
 	DynamicMesh *ShaftDoorContainer; //shaft door dynamic mesh container
@@ -110,22 +155,6 @@ private:
 	bool checkfirstrun;
 	bool InElevator;
 	bool ShowFloorsFull_Enabled;
-
-	//Doors
-	std::vector<std::vector<Door*> > DoorArray;
-	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
-
-	//Lights
-	std::vector<std::vector<Light*> > lights;
-
-	//Models
-	std::vector<std::vector<Model*> > ModelArray;
-
-	//Controls
-	std::vector<std::vector<Control*> > ControlArray;
-
-	//Triggers
-	//std::vector<std::vector<Trigger*> > TriggerArray;
 
 	//dynamic mesh object
 	DynamicMesh *dynamic_mesh;

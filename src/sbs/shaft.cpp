@@ -35,6 +35,7 @@
 #include "camera.h"
 #include "control.h"
 #include "profiler.h"
+#include "cameratexture.h"
 #include "shaft.h"
 
 namespace SBS {
@@ -81,20 +82,9 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 
 	dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
 
-	ShaftArray.resize(endfloor - startfloor + 1);
-	EnableArray.resize(endfloor - startfloor + 1);
-	DoorArray.resize(endfloor - startfloor + 1);
-	lights.resize(endfloor - startfloor + 1);
-	ModelArray.resize(endfloor - startfloor + 1);
-	ControlArray.resize(endfloor - startfloor + 1);
-	//TriggerArray.resize(endfloor - startfloor + 1);
-
 	for (int i = startfloor; i <= endfloor; i++)
 	{
-		//Create shaft meshes
-		ShaftArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i), dynamic_mesh);
-		ShaftArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->Altitude);
-		EnableArray[i - startfloor] = true;
+		Levels.push_back(new Level(this, i));
 	}
 
 	//create a dynamic mesh for doors
@@ -103,6 +93,8 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	//create a dynamic mesh for doors
 	ShaftDoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Shaft Door Container", 0, true);
 
+	Report("created at " + TruncateNumber(CenterX, 4) + ", " + TruncateNumber(CenterZ, 4));
+
 	EnableLoop(true);
 }
 
@@ -110,74 +102,12 @@ Shaft::~Shaft()
 {
 	//destructor
 
-	//delete controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
+	//delete levels
+	for (int i = 0; i < Levels.size(); i++)
 	{
-		for (size_t j = 0; j < ControlArray[i].size(); j++)
-		{
-			if (ControlArray[i][j])
-			{
-				ControlArray[i][j]->parent_deleting = true;
-				delete ControlArray[i][j];
-			}
-			ControlArray[i][j] = 0;
-		}
-	}
-
-	//delete triggers
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		for (size_t j = 0; j < TriggerArray[i].size(); j++)
-		{
-			if (TriggerArray[i][j])
-			{
-				TriggerArray[i][j]->parent_deleting = true;
-				delete TriggerArray[i][j];
-			}
-			TriggerArray[i][j] = 0;
-		}
-	}*/
-
-	//delete models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		for (size_t j = 0; j < ModelArray[i].size(); j++)
-		{
-			if (ModelArray[i][j])
-			{
-				ModelArray[i][j]->parent_deleting = true;
-				delete ModelArray[i][j];
-			}
-			ModelArray[i][j] = 0;
-		}
-	}
-
-	//delete lights
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		for (size_t j = 0; j < lights[i].size(); j++)
-		{
-			if (lights[i][j])
-			{
-				lights[i][j]->parent_deleting = true;
-				delete lights[i][j];
-			}
-			lights[i][j] = 0;
-		}
-	}
-
-	//delete doors
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		for (size_t j = 0; j < DoorArray[i].size(); j++)
-		{
-			if (DoorArray[i][j])
-			{
-				DoorArray[i][j]->parent_deleting = true;
-				delete DoorArray[i][j];
-			}
-			DoorArray[i][j] = 0;
-		}
+		if (Levels[i])
+			delete Levels[i];
+		Levels[i] = 0;
 	}
 
 	if (DoorWrapper)
@@ -187,17 +117,6 @@ Shaft::~Shaft()
 	if (ShaftDoorContainer)
 		delete ShaftDoorContainer;
 	ShaftDoorContainer = 0;
-
-	//delete mesh array objects
-	for (size_t i = 0; i < ShaftArray.size(); i++)
-	{
-		if (ShaftArray[i])
-		{
-			ShaftArray[i]->parent_deleting = true;
-			delete ShaftArray[i];
-		}
-		ShaftArray[i] = 0;
-	}
 
 	//delete dynamic mesh
 	if (dynamic_mesh)
@@ -209,134 +128,17 @@ Shaft::~Shaft()
 		sbs->RemoveShaft(this);
 }
 
-Wall* Shaft::AddWall(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
+Shaft::Level* Shaft::GetLevel(int floor)
 {
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
+	for (int i = 0; i < Levels.size(); i++)
 	{
-		ReportError("AddWall: Floor " + ToString(floor) + " out of range");
-		return 0;
+		if (Levels[i]->GetFloor() == floor)
+			return Levels[i];
 	}
-
-	Wall *wall = GetMeshObject(floor)->CreateWallObject(name);
-	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
-	return wall;
+	return 0;
 }
 
-bool Shaft::AddWall(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
-{
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-		return ReportError("AddWall: Floor " + ToString(floor) + " out of range");
-
-	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
-}
-
-Wall* Shaft::AddFloor(int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
-{
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-	{
-		ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
-		return 0;
-	}
-
-	Wall *wall = GetMeshObject(floor)->CreateWallObject(name);
-	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
-	return wall;
-}
-
-bool Shaft::AddFloor(Wall *wall, int floor, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
-{
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-		return ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
-
-	//get shaft extents
-	Real altitude = sbs->GetFloor(floor)->Altitude;
-
-	//recalculate shaft extents if needed
-	if (altitude + voffset1 < bottom)
-		bottom = altitude + voffset1;
-	if (altitude + voffset2 < bottom)
-		bottom = altitude + voffset2;
-	if (altitude + voffset1 > top)
-		top = altitude + voffset1;
-	if (altitude + voffset2 > top)
-		top = altitude + voffset2;
-
-	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
-}
-
-void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
-{
-	SBS_PROFILE("Shaft::Enabled");
-	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor && EnableCheck == false)
-	{
-		//turns shaft on/off for a specific floor
-
-		GetMeshObject(floor)->Enabled(value);
-		EnableArray[floor - startfloor] = value;
-
-		//doors
-		for (size_t i = 0; i < DoorArray[floor - startfloor].size(); i++)
-		{
-			if (DoorArray[floor - startfloor][i])
-				DoorArray[floor - startfloor][i]->Enabled(value);
-		}
-
-		//controls
-		for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
-		{
-			if (ControlArray[floor - startfloor][i])
-				ControlArray[floor - startfloor][i]->Enabled(value);
-		}
-
-		//triggers
-		/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
-		{
-			if (TriggerArray[floor - startfloor][i])
-				TriggerArray[floor - startfloor][i]->Enabled(value);
-		}*/
-
-		//models
-		for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
-		{
-			if (ModelArray[floor - startfloor][i])
-				ModelArray[floor - startfloor][i]->Enabled(value);
-		}
-
-		//lights
-		for (size_t i = 0; i < lights[floor - startfloor].size(); i++)
-		{
-			if (lights[floor - startfloor][i])
-				lights[floor - startfloor][i]->Enabled(value);
-		}
-
-		if (EnableShaftDoors == true)
-		{
-			for (size_t i = 0; i < elevators.size(); i++)
-			{
-				Elevator *elevator = sbs->GetElevator(elevators[i]);
-				if (elevator)
-				{
-					for (int j = 1; j <= elevator->GetCarCount(); j++)
-					{
-						ElevatorCar *car = elevator->GetCar(j);
-
-						for (size_t k = 0; k < car->ServicedFloors.size(); k++)
-						{
-							if (car->ServicedFloors[k] == floor)
-								car->ShaftDoorsEnabled(0, car->ServicedFloors[k], value);
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
+void Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
 {
 	//turn on/off entire shaft
 
@@ -351,8 +153,8 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 		for (int i = startfloor; i <= endfloor; i++)
 		{
 			if (force == true)
-				EnableArray[i - startfloor] = !value;
-			Enabled(i, value, EnableShaftDoors);
+				GetLevel(i)->enabled = !value;
+			GetLevel(i)->Enabled(value, EnableShaftDoors);
 		}
 	}
 
@@ -366,7 +168,7 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 		EnableCheck = true;
 }
 
-bool Shaft::IsInShaft(const Ogre::Vector3 &position)
+bool Shaft::IsInside(const Ogre::Vector3 &position)
 {
 	//SBS_PROFILE("Shaft::IsInShaft");
 
@@ -376,13 +178,13 @@ bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 
 	checkfirstrun = false;
 
-	if (position.y > bottom && position.y < top && ShaftArray.size() > 0)
+	if (position.y > bottom && position.y < top && Levels.size() > 0)
 	{
 		//first determine if camera has X and Z values within the first shaft floor's bounding box
-		if (ShaftArray[0]->InBoundingBox(position, false) == true)
+		if (Levels[0]->GetMeshObject()->InBoundingBox(position, false) == true)
 		{
 			//do a hit beam test from the position to the bottom of the shaft, to see if it hits a shaft floor
-			bool result = (ShaftArray[0]->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
+			bool result = (Levels[0]->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
 
 			//cache values
 			lastcheckresult = result;
@@ -455,38 +257,6 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	}
 }
 
-bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
-{
-	//Cut through a wall segment
-	//the Y values in start and end are both relative to the floor's altitude
-
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-	{
-		if (sbs->Verbose)
-			ReportError("Cut: Floor " + ToString(floor) + " out of range");
-		else
-			sbs->LastError = "Cut: Floor " + ToString(floor) + " out of range";
-		return false;
-	}
-
-	if (!sbs->GetFloor(floor))
-		return false;
-
-	for (size_t i = 0; i < GetMeshObject(floor)->Walls.size(); i++)
-	{
-		bool reset = true;
-		if (i > 0)
-			reset = false;
-
-		if (relative == true)
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
-		else
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Ogre::Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
-	}
-	return true;
-}
-
 void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 {
 	//turn on/off a range of floors
@@ -522,12 +292,12 @@ void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 		if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
 		{
 			if (sbs->GetFloor(floor)->IsInGroup(floor - additionalfloors - 1) == false) //only disable if not in group
-				Enabled(floor - additionalfloors - 1, false, EnableShaftDoors);
+				GetLevel(floor - additionalfloors - 1)->Enabled(false, EnableShaftDoors);
 		}
 		if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
 		{
 			if (sbs->GetFloor(floor)->IsInGroup(floor + additionalfloors + 1) == false) //only disable if not in group
-				Enabled(floor + additionalfloors + 1, false, EnableShaftDoors);
+				GetLevel(floor + additionalfloors + 1)->Enabled(false, EnableShaftDoors);
 		}
 	}
 
@@ -535,16 +305,8 @@ void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
 	{
 		if (i >= startfloor && i <= endfloor)
-			Enabled(i, value, EnableShaftDoors);
+			GetLevel(i)->Enabled(value, EnableShaftDoors);
 	}
-}
-
-bool Shaft::IsEnabledFloor(int floor)
-{
-	if (floor >= startfloor && floor <= endfloor)
-		return EnableArray[floor - startfloor];
-	else
-		return false;
 }
 
 void Shaft::AddShowFloor(int floor)
@@ -665,7 +427,7 @@ bool Shaft::IsValidFloor(int floor)
 	if (floor < startfloor || floor > endfloor)
 		return false;
 
-	if (!ShaftArray[floor - startfloor])
+	if (!GetLevel(floor))
 		return false;
 
 	return true;
@@ -698,80 +460,6 @@ void Shaft::RemoveElevator(int number)
 	}
 }
 
-void Shaft::RemoveLight(Light *light)
-{
-	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		for (size_t j = 0; j < lights[i].size(); j++)
-		{
-			if (lights[i][j] == light)
-			{
-				lights[i].erase(lights[i].begin() + j);
-				return;
-			}
-		}
-	}
-}
-
-void Shaft::RemoveModel(Model *model)
-{
-	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		for (size_t j = 0; j < ModelArray[i].size(); j++)
-		{
-			if (ModelArray[i][j] == model)
-			{
-				ModelArray[i].erase(ModelArray[i].begin() + j);
-				return;
-			}
-		}
-	}
-}
-
-void Shaft::RemoveControl(Control *control)
-{
-	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		for (size_t j = 0; j < ControlArray[i].size(); j++)
-		{
-			if (ControlArray[i][j] == control)
-			{
-				ControlArray[i].erase(ControlArray[i].begin() + j);
-				return;
-			}
-		}
-	}
-}
-
-void Shaft::RemoveTrigger(Trigger *trigger)
-{
-	//remove a trigger reference (does not delete the object itself)
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		for (size_t j = 0; j < TriggerArray[i].size(); j++)
-		{
-			if (TriggerArray[i][j] == trigger)
-			{
-				TriggerArray[i].erase(TriggerArray[i].begin() + j);
-				return;
-			}
-		}
-	}*/
-}
-
-MeshObject* Shaft::GetMeshObject(int floor)
-{
-	//returns the mesh object for the specified floor
-
-	if (!IsValidFloor(floor))
-		return 0;
-
-	return ShaftArray[floor - startfloor];
-}
-
 void Shaft::Report(const std::string &message)
 {
 	//general reporting function
@@ -784,92 +472,10 @@ bool Shaft::ReportError(const std::string &message)
 	return Object::ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
-Light* Shaft::AddLight(int floor, const std::string &name, int type)
-{
-	//add a global light
-
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
-	Light* light = new Light(GetMeshObject(floor), name, type);
-	lights[floor - startfloor].push_back(light);
-	return light;
-}
-
-Model* Shaft::AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
-{
-	//add a model
-
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
-	Model* model = new Model(GetMeshObject(floor), name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
-	if (model->load_error == true)
-	{
-		delete model;
-		return 0;
-	}
-	ModelArray[floor - startfloor].push_back(model);
-	return model;
-}
-
-void Shaft::AddModel(int floor, Model *model)
-{
-	//add a model reference
-
-	if (!model)
-		return;
-
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return;
-
-	for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
-	{
-		if (ModelArray[floor - startfloor][i] == model)
-			return;
-	}
-
-	ModelArray[floor - startfloor].push_back(model);
-}
-
-Control* Shaft::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
-{
-	//add a control
-
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
-	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
-	control->Move(CenterX, voffset, CenterZ);
-	ControlArray[floor - startfloor].push_back(control);
-	return control;
-}
-
-Trigger* Shaft::AddTrigger(int floor, const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
-{
-	//triggers disabled for now
-
-	//add a trigger
-
-	//exit if floor is invalid
-	/*if (!IsValidFloor(floor))
-		return 0;
-
-	Trigger* trigger = new Trigger(GetMeshObject(floor), name, false, sound_file, area_min, area_max, action_names);
-	TriggerArray[floor - startfloor].push_back(trigger);
-	return trigger;*/
-	return 0;
-}
-
 void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	for (int i = startfloor; i <= endfloor; i++)
-        	GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
+	for (int i = 0; i < Levels.size(); i++)
+		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
 void Shaft::OnInit()
@@ -877,84 +483,9 @@ void Shaft::OnInit()
 	//startup initialization of shafts
 
 	if (ShowFullShaft == false)
-		EnableWholeShaft(false, true);
+		EnableWhole(false, true);
 	else
-		EnableWholeShaft(true, true, true);
-}
-
-Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
-{
-	//add a door
-
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-	{
-		ReportError("AddDoor: Floor " + ToString(floor) + " out of range");
-		return 0;
-	}
-
-	Floor *floorptr = sbs->GetFloor(floor);
-	if (!floorptr)
-		return 0;
-
-	Real x1, z1, x2, z2;
-	//set up coordinates
-	if (direction < 5)
-	{
-		x1 = CenterX;
-		x2 = CenterX;
-		z1 = CenterZ - (width / 2);
-		z2 = CenterZ + (width / 2);
-	}
-	else
-	{
-		x1 = CenterX - (width / 2);
-		x2 = CenterX + (width / 2);
-		z1 = CenterZ;
-		z2 = CenterZ;
-	}
-
-	//cut area
-	sbs->ResetDoorwayWalls();
-	if (direction < 5)
-	{
-		Cut(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
-	}
-	else
-	{
-		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
-	}
-
-	//create doorway walls
-	sbs->AddDoorwayWalls(GetMeshObject(floor), "Connection Walls", "ConnectionWall", 0, 0);
-
-	int index = floor - startfloor;
-	std::string num = ToString((int)DoorArray[index].size());
-	std::string name = "Shaft " + ToString(ShaftNumber) + ":Door " + ToString(floor) + ":" + num;
-
-	Door* door = new Door(GetMeshObject(floor), DoorWrapper, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
-	DoorArray[index].push_back(door);
-
-	floorptr = 0;
-	return door;
-}
-
-void Shaft::RemoveDoor(Door *door)
-{
-	//remove a door reference (this does not delete the object)
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		for (size_t j = 0; j < DoorArray[i].size(); j++)
-		{
-			if (DoorArray[i][j] == door)
-			{
-				DoorArray[i].erase(DoorArray[i].begin() + j);
-				return;
-			}
-		}
-	}
+		EnableWhole(true, true, true);
 }
 
 void Shaft::Check(Ogre::Vector3 position, int current_floor)
@@ -971,7 +502,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 
 	SBS_PROFILE("Shaft::Check");
 
-	if (IsInShaft(position) == true)
+	if (IsInside(position) == true)
 	{
 		if (InsideShaft == false && sbs->InElevator == false)
 		{
@@ -981,7 +512,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 			InElevator = false;
 
 			//turn on entire shaft
-			EnableWholeShaft(true, true);
+			EnableWhole(true, true);
 		}
 		else if (InsideShaft == true && sbs->InElevator == true)
 		{
@@ -990,7 +521,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 			sbs->InShaft = false;
 			InElevator = true;
 
-			EnableWholeShaft(ShowFullShaft, true);
+			EnableWhole(ShowFullShaft, true);
 		}
 		else if (InsideShaft == false && sbs->InElevator == true && ShowFullShaft == false)
 		{
@@ -1060,7 +591,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		InElevator = false;
 
 		//turn off shaft
-		EnableWholeShaft(false, true, true);
+		EnableWhole(false, true, true);
 
 		//disable floors listed in ShowFloors list, when "full" mode is enabled
 		if (ShowFloors == 2 && ShowFloorsFull_Enabled == true)
@@ -1112,25 +643,14 @@ void Shaft::Loop()
 	LoopChildren();
 }
 
-Model* Shaft::GetModel(int floor, std::string name)
+DynamicMesh* Shaft::GetDynamicMesh()
 {
-	//get a model by name
+	return dynamic_mesh;
+}
 
-	//exit if floor is invalid
-	if (!IsValidFloor(floor))
-		return 0;
-
-	SetCase(name, false);
-
-	int index = floor - startfloor;
-
-	for (size_t i = 0; i < ModelArray[index].size(); i++)
-	{
-		if (SetCaseCopy(ModelArray[index][i]->GetName(), false) == name)
-			return ModelArray[index][i];
-	}
-
-	return 0;
+DynamicMesh* Shaft::GetDoorWrapper()
+{
+	return DoorWrapper;
 }
 
 void Shaft::SetShowFull(bool value)
@@ -1141,6 +661,511 @@ void Shaft::SetShowFull(bool value)
 	dynamic_mesh->force_combine = value;
 	DoorWrapper->force_combine = value;
 	ShaftDoorContainer->force_combine = value;
+}
+
+Shaft::Level::Level(Shaft *parent, int number) : Object(parent)
+{
+	//set up SBS object
+	SetValues("Shaft Level", "", true);
+
+	enabled = true;
+	floornum = number;
+	this->parent = parent;
+
+	std::string name;
+	name = "Shaft " + ToString(parent->ShaftNumber) + ": Level " + ToString(number);
+	SetName(name);
+
+	//Create level mesh
+	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
+	SetPositionY(sbs->GetFloor(number)->Altitude);
+
+	EnableLoop(true);
+}
+
+Shaft::Level::~Level()
+{
+	//delete controls
+	for (size_t i = 0; i < ControlArray.size(); i++)
+	{
+		if (ControlArray[i])
+		{
+			ControlArray[i]->parent_deleting = true;
+			delete ControlArray[i];
+		}
+		ControlArray[i] = 0;
+	}
+
+	//delete triggers
+	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+		{
+			TriggerArray[i]->parent_deleting = true;
+			delete TriggerArray[i];
+		}
+		TriggerArray[i] = 0;
+	}*/
+
+	//delete models
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i])
+		{
+			ModelArray[i]->parent_deleting = true;
+			delete ModelArray[i];
+		}
+		ModelArray[i] = 0;
+	}
+
+	//delete lights
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (lights[i])
+		{
+			lights[i]->parent_deleting = true;
+			delete lights[i];
+		}
+		lights[i] = 0;
+	}
+
+	//delete doors
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+		{
+			DoorArray[i]->parent_deleting = true;
+			delete DoorArray[i];
+		}
+		DoorArray[i] = 0;
+	}
+
+	//delete camera textures
+	for (size_t i = 0; i < CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i])
+		{
+			CameraTextureArray[i]->parent_deleting = true;
+			delete CameraTextureArray[i];
+		}
+		CameraTextureArray[i] = 0;
+	}
+
+	if (mesh)
+		delete mesh;
+	mesh = 0;
+}
+
+Wall* Shaft::Level::AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
+{
+	//exit with an error if floor is invalid
+	/*if (IsValidFloor(floor) == false)
+	{
+		ReportError("AddWall: Floor " + ToString(floor) + " out of range");
+		return 0;
+	}*/
+
+	Wall *wall = mesh->CreateWallObject(name);
+	AddWall(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
+	return wall;
+}
+
+bool Shaft::Level::AddWall(Wall *wall, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th)
+{
+	//exit with an error if floor is invalid
+	/*if (IsValidFloor(floor) == false)
+		return ReportError("AddWall: Floor " + ToString(floor) + " out of range");*/
+
+	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+}
+
+Wall* Shaft::Level::AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
+{
+	//exit with an error if floor is invalid
+	/*if (IsValidFloor(floor) == false)
+	{
+		ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
+		return 0;
+	}*/
+
+	Wall *wall = mesh->CreateWallObject(name);
+	AddFloor(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
+	return wall;
+}
+
+bool Shaft::Level::AddFloor(Wall *wall, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
+{
+	//exit with an error if floor is invalid
+	//if (IsValidFloor(floor) == false)
+		//return ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
+
+	//get shaft extents
+	Real altitude = sbs->GetFloor(floornum)->Altitude;
+
+	//recalculate shaft extents if needed
+	if (altitude + voffset1 < parent->bottom)
+		parent->bottom = altitude + voffset1;
+	if (altitude + voffset2 < parent->bottom)
+		parent->bottom = altitude + voffset2;
+	if (altitude + voffset1 > parent->top)
+		parent->top = altitude + voffset1;
+	if (altitude + voffset2 > parent->top)
+		parent->top = altitude + voffset2;
+
+	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+}
+
+void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
+{
+	SBS_PROFILE("Shaft::Enabled");
+	if (IsEnabled() != value && parent->EnableCheck == false)
+	{
+		//turns shaft on/off for a specific floor
+
+		mesh->Enabled(value);
+		enabled = value;
+
+		//doors
+		for (size_t i = 0; i < DoorArray.size(); i++)
+		{
+			if (DoorArray[i])
+				DoorArray[i]->Enabled(value);
+		}
+
+		//controls
+		for (size_t i = 0; i < ControlArray.size(); i++)
+		{
+			if (ControlArray[i])
+				ControlArray[i]->Enabled(value);
+		}
+
+		//triggers
+		/*for (size_t i = 0; i < TriggerArray.size(); i++)
+		{
+			if (TriggerArray[i])
+				TriggerArray[i]->Enabled(value);
+		}*/
+
+		//models
+		for (size_t i = 0; i < ModelArray.size(); i++)
+		{
+			if (ModelArray[i])
+				ModelArray[i]->Enabled(value);
+		}
+
+		//lights
+		for (size_t i = 0; i < lights.size(); i++)
+		{
+			if (lights[i])
+				lights[i]->Enabled(value);
+		}
+
+		if (EnableShaftDoors == true)
+		{
+			for (size_t i = 0; i < parent->elevators.size(); i++)
+			{
+				Elevator *elevator = sbs->GetElevator(parent->elevators[i]);
+				if (elevator)
+				{
+					for (int j = 1; j <= elevator->GetCarCount(); j++)
+					{
+						ElevatorCar *car = elevator->GetCar(j);
+
+						for (size_t k = 0; k < car->ServicedFloors.size(); k++)
+						{
+							if (car->ServicedFloors[k] == floornum)
+								car->ShaftDoorsEnabled(0, car->ServicedFloors[k], value);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+bool Shaft::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
+{
+	//Cut through a wall segment
+	//the Y values in start and end are both relative to the floor's altitude
+
+	//exit with an error if floor is invalid
+	/*if (IsValidFloor(floor) == false)
+	{
+		if (sbs->Verbose)
+			ReportError("Cut: Floor " + ToString(floor) + " out of range");
+		else
+			sbs->LastError = "Cut: Floor " + ToString(floor) + " out of range";
+		return false;
+	}*/
+
+	if (!sbs->GetFloor(floornum))
+		return false;
+
+	for (size_t i = 0; i < mesh->Walls.size(); i++)
+	{
+		bool reset = true;
+		if (i > 0)
+			reset = false;
+
+		if (relative == true)
+			sbs->Cut(mesh->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+		else
+			sbs->Cut(mesh->Walls[i], Ogre::Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Ogre::Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
+	}
+	return true;
+}
+
+bool Shaft::Level::IsEnabled()
+{
+	return enabled;
+}
+
+void Shaft::Level::RemoveLight(Light *light)
+{
+	//remove a light reference (does not delete the object itself)
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (lights[i] == light)
+		{
+			lights.erase(lights.begin() + i);
+			return;
+		}
+	}
+}
+
+void Shaft::Level::RemoveModel(Model *model)
+{
+	//remove a model reference (does not delete the object itself)
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+		{
+			ModelArray.erase(ModelArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void Shaft::Level::RemoveControl(Control *control)
+{
+	//remove a control reference (does not delete the object itself)
+	for (size_t i = 0; i < ControlArray.size(); i++)
+	{
+		if (ControlArray[i] == control)
+		{
+			ControlArray.erase(ControlArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void Shaft::Level::RemoveTrigger(Trigger *trigger)
+{
+	//remove a trigger reference (does not delete the object itself)
+	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i] == trigger)
+		{
+			TriggerArray.erase(TriggerArray.begin() + i);
+			return;
+		}
+	}*/
+}
+
+MeshObject* Shaft::Level::GetMeshObject()
+{
+	//returns the mesh object for the specified floor
+
+	return mesh;
+}
+
+Light* Shaft::Level::AddLight(const std::string &name, int type)
+{
+	//add a global light
+
+	Light* light = new Light(mesh, name, type);
+	lights.push_back(light);
+	return light;
+}
+
+Light* Shaft::Level::GetLight(const std::string &name)
+{
+	for (int i = 0; i < lights.size(); i++)
+	{
+		if (lights[i]->GetName() == name)
+			return lights[i];
+	}
+	return 0;
+}
+
+Model* Shaft::Level::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
+{
+	//add a model
+
+	Model* model = new Model(mesh, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	if (model->load_error == true)
+	{
+		delete model;
+		return 0;
+	}
+	ModelArray.push_back(model);
+	return model;
+}
+
+void Shaft::Level::AddModel(Model *model)
+{
+	//add a model reference
+
+	if (!model)
+		return;
+
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+			return;
+	}
+
+	ModelArray.push_back(model);
+}
+
+Control* Shaft::Level::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+{
+	//add a control
+
+	std::vector<Action*> actionnull; //not used
+	Control* control = new Control(mesh, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
+	control->Move(CenterX, voffset, CenterZ);
+	ControlArray.push_back(control);
+	return control;
+}
+
+Trigger* Shaft::Level::AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+{
+	//triggers are disabled for now
+
+	//add a trigger
+
+	//exit if floor is invalid
+	/*if (!IsValid())
+		return 0;
+
+	Trigger* trigger = new Trigger(mesh, name, false, sound_file, area_min, area_max, action_names);
+	TriggerArray.push_back(trigger);
+	return trigger;*/
+	return 0;
+}
+
+Model* Shaft::Level::GetModel(std::string name)
+{
+	//get a model by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < ModelArray.size(); i++)
+	{
+		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
+			return ModelArray[i];
+	}
+
+	return 0;
+}
+
+void Shaft::Level::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	mesh->ReplaceTexture(oldtexture, newtexture);
+}
+
+int Shaft::Level::GetFloor()
+{
+	return floornum;
+}
+
+void Shaft::Level::Loop()
+{
+	//level runloop
+
+	SBS_PROFILE("Stairwell::Level::Loop");
+
+	LoopChildren();
+}
+
+Door* Shaft::Level::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+{
+	//add a door
+
+	//exit with an error if floor is invalid
+	/*if (IsValidFloor(floor) == false)
+	{
+		ReportError("AddDoor: Floor " + ToString(floor) + " out of range");
+		return 0;
+	}*/
+
+	Floor *floorptr = sbs->GetFloor(floornum);
+	if (!floorptr)
+		return 0;
+
+	Real x1, z1, x2, z2;
+	//set up coordinates
+	if (direction < 5)
+	{
+		x1 = CenterX;
+		x2 = CenterX;
+		z1 = CenterZ - (width / 2);
+		z2 = CenterZ + (width / 2);
+	}
+	else
+	{
+		x1 = CenterX - (width / 2);
+		x2 = CenterX + (width / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+	}
+
+	//cut area
+	sbs->ResetDoorwayWalls();
+	if (direction < 5)
+	{
+		Cut(1, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
+		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
+	}
+	else
+	{
+		Cut(1, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
+		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
+	}
+
+	//create doorway walls
+	sbs->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
+
+	std::string num = ToString((int)DoorArray.size());
+	std::string name = "Shaft " + ToString(parent->ShaftNumber) + ":Door " + ToString(floornum) + ":" + num;
+
+	Door* door = new Door(mesh, parent->GetDoorWrapper(), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray.push_back(door);
+
+	floorptr = 0;
+	return door;
+}
+
+void Shaft::Level::RemoveDoor(Door *door)
+{
+	//remove a door reference (this does not delete the object)
+	for (size_t i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i] == door)
+		{
+			DoorArray.erase(DoorArray.begin() + i);
+			return;
+		}
+	}
+}
+
+CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+{
+	//add a camera texture
+	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
+	CameraTextureArray.push_back(cameratexture);
+	return cameratexture;
 }
 
 }

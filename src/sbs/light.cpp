@@ -73,7 +73,8 @@ Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 	if (type == 2)
 		type_name = "spotlight";
 
-	Report("Light '" + name + "' created as type " + type_name);
+	if (sbs->Verbose == true)
+		Report("Light '" + name + "' created as type " + type_name);
 }
 
 Light::~Light()
@@ -91,10 +92,10 @@ Light::~Light()
 			static_cast<ElevatorCar*>(GetParent())->RemoveLight(this);
 		else if (type == "Floor")
 			static_cast<Floor*>(GetParent())->RemoveLight(this);
-		else if (type == "Shaft")
-			static_cast<Shaft*>(GetParent())->RemoveLight(this);
-		else if (type == "Stairs")
-			static_cast<Stairs*>(GetParent())->RemoveLight(this);
+		else if (type == "Shaft Level")
+			static_cast<Shaft::Level*>(GetParent())->RemoveLight(this);
+		else if (type == "Stairwell Level")
+			static_cast<Stairwell::Level*>(GetParent())->RemoveLight(this);
 		else if (type == "SBS")
 			sbs->RemoveLight(this);
 	}

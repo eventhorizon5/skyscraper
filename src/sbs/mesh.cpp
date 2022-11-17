@@ -158,7 +158,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 		worker.clear();
 		Ogre::Vector2 extentsx, extentsy, extentsz;
 		Ogre::AxisAlignedBox bounds (start, end);
-		Ogre::AxisAlignedBox polybounds;
+		Ogre::AxisAlignedBox polybounds = Ogre::AxisAlignedBox::BOX_NULL;
 		bool polycheck2 = false;
 
 		//copy source polygon vertices
@@ -582,7 +582,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			int vertex_count, index_count;
 			Ogre::Vector3* vertices;
 			long unsigned int* indices;
-			Ogre::AxisAlignedBox box;
+			Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
 			GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
@@ -2086,6 +2086,13 @@ void MeshObject::ChangeHeight(Real newheight)
 	{
 		Walls[i]->ChangeHeight(newheight);
 	}
+}
+
+void MeshObject::EnableShadows(bool value)
+{
+	//enable shadows
+
+	MeshWrapper->EnableShadows(value);
 }
 
 }

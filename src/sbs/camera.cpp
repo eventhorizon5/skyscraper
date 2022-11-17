@@ -526,9 +526,9 @@ void Camera::CheckStairwell()
 
 	SBS_PROFILE("Camera::CheckStairwell");
 
-	for (int i = 1; i <= sbs->GetStairsCount(); i++)
+	for (int i = 1; i <= sbs->GetStairwellCount(); i++)
 	{
-		Stairs *stairs = sbs->GetStairs(i);
+		Stairwell *stairs = sbs->GetStairwell(i);
 
 		if (!stairs)
 			continue;
@@ -623,7 +623,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 		if (wall && obj->GetType() == "Wall")
 		{
 			std::string type = mesh_parent->GetType();
-			if (type == "Floor" || type == "ElevatorCar" || type == "Shaft" || type == "Stairs" || type == "SBS")
+			if (type == "Floor" || type == "ElevatorCar" || type == "Shaft" || type == "Stairwell" || type == "SBS")
 			{
 				sbs->DeleteObject(obj);
 				return;

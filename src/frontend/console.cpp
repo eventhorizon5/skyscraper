@@ -39,6 +39,7 @@ namespace Skyscraper {
 const long Console::ID_tConsole = wxNewId();
 const long Console::ID_tCommand = wxNewId();
 const long Console::ID_bSend = wxNewId();
+const long Console::ID_bClear = wxNewId();
 const long Console::ID_chkEcho = wxNewId();
 const long Console::ID_PANEL1 = wxNewId();
 //*)
@@ -66,7 +67,7 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	FlexGridSizer3 = new wxFlexGridSizer(2, 1, 0, 0);
 	FlexGridSizer3->AddGrowableCol(0);
 	FlexGridSizer3->AddGrowableRow(0);
-	tConsole = new wxTextCtrl(Panel1, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY, wxDefaultValidator, _T("ID_tConsole"));
+	tConsole = new wxTextCtrl(Panel1, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL, wxDefaultValidator, _T("ID_tConsole"));
 	FlexGridSizer3->Add(tConsole, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(1, 2, 0, 0);
 	FlexGridSizer2->AddGrowableCol(0);
@@ -76,8 +77,10 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	bSend = new wxButton(Panel1, ID_bSend, _("Send"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSend"));
 	BoxSizer1->Add(bSend, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT, 5);
+	bClear = new wxButton(Panel1, ID_bClear, _("Clear"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bClear"));
+	BoxSizer1->Add(bClear, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkEcho = new wxCheckBox(Panel1, ID_chkEcho, _("Echo"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkEcho"));
-	chkEcho->SetValue(false);
+	chkEcho->SetValue(true);
 	BoxSizer1->Add(chkEcho, 1, wxALL|wxALIGN_LEFT, 5);
 	FlexGridSizer2->Add(BoxSizer1, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer3->Add(FlexGridSizer2, 1, wxEXPAND, 5);
@@ -90,6 +93,7 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	FlexGridSizer1->SetSizeHints(this);
 
 	Connect(ID_bSend,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bSend_Click);
+	Connect(ID_bClear,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bClear_Click);
 	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&Console::On_Close);
 	//*)
 	Simcore = 0;
@@ -118,7 +122,10 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 	//load new commands into script interpreter, and run
 	processor->LoadFromText(std::string(tCommand->GetValue()));
 	if (chkEcho->GetValue() == true)
-		tConsole->AppendText(tCommand->GetValue());
+	{
+		tConsole->AppendText(tCommand->GetValue() + wxT('\n'));
+		tConsole->SetInsertionPointEnd();
+	}
 	tCommand->Clear();
 }
 
@@ -136,6 +143,11 @@ void Console::Write(const std::string &message)
 {
 	tConsole->AppendText(message + wxT("\n"));
 	tConsole->SetInsertionPointEnd();
+}
+
+void Console::On_bClear_Click(wxCommandEvent& event)
+{
+	tConsole->Clear();
 }
 
 }

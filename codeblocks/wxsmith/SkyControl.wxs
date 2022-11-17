@@ -22,7 +22,9 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_tLatitude" variable="tLatitude" member="yes" />
+								<object class="wxTextCtrl" name="ID_tLatitude" variable="tLatitude" member="yes">
+									<minsize>90,-1</minsize>
+								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
@@ -46,7 +48,9 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_tLongitude" variable="tLongitude" member="yes" />
+								<object class="wxTextCtrl" name="ID_tLongitude" variable="tLongitude" member="yes">
+									<minsize>90,-1</minsize>
+								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
@@ -91,6 +95,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tJulian" variable="tJulian" member="yes">
+											<minsize>90,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
@@ -123,6 +128,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tYear" variable="tYear" member="yes">
+											<minsize>90,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -139,6 +145,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tMonth" variable="tMonth" member="yes">
+											<minsize>90,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -155,6 +162,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tDay" variable="tDay" member="yes">
+											<minsize>90,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -171,6 +179,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tHour" variable="tHour" member="yes">
+											<minsize>90,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -187,6 +196,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tMinute" variable="tMinute" member="yes">
+											<minsize>90,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -203,6 +213,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tSecond" variable="tSecond" member="yes">
+											<minsize>90,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -258,7 +269,9 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_tMultiplier" variable="tMultiplier" member="yes" />
+								<object class="wxTextCtrl" name="ID_tMultiplier" variable="tMultiplier" member="yes">
+									<minsize>90,-1</minsize>
+								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>

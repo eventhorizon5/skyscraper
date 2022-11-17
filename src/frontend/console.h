@@ -42,6 +42,7 @@ class Console: public wxFrame
 		virtual ~Console();
 
 		//(*Declarations(Console)
+		wxButton* bClear;
 		wxButton* bSend;
 		wxCheckBox* chkEcho;
 		wxPanel* Panel1;
@@ -56,6 +57,7 @@ class Console: public wxFrame
 		static const long ID_tConsole;
 		static const long ID_tCommand;
 		static const long ID_bSend;
+		static const long ID_bClear;
 		static const long ID_chkEcho;
 		static const long ID_PANEL1;
 		//*)
@@ -66,6 +68,7 @@ class Console: public wxFrame
 		void On_bSend_Click(wxCommandEvent& event);
 		void On_bClose_Click(wxCommandEvent& event);
 		void On_Close(wxCloseEvent& event);
+		void On_bClear_Click(wxCommandEvent& event);
 		//*)
 
 		SBS::SBS *Simcore;

@@ -287,7 +287,7 @@ void Stats::Loop()
 	tBasements->SetValue(ToString(Simcore->Basements));
 	tElevators->SetValue(ToString(Simcore->GetElevatorCount()));
 	tShafts->SetValue(ToString(Simcore->GetShaftCount()));
-	tStairs->SetValue(ToString(Simcore->GetStairsCount()));
+	tStairs->SetValue(ToString(Simcore->GetStairwellCount()));
 }
 
 }

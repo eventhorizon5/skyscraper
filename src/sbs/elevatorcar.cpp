@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "dynamicmesh.h"
 #include "texture.h"
 #include "profiler.h"
+#include "cameratexture.h"
 #include "elevatorcar.h"
 
 namespace SBS {
@@ -238,6 +239,17 @@ ElevatorCar::~ElevatorCar()
 		StdDoorArray[i] = 0;
 	}
 
+	//delete camera textures
+	for (size_t i = 0; i < CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i])
+		{
+			CameraTextureArray[i]->parent_deleting = true;
+			delete CameraTextureArray[i];
+		}
+		CameraTextureArray[i] = 0;
+	}
+
 	if (sbs->Verbose)
 		parent->Report("deleting sounds");
 	if (carsound)
@@ -374,10 +386,6 @@ bool ElevatorCar::CreateCar(int floor)
 
 	//set current floor
 	CurrentFloor = StartingFloor;
-
-	//create test light
-	Light *light = AddLight("light", 0);
-	light->Move(Ogre::Vector3(0, 6, 0));
 
 	Created = true;
 
@@ -2166,6 +2174,16 @@ Light* ElevatorCar::AddLight(const std::string &name, int type)
 	return light;
 }
 
+Light* ElevatorCar::GetLight(const std::string &name)
+{
+	for (int i = 0; i < lights.size(); i++)
+	{
+		if (lights[i]->GetName() == name)
+			return lights[i];
+	}
+	return 0;
+}
+
 Model* ElevatorCar::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
@@ -3080,6 +3098,14 @@ void ElevatorCar::FlashIndicators(bool value)
 	//flash all floor indicators if supported
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 		FloorIndicatorArray[i]->Flash(value);
+}
+
+CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+{
+	//add a camera texture
+	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
+	CameraTextureArray.push_back(cameratexture);
+	return cameratexture;
 }
 
 }

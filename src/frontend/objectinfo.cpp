@@ -165,7 +165,8 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Object created on line:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
 	FlexGridSizer3->Add(StaticText7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tLineNum = new wxTextCtrl(this, ID_tLineNum, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tLineNum"));
-	FlexGridSizer3->Add(tLineNum, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tLineNum->SetMinSize(wxSize(100,-1));
+	FlexGridSizer3->Add(tLineNum, 1, wxLEFT|wxRIGHT, 5);
 	FlexGridSizer2->Add(FlexGridSizer3, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer6 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText12 = new wxStaticText(this, ID_STATICTEXT12, _("In included file:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT12"));

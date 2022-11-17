@@ -14,8 +14,7 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
+      <Configuration>Release</Configuration> <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -345,6 +344,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\frontend\actionviewer.cpp" />
     <ClCompile Include="..\src\frontend\cameracontrol.cpp" />
+    <ClCompile Include="..\src\frontend\camtex.cpp" />
     <ClCompile Include="..\src\frontend\console.cpp" />
     <ClCompile Include="..\src\frontend\createobject.cpp" />
     <ClCompile Include="..\src\frontend\debugpanel.cpp" />
@@ -379,6 +379,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\frontend\actionviewer.h" />
     <ClInclude Include="..\src\frontend\cameracontrol.h" />
+    <ClInclude Include="..\src\frontend\camtex.h" />
     <ClInclude Include="..\src\frontend\console.h" />
     <ClInclude Include="..\src\frontend\createobject.h" />
     <ClInclude Include="..\src\frontend\debugpanel.h" />

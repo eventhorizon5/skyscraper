@@ -234,16 +234,24 @@ void MeshControl::On_chkShafts_Click(wxCommandEvent& event)
 	for (int i = 1; i <= Simcore->GetShaftCount(); i++)
 	{
 		if (Simcore->GetShaft(i))
-			Simcore->GetShaft(i)->Enabled(Simcore->camera->CurrentFloor, chkShafts->GetValue(), true);
+		{
+			::SBS::Shaft::Level *level = Simcore->GetShaft(i)->GetLevel(Simcore->camera->CurrentFloor);
+			if (level)
+				level->Enabled(chkShafts->GetValue(), true);
+		}
 	}
 }
 
 void MeshControl::On_chkStairs_Click(wxCommandEvent& event)
 {
-	for (int i = 1; i <= Simcore->GetStairsCount(); i++)
+	for (int i = 1; i <= Simcore->GetStairwellCount(); i++)
 	{
-		if (Simcore->GetStairs(i))
-			Simcore->GetStairs(i)->Enabled(Simcore->camera->CurrentFloor, chkStairs->GetValue());
+		if (Simcore->GetStairwell(i))
+		{
+			::SBS::Stairwell::Level *level = Simcore->GetStairwell(i)->GetLevel(Simcore->camera->CurrentFloor);
+			if (level)
+				level->Enabled(chkStairs->GetValue());
+		}
 	}
 }
 
@@ -260,23 +268,17 @@ void MeshControl::On_chkAllShafts_Click(wxCommandEvent& event)
 {
 	for (int i = 1; i <= Simcore->GetShaftCount(); i++)
 	{
-		for (int j = -Simcore->Basements; j <= Simcore->Floors; j++)
-		{
-			if (Simcore->GetShaft(i))
-				Simcore->GetShaft(i)->Enabled(j, chkAllShafts->GetValue(), true);
-		}
+		if (Simcore->GetShaft(i))
+			Simcore->GetShaft(i)->EnableWhole(chkAllShafts->GetValue(), true, true);
 	}
 }
 
 void MeshControl::On_chkAllStairs_Click(wxCommandEvent& event)
 {
-	for (int i = 1; i <= Simcore->GetStairsCount(); i++)
+	for (int i = 1; i <= Simcore->GetStairwellCount(); i++)
 	{
-		for (int j = -Simcore->Basements; j <= Simcore->Floors; j++)
-		{
-			if (Simcore->GetStairs(i))
-				Simcore->GetStairs(i)->Enabled(j, chkAllStairs->GetValue());
-		}
+		if (Simcore->GetStairwell(i))
+			Simcore->GetStairwell(i)->EnableWhole(chkAllStairs->GetValue(), true);
 	}
 }
 

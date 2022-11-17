@@ -64,7 +64,7 @@ namespace SBS {
 	class FloorManager;
 	class ElevatorManager;
 	class ShaftManager;
-	class StairsManager;
+	class StairwellManager;
 	class DoorManager;
 	class TextureManager;
 	class RevolvingDoorManager;
@@ -80,7 +80,7 @@ namespace SBS {
 	class Shaft;
 	class Camera;
 	struct CameraState;
-	class Stairs;
+	class Stairwell;
 	class Sound;
 	class SoundSystem;
 	struct SoundData;
@@ -211,19 +211,19 @@ public:
 	int GetFloorNumber(Real altitude, int lastfloor = 0, bool checklastfloor = false);
 	Real GetDistance(Real x1, Real x2, Real z1, Real z2);
 	Shaft* CreateShaft(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
-	Stairs* CreateStairwell(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
+	Stairwell* CreateStairwell(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	Elevator* NewElevator(int number);
 	Floor* NewFloor(int number);
 	Vehicle* NewVehicle(int number);
 	int GetElevatorCount();
 	int GetTotalFloors(); //all floors including basements
 	int GetShaftCount();
-	int GetStairsCount();
+	int GetStairwellCount();
 	int GetVehicleCount();
 	Floor* GetFloor(int number);
 	Elevator* GetElevator(int number);
 	Shaft* GetShaft(int number);
-	Stairs* GetStairs(int number);
+	Stairwell* GetStairwell(int number);
 	Vehicle* GetVehicle(int number);
 	bool SetWallOrientation(std::string direction);
 	int GetWallOrientation();
@@ -258,7 +258,7 @@ public:
 	Ogre::Vector3 ToRemote(const Ogre::Vector3& local_value, bool rescale = true, bool flip_z = true);
 	int GetObjectCount();
 	Object* GetObject(int number);
-	Object* GetObject(std::string name);
+	Object* GetObject(std::string name, bool case_sensitive = true);
 	std::vector<Object*> GetObjectRange(const std::string &expression);
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);
@@ -269,7 +269,7 @@ public:
 	void RemoveFloor(Floor *floor);
 	void RemoveElevator(Elevator *elevator);
 	void RemoveShaft(Shaft *shaft);
-	void RemoveStairs(Stairs *stairs);
+	void RemoveStairwell(Stairwell *stairs);
 	void RemoveSound(Sound *sound);
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
@@ -372,13 +372,17 @@ public:
 	FloorManager* GetFloorManager();
 	ElevatorManager* GetElevatorManager();
 	ShaftManager* GetShaftManager();
-	StairsManager* GetStairsManager();
+	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
 	RevolvingDoorManager* GetRevolvingDoorManager();
 	VehicleManager* GetVehicleManager();
+	void RegisterCameraTexture(CameraTexture *camtex);
+	void UnregisterCameraTexture(CameraTexture *camtex);
+	int GetCameraTextureCount();
+	CameraTexture* GetCameraTexture(int number);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -426,7 +430,7 @@ private:
 	FloorManager* floor_manager;
 	ElevatorManager* elevator_manager;
 	ShaftManager* shaft_manager;
-	StairsManager* stairs_manager;
+	StairwellManager* stairwell_manager;
 	DoorManager* door_manager;
 	VehicleManager* vehicle_manager;
 
@@ -534,6 +538,9 @@ private:
 
 	//sim engine area trigger
 	Trigger *area_trigger;
+
+	//camera texture references
+	std::vector<CameraTexture*> camtexarray;
 };
 
 }

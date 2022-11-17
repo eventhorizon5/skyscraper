@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="CameraTextureControl">
+		<title>CameraTexture Control</title>
+		<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
+			<cols>1</cols>
+			<object class="sizeritem">
+				<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
+					<cols>3</cols>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+							<object class="sizeritem">
+								<object class="wxListBox" name="ID_CameraList" variable="CameraList" member="yes">
+									<default>-1</default>
+									<size>200,150</size>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxFlexGridSizer" variable="FlexGridSizer3" member="no">
+							<cols>1</cols>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkEnabled" variable="chkEnabled" member="yes">
+									<label>Enabled</label>
+									<handler function="On_chkEnabled_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+									<label>Position</label>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer4" member="no">
+											<cols>1</cols>
+											<object class="sizeritem">
+												<object class="wxFlexGridSizer" variable="FlexGridSizer5" member="no">
+													<cols>3</cols>
+													<object class="sizeritem">
+														<object class="wxStaticText" name="ID_lblPositionX" variable="lblPositionX" member="yes">
+															<label>X</label>
+															<style>wxALIGN_CENTRE</style>
+														</object>
+														<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxStaticText" name="ID_lblPositionY" variable="lblPositionY" member="yes">
+															<label>Y</label>
+															<style>wxALIGN_CENTRE</style>
+														</object>
+														<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxStaticText" name="ID_lblPositionZ" variable="lblPositionZ" member="yes">
+															<label>Z</label>
+															<style>wxALIGN_CENTRE</style>
+														</object>
+														<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxTextCtrl" name="ID_txtPositionX" variable="txtPositionX" member="yes">
+															<minsize>90,-1</minsize>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxTextCtrl" name="ID_txtPositionY" variable="txtPositionY" member="yes">
+															<minsize>90,-1</minsize>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxTextCtrl" name="ID_txtPositionZ" variable="txtPositionZ" member="yes">
+															<minsize>90,-1</minsize>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetPosition" variable="bSetPosition" member="yes">
+													<label>Set Position</label>
+													<handler function="On_bSetPosition_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+									<label>Rotation</label>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer6" member="no">
+											<cols>1</cols>
+											<object class="sizeritem">
+												<object class="wxFlexGridSizer" variable="FlexGridSizer7" member="no">
+													<cols>3</cols>
+													<object class="sizeritem">
+														<object class="wxStaticText" name="ID_lblRotationX" variable="lblRotationX" member="yes">
+															<label>X</label>
+															<style>wxALIGN_CENTRE</style>
+														</object>
+														<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxStaticText" name="ID_lblRotationY" variable="lblRotationY" member="yes">
+															<label>Y</label>
+															<style>wxALIGN_CENTRE</style>
+														</object>
+														<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxStaticText" name="ID_lblRotationZ" variable="lblRotationZ" member="yes">
+															<label>Z</label>
+															<style>wxALIGN_CENTRE</style>
+														</object>
+														<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxTextCtrl" name="ID_txtRotationX" variable="txtRotationX" member="yes">
+															<minsize>90,-1</minsize>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxTextCtrl" name="ID_txtRotationY" variable="txtRotationY" member="yes">
+															<minsize>90,-1</minsize>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxTextCtrl" name="ID_txtRotationZ" variable="txtRotationZ" member="yes">
+															<minsize>90,-1</minsize>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+													<object class="sizeritem">
+														<object class="wxButton" name="ID_bSetRotation" variable="bSetRotation" member="yes">
+															<label>Set Rotation</label>
+															<handler function="On_bSetRotation_Click" entry="EVT_BUTTON" />
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxButton" name="ID_bSetLookAt" variable="bSetLookAt" member="yes">
+															<label>LookAt</label>
+															<handler function="On_bSetLookAt_Click" entry="EVT_BUTTON" />
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer3" member="no">
+									<label>FOV</label>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer8" member="no">
+											<cols>1</cols>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_lblFOV" variable="lblFOV" member="yes">
+													<label>FOV</label>
+													<style>wxALIGN_CENTRE</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxFlexGridSizer" variable="FlexGridSizer9" member="no">
+													<cols>3</cols>
+													<object class="sizeritem">
+														<object class="wxTextCtrl" name="ID_txtFOV" variable="txtFOV" member="yes">
+															<minsize>90,-1</minsize>
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetFOV" variable="bSetFOV" member="yes">
+													<label>Set FOV</label>
+													<handler function="On_bSetFOV_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_bOK" variable="bOK" member="yes">
+							<label>OK</label>
+							<handler function="On_bOK_Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

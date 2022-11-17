@@ -574,16 +574,22 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 	for (int i = 1; i <= sbs->GetShaftCount(); i++)
 	{
 		if (sbs->GetShaft(i))
-			sbs->GetShaft(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
+		{
+			if (sbs->GetShaft(i)->GetLevel(Number))
+				sbs->GetShaft(i)->GetLevel(Number)->Cut(false, start, end, cutwalls, cutfloors);
+		}
 	}
 
 	Ogre::Vector3 offset (0, GetBase(true), 0);
 
 	//cut stairs
-	for (int i = 1; i <= sbs->GetStairsCount(); i++)
+	for (int i = 1; i <= sbs->GetStairwellCount(); i++)
 	{
-		if (sbs->GetStairs(i))
-			sbs->GetStairs(i)->Cut(false, Number, start - offset, end - offset, cutwalls, cutfloors);
+		if (sbs->GetStairwell(i))
+		{
+			if (sbs->GetStairwell(i)->GetLevel(Number))
+				sbs->GetStairwell(i)->GetLevel(Number)->Cut(false, start - offset, end - offset, cutwalls, cutfloors);
+		}
 	}
 
 	//cut external
@@ -653,16 +659,22 @@ void Floor::EnableGroup(bool value)
 					if (shaft)
 					{
 						if (shaft->IsEnabled == false)
-							shaft->Enabled(Group[i], value, true);
+						{
+							if (shaft->GetLevel(Group[i]))
+								shaft->GetLevel(Group[i])->Enabled(value, true);
+						}
 					}
 				}
-				for (int j = 1; j <= sbs->GetStairsCount(); j++)
+				for (int j = 1; j <= sbs->GetStairwellCount(); j++)
 				{
-					Stairs *stairs = sbs->GetStairs(j);
+					Stairwell *stairs = sbs->GetStairwell(j);
 					if (stairs)
 					{
 						if (stairs->IsEnabled == false)
-							stairs->Enabled(Group[i], value);
+						{
+							if (stairs->GetLevel(Group[i]))
+								stairs->GetLevel(Group[i])->Enabled(value);
+						}
 					}
 				}
 			}
@@ -1355,6 +1367,16 @@ Light* Floor::AddLight(const std::string &name, int type)
 	return light;
 }
 
+Light* Floor::GetLight(const std::string &name)
+{
+	for (int i = 0; i < lights.size(); i++)
+	{
+		if (lights[i]->GetName() == name)
+			return lights[i];
+	}
+	return 0;
+}
+
 Model* Floor::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
@@ -1411,10 +1433,10 @@ Trigger* Floor::AddTrigger(const std::string &name, const std::string &sound_fil
 	return trigger;
 }
 
-CameraTexture* Floor::AddCameraTexture(const std::string &name, bool enabled, int quality, Real fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
+CameraTexture* Floor::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
 {
 	//add a camera texture
-	CameraTexture* cameratexture = new CameraTexture(this, name, enabled, quality, fov, GetBase(true) + position, use_rotation, rotation);
+	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, GetBase(true) + position, use_rotation, rotation);
 	CameraTextureArray.push_back(cameratexture);
 	return cameratexture;
 }
@@ -1470,7 +1492,7 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 
 		std::vector<int> elevator_list, stairs_list, shaft_list;
 		GetElevatorList(elevator_list);
-		GetStairsList(stairs_list);
+		GetStairwellList(stairs_list);
 		GetShaftList(shaft_list);
 
 		std::string elevs;
@@ -1538,13 +1560,13 @@ void Floor::GetElevatorList(std::vector<int> &listing, bool get_locals, bool get
 	}
 }
 
-void Floor::GetStairsList(std::vector<int> &listing)
+void Floor::GetStairwellList(std::vector<int> &listing)
 {
 	//return a list of stairwells that span this floor
 
-	for (int i = 1; i <= sbs->GetStairsCount(); i++)
+	for (int i = 1; i <= sbs->GetStairwellCount(); i++)
 	{
-		Stairs *stairs = sbs->GetStairs(i);
+		Stairwell *stairs = sbs->GetStairwell(i);
 		if (stairs)
 		{
 			if (stairs->IsValidFloor(Number) == true)
@@ -1701,6 +1723,14 @@ RevolvingDoor* Floor::GetRevolvingDoor(int number)
 	}
 
 	return 0;
+}
+
+CameraTexture* Floor::GetCameraTexture(int number)
+{
+	if (number < CameraTextureArray.size())
+		return CameraTextureArray[number];
+	else
+		return 0;
 }
 
 }

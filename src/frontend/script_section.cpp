@@ -1004,7 +1004,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				modelname = name.substr(marker + 1);
 
 			if (marker > 0)
-				num = name.substr(5, (int)name.length() - marker - 5 - 1);
+				num = name.substr(5, (int)name.length() - marker - 1);
 			else
 				num = name.substr(5);
 
@@ -1019,7 +1019,11 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 
 			if (marker > 0)
 			{
-				Model *model = shaft->GetModel(config->Current, modelname);
+				Model *model = 0;
+
+				if (shaft->GetLevel(config->Current))
+					model = shaft->GetLevel(config->Current)->GetModel(modelname);
+
 				if (model)
 				{
 					if (model->IsCustom() == true)
@@ -1028,7 +1032,12 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				return 0;
 			}
 			else
-				return shaft->GetMeshObject(config->Current);
+			{
+				if (shaft->GetLevel(config->Current))
+					return shaft->GetLevel(config->Current)->GetMeshObject();
+				else
+					return 0;
+			}
 		}
 		return 0;
 	}
@@ -1044,7 +1053,7 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				modelname = name.substr(marker + 1);
 
 			if (marker > 0)
-				num = name.substr(9, (int)name.length() - marker - 5 - 1);
+				num = name.substr(9, (int)name.length() - marker - 1);
 			else
 				num = name.substr(9);
 
@@ -1053,13 +1062,17 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 			if (!IsNumeric(num, number))
 				return 0;
 
-			Stairs *stairs = Simcore->GetStairs(number);
+			Stairwell *stairs = Simcore->GetStairwell(number);
 			if (!stairs)
 				return 0;
 
 			if (marker > 0)
 			{
-				Model *model = stairs->GetModel(config->Current, modelname);
+				Model *model = 0;
+
+				if (stairs->GetLevel(config->Current))
+					model = stairs->GetLevel(config->Current)->GetModel(modelname);
+
 				if (model)
 				{
 					if (model->IsCustom() == true)
@@ -1068,7 +1081,12 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 				return 0;
 			}
 			else
-				return stairs->GetMeshObject(config->Current);
+			{
+				if (stairs->GetLevel(config->Current))
+					return stairs->GetLevel(config->Current)->GetMeshObject();
+				else
+					return 0;
+			}
 		}
 		return 0;
 	}

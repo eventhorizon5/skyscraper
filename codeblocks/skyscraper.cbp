@@ -16,6 +16,8 @@
 		<Unit filename="../src/frontend/actionviewer.h" />
 		<Unit filename="../src/frontend/cameracontrol.cpp" />
 		<Unit filename="../src/frontend/cameracontrol.h" />
+		<Unit filename="../src/frontend/camtex.cpp" />
+		<Unit filename="../src/frontend/camtex.h" />
 		<Unit filename="../src/frontend/console.cpp" />
 		<Unit filename="../src/frontend/console.h" />
 		<Unit filename="../src/frontend/createobject.cpp" />
@@ -115,12 +117,11 @@
 		<Unit filename="../src/sbs/unix.h" />
 		<Unit filename="../src/sbs/wall.cpp" />
 		<Unit filename="../src/sbs/wall.h" />
+		<Unit filename="wxsmith/CameraTextureControl.wxs" />
 		<Unit filename="wxsmith/EngineManager.wxs" />
 		<Unit filename="wxsmith/PeopleManager.wxs" />
 		<Unit filename="wxsmith/SkyControl.wxs" />
 		<Extensions>
-			<code_completion />
-			<debugger />
 			<wxsmith version="1">
 				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
 				<resources>
@@ -142,9 +143,9 @@
 					<wxDialog wxs="wxsmith/EngineManager.wxs" src="../src/frontend/enginemanager.cpp" hdr="../src/frontend/enginemanager.h" fwddecl="0" i18n="1" name="EngineManager" language="CPP" />
 					<wxDialog wxs="wxsmith/PeopleManager.wxs" src="../src/frontend/peoplemanager.cpp" hdr="../src/frontend/peoplemanager.h" fwddecl="0" i18n="1" name="PeopleManager" language="CPP" />
 					<wxDialog wxs="wxsmith/LoadDialog.wxs" src="../src/frontend/loaddialog.cpp" hdr="../src/frontend/loaddialog.h" fwddecl="0" i18n="1" name="LoadDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/CameraTextureControl.wxs" src="../src/frontend/camtex.cpp" hdr="../src/frontend/camtex.h" fwddecl="0" i18n="1" name="CameraTextureControl" language="CPP" />
 				</resources>
 			</wxsmith>
-			<envvars />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

@@ -46,7 +46,7 @@
 										<object class="wxTextCtrl" name="ID_txtDirectionTop" variable="txtDirectionTop" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -62,7 +62,7 @@
 										<object class="wxTextCtrl" name="ID_txtCurrentFloor" variable="txtCurrentFloor" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -78,7 +78,7 @@
 										<object class="wxTextCtrl" name="ID_txtLastMesh" variable="txtLastMesh" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -94,7 +94,7 @@
 										<object class="wxTextCtrl" name="ID_txtDesiredVel" variable="txtDesiredVel" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -110,7 +110,7 @@
 										<object class="wxTextCtrl" name="ID_txtVelocity" variable="txtVelocity" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -126,7 +126,7 @@
 										<object class="wxTextCtrl" name="ID_txtDesiredAngle" variable="txtDesiredAngle" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -142,7 +142,7 @@
 										<object class="wxTextCtrl" name="ID_txtAngle" variable="txtAngle" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -158,7 +158,7 @@
 										<object class="wxTextCtrl" name="ID_txtSpeed" variable="txtSpeed" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -174,7 +174,7 @@
 										<object class="wxTextCtrl" name="ID_txtMouseDown" variable="txtMouseDown" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -190,7 +190,7 @@
 										<object class="wxTextCtrl" name="ID_txtStartFloor" variable="txtStartFloor" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -206,7 +206,7 @@
 										<object class="wxTextCtrl" name="ID_txtStartPosition" variable="txtStartPosition" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -222,7 +222,7 @@
 										<object class="wxTextCtrl" name="ID_txtFOV" variable="txtFOV" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -254,7 +254,7 @@
 										<object class="wxTextCtrl" name="ID_txtGravity" variable="txtGravity" member="yes">
 											<minsize>100,-1</minsize>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -280,7 +280,7 @@
 										<object class="wxTextCtrl" name="ID_txtGravityEnabled" variable="txtGravityEnabled" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -306,7 +306,7 @@
 										<object class="wxTextCtrl" name="ID_txtCollisions" variable="txtCollisions" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -332,7 +332,7 @@
 										<object class="wxTextCtrl" name="ID_txtReportCollisions" variable="txtReportCollisions" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -358,7 +358,7 @@
 										<object class="wxTextCtrl" name="ID_txtFreelook" variable="txtFreelook" member="yes">
 											<style>wxTE_READONLY</style>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -382,7 +382,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtFreelookSpeed" variable="txtFreelookSpeed" member="yes" />
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -406,7 +406,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtBinocularsFOV" variable="txtBinocularsFOV" member="yes" />
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -430,7 +430,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtGotoFloor" variable="txtGotoFloor" member="yes" />
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -476,7 +476,7 @@
 													<label>Position:</label>
 													<style>wxALIGN_CENTRE</style>
 												</object>
-												<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -485,7 +485,7 @@
 													<label>Rotation:</label>
 													<style>wxALIGN_CENTRE</style>
 												</object>
-												<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -494,7 +494,7 @@
 													<label>0, 0, 0</label>
 													<style>wxST_NO_AUTORESIZE|wxALIGN_CENTRE</style>
 												</object>
-												<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -503,12 +503,12 @@
 													<label>0, 0, 0</label>
 													<style>wxST_NO_AUTORESIZE|wxALIGN_CENTRE</style>
 												</object>
-												<flag>wxALL|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -516,7 +516,7 @@
 										<object class="wxStaticLine" name="ID_STATICLINE2" variable="StaticLine2" member="yes">
 											<size>10,-1</size>
 										</object>
-										<flag>wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -561,6 +561,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtMoveSpeed" variable="txtMoveSpeed" member="yes">
 													<value>1.0</value>
+													<minsize>90,-1</minsize>
 												</object>
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -725,6 +726,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtPositionX" variable="txtPositionX" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -751,6 +753,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtPositionY" variable="txtPositionY" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -777,6 +780,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtPositionZ" variable="txtPositionZ" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -801,7 +805,7 @@
 										<object class="wxStaticLine" name="ID_STATICLINE1" variable="StaticLine1" member="yes">
 											<size>10,-1</size>
 										</object>
-										<flag>wxTOP|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxTOP|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -827,6 +831,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtRotationX" variable="txtRotationX" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -853,6 +858,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtRotationY" variable="txtRotationY" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -879,6 +885,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtRotationZ" variable="txtRotationZ" member="yes">
 													<value>0</value>
+													<minsize>90,-1</minsize>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -903,7 +910,7 @@
 										<object class="wxStaticLine" name="ID_STATICLINE3" variable="StaticLine3" member="yes">
 											<size>10,-1</size>
 										</object>
-										<flag>wxTOP|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxTOP|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>

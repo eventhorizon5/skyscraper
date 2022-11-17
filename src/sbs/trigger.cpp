@@ -89,10 +89,10 @@ Trigger::~Trigger()
 				static_cast<ElevatorCar*>(GetParent())->RemoveTrigger(this);
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveTrigger(this);
-			else if (type == "Shaft")
-				static_cast<Shaft*>(GetParent())->RemoveTrigger(this);
-			else if (type == "Stairs")
-				static_cast<Stairs*>(GetParent())->RemoveTrigger(this);
+			else if (type == "Shaft Level")
+				static_cast<Shaft::Level*>(GetParent())->RemoveTrigger(this);
+			else if (type == "Stairwell Level")
+				static_cast<Stairwell::Level*>(GetParent())->RemoveTrigger(this);
 			else if (type == "SBS")
 				sbs->RemoveTrigger(this);
 		}

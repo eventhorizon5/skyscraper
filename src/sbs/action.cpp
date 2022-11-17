@@ -34,6 +34,8 @@
 #include "mesh.h"
 #include "escalator.h"
 #include "movingwalkway.h"
+#include "cameratexture.h"
+#include "light.h"
 #include "action.h"
 
 namespace SBS {
@@ -189,14 +191,24 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//Reverse
 	//Stop
 
+	//CameraTexture actions:
+	//Enable
+	//Disable
+
+	//Light actions:
+	//On
+	//Off
+
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
 	Floor *floor = dynamic_cast<Floor*>(parent);
 	Shaft *shaft = dynamic_cast<Shaft*>(parent);
-	Stairs *stairs = dynamic_cast<Stairs*>(parent);
+	Stairwell *stairs = dynamic_cast<Stairwell*>(parent);
 	CallButton *callbutton = dynamic_cast<CallButton*>(parent);
 	Escalator *escalator = dynamic_cast<Escalator*>(parent);
 	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
+	CameraTexture *camtex = dynamic_cast<CameraTexture*>(parent);
+	Light *light = dynamic_cast<Light*>(parent);
 
 	std::string caller_name = caller->GetName();
 	std::string caller_type = caller->GetType();
@@ -635,7 +647,6 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			escalator->SetRun(0);
 			return true;
 		}
-
 	}
 
 	//moving walkway-specific commands
@@ -656,7 +667,36 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			walkway->SetRun(0);
 			return true;
 		}
+	}
 
+	//cameratexture-specific commands
+	if (camtex)
+	{
+		if (command_name == "enable")
+		{
+			camtex->Enabled(true);
+			return true;
+		}
+		if (command_name == "disable")
+		{
+			camtex->Enabled(false);
+			return true;
+		}
+	}
+
+	//light-specific commands
+	if (light)
+	{
+		if (command_name == "on")
+		{
+			light->Enabled(true);
+			return true;
+		}
+		if (command_name == "off")
+		{
+			light->Enabled(false);
+			return true;
+		}
 	}
 
 	if (command_name == "changetexture")
@@ -697,7 +737,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 				}
 				return false;
 			}
-			if (parent_type == "Stairs")
+			if (parent_type == "Stairwell")
 			{
 				if (stairs)
 				{
