@@ -672,17 +672,6 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "alarmsound")
-	{
-		if (equals == false)
-			return ScriptError("Syntax error");
-
-		//check to see if file exists
-		parent->CheckFile("data/" + value);
-
-		car->AlarmSound = value;
-		return sNextLine;
-	}
 	if (linecheck.substr(0, 14) == "alarmsoundstop")
 	{
 		if (equals == false)
@@ -692,6 +681,17 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		parent->CheckFile("data/" + value);
 
 		car->AlarmSoundStop = value;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "alarmsound")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		car->AlarmSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "beepsound")
