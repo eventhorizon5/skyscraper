@@ -265,7 +265,7 @@ CAELUM_HOME_64 points to C:\caelum-win64
 
 FMOD_HOME points to C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows
 
-OGRE_HOME_64 points to C:\ogre-13.4.3
+OGRE_HOME_64 points to C:\ogre-13.4.3\SDK
 
 WXWIN_64 points to C:\wxWidgets-3.2.1
 
