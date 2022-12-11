@@ -265,6 +265,8 @@ CAELUM_HOME_64 points to C:\caelum-win64
 
 FMOD_HOME points to C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows
 
+OGRE_HOME_64 points to C:\ogre-13.4.3
+
 WXWIN_64 points to C:\wxWidgets-3.2.1
 
 Step 5 - download and install Git
