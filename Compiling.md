@@ -276,7 +276,7 @@ In a terminal or Powershell, go to the folder where you'd like to store Skyscrap
     git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
     cd skyscraper
 
-Download the file at https://www.skyscrapersim.net/downloads/dev/other_apps/plugins.cfg and place it into your new Skyscraper folder.
+Download the file at https://www.skyscrapersim.net/downloads/dev/other_apps/plugins-windows.cfg and place it into your new Skyscraper folder, rename it to plugins.cfg.
 
 Once that's done go into Visual Studio, and load the project file (Skyscraper.sln) which is in the "msvc" folder.
 
