@@ -215,6 +215,8 @@ First grab the source via git, and build, pointing it to the wxWidgets you just 
     cmake . -DwxWidgets_CONFIG_EXECUTABLE=/opt/wx/bin/wx-config -DCMAKE_CXX_FLAGS="-arch arm64 -std=c++11 -I/usr/local/include"
     make
 
+You may need to edit plugins.cfg to redirect to `Contents/Framework`, and comment out plugins like Cg if you are on M1.
+
 ##### Finally, run Skyscraper:
 
     open Skyscraper.app
