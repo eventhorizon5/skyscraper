@@ -1080,7 +1080,7 @@ void ScriptProcessor::ProcessFunctionParameters()
 
 					//replace all occurrences of the variable with it's value
 					std::string replacement;
-					if (index > 0 && index <= (int)FunctionStack[InFunction - 1].Params.size() - 1)
+					if (index > 0 && index <= (int)FunctionStack[InFunction - 1].Params.size())
 						replacement = FunctionStack[InFunction - 1].Params[index - 1];
 					else
 						replacement = "";
