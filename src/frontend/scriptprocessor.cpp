@@ -905,7 +905,7 @@ bool ScriptProcessor::FunctionProc()
 
 			//get function parameters
 			int location2 = location + (int)data.Name.length() + 1;
-			int end_loc = LineData.find(")", location);
+			int end_loc = LineData.find_last_of(")");
 			std::string newdata = LineData.substr(location2, end_loc - location2);
 			std::vector<std::string> tempdata;
 			SplitString(tempdata, newdata, ',');
