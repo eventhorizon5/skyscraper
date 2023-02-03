@@ -33,7 +33,7 @@ class SBSIMPEXP CallButton : public Object, public Lock
 public:
 
 	//functions
-	CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
+	CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 	~CallButton();
 	void Enabled(bool value);
 	bool Call(bool direction); //true is up, false is down

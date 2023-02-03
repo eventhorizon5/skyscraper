@@ -46,7 +46,7 @@ public:
 	virtual void Notify();
 };
 
-CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th) : Object(parent), Lock(this)
+CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th) : Object(parent), Lock(this)
 {
 	//create a set of call buttons
 
@@ -151,7 +151,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		names.push_back("off");
 		names.push_back("up");
 
-		panel->AddControl(sound_file, row, 1, 1, 1, 0, 0, 1, names, textures);
+		panel->AddControl(sound_file_up, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
 	if (DownExists == true)
 	{
@@ -167,7 +167,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		names.push_back("off");
 		names.push_back("down");
 
-		panel->AddControl(sound_file, row, 1, 1, 1, 0, 0, 1, names, textures);
+		panel->AddControl(sound_file_down, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
 
 	//set position of object
