@@ -841,6 +841,9 @@ Control* CallButton::GetDownControl()
 
 bool CallButton::Press(bool up)
 {
+	//press the related call button (the control object)
+	//which also initiates the call via the Call() function
+
 	bool result = false;
 
 	if (up == true && this->up)
