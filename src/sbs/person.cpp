@@ -206,12 +206,12 @@ void Person::ProcessRoute()
 
 			if (floor_selection > current_floor)
 			{
-				result = button->Call(true);
+				result = button->Press(true);
 				route[0].call_made = 1;
 			}
 			else
 			{
-				result = button->Call(false);
+				result = button->Press(false);
 				route[0].call_made = -1;
 			}
 		}
