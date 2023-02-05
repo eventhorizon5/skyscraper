@@ -3038,14 +3038,14 @@ void ElevatorCar::NotifyArrival(int floor)
 	//play chime sound and change indicator
 	if (parent->GetArrivalDirection(floor) == true)
 	{
-		if (up == true)
+		if (up == true || parent->NotifyLate == true)
 			Chime(0, floor, true);
 		SetDirectionalIndicators(floor, true, false);
 		parent->LastChimeDirection = 1;
 	}
 	else
 	{
-		if (down == true)
+		if (down == true || parent->NotifyLate == true)
 			Chime(0, floor, false);
 		SetDirectionalIndicators(floor, false, true);
 		parent->LastChimeDirection = -1;

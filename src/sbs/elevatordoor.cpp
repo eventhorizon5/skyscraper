@@ -731,6 +731,10 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 		//play direction message sound
 		car->PlayMessageSound(true);
+
+		//play late arrival notification if specified
+		if (elev->NotifyLate == true)
+			car->NotifyArrival(car->GetFloor());
 	}
 	else
 	{

@@ -142,6 +142,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	motorsound = 0;
 	motoridlesound = 0;
 	NotifyEarly = sbs->GetConfigInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
+	NotifyLate = sbs->GetConfigBool("Skyscraper.SBS.Elevator.NotifyLate", false);
 	Running = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Run", true);
 	Notified = false;
 	Parking = false;
@@ -844,7 +845,7 @@ void Elevator::ProcessCallQueue()
 	}
 
 	//reverse queues if related queue empty flag is set
-	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.empty() == false && NotifyEarly == 0)
+	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.empty() == false && NotifyEarly <= 0)
 	{
 		if (UpCall == false)
 		{
@@ -854,7 +855,7 @@ void Elevator::ProcessCallQueue()
 			QueuePositionDirection = -1;
 		}
 	}
-	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.empty() == false && NotifyEarly == 0)
+	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.empty() == false && NotifyEarly <= 0)
 	{
 		if (DownCall == false)
 		{
@@ -1988,7 +1989,7 @@ void Elevator::FinishMove()
 		if (InServiceMode() == false)
 		{
 			//notify on arrival
-			if ((NotifyEarly == 0 || Notified == false) && Parking == false)
+			if ((NotifyEarly == 0 || Notified == false) && Parking == false && NotifyEarly != -1)
 				NotifyArrival();
 
 			//get status of call buttons before switching off
@@ -3336,7 +3337,7 @@ bool Elevator::GetArrivalDirection(int floor)
 	if (DownStatus == true && QueuePositionDirection == -1)
 		return false;
 
-	if (NotifyEarly == 0)
+	if (NotifyEarly <= 0)
 	{
 		if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
 			newfloor = UpQueue[0].floor;

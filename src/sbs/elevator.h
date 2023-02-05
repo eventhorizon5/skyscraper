@@ -92,7 +92,8 @@ public:
 	Real LevelingOpen; //leveling door open offset
 	bool WaitForDoors; //set to true for the MoveElevatorToFloor() function to wait for the doors to close before running
 	int ActiveDirection; //variant of Direction that doesn't change during slowdown
-	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
+	int NotifyEarly; //perform arrival notification earlier (-1 for off, 0 for normal, 1 for at start of leveling, 2 for at start of decel)
+	bool NotifyLate; //perform arrival notification after doors have opened
 	bool Notified; //true if arrival notification has been performed
 	bool Parking; //is elevator parking?
 	Real DepartureDelay; //delay in seconds between door closure and elevator departure
