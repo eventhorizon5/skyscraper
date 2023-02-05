@@ -621,6 +621,10 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callbutton->Call(true);
 		if (command_name == "down")
 			return callbutton->Call(false);
+		if (command_name == "pressup")
+			return callbutton->Press(true);
+		if (command_name == "pressdown")
+			return callbutton->Press(false);
 		if (command_name == "fireoff")
 			return callbutton->FireService(0);
 		if (command_name == "fireon")
