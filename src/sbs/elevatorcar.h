@@ -196,7 +196,7 @@ public:
 	void SetFloor(int floor, bool move_parent = true);
 	bool IsLeveled();
 	bool IsOnFloor(int floor, bool leveled = true);
-	void NotifyArrival(int floor, bool early = false);
+	void NotifyArrival(int floor, bool early = false, int direction = 0);
 	bool IndependentServiceActive();
 	bool IndependentServiceOnOtherCar();
 	int FirePhase2Active();

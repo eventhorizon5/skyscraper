@@ -544,22 +544,17 @@ void CallButton::Process(int direction)
 		{
 			//update arrival information
 			elevator->NotifyCallButtons(GetFloor(), false);
-
-			//turn on directional indicator
-			car->SetDirectionalIndicators(GetFloor(), false, true);
-			//play chime sound
-			car->Chime(0, GetFloor(), false);
 		}
 		else
 		{
 			//update arrival information
 			elevator->NotifyCallButtons(GetFloor(), true);
-
-			//turn on directional indicator
-			car->SetDirectionalIndicators(GetFloor(), true, false);
-			//play chime sound
-			car->Chime(0, GetFloor(), true);
 		}
+
+		//notify on arrival
+		if (elevator->NotifyEarly == 0 || elevator->NotifyEarly == 3)
+			car->NotifyArrival(GetFloor(), false, direction);
+
 		//open elevator if it's on the same floor
 		car->OpenDoors();
 	}

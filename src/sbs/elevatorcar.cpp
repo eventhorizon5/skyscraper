@@ -3025,7 +3025,7 @@ bool ElevatorCar::IsOnFloor(int floor, bool leveled)
 	return false;
 }
 
-void ElevatorCar::NotifyArrival(int floor, bool early)
+void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 {
 	//notify on car arrival (play chime and turn on related directional indicator lantern)
 
@@ -3037,13 +3037,13 @@ void ElevatorCar::NotifyArrival(int floor, bool early)
 	bool up = true, down = true;
 
 	//if ChimeOnArrival is off, only chime if responding to a hall call
-	if (parent->ChimeOnArrival == false)
+	if (parent->ChimeOnArrival == false && direction == 0)
 		parent->GetCallButtonStatus(floor, up, down);
 
 	//play chime sound and change indicator
 	if (parent->GetArrivalDirection(floor) == true)
 	{
-		if (up == true || parent->NotifyLate == true)
+		if ((up == true || direction == 1) || parent->NotifyLate == true)
 		{
 			Chime(0, floor, true, early);
 			SetDirectionalIndicators(floor, true, false);
@@ -3052,7 +3052,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early)
 	}
 	else
 	{
-		if (down == true || parent->NotifyLate == true)
+		if ((down == true && direction == -1) || parent->NotifyLate == true)
 		{
 			Chime(0, floor, false, early);
 			SetDirectionalIndicators(floor, false, true);
