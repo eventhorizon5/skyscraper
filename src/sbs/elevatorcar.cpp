@@ -3044,15 +3044,19 @@ void ElevatorCar::NotifyArrival(int floor, bool early)
 	if (parent->GetArrivalDirection(floor) == true)
 	{
 		if (up == true || parent->NotifyLate == true)
+		{
 			Chime(0, floor, true, early);
-		SetDirectionalIndicators(floor, true, false);
+			SetDirectionalIndicators(floor, true, false);
+		}
 		parent->LastChimeDirection = 1;
 	}
 	else
 	{
 		if (down == true || parent->NotifyLate == true)
+		{
 			Chime(0, floor, false, early);
-		SetDirectionalIndicators(floor, false, true);
+			SetDirectionalIndicators(floor, false, true);
+		}
 		parent->LastChimeDirection = -1;
 	}
 
