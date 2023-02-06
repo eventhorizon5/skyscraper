@@ -63,8 +63,6 @@ private:
 	void Process(int direction);
 
 	ButtonPanel* panel; //button panel object
-	Control* up; //up control
-	Control* down; //down control
 
 	int Number; //call button index number (on the specified floor)
 	bool is_enabled;

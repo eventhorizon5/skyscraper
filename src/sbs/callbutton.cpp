@@ -70,8 +70,6 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	ActiveElevatorDown = 0;
 	elevator_arrived_up = 0;
 	elevator_arrived_down = 0;
-	up = 0;
-	down = 0;
 
 	//create object mesh
 	std::string base = "Floor " + ToString(floornum) + ":Call Panel " + ToString(number);
@@ -153,7 +151,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		names.push_back("off");
 		names.push_back("up");
 
-		up = panel->AddControl(sound_file_up, row, 1, 1, 1, 0, 0, 1, names, textures);
+		panel->AddControl(sound_file_up, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
 	if (DownExists == true)
 	{
@@ -169,7 +167,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		names.push_back("off");
 		names.push_back("down");
 
-		down = panel->AddControl(sound_file_down, row, 1, 1, 1, 0, 0, 1, names, textures);
+		panel->AddControl(sound_file_down, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
 
 	//set position of object
@@ -836,10 +834,10 @@ bool CallButton::Press(bool up)
 
 	bool result = false;
 
-	if (up == true && this->up)
-		result = this->up->Press();
-	if (up == false && down)
-		result = down->Press();
+	if (up == true && GetUpControl())
+		result = GetUpControl()->Press();
+	if (up == false && GetDownControl())
+		result = GetDownControl()->Press();
 
 	return result;
 }
