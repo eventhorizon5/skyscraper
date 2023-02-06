@@ -540,16 +540,11 @@ void CallButton::Process(int direction)
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
+		//update arrival information
 		if (direction == -1)
-		{
-			//update arrival information
 			elevator->NotifyCallButtons(GetFloor(), false);
-		}
 		else
-		{
-			//update arrival information
 			elevator->NotifyCallButtons(GetFloor(), true);
-		}
 
 		//notify on arrival
 		if (elevator->NotifyEarly == 0 || elevator->NotifyEarly == 3)
