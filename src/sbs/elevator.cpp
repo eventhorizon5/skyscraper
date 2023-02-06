@@ -845,7 +845,7 @@ void Elevator::ProcessCallQueue()
 	}
 
 	//reverse queues if related queue empty flag is set
-	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.empty() == false && NotifyEarly <= 0)
+	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.empty() == false && (NotifyEarly <= 0 || NotifyEarly == 3))
 	{
 		if (UpCall == false)
 		{
@@ -855,7 +855,7 @@ void Elevator::ProcessCallQueue()
 			QueuePositionDirection = -1;
 		}
 	}
-	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.empty() == false && NotifyEarly <= 0)
+	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.empty() == false && (NotifyEarly <= 0 || NotifyEarly == 3))
 	{
 		if (DownCall == false)
 		{
@@ -1710,7 +1710,7 @@ void Elevator::MoveElevatorToFloor()
 			{
 				PlayStoppingSounds();
 
-				if (NotifyEarly == 2 && Parking == false)
+				if ((NotifyEarly == 2 || NotifyEarly == 3) && Parking == false)
 					NotifyArrival();
 			}
 		}
@@ -1989,7 +1989,7 @@ void Elevator::FinishMove()
 		if (InServiceMode() == false)
 		{
 			//notify on arrival
-			if ((NotifyEarly == 0 || Notified == false) && Parking == false && NotifyEarly != -1)
+			if (((NotifyEarly == 0 || NotifyEarly == 3) || Notified == false) && Parking == false && NotifyEarly != -1)
 				NotifyArrival();
 
 			//get status of call buttons before switching off
@@ -3337,7 +3337,7 @@ bool Elevator::GetArrivalDirection(int floor)
 	if (DownStatus == true && QueuePositionDirection == -1)
 		return false;
 
-	if (NotifyEarly <= 0)
+	if (NotifyEarly <= 0 || NotifyEarly == 3)
 	{
 		if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
 			newfloor = UpQueue[0].floor;
