@@ -1,5 +1,18 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-Fixed a cut issue on the Triton Center's floor 119 stairwell, where a ceiling piece prevented the user from going up to 120
+-Added PressUp and PressDown callbutton actions, which play the press sound in addition to initiating the related call
+-People objects now are able to play call button press sounds
+-Added NotifyLate parameter to Elevator Editor
+-added option to NotifyEarly to turn off standard elevator arrival notifications
+-added elevator option NotifyLate which performs elevator car arrival notifications after the doors open
+-The CreateCallButtons command can now specify separate up and down sounds
+-Added AccelJerk and DecelJerk elevator parameters, which were missing
+-Fixed a crash in the function processor, the crash would happen if a closing parenthesis ")" was specified before the function's closing parenthesis.
+-camera pitch fix by NoNoTeal (contribution)
+-Updated documentation for Windows builds
+-Fix for the AlarmSoundStop parameter
+-Switched CopyTexture() main function to blit instead of blitFromMemory, this appears to fix reported texture copying problems
 -Exit with a script error if specifying an invalid level, this fixes a number of crashes
 -Mention stairwell number in error messages
 -Added more verbose error messages, and fixed another crash
