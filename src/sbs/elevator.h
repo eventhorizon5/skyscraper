@@ -320,7 +320,7 @@ private:
 	Real GetDestinationAltitude(int floor);
 	Real GetDestinationOffset(int floor);
 	void DirectionalIndicatorsOff();
-	void NotifyArrival();
+	void NotifyArrival(bool early = false);
 	void ProcessGotoFloor(int floor, int direction);
 	void DoSetControls();
 

@@ -125,7 +125,7 @@ public:
 	bool AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
 	ElevatorDoor::DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th);
 	ElevatorDoor::DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
-	void Chime(int number, int floor, bool direction);
+	void Chime(int number, int floor, bool direction, bool early = false);
 	void EnableDoors(bool value);
 	bool AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
 	int AreDoorsMoving(int number = 0, bool car_doors = true, bool shaft_doors = true);
@@ -196,7 +196,7 @@ public:
 	void SetFloor(int floor, bool move_parent = true);
 	bool IsLeveled();
 	bool IsOnFloor(int floor, bool leveled = true);
-	void NotifyArrival(int floor);
+	void NotifyArrival(int floor, bool early = false);
 	bool IndependentServiceActive();
 	bool IndependentServiceOnOtherCar();
 	int FirePhase2Active();

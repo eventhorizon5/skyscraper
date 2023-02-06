@@ -108,6 +108,8 @@ public:
 	std::string CloseSound; //door close sound
 	std::string UpChimeSound; //elevator up chime sound
 	std::string DownChimeSound; //elevator down chime sound
+	std::string EarlyUpChimeSound; //elevator early up chime sound
+	std::string EarlyDownChimeSound; //elevator early down chime sound
 	std::string NudgeSound; //nudge mode sound
 	std::string SensorSound; //door sensor sound
 	int OpenDoor; //1=open doors, -1=close doors, 2=open manual, -2=close manual
@@ -115,6 +117,8 @@ public:
 	Ogre::Vector3 ShaftDoorOrigin; //shaft door origin (deprecated)
 	Real ManualSpeed; //manual speed multiplier
 	Real SlowSpeed; //slow speed multiplier, mainly for nudge mode
+	bool EarlyUpSet;
+	bool EarlyDownSet;
 
 	ElevatorDoor(int number, ElevatorCar* car);
 	~ElevatorDoor();
@@ -136,6 +140,7 @@ public:
 	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th);
 	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
 	void Chime(int floor, bool direction);
+	void EarlyChime(int floor, bool direction);
 	void Loop();
 	void MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
 	void Enabled(bool value);
@@ -197,6 +202,7 @@ private:
 	//sound objects
 	Sound *doorsound;
 	Sound *chime;
+	Sound *earlychime;
 	Sound *nudgesound;
 
 	//door internals
@@ -209,6 +215,7 @@ private:
 	bool nudge_enabled;
 	bool nudgesound_loaded;
 	int chimesound_loaded;
+	int earlychimesound_loaded;
 	bool sensor_enabled; //enable door sensor (active state)
 	bool sensor_status; //persistent sensor on/off state
 

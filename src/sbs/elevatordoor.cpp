@@ -83,6 +83,8 @@ ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 	CloseSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.CloseSound", "elevatorclose.wav");
 	UpChimeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.UpChimeSound", "chime1-up.wav");
 	DownChimeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.DownChimeSound", "chime1-down.wav");
+	EarlyUpChimeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.EarlyUpChimeSound", "chime1-up.wav");
+	EarlyDownChimeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.EarlyUpChimeSound", "chime1-down.wav");
 	NudgeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.NudgeSound", "buzz.wav");
 	doors_stopped = false;
 	ShaftDoorThickness = 0;
@@ -94,6 +96,7 @@ ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 	NudgeTimer = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.NudgeTimer", 30);
 	nudgesound_loaded = false;
 	chimesound_loaded = 0;
+	earlychimesound_loaded = 0;
 	sensor = 0;
 	sensor_action = 0;
 	reset_action = 0;
@@ -102,6 +105,8 @@ ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 	EnableSensor(sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true));
 	SensorSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.SensorSound", "");
 	DoorDirection = false;
+	EarlyUpSet = false;
+	EarlyDownSet = false;
 
 	//create main door object
 	Doors = new DoorWrapper(this, this, false);
@@ -118,6 +123,7 @@ ElevatorDoor::ElevatorDoor(int number, ElevatorCar* car) : Object(car)
 	//create sound object
 	doorsound = new Sound(this, "Door Sound", true);
 	chime = new Sound(this, "Chime", true);
+	earlychime = new Sound(this, "EarlyChime", true);
 	nudgesound = new Sound(this, "Nudge Sound", true);
 }
 
@@ -168,6 +174,11 @@ ElevatorDoor::~ElevatorDoor()
 		delete chime;
 	}
 	chime = 0;
+	if (earlychime)
+	{
+		earlychime->parent_deleting = true;
+		delete earlychime;
+	}
 	if (nudgesound)
 	{
 		nudgesound->parent_deleting = true;
@@ -1067,7 +1078,10 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 		nudgesound->SetPosition(center);
 	}
 	else
+	{
 		chime->SetPosition(center);
+		earlychime->SetPosition(center);
+	}
 
 	//create door sensor
 	if (GetSensorStatus() == true && ShaftDoor == false && elev->AutoDoors == true)
@@ -1359,6 +1373,30 @@ void ElevatorDoor::Chime(int floor, bool direction)
 	chime->SetLoopState(false);
 	chime->SetPositionY(sbs->GetFloor(floor)->GetBase() + Doors->Height);
 	chime->Play();
+}
+
+void ElevatorDoor::EarlyChime(int floor, bool direction)
+{
+	//play chime sound on specified floor
+	if (direction == false && earlychimesound_loaded != -1)
+	{
+		if (EarlyDownSet == true)
+			earlychime->Load(EarlyDownChimeSound);
+		else
+			earlychime->Load(DownChimeSound);
+		earlychimesound_loaded = -1;
+	}
+	else if (direction == true && earlychimesound_loaded != 1)
+	{
+		if (EarlyUpSet == true)
+			earlychime->Load(EarlyUpChimeSound);
+		else
+			earlychime->Load(UpChimeSound);
+		earlychimesound_loaded = 1;
+	}
+	earlychime->SetLoopState(false);
+	earlychime->SetPositionY(sbs->GetFloor(floor)->GetBase() + Doors->Height);
+	earlychime->Play();
 }
 
 void ElevatorDoor::Reset(bool sensor)

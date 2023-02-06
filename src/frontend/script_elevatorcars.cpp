@@ -672,6 +672,52 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 17) == "earlyupchimesound")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(17, LineData.find("=", 0) - 17);
+		str = Calc(str);
+		int door = 0;
+		if (!IsNumeric(str, door))
+			return ScriptError("No door specified");
+		if (door == 0 || door > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		car->GetDoor(door)->EarlyUpChimeSound = value;
+		car->GetDoor(door)->EarlyUpSet = true;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 19) == "earlydownchimesound")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(19, LineData.find("=", 0) - 19);
+		str = Calc(str);
+		int door = 0;
+		if (!IsNumeric(str, door))
+			return ScriptError("No door specified");
+		if (door == 0 || door > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		car->GetDoor(door)->EarlyDownChimeSound = value;
+		car->GetDoor(door)->EarlyDownSet = true;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 14) == "alarmsoundstop")
 	{
 		if (equals == false)

@@ -1711,7 +1711,7 @@ void Elevator::MoveElevatorToFloor()
 				PlayStoppingSounds();
 
 				if ((NotifyEarly == 2 || NotifyEarly == 3) && Parking == false)
-					NotifyArrival();
+					NotifyArrival(true);
 			}
 		}
 	}
@@ -1726,7 +1726,7 @@ void Elevator::MoveElevatorToFloor()
 			StartLeveling = true;
 
 			if (NotifyEarly == 1 && Parking == false)
-				NotifyArrival();
+				NotifyArrival(true);
 		}
 	}
 
@@ -1990,7 +1990,7 @@ void Elevator::FinishMove()
 		{
 			//notify on arrival
 			if (((NotifyEarly == 0 || NotifyEarly == 3) || Notified == false) && Parking == false && NotifyEarly != -1)
-				NotifyArrival();
+				NotifyArrival(false);
 
 			//get status of call buttons before switching off
 			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
@@ -3286,7 +3286,7 @@ bool Elevator::IsQueued(int floor, int queue)
 	return false;
 }
 
-void Elevator::NotifyArrival()
+void Elevator::NotifyArrival(bool early)
 {
 	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
 	//for all cars
@@ -3296,7 +3296,7 @@ void Elevator::NotifyArrival()
 		if (GetCar(i)->GotoFloor == true)
 		{
 			int floor = GetFloorForCar(i, GotoFloor);
-			GetCar(i)->NotifyArrival(floor);
+			GetCar(i)->NotifyArrival(floor, early);
 		}
 	}
 

@@ -1489,7 +1489,7 @@ bool ElevatorCar::AreShaftDoorsClosed(bool skip_current_floor)
 	return true;
 }
 
-void ElevatorCar::Chime(int number, int floor, bool direction)
+void ElevatorCar::Chime(int number, int floor, bool direction, bool early)
 {
 	//play chime sound on specified floor
 
@@ -1505,7 +1505,12 @@ void ElevatorCar::Chime(int number, int floor, bool direction)
 	{
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			door->Chime(floor, direction);
+		{
+			if (early == false)
+				door->Chime(floor, direction);
+			else
+				door->EarlyChime(floor, direction);
+		}
 		else
 			ReportError("Invalid door " + ToString(i));
 	}
@@ -3020,7 +3025,7 @@ bool ElevatorCar::IsOnFloor(int floor, bool leveled)
 	return false;
 }
 
-void ElevatorCar::NotifyArrival(int floor)
+void ElevatorCar::NotifyArrival(int floor, bool early)
 {
 	//notify on car arrival (play chime and turn on related directional indicator lantern)
 
@@ -3039,14 +3044,14 @@ void ElevatorCar::NotifyArrival(int floor)
 	if (parent->GetArrivalDirection(floor) == true)
 	{
 		if (up == true || parent->NotifyLate == true)
-			Chime(0, floor, true);
+			Chime(0, floor, true, early);
 		SetDirectionalIndicators(floor, true, false);
 		parent->LastChimeDirection = 1;
 	}
 	else
 	{
 		if (down == true || parent->NotifyLate == true)
-			Chime(0, floor, false);
+			Chime(0, floor, false, early);
 		SetDirectionalIndicators(floor, false, true);
 		parent->LastChimeDirection = -1;
 	}
