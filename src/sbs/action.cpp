@@ -182,6 +182,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//Off
 	//Up
 	//Down
+	//PressUp
+	//PressDown
 	//FireOff
 	//FireOn
 	//FireBypass
