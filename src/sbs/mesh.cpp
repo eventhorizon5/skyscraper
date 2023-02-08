@@ -453,7 +453,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 	for (size_t i = 0; i < polygon.size(); i++)
 		newpoly.push_back(ToRemote(polygon[i], true, false));
 
-	Ogre::Vector3 normal = ComputePlane(newpoly).normal;
+	Ogre::Vector3 normal = ComputePlane2(newpoly).normal;
 
 	int largest_normal = 0; //x
 
@@ -503,6 +503,16 @@ Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real
 }
 
 Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
+{
+	//compute plane from a set of given vertices
+
+	Real det;
+	Ogre::Vector3 normal = -ComputeNormal(vertices, det);
+	normal.normalise();
+	return Ogre::Plane(normal, det);
+}
+
+Ogre::Plane SBS::ComputePlane2(std::vector<Ogre::Vector3> &vertices)
 {
 	//compute plane from a set of given vertices
 
@@ -922,7 +932,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	geometry.resize(converted_vertices.size());
 
 	//calculate normal
-	Ogre::Vector3 normal = sbs->ComputePlane(converted_vertices).normal;
+	Ogre::Vector3 normal = sbs->ComputePlane2(converted_vertices).normal;
 
 	//populate vertices, normals, and texels for mesh data
 	{
