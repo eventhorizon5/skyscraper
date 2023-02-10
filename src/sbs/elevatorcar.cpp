@@ -3040,8 +3040,19 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 	if (parent->ChimeOnArrival == false && direction == 0)
 		parent->GetCallButtonStatus(floor, up, down);
 
+	bool new_direction = false;
+	if (direction == 0)
+		new_direction = parent->GetArrivalDirection(floor);
+	else
+	{
+		if (direction == 1)
+			new_direction = true;
+		else
+			new_direction = false;
+	}
+
 	//play chime sound and change indicator
-	if (parent->GetArrivalDirection(floor) == true)
+	if (new_direction == true)
 	{
 		if ((up == true || direction == 1) || parent->NotifyLate == true)
 		{
@@ -3050,7 +3061,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 		}
 		parent->LastChimeDirection = 1;
 	}
-	else
+	if (new_direction == false)
 	{
 		if ((down == true || direction == -1) || parent->NotifyLate == true)
 		{
