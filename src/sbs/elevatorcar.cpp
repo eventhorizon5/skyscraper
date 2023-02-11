@@ -107,6 +107,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	Created = false;
 	Offset = 0;
 	GotoFloor = false;
+	LateDirection = 0;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -3041,14 +3042,31 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 		parent->GetCallButtonStatus(floor, up, down);
 
 	bool new_direction = false;
-	if (direction == 0)
-		new_direction = parent->GetArrivalDirection(floor);
-	else
+
+	if (LateDirection != 0)
 	{
-		if (direction == 1)
+		//notify is a late notification
+		if (LateDirection == 1)
 			new_direction = true;
 		else
 			new_direction = false;
+		LateDirection = 0;
+	}
+	else
+	{
+		if (direction == 0)
+		{
+			//notify is for a standard arrival
+			new_direction = parent->GetArrivalDirection(floor);
+		}
+		else
+		{
+			//notify is for a same-floor call
+			if (direction == 1)
+				new_direction = true;
+			else
+				new_direction = false;
+		}
 	}
 
 	//play chime sound and change indicator

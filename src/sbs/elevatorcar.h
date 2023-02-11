@@ -74,6 +74,7 @@ public:
 	bool Created; //has car been created with the CreateCar function?
 	int Offset; //floor number offset from the primary elevator
 	bool GotoFloor; //true if car is heading to a floor
+	int LateDirection; //temporary call direction used for NotifyLate option
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();

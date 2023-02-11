@@ -548,6 +548,10 @@ void CallButton::Process(int direction)
 		if (elevator->NotifyEarly >= 0)
 			car->NotifyArrival(GetFloor(), false, direction);
 
+		//store call direction for NotifyLate feature
+		if (elevator->NotifyLate == true)
+			car->LateDirection = direction;
+
 		//open elevator if it's on the same floor
 		car->OpenDoors();
 	}
