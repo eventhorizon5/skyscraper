@@ -3043,6 +3043,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 
 	bool new_direction = false;
 
+	//get notification direction
 	if (LateDirection != 0)
 	{
 		//notify is a late notification
@@ -3089,6 +3090,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 		parent->LastChimeDirection = -1;
 	}
 
+	//play floor sound
 	if (parent->FireServicePhase1 == 0 && parent->FireServicePhase2 == 0)
 		PlayFloorSound();
 }
