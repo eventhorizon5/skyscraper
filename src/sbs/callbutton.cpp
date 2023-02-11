@@ -545,7 +545,7 @@ void CallButton::Process(int direction)
 			elevator->NotifyCallButtons(GetFloor(), true);
 
 		//notify on arrival
-		if (elevator->NotifyEarly == 0 || elevator->NotifyEarly == 3)
+		if (elevator->NotifyEarly >= 0)
 			car->NotifyArrival(GetFloor(), false, direction);
 
 		//open elevator if it's on the same floor
