@@ -9137,7 +9137,7 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
 
 <Floors 119 to 142>
     #extra cut operation
-    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] Cut -17 + 4.7515, -%interfloorheight% + 1, -4.5 + 51.66, -9.0815 + 4.7515, %fullheight%, 4.5 + 51.66, false, true
+    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] Cut -17 + 4.7515, -%interfloorheight% + 1, -4.5 + 51.66, -9.0815 + 4.7515, %fullheight% + 1, 4.5 + 51.66, false, true
     if[%floor% = 120] Cut -17 + 4.7515, -%interfloorheight% - 1, -4.5 + 51.66, -9.0815 + 4.7515, %height% + 2, 4.5 + 51.66, false, true
     if[%floor% > 140] Cut -17 + 4.7515, -%interfloorheight% - 1, -4.5 + 51.66, -9.0815 + 4.7515, 15, 4.5 + 51.66, false, true
 <EndFloors>

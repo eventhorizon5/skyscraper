@@ -1,7 +1,7 @@
 /*
 Scalable Building Simulator - Elevator Car Object
 The Skyscraper Project - Version 1.11 Alpha
-Copyright (C)2004-2022 Ryan Thoryk
+Copyright (C)2004-2023 Ryan Thoryk
 https://www.skyscrapersim.net
 https://sourceforge.net/projects/skyscraper/
 Contact - ryan@thoryk.com
@@ -107,6 +107,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	Created = false;
 	Offset = 0;
 	GotoFloor = false;
+	LateDirection = 0;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -1489,7 +1490,7 @@ bool ElevatorCar::AreShaftDoorsClosed(bool skip_current_floor)
 	return true;
 }
 
-void ElevatorCar::Chime(int number, int floor, bool direction)
+void ElevatorCar::Chime(int number, int floor, bool direction, bool early)
 {
 	//play chime sound on specified floor
 
@@ -1505,7 +1506,12 @@ void ElevatorCar::Chime(int number, int floor, bool direction)
 	{
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			door->Chime(floor, direction);
+		{
+			if (early == false)
+				door->Chime(floor, direction);
+			else
+				door->EarlyChime(floor, direction);
+		}
 		else
 			ReportError("Invalid door " + ToString(i));
 	}
@@ -3020,7 +3026,7 @@ bool ElevatorCar::IsOnFloor(int floor, bool leveled)
 	return false;
 }
 
-void ElevatorCar::NotifyArrival(int floor)
+void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 {
 	//notify on car arrival (play chime and turn on related directional indicator lantern)
 
@@ -3032,25 +3038,59 @@ void ElevatorCar::NotifyArrival(int floor)
 	bool up = true, down = true;
 
 	//if ChimeOnArrival is off, only chime if responding to a hall call
-	if (parent->ChimeOnArrival == false)
+	if (parent->ChimeOnArrival == false && direction == 0)
 		parent->GetCallButtonStatus(floor, up, down);
 
-	//play chime sound and change indicator
-	if (parent->GetArrivalDirection(floor) == true)
+	bool new_direction = false;
+
+	//get notification direction
+	if (LateDirection != 0)
 	{
-		if (up == true)
-			Chime(0, floor, true);
-		SetDirectionalIndicators(floor, true, false);
+		//notify is a late notification
+		if (LateDirection == 1)
+			new_direction = true;
+		else
+			new_direction = false;
+		LateDirection = 0;
+	}
+	else
+	{
+		if (direction == 0)
+		{
+			//notify is for a standard arrival
+			new_direction = parent->GetArrivalDirection(floor);
+		}
+		else
+		{
+			//notify is for a same-floor call
+			if (direction == 1)
+				new_direction = true;
+			else
+				new_direction = false;
+		}
+	}
+
+	//play chime sound and change indicator
+	if (new_direction == true)
+	{
+		if (up == true || direction == 1 || parent->NotifyLate == true)
+		{
+			Chime(0, floor, true, early);
+			SetDirectionalIndicators(floor, true, false);
+		}
 		parent->LastChimeDirection = 1;
 	}
 	else
 	{
-		if (down == true)
-			Chime(0, floor, false);
-		SetDirectionalIndicators(floor, false, true);
+		if (down == true || direction == -1 || parent->NotifyLate == true)
+		{
+			Chime(0, floor, false, early);
+			SetDirectionalIndicators(floor, false, true);
+		}
 		parent->LastChimeDirection = -1;
 	}
 
+	//play floor sound
 	if (parent->FireServicePhase1 == 0 && parent->FireServicePhase2 == 0)
 		PlayFloorSound();
 }

@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Floor Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2022 Ryan Thoryk
+	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -509,7 +509,7 @@ Real Floor::FullHeight()
 	return InterfloorHeight + Height;
 }
 
-CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
+CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string &sound_file_up, const std::string &sound_file_down, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
 {
 	//adds call buttons
 
@@ -534,7 +534,7 @@ CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string
 
 	//create call button
 	int Current = (int)CallButtonArray.size() + 1;
-	CallButton *button = new CallButton(this, elevators, Number, Current, sound_file, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	CallButton *button = new CallButton(this, elevators, Number, Current, sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	CallButtonArray.push_back(button);
 	return button;
 }

@@ -1,6 +1,6 @@
 /*
 	Skyscraper 1.11 Alpha - File I/O and Script Processing Routines
-	Copyright (C)2003-2022 Ryan Thoryk
+	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -905,7 +905,7 @@ bool ScriptProcessor::FunctionProc()
 
 			//get function parameters
 			int location2 = location + (int)data.Name.length() + 1;
-			int end_loc = LineData.find(")", location);
+			int end_loc = LineData.find_last_of(")");
 			std::string newdata = LineData.substr(location2, end_loc - location2);
 			std::vector<std::string> tempdata;
 			SplitString(tempdata, newdata, ',');

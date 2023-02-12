@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Call Button Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2022 Ryan Thoryk
+	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -33,7 +33,7 @@ class SBSIMPEXP CallButton : public Object, public Lock
 public:
 
 	//functions
-	CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
+	CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 	~CallButton();
 	void Enabled(bool value);
 	bool Call(bool direction); //true is up, false is down
@@ -57,6 +57,7 @@ public:
 	int FindClosestElevator(int direction);
 	Control* GetUpControl();
 	Control* GetDownControl();
+	bool Press(bool up);
 
 private:
 	void Process(int direction);

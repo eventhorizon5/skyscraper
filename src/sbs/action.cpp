@@ -1,7 +1,7 @@
 /*
         Scalable Building Simulator - Action Interface Class
         The Skyscraper Project - Version 1.11 Alpha
-        Copyright (C)2004-2022 Ryan Thoryk
+        Copyright (C)2004-2023 Ryan Thoryk
         https://www.skyscrapersim.net
         https://sourceforge.net/projects/skyscraper/
         Contact - ryan@thoryk.com
@@ -182,6 +182,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//Off
 	//Up
 	//Down
+	//PressUp
+	//PressDown
 	//FireOff
 	//FireOn
 	//FireBypass
@@ -621,6 +623,10 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callbutton->Call(true);
 		if (command_name == "down")
 			return callbutton->Call(false);
+		if (command_name == "pressup")
+			return callbutton->Press(true);
+		if (command_name == "pressdown")
+			return callbutton->Press(false);
 		if (command_name == "fireoff")
 			return callbutton->FireService(0);
 		if (command_name == "fireon")

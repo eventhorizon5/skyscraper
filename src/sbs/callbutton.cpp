@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Call Button Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2022 Ryan Thoryk
+	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -46,7 +46,7 @@ public:
 	virtual void Notify();
 };
 
-CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th) : Object(parent), Lock(this)
+CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th) : Object(parent), Lock(this)
 {
 	//create a set of call buttons
 
@@ -151,7 +151,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		names.push_back("off");
 		names.push_back("up");
 
-		panel->AddControl(sound_file, row, 1, 1, 1, 0, 0, 1, names, textures);
+		panel->AddControl(sound_file_up, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
 	if (DownExists == true)
 	{
@@ -167,7 +167,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 		names.push_back("off");
 		names.push_back("down");
 
-		panel->AddControl(sound_file, row, 1, 1, 1, 0, 0, 1, names, textures);
+		panel->AddControl(sound_file_down, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
 
 	//set position of object
@@ -538,26 +538,20 @@ void CallButton::Process(int direction)
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
+		//update arrival information
 		if (direction == -1)
-		{
-			//update arrival information
 			elevator->NotifyCallButtons(GetFloor(), false);
-
-			//turn on directional indicator
-			car->SetDirectionalIndicators(GetFloor(), false, true);
-			//play chime sound
-			car->Chime(0, GetFloor(), false);
-		}
 		else
-		{
-			//update arrival information
 			elevator->NotifyCallButtons(GetFloor(), true);
 
-			//turn on directional indicator
-			car->SetDirectionalIndicators(GetFloor(), true, false);
-			//play chime sound
-			car->Chime(0, GetFloor(), true);
-		}
+		//notify on arrival
+		if (elevator->NotifyEarly >= 0)
+			car->NotifyArrival(GetFloor(), false, direction);
+
+		//store call direction for NotifyLate feature
+		if (elevator->NotifyLate == true)
+			car->LateDirection = direction;
+
 		//open elevator if it's on the same floor
 		car->OpenDoors();
 	}
@@ -835,6 +829,21 @@ Control* CallButton::GetDownControl()
 		return 0;
 
 	return panel->GetControl("down");
+}
+
+bool CallButton::Press(bool up)
+{
+	//press the related call button (the control object)
+	//which also initiates the call via the Call() function
+
+	bool result = false;
+
+	if (up == true && GetUpControl())
+		result = GetUpControl()->Press();
+	if (up == false && GetDownControl())
+		result = GetDownControl()->Press();
+
+	return result;
 }
 
 }

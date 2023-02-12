@@ -1,6 +1,6 @@
 /*
 	Skyscraper 1.11 Alpha - Script Processor - Elevator Car Section
-	Copyright (C)2003-2022 Ryan Thoryk
+	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -672,15 +672,50 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "alarmsound")
+	if (linecheck.substr(0, 17) == "earlyupchimesound")
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(17, LineData.find("=", 0) - 17);
+		str = Calc(str);
+		int door = 0;
+		if (!IsNumeric(str, door))
+			return ScriptError("No door specified");
+		if (door == 0 || door > car->NumDoors)
+			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		parent->CheckFile("data/" + value);
 
-		car->AlarmSound = value;
+		car->GetDoor(door)->EarlyUpChimeSound = value;
+		car->GetDoor(door)->EarlyUpSet = true;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 19) == "earlydownchimesound")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (car->Created == false)
+			return ScriptError("Car not created yet");
+		std::string str = LineData.substr(19, LineData.find("=", 0) - 19);
+		str = Calc(str);
+		int door = 0;
+		if (!IsNumeric(str, door))
+			return ScriptError("No door specified");
+		if (door == 0 || door > car->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		car->GetDoor(door)->EarlyDownChimeSound = value;
+		car->GetDoor(door)->EarlyDownSet = true;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "alarmsoundstop")
@@ -692,6 +727,17 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		parent->CheckFile("data/" + value);
 
 		car->AlarmSoundStop = value;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "alarmsound")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		car->AlarmSound = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "beepsound")

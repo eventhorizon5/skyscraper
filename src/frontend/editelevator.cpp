@@ -1,6 +1,6 @@
 /*
 	Skyscraper 1.11 Alpha - Edit Elevator Form
-	Copyright (C)2003-2022 Ryan Thoryk
+	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -272,6 +272,9 @@ const long editelevator::ID_txtErrorOffset = wxNewId();
 const long editelevator::ID_STATICTEXT59 = wxNewId();
 const long editelevator::ID_txtNotifyEarly = wxNewId();
 const long editelevator::ID_bNotifyEarly = wxNewId();
+const long editelevator::ID_STATICTEXT89 = wxNewId();
+const long editelevator::ID_txtNotifyLate = wxNewId();
+const long editelevator::ID_bNotifyLate = wxNewId();
 const long editelevator::ID_STATICTEXT65 = wxNewId();
 const long editelevator::ID_txtDepartureDelay = wxNewId();
 const long editelevator::ID_bSetDepartureDelay = wxNewId();
@@ -964,6 +967,13 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	FlexGridSizer7->Add(txtNotifyEarly, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bNotifyEarly = new wxButton(this, ID_bNotifyEarly, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bNotifyEarly"));
 	FlexGridSizer7->Add(bNotifyEarly, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText89 = new wxStaticText(this, ID_STATICTEXT89, _("NotifyLate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT89"));
+	FlexGridSizer7->Add(StaticText89, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtNotifyLate = new wxTextCtrl(this, ID_txtNotifyLate, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtNotifyLate"));
+	txtNotifyLate->SetToolTip(_("Notify Early"));
+	FlexGridSizer7->Add(txtNotifyLate, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bNotifyLate = new wxButton(this, ID_bNotifyLate, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bNotifyLate"));
+	FlexGridSizer7->Add(bNotifyLate, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText65 = new wxStaticText(this, ID_STATICTEXT65, _("DDelay:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT65"));
 	FlexGridSizer7->Add(StaticText65, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtDepartureDelay = new wxTextCtrl(this, ID_txtDepartureDelay, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtDepartureDelay"));
@@ -1096,6 +1106,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bSetManualSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetManualSpeed_Click);
 	Connect(ID_bSetInspectionSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetInspectionSpeed_Click);
 	Connect(ID_bNotifyEarly,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bNotifyEarly_Click);
+	Connect(ID_bNotifyLate,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bNotifyLate_Click);
 	Connect(ID_bSetDepartureDelay,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDepartureDelay_Click);
 	Connect(ID_bSetArrivalDelay,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetArrivalDelay_Click);
 	Connect(ID_bSetACPFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetACPFloor_Click);
@@ -1384,6 +1395,7 @@ void editelevator::Loop()
 	txtActiveDirection->SetValue(ToString(elevator->ActiveDirection));
 	txtManualMove->SetValue(ToString(elevator->ManualMove));
 	txtMusicPosition->SetValue(TruncateNumber(car->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.z, 2));
+	txtNotifyLate->SetValue(BoolToString(elevator->NotifyLate));
 
 	//changeable values
 	if (chkVisible->GetValue() != elevator->IsEnabled)
@@ -1856,4 +1868,11 @@ void editelevator::On_bSetDownSpeed_Click(wxCommandEvent& event)
 		 elevator->DownSpeed = atof(txtDownSpeed->GetValue());
 }
 
+void editelevator::On_bNotifyLate_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->NotifyLate = !elevator->NotifyLate;
 }
+
+}
+

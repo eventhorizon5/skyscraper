@@ -233,3 +233,63 @@ You may need to edit plugins.cfg to redirect to `Contents/Framework`, and commen
     cmake .
     make
     open Skyscraper.app
+
+
+# Skyscraper source build for Windows, using Visual Studio 2022
+
+Step 1 - download the dependencies
+-----------
+First, download the dependencies archive here:
+
+https://www.skyscrapersim.net/downloads/dev/other_apps/skyscraper-deps-winbuild-release.7z
+    
+Step 2 - extract the dependencies
+-----------
+Use the 7zip tool from https://7-zip.org to extract the package, extract it into the root of your C: drive.
+
+Step 3 - install the FMOD sound system
+-----------
+Go to https://fmod.com and sign up for an account.
+
+Log in, click Download, and download and install the "FMOD Engine" for Windows.
+
+Step 4 - set up environment variables
+-----------
+Skyscraper's build system requires you to set up environment variables that point to the individual dependencies.
+
+Search for "environment variables" in the Windows search box, and click on "Edit the system environment variables".
+
+Here's the variables that need to be set up:
+
+BULLET_HOME_64 points to C:\bullet-svn
+
+CAELUM_HOME_64 points to C:\caelum-win64
+
+FMOD_HOME points to C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows
+
+OGRE_HOME_64 points to C:\ogre-13.4.3\SDK
+
+WXWIN_64 points to C:\wxWidgets-3.2.1
+
+Step 5 - download and install Git
+-----------
+Get a Git client, such as the one from https://gitforwindows.org/
+
+In a terminal or Powershell, go to the folder where you'd like to store Skyscraper, then download the Skyscraper source repository:
+
+    git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
+    cd skyscraper
+
+Download the file at https://www.skyscrapersim.net/downloads/dev/other_apps/plugins-windows.cfg and place it into your new Skyscraper folder, rename it to plugins.cfg.
+
+Once that's done go into Visual Studio, and load the project file (Skyscraper.sln) which is in the "msvc" folder.
+
+Debug builds might have issues, so do a release build.
+
+Step 6 - copy over the DLLs into Skyscraper's folder so it'll run
+------------
+Download the latest build of Skyscraper from https://www.skyscrapersim.net and copy all of the "dll" and "pdb" files from that package into the folder you created that contains the Skyscraper source code.  This will allow Skyscraper to run in release mode.
+
+Step 7 - build and run
+------------
+Try having Visual Studio build from source, and then see if Skyscraper will run for you.  You can change the renderer settings on startup by deleting the ogre.cfg file and running again.

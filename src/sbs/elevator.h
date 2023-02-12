@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Elevator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2022 Ryan Thoryk
+	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -92,7 +92,8 @@ public:
 	Real LevelingOpen; //leveling door open offset
 	bool WaitForDoors; //set to true for the MoveElevatorToFloor() function to wait for the doors to close before running
 	int ActiveDirection; //variant of Direction that doesn't change during slowdown
-	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
+	int NotifyEarly; //perform arrival notification earlier (-1 for off, 0 for normal, 1 for at start of leveling, 2 for at start of decel, 3 for both options 0 and 2)
+	bool NotifyLate; //perform arrival notification after doors have opened
 	bool Notified; //true if arrival notification has been performed
 	bool Parking; //is elevator parking?
 	Real DepartureDelay; //delay in seconds between door closure and elevator departure
@@ -319,7 +320,7 @@ private:
 	Real GetDestinationAltitude(int floor);
 	Real GetDestinationOffset(int floor);
 	void DirectionalIndicatorsOff();
-	void NotifyArrival();
+	void NotifyArrival(bool early = false);
 	void ProcessGotoFloor(int floor, int direction);
 	void DoSetControls();
 

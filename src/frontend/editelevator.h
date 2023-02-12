@@ -1,6 +1,6 @@
 /*
 	Skyscraper 1.11 Alpha - Edit Elevator Form
-	Copyright (C)2004-2022 Ryan Thoryk
+	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -276,6 +276,9 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT59;
 		static const long ID_txtNotifyEarly;
 		static const long ID_bNotifyEarly;
+		static const long ID_STATICTEXT89;
+		static const long ID_txtNotifyLate;
+		static const long ID_bNotifyLate;
 		static const long ID_STATICTEXT65;
 		static const long ID_txtDepartureDelay;
 		static const long ID_bSetDepartureDelay;
@@ -382,6 +385,7 @@ class editelevator: public wxDialog
 		void On_bSetType_Click(wxCommandEvent& event);
 		void On_bSetUpSpeed_Click(wxCommandEvent& event);
 		void On_bSetDownSpeed_Click(wxCommandEvent& event);
+		void On_bNotifyLate_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -408,6 +412,7 @@ class editelevator: public wxDialog
 		wxButton* bInterlocks;
 		wxButton* bLevelingOpen;
 		wxButton* bNotifyEarly;
+		wxButton* bNotifyLate;
 		wxButton* bOpen;
 		wxButton* bOpenManual;
 		wxButton* bOpenShaftDoor;
@@ -557,6 +562,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText86;
 		wxStaticText* StaticText87;
 		wxStaticText* StaticText88;
+		wxStaticText* StaticText89;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText9;
 		wxStaticText* tCar;
@@ -620,6 +626,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtName;
 		wxTextCtrl* txtNotified;
 		wxTextCtrl* txtNotifyEarly;
+		wxTextCtrl* txtNotifyLate;
 		wxTextCtrl* txtNudgeMode;
 		wxTextCtrl* txtNudgeTimer;
 		wxTextCtrl* txtNumber;

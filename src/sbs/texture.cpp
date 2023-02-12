@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Texture Manager
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2022 Ryan Thoryk
+	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -1143,7 +1143,7 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Ogre::Plane plane = -sbs->ComputePlane(vertices);
+		Ogre::Plane plane = sbs->ComputePlane(vertices);
 		Ogre::Vector3 normal = plane.normal;
 
 		direction = 0; //x; faces left/right

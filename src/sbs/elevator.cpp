@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Elevator Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2022 Ryan Thoryk
+	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -142,6 +142,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	motorsound = 0;
 	motoridlesound = 0;
 	NotifyEarly = sbs->GetConfigInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
+	NotifyLate = sbs->GetConfigBool("Skyscraper.SBS.Elevator.NotifyLate", false);
 	Running = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Run", true);
 	Notified = false;
 	Parking = false;
@@ -844,7 +845,7 @@ void Elevator::ProcessCallQueue()
 	}
 
 	//reverse queues if related queue empty flag is set
-	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.empty() == false && NotifyEarly == 0)
+	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.empty() == false && (NotifyEarly <= 0 || NotifyEarly == 3))
 	{
 		if (UpCall == false)
 		{
@@ -854,7 +855,7 @@ void Elevator::ProcessCallQueue()
 			QueuePositionDirection = -1;
 		}
 	}
-	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.empty() == false && NotifyEarly == 0)
+	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.empty() == false && (NotifyEarly <= 0 || NotifyEarly == 3))
 	{
 		if (DownCall == false)
 		{
@@ -1709,8 +1710,8 @@ void Elevator::MoveElevatorToFloor()
 			{
 				PlayStoppingSounds();
 
-				if (NotifyEarly == 2 && Parking == false)
-					NotifyArrival();
+				if ((NotifyEarly == 2 || NotifyEarly == 3) && Parking == false)
+					NotifyArrival(true);
 			}
 		}
 	}
@@ -1725,7 +1726,7 @@ void Elevator::MoveElevatorToFloor()
 			StartLeveling = true;
 
 			if (NotifyEarly == 1 && Parking == false)
-				NotifyArrival();
+				NotifyArrival(true);
 		}
 	}
 
@@ -1988,8 +1989,8 @@ void Elevator::FinishMove()
 		if (InServiceMode() == false)
 		{
 			//notify on arrival
-			if ((NotifyEarly == 0 || Notified == false) && Parking == false)
-				NotifyArrival();
+			if (((NotifyEarly == 0 || NotifyEarly == 3) || Notified == false) && Parking == false && NotifyEarly != -1)
+				NotifyArrival(false);
 
 			//get status of call buttons before switching off
 			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
@@ -3285,7 +3286,7 @@ bool Elevator::IsQueued(int floor, int queue)
 	return false;
 }
 
-void Elevator::NotifyArrival()
+void Elevator::NotifyArrival(bool early)
 {
 	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
 	//for all cars
@@ -3295,7 +3296,7 @@ void Elevator::NotifyArrival()
 		if (GetCar(i)->GotoFloor == true)
 		{
 			int floor = GetFloorForCar(i, GotoFloor);
-			GetCar(i)->NotifyArrival(floor);
+			GetCar(i)->NotifyArrival(floor, early);
 		}
 	}
 
@@ -3336,7 +3337,7 @@ bool Elevator::GetArrivalDirection(int floor)
 	if (DownStatus == true && QueuePositionDirection == -1)
 		return false;
 
-	if (NotifyEarly == 0)
+	if (NotifyEarly <= 0 || NotifyEarly == 3)
 	{
 		if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
 			newfloor = UpQueue[0].floor;

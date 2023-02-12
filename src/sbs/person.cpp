@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Person Object
 	The Skyscraper Project - Version 1.11 Alpha
-	Copyright (C)2004-2022 Ryan Thoryk
+	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
@@ -206,12 +206,12 @@ void Person::ProcessRoute()
 
 			if (floor_selection > current_floor)
 			{
-				result = button->Call(true);
+				result = button->Press(true);
 				route[0].call_made = 1;
 			}
 			else
 			{
-				result = button->Call(false);
+				result = button->Press(false);
 				route[0].call_made = -1;
 			}
 		}
