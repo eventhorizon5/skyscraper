@@ -446,12 +446,12 @@ void Skyscraper::UnloadSim()
 
 }
 
-void Skyscraper::Render()
+bool Skyscraper::Render()
 {
 	SBS_PROFILE_MAIN("Render");
 
 	if (Headless == true)
-		return;
+		return true;
 
 	// Render to the frame buffer
 	try
@@ -460,13 +460,15 @@ void Skyscraper::Render()
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error in render operation\nDetails: " + e.getDescription());
+		return ReportFatalError("Error in render operation\nDetails: " + e.getDescription());
 	}
 
 	//update frame statistics
 	Ogre::FrameEvent a;
 	if (mTrayMgr)
 		mTrayMgr->frameRendered(a);
+
+	return true;
 }
 
 bool Skyscraper::Initialize()
@@ -837,7 +839,7 @@ void Skyscraper::ShowMessage(const std::string &message)
 	dialog.ShowModal();
 }
 
-void Skyscraper::Loop()
+bool Skyscraper::Loop()
 {
 	//Main simulator loop
 
@@ -849,8 +851,8 @@ void Skyscraper::Loop()
 	{
 		DrawBackground();
 		GetMenuInput();
-		Render();
-		return;
+
+		return Render();
 	}
 
 	//show progress dialog if needed
@@ -871,10 +873,10 @@ void Skyscraper::Loop()
 	}
 
 	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
-		return;
+		return true;
 
 	if (!active_engine)
-		return;
+		return true;
 
 	//make sure active engine is the one the camera is active in
 	if (active_engine->IsCameraActive() == false)
@@ -882,20 +884,22 @@ void Skyscraper::Loop()
 
 	//exit if active engine is loading
 	if (active_engine->IsLoading() == true)
-		return;
+		return true;
 
 	//if in CheckScript mode, exit
 	if (CheckScript == true)
 	{
 		UnloadToMenu();
-		return;
+		return true;
 	}
 
 	//update Caelum
 	UpdateSky();
 
 	//render graphics
-	Render();
+	result = Render();
+	if (!result)
+		return false;
 
 	//handle a building reload
 	HandleReload();
@@ -904,6 +908,8 @@ void Skyscraper::Loop()
 	SwitchEngines();
 
 	//ProfileManager::dumpAll();
+
+	return true;
 }
 
 void Skyscraper::DrawBackground()

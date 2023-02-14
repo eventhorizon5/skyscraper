@@ -106,7 +106,7 @@ public:
 	bool Headless;
 	bool RTSS;
 
-	void Loop();
+	bool Loop();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
 	void DrawBackground();
@@ -114,7 +114,7 @@ public:
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
-	void Render();
+	bool Render();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);

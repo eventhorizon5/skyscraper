@@ -173,7 +173,9 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 				panel->SetFocus();
 
 			try {
-				frontend->Loop(); //run simulator loop
+				bool result = frontend->Loop(); //run simulator loop
+				if (!result)
+					frontend->Quit();
 			}
 			catch (Ogre::Exception &e)
 			{
