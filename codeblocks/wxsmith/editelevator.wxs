@@ -2326,7 +2326,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtNotifyLate" variable="txtNotifyLate" member="yes">
 													<size>75,-1</size>
-													<tooltip>Notify Early</tooltip>
+													<tooltip>Notify Late</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
