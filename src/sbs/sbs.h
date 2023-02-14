@@ -332,8 +332,7 @@ public:
 	void UnregisterControl(Control *control);
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real distance);
 	void ShowFloorList();
-	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices);
-	Ogre::Plane ComputePlane2(std::vector<Ogre::Vector3> &vertices);
+	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices, bool flip_normal = true);
 	void ShowSceneNodes(bool value);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon);
 	void ShowBoundingBoxes(bool value);
