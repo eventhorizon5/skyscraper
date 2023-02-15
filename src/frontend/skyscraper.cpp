@@ -662,6 +662,9 @@ bool Skyscraper::Initialize()
 			// forward scheme not found events to the RTSS
 			OgreBites::SGTechniqueResolverListener* schemeNotFoundHandler = new OgreBites::SGTechniqueResolverListener(shaderGenerator);
 			Ogre::MaterialManager::getSingleton().addListener(schemeNotFoundHandler);
+
+			//uncomment this to dump RTSS shaders
+			//shaderGenerator->setShaderCachePath("shaders/");
 		}
 	}
 
