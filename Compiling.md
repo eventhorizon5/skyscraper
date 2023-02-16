@@ -58,7 +58,7 @@ Step 3 - build and install OGRE
     
     wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-13-skyscraper.tar.bz2
     tar xfvz ogre-13-skyscraper.tar.bz2
-    cd ogre-13.4.3
+    cd ogre-13.6.2
     cmake . -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON OGRE_BUILD_COMPONENT_BULLET=OFF
     make
     sudo make install
@@ -139,7 +139,7 @@ Step 1 - build and install OGRE
     
     wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-13-skyscraper.tar.bz2
     tar xfvz ogre-13-skyscraper.tar.bz2
-    cd ogre-13.4.3
+    cd ogre-13.6.2
     cmake . -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON -DOGRE_BUILD_COMPONENT_BULLET=OFF -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX=/usr/local/ -DOGRE_BUILD_RENDERSYSTEM_METAL=ON
     make
     sudo make install
@@ -267,7 +267,7 @@ CAELUM_HOME_64 points to C:\caelum-win64
 
 FMOD_HOME points to C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows
 
-OGRE_HOME_64 points to C:\ogre-13.4.3\SDK
+OGRE_HOME_64 points to C:\ogre-13.6.2\SDK
 
 WXWIN_64 points to C:\wxWidgets-3.2.1
 
