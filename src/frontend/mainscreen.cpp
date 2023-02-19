@@ -253,6 +253,9 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		//crash test
 		if (event.ControlDown() && key == (wxKeyCode)'C')
 			throw;
+
+		if (key == WXK_F4)
+			Close();
 	}
 	else
 	{
