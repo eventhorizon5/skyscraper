@@ -1,5 +1,16 @@
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-Exit app when Alt-F4 is pressed, this is a fix for Windows builds
+-Added the ability to dump shaders to a folder, used for RTSS debugging
+-Exit if a fatal render operation is encountered
+-Consolidate ComputePlane functions into a single function
+-Call button should store the call direction for the NotifyLate feature
+-Elevator should always perform arrival notification if on the same floor as the call, unless NotifyEarly is -1
+-use NotifyArrival() for callbuttons opening elevator on same floor
+-elevators now follow the NotifyEarly and NotifyLate parameters if elevator is on the same floor
+-Directional indicators no longer light up for non-calls when ChimeOnArrival is false
+-Added support for setting separate early chime sounds
+-Added a value of 3 to the NotifyEarly command, which combines both options 0 and 2, having the elevator notify/chime twice
 -Fixed a cut issue on the Triton Center's floor 119 stairwell, where a ceiling piece prevented the user from going up to 120
 -Added PressUp and PressDown callbutton actions, which play the press sound in addition to initiating the related call
 -People objects now are able to play call button press sounds
