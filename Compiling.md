@@ -83,9 +83,10 @@ So pull the source from Git, and build:
 Step 5 - build wxWidgets
 -----------
 
-    wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.1/wxWidgets-3.2.1.tar.bz2
-    cd wxWidgets-3.2.1
-    cmake . --prefix=/opt/wx
+    wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.2.1/wxWidgets-3.2.2.1.tar.bz2
+    tar xfj wxWidgets-3.2.2.1.tar.bz2
+    cd wxWidgets-3.2.2.1
+    ./configure --prefix=/opt/wx
     make
     make install
 
