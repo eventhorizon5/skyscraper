@@ -3091,7 +3091,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 	}
 
 	//play floor sound
-	if (parent->FireServicePhase1 == 0 && parent->FireServicePhase2 == 0)
+	if (parent->FireServicePhase1 == 0 && parent->FireServicePhase2 == 0 && direction == 0)
 		PlayFloorSound();
 }
 
