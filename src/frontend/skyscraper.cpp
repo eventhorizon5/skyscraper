@@ -745,9 +745,7 @@ bool Skyscraper::Initialize()
 				sprintf(hexString,"%x.%x.%x", major, minor, rev);
 				s_version = std::string(hexString);
 
-				std::string name = "FMOD Engine";
-				Report("Sound initialized: " + name + " version " + s_version);
-
+				Report("Sound initialized: FMOD Engine version " + s_version);
 			}
 		}
 	}
