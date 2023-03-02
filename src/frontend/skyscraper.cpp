@@ -739,8 +739,21 @@ bool Skyscraper::Initialize()
 				int minor = (version >> 8) & 255;
 				int rev = version & 255;
 
+				std::string s_major, s_minor, s_rev;
+				char hexString[4*sizeof(int)+1];
+
+				sprintf(hexString,"%x", major);
+				s_major = std::string(hexString);
+
+				sprintf(hexString,"%x", minor);
+				s_minor = std::string(hexString);
+
+				sprintf(hexString,"%x", rev);
+				s_rev = std::string(hexString);
+
 				std::string name = "FMOD Engine";
-				Report("Sound initialized: " + name + " version " + ToString(major) + "." + ToString(minor) + "." + ToString(rev));
+				Report("Sound initialized: " + name + " version " + s_major + "." + s_minor + "." + s_rev);
+
 			}
 		}
 	}
