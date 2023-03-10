@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Skyscraper"
-!define PRODUCT_VERSION "2.0 Alpha 10"
+!define PRODUCT_VERSION "2.0 Alpha 11"
 !define PRODUCT_PUBLISHER "Ryan Thoryk"
 !define PRODUCT_WEB_SITE "https://www.skyscrapersim.net"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Skyscraper.exe"
@@ -20,10 +20,10 @@ SetCompressor lzma
 VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
-VIAddVersionKey LegalCopyright "�2003-2018 Ryan Thoryk"
-VIAddVersionKey FileVersion "1.10.0.0"
-VIAddVersionKey ProductVersion "1.10.0.0"
-VIProductVersion 1.10.0.0
+VIAddVersionKey LegalCopyright "Copyright 2003-2023 Ryan Thoryk"
+VIAddVersionKey FileVersion "1.11.0.0"
+VIAddVersionKey ProductVersion "1.11.0.0"
+VIProductVersion 1.11.0.0
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -38,7 +38,7 @@ VIProductVersion 1.10.0.0
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "${LOCAL_FILES}\gpl.txt"
+!insertmacro MUI_PAGE_LICENSE "${LOCAL_FILES}\LICENSE"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
@@ -96,6 +96,7 @@ Section "Application" SEC01
   File "${LOCAL_FILES}\changelog.txt"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Changelog.lnk" "write.exe" '"$INSTDIR\changelog.txt"'
   File "${LOCAL_FILES}\design.rtf"
+  File "${LOCAL_FILES}\keyboard.ini"
   SetOutPath "$INSTDIR\buildings"
   File "${LOCAL_FILES}\buildings\*.bld"
   SetOutPath "$INSTDIR\screenshots"
@@ -128,12 +129,22 @@ Section "Application" SEC01
   File "${LOCAL_FILES}\data\pool\*.*"
   SetOutPath "$INSTDIR\data\Sigma_Palladium"
   File "${LOCAL_FILES}\data\Sigma_Palladium\*.*"
+  SetOutPath "$INSTDIR\media"
+  File "${LOCAL_FILES}\media\*.*"
+  SetOutPath "$INSTDIR\media\Main"
+  File "${LOCAL_FILES}\media\Main\*.*"
+  SetOutPath "$INSTDIR\media\packs"
+  File "${LOCAL_FILES}\media\packs\*.*"
+  SetOutPath "$INSTDIR\media\RTShaderLib\GLSL"
+  File "${LOCAL_FILES}\media\RTShaderLib\GLSL\*.*"
+  SetOutPath "$INSTDIR\media\Terrain"
+  File "${LOCAL_FILES}\media\Terrain\*.*"
 SectionEnd
 
 Section /o "Source Code" SEC02
   SetOutPath "$INSTDIR"
   File "${LOCAL_FILES}\skyscraper.ico"
-  File "${LOCAL_FILES}\gpl.txt"
+  File "${LOCAL_FILES}\LICENSE"
   File "${LOCAL_FILES}\Doxyfile"
   File "${LOCAL_FILES}\CMakeLists.txt"
   File "${LOCAL_FILES}\compiling.txt"
@@ -141,8 +152,6 @@ Section /o "Source Code" SEC02
   File "${LOCAL_FILES}\*.patch"
   SetOutPath "$INSTDIR\ogrebullet"
   File /r "${LOCAL_FILES}\ogrebullet\*.*"
-  SetOutPath "$INSTDIR\svnrev"
-  File "${LOCAL_FILES}\svnrev\*.*"
   SetOutPath "$INSTDIR\src"
   File /r "${LOCAL_FILES}\src\*.*"
   SetOutPath "$INSTDIR\codeblocks"
@@ -159,26 +168,35 @@ Section "Required libraries" SEC03
   SetOutPath "$INSTDIR"
   File "${LOCAL_FILES}\Caelum.dll"
   File "${LOCAL_FILES}\cg.dll"
-  File "${LOCAL_FILES}\fmodex64.dll"
+  File "${LOCAL_FILES}\fmod.dll"
+  File "${LOCAL_FILES}\Codec_FreeImage.dll"
   File "${LOCAL_FILES}\OgreMain.dll"
   File "${LOCAL_FILES}\OgreOverlay.dll"
+  File "${LOCAL_FILES}\OgreRTShaderSystem.dll"
+  File "${LOCAL_FILES}\OgreBites.dll"
+  File "${LOCAL_FILES}\FreeImage.dll"
   File "${LOCAL_FILES}\Plugin_CgProgramManager.dll"
   File "${LOCAL_FILES}\Plugin_OctreeSceneManager.dll"
   File "${LOCAL_FILES}\RenderSystem_Direct3D9.dll"
   File "${LOCAL_FILES}\RenderSystem_Direct3D11.dll"
   File "${LOCAL_FILES}\RenderSystem_GL.dll"
+  File "${LOCAL_FILES}\RenderSystem_GL3Plus.dll"
+  File "${LOCAL_FILES}\RenderSystem_GLES2.dll"
   File "${LOCAL_FILES}\plugins.cfg"
   File "${LOCAL_FILES}\resources.cfg"
   File "${LOCAL_FILES}\ogre.cfg"
-  File "${LOCAL_FILES}\wxbase30u_vc_x64_custom.dll"
-  File "${LOCAL_FILES}\wxmsw30u_core_vc_x64_custom.dll"
-  File "${LOCAL_FILES}\wxmsw30u_gl_vc_x64_custom.dll"
+  File "${LOCAL_FILES}\wxbase32u_vc_custom.dll"
+  File "${LOCAL_FILES}\wxmsw32u_core_vc_custom.dll"
   File "${LOCAL_FILES}\D3DX9_43.dll"
-  File "${LOCAL_FILES}\D3DCompiler_43.dll"
-  File "${LOCAL_FILES}\msvcp100.dll"
-  File "${LOCAL_FILES}\msvcr100.dll"
+  File "${LOCAL_FILES}\D3DCompiler_47.dll"
+  File "${LOCAL_FILES}\msvcp140.dll"
+  File "${LOCAL_FILES}\vcruntime140.dll"
+  File "${LOCAL_FILES}\vcruntime140_1.dll"
   File "${LOCAL_FILES}\dbghelp.dll"
   File "${LOCAL_FILES}\vc_redist.x64.exe"
+  File "${LOCAL_FILES}\*.pdb"
+  File "${LOCAL_FILES}\zlib.dll"
+  File "${LOCAL_FILES}\SDL2.dll"
   ExecWait '"$INSTDIR\vc_redist.x64.exe" /Q'
   Delete "${LOCAL_FILES}\vc_redist.x64.exe" 
   SetOutPath "$INSTDIR\data\caelum"
