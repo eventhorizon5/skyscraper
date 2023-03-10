@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - File I/O and Script Processing Routines
+	Skyscraper 1.12 Alpha - File I/O and Script Processing Routines
 	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

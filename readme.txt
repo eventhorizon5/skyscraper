@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 11 
+Skyscraper 2.0 Alpha 12
 Copyright (C)2003-2023 Ryan Thoryk
 https://www.skyscrapersim.net
 https://github.com/eventhorizon5/skyscraper

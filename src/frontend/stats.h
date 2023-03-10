@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - Statistics Dialog
+	Skyscraper 1.12 Alpha - Statistics Dialog
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

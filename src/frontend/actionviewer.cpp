@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - Action Viewer
+	Skyscraper 1.12 Alpha - Action Viewer
 	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
