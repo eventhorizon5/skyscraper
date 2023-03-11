@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 12
+Skyscraper 2.0 Alpha 11 
 Copyright (C)2003-2023 Ryan Thoryk
 https://www.skyscrapersim.net
 https://github.com/eventhorizon5/skyscraper
@@ -55,12 +55,12 @@ files.
 
 3. Release Notes
 
-This release is the tenth development release of the 2.0 series (which is a complete rewrite of
+This release is the eleventh development release of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
-This software utilizes the OGRE rendering engine library (version 1.8 or later), the Bullet physics engine with some custom patches, the FMOD sound system, the wxWidgets library (version 3.0 or later), and the Caleum sky system addon for OGRE.
+This software utilizes the OGRE rendering engine library (version 13), the Bullet physics engine with some custom patches, the FMOD sound system, the wxWidgets library (version 3.2 or later), and the Caleum sky system addon for OGRE.
 
-Skyscraper on Windows supports both DirectX and OpenGL.  To switch between them, simply delete the ogre.cfg file in Skyscraper's folder, run the program again, and choose from the OGRE rendering menu.
+Skyscraper currently only supports OpenGL.
 
 See the changelog for a detailed list of new features, fixes, and other changes in this release.
 
@@ -105,6 +105,7 @@ F5 - Freelook (mouse look) mode
 F6 - Full camera reset (respawn)
 F7 - Show colliders
 F8 - Show mesh bounding boxes
+F9 - Toggle statistics display
 F10 - Fullscreen mode
 F11 - Take screenshot
 F12 - Open control panel
@@ -140,12 +141,10 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 Information for this release:
 ------------------------------------
 
-This release has a very large amount of bug fixes and stability fixes, which results in Alpha 10 being the most stable release of Skyscraper yet.  Many fixes were intended to make Skyscraper stable for dynamic creation and deletion of objects during runtime, in anticipation for a building designer.
-
 Most objects can be deleted by pressing Ctrl and Alt together, and clicking on the object.  On a Mac, the keys are Command and Option.
 
-Skyscraper has supported loading standard OGRE mesh models since the Alpha 8 release.  A couple couches and keys are loaded in the Simple building as an example, and there is a couch on the roof of the Triton Center to demonstrate physics.  See this forum thread on how to create models using Google Sketchup:
-http://forum.skyscrapersim.net/index.php?topic=5556.0
+Skyscraper has supported loading standard OGRE mesh models since the Alpha 8 release.  A couple couches and keys are loaded in the Simple building as an example, and there is a couch on the roof of the Triton Center to demonstrate physics.  See this forum thread on how to create models:
+https://skyscrapersimulatorforum.createaforum.com/tutorials/guide-to-importing-models-into-skyscraper/
 
 To optimize rendering speed, the main thing that will cause overall slowdowns is the type of texture filtering used.  The better the filtering, the better the visual quality but the slower the app.  Skyscraper defaults to anisotropic filtering at level 4.  Lower-quality filtering is available too in the forms of bilinear and trilinear filtering, so to improve rendering performance, either lower the anisotropic level in the INI file or switch to a different filtering method.  Also, the Vsync option normally locks the FPS at 60, but can cause abnormal slowdowns that can decrease the framerate below what it should (such as an FPS reading of 30 with vsync on, while one of 40 with it off).  These options can all be set in the INI file.
 
@@ -157,66 +156,72 @@ To revert back to the old sky system, turn off Caelum in the skyscraper.ini file
 Major changes since the Alpha 9 release:
 ------------------------------------
 
-Ogre 1.9 is now used instead of 1.8.1, which Alpha 9 used.  Model mesh files need to be upgraded to the newer format to prevent warning messages on startup - they'll still work fine though.
+Ogre 13 is now used instead of 1.9, which Alpha 10 used.  Model mesh files need to be upgraded to the newer format to prevent warning messages on startup - they'll still work fine though.
 
-Skyscraper now supports running multiple buildings simultaneously via the new Engine Contexts feature.  This makes the development of cities possible.
+MacOS is now fully supported, with an application bundle.  The official build of Skyscraper runs on both Intel and ARM/M1 macs.
 
-Sky parameters can now be controlled via the Sky Control dialog.
+A statistics bar has been added to the simulator, which can be turned on and off by pressing F9.
 
-Virtual people are supported, to simulate elevator traffic.
+Vehicles are now supported, demonstrated in a vehicle demo building.
 
-A new sound system has been added, which is more efficient than the previous one.
+Ropes and counterweights are now supported for elevators.
 
-A new Dynamic Meshes system has been added, which greatly improves the rendering efficiency of the simulator.
+Skyscraper's source code is now hosted on GitHub:
+https://github.com/eventhorizon5/skyscraper
 
-See the forum and changelog for more information on the new changes and features.
+Subversion/SVN information in the simulator has been removed.
 
-Command line options are now supported.
+Lighting has been added, as an experimental feature, and can be enabled in the INI file
 
-Double-decker elevators (really multi-deck elevators) are now supported.
+CameraTexture objects are now supported
 
-Elevators now support hoistway access functions.
+Shaft and Stairwell objects now use the new Levels design in the source code
 
-Working revolving doors are supported.
+Many bugfixes.
 
 
 Modified keys:
 -------
-Number keys switch between engines, when multiple buildings are loaded.
+F9 shows/expands/hides the statistics bar
 -------
 
 
 New commands/parameters:
-ListVisibleMeshes
-CreatewallObject
-AddPolygon
-AddExternalDoor
-ChimeOnArrival
-new Buildings and Car sections
-Position
-Bounds
-ShowLoadedSounds
-ShowPlayingSounds
-Teleport
-GotoFloor
+RunState
+RopePosition
+RopeTexture
+CounterweightStartSound
+CounterweightMoveSound
+CounterweightStopSound
+EarlyUpChimeSound
+EarlyDownChimeSound
+TimeScale
+AccelJerk
+DecelJerk
+CreateCounterweight
+AddRails
+
+(Extended Commands/Functions section was added)
+
+(Vehicles section has been added)
+
 
 New elevator actions:
-PeakOff
-StopDoors
-SensorReset
+AccessDown
+AccessUp
+AccessOff
 
 New call button actions:
-Off
-Up
-Down
-FireOff
-FireOn
-FireBypass
+PressUp
+PressDown
 
-New escalator/moving walkway actions:
-Forward
-Reverse
-Stop
+New CameraTexture actions:
+Enable
+Disable
+
+New Light actions:
+On
+Off
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
