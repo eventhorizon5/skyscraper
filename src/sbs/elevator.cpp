@@ -3627,6 +3627,141 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 	return 2;
 }
 
+int Elevator::AvailableForCallDestination(int floor, int destination_floor, bool report_on_failure)
+{
+	//determines if the elevator is available for the specified hall call
+	//if report_on_failure is true, and verbose mode is enabled, report the reason for call rejection
+
+	//return codes:
+	//0 - busy and will eventually be available
+	//1 - available for call
+	//2 - unavailable due to a service mode or error
+
+	SBS_PROFILE("Elevator::AvailableForCall");
+
+	ElevatorCar *car = GetCarForFloor(floor, report_on_failure);
+
+	int direction = 0;
+
+	if (destination_floor > floor)
+		direction = 1;
+	else if (destination_floor < floor)
+		direction = -1;
+
+	//if floor is a serviced floor (valid car found)
+	if (car)
+	{
+		//if elevator is running
+		if (IsRunning() == true)
+		{
+			//and if it's not in any service mode
+			if (InServiceMode() == false)
+			{
+				//and if no queue changes are pending, unless doors are open on the same floor as call
+				if (QueuePending == false || ((AreDoorsOpen() == true || AreDoorsOpening() == true) && car->GetFloor() == floor))
+				{
+					//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
+					if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+					{
+						//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
+						if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+						{
+							//and if doors are not being held or elevator is waiting in a peak mode
+							if (GetHoldStatus() == false || PeakWaiting() == true)
+							{
+								//and if the interlock check passes, unless waiting in a peak mode
+								if (CheckInterlocks(true) == true || PeakWaiting() == true)
+								{
+									//and if nudge mode is off on all doors
+									if (IsNudgeModeActive() == false)
+									{
+										//and if it's above the current floor and should be called down, or below the
+										//current floor and called up, or on the same floor and not moving, or idle
+										if ((car->GetFloor() > floor && direction == -1) || (car->GetFloor() < floor && direction == 1) || (car->GetFloor() == floor && MoveElevator == false) || IsIdle())
+										{
+											//and if it's either going the same direction as the call, or queue is not active, or idle
+											if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle())
+											{
+												if (sbs->Verbose)
+													Report("Available for call");
+												return 1;
+											}
+											else
+											{
+												if (sbs->Verbose == true && report_on_failure == true)
+													Report("Not available for call - going a different direction and is not idle");
+												return 0;
+											}
+										}
+										else
+										{
+											if (sbs->Verbose == true && report_on_failure == true)
+												Report("Not available for call - position/direction wrong for call and is not idle");
+											return 0;
+										}
+									}
+									else
+									{
+										if (sbs->Verbose == true && report_on_failure == true)
+											Report("Not available for call - in nudge mode");
+										return 0;
+									}
+								}
+								else
+								{
+									if (sbs->Verbose == true && report_on_failure == true)
+										Report("Not available for call - interlock check failed");
+									return 2;
+								}
+							}
+							else
+							{
+								if (sbs->Verbose == true && report_on_failure == true)
+									Report("Not available for call - door hold is enabled");
+								return 0;
+							}
+						}
+						else
+						{
+							if (sbs->Verbose == true && report_on_failure == true)
+								Report("Not available for call - queueresets is on and opposite queue direction is active");
+							return 0;
+						}
+					}
+					else
+					{
+						if (sbs->Verbose == true && report_on_failure == true)
+							Report("Not available for call - limitqueue is on and queue is active");
+						return 0;
+					}
+				}
+				else
+				{
+					if (sbs->Verbose == true && report_on_failure == true)
+						Report("Not available for call - queue change is pending");
+					return 0;
+				}
+			}
+			else
+			{
+				if (sbs->Verbose == true && report_on_failure == true)
+					Report("Not available for call - in service mode");
+				return 2;
+			}
+		}
+		else
+		{
+			if (sbs->Verbose == true && report_on_failure == true)
+				Report("Not available for call - elevator not running");
+			return 2;
+		}
+	}
+
+	if (sbs->Verbose == true && report_on_failure == true)
+		Report("Not available for call - not a serviced floor");
+	return 2;
+}
+
 bool Elevator::SelectFloor(int floor)
 {
 	//select a floor (in-elevator floor selections)

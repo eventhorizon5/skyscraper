@@ -187,6 +187,7 @@ public:
 	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 	int AvailableForCall(int floor, int direction, bool report_on_failure = true);
+	int AvailableForCallDestination(int floor, int destination_floor, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);
 	bool ReturnToNearestFloor();
