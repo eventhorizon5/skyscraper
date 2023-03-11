@@ -104,6 +104,7 @@ namespace SBS {
 	class MovingWalkway;
 	class Step;
 	class Vehicle;
+	class Destination;
 }
 
 #include "object.h"
