@@ -156,7 +156,7 @@ bool Destination::Call(int floor)
 	//exit if call has already been made
 	if (timer->IsRunning() == true)
 	{
-		if (DestinationFloor = floor && Processed == true)
+		if (DestinationFloor == floor && Processed == true)
 		{
 			Report("Call has already been made");
 			return true;
@@ -182,6 +182,8 @@ bool Destination::Call(int floor)
 
 	//reset elevator arrival state
 	elevator_arrived = 0;
+
+	DestinationFloor = floor;
 
 	if (sbs->Verbose)
 		Report("Starting timer");
@@ -310,26 +312,31 @@ void Destination::Process()
 	if (!car)
 		return;
 
+	int direction = 0;
+	if (DestinationFloor > GetFloor())
+		direction = 1;
+	else if (DestinationFloor < GetFloor())
+		direction = -1;
+
 	//if closest elevator is already on the called floor
-	//if (car->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
-	if (car->IsOnFloor(GetFloor()))
+	if (car->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
 	{
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
 		//update arrival information
-		/*if (direction == -1)
+		if (direction == -1)
 			elevator->NotifyCallButtons(GetFloor(), false);
 		else
-			elevator->NotifyCallButtons(GetFloor(), true);*/
+			elevator->NotifyCallButtons(GetFloor(), true);
 
 		//notify on arrival
 		if (elevator->NotifyEarly >= 0)
 			car->NotifyArrival(GetFloor(), false, 0);
 
 		//store call direction for NotifyLate feature
-		//if (elevator->NotifyLate == true)
-			//car->LateDirection = direction;
+		if (elevator->NotifyLate == true)
+			car->LateDirection = direction;
 
 		//open elevator if it's on the same floor
 		car->OpenDoors();
@@ -337,12 +344,6 @@ void Destination::Process()
 	else
 	{
 		//otherwise add a route entry to this floor
-		int direction = 0;
-		if (DestinationFloor > GetFloor())
-			direction = 1;
-		else if (DestinationFloor < GetFloor())
-			direction = -1;
-
 		elevator->AddRoute(GetFloor(), direction, 1);
 
 		ActiveElevator = elevator->Number;
