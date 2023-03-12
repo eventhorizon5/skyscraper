@@ -2,7 +2,7 @@
 
 * [Compiling for Debian Linux](#skyscraper-source-build-instructions-for-debian-linux)
 * [Compiling for Apple Silicon](#skyscraper-source-build-for-apple-silicon)
-* [Compliling for Windows](#skyscraper-source-build-for-windows-using-visual-studio-2022)
+* [Compiling for Windows](#skyscraper-source-build-for-windows-using-visual-studio-2022)
 
 # Skyscraper source build instructions for Debian Linux
 
