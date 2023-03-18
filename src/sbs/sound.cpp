@@ -184,12 +184,12 @@ bool Sound::GetLoopState()
 	return SoundLoop;
 }
 
-void Sound::Pause()
+void Sound::Pause(bool value)
 {
 	if (!IsValid())
 		return;
 	if (channel)
-		channel->setPaused(true);
+		channel->setPaused(value);
 }
 
 bool Sound::IsPaused()

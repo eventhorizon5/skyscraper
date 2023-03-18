@@ -42,17 +42,40 @@ class SoundManager: public wxDialog
 		virtual ~SoundManager();
 
 		//(*Declarations(SoundManager)
+		wxButton* bListPlaying;
 		wxButton* bOK;
+		wxButton* bPlay;
+		wxButton* bReset;
+		wxButton* bSetLoop;
+		wxButton* bSetPause;
+		wxButton* bSetSpeed;
+		wxButton* bSetVolume;
+		wxButton* bStop;
+		wxButton* bUnload;
 		wxListBox* HandleList;
 		wxListBox* SoundList;
+		wxStaticText* StaticText10;
+		wxStaticText* StaticText11;
+		wxStaticText* StaticText12;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText3;
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
+		wxStaticText* StaticText6;
+		wxStaticText* StaticText7;
+		wxStaticText* StaticText8;
+		wxStaticText* StaticText9;
 		wxTextCtrl* tChannels;
+		wxTextCtrl* tLoop;
 		wxTextCtrl* tName;
 		wxTextCtrl* tParent;
+		wxTextCtrl* tPaused;
+		wxTextCtrl* tPlayPosition;
+		wxTextCtrl* tPlaying;
+		wxTextCtrl* tPosition;
+		wxTextCtrl* tSpeed;
+		wxTextCtrl* tVolume;
 		//*)
 		void Loop();
 
@@ -69,13 +92,45 @@ class SoundManager: public wxDialog
 		static const long ID_tParent;
 		static const long ID_STATICTEXT5;
 		static const long ID_tChannels;
+		static const long ID_STATICTEXT6;
+		static const long ID_tPlaying;
+		static const long ID_STATICTEXT7;
+		static const long ID_tPosition;
+		static const long ID_STATICTEXT8;
+		static const long ID_tVolume;
+		static const long ID_bSetVolume;
+		static const long ID_STATICTEXT9;
+		static const long ID_tLoop;
+		static const long ID_bSetLoop;
+		static const long ID_STATICTEXT10;
+		static const long ID_tPaused;
+		static const long ID_bSetPause;
+		static const long ID_STATICTEXT11;
+		static const long ID_tSpeed;
+		static const long ID_bSetSpeed;
+		static const long ID_STATICTEXT12;
+		static const long ID_tPlayPosition;
+		static const long ID_bPlay;
+		static const long ID_bStop;
+		static const long ID_bReset;
+		static const long ID_bUnload;
 		static const long ID_bOK;
+		static const long ID_bListPlaying;
 		//*)
 
 	private:
 
 		//(*Handlers(SoundManager)
 		void On_bOK_Click(wxCommandEvent& event);
+		void On_bListPlaying_Click(wxCommandEvent& event);
+		void On_bSetVolume_Click(wxCommandEvent& event);
+		void On_bSetLoop_Click(wxCommandEvent& event);
+		void On_bSetPause_Click(wxCommandEvent& event);
+		void On_bSetSpeed_Click(wxCommandEvent& event);
+		void On_bPlay_Click(wxCommandEvent& event);
+		void On_bStop_Click(wxCommandEvent& event);
+		void On_bReset_Click(wxCommandEvent& event);
+		void On_bUnload_Click(wxCommandEvent& event);
 		//*)
 		void BuildSoundList(bool restore_selection = false);
 		void BuildHandleList(bool restore_selection = false);
@@ -86,6 +141,8 @@ class SoundManager: public wxDialog
 		SBS::Sound *handle;
 		int lastcount;
 		int lasthandlecount;
+		Real volume;
+		Real speed;
 
 		DECLARE_EVENT_TABLE()
 };
