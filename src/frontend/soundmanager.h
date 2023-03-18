@@ -67,7 +67,8 @@ class SoundManager: public wxDialog
 		wxStaticText* StaticText7;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText9;
-		wxTextCtrl* tChannels;
+		wxStaticText* lblStats;
+		wxTextCtrl* tLength;
 		wxTextCtrl* tLoop;
 		wxTextCtrl* tName;
 		wxTextCtrl* tParent;
@@ -87,12 +88,13 @@ class SoundManager: public wxDialog
 		static const long ID_SoundList;
 		static const long ID_STATICTEXT2;
 		static const long ID_HandleList;
+		static const long ID_lblStats;
 		static const long ID_STATICTEXT4;
 		static const long ID_tName;
 		static const long ID_STATICTEXT3;
 		static const long ID_tParent;
 		static const long ID_STATICTEXT5;
-		static const long ID_tChannels;
+		static const long ID_tLength;
 		static const long ID_STATICTEXT6;
 		static const long ID_tPlaying;
 		static const long ID_STATICTEXT7;
