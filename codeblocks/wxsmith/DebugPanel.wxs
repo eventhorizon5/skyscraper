@@ -453,10 +453,9 @@
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
-											<object class="wxButton" name="ID_bLightControl" variable="bLightControl" member="yes">
-												<label>Light Control</label>
-												<enabled>0</enabled>
-												<handler function="On_bLightControl_Click" entry="EVT_BUTTON" />
+											<object class="wxButton" name="ID_bSoundManager" variable="bSoundManager" member="yes">
+												<label>Sound Manager</label>
+												<handler function="On_bSoundManager_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>
 											<border>5</border>

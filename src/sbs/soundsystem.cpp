@@ -245,6 +245,16 @@ SoundData* SoundSystem::GetSoundData(std::string filename)
 	return 0;
 }
 
+SoundData* SoundSystem::GetSoundData(int number)
+{
+	//get sound data element
+
+	if (number <= GetSoundCount())
+		return sounds[number];
+
+	return 0;
+}
+
 void SoundSystem::Report(const std::string &message)
 {
 	Object::Report("Sound System: " + message);
