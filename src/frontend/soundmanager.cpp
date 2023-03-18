@@ -432,7 +432,7 @@ void SoundManager::On_bSetPause_Click(wxCommandEvent& event)
 void SoundManager::On_bSetSpeed_Click(wxCommandEvent& event)
 {
 	if (handle)
-		handle->SetSpeed(atof(tSpeed->GetValue()));
+		handle->SetSpeed(atoi(tSpeed->GetValue()));
 }
 
 void SoundManager::On_bPlay_Click(wxCommandEvent& event)

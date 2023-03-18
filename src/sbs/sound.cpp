@@ -360,7 +360,7 @@ Real Sound::GetPlayPosition()
 	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
 
 	if (length > 0)
-		Percent = float(position / length);
+		Percent = (float)position / (float)length;
 	return Percent;
 }
 
