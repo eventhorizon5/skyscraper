@@ -126,9 +126,19 @@ void SoundSystem::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::V
 	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
 
-void SoundSystem::Cleanup()
+void SoundSystem::Cleanup(int index)
 {
 	//unloads sounds that are not associated with any channels
+
+	if (index >= 0 && index < GetSoundCount())
+	{
+		if (sounds[index]->handles.size() == 0)
+		{
+			delete sounds[index];
+			sounds.erase(sounds.begin() + index);
+		}
+		return;
+	}
 
 	for (int i = 0; i < GetSoundCount(); i++)
 	{

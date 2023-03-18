@@ -68,6 +68,7 @@ const long SoundManager::ID_bPlay = wxNewId();
 const long SoundManager::ID_bStop = wxNewId();
 const long SoundManager::ID_bReset = wxNewId();
 const long SoundManager::ID_bUnload = wxNewId();
+const long SoundManager::ID_bCleanup = wxNewId();
 const long SoundManager::ID_bOK = wxNewId();
 const long SoundManager::ID_bListPlaying = wxNewId();
 //*)
@@ -127,12 +128,12 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	FlexGridSizer4->Add(-1,-1,1, wxALL|wxEXPAND, 5);
 	StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("Is Playing:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
 	FlexGridSizer4->Add(StaticText6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tPlaying = new wxTextCtrl(this, ID_tPlaying, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tPlaying"));
+	tPlaying = new wxTextCtrl(this, ID_tPlaying, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tPlaying"));
 	FlexGridSizer4->Add(tPlaying, 1, wxEXPAND, 5);
 	FlexGridSizer4->Add(-1,-1,1, wxALL|wxEXPAND, 5);
 	StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
 	FlexGridSizer4->Add(StaticText7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tPosition = new wxTextCtrl(this, ID_tPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tPosition"));
+	tPosition = new wxTextCtrl(this, ID_tPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tPosition"));
 	FlexGridSizer4->Add(tPosition, 1, wxEXPAND, 5);
 	FlexGridSizer4->Add(-1,-1,1, wxALL|wxEXPAND, 5);
 	StaticText8 = new wxStaticText(this, ID_STATICTEXT8, _("Volume:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
@@ -161,7 +162,7 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	FlexGridSizer4->Add(bSetSpeed, 1, wxLEFT, 5);
 	StaticText12 = new wxStaticText(this, ID_STATICTEXT12, _("Play Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT12"));
 	FlexGridSizer4->Add(StaticText12, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tPlayPosition = new wxTextCtrl(this, ID_tPlayPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tPlayPosition"));
+	tPlayPosition = new wxTextCtrl(this, ID_tPlayPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tPlayPosition"));
 	FlexGridSizer4->Add(tPlayPosition, 1, wxEXPAND, 5);
 	FlexGridSizer4->Add(-1,-1,1, wxALL|wxEXPAND, 5);
 	FlexGridSizer3->Add(FlexGridSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -177,6 +178,8 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	bUnload = new wxButton(this, ID_bUnload, _("Unload"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bUnload"));
 	BoxSizer4->Add(bUnload, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bCleanup = new wxButton(this, ID_bCleanup, _("Cleanup"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCleanup"));
+	BoxSizer4->Add(bCleanup, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer3->Add(BoxSizer4, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer3->Add(BoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -199,6 +202,7 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	Connect(ID_bStop,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bStop_Click);
 	Connect(ID_bReset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bReset_Click);
 	Connect(ID_bUnload,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bUnload_Click);
+	Connect(ID_bCleanup,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bCleanup_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bOK_Click);
 	Connect(ID_bListPlaying,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bListPlaying_Click);
 	//*)
@@ -220,8 +224,6 @@ SoundManager::~SoundManager()
 
 void SoundManager::Loop()
 {
-	bool reset = false;
-
 	if (Simcore != panel->GetSystem())
 	{
 		//if active engine has changed, refresh values
@@ -246,9 +248,6 @@ void SoundManager::Loop()
 			sound = newsound;
 			handle = 0;
 			HandleList->Clear();
-
-			tChannels->SetValue(SBS::ToString(sound->GetChannelCount()));
-			reset = true;
 		}
 	}
 	else
@@ -259,6 +258,8 @@ void SoundManager::Loop()
 
 	if (!sound)
 		return;
+
+	tChannels->SetValue(SBS::ToString(sound->GetChannelCount()));
 
 	int handleselect = HandleList->GetSelection();
 
@@ -275,7 +276,6 @@ void SoundManager::Loop()
 			tParent->SetValue(handle->GetParent()->GetName());
 			tVolume->SetValue(TruncateNumber(handle->GetVolume(), 2));
 			tSpeed->SetValue(SBS::ToString(handle->GetSpeed()));
-			reset = true;
 		}
 	}
 	else
@@ -393,7 +393,8 @@ void SoundManager::BuildHandleList(bool restore_selection)
 
 void SoundManager::On_bListPlaying_Click(wxCommandEvent& event)
 {
-	Simcore->GetSoundSystem()->ShowPlayingSounds();
+	if (Simcore)
+		Simcore->GetSoundSystem()->ShowPlayingSounds();
 }
 
 void SoundManager::On_bSetVolume_Click(wxCommandEvent& event)
@@ -447,7 +448,19 @@ void SoundManager::On_bReset_Click(wxCommandEvent& event)
 void SoundManager::On_bUnload_Click(wxCommandEvent& event)
 {
 	if (handle)
+	{
 		handle->Unload();
+		return;
+	}
+
+	if (sound && Simcore)
+		Simcore->GetSoundSystem()->Cleanup(SoundList->GetSelection());
+}
+
+void SoundManager::On_bCleanup_Click(wxCommandEvent& event)
+{
+	if (Simcore)
+		Simcore->GetSoundSystem()->Cleanup();
 }
 
 }

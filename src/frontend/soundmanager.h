@@ -42,6 +42,7 @@ class SoundManager: public wxDialog
 		virtual ~SoundManager();
 
 		//(*Declarations(SoundManager)
+		wxButton* bCleanup;
 		wxButton* bListPlaying;
 		wxButton* bOK;
 		wxButton* bPlay;
@@ -114,6 +115,7 @@ class SoundManager: public wxDialog
 		static const long ID_bStop;
 		static const long ID_bReset;
 		static const long ID_bUnload;
+		static const long ID_bCleanup;
 		static const long ID_bOK;
 		static const long ID_bListPlaying;
 		//*)
@@ -131,6 +133,7 @@ class SoundManager: public wxDialog
 		void On_bStop_Click(wxCommandEvent& event);
 		void On_bReset_Click(wxCommandEvent& event);
 		void On_bUnload_Click(wxCommandEvent& event);
+		void On_bCleanup_Click(wxCommandEvent& event);
 		//*)
 		void BuildSoundList(bool restore_selection = false);
 		void BuildHandleList(bool restore_selection = false);

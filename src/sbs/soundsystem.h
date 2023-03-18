@@ -38,7 +38,7 @@ public:
 	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);
 	void Loop();
 	FMOD::System *GetFmodSystem() { return soundsys; } //temporary for transition
-	void Cleanup();
+	void Cleanup(int index = -1);
 	unsigned int GetLength(SoundData *data);
 	SoundData* Load(const std::string &filename);
 	bool IsLoaded(std::string filename);

@@ -138,7 +138,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tPlaying" variable="tPlaying" member="yes" />
+										<object class="wxTextCtrl" name="ID_tPlaying" variable="tPlaying" member="yes">
+											<style>wxTE_READONLY</style>
+										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
@@ -157,7 +159,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tPosition" variable="tPosition" member="yes" />
+										<object class="wxTextCtrl" name="ID_tPosition" variable="tPosition" member="yes">
+											<style>wxTE_READONLY</style>
+										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
@@ -268,7 +272,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tPlayPosition" variable="tPlayPosition" member="yes" />
+										<object class="wxTextCtrl" name="ID_tPlayPosition" variable="tPlayPosition" member="yes">
+											<style>wxTE_READONLY</style>
+										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
@@ -326,6 +332,15 @@
 												<object class="wxButton" name="ID_bUnload" variable="bUnload" member="yes">
 													<label>Unload</label>
 													<handler function="On_bUnload_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bCleanup" variable="bCleanup" member="yes">
+													<label>Cleanup</label>
+													<handler function="On_bCleanup_Click" entry="EVT_BUTTON" />
 												</object>
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
