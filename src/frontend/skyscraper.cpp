@@ -1573,7 +1573,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	//show frame stats
-	EnableStats(true);
+	EnableStats(GetConfigBool("Skyscraper.Frontend.Stats", true));
 
 	//run simulation
 	Report("Running simulation...");
