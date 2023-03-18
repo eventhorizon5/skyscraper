@@ -50,7 +50,7 @@
 									<object class="sizeritem">
 										<object class="wxListBox" name="ID_HandleList" variable="HandleList" member="yes">
 											<default>-1</default>
-											<size>300,300</size>
+											<size>250,300</size>
 										</object>
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
@@ -96,8 +96,8 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tName" variable="tName" member="yes">
-											<size>150,-1</size>
-											<style>wxTE_READONLY</style>
+											<size>200,-1</size>
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
@@ -118,7 +118,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tParent" variable="tParent" member="yes">
-											<style>wxTE_READONLY</style>
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
@@ -139,7 +139,8 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tLength" variable="tLength" member="yes">
-											<style>wxTE_READONLY</style>
+											<size>100,-1</size>
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
@@ -160,7 +161,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tPlaying" variable="tPlaying" member="yes">
-											<style>wxTE_READONLY</style>
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
@@ -181,7 +182,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tPosition" variable="tPosition" member="yes">
-											<style>wxTE_READONLY</style>
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
@@ -201,7 +202,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tVolume" variable="tVolume" member="yes" />
+										<object class="wxTextCtrl" name="ID_tVolume" variable="tVolume" member="yes">
+											<style>wxTE_CENTRE</style>
+										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
@@ -209,6 +212,7 @@
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bSetVolume" variable="bSetVolume" member="yes">
 											<label>Set</label>
+											<size>50,-1</size>
 											<handler function="On_bSetVolume_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -224,7 +228,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tLoop" variable="tLoop" member="yes" />
+										<object class="wxTextCtrl" name="ID_tLoop" variable="tLoop" member="yes">
+											<style>wxTE_CENTRE</style>
+										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
@@ -232,6 +238,7 @@
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bSetLoop" variable="bSetLoop" member="yes">
 											<label>Set</label>
+											<size>50,-1</size>
 											<handler function="On_bSetLoop_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -247,7 +254,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tPaused" variable="tPaused" member="yes" />
+										<object class="wxTextCtrl" name="ID_tPaused" variable="tPaused" member="yes">
+											<style>wxTE_CENTRE</style>
+										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
@@ -255,6 +264,7 @@
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bSetPause" variable="bSetPause" member="yes">
 											<label>Set</label>
+											<size>50,-1</size>
 											<handler function="On_bSetPause_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -270,7 +280,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tSpeed" variable="tSpeed" member="yes" />
+										<object class="wxTextCtrl" name="ID_tSpeed" variable="tSpeed" member="yes">
+											<style>wxTE_CENTRE</style>
+										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
@@ -278,6 +290,7 @@
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bSetSpeed" variable="bSetSpeed" member="yes">
 											<label>Set</label>
+											<size>50,-1</size>
 											<handler function="On_bSetSpeed_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxLEFT</flag>
@@ -294,7 +307,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tPlayPosition" variable="tPlayPosition" member="yes">
-											<style>wxTE_READONLY</style>
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
