@@ -130,6 +130,9 @@ void SoundSystem::Cleanup(int index)
 {
 	//unloads sounds that are not associated with any channels
 
+	if (sbs->Verbose)
+		Report("Cleaning up unused sounds");
+
 	if (index >= 0 && index < GetSoundCount())
 	{
 		if (sounds[index]->handles.size() == 0)
