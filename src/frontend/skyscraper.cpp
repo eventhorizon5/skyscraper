@@ -109,7 +109,7 @@ bool Skyscraper::OnInit(void)
 	version = "1.11";
 	version_rev = "0";
 	version_state = "Alpha";
-	version_frontend = version + ".0." + version_rev;
+	version_frontend = version + ".1." + version_rev;
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
