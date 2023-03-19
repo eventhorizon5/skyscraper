@@ -1,5 +1,6 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-Object selection fixes for the People Manager dialog
 -Updated guide to reflect collider filename change
 -Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
 -Sizing fixes for CameraTexture dialog
@@ -13,6 +14,7 @@ Version 1.12 (2.0 Alpha 12)
 
 Version 1.11.1 (2.0 Alpha 11 Update 1)
 -------------------------
+-Object selection fixes for the People Manager dialog
 -Updated guide to reflect collider filename change
 -Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
 -CameraTexture dialog fixes
