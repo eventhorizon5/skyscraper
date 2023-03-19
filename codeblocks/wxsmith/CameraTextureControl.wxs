@@ -74,6 +74,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtPositionX" variable="txtPositionX" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -82,6 +83,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtPositionY" variable="txtPositionY" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -90,6 +92,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtPositionZ" variable="txtPositionZ" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -158,6 +161,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtRotationX" variable="txtRotationX" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -166,6 +170,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtRotationY" variable="txtRotationY" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -174,6 +179,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtRotationZ" variable="txtRotationZ" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -240,6 +246,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtFOV" variable="txtFOV" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>

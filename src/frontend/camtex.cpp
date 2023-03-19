@@ -80,13 +80,13 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	FlexGridSizer5->Add(lblPositionY, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	lblPositionZ = new wxStaticText(this, ID_lblPositionZ, _("Z"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_lblPositionZ"));
 	FlexGridSizer5->Add(lblPositionZ, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtPositionX = new wxTextCtrl(this, ID_txtPositionX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionX"));
+	txtPositionX = new wxTextCtrl(this, ID_txtPositionX, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_txtPositionX"));
 	txtPositionX->SetMinSize(wxSize(90,-1));
 	FlexGridSizer5->Add(txtPositionX, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtPositionY = new wxTextCtrl(this, ID_txtPositionY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionY"));
+	txtPositionY = new wxTextCtrl(this, ID_txtPositionY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_txtPositionY"));
 	txtPositionY->SetMinSize(wxSize(90,-1));
 	FlexGridSizer5->Add(txtPositionY, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtPositionZ = new wxTextCtrl(this, ID_txtPositionZ, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionZ"));
+	txtPositionZ = new wxTextCtrl(this, ID_txtPositionZ, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_txtPositionZ"));
 	txtPositionZ->SetMinSize(wxSize(90,-1));
 	FlexGridSizer5->Add(txtPositionZ, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(FlexGridSizer5, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -103,13 +103,13 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	FlexGridSizer7->Add(lblRotationY, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	lblRotationZ = new wxStaticText(this, ID_lblRotationZ, _("Z"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_lblRotationZ"));
 	FlexGridSizer7->Add(lblRotationZ, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtRotationX = new wxTextCtrl(this, ID_txtRotationX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationX"));
+	txtRotationX = new wxTextCtrl(this, ID_txtRotationX, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_txtRotationX"));
 	txtRotationX->SetMinSize(wxSize(90,-1));
 	FlexGridSizer7->Add(txtRotationX, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtRotationY = new wxTextCtrl(this, ID_txtRotationY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationY"));
+	txtRotationY = new wxTextCtrl(this, ID_txtRotationY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_txtRotationY"));
 	txtRotationY->SetMinSize(wxSize(90,-1));
 	FlexGridSizer7->Add(txtRotationY, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtRotationZ = new wxTextCtrl(this, ID_txtRotationZ, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationZ"));
+	txtRotationZ = new wxTextCtrl(this, ID_txtRotationZ, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_txtRotationZ"));
 	txtRotationZ->SetMinSize(wxSize(90,-1));
 	FlexGridSizer7->Add(txtRotationZ, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer6->Add(FlexGridSizer7, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -126,7 +126,7 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	lblFOV = new wxStaticText(this, ID_lblFOV, _("FOV"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_lblFOV"));
 	FlexGridSizer8->Add(lblFOV, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer9 = new wxFlexGridSizer(0, 3, 0, 0);
-	txtFOV = new wxTextCtrl(this, ID_txtFOV, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtFOV"));
+	txtFOV = new wxTextCtrl(this, ID_txtFOV, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_txtFOV"));
 	txtFOV->SetMinSize(wxSize(90,-1));
 	FlexGridSizer9->Add(txtFOV, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer8->Add(FlexGridSizer9, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -166,8 +166,6 @@ CameraTextureControl::~CameraTextureControl()
 
 void CameraTextureControl::Loop()
 {
-	bool reset = false;
-
 	if (Simcore != panel->GetSystem())
 	{
 		//if active engine has changed, refresh values
@@ -190,9 +188,15 @@ void CameraTextureControl::Loop()
 		{
 			camera = Simcore->GetCameraTexture(selection);
 
-			chkEnabled->SetValue(camera->IsEnabled());
+			txtPositionX->SetValue(SBS::ToString(camera->GetPosition().x));
+			txtPositionY->SetValue(SBS::ToString(camera->GetPosition().y));
+			txtPositionZ->SetValue(SBS::ToString(camera->GetPosition().z));
 
-			reset = true;
+			txtRotationX->SetValue(SBS::ToString(camera->GetRotation().x));
+			txtRotationY->SetValue(SBS::ToString(camera->GetRotation().y));
+			txtRotationZ->SetValue(SBS::ToString(camera->GetRotation().z));
+
+			txtFOV->SetValue(SBS::ToString(camera->GetFOVAngle()));
 		}
 	}
 	else
@@ -201,17 +205,7 @@ void CameraTextureControl::Loop()
 	if (!camera)
 		return;
 
-	//set dynamic values
-
-	lblPositionX->SetLabel(SBS::ToString(camera->GetPosition().x));
-	lblPositionY->SetLabel(SBS::ToString(camera->GetPosition().y));
-	lblPositionZ->SetLabel(SBS::ToString(camera->GetPosition().z));
-
-	lblRotationX->SetLabel(SBS::ToString(camera->GetRotation().x));
-	lblRotationY->SetLabel(SBS::ToString(camera->GetRotation().y));
-	lblRotationZ->SetLabel(SBS::ToString(camera->GetRotation().z));
-
-	lblFOV->SetLabel(SBS::ToString(camera->GetFOVAngle()));
+	chkEnabled->SetValue(camera->IsEnabled());
 }
 
 void CameraTextureControl::BuildList(bool restore_selection)
@@ -240,13 +234,13 @@ void CameraTextureControl::BuildList(bool restore_selection)
 		else
 		{
 			//clear values
-			lblPositionX->SetLabel(wxT(""));
-			lblPositionY->SetLabel(wxT(""));
-			lblPositionZ->SetLabel(wxT(""));
-			lblRotationX->SetLabel(wxT(""));
-			lblRotationY->SetLabel(wxT(""));
-			lblRotationZ->SetLabel(wxT(""));
-			lblFOV->SetLabel(wxT(""));
+			txtPositionX->SetValue(wxT(""));
+			txtPositionY->SetValue(wxT(""));
+			txtPositionZ->SetValue(wxT(""));
+			txtRotationX->SetValue(wxT(""));
+			txtRotationY->SetValue(wxT(""));
+			txtRotationZ->SetValue(wxT(""));
+			txtFOV->SetValue(wxT(""));
 			chkEnabled->SetValue(false);
 		}
 	}
