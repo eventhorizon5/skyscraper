@@ -220,6 +220,13 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting meshes");
 
+	if (counterweightsound)
+	{
+		counterweightsound->parent_deleting = true;
+		delete counterweightsound;
+	}
+	counterweightsound = 0;
+
 	if (WeightMesh)
 	{
 		WeightMesh->parent_deleting = true;
@@ -302,13 +309,6 @@ Elevator::~Elevator()
 		delete motoridlesound;
 	}
 	motoridlesound = 0;
-
-	if (counterweightsound)
-	{
-		counterweightsound->parent_deleting = true;
-		delete counterweightsound;
-	}
-	counterweightsound = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
