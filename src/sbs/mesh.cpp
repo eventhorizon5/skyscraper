@@ -2029,7 +2029,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 
 		try
 		{
-			std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider";
+			std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider.mesh";
 			colname2 = sbs->VerifyFile(colname);
 			collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
 		}
