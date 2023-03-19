@@ -224,7 +224,7 @@ void Sound::SetSpeed(int percent)
 	if (!channel)
 		return;
 
-	channel->setFrequency(default_speed * (percent / 100));
+	channel->setFrequency(default_speed * ((float)percent / 100));
 }
 
 int Sound::GetSpeed()
