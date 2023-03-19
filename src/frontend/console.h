@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - Script Console
+	Skyscraper 1.12 Alpha - Script Console
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - People Manager Dialog
+	Skyscraper 1.12 Alpha - People Manager Dialog
 	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -267,6 +267,7 @@ void PeopleManager::On_bDelete_Click(wxCommandEvent& event)
 	if (person)
 		Simcore->DeleteObject(person);
 	person = 0;
+	BuildList(true);
 }
 
 void PeopleManager::On_bOK_Click(wxCommandEvent& event)
@@ -307,10 +308,20 @@ void PeopleManager::BuildList(bool restore_selection)
 
 		if (count > 0)
 		{
-			if (restore_selection == false)
-				PersonList->SetSelection(count - 1);
+			if (restore_selection == true)
+			{
+				if (old_selection < PersonList->GetCount())
+					PersonList->SetSelection(old_selection);
+				else
+					PersonList->SetSelection(count - 1);
+			}
 			else
-				PersonList->SetSelection(old_selection);
+			{
+				if (old_selection < PersonList->GetCount())
+					PersonList->SetSelection(count - 1);
+				else
+					PersonList->SetSelection(0);
+			}
 		}
 		else
 		{

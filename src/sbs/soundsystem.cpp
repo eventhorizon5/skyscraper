@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Sound System
-	The Skyscraper Project - Version 1.11 Alpha
+	The Skyscraper Project - Version 1.12 Alpha
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -126,9 +126,22 @@ void SoundSystem::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::V
 	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
 
-void SoundSystem::Cleanup()
+void SoundSystem::Cleanup(int index)
 {
 	//unloads sounds that are not associated with any channels
+
+	if (sbs->Verbose)
+		Report("Cleaning up unused sounds");
+
+	if (index >= 0 && index < GetSoundCount())
+	{
+		if (sounds[index]->handles.size() == 0)
+		{
+			delete sounds[index];
+			sounds.erase(sounds.begin() + index);
+		}
+		return;
+	}
 
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
@@ -242,6 +255,16 @@ SoundData* SoundSystem::GetSoundData(std::string filename)
 		if (sounds[i]->filename == filename)
 			return sounds[i];
 	}
+	return 0;
+}
+
+SoundData* SoundSystem::GetSoundData(int number)
+{
+	//get sound data element
+
+	if (number <= GetSoundCount())
+		return sounds[number];
+
 	return 0;
 }
 

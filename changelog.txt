@@ -1,5 +1,39 @@
+Version 1.12 (2.0 Alpha 12)
+-------------------------
+-Updated guide to reflect collider filename change
+-Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
+-Sizing fixes for CameraTexture dialog
+-CameraTexture dialog fixes
+-Fixed a crash when deleting elevator objects
+-Added verbose messages to soundsystem and sounds
+-Fix for the sound's GetSpeed() function
+-new Sound Manager dialog
+-Added an INI file setting to enable or disable the frame statistics on startup
+-Render window now resizes properly on Linux when the scaling factor is not 100%
+
+Version 1.11.1 (2.0 Alpha 11 Update 1)
+-------------------------
+-Updated guide to reflect collider filename change
+-Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
+-CameraTexture dialog fixes
+-Fixed a crash when deleting elevator objects
+-Render window now resizes properly on Linux when the scaling factor is not 100%
+
 Version 1.11 (2.0 Alpha 11)
 -------------------------
+-fix FMOD version number reporting
+-Only play floor sound during an elevator's standard arrival notification
+-Exit app when Alt-F4 is pressed, this is a fix for Windows builds
+-Added the ability to dump shaders to a folder, used for RTSS debugging
+-Exit if a fatal render operation is encountered
+-Consolidate ComputePlane functions into a single function
+-Call button should store the call direction for the NotifyLate feature
+-Elevator should always perform arrival notification if on the same floor as the call, unless NotifyEarly is -1
+-use NotifyArrival() for callbuttons opening elevator on same floor
+-elevators now follow the NotifyEarly and NotifyLate parameters if elevator is on the same floor
+-Directional indicators no longer light up for non-calls when ChimeOnArrival is false
+-Added support for setting separate early chime sounds
+-Added a value of 3 to the NotifyEarly command, which combines both options 0 and 2, having the elevator notify/chime twice
 -Fixed a cut issue on the Triton Center's floor 119 stairwell, where a ceiling piece prevented the user from going up to 120
 -Added PressUp and PressDown callbutton actions, which play the press sound in addition to initiating the related call
 -People objects now are able to play call button press sounds

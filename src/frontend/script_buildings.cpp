@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - Script Processor - Buildings Section
+	Skyscraper 1.12 Alpha - Script Processor - Buildings Section
 	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

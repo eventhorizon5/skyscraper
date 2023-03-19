@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - Main Screen
+	Skyscraper 1.12 Alpha - Main Screen
 	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -131,7 +131,8 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 	if (frontend->mRenderWindow)
 	{
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+		Real scale = this->GetContentScaleFactor();
+		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
 #else
 		frontend->mRenderWindow->windowMovedOrResized();
 #endif
@@ -173,7 +174,9 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 				panel->SetFocus();
 
 			try {
-				frontend->Loop(); //run simulator loop
+				bool result = frontend->Loop(); //run simulator loop
+				if (!result)
+					frontend->Quit();
 			}
 			catch (Ogre::Exception &e)
 			{
@@ -251,6 +254,9 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		//crash test
 		if (event.ControlDown() && key == (wxKeyCode)'C')
 			throw;
+
+		if (key == WXK_F4)
+			Close();
 	}
 	else
 	{

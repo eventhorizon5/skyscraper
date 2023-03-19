@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Sound System
-	The Skyscraper Project - Version 1.11 Alpha
+	The Skyscraper Project - Version 1.12 Alpha
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -38,7 +38,7 @@ public:
 	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);
 	void Loop();
 	FMOD::System *GetFmodSystem() { return soundsys; } //temporary for transition
-	void Cleanup();
+	void Cleanup(int index = -1);
 	unsigned int GetLength(SoundData *data);
 	SoundData* Load(const std::string &filename);
 	bool IsLoaded(std::string filename);
@@ -46,6 +46,7 @@ public:
 	bool ReportError(const std::string &message);
 	FMOD::Channel* Prepare(SoundData *data);
 	SoundData* GetSoundData(std::string filename);
+	SoundData* GetSoundData(int number);
 	int GetPlayingCount();
 	int GetSoundCount();
 	void ShowLoadedSounds();

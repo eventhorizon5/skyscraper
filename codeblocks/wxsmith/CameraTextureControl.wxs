@@ -31,7 +31,7 @@
 									<label>Enabled</label>
 									<handler function="On_chkEnabled_Click" entry="EVT_CHECKBOX" />
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -74,6 +74,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtPositionX" variable="txtPositionX" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -82,6 +83,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtPositionY" variable="txtPositionY" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -90,6 +92,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtPositionZ" variable="txtPositionZ" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -105,17 +108,17 @@
 													<label>Set Position</label>
 													<handler function="On_bSetPosition_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -158,6 +161,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtRotationX" variable="txtRotationX" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -166,6 +170,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtRotationY" variable="txtRotationY" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -174,6 +179,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtRotationZ" variable="txtRotationZ" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -191,7 +197,7 @@
 															<label>Set Rotation</label>
 															<handler function="On_bSetRotation_Click" entry="EVT_BUTTON" />
 														</object>
-														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<flag>wxBOTTOM|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
@@ -200,7 +206,7 @@
 															<label>LookAt</label>
 															<handler function="On_bSetLookAt_Click" entry="EVT_BUTTON" />
 														</object>
-														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<flag>wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
 														<option>1</option>
 													</object>
@@ -210,12 +216,12 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -240,6 +246,7 @@
 													<object class="sizeritem">
 														<object class="wxTextCtrl" name="ID_txtFOV" variable="txtFOV" member="yes">
 															<minsize>90,-1</minsize>
+															<style>wxTE_CENTRE</style>
 														</object>
 														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 														<border>5</border>
@@ -255,17 +262,17 @@
 													<label>Set FOV</label>
 													<handler function="On_bSetFOV_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -286,7 +293,7 @@
 							<label>OK</label>
 							<handler function="On_bOK_Click" entry="EVT_BUTTON" />
 						</object>
-						<flag>wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>

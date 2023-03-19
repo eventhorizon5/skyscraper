@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - Debug Panel
+	Skyscraper 1.12 Alpha - Debug Panel
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -57,6 +57,7 @@ class ParameterViewer;
 class CreateObject;
 class MoveObject;
 class CameraTextureControl;
+class SoundManager;
 
 class DebugPanel: public wxFrame
 {
@@ -113,7 +114,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bKeys;
 		static const long ID_bTextures;
 		static const long ID_bFloorInfo;
-		static const long ID_bLightControl;
+		static const long ID_bSoundManager;
 		static const long ID_PANEL1;
 		//*)
 		void EnableTimer(bool value);
@@ -163,6 +164,7 @@ class DebugPanel: public wxFrame
 		void On_bPeopleManager_Click(wxCommandEvent& event);
 		void On_bCameraTexture_Click(wxCommandEvent& event);
 		void On_bLightControl_Click(wxCommandEvent& event);
+		void On_bSoundManager_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -183,12 +185,12 @@ class DebugPanel: public wxFrame
 		wxButton* bFloorInfo;
 		wxButton* bFloorList;
 		wxButton* bKeys;
-		wxButton* bLightControl;
 		wxButton* bMeshControl;
 		wxButton* bObjectInfo;
 		wxButton* bPeopleManager;
 		wxButton* bProfiler;
 		wxButton* bSkyControl;
+		wxButton* bSoundManager;
 		wxButton* bStats;
 		wxButton* bTextures;
 		wxCheckBox* chkAutoShafts;
@@ -237,6 +239,7 @@ class DebugPanel: public wxFrame
 		EngineManager *emanager;
 		PeopleManager *pmanager;
 		CameraTextureControl *camtex;
+		SoundManager *smanager;
 
 		DECLARE_EVENT_TABLE()
 };

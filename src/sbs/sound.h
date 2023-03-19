@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Sound Object
-	The Skyscraper Project - Version 1.11 Alpha
+	The Skyscraper Project - Version 1.12 Alpha
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -43,7 +43,7 @@ public:
 	Ogre::Vector3 GetDirection();
 	void SetLoopState(bool value);
 	bool GetLoopState();
-	void Pause();
+	void Pause(bool value = true);
 	bool IsPaused();
 	void Stop();
 	bool Play(bool reset = true);

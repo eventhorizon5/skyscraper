@@ -1,6 +1,6 @@
 /*
 Scalable Building Simulator - Elevator Car Object
-The Skyscraper Project - Version 1.11 Alpha
+The Skyscraper Project - Version 1.12 Alpha
 Copyright (C)2004-2023 Ryan Thoryk
 https://www.skyscrapersim.net
 https://sourceforge.net/projects/skyscraper/
@@ -3091,7 +3091,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 	}
 
 	//play floor sound
-	if (parent->FireServicePhase1 == 0 && parent->FireServicePhase2 == 0)
+	if (parent->FireServicePhase1 == 0 && parent->FireServicePhase2 == 0 && direction == 0)
 		PlayFloorSound();
 }
 

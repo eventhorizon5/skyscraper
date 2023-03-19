@@ -48,6 +48,8 @@
 		<Unit filename="../src/frontend/skycontrol.h" />
 		<Unit filename="../src/frontend/skyscraper.cpp" />
 		<Unit filename="../src/frontend/skyscraper.h" />
+		<Unit filename="../src/frontend/soundmanager.cpp" />
+		<Unit filename="../src/frontend/soundmanager.h" />
 		<Unit filename="../src/frontend/stackwalker.cpp" />
 		<Unit filename="../src/frontend/stackwalker.h" />
 		<Unit filename="../src/frontend/stats.cpp" />
@@ -121,6 +123,7 @@
 		<Unit filename="wxsmith/EngineManager.wxs" />
 		<Unit filename="wxsmith/PeopleManager.wxs" />
 		<Unit filename="wxsmith/SkyControl.wxs" />
+		<Unit filename="wxsmith/SoundManager.wxs" />
 		<Extensions>
 			<wxsmith version="1">
 				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
@@ -144,6 +147,7 @@
 					<wxDialog wxs="wxsmith/PeopleManager.wxs" src="../src/frontend/peoplemanager.cpp" hdr="../src/frontend/peoplemanager.h" fwddecl="0" i18n="1" name="PeopleManager" language="CPP" />
 					<wxDialog wxs="wxsmith/LoadDialog.wxs" src="../src/frontend/loaddialog.cpp" hdr="../src/frontend/loaddialog.h" fwddecl="0" i18n="1" name="LoadDialog" language="CPP" />
 					<wxDialog wxs="wxsmith/CameraTextureControl.wxs" src="../src/frontend/camtex.cpp" hdr="../src/frontend/camtex.h" fwddecl="0" i18n="1" name="CameraTextureControl" language="CPP" />
+					<wxDialog wxs="wxsmith/SoundManager.wxs" src="../src/frontend/soundmanager.cpp" hdr="../src/frontend/soundmanager.h" fwddecl="0" i18n="1" name="SoundManager" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

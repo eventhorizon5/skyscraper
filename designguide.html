@@ -7,7 +7,7 @@
   </head>
   <body>
     <div align="center">
-      <p><strong><font size="+2">Skyscraper 1.11<br>
+      <p><strong><font size="+2">Skyscraper 1.12<br>
             Building Design Guide<br>
           </font></strong>Copyright (C)2005-2023 Ryan Thoryk</p>
       <hr>
@@ -1501,7 +1501,7 @@ Brick1,
           AddModel</strong> - adds a 3D model to the floor. If a
         filename is specified, the model's textures/materials must be
         defined in a separate ".material" file, and a separate collider
-        mesh ".collider" will be loaded. In that situation, if a
+        mesh ".collider.mesh" will be loaded. In that situation, if a
         collider mesh isn't available, a simple box collider will be
         created. If a filename is not specified, this command will
         create a new empty model, where it's name can be used as the <em>destobject</em>
@@ -1541,7 +1541,7 @@ filename,
         set to 2 to double the size. Model files are in the OGRE native
         mesh format. In the example, the material/texture file is
         cube.material, and the optional collider mesh file is
-        cube.collider. <em>EnablePhysics</em> enables Bullet physics on
+        cube.collider.mesh. <em>EnablePhysics</em> enables Bullet physics on
         the object (physics will only work if you don't provide a
         collider mesh), and <em>Restitution</em>, <em>Friction</em>
         and <em>Mass</em> determine the physical properties of the
@@ -3366,7 +3366,7 @@ filename,
       <p align="left"><strong>20. AddModel</strong> - adds a 3D model to
         the elevator car. If a filename is specified, the model's
         textures/materials must be defined in a separate ".material"
-        file, and a separate collider mesh ".collider" will be loaded.
+        file, and a separate collider mesh ".collider.mesh" will be loaded.
         In that situation, if a collider mesh isn't available, a simple
         box collider will be created. If a filename is not specified,
         this command will create a new empty model, where it's name can
@@ -3406,7 +3406,7 @@ filename,
         set to 2 to double the size. Models are in the OGRE native mesh
         format. In the example, the material/texture file is
         cube.material, and the optional collider mesh file is
-        cube.collider. <em>EnablePhysics</em> enables Bullet physics on
+        cube.collider.mesh. <em>EnablePhysics</em> enables Bullet physics on
         the object, and <em>Restitution</em>, <em>Friction</em> and <em>Mass</em>
         determine the physical properties of the object.</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>21.
@@ -4490,7 +4490,7 @@ example,
           AddModel</strong> - adds a global 3D model. If a filename is
         specified, the model's textures/materials must be defined in a
         separate ".material" file, and a separate collider mesh
-        ".collider" will be loaded. In that situation, if a collider
+        ".collider.mesh" will be loaded. In that situation, if a collider
         mesh isn't available, a simple box collider will be created. If
         a filename is not specified, this command will create a new
         empty model, where it's name can be used as the <em>destobject</em>
@@ -4529,7 +4529,7 @@ filename,
         set to 2 to double the size. Model files are in the OGRE native
         mesh format. In the example, the material/texture file is
         cube.material, and the optional collider mesh file is
-        cube.collider. <em>EnablePhysics</em> enables Bullet physics on
+        cube.collider.mesh. <em>EnablePhysics</em> enables Bullet physics on
         the object (physics will only work if you don't provide a
         collider mesh), and <em>Restitution</em>, <em>Friction</em>
         and <em>Mass</em> determine the physical properties of the

@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.11 Alpha - Edit Elevator Form
+	Skyscraper 1.12 Alpha - Edit Elevator Form
 	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -970,7 +970,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	StaticText89 = new wxStaticText(this, ID_STATICTEXT89, _("NotifyLate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT89"));
 	FlexGridSizer7->Add(StaticText89, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtNotifyLate = new wxTextCtrl(this, ID_txtNotifyLate, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtNotifyLate"));
-	txtNotifyLate->SetToolTip(_("Notify Early"));
+	txtNotifyLate->SetToolTip(_("Notify Late"));
 	FlexGridSizer7->Add(txtNotifyLate, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bNotifyLate = new wxButton(this, ID_bNotifyLate, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bNotifyLate"));
 	FlexGridSizer7->Add(bNotifyLate, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
@@ -1039,7 +1039,6 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	BoxSizer3->Add(BoxSizer7, 1, wxBOTTOM|wxRIGHT|wxALIGN_TOP, 5);
 	BoxSizer1->Add(BoxSizer3, 0, wxALL|wxEXPAND, 0);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
 

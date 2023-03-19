@@ -2,6 +2,7 @@
 
 * [Compiling for Debian Linux](#skyscraper-source-build-instructions-for-debian-linux)
 * [Compiling for Apple Silicon](#skyscraper-source-build-for-apple-silicon)
+* [Compiling for Windows](#skyscraper-source-build-for-windows-using-visual-studio-2022)
 
 # Skyscraper source build instructions for Debian Linux
 
@@ -58,7 +59,7 @@ Step 3 - build and install OGRE
     
     wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-13-skyscraper.tar.bz2
     tar xfvz ogre-13-skyscraper.tar.bz2
-    cd ogre-13.4.3
+    cd ogre-13.6.2
     cmake . -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON OGRE_BUILD_COMPONENT_BULLET=OFF
     make
     sudo make install
@@ -83,9 +84,10 @@ So pull the source from Git, and build:
 Step 5 - build wxWidgets
 -----------
 
-    wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.1/wxWidgets-3.2.1.tar.bz2
-    cd wxWidgets-3.2.1
-    cmake . --prefix=/opt/wx
+    wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.2.1/wxWidgets-3.2.2.1.tar.bz2
+    tar xfj wxWidgets-3.2.2.1.tar.bz2
+    cd wxWidgets-3.2.2.1
+    ./configure --prefix=/opt/wx
     make
     make install
 
@@ -139,7 +141,7 @@ Step 1 - build and install OGRE
     
     wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-13-skyscraper.tar.bz2
     tar xfvz ogre-13-skyscraper.tar.bz2
-    cd ogre-13.4.3
+    cd ogre-13.6.2
     cmake . -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_CONFIG_THREADS=0 -DOGRE_NODELESS_POSITIONING=ON -DOGRE_BUILD_COMPONENT_BULLET=OFF -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX=/usr/local/ -DOGRE_BUILD_RENDERSYSTEM_METAL=ON
     make
     sudo make install
@@ -235,7 +237,7 @@ You may need to edit plugins.cfg to redirect to `Contents/Framework`, and commen
     open Skyscraper.app
 
 
-# Skyscraper source build for Windows, using Visual Studio 2022
+# Skyscraper source build for Windows using Visual Studio 2022
 
 Step 1 - download the dependencies
 -----------
@@ -267,9 +269,9 @@ CAELUM_HOME_64 points to C:\caelum-win64
 
 FMOD_HOME points to C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows
 
-OGRE_HOME_64 points to C:\ogre-13.4.3\SDK
+OGRE_HOME_64 points to C:\ogre-13.6.2\SDK
 
-WXWIN_64 points to C:\wxWidgets-3.2.1
+WXWIN_64 points to C:\wxWidgets-3.2.2.1
 
 Step 5 - download and install Git
 -----------
