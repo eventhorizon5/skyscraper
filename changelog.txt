@@ -1,6 +1,10 @@
 Version 1.11.1 (2.0 Alpha 11 Update 1)
 -------------------------
--Render window now resizes properly on Linux when the scaling factor is not 100% (backported from 1.12)
+-Updated guide to reflect collider filename change
+-Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
+-CameraTexture dialog fixes
+-Fixed a crash when deleting elevator objects
+-Render window now resizes properly on Linux when the scaling factor is not 100%
 
 Version 1.11 (2.0 Alpha 11)
 -------------------------
