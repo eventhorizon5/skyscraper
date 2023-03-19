@@ -1,3 +1,7 @@
+Version 1.11.1 (2.0 Alpha 11 Update 1)
+-------------------------
+-Render window now resizes properly on Linux when the scaling factor is not 100% (backported from 1.12)
+
 Version 1.11 (2.0 Alpha 11)
 -------------------------
 -fix FMOD version number reporting
