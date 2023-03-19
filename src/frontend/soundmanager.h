@@ -137,8 +137,8 @@ class SoundManager: public wxDialog
 		void On_bUnload_Click(wxCommandEvent& event);
 		void On_bCleanup_Click(wxCommandEvent& event);
 		//*)
-		void BuildSoundList(bool restore_selection = false);
-		void BuildHandleList(bool restore_selection = false);
+		void BuildSoundList();
+		void BuildHandleList();
 
 		SBS::SBS *Simcore;
 		DebugPanel *panel;

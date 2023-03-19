@@ -238,8 +238,8 @@ void SoundManager::Loop()
 	if (!Simcore)
 		return;
 
-	BuildSoundList(true);
-	BuildHandleList(true);
+	BuildSoundList();
+	BuildHandleList();
 
 	int selection = SoundList->GetSelection();
 
@@ -318,7 +318,7 @@ void SoundManager::On_bOK_Click(wxCommandEvent& event)
 	this->Close();
 }
 
-void SoundManager::BuildSoundList(bool restore_selection)
+void SoundManager::BuildSoundList()
 {
 	int count = Simcore->GetSoundSystem()->GetSoundCount();
 
@@ -333,9 +333,7 @@ void SoundManager::BuildSoundList(bool restore_selection)
 
 		if (count > 0)
 		{
-			if (restore_selection == false)
-				SoundList->SetSelection(0);
-			else if (old_selection < SoundList->GetCount())
+			if (old_selection < SoundList->GetCount())
 				SoundList->SetSelection(old_selection);
 			else
 				SoundList->SetSelection(0);
@@ -357,7 +355,7 @@ void SoundManager::BuildSoundList(bool restore_selection)
 	}
 }
 
-void SoundManager::BuildHandleList(bool restore_selection)
+void SoundManager::BuildHandleList()
 {
 	if (!sound)
 		return;
@@ -375,9 +373,7 @@ void SoundManager::BuildHandleList(bool restore_selection)
 
 		if (count > 0)
 		{
-			if (restore_selection == false)
-				HandleList->SetSelection(0);
-			else if (old_selection < HandleList->GetCount())
+			if (old_selection < HandleList->GetCount())
 				HandleList->SetSelection(old_selection);
 			else
 				HandleList->SetSelection(0);
