@@ -1,5 +1,12 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-new Sound Manager dialog
+-Added an INI file setting to enable or disable the frame statistics on startup
+-Render window now resizes properly on Linux when the scaling factor is not 100%
+
+Version 1.11.1 (2.0 Alpha 11 Update 1)
+-------------------------
+-Render window now resizes properly on Linux when the scaling factor is not 100% (backported from 1.12)
 
 Version 1.11 (2.0 Alpha 11)
 -------------------------
