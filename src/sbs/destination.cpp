@@ -258,14 +258,14 @@ int DestinationController::FindClosestElevator(int starting_floor, int destinati
 void DestinationController::Report(const std::string &message)
 {
 	//general reporting function
-	std::string msg = "Destination Controller " + ToString(Number) + " - " + message;
+	std::string msg = "Destination Controller - " + message;
 	Object::Report(msg);
 }
 
 bool DestinationController::ReportError(const std::string &message)
 {
 	//general reporting function
-	std::string msg = "Destination Controller " + ToString(Number) + " - " + message;
+	std::string msg = "Destination Controller - " + message;
 	return Object::ReportError(msg);
 }
 
