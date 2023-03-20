@@ -52,6 +52,9 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 	doppler_level = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 	position_queued = false;
 	SetVelocity = false;
+
+	if (sbs->Verbose)
+		Report("Created sound");
 }
 
 Sound::~Sound()
@@ -116,6 +119,10 @@ void Sound::OnRotate(bool parent)
 void Sound::SetVolume(Real value)
 {
 	//set volume of sound
+
+	if (sbs->Verbose)
+		Report("Setting volume to " + ToString(value));
+
 	Volume = (float)value;
 	if (channel)
 		channel->setVolume((float)value);
@@ -184,12 +191,21 @@ bool Sound::GetLoopState()
 	return SoundLoop;
 }
 
-void Sound::Pause()
+void Sound::Pause(bool value)
 {
 	if (!IsValid())
 		return;
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("Pause");
+		else
+			Report("Unpause");
+	}
+
 	if (channel)
-		channel->setPaused(true);
+		channel->setPaused(value);
 }
 
 bool Sound::IsPaused()
@@ -224,7 +240,10 @@ void Sound::SetSpeed(int percent)
 	if (!channel)
 		return;
 
-	channel->setFrequency(default_speed * (percent / 100));
+	if (sbs->Verbose)
+		Report("Setting speed to " + ToString(percent));
+
+	channel->setFrequency(default_speed * ((float)percent / 100));
 }
 
 int Sound::GetSpeed()
@@ -314,6 +333,9 @@ bool Sound::Play(bool reset)
 
 void Sound::Reset()
 {
+	if (sbs->Verbose)
+		Report("Reset");
+
 	SetPlayPosition(0);
 }
 
@@ -329,6 +351,9 @@ bool Sound::Load(const std::string &filename, bool force)
 
 	//clear current references
 	Unload();
+
+	if (sbs->Verbose)
+		Report("Loading sound " + filename);
 
 	//have sound system load sound file
 	sound = system->Load(filename);
@@ -360,7 +385,7 @@ Real Sound::GetPlayPosition()
 	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
 
 	if (length > 0)
-		Percent = float(position / length);
+		Percent = (float)position / (float)length;
 	return Percent;
 }
 
@@ -372,6 +397,9 @@ void Sound::SetPlayPosition(Real percent)
 
 	if (channel)
 	{
+		if (sbs->Verbose)
+			Report("Setting play position to " + ToString(percent));
+
 		//get length of sound in milliseconds
 		unsigned int length = system->GetLength(sound);
 
@@ -414,6 +442,9 @@ void Sound::PlayQueued(const std::string &filename, bool stop, bool loop)
 	//if "stop" is true, stops currently playing sound
 	//use the ProcessQueue function to process queued sounds
 
+	if (sbs->Verbose)
+		Report("Playing queued sound");
+
 	//queue sound object
 	SoundEntry snd;
 	snd.filename = filename;
@@ -445,6 +476,9 @@ void Sound::ProcessQueue()
 		return;
 	}
 
+	if (sbs->Verbose)
+		Report("Processing queued sound");
+
 	//play new sound
 	Load(snd->filename);
 	SetLoopState(snd->loop);
@@ -457,10 +491,15 @@ void Sound::Unload()
 	//stop and unload the sound channel
 
 	Stop();
+
+	if (sbs->Verbose)
+		Report("Unloading");
+
 	if (sound)
 		sound->RemoveHandle(this);
 	sound = 0;
 	channel = 0;
+
 }
 
 FMOD::Channel* Sound::GetChannel()

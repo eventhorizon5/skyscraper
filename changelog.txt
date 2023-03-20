@@ -1,5 +1,25 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-Object selection fixes for the People Manager dialog
+-Updated guide to reflect collider filename change
+-Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
+-Sizing fixes for CameraTexture dialog
+-CameraTexture dialog fixes
+-Fixed a crash when deleting elevator objects
+-Added verbose messages to soundsystem and sounds
+-Fix for the sound's GetSpeed() function
+-new Sound Manager dialog
+-Added an INI file setting to enable or disable the frame statistics on startup
+-Render window now resizes properly on Linux when the scaling factor is not 100%
+
+Version 1.11.1 (2.0 Alpha 11 Update 1)
+-------------------------
+-Object selection fixes for the People Manager dialog
+-Updated guide to reflect collider filename change
+-Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
+-CameraTexture dialog fixes
+-Fixed a crash when deleting elevator objects
+-Render window now resizes properly on Linux when the scaling factor is not 100%
 
 Version 1.11 (2.0 Alpha 11)
 -------------------------

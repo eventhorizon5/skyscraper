@@ -43,7 +43,7 @@ public:
 	Ogre::Vector3 GetDirection();
 	void SetLoopState(bool value);
 	bool GetLoopState();
-	void Pause();
+	void Pause(bool value = true);
 	bool IsPaused();
 	void Stop();
 	bool Play(bool reset = true);

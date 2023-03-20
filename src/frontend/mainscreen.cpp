@@ -131,7 +131,8 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 	if (frontend->mRenderWindow)
 	{
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+		Real scale = this->GetContentScaleFactor();
+		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
 #else
 		frontend->mRenderWindow->windowMovedOrResized();
 #endif

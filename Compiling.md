@@ -2,6 +2,7 @@
 
 * [Compiling for Debian Linux](#skyscraper-source-build-instructions-for-debian-linux)
 * [Compiling for Apple Silicon](#skyscraper-source-build-for-apple-silicon)
+* [Compiling for Windows](#skyscraper-source-build-for-windows-using-visual-studio-2022)
 
 # Skyscraper source build instructions for Debian Linux
 
@@ -236,7 +237,7 @@ You may need to edit plugins.cfg to redirect to `Contents/Framework`, and commen
     open Skyscraper.app
 
 
-# Skyscraper source build for Windows, using Visual Studio 2022
+# Skyscraper source build for Windows using Visual Studio 2022
 
 Step 1 - download the dependencies
 -----------
@@ -270,7 +271,7 @@ FMOD_HOME points to C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Wind
 
 OGRE_HOME_64 points to C:\ogre-13.6.2\SDK
 
-WXWIN_64 points to C:\wxWidgets-3.2.1
+WXWIN_64 points to C:\wxWidgets-3.2.2.1
 
 Step 5 - download and install Git
 -----------
