@@ -56,6 +56,8 @@ bool DestinationController::RequestRoute(int starting_floor, int destination_flo
 {
 	//request a destination dispatch route
 
+	Report("Requesting route from origin floor " + ToString(starting_floor) + " to destination floor " + ToString(destination_floor));
+
 	//check to make sure elevator objects are valid
 	bool isvalid = false;
 	for (size_t i = 0; i < Elevators.size(); i++)
@@ -81,8 +83,7 @@ bool DestinationController::RequestRoute(int starting_floor, int destination_flo
 	Elevator* elevator = sbs->GetElevator(Elevators[closest]);
 	//get letter
 
-	if (sbs->Verbose)
-		Report("Using elevator " + ToString(elevator->Number));
+	Report("Using elevator " + ToString(elevator->Number));
 
 	ElevatorCar *car = elevator->GetCarForFloor(starting_floor);
 	if (!car)
