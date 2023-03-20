@@ -43,8 +43,7 @@ DestinationController::DestinationController(Object *parent, std::vector<int> &e
 		for (size_t i = 0; i < elevators.size(); i++)
 			Elevators[i] = elevators[i];
 
-	if (sbs->Verbose)
-		Report("Created");
+	Report("Created");
 }
 
 DestinationController::~DestinationController()
@@ -104,7 +103,7 @@ bool DestinationController::RequestRoute(int starting_floor, int destination_flo
 
 bool DestinationController::AddElevator(int elevator)
 {
-	//add an elevator to this call button
+	//add an elevator to this controller
 
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
@@ -118,7 +117,7 @@ bool DestinationController::AddElevator(int elevator)
 
 bool DestinationController::RemoveElevator(int elevator)
 {
-	//remove an elevator from this call button
+	//remove an elevator from this controller
 
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
@@ -133,7 +132,7 @@ bool DestinationController::RemoveElevator(int elevator)
 
 bool DestinationController::ServicesElevator(int elevator)
 {
-	//return true if this call button services the specified elevator
+	//return true if this controller services the specified elevator
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i] == elevator)
@@ -178,7 +177,7 @@ int DestinationController::FindClosestElevator(int starting_floor, int destinati
 	if (sbs->Verbose && count > 1 && recheck == false)
 		Report("Finding nearest available elevator...");
 
-	//check each elevator associated with this call button to find the closest available one
+	//check each elevator associated with this controller to find the closest available one
 	for (int i = 0; i < count; i++)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
