@@ -37,6 +37,8 @@ public:
 	bool AddElevator(int elevator);
 	bool RemoveElevator(int elevator);
 	bool ServicesElevator(int elevator);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 private:
 
