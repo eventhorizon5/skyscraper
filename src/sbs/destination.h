@@ -31,11 +31,19 @@ class SBSIMPEXP DestinationController : public Object
 public:
 
 	//functions
-	DestinationController(Object *parent);
+	DestinationController(Object *parent, std::vector<int> &elevators);
 	~DestinationController();
+	bool RequestRoute(int starting_floor, int destination_floor);
+	bool AddElevator(int elevator);
+	bool RemoveElevator(int elevator);
+	bool ServicesElevator(int elevator);
 
 private:
 
+	int FindClosestElevator(int starting_floor, int destination_floor);
+
+	std::vector<int> Elevators;
+	int ActiveElevator;
 };
 
 }
