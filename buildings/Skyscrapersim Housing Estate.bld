@@ -2992,7 +2992,7 @@ CutStairwell 3, -8.5, -3.5, 8.5, 3.5, 0, 3
     #Staircase Signage
     if[%floor% = 0] AddStairsWall 3, SignTop, ButtonG, 0, -8.5 + 0.05, -3, -8.5 + 0.05, -2, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% > 0 & %floor% < 39] AddStairsWall 3, SignTop, Button%floor%, 0, -8.5 + 0.05, -3, -8.5 + 0.05, -2, 0.75, 0.75, 4.25, 4.25, 1, 1
-    if[%floor% = 39] AddStairsWall 2, SignTop, ButtonR, 0, -8.5 + 0.05, -3, -8.5 + 0.05, -2, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = 39] AddStairsWall 3, SignTop, ButtonR, 0, -8.5 + 0.05, -3, -8.5 + 0.05, -2, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 40] AddStairsWall 3, SignTop, ButtonM, 0, -8.5 + 0.05, -3, -8.5 + 0.05, -2, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 41] AddStairsWall 3, SignTop, ButtonT, 0, -8.5 + 0.05, -3, -8.5 + 0.05, -2, 0.75, 0.75, 4.25, 4.25, 1, 1
     AddStairsWall 3, SignFloor, FloorSignFloor, 0, -8.5 + 0.052, -3, -8.5 + 0.052 , -2, 0.25, 0.25, 4.8, 4.8, 1, 1
