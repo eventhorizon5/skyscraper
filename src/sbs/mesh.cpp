@@ -141,6 +141,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 		//get original vertices
 		std::vector<Ogre::Vector3> origpoly;
 		std::vector<std::vector<Ogre::Vector3> > newpolys;
+		newpolys.reserve(4);
 
 		polygon->GetGeometry(origpoly);
 
@@ -162,6 +163,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 		bool polycheck2 = false;
 
 		//copy source polygon vertices
+		temppoly.reserve(origpoly.size());
 		for (size_t j = 0; j < origpoly.size(); j++)
 		{
 			temppoly.push_back(origpoly[j]);
