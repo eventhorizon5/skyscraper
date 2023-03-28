@@ -1,6 +1,9 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-updated starting position for Dellerton Plaza building
 -reverted the PolyMesh geometry system cleanups, due to performance problems
+-made Level errors non-fatal
+-fixed a script error in the Skyscrapersim Housing Estate building
 -Object selection fixes for the People Manager dialog
 -Updated guide to reflect collider filename change
 -Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
@@ -15,7 +18,10 @@ Version 1.12 (2.0 Alpha 12)
 
 Version 1.11.2 (2.0 Alpha 11 Update 2)
 -------------------------
+-updated starting position for Dellerton Plaza building
 -reverted the PolyMesh geometry system cleanups, due to performance problems
+-made Level errors non-fatal
+-fixed a script error in the Skyscrapersim Housing Estate building
 
 Version 1.11.1 (2.0 Alpha 11 Update 1)
 -------------------------
