@@ -39,7 +39,7 @@ public:
 	Ogre::Plane plane; //plane in remote (Ogre) form, relative positioning
 
 	//array holding index extents, to get original geometry
-	Extents index_extents;
+	std::vector<Extents> index_extents;
 
 	//texture mapping matrix and vector
 	Ogre::Matrix3 t_matrix;
@@ -47,7 +47,7 @@ public:
 
 	std::string material; //polygon material
 
-	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, Extents &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane);
+	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane);
 	~Polygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	int GetSubMesh();
