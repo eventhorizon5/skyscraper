@@ -451,7 +451,6 @@ bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &
 		if (IntersectRay(vertices[i], start, end))
 			return true;
 	}
-
 	return false;
 }
 

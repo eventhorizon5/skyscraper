@@ -86,7 +86,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	Ogre::Vector3 tv;
 	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
-	std::vector<Ogre::Vector3> converted_vertices;
+	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
 	if (!meshwrapper->PolyMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles, converted_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
@@ -100,23 +100,20 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 
 	//compute plane
-	Ogre::Plane plane = sbs->ComputePlane(converted_vertices);
+	Ogre::Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
 	int index = CreatePolygon(triangles, index_extents, tm, tv, material, name, plane);
 	return &polygons[index];
 }
 
-Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
-	//create a generic polygon and specify texture mapping
-
 	//add a set of polygons, providing the original material and texture mapping
 
 	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
-	std::vector<Ogre::Vector3> converted_vertices;
-
-	if (!meshwrapper->PolyMesh(name, texture, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
+	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
+	if (!meshwrapper->PolyMesh(name, material, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -126,9 +123,9 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 		return 0;
 
 	//compute plane
-	Ogre::Plane plane = sbs->ComputePlane(converted_vertices);
+	Ogre::Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
-	int index = CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, texture, name, plane);
+	int index = CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, material, name, plane);
 	return &polygons[index];
 }
 
