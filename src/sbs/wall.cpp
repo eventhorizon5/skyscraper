@@ -86,7 +86,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	Ogre::Vector3 tv;
 	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
-	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
+	PolygonSet converted_vertices;
 	if (!meshwrapper->PolyMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles, converted_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
@@ -106,13 +106,13 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	return &polygons[index];
 }
 
-Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 
 	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
-	std::vector<std::vector<Ogre::Vector3> > converted_vertices;
+	PolygonSet converted_vertices;
 	if (!meshwrapper->PolyMesh(name, material, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
 	{
 		ReportError("Error creating wall '" + name + "'");
@@ -206,7 +206,7 @@ int Wall::FindPolygon(const std::string &name)
 	return -1;
 }
 
-void Wall::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Wall::GetGeometry(int index, PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -304,7 +304,7 @@ Ogre::Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
-		std::vector<std::vector<Ogre::Vector3> > origpolys;
+		PolygonSet origpolys;
 		GetGeometry(i, origpolys, true);
 
 		std::vector<Ogre::Vector3> original, tmp1, tmp2;

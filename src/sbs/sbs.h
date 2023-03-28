@@ -104,6 +104,8 @@ namespace SBS {
 	class MovingWalkway;
 	class Step;
 	class Vehicle;
+
+	typedef std::vector<std::vector<Ogre::Vector3> > PolygonSet;
 }
 
 #include "object.h"

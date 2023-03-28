@@ -59,7 +59,7 @@ int Polygon::GetSubMesh()
 	return  mesh->FindMatchingSubMesh(material);
 }
 
-void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -186,7 +186,7 @@ Ogre::Vector2 Polygon::GetExtents(int coord)
 	if (coord < 1 || coord > 3)
 		return Ogre::Vector2(0, 0);
 
-	std::vector<std::vector<Ogre::Vector3> > poly;
+	PolygonSet poly;
 	GetGeometry(poly);
 
 	//get polygon extents
