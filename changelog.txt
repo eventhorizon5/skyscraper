@@ -1,5 +1,6 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-reverted the PolyMesh geometry system cleanups, due to performance problems
 -Object selection fixes for the People Manager dialog
 -Updated guide to reflect collider filename change
 -Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
@@ -11,6 +12,10 @@ Version 1.12 (2.0 Alpha 12)
 -new Sound Manager dialog
 -Added an INI file setting to enable or disable the frame statistics on startup
 -Render window now resizes properly on Linux when the scaling factor is not 100%
+
+Version 1.11.2 (2.0 Alpha 11 Update 2)
+-------------------------
+-reverted the PolyMesh geometry system cleanups, due to performance problems
 
 Version 1.11.1 (2.0 Alpha 11 Update 1)
 -------------------------
