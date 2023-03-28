@@ -68,7 +68,7 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 {
 	//add a quad
 
-	std::vector<Ogre::Vector3> vertices;
+	PolyArray vertices;
 	vertices.reserve(4);
 	vertices.push_back(v1);
 	vertices.push_back(v2);
@@ -78,7 +78,7 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
-Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize)
+Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize)
 {
 	//create a generic polygon
 
@@ -307,7 +307,7 @@ Ogre::Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 		PolygonSet origpolys;
 		GetGeometry(i, origpolys, true);
 
-		std::vector<Ogre::Vector3> original, tmp1, tmp2;
+		PolyArray original, tmp1, tmp2;
 		original.reserve(origpolys[0].size());
 		for (size_t i = 0; i < origpolys[0].size(); i++)
 			original.push_back(origpolys[0][i]);

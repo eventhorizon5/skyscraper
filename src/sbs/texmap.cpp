@@ -32,7 +32,7 @@ namespace SBS {
 #undef SMALL_EPSILON
 #define SMALL_EPSILON 0.000001f
 
-bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3, Real tw, Real th)
+bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, PolyArray &vertices, const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3, Real tw, Real th)
 {
 	//this is modified code from the Crystal Space thingmesh system (SetTextureSpace function),
 	//from the "plugins/mesh/thing/object/polygon.cpp" file.
@@ -236,7 +236,7 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 	return true;
 }
 
-void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, Real value)
+void SBS::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//axis is 0 for X, 1 for Y, 2 for Z
@@ -339,7 +339,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	}
 }
 
-Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D)
+Ogre::Vector3 SBS::ComputeNormal(PolyArray &vertices, Real &D)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//calculate polygon normal
@@ -381,7 +381,7 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D)
 	return norm;
 }
 
-bool Polygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+bool Polygon::IntersectRay(PolyArray &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 

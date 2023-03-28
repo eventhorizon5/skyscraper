@@ -53,7 +53,7 @@ public:
 	int GetSubMesh();
 	void GetGeometry(PolygonSet &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal);
-	bool IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
+	bool IntersectRay(PolyArray &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	bool IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal);
 	void Move(const Ogre::Vector3 &position, Real speed = 1.0);
 	void Delete();

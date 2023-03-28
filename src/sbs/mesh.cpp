@@ -45,7 +45,7 @@
 
 namespace SBS {
 
-Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z)
+Ogre::Vector2 SBS::GetExtents(PolyArray &varray, int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from a vertex array (polygon).
@@ -107,7 +107,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 	if (start.z > end.z)
 		std::swap(start.z, end.z);
 
-	std::vector<Ogre::Vector3> temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 
 	temppoly.reserve(32);
 	temppoly2.reserve(32);
@@ -401,7 +401,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 	}
 }
 
-void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon)
+void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon)
 {
 	//calculate doorway extents, for use with AddDoorwayWalls function
 	//checknumber is 1 when checking shaft walls, and 2 when checking floor walls
@@ -444,7 +444,7 @@ void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre:
 	}
 }
 
-Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
+Ogre::Vector3 SBS::GetPolygonDirection(PolyArray &polygon)
 {
 	//returns the direction the polygon faces, in a 3D vector
 	//for example, <-1, 0, 0> means that the wall faces left.
@@ -452,7 +452,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 	//get largest normal
 
 	//convert to remote values for precision compatibility with Alpha 7 and earlier
-	std::vector<Ogre::Vector3> newpoly;
+	PolyArray newpoly;
 	for (size_t i = 0; i < polygon.size(); i++)
 		newpoly.push_back(ToRemote(polygon[i], true, false));
 
@@ -505,7 +505,7 @@ Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real
 
 }
 
-Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices, bool flip_normal)
+Ogre::Plane SBS::ComputePlane(PolyArray &vertices, bool flip_normal)
 {
 	//compute plane from a set of given vertices
 
@@ -834,7 +834,7 @@ bool MeshObject::IsEnabled()
 	return enabled;
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 

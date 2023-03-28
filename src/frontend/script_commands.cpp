@@ -490,7 +490,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			}
 		}
 
-		std::vector<Ogre::Vector3> varray;
+		PolyArray varray;
 		for (int i = start; i < params - 2; i += 3)
 			varray.push_back(Ogre::Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
@@ -581,7 +581,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				voffset += Simcore->GetFloor(config->Current)->GetBase();
 		}
 
-		std::vector<Ogre::Vector3> varray;
+		PolyArray varray;
 		for (int i = 3; i < params - 2; i += 3)
 			varray.push_back(Ogre::Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 

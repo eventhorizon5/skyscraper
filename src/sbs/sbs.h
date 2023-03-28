@@ -105,7 +105,8 @@ namespace SBS {
 	class Step;
 	class Vehicle;
 
-	typedef std::vector<std::vector<Ogre::Vector3> > PolygonSet;
+	typedef std::vector<Ogre::Vector3> PolyArray;
+	typedef std::vector<PolyArray> PolygonSet;
 }
 
 #include "object.h"
@@ -203,9 +204,9 @@ public:
 	Wall* CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	Wall* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th);
-	Wall* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, Real tw, Real th);
+	Wall* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, PolyArray &varray, Real tw, Real th);
 	Wall* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, Real altitude, Real tw, Real th);
-	void AddPolygon(Wall* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, Real tw, Real th);
+	void AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th);
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);
@@ -289,15 +290,15 @@ public:
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
-	Ogre::Vector2 GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z = false);
+	Ogre::Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
 	void Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	Ogre::Vector3 GetPolygonDirection(std::vector<Ogre::Vector3> &polygon);
+	Ogre::Vector3 GetPolygonDirection(PolyArray &polygon);
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
 	Real GetConfigFloat(const std::string &key, Real default_value);
-	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, Real value);
-	Ogre::Vector3 ComputeNormal(std::vector<Ogre::Vector3> &vertices, Real &D);
+	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
+	Ogre::Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
 	void AdvanceClock();
 	unsigned long GetCurrentTime();
@@ -334,9 +335,9 @@ public:
 	void UnregisterControl(Control *control);
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real distance);
 	void ShowFloorList();
-	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices, bool flip_normal = true);
+	Ogre::Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
 	void ShowSceneNodes(bool value);
-	void GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon);
+	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
 	void ShowBoundingBoxes(bool value);
 	void ListVisibleMeshes();
 	int GetEscalatorCount();
