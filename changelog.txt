@@ -1,3 +1,7 @@
+Version 1.11.2 (2.0 Alpha 11 Update 2)
+-------------------------
+-reverted the PolyMesh geometry system cleanups, due to performance problems
+
 Version 1.11.1 (2.0 Alpha 11 Update 1)
 -------------------------
 -Object selection fixes for the People Manager dialog
