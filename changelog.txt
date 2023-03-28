@@ -1,6 +1,9 @@
 Version 1.11.2 (2.0 Alpha 11 Update 2)
 -------------------------
+-updated starting position for Dellerton Plaza building
 -reverted the PolyMesh geometry system cleanups, due to performance problems
+-made Level errors non-fatal
+-fixed a script error in the Skyscrapersim Housing Estate building
 
 Version 1.11.1 (2.0 Alpha 11 Update 1)
 -------------------------
