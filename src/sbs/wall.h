@@ -44,7 +44,7 @@ public:
 	int GetPolygonCount();
 	Polygon* GetPolygon(int index);
 	int FindPolygon(const std::string &name);
-	void GetGeometry(int index, std::vector<Ogre::Vector3> &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
+	void GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 &isect, bool convert = true);
 	void Move(const Ogre::Vector3 &position, Real speed = 1.0);
 	MeshObject* GetMesh();
