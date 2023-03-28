@@ -895,7 +895,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	//convert to remote positioning
 	if (convert_vertices == true)
 	{
-		converted_vertices.reserve(vertices.size());
+		converted_vertices.resize(vertices.size());
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
 			converted_vertices.push_back(sbs->ToRemote(vertices[i]));
@@ -1074,9 +1074,7 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 
 		//add vertices
 		for (size_t i = 0; i < vertices.size(); i++)
-		{
 			Submeshes[index].MeshGeometry.push_back(vertices[i]);
-		}
 	}
 	else
 	{
