@@ -323,6 +323,11 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 		Elevator *elevator = sbs->GetElevator(Elevators[i].number);
 		if (elevator)
 		{
+			//skip elevator if it doesn't serve the destination floor
+			bool serviced = elevator->IsServicedFloor(destination_floor, true);
+			if (serviced == false)
+				continue;
+
 			ElevatorCar *car = elevator->GetCarForFloor(starting_floor);
 			if (car)
 			{
@@ -425,13 +430,22 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 
 void DispatchController::DispatchElevator(int number, int destination_floor, int direction)
 {
+	//dispatch an elevator to the given destination floor
+
 	Elevator *elevator = sbs->GetElevator(number);
 	Floor *floor = sbs->GetFloor(destination_floor);
 
 	if (elevator && floor)
 	{
 		Report("Dispatching elevator " + ToString(number) + " to floor " + ToString(destination_floor) + " (" + floor->ID + ")");
-		elevator->AddRoute(destination_floor, direction, 2);
+
+		int type = 0;
+		if (DestinationDispatch == false)
+			type = 1;
+		else
+			type = 2;
+
+		elevator->AddRoute(destination_floor, direction, type);
 	}
 }
 
