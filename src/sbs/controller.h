@@ -43,7 +43,7 @@ public:
 	bool ServicesElevator(int elevator);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	void ElevatorArrived(int number, int floor);
+	void ElevatorArrived(int number, int floor, bool direction);
 
 private:
 
@@ -52,17 +52,20 @@ private:
 	int FindClosestElevator(int starting_floor, int destination_floor);
 	void DispatchElevator(int number, int destination_floor, int direction);
 	void RemoveRoute(Request &request);
+	void Process(int direction);
+	void ProcessDestinationDispatch();
 
 	int ElevatorRange;
 
-	struct Map
+	struct ElevMap
 	{
 		int number; //elevator number
 		bool arrived; //has elevator arrived?
 		int arrival_floor; //arrival floor
+		bool arrival_direction; //arrival direction
 	};
 
-	std::vector<Map> Elevators; //controller object array
+	std::vector<ElevMap> Elevators; //controller object array
 
 	struct Request
 	{

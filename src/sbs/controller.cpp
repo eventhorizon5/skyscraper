@@ -44,7 +44,7 @@ public:
 
 DispatchController::DispatchController(Object *parent, int number, std::vector<int> &elevators, int elevator_range) : Object(parent)
 {
-	//create a Dispatch controller object
+	//create a dispatch controller object
 
 	//set up SBS object
 	SetValues("DispatchController", "Dispatch Controller " + ToString(number), false);
@@ -57,10 +57,11 @@ DispatchController::DispatchController(Object *parent, int number, std::vector<i
 	Elevators.resize(elevators.size());
 	for (size_t i = 0; i < elevators.size(); i++)
 	{
-		Map elev;
+		ElevMap elev;
 		elev.number = elevators[i];
 		elev.arrived = false;
 		elev.arrival_floor = 0;
+		elev.arrival_direction = false;
 		Elevators[i] = elev;
 	}
 
@@ -79,7 +80,6 @@ DispatchController::~DispatchController()
 		delete timer;
 	}
 	timer = 0;
-
 }
 
 void DispatchController::Timer::Notify()
@@ -89,26 +89,57 @@ void DispatchController::Timer::Notify()
 
 void DispatchController::Loop()
 {
-	if (DestinationDispatch == true)
+	//this function runs for every registered dispatch controller via timer callback
+
+	if (DestinationDispatch == false)
 	{
-		//if elevator has arrived, dispatch to destination floor
-		for (int i = 0; i < Elevators.size(); i++)
+		//this is reserved for future use
+
+		//process up calls
+		Process(1);
+
+		//process down calls
+		Process(-1);
+	}
+
+	if (DestinationDispatch == true)
+		ProcessDestinationDispatch();
+}
+
+void DispatchController::Process(int direction)
+{
+	//this is reserved for future use
+}
+
+void DispatchController::ProcessDestinationDispatch()
+{
+	//destination dispatch processing
+
+	//check elevators to see if any have arrived, and if so, dispatch to destination floor
+	for (int i = 0; i < Elevators.size(); i++)
+	{
+		//determine if elevator has arrived
+		if (Elevators[i].arrived == true)
 		{
-			if (Elevators[i].arrived == true)
+			//step through requests table and find a request that matches the arrived elevator
+			for (int j = 0; j < Requests.size(); j++)
 			{
-				for (int j = 0; j < Requests.size(); j++)
+				//get request's direction of travel
+				int direction = 0;
+				if (Requests[j].starting_floor < Requests[j].destination_floor)
+					direction = 1;
+				else
+					direction = -1;
+
+				//if request matches the elevator
+				if (Requests[j].starting_floor == Elevators[i].arrival_floor)
 				{
-					int direction = 0;
-					if (Requests[j].starting_floor < Requests[j].destination_floor)
-						direction = 1;
-					else
-						direction = -1;
-					if (Requests[j].starting_floor == Elevators[i].arrival_floor)
-					{
-						DispatchElevator(Elevators[i].number, Requests[j].destination_floor, direction);
-						RemoveRoute(Requests[j]);
-						return;
-					}
+					//dispatch elevator to destination floor
+					DispatchElevator(Elevators[i].number, Requests[j].destination_floor, direction);
+
+					//remove route from requests table
+					RemoveRoute(Requests[j]);
+					return;
 				}
 			}
 		}
@@ -117,6 +148,8 @@ void DispatchController::Loop()
 
 void DispatchController::RemoveRoute(Request &request)
 {
+	//remove a destination dispatch route
+
 	for (int i = 0; i < Requests.size(); i++)
 	{
 		if (Requests[i].starting_floor == request.starting_floor && Requests[i].destination_floor == request.destination_floor)
@@ -205,10 +238,11 @@ bool DispatchController::AddElevator(int elevator)
 			return false;
 	}
 
-	Map newelevator;
+	ElevMap newelevator;
 	newelevator.number = elevator;
 	newelevator.arrived = false;
 	newelevator.arrival_floor = 0;
+	newelevator.arrival_direction = false;
 
 	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
 	Elevators.push_back(newelevator);
@@ -234,6 +268,7 @@ bool DispatchController::RemoveElevator(int elevator)
 bool DispatchController::ServicesElevator(int elevator)
 {
 	//return true if this controller services the specified elevator
+
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == elevator)
@@ -248,6 +283,8 @@ bool DispatchController::ServicesElevator(int elevator)
 
 int DispatchController::FindClosestElevator(int starting_floor, int destination_floor)
 {
+	//finds closest elevator for destination dispatch mode
+
 	//initialize values
 	int closest = 0;
 	int closest_elev = 0;
@@ -262,6 +299,8 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 		direction = -1;
 
 	int ActiveElevator = 0;
+
+	//***NOTE - recheck and ActiveElevator need to be rewritten for Destination Dispatch
 
 	//if an elevator is already servicing the call, set recheck to true
 	bool recheck = false;
@@ -359,12 +398,12 @@ void DispatchController::Report(const std::string &message)
 
 bool DispatchController::ReportError(const std::string &message)
 {
-	//general reporting function
+	//general error reporting function
 	std::string msg = "Dispatch Controller " + ToString(Number) + ": " + message;
 	return Object::ReportError(msg);
 }
 
-void DispatchController::ElevatorArrived(int number, int floor)
+void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 {
 	//notify controller about an elevator arrival
 
@@ -380,6 +419,7 @@ void DispatchController::ElevatorArrived(int number, int floor)
 		Report("Elevator " + ToString(number) + " arrived at floor " + ToString(floor) + " (" + floorobj->ID + ")");
 		Elevators[i].arrived = true;
 		Elevators[i].arrival_floor = floor;
+		Elevators[i].arrival_direction = direction;
 	}
 }
 

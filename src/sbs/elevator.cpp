@@ -2004,17 +2004,18 @@ void Elevator::FinishMove()
 			//get status of call buttons before switching off
 			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
 
-			//notify call buttons of arrival (which also disables call button lights)
 			for (int i = 1; i <= GetCarCount(); i++)
 			{
 				if (GetCar(i)->GotoFloor == true)
 				{
 					int floor = GetFloorForCar(i, GotoFloor);
+
+					//notify call buttons of arrival (which also disables call button lights)
 					NotifyCallButtons(floor, GetArrivalDirection(floor));
 
-					//notify destination controller
+					//notify dispatch controller of arrival
 					if (GetController())
-						GetController()->ElevatorArrived(Number, floor);
+						GetController()->ElevatorArrived(Number, floor, GetArrivalDirection(floor));
 				}
 			}
 		}
