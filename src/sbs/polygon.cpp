@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, Extents &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane) : ObjectBase(parent)
+Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
 	this->index_extents = index_extents;
@@ -59,7 +59,7 @@ int Polygon::GetSubMesh()
 	return  mesh->FindMatchingSubMesh(material);
 }
 
-void Polygon::GetGeometry(std::vector<Ogre::Vector3> &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -68,6 +68,8 @@ void Polygon::GetGeometry(std::vector<Ogre::Vector3> &vertices, bool firstonly, 
 	//if rescale is true (along with convert), rescales vertices with UnitScale multiplier
 	//if relative is true, vertices are relative of mesh center, otherwise they use absolute/global positioning
 	//if reverse is false, process extents table in ascending order, otherwise descending order
+
+	vertices.resize(index_extents.size());
 
 	Ogre::Vector3 mesh_position;
 	if (convert == true)
@@ -82,52 +84,55 @@ void Polygon::GetGeometry(std::vector<Ogre::Vector3> &vertices, bool firstonly, 
 
 	MeshObject::SubMesh &submesh = mesh->Submeshes[index];
 
-	int min = index_extents.min;
-	int max = index_extents.max;
-	int newsize = (int)vertices.size() + max - min + 1;
-	vertices.reserve(newsize);
-	if (reverse == false)
+	for (size_t i = 0; i < index_extents.size(); i++)
 	{
-		for (int j = min; j <= max; j++)
+		int min = index_extents[i].min;
+		int max = index_extents[i].max;
+		int newsize = (int)vertices[i].size() + max - min + 1;
+		vertices[i].reserve(newsize);
+		if (reverse == false)
 		{
-			if (relative == true)
+			for (int j = min; j <= max; j++)
 			{
-				if (convert == true)
-					vertices.push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
+				if (relative == true)
+				{
+					if (convert == true)
+						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
+					else
+						vertices[i].push_back(submesh.MeshGeometry[j].vertex);
+				}
 				else
-					vertices.push_back(submesh.MeshGeometry[j].vertex);
-			}
-			else
-			{
-				if (convert == true)
-					vertices.push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
-				else
-					vertices.push_back(submesh.MeshGeometry[j].vertex + mesh_position);
+				{
+					if (convert == true)
+						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
+					else
+						vertices[i].push_back(submesh.MeshGeometry[j].vertex + mesh_position);
+				}
 			}
 		}
-	}
-	else
-	{
-		for (int j = max; j >= min; j--)
+		else
 		{
-			if (relative == true)
+			for (int j = max; j >= min; j--)
 			{
-				if (convert == true)
-					vertices.push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
+				if (relative == true)
+				{
+					if (convert == true)
+						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
+					else
+						vertices[i].push_back(submesh.MeshGeometry[j].vertex);
+				}
 				else
-					vertices.push_back(submesh.MeshGeometry[j].vertex);
-			}
-			else
-			{
-				if (convert == true)
-					vertices.push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
-				else
-					vertices.push_back(submesh.MeshGeometry[j].vertex + mesh_position);
+				{
+					if (convert == true)
+						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
+					else
+						vertices[i].push_back(submesh.MeshGeometry[j].vertex + mesh_position);
+				}
 			}
 		}
+		if (firstonly == true)
+			return;
 	}
-	if (firstonly == true)
-		return;
 }
 
 void Polygon::Move(const Ogre::Vector3 &position, Real speed)
@@ -139,17 +144,20 @@ void Polygon::Move(const Ogre::Vector3 &position, Real speed)
 	if (submesh == -1)
 		return;
 
-	int min = index_extents.min;
-	int max = index_extents.max;
-
-	for (int index = min; index <= max; index++)
+	for (size_t i = 0; i < index_extents.size(); i++)
 	{
-		MeshObject::Geometry &data = mesh->Submeshes[submesh].MeshGeometry[index];
-		data.vertex += sbs->ToRemote(position * speed);
+		int min = index_extents[i].min;
+		int max = index_extents[i].max;
 
-		//update vertices in render buffer, if using dynamic buffers
-		if (dynamic == true)
-			mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
+		for (int index = min; index <= max; index++)
+		{
+			MeshObject::Geometry &data = mesh->Submeshes[submesh].MeshGeometry[index];
+			data.vertex += sbs->ToRemote(position * speed);
+
+			//update vertices in render buffer, if using dynamic buffers
+			if (dynamic == true)
+				mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
+		}
 	}
 }
 
@@ -178,17 +186,21 @@ Ogre::Vector2 Polygon::GetExtents(int coord)
 	if (coord < 1 || coord > 3)
 		return Ogre::Vector2(0, 0);
 
-	std::vector<Ogre::Vector3> poly;
+	PolygonSet poly;
 	GetGeometry(poly);
 
 	//get polygon extents
 	Ogre::Vector2 extents = Ogre::Vector2::ZERO;
-
-	Ogre::Vector2 extents2 = sbs->GetExtents(poly, coord);
-	if (extents2.x < extents.x)
-		extents.x = extents2.x;
-	if (extents2.y > extents.y)
-		extents.y = extents2.y;
+	bool firstrun = true;
+	for (size_t i = 0; i < poly.size(); i++)
+	{
+		Ogre::Vector2 extents2 = sbs->GetExtents(poly[i], coord);
+		if (extents2.x < extents.x || firstrun == true)
+			extents.x = extents2.x;
+		if (extents2.y > extents.y || firstrun == true)
+			extents.y = extents2.y;
+		firstrun = false;
+	}
 
 	return extents;
 }
@@ -205,19 +217,22 @@ void Polygon::ChangeHeight(Real newheight)
 	if (submesh == -1)
 		return;
 
-	unsigned int min = index_extents.min;
-	unsigned int max = index_extents.max;
-
-	for (unsigned int index = min; index <= max; index++)
+	for (size_t i = 0; i < index_extents.size(); i++)
 	{
-		MeshObject::Geometry &data = mesh->Submeshes[submesh].MeshGeometry[index];
-		if (data.vertex.y == sbs->ToRemote(extents.y))
-		{
-			data.vertex.y = sbs->ToRemote(extents.x + newheight);
+		unsigned int min = index_extents[i].min;
+		unsigned int max = index_extents[i].max;
 
-			//update vertices in render buffer, if using dynamic buffers
-			if (dynamic == true)
-				mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
+		for (unsigned int index = min; index <= max; index++)
+		{
+			MeshObject::Geometry &data = mesh->Submeshes[submesh].MeshGeometry[index];
+			if (data.vertex.y == sbs->ToRemote(extents.y))
+			{
+				data.vertex.y = sbs->ToRemote(extents.x + newheight);
+
+				//update vertices in render buffer, if using dynamic buffers
+				if (dynamic == true)
+					mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
+			}
 		}
 	}
 }

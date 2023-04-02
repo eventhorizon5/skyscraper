@@ -68,7 +68,7 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 {
 	//add a quad
 
-	std::vector<Ogre::Vector3> vertices;
+	PolyArray vertices;
 	vertices.reserve(4);
 	vertices.push_back(v1);
 	vertices.push_back(v2);
@@ -78,15 +78,15 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
-Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize)
+Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize)
 {
 	//create a generic polygon
 
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
-	Extents index_extents;
+	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
-	std::vector<Ogre::Vector3> converted_vertices;
+	PolygonSet converted_vertices;
 	if (!meshwrapper->PolyMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles, converted_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
@@ -100,23 +100,20 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 
 	//compute plane
-	Ogre::Plane plane = sbs->ComputePlane(converted_vertices);
+	Ogre::Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
 	int index = CreatePolygon(triangles, index_extents, tm, tv, material, name, plane);
 	return &polygons[index];
 }
 
-Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
-	//create a generic polygon and specify texture mapping
-
 	//add a set of polygons, providing the original material and texture mapping
 
-	Extents index_extents;
+	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
-	std::vector<Ogre::Vector3> converted_vertices;
-
-	if (!meshwrapper->PolyMesh(name, texture, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
+	PolygonSet converted_vertices;
+	if (!meshwrapper->PolyMesh(name, material, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -126,13 +123,13 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, s
 		return 0;
 
 	//compute plane
-	Ogre::Plane plane = sbs->ComputePlane(converted_vertices);
+	Ogre::Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
-	int index = CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, texture, name, plane);
+	int index = CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, material, name, plane);
 	return &polygons[index];
 }
 
-int Wall::CreatePolygon(std::vector<Triangle> &triangles, Extents &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane)
+int Wall::CreatePolygon(std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 
@@ -209,7 +206,7 @@ int Wall::FindPolygon(const std::string &name)
 	return -1;
 }
 
-void Wall::GetGeometry(int index, std::vector<Ogre::Vector3> &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Wall::GetGeometry(int index, PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -307,13 +304,13 @@ Ogre::Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
-		std::vector<Ogre::Vector3> origpoly;
-		GetGeometry(i, origpoly, true);
+		PolygonSet origpolys;
+		GetGeometry(i, origpolys, true);
 
-		std::vector<Ogre::Vector3> original, tmp1, tmp2;
-		original.reserve(origpoly.size());
-		for (size_t i = 0; i < origpoly.size(); i++)
-			original.push_back(origpoly[i]);
+		PolyArray original, tmp1, tmp2;
+		original.reserve(origpolys[0].size());
+		for (size_t i = 0; i < origpolys[0].size(); i++)
+			original.push_back(origpolys[0][i]);
 
 		//if given altitude is outside of polygon's range, return 0
 		Ogre::Vector2 yextents = sbs->GetExtents(original, 2);

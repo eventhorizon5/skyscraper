@@ -1349,7 +1349,10 @@ bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, cons
 	//uses some parameters (width, height, direction) from AddDoors function
 
 	if (GetDoor(number))
+	{
+		Report("Adding shaft doors...");
 		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+	}
 	else
 		ReportError("Invalid door " + ToString(number));
 	return false;
@@ -1826,7 +1829,10 @@ void ElevatorCar::AddShaftDoorsComponent(int number, const std::string &name, co
 	//adds shaft's elevator door components specified at a relative central position (off of elevator origin)
 
 	if (GetDoor(number))
+	{
+		Report("Adding shaft doors component...");
 		GetDoor(number)->AddShaftDoorsComponent(name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	}
 	else
 		ReportError("Invalid door " + ToString(number));
 }

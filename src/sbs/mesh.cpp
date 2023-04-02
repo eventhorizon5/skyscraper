@@ -45,7 +45,7 @@
 
 namespace SBS {
 
-Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z)
+Ogre::Vector2 SBS::GetExtents(PolyArray &varray, int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from a vertex array (polygon).
@@ -107,7 +107,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 	if (start.z > end.z)
 		std::swap(start.z, end.z);
 
-	std::vector<Ogre::Vector3> temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 
 	temppoly.reserve(32);
 	temppoly2.reserve(32);
@@ -139,230 +139,235 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 		Polygon *polygon = wall->GetPolygon(i);
 
 		//get original vertices
-		std::vector<Ogre::Vector3> origpoly;
-		std::vector<std::vector<Ogre::Vector3> > newpolys;
+		PolygonSet origpolys;
+		PolygonSet newpolys;
+		wall->GetGeometry(i, origpolys);
 
-		polygon->GetGeometry(origpoly);
+		//skip empty meshes
+		if (origpolys.size() == 0)
+			continue;
 
 		//cut all polygons within range
-
-		//skip null geometry
-		if (origpoly.size() == 0)
-			continue;
-
-		temppoly.clear();
-		temppoly2.clear();
-		temppoly3.clear();
-		temppoly4.clear();
-		temppoly5.clear();
-		worker.clear();
-		Ogre::Vector2 extentsx, extentsy, extentsz;
-		Ogre::AxisAlignedBox bounds (start, end);
-		Ogre::AxisAlignedBox polybounds = Ogre::AxisAlignedBox::BOX_NULL;
-		bool polycheck2 = false;
-
-		//copy source polygon vertices
-		for (size_t j = 0; j < origpoly.size(); j++)
+		for (size_t j = 0; j < origpolys.size(); j++)
 		{
-			temppoly.push_back(origpoly[j]);
-			polybounds.merge(origpoly[j]);
-		}
+			//skip null geometry
+			if (origpolys[j].size() == 0)
+				continue;
 
-		//skip if the polygon is completely inside the bounding box
-		/*if (bounds.contains(polybounds) == true)
-		{
-			polycheck = true;
-			continue;
-		}*/
+			temppoly.clear();
+			temppoly2.clear();
+			temppoly3.clear();
+			temppoly4.clear();
+			temppoly5.clear();
+			worker.clear();
+			Ogre::Vector2 extentsx, extentsy, extentsz;
+			Ogre::AxisAlignedBox bounds (start, end);
+			Ogre::AxisAlignedBox polybounds = Ogre::AxisAlignedBox::BOX_NULL;
+			bool polycheck2 = false;
 
-		//make sure the polygon intersects bounds (is not outside the cut area)
-		if (bounds.intersects(polybounds) == true)
-		{
-			extentsx = GetExtents(temppoly, 1);
-			extentsy = GetExtents(temppoly, 2);
-			extentsz = GetExtents(temppoly, 3);
-
-			//is polygon a wall?
-			if (extentsy.x != extentsy.y)
+			//copy source polygon vertices
+			for (size_t k = 0; k < origpolys[j].size(); k++)
 			{
-				if (cutwalls == true)
+				temppoly.push_back(origpolys[j][k]);
+				polybounds.merge(origpolys[j][k]);
+			}
+
+			//skip if the polygon is completely inside the bounding box
+			/*if (bounds.contains(polybounds) == true)
+			{
+				polycheck = true;
+				continue;
+			}*/
+
+			//make sure the polygon intersects bounds (is not outside the cut area)
+			if (bounds.intersects(polybounds) == true)
+			{
+				extentsx = GetExtents(temppoly, 1);
+				extentsy = GetExtents(temppoly, 2);
+				extentsz = GetExtents(temppoly, 3);
+
+				//is polygon a wall?
+				if (extentsy.x != extentsy.y)
 				{
-					//wall
-					if (std::abs(extentsx.x - extentsx.y) > std::abs(extentsz.x - extentsz.y))
+					if (cutwalls == true)
 					{
-						//wall is facing forward/backward
+						//wall
+						if (std::abs(extentsx.x - extentsx.y) > std::abs(extentsz.x - extentsz.y))
+						{
+							//wall is facing forward/backward
 
-						//get left side
-						worker = temppoly;
-						SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
-						worker.clear();
+							//get left side
+							worker = temppoly;
+							SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+							worker.clear();
 
-						//get right side
-						if (temppoly2.size() > 0)
-							worker = temppoly2;
+							//get right side
+							if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else
+								worker = temppoly;
+							SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+							worker.clear();
+
+							//get lower
+							if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							worker.clear();
+
+							//get upper
+							if (temppoly4.size() > 0)
+								worker = temppoly4;
+							else if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							worker.clear();
+						}
 						else
-							worker = temppoly;
-						SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
-						worker.clear();
+						{
+							//wall is facing left/right
 
-						//get lower
-						if (temppoly3.size() > 0)
-							worker = temppoly3;
-						else if (temppoly2.size() > 0)
-							worker = temppoly2;
-						else if (temppoly.size() > 0)
+							//get left side
 							worker = temppoly;
-						SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
-						worker.clear();
+							SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
+							worker.clear();
 
-						//get upper
-						if (temppoly4.size() > 0)
-							worker = temppoly4;
-						else if (temppoly3.size() > 0)
-							worker = temppoly3;
-						else if (temppoly2.size() > 0)
-							worker = temppoly2;
-						else if (temppoly.size() > 0)
-							worker = temppoly;
-						SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
-						worker.clear();
+							//get right side
+							if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else
+								worker = temppoly;
+							SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
+							worker.clear();
+
+							//get lower
+							if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							worker.clear();
+
+							//get upper
+							if (temppoly4.size() > 0)
+								worker = temppoly4;
+							else if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							worker.clear();
+						}
+						polycheck = true;
+						polycheck2 = true;
+
+						//store extents of temppoly5 for door sides if needed
+						GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly5);
 					}
+				}
+				else if (cutfloors == true)
+				{
+					//floor
+
+					//get left side
+					worker = temppoly;
+					SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+					worker.clear();
+
+					//get right side
+					if (temppoly2.size() > 0)
+						worker = temppoly2;
 					else
-					{
-						//wall is facing left/right
-
-						//get left side
 						worker = temppoly;
-						SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
-						worker.clear();
+					SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+					worker.clear();
 
-						//get right side
-						if (temppoly2.size() > 0)
-							worker = temppoly2;
-						else
-							worker = temppoly;
-						SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
-						worker.clear();
+					//get lower
+					if (temppoly3.size() > 0)
+						worker = temppoly3;
+					else if (temppoly2.size() > 0)
+						worker = temppoly2;
+					else if (temppoly.size() > 0)
+						worker = temppoly;
+					SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
+					worker.clear();
 
-						//get lower
-						if (temppoly3.size() > 0)
-							worker = temppoly3;
-						else if (temppoly2.size() > 0)
-							worker = temppoly2;
-						else if (temppoly.size() > 0)
-							worker = temppoly;
-						SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
-						worker.clear();
+					//get upper
+					if (temppoly4.size() > 0)
+						worker = temppoly4;
+					else if (temppoly3.size() > 0)
+						worker = temppoly3;
+					else if (temppoly2.size() > 0)
+						worker = temppoly2;
+					else if (temppoly.size() > 0)
+						worker = temppoly;
+					SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
+					worker.clear();
+					temppoly5.clear();
 
-						//get upper
-						if (temppoly4.size() > 0)
-							worker = temppoly4;
-						else if (temppoly3.size() > 0)
-							worker = temppoly3;
-						else if (temppoly2.size() > 0)
-							worker = temppoly2;
-						else if (temppoly.size() > 0)
-							worker = temppoly;
-						SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
-						worker.clear();
-					}
 					polycheck = true;
 					polycheck2 = true;
+				}
 
-					//store extents of temppoly5 for door sides if needed
-					GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly5);
+				//create split polygons
+				if (polycheck2 == true)
+				{
+					if (temppoly.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly.size());
+						for (size_t k = 0; k < temppoly.size(); k++)
+							newpolys[newpolys.size() - 1].push_back(temppoly[k]);
+					}
+					if (temppoly2.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly2.size());
+						for (size_t k = 0; k < temppoly2.size(); k++)
+							newpolys[newpolys.size() - 1].push_back(temppoly2[k]);
+					}
+					if (temppoly3.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly3.size());
+						for (size_t k = 0; k < temppoly3.size(); k++)
+							newpolys[newpolys.size() - 1].push_back(temppoly3[k]);
+					}
+					if (temppoly4.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly4.size());
+						for (size_t k = 0; k < temppoly4.size(); k++)
+							newpolys[newpolys.size() - 1].push_back(temppoly4[k]);
+					}
+
+					temppoly.clear();
+					temppoly2.clear();
+					temppoly3.clear();
+					temppoly4.clear();
 				}
 			}
-			else if (cutfloors == true)
+			else
 			{
-				//floor
-
-				//get left side
-				worker = temppoly;
-				SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
-				worker.clear();
-
-				//get right side
-				if (temppoly2.size() > 0)
-					worker = temppoly2;
-				else
-					worker = temppoly;
-				SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
-				worker.clear();
-
-				//get lower
-				if (temppoly3.size() > 0)
-					worker = temppoly3;
-				else if (temppoly2.size() > 0)
-					worker = temppoly2;
-				else if (temppoly.size() > 0)
-					worker = temppoly;
-				SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
-				worker.clear();
-
-				//get upper
-				if (temppoly4.size() > 0)
-					worker = temppoly4;
-				else if (temppoly3.size() > 0)
-					worker = temppoly3;
-				else if (temppoly2.size() > 0)
-					worker = temppoly2;
-				else if (temppoly.size() > 0)
-					worker = temppoly;
-				SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
-				worker.clear();
-				temppoly5.clear();
-
-				polycheck = true;
-				polycheck2 = true;
+				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
+				newpolys.push_back(origpolys[j]);
 			}
-
-			//create split polygons
-			if (polycheck2 == true)
-			{
-				if (temppoly.size() > 2)
-				{
-					newpolys.resize(newpolys.size() + 1);
-					if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
-						newpolys[newpolys.size() - 1].reserve(temppoly.size());
-					for (size_t k = 0; k < temppoly.size(); k++)
-						newpolys[newpolys.size() - 1].push_back(temppoly[k]);
-				}
-				if (temppoly2.size() > 2)
-				{
-					newpolys.resize(newpolys.size() + 1);
-					if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
-						newpolys[newpolys.size() - 1].reserve(temppoly2.size());
-					for (size_t k = 0; k < temppoly2.size(); k++)
-						newpolys[newpolys.size() - 1].push_back(temppoly2[k]);
-				}
-				if (temppoly3.size() > 2)
-				{
-					newpolys.resize(newpolys.size() + 1);
-					if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
-						newpolys[newpolys.size() - 1].reserve(temppoly3.size());
-					for (size_t k = 0; k < temppoly3.size(); k++)
-						newpolys[newpolys.size() - 1].push_back(temppoly3[k]);
-				}
-				if (temppoly4.size() > 2)
-				{
-					newpolys.resize(newpolys.size() + 1);
-					if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
-						newpolys[newpolys.size() - 1].reserve(temppoly4.size());
-					for (size_t k = 0; k < temppoly4.size(); k++)
-						newpolys[newpolys.size() - 1].push_back(temppoly4[k]);
-				}
-
-				temppoly.clear();
-				temppoly2.clear();
-				temppoly3.clear();
-				temppoly4.clear();
-			}
-		}
-		else
-		{
-			//otherwise put original polygon into array (will only be used if the related submesh is recreated)
-			newpolys.push_back(origpoly);
 		}
 
 		//create new polygon
@@ -384,11 +389,9 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 			wall->DeletePolygon(i, false);
 			polygon = 0;
 
-			//create new polygons
-			for (int i = 0; i < newpolys.size(); i++)
-			{
-				wall->AddPolygon(name + ToString(i), oldmat, newpolys[i], mapping, oldvector);
-			}
+			//create new polygon
+			if (newpolys.size() > 0)
+				wall->AddPolygonSet(name, oldmat, newpolys, mapping, oldvector);
 
 			//reset search position
 			i--;
@@ -398,7 +401,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 	}
 }
 
-void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon)
+void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon)
 {
 	//calculate doorway extents, for use with AddDoorwayWalls function
 	//checknumber is 1 when checking shaft walls, and 2 when checking floor walls
@@ -441,7 +444,7 @@ void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre:
 	}
 }
 
-Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
+Ogre::Vector3 SBS::GetPolygonDirection(PolyArray &polygon)
 {
 	//returns the direction the polygon faces, in a 3D vector
 	//for example, <-1, 0, 0> means that the wall faces left.
@@ -449,7 +452,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 	//get largest normal
 
 	//convert to remote values for precision compatibility with Alpha 7 and earlier
-	std::vector<Ogre::Vector3> newpoly;
+	PolyArray newpoly;
 	for (size_t i = 0; i < polygon.size(); i++)
 		newpoly.push_back(ToRemote(polygon[i], true, false));
 
@@ -502,7 +505,7 @@ Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real
 
 }
 
-Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices, bool flip_normal)
+Ogre::Plane SBS::ComputePlane(PolyArray &vertices, bool flip_normal)
 {
 	//compute plane from a set of given vertices
 
@@ -831,7 +834,7 @@ bool MeshObject::IsEnabled()
 	return enabled;
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, Real tw, Real th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, Extents &mesh_indices, std::vector<Triangle> &triangles, std::vector<Ogre::Vector3> &converted_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -847,16 +850,18 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 		texname = "Default";
 
 	//convert to remote positioning
-	converted_vertices.reserve(vertices.size());
+	converted_vertices.resize(1);
+
+	converted_vertices[0].reserve(vertices.size());
 	for (size_t i = 0; i < vertices.size(); i++)
-		converted_vertices.push_back(sbs->ToRemote(vertices[i]));
+		converted_vertices[0].push_back(sbs->ToRemote(vertices[i]));
 
 	//texture mapping
 	Ogre::Vector3 v1, v2, v3;
 	int direction;
 
 	//get texture mapping coordinates
-	if (!sbs->GetTextureManager()->GetTextureMapping(converted_vertices, v1, v2, v3, direction))
+	if (!sbs->GetTextureManager()->GetTextureMapping(converted_vertices[0], v1, v2, v3, direction))
 		return ReportError("PolyMesh: Texture mapping error");
 
 	if (tw == 0)
@@ -881,13 +886,13 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 		th2 = sizing.y * mh;
 	}
 
-	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, converted_vertices, v1, v2, v3, tw2, th2))
+	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, converted_vertices[0], v1, v2, v3, tw2, th2))
 		return false;
 
 	return PolyMesh(name, material, converted_vertices, t_matrix, t_vector, mesh_indices, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<Ogre::Vector3> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Extents &mesh_indices, std::vector<Triangle> &triangles, std::vector<Ogre::Vector3> &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -895,10 +900,12 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	//convert to remote positioning
 	if (convert_vertices == true)
 	{
-		converted_vertices.reserve(vertices.size());
+		converted_vertices.resize(vertices.size());
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
-			converted_vertices.push_back(sbs->ToRemote(vertices[i]));
+			converted_vertices[i].reserve(vertices[i].size());
+			for (size_t j = 0; j < vertices[i].size(); j++)
+				converted_vertices[i].push_back(sbs->ToRemote(vertices[i][j]));
 		}
 	}
 	else
@@ -908,40 +915,48 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, converted_vertices, tw, th);
 
 	//triangulate mesh
-	TriangleIndices *polygon = new TriangleIndices[1];
+	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
+	size_t trimesh_size = converted_vertices.size();
 
-	//do a (very) simple triangulation
-	//this method also somewhat works with non-planar polygons
-	polygon->triangles.reserve(converted_vertices.size() - 2);
-	for (size_t i = 2; i < converted_vertices.size(); i++)
-		polygon->triangles.push_back(Triangle(0, i - 1, i));
-
-	if (polygon->triangles.size() == 0)
-		return false;
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		//do a (very) simple triangulation
+		//this method also somewhat works with non-planar polygons
+		trimesh[i].triangles.reserve(converted_vertices[i].size() - 2);
+		for (size_t j = 2; j < converted_vertices[i].size(); j++)
+			trimesh[i].triangles.push_back(Triangle(0, j - 1, j));
+	}
 
 	//set up geometry array
 	std::vector<Geometry> geometry;
 
 	//initialize geometry arrays
-	geometry.resize(converted_vertices.size());
-
-	//calculate normal
-	Ogre::Vector3 normal = sbs->ComputePlane(converted_vertices, false).normal;
+	size_t size = 0;
+	for (size_t i = 0; i < trimesh_size; i++)
+		size += converted_vertices[i].size();
+	geometry.resize(size);
 
 	//populate vertices, normals, and texels for mesh data
-	{
-		unsigned int j = 0;
+	unsigned int k = 0;
 
-		unsigned int min = j;
-		for (size_t i = 0; i < converted_vertices.size(); i++)
+	if (mesh_indices.capacity() < mesh_indices.size() + trimesh_size)
+		mesh_indices.reserve(mesh_indices.size() + trimesh_size);
+
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		unsigned int min = k;
+		for (size_t j = 0; j < converted_vertices[i].size(); j++)
 		{
-			geometry[j].vertex = converted_vertices[i];
-			geometry[j].normal = normal;
-			geometry[j].texel = table[j];
-			j++;
+			//calculate normal
+			Ogre::Vector3 normal = sbs->ComputePlane(converted_vertices[i], false).normal;
+
+			geometry[k].vertex = converted_vertices[i][j];
+			geometry[k].normal = normal;
+			geometry[k].texel = table[k];
+			k++;
 		}
-		unsigned int max = j - 1;
-		mesh_indices = Extents(min, max);
+		unsigned int max = k - 1;
+		mesh_indices.push_back(Extents(min, max));
 	}
 
 	//delete texel array
@@ -951,27 +966,34 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 
 	//add triangles to single array, to be passed to the submesh
 	size_t location = 0;
-	for (size_t i = 0; i < polygon->triangles.size(); i++)
+	for (size_t i = 0; i < trimesh_size; i++)
 	{
-		if (triangles.capacity() < polygon->triangles.size())
-			triangles.reserve(polygon->triangles.size());
-
-		Triangle tri = polygon->triangles[i];
-		triangles.push_back(tri);
+		if (triangles.capacity() < trimesh[i].triangles.size())
+			triangles.reserve(trimesh[i].triangles.size());
+		for (size_t j = 0; j < trimesh[i].triangles.size(); j++)
+		{
+			Triangle tri = trimesh[i].triangles[j];
+			tri += location;
+			triangles.push_back(tri);
+		}
+		location += converted_vertices[i].size();
 	}
 
 	//delete trimesh array
-	delete [] polygon;
-	polygon = 0;
+	delete [] trimesh;
+	trimesh = 0;
 
 	//create submesh and set material
 	int index = ProcessSubMesh(geometry, triangles, material, true);
 
 	if (index >= 0)
 	{
-		unsigned int size = Submeshes[index].MeshGeometry.size() - geometry.size();
-		mesh_indices.min += size;
-		mesh_indices.max += size;
+		for (size_t i = 0; i < mesh_indices.size(); i++)
+		{
+			unsigned int size = Submeshes[index].MeshGeometry.size() - geometry.size();
+			mesh_indices[i].min += size;
+			mesh_indices[i].max += size;
+		}
 	}
 
 	//recreate colliders if specified
@@ -984,24 +1006,30 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	return true;
 }
 
-Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector3> &vertices, Real tw, Real th)
+Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th)
 {
 	//return texel array for specified texture transformation matrix and vector
 
 	if (sbs->TexelOverride == false)
 	{
 		//create array for texel map
-		Ogre::Vector2 *texels = new Ogre::Vector2[vertices.size()];
+		size_t texel_count = 0;
+		for (size_t i = 0; i < vertices.size(); i++)
+			texel_count += vertices[i].size();
+		Ogre::Vector2 *texels = new Ogre::Vector2[texel_count];
 
 		//transform matrix into texel map
 		size_t index = 0;
 		Ogre::Vector3 texel_temp;
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
-			texel_temp = tex_matrix * (vertices[i] - tex_vector);
-			texels[index].x = texel_temp.x;
-			texels[index].y = texel_temp.y;
-			index++;
+			for (size_t j = 0; j < vertices[i].size(); j++)
+			{
+				texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
+				texels[index].x = texel_temp.x;
+				texels[index].y = texel_temp.y;
+				index++;
+			}
 		}
 		return texels;
 	}
@@ -1071,9 +1099,7 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 
 		//add vertices
 		for (size_t i = 0; i < vertices.size(); i++)
-		{
 			Submeshes[index].MeshGeometry.push_back(vertices[i]);
-		}
 	}
 	else
 	{
@@ -1326,12 +1352,16 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 			//reindex extents, used for getting original geometry
 			for (int k = deleted_size - 1; k >= 0; k--)
 			{
-				Extents extents = poly->index_extents;
-				if (deleted[k] < extents.min)
-					extents.min--;
-				if (deleted[k] < extents.max)
-					extents.max--;
-				poly->index_extents = extents;
+				size_t size = poly->index_extents.size();
+				for (size_t m = 0; m < size; m++)
+				{
+					Extents extents = poly->index_extents[m];
+					if (deleted[k] < extents.min)
+						extents.min--;
+					if (deleted[k] < extents.max)
+						extents.max--;
+					poly->index_extents[m] = extents;
+				}
 			}
 			delete [] elements;
 			delete [] valid;
