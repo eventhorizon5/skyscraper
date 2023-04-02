@@ -31,7 +31,7 @@
 #include "revolvingdoor.h"
 #include "dynamicmesh.h"
 #include "vehicle.h"
-#include "destination.h"
+#include "controller.h"
 #include "manager.h"
 
 namespace SBS {

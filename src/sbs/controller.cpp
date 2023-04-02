@@ -27,7 +27,7 @@
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "floor.h"
-#include "destination.h"
+#include "controller.h"
 
 namespace SBS {
 

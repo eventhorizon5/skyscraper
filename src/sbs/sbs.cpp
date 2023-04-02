@@ -52,7 +52,7 @@
 #include "model.h"
 #include "timer.h"
 #include "profiler.h"
-#include "destination.h"
+#include "controller.h"
 
 namespace SBS {
 
