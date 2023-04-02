@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Call Button Object
+	Scalable Building Simulator - Destination Controller Object
 	The Skyscraper Project - Version 1.12 Alpha
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
