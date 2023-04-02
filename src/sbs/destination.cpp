@@ -23,11 +23,23 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "timer.h"
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "destination.h"
 
 namespace SBS {
+
+class DestinationController::Timer : public TimerObject
+{
+public:
+	DestinationController *parent;
+	Timer(const std::string &name, DestinationController *parent) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+	}
+	virtual void Notify();
+};
 
 DestinationController::DestinationController(Object *parent, std::vector<int> &elevators, int elevator_range) : Object(parent)
 {
@@ -44,12 +56,30 @@ DestinationController::DestinationController(Object *parent, std::vector<int> &e
 		for (size_t i = 0; i < elevators.size(); i++)
 			Elevators[i] = elevators[i];
 
+	//create timer
+	timer = new Timer("Destination Timer", this);
+
 	Report("Created");
 }
 
 DestinationController::~DestinationController()
 {
+	if (timer)
+	{
+		timer->parent_deleting = true;
+		delete timer;
+	}
+	timer = 0;
 
+}
+
+void DestinationController::Timer::Notify()
+{
+	parent->Loop();
+}
+
+void DestinationController::Loop()
+{
 }
 
 bool DestinationController::RequestRoute(int starting_floor, int destination_floor)

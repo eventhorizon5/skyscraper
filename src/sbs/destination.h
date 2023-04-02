@@ -33,6 +33,7 @@ public:
 	//functions
 	DestinationController(Object *parent, std::vector<int> &elevators, int elevator_range);
 	~DestinationController();
+	void Loop();
 	bool RequestRoute(int starting_floor, int destination_floor);
 	bool AddElevator(int elevator);
 	bool RemoveElevator(int elevator);
@@ -47,6 +48,11 @@ private:
 	std::vector<int> Elevators;
 	int ActiveElevator;
 	int ElevatorRange;
+
+	class Timer; //internal timer class
+
+	//timer object
+	Timer *timer;
 };
 
 }
