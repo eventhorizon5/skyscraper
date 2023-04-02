@@ -26,6 +26,7 @@
 #include "timer.h"
 #include "elevator.h"
 #include "elevatorcar.h"
+#include "floor.h"
 #include "destination.h"
 
 namespace SBS {
@@ -115,6 +116,8 @@ void DestinationController::RemoveRoute(Request &request)
 	{
 		if (Requests[i].starting_floor == request.starting_floor && Requests[i].destination_floor == request.destination_floor)
 		{
+			if (sbs->Verbose)
+				Report("Removing route from " + ToString(request.starting_floor) + " to " + ToString(request.destination_floor));
 			Requests.erase(Requests.begin() + i);
 			return;
 		}
@@ -196,6 +199,7 @@ bool DestinationController::AddElevator(int elevator)
 	newelevator.arrived = false;
 	newelevator.arrival_floor = 0;
 
+	Report ("Elevator " + ToString(elevator) + " added to destination controller " + ToString(Number));
 	Elevators.push_back(newelevator);
 	return true;
 }
@@ -208,6 +212,7 @@ bool DestinationController::RemoveElevator(int elevator)
 	{
 		if (Elevators[i].number == elevator)
 		{
+			Report ("Elevator " + ToString(elevator) + " removed from destination controller " + ToString(Number));
 			Elevators.erase(Elevators.begin() + i);
 			return true;
 		}
@@ -363,6 +368,11 @@ void DestinationController::ElevatorArrived(int number, int floor)
 		if (Elevators[i].number == number && Elevators[i].arrived == true)
 			return;
 
+		Floor *floorobj = sbs->GetFloor(floor);
+		if (!floorobj)
+			return;
+
+		Report("Elevator " + ToString(number) + " arrived at floor " + ToString(floor) + " (" + floorobj->ID + ")");
 		Elevators[i].arrived = true;
 		Elevators[i].arrival_floor = floor;
 	}
@@ -371,9 +381,11 @@ void DestinationController::ElevatorArrived(int number, int floor)
 void DestinationController::DispatchElevator(int number, int destination_floor, int direction)
 {
 	Elevator *elevator = sbs->GetElevator(number);
+	Floor *floor = sbs->GetFloor(destination_floor);
 
-	if (elevator)
+	if (elevator && floor)
 	{
+		Report("Dispatching elevator " + ToString(number) + " to floor " + ToString(destination_floor) + " (" + floor->ID + ")");
 		elevator->AddRoute(destination_floor, direction, 2);
 	}
 }
