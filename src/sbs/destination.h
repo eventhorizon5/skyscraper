@@ -31,7 +31,7 @@ class SBSIMPEXP DestinationController : public Object
 public:
 
 	//functions
-	DestinationController(Object *parent, std::vector<int> &elevators);
+	DestinationController(Object *parent, std::vector<int> &elevators, int elevator_range);
 	~DestinationController();
 	bool RequestRoute(int starting_floor, int destination_floor);
 	bool AddElevator(int elevator);
@@ -46,6 +46,7 @@ private:
 
 	std::vector<int> Elevators;
 	int ActiveElevator;
+	int ElevatorRange;
 };
 
 }

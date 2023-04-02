@@ -29,7 +29,7 @@
 
 namespace SBS {
 
-DestinationController::DestinationController(Object *parent, std::vector<int> &elevators) : Object(parent)
+DestinationController::DestinationController(Object *parent, std::vector<int> &elevators, int elevator_range) : Object(parent)
 {
 	//create a destination controller object
 
@@ -37,6 +37,7 @@ DestinationController::DestinationController(Object *parent, std::vector<int> &e
 	SetValues("DestinationController", "", false);
 
 	ActiveElevator = 0;
+	ElevatorRange = elevator_range;
 
 	//add elevators
 	Elevators.resize(elevators.size());

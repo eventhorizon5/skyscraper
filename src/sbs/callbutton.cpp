@@ -230,7 +230,7 @@ bool CallButton::Call(bool direction)
 	//calls the closest elevator in the elevator array list to the current floor,
 	//and also depending on the direction it's traveling
 
-	DestinationController *controller = new DestinationController(this, Elevators);
+	DestinationController *controller = new DestinationController(this, Elevators, 5);
 
 	controller->RequestRoute(GetFloor(), 5);
 
