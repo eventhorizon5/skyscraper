@@ -940,7 +940,7 @@ ControllerManager::~ControllerManager()
 	}
 }
 
-DestinationController* ControllerManager::Create(int number, std::vector<int> &elevators, int elevator_range)
+DispatchController* ControllerManager::Create(int number, std::vector<int> &elevators, int elevator_range)
 {
 	//create a controller object
 
@@ -956,7 +956,7 @@ DestinationController* ControllerManager::Create(int number, std::vector<int> &e
 
 	Map controller;
 	controller.number = number;
-	controller.object = new DestinationController(this, number, elevators, elevator_range);
+	controller.object = new DispatchController(this, number, elevators, elevator_range);
 	Array.push_back(controller);
 	return controller.object;
 }
@@ -967,7 +967,7 @@ int ControllerManager::GetCount()
 	return (int)Array.size();
 }
 
-DestinationController* ControllerManager::Get(int number)
+DispatchController* ControllerManager::Get(int number)
 {
 	//return pointer to controller object
 
@@ -1012,7 +1012,7 @@ DestinationController* ControllerManager::Get(int number)
 	return 0;
 }
 
-DestinationController* ControllerManager::GetIndex(int index)
+DispatchController* ControllerManager::GetIndex(int index)
 {
 	if (index < 0 || index >= (int)Array.size())
 		return 0;
@@ -1020,12 +1020,12 @@ DestinationController* ControllerManager::GetIndex(int index)
 	return Array[index].object;
 }
 
-void ControllerManager::Remove(DestinationController *shaft)
+void ControllerManager::Remove(DispatchController *controller)
 {
 	//remove a controller (does not delete the object)
 	for (size_t i = 0; i < Array.size(); i++)
 	{
-		if (Array[i].object == shaft)
+		if (Array[i].object == controller)
 		{
 			Array.erase(Array.begin() + i);
 

@@ -198,7 +198,7 @@ public:
 	bool Up(bool value);
 	bool Down(bool value);
 	Shaft* GetShaft();
-	DestinationController* GetController();
+	DispatchController* GetController();
 	CallButton* GetPrimaryCallButton();
 	int GetActiveCallFloor();
 	int GetActiveCallDirection();

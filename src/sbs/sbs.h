@@ -104,7 +104,7 @@ namespace SBS {
 	class MovingWalkway;
 	class Step;
 	class Vehicle;
-	class DestinationController;
+	class DispatchController;
 	class ControllerManager;
 
 	typedef std::vector<Ogre::Vector3> PolyArray;
@@ -231,7 +231,7 @@ public:
 	Shaft* GetShaft(int number);
 	Stairwell* GetStairwell(int number);
 	Vehicle* GetVehicle(int number);
-	DestinationController* GetController(int number);
+	DispatchController* GetController(int number);
 	bool SetWallOrientation(std::string direction);
 	int GetWallOrientation();
 	bool SetFloorOrientation(std::string direction);

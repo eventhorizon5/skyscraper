@@ -3876,7 +3876,7 @@ Shaft* Elevator::GetShaft()
 	return sbs->GetShaft(AssignedShaft);
 }
 
-DestinationController* Elevator::GetController()
+DispatchController* Elevator::GetController()
 {
 	//get associated destination controller
 	return sbs->GetController(Controller);

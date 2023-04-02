@@ -26,15 +26,15 @@
 
 namespace SBS {
 
-class SBSIMPEXP DestinationController : public Object
+class SBSIMPEXP DispatchController : public Object
 {
 public:
 
 	int Number;
 
 	//functions
-	DestinationController(Object *parent, int number, std::vector<int> &elevators, int elevator_range);
-	~DestinationController();
+	DispatchController(Object *parent, int number, std::vector<int> &elevators, int elevator_range);
+	~DispatchController();
 	void Loop();
 	bool RequestRoute(int starting_floor, int destination_floor);
 	bool AddElevator(int elevator);

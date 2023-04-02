@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Destination Controller Object
+	Scalable Building Simulator - Dispatch Controller Object
 	The Skyscraper Project - Version 1.12 Alpha
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
@@ -31,23 +31,23 @@
 
 namespace SBS {
 
-class DestinationController::Timer : public TimerObject
+class DispatchController::Timer : public TimerObject
 {
 public:
-	DestinationController *parent;
-	Timer(const std::string &name, DestinationController *parent) : TimerObject(parent, name)
+	DispatchController *parent;
+	Timer(const std::string &name, DispatchController *parent) : TimerObject(parent, name)
 	{
 		this->parent = parent;
 	}
 	virtual void Notify();
 };
 
-DestinationController::DestinationController(Object *parent, int number, std::vector<int> &elevators, int elevator_range) : Object(parent)
+DispatchController::DispatchController(Object *parent, int number, std::vector<int> &elevators, int elevator_range) : Object(parent)
 {
 	//create a destination controller object
 
 	//set up SBS object
-	SetValues("DestinationController", "Destination Controller " + ToString(number), false);
+	SetValues("DispatchController", "Destination Controller " + ToString(number), false);
 
 	ElevatorRange = elevator_range;
 	Number = number;
@@ -70,7 +70,7 @@ DestinationController::DestinationController(Object *parent, int number, std::ve
 	Report("Created");
 }
 
-DestinationController::~DestinationController()
+DispatchController::~DispatchController()
 {
 	if (timer)
 	{
@@ -81,12 +81,12 @@ DestinationController::~DestinationController()
 
 }
 
-void DestinationController::Timer::Notify()
+void DispatchController::Timer::Notify()
 {
 	parent->Loop();
 }
 
-void DestinationController::Loop()
+void DispatchController::Loop()
 {
 	//if elevator has arrived, dispatch to destination floor
 	for (int i = 0; i < Elevators.size(); i++)
@@ -111,7 +111,7 @@ void DestinationController::Loop()
 	}
 }
 
-void DestinationController::RemoveRoute(Request &request)
+void DispatchController::RemoveRoute(Request &request)
 {
 	for (int i = 0; i < Requests.size(); i++)
 	{
@@ -125,7 +125,7 @@ void DestinationController::RemoveRoute(Request &request)
 	}
 }
 
-bool DestinationController::RequestRoute(int starting_floor, int destination_floor)
+bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 {
 	//request a destination dispatch route
 
@@ -185,7 +185,7 @@ bool DestinationController::RequestRoute(int starting_floor, int destination_flo
 	return true;
 }
 
-bool DestinationController::AddElevator(int elevator)
+bool DispatchController::AddElevator(int elevator)
 {
 	//add an elevator to this controller
 
@@ -205,7 +205,7 @@ bool DestinationController::AddElevator(int elevator)
 	return true;
 }
 
-bool DestinationController::RemoveElevator(int elevator)
+bool DispatchController::RemoveElevator(int elevator)
 {
 	//remove an elevator from this controller
 
@@ -221,7 +221,7 @@ bool DestinationController::RemoveElevator(int elevator)
 	return false;
 }
 
-bool DestinationController::ServicesElevator(int elevator)
+bool DispatchController::ServicesElevator(int elevator)
 {
 	//return true if this controller services the specified elevator
 	for (size_t i = 0; i < Elevators.size(); i++)
@@ -236,7 +236,7 @@ bool DestinationController::ServicesElevator(int elevator)
 	return false;
 }
 
-int DestinationController::FindClosestElevator(int starting_floor, int destination_floor)
+int DispatchController::FindClosestElevator(int starting_floor, int destination_floor)
 {
 	//initialize values
 	int closest = 0;
@@ -340,21 +340,21 @@ int DestinationController::FindClosestElevator(int starting_floor, int destinati
 	return closest_elev;
 }
 
-void DestinationController::Report(const std::string &message)
+void DispatchController::Report(const std::string &message)
 {
 	//general reporting function
 	std::string msg = "Destination Controller " + ToString(Number) + ": " + message;
 	Object::Report(msg);
 }
 
-bool DestinationController::ReportError(const std::string &message)
+bool DispatchController::ReportError(const std::string &message)
 {
 	//general reporting function
 	std::string msg = "Destination Controller " + ToString(Number) + ": " + message;
 	return Object::ReportError(msg);
 }
 
-void DestinationController::ElevatorArrived(int number, int floor)
+void DispatchController::ElevatorArrived(int number, int floor)
 {
 	//notify controller about an elevator arrival
 
@@ -373,7 +373,7 @@ void DestinationController::ElevatorArrived(int number, int floor)
 	}
 }
 
-void DestinationController::DispatchElevator(int number, int destination_floor, int direction)
+void DispatchController::DispatchElevator(int number, int destination_floor, int direction)
 {
 	Elevator *elevator = sbs->GetElevator(number);
 	Floor *floor = sbs->GetFloor(destination_floor);

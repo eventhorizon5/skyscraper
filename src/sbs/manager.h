@@ -205,24 +205,24 @@ class SBSIMPEXP ControllerManager : public Object
 public:
 	ControllerManager(Object* parent);
 	~ControllerManager();
-	DestinationController* Create(int number, std::vector<int> &elevators, int elevator_range);
+	DispatchController* Create(int number, std::vector<int> &elevators, int elevator_range);
 	int GetCount();
-	DestinationController* Get(int number);
-	DestinationController* GetIndex(int index);
-	void Remove(DestinationController *shaft);
+	DispatchController* Get(int number);
+	DispatchController* GetIndex(int index);
+	void Remove(DispatchController *controller);
 	void Loop();
 
 private:
 	struct Map
 	{
 		int number; //controller number
-		DestinationController* object; //controller object reference
+		DispatchController* object; //controller object reference
 	};
 
 	std::vector<Map> Array; //controller object array
 
 	//function caching
-	DestinationController* get_result;
+	DispatchController* get_result;
 	int get_number;
 };
 

@@ -498,7 +498,7 @@ bool SBS::Start(Ogre::Camera *camera)
 	Elevators.push_back(1);
 
 	//create new controller
-	DestinationController *controller = sbs->GetControllerManager()->Create(1, Elevators, 5);
+	DispatchController *controller = sbs->GetControllerManager()->Create(1, Elevators, 5);
 
 	//assign elevator to controller
 	GetElevator(1)->Controller = 1;
@@ -1701,7 +1701,7 @@ Vehicle* SBS::GetVehicle(int number)
 	return vehicle_manager->Get(number);
 }
 
-DestinationController* SBS::GetController(int number)
+DispatchController* SBS::GetController(int number)
 {
 	//return pointer to controller object
 
