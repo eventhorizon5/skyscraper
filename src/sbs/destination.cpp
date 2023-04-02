@@ -47,7 +47,7 @@ DestinationController::DestinationController(Object *parent, int number, std::ve
 	//create a destination controller object
 
 	//set up SBS object
-	SetValues("DestinationController", "", false);
+	SetValues("DestinationController", "Destination Controller " + ToString(number), false);
 
 	ElevatorRange = elevator_range;
 	Number = number;
@@ -88,6 +88,7 @@ void DestinationController::Timer::Notify()
 
 void DestinationController::Loop()
 {
+	//if elevator has arrived, dispatch to destination floor
 	for (int i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].arrived == true)
@@ -323,12 +324,6 @@ int DestinationController::FindClosestElevator(int starting_floor, int destinati
 			item = "Elevator";
 
 		Report(item + " unavailable due to service modes or errors");
-
-		//turn off lights
-		/*if (direction == 1)
-			UpLight(false);
-		else
-			DownLight(false);*/
 
 		return -1;
 	}
