@@ -2014,7 +2014,7 @@ void Elevator::FinishMove()
 
 					//notify destination controller
 					if (GetController())
-						GetController()->ElevatorArrived(Number);
+						GetController()->ElevatorArrived(Number, floor);
 				}
 			}
 		}

@@ -75,6 +75,8 @@ public:
 	int Offset; //floor number offset from the primary elevator
 	bool GotoFloor; //true if car is heading to a floor
 	int LateDirection; //temporary call direction used for NotifyLate option
+	int DestinationFloor; //used for destination dispatch
+	bool UseDestination; //use destination floor
 
 	ElevatorCar(Elevator *parent, int number);
 	~ElevatorCar();

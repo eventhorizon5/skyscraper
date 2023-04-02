@@ -48,17 +48,23 @@ DestinationController::DestinationController(Object *parent, int number, std::ve
 	//set up SBS object
 	SetValues("DestinationController", "", false);
 
-	ActiveElevator = 0;
 	ElevatorRange = elevator_range;
 	Number = number;
 
 	//add elevators
 	Elevators.resize(elevators.size());
-		for (size_t i = 0; i < elevators.size(); i++)
-			Elevators[i] = elevators[i];
+	for (size_t i = 0; i < elevators.size(); i++)
+	{
+		Map elev;
+		elev.number = elevators[i];
+		elev.arrived = false;
+		elev.arrival_floor = 0;
+		Elevators[i] = elev;
+	}
 
 	//create timer
 	timer = new Timer("Destination Timer", this);
+	timer->Start(1000);
 
 	Report("Created");
 }
@@ -81,6 +87,22 @@ void DestinationController::Timer::Notify()
 
 void DestinationController::Loop()
 {
+	for (int i = 0; i < Elevators.size(); i++)
+	{
+		if (Elevators[i].arrived == true)
+		{
+			for (int j = 0; j < Requests.size(); j++)
+			{
+				int direction = 0;
+				if (Requests[j].starting_floor < Requests[j].destination_floor)
+					direction = 1;
+				else
+					direction = -1;
+				if (Requests[j].starting_floor == Elevators[i].arrival_floor)
+					DispatchElevator(Elevators[i].number, Requests[j].destination_floor, direction);
+			}
+		}
+	}
 }
 
 bool DestinationController::RequestRoute(int starting_floor, int destination_floor)
@@ -93,7 +115,7 @@ bool DestinationController::RequestRoute(int starting_floor, int destination_flo
 	bool isvalid = false;
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
-		Elevator *elevator = sbs->GetElevator(Elevators[i]);
+		Elevator *elevator = sbs->GetElevator(Elevators[i].number);
 		if (elevator)
 		{
 			isvalid = true;
@@ -111,7 +133,7 @@ bool DestinationController::RequestRoute(int starting_floor, int destination_flo
 		return false;
 
 	//return the letter of the elevator
-	Elevator* elevator = sbs->GetElevator(Elevators[closest]);
+	Elevator* elevator = sbs->GetElevator(Elevators[closest].number);
 	//get letter
 
 	Report("Using elevator " + ToString(elevator->Number));
@@ -128,7 +150,10 @@ bool DestinationController::RequestRoute(int starting_floor, int destination_flo
 
 	//add a route entry to this floor
 	elevator->AddRoute(starting_floor, direction, 1);
-	ActiveElevator = elevator->Number;
+	//ActiveElevator = elevator->Number;
+
+	car->DestinationFloor = destination_floor;
+	car->UseDestination = true;
 
 	return true;
 }
@@ -139,11 +164,16 @@ bool DestinationController::AddElevator(int elevator)
 
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
-		if (Elevators[i] == elevator)
+		if (Elevators[i].number == elevator)
 			return false;
 	}
 
-	Elevators.push_back(elevator);
+	Map newelevator;
+	newelevator.number = elevator;
+	newelevator.arrived = false;
+	newelevator.arrival_floor = 0;
+
+	Elevators.push_back(newelevator);
 	return true;
 }
 
@@ -153,7 +183,7 @@ bool DestinationController::RemoveElevator(int elevator)
 
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
-		if (Elevators[i] == elevator)
+		if (Elevators[i].number == elevator)
 		{
 			Elevators.erase(Elevators.begin() + i);
 			return true;
@@ -167,7 +197,7 @@ bool DestinationController::ServicesElevator(int elevator)
 	//return true if this controller services the specified elevator
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
-		if (Elevators[i] == elevator)
+		if (Elevators[i].number == elevator)
 		{
 			if (sbs->Verbose)
 				Report("Services elevator " + ToString(elevator));
@@ -212,7 +242,7 @@ int DestinationController::FindClosestElevator(int starting_floor, int destinati
 	//check each elevator associated with this controller to find the closest available one
 	for (int i = 0; i < count; i++)
 	{
-		Elevator *elevator = sbs->GetElevator(Elevators[i]);
+		Elevator *elevator = sbs->GetElevator(Elevators[i].number);
 		if (elevator)
 		{
 			ElevatorCar *car = elevator->GetCarForFloor(starting_floor);
@@ -301,10 +331,28 @@ bool DestinationController::ReportError(const std::string &message)
 	return Object::ReportError(msg);
 }
 
-void DestinationController::ElevatorArrived(int number)
+void DestinationController::ElevatorArrived(int number, int floor)
 {
 	//notify controller about an elevator arrival
 
+	for (int i = 0; i < Elevators.size(); i++)
+	{
+		if (Elevators[i].number == number && Elevators[i].arrived == true)
+			return;
+
+		Elevators[i].arrived = true;
+		Elevators[i].arrival_floor = floor;
+	}
+}
+
+void DestinationController::DispatchElevator(int number, int destination_floor, int direction)
+{
+	Elevator *elevator = sbs->GetElevator(number);
+
+	if (elevator)
+	{
+		elevator->AddRoute(destination_floor, direction, 2);
+	}
 }
 
 }

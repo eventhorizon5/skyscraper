@@ -42,15 +42,31 @@ public:
 	bool ServicesElevator(int elevator);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	void ElevatorArrived(int number);
+	void ElevatorArrived(int number, int floor);
 
 private:
 
 	int FindClosestElevator(int starting_floor, int destination_floor);
+	void DispatchElevator(int number, int destination_floor, int direction);
 
-	std::vector<int> Elevators;
-	int ActiveElevator;
 	int ElevatorRange;
+
+	struct Map
+	{
+		int number; //elevator number
+		bool arrived; //has elevator arrived?
+		int arrival_floor; //arrival floor
+	};
+
+	std::vector<Map> Elevators; //controller object array
+
+	struct Map2
+	{
+		int starting_floor;
+		int destination_floor;
+	};
+
+	std::vector<Map2> Requests; //destination dispatch requests
 
 	class Timer; //internal timer class
 
