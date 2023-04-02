@@ -123,7 +123,7 @@ public:
 	std::string CounterweightStopSound; //counterweight stopping sound
 	bool Counterweight; //if true, elevator has a counterweight
 	bool Error; //true if an error occurred during movement processing
-	int Controller; //destination controller this elevator is assigned to, 0 is default
+	int Controller; //destination controller this elevator is assigned to, 0 is default (none)
 
 	//functions
 	Elevator(Object *parent, int number);

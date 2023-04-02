@@ -99,8 +99,24 @@ void DestinationController::Loop()
 				else
 					direction = -1;
 				if (Requests[j].starting_floor == Elevators[i].arrival_floor)
+				{
 					DispatchElevator(Elevators[i].number, Requests[j].destination_floor, direction);
+					RemoveRoute(Requests[j]);
+					return;
+				}
 			}
+		}
+	}
+}
+
+void DestinationController::RemoveRoute(Request &request)
+{
+	for (int i = 0; i < Requests.size(); i++)
+	{
+		if (Requests[i].starting_floor == request.starting_floor && Requests[i].destination_floor == request.destination_floor)
+		{
+			Requests.erase(Requests.begin() + i);
+			return;
 		}
 	}
 }
@@ -152,6 +168,13 @@ bool DestinationController::RequestRoute(int starting_floor, int destination_flo
 	elevator->AddRoute(starting_floor, direction, 1);
 	//ActiveElevator = elevator->Number;
 
+	//add request to list
+	Request request;
+	request.starting_floor = starting_floor;
+	request.destination_floor = destination_floor;
+	Requests.push_back(request);
+
+	//have elevator use destination dispatch
 	car->DestinationFloor = destination_floor;
 	car->UseDestination = true;
 

@@ -52,6 +52,7 @@
 #include "model.h"
 #include "timer.h"
 #include "profiler.h"
+#include "destination.h"
 
 namespace SBS {
 
@@ -491,6 +492,19 @@ bool SBS::Start(Ogre::Camera *camera)
 		EnableRandomActivity(true);
 
 	IsRunning = true;
+
+	//test code
+	std::vector<int> Elevators;
+	Elevators.push_back(1);
+
+	//create new controller
+	DestinationController *controller = sbs->GetControllerManager()->Create(1, Elevators, 5);
+
+	//assign elevator to controller
+	GetElevator(1)->Controller = 1;
+
+	//request route to floor 5
+	controller->RequestRoute(0, 5);
 
 	return true;
 }

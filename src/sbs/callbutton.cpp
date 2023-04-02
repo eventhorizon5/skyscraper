@@ -31,7 +31,6 @@
 #include "buttonpanel.h"
 #include "control.h"
 #include "texture.h"
-#include "destination.h"
 #include "manager.h"
 #include "callbutton.h"
 
@@ -230,12 +229,6 @@ bool CallButton::Call(bool direction)
 {
 	//calls the closest elevator in the elevator array list to the current floor,
 	//and also depending on the direction it's traveling
-
-	DestinationController *controller = sbs->GetControllerManager()->Create(1, Elevators, 5);
-
-	controller->RequestRoute(GetFloor(), 5);
-
-	return true;
 
 	//check lock state
 	if (IsLocked() == true)

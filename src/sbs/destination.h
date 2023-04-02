@@ -46,8 +46,11 @@ public:
 
 private:
 
+	struct Request;
+
 	int FindClosestElevator(int starting_floor, int destination_floor);
 	void DispatchElevator(int number, int destination_floor, int direction);
+	void RemoveRoute(Request &request);
 
 	int ElevatorRange;
 
@@ -60,13 +63,13 @@ private:
 
 	std::vector<Map> Elevators; //controller object array
 
-	struct Map2
+	struct Request
 	{
 		int starting_floor;
 		int destination_floor;
 	};
 
-	std::vector<Map2> Requests; //destination dispatch requests
+	std::vector<Request> Requests; //destination dispatch requests
 
 	class Timer; //internal timer class
 
