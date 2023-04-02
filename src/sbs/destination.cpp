@@ -41,7 +41,7 @@ public:
 	virtual void Notify();
 };
 
-DestinationController::DestinationController(Object *parent, std::vector<int> &elevators, int elevator_range) : Object(parent)
+DestinationController::DestinationController(Object *parent, int number, std::vector<int> &elevators, int elevator_range) : Object(parent)
 {
 	//create a destination controller object
 
@@ -50,6 +50,7 @@ DestinationController::DestinationController(Object *parent, std::vector<int> &e
 
 	ActiveElevator = 0;
 	ElevatorRange = elevator_range;
+	Number = number;
 
 	//add elevators
 	Elevators.resize(elevators.size());
@@ -298,6 +299,12 @@ bool DestinationController::ReportError(const std::string &message)
 	//general reporting function
 	std::string msg = "Destination Controller - " + message;
 	return Object::ReportError(msg);
+}
+
+void DestinationController::ElevatorArrived(int number)
+{
+	//notify controller about an elevator arrival
+
 }
 
 }

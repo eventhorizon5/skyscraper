@@ -31,6 +31,7 @@
 #include "revolvingdoor.h"
 #include "dynamicmesh.h"
 #include "vehicle.h"
+#include "destination.h"
 #include "manager.h"
 
 namespace SBS {
@@ -914,5 +915,132 @@ void VehicleManager::Loop()
 {
 	LoopChildren();
 }
+
+ControllerManager::ControllerManager(Object* parent) : Object(parent)
+{
+	//set up SBS object
+	SetValues("ControllerManager", "Controller Manager", true, false);
+
+	get_result = 0;
+	get_number = 0;
+	EnableLoop(true);
+}
+
+ControllerManager::~ControllerManager()
+{
+	//delete controllers
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i].object)
+		{
+			Array[i].object->parent_deleting = true;
+			delete Array[i].object;
+		}
+		Array[i].object = 0;
+	}
+}
+
+DestinationController* ControllerManager::Create(int number, std::vector<int> &elevators, int elevator_range)
+{
+	//create a controller object
+
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i].number == number)
+		{
+			std::string num = ToString(number);
+			ReportError("Controller " + num + " already exists");
+			return 0;
+		}
+	}
+
+	Map controller;
+	controller.number = number;
+	controller.object = new DestinationController(this, number, elevators, elevator_range);
+	Array.push_back(controller);
+	return controller.object;
+}
+
+int ControllerManager::GetCount()
+{
+	//return the number of shafts
+	return (int)Array.size();
+}
+
+DestinationController* ControllerManager::Get(int number)
+{
+	//return pointer to controller object
+
+	if (number < 1 || number > GetCount())
+		return 0;
+
+	if (get_number == number && get_result)
+		return get_result;
+
+	if ((int)Array.size() > number - 1)
+	{
+		//quick prediction
+		if (Array[number - 1].number == number)
+		{
+			if (Array[number - 1].object)
+			{
+				get_number = number;
+				get_result = Array[number - 1].object;
+				return get_result;
+			}
+			else
+			{
+				get_number = 0;
+				get_result = 0;
+				return 0;
+			}
+		}
+	}
+
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i].number == number)
+		{
+			get_number = number;
+			get_result = Array[i].object;
+			return get_result;
+		}
+	}
+
+	get_number = 0;
+	get_result = 0;
+	return 0;
+}
+
+DestinationController* ControllerManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index].object;
+}
+
+void ControllerManager::Remove(DestinationController *shaft)
+{
+	//remove a controller (does not delete the object)
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i].object == shaft)
+		{
+			Array.erase(Array.begin() + i);
+
+			//clear cached values
+			get_result = 0;
+			get_number = 0;
+			return;
+		}
+	}
+}
+
+void ControllerManager::Loop()
+{
+	LoopChildren();
+}
+
 
 }

@@ -235,6 +235,7 @@ void SBS::Initialize()
 	door_manager = new DoorManager(this);
 	revolvingdoor_manager = new RevolvingDoorManager(this);
 	vehicle_manager = new VehicleManager(this);
+	controller_manager = new ControllerManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -1645,6 +1646,12 @@ int SBS::GetStairwellCount()
 	return stairwell_manager->GetCount();
 }
 
+int SBS::GetControllerCount()
+{
+	//return the number of shafts
+	return controller_manager->GetCount();
+}
+
 Floor* SBS::GetFloor(int number)
 {
 	//return pointer to floor object
@@ -1678,6 +1685,13 @@ Vehicle* SBS::GetVehicle(int number)
 	//return pointer to vehicle object
 
 	return vehicle_manager->Get(number);
+}
+
+DestinationController* SBS::GetController(int number)
+{
+	//return pointer to controller object
+
+	return controller_manager->Get(number);
 }
 
 bool SBS::SetWallOrientation(std::string direction)
@@ -4107,6 +4121,11 @@ RevolvingDoorManager* SBS::GetRevolvingDoorManager()
 VehicleManager* SBS::GetVehicleManager()
 {
 	return vehicle_manager;
+}
+
+ControllerManager* SBS::GetControllerManager()
+{
+	return controller_manager;
 }
 
 void SBS::RegisterCameraTexture(CameraTexture *camtex)

@@ -105,6 +105,7 @@ namespace SBS {
 	class Step;
 	class Vehicle;
 	class DestinationController;
+	class ControllerManager;
 
 	typedef std::vector<Ogre::Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -224,11 +225,13 @@ public:
 	int GetShaftCount();
 	int GetStairwellCount();
 	int GetVehicleCount();
+	int GetControllerCount();
 	Floor* GetFloor(int number);
 	Elevator* GetElevator(int number);
 	Shaft* GetShaft(int number);
 	Stairwell* GetStairwell(int number);
 	Vehicle* GetVehicle(int number);
+	DestinationController* GetController(int number);
 	bool SetWallOrientation(std::string direction);
 	int GetWallOrientation();
 	bool SetFloorOrientation(std::string direction);
@@ -378,6 +381,7 @@ public:
 	ShaftManager* GetShaftManager();
 	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
+	ControllerManager* GetControllerManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
@@ -437,6 +441,7 @@ private:
 	StairwellManager* stairwell_manager;
 	DoorManager* door_manager;
 	VehicleManager* vehicle_manager;
+	ControllerManager* controller_manager;
 
 	//dynamic meshes
 	std::vector<DynamicMesh*> dynamic_meshes;

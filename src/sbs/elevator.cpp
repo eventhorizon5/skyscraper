@@ -35,6 +35,7 @@
 #include "timer.h"
 #include "profiler.h"
 #include "texture.h"
+#include "destination.h"
 #include "elevator.h"
 
 #include <time.h>
@@ -191,6 +192,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WeightRopeMesh = 0;
 	RopeMesh = 0;
 	Error = false;
+	Controller = 0;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -344,6 +346,9 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	if (AssignedShaft <= 0)
 		return ReportError("Not assigned to a shaft");
 
+	if (Controller < 0)
+		return ReportError("Invalid value for Controller");
+
 	if (!GetShaft())
 		return ReportError("Shaft " + ToString(AssignedShaft) + " doesn't exist");
 
@@ -363,6 +368,10 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 
 	//add elevator to associated shaft
 	GetShaft()->AddElevator(Number);
+
+	//add elevator to associated destination controller
+	if (GetController())
+		GetController()->AddElevator(Number);
 
 	//set recall/ACP floors if not already set
 	if (RecallSet == false)
@@ -3861,6 +3870,12 @@ Shaft* Elevator::GetShaft()
 {
 	//get associated shaft object
 	return sbs->GetShaft(AssignedShaft);
+}
+
+DestinationController* Elevator::GetController()
+{
+	//get associated destination controller
+	return sbs->GetController(Controller);
 }
 
 CallButton* Elevator::GetPrimaryCallButton()
