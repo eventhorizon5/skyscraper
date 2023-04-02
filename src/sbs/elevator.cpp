@@ -2011,6 +2011,10 @@ void Elevator::FinishMove()
 				{
 					int floor = GetFloorForCar(i, GotoFloor);
 					NotifyCallButtons(floor, GetArrivalDirection(floor));
+
+					//notify destination controller
+					if (GetController())
+						GetController()->ElevatorArrived(Number);
 				}
 			}
 		}
