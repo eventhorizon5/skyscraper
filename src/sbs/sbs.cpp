@@ -500,6 +500,9 @@ bool SBS::Start(Ogre::Camera *camera)
 	//create new controller
 	DispatchController *controller = sbs->GetControllerManager()->Create(1, Elevators, 5);
 
+	//turn on destination dispatch
+	controller->DestinationDispatch = true;
+
 	//assign elevator to controller
 	GetElevator(1)->Controller = 1;
 

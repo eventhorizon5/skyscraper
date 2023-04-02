@@ -44,13 +44,14 @@ public:
 
 DispatchController::DispatchController(Object *parent, int number, std::vector<int> &elevators, int elevator_range) : Object(parent)
 {
-	//create a destination controller object
+	//create a Dispatch controller object
 
 	//set up SBS object
-	SetValues("DispatchController", "Destination Controller " + ToString(number), false);
+	SetValues("DispatchController", "Dispatch Controller " + ToString(number), false);
 
 	ElevatorRange = elevator_range;
 	Number = number;
+	DestinationDispatch = false;
 
 	//add elevators
 	Elevators.resize(elevators.size());
@@ -64,7 +65,7 @@ DispatchController::DispatchController(Object *parent, int number, std::vector<i
 	}
 
 	//create timer
-	timer = new Timer("Destination Timer", this);
+	timer = new Timer("Dispatch Timer", this);
 	timer->Start(1000);
 
 	Report("Created");
@@ -88,23 +89,26 @@ void DispatchController::Timer::Notify()
 
 void DispatchController::Loop()
 {
-	//if elevator has arrived, dispatch to destination floor
-	for (int i = 0; i < Elevators.size(); i++)
+	if (DestinationDispatch == true)
 	{
-		if (Elevators[i].arrived == true)
+		//if elevator has arrived, dispatch to destination floor
+		for (int i = 0; i < Elevators.size(); i++)
 		{
-			for (int j = 0; j < Requests.size(); j++)
+			if (Elevators[i].arrived == true)
 			{
-				int direction = 0;
-				if (Requests[j].starting_floor < Requests[j].destination_floor)
-					direction = 1;
-				else
-					direction = -1;
-				if (Requests[j].starting_floor == Elevators[i].arrival_floor)
+				for (int j = 0; j < Requests.size(); j++)
 				{
-					DispatchElevator(Elevators[i].number, Requests[j].destination_floor, direction);
-					RemoveRoute(Requests[j]);
-					return;
+					int direction = 0;
+					if (Requests[j].starting_floor < Requests[j].destination_floor)
+						direction = 1;
+					else
+						direction = -1;
+					if (Requests[j].starting_floor == Elevators[i].arrival_floor)
+					{
+						DispatchElevator(Elevators[i].number, Requests[j].destination_floor, direction);
+						RemoveRoute(Requests[j]);
+						return;
+					}
 				}
 			}
 		}
@@ -128,6 +132,12 @@ void DispatchController::RemoveRoute(Request &request)
 bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 {
 	//request a destination dispatch route
+
+	if (DestinationDispatch == false)
+	{
+		ReportError("RequestRoute: Destination Dispatch not enabled");
+		return false;
+	}
 
 	Report("Requesting route from origin floor " + ToString(starting_floor) + " to destination floor " + ToString(destination_floor));
 
@@ -200,7 +210,7 @@ bool DispatchController::AddElevator(int elevator)
 	newelevator.arrived = false;
 	newelevator.arrival_floor = 0;
 
-	Report ("Elevator " + ToString(elevator) + " added to destination controller " + ToString(Number));
+	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
 	Elevators.push_back(newelevator);
 	return true;
 }
@@ -213,7 +223,7 @@ bool DispatchController::RemoveElevator(int elevator)
 	{
 		if (Elevators[i].number == elevator)
 		{
-			Report ("Elevator " + ToString(elevator) + " removed from destination controller " + ToString(Number));
+			Report ("Elevator " + ToString(elevator) + " removed from dispatch controller " + ToString(Number));
 			Elevators.erase(Elevators.begin() + i);
 			return true;
 		}
@@ -343,14 +353,14 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 void DispatchController::Report(const std::string &message)
 {
 	//general reporting function
-	std::string msg = "Destination Controller " + ToString(Number) + ": " + message;
+	std::string msg = "Dispatch Controller " + ToString(Number) + ": " + message;
 	Object::Report(msg);
 }
 
 bool DispatchController::ReportError(const std::string &message)
 {
 	//general reporting function
-	std::string msg = "Destination Controller " + ToString(Number) + ": " + message;
+	std::string msg = "Dispatch Controller " + ToString(Number) + ": " + message;
 	return Object::ReportError(msg);
 }
 

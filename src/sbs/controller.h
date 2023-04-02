@@ -31,6 +31,7 @@ class SBSIMPEXP DispatchController : public Object
 public:
 
 	int Number;
+	bool DestinationDispatch; //enable or disable Destination Dispatch
 
 	//functions
 	DispatchController(Object *parent, int number, std::vector<int> &elevators, int elevator_range);
