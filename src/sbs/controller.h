@@ -33,6 +33,7 @@ public:
 	int Number;
 	bool DestinationDispatch; //enable or disable Destination Dispatch
 	int Range; //elevator selection range
+	int MaxPassengers; //maximum passengers per route
 
 	//functions
 	DispatchController(Object *parent, int number);

@@ -52,6 +52,7 @@ DispatchController::DispatchController(Object *parent, int number) : Object(pare
 	Number = number;
 	Range = 5;
 	DestinationDispatch = false;
+	MaxPassengers = 5;
 
 	//create timer
 	timer = new Timer("Dispatch Timer", this);
@@ -189,6 +190,10 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 	{
 		if (Routes[i].starting_floor == starting_floor && Routes[i].destination_floor == destination_floor)
 		{
+			//create a new route if max passengers has been reached
+			if (Routes[i].requests >= MaxPassengers && Elevators.size() > 1)
+				break;
+
 			Routes[i].requests++;
 			return true;
 		}
