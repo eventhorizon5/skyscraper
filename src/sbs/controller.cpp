@@ -103,6 +103,9 @@ void DispatchController::ProcessDestinationDispatch()
 {
 	//destination dispatch processing
 
+	//process pending requests
+	ProcessRoutes();
+
 	//check elevators to see if any have arrived, and if so, dispatch to destination floor
 	for (int i = 0; i < Elevators.size(); i++)
 	{
@@ -110,23 +113,23 @@ void DispatchController::ProcessDestinationDispatch()
 		if (Elevators[i].arrived == true)
 		{
 			//step through requests table and find a request that matches the arrived elevator
-			for (int j = 0; j < Requests.size(); j++)
+			for (int j = 0; j < Routes.size(); j++)
 			{
 				//get request's direction of travel
 				int direction = 0;
-				if (Requests[j].starting_floor < Requests[j].destination_floor)
+				if (Routes[j].starting_floor < Routes[j].destination_floor)
 					direction = 1;
 				else
 					direction = -1;
 
 				//if request matches the elevator
-				if (Requests[j].starting_floor == Elevators[i].arrival_floor)
+				if (Routes[j].starting_floor == Elevators[i].arrival_floor)
 				{
 					//dispatch elevator to destination floor
-					DispatchElevator(Elevators[i].number, Requests[j].destination_floor, direction);
+					DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction);
 
-					//remove route from requests table
-					RemoveRoute(Requests[j]);
+					//remove route from table
+					RemoveRoute(Routes[j]);
 
 					return;
 				}
@@ -135,17 +138,17 @@ void DispatchController::ProcessDestinationDispatch()
 	}
 }
 
-void DispatchController::RemoveRoute(Request &request)
+void DispatchController::RemoveRoute(Route &route)
 {
 	//remove a destination dispatch route
 
-	for (int i = 0; i < Requests.size(); i++)
+	for (int i = 0; i < Routes.size(); i++)
 	{
-		if (Requests[i].starting_floor == request.starting_floor && Requests[i].destination_floor == request.destination_floor)
+		if (Routes[i].starting_floor == route.starting_floor && Routes[i].destination_floor == route.destination_floor)
 		{
 			if (sbs->Verbose)
-				Report("Removing route from " + ToString(request.starting_floor) + " to " + ToString(request.destination_floor));
-			Requests.erase(Requests.begin() + i);
+				Report("Removing route from " + ToString(route.starting_floor) + " to " + ToString(route.destination_floor));
+			Routes.erase(Routes.begin() + i);
 			return;
 		}
 	}
@@ -181,44 +184,70 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 	if (isvalid == false)
 		return ReportError("No valid elevators found");
 
-	//get closest elevator
-	int closest = FindClosestElevator(starting_floor, destination_floor);
+	//use existing entry if found
+	for (int i = 0; i < Routes.size(); i++)
+	{
+		if (Routes[i].starting_floor == starting_floor && Routes[i].destination_floor == destination_floor)
+		{
+			Routes[i].requests++;
+			return true;
+		}
+	}
 
-	//if none found, exit
-	if (closest == -1)
-		return false;
-
-	//return the letter of the elevator
-	Elevator* elevator = sbs->GetElevator(Elevators[closest].number);
-	//get letter
-
-	Report("Using elevator " + ToString(elevator->Number));
-
-	ElevatorCar *car = elevator->GetCarForFloor(starting_floor);
-	if (!car)
-		return false;
-
-	int direction = 0;
-	if (destination_floor > starting_floor)
-		direction = 1;
-	else
-		direction = -1;
-
-	//dispatch elevator
-	DispatchElevator(elevator->Number, starting_floor, direction);
-	//ActiveElevator = elevator->Number;
-
-	//add request to table
-	Request request;
-	request.starting_floor = starting_floor;
-	request.destination_floor = destination_floor;
-	Requests.push_back(request);
-
-	//have elevator use destination dispatch
-	car->DestinationFloor = destination_floor;
-	car->UseDestination = true;
+	//otherwise add route request to table
+	Route route;
+	route.starting_floor = starting_floor;
+	route.destination_floor = destination_floor;
+	route.requests = 1;
+	route.processed = false;
+	Routes.push_back(route);
 
 	return true;
+}
+
+void DispatchController::ProcessRoutes()
+{
+	for (int i = 0; i < Routes.size(); i++)
+	{
+		if (Routes[i].processed == true)
+			continue;
+
+		int starting_floor = Routes[i].starting_floor;
+		int destination_floor = Routes[i].destination_floor;
+
+		//get closest elevator
+		int closest = FindClosestElevator(starting_floor, destination_floor);
+
+		//if none found, exit
+		if (closest == -1)
+			return;
+
+		//return the letter of the elevator
+		Elevator* elevator = sbs->GetElevator(Elevators[closest].number);
+		//get letter
+
+		Report("Using elevator " + ToString(elevator->Number));
+
+		ElevatorCar *car = elevator->GetCarForFloor(starting_floor);
+		if (!car)
+			return;
+
+		int direction = 0;
+		if (destination_floor > starting_floor)
+			direction = 1;
+		else
+			direction = -1;
+
+		//dispatch elevator
+		DispatchElevator(elevator->Number, starting_floor, direction);
+		//ActiveElevator = elevator->Number;
+
+		//have elevator use destination dispatch
+		car->DestinationFloor = destination_floor;
+		car->UseDestination = true;
+
+		Routes[i].processed = true;
+	}
 }
 
 bool DispatchController::AddElevator(int elevator)

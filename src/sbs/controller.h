@@ -53,13 +53,14 @@ public:
 
 private:
 
-	struct Request;
+	struct Route;
 
 	int FindClosestElevator(int starting_floor, int destination_floor);
 	void DispatchElevator(int number, int destination_floor, int direction);
-	void RemoveRoute(Request &request);
+	void RemoveRoute(Route &route);
 	void Process(int direction);
 	void ProcessDestinationDispatch();
+	void ProcessRoutes();
 
 	struct ElevMap
 	{
@@ -73,13 +74,15 @@ private:
 
 	std::vector<ElevMap> Elevators; //controller object array
 
-	struct Request
+	struct Route
 	{
 		int starting_floor;
 		int destination_floor;
+		int requests;
+		bool processed;
 	};
 
-	std::vector<Request> Requests; //destination dispatch requests
+	std::vector<Route> Routes; //destination dispatch requests
 
 	std::vector<CallStation*> CallStations; //call station registrations
 
