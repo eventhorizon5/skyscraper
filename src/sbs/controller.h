@@ -48,6 +48,8 @@ public:
 	bool IsElevatorAssigned(int number, int destination_floor);
 	bool IsElevatorAssignedToOther(int number, int destination_floor);
 	void AssignElevator(int number, int destination_floor);
+	void RegisterCallStation(CallStation *station);
+	void UnregisterCallStation(CallStation *station);
 
 private:
 
@@ -78,6 +80,8 @@ private:
 	};
 
 	std::vector<Request> Requests; //destination dispatch requests
+
+	std::vector<CallStation*> CallStations; //call station registrations
 
 	class Timer; //internal timer class
 

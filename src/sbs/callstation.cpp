@@ -65,6 +65,9 @@ CallStation::~CallStation()
 	//unregister with parent floor object
 	if (sbs->FastDelete == false)
 	{
+		if (controller)
+			controller->UnregisterCallStation(this);
+
 		if (parent_deleting == false)
 			floor->RemoveCallStation(this);
 	}
@@ -144,6 +147,9 @@ bool CallStation::SelectFloor(int floor)
 void CallStation::SetController(int controller)
 {
 	this->controller = sbs->GetController(controller);
+
+	if (this->controller)
+		this->controller->RegisterCallStation(this);
 }
 
 DispatchController* CallStation::GetController()

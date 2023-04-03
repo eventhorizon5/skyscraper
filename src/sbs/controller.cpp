@@ -510,4 +510,21 @@ void DispatchController::AssignElevator(int number, int destination_floor)
 	}
 }
 
+void DispatchController::RegisterCallStation(CallStation *station)
+{
+	CallStations.push_back(station);
+}
+
+void DispatchController::UnregisterCallStation(CallStation *station)
+{
+	for (size_t i = 0; i < CallStations.size(); i++)
+	{
+		if (CallStations[i] == station)
+		{
+			CallStations.erase(CallStations.begin() + i);
+			return;
+		}
+	}
+}
+
 }
