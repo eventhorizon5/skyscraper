@@ -365,6 +365,13 @@ SBS::~SBS()
 	}
 	vehicle_manager = 0;
 
+	if (controller_manager)
+	{
+		controller_manager->parent_deleting = true;
+		delete controller_manager;
+	}
+	controller_manager = 0;
+
 	//delete sounds
 	for (size_t i = 0; i < sounds.size(); i++)
 	{
