@@ -127,6 +127,7 @@ void DispatchController::ProcessDestinationDispatch()
 
 					//remove route from requests table
 					RemoveRoute(Requests[j]);
+
 					return;
 				}
 			}
@@ -203,8 +204,8 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 	else
 		direction = -1;
 
-	//add a route entry to this floor
-	elevator->AddRoute(starting_floor, direction, 1);
+	//dispatch elevator
+	DispatchElevator(elevator->Number, starting_floor, direction);
 	//ActiveElevator = elevator->Number;
 
 	//add request to table
@@ -459,6 +460,17 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 
 		AssignElevator(number, destination_floor);
 		elevator->AddRoute(destination_floor, direction, type);
+
+		//reset arrival status
+		for (int i = 0; i < Elevators.size(); i++)
+		{
+			if (Elevators[i].number == number)
+			{
+				Elevators[i].arrived = false;
+				Elevators[i].arrival_floor = 0;
+				Elevators[i].arrival_direction = false;
+			}
+		}
 	}
 }
 
