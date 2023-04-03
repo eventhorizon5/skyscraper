@@ -106,6 +106,7 @@ namespace SBS {
 	class Vehicle;
 	class DispatchController;
 	class ControllerManager;
+	class CallStation;
 
 	typedef std::vector<Ogre::Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
