@@ -54,6 +54,7 @@
 #include "profiler.h"
 #include "controller.h"
 #include "callstation.h"
+#include "buttonpanel.h"
 
 namespace SBS {
 
@@ -511,8 +512,19 @@ bool SBS::Start(Ogre::Camera *camera)
 	//assign station to Dispatch Controller 1
 	station->SetController(1);
 
+	//create a button panel
+	ButtonPanel *panel = station->CreateButtonPanel("ElevExtPanels", 1, 1, "front", -6, 0, 1, 1, 1, 1, 4, 0, 0);
+
+	//create a control that selects floor 5
+	std::vector<std::string> action_names;
+	action_names.push_back("5");
+	std::vector<std::string> textures;
+	textures.push_back("Button5");
+
+	panel->AddControl("switch.wav", 1, 1, 0, 0, 0, 0, 1, action_names, textures);
+
 	//request route from lobby to floor 5
-	station->SelectFloor(5);
+	//station->SelectFloor(5);
 
 	return true;
 }
