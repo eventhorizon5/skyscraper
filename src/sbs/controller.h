@@ -44,6 +44,9 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void ElevatorArrived(int number, int floor, bool direction);
+	bool IsElevatorAssigned(int number, int destination_floor);
+	bool IsElevatorAssignedToOther(int number, int destination_floor);
+	void AssignElevator(int number, int destination_floor);
 
 private:
 
@@ -63,6 +66,8 @@ private:
 		bool arrived; //has elevator arrived?
 		int arrival_floor; //arrival floor
 		bool arrival_direction; //arrival direction
+		int assigned_destination;
+		bool assigned;
 	};
 
 	std::vector<ElevMap> Elevators; //controller object array
