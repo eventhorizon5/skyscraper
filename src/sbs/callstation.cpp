@@ -25,6 +25,7 @@
 #include "sbs.h"
 #include "buttonpanel.h"
 #include "floor.h"
+#include "controller.h"
 #include "callstation.h"
 
 namespace SBS {
@@ -129,6 +130,23 @@ ButtonPanel* CallStation::GetPanel()
 void CallStation::RemovePanel()
 {
 	panel = 0;
+}
+
+bool CallStation::SelectFloor(int floor)
+{
+	if (controller)
+		return controller->RequestRoute(GetFloor(), floor);
+	return false;
+}
+
+void CallStation::SetController(int controller)
+{
+	this->controller = sbs->GetController(controller);
+}
+
+DispatchController* CallStation::GetController()
+{
+	return controller;
 }
 
 }

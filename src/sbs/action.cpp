@@ -30,6 +30,7 @@
 #include "stairs.h"
 #include "camera.h"
 #include "callbutton.h"
+#include "callstation.h"
 #include "sound.h"
 #include "mesh.h"
 #include "escalator.h"
@@ -188,6 +189,9 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//FireOn
 	//FireBypass
 
+	//CallStation actions:
+	//(floor number)
+
 	//Escalator and MovingWalkway actions:
 	//Forward
 	//Reverse
@@ -207,6 +211,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	Shaft *shaft = dynamic_cast<Shaft*>(parent);
 	Stairwell *stairs = dynamic_cast<Stairwell*>(parent);
 	CallButton *callbutton = dynamic_cast<CallButton*>(parent);
+	CallStation *callstation = dynamic_cast<CallStation*>(parent);
 	Escalator *escalator = dynamic_cast<Escalator*>(parent);
 	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
 	CameraTexture *camtex = dynamic_cast<CameraTexture*>(parent);
@@ -633,6 +638,21 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callbutton->FireService(1);
 		if (command_name == "firebypass")
 			return callbutton->FireService(2);
+	}
+
+	//if parent is a call station, get parent floor object
+	if (callstation)
+		floor = sbs->GetFloor(callstation->GetFloor());
+
+	//callstation-specific commands
+	if (floor && callstation)
+	{
+		//numeric commands for station floor selections
+		if (IsNumeric(command_name) == true)
+		{
+			int floor = ToInt(command_name);
+			return callstation->SelectFloor(floor);
+		}
 	}
 
 	//escalator-specific commands

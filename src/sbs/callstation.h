@@ -42,9 +42,13 @@ public:
 	int GetFloor();
 	ButtonPanel* GetPanel();
 	void RemovePanel();
+	bool SelectFloor(int floor);
+	void SetController(int controller);
+	DispatchController* GetController();
 
 private:
 	ButtonPanel* panel; //button panel object
+	DispatchController *controller; //dispatch controller object
 
 	int Number; //call button index number (on the specified floor)
 	bool is_enabled;
