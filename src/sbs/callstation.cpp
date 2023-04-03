@@ -75,7 +75,7 @@ ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows
 	//create a new button panel object
 
 	if (sbs->Verbose)
-		Report("creating button panel");
+		Report("Creating button panel");
 
 	if (panel)
 		return 0;
@@ -134,6 +134,8 @@ void CallStation::RemovePanel()
 
 bool CallStation::SelectFloor(int floor)
 {
+	Report("Selecting floor " + ToString(floor));
+
 	if (controller)
 		return controller->RequestRoute(GetFloor(), floor);
 	return false;

@@ -53,6 +53,7 @@
 #include "timer.h"
 #include "profiler.h"
 #include "controller.h"
+#include "callstation.h"
 
 namespace SBS {
 
@@ -504,8 +505,14 @@ bool SBS::Start(Ogre::Camera *camera)
 	//turn on destination dispatch
 	controller->DestinationDispatch = true;
 
+	//create a new call station on floor 0
+	CallStation *station = GetFloor(0)->AddCallStation();
+
+	//assign station to Dispatch Controller 1
+	station->SetController(1);
+
 	//request route from lobby to floor 5
-	controller->RequestRoute(0, 5);
+	station->SelectFloor(5);
 
 	return true;
 }

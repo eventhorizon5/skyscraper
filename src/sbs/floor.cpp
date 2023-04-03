@@ -185,6 +185,17 @@ Floor::~Floor()
 		CallButtonArray[i] = 0;
 	}
 
+	//delete call stations
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i])
+		{
+			CallStationArray[i]->parent_deleting = true;
+			delete CallStationArray[i];
+		}
+		CallStationArray[i] = 0;
+	}
+
 	//delete doors
 	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
