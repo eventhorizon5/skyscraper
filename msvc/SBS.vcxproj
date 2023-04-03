@@ -267,10 +267,11 @@
     <ClCompile Include="..\src\sbs\action.cpp" />
     <ClCompile Include="..\src\sbs\buttonpanel.cpp" />
     <ClCompile Include="..\src\sbs\callbutton.cpp" />
+    <ClCompile Include="..\src\sbs\callstation.cpp" />
     <ClCompile Include="..\src\sbs\camera.cpp" />
     <ClCompile Include="..\src\sbs\cameratexture.cpp" />
     <ClCompile Include="..\src\sbs\control.cpp" />
-    <ClCompile Include="..\src\sbs\destination.cpp" />
+    <ClCompile Include="..\src\sbs\controller.cpp" />
     <ClCompile Include="..\src\sbs\directional.cpp" />
     <ClCompile Include="..\src\sbs\door.cpp" />
     <ClCompile Include="..\src\sbs\dynamicmesh.cpp" />
@@ -313,10 +314,11 @@
     <ClInclude Include="..\src\sbs\action.h" />
     <ClInclude Include="..\src\sbs\buttonpanel.h" />
     <ClInclude Include="..\src\sbs\callbutton.h" />
+    <ClInclude Include="..\src\sbs\callstation.h" />
     <ClInclude Include="..\src\sbs\camera.h" />
     <ClInclude Include="..\src\sbs\cameratexture.h" />
     <ClInclude Include="..\src\sbs\control.h" />
-    <ClInclude Include="..\src\sbs\destination.h" />
+    <ClInclude Include="..\src\sbs\controller.h" />
     <ClInclude Include="..\src\sbs\directional.h" />
     <ClInclude Include="..\src\sbs\door.h" />
     <ClInclude Include="..\src\sbs\dynamicmesh.h" />
