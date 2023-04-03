@@ -453,6 +453,13 @@ void Floor::Enabled(bool value)
 			CallButtonArray[i]->Enabled(value);
 	}
 
+	//call stations
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i])
+			CallStationArray[i]->Enabled(value);
+	}
+
 	//doors
 	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
