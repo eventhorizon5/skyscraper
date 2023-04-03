@@ -162,6 +162,10 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 
 	Report("Requesting route from origin floor " + ToString(starting_floor) + " to destination floor " + ToString(destination_floor));
 
+	//make sure floors are valid
+	if (!sbs->GetFloor(starting_floor) || !sbs->GetFloor(destination_floor))
+		return false;
+
 	//check to make sure elevator objects are valid
 	bool isvalid = false;
 	for (size_t i = 0; i < Elevators.size(); i++)
@@ -203,7 +207,7 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 	elevator->AddRoute(starting_floor, direction, 1);
 	//ActiveElevator = elevator->Number;
 
-	//add request to list
+	//add request to table
 	Request request;
 	request.starting_floor = starting_floor;
 	request.destination_floor = destination_floor;
