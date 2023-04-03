@@ -42,30 +42,16 @@ public:
 	virtual void Notify();
 };
 
-DispatchController::DispatchController(Object *parent, int number, std::vector<int> &elevators, int elevator_range) : Object(parent)
+DispatchController::DispatchController(Object *parent, int number) : Object(parent)
 {
 	//create a dispatch controller object
 
 	//set up SBS object
 	SetValues("DispatchController", "Dispatch Controller " + ToString(number), false);
 
-	ElevatorRange = elevator_range;
 	Number = number;
+	Range = 5;
 	DestinationDispatch = false;
-
-	//add elevators
-	Elevators.resize(elevators.size());
-	for (size_t i = 0; i < elevators.size(); i++)
-	{
-		ElevMap elev;
-		elev.number = elevators[i];
-		elev.arrived = false;
-		elev.arrival_floor = 0;
-		elev.arrival_direction = false;
-		elev.assigned_destination = 0;
-		elev.assigned = false;
-		Elevators[i] = elev;
-	}
 
 	//create timer
 	timer = new Timer("Dispatch Timer", this);
@@ -234,12 +220,17 @@ bool DispatchController::AddElevator(int elevator)
 {
 	//add an elevator to this controller
 
+	if (!sbs->GetElevator(elevator))
+		return false;
+
+	//exit if already in table
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == elevator)
 			return false;
 	}
 
+	//create a new elevator map
 	ElevMap newelevator;
 	newelevator.number = elevator;
 	newelevator.arrived = false;
@@ -247,6 +238,9 @@ bool DispatchController::AddElevator(int elevator)
 	newelevator.arrival_direction = false;
 	newelevator.assigned_destination = 0;
 	newelevator.assigned = false;
+
+	//assign controller to elevator
+	sbs->GetElevator(elevator)->Controller = Number;
 
 	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
 	Elevators.push_back(newelevator);

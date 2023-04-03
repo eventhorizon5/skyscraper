@@ -205,7 +205,7 @@ class SBSIMPEXP ControllerManager : public Object
 public:
 	ControllerManager(Object* parent);
 	~ControllerManager();
-	DispatchController* Create(int number, std::vector<int> &elevators, int elevator_range);
+	DispatchController* Create(int number);
 	int GetCount();
 	DispatchController* Get(int number);
 	DispatchController* GetIndex(int index);

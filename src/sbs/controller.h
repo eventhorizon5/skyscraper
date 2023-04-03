@@ -32,9 +32,10 @@ public:
 
 	int Number;
 	bool DestinationDispatch; //enable or disable Destination Dispatch
+	int Range; //elevator selection range
 
 	//functions
-	DispatchController(Object *parent, int number, std::vector<int> &elevators, int elevator_range);
+	DispatchController(Object *parent, int number);
 	~DispatchController();
 	void Loop();
 	bool RequestRoute(int starting_floor, int destination_floor);
@@ -57,8 +58,6 @@ private:
 	void RemoveRoute(Request &request);
 	void Process(int direction);
 	void ProcessDestinationDispatch();
-
-	int ElevatorRange;
 
 	struct ElevMap
 	{

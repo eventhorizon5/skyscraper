@@ -493,20 +493,18 @@ bool SBS::Start(Ogre::Camera *camera)
 
 	IsRunning = true;
 
-	//test code
-	std::vector<int> Elevators;
-	Elevators.push_back(1);
+	///////test code
 
 	//create new controller
-	DispatchController *controller = sbs->GetControllerManager()->Create(1, Elevators, 5);
+	DispatchController *controller = sbs->GetControllerManager()->Create(1);
+
+	//add elevator to controller
+	controller->AddElevator(1);
 
 	//turn on destination dispatch
 	controller->DestinationDispatch = true;
 
-	//assign elevator to controller
-	GetElevator(1)->Controller = 1;
-
-	//request route to floor 5
+	//request route from lobby to floor 5
 	controller->RequestRoute(0, 5);
 
 	return true;

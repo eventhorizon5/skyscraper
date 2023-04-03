@@ -940,7 +940,7 @@ ControllerManager::~ControllerManager()
 	}
 }
 
-DispatchController* ControllerManager::Create(int number, std::vector<int> &elevators, int elevator_range)
+DispatchController* ControllerManager::Create(int number)
 {
 	//create a controller object
 
@@ -956,7 +956,7 @@ DispatchController* ControllerManager::Create(int number, std::vector<int> &elev
 
 	Map controller;
 	controller.number = number;
-	controller.object = new DispatchController(this, number, elevators, elevator_range);
+	controller.object = new DispatchController(this, number);
 	Array.push_back(controller);
 	return controller.object;
 }
