@@ -38,6 +38,7 @@
 #include "escalator.h"
 #include "cameratexture.h"
 #include "callbutton.h"
+#include "callstation.h"
 #include "control.h"
 #include "trigger.h"
 #include "floorindicator.h"
@@ -537,6 +538,16 @@ CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string
 	CallButton *button = new CallButton(this, elevators, Number, Current, sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	CallButtonArray.push_back(button);
 	return button;
+}
+
+CallStation* Floor::AddCallStation()
+{
+	//create a new call station object
+
+	int number = (int)CallStationArray.size() + 1;
+	CallStation *station = new CallStation(this, Number, number);
+	CallStationArray.push_back(station);
+	return station;
 }
 
 void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, bool prepare)
@@ -1210,6 +1221,19 @@ void Floor::RemoveCallButton(CallButton *callbutton)
 	}
 }
 
+void Floor::RemoveCallStation(CallStation* station)
+{
+	//remove a call station reference (does not delete the object itself)
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i] == station)
+		{
+			CallStationArray.erase(CallStationArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void Floor::RemoveFloorIndicator(FloorIndicator *indicator)
 {
 	//remove a floor indicator from the array
@@ -1731,6 +1755,11 @@ CameraTexture* Floor::GetCameraTexture(int number)
 		return CameraTextureArray[number];
 	else
 		return 0;
+}
+
+int Floor::GetCallStationCount()
+{
+	return (int)CallStationArray.size();
 }
 
 }

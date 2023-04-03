@@ -31,8 +31,6 @@ namespace SBS {
 
 CallStation::CallStation(Object *parent, int floornum, int number) : Object(parent), Lock(this)
 {
-	panel = 0;
-
 	floor = sbs->GetFloor(floornum);
 	if (!floor)
 		return;
@@ -49,6 +47,7 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 	Number = number;
 	Locked = false;
 	KeyID = 0;
+	panel = 0;
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -63,16 +62,25 @@ CallStation::~CallStation()
 	}
 
 	//unregister with parent floor object
-	/*if (sbs->FastDelete == false)
+	if (sbs->FastDelete == false)
 	{
 		if (parent_deleting == false)
-			floor->RemoveCallButton(this);
-	}*/
+			floor->RemoveCallStation(this);
+	}
 }
 
-ButtonPanel* CallStation::CreatePanel()
+ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th)
 {
-	return 0;
+	//create a new button panel object
+
+	if (sbs->Verbose)
+		Report("creating button panel");
+
+	if (panel)
+		return 0;
+
+	panel = new ButtonPanel(this, 0, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	return panel;
 }
 
 void CallStation::Enabled(bool value)
@@ -111,6 +119,16 @@ int CallStation::GetFloor()
 	//return floor number this call button is on
 
 	return floor->Number;
+}
+
+ButtonPanel* CallStation::GetPanel()
+{
+	return panel;
+}
+
+void CallStation::RemovePanel()
+{
+	panel = 0;
 }
 
 }
