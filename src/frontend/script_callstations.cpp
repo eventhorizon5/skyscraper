@@ -125,11 +125,11 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 12);
 
-		if (params != 13)
+		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 1; i <= 12; i++)
+		for (int i = 1; i <= 9; i++)
 		{
 			if (i == 3)
 				i = 4;
@@ -137,7 +137,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(station->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+		StoreCommand(station->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		return sNextLine;
 	}
 

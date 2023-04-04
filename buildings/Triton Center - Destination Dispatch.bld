@@ -7766,14 +7766,14 @@ AddAction FireServiceBypass13, Elevator13, Fire1Bypass
     <CallStation 1>
         Name = Call Station %callstation%
         Controller = 1
-        CreatePanel ElevExtPanels, 6, 5, right, 0, 0, 0.15, 0.15, 0.3, 0.45, 0, 0, 0
+        CreatePanel ElevExtPanels, 6, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -9.583 + 4.25 + 0.33 + 0.01, 4, -4.5
     <EndCallStation>
 
     <CallStation 2>
         Name = Call Station %callstation%
         Controller = 1
-        CreatePanel ElevExtPanels, 6, 5, left, 0, 0, 0.15, 0.15, 0.3, 0.45, 0, 0, 0
+        CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 9.583 - 4.25 - 0.33 - 0.01, 4, 4.5
     <EndCallStation>
 
@@ -7810,14 +7810,14 @@ AddAction FireServiceBypass13, Elevator13, Fire1Bypass
     <CallStation 1>
         Name = Call Station %callstation%
         Controller = 1
-        CreatePanel ElevExtPanels, 6, 5, right, 0, 0, 0.15, 0.15, 0.3, 0.45, 0, 0, 0
+        CreatePanel ElevExtPanels, 6, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -9.583 + 4.25 + 0.33 + 0.01, 4, -4.5
     <EndCallStation>
 
     <CallStation 2>
         Name = Call Station %callstation%
         Controller = 1
-        CreatePanel ElevExtPanels, 6, 5, left, 0, 0, 0.15, 0.15, 0.3, 0.45, 0, 0, 0
+        CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 9.583 - 4.25 - 0.33 - 0.01, 4, 4.5
     <EndCallStation>
 

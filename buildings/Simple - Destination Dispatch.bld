@@ -505,7 +505,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
         Controller = 1  #assign to Dispatch Controller 1
 
         #create a button panel and control
-        CreatePanel ElevExtPanels, 3, 3, front, 0, 0, 0.15, 0.15, 0.3, 0.45, 0, 0, 0
+        CreatePanel ElevExtPanels, 3, 3, front, 0.15, 0.15, 0.3, 0.45, 0, 0
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 5, Button6
 
 	#set position of call station

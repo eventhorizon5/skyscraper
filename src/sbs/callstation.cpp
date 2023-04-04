@@ -70,7 +70,7 @@ CallStation::~CallStation()
 	}
 }
 
-ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th)
+ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real tw, Real th)
 {
 	//create a new button panel object
 
@@ -80,7 +80,7 @@ ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows
 	if (sbs->Verbose)
 		Report("Creating button panel");
 
-	panel = new ButtonPanel(this, 0, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	panel = new ButtonPanel(this, 0, texture, rows, columns, direction, 0, 0, buttonwidth, buttonheight, spacingX, spacingY, 0, tw, th);
 	return panel;
 }
 
