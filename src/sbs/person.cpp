@@ -166,6 +166,7 @@ void Person::GotoFloor(int floor)
 		route_entry.call_made = 0;
 		route_entry.floor_selected = false;
 		route_entry.destination = false;
+		route_entry.in_elevator = false;
 		route.push_back(route_entry);
 	}
 }
@@ -248,7 +249,7 @@ void Person::ProcessRoute()
 
 	//if a call has been made, wait for an elevator to arrive
 	//then press floor button for standard elevators, or ride elevator for destination dispatch
-	if (route[0].floor_selected == false || route[0].destination == true)
+	if (route[0].floor_selected == false || (route[0].destination == true && route[0].in_elevator == false))
 	{
 		CallButton *button = route[0].callbutton;
 		CallStation *station = route[0].callstation;
@@ -277,15 +278,18 @@ void Person::ProcessRoute()
 					//have elevator route use arrived elevator
 					route[0].elevator_route->car = car;
 
-					//wait for elevator doors to open before pressing button
-					if (car->AreDoorsOpen() == true)
+					//person is in elevator
+					route[0].in_elevator = true;
+
+					Floor *floor = sbs->GetFloor(floor_selection);
+
+					if (!floor)
+						return;
+
+					if (route[0].destination == false)
 					{
-						Floor *floor = sbs->GetFloor(floor_selection);
-
-						if (!floor)
-							return;
-
-						if (route[0].destination == false)
+						//wait for elevator doors to open before pressing button
+						if (car->AreDoorsOpen() == true)
 						{
 							Report("Pressing elevator button for floor " + floor->ID);
 
@@ -307,12 +311,11 @@ void Person::ProcessRoute()
 							Stop();
 							return;
 						}
-						else
-						{
-							//destination dispatch mode
-
-							Report("Waiting for elevator for floor " + floor->ID);
-						}
+					}
+					else
+					{
+						//destination dispatch mode
+						Report("Waiting for elevator for floor " + floor->ID);
 					}
 				}
 			}
@@ -470,9 +473,9 @@ std::string Person::GetStatus()
 	{
 		int elevator_number = car->GetElevator()->Number;
 
-		if (car->AreDoorsOpen() == true)
+		if (car->AreDoorsOpen() == true && route[0].destination == false)
 			return "Pressed " + floor->ID + " in elevator " + ToString(elevator_number);
-		else
+		else if (route[0].in_elevator == true)
 		{
 			if (route[0].call_made != 2)
 			{
@@ -488,11 +491,16 @@ std::string Person::GetStatus()
 		}
 	}
 
-	if (route[0].call_made == 1)
-		return "Call button Up pressed";
+	if (route[0].destination == false)
+	{
+		if (route[0].call_made == 1)
+			return "Call button Up pressed";
 
-	if (route[0].call_made == -1)
-		return "Call button Down pressed";
+		if (route[0].call_made == -1)
+			return "Call button Down pressed";
+	}
+	else
+		return "Selected floor " + ToString(floor_selection) + " on call station";
 
 	return "";
 }

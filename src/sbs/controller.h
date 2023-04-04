@@ -73,6 +73,7 @@ private:
 		bool arrival_direction; //arrival direction
 		int assigned_destination;
 		bool assigned;
+		int destination_floor;
 	};
 
 	std::vector<ElevMap> Elevators; //controller object array

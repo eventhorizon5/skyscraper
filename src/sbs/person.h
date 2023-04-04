@@ -62,6 +62,7 @@ private:
 		int call_made;
 		bool floor_selected;
 		bool destination;
+		bool in_elevator;
 	};
 
 	int current_floor;

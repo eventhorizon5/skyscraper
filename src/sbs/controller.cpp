@@ -256,6 +256,11 @@ void DispatchController::ProcessRoutes()
 		DispatchElevator(elevator->Number, starting_floor, direction);
 		//ActiveElevator = elevator->Number;
 
+		for (int i = 0; i < Elevators.size(); i++)
+		{
+			if (Elevators[i].number == elevator->Number)
+				Elevators[i].destination_floor = destination_floor;
+		}
 		//have elevator use destination dispatch
 		car->DestinationFloor = destination_floor;
 		elevator->UseDestination = true;
@@ -286,6 +291,7 @@ bool DispatchController::AddElevator(int elevator)
 	newelevator.arrival_direction = false;
 	newelevator.assigned_destination = 0;
 	newelevator.assigned = false;
+	newelevator.destination_floor = 0;
 
 	//assign controller to elevator
 	sbs->GetElevator(elevator)->Controller = Number;
@@ -602,7 +608,7 @@ int DispatchController::GetElevatorArrived(int starting_floor, int destination_f
 	{
 		if (Elevators[i].arrived == true)
 		{
-			if (Elevators[i].arrival_floor == starting_floor && Elevators[i].assigned_destination == destination_floor)
+			if (Elevators[i].arrival_floor == starting_floor && Elevators[i].destination_floor == destination_floor)
 				return Elevators[i].number;
 		}
 	}
