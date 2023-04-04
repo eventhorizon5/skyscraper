@@ -56,18 +56,15 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 
 CallStation::~CallStation()
 {
-	if (panel)
-	{
-		panel->parent_deleting = true;
-		delete panel;
-	}
+	RemovePanel();
 
-	//unregister with parent floor object
 	if (sbs->FastDelete == false)
 	{
+		//unregister with controller
 		if (controller)
 			controller->UnregisterCallStation(this);
 
+		//unregister with parent floor object
 		if (parent_deleting == false)
 			floor->RemoveCallStation(this);
 	}
@@ -77,11 +74,11 @@ ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows
 {
 	//create a new button panel object
 
-	if (sbs->Verbose)
-		Report("Creating button panel");
-
 	if (panel)
 		return 0;
+
+	if (sbs->Verbose)
+		Report("Creating button panel");
 
 	panel = new ButtonPanel(this, 0, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	return panel;
@@ -89,11 +86,14 @@ ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows
 
 void CallStation::Enabled(bool value)
 {
-	//turns call buttons on/off
+	//turns station on/off
 	if (is_enabled == value)
 		return;
 
 	is_enabled = value;
+
+	//enable or disable the button panel
+	panel->Enabled(value);
 
 	if (sbs->Verbose)
 	{
@@ -132,6 +132,11 @@ ButtonPanel* CallStation::GetPanel()
 
 void CallStation::RemovePanel()
 {
+	if (panel)
+	{
+		panel->parent_deleting = true;
+		delete panel;
+	}
 	panel = 0;
 }
 
@@ -146,6 +151,8 @@ bool CallStation::SelectFloor(int floor)
 
 void CallStation::SetController(int controller)
 {
+	//assign this call station to a controller, and register with it
+
 	this->controller = sbs->GetController(controller);
 
 	if (this->controller)
