@@ -3925,6 +3925,14 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevators>
 
+<Controller 1>
+    Name = Zone 1 Local 3 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 1 - 6
+<EndController>
+
 
 #Office Zone1 Locals 15-26
 <Elevator 7>
@@ -4181,6 +4189,14 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 3.125 + 0.5, 0, true, 1 + 0.06, 0.1
 
 <EndElevators>
+
+<Controller 2>
+    Name = Zone 1 Local 2 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 7 - 12
+<EndController>
 
 
 #Office Zone1 Locals 2-14
@@ -4440,6 +4456,14 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 3.125 + 0.5, 0, true, 1 + 0.06, 0.1
 
 <EndElevators>
+
+<Controller 3>
+    Name = Zone 1 Local 1 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 13 - 18
+<EndController>
 
 
 #Office Express
@@ -4791,6 +4815,14 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevators>
 
+<Controller 4>
+    Name = Concourse Dispatch Controller 1
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 25, 26
+<EndController>
+
 <Elevator 27>
     Name = Concourse 3
     Type = Local
@@ -4902,6 +4934,14 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 3.125 + 0.5, 0, true, 1 + 0.06, 0.1
 
 <EndElevators>
+
+<Controller 5>
+    Name = Concourse Dispatch Controller 2
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 27, 28
+<EndController>
 
 
 #Residential Express
@@ -5215,6 +5255,14 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, -3.75 - 0.5, 0, true, 1 + 0.06, 0.1
 
 <EndElevators>
+
+<Controller 6>
+    Name = Upper Express Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 33, 34
+<EndController>
 
 
 #Hotel Express
@@ -5550,6 +5598,14 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevators>
 
+<Controller 7>
+    Name = Zone 2 Local 1 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 38 - 41
+<EndController>
+
 
 #Office Zone2 locals 61-70
 <Elevator 42>
@@ -5691,6 +5747,14 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 0, -3.125 - 0.5, false, 1 + 0.06, 0.1
 
 <EndElevators>
+
+<Controller 8>
+    Name = Zone 2 Local 3 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 42 - 45
+<EndController>
 
 
 #Office Zone2 locals 51-60
@@ -5834,6 +5898,14 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 0, 3.125 + 0.5, false, 1 + 0.06, 0.1
 
 <EndElevators>
+
+<Controller 9>
+    Name = Zone 2 Local 2 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 46 - 49
+<EndController>
 
 
 #Office Zone2 locals 71-78
@@ -5979,6 +6051,14 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 0, 3.125 + 0.5, false, 1 + 0.06, 0.1
 
 <EndElevators>
+
+<Controller 10>
+    Name = Zone 2 Local 4 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 50 - 53
+<EndController>
 
 
 #Hotel locals 82-99
@@ -6234,6 +6314,14 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevators>
 
+<Controller 11>
+    Name = Hotel Local Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 54 - 57
+<EndController>
+
 
 #Pool express
 <Elevator 58>
@@ -6324,6 +6412,14 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 0, 3.125 + 0.5, false, 1 + 0.06, 0.1
 
 <EndElevator>
+
+<Controller 12>
+    Name = Pool Express Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 58
+<EndController>
 
 
 #Residential locals
@@ -6658,6 +6754,22 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 0, -3.125 - 0.5, false, 1 + 0.06, 0.1
 
 <EndElevators>
+
+<Controller 13>
+    Name = Residential Local 1 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 60, 61, 64, 65
+<EndController>
+
+<Controller 14>
+    Name = Residential Local 2 Dispatch Controller
+    DestinationDispatch = true
+    Range = 3
+    MaxPassengers = 10
+    Elevators = 59, 62, 63
+<EndController>
 
 
 #Service Elevators
