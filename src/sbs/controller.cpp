@@ -195,6 +195,7 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 				break;
 
 			Routes[i].requests++;
+			Report("Route has " + ToString(Routes[i].requests) + " total requests");
 			return true;
 		}
 	}
