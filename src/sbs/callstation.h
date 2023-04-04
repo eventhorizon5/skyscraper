@@ -47,6 +47,7 @@ public:
 	bool SelectFloor(int floor);
 	void SetController(int number);
 	DispatchController* GetController();
+	void SetPosition(Ogre::Vector3 &position);
 
 private:
 	ButtonPanel* panel; //button panel object

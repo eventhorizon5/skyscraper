@@ -169,4 +169,10 @@ DispatchController* CallStation::GetController()
 	return controller;
 }
 
+void CallStation::SetPosition(Ogre::Vector3 &position)
+{
+	position.y += sbs->GetFloor(GetFloor())->GetBase();
+	Object::SetPosition(position);
+}
+
 }
