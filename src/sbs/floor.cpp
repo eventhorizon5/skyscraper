@@ -953,7 +953,7 @@ std::vector<int> Floor::GetCallStations(int elevator)
 	return stations;
 }
 
-CallStation* Floor::GetCallStation(int elevator)
+CallStation* Floor::GetCallStationForElevator(int elevator)
 {
 	//returns the first call button object that services the specified elevator
 
@@ -965,6 +965,13 @@ CallStation* Floor::GetCallStation(int elevator)
 				return CallStationArray[i];
 		}
 	}
+	return 0;
+}
+
+CallStation* Floor::GetCallStation(int number)
+{
+	if (number > 0 && number <= CallStationArray.size())
+		return CallStationArray[number - 1];
 	return 0;
 }
 

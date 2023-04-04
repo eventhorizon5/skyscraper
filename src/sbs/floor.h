@@ -87,7 +87,8 @@ public:
 	std::vector<int> GetCallButtons(int elevator);
 	CallButton* GetCallButton(int elevator);
 	std::vector<int> GetCallStations(int elevator);
-	CallStation* GetCallStation(int elevator);
+	CallStation* GetCallStationForElevator(int elevator);
+	CallStation* GetCallStation(int number);
 	void AddFillerWalls(const std::string &texture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, bool direction, Real tw, Real th, bool isexternal);
 	Sound* AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	void Report(const std::string &message);
