@@ -465,15 +465,19 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 		if (!floorobj)
 			return;
 
-		Report("Elevator " + ToString(number) + " arrived at floor " + ToString(floor) + " (" + floorobj->ID + ")");
-		Elevators[i].arrived = true;
-		Elevators[i].arrival_floor = floor;
-		Elevators[i].arrival_direction = direction;
-
-		if (Elevators[i].assigned_destination == floor)
+		if (Elevators[i].number == number)
 		{
-			Elevators[i].assigned_destination = 0;
-			Elevators[i].assigned = false;
+			Report("Elevator " + ToString(number) + " arrived at floor " + ToString(floor) + " (" + floorobj->ID + ")");
+			Elevators[i].arrived = true;
+			Elevators[i].arrival_floor = floor;
+			Elevators[i].arrival_direction = direction;
+
+			if (Elevators[i].assigned_destination == floor)
+			{
+				Elevators[i].assigned_destination = 0;
+				Elevators[i].assigned = false;
+			}
+			break;
 		}
 	}
 }
