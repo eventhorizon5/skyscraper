@@ -221,6 +221,7 @@ public:
 	Elevator* NewElevator(int number);
 	Floor* NewFloor(int number);
 	Vehicle* NewVehicle(int number);
+	DispatchController* NewController(int number);
 	int GetElevatorCount();
 	int GetTotalFloors(); //all floors including basements
 	int GetShaftCount();

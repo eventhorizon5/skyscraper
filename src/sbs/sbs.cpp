@@ -1659,6 +1659,13 @@ Vehicle* SBS::NewVehicle(int number)
 	return vehicle_manager->Create(number);
 }
 
+DispatchController* SBS::NewController(int number)
+{
+	//create a new controller object
+
+	return controller_manager->Create(number);
+}
+
 int SBS::GetElevatorCount()
 {
 	//return the number of elevators

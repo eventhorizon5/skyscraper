@@ -40,6 +40,7 @@ public:
 	class ElevatorSection;
 	class ElevatorCarSection;
 	class VehicleSection;
+	class ControllerSection;
 
 	ScriptProcessor(EngineContext *instance);
 	~ScriptProcessor();
@@ -93,6 +94,7 @@ private:
 	ElevatorSection *elevator_section;
 	ElevatorCarSection *elevatorcar_section;
 	VehicleSection *vehicle_section;
+	ControllerSection *controller_section;
 
 	struct FunctionData
 	{

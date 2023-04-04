@@ -63,6 +63,7 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	elevator_section = new ElevatorSection(this);
 	elevatorcar_section = new ElevatorCarSection(this);
 	vehicle_section = new VehicleSection(this);
+	controller_section = new ControllerSection(this);
 
 	Reset();
 }
@@ -87,6 +88,8 @@ ScriptProcessor::~ScriptProcessor()
 		delete elevatorcar_section;
 	if (vehicle_section)
 		delete vehicle_section;
+	if (controller_section)
+		delete controller_section;
 }
 
 void ScriptProcessor::Reset()
@@ -127,6 +130,7 @@ void ScriptProcessor::Reset()
 	elevator_section->Reset();
 	elevatorcar_section->Reset();
 	vehicle_section->Reset();
+	controller_section->Reset();
 }
 
 bool ScriptProcessor::Run()
@@ -217,6 +221,10 @@ recalc:
 		//process vehicles
 		else if (config->SectionNum == 7)
 			returncode = vehicle_section->Run(LineData);
+
+		//process controllers
+		else if (config->SectionNum == 8)
+			returncode = controller_section->Run(LineData);
 
 		//Global commands
 		if (returncode == sContinue)
@@ -884,6 +892,8 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->context = "Elevator " + ToString(config->CurrentOld) + " Car " + current;
 	if (config->SectionNum == 7)
 		object->context = "Vehicle " + current;
+	if (config->SectionNum == 8)
+		object->context = "Controller " + current;
 }
 
 bool ScriptProcessor::FunctionProc()
@@ -1548,6 +1558,61 @@ int ScriptProcessor::ProcessSections()
 		}
 		config->Context = "Vehicle " + ToString(config->Current);
 		engine->Report("Processing vehicle " + ToString(config->Current) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "<controllers")
+	{
+		if (config->SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		config->SectionNum = 8;
+		int loc = linecheck.find("to", 12);
+		if (loc < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		std::string str1 = LineData.substr(13, loc - 14);
+		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, config->RangeL) || !IsNumeric(str2, config->RangeH))
+		{
+			ScriptError("Invalid range");
+			return sError;
+		}
+		config->Context = "Controller range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
+		config->Current = config->RangeL;
+		config->RangeStart = line;
+		engine->Report("Processing controllers " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "<controller ")
+	{
+		if (config->SectionNum > 0)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		config->SectionNum = 8;
+		config->RangeL = 0;
+		config->RangeH = 0;
+		std::string str = LineData.substr(12, LineData.length() - 13);
+		TrimString(str);
+		if (!IsNumeric(str, config->Current))
+		{
+			ScriptError("Invalid controller");
+			return sError;
+		}
+		if (config->Current < 1 || config->Current > Simcore->GetControllerCount() + 1)
+		{
+			ScriptError("Invalid controller");
+			return sError;
+		}
+		config->Context = "Controller " + ToString(config->Current);
+		engine->Report("Processing controller " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 

@@ -31,6 +31,7 @@ class SBSIMPEXP DispatchController : public Object
 public:
 
 	int Number;
+	std::string Name; //controller name
 	bool DestinationDispatch; //enable or disable Destination Dispatch
 	int Range; //elevator selection range
 	int MaxPassengers; //maximum passengers per route
