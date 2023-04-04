@@ -142,6 +142,10 @@ void CallStation::RemovePanel()
 
 bool CallStation::SelectFloor(int floor)
 {
+	//check lock state
+	if (IsLocked() == true)
+		return ReportError("Call station is locked");
+
 	Report("Selecting floor " + ToString(floor));
 
 	if (controller)
