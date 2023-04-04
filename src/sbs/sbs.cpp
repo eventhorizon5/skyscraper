@@ -471,39 +471,6 @@ bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
-	///////test code
-
-	//create new controller
-	DispatchController *controller = sbs->GetControllerManager()->Create(1);
-
-	//add elevator to controller
-	controller->AddElevator(1);
-
-	//turn on destination dispatch
-	controller->DestinationDispatch = true;
-
-	//create a new call station on floor 0
-	CallStation *station = GetFloor(0)->AddCallStation();
-
-	//assign station to Dispatch Controller 1
-	station->SetController(1);
-
-	//create a button panel
-	ButtonPanel *panel = station->CreateButtonPanel("ElevExtPanels", 3, 3, "front", 0, 0, 0.15, 0.15, 0.3, 0.45, 0, 0, 0);
-
-	//create a control that selects floor 5
-	std::vector<std::string> action_names;
-	action_names.push_back("5");
-	std::vector<std::string> textures;
-	textures.push_back("Button5");
-
-	panel->AddControl("switch.wav", 2, 2, 0, 0, 0, 0, 1, action_names, textures);
-
-	station->Move(3, GetFloor(0)->GetBase(true) + 4.5, 6 - 4.125 - 0.33 - 0.1);
-
-	////////end of test code
-
-
 	//prepare 3D geometry for use
 	Prepare();
 

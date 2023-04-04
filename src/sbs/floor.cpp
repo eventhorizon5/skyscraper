@@ -1783,7 +1783,7 @@ int Floor::GetCallStationCount()
 CallStation* Floor::GetCallStation(int number)
 {
 	if (number > 0 && number <= CallStationArray.size())
-		return CallStationArray[number + 1];
+		return CallStationArray[number - 1];
 	return 0;
 }
 

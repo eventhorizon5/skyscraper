@@ -489,3 +489,27 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, 1, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
+#Create a new Dispatch Controller to handle the elevator
+<Controller 1>
+    Name = Dispatch Controller %controller%
+    Destination Dispatch = true #turn on Destination Dispatch mode
+    Range = 5
+    MaxPassengers = 5
+    Elevators = 1  #assign elevator 1 to controller 1
+<EndController>
+
+#create a call station on each floor
+<Floors 0 to 9>
+    <CallStation 1>
+        Name = Call Station %callstation%
+
+        #create a button panel and control
+        CreatePanel ElevExtPanels, 3, 3, front, 0, 0, 0.15, 0.15, 0.3, 0.45, 0, 0, 0
+        AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 5, Button6
+
+	#set position of call station
+	Move 3, 4.5, 6 - 4.125 - 0.33 - 0.1
+
+    <EndCallStation>
+<EndFloors>
+

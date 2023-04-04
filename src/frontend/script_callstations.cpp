@@ -190,6 +190,25 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//Move command
+	if (linecheck.substr(0, 5) == "move ")
+	{
+		//get data
+		int params = SplitData(LineData, 5);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i < 2; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		station->Move(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+	}
+
 	//handle end of call station section
 	if (linecheck == "<endcallstation>" && config->RangeL == config->RangeH)
 	{
