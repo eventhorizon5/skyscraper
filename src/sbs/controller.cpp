@@ -212,6 +212,8 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 
 void DispatchController::ProcessRoutes()
 {
+	//process destination dispatch routes
+
 	for (int i = 0; i < Routes.size(); i++)
 	{
 		if (Routes[i].processed == true)
@@ -558,11 +560,15 @@ void DispatchController::AssignElevator(int number, int destination_floor)
 
 void DispatchController::RegisterCallStation(CallStation *station)
 {
+	//register the specified call station
+
 	CallStations.push_back(station);
 }
 
 void DispatchController::UnregisterCallStation(CallStation *station)
 {
+	//unregister the specified call station
+
 	for (size_t i = 0; i < CallStations.size(); i++)
 	{
 		if (CallStations[i] == station)

@@ -45,7 +45,7 @@ public:
 	ButtonPanel* GetPanel();
 	void RemovePanel();
 	bool SelectFloor(int floor);
-	void SetController(int controller);
+	void SetController(int number);
 	DispatchController* GetController();
 
 private:

@@ -93,7 +93,8 @@ void CallStation::Enabled(bool value)
 	is_enabled = value;
 
 	//enable or disable the button panel
-	panel->Enabled(value);
+	if (panel)
+		panel->Enabled(value);
 
 	if (sbs->Verbose)
 	{
@@ -153,14 +154,14 @@ bool CallStation::SelectFloor(int floor)
 	return false;
 }
 
-void CallStation::SetController(int controller)
+void CallStation::SetController(int number)
 {
 	//assign this call station to a controller, and register with it
 
-	this->controller = sbs->GetController(controller);
+	controller = sbs->GetController(number);
 
-	if (this->controller)
-		this->controller->RegisterCallStation(this);
+	if (controller)
+		controller->RegisterCallStation(this);
 }
 
 DispatchController* CallStation::GetController()
