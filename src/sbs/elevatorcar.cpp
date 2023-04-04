@@ -109,7 +109,6 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	GotoFloor = false;
 	LateDirection = 0;
 	DestinationFloor = 0;
-	UseDestination = false;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);

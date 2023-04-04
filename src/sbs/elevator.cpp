@@ -193,6 +193,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	RopeMesh = 0;
 	Error = false;
 	Controller = 0;
+	UseDestination = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -3662,7 +3663,7 @@ bool Elevator::SelectFloor(int floor)
 		return ReportError("Floor " + ToString(floor) + " not a serviced floor");
 
 	//SelectFloor won't work if Destination Dispatch is enabled
-	if (car->UseDestination == true && InServiceMode() == false)
+	if (UseDestination == true && InServiceMode() == false)
 		return ReportError("Cannot select floor " + ToString(floor) + ": Destination Dispatch is enabled");
 
 	bool result = false;

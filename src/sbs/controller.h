@@ -52,6 +52,7 @@ public:
 	void AssignElevator(int number, int destination_floor);
 	void RegisterCallStation(CallStation *station);
 	void UnregisterCallStation(CallStation *station);
+	int GetElevatorArrived(int starting_floor, int destination_floor);
 
 private:
 

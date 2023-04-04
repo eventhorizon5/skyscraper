@@ -258,7 +258,7 @@ void DispatchController::ProcessRoutes()
 
 		//have elevator use destination dispatch
 		car->DestinationFloor = destination_floor;
-		car->UseDestination = true;
+		elevator->UseDestination = true;
 
 		Routes[i].processed = true;
 	}
@@ -289,6 +289,9 @@ bool DispatchController::AddElevator(int elevator)
 
 	//assign controller to elevator
 	sbs->GetElevator(elevator)->Controller = Number;
+
+	//switch elevator into Destination Dispatch mode
+	sbs->GetElevator(elevator)->UseDestination = true;
 
 	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
 	Elevators.push_back(newelevator);
@@ -588,6 +591,22 @@ void DispatchController::UnregisterCallStation(CallStation *station)
 			return;
 		}
 	}
+}
+
+int DispatchController::GetElevatorArrived(int starting_floor, int destination_floor)
+{
+	//return the number of the elevator that has arrived, for the specified route
+	//return 0 if no elevator has arrived yet
+
+	for (int i = 0; i < Elevators.size(); i++)
+	{
+		if (Elevators[i].arrived == true)
+		{
+			if (Elevators[i].arrival_floor == starting_floor && Elevators[i].assigned_destination == destination_floor)
+				return Elevators[i].number;
+		}
+	}
+	return 0;
 }
 
 }

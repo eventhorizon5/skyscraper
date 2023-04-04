@@ -27,6 +27,7 @@
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "callbutton.h"
+#include "callstation.h"
 #include "control.h"
 #include "route.h"
 #include "random.h"
@@ -161,8 +162,10 @@ void Person::GotoFloor(int floor)
 		RouteEntry route_entry;
 		route_entry.elevator_route = elevators[i];
 		route_entry.callbutton = 0;
+		route_entry.callstation = 0;
 		route_entry.call_made = 0;
 		route_entry.floor_selected = false;
+		route_entry.destination = false;
 		route.push_back(route_entry);
 	}
 }
@@ -192,11 +195,15 @@ void Person::ProcessRoute()
 
 	Elevator *elevator = car->GetElevator();
 
+	route[0].destination = elevator->UseDestination;
+
 	//if a call has not been made, press first elevator's associated call button
 	if (route[0].call_made == 0)
 	{
 		route[0].callbutton = floor_obj->GetCallButton(elevator->Number);
+		route[0].callstation = floor_obj->GetCallStation(elevator->Number);
 		CallButton *button = route[0].callbutton;
+		CallStation *station = route[0].callstation;
 
 		bool result = false;
 
@@ -216,30 +223,50 @@ void Person::ProcessRoute()
 			}
 		}
 
+		if (station && route[0].destination == true)
+		{
+			Report("Pressing " + ToString(floor_selection) + " on call station for elevator " + ToString(elevator->Number));
+
+			result = station->SelectFloor(floor_selection);
+			route[0].floor_selected = true;
+
+			if (floor_selection > current_floor)
+				route[0].call_made = 1;
+			else
+				route[0].call_made = -1;
+		}
+
 		//stop route if call can't be made
 		if (result == false)
 		{
-			Report("Can't press call button for elevator " +  ToString(elevator->Number));
+			Report("Can't call elevator " +  ToString(elevator->Number));
 			Stop();
 		}
 
 		return;
 	}
 
-	//if a call has been made, wait for an elevator to arrive to press floor button
-	if (route[0].floor_selected == false)
+	//if a call has been made, wait for an elevator to arrive
+	//then press floor button for standard elevators, or ride elevator for destination dispatch
+	if (route[0].floor_selected == false || route[0].destination == true)
 	{
 		CallButton *button = route[0].callbutton;
+		CallStation *station = route[0].callstation;
 
-		if (!button)
+		if (!button && !station)
 			return;
 
 		bool direction = (floor_selection > current_floor);
-		int number = button->GetElevatorArrived(direction);
+		int number = 0;
+		if (button)
+			number = button->GetElevatorArrived(direction);
+		if (station && route[0].destination == true)
+			number = station->GetElevatorArrived(current_floor, floor_selection);
 
 		if (number > 0)
 		{
-			//if elevator has arrived at the called floor, press related floor button
+			//if elevator has arrived at the called floor, press related floor button if using a call button
+			//otherwise wait for destination dispatch mode
 
 			Elevator *elevator = sbs->GetElevator(number);
 			if (elevator)
@@ -258,25 +285,34 @@ void Person::ProcessRoute()
 						if (!floor)
 							return;
 
-						Report("Pressing elevator button for floor " + floor->ID);
-
-						Control *control = car->GetFloorButton(floor_selection);
-
-						if (control)
+						if (route[0].destination == false)
 						{
-							if (control->IsLocked() == false)
-							{
-								//press floor button
-								control->Press();
-								route[0].floor_selected = true;
-								return;
-							}
-						}
+							Report("Pressing elevator button for floor " + floor->ID);
 
-						//stop route if floor button is locked, or does not exist
-						Report("Can't press elevator button for floor " + floor->ID);
-						Stop();
-						return;
+							Control *control = car->GetFloorButton(floor_selection);
+
+							if (control)
+							{
+								if (control->IsLocked() == false)
+								{
+									//press floor button
+									control->Press();
+									route[0].floor_selected = true;
+									return;
+								}
+							}
+
+							//stop route if floor button is locked, or does not exist
+							Report("Can't press elevator button for floor " + floor->ID);
+							Stop();
+							return;
+						}
+						else
+						{
+							//destination dispatch mode
+
+							Report("Waiting for elevator for floor " + floor->ID);
+						}
 					}
 				}
 			}
@@ -284,13 +320,15 @@ void Person::ProcessRoute()
 		else
 		{
 			//if call has become invalid, stop route
-			if ((direction == true && button->GetUpStatus() == false) ||
-					(direction == false && button->GetDownStatus() == false))
+			if (button)
 			{
-				Stop();
-				return;
+				if ((direction == true && button->GetUpStatus() == false) ||
+						(direction == false && button->GetDownStatus() == false))
+				{
+					Stop();
+					return;
+				}
 			}
-
 		}
 	}
 	else

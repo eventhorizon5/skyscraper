@@ -48,6 +48,8 @@ public:
 	void SetController(int number);
 	DispatchController* GetController();
 	void SetPosition(Ogre::Vector3 &position);
+	bool ServicesElevator(int elevator);
+	int GetElevatorArrived(int starting_floor, int destination_floor);
 
 private:
 	ButtonPanel* panel; //button panel object

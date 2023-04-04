@@ -935,6 +935,39 @@ CallButton* Floor::GetCallButton(int elevator)
 	return 0;
 }
 
+std::vector<int> Floor::GetCallStations(int elevator)
+{
+	//get numbers of call stations that service the specified elevator
+
+	std::vector<int> stations;
+	stations.reserve(CallStationArray.size());
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		//put station number onto the array if it serves the elevator
+		if (CallStationArray[i])
+		{
+			if (CallStationArray[i]->ServicesElevator(elevator) == true)
+				stations.push_back((int)i);
+		}
+	}
+	return stations;
+}
+
+CallStation* Floor::GetCallStation(int elevator)
+{
+	//returns the first call button object that services the specified elevator
+
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i])
+		{
+			if (CallStationArray[i]->ServicesElevator(elevator) == true)
+				return CallStationArray[i];
+		}
+	}
+	return 0;
+}
+
 void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, bool direction, Real tw, Real th, bool isexternal)
 {
 	//convenience function for adding filler walls around doors
@@ -1652,8 +1685,9 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 				std::string type = SetCaseCopy(elev->Type, false);
 				bool serviced = car->IsServicedFloor(DestinationFloor);
 				CallButton *button = GetCallButton(elev->Number);
+				CallStation *station = GetCallStation(elev->Number);
 
-				if (serviced == true && type == ElevatorType && button)
+				if (serviced == true && type == ElevatorType && (button || station))
 				{
 					ElevatorRoute* route = new ElevatorRoute(car, DestinationFloor);
 					return route;
@@ -1778,13 +1812,6 @@ CameraTexture* Floor::GetCameraTexture(int number)
 int Floor::GetCallStationCount()
 {
 	return (int)CallStationArray.size();
-}
-
-CallStation* Floor::GetCallStation(int number)
-{
-	if (number > 0 && number <= CallStationArray.size())
-		return CallStationArray[number - 1];
-	return 0;
 }
 
 }

@@ -49,6 +49,7 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 	Locked = false;
 	KeyID = 0;
 	panel = 0;
+	controller = 0;
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -173,6 +174,24 @@ void CallStation::SetPosition(Ogre::Vector3 &position)
 {
 	position.y += sbs->GetFloor(GetFloor())->GetBase();
 	Object::SetPosition(position);
+}
+
+bool CallStation::ServicesElevator(int elevator)
+{
+	if (controller)
+		return controller->ServicesElevator(elevator);
+	return false;
+}
+
+int CallStation::GetElevatorArrived(int starting_floor, int destination_floor)
+{
+	//return the number of the elevator that has arrived, for the specified route
+	//return 0 if no elevator has arrived yet
+
+	if (!controller)
+		return 0;
+
+	return controller->GetElevatorArrived(starting_floor, destination_floor);
 }
 
 }
