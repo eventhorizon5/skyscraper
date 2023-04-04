@@ -194,7 +194,7 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 	//use existing entry if found
 	for (int i = 0; i < Routes.size(); i++)
 	{
-		if (Routes[i].starting_floor == starting_floor && Routes[i].destination_floor == destination_floor)
+		if (Routes[i].starting_floor == starting_floor && Routes[i].destination_floor == destination_floor && Routes[i].requests < MaxPassengers)
 		{
 			//create a new route if max passengers has been reached
 			if (Routes[i].requests >= MaxPassengers && Elevators.size() > 1)
