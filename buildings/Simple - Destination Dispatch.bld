@@ -508,7 +508,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 5, Button6
 
 	#set position of call station
-	Move 3, 4.5, 6 - 4.125 - 0.33 - 0.1
+	SetPosition 3, 4.5, 6 - 4.125 - 0.33 - 0.1
 
     <EndCallStation>
 <EndFloors>

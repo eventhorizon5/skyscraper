@@ -190,11 +190,11 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//Move command
-	if (linecheck.substr(0, 5) == "move ")
+	//SetPosition command
+	if (linecheck.substr(0, 12) == "setposition ")
 	{
 		//get data
-		int params = SplitData(LineData, 5);
+		int params = SplitData(LineData, 12);
 
 		if (params != 3)
 			return ScriptError("Incorrect number of parameters");
@@ -206,7 +206,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		station->Move(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		station->SetPosition(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 	}
 
 	//handle end of call station section
