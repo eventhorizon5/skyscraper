@@ -165,6 +165,12 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 		return false;
 	}
 
+	if (starting_floor == destination_floor)
+	{
+		ReportError("RequestRoute: Floors are the same");
+		return false;
+	}
+
 	Report("Requesting route from origin floor " + ToString(starting_floor) + " to destination floor " + ToString(destination_floor));
 
 	//make sure floors are valid
