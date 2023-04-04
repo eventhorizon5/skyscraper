@@ -3661,6 +3661,10 @@ bool Elevator::SelectFloor(int floor)
 	if (!car)
 		return ReportError("Floor " + ToString(floor) + " not a serviced floor");
 
+	//SelectFloor won't work if Destination Dispatch is enabled
+	if (car->UseDestination == true && InServiceMode() == false)
+		return ReportError("Cannot select floor " + ToString(floor) + ": Destination Dispatch is enabled");
+
 	bool result = false;
 
 	//elevator is above floor
