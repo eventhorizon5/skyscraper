@@ -7766,17 +7766,18 @@ AddAction FireServiceBypass13, Elevator13, Fire1Bypass
     <CallStation 1>
         Name = Call Station %callstation%
         Controller = 1
+        CreatePanel ElevExtPanels, 6, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -9.583 + 4.25 + 0.33 + 0.01, 4, -4.5
     <EndCallStation>
 
     <CallStation 2>
         Name = Call Station %callstation%
         Controller = 1
+        CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 9.583 - 4.25 - 0.33 - 0.01, 4, 4.5
     <EndCallStation>
 
     <CallStations 1 to 2>
-        CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 35, Button35
         AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 36, Button36
         AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 37, Button37
@@ -7795,17 +7796,18 @@ AddAction FireServiceBypass13, Elevator13, Fire1Bypass
     <CallStation 3>
         Name = Call Station %callstation%
         Controller = 2
+        CreatePanel ElevExtPanels, 6, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 18.083 + 4.25 + 0.33 + 0.01, 4, -4.5
     <EndCallStation>
 
     <CallStation 4>
         Name = Call Station %callstation%
         Controller = 2
+        CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 37.25 - 4.25 - 0.33 - 0.01, 4, 4.5
     <EndCallStation>
 
     <CallStations 3 to 4>
-        CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 24, Button24
         AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 25, Button25
         AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 26, Button26
@@ -7825,17 +7827,18 @@ AddAction FireServiceBypass13, Elevator13, Fire1Bypass
     <CallStation 5>
         Name = Call Station %callstation%
         Controller = 3
+        CreatePanel ElevExtPanels, 7, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -37.25 + 4.25 + 0.33 + 0.01, 4, -4.5
     <EndCallStation>
 
     <CallStation 6>
         Name = Call Station %callstation%
         Controller = 3
+        CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -18.083 - 4.25 - 0.33 - 0.01, 4, 4.5
     <EndCallStation>
 
     <CallStations 5 to 6>
-        CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 12, Button12
         AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 13, Button13
         AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 14, Button14
@@ -7859,17 +7862,18 @@ AddAction FireServiceBypass13, Elevator13, Fire1Bypass
     <CallStation 1>
         Name = Call Station %callstation%
         Controller = 1
+        CreatePanel ElevExtPanels, 6, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -9.583 + 4.25 + 0.33 + 0.01, 4, -4.5
     <EndCallStation>
 
     <CallStation 2>
         Name = Call Station %callstation%
         Controller = 1
+        CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 9.583 - 4.25 - 0.33 - 0.01, 4, 4.5
     <EndCallStation>
 
     <CallStations 1 to 2>
-        CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 35, Button35
         AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 36, Button36
         AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 37, Button37
@@ -7889,17 +7893,18 @@ AddAction FireServiceBypass13, Elevator13, Fire1Bypass
     <CallStation 1>
         Name = Call Station %callstation%
         Controller = 2
+        CreatePanel ElevExtPanels, 7, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 18.083 + 4.25 + 0.33 + 0.01, 4, -4.5
     <EndCallStation>
 
     <CallStation 2>
         Name = Call Station %callstation%
         Controller = 2
+        CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 37.25 - 4.25 - 0.33 - 0.01, 4, 4.5
     <EndCallStation>
 
     <CallStations 1 to 2>
-        CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 24, Button24
         AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 25, Button25
         AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 26, Button26
@@ -7920,17 +7925,18 @@ AddAction FireServiceBypass13, Elevator13, Fire1Bypass
     <CallStation 1>
         Name = Call Station %callstation%
         Controller = 3
+        CreatePanel ElevExtPanels, 7, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -37.25 + 4.25 + 0.33 + 0.01, 4, -4.5
     <EndCallStation>
 
     <CallStation 2>
         Name = Call Station %callstation%
         Controller = 3
+        CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -18.083 - 4.25 - 0.33 - 0.01, 4, 4.5
     <EndCallStation>
 
     <CallStations 1 to 2>
-        CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 12, Button12
         AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 13, Button13
         AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 14, Button14
@@ -8276,16 +8282,80 @@ AddAction FireServiceOn54, Elevator54, Fire1On
 AddAction FireServiceOff54, Elevator54, Fire1Off
 AddAction FireServiceBypass54, Elevator54, Fire1Bypass
 <Floor 80>
-    CallButtonElevators = 54, 55, 56, 57
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 3, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -36.25 + 4.25 + 0.33 + 0.01, 3, back, 0.5, 1, true, 0, 0
+    <CallStation 1>
+        Name = Call Station %callstation%
+        Controller = 11
+        CreatePanel ElevExtPanels, 7, 6, front, 0.15, 0.15, 0.3, 0.45, 0, 0
+        SetPosition -14.67, 4, -17.75 - 4.25 - 0.33 - 0.01
+    <EndCallStation>
+
+    <CallStation 2>
+        Name = Call Station %callstation%
+        Controller = 11
+        CreatePanel ElevExtPanels, 7, 6, back, 0.15, 0.15, 0.3, 0.45, 0, 0
+        SetPosition -14.67, 4, -36.25 + 4.25 + 0.33 + 0.01
+    <EndCallStation>
+
+    <CallStations 1 to 2>
+        AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 96, Button96
+        AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 97, Button97
+        AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 98, Button98
+        AddControl switch.wav, 2, 5, 0, 0, 0, 0, 1, 99, Button99
+        AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, 92, Button92
+        AddControl switch.wav, 3, 3, 0, 0, 0, 0, 1, 93, Button93
+        AddControl switch.wav, 3, 4, 0, 0, 0, 0, 1, 94, Button94
+        AddControl switch.wav, 3, 5, 0, 0, 0, 0, 1, 95, Button95
+        AddControl switch.wav, 4, 2, 0, 0, 0, 0, 1, 88, Button88
+        AddControl switch.wav, 4, 3, 0, 0, 0, 0, 1, 89, Button89
+        AddControl switch.wav, 4, 4, 0, 0, 0, 0, 1, 90, Button90
+        AddControl switch.wav, 4, 5, 0, 0, 0, 0, 1, 91, Button91
+        AddControl switch.wav, 5, 2, 0, 0, 0, 0, 1, 84, Button84
+        AddControl switch.wav, 5, 3, 0, 0, 0, 0, 1, 85, Button85
+        AddControl switch.wav, 5, 4, 0, 0, 0, 0, 1, 86, Button86
+        AddControl switch.wav, 5, 5, 0, 0, 0, 0, 1, 87, Button87
+        AddControl switch.wav, 6, 2, 0, 0, 0, 0, 1, 82, Button82
+        AddControl switch.wav, 6, 5, 0, 0, 0, 0, 1, 83, Button83
+    <EndCallStations>
+
     AddActionControl FireSwitch54, switch.wav, front, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 0.2, 0.2, 2.5, FireServiceOff54, FireServiceBypass54, FireServiceOn54, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
 <Floors 82 to 99>
-    CallButtonElevators = 54, 55, 56, 57
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -17.75 - 4.25 - 0.33 - 0.01, 3, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.67, -36.25 + 4.25 + 0.33 + 0.01, 3, back, 0.5, 1, true, 0, 0
+        <CallStation 1>
+        Name = Call Station %callstation%
+        Controller = 11
+        CreatePanel ElevExtPanels, 7, 6, front, 0.15, 0.15, 0.3, 0.45, 0, 0
+        SetPosition -14.67, 4, -17.75 - 4.25 - 0.33 - 0.01
+    <EndCallStation>
+
+    <CallStation 2>
+        Name = Call Station %callstation%
+        Controller = 11
+        CreatePanel ElevExtPanels, 7, 6, back, 0.15, 0.15, 0.3, 0.45, 0, 0
+        SetPosition -14.67, 4, -36.25 + 4.25 + 0.33 + 0.01
+    <EndCallStation>
+
+    <CallStations 1 to 2>
+        AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 96, Button96
+        AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 97, Button97
+        AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 98, Button98
+        AddControl switch.wav, 2, 5, 0, 0, 0, 0, 1, 99, Button99
+        AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, 92, Button92
+        AddControl switch.wav, 3, 3, 0, 0, 0, 0, 1, 93, Button93
+        AddControl switch.wav, 3, 4, 0, 0, 0, 0, 1, 94, Button94
+        AddControl switch.wav, 3, 5, 0, 0, 0, 0, 1, 95, Button95
+        AddControl switch.wav, 4, 2, 0, 0, 0, 0, 1, 88, Button88
+        AddControl switch.wav, 4, 3, 0, 0, 0, 0, 1, 89, Button89
+        AddControl switch.wav, 4, 4, 0, 0, 0, 0, 1, 90, Button90
+        AddControl switch.wav, 4, 5, 0, 0, 0, 0, 1, 91, Button91
+        AddControl switch.wav, 5, 2, 0, 0, 0, 0, 1, 84, Button84
+        AddControl switch.wav, 5, 3, 0, 0, 0, 0, 1, 85, Button85
+        AddControl switch.wav, 5, 4, 0, 0, 0, 0, 1, 86, Button86
+        AddControl switch.wav, 5, 5, 0, 0, 0, 0, 1, 87, Button87
+        AddControl switch.wav, 6, 2, 0, 0, 0, 0, 1, 80, Button80
+        AddControl switch.wav, 6, 4, 0, 0, 0, 0, 1, 82, Button82
+        AddControl switch.wav, 6, 5, 0, 0, 0, 0, 1, 83, Button83
+    <EndCallStations>
 <EndFloors>
 
 #Residential Locals
