@@ -216,6 +216,9 @@ void CallButton::Enabled(bool value)
 
 	is_enabled = value;
 
+	//enable or disable the button panel
+	panel->Enabled(value);
+
 	if (sbs->Verbose)
 	{
 		if (value == true)
