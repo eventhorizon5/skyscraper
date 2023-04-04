@@ -492,7 +492,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 #Create a new Dispatch Controller to handle the elevator
 <Controller 1>
     Name = Dispatch Controller %controller%
-    Destination Dispatch = true #turn on Destination Dispatch mode
+    DestinationDispatch = true #turn on Destination Dispatch mode
     Range = 5
     MaxPassengers = 5
     Elevators = 1  #assign elevator 1 to controller 1
@@ -502,6 +502,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 <Floors 0 to 9>
     <CallStation 1>
         Name = Call Station %callstation%
+        Controller = 1  #assign to Dispatch Controller 1
 
         #create a button panel and control
         CreatePanel ElevExtPanels, 3, 3, front, 0, 0, 0.15, 0.15, 0.3, 0.45, 0, 0, 0

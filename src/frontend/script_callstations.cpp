@@ -107,6 +107,17 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		station->Name = value;
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 10) == "controller")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		std::string str = Calc(value);
+		int num = 0;
+		if (!IsNumeric(str, num))
+			return ScriptError("Invalid value");
+		station->SetController(num);
+		return sNextLine;
+	}
 
 	//CreatePanel command
 	if (linecheck.substr(0, 11) == "createpanel")
