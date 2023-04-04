@@ -32,6 +32,8 @@ class SBSIMPEXP CallStation : public Object, public Lock
 {
 public:
 
+	std::string Name;
+
 	//functions
 	CallStation(Object *parent, int floornum, int number);
 	~CallStation();

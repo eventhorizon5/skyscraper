@@ -129,6 +129,7 @@ public:
 	RevolvingDoor* GetRevolvingDoor(int number);
 	CameraTexture* GetCameraTexture(int number);
 	int GetCallStationCount();
+	CallStation* GetCallStation(int number);
 
 private:
 	//sound objects

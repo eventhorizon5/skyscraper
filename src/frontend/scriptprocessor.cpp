@@ -64,6 +64,7 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	elevatorcar_section = new ElevatorCarSection(this);
 	vehicle_section = new VehicleSection(this);
 	controller_section = new ControllerSection(this);
+	callstation_section = new CallStationSection(this);
 
 	Reset();
 }
@@ -90,6 +91,8 @@ ScriptProcessor::~ScriptProcessor()
 		delete vehicle_section;
 	if (controller_section)
 		delete controller_section;
+	if (callstation_section)
+		delete callstation_section;
 }
 
 void ScriptProcessor::Reset()
@@ -131,6 +134,7 @@ void ScriptProcessor::Reset()
 	elevatorcar_section->Reset();
 	vehicle_section->Reset();
 	controller_section->Reset();
+	callstation_section->Reset();
 }
 
 bool ScriptProcessor::Run()
@@ -225,6 +229,10 @@ recalc:
 		//process controllers
 		else if (config->SectionNum == 8)
 			returncode = controller_section->Run(LineData);
+
+		//process call stations
+		else if (config->SectionNum == 9)
+			returncode = callstation_section->Run(LineData);
 
 		//Global commands
 		if (returncode == sContinue)
@@ -894,6 +902,8 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->context = "Vehicle " + current;
 	if (config->SectionNum == 8)
 		object->context = "Controller " + current;
+	if (config->SectionNum == 9)
+		object->context = "Call Station " + current;
 }
 
 bool ScriptProcessor::FunctionProc()
@@ -1613,6 +1623,78 @@ int ScriptProcessor::ProcessSections()
 		}
 		config->Context = "Controller " + ToString(config->Current);
 		engine->Report("Processing controller " + ToString(config->Current) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 13) == "<callstations" && config->SectionNum == 2)
+	{
+		config->SectionNum = 9;
+		int loc = linecheck.find("to", 13);
+		if (loc < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+
+		//store previous elevator section values
+		config->CurrentOld = config->Current;
+		config->RangeLOld = config->RangeL;
+		config->RangeHOld = config->RangeH;
+		config->RangeStartOld = config->RangeStart;
+		config->ContextOld = config->Context;
+
+		std::string str1 = LineData.substr(14, loc - 15);
+		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, config->RangeL) || !IsNumeric(str2, config->RangeH))
+		{
+			ScriptError("Invalid range");
+			return sError;
+		}
+
+		//verify floor
+		if (!Simcore->GetFloor(config->CurrentOld))
+		{
+			ScriptError("Invalid floor");
+			return sError;
+		}
+
+		config->Context = "Floor " + ToString(config->CurrentOld) + " Call Station range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
+		config->Current = config->RangeL;
+		config->RangeStart = line;
+		engine->Report("Processing floor " + ToString(config->CurrentOld) + " call stations " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 13) == "<callstation " && config->SectionNum == 2)
+	{
+		config->SectionNum = 9;
+
+		//store previous elevator section values
+		config->CurrentOld = config->Current;
+		config->RangeLOld = config->RangeL;
+		config->RangeHOld = config->RangeH;
+		config->RangeStartOld = config->RangeStart;
+		config->ContextOld = config->Context;
+
+		config->RangeL = 0;
+		config->RangeH = 0;
+		std::string str = LineData.substr(13, LineData.length() - 14);
+		TrimString(str);
+		if (!IsNumeric(str, config->Current))
+		{
+			ScriptError("Invalid call station number");
+			return sError;
+		}
+
+		//verify floor
+		if (!Simcore->GetFloor(config->CurrentOld))
+		{
+			ScriptError("Invalid floor");
+			return sError;
+		}
+
+		config->Context = "Floor " + ToString(config->CurrentOld) + " Call Station " + ToString(config->Current);
+		engine->Report("Processing floor " + ToString(config->CurrentOld) + " call station " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 

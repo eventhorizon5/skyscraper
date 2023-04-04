@@ -1,0 +1,233 @@
+/*
+	Skyscraper 1.12 Alpha - Script Processor - Call Stations Section
+	Copyright (C)2003-2023 Ryan Thoryk
+	https://www.skyscrapersim.net
+	https://sourceforge.net/projects/skyscraper/
+	Contact - ryan@thoryk.com
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+#include "globals.h"
+#include "sbs.h"
+#include "skyscraper.h"
+#include "enginecontext.h"
+#include "floor.h"
+#include "callstation.h"
+#include "buttonpanel.h"
+#include "control.h"
+#include "scriptprocessor.h"
+#include "script_section.h"
+
+using namespace SBS;
+
+namespace Skyscraper {
+
+ScriptProcessor::CallStationSection::CallStationSection(ScriptProcessor *parent) : Section(parent)
+{
+
+}
+
+int ScriptProcessor::CallStationSection::Run(std::string &LineData)
+{
+	//Process call stations
+
+	//get call station object
+	CallStation *station = 0;
+	Floor *floor = 0;
+	if (config->SectionNum == 9)
+	{
+		floor = Simcore->GetFloor(config->CurrentOld);
+		if (floor)
+			station = floor->GetCallStation(config->Current);
+	}
+	else
+	{
+		//get default station if not in a separate callstation section
+		floor = Simcore->GetFloor(config->Current);
+		if (floor)
+			station = floor->GetCallStation(1);
+	}
+
+	if (!floor)
+		return sError;
+
+	//create call station if not created already
+	if (!station)
+		station = floor->AddCallStation();
+
+	if (!station)
+		return sError;
+
+	//replace variables with actual values
+	if (config->SectionNum == 9) //only run if not being called from floor function
+	{
+		ReplaceAll(LineData, "%floor%", ToString(config->CurrentOld));
+		ReplaceAll(LineData, "%callstation%", ToString(config->Current));
+
+		//IF/While statement stub (continue to global commands for processing)
+		if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+			return sContinue;
+
+		//process math functions
+		if (MathFunctions(LineData) == sError)
+			return sError;
+
+		//process functions
+		if (parent->FunctionProc() == true)
+			return sNextLine;
+	}
+
+	//get text after equal sign
+	bool equals = true;
+	if ((int)LineData.find("=", 0) == -1)
+		equals = false;
+	std::string value = GetAfterEquals(LineData);
+
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
+	//parameters
+	if (linecheck.substr(0, 4) == "name")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		station->Name = value;
+		return sNextLine;
+	}
+
+	//CreatePanel command
+	if (linecheck.substr(0, 11) == "createpanel")
+	{
+		//get data
+		int params = SplitData(LineData, 12);
+
+		if (params != 13)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 12; i++)
+		{
+			if (i == 3)
+				i = 4;
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		StoreCommand(station->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+		return sNextLine;
+	}
+
+	//AddControl command
+	if (linecheck.substr(0, 11) == "addcontrol ")
+	{
+		//get data
+		int params = SplitData(LineData, 11);
+
+		if (params < 10)
+			return ScriptError("Incorrect number of parameters");
+
+		int end = 7;
+
+		//check numeric values
+		for (int i = 0; i <= end; i++)
+		{
+			if (i == 0)
+				i++;
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		if (!station->GetPanel())
+			return ScriptError("Panel not created yet");
+
+		std::vector<std::string> action_array, tex_array;
+		int slength, parameters;
+
+		//get number of action & texture parameters
+		slength = (int)tempdata.size();
+		parameters = slength - (end + 1); //strip off main parameters
+
+		//action & texture parameter number needs to be even
+		if (IsEven(parameters) == false)
+			return ScriptError("Incorrect number of parameters");
+
+		for (int i = (end + 1); i < slength - (parameters / 2); i++)
+			action_array.push_back(tempdata[i]);
+		for (int i = slength - (parameters / 2); i < slength; i++)
+			tex_array.push_back(tempdata[i]);
+
+		//check to see if file exists
+		parent->CheckFile("data/" + tempdata[0]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		Control* control = 0;
+		control = station->GetPanel()->AddControl(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), action_array, tex_array);
+
+		if (control)
+		{
+			if (config->lockvalue == 0)
+				control->SetLocked(false, config->keyvalue);
+			else
+				control->SetLocked(true, config->keyvalue);
+		}
+		StoreCommand(control);
+		return sNextLine;
+	}
+
+	//handle end of call station section
+	if (linecheck == "<endcallstation>" && config->RangeL == config->RangeH)
+	{
+		//return to floor section
+		config->SectionNum = 2;
+		config->Context = config->ContextOld;
+		config->Current = config->CurrentOld;
+		config->RangeL = config->RangeLOld;
+		config->RangeH = config->RangeHOld;
+		config->RangeStart = config->RangeStartOld;
+
+		engine->Report("Finished call station");
+		return sNextLine;
+	}
+
+	//handle call station range
+	if (config->RangeL != config->RangeH && linecheck.substr(0, 15) == "<endcallstation")
+	{
+		if (config->Current < config->RangeH)
+		{
+			config->Current++;
+			parent->line = config->RangeStart;  //loop back
+			return sNextLine;
+		}
+		else
+		{
+			config->SectionNum = 2; //break out of loop
+			config->Context = config->ContextOld;
+			config->RangeL = config->RangeLOld;
+			config->RangeH = config->RangeHOld;
+			config->RangeStart = config->RangeStartOld;
+			config->Current = config->CurrentOld;
+			engine->Report("Finished call stations");
+			return sNextLine;
+		}
+	}
+
+	return sContinue;
+}
+
+}
