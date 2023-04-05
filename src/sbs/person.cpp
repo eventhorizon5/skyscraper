@@ -202,7 +202,7 @@ void Person::ProcessRoute()
 	if (route[0].call_made == 0)
 	{
 		route[0].callbutton = floor_obj->GetCallButton(elevator->Number);
-		route[0].callstation = floor_obj->GetCallStation(elevator->Number);
+		route[0].callstation = floor_obj->GetCallStationForElevator(elevator->Number);
 		CallButton *button = route[0].callbutton;
 		CallStation *station = route[0].callstation;
 
@@ -315,7 +315,7 @@ void Person::ProcessRoute()
 					else
 					{
 						//destination dispatch mode
-						Report("Waiting for elevator for floor " + floor->ID);
+						Report("Waiting in elevator for floor " + floor->ID);
 					}
 				}
 			}
