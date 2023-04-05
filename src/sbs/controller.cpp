@@ -647,4 +647,20 @@ void DispatchController::GetFloorRange()
 	}
 }
 
+bool DispatchController::IsServicedFloor(int floor)
+{
+	//return true if this controller serves the specified floor
+
+	for (size_t i = 0; i < Elevators.size(); i++)
+	{
+		bool tmp = false;
+		Elevator *elev = sbs->GetElevator(Elevators[i].number);
+		if (elev)
+			tmp = elev->IsServicedFloor(floor);
+		if (tmp == true)
+			return true;
+	}
+	return false;
+}
+
 }
