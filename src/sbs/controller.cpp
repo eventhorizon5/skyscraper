@@ -287,6 +287,10 @@ bool DispatchController::AddElevator(int elevator)
 			return false;
 	}
 
+	//exit if elevator is already assigned to another controller
+	if (sbs->GetElevator(elevator)->Controller)
+		return ReportError("Elevator " + ToString(elevator) + " already assigned to a controller");
+
 	//create a new elevator map
 	ElevMap newelevator;
 	newelevator.number = elevator;
@@ -317,6 +321,10 @@ bool DispatchController::RemoveElevator(int elevator)
 		if (Elevators[i].number == elevator)
 		{
 			Report ("Elevator " + ToString(elevator) + " removed from dispatch controller " + ToString(Number));
+
+			if (sbs->GetElevator(elevator))
+				sbs->GetElevator(elevator)->Controller = 0;
+
 			Elevators.erase(Elevators.begin() + i);
 			return true;
 		}
