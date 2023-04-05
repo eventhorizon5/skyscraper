@@ -8354,14 +8354,31 @@ AddAction FireServiceOn33, Elevator33, Fire1On
 AddAction FireServiceOff33, Elevator33, Fire1Off
 AddAction FireServiceBypass33, Elevator33, Fire1Bypass
 <Floor 0>
-    CallButtonElevators = 33, 34
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 9.083 + 4.75 + 0.33 + 0.01, 33.33, 4, right, 0.5, 1, true, 0, 0
-    AddActionControl FireSwitch33, switch.wav, right, 9.083 + 4.75 + 0.33 + 0.01, 33.33, 0.25, 0.25, 3.5, FireServiceOff33, FireServiceBypass33, FireServiceOn33, Fire1Off, Fire1Bypass, Fire1On
+    <CallStation 9>
+        Name = Call Station %callstation%
+        Controller = 6
+        CreatePanel ElevExtPanels, 4, 4, right, 0.15, 0.15, 0.3, 0.45, 0, 0
+        SetPosition 9.083 + 4.75 + 0.33 + 0.01, 4, 33.33
+        AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 0, Button135
+        AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 1, Button136
+        AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, 2, ButtonL
+        AddControl switch.wav, 3, 3, 0, 0, 0, 0, 1, -3, Button134
+    <EndCallStation>
+
+    AddActionControl FireSwitch33, switch.wav, right, 9.083 + 4.75 + 0.33 + 0.01, 33.33, 0.25, 0.25, 3, FireServiceOff33, FireServiceBypass33, FireServiceOn33, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
 <Floors 134 to 136>
-    CallButtonElevators = 33, 34
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 9.083 + 4.75 + 0.33 + 0.01, 33.33, 4, right, 0.5, 1, true, 0, 0
+    <CallStation 1>
+        Name = Call Station %callstation%
+        Controller = 6
+        CreatePanel ElevExtPanels, 4, 4, right, 0.15, 0.15, 0.3, 0.45, 0, 0
+        SetPosition 9.083 + 4.75 + 0.33 + 0.01, 4, 33.33
+        AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 0, Button135
+        AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 1, Button136
+        AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, 2, ButtonL
+        AddControl switch.wav, 3, 3, 0, 0, 0, 0, 1, -3, Button134
+    <EndCallStation>
 <EndFloors>
 
 #Hotel Express
