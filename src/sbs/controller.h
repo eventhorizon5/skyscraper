@@ -64,6 +64,10 @@ private:
 	void Process(int direction);
 	void ProcessDestinationDispatch();
 	void ProcessRoutes();
+	void GetFloorRange();
+
+	int bottom_floor;
+	int top_floor;
 
 	struct ElevMap
 	{

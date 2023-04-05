@@ -299,6 +299,9 @@ bool DispatchController::AddElevator(int elevator)
 	//switch elevator into Destination Dispatch mode
 	sbs->GetElevator(elevator)->UseDestination = true;
 
+	//process floor range
+	GetFloorRange();
+
 	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
 	Elevators.push_back(newelevator);
 	return true;
@@ -613,6 +616,35 @@ int DispatchController::GetElevatorArrived(int starting_floor, int destination_f
 		}
 	}
 	return 0;
+}
+
+void DispatchController::GetFloorRange()
+{
+	//determine floor range of associated elevators
+	bool firstrun = true;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
+	{
+		Elevator *elev = sbs->GetElevator(Elevators[i].number);
+		if (elev)
+		{
+			int carnum = elev->GetCarCount();
+			for (int j = 1; j <= carnum; j++)
+			{
+				ElevatorCar *car = elev->GetCar(j);
+				if (car)
+				{
+					int tmpbottom = car->GetBottomFloor();
+					int tmptop = car->GetTopFloor();
+					if (tmpbottom < bottom_floor || firstrun == true)
+						bottom_floor = tmpbottom;
+					if (tmptop > top_floor || firstrun == true)
+						top_floor = tmptop;
+					firstrun = false;
+				}
+			}
+		}
+	}
 }
 
 }
