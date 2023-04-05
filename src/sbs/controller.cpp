@@ -178,6 +178,12 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 	if (!sbs->GetFloor(starting_floor) || !sbs->GetFloor(destination_floor))
 		return ReportError("Invalid floor");
 
+	//make sure this controller has elevators that serve the specified floors
+	if (IsServicedFloor(starting_floor) == false)
+		return ReportError("No elevators found for floor " + ToString(starting_floor));
+	if (IsServicedFloor(destination_floor) == false)
+		return ReportError("No elevators found for floor " + ToString(destination_floor));
+
 	//check to make sure elevator objects are valid
 	bool isvalid = false;
 	for (size_t i = 0; i < Elevators.size(); i++)
