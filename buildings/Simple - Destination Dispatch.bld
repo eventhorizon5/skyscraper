@@ -494,7 +494,7 @@ SetAutoSize = false, false
         Name = Call Station %callstation%
         Controller = 1  #assign to Dispatch Controller 1
 
-        #create a button panel and control
+        #create a button panel and controls
         CreatePanel ElevExtPanels, 6, 5, front, 0.15, 0.15, 0.3, 0.45, 0, 0
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 7, Button8
         AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 8, Button9
