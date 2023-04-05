@@ -7762,6 +7762,9 @@ AddAction FireServiceBypass7, Elevator7, Fire1Bypass
 AddAction FireServiceOn13, Elevator13, Fire1On
 AddAction FireServiceOff13, Elevator13, Fire1Off
 AddAction FireServiceBypass13, Elevator13, Fire1Bypass
+
+SetAutoSize = false, false
+
 <Floor 0>
     <CallStation 1>
         Name = Call Station %callstation%
