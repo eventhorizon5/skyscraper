@@ -498,6 +498,8 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     Elevators = 1  #assign elevator 1 to controller 1
 <EndController>
 
+SetAutoSize = false, false
+
 #create a call station on each floor
 <Floors 0 to 9>
     <CallStation 1>
