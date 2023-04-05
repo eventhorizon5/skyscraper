@@ -493,6 +493,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 <Controller 1>
     Name = Dispatch Controller %controller%
     DestinationDispatch = true #turn on Destination Dispatch mode
+    Hybrid = true
     Range = 5
     MaxPassengers = 5
     Elevators = 1  #assign elevator 1 to controller 1

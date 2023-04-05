@@ -193,7 +193,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	RopeMesh = 0;
 	Error = false;
 	Controller = 0;
-	UseDestination = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -3662,9 +3661,12 @@ bool Elevator::SelectFloor(int floor)
 	if (!car)
 		return ReportError("Floor " + ToString(floor) + " not a serviced floor");
 
-	//SelectFloor won't work if Destination Dispatch is enabled
-	if (UseDestination == true && InServiceMode() == false)
-		return ReportError("Cannot select floor " + ToString(floor) + ": Destination Dispatch is enabled");
+	//SelectFloor won't work if Destination Dispatch is enabled, if set
+	if (GetController())
+	{
+		if (GetController()->DestinationDispatch == true && GetController()->Hybrid == false && InServiceMode() == false)
+			return ReportError("Cannot select floor " + ToString(floor) + ": Destination Dispatch is enabled");
+	}
 
 	bool result = false;
 
@@ -4677,6 +4679,15 @@ void Elevator::DoSetControls()
 
 		ControlQueue.pop();
 	}
+}
+
+bool Elevator::GetDestinationDispatch()
+{
+	//return true if Destination Dispatch is enabled
+
+	if (sbs->GetController(Controller))
+		return sbs->GetController(Controller)->DestinationDispatch;
+	return false;
 }
 
 }

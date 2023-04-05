@@ -53,6 +53,7 @@ DispatchController::DispatchController(Object *parent, int number) : Object(pare
 	Range = 5;
 	DestinationDispatch = false;
 	MaxPassengers = 5;
+	Hybrid = false;
 
 	//create timer
 	timer = new Timer("Dispatch Timer", this);
@@ -80,7 +81,7 @@ void DispatchController::Loop()
 {
 	//this function runs for every registered dispatch controller via timer callback
 
-	if (DestinationDispatch == false)
+	if (DestinationDispatch == false || Hybrid == true)
 	{
 		//this is reserved for future use
 
@@ -261,9 +262,6 @@ void DispatchController::ProcessRoutes()
 			if (Elevators[i].number == elevator->Number)
 				Elevators[i].destination_floor = destination_floor;
 		}
-		//have elevator use destination dispatch
-		car->DestinationFloor = destination_floor;
-		elevator->UseDestination = true;
 
 		Routes[i].processed = true;
 	}
@@ -295,9 +293,6 @@ bool DispatchController::AddElevator(int elevator)
 
 	//assign controller to elevator
 	sbs->GetElevator(elevator)->Controller = Number;
-
-	//switch elevator into Destination Dispatch mode
-	sbs->GetElevator(elevator)->UseDestination = true;
 
 	//process floor range
 	GetFloorRange();

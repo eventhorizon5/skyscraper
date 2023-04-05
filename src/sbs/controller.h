@@ -33,6 +33,7 @@ public:
 	int Number;
 	std::string Name; //controller name
 	bool DestinationDispatch; //enable or disable Destination Dispatch
+	bool Hybrid; //if true, allow both standard and destination dispatch modes
 	int Range; //elevator selection range
 	int MaxPassengers; //maximum passengers per route
 

@@ -196,7 +196,7 @@ void Person::ProcessRoute()
 
 	Elevator *elevator = car->GetElevator();
 
-	route[0].destination = elevator->UseDestination;
+	route[0].destination = elevator->GetDestinationDispatch();
 
 	//if a call has not been made, press first elevator's associated call button
 	if (route[0].call_made == 0)

@@ -87,6 +87,14 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		c->DestinationDispatch = ToBool(value);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 6) == "hybrid")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		c->Hybrid = ToBool(value);
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 5) == "range")
 	{
 		if (equals == false)
