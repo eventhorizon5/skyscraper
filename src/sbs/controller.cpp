@@ -176,7 +176,7 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 
 	//make sure floors are valid
 	if (!sbs->GetFloor(starting_floor) || !sbs->GetFloor(destination_floor))
-		return false;
+		return ReportError("Invalid floor");
 
 	//check to make sure elevator objects are valid
 	bool isvalid = false;
