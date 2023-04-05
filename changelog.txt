@@ -1,5 +1,7 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-new "Simple - Double Decker DD" building
+-new "Triton Center - Destination Dispatch" building
 -disable button panels for Call Button objects in Enabled() function to improve performance
 -new "Simple - Destination Dispatch" building, replacing the old Destination one
 -support for Destination Dispatch elevators
