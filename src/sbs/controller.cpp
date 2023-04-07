@@ -119,8 +119,8 @@ void DispatchController::ProcessDestinationDispatch()
 		{
 			if (elev)
 			{
-				//wait until doors have opened
-				if (elev->AreDoorsOpening() == true)
+				//wait until doors have started closing
+				if (elev->AreDoorsOpening() == true || (elev->AreDoorsOpen() == true && elev->AreDoorsClosing() == false))
 					return;
 			}
 
