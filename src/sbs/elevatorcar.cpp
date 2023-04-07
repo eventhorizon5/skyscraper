@@ -3076,10 +3076,17 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 		}
 	}
 
+	DispatchController *controller = 0;
+	if (parent->Controller > 0)
+	{
+		controller = sbs->GetController(parent->Controller);
+
+	}
+
 	//play chime sound and change indicator
 	if (new_direction == true)
 	{
-		if (up == true || direction == 1 || parent->NotifyLate == true)
+		if (up == true || direction == 1 || parent->NotifyLate == true || controller)
 		{
 			Chime(0, floor, true, early);
 			SetDirectionalIndicators(floor, true, false);
@@ -3088,7 +3095,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 	}
 	else
 	{
-		if (down == true || direction == -1 || parent->NotifyLate == true)
+		if (down == true || direction == -1 || parent->NotifyLate == true || controller)
 		{
 			Chime(0, floor, false, early);
 			SetDirectionalIndicators(floor, false, true);
