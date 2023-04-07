@@ -124,6 +124,7 @@ public:
 	bool Counterweight; //if true, elevator has a counterweight
 	bool Error; //true if an error occurred during movement processing
 	int Controller; //destination controller this elevator is assigned to, 0 is default (none)
+	std::string Ident; //letter identifier of elevator for Destination Dispatch
 
 	//functions
 	Elevator(Object *parent, int number);
