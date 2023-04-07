@@ -61,6 +61,10 @@ CallStation::~CallStation()
 {
 	RemovePanel();
 
+	if (display)
+		delete display;
+	display = 0;
+
 	if (sbs->FastDelete == false)
 	{
 		//unregister with controller
@@ -203,14 +207,14 @@ bool CallStation::FireService(int value)
 	return false;
 }
 
-bool CallStation::CreateDisplayPanel(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
+DisplayPanel* CallStation::AddDisplay(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
 {
 	if (display)
-		return false;
+		return 0;
 
 	display = new DisplayPanel(this, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
 
-	return true;
+	return display;
 }
 
 void CallStation::UpdateDisplay(std::string &text)

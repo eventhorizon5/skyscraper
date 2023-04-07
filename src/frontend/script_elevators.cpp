@@ -612,6 +612,13 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->CounterweightStopSound = value;
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 5) == "ident")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		elev->Ident = value;
+		return sNextLine;
+	}
 
 	//CreateElevator command
 	if (linecheck.substr(0, 14) == "createelevator")

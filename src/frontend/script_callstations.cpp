@@ -28,6 +28,7 @@
 #include "callstation.h"
 #include "buttonpanel.h"
 #include "control.h"
+#include "display.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -219,6 +220,26 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 
 		Ogre::Vector3 position = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		station->SetPosition(position);
+	}
+
+	//AddDisplay command
+	if (linecheck.substr(0, 10) == "adddisplay")
+	{
+		//get data
+		int params = SplitData(LineData, 11);
+
+		if (params != 8)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 7; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		StoreCommand(station->AddDisplay(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+		return sNextLine;
 	}
 
 	//handle end of call station section
