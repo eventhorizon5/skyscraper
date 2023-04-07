@@ -143,8 +143,8 @@ void DispatchController::ProcessDestinationDispatch()
 					//turn off display
 					if (Routes[j].station)
 					{
-						std::string display = "";
-						Routes[j].station->UpdateDisplay(display);
+						std::string indicator = "";
+						Routes[j].station->UpdateIndicator(indicator);
 					}
 
 					//remove route from table
@@ -279,7 +279,7 @@ void DispatchController::ProcessRoutes()
 
 		//update destination display
 		if (Routes[i].station)
-			Routes[i].station->UpdateDisplay(elevator->Ident);
+			Routes[i].station->UpdateIndicator(elevator->Ident);
 
 		//dispatch elevator
 		DispatchElevator(elevator->Number, starting_floor, direction);

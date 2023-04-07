@@ -107,7 +107,7 @@ namespace SBS {
 	class DispatchController;
 	class ControllerManager;
 	class CallStation;
-	class DisplayPanel;
+	class Indicator;
 
 	typedef std::vector<Ogre::Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;

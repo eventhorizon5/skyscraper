@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Identifier Object
+	Scalable Building Simulator - Indicator Object
 	The Skyscraper Project - Version 1.12 Alpha
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
@@ -26,16 +26,16 @@
 #include "mesh.h"
 #include "manager.h"
 #include "texture.h"
-#include "display.h"
+#include "indicator.h"
 
 namespace SBS {
 
-DisplayPanel::DisplayPanel(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
+Indicator::Indicator(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
 {
 	//creates a new display panel at the specified position
 
 	//set up SBS object
-	SetValues("DisplayPanel", "Display Panel", false);
+	SetValues("Indicator", "Indicator", false);
 
 	is_enabled = true;
 	Prefix = texture_prefix;
@@ -59,7 +59,7 @@ DisplayPanel::DisplayPanel(Object *parent, const std::string &texture_prefix, co
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(this, Mesh, "Display Panel", Blank, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
+		sbs->AddWallMain(this, Mesh, "Indicator", Blank, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (tmpdirection == "left" || tmpdirection == "right")
 	{
@@ -68,12 +68,12 @@ DisplayPanel::DisplayPanel(Object *parent, const std::string &texture_prefix, co
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(this, Mesh, "Display Panel", Blank, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
+		sbs->AddWallMain(this, Mesh, "Indicator", Blank, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
 }
 
-DisplayPanel::~DisplayPanel()
+Indicator::~Indicator()
 {
 	if (Mesh)
 	{
@@ -94,7 +94,7 @@ DisplayPanel::~DisplayPanel()
 	}*/
 }
 
-void DisplayPanel::Enabled(bool value)
+void Indicator::Enabled(bool value)
 {
 	//turns display on/off
 
@@ -105,27 +105,28 @@ void DisplayPanel::Enabled(bool value)
 	is_enabled = value;
 }
 
-void DisplayPanel::Update(std::string texture)
+void Indicator::Update(std::string &text)
 {
-	//update display with given texture
+	//update display with given text
 
-	if (texture == "" && Blank != "")
+	if (text == "" && Blank != "")
 	{
 		Mesh->ChangeTexture(Blank);
 		return;
 	}
 
 	//don't update texture if no value
-	if (texture == "")
+	if (text == "")
 		return;
 
+	std::string texture = text;
 	texture.insert(0, Prefix);
 
 	Mesh->ChangeTexture(texture);
 	sbs->GetTextureManager()->EnableLighting(texture, false);
 }
 
-void DisplayPanel::Off()
+void Indicator::Off()
 {
 	if (Blank != "")
 		Mesh->ChangeTexture(Blank);

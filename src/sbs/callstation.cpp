@@ -26,7 +26,7 @@
 #include "buttonpanel.h"
 #include "floor.h"
 #include "controller.h"
-#include "display.h"
+#include "indicator.h"
 #include "callstation.h"
 
 namespace SBS {
@@ -51,7 +51,7 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 	KeyID = 0;
 	panel = 0;
 	controller = 0;
-	display = 0;
+	indicator = 0;
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -61,9 +61,9 @@ CallStation::~CallStation()
 {
 	RemovePanel();
 
-	if (display)
-		delete display;
-	display = 0;
+	if (indicator)
+		delete indicator;
+	indicator = 0;
 
 	if (sbs->FastDelete == false)
 	{
@@ -207,20 +207,20 @@ bool CallStation::FireService(int value)
 	return false;
 }
 
-DisplayPanel* CallStation::AddDisplay(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
+Indicator* CallStation::AddIndicator(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
 {
-	if (display)
+	if (indicator)
 		return 0;
 
-	display = new DisplayPanel(this, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
+	indicator = new Indicator(this, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
 
-	return display;
+	return indicator;
 }
 
-void CallStation::UpdateDisplay(std::string &text)
+void CallStation::UpdateIndicator(std::string &text)
 {
-	if (display)
-		display->Update(text);
+	if (indicator)
+		indicator->Update(text);
 }
 
 }

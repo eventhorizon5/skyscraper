@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Identifier Object
+	Scalable Building Simulator - Indicator Object
 	The Skyscraper Project - Version 1.12 Alpha
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
@@ -21,12 +21,12 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_DISPLAY_H
-#define _SBS_DISPLAY_H
+#ifndef _SBS_INDICATOR_H
+#define _SBS_INDICATOR_H
 
 namespace SBS {
 
-class SBSIMPEXP DisplayPanel : public Object
+class SBSIMPEXP Indicator : public Object
 {
 public:
 
@@ -34,10 +34,10 @@ public:
 	std::string Blank; //blank texture name
 
 	//functions
-	DisplayPanel(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
-	~DisplayPanel();
+	Indicator(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
+	~Indicator();
 	void Enabled(bool value);
-	void Update(std::string text);
+	void Update(std::string &text);
 	bool IsEnabled() { return is_enabled; }
 	void Off();
 

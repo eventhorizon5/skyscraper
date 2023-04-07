@@ -28,7 +28,7 @@
 #include "callstation.h"
 #include "buttonpanel.h"
 #include "control.h"
-#include "display.h"
+#include "indicator.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -223,10 +223,10 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//AddDisplay command
-	if (linecheck.substr(0, 10) == "adddisplay")
+	if (linecheck.substr(0, 12) == "addindicator")
 	{
 		//get data
-		int params = SplitData(LineData, 11);
+		int params = SplitData(LineData, 13);
 
 		if (params != 8)
 			return ScriptError("Incorrect number of parameters");
@@ -238,7 +238,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(station->AddDisplay(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+		StoreCommand(station->AddIndicator(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
 		return sNextLine;
 	}
 
