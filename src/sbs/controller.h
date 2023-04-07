@@ -55,6 +55,7 @@ public:
 	void UnregisterCallStation(CallStation *station);
 	int GetElevatorArrived(int starting_floor, int destination_floor);
 	bool IsServicedFloor(int floor);
+	bool FireService(int value);
 
 private:
 

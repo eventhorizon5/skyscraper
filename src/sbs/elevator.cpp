@@ -3910,6 +3910,15 @@ CallButton* Elevator::GetPrimaryCallButton()
 	return 0;
 }
 
+CallStation* Elevator::GetPrimaryCallStation()
+{
+	//returns the first call button associated with this elevator, on the fire recall (lobby) floor
+	Floor *floor = sbs->GetFloor(RecallFloor);
+	if (floor)
+		return floor->GetCallStationForElevator(Number);
+	return 0;
+}
+
 int Elevator::GetActiveCallFloor()
 {
 	return ActiveCall.floor;

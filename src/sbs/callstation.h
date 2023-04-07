@@ -50,6 +50,7 @@ public:
 	void SetPosition(Ogre::Vector3 &position);
 	bool ServicesElevator(int elevator);
 	int GetElevatorArrived(int starting_floor, int destination_floor);
+	bool FireService(int value);
 
 private:
 	ButtonPanel* panel; //button panel object

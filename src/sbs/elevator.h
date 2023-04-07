@@ -200,6 +200,7 @@ public:
 	Shaft* GetShaft();
 	DispatchController* GetController();
 	CallButton* GetPrimaryCallButton();
+	CallStation* GetPrimaryCallStation();
 	int GetActiveCallFloor();
 	int GetActiveCallDirection();
 	int GetActiveCallType();

@@ -247,6 +247,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 
 		//get first callbutton on recall floor
 		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		CallStation *station = elevator->GetPrimaryCallStation();
 
 		//if called from a control and mouse button is held down, notify elevator
 		if (caller_type == "Control" && sbs->camera->MouseDown() == true)
@@ -484,6 +485,15 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 				return callbutton->FireService(1);
 			if (command_name == "fire1bypass")
 				return callbutton->FireService(2);
+		}
+		if (station)
+		{
+			if (command_name == "fire1off")
+				return station->FireService(0);
+			if (command_name == "fire1on")
+				return station->FireService(1);
+			if (command_name == "fire1bypass")
+				return station->FireService(2);
 		}
 
 		if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)

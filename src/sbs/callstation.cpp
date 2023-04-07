@@ -194,4 +194,11 @@ int CallStation::GetElevatorArrived(int starting_floor, int destination_floor)
 	return controller->GetElevatorArrived(starting_floor, destination_floor);
 }
 
+bool CallStation::FireService(int value)
+{
+	if (controller)
+		return controller->FireService(value);
+	return false;
+}
+
 }
