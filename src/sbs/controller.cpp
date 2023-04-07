@@ -112,9 +112,18 @@ void DispatchController::ProcessDestinationDispatch()
 	//check elevators to see if any have arrived, and if so, dispatch to destination floor
 	for (int i = 0; i < Elevators.size(); i++)
 	{
+		Elevator *elev = sbs->GetElevator(Elevators[i].number);
+
 		//determine if elevator has arrived
 		if (Elevators[i].arrived == true)
 		{
+			if (elev)
+			{
+				//wait until doors have opened
+				if (elev->AreDoorsOpening() == true)
+					return;
+			}
+
 			//step through requests table and find a request that matches the arrived elevator
 			for (int j = 0; j < Routes.size(); j++)
 			{
