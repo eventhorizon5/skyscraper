@@ -51,6 +51,8 @@ public:
 	bool ServicesElevator(int elevator);
 	int GetElevatorArrived(int starting_floor, int destination_floor);
 	bool FireService(int value);
+	bool CreateDisplayPanel(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
+	void UpdateDisplay(std::string &text);
 
 private:
 	ButtonPanel* panel; //button panel object
@@ -60,6 +62,8 @@ private:
 	bool is_enabled;
 
 	Floor *floor; //floor this call button set is on
+
+	DisplayPanel* display;
 
 	bool Locked;
 	int KeyID;

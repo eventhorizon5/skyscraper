@@ -26,6 +26,7 @@
 #include "buttonpanel.h"
 #include "floor.h"
 #include "controller.h"
+#include "display.h"
 #include "callstation.h"
 
 namespace SBS {
@@ -50,6 +51,7 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 	KeyID = 0;
 	panel = 0;
 	controller = 0;
+	display = 0;
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -151,7 +153,7 @@ bool CallStation::SelectFloor(int floor)
 	Report("Selecting floor " + ToString(floor));
 
 	if (controller)
-		return controller->RequestRoute(GetFloor(), floor);
+		return controller->RequestRoute(this, GetFloor(), floor);
 	return false;
 }
 
@@ -199,6 +201,22 @@ bool CallStation::FireService(int value)
 	if (controller)
 		return controller->FireService(value);
 	return false;
+}
+
+bool CallStation::CreateDisplayPanel(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
+{
+	if (display)
+		return false;
+
+	display = new DisplayPanel(this, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
+
+	return true;
+}
+
+void CallStation::UpdateDisplay(std::string &text)
+{
+	if (display)
+		display->Update(text);
 }
 
 }

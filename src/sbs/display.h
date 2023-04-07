@@ -30,14 +30,16 @@ class SBSIMPEXP DisplayPanel : public Object
 {
 public:
 
+	std::string Prefix; //texture name prefix
 	std::string Blank; //blank texture name
 
 	//functions
-	DisplayPanel(Object *parent, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real altitude);
+	DisplayPanel(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
 	~DisplayPanel();
 	void Enabled(bool value);
 	void Update(std::string &text);
 	bool IsEnabled() { return is_enabled; }
+	void Off();
 
 private:
 	MeshObject* Mesh; //mesh object

@@ -41,7 +41,7 @@ public:
 	DispatchController(Object *parent, int number);
 	~DispatchController();
 	void Loop();
-	bool RequestRoute(int starting_floor, int destination_floor);
+	bool RequestRoute(CallStation *station, int starting_floor, int destination_floor);
 	bool AddElevator(int elevator);
 	bool RemoveElevator(int elevator);
 	bool ServicesElevator(int elevator);
@@ -91,6 +91,7 @@ private:
 		int destination_floor;
 		int requests;
 		bool processed;
+		CallStation* station;
 	};
 
 	std::vector<Route> Routes; //destination dispatch requests

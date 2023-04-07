@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-DisplayPanel::DisplayPanel(Object *parent, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
+DisplayPanel::DisplayPanel(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
 {
 	//creates a new display panel at the specified position
 
@@ -106,7 +106,7 @@ void DisplayPanel::Enabled(bool value)
 
 void DisplayPanel::Update(std::string &texture)
 {
-	//update display with given text string
+	//update display with given texture
 
 	if (texture == "" && Blank != "")
 	{
@@ -118,8 +118,16 @@ void DisplayPanel::Update(std::string &texture)
 	if (texture == "")
 		return;
 
+	texture.insert(0, Prefix);
+
 	Mesh->ChangeTexture(texture);
 	sbs->GetTextureManager()->EnableLighting(texture, false);
+}
+
+void DisplayPanel::Off()
+{
+	if (Blank != "")
+		Mesh->ChangeTexture(Blank);
 }
 
 }

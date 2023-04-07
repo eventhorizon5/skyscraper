@@ -27,6 +27,7 @@
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "floor.h"
+#include "callstation.h"
 #include "controller.h"
 
 namespace SBS {
@@ -130,6 +131,13 @@ void DispatchController::ProcessDestinationDispatch()
 					//dispatch elevator to destination floor
 					DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction);
 
+					//turn off display
+					if (Routes[j].station)
+					{
+						std::string display = "";
+						Routes[j].station->UpdateDisplay(display);
+					}
+
 					//remove route from table
 					RemoveRoute(Routes[j]);
 
@@ -156,7 +164,7 @@ void DispatchController::RemoveRoute(Route &route)
 	}
 }
 
-bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
+bool DispatchController::RequestRoute(CallStation *station, int starting_floor, int destination_floor)
 {
 	//request a destination dispatch route
 
@@ -219,6 +227,7 @@ bool DispatchController::RequestRoute(int starting_floor, int destination_floor)
 	route.destination_floor = destination_floor;
 	route.requests = 1;
 	route.processed = false;
+	route.station = station;
 	Routes.push_back(route);
 
 	return true;
@@ -258,6 +267,10 @@ void DispatchController::ProcessRoutes()
 			direction = 1;
 		else
 			direction = -1;
+
+		//update destination display
+		if (Routes[i].station)
+			Routes[i].station->UpdateDisplay(elevator->Ident);
 
 		//dispatch elevator
 		DispatchElevator(elevator->Number, starting_floor, direction);
