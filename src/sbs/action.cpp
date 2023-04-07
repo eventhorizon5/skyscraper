@@ -191,6 +191,9 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 
 	//CallStation actions:
 	//(floor number)
+	//FireOff
+	//FireOn
+	//FireBypass
 
 	//Escalator and MovingWalkway actions:
 	//Forward
@@ -663,6 +666,12 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			int floor = ToInt(command_name);
 			return callstation->SelectFloor(floor);
 		}
+		if (command_name == "fireoff")
+			return callstation->FireService(0);
+		if (command_name == "fireon")
+			return callstation->FireService(1);
+		if (command_name == "firebypass")
+			return callstation->FireService(2);
 	}
 
 	//escalator-specific commands
