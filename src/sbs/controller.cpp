@@ -524,7 +524,7 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 		if (DestinationDispatch == false)
 			type = 1;
 		else
-			type = 2;
+			type = 3;
 
 		AssignElevator(number, destination_floor);
 

@@ -533,7 +533,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
-	//call type is 0 for a car call, 1 for a hall call, and 2 for a system call
+	//call type is 0 for a car call, 1 for a hall call, 2 for a system call, and 3 for a Destination Dispatch call
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -625,7 +625,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 	ProcessGotoFloor(floor, direction);
 
 	//turn on button lights
-	if (call_type == 0)
+	if (call_type == 0 || call_type == 3)
 		ChangeLight(floor, true);
 
 	//go to ACP floor if ACP mode is enabled
@@ -2129,6 +2129,8 @@ void Elevator::DumpQueues()
 			type = "Hall";
 		if (UpQueue[i].call_type == 2)
 			type = "System";
+		if (UpQueue[i].call_type == 3)
+			type = "Destination";
 
 		std::string car;
 		if (GetCarCount() > 1)
@@ -2147,6 +2149,8 @@ void Elevator::DumpQueues()
 			type = "Hall";
 		if (DownQueue[i].call_type == 2)
 			type = "System";
+		if (DownQueue[i].call_type == 3)
+			type = "Destination";
 
 		std::string car;
 		if (GetCarCount() > 1)
