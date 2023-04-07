@@ -527,7 +527,6 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 			type = 2;
 
 		AssignElevator(number, destination_floor);
-		elevator->AddRoute(destination_floor, direction, type);
 
 		//reset arrival status
 		for (int i = 0; i < Elevators.size(); i++)
@@ -539,6 +538,8 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 				Elevators[i].arrival_direction = false;
 			}
 		}
+
+		elevator->AddRoute(destination_floor, direction, type);
 	}
 }
 

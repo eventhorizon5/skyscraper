@@ -568,6 +568,13 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 	if (!car)
 		return ReportError("floor " + ToString(floor) + " is not a serviced floor");
 
+	//if car is on the same floor, perform an arrival
+	if (car->IsOnFloor(floor) && (QueuePositionDirection == direction || QueuePositionDirection == 0))
+	{
+		SameFloorArrival(floor, direction);
+		return true;
+	}
+
 	//add route in related direction queue
 	if (direction == 1)
 	{
@@ -4688,6 +4695,46 @@ bool Elevator::GetDestinationDispatch()
 	if (sbs->GetController(Controller))
 		return sbs->GetController(Controller)->DestinationDispatch;
 	return false;
+}
+
+void Elevator::SameFloorArrival(int floor, int direction)
+{
+	if (sbs->Verbose)
+		Report("Elevator active on current floor - opening");
+
+	//get related car number
+	ElevatorCar *car = GetCarForFloor(floor);
+
+	if (!car)
+	{
+		ReportError("floor " + ToString(floor) + " is not a serviced floor");
+		return;
+	}
+
+	//update arrival information
+	if (direction == -1)
+	{
+		NotifyCallButtons(floor, false);
+		if (GetController())
+			GetController()->ElevatorArrived(Number, floor, false);
+	}
+	else
+	{
+		NotifyCallButtons(floor, true);
+		if (GetController())
+			GetController()->ElevatorArrived(Number, floor, true);
+	}
+
+	//notify on arrival
+	if (NotifyEarly >= 0)
+		car->NotifyArrival(floor, false, direction);
+
+	//store call direction for NotifyLate feature
+	if (NotifyLate == true)
+		car->LateDirection = direction;
+
+	//open elevator if it's on the same floor
+	car->OpenDoors();
 }
 
 }

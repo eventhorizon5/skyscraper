@@ -537,30 +537,12 @@ void CallButton::Process(int direction)
 		return;
 
 	//if closest elevator is already on the called floor
-	if (car->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
+	/*if (car->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
 	{
-		if (sbs->Verbose)
-			Report("Elevator active on current floor - opening");
-
-		//update arrival information
-		if (direction == -1)
-			elevator->NotifyCallButtons(GetFloor(), false);
-		else
-			elevator->NotifyCallButtons(GetFloor(), true);
-
-		//notify on arrival
-		if (elevator->NotifyEarly >= 0)
-			car->NotifyArrival(GetFloor(), false, direction);
-
-		//store call direction for NotifyLate feature
-		if (elevator->NotifyLate == true)
-			car->LateDirection = direction;
-
-		//open elevator if it's on the same floor
-		car->OpenDoors();
+		elevator->SameFloorArrival(GetFloor(), direction);
 	}
 	else
-	{
+	{*/
 		//otherwise add a route entry to this floor
 		elevator->AddRoute(GetFloor(), direction, 1);
 
@@ -568,7 +550,7 @@ void CallButton::Process(int direction)
 			ActiveElevatorUp = elevator->Number;
 		else
 			ActiveElevatorDown = elevator->Number;
-	}
+	//}
 }
 
 void CallButton::Report(const std::string &message)
