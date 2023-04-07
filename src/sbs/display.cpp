@@ -38,6 +38,7 @@ DisplayPanel::DisplayPanel(Object *parent, const std::string &texture_prefix, co
 	SetValues("DisplayPanel", "Display Panel", false);
 
 	is_enabled = true;
+	Prefix = texture_prefix;
 	Blank = blank_texture;
 
 	//move object
