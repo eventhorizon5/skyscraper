@@ -105,7 +105,7 @@ void DisplayPanel::Enabled(bool value)
 	is_enabled = value;
 }
 
-void DisplayPanel::Update(std::string &texture)
+void DisplayPanel::Update(std::string texture)
 {
 	//update display with given texture
 
