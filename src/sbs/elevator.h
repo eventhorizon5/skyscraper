@@ -238,7 +238,6 @@ public:
 	bool SetHoistwayAccess(int floor, int access);
 	void SetControls(const std::string &action_name);
 	bool GetDestinationDispatch();
-	void SameFloorArrival(int floor, int direction);
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
@@ -327,6 +326,7 @@ private:
 	void NotifyArrival(bool early = false);
 	void ProcessGotoFloor(int floor, int direction);
 	void DoSetControls();
+	void SameFloorArrival(int floor, int direction);
 
 	//motor sound objects
 	Sound *motorsound;

@@ -536,21 +536,13 @@ void CallButton::Process(int direction)
 	if (!car)
 		return;
 
-	//if closest elevator is already on the called floor
-	/*if (car->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
-	{
-		elevator->SameFloorArrival(GetFloor(), direction);
-	}
-	else
-	{*/
-		//otherwise add a route entry to this floor
-		elevator->AddRoute(GetFloor(), direction, 1);
+	//add a route entry to this floor
+	elevator->AddRoute(GetFloor(), direction, 1);
 
-		if (direction == 1)
-			ActiveElevatorUp = elevator->Number;
-		else
-			ActiveElevatorDown = elevator->Number;
-	//}
+	if (direction == 1)
+		ActiveElevatorUp = elevator->Number;
+	else
+		ActiveElevatorDown = elevator->Number;
 }
 
 void CallButton::Report(const std::string &message)
