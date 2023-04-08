@@ -34,6 +34,7 @@ class SBSIMPEXP Elevator : public Object
 public:
 	int Number; //elevator number
 	std::string Name; //elevator name
+	std::string ID; //identifier for Destination Dispatch
 	std::string Type; //type of elevator: standard, express, service, freight
 	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction
@@ -124,7 +125,6 @@ public:
 	bool Counterweight; //if true, elevator has a counterweight
 	bool Error; //true if an error occurred during movement processing
 	int Controller; //destination controller this elevator is assigned to, 0 is default (none)
-	std::string Ident; //letter identifier of elevator for Destination Dispatch
 
 	//functions
 	Elevator(Object *parent, int number);

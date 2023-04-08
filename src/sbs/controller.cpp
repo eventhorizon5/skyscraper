@@ -279,7 +279,7 @@ void DispatchController::ProcessRoutes()
 
 		//update destination display
 		if (Routes[i].station)
-			Routes[i].station->UpdateIndicator(elevator->Ident);
+			Routes[i].station->UpdateIndicator(elevator->ID);
 
 		//dispatch elevator
 		DispatchElevator(elevator->Number, starting_floor, direction);
