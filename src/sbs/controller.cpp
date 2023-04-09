@@ -117,13 +117,6 @@ void DispatchController::ProcessDestinationDispatch()
 		//determine if elevator has arrived
 		if (Elevators[i].arrived == true)
 		{
-			if (elev)
-			{
-				//wait until doors have started closing
-				if (elev->AreDoorsOpening() == true || (elev->AreDoorsOpen() == true && elev->AreDoorsClosing() == false))
-					return;
-			}
-
 			//step through requests table and find a request that matches the arrived elevator
 			for (int j = 0; j < Routes.size(); j++)
 			{
