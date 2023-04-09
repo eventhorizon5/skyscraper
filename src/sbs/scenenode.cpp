@@ -276,7 +276,7 @@ void SceneNode::DetachObject(Ogre::MovableObject *object)
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportError("Error detaching object:\n" + e.getDescription());
+			//ReportError("Error detaching object:\n" + e.getDescription());
 		}
 	}
 }
