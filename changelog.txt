@@ -1,5 +1,10 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-Turn off object detachment error messages
+-Don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
+-added new ID elevator parameter for Destination Dispatch
+-Centralized same-floor notifications and re-opening
+-Person route support for Destination Dispatch
 -new "Simple - Double Decker DD" building
 -new "Triton Center - Destination Dispatch" building
 -disable button panels for Call Button objects in Enabled() function to improve performance
