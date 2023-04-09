@@ -2642,6 +2642,8 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "Light")
 		deleted = true;
+	else if (type == "CallStation")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
