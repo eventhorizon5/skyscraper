@@ -407,10 +407,6 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 			if (serviced == false)
 				continue;
 
-			//skip if elevator has already been assigned for another destination
-			if (IsElevatorAssignedToOther(elevator->Number, destination_floor))
-				continue;
-
 			ElevatorCar *car = elevator->GetCarForFloor(starting_floor);
 			if (car)
 			{
@@ -437,6 +433,11 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 
 					if (result == 1) //available
 					{
+						//skip if elevator has already been assigned for another destination
+						//outside of the serviced floor range, but only if multiple elevators are assigned
+						if (IsElevatorAssignedToOther(elevator->Number, destination_floor) == true)
+							continue;
+
 						if (sbs->Verbose && count > 1 && recheck == false)
 							Report("Marking - closest so far");
 						closest = abs(car->GetFloor() - starting_floor);
@@ -575,12 +576,14 @@ bool DispatchController::IsElevatorAssigned(int number, int destination_floor)
 bool DispatchController::IsElevatorAssignedToOther(int number, int destination_floor)
 {
 	//return true if the specified elevator is assigned to a destination floor other than the specified one
+	//while also taking the serviced floor range into account if more than one elevator is assigned
 
 	for (int i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == number)
 		{
-			if (Elevators[i].assigned_destination != destination_floor && Elevators[i].assigned == true)
+			if (Elevators[i].assigned_destination != destination_floor && Elevators[i].assigned == true &&
+				((abs(Elevators[i].assigned_destination - destination_floor) > Range) && Elevators.size() > 1))
 				return true;
 			else
 				return false;
