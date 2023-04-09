@@ -26,11 +26,23 @@
 #include "mesh.h"
 #include "manager.h"
 #include "texture.h"
+#include "timer.h"
 #include "indicator.h"
 
 namespace SBS {
 
-Indicator::Indicator(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
+class Indicator::Timer : public TimerObject
+{
+public:
+	Indicator *parent;
+	Timer(const std::string &name, Indicator *parent) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+	}
+	virtual void Notify();
+};
+
+Indicator::Indicator(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration) : Object(parent)
 {
 	//creates a new display panel at the specified position
 
@@ -40,6 +52,7 @@ Indicator::Indicator(Object *parent, const std::string &texture_prefix, const st
 	is_enabled = true;
 	Prefix = texture_prefix;
 	Blank = blank_texture;
+	this->timer_duration = timer_duration;
 
 	//move object
 	Move(CenterX, voffset, CenterZ);
@@ -71,6 +84,9 @@ Indicator::Indicator(Object *parent, const std::string &texture_prefix, const st
 		sbs->AddWallMain(this, Mesh, "Indicator", Blank, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
+
+	//create timer
+	timer = new Timer("Dispatch Timer", this);
 }
 
 Indicator::~Indicator()
@@ -124,12 +140,21 @@ void Indicator::Update(std::string &text)
 
 	Mesh->ChangeTexture(texture);
 	sbs->GetTextureManager()->EnableLighting(texture, false);
+
+	timer->Start(timer_duration * 1000.0);
 }
 
 void Indicator::Off()
 {
 	if (Blank != "")
 		Mesh->ChangeTexture(Blank);
+}
+
+void Indicator::Timer::Notify()
+{
+	//turn off indicator display when timer expires
+
+	parent->Off();
 }
 
 }

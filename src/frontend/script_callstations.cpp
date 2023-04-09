@@ -228,17 +228,17 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 13);
 
-		if (params != 8)
+		if (params != 9)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i <= 7; i++)
+		for (int i = 3; i <= 8; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(station->AddIndicator(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+		StoreCommand(station->AddIndicator(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
 		return sNextLine;
 	}
 

@@ -133,13 +133,6 @@ void DispatchController::ProcessDestinationDispatch()
 					//dispatch elevator to destination floor
 					DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction);
 
-					//turn off display
-					if (Routes[j].station)
-					{
-						std::string indicator = "";
-						Routes[j].station->UpdateIndicator(indicator);
-					}
-
 					//remove route from table
 					RemoveRoute(Routes[j]);
 

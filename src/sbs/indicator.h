@@ -34,7 +34,7 @@ public:
 	std::string Blank; //blank texture name
 
 	//functions
-	Indicator(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
+	Indicator(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration);
 	~Indicator();
 	void Enabled(bool value);
 	void Update(std::string &text);
@@ -44,6 +44,12 @@ public:
 private:
 	MeshObject* Mesh; //mesh object
 	bool is_enabled;
+
+	class Timer; //internal timer class
+
+	//timer object
+	Timer *timer;
+	Real timer_duration;
 };
 
 }

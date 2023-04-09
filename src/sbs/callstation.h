@@ -51,7 +51,7 @@ public:
 	bool ServicesElevator(int elevator);
 	int GetElevatorArrived(int starting_floor, int destination_floor);
 	bool FireService(int value);
-	Indicator* AddIndicator(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
+	Indicator* AddIndicator(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration);
 	void UpdateIndicator(std::string &text);
 
 private:
