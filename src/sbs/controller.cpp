@@ -271,15 +271,19 @@ void DispatchController::ProcessRoutes()
 		if (Routes[i].station)
 			Routes[i].station->UpdateIndicator(elevator->ID);
 
-		//dispatch elevator
-		DispatchElevator(elevator->Number, starting_floor, direction);
-		//ActiveElevator = elevator->Number;
-
 		for (int i = 0; i < Elevators.size(); i++)
 		{
 			if (Elevators[i].number == elevator->Number)
+			{
 				Elevators[i].destination_floor = destination_floor;
+				Elevators[i].call_floor = starting_floor;
+				Elevators[i].use_call_floor = true;
+			}
 		}
+
+		//dispatch elevator
+		DispatchElevator(elevator->Number, starting_floor, direction);
+		//ActiveElevator = elevator->Number;
 
 		Routes[i].processed = true;
 	}
@@ -312,6 +316,8 @@ bool DispatchController::AddElevator(int elevator)
 	newelevator.assigned_destination = 0;
 	newelevator.assigned = false;
 	newelevator.destination_floor = 0;
+	newelevator.call_floor = 0;
+	newelevator.use_call_floor = false;
 
 	//assign controller to elevator
 	sbs->GetElevator(elevator)->Controller = Number;
@@ -367,6 +373,7 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 	//initialize values
 	int closest = 0;
 	int closest_elev = 0;
+	bool closest_busy = false;
 	bool check = false;
 	int errors = 0;
 	int result = 0;
@@ -414,9 +421,10 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 					Report("Checking elevator " + ToString(elevator->Number) + " car " + ToString(car->Number));
 
 				//if elevator is closer than the previously checked one or we're starting the checks
-				if (abs(car->GetFloor() - starting_floor) < closest || check == false)
+				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy == true)
 				{
 					//see if elevator is available for the call
+
 					/*if (recheck == true && elevator->Number == ActiveElevator)
 					{
 						if (elevator->Error == true)
@@ -431,7 +439,12 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 					else*/
 						result = elevator->AvailableForCall(starting_floor, direction, !recheck);
 
-					if (result == 1) //available
+					if (closest_busy == true && result == 1)
+					{
+						closest_busy = false;
+					}
+
+					if (result < 2) //available or busy
 					{
 						//skip if elevator has already been assigned for another destination
 						//outside of the serviced floor range, but only if multiple elevators are assigned
@@ -442,6 +455,8 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 							Report("Marking - closest so far");
 						closest = abs(car->GetFloor() - starting_floor);
 						closest_elev = i;
+						if (result == 0)
+							closest_busy = true;
 						check = true;
 					}
 					else if (result == 2) //elevator won't service the call
@@ -508,9 +523,16 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 		if (Elevators[i].number == number)
 		{
 			Report("Elevator " + ToString(number) + " arrived at floor " + ToString(floor) + " (" + floorobj->ID + ")");
-			Elevators[i].arrived = true;
-			Elevators[i].arrival_floor = floor;
-			Elevators[i].arrival_direction = direction;
+
+			//only set if arriving at starting floor
+			if (Elevators[i].call_floor == floor && Elevators[i].use_call_floor == true)
+			{
+				Elevators[i].arrived = true;
+				Elevators[i].arrival_floor = floor;
+				Elevators[i].arrival_direction = direction;
+				Elevators[i].call_floor = 0;
+				Elevators[i].use_call_floor = false;
+			}
 
 			if (Elevators[i].assigned_destination == floor)
 			{
