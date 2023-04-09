@@ -2644,6 +2644,8 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "CallStation")
 		deleted = true;
+	else if (type == "DispatchController")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
@@ -2802,6 +2804,13 @@ void SBS::RemoveTrigger(Trigger *trigger)
 			return;
 		}
 	}
+}
+
+void SBS::RemoveController(DispatchController *controller)
+{
+	//remove a floor (does not delete the object)
+
+	controller_manager->Remove(controller);
 }
 
 std::string SBS::VerifyFile(const std::string &filename)

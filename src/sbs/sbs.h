@@ -285,6 +285,7 @@ public:
 	void RemoveModel(Model *model);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
+	void RemoveController(DispatchController *controller);
 	std::string VerifyFile(const std::string &filename);
 	std::string VerifyFile(std::string filename, bool &result, bool skip_cache);
 	bool FileExists(const std::string &filename);

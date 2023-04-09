@@ -71,6 +71,10 @@ DispatchController::~DispatchController()
 		delete timer;
 	}
 	timer = 0;
+
+	//unregister from parent
+	if (sbs->FastDelete == false && parent_deleting == false)
+		sbs->RemoveController(this);
 }
 
 void DispatchController::Timer::Notify()

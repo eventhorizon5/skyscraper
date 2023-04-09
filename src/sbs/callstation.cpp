@@ -68,8 +68,8 @@ CallStation::~CallStation()
 	if (sbs->FastDelete == false)
 	{
 		//unregister with controller
-		if (controller)
-			controller->UnregisterCallStation(this);
+		if (GetController())
+			GetController()->UnregisterCallStation(this);
 
 		//unregister with parent floor object
 		if (parent_deleting == false)
@@ -156,8 +156,8 @@ bool CallStation::SelectFloor(int floor)
 
 	Report("Selecting floor " + ToString(floor));
 
-	if (controller)
-		return controller->RequestRoute(this, GetFloor(), floor);
+	if (GetController())
+		return GetController()->RequestRoute(this, GetFloor(), floor);
 	return false;
 }
 
@@ -165,15 +165,15 @@ void CallStation::SetController(int number)
 {
 	//assign this call station to a controller, and register with it
 
-	controller = sbs->GetController(number);
+	controller = number;
 
-	if (controller)
-		controller->RegisterCallStation(this);
+	if (GetController())
+		GetController()->RegisterCallStation(this);
 }
 
 DispatchController* CallStation::GetController()
 {
-	return controller;
+	return sbs->GetController(controller);
 }
 
 void CallStation::SetPosition(Ogre::Vector3 &position)
@@ -184,8 +184,8 @@ void CallStation::SetPosition(Ogre::Vector3 &position)
 
 bool CallStation::ServicesElevator(int elevator)
 {
-	if (controller)
-		return controller->ServicesElevator(elevator);
+	if (GetController())
+		return GetController()->ServicesElevator(elevator);
 	return false;
 }
 
@@ -194,16 +194,16 @@ int CallStation::GetElevatorArrived(int starting_floor, int destination_floor)
 	//return the number of the elevator that has arrived, for the specified route
 	//return 0 if no elevator has arrived yet
 
-	if (!controller)
+	if (!GetController())
 		return 0;
 
-	return controller->GetElevatorArrived(starting_floor, destination_floor);
+	return GetController()->GetElevatorArrived(starting_floor, destination_floor);
 }
 
 bool CallStation::FireService(int value)
 {
-	if (controller)
-		return controller->FireService(value);
+	if (GetController())
+		return GetController()->FireService(value);
 	return false;
 }
 

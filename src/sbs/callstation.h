@@ -56,7 +56,7 @@ public:
 
 private:
 	ButtonPanel* panel; //button panel object
-	DispatchController *controller; //dispatch controller object
+	int controller; //dispatch controller
 
 	int Number; //call button index number (on the specified floor)
 	bool is_enabled;
