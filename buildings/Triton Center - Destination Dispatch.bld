@@ -187,6 +187,14 @@
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     AddTextRange 1, 143, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 2, 141, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+
+    #Destination Dispatch indicators
+    AddText Black, ButtonA, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonB, nimbus_sans.ttf, 47, B, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonD, nimbus_sans.ttf, 47, D, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonE, nimbus_sans.ttf, 47, E, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonF, nimbus_sans.ttf, 47, F, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
 # Ground
