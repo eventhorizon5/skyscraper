@@ -139,8 +139,6 @@ void DispatchController::ProcessDestinationDispatch()
 
 					//remove route from table
 					RemoveRoute(Routes[j]);
-
-					return;
 				}
 			}
 		}
