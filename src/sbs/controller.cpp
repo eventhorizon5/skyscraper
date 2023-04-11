@@ -667,6 +667,15 @@ void DispatchController::AssignElevator(int number, int destination_floor)
 		if (Elevators[i].number == number)
 		{
 			Elevators[i].assigned = true;
+
+			for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+			{
+				if (Elevators[i].assigned_destination[j] == destination_floor)
+				{
+					Report("Elevator already assigned to destination floor " + ToString(destination_floor));
+					return;
+				}
+			}
 			Elevators[i].assigned_destination.push_back(destination_floor);
 		}
 	}
