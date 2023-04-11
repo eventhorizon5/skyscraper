@@ -449,7 +449,10 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 						//skip if elevator has already been assigned for another destination
 						//outside of the serviced floor range, but only if multiple elevators are assigned
 						if (IsElevatorAssignedToOther(elevator->Number, destination_floor) == true)
+						{
+							closest_busy = true;
 							continue;
+						}
 
 						if (sbs->Verbose && count > 1 && recheck == false)
 							Report("Marking - closest so far");
