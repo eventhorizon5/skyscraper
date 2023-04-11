@@ -281,6 +281,7 @@ void DispatchController::ProcessRoutes()
 		}
 
 		//dispatch elevator
+		AssignElevator(elevator->Number, destination_floor);
 		DispatchElevator(elevator->Number, starting_floor, direction, true);
 		//ActiveElevator = elevator->Number;
 
@@ -559,9 +560,6 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 			type = 1;
 		else if (DestinationDispatch == false)
 			type = 2;
-
-		if (call == false)
-			AssignElevator(number, destination_floor);
 
 		//reset arrival status
 		for (int i = 0; i < Elevators.size(); i++)
