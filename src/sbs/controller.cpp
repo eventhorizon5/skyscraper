@@ -432,6 +432,14 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 				if (sbs->Verbose && recheck == false)
 					Report("Checking elevator " + ToString(elevator->Number) + " car " + ToString(car->Number));
 
+				//skip elevator if serving a route with the maximum number of requests
+				if (AtMaxRequests(Elevators[i].number, destination_floor) == true)
+				{
+					if (sbs->Verbose)
+						Report("Skipping elevator " + ToString(elevator->Number) + " due to reached max passengers value");
+					continue;
+				}
+
 				//if elevator is closer than the previously checked one or we're starting the checks
 				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy == true)
 				{
@@ -755,6 +763,38 @@ bool DispatchController::FireService(int value)
 			status = true;
 	}
 	return status;
+}
+
+bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
+{
+	if (!sbs->GetElevator(elevator))
+		return false;
+
+	//get elevator index
+	int index = -1;
+	for (int i = 0; i < Elevators.size(); i++)
+	{
+		if (Elevators[i].number == elevator)
+		{
+			index = i;
+			break;
+		}
+	}
+
+	//return true if an elevator's assigned DD route has requests at the MaxPassengers value
+	for (int i = 0; i < Routes.size(); i++)
+	{
+		for (int j = 0; j < Elevators[index].assigned_destination.size(); j++)
+		{
+			if (Elevators[index].assigned_destination[j] == destination_floor && Elevators[index].assigned == true)
+			{
+				if (Routes[i].requests == MaxPassengers)
+					return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 }
