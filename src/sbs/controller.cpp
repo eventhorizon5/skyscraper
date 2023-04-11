@@ -131,8 +131,9 @@ void DispatchController::ProcessDestinationDispatch()
 				else
 					direction = -1;
 
-				//if request matches the elevator
-				if (Routes[j].starting_floor == Elevators[i].arrival_floor)
+				//if request matches the elevator arrival and assignment
+				if (Routes[j].starting_floor == Elevators[i].arrival_floor &&
+						Routes[j].destination_floor == Elevators[i].assigned_destination && Elevators[i].assigned == true)
 				{
 					//dispatch elevator to destination floor
 					DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
