@@ -369,7 +369,7 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 	bool check = false;
 	int errors = 0;
 	int result = 0;
-	bool direction = 0;
+	int direction = 0;
 
 	if (destination_floor > starting_floor)
 		direction = 1;
