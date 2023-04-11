@@ -3677,7 +3677,7 @@ bool Elevator::SelectFloor(int floor)
 	if (GetController())
 	{
 		if (GetController()->DestinationDispatch == true && GetController()->Hybrid == false && InServiceMode() == false)
-			return ReportError("Cannot select floor " + ToString(floor) + ": Destination Dispatch is enabled");
+			return ReportError("Cannot select floor " + ToString(floor) + ": Hybrid mode is not enabled");
 	}
 
 	bool result = false;

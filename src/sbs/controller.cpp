@@ -136,11 +136,11 @@ void DispatchController::ProcessDestinationDispatch()
 				{
 					bool result = false;
 
+					//dispatch elevator to destination floor for each registered assignment
 					for (int k = 0; k < Elevators[i].assigned_destination.size(); k++)
 					{
 						if (Routes[j].destination_floor == Elevators[i].assigned_destination[k])
 						{
-							//dispatch elevator to destination floor
 							DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
 							result = true;
 						}
@@ -466,12 +466,13 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 							continue;
 						}
 
+						//mark as closest elevator
 						if (sbs->Verbose && count > 1 && recheck == false)
 							Report("Marking - closest so far");
 						closest = abs(car->GetFloor() - starting_floor);
 						closest_elev = i;
 						if (result == 0)
-							closest_busy = true;
+							closest_busy = true; //mark that it's also busy
 						check = true;
 					}
 					else if (result == 2) //elevator won't service the call
