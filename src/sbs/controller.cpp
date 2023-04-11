@@ -133,7 +133,7 @@ void DispatchController::ProcessDestinationDispatch()
 
 				//if request matches the elevator arrival and assignment
 				if (Routes[j].starting_floor == Elevators[i].arrival_floor &&
-						Routes[j].destination_floor == Elevators[i].assigned_destination && Elevators[i].assigned == true)
+						Routes[j].destination_floor == Elevators[i].assigned_destination[0] && Elevators[i].assigned == true)
 				{
 					//dispatch elevator to destination floor
 					DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
@@ -314,7 +314,7 @@ bool DispatchController::AddElevator(int elevator)
 	newelevator.arrived = false;
 	newelevator.arrival_floor = 0;
 	newelevator.arrival_direction = false;
-	newelevator.assigned_destination = 0;
+	newelevator.assigned_destination.clear();
 	newelevator.assigned = false;
 	newelevator.destination_floor = 0;
 	newelevator.call_floor = 0;
@@ -538,10 +538,21 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 				Elevators[i].use_call_floor = false;
 			}
 
-			if (Elevators[i].assigned_destination == floor)
+			if (Elevators[i].assigned == true)
 			{
-				Elevators[i].assigned_destination = 0;
-				Elevators[i].assigned = false;
+				//unassign route
+				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+				{
+					if (Elevators[i].assigned_destination[j] == floor)
+					{
+						Elevators[i].assigned_destination.erase(Elevators[i].assigned_destination.begin() + j);
+						break;
+					}
+				}
+
+				//unassign elevator if no more routes
+				if (Elevators[i].assigned_destination.size() == 0)
+					Elevators[i].assigned = false;
 			}
 			break;
 		}
@@ -588,10 +599,12 @@ bool DispatchController::IsElevatorAssigned(int number, int destination_floor)
 	{
 		if (Elevators[i].number == number)
 		{
-			if (Elevators[i].assigned_destination == destination_floor && Elevators[i].assigned == true)
-				return true;
-			else
-				return false;
+			for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+			{
+				if (Elevators[i].assigned_destination[j] == destination_floor && Elevators[i].assigned == true)
+					return true;
+			}
+			return false;
 		}
 	}
 	return false;
@@ -606,8 +619,11 @@ bool DispatchController::IsElevatorAssignedToOther(int number, int destination_f
 	{
 		if (Elevators[i].number == number)
 		{
-			if (Elevators[i].assigned_destination != destination_floor && Elevators[i].assigned == true &&
-				((abs(Elevators[i].assigned_destination - destination_floor) > Range) && Elevators.size() > 1))
+			if (Elevators[i].assigned == false || Elevators[i].assigned_destination.size() == 0)
+				return false;
+
+			if (Elevators[i].assigned_destination[0] != destination_floor && Elevators[i].assigned == true &&
+				((abs(Elevators[i].assigned_destination[0] - destination_floor) > Range) && Elevators.size() > 1))
 				return true;
 			else
 				return false;
@@ -625,7 +641,7 @@ void DispatchController::AssignElevator(int number, int destination_floor)
 		if (Elevators[i].number == number)
 		{
 			Elevators[i].assigned = true;
-			Elevators[i].assigned_destination = destination_floor;
+			Elevators[i].assigned_destination.push_back(destination_floor);
 		}
 	}
 }
