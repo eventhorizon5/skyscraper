@@ -3709,10 +3709,13 @@ bool Elevator::SelectFloor(int floor)
 							dir = LastQueueDirection;
 					}
 
-					if (dir == -1)
-						car->Chime(0, floor, false);
-					else if (dir == 1)
-						car->Chime(0, floor, true);
+					if (ChimeOnArrival == true)
+					{
+						if (dir == -1)
+							car->Chime(0, floor, false);
+						else if (dir == 1)
+							car->Chime(0, floor, true);
+					}
 				}
 				if (FireServicePhase2 == 0)
 					if (AutoDoors == true)
