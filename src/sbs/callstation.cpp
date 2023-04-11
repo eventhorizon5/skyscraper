@@ -158,6 +158,8 @@ bool CallStation::SelectFloor(int floor)
 
 	if (GetController())
 		return GetController()->RequestRoute(this, GetFloor(), floor);
+	else
+		return ReportError("No controller");
 	return false;
 }
 
@@ -204,6 +206,8 @@ bool CallStation::FireService(int value)
 {
 	if (GetController())
 		return GetController()->FireService(value);
+	else
+		return ReportError("No controller");
 	return false;
 }
 
