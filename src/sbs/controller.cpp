@@ -267,9 +267,8 @@ void DispatchController::ProcessRoutes()
 		if (closest == -1)
 			return;
 
-		//return the letter of the elevator
+		//get elevator and car for route
 		Elevator* elevator = sbs->GetElevator(Elevators[closest].number);
-		//get letter
 
 		Report("Using elevator " + ToString(elevator->Number));
 
@@ -283,10 +282,11 @@ void DispatchController::ProcessRoutes()
 		else
 			direction = -1;
 
-		//update destination display
+		//update destination indicator with elevator ID
 		if (Routes[i].station)
 			Routes[i].station->UpdateIndicator(elevator->ID);
 
+		//update elevator's call information
 		for (int i = 0; i < Elevators.size(); i++)
 		{
 			if (Elevators[i].number == elevator->Number)
@@ -297,7 +297,7 @@ void DispatchController::ProcessRoutes()
 			}
 		}
 
-		//dispatch elevator
+		//assign and dispatch elevator
 		AssignElevator(elevator->Number, destination_floor);
 		DispatchElevator(elevator->Number, starting_floor, direction, true);
 		//ActiveElevator = elevator->Number;
@@ -331,7 +331,6 @@ bool DispatchController::AddElevator(int elevator)
 	newelevator.arrived = false;
 	newelevator.arrival_floor = 0;
 	newelevator.arrival_direction = false;
-	newelevator.assigned_destination.clear();
 	newelevator.assigned = false;
 	newelevator.destination_floor = 0;
 	newelevator.call_floor = 0;
@@ -554,7 +553,7 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 		{
 			Report("Elevator " + ToString(number) + " arrived at floor " + ToString(floor) + " (" + floorobj->ID + ")");
 
-			//only set if arriving at starting floor
+			//only set values if arriving at starting floor
 			if (Elevators[i].call_floor == floor && Elevators[i].use_call_floor == true)
 			{
 				Elevators[i].arrived = true;
@@ -566,7 +565,7 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 
 			if (Elevators[i].assigned == true)
 			{
-				//unassign route
+				//unassign route from elevator
 				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
 				{
 					if (Elevators[i].assigned_destination[j] == floor)
@@ -613,6 +612,7 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 			}
 		}
 
+		//add elevator route
 		elevator->AddRoute(destination_floor, direction, type);
 	}
 }
@@ -630,7 +630,7 @@ bool DispatchController::IsElevatorAssigned(int number, int destination_floor)
 				if (Elevators[i].assigned_destination[j] == destination_floor && Elevators[i].assigned == true)
 					return true;
 			}
-			return false;
+			break;
 		}
 	}
 	return false;
@@ -652,7 +652,7 @@ bool DispatchController::IsElevatorAssignedToOther(int number, int destination_f
 				((abs(Elevators[i].assigned_destination[0] - destination_floor) > Range) && Elevators.size() > 1))
 				return true;
 			else
-				return false;
+				break;
 		}
 	}
 	return false;
@@ -668,6 +668,7 @@ void DispatchController::AssignElevator(int number, int destination_floor)
 		{
 			Elevators[i].assigned = true;
 
+			//exit if elevator has already been assigned to the floor
 			for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
 			{
 				if (Elevators[i].assigned_destination[j] == destination_floor)
@@ -676,6 +677,8 @@ void DispatchController::AssignElevator(int number, int destination_floor)
 					return;
 				}
 			}
+
+			//add floor to assignment list
 			Elevators[i].assigned_destination.push_back(destination_floor);
 		}
 	}
@@ -684,6 +687,13 @@ void DispatchController::AssignElevator(int number, int destination_floor)
 void DispatchController::RegisterCallStation(CallStation *station)
 {
 	//register the specified call station
+
+	//exit if already registered
+	for (int i = 0; i < CallStations.size(); i++)
+	{
+		if (CallStations[i] == station)
+			return;
+	}
 
 	CallStations.push_back(station);
 }
@@ -721,6 +731,7 @@ int DispatchController::GetElevatorArrived(int starting_floor, int destination_f
 void DispatchController::GetFloorRange()
 {
 	//determine floor range of associated elevators
+
 	bool firstrun = true;
 
 	for (size_t i = 0; i < Elevators.size(); i++)
@@ -782,6 +793,8 @@ bool DispatchController::FireService(int value)
 
 bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
 {
+	//return true if the specified elevator is at the maximum requests level for the specified destination floor
+
 	if (!sbs->GetElevator(elevator))
 		return false;
 
