@@ -625,8 +625,8 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 	//make sure the car's GotoFloor status is set, if this is an additional car heading the same route
 	ProcessGotoFloor(floor, direction);
 
-	//turn on button lights
-	if (call_type == 0 || call_type == 3)
+	//turn on button lights for a car call, or a Destination Dispatch hall call
+	if (call_type == 0)
 		ChangeLight(floor, true);
 
 	//go to ACP floor if ACP mode is enabled

@@ -554,7 +554,7 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 		Report("Dispatching elevator " + ToString(number) + " to floor " + ToString(destination_floor) + " (" + floor->ID + ")");
 
 		int type = 0;
-		if (call == true || DestinationDispatch == true)
+		if (call == true && DestinationDispatch == true)
 			type = 1;
 		else if (DestinationDispatch == false)
 			type = 2;
