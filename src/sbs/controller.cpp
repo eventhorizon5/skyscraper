@@ -132,15 +132,26 @@ void DispatchController::ProcessDestinationDispatch()
 					direction = -1;
 
 				//if request matches the elevator arrival and assignment
-				if (Routes[j].starting_floor == Elevators[i].arrival_floor &&
-						Routes[j].destination_floor == Elevators[i].assigned_destination[0] && Elevators[i].assigned == true)
+				if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true)
 				{
-					//dispatch elevator to destination floor
-					DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
+					bool result = false;
+
+					for (int k = 0; k < Elevators[i].assigned_destination.size(); k++)
+					{
+						if (Routes[j].destination_floor == Elevators[i].assigned_destination[k])
+						{
+							//dispatch elevator to destination floor
+							DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
+							result = true;
+						}
+					}
 
 					//remove route from table
-					RemoveRoute(Routes[j]);
-					j--;
+					if (result == true)
+					{
+						RemoveRoute(Routes[j]);
+						j--;
+					}
 				}
 			}
 		}
