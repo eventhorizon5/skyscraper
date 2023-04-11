@@ -94,6 +94,7 @@ private:
 		int destination_floor;
 		int requests;
 		bool processed;
+		int assigned_elevator;
 		CallStation* station;
 	};
 

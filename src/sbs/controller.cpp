@@ -131,26 +131,30 @@ void DispatchController::ProcessDestinationDispatch()
 				else
 					direction = -1;
 
-				//if request matches the elevator arrival and assignment
-				if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true)
+				//if route matches elevator
+				if (Routes[j].processed == true && Routes[j].assigned_elevator == Elevators[i].number)
 				{
-					bool result = false;
-
-					//dispatch elevator to destination floor for each registered assignment
-					for (int k = 0; k < Elevators[i].assigned_destination.size(); k++)
+					//if request matches the elevator arrival and assignment
+					if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true)
 					{
-						if (Routes[j].destination_floor == Elevators[i].assigned_destination[k])
+						bool result = false;
+
+						//dispatch elevator to destination floor for each registered assignment
+						for (int k = 0; k < Elevators[i].assigned_destination.size(); k++)
 						{
-							DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
-							result = true;
+							if (Routes[j].destination_floor == Elevators[i].assigned_destination[k])
+							{
+								DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
+								result = true;
+							}
 						}
-					}
 
-					//remove route from table
-					if (result == true)
-					{
-						RemoveRoute(Routes[j]);
-						j--;
+						//remove route from table
+						if (result == true)
+						{
+							RemoveRoute(Routes[j]);
+							j--;
+						}
 					}
 				}
 			}
@@ -238,6 +242,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	route.requests = 1;
 	route.processed = false;
 	route.station = station;
+	route.assigned_elevator = 0;
 	Routes.push_back(route);
 
 	return true;
@@ -298,6 +303,7 @@ void DispatchController::ProcessRoutes()
 		//ActiveElevator = elevator->Number;
 
 		Routes[i].processed = true;
+		Routes[i].assigned_elevator = elevator->Number;
 	}
 }
 
