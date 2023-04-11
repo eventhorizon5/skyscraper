@@ -512,7 +512,7 @@ SetAutoSize = false, false
         #set position of call station
         SetPosition 3, 4, 6 - 4.125 - 0.33 - 0.1
 
-        AddIndicator Button, Black, front, 0, 0, 0.5, 0.5, 1, 5
+        AddIndicator mechchime9.wav, Button, Black, front, 0, 0, 0.5, 0.5, 1, 5
     <EndCallStation>
 <EndFloors>
 

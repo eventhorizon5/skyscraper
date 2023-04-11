@@ -27,6 +27,7 @@
 #include "manager.h"
 #include "texture.h"
 #include "timer.h"
+#include "sound.h"
 #include "indicator.h"
 
 namespace SBS {
@@ -42,7 +43,7 @@ public:
 	virtual void Notify();
 };
 
-Indicator::Indicator(Object *parent, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration) : Object(parent)
+Indicator::Indicator(Object *parent, const std::string &sound, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration) : Object(parent)
 {
 	//creates a new display panel at the specified position
 
@@ -85,6 +86,11 @@ Indicator::Indicator(Object *parent, const std::string &texture_prefix, const st
 	}
 	sbs->ResetWalls();
 
+	//create sound
+	this->sound = new Sound(this, "Indicator Sound", true);
+	soundfile = sound;
+	TrimString(soundfile);
+
 	//create timer
 	timer = new Timer("Dispatch Timer", this);
 }
@@ -97,6 +103,13 @@ Indicator::~Indicator()
 		delete Mesh;
 	}
 	Mesh = 0;
+
+	if (sound)
+	{
+		sound->parent_deleting = true;
+		delete sound;
+	}
+	sound = 0;
 
 	//unregister from parent
 	/*if (sbs->FastDelete == false && parent_deleting == false)
@@ -141,6 +154,9 @@ void Indicator::Update(std::string &text)
 	Mesh->ChangeTexture(texture);
 	sbs->GetTextureManager()->EnableLighting(texture, false);
 
+	active_text = text;
+	PlaySound();
+
 	timer->Start(timer_duration * 1000.0);
 }
 
@@ -148,6 +164,8 @@ void Indicator::Off()
 {
 	if (Blank != "")
 		Mesh->ChangeTexture(Blank);
+
+	active_text = "";
 }
 
 void Indicator::Timer::Notify()
@@ -155,6 +173,27 @@ void Indicator::Timer::Notify()
 	//turn off indicator display when timer expires
 
 	parent->Off();
+}
+
+bool Indicator::PlaySound()
+{
+	//play floor beep sound
+
+	if (soundfile == "")
+		return false;
+
+	if (sbs->Verbose)
+		Report("playing indicator sound");
+
+	std::string newsound = soundfile;
+	//change the asterisk into the current active text value
+	ReplaceAll(newsound, "*", active_text);
+	TrimString(newsound);
+	sound->Stop();
+	sound->Load(newsound);
+	sound->SetLoopState(false);
+	sound->Play();
+	return true;
 }
 
 }

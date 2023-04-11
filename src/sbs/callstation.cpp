@@ -207,12 +207,12 @@ bool CallStation::FireService(int value)
 	return false;
 }
 
-Indicator* CallStation::AddIndicator(const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration)
+Indicator* CallStation::AddIndicator(const std::string &sound, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration)
 {
 	if (indicator)
 		return 0;
 
-	indicator = new Indicator(this, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset, timer_duration);
+	indicator = new Indicator(this, sound, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset, timer_duration);
 
 	return indicator;
 }
