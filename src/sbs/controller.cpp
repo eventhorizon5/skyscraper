@@ -240,7 +240,10 @@ void DispatchController::ProcessRoutes()
 
 		//if none found, exit
 		if (closest == -1)
+		{
+			Report("ProcessRoutes: No available elevators found, will try again");
 			return;
+		}
 
 		//get elevator and car for route
 		Elevator* elevator = sbs->GetElevator(Elevators[closest].number);
