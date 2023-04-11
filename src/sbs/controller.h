@@ -101,11 +101,6 @@ private:
 	std::vector<Route> Routes; //destination dispatch requests
 
 	std::vector<CallStation*> CallStations; //call station registrations
-
-	class Timer; //internal timer class
-
-	//timer object
-	Timer *timer;
 };
 
 }

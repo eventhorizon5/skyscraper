@@ -32,17 +32,6 @@
 
 namespace SBS {
 
-class DispatchController::Timer : public TimerObject
-{
-public:
-	DispatchController *parent;
-	Timer(const std::string &name, DispatchController *parent) : TimerObject(parent, name)
-	{
-		this->parent = parent;
-	}
-	virtual void Notify();
-};
-
 DispatchController::DispatchController(Object *parent, int number) : Object(parent)
 {
 	//create a dispatch controller object
@@ -56,30 +45,16 @@ DispatchController::DispatchController(Object *parent, int number) : Object(pare
 	MaxPassengers = 5;
 	Hybrid = false;
 
-	//create timer
-	timer = new Timer("Dispatch Timer", this);
-	timer->Start(1000);
+	EnableLoop(true);
 
 	Report("Created");
 }
 
 DispatchController::~DispatchController()
 {
-	if (timer)
-	{
-		timer->parent_deleting = true;
-		delete timer;
-	}
-	timer = 0;
-
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
 		sbs->RemoveController(this);
-}
-
-void DispatchController::Timer::Notify()
-{
-	parent->Loop();
 }
 
 void DispatchController::Loop()
