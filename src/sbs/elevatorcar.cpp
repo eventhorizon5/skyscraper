@@ -3161,4 +3161,21 @@ CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int qualit
 	return cameratexture;
 }
 
+bool ElevatorCar::RespondingToCall(int floor, int direction)
+{
+	//returns true if the car is responding to a call on the specified floor
+
+	Elevator *e = GetElevator();
+
+	//if proceeding to call floor for a call
+	if (GotoFloor == true && e->GotoFloor == floor && e->GetActiveCallFloor() == e->GotoFloor)
+	{
+		//and if a hall call, with the same call direction
+		if (e->GetActiveCallType() == 1 && e->GetActiveCallDirection() == direction)
+			return true;
+	}
+
+	return false;
+}
+
 }

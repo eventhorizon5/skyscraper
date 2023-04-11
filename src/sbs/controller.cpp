@@ -135,7 +135,7 @@ void DispatchController::ProcessDestinationDispatch()
 				if (Routes[j].starting_floor == Elevators[i].arrival_floor)
 				{
 					//dispatch elevator to destination floor
-					DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction);
+					DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
 
 					//remove route from table
 					RemoveRoute(Routes[j]);
@@ -282,7 +282,7 @@ void DispatchController::ProcessRoutes()
 		}
 
 		//dispatch elevator
-		DispatchElevator(elevator->Number, starting_floor, direction);
+		DispatchElevator(elevator->Number, starting_floor, direction, true);
 		//ActiveElevator = elevator->Number;
 
 		Routes[i].processed = true;
@@ -544,7 +544,7 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 	}
 }
 
-void DispatchController::DispatchElevator(int number, int destination_floor, int direction)
+void DispatchController::DispatchElevator(int number, int destination_floor, int direction, bool call)
 {
 	//dispatch an elevator to the given destination floor
 
@@ -556,12 +556,13 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 		Report("Dispatching elevator " + ToString(number) + " to floor " + ToString(destination_floor) + " (" + floor->ID + ")");
 
 		int type = 0;
-		if (DestinationDispatch == false)
+		if (call == true || DestinationDispatch == true)
 			type = 1;
-		else
-			type = 3;
+		else if (DestinationDispatch == false)
+			type = 2;
 
-		AssignElevator(number, destination_floor);
+		if (call == false)
+			AssignElevator(number, destination_floor);
 
 		//reset arrival status
 		for (int i = 0; i < Elevators.size(); i++)

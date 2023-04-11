@@ -534,7 +534,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
-	//call type is 0 for a car call, 1 for a hall call, 2 for a system call, and 3 for a Destination Dispatch call
+	//call type is 0 for a car call, 1 for a hall call, 2 for a system call
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -3560,8 +3560,8 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 										if (IsNudgeModeActive() == false)
 										{
 											//and if it's above the current floor and should be called down, or below the
-											//current floor and called up, or on the same floor and not moving, or idle
-											if ((car->GetFloor() > floor && direction == -1) || (car->GetFloor() < floor && direction == 1) || (car->GetFloor() == floor && MoveElevator == false) || IsIdle())
+											//current floor and called up, or on the same floor and not moving, or idle, or proceeding to call floor
+											if ((car->GetFloor() > floor && direction == -1) || (car->GetFloor() < floor && direction == 1) || (car->GetFloor() == floor && MoveElevator == false) || IsIdle() || car->RespondingToCall(floor, direction) == true)
 											{
 												//and if it's either going the same direction as the call, or queue is not active, or idle
 												if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle())
