@@ -380,8 +380,8 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 
 	//initialize values
 	int closest = 0;
-	int closest_elev = 0;
-	bool closest_busy = false;
+	int closest_busy = 0;
+	int closest_notbusy = 0;
 	bool check = false;
 	int errors = 0;
 	int result = 0;
@@ -437,7 +437,7 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 				}
 
 				//if elevator is closer than the previously checked one or we're starting the checks
-				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy == true)
+				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy > 0)
 				{
 					//see if elevator is available for the call
 
@@ -455,9 +455,10 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 					else*/
 						result = elevator->AvailableForCall(starting_floor, direction, !recheck);
 
-					if (closest_busy == true && result == 1)
+					//if an elevator is not busy and available, reset closest_busy value
+					if (closest_busy > 0 && result == 1)
 					{
-						closest_busy = false;
+						closest_busy = 0;
 					}
 
 					if (result < 2) //available or busy
@@ -466,17 +467,26 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 						//outside of the serviced floor range, but only if multiple elevators are assigned
 						if (IsElevatorAssignedToOther(elevator->Number, destination_floor) == true)
 						{
-							closest_busy = true;
+							closest_busy = i;
 							continue;
 						}
 
-						//mark as closest elevator
-						if (sbs->Verbose && count > 1 && recheck == false)
-							Report("Marking - closest so far");
-						closest = abs(car->GetFloor() - starting_floor);
-						closest_elev = i;
+						//mark as closest busy elevator
 						if (result == 0)
-							closest_busy = true; //mark that it's also busy
+						{
+							if (sbs->Verbose && count > 1 && recheck == false)
+								Report("Marking - closest so far as busy");
+							closest = abs(car->GetFloor() - starting_floor);
+							closest_busy = i;
+						}
+						else
+						{
+							//mark as closest elevator
+							if (sbs->Verbose && count > 1 && recheck == false)
+								Report("Marking - closest so far");
+							closest = abs(car->GetFloor() - starting_floor);
+							closest_notbusy = i;
+						}
 						check = true;
 					}
 					else if (result == 2) //elevator won't service the call
@@ -510,7 +520,10 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 		return -1;
 	}
 
-	return closest_elev;
+	if (closest_notbusy > 0)
+		return closest_notbusy;
+	else
+		return closest_busy;
 }
 
 void DispatchController::Report(const std::string &message)
