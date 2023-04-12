@@ -205,6 +205,15 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 
 			Routes[i].requests++;
 			Report("Route has " + ToString(Routes[i].requests) + " total requests");
+
+			//report on indicator for new request
+			if (Routes[i].assigned_elevator > 0)
+			{
+				Elevator *e = sbs->GetElevator(Routes[i].assigned_elevator);
+
+				if (Routes[i].station && e)
+					Routes[i].station->UpdateIndicator(e->ID);
+			}
 			return true;
 		}
 	}
