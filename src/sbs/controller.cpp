@@ -244,7 +244,7 @@ void DispatchController::ProcessRoutes()
 		int destination_floor = Routes[i].destination_floor;
 
 		//get closest elevator
-		int closest = FindClosestElevator(starting_floor, destination_floor);
+		int closest = FindClosestElevator(true, starting_floor, destination_floor);
 
 		//if none found, report an error and withdraw the route
 		if (closest == -1)
@@ -374,7 +374,7 @@ bool DispatchController::ServicesElevator(int elevator)
 	return false;
 }
 
-int DispatchController::FindClosestElevator(int starting_floor, int destination_floor)
+int DispatchController::FindClosestElevator(bool destination, int starting_floor, int destination_floor)
 {
 	//finds closest elevator for destination dispatch mode
 
@@ -418,9 +418,12 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 		if (elevator)
 		{
 			//skip elevator if it doesn't serve the destination floor
-			bool serviced = elevator->IsServicedFloor(destination_floor, true);
-			if (serviced == false)
-				continue;
+			if (destination == true)
+			{
+				bool serviced = elevator->IsServicedFloor(destination_floor, true);
+				if (serviced == false)
+					continue;
+			}
 
 			ElevatorCar *car = elevator->GetCarForFloor(starting_floor);
 			if (car)
@@ -428,12 +431,15 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 				if (sbs->Verbose && recheck == false)
 					Report("Checking elevator " + ToString(elevator->Number) + " car " + ToString(car->Number));
 
-				//skip elevator if serving a route with the maximum number of requests
-				if (AtMaxRequests(Elevators[i].number, destination_floor) == true)
+				if (destination == true)
 				{
-					if (sbs->Verbose)
-						Report("Skipping elevator " + ToString(elevator->Number) + " due to reached max passengers value");
-					continue;
+					//skip elevator if serving a route with the maximum number of requests
+					if (AtMaxRequests(Elevators[i].number, destination_floor) == true)
+					{
+						if (sbs->Verbose)
+							Report("Skipping elevator " + ToString(elevator->Number) + " due to reached max passengers value");
+						continue;
+					}
 				}
 
 				//if elevator is closer than the previously checked one or we're starting the checks
@@ -465,10 +471,13 @@ int DispatchController::FindClosestElevator(int starting_floor, int destination_
 					{
 						//skip if elevator has already been assigned for another destination
 						//outside of the serviced floor range, but only if multiple elevators are assigned
-						if (IsElevatorAssignedToOther(elevator->Number, destination_floor) == true)
+						if (destination == true)
 						{
-							closest_busy = i;
-							continue;
+							if (IsElevatorAssignedToOther(elevator->Number, destination_floor) == true)
+							{
+								closest_busy = i;
+								continue;
+							}
 						}
 
 						//mark as closest busy elevator
