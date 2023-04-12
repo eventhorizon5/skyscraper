@@ -237,10 +237,14 @@ void DispatchController::ProcessRoutes()
 		//get closest elevator
 		int closest = FindClosestElevator(starting_floor, destination_floor);
 
-		//if none found, exit
+		//if none found, report an error and withdraw the route
 		if (closest == -1)
 		{
-			Report("ProcessRoutes: No available elevators found, will try again");
+			Report("ProcessRoutes: No available elevators found");
+			std::string error = "XX";
+			if (Routes[i].station)
+				Routes[i].station->UpdateIndicator(error);
+			Routes.erase(Routes.begin() + i);
 			return;
 		}
 

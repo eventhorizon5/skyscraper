@@ -195,6 +195,7 @@
     AddText Black, ButtonD, nimbus_sans.ttf, 47, D, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonE, nimbus_sans.ttf, 47, E, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonF, nimbus_sans.ttf, 47, F, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonXX, nimbus_sans.ttf, 47, XX, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
 # Ground
