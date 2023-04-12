@@ -570,10 +570,16 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 		return ReportError("floor " + ToString(floor) + " is not a serviced floor");
 
 	//if car is on the same floor, perform an arrival
-	if (car->IsOnFloor(floor) && (QueuePositionDirection == direction || QueuePositionDirection == 0))
+	if (car->IsOnFloor(floor))
 	{
-		SameFloorArrival(floor, direction);
-		return true;
+		if (QueuePositionDirection == direction ||
+			QueuePositionDirection == 0 ||
+			(QueuePositionDirection == 1 && UpQueue.size() == 0) ||
+			(QueuePositionDirection == -1 && DownQueue.size() == 0))
+		{
+			SameFloorArrival(floor, direction);
+			return true;
+		}
 	}
 
 	//add route in related direction queue
