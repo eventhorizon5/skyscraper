@@ -1289,6 +1289,10 @@ void Elevator::MoveElevatorToFloor()
 
 		Notified = false;
 
+		//notify controller of movement
+		if (GetController())
+			GetController()->ElevatorMoving(Number);
+
 		//get elevator's current altitude
 		elevposition = GetPosition();
 		ElevatorStart = elevposition.y;

@@ -578,18 +578,6 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 		else if (DestinationDispatch == false)
 			type = 2;
 
-		//reset arrival status
-		for (int i = 0; i < Elevators.size(); i++)
-		{
-			if (Elevators[i].number == number)
-			{
-				Elevators[i].arrived = false;
-				Elevators[i].arrival_floor = 0;
-				Elevators[i].arrival_direction = false;
-				break;
-			}
-		}
-
 		//add elevator route
 		elevator->AddRoute(destination_floor, direction, type);
 	}
@@ -801,6 +789,23 @@ bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
 	}
 
 	return false;
+}
+
+void DispatchController::ElevatorMoving(int number)
+{
+	//runs when elevator notifies that it's started moving
+
+	//reset arrival status
+	for (int i = 0; i < Elevators.size(); i++)
+	{
+		if (Elevators[i].number == number)
+		{
+			Elevators[i].arrived = false;
+			Elevators[i].arrival_floor = 0;
+			Elevators[i].arrival_direction = false;
+			break;
+		}
+	}
 }
 
 }

@@ -48,6 +48,7 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void ElevatorArrived(int number, int floor, bool direction);
+	void ElevatorMoving(int number);
 	bool IsElevatorAssigned(int number, int destination_floor);
 	bool IsElevatorAssignedToOther(int number, int destination_floor);
 	void AssignElevator(int number, int destination_floor);
