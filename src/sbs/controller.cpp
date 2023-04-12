@@ -23,7 +23,6 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "timer.h"
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "floor.h"
@@ -275,7 +274,7 @@ void DispatchController::ProcessRoutes()
 			}
 		}
 
-		//assign and dispatch elevator
+		//assign and dispatch elevator to starting floor
 		AssignElevator(elevator->Number, destination_floor);
 		DispatchElevator(elevator->Number, starting_floor, direction, true);
 		//ActiveElevator = elevator->Number;
@@ -587,6 +586,7 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 				Elevators[i].arrived = false;
 				Elevators[i].arrival_floor = 0;
 				Elevators[i].arrival_direction = false;
+				break;
 			}
 		}
 
