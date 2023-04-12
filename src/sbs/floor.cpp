@@ -1692,7 +1692,7 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 				std::string type = SetCaseCopy(elev->Type, false);
 				bool serviced = car->IsServicedFloor(DestinationFloor);
 				CallButton *button = GetCallButton(elev->Number);
-				CallStation *station = GetCallStation(elev->Number);
+				CallStation *station = GetCallStationForElevator(elev->Number);
 
 				if (serviced == true && type == ElevatorType && (button || station))
 				{
