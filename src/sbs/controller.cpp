@@ -284,6 +284,7 @@ void DispatchController::ProcessRoutes()
 				Elevators[i].destination_floor = destination_floor;
 				Elevators[i].call_floor = starting_floor;
 				Elevators[i].use_call_floor = true;
+				break;
 			}
 		}
 

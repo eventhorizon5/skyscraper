@@ -196,6 +196,12 @@
     AddText Black, ButtonE, nimbus_sans.ttf, 47, E, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonF, nimbus_sans.ttf, 47, F, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonXX, nimbus_sans.ttf, 47, XX, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonLitA, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 255, 255, 0
+    AddText Black, ButtonLitB, nimbus_sans.ttf, 47, B, -1, -1, -1, -1, center, center, 255, 255, 0
+    AddText Black, ButtonLitC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 0
+    AddText Black, ButtonLitD, nimbus_sans.ttf, 47, D, -1, -1, -1, -1, center, center, 255, 255, 0
+    AddText Black, ButtonLitE, nimbus_sans.ttf, 47, E, -1, -1, -1, -1, center, center, 255, 255, 0
+    AddText Black, ButtonLitF, nimbus_sans.ttf, 47, F, -1, -1, -1, -1, center, center, 255, 255, 0
 <EndTextures>
 
 # Ground
@@ -7654,28 +7660,8 @@ DrawWalls = true, true, false, false, false, false
 
 
 #directional indicators
+
 <Floor 0>
-    AddDirectionalIndicator 1, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 2, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 3, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 4, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 5, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 6, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-
-    AddDirectionalIndicator 7, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 8, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 9, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 10, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 11, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 12, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-
-    AddDirectionalIndicator 13, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 14, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 15, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 16, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 17, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 18, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
-
     AddDirectionalIndicator 19, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.051 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
     AddDirectionalIndicator 20, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.051 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
     AddDirectionalIndicator 21, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.051 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
@@ -7688,12 +7674,35 @@ DrawWalls = true, true, false, false, false, false
     AddDirectionalIndicator 31, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.051 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
     AddDirectionalIndicator 32, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.051 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
 
-    AddDirectionalIndicator 33, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.051 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 34, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.051 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
-
     AddDirectionalIndicator 35, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicator 36, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 36, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
 <EndFloor>
+
+<Floors 0 to 136>
+    AddDirectionalIndicator 1, true, true, true, ElevExtPanels, ButtonA, ButtonLitA, ButtonA, ButtonLitA, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 2, true, true, true, ElevExtPanels, ButtonB, ButtonLitB, ButtonB, ButtonLitB, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 3, true, true, true, ElevExtPanels, ButtonC, ButtonLitC, ButtonC, ButtonLitC, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 4, true, true, true, ElevExtPanels, ButtonD, ButtonLitD, ButtonD, ButtonLitD, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 5, true, true, true, ElevExtPanels, ButtonE, ButtonLitE, ButtonE, ButtonLitE, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 6, true, true, true, ElevExtPanels, ButtonF, ButtonLitF, ButtonF, ButtonLitF, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+
+    AddDirectionalIndicator 7, true, true, true, ElevExtPanels, ButtonA, ButtonLitA, Button, Button_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 8, true, true, true, ElevExtPanels, ButtonB, ButtonLitB, Button, Button_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 9, true, true, true, ElevExtPanels, ButtonC, ButtonLitC, Button, Button_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 10, true, true, true, ElevExtPanels, ButtonD, ButtonLitD, Button, Button_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 11, true, true, true, ElevExtPanels, ButtonE, ButtonLitE, Button, Button_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 12, true, true, true, ElevExtPanels, ButtonF, ButtonLitF, Button, Button_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+
+    AddDirectionalIndicator 13, true, true, true, ElevExtPanels, ButtonA, ButtonLitA, Button, Button_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 14, true, true, true, ElevExtPanels, ButtonB, ButtonLitB, Button, Button_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 15, true, true, true, ElevExtPanels, ButtonC, ButtonLitC, Button, Button_Lit, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 16, true, true, true, ElevExtPanels, ButtonD, ButtonLitD, Button, Button_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 17, true, true, true, ElevExtPanels, ButtonE, ButtonLitE, Button, Button_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 18, true, true, true, ElevExtPanels, ButtonF, ButtonLitF, Button, Button_Lit, -3.426 - 0.2 - 0.66 - 0.02, 0, 8.2, left, 0.5, 0.5, true, 0, 0
+
+    AddDirectionalIndicator 33, true, true, true, ElevExtPanels, ButtonA, ButtonLitA, Button, Button_Lit, 4.051 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicator 34, true, true, true, ElevExtPanels, ButtonB, ButtonLitB, Button, Button_Lit, 4.051 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0
+<EndFloors>
 
 <Floors -7 to 1>
     AddDirectionalIndicator 25, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, 2.5, 6.5, right, 0.5, 1, true, 0, 0
