@@ -3045,7 +3045,14 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 
 	//if ChimeOnArrival is off, only chime if responding to a hall call
 	if (parent->ChimeOnArrival == false && direction == 0)
+	{
 		parent->GetCallButtonStatus(floor, up, down);
+
+		//when a controller is assigned, set direction to be the call response direction
+		//the above GetCallButtonStatus should probably be migrated to this function
+		if (parent->GetController())
+			direction = RespondingToCall(floor);
+	}
 
 	bool new_direction = false;
 
@@ -3176,6 +3183,23 @@ bool ElevatorCar::RespondingToCall(int floor, int direction)
 	}
 
 	return false;
+}
+
+int ElevatorCar::RespondingToCall(int floor)
+{
+	//same as other function, but returns the direction of the call
+
+	Elevator *e = GetElevator();
+
+	//if proceeding to call floor for a call
+	if (GotoFloor == true && e->GotoFloor == floor && e->GetActiveCallFloor() == e->GotoFloor)
+	{
+		//and if a hall call, with the same call direction
+		if (e->GetActiveCallType() == 1)
+			return e->GetActiveCallDirection();
+	}
+
+	return 0;
 }
 
 }

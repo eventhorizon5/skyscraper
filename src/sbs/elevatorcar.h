@@ -206,6 +206,7 @@ public:
 	void FlashIndicators(bool value);
 	CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
 	bool RespondingToCall(int floor, int direction);
+	int RespondingToCall(int floor);
 
 	MeshObject* Mesh; //car mesh object
 
