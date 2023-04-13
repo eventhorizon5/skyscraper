@@ -3418,6 +3418,15 @@ bool Elevator::GetArrivalDirection(int floor)
 	if (QueuePositionDirection == -1 && UpQueue.size() == 0 && DownQueue.size() == 0)
 		return false;
 
+	//return direction of queue if floors are the same
+	if (newfloor == floor)
+	{
+		if (QueuePositionDirection == 1 && UpQueue.size() > 0)
+			return true;
+		else if (QueuePositionDirection == -1 && DownQueue.size() > 0)
+			return false;
+	}
+
 	if (newfloor >= floor)
 		return true; //turn on up for entry above current floor
 	else
