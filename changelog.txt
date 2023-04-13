@@ -32,6 +32,7 @@ Version 1.12 (2.0 Alpha 12)
 
 Version 1.11.2 (2.0 Alpha 11 Update 2)
 -------------------------
+-don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
 -updated starting position for Dellerton Plaza building
 -reverted the PolyMesh geometry system cleanups, due to performance problems
 -made Level errors non-fatal
