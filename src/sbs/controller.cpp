@@ -380,8 +380,8 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 
 	//initialize values
 	int closest = 0;
-	int closest_busy = 0;
-	int closest_notbusy = 0;
+	int closest_busy = -1;
+	int closest_notbusy = -1;
 	bool check = false;
 	int errors = 0;
 	int result = 0;
@@ -443,7 +443,7 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 				}
 
 				//if elevator is closer than the previously checked one or we're starting the checks
-				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy > 0)
+				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy >= 0)
 				{
 					//see if elevator is available for the call
 
@@ -462,9 +462,9 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 						result = elevator->AvailableForCall(starting_floor, direction, !recheck);
 
 					//if an elevator is not busy and available, reset closest_busy value
-					if (closest_busy > 0 && result == 1)
+					if (closest_busy >= 0 && result == 1)
 					{
-						closest_busy = 0;
+						closest_busy = -1;
 					}
 
 					if (result < 2) //available or busy
@@ -529,7 +529,7 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 		return -1;
 	}
 
-	if (closest_notbusy > 0)
+	if (closest_notbusy >= 0)
 		return closest_notbusy;
 	else
 		return closest_busy;
