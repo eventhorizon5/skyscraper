@@ -67,7 +67,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	//init variables
 	Name = "";
 	Type = "Local";
-	ID = "";
+	ID = ToString(Number);
 	QueuePositionDirection = 0;
 	LastQueueDirection = 0;
 	LastQueueFloor[0] = 0;
