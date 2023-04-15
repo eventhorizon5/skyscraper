@@ -200,6 +200,32 @@ private:
 	int get_number;
 };
 
+class SBSIMPEXP ControllerManager : public Object
+{
+public:
+	ControllerManager(Object* parent);
+	~ControllerManager();
+	DispatchController* Create(int number);
+	int GetCount();
+	DispatchController* Get(int number);
+	DispatchController* GetIndex(int index);
+	void Remove(DispatchController *controller);
+	void Loop();
+
+private:
+	struct Map
+	{
+		int number; //controller number
+		DispatchController* object; //controller object reference
+	};
+
+	std::vector<Map> Array; //controller object array
+
+	//function caching
+	DispatchController* get_result;
+	int get_number;
+};
+
 }
 
 #endif

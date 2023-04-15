@@ -38,6 +38,7 @@
 #include "escalator.h"
 #include "cameratexture.h"
 #include "callbutton.h"
+#include "callstation.h"
 #include "control.h"
 #include "trigger.h"
 #include "floorindicator.h"
@@ -182,6 +183,17 @@ Floor::~Floor()
 			delete CallButtonArray[i];
 		}
 		CallButtonArray[i] = 0;
+	}
+
+	//delete call stations
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i])
+		{
+			CallStationArray[i]->parent_deleting = true;
+			delete CallStationArray[i];
+		}
+		CallStationArray[i] = 0;
 	}
 
 	//delete doors
@@ -441,6 +453,13 @@ void Floor::Enabled(bool value)
 			CallButtonArray[i]->Enabled(value);
 	}
 
+	//call stations
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i])
+			CallStationArray[i]->Enabled(value);
+	}
+
 	//doors
 	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
@@ -537,6 +556,16 @@ CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string
 	CallButton *button = new CallButton(this, elevators, Number, Current, sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	CallButtonArray.push_back(button);
 	return button;
+}
+
+CallStation* Floor::AddCallStation()
+{
+	//create a new call station object
+
+	int number = (int)CallStationArray.size() + 1;
+	CallStation *station = new CallStation(this, Number, number);
+	CallStationArray.push_back(station);
+	return station;
 }
 
 void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, bool prepare)
@@ -906,6 +935,46 @@ CallButton* Floor::GetCallButton(int elevator)
 	return 0;
 }
 
+std::vector<int> Floor::GetCallStations(int elevator)
+{
+	//get numbers of call stations that service the specified elevator
+
+	std::vector<int> stations;
+	stations.reserve(CallStationArray.size());
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		//put station number onto the array if it serves the elevator
+		if (CallStationArray[i])
+		{
+			if (CallStationArray[i]->ServicesElevator(elevator) == true)
+				stations.push_back((int)i);
+		}
+	}
+	return stations;
+}
+
+CallStation* Floor::GetCallStationForElevator(int elevator)
+{
+	//returns the first call button object that services the specified elevator
+
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i])
+		{
+			if (CallStationArray[i]->ServicesElevator(elevator) == true)
+				return CallStationArray[i];
+		}
+	}
+	return 0;
+}
+
+CallStation* Floor::GetCallStation(int number)
+{
+	if (number > 0 && number <= CallStationArray.size())
+		return CallStationArray[number - 1];
+	return 0;
+}
+
 void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, bool direction, Real tw, Real th, bool isexternal)
 {
 	//convenience function for adding filler walls around doors
@@ -1205,6 +1274,19 @@ void Floor::RemoveCallButton(CallButton *callbutton)
 		if (CallButtonArray[i] == callbutton)
 		{
 			CallButtonArray.erase(CallButtonArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void Floor::RemoveCallStation(CallStation* station)
+{
+	//remove a call station reference (does not delete the object itself)
+	for (size_t i = 0; i < CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i] == station)
+		{
+			CallStationArray.erase(CallStationArray.begin() + i);
 			return;
 		}
 	}
@@ -1610,8 +1692,9 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 				std::string type = SetCaseCopy(elev->Type, false);
 				bool serviced = car->IsServicedFloor(DestinationFloor);
 				CallButton *button = GetCallButton(elev->Number);
+				CallStation *station = GetCallStationForElevator(elev->Number);
 
-				if (serviced == true && type == ElevatorType && button)
+				if (serviced == true && type == ElevatorType && (button || station))
 				{
 					ElevatorRoute* route = new ElevatorRoute(car, DestinationFloor);
 					return route;
@@ -1731,6 +1814,11 @@ CameraTexture* Floor::GetCameraTexture(int number)
 		return CameraTextureArray[number];
 	else
 		return 0;
+}
+
+int Floor::GetCallStationCount()
+{
+	return (int)CallStationArray.size();
 }
 
 }

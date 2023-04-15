@@ -28,6 +28,7 @@
 #include "elevatorcar.h"
 #include "action.h"
 #include "control.h"
+#include "callstation.h"
 #include "buttonpanel.h"
 
 namespace SBS {
@@ -121,6 +122,9 @@ ButtonPanel::~ButtonPanel()
 
 			if (type == "ElevatorCar")
 				static_cast<ElevatorCar*>(GetParent())->RemovePanel(this);
+
+			if (type == "CallStation")
+				static_cast<CallStation*>(GetParent())->RemovePanel();
 		}
 
 		//remove associated actions

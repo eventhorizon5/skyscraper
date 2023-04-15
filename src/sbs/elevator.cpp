@@ -35,6 +35,7 @@
 #include "timer.h"
 #include "profiler.h"
 #include "texture.h"
+#include "controller.h"
 #include "elevator.h"
 
 #include <time.h>
@@ -66,6 +67,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	//init variables
 	Name = "";
 	Type = "Local";
+	ID = "";
 	QueuePositionDirection = 0;
 	LastQueueDirection = 0;
 	LastQueueFloor[0] = 0;
@@ -191,6 +193,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WeightRopeMesh = 0;
 	RopeMesh = 0;
 	Error = false;
+	Controller = 0;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -344,6 +347,9 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	if (AssignedShaft <= 0)
 		return ReportError("Not assigned to a shaft");
 
+	if (Controller < 0)
+		return ReportError("Invalid value for Controller");
+
 	if (!GetShaft())
 		return ReportError("Shaft " + ToString(AssignedShaft) + " doesn't exist");
 
@@ -363,6 +369,10 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 
 	//add elevator to associated shaft
 	GetShaft()->AddElevator(Number);
+
+	//add elevator to associated destination controller
+	if (GetController())
+		GetController()->AddElevator(Number);
 
 	//set recall/ACP floors if not already set
 	if (RecallSet == false)
@@ -524,7 +534,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
-	//call type is 0 for a car call, 1 for a hall call, and 2 for a system call
+	//call type is 0 for a car call, 1 for a hall call, 2 for a system call
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -558,6 +568,19 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 
 	if (!car)
 		return ReportError("floor " + ToString(floor) + " is not a serviced floor");
+
+	//if car is on the same floor, perform an arrival
+	if (car->IsOnFloor(floor))
+	{
+		if (QueuePositionDirection == direction ||
+			QueuePositionDirection == 0 ||
+			(QueuePositionDirection == 1 && UpQueue.size() == 0) ||
+			(QueuePositionDirection == -1 && DownQueue.size() == 0))
+		{
+			SameFloorArrival(floor, direction);
+			return true;
+		}
+	}
 
 	//add route in related direction queue
 	if (direction == 1)
@@ -608,7 +631,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 	//make sure the car's GotoFloor status is set, if this is an additional car heading the same route
 	ProcessGotoFloor(floor, direction);
 
-	//turn on button lights
+	//turn on button lights for a car call, or a Destination Dispatch hall call
 	if (call_type == 0)
 		ChangeLight(floor, true);
 
@@ -1271,6 +1294,10 @@ void Elevator::MoveElevatorToFloor()
 		std::string dir_string;
 
 		Notified = false;
+
+		//notify controller of movement
+		if (GetController())
+			GetController()->ElevatorMoving(Number);
 
 		//get elevator's current altitude
 		elevposition = GetPosition();
@@ -1995,13 +2022,18 @@ void Elevator::FinishMove()
 			//get status of call buttons before switching off
 			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
 
-			//notify call buttons of arrival (which also disables call button lights)
 			for (int i = 1; i <= GetCarCount(); i++)
 			{
 				if (GetCar(i)->GotoFloor == true)
 				{
 					int floor = GetFloorForCar(i, GotoFloor);
+
+					//notify call buttons of arrival (which also disables call button lights)
 					NotifyCallButtons(floor, GetArrivalDirection(floor));
+
+					//notify dispatch controller of arrival
+					if (GetController())
+						GetController()->ElevatorArrived(Number, floor, GetArrivalDirection(floor));
 				}
 			}
 		}
@@ -2108,6 +2140,8 @@ void Elevator::DumpQueues()
 			type = "Hall";
 		if (UpQueue[i].call_type == 2)
 			type = "System";
+		if (UpQueue[i].call_type == 3)
+			type = "Destination";
 
 		std::string car;
 		if (GetCarCount() > 1)
@@ -2126,6 +2160,8 @@ void Elevator::DumpQueues()
 			type = "Hall";
 		if (DownQueue[i].call_type == 2)
 			type = "System";
+		if (DownQueue[i].call_type == 3)
+			type = "Destination";
 
 		std::string car;
 		if (GetCarCount() > 1)
@@ -3382,6 +3418,15 @@ bool Elevator::GetArrivalDirection(int floor)
 	if (QueuePositionDirection == -1 && UpQueue.size() == 0 && DownQueue.size() == 0)
 		return false;
 
+	//return direction of queue if floors are the same
+	if (newfloor == floor)
+	{
+		if (QueuePositionDirection == 1 && UpQueue.size() > 0)
+			return true;
+		else if (QueuePositionDirection == -1 && DownQueue.size() > 0)
+			return false;
+	}
+
 	if (newfloor >= floor)
 		return true; //turn on up for entry above current floor
 	else
@@ -3534,8 +3579,8 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 										if (IsNudgeModeActive() == false)
 										{
 											//and if it's above the current floor and should be called down, or below the
-											//current floor and called up, or on the same floor and not moving, or idle
-											if ((car->GetFloor() > floor && direction == -1) || (car->GetFloor() < floor && direction == 1) || (car->GetFloor() == floor && MoveElevator == false) || IsIdle())
+											//current floor and called up, or on the same floor and not moving, or idle, or proceeding to call floor
+											if ((car->GetFloor() > floor && direction == -1) || (car->GetFloor() < floor && direction == 1) || (car->GetFloor() == floor && MoveElevator == false) || IsIdle() || car->RespondingToCall(floor, direction) == true)
 											{
 												//and if it's either going the same direction as the call, or queue is not active, or idle
 												if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle())
@@ -3647,6 +3692,13 @@ bool Elevator::SelectFloor(int floor)
 	if (!car)
 		return ReportError("Floor " + ToString(floor) + " not a serviced floor");
 
+	//SelectFloor won't work if Destination Dispatch is enabled, if set
+	if (GetController())
+	{
+		if (GetController()->DestinationDispatch == true && GetController()->Hybrid == false && InServiceMode() == false)
+			return ReportError("Cannot select floor " + ToString(floor) + ": Hybrid mode is not enabled");
+	}
+
 	bool result = false;
 
 	//elevator is above floor
@@ -3676,10 +3728,13 @@ bool Elevator::SelectFloor(int floor)
 							dir = LastQueueDirection;
 					}
 
-					if (dir == -1)
-						car->Chime(0, floor, false);
-					else if (dir == 1)
-						car->Chime(0, floor, true);
+					if (ChimeOnArrival == true)
+					{
+						if (dir == -1)
+							car->Chime(0, floor, false);
+						else if (dir == 1)
+							car->Chime(0, floor, true);
+					}
 				}
 				if (FireServicePhase2 == 0)
 					if (AutoDoors == true)
@@ -3863,12 +3918,27 @@ Shaft* Elevator::GetShaft()
 	return sbs->GetShaft(AssignedShaft);
 }
 
+DispatchController* Elevator::GetController()
+{
+	//get associated destination controller
+	return sbs->GetController(Controller);
+}
+
 CallButton* Elevator::GetPrimaryCallButton()
 {
 	//returns the first call button associated with this elevator, on the fire recall (lobby) floor
 	Floor *floor = sbs->GetFloor(RecallFloor);
 	if (floor)
 		return floor->GetCallButton(Number);
+	return 0;
+}
+
+CallStation* Elevator::GetPrimaryCallStation()
+{
+	//returns the first call button associated with this elevator, on the fire recall (lobby) floor
+	Floor *floor = sbs->GetFloor(RecallFloor);
+	if (floor)
+		return floor->GetCallStationForElevator(Number);
 	return 0;
 }
 
@@ -4652,6 +4722,55 @@ void Elevator::DoSetControls()
 
 		ControlQueue.pop();
 	}
+}
+
+bool Elevator::GetDestinationDispatch()
+{
+	//return true if Destination Dispatch is enabled
+
+	if (sbs->GetController(Controller))
+		return sbs->GetController(Controller)->DestinationDispatch;
+	return false;
+}
+
+void Elevator::SameFloorArrival(int floor, int direction)
+{
+	if (sbs->Verbose)
+		Report("Elevator active on current floor - opening");
+
+	//get related car number
+	ElevatorCar *car = GetCarForFloor(floor);
+
+	if (!car)
+	{
+		ReportError("floor " + ToString(floor) + " is not a serviced floor");
+		return;
+	}
+
+	//update arrival information
+	if (direction == -1)
+	{
+		NotifyCallButtons(floor, false);
+		if (GetController())
+			GetController()->ElevatorArrived(Number, floor, false);
+	}
+	else
+	{
+		NotifyCallButtons(floor, true);
+		if (GetController())
+			GetController()->ElevatorArrived(Number, floor, true);
+	}
+
+	//notify on arrival
+	if (NotifyEarly >= 0)
+		car->NotifyArrival(floor, false, direction);
+
+	//store call direction for NotifyLate feature
+	if (NotifyLate == true)
+		car->LateDirection = direction;
+
+	//open elevator if it's on the same floor
+	car->OpenDoors();
 }
 
 }

@@ -31,8 +31,8 @@
     Description = A 55-story office building.
     Version = 1
     HorizScale = 1
-    CameraFloor = 65
-    CameraPosition = 140, 0
+    CameraFloor = 0
+    CameraPosition = 140, 14
     CameraRotation = 0, 270, 0
 <EndGlobals>
 

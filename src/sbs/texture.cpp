@@ -1128,7 +1128,7 @@ Ogre::Vector2 TextureManager::CalculateSizing(const std::string &texture, const 
 	return Ogre::Vector2(tw2, th2);
 }
 
-bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction)
+bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction)
 {
 	//returns texture mapping coordinates for the specified vertices, in the v1, v2, and v3 vectors
 	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
@@ -1138,7 +1138,7 @@ bool TextureManager::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogr
 		//planar method
 
 		Ogre::Vector2 x, y, z;
-		std::vector<Ogre::Vector3> varray;
+		PolyArray varray;
 		bool rev_x = false, rev_y = false, rev_z = false;
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;

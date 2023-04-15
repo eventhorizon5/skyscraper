@@ -163,6 +163,22 @@ public:
 	int Run(std::string &LineData);
 };
 
+class ScriptProcessor::ControllerSection : public ScriptProcessor::Section
+{
+public:
+	ControllerSection(ScriptProcessor* parent);
+	~ControllerSection() {}
+	int Run(std::string &LineData);
+};
+
+class ScriptProcessor::CallStationSection : public ScriptProcessor::Section
+{
+public:
+	CallStationSection(ScriptProcessor* parent);
+	~CallStationSection() {}
+	int Run(std::string &LineData);
+};
+
 }
 
 #endif

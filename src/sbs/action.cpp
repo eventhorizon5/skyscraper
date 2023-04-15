@@ -30,6 +30,7 @@
 #include "stairs.h"
 #include "camera.h"
 #include "callbutton.h"
+#include "callstation.h"
 #include "sound.h"
 #include "mesh.h"
 #include "escalator.h"
@@ -188,6 +189,12 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//FireOn
 	//FireBypass
 
+	//CallStation actions:
+	//(floor number)
+	//FireOff
+	//FireOn
+	//FireBypass
+
 	//Escalator and MovingWalkway actions:
 	//Forward
 	//Reverse
@@ -207,6 +214,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	Shaft *shaft = dynamic_cast<Shaft*>(parent);
 	Stairwell *stairs = dynamic_cast<Stairwell*>(parent);
 	CallButton *callbutton = dynamic_cast<CallButton*>(parent);
+	CallStation *callstation = dynamic_cast<CallStation*>(parent);
 	Escalator *escalator = dynamic_cast<Escalator*>(parent);
 	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
 	CameraTexture *camtex = dynamic_cast<CameraTexture*>(parent);
@@ -242,6 +250,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 
 		//get first callbutton on recall floor
 		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		CallStation *station = elevator->GetPrimaryCallStation();
 
 		//if called from a control and mouse button is held down, notify elevator
 		if (caller_type == "Control" && sbs->camera->MouseDown() == true)
@@ -480,6 +489,15 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			if (command_name == "fire1bypass")
 				return callbutton->FireService(2);
 		}
+		if (station)
+		{
+			if (command_name == "fire1off")
+				return station->FireService(0);
+			if (command_name == "fire1on")
+				return station->FireService(1);
+			if (command_name == "fire1bypass")
+				return station->FireService(2);
+		}
 
 		if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
 		{
@@ -633,6 +651,27 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callbutton->FireService(1);
 		if (command_name == "firebypass")
 			return callbutton->FireService(2);
+	}
+
+	//if parent is a call station, get parent floor object
+	if (callstation)
+		floor = sbs->GetFloor(callstation->GetFloor());
+
+	//callstation-specific commands
+	if (floor && callstation)
+	{
+		//numeric commands for station floor selections
+		if (IsNumeric(command_name) == true)
+		{
+			int floor = ToInt(command_name);
+			return callstation->SelectFloor(floor);
+		}
+		if (command_name == "fireoff")
+			return callstation->FireService(0);
+		if (command_name == "fireon")
+			return callstation->FireService(1);
+		if (command_name == "firebypass")
+			return callstation->FireService(2);
 	}
 
 	//escalator-specific commands

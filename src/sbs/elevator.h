@@ -34,6 +34,7 @@ class SBSIMPEXP Elevator : public Object
 public:
 	int Number; //elevator number
 	std::string Name; //elevator name
+	std::string ID; //identifier for Destination Dispatch
 	std::string Type; //type of elevator: standard, express, service, freight
 	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction
@@ -123,6 +124,7 @@ public:
 	std::string CounterweightStopSound; //counterweight stopping sound
 	bool Counterweight; //if true, elevator has a counterweight
 	bool Error; //true if an error occurred during movement processing
+	int Controller; //destination controller this elevator is assigned to, 0 is default (none)
 
 	//functions
 	Elevator(Object *parent, int number);
@@ -197,7 +199,9 @@ public:
 	bool Up(bool value);
 	bool Down(bool value);
 	Shaft* GetShaft();
+	DispatchController* GetController();
 	CallButton* GetPrimaryCallButton();
+	CallStation* GetPrimaryCallStation();
 	int GetActiveCallFloor();
 	int GetActiveCallDirection();
 	int GetActiveCallType();
@@ -235,6 +239,7 @@ public:
 	bool OnParkingFloor();
 	bool SetHoistwayAccess(int floor, int access);
 	void SetControls(const std::string &action_name);
+	bool GetDestinationDispatch();
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
@@ -323,6 +328,7 @@ private:
 	void NotifyArrival(bool early = false);
 	void ProcessGotoFloor(int floor, int direction);
 	void DoSetControls();
+	void SameFloorArrival(int floor, int direction);
 
 	//motor sound objects
 	Sound *motorsound;

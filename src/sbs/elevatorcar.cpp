@@ -1349,7 +1349,10 @@ bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, cons
 	//uses some parameters (width, height, direction) from AddDoors function
 
 	if (GetDoor(number))
+	{
+		Report("Adding shaft doors...");
 		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+	}
 	else
 		ReportError("Invalid door " + ToString(number));
 	return false;
@@ -1826,7 +1829,10 @@ void ElevatorCar::AddShaftDoorsComponent(int number, const std::string &name, co
 	//adds shaft's elevator door components specified at a relative central position (off of elevator origin)
 
 	if (GetDoor(number))
+	{
+		Report("Adding shaft doors component...");
 		GetDoor(number)->AddShaftDoorsComponent(name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	}
 	else
 		ReportError("Invalid door " + ToString(number));
 }
@@ -3039,7 +3045,14 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 
 	//if ChimeOnArrival is off, only chime if responding to a hall call
 	if (parent->ChimeOnArrival == false && direction == 0)
+	{
 		parent->GetCallButtonStatus(floor, up, down);
+
+		//when a controller is assigned, set direction to be the call response direction
+		//the above GetCallButtonStatus should probably be migrated to this function
+		if (parent->GetController())
+			direction = RespondingToCall(floor);
+	}
 
 	bool new_direction = false;
 
@@ -3070,10 +3083,17 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 		}
 	}
 
+	DispatchController *controller = 0;
+	if (parent->Controller > 0)
+	{
+		controller = sbs->GetController(parent->Controller);
+
+	}
+
 	//play chime sound and change indicator
 	if (new_direction == true)
 	{
-		if (up == true || direction == 1 || parent->NotifyLate == true)
+		if (up == true || direction == 1 || parent->NotifyLate == true || (controller && parent->ChimeOnArrival == true))
 		{
 			Chime(0, floor, true, early);
 			SetDirectionalIndicators(floor, true, false);
@@ -3082,7 +3102,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 	}
 	else
 	{
-		if (down == true || direction == -1 || parent->NotifyLate == true)
+		if (down == true || direction == -1 || parent->NotifyLate == true || (controller && parent->ChimeOnArrival == true))
 		{
 			Chime(0, floor, false, early);
 			SetDirectionalIndicators(floor, false, true);
@@ -3146,6 +3166,40 @@ CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int qualit
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
 	CameraTextureArray.push_back(cameratexture);
 	return cameratexture;
+}
+
+bool ElevatorCar::RespondingToCall(int floor, int direction)
+{
+	//returns true if the car is responding to a call on the specified floor
+
+	Elevator *e = GetElevator();
+
+	//if proceeding to call floor for a call
+	if (GotoFloor == true && e->GotoFloor == floor && e->GetActiveCallFloor() == e->GotoFloor)
+	{
+		//and if a hall call, with the same call direction
+		if (e->GetActiveCallType() == 1 && e->GetActiveCallDirection() == direction)
+			return true;
+	}
+
+	return false;
+}
+
+int ElevatorCar::RespondingToCall(int floor)
+{
+	//same as other function, but returns the direction of the call
+
+	Elevator *e = GetElevator();
+
+	//if proceeding to call floor for a call
+	if (GotoFloor == true && e->GotoFloor == floor && e->GetActiveCallFloor() == e->GotoFloor)
+	{
+		//and if a hall call, with the same call direction
+		if (e->GetActiveCallType() == 1)
+			return e->GetActiveCallDirection();
+	}
+
+	return 0;
 }
 
 }

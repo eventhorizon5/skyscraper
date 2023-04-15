@@ -52,6 +52,9 @@
 #include "model.h"
 #include "timer.h"
 #include "profiler.h"
+#include "controller.h"
+#include "callstation.h"
+#include "buttonpanel.h"
 
 namespace SBS {
 
@@ -235,6 +238,7 @@ void SBS::Initialize()
 	door_manager = new DoorManager(this);
 	revolvingdoor_manager = new RevolvingDoorManager(this);
 	vehicle_manager = new VehicleManager(this);
+	controller_manager = new ControllerManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -360,6 +364,13 @@ SBS::~SBS()
 		delete vehicle_manager;
 	}
 	vehicle_manager = 0;
+
+	if (controller_manager)
+	{
+		controller_manager->parent_deleting = true;
+		delete controller_manager;
+	}
+	controller_manager = 0;
 
 	//delete sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -1304,15 +1315,15 @@ Wall* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::
 	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-void SBS::AddPolygon(Wall* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, Real tw, Real th)
+void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th)
 {
 	//creates a polygon in the specified wall object
 
 	if (!wallobject)
 		return;
 
-	std::vector<Ogre::Vector3> varray1 = varray;
-	std::vector<Ogre::Vector3> varray2;
+	PolyArray varray1 = varray;
+	PolyArray varray2;
 
 	//get number of stored vertices
 	size_t num = varray.size();
@@ -1351,7 +1362,7 @@ void SBS::AddPolygon(Wall* wallobject, const std::string &texture, std::vector<O
 	}
 }
 
-Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, Real tw, Real th)
+Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, PolyArray &varray, Real tw, Real th)
 {
 	//Adds a wall from a specified array of 3D vectors
 
@@ -1370,7 +1381,7 @@ Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::s
 Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, Real altitude, Real tw, Real th)
 {
 	//Same as AddCustomWall, with only one altitude value value
-	std::vector<Ogre::Vector3> varray3;
+	PolyArray varray3;
 
 	//set up 3D vertex array
 	varray3.reserve(varray.size());
@@ -1386,7 +1397,7 @@ Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::
 Wall* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th)
 {
 	//Adds a triangular wall with the specified dimensions
-	std::vector<Ogre::Vector3> varray;
+	PolyArray varray;
 
 	//set up temporary vertex array
 	varray.reserve(3);
@@ -1615,6 +1626,13 @@ Vehicle* SBS::NewVehicle(int number)
 	return vehicle_manager->Create(number);
 }
 
+DispatchController* SBS::NewController(int number)
+{
+	//create a new controller object
+
+	return controller_manager->Create(number);
+}
+
 int SBS::GetElevatorCount()
 {
 	//return the number of elevators
@@ -1643,6 +1661,12 @@ int SBS::GetStairwellCount()
 {
 	//return the number of stairs
 	return stairwell_manager->GetCount();
+}
+
+int SBS::GetControllerCount()
+{
+	//return the number of shafts
+	return controller_manager->GetCount();
 }
 
 Floor* SBS::GetFloor(int number)
@@ -1678,6 +1702,13 @@ Vehicle* SBS::GetVehicle(int number)
 	//return pointer to vehicle object
 
 	return vehicle_manager->Get(number);
+}
+
+DispatchController* SBS::GetController(int number)
+{
+	//return pointer to controller object
+
+	return controller_manager->Get(number);
 }
 
 bool SBS::SetWallOrientation(std::string direction)
@@ -2611,6 +2642,10 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "Light")
 		deleted = true;
+	else if (type == "CallStation")
+		deleted = true;
+	else if (type == "DispatchController")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
@@ -2769,6 +2804,13 @@ void SBS::RemoveTrigger(Trigger *trigger)
 			return;
 		}
 	}
+}
+
+void SBS::RemoveController(DispatchController *controller)
+{
+	//remove a floor (does not delete the object)
+
+	controller_manager->Remove(controller);
 }
 
 std::string SBS::VerifyFile(const std::string &filename)
@@ -4107,6 +4149,11 @@ RevolvingDoorManager* SBS::GetRevolvingDoorManager()
 VehicleManager* SBS::GetVehicleManager()
 {
 	return vehicle_manager;
+}
+
+ControllerManager* SBS::GetControllerManager()
+{
+	return controller_manager;
 }
 
 void SBS::RegisterCameraTexture(CameraTexture *camtex)

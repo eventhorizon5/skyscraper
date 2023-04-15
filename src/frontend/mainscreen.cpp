@@ -222,6 +222,10 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 	int key = event.GetKeyCode();
 
+	//don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
+	if (wxGetKeyState((wxKeyCode)key) == false)
+		return;
+
 	if (key == WXK_ESCAPE)
 	{
 		int result = wxMessageBox(wxT("Exit and return to the main menu?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);

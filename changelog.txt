@@ -1,5 +1,24 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-When ReOpen is true and elevator re-opens on a floor, chime should not sound if ChimeOnArrival is false
+-Turn off object detachment error messages
+-Don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
+-added new ID elevator parameter for Destination Dispatch
+-Centralized same-floor notifications and re-opening
+-Person route support for Destination Dispatch
+-new "Simple - Double Decker DD" building
+-new "Triton Center - Destination Dispatch" building
+-disable button panels for Call Button objects in Enabled() function to improve performance
+-new "Simple - Destination Dispatch" building, replacing the old Destination one
+-support for Destination Dispatch elevators
+-new CallStation object
+-new DispatchController system
+-Added verbose shaft door creation messages
+-updated starting position for Dellerton Plaza building
+-reverted the PolyMesh geometry system cleanups, due to performance problems
+-made Level errors non-fatal
+-fixed a script error in the Skyscrapersim Housing Estate building
+-Object selection fixes for the People Manager dialog
 -Updated guide to reflect collider filename change
 -Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
 -Sizing fixes for CameraTexture dialog
@@ -11,8 +30,17 @@ Version 1.12 (2.0 Alpha 12)
 -Added an INI file setting to enable or disable the frame statistics on startup
 -Render window now resizes properly on Linux when the scaling factor is not 100%
 
+Version 1.11.2 (2.0 Alpha 11 Update 2)
+-------------------------
+-don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
+-updated starting position for Dellerton Plaza building
+-reverted the PolyMesh geometry system cleanups, due to performance problems
+-made Level errors non-fatal
+-fixed a script error in the Skyscrapersim Housing Estate building
+
 Version 1.11.1 (2.0 Alpha 11 Update 1)
 -------------------------
+-Object selection fixes for the People Manager dialog
 -Updated guide to reflect collider filename change
 -Upgraded the swimmingpool collider mesh format, and renamed it to a "collider.mesh" file in order to load properly
 -CameraTexture dialog fixes
