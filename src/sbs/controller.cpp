@@ -158,12 +158,14 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 
 	if (DestinationDispatch == false)
 	{
+		StationError(station);
 		ReportError("RequestRoute: Destination Dispatch not enabled");
 		return false;
 	}
 
 	if (starting_floor == destination_floor)
 	{
+		StationError(station);
 		ReportError("RequestRoute: Floors are the same");
 		return false;
 	}
@@ -172,7 +174,10 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 
 	//make sure floors are valid
 	if (!sbs->GetFloor(starting_floor) || !sbs->GetFloor(destination_floor))
+	{
+		StationError(station);
 		return ReportError("Invalid floor");
+	}
 
 	//make sure this controller has elevators that serve the specified floors
 	if (IsServicedFloor(starting_floor) == false)
@@ -250,9 +255,7 @@ void DispatchController::ProcessRoutes()
 		if (closest == -1)
 		{
 			Report("ProcessRoutes: No available elevators found");
-			std::string error = "XX";
-			if (Routes[i].station)
-				Routes[i].station->UpdateIndicator(error);
+			StationError(Routes[i].station);
 			Routes.erase(Routes.begin() + i);
 			return;
 		}
@@ -842,6 +845,15 @@ void DispatchController::ElevatorMoving(int number)
 			break;
 		}
 	}
+}
+
+void DispatchController::StationError(CallStation *station)
+{
+	if (!station)
+		return;
+
+	std::string message = "XX";
+	station->UpdateIndicator(message);
 }
 
 }
