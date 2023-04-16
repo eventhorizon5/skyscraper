@@ -28,6 +28,7 @@
 #include "controller.h"
 #include "indicator.h"
 #include "timer.h"
+#include "manager.h"
 #include "callstation.h"
 
 namespace SBS {
@@ -279,8 +280,15 @@ void CallStation::ProcessCache()
 	//process and clear input cache
 
 	int floor = ToInt(InputCache);
+
+	Floor *floorobj = sbs->GetFloorManager()->GetByID(InputCache);
+
+	if (floorobj)
+		SelectFloor(floorobj->Number);
+	else
+		SelectFloor(floor);
+
 	InputCache = "";
-	SelectFloor(floor);
 }
 
 }
