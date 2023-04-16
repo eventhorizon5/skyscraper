@@ -8546,7 +8546,7 @@ AddAction FireServiceBypass60, Elevator60, Fire1Bypass
     <CallStation 23>
         Name = Call Station %callstation%
         Controller = 14
-        CreatePanel ElevExtPanels, 6, 6, back, 0.15, 0.15, 0.3, 0.45, 0, 0
+        CreatePanel ElevExtPanels, 6, 5, back, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -14.67, 4, -9.25 + 4.25 + 0.33 + 0.01
         AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 127, Button127
         AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 128, Button128
@@ -8848,7 +8848,7 @@ AddAction FireServiceBypass69, Elevator69, Fire1Bypass
         AddIndicator mechchime9.wav, Button, Black, back, 0, 0, 0.5, 0.5, 0.75, 5
     <EndCallStation>
 
-    if[%floor% = 80] AddActionControl FireSwitch69, switch.wav, back, -14.04, 51.66 + 4.5 + 0.33 + 0.01, 0.25, 0.25, 3.5, FireServiceOff69, FireServiceBypass69, FireServiceOn69, Fire1Off, Fire1Bypass, Fire1On
+    if[%floor% = 80] AddActionControl FireSwitch69, switch.wav, back, -14.04, 51.66 + 4.5 + 0.33 + 0.01, 0.25, 0.25, 3, FireServiceOff69, FireServiceBypass69, FireServiceOn69, Fire1Off, Fire1Bypass, Fire1On
 <EndFloors>
 
 #Residential Service
@@ -8876,7 +8876,7 @@ AddAction FireServiceBypass71, Elevator71, Fire1Bypass
         AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 0.75, 5
     <EndCallStation>
 
-    if[%floor% = 100] AddActionControl FireSwitch71, switch.wav, left, 9.375 - 5.08 - 0.33 - 0.01, 18.542 - 2.5, 0.25, 0.25, 3.5, FireServiceOff71, FireServiceBypass71, FireServiceOn71, Fire1Off, Fire1Bypass, Fire1On
+    if[%floor% = 100] AddActionControl FireSwitch71, switch.wav, left, 9.375 - 5.08 - 0.33 - 0.01, 18.542 - 2.5, 0.25, 0.25, 3, FireServiceOff71, FireServiceBypass71, FireServiceOn71, Fire1Off, Fire1Bypass, Fire1On
 <EndFloors>
 
 #Floor indicators
