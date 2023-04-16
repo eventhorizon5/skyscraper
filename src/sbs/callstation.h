@@ -55,6 +55,7 @@ public:
 	void UpdateIndicator(std::string &text, bool play_sound);
 	bool Input(const std::string &text);
 	void ProcessCache();
+	void Error(bool type = 0);
 
 private:
 	ButtonPanel* panel; //button panel object

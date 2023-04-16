@@ -58,7 +58,6 @@ public:
 	bool IsServicedFloor(int floor);
 	bool FireService(int value);
 	bool AtMaxRequests(int elevator, int destination_floor);
-	void StationError(CallStation *station, bool floor_error = false);
 
 private:
 

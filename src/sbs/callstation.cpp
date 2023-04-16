@@ -277,6 +277,7 @@ void CallStation::ProcessCache()
 	if (!IsNumeric(InputCache))
 	{
 		InputCache = "";
+		Error();
 		return;
 	}
 
@@ -290,6 +291,18 @@ void CallStation::ProcessCache()
 		SelectFloor(floor);
 
 	InputCache = "";
+}
+
+void CallStation::Error(bool type)
+{
+	//if type is 0, standard error
+	//if type is 1, invalid floor
+
+	std::string message = "XX";
+	if (type == 1)
+		message = "??";
+
+	UpdateIndicator(message, false);
 }
 
 }
