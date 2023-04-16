@@ -37,7 +37,7 @@ public:
 	Indicator(Object *parent, const std::string &sound, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration);
 	~Indicator();
 	void Enabled(bool value);
-	void Update(std::string &text, bool play_sound);
+	void Update(std::string &text, bool play_sound = true);
 	bool IsEnabled() { return is_enabled; }
 	void Off();
 	bool PlaySound();

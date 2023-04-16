@@ -52,7 +52,7 @@ public:
 	int GetElevatorArrived(int starting_floor, int destination_floor);
 	bool FireService(int value);
 	Indicator* AddIndicator(const std::string &sound, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration);
-	void UpdateIndicator(std::string &text, bool play_sound);
+	void UpdateIndicator(std::string &text);
 	bool Input(const std::string &text);
 	void ProcessCache();
 	void Error(bool type = 0);

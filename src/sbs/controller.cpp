@@ -220,7 +220,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 				Elevator *e = sbs->GetElevator(Routes[i].assigned_elevator);
 
 				if (Routes[i].station && e)
-					Routes[i].station->UpdateIndicator(e->ID, true);
+					Routes[i].station->UpdateIndicator(e->ID);
 			}
 			return true;
 		}
@@ -281,7 +281,7 @@ void DispatchController::ProcessRoutes()
 
 		//update destination indicator with elevator ID
 		if (Routes[i].station)
-			Routes[i].station->UpdateIndicator(elevator->ID, true);
+			Routes[i].station->UpdateIndicator(elevator->ID);
 
 		//update elevator's call information
 		for (int i = 0; i < Elevators.size(); i++)

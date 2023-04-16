@@ -244,10 +244,10 @@ Indicator* CallStation::AddIndicator(const std::string &sound, const std::string
 	return indicator;
 }
 
-void CallStation::UpdateIndicator(std::string &text, bool play_sound)
+void CallStation::UpdateIndicator(std::string &text)
 {
 	if (indicator)
-		indicator->Update(text, play_sound);
+		indicator->Update(text);
 }
 
 bool CallStation::Input(const std::string &text)
@@ -266,7 +266,7 @@ bool CallStation::Input(const std::string &text)
 	InputCache += text;
 
 	//update indicator display
-	UpdateIndicator(InputCache, false);
+	UpdateIndicator(InputCache);
 
 	//start timeout timer
 	timer->Start(2000, true);
@@ -314,7 +314,7 @@ void CallStation::Error(bool type)
 	if (type == 1)
 		message = "??";
 
-	UpdateIndicator(message, false);
+	UpdateIndicator(message);
 }
 
 int CallStation::GetRecallFloor()
