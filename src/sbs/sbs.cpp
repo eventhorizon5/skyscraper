@@ -3742,7 +3742,9 @@ void SBS::EnableRandomActivity(bool value)
 	if (value == true)
 	{
 		//create regular people
-		for (int i = 0; i < GetTotalFloors(); i++)
+		int people = GetConfigInt("Skyscraper.SBS.Person.RandomPeople", 0);
+		people = people == 0 ? GetTotalFloors() : people;
+		for (int i = 0; i < people; i++)
 		{
 			Person *person = CreatePerson("Random " + ToString(i + 1), 0, false);
 
@@ -3751,8 +3753,7 @@ void SBS::EnableRandomActivity(bool value)
 		}
 
 		//create a service person
-		int i = GetTotalFloors();
-		Person *person = CreatePerson("Random " + ToString(i + 1), 0, true);
+		Person *person = CreatePerson("Random " + ToString(people + 1), 0, true);
 
 		//enable random activity on the person
 		person->EnableRandomActivity(true);
