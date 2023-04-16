@@ -205,6 +205,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//Input9
 	//Input0
 	//InputMinus
+	//InputStar
 
 	//Escalator and MovingWalkway actions:
 	//Forward
@@ -705,6 +706,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callstation->Input("0");
 		if (command_name == "inputminus")
 			return callstation->Input("-");
+		if (command_name == "inputstar")
+			return callstation->Input("*");
 	}
 
 	//escalator-specific commands

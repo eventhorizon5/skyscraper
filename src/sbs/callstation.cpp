@@ -278,18 +278,18 @@ void CallStation::ProcessCache()
 {
 	//process and clear input cache
 
+	//select recall floor if "0"
+	if (InputCache == "0" || InputCache == "*")
+	{
+		SelectFloor(GetRecallFloor());
+		InputCache = "";
+		return;
+	}
+
 	if (!IsNumeric(InputCache))
 	{
 		InputCache = "";
 		Error();
-		return;
-	}
-
-	//select recall floor if "0"
-	if (InputCache == "0")
-	{
-		SelectFloor(GetRecallFloor());
-		InputCache = "";
 		return;
 	}
 
