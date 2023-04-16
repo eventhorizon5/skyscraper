@@ -258,13 +258,8 @@ bool CallStation::Input(const std::string &text)
 	if (text.length() != 1)
 		return false;
 
-	//if a minus is specified, erase last character
-	if (text == "-" && InputCache.size() >= 1)
-		InputCache.pop_back();
-
 	//add text to cache
-	if (IsNumeric(text))
-		InputCache += text;
+	InputCache += text;
 
 	//update indicator display
 	UpdateIndicator(InputCache, false);
@@ -278,6 +273,12 @@ bool CallStation::Input(const std::string &text)
 void CallStation::ProcessCache()
 {
 	//process and clear input cache
+
+	if (!IsNumeric(InputCache))
+	{
+		InputCache = "";
+		return;
+	}
 
 	int floor = ToInt(InputCache);
 
