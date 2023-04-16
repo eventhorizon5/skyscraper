@@ -34,6 +34,8 @@ public:
 
 	std::string Name;
 	int Number;
+	std::vector<std::string> ElevatorsLeft;
+	std::vector<std::string> ElevatorsRight;
 
 	//functions
 	CallStation(Object *parent, int floornum, int number);
@@ -53,11 +55,12 @@ public:
 	int GetElevatorArrived(int starting_floor, int destination_floor);
 	bool FireService(int value);
 	Indicator* AddIndicator(const std::string &sound, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration);
-	void UpdateIndicator(std::string &text, bool play_sound = true);
+	void UpdateIndicator(const std::string &text, bool play_sound = true);
 	bool Input(const std::string &text);
 	void ProcessCache();
 	void Error(bool type = 0);
 	int GetRecallFloor();
+	void ReportElevator(const std::string &elevator_id);
 
 private:
 	ButtonPanel* panel; //button panel object

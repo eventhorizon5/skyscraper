@@ -244,7 +244,7 @@ Indicator* CallStation::AddIndicator(const std::string &sound, const std::string
 	return indicator;
 }
 
-void CallStation::UpdateIndicator(std::string &text, bool play_sound)
+void CallStation::UpdateIndicator(const std::string &text, bool play_sound)
 {
 	if (indicator)
 		indicator->Update(text, play_sound);
@@ -324,6 +324,35 @@ int CallStation::GetRecallFloor()
 	if (GetController())
 		return GetController()->GetRecallFloor();
 	return 0;
+}
+
+void CallStation::ReportElevator(const std::string &elevator_id)
+{
+	//report which elevator is assigned, on indicator
+
+	//update indicator with direction of elevator
+	for (int i = 0; i < (int)ElevatorsLeft.size(); i++)
+	{
+		if (ElevatorsLeft[i] == elevator_id)
+		{
+			std::string message = "<" + elevator_id;
+			UpdateIndicator(message);
+			return;
+		}
+	}
+	for (int i = 0; i < (int)ElevatorsRight.size(); i++)
+	{
+		if (ElevatorsRight[i] == elevator_id)
+		{
+			std::string message = elevator_id + ">";
+			UpdateIndicator(message);
+			return;
+		}
+	}
+
+	//otherwise update indicator with just elevator ID
+	UpdateIndicator(elevator_id);
+	return;
 }
 
 }

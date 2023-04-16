@@ -138,7 +138,7 @@ void Indicator::Enabled(bool value)
 	is_enabled = value;
 }
 
-void Indicator::Update(std::string &text, bool play_sound)
+void Indicator::Update(const std::string &text, bool play_sound)
 {
 	//update display with given text
 

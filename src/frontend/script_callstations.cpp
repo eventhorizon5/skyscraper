@@ -101,6 +101,8 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	std::string linecheck = SetCaseCopy(LineData, false);
 
 	//parameters
+
+	//Name parameter
 	if (linecheck.substr(0, 4) == "name")
 	{
 		if (equals == false)
@@ -108,6 +110,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		station->Name = value;
 		return sNextLine;
 	}
+	//Controller parameter
 	if (linecheck.substr(0, 10) == "controller")
 	{
 		if (equals == false)
@@ -117,6 +120,40 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		if (!IsNumeric(str, num))
 			return ScriptError("Invalid value");
 		station->SetController(num);
+		return sNextLine;
+	}
+	//ElevatorsLeft parameter
+	if (linecheck.substr(0, 13) == "elevatorsleft")
+	{
+		//copy string listing of elevators into array
+		int params = SplitAfterEquals(LineData, false);
+		if (params < 1)
+			return ScriptError("Syntax Error");
+
+		std::vector<std::string> elevs;
+
+		for (int line = 0; line < params; line++)
+			elevs.push_back(tempdata[line]);
+
+		station->ElevatorsLeft = elevs;
+
+		return sNextLine;
+	}
+	//ElevatorsRight parameter
+	if (linecheck.substr(0, 14) == "elevatorsright")
+	{
+		//copy string listing of elevators into array
+		int params = SplitAfterEquals(LineData, false);
+		if (params < 1)
+			return ScriptError("Syntax Error");
+
+		std::vector<std::string> elevs;
+
+		for (int line = 0; line < params; line++)
+			elevs.push_back(tempdata[line]);
+
+		station->ElevatorsRight = elevs;
+
 		return sNextLine;
 	}
 
@@ -141,6 +178,8 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		StoreCommand(station->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		return sNextLine;
 	}
+
+	//commands
 
 	//AddControl command
 	if (linecheck.substr(0, 11) == "addcontrol ")
