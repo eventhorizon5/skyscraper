@@ -1,5 +1,9 @@
 Version 1.12 (2.0 Alpha 12)
 -------------------------
+-(xteal/NoNoTeal) added a configurable People parameter to the INI file
+-When AvailableForCall() does the final check on the queue direction, it should consider elevators on the same floor with queues empty to be available, maybe this situation should be moved into the IsIdle() function
+-Fixed an issue where the check in GetArrivalDirection() would check the same floor, in this case, use the queue direction if still active
+-The SameFloorArrival check code should take into account empty queues for the active queue direction
 -When ReOpen is true and elevator re-opens on a floor, chime should not sound if ChimeOnArrival is false
 -Turn off object detachment error messages
 -Don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
