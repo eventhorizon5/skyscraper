@@ -1809,7 +1809,11 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
+		#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE && OGRE_CPU != OGRE_CPU_ARM
+			ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
+		#else
+			ReportError("Caelum clouds cannot be created on an arm64-based mac.");
+		#endif
 		sky_error = true;
 	}
 	catch (...)
@@ -2497,11 +2501,7 @@ void Skyscraper::CreateSky(EngineContext *engine)
 		}
 		catch (Ogre::Exception &e)
 		{
-			#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE && OGRE_CPU != OGRE_CPU_ARM
-				ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
-			#else
-				ReportError("Caelum clouds cannot be created on an arm64-based mac.");
-			#endif
+			ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
 			return;
 		}
 	}
