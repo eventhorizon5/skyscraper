@@ -58,6 +58,7 @@ public:
 	bool IsServicedFloor(int floor);
 	bool FireService(int value);
 	bool AtMaxRequests(int elevator, int destination_floor);
+	int GetRecallFloor();
 
 private:
 

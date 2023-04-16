@@ -56,6 +56,7 @@ public:
 	bool Input(const std::string &text);
 	void ProcessCache();
 	void Error(bool type = 0);
+	int GetRecallFloor();
 
 private:
 	ButtonPanel* panel; //button panel object

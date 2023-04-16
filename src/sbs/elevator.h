@@ -240,6 +240,7 @@ public:
 	bool SetHoistwayAccess(int floor, int access);
 	void SetControls(const std::string &action_name);
 	bool GetDestinationDispatch();
+	int GetRecallFloor();
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);

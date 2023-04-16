@@ -851,4 +851,18 @@ void DispatchController::ElevatorMoving(int number)
 	}
 }
 
+int DispatchController::GetRecallFloor()
+{
+	if (Elevators.empty())
+		return 0;
+
+	Elevator *elevator = sbs->GetElevator(Elevators[0].number);
+
+	//return recall floor of first elevator in group
+	if (elevator)
+		return elevator->GetRecallFloor();
+
+	return 0;
+}
+
 }

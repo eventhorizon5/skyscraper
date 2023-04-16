@@ -2407,6 +2407,15 @@ void Elevator::GoToRecallFloor()
 	}
 }
 
+int Elevator::GetRecallFloor()
+{
+	//returns the recall floor of the elevator
+
+	if (RecallUnavailable == true)
+		return RecallFloorAlternate;
+	return RecallFloor;
+}
+
 bool Elevator::EnableACP(bool value)
 {
 	//enable Anti-Crime Protection (ACP) mode

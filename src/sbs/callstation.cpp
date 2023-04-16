@@ -285,6 +285,14 @@ void CallStation::ProcessCache()
 		return;
 	}
 
+	//select recall floor if "0"
+	if (InputCache == "0")
+	{
+		SelectFloor(GetRecallFloor());
+		InputCache = "";
+		return;
+	}
+
 	int floor = ToInt(InputCache);
 
 	Floor *floorobj = sbs->GetFloorManager()->GetByID(InputCache);
@@ -307,6 +315,15 @@ void CallStation::Error(bool type)
 		message = "??";
 
 	UpdateIndicator(message, false);
+}
+
+int CallStation::GetRecallFloor()
+{
+	//get recall floor of elevator group from controller
+
+	if (GetController())
+		return GetController()->GetRecallFloor();
+	return 0;
 }
 
 }
