@@ -265,8 +265,6 @@ bool CallStation::Input(const std::string &text)
 	//add text to cache
 	if (IsNumeric(text))
 		InputCache += text;
-	else
-		return false;
 
 	//update indicator display
 	UpdateIndicator(InputCache, false);
