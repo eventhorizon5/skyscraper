@@ -6992,6 +6992,12 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevator>
 
+<Controller 15>
+    Name = Upper Service Dispatch Controller
+    DestinationDispatch = true
+    Elevators = 66
+<EndController>
+
 <Elevator 67>
     Name = Lower Service
     Type = Service
@@ -7171,6 +7177,11 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevator>
 
+<Controller 16>
+    Name = Lower Service Dispatch Controller
+    DestinationDispatch = true
+    Elevators = 67
+<EndController>
 
 #Freight Elevator
 <Elevator 68>
@@ -7423,6 +7434,12 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevator>
 
+<Controller 17>
+    Name = Freight Dispatch Controller
+    DestinationDispatch = true
+    Elevators = 68
+<EndController>
+
 #Hotel Service
 <Elevator 69>
     Name = Hotel Service 1
@@ -7543,6 +7560,12 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevators>
 
+<Controller 18>
+    Name = Freight Dispatch Controller
+    DestinationDispatch = true
+    Elevators = 69, 70
+<EndController>
+
 #Residential service
 <Elevator 71>
     Name = Residential Service
@@ -7657,6 +7680,12 @@ DrawWalls = true, true, false, false, false, false
     AddRails Rails, RailsEdge, 3.625 + 0.5, 0, true, 1 + 0.06, 0.1
 
 <EndElevator>
+
+<Controller 19>
+    Name = Residential Service Dispatch Controller
+    DestinationDispatch = true
+    Elevators = 71
+<EndController>
 
 
 #directional indicators
