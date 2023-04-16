@@ -27,9 +27,21 @@
 #include "floor.h"
 #include "controller.h"
 #include "indicator.h"
+#include "timer.h"
 #include "callstation.h"
 
 namespace SBS {
+
+class CallStation::Timer : public TimerObject
+{
+public:
+	CallStation *parent;
+	Timer(const std::string &name, CallStation *parent) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+	}
+	virtual void Notify();
+};
 
 CallStation::CallStation(Object *parent, int floornum, int number) : Object(parent), Lock(this)
 {
@@ -53,6 +65,9 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 	controller = 0;
 	indicator = 0;
 
+	//create timer
+	timer = new Timer("Input Timeout Timer", this);
+
 	if (sbs->Verbose)
 		Report("Created");
 }
@@ -75,6 +90,13 @@ CallStation::~CallStation()
 		if (parent_deleting == false)
 			floor->RemoveCallStation(this);
 	}
+}
+
+void CallStation::Timer::Notify()
+{
+	//input timeout timer
+
+	parent->ProcessCache();
 }
 
 ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real tw, Real th)
@@ -225,6 +247,40 @@ void CallStation::UpdateIndicator(std::string &text)
 {
 	if (indicator)
 		indicator->Update(text);
+}
+
+bool CallStation::Input(const std::string &text)
+{
+	//input a keypad character
+
+	//only allow single characters
+	if (text.length() != 1)
+		return false;
+
+	//if a minus is specified, erase last character
+	if (text == "-" && InputCache.size() >= 1)
+		InputCache.pop_back();
+
+	//add text to cache
+	if (IsNumeric(text))
+		InputCache += text;
+
+	//update indicator display
+	UpdateIndicator(InputCache);
+
+	//start timeout timer
+	timer->Start(2000, true);
+
+	return true;
+}
+
+void CallStation::ProcessCache()
+{
+	//process and clear input cache
+
+	int floor = ToInt(InputCache);
+	InputCache = "";
+	SelectFloor(floor);
 }
 
 }

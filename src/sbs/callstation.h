@@ -53,6 +53,8 @@ public:
 	bool FireService(int value);
 	Indicator* AddIndicator(const std::string &sound, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration);
 	void UpdateIndicator(std::string &text);
+	bool Input(const std::string &text);
+	void ProcessCache();
 
 private:
 	ButtonPanel* panel; //button panel object
@@ -65,8 +67,16 @@ private:
 
 	Indicator* indicator;
 
+	//for keypad
+	std::string InputCache;
+
 	bool Locked;
 	int KeyID;
+
+	class Timer; //internal timer class
+
+	//timer object
+	Timer *timer;
 };
 
 }

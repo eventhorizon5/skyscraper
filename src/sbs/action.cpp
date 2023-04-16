@@ -194,6 +194,17 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//FireOff
 	//FireOn
 	//FireBypass
+	//Input1
+	//Input2
+	//Input3
+	//Input4
+	//Input5
+	//Input6
+	//Input7
+	//Input8
+	//Input9
+	//Input0
+	//InputMinus
 
 	//Escalator and MovingWalkway actions:
 	//Forward
@@ -672,6 +683,28 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callstation->FireService(1);
 		if (command_name == "firebypass")
 			return callstation->FireService(2);
+		if (command_name == "input1")
+			return callstation->Input("1");
+		if (command_name == "input2")
+			return callstation->Input("2");
+		if (command_name == "input3")
+			return callstation->Input("3");
+		if (command_name == "input4")
+			return callstation->Input("4");
+		if (command_name == "input5")
+			return callstation->Input("5");
+		if (command_name == "input6")
+			return callstation->Input("6");
+		if (command_name == "input7")
+			return callstation->Input("7");
+		if (command_name == "input8")
+			return callstation->Input("8");
+		if (command_name == "input9")
+			return callstation->Input("9");
+		if (command_name == "input0")
+			return callstation->Input("0");
+		if (command_name == "inputminus")
+			return callstation->Input("-");
 	}
 
 	//escalator-specific commands
