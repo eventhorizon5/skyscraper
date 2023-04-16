@@ -33,6 +33,7 @@ class SBSIMPEXP CallStation : public Object, public Lock
 public:
 
 	std::string Name;
+	int Number;
 
 	//functions
 	CallStation(Object *parent, int floornum, int number);
@@ -62,7 +63,6 @@ private:
 	ButtonPanel* panel; //button panel object
 	int controller; //dispatch controller
 
-	int Number; //call button index number (on the specified floor)
 	bool is_enabled;
 
 	Floor *floor; //floor this call button set is on

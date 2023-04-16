@@ -67,7 +67,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 
 	//create call station if not created already
 	if (!station)
-		station = floor->AddCallStation();
+		station = floor->AddCallStation(config->Current);
 
 	if (!station)
 		return sError;

@@ -558,11 +558,10 @@ CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string
 	return button;
 }
 
-CallStation* Floor::AddCallStation()
+CallStation* Floor::AddCallStation(int number)
 {
 	//create a new call station object
 
-	int number = (int)CallStationArray.size() + 1;
 	CallStation *station = new CallStation(this, Number, number);
 	CallStationArray.push_back(station);
 	return station;
@@ -970,8 +969,14 @@ CallStation* Floor::GetCallStationForElevator(int elevator)
 
 CallStation* Floor::GetCallStation(int number)
 {
-	if (number > 0 && number <= CallStationArray.size())
-		return CallStationArray[number - 1];
+	for (int i = 0; i < (int)CallStationArray.size(); i++)
+	{
+		if (CallStationArray[i])
+		{
+			if (CallStationArray[i]->Number == number)
+				return CallStationArray[i];
+		}
+	}
 	return 0;
 }
 
