@@ -175,7 +175,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	//make sure floors are valid
 	if (!sbs->GetFloor(starting_floor) || !sbs->GetFloor(destination_floor))
 	{
-		StationError(station);
+		StationError(station, true);
 		return ReportError("Invalid floor");
 	}
 
@@ -847,12 +847,15 @@ void DispatchController::ElevatorMoving(int number)
 	}
 }
 
-void DispatchController::StationError(CallStation *station)
+void DispatchController::StationError(CallStation *station, bool floor_error)
 {
 	if (!station)
 		return;
 
 	std::string message = "XX";
+	if (floor_error == true)
+		message = "??";
+
 	station->UpdateIndicator(message, false);
 }
 
