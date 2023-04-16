@@ -510,7 +510,7 @@ SetAutoSize = false, false
         AddControl switch.wav, 4, 2, 0, 0, 0, 0, 1, Input1, Button1
         AddControl switch.wav, 4, 3, 0, 0, 0, 0, 1, Input2, Button2
         AddControl switch.wav, 4, 4, 0, 0, 0, 0, 1, Input3, Button3
-        AddControl switch.wav, 5, 2, 0, 0, 0, 0, 1, Input1, ButtonStar
+        AddControl switch.wav, 5, 2, 0, 0, 0, 0, 1, Input0, ButtonStar
         AddControl switch.wav, 5, 3, 0, 0, 0, 0, 1, Input0, Button0
         AddControl switch.wav, 5, 4, 0, 0, 0, 0, 1, InputMinus, ButtonMinus
 
