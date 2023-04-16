@@ -1662,7 +1662,8 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Floor " + ToString(config->CurrentOld) + " Call Station range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing floor " + ToString(config->CurrentOld) + " call stations " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		if (Simcore->Verbose)
+			engine->Report("Processing floor " + ToString(config->CurrentOld) + " call stations " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "<callstation " && config->SectionNum == 2)
@@ -1694,7 +1695,8 @@ int ScriptProcessor::ProcessSections()
 		}
 
 		config->Context = "Floor " + ToString(config->CurrentOld) + " Call Station " + ToString(config->Current);
-		engine->Report("Processing floor " + ToString(config->CurrentOld) + " call station " + ToString(config->Current) + "...");
+		if (Simcore->Verbose)
+			engine->Report("Processing floor " + ToString(config->CurrentOld) + " call station " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 

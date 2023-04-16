@@ -253,7 +253,8 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		config->RangeH = config->RangeHOld;
 		config->RangeStart = config->RangeStartOld;
 
-		engine->Report("Finished call station");
+		if (Simcore->Verbose)
+			engine->Report("Finished call station");
 		return sNextLine;
 	}
 
@@ -274,7 +275,8 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 			config->RangeH = config->RangeHOld;
 			config->RangeStart = config->RangeStartOld;
 			config->Current = config->CurrentOld;
-			engine->Report("Finished call stations");
+			if (Simcore->Verbose)
+				engine->Report("Finished call stations");
 			return sNextLine;
 		}
 	}
