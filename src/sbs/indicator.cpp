@@ -134,7 +134,7 @@ void Indicator::Enabled(bool value)
 	is_enabled = value;
 }
 
-void Indicator::Update(std::string &text)
+void Indicator::Update(std::string &text, bool play_sound)
 {
 	//update display with given text
 
@@ -155,7 +155,8 @@ void Indicator::Update(std::string &text)
 	sbs->GetTextureManager()->EnableLighting(texture, false);
 
 	active_text = text;
-	PlaySound();
+	if (play_sound == true)
+		PlaySound();
 
 	timer->Start(timer_duration * 1000.0);
 }

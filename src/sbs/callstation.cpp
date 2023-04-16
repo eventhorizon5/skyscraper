@@ -244,10 +244,10 @@ Indicator* CallStation::AddIndicator(const std::string &sound, const std::string
 	return indicator;
 }
 
-void CallStation::UpdateIndicator(std::string &text)
+void CallStation::UpdateIndicator(std::string &text, bool play_sound)
 {
 	if (indicator)
-		indicator->Update(text);
+		indicator->Update(text, play_sound);
 }
 
 bool CallStation::Input(const std::string &text)
@@ -267,7 +267,7 @@ bool CallStation::Input(const std::string &text)
 		InputCache += text;
 
 	//update indicator display
-	UpdateIndicator(InputCache);
+	UpdateIndicator(InputCache, false);
 
 	//start timeout timer
 	timer->Start(2000, true);
