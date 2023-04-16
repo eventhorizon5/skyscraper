@@ -56,9 +56,6 @@ Indicator::Indicator(Object *parent, const std::string &sound, const std::string
 	this->timer_duration = timer_duration;
 	this->sound = 0;
 
-	//move object
-	Move(CenterX, voffset, CenterZ);
-
 	//std::string name = "Display Panel " + ToString(elevator);
 	//SetName(name);
 
@@ -94,6 +91,9 @@ Indicator::Indicator(Object *parent, const std::string &sound, const std::string
 		soundfile = sound;
 		TrimString(soundfile);
 	}
+
+	//move object
+	Move(CenterX, voffset, CenterZ);
 
 	//create timer
 	timer = new Timer("Dispatch Timer", this);
