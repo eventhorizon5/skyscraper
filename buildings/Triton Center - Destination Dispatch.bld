@@ -7564,7 +7564,7 @@ DrawWalls = true, true, false, false, false, false
 <EndElevators>
 
 <Controller 18>
-    Name = Freight Dispatch Controller
+    Name = Hotel Service Controller
     DestinationDispatch = true
     Elevators = 69, 70
 <EndController>
@@ -8828,8 +8828,26 @@ AddAction FireServiceOn69, Elevator69, Fire1On
 AddAction FireServiceOff69, Elevator69, Fire1Off
 AddAction FireServiceBypass69, Elevator69, Fire1Bypass
 <Floors 80 to 99>
-    CallButtonElevators = 69, 70
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -14.04, 51.66 + 4.5 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    <CallStation 27>
+        Name = Call Station %callstation%
+        Controller = 18
+        CreatePanel ElevExtPanels, 6, 5, back, 0.15, 0.15, 0.3, 0.45, 0, 0
+        AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, Input7, Button7
+        AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, Input8, Button8
+        AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, Input9, Button9
+        AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, Input4, Button4
+        AddControl switch.wav, 3, 3, 0, 0, 0, 0, 1, Input5, Button5
+        AddControl switch.wav, 3, 4, 0, 0, 0, 0, 1, Input6, Button6
+        AddControl switch.wav, 4, 2, 0, 0, 0, 0, 1, Input1, Button1
+        AddControl switch.wav, 4, 3, 0, 0, 0, 0, 1, Input2, Button2
+        AddControl switch.wav, 4, 4, 0, 0, 0, 0, 1, Input3, Button3
+        AddControl switch.wav, 5, 2, 0, 0, 0, 0, 1, InputStar, Button*
+        AddControl switch.wav, 5, 3, 0, 0, 0, 0, 1, Input0, Button0
+        AddControl switch.wav, 5, 4, 0, 0, 0, 0, 1, InputMinus, Button-
+        SetPosition -14.04, 4, 51.66 + 4.5 + 0.33 + 0.01
+        AddIndicator mechchime9.wav, Button, Black, back, 0, 0, 0.5, 0.5, 0.75, 5
+    <EndCallStation>
+
     if[%floor% = 80] AddActionControl FireSwitch69, switch.wav, back, -14.04, 51.66 + 4.5 + 0.33 + 0.01, 0.25, 0.25, 3.5, FireServiceOff69, FireServiceBypass69, FireServiceOn69, Fire1Off, Fire1Bypass, Fire1On
 <EndFloors>
 
@@ -8838,8 +8856,26 @@ AddAction FireServiceOn71, Elevator71, Fire1On
 AddAction FireServiceOff71, Elevator71, Fire1Off
 AddAction FireServiceBypass71, Elevator71, Fire1Bypass
 <Floors 100 to 130>
-    CallButtonElevators = 71
-    CreateCallButtons ElevExtPanels2, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 9.375 - 5.08 - 0.33 - 0.01, 18.542 - 2.5, 4, left, 0.5, 1, true, 0, 0
+    <CallStation 28>
+        Name = Call Station %callstation%
+        Controller = 19
+        CreatePanel ElevExtPanels2, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
+        AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, Input7, Button7
+        AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, Input8, Button8
+        AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, Input9, Button9
+        AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, Input4, Button4
+        AddControl switch.wav, 3, 3, 0, 0, 0, 0, 1, Input5, Button5
+        AddControl switch.wav, 3, 4, 0, 0, 0, 0, 1, Input6, Button6
+        AddControl switch.wav, 4, 2, 0, 0, 0, 0, 1, Input1, Button1
+        AddControl switch.wav, 4, 3, 0, 0, 0, 0, 1, Input2, Button2
+        AddControl switch.wav, 4, 4, 0, 0, 0, 0, 1, Input3, Button3
+        AddControl switch.wav, 5, 2, 0, 0, 0, 0, 1, InputStar, Button*
+        AddControl switch.wav, 5, 3, 0, 0, 0, 0, 1, Input0, Button0
+        AddControl switch.wav, 5, 4, 0, 0, 0, 0, 1, InputMinus, Button-
+        SetPosition 9.375 - 5.08 - 0.33 - 0.01, 4, 18.542 - 2.5
+        AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 0.75, 5
+    <EndCallStation>
+
     if[%floor% = 100] AddActionControl FireSwitch71, switch.wav, left, 9.375 - 5.08 - 0.33 - 0.01, 18.542 - 2.5, 0.25, 0.25, 3.5, FireServiceOff71, FireServiceBypass71, FireServiceOn71, Fire1Off, Fire1Bypass, Fire1On
 <EndFloors>
 
