@@ -54,6 +54,7 @@ Indicator::Indicator(Object *parent, const std::string &sound, const std::string
 	Prefix = texture_prefix;
 	Blank = blank_texture;
 	this->timer_duration = timer_duration;
+	this->sound = 0;
 
 	//move object
 	Move(CenterX, voffset, CenterZ);
@@ -87,9 +88,12 @@ Indicator::Indicator(Object *parent, const std::string &sound, const std::string
 	sbs->ResetWalls();
 
 	//create sound
-	this->sound = new Sound(this, "Indicator Sound", true);
-	soundfile = sound;
-	TrimString(soundfile);
+	if (sound != "")
+	{
+		this->sound = new Sound(this, "Indicator Sound", true);
+		soundfile = sound;
+		TrimString(soundfile);
+	}
 
 	//create timer
 	timer = new Timer("Dispatch Timer", this);
@@ -180,7 +184,7 @@ bool Indicator::PlaySound()
 {
 	//play floor beep sound
 
-	if (soundfile == "")
+	if (soundfile == "" || !sound)
 		return false;
 
 	if (sbs->Verbose)
