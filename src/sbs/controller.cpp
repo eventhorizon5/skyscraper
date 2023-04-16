@@ -184,9 +184,17 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 
 	//make sure this controller has elevators that serve the specified floors
 	if (IsServicedFloor(starting_floor) == false)
+	{
+		if (station)
+			station->Error(1);
 		return ReportError("No elevators found for floor " + ToString(starting_floor));
+	}
 	if (IsServicedFloor(destination_floor) == false)
+	{
+		if (station)
+			station->Error(1);
 		return ReportError("No elevators found for floor " + ToString(destination_floor));
+	}
 
 	//check to make sure elevator objects are valid
 	bool isvalid = false;
@@ -200,7 +208,11 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 		}
 	}
 	if (isvalid == false)
+	{
+		if (station)
+			station->Error();
 		return ReportError("No valid elevators found");
+	}
 
 	//use existing entry if found
 	for (int i = 0; i < Routes.size(); i++)
