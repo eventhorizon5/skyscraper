@@ -531,6 +531,12 @@ SetAutoSize = false, false
         SetPosition 3, 4, 6 - 4.125 - 0.33 - 0.1
 
         AddIndicator mechchime9.wav, Button, Black, front, 0, 0, 0.5, 0.5, 1, 5
+
+        #To have error and other sounds, such as a sound played when elevator A is selected,
+        #use something like indicator*.wav for the sound, and then indicatorA.wav would play
+        #for the A selection, indicatorXX.wav would play for an error, and indicator??.wav would play
+        #for invalid floor entries
+
     <EndCallStation>
 <EndFloors>
 
