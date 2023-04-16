@@ -258,6 +258,10 @@ bool CallStation::Input(const std::string &text)
 	if (text.length() != 1)
 		return false;
 
+	//erase last character if specified
+	if (text == "<" && InputCache.size() >= 1)
+		InputCache.pop_back();
+
 	//add text to cache
 	InputCache += text;
 
