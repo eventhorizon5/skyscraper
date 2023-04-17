@@ -98,16 +98,6 @@
     AddText Black, Button??, nimbus_sans.ttf, 47, ??, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, Button-, nimbus_sans.ttf, 47, -, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, Button*, nimbus_sans.ttf, 47, *, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button00, nimbus_sans.ttf, 47, 00, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button01, nimbus_sans.ttf, 47, 01, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button02, nimbus_sans.ttf, 47, 02, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button03, nimbus_sans.ttf, 47, 03, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button04, nimbus_sans.ttf, 47, 04, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button05, nimbus_sans.ttf, 47, 05, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button06, nimbus_sans.ttf, 47, 06, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button07, nimbus_sans.ttf, 47, 07, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button08, nimbus_sans.ttf, 47, 08, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, Button09, nimbus_sans.ttf, 47, 09, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
 #Next you'll need to create the ground. The following code is the default ground code.
