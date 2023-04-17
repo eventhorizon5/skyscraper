@@ -189,6 +189,19 @@ Floor* FloorManager::GetByID(const std::string &id)
 	return 0;
 }
 
+Floor* FloorManager::GetByNumberID(const std::string &id)
+{
+	for (int i = 0; i < (int)Array.size(); i++)
+	{
+		if (Array[i].object)
+		{
+			if (Array[i].object->NumberID == id)
+				return Array[i].object;
+		}
+	}
+	return 0;
+}
+
 void FloorManager::Remove(Floor *floor)
 {
 	//remove a floor (does not delete the object)

@@ -36,6 +36,7 @@ public:
 	Floor* Get(int number);
 	Floor* GetIndex(int index);
 	Floor* GetByID(const std::string &id);
+	Floor* GetByNumberID(const std::string &id);
 	void Remove(Floor *floor);
 	void EnableAll(bool value);
 	DynamicMesh* GetFloorDynMesh() { return floors; }

@@ -116,6 +116,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 <Floors 0 to 9>
     #The ID of a floor is it's commonly-used number or symbol - this sets floor 0 to be known as "1", etc.
     ID = %floor% + 1
+    NumberID = %floor% + 1
     Name = Floor (%floor% + 1)
     Type = Office
     Height = 10 #This is the height in feet of the floor

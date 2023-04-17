@@ -295,7 +295,7 @@ void CallStation::ProcessCache()
 
 	int floor = ToInt(InputCache);
 
-	Floor *floorobj = sbs->GetFloorManager()->GetByID(InputCache);
+	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(InputCache);
 
 	if (floorobj)
 		SelectFloor(floorobj->Number);

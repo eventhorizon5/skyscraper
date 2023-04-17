@@ -78,6 +78,7 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	//init other variables
 	Name = "";
 	ID = "";
+	NumberID = "";
 	FloorType = "";
 	Description = "";
 	IndicatorTexture = "";

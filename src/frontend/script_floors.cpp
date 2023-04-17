@@ -122,6 +122,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	ReplaceAll(LineData, "%interfloorheight%", cache_interfloorheight_s);
 	ReplaceAll(LineData, "%base%", cache_base_s);
 	ReplaceAll(LineData, "%floorid%", floor->ID);
+	ReplaceAll(LineData, "%floornumberid%", floor->NumberID);
 	ReplaceAll(LineData, "%floorname%", floor->Name);
 	ReplaceAll(LineData, "%floortype%", floor->FloorType);
 	ReplaceAll(LineData, "%description%", floor->Description);
@@ -191,6 +192,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 		floor->ID = Calc(value);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 8) == "numberid")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		floor->NumberID = Calc(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 4) == "name")

@@ -36,6 +36,7 @@ public:
 	int Number; //floor number
 	std::string Name; //floor name
 	std::string ID;
+	std::string NumberID; //number ID of floor, for use with Destination Dispatch keypads
 	std::string FloorType;
 	std::string Description;
 	std::string IndicatorTexture; //elevator indicator texture name
