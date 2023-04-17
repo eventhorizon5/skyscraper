@@ -71,6 +71,7 @@ private:
 	void ProcessDestinationDispatch();
 	void ProcessRoutes();
 	void GetFloorRange();
+	bool ElevatorUnavailable(int elevator);
 
 	int bottom_floor;
 	int top_floor;

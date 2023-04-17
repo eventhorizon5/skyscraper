@@ -258,7 +258,17 @@ void DispatchController::ProcessRoutes()
 	for (int i = 0; i < Routes.size(); i++)
 	{
 		if (Routes[i].processed == true)
-			continue;
+		{
+			if (ElevatorUnavailable(Routes[i].assigned_elevator) == true)
+			{
+				//if active elevator becomes unavailable during call wait, reprocess route
+				Report("Assigned elevator " + ToString(Routes[i].assigned_elevator) + " became unavailable, reprocessing route");
+				Routes[i].processed = false;
+				Routes[i].assigned_elevator = 0;
+			}
+			else
+				continue; //skip route if elevator is still available
+		}
 
 		int starting_floor = Routes[i].starting_floor;
 		int destination_floor = Routes[i].destination_floor;
@@ -875,6 +885,36 @@ int DispatchController::GetRecallFloor()
 		return elevator->GetRecallFloor();
 
 	return 0;
+}
+
+bool DispatchController::ElevatorUnavailable(int elevator)
+{
+	//returns true if an elevator has become unavailable during dispatch
+
+	Elevator *elev = sbs->GetElevator(elevator);
+
+	if (elev->InServiceMode() == true)
+	{
+		Report("Elevator " + ToString(elevator) + " in service mode");
+		return true;
+	}
+	if (elev->IsRunning() == false)
+	{
+		Report("Elevator " + ToString(elevator) + " not running");
+		return true;
+	}
+	if (elev->IsStopped() == true)
+	{
+		Report("Elevator " + ToString(elevator) + " stopped");
+		return true;
+	}
+	if (elev->Error == true)
+	{
+		Report("Elevator " + ToString(elevator) + " movement processing error");
+		return true;
+	}
+
+	return false;
 }
 
 }
