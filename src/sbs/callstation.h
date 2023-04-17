@@ -34,8 +34,6 @@ public:
 
 	std::string Name;
 	int Number;
-	std::vector<std::string> ElevatorsLeft;
-	std::vector<std::string> ElevatorsRight;
 	std::vector<std::string> InvalidInput;
 
 	//functions
@@ -61,7 +59,7 @@ public:
 	void ProcessCache();
 	void Error(bool type = 0);
 	int GetRecallFloor();
-	void ReportElevator(const std::string &elevator_id);
+	void ReportElevator(Elevator *elevator);
 	bool Call(bool direction);
 
 private:

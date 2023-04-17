@@ -1,0 +1,2726 @@
+18:46:37: Creating resource group General
+18:46:37: Creating resource group OgreInternal
+18:46:37: Creating resource group OgreAutodetect
+18:46:37: SceneManagerFactory for type 'DefaultSceneManager' registered.
+18:46:37: Registering ResourceManager for type Material
+18:46:37: Registering ResourceManager for type Mesh
+18:46:37: Registering ResourceManager for type Skeleton
+18:46:37: MovableObjectFactory for type 'ParticleSystem' registered.
+18:46:37: ArchiveFactory for type 'FileSystem' registered
+18:46:37: ArchiveFactory for type 'Zip' registered
+18:46:37: ArchiveFactory for type 'EmbeddedZip' registered
+18:46:37: DDS codec registering
+18:46:37: ETC codec registering
+18:46:37: ASTC codec registering
+18:46:37: Registering ResourceManager for type GpuProgram
+18:46:37: Registering ResourceManager for type Compositor
+18:46:37: MovableObjectFactory for type 'Entity' registered.
+18:46:37: MovableObjectFactory for type 'Light' registered.
+18:46:37: MovableObjectFactory for type 'BillboardSet' registered.
+18:46:37: MovableObjectFactory for type 'ManualObject' registered.
+18:46:37: MovableObjectFactory for type 'BillboardChain' registered.
+18:46:37: MovableObjectFactory for type 'RibbonTrail' registered.
+18:46:37: MovableObjectFactory for type 'StaticGeometry' registered.
+18:46:37: MovableObjectFactory for type 'Rectangle2D' registered.
+18:46:37: Loading library /usr/local/lib/OGRE/RenderSystem_GL.so.13.6
+18:46:37: Installing plugin: GL RenderSystem
+18:46:37: OpenGL Rendering Subsystem created.
+18:46:38: Plugin successfully installed
+18:46:38: Loading library /usr/local/lib/OGRE/RenderSystem_GL3Plus.so.13.6
+18:46:38: Installing plugin: GL 3+ RenderSystem
+18:46:38: OpenGL 3+ Rendering Subsystem created.
+18:46:38: Plugin successfully installed
+18:46:38: Loading library /usr/local/lib/OGRE/RenderSystem_GLES2.so.13.6
+18:46:38: Installing plugin: OpenGL ES 2.0 RenderSystem
+18:46:38: OpenGL ES 2.x Rendering Subsystem created.
+18:46:38: Plugin successfully installed
+18:46:38: Loading library /usr/local/lib/OGRE/Plugin_CgProgramManager.so.13.6
+18:46:38: Installing plugin: Cg Program Manager
+18:46:38: Plugin successfully installed
+18:46:38: Loading library /usr/local/lib/OGRE/Plugin_OctreeSceneManager.so.13.6
+18:46:38: Installing plugin: Octree Scene Manager
+18:46:38: Plugin successfully installed
+18:46:38: Loading library /usr/local/lib/OGRE/Codec_FreeImage.so.13.6
+18:46:38: FreeImage version: 3.18.0
+18:46:38: This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
+18:46:38: Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,psb,cut,xbm,xpm,gif,hdr,g3,sgi,rgb,rgba,bw,exr,j2k,j2c,jp2,pfm,pct,pict,pic,3fr,arw,bay,bmq,cap,cine,cr2,crw,cs1,dc2,dcr,drf,dsc,dng,erf,fff,ia,iiq,k25,kc2,kdc,mdc,mef,mos,mrw,nef,nrw,orf,pef,ptx,pxn,qtk,raf,raw,rdc,rw2,rwl,rwz,sr2,srf,srw,sti,x3f,webp,jxr,wdp,hdp
+18:46:38: *-*-* OGRE Initialising
+18:46:38: *-*-* Version 13.6.4 (Tsathoggua)
+18:46:38: OverlayElementFactory for type Panel registered.
+18:46:38: OverlayElementFactory for type BorderPanel registered.
+18:46:38: OverlayElementFactory for type TextArea registered.
+18:46:38: Registering ResourceManager for type Font
+18:46:38: CPU Identifier & Features
+18:46:38: -------------------------
+18:46:38:  *   CPU ID: GenuineIntel: Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
+18:46:38:  *          SSE: yes
+18:46:38:  *         SSE2: yes
+18:46:38:  *         SSE3: yes
+18:46:38:  *        SSE41: yes
+18:46:38:  *        SSE42: yes
+18:46:38:  *          MMX: yes
+18:46:38:  *       MMXEXT: yes
+18:46:38:  *        3DNOW: no
+18:46:38:  *     3DNOWEXT: no
+18:46:38:  *         CMOV: yes
+18:46:38:  *          TSC: yes
+18:46:38:  *INVARIANT TSC: yes
+18:46:38:  *          FPU: yes
+18:46:38:  *          PRO: yes
+18:46:38:  *           HT: no
+18:46:38: -------------------------
+18:46:38: ******************************
+*** Starting EGL Subsystem ***
+******************************
+18:46:38: EGL_VENDOR = Mesa Project
+18:46:38: EGL_VERSION = 1.5
+18:46:38: EGL_EXTENSIONS = EGL_EXT_device_base EGL_EXT_device_enumeration EGL_EXT_device_query EGL_EXT_platform_base EGL_KHR_client_get_all_proc_addresses EGL_EXT_client_extensions EGL_KHR_debug EGL_EXT_platform_device EGL_EXT_platform_wayland EGL_KHR_platform_wayland EGL_EXT_platform_x11 EGL_KHR_platform_x11 EGL_EXT_platform_xcb EGL_MESA_platform_gbm EGL_KHR_platform_gbm EGL_MESA_platform_surfaceless EGL_ANDROID_blob_cache EGL_ANDROID_native_fence_sync EGL_CHROMIUM_sync_control EGL_ANGLE_sync_control_rate EGL_EXT_buffer_age EGL_EXT_create_context_robustness EGL_EXT_image_dma_buf_import EGL_EXT_image_dma_buf_import_modifiers EGL_EXT_swap_buffers_with_damage EGL_IMG_context_priority EGL_KHR_cl_event2 EGL_KHR_config_attribs EGL_KHR_context_flush_control EGL_KHR_create_context EGL_KHR_create_context_no_error EGL_KHR_fence_sync EGL_KHR_get_all_proc_addresses EGL_KHR_gl_colorspace EGL_KHR_gl_renderbuffer_image EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_3D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_image EGL_KHR_image_base EGL_KHR_image_pixmap EGL_KHR_no_config_context EGL_KHR_reusable_sync EGL_KHR_surfaceless_context EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_wait_sync EGL_MESA_configless_context EGL_MESA_drm_image EGL_MESA_image_dma_buf_export EGL_MESA_query_driver EGL_NOK_texture_from_pixmap EGL_WL_bind_wayland_display 
+18:46:38: RenderSystem::_createRenderWindow "", 800x600 windowed  miscParams: externalWindowHandle=94416892765296::0:81788947:94416893258896 vsync=true vsyncInterval=1 
+18:46:38: EGLWindow: colourBufferSize=8/8/8/8 gamma=0 FSAA=0
+18:46:38: GL_VERSION = 4.6.0.0
+18:46:38: GL_VENDOR = AMD
+18:46:38: GL_RENDERER = AMD Radeon Pro WX 4100 (polaris11, LLVM 15.0.6, DRM 3.49, 6.1.0-7-amd64)
+18:46:38: GL_EXTENSIONS = GL_AMD_conservative_depth GL_AMD_depth_clamp_separate GL_AMD_draw_buffers_blend GL_AMD_framebuffer_multisample_advanced GL_AMD_gpu_shader_int64 GL_AMD_multi_draw_indirect GL_AMD_performance_monitor GL_AMD_pinned_memory GL_AMD_query_buffer_object GL_AMD_seamless_cubemap_per_texture GL_AMD_shader_stencil_export GL_AMD_shader_trinary_minmax GL_AMD_texture_texture4 GL_AMD_vertex_shader_layer GL_AMD_vertex_shader_viewport_index GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ARB_ES2_compatibility GL_ARB_ES3_1_compatibility GL_ARB_ES3_2_compatibility GL_ARB_ES3_compatibility GL_ARB_arrays_of_arrays GL_ARB_base_instance GL_ARB_bindless_texture GL_ARB_blend_func_extended GL_ARB_buffer_storage GL_ARB_clear_buffer_object GL_ARB_clear_texture GL_ARB_clip_control GL_ARB_color_buffer_float GL_ARB_compressed_texture_pixel_storage GL_ARB_compute_shader GL_ARB_compute_variable_group_size GL_ARB_conditional_render_inverted GL_ARB_conservative_depth GL_ARB_copy_buffer GL_ARB_copy_image GL_ARB_cull_distance GL_ARB_debug_output GL_ARB_depth_buffer_float GL_ARB_depth_clamp GL_ARB_derivative_control GL_ARB_direct_state_access GL_ARB_draw_buffers GL_ARB_draw_buffers_blend GL_ARB_draw_elements_base_vertex GL_ARB_draw_indirect GL_ARB_draw_instanced GL_ARB_enhanced_layouts GL_ARB_explicit_attrib_location GL_ARB_explicit_uniform_location GL_ARB_fragment_coord_conventions GL_ARB_fragment_layer_viewport GL_ARB_fragment_shader GL_ARB_framebuffer_no_attachments GL_ARB_framebuffer_object GL_ARB_framebuffer_sRGB GL_ARB_get_program_binary GL_ARB_get_texture_sub_image GL_ARB_gl_spirv GL_ARB_gpu_shader5 GL_ARB_gpu_shader_fp64 GL_ARB_gpu_shader_int64 GL_ARB_half_float_pixel GL_ARB_half_float_vertex GL_ARB_indirect_parameters GL_ARB_instanced_arrays GL_ARB_internalformat_query GL_ARB_internalformat_query2 GL_ARB_invalidate_subdata GL_ARB_map_buffer_alignment GL_ARB_map_buffer_range GL_ARB_multi_bind GL_ARB_multi_draw_indirect GL_ARB_occlusion_query2 GL_ARB_parallel_shader_compile GL_ARB_pipeline_statistics_query GL_ARB_pixel_buffer_object GL_ARB_point_sprite GL_ARB_polygon_offset_clamp GL_ARB_program_interface_query GL_ARB_provoking_vertex GL_ARB_query_buffer_object GL_ARB_robust_buffer_access_behavior GL_ARB_robustness GL_ARB_sample_shading GL_ARB_sampler_objects GL_ARB_seamless_cube_map GL_ARB_seamless_cubemap_per_texture GL_ARB_separate_shader_objects GL_ARB_shader_atomic_counter_ops GL_ARB_shader_atomic_counters GL_ARB_shader_ballot GL_ARB_shader_bit_encoding GL_ARB_shader_clock GL_ARB_shader_draw_parameters GL_ARB_shader_group_vote GL_ARB_shader_image_load_store GL_ARB_shader_image_size GL_ARB_shader_objects GL_ARB_shader_precision GL_ARB_shader_stencil_export GL_ARB_shader_storage_buffer_object GL_ARB_shader_subroutine GL_ARB_shader_texture_image_samples GL_ARB_shader_texture_lod GL_ARB_shader_viewport_layer_array GL_ARB_shading_language_420pack GL_ARB_shading_language_include GL_ARB_shading_language_packing GL_ARB_spirv_extensions GL_ARB_stencil_texturing GL_ARB_sync GL_ARB_tessellation_shader GL_ARB_texture_barrier GL_ARB_texture_buffer_object GL_ARB_texture_buffer_object_rgb32 GL_ARB_texture_buffer_range GL_ARB_texture_compression_bptc GL_ARB_texture_compression_rgtc GL_ARB_texture_cube_map_array GL_ARB_texture_filter_anisotropic GL_ARB_texture_float GL_ARB_texture_gather GL_ARB_texture_mirror_clamp_to_edge GL_ARB_texture_multisample GL_ARB_texture_non_power_of_two GL_ARB_texture_query_levels GL_ARB_texture_query_lod GL_ARB_texture_rectangle GL_ARB_texture_rg GL_ARB_texture_rgb10_a2ui GL_ARB_texture_stencil8 GL_ARB_texture_storage GL_ARB_texture_storage_multisample GL_ARB_texture_swizzle GL_ARB_texture_view GL_ARB_timer_query GL_ARB_transform_feedback2 GL_ARB_transform_feedback3 GL_ARB_transform_feedback_instanced GL_ARB_transform_feedback_overflow_query GL_ARB_uniform_buffer_object GL_ARB_vertex_array_bgra GL_ARB_vertex_array_object GL_ARB_vertex_attrib_64bit GL_ARB_vertex_attrib_binding GL_ARB_vertex_buffer_object GL_ARB_vertex_shader GL_ARB_vertex_type_10f_11f_11f_rev GL_ARB_vertex_type_2_10_10_10_rev GL_ARB_viewport_array GL_ATI_blend_equation_separate GL_ATI_meminfo GL_ATI_texture_float GL_ATI_texture_mirror_once GL_EXT_EGL_image_storage GL_EXT_EGL_sync GL_EXT_abgr GL_EXT_blend_equation_separate GL_EXT_debug_label GL_EXT_demote_to_helper_invocation GL_EXT_depth_bounds_test GL_EXT_draw_buffers2 GL_EXT_draw_instanced GL_EXT_framebuffer_blit GL_EXT_framebuffer_multisample GL_EXT_framebuffer_multisample_blit_scaled GL_EXT_framebuffer_object GL_EXT_framebuffer_sRGB GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_packed_depth_stencil GL_EXT_packed_float GL_EXT_pixel_buffer_object GL_EXT_polygon_offset_clamp GL_EXT_provoking_vertex GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_shader_image_load_formatted GL_EXT_shader_image_load_store GL_EXT_shader_integer_mix GL_EXT_shader_samples_identical GL_EXT_texture_array GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc GL_EXT_texture_filter_anisotropic GL_EXT_texture_integer GL_EXT_texture_mirror_clamp GL_EXT_texture_sRGB GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_shared_exponent GL_EXT_texture_snorm GL_EXT_texture_swizzle GL_EXT_timer_query GL_EXT_transform_feedback GL_EXT_vertex_array_bgra GL_EXT_vertex_attrib_64bit GL_EXT_window_rectangles GL_IBM_multimode_draw_arrays GL_INTEL_blackhole_render GL_KHR_blend_equation_advanced GL_KHR_context_flush_control GL_KHR_debug GL_KHR_no_error GL_KHR_parallel_shader_compile GL_KHR_robust_buffer_access_behavior GL_KHR_robustness GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_sliced_3d GL_MESA_framebuffer_flip_y GL_MESA_pack_invert GL_MESA_shader_integer_functions GL_MESA_texture_signed_rgba GL_NVX_gpu_memory_info GL_NV_alpha_to_coverage_dither_control GL_NV_compute_shader_derivatives GL_NV_conditional_render GL_NV_copy_image GL_NV_depth_clamp GL_NV_packed_depth_stencil GL_NV_shader_atomic_int64 GL_NV_texture_barrier GL_NV_vdpau_interop GL_OES_EGL_image GL_S3_s3tc 
+18:46:38: **************************************
+18:46:38: ***   OpenGL 3+ Renderer Started   ***
+18:46:38: **************************************
+18:46:38: FBO PF_UNKNOWN depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_L8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_L16 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_A8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_BYTE_LA depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R5G6B5 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_B5G6R5 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_A4R4G4B4 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_A1R5G5B5 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8B8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_B8G8R8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_A8R8G8B8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_A8B8G8R8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_B8G8R8A8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_A2R10G10B10 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_A2B10G10R10 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_FLOAT16_RGB depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_FLOAT16_RGBA depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_FLOAT32_RGB depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_FLOAT32_RGBA depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_X8R8G8B8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_X8B8G8R8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8B8A8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_DEPTH16 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_SHORT_RGBA depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R3G3B2 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_FLOAT16_R depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_FLOAT32_R depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_SHORT_GR depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_FLOAT16_GR depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_FLOAT32_GR depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_SHORT_RGB depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R11G11B10_FLOAT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8B8_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8B8A8_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16B16_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16B16A16_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R32_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R32G32_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R32G32B32_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R32G32B32A32_UINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8B8_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8B8A8_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16B16_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16B16A16_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R32_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R32G32_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R32G32B32_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R32G32B32A32_SINT depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R9G9B9E5_SHAREDEXP depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8_SNORM depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8_SNORM depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8B8_SNORM depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R8G8B8A8_SNORM depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16_SNORM depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16_SNORM depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16B16_SNORM depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_R16G16B16A16_SNORM depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_DEPTH32 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_DEPTH32F depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: FBO PF_DEPTH24_STENCIL8 depth/stencil support: D0S0 D0S1 D0S4 D0S8 D0S16 D16S0 D16S1 D16S4 D16S8 D16S16 D24S0 D24S1 D24S4 D24S8 D24S16 D32S0 D32S1 D32S4 D32S8 D32S16 D32S0 D32S1 D32S4 D32S8 D32S16 Packed-D24S8 Packed-D32S8 
+18:46:38: [GL] : Valid FBO targets PF_UNKNOWN PF_L8 PF_L16 PF_A8 PF_BYTE_LA PF_R5G6B5 PF_B5G6R5 PF_A4R4G4B4 PF_A1R5G5B5 PF_R8G8B8 PF_B8G8R8 PF_A8R8G8B8 PF_A8B8G8R8 PF_B8G8R8A8 PF_A2R10G10B10 PF_A2B10G10R10 PF_FLOAT16_RGB PF_FLOAT16_RGBA PF_FLOAT32_RGB PF_FLOAT32_RGBA PF_X8R8G8B8 PF_X8B8G8R8 PF_R8G8B8A8 PF_DEPTH16 PF_SHORT_RGBA PF_R3G3B2 PF_FLOAT16_R PF_FLOAT32_R PF_SHORT_GR PF_FLOAT16_GR PF_FLOAT32_GR PF_SHORT_RGB PF_R11G11B10_FLOAT PF_R8_UINT PF_R8G8_UINT PF_R8G8B8_UINT PF_R8G8B8A8_UINT PF_R16_UINT PF_R16G16_UINT PF_R16G16B16_UINT PF_R16G16B16A16_UINT PF_R32_UINT PF_R32G32_UINT PF_R32G32B32_UINT PF_R32G32B32A32_UINT PF_R8_SINT PF_R8G8_SINT PF_R8G8B8_SINT PF_R8G8B8A8_SINT PF_R16_SINT PF_R16G16_SINT PF_R16G16B16_SINT PF_R16G16B16A16_SINT PF_R32_SINT PF_R32G32_SINT PF_R32G32B32_SINT PF_R32G32B32A32_SINT PF_R9G9B9E5_SHAREDEXP PF_R8 PF_R8G8 PF_R8_SNORM PF_R8G8_SNORM PF_R8G8B8_SNORM PF_R8G8B8A8_SNORM PF_R16_SNORM PF_R16G16_SNORM PF_R16G16B16_SNORM PF_R16G16B16A16_SNORM PF_DEPTH32 PF_DEPTH32F PF_DEPTH24_STENCIL8 
+18:46:38: Registering ResourceManager for type Texture
+18:46:38: RenderSystem capabilities
+18:46:38: -------------------------
+18:46:38: RenderSystem Name: OpenGL 3+ Rendering Subsystem
+18:46:38: GPU Vendor: amd
+18:46:38: Device Name: AMD Radeon Pro WX 4100 (polaris11, LLVM 15.0.6, DRM 3.49, 6.1.0-7-amd64)
+18:46:38: Driver Version: 4.6.0.0
+18:46:38:  * Fixed function pipeline: no
+18:46:38:  * 32-bit index buffers: yes
+18:46:38:  * Hardware stencil buffer: yes
+18:46:38:    - Two sided stencil support: yes
+18:46:38:    - Wrap stencil values: yes
+18:46:38:  * Vertex programs: yes
+18:46:38:    - Number of constant 4-vectors: 4096
+18:46:38:  * Fragment programs: yes
+18:46:38:    - Number of constant 4-vectors: 4096
+18:46:38:  * Geometry programs: yes
+18:46:38:    - Number of constant 4-vectors: 4096
+18:46:38:  * Tessellation Hull programs: yes
+18:46:38:    - Number of constant 4-vectors: 4096
+18:46:38:  * Tessellation Domain programs: yes
+18:46:38:    - Number of constant 4-vectors: 4096
+18:46:38:  * Compute programs: yes
+18:46:38:    - Number of constant 4-vectors: 16384
+18:46:38:  * Supported Shader Profiles: gl_spirv glsl glsl130 glsl140 glsl150 glsl330 glsl400 glsl410 glsl420 glsl430 glsl440 glsl450 glsl460
+18:46:38:  * Read-back compiled shader: yes
+18:46:38:  * Number of vertex attributes: 16
+18:46:38:  * Textures
+18:46:38:    - Number of texture units: 16
+18:46:38:    - Floating point: yes
+18:46:38:    - Non-power-of-two: yes
+18:46:38:    - 1D textures: yes
+18:46:38:    - 2D array textures: yes
+18:46:38:    - 3D textures: yes
+18:46:38:    - Anisotropic filtering: yes
+18:46:38:  * Texture Compression: yes
+18:46:38:    - DXT: yes
+18:46:38:    - VTC: no
+18:46:38:    - PVRTC: no
+18:46:38:    - ATC: no
+18:46:38:    - ETC1: no
+18:46:38:    - ETC2: yes
+18:46:38:    - BC4/BC5: yes
+18:46:38:    - BC6H/BC7: yes
+18:46:38:    - ASTC: yes
+18:46:38:    - Automatic mipmap generation: yes
+18:46:38:  * Vertex Buffers
+18:46:38:    - Render to Vertex Buffer: yes
+18:46:38:    - Instance Data: yes
+18:46:38:    - Primitive Restart: yes
+18:46:38:    - INT_10_10_10_2_NORM element type: yes
+18:46:38:  * Vertex texture fetch: yes
+18:46:38:    - Max vertex textures: 16
+18:46:38:    - Vertex textures shared: no
+18:46:38:  * Read/Write Buffers: yes
+18:46:38:  * Hardware Occlusion Query: yes
+18:46:38:  * User clip planes: yes
+18:46:38:  * Depth clamping: yes
+18:46:38:  * Hardware render-to-texture: yes
+18:46:38:    - Multiple Render Targets: 8
+18:46:38:    - With different bit depths: yes
+18:46:38:  * Point Sprites: yes
+18:46:38:    - Extended parameters: yes
+18:46:38:    - Max Size: 2048
+18:46:38:  * Wide Lines: yes
+18:46:38:  * Hardware Gamma: yes
+18:46:38:  * PBuffer support: no
+18:46:38:  * Vertex Array Objects: yes
+18:46:38:  * Separate shader objects: yes
+18:46:38:    - redeclare GLSL interface block: yes
+18:46:38:  * Debugging/ profiling events: yes
+18:46:38:  * Map buffer storage: yes
+18:46:38: DefaultWorkQueue('Root') initialising on thread main.
+18:46:38: Particle Renderer Type 'billboard' registered
+18:46:38: SceneManagerFactory for type 'OctreeSceneManager' registered.
+18:46:38: Added resource location './media/Main' of type 'FileSystem' to resource group 'General'
+18:46:38: Added resource location './media/RTShaderLib/GLSL' of type 'FileSystem' to resource group 'General'
+18:46:38: Added resource location './media/Terrain' of type 'FileSystem' to resource group 'General'
+18:46:38: Initialising resource group General
+18:46:38: Parsing scripts for resource group General
+18:46:38: Parsing script ShadowVolumeExtude.program
+18:46:38: Parsing script Shadow.material
+18:46:38: Finished parsing scripts for resource group General
+18:46:38: Creating resources for group General
+18:46:38: All done
+18:46:38: Added resource location '.' of type 'FileSystem' to resource group 'General' with recursive option
+18:46:38: Creating resource group Materials
+18:46:38: Added resource location 'data/materials' of type 'FileSystem' to resource group 'Materials' with recursive option
+18:46:38: Initialising resource group Materials
+18:46:38: Parsing scripts for resource group Materials
+18:46:38: Parsing script testmat.material
+18:46:38: Finished parsing scripts for resource group Materials
+18:46:38: Creating resources for group Materials
+18:46:38: All done
+18:46:38: Creating resource group Trays
+18:46:38: Added resource location 'media/packs/SdkTrays.zip' of type 'Zip' to resource group 'Trays' with recursive option
+18:46:38: Initialising resource group Trays
+18:46:38: Parsing scripts for resource group Trays
+18:46:38: Parsing script SdkTrays.material
+18:46:38: Parsing script SdkTrays.fontdef
+18:46:38: Parsing script SdkTrays.overlay
+18:46:38: Texture 'sdk_cursor.png': Loading 1 faces(PF_A8R8G8B8,32x32x1) with 5 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,32x32x1.
+18:46:38: Texture 'sdk_tray.png': Loading 1 faces(PF_A8R8G8B8,64x64x1) with 6 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,64x64x1.
+18:46:38: Texture 'sdk_button_up.png': Loading 1 faces(PF_A8R8G8B8,128x32x1) with 7 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,128x32x1.
+18:46:38: Texture 'sdk_text_box.png': Loading 1 faces(PF_A8R8G8B8,32x32x1) with 5 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,32x32x1.
+18:46:38: Texture 'sdk_mini_tray.png': Loading 1 faces(PF_A8R8G8B8,32x32x1) with 5 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,32x32x1.
+18:46:38: Texture 'sdk_track.png': Loading 1 faces(PF_A8R8G8B8,16x32x1) with 5 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,16x32x1.
+18:46:38: Texture 'sdk_handle.png': Loading 1 faces(PF_A8R8G8B8,16x16x1) with 4 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,16x16x1.
+18:46:38: Texture 'sdk_mini_text_box.png': Loading 1 faces(PF_A8R8G8B8,32x32x1) with 5 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,32x32x1.
+18:46:38: Texture 'sdk_label.png': Loading 1 faces(PF_A8R8G8B8,32x32x1) with 5 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,32x32x1.
+18:46:38: Texture 'sdk_separator.png': Loading 1 faces(PF_A8R8G8B8,64x16x1) with 6 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,64x16x1.
+18:46:38: Texture 'sdk_logo.png': Loading 1 faces(PF_A8R8G8B8,128x64x1) with 7 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,128x64x1.
+18:46:38: Texture 'sdk_shade.png': Loading 1 faces(PF_A8R8G8B8,64x48x1) with 6 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,64x48x1.
+18:46:38: Texture 'sdk_frame.png': Loading 1 faces(PF_A8R8G8B8,32x32x1) with 5 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,32x32x1.
+18:46:38: Texture 'sdk_mini_text_box_over.png': Loading 1 faces(PF_A8R8G8B8,32x32x1) with 5 hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,32x32x1.
+18:46:38: Texture 'sdk_pulse.png': Loading 1 faces(PF_R8G8B8,8x1x1) with 3 hardware generated mipmaps from Image. Internal format is PF_R8G8B8,8x1x1.
+18:46:38: Finished parsing scripts for resource group Trays
+18:46:38: Creating resources for group Trays
+18:46:38: All done
+18:46:38: 
+ FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2023
+
+18:46:38: Sound initialized: FMOD Engine version 2.2.12
+18:46:41: 
+Starting instance 0...
+18:46:41: 
+18:46:41:  Scalable Building Simulator 0.12.0.0 Alpha
+18:46:41:  Copyright (C)2004-2023 Ryan Thoryk
+18:46:41:  This software comes with ABSOLUTELY NO WARRANTY. This is free
+18:46:41:  software, and you are welcome to redistribute it under certain
+18:46:41:  conditions. For details, see the file gpl.txt
+
+18:46:43: 0> Loading default textures...
+18:46:43: 0> Loaded texture 'data/default.png' as 'Default'
+18:46:43: 0> Loaded texture 'data/gray2-sm.jpg' as 'ConnectionWall'
+18:46:43: 0> Loaded texture 'data/metal1-sm.jpg' as 'Connection'
+18:46:43: 0> Done
+18:46:43: 0> Mounting data/signs-sans.zip as path signs/sans
+18:46:43: 0> Error mounting file data/signs-sans.zip
+Cannot open file: data/signs-sans.zip
+18:46:43: 0> Mounting data/signs-sans_bold.zip as path signs/sans_bold
+18:46:43: 0> Error mounting file data/signs-sans_bold.zip
+Cannot open file: data/signs-sans_bold.zip
+18:46:43: 0> Mounting data/signs-sans_cond.zip as path signs/sans_cond
+18:46:43: 0> Error mounting file data/signs-sans_cond.zip
+Cannot open file: data/signs-sans_cond.zip
+18:46:43: 0> Mounting data/signs-sans_cond_bold.zip as path signs/sans_cond_bold
+18:46:43: 0> Error mounting file data/signs-sans_cond_bold.zip
+Cannot open file: data/signs-sans_cond_bold.zip
+18:46:43: 0> 
+Loading building data from Triton Center - Destination Dispatch.bld...
+
+18:46:43: ArchiveFactory for type 'FileSystem' registered
+18:46:43: 0> Processing globals...
+18:46:43: 0> Finished globals
+18:46:43: 0> Processing textures...
+18:46:43: 0> Loaded texture 'data/brick1.jpg' as 'Brick'
+18:46:43: 0> Loaded texture 'data/lobbyfront-b.gif' as 'LobbyFront'
+18:46:43: 0> Loaded texture 'data/windows11h_black.jpg' as 'MainWindows2'
+18:46:43: 0> Loaded texture 'data/windows11h_black_mid2.jpg' as 'MainWindows2b'
+18:46:43: 0> Loaded texture 'data/windows11h_black_double.jpg' as 'MainWindowsDouble'
+18:46:43: 0> Loaded texture 'data/windows11h_inside.gif' as 'MainWindowsInt'
+18:46:44: 0> Loaded texture 'data/windows11h_mid_int2.gif' as 'MainWindowsInt2'
+18:46:44: 0> Loaded texture 'data/windows11h_inside_double.gif' as 'MainWindowsIntDouble'
+18:46:44: 0> Loaded texture 'data/Carpet0013_S.jpg' as 'Carpet1'
+18:46:44: 0> Loaded texture 'data/stucco3.jpg' as 'MainCeiling'
+18:46:44: 0> Loaded texture 'data/graniteTexture_0018e.jpg' as 'LobbyFloor'
+18:46:44: 0> Loaded texture 'data/ceilinglight1b.jpg' as 'LobbyCeiling'
+18:46:44: 0> Loaded texture 'data/ceilinglight1b.jpg' as 'ElevCeiling'
+18:46:44: 0> Loaded texture 'data/Carpet0006_S.jpg' as 'ElevFloor'
+18:46:44: 0> Loaded texture 'data/Threadplate0055_2_S.jpg' as 'ServiceElevFloor'
+18:46:44: 0> Loaded texture 'data/MetalBare0085_3_S.jpg' as 'ServiceElevWall'
+18:46:44: 0> Loaded texture 'data/metal080.jpg' as 'ServiceElevPanelMain'
+18:46:44: 0> Loaded texture 'data/diamond18h.jpg' as 'OfficeElevWall'
+18:46:44: 0> Loaded texture 'data/diamond18b.jpg' as 'ExpressElevWall'
+18:46:44: 0> Loaded texture 'data/diamond18i.jpg' as 'HotelElevWall'
+18:46:44: 0> Loaded texture 'data/diamond18g.jpg' as 'ResidentialElevWall'
+18:46:44: 0> Loaded texture 'data/metal080.jpg' as 'ColumnTex'
+18:46:44: 0> Loaded texture 'data/granite_0007e.jpg' as 'LobbyWalls'
+18:46:44: 0> Loaded texture 'data/marble5c.jpg' as 'LobbyWalls2'
+18:46:44: 0> Loaded texture 'data/marble5c.jpg' as 'Wall1'
+18:46:44: 0> Loaded texture 'data/stucco4c.jpg' as 'Stucco4'
+18:46:44: 0> Loaded texture 'data/marble4b.jpg' as 'ICover'
+18:46:44: 0> Loaded texture 'data/stucco1b.jpg' as 'Ceiling1'
+18:46:44: 0> Loaded texture 'data/grndroad1mid.jpg' as 'ParkingFloor'
+18:46:44: 0> Loaded texture 'data/stucco4c.jpg' as 'ParkingCeiling'
+18:46:44: 0> Loaded texture 'data/stucco4e.jpg' as 'ParkingWalls'
+18:46:44: 0> Loaded texture 'data/stucco4b.jpg' as 'LowerLevelWalls'
+18:46:44: 0> Loaded texture 'data/intext.jpg' as 'InterInt'
+18:46:44: 0> Loaded texture 'data/metal1.jpg' as 'ElevExt'
+18:46:44: 0> Loaded texture 'data/aluminumdoor_c.jpg' as 'ElevDoors'
+18:46:44: 0> Loaded texture 'data/aluminumdoor_c.jpg' as 'ElevDoors2'
+18:46:44: 0> Loaded texture 'data/door1c.jpg' as 'ServiceElevDoors'
+18:46:44: 0> Loaded texture 'data/door1c.jpg' as 'ServiceElevDoors2'
+18:46:44: 0> Loaded texture 'data/door1.jpg' as 'ServiceElevDoorsb'
+18:46:44: 0> Loaded texture 'data/door1.jpg' as 'ServiceElevDoors2b'
+18:46:44: 0> Loaded texture 'data/gray3.jpg' as 'Gray'
+18:46:44: 0> Loaded texture 'data/otis67/OTIS67_OTIS_PANEL_BUTTON_EXTERNAL_nologo_b.jpg' as 'ElevExtPanels'
+18:46:44: 0> Loaded texture 'data/otis67/OTIS67_OTIS_PANEL_BUTTON_EXTERNAL_nologo_b.jpg' as 'ElevExtPanels2'
+18:46:44: 0> Loaded texture 'data/otis67/OTIS67_OTIS_PANEL_BUTTON_EXTERNAL_nologo_b.jpg' as 'ElevPanel'
+18:46:44: 0> Loaded texture 'data/diamond18j.jpg' as 'ElevPanelMain'
+18:46:44: 0> Loaded texture 'data/cinderblocks.jpg' as 'Concrete'
+18:46:44: 0> Loaded texture 'data/cinderblocks.jpg' as 'StairsWall'
+18:46:44: 0> Loaded texture 'data/cem_tr_b.jpg' as 'Stairs'
+18:46:44: 0> Loaded texture 'data/metal072b.jpg' as 'StairsLanding'
+18:46:44: 0> Loaded texture 'data/servicedoor2b.jpg' as 'StairsDoor'
+18:46:44: 0> Loaded texture 'data/miscdoor8.jpg' as 'StairsDoor2'
+18:46:44: 0> Loaded texture 'data/miscdoor9b.jpg' as 'HotelDoor'
+18:46:44: 0> Loaded texture 'data/downtown.jpg' as 'Downtown'
+18:46:44: 0> Loaded texture 'data/bracing1.jpg' as 'VentsInt'
+18:46:44: 0> Loaded texture 'data/vents1.jpg' as 'VentsExt'
+18:46:44: 0> Loaded texture 'data/stucco22b.jpg' as 'HotelWalls'
+18:46:44: 0> Loaded texture 'data/Carpet0013b_S.jpg' as 'HotelFloor'
+18:46:44: 0> Loaded texture 'data/stucco2f.jpg' as 'HotelCeiling'
+18:46:44: 0> Loaded texture 'data/callbutton3.gif' as 'ButtonUp'
+18:46:44: 0> Loaded texture 'data/callbutton3_lityellow.gif' as 'ButtonUpLit'
+18:46:44: 0> Loaded texture 'data/callbutton3.gif' as 'ButtonDown'
+18:46:44: 0> Loaded texture 'data/callbutton3_lityellow.gif' as 'ButtonDownLit'
+18:46:44: 0> Loaded texture 'data/floorsign.jpg' as 'FloorSign'
+18:46:44: 0> Loaded texture 'data/darrow_unlit.gif' as 'ArrowUp'
+18:46:44: 0> Loaded texture 'data/darrow_unlit.gif' as 'ArrowDown'
+18:46:44: 0> Loaded texture 'data/darrow_lit.gif' as 'ArrowUp_Lit'
+18:46:44: 0> Loaded texture 'data/darrow_lit.gif' as 'ArrowDown_Lit'
+18:46:44: 0> Loaded texture 'data/darrow_single_up.jpg' as 'ArrowUpSingle'
+18:46:44: 0> Loaded texture 'data/darrow_single_down.jpg' as 'ArrowDownSingle'
+18:46:44: 0> Loaded texture 'data/metal080.jpg' as 'MainPanelBack'
+18:46:44: 0> Loaded texture 'data/daley.jpg' as 'Daley'
+18:46:44: 0> Loaded texture 'data/searstower.jpg' as 'SearsTower'
+18:46:44: 0> Loaded texture 'data/glasselevator1.gif' as 'Railing'
+18:46:44: 0> Loaded texture 'data/fire2keyoff.png' as 'Fire2Off'
+18:46:44: 0> Loaded texture 'data/fire2keyon.png' as 'Fire2On'
+18:46:44: 0> Loaded texture 'data/fire2keyhold.png' as 'Fire2Hold'
+18:46:44: 0> Loaded texture 'data/fire1keyoff.png' as 'Fire1Off'
+18:46:44: 0> Loaded texture 'data/fire1keyon.png' as 'Fire1On'
+18:46:44: 0> Loaded texture 'data/fire1keybypass.png' as 'Fire1Bypass'
+18:46:44: 0> Loaded texture 'data/runkey.png' as 'RunKey'
+18:46:44: 0> Loaded texture 'data/stopkey.png' as 'StopKey'
+18:46:44: 0> Loaded texture 'data/indservkeyon.png' as 'IndOn'
+18:46:44: 0> Loaded texture 'data/indservkeyoff.png' as 'IndOff'
+18:46:44: 0> Loaded texture 'data/dcircle_lit.gif' as 'ShaftLight'
+18:46:44: 0> Loaded texture 'data/counterweight.png' as 'Counterweight'
+18:46:44: 0> Loaded texture 'data/counterweight_frame.png' as 'CounterweightFrame'
+18:46:44: 0> Loaded texture 'data/ropes.png' as 'Ropes'
+18:46:44: 0> Loaded texture 'data/metal080.jpg' as 'Rails'
+18:46:44: 0> Loaded texture 'data/metal1.jpg' as 'RailsEdge'
+18:46:44: 0> Loaded texture 'data/triton_signs/2-14.png' as 'Sign2-14'
+18:46:44: 0> Loaded texture 'data/triton_signs/15-26.png' as 'Sign15-26'
+18:46:44: 0> Loaded texture 'data/triton_signs/27-37.png' as 'Sign27-37'
+18:46:44: 0> Loaded texture 'data/triton_signs/41-50.png' as 'Sign41-50'
+18:46:44: 0> Loaded texture 'data/triton_signs/41-60.png' as 'Sign41-60'
+18:46:44: 0> Loaded texture 'data/triton_signs/51-60.png' as 'Sign51-60'
+18:46:44: 0> Loaded texture 'data/triton_signs/61-70.png' as 'Sign61-70'
+18:46:44: 0> Loaded texture 'data/triton_signs/61-78.png' as 'Sign61-78'
+18:46:44: 0> Loaded texture 'data/triton_signs/71-78.png' as 'Sign71-78'
+18:46:44: 0> Loaded texture 'data/triton_signs/102-118.png' as 'Sign102-118'
+18:46:44: 0> Loaded texture 'data/triton_signs/120-129.png' as 'Sign120-129'
+18:46:44: 0> Loaded texture 'data/triton_signs/134-136.png' as 'Sign134-136'
+18:46:44: 0> Loaded texture 'data/triton_signs/hotel.png' as 'SignHotel'
+18:46:44: 0> Loaded texture 'data/triton_signs/lobby.png' as 'SignLobby'
+18:46:44: 0> Loaded texture 'data/triton_signs/mez.png' as 'SignMez'
+18:46:44: 0> Loaded texture 'data/triton_signs/office.png' as 'SignOffice'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices2-14.png' as 'SignOffices2-14'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices15-26.png' as 'SignOffices15-26'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices27-37.png' as 'SignOffices27-37'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices40-78.png' as 'SignOffices40-78'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices41-50.png' as 'SignOffices41-50'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices41-73.png' as 'SignOffices41-73'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices51-60.png' as 'SignOffices51-60'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices61-70.png' as 'SignOffices61-70'
+18:46:44: 0> Loaded texture 'data/triton_signs/offices71-78.png' as 'SignOffices71-78'
+18:46:44: 0> Loaded texture 'data/triton_signs/pool.png' as 'SignPool'
+18:46:44: 0> Loaded texture 'data/triton_signs/res.png' as 'SignRes'
+18:46:44: 0> Loaded texture 'data/triton_signs/service1.png' as 'SignService1'
+18:46:44: 0> Loaded texture 'data/triton_signs/service2.png' as 'SignService2'
+18:46:44: 0> Loaded texture 'data/triton_signs/skydeck.png' as 'SignSkydeck'
+18:46:44: 0> Loaded texture 'data/black.jpg' as 'Black'
+18:46:44: 0> Loaded texture 'data/black_lit.jpg' as 'BlackLit'
+18:46:44: Warning: Freetype did not find charcode 32 in font data/fonts/nimbus_sans.ttf
+18:46:44: Warning: Freetype did not find charcode 32 in font data/fonts/nimbus_sans.ttf
+18:46:44: 0> Finished textures
+18:46:44: 0> Creating ground...
+18:46:44: 0> Finished ground
+18:46:44: 0> Processing floor -1...
+18:46:44: 0> Finished floor
+18:46:44: 0> Processing floor -2...
+18:46:44: 0> Finished floor
+18:46:44: 0> Processing floors -1 to -2...
+18:46:44: 0> Finished floors
+18:46:44: 0> Processing floor -3...
+18:46:44: 0> Finished floor
+18:46:44: 0> Processing floor -4...
+18:46:44: 0> Finished floor
+18:46:44: 0> Processing floor -5...
+18:46:44: 0> Finished floor
+18:46:44: 0> Processing floor -6...
+18:46:44: 0> Finished floor
+18:46:45: 0> Processing floor -7...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floor -8...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floors -3 to -8...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floor 0...
+18:46:45: 0> Created camera texture 'Camera1'
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floor 1...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floors 0 to -7...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floors 2 to 37...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floors 2 to 5...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floor 2...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floors 6 to 37...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floors 38 to 39...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floor 38...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floor 39...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floor 38...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floors 0 to 39...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floors 40 to 78...
+18:46:45: 0> 10%
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floor 40...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floors 41 to 78...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floor 79...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floors 40 to 79...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floors 80 to 118...
+18:46:45: 0> Finished floors
+18:46:45: 0> Processing floor 80...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floor 81...
+18:46:45: 0> Finished floor
+18:46:45: 0> Processing floors 82 to 98...
+18:46:47: 0> Finished floors
+18:46:47: 0> Processing floor 99...
+18:46:47: 0> Finished floor
+18:46:47: 0> Processing floors 82 to 98...
+18:46:47: 0> Finished floors
+18:46:47: 0> Processing floor 100...
+18:46:47: 0> Finished floor
+18:46:47: 0> Processing floor 101...
+18:46:47: 0> Finished floor
+18:46:47: 0> Processing floors 102 to 118...
+18:46:47: 0> Finished floors
+18:46:47: 0> Processing floor 119...
+18:46:47: 0> Finished floor
+18:46:47: 0> Processing floors 80 to 119...
+18:46:47: 0> Finished floors
+18:46:47: 0> Processing floors 120 to 134...
+18:46:47: 0> Finished floors
+18:46:48: 0> Processing floors 120 to 129...
+18:46:48: 0> Finished floors
+18:46:48: 0> Processing floor 130...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 131...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 132...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 133...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 134...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 135...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 136...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 137...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floors 138 to 140...
+18:46:48: 0> Finished floors
+18:46:48: 0> Processing floor 141...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 142...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 141...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 142...
+18:46:48: 0> 20%
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floors 141 to 142...
+18:46:48: 0> Finished floors
+18:46:48: 0> Processing floor 143...
+18:46:48: 0> Loading material script data/couch.material
+18:46:48: 0> Loading material 1356759433_1_<Brown>
+18:46:48: 0> Loading material 1356759433_2_front_back
+18:46:48: 0> Loading material 1356759433_3_side
+18:46:48: 0> Loading material 1356759433_4_front_left_side
+18:46:48: 0> Loading material 1356759433_5_Material3
+18:46:48: 0> Loading material 1356759433_6_wood123_v-dark
+18:46:48: 0> Loading material 1356759433_SketchupDefault
+18:46:48: Mesh: Loading data/couch.mesh.
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floor 144...
+18:46:48: 0> Finished floor
+18:46:48: 0> Processing floors 120 to 142...
+18:46:48: 0> Finished floors
+18:46:48: 0> Processing floors -1 to 142...
+18:46:49: 0> Finished floors
+18:46:49: 0> Processing floors -1 to 16...
+18:46:49: 0> Finished floors
+18:46:49: 0> Shaft 1: created at -9.5830, 0
+18:46:49: 0> Shaft 2: created at 9.5830, 0
+18:46:49: 0> Shaft 3: created at -18.0830, 0
+18:46:49: 0> Shaft 4: created at 18.0830, 0
+18:46:49: 0> Shaft 5: created at -37.2500, 0
+18:46:49: 0> Shaft 6: created at 37.2500, 0
+18:46:49: 0> Shaft 1: cutting...
+18:46:49: 0> Shaft 2: cutting...
+18:46:49: 0> Shaft 3: cutting...
+18:46:49: 0> Shaft 4: cutting...
+18:46:49: 0> Shaft 5: cutting...
+18:46:49: 0> Shaft 6: cutting...
+18:46:49: 0> Shaft 7: created at -12.5830, -38.7500
+18:46:49: 0> Shaft 8: created at 12.5830, -38.7500
+18:46:49: 0> Shaft 7: cutting...
+18:46:49: 0> Shaft 8: cutting...
+18:46:49: 0> Shaft 9: created at -46.9500, -33
+18:46:49: 0> Shaft 10: created at 46.9500, -33
+18:46:49: 0> Shaft 9: cutting...
+18:46:49: 0> Shaft 10: cutting...
+18:46:49: 0> Shaft 11: created at -39.1660, 23.3750
+18:46:49: 0> Shaft 12: created at -19, 23.3750
+18:46:49: 0> Shaft 11: cutting...
+18:46:49: 0> Shaft 12: cutting...
+18:46:50: 0> Shaft 13: created at 24.0800, 18.0800
+18:46:50: 0> Shaft 13: cutting...
+18:46:50: 0> Shaft 14: created at -9.4170, 30.7100
+18:46:50: 0> Shaft 14: cutting...
+18:46:50: 0> Shaft 15: created at 9.0830, 33.3300
+18:46:50: 0> Shaft 15: cutting...
+18:46:50: 0> Shaft 16: created at 9.3750, 18.5400
+18:46:50: 0> Shaft 16: cutting...
+18:46:50: 0> Shaft 17: created at 0, 42.7100
+18:46:50: 0> Shaft 17: cutting...
+18:46:50: 0> Shaft 18: created at -23.8500, 9.2500
+18:46:50: 0> Shaft 19: created at -23.8500, -10.7500
+18:46:50: 0> Shaft 20: created at 23.8500, 9.2500
+18:46:50: 0> Shaft 21: created at 23.8500, -10.7500
+18:46:50: 0> Shaft 18: cutting...
+18:46:50: 0> Shaft 19: cutting...
+18:46:50: 0> Shaft 20: cutting...
+18:46:50: 0> Shaft 21: cutting...
+18:46:51: 0> Shaft 22: created at -14.6700, -17.7500
+18:46:51: 0> Shaft 23: created at -14.6700, -36.2500
+18:46:51: 0> Shaft 22: cutting...
+18:46:51: 0> Shaft 23: cutting...
+18:46:51: 0> Shaft 24: created at -10.1700, 9.2500
+18:46:51: 0> Shaft 24: cutting...
+18:46:51: 0> Shaft 25: created at -19.1700, 9.2500
+18:46:51: 0> Shaft 26: created at -14.6700, -9.2500
+18:46:51: 0> Shaft 27: created at 14.6700, 9.2500
+18:46:51: 0> Shaft 28: created at 14.6700, -9.2500
+18:46:51: 0> Shaft 25: cutting...
+18:46:51: 0> Shaft 26: cutting...
+18:46:51: 0> Shaft 27: cutting...
+18:46:51: 0> Shaft 28: cutting...
+18:46:51: 0> Shaft 29: created at -19, 37.3670
+18:46:51: 0> Shaft 29: cutting...
+18:46:51: 0> Shaft 30: created at 9.0830, 45.3140
+18:46:51: 0> Shaft 30: cutting...
+18:46:52: 0> Shaft 31: created at -19.4600, -38.7500
+18:46:52: 0> Shaft 31: cutting...
+18:46:52: 0> Shaft 32: created at 19.4600, -38.7500
+18:46:52: 0> Shaft 32: cutting...
+18:46:52: 0> Shaft 33: created at -46.6700, 9.7920
+18:46:52: 0> Shaft 33: cutting...
+18:46:52: 0> Shaft 34: created at 46.6700, -9.7920
+18:46:52: 0> Shaft 34: cutting...
+18:46:52: 0> Shaft 35: created at -14.0400, 51.6600
+18:46:52: 0> Shaft 35: cutting...
+18:46:52: 0> Shaft 36: created at 9.3750, 18.5400
+18:46:52: 0> Shaft 36: cutting...
+18:46:52: 0> Processing floors -1 to 38...
+18:46:53: 0> Finished floors
+18:46:53: 0> Processing floors -1 to 16...
+18:46:53: 0> Finished floors
+18:46:53: 0> Processing floors -1 to 28...
+18:46:53: 0> Finished floors
+18:46:53: 0> Processing floors -1 to 42...
+18:46:53: 0> Finished floors
+18:46:53: 0> Processing floors -8 to 2...
+18:46:53: 0> Finished floors
+18:46:53: 0> Processing floors -1 to 102...
+18:46:53: 0> Finished floors
+18:46:53: 0> Processing floors -1 to 82...
+18:46:53: 0> Finished floors
+18:46:53: 0> Processing floors -8 to 142...
+18:46:54: 0> Finished floors
+18:46:54: 0> Processing floors -1 to 142...
+18:46:54: 0> Finished floors
+18:46:54: 0> Processing floors 39 to 62...
+18:46:54: 0> Finished floors
+18:46:54: 0> Processing floors 39 to 52...
+18:46:54: 0> Finished floors
+18:46:54: 0> Processing floors 39 to 79...
+18:46:54: 0> Finished floors
+18:46:54: 0> Processing floors 39 to 72...
+18:46:54: 0> 30%
+18:46:54: 0> Finished floors
+18:46:54: 0> Processing floors 79 to 101...
+18:46:54: 0> Finished floors
+18:46:54: 0> Processing floors 79 to 134...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing floors 99 to 131...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing floors 99 to 119...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing floors -1 to 119...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing floors -1 to 142...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing floors -1 to 42...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing floors -1 to 39...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing floors 79 to 101...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing floors 99 to 142...
+18:46:55: 0> Finished floors
+18:46:55: 0> Processing elevator 1...
+18:46:55: 0> Elevator 1: created at -9.2890, 9
+18:46:55: 0> Elevator 1: created on floor 0
+18:46:55: 0> Finished elevator
+18:46:55: 0> Processing elevator 2...
+18:46:55: 0> Elevator 2: created at -9.2890, 0
+18:46:56: 0> Elevator 2: created on floor 0
+18:46:56: 0> Finished elevator
+18:46:56: 0> Processing elevator 3...
+18:46:56: 0> Elevator 3: created at -9.2890, -9
+18:46:56: 0> Elevator 3: created on floor 0
+18:46:56: 0> Finished elevator
+18:46:56: 0> Processing elevators 1 to 3...
+18:46:56: 0> Elevator 1: Adding shaft doors...
+18:46:56: 0> Elevator 2: Adding shaft doors...
+18:46:56: 0> Elevator 3: Adding shaft doors...
+18:46:56: 0> Finished elevators
+18:46:56: 0> Processing elevator 4...
+18:46:56: 0> Elevator 4: created at 9.2890, 9
+18:46:56: 0> Elevator 4: created on floor 37
+18:46:56: 0> Finished elevator
+18:46:56: 0> Processing elevator 5...
+18:46:56: 0> Elevator 5: created at 9.2890, 0
+18:46:56: 0> Elevator 5: created on floor 37
+18:46:56: 0> Finished elevator
+18:46:56: 0> Processing elevator 6...
+18:46:56: 0> Elevator 6: created at 9.2890, -9
+18:46:56: 0> Elevator 6: created on floor 37
+18:46:56: 0> Finished elevator
+18:46:56: 0> Processing elevators 4 to 6...
+18:46:56: 0> Elevator 4: Adding shaft doors...
+18:46:56: 0> Elevator 5: Adding shaft doors...
+18:46:56: 0> Elevator 6: Adding shaft doors...
+18:46:56: 0> Finished elevators
+18:46:56: 0> Processing controller 1...
+18:46:56: 0> Dispatch Controller 1: Created
+18:46:56: 0> Controller 1 already exists
+18:46:56: 0> Controller 1 already exists
+18:46:56: 0> Controller 1 already exists
+18:46:56: 0> Controller 1 already exists
+18:46:56: 0> Dispatch Controller 1: Elevator 1 added to dispatch controller 1
+18:46:56: 0> Dispatch Controller 1: Elevator 2 added to dispatch controller 1
+18:46:56: 0> Dispatch Controller 1: Elevator 3 added to dispatch controller 1
+18:46:56: 0> Dispatch Controller 1: Elevator 4 added to dispatch controller 1
+18:46:56: 0> Dispatch Controller 1: Elevator 5 added to dispatch controller 1
+18:46:56: 0> Dispatch Controller 1: Elevator 6 added to dispatch controller 1
+18:46:56: 0> Controller 1 already exists
+18:46:56: 0> Finished controller
+18:46:56: 0> Processing elevator 7...
+18:46:56: 0> Elevator 7: created at 18.3770, 9
+18:46:56: 0> Elevator 7: created on floor 0
+18:46:56: 0> Finished elevator
+18:46:56: 0> Processing elevator 8...
+18:46:56: 0> Elevator 8: created at 18.3770, 0
+18:46:57: 0> Elevator 8: created on floor 0
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevator 9...
+18:46:57: 0> Elevator 9: created at 18.3770, -9
+18:46:57: 0> Elevator 9: created on floor 0
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevators 7 to 9...
+18:46:57: 0> Elevator 7: Adding shaft doors...
+18:46:57: 0> Elevator 8: Adding shaft doors...
+18:46:57: 0> Elevator 9: Adding shaft doors...
+18:46:57: 0> Finished elevators
+18:46:57: 0> Processing elevator 10...
+18:46:57: 0> Elevator 10: created at 36.9560, 9
+18:46:57: 0> Elevator 10: created on floor 26
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevator 11...
+18:46:57: 0> Elevator 11: created at 36.9560, 0
+18:46:57: 0> Elevator 11: created on floor 26
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevator 12...
+18:46:57: 0> Elevator 12: created at 36.9560, -9
+18:46:57: 0> Elevator 12: created on floor 26
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevators 10 to 12...
+18:46:57: 0> 40%
+18:46:57: 0> Elevator 10: Adding shaft doors...
+18:46:57: 0> Elevator 11: Adding shaft doors...
+18:46:57: 0> Elevator 12: Adding shaft doors...
+18:46:57: 0> Finished elevators
+18:46:57: 0> Processing controller 2...
+18:46:57: 0> Dispatch Controller 2: Created
+18:46:57: 0> Controller 2 already exists
+18:46:57: 0> Controller 2 already exists
+18:46:57: 0> Controller 2 already exists
+18:46:57: 0> Controller 2 already exists
+18:46:57: 0> Dispatch Controller 2: Elevator 7 added to dispatch controller 2
+18:46:57: 0> Dispatch Controller 2: Elevator 8 added to dispatch controller 2
+18:46:57: 0> Dispatch Controller 2: Elevator 9 added to dispatch controller 2
+18:46:57: 0> Dispatch Controller 2: Elevator 10 added to dispatch controller 2
+18:46:57: 0> Dispatch Controller 2: Elevator 11 added to dispatch controller 2
+18:46:57: 0> Dispatch Controller 2: Elevator 12 added to dispatch controller 2
+18:46:57: 0> Controller 2 already exists
+18:46:57: 0> Finished controller
+18:46:57: 0> Processing elevator 13...
+18:46:57: 0> Elevator 13: created at -36.9560, 9
+18:46:57: 0> Elevator 13: created on floor 0
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevator 14...
+18:46:57: 0> Elevator 14: created at -36.9560, 0
+18:46:57: 0> Elevator 14: created on floor 0
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevator 15...
+18:46:57: 0> Elevator 15: created at -36.9560, -9
+18:46:57: 0> Elevator 15: created on floor 0
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevators 13 to 15...
+18:46:57: 0> Elevator 13: Adding shaft doors...
+18:46:57: 0> Elevator 14: Adding shaft doors...
+18:46:57: 0> Elevator 15: Adding shaft doors...
+18:46:57: 0> Finished elevators
+18:46:57: 0> Processing elevator 16...
+18:46:57: 0> Elevator 16: created at -18.3770, 9
+18:46:57: 0> Elevator 16: created on floor 14
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevator 17...
+18:46:57: 0> Elevator 17: created at -18.3770, 0
+18:46:57: 0> Elevator 17: created on floor 14
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevator 18...
+18:46:57: 0> Elevator 18: created at -18.3770, -9
+18:46:57: 0> Elevator 18: created on floor 14
+18:46:57: 0> Finished elevator
+18:46:57: 0> Processing elevators 16 to 18...
+18:46:57: 0> Elevator 16: Adding shaft doors...
+18:46:58: 0> Elevator 17: Adding shaft doors...
+18:46:58: 0> Elevator 18: Adding shaft doors...
+18:46:58: 0> Finished elevators
+18:46:58: 0> Processing controller 3...
+18:46:58: 0> Dispatch Controller 3: Created
+18:46:58: 0> Controller 3 already exists
+18:46:58: 0> Controller 3 already exists
+18:46:58: 0> Controller 3 already exists
+18:46:58: 0> Controller 3 already exists
+18:46:58: 0> Dispatch Controller 3: Elevator 13 added to dispatch controller 3
+18:46:58: 0> Dispatch Controller 3: Elevator 14 added to dispatch controller 3
+18:46:58: 0> Dispatch Controller 3: Elevator 15 added to dispatch controller 3
+18:46:58: 0> Dispatch Controller 3: Elevator 16 added to dispatch controller 3
+18:46:58: 0> Dispatch Controller 3: Elevator 17 added to dispatch controller 3
+18:46:58: 0> Dispatch Controller 3: Elevator 18 added to dispatch controller 3
+18:46:58: 0> Controller 3 already exists
+18:46:58: 0> Finished controller
+18:46:58: 0> Processing elevator 19...
+18:46:58: 0> Elevator 19: created at -12.4140, -29.0830
+18:46:58: 0> Elevator 19: created on floor 0
+18:46:58: 0> Finished elevator
+18:46:58: 0> Processing elevator 20...
+18:46:58: 0> Elevator 20: created at -12.4140, -38.9160
+18:46:58: 0> Elevator 20: created on floor 0
+18:46:58: 0> Finished elevator
+18:46:58: 0> Processing elevator 21...
+18:46:58: 0> Elevator 21: created at -12.4140, -48.7500
+18:46:58: 0> Elevator 21: created on floor 0
+18:46:58: 0> Finished elevator
+18:46:58: 0> Processing elevators 19 to 21...
+18:46:58: 0> Elevator 19: Adding shaft doors...
+18:46:58: 0> Elevator 20: Adding shaft doors...
+18:46:58: 0> Elevator 21: Adding shaft doors...
+18:46:58: 0> Finished elevators
+18:46:58: 0> Processing elevator 22...
+18:46:58: 0> Elevator 22: created at 12.4140, -29.0830
+18:46:58: 0> Elevator 22: created on floor 40
+18:46:58: 0> Finished elevator
+18:46:58: 0> Processing elevator 23...
+18:46:58: 0> Elevator 23: created at 12.4140, -38.9160
+18:46:58: 0> Elevator 23: created on floor 40
+18:46:58: 0> Finished elevator
+18:46:58: 0> Processing elevator 24...
+18:46:58: 0> Elevator 24: created at 12.4140, -48.7500
+18:46:58: 0> Elevator 24: created on floor 40
+18:46:58: 0> Finished elevator
+18:46:58: 0> Processing elevators 22 to 24...
+18:46:58: 0> Elevator 22: Adding shaft doors...
+18:46:58: 0> Elevator 23: Adding shaft doors...
+18:46:58: 0> Elevator 24: Adding shaft doors...
+18:46:58: 0> Finished elevators
+18:46:58: 0> Processing elevator 25...
+18:46:58: 0> Elevator 25: created at 47.2440, -28.7500
+18:46:58: 0> Elevator 25: created on floor 0
+18:46:58: 0> Finished elevator
+18:46:59: 0> Processing elevator 26...
+18:46:59: 0> Elevator 26: created at 47.2440, -37.7500
+18:46:59: 0> Elevator 26: created on floor 0
+18:46:59: 0> Finished elevator
+18:46:59: 0> Processing elevators 25 to 26...
+18:46:59: 0> Elevator 25: Adding shaft doors...
+18:46:59: 0> Elevator 26: Adding shaft doors...
+18:46:59: 0> Finished elevators
+18:46:59: 0> Processing controller 4...
+18:46:59: 0> Dispatch Controller 4: Created
+18:46:59: 0> Controller 4 already exists
+18:46:59: 0> Controller 4 already exists
+18:46:59: 0> Controller 4 already exists
+18:46:59: 0> Controller 4 already exists
+18:46:59: 0> Dispatch Controller 4: Elevator 25 added to dispatch controller 4
+18:46:59: 0> Dispatch Controller 4: Elevator 26 added to dispatch controller 4
+18:46:59: 0> Controller 4 already exists
+18:46:59: 0> Finished controller
+18:46:59: 0> Processing elevator 27...
+18:46:59: 0> Elevator 27: created at -47.2440, -28.7500
+18:46:59: 0> Elevator 27: created on floor 0
+18:46:59: 0> Finished elevator
+18:46:59: 0> Processing elevator 28...
+18:46:59: 0> Elevator 28: created at -47.2440, -37.7500
+18:46:59: 0> Elevator 28: created on floor 0
+18:46:59: 0> Finished elevator
+18:46:59: 0> Processing elevators 27 to 28...
+18:46:59: 0> Elevator 27: Adding shaft doors...
+18:46:59: 0> Elevator 28: Adding shaft doors...
+18:46:59: 0> Finished elevators
+18:46:59: 0> Processing controller 5...
+18:46:59: 0> Dispatch Controller 5: Created
+18:46:59: 0> Controller 5 already exists
+18:46:59: 0> Controller 5 already exists
+18:46:59: 0> Controller 5 already exists
+18:46:59: 0> Controller 5 already exists
+18:46:59: 0> Dispatch Controller 5: Elevator 27 added to dispatch controller 5
+18:46:59: 0> Dispatch Controller 5: Elevator 28 added to dispatch controller 5
+18:46:59: 0> Controller 5 already exists
+18:46:59: 0> Finished controller
+18:46:59: 0> Processing elevator 29...
+18:46:59: 0> Elevator 29: created at -38.9970, 28.2530
+18:46:59: 0> Elevator 29: created on floor 0
+18:46:59: 0> Finished elevator
+18:46:59: 0> Processing elevator 30...
+18:46:59: 0> Elevator 30: created at -38.9970, 18.4200
+18:46:59: 0> Elevator 30: created on floor 0
+18:46:59: 0> Finished elevator
+18:46:59: 0> Processing elevators 29 to 30...
+18:46:59: 0> Elevator 29: Adding shaft doors...
+18:46:59: 0> Elevator 30: Adding shaft doors...
+18:46:59: 0> Finished elevators
+18:46:59: 0> Processing elevator 31...
+18:46:59: 0> Elevator 31: created at -19.1690, 28.2530
+18:46:59: 0> Elevator 31: created on floor 100
+18:46:59: 0> Finished elevator
+18:46:59: 0> Processing elevator 32...
+18:46:59: 0> Elevator 32: created at -19.1690, 18.4200
+18:46:59: 0> Elevator 32: created on floor 100
+18:46:59: 0> Finished elevator
+18:46:59: 0> Processing elevators 31 to 32...
+18:46:59: 0> Elevator 31: Adding shaft doors...
+18:47:00: 0> Elevator 32: Adding shaft doors...
+18:47:00: 0> Finished elevators
+18:47:00: 0> Processing elevator 33...
+18:47:00: 0> Elevator 33: created at 9.2520, 38.4200
+18:47:00: 0> Elevator 33: created on floor 0
+18:47:00: 0> Finished elevator
+18:47:00: 0> Processing elevator 34...
+18:47:00: 0> 50%
+18:47:00: 0> Elevator 34: created at 9.2520, 28.4200
+18:47:00: 0> Elevator 34: created on floor 135
+18:47:00: 0> Finished elevator
+18:47:00: 0> Processing elevators 33 to 34...
+18:47:00: 0> Elevator 33: Adding shaft doors...
+18:47:00: 0> Elevator 34: Adding shaft doors...
+18:47:00: 0> Finished elevators
+18:47:00: 0> Processing controller 6...
+18:47:00: 0> Dispatch Controller 6: Created
+18:47:00: 0> Controller 6 already exists
+18:47:00: 0> Controller 6 already exists
+18:47:00: 0> Controller 6 already exists
+18:47:00: 0> Controller 6 already exists
+18:47:00: 0> Dispatch Controller 6: Elevator 33 added to dispatch controller 6
+18:47:01: 0> Dispatch Controller 6: Elevator 34 added to dispatch controller 6
+18:47:01: 0> Controller 6 already exists
+18:47:01: 0> Finished controller
+18:47:01: 0> Processing elevator 35...
+18:47:01: 0> Elevator 35: created at 19.0830, 18.2490
+18:47:01: 0> Elevator 35: created on floor 0
+18:47:01: 0> Finished elevator
+18:47:01: 0> Processing elevator 36...
+18:47:01: 0> Elevator 36: created at 28.9170, 18.2490
+18:47:01: 0> Elevator 36: created on floor 80
+18:47:01: 0> Finished elevator
+18:47:01: 0> Processing elevators 35 to 36...
+18:47:01: 0> Elevator 35: Adding shaft doors...
+18:47:01: 0> Elevator 36: Adding shaft doors...
+18:47:01: 0> Finished elevators
+18:47:01: 0> Processing elevator 37...
+18:47:01: 0> Elevator 37: created at -9.1660, 42.8790
+18:47:01: 0> Elevator 37: created on floor -1
+18:47:01: 0> Elevator 37: Adding shaft doors...
+18:47:01: 0> Finished elevator
+18:47:01: 0> Processing elevator 38...
+18:47:01: 0> Elevator 38: created at -37.2500, -10.4560
+18:47:01: 0> Elevator 38: created on floor 40
+18:47:01: 0> Finished elevator
+18:47:01: 0> Processing elevator 39...
+18:47:01: 0> Elevator 39: created at -28.2500, -10.4560
+18:47:01: 0> Elevator 39: created on floor 40
+18:47:01: 0> Finished elevator
+18:47:01: 0> Processing elevator 40...
+18:47:01: 0> Elevator 40: created at -19.2500, -10.4560
+18:47:01: 0> Elevator 40: created on floor 50
+18:47:01: 0> Finished elevator
+18:47:01: 0> Processing elevator 41...
+18:47:01: 0> Elevator 41: created at -10.2500, -10.4560
+18:47:01: 0> Elevator 41: created on floor 50
+18:47:01: 0> Finished elevator
+18:47:01: 0> Processing elevators 38 to 41...
+18:47:01: 0> Elevator 38: Adding shaft doors...
+18:47:01: 0> Elevator 39: Adding shaft doors...
+18:47:01: 0> Elevator 40: Adding shaft doors...
+18:47:01: 0> Elevator 41: Adding shaft doors...
+18:47:02: 0> Finished elevators
+18:47:02: 0> Processing controller 7...
+18:47:02: 0> Dispatch Controller 7: Created
+18:47:02: 0> Controller 7 already exists
+18:47:02: 0> Controller 7 already exists
+18:47:02: 0> Controller 7 already exists
+18:47:02: 0> Controller 7 already exists
+18:47:02: 0> Dispatch Controller 7: Elevator 38 added to dispatch controller 7
+18:47:02: 0> Dispatch Controller 7: Elevator 39 added to dispatch controller 7
+18:47:02: 0> Dispatch Controller 7: Elevator 40 added to dispatch controller 7
+18:47:02: 0> Dispatch Controller 7: Elevator 41 added to dispatch controller 7
+18:47:02: 0> Controller 7 already exists
+18:47:02: 0> Finished controller
+18:47:02: 0> Processing elevator 42...
+18:47:02: 0> Elevator 42: created at 10.5830, -10.4560
+18:47:02: 0> Elevator 42: created on floor 40
+18:47:02: 0> Finished elevator
+18:47:02: 0> Processing elevator 43...
+18:47:02: 0> Elevator 43: created at 19.5830, -10.4560
+18:47:02: 0> Elevator 43: created on floor 40
+18:47:02: 0> Finished elevator
+18:47:02: 0> Processing elevator 44...
+18:47:02: 0> Elevator 44: created at 28.5830, -10.4560
+18:47:02: 0> Elevator 44: created on floor 70
+18:47:02: 0> Finished elevator
+18:47:02: 0> Processing elevator 45...
+18:47:02: 0> Elevator 45: created at 37.5830, -10.4560
+18:47:02: 0> Elevator 45: created on floor 70
+18:47:02: 0> Finished elevator
+18:47:02: 0> Processing elevators 42 to 45...
+18:47:02: 0> Elevator 42: Adding shaft doors...
+18:47:02: 0> Elevator 43: Adding shaft doors...
+18:47:02: 0> Elevator 44: Adding shaft doors...
+18:47:02: 0> Elevator 45: Adding shaft doors...
+18:47:02: 0> Finished elevators
+18:47:02: 0> Processing controller 8...
+18:47:02: 0> Dispatch Controller 8: Created
+18:47:02: 0> Controller 8 already exists
+18:47:02: 0> Controller 8 already exists
+18:47:02: 0> Controller 8 already exists
+18:47:02: 0> Controller 8 already exists
+18:47:02: 0> Dispatch Controller 8: Elevator 42 added to dispatch controller 8
+18:47:02: 0> Dispatch Controller 8: Elevator 43 added to dispatch controller 8
+18:47:02: 0> Dispatch Controller 8: Elevator 44 added to dispatch controller 8
+18:47:02: 0> Dispatch Controller 8: Elevator 45 added to dispatch controller 8
+18:47:02: 0> Controller 8 already exists
+18:47:02: 0> Finished controller
+18:47:02: 0> Processing elevator 46...
+18:47:02: 0> Elevator 46: created at -37.2500, 8.9560
+18:47:02: 0> Elevator 46: created on floor 40
+18:47:02: 0> Finished elevator
+18:47:02: 0> Processing elevator 47...
+18:47:02: 0> Elevator 47: created at -28.2500, 8.9560
+18:47:02: 0> Elevator 47: created on floor 40
+18:47:02: 0> Finished elevator
+18:47:02: 0> Processing elevator 48...
+18:47:02: 0> Elevator 48: created at -19.2500, 8.9560
+18:47:02: 0> Elevator 48: created on floor 60
+18:47:02: 0> Finished elevator
+18:47:02: 0> Processing elevator 49...
+18:47:02: 0> Elevator 49: created at -10.2500, 8.9560
+18:47:02: 0> Elevator 49: created on floor 60
+18:47:02: 0> Finished elevator
+18:47:02: 0> Processing elevators 46 to 49...
+18:47:02: 0> Elevator 46: Adding shaft doors...
+18:47:02: 0> Elevator 47: Adding shaft doors...
+18:47:02: 0> Elevator 48: Adding shaft doors...
+18:47:02: 0> Elevator 49: Adding shaft doors...
+18:47:02: 0> Finished elevators
+18:47:02: 0> Processing controller 9...
+18:47:02: 0> Dispatch Controller 9: Created
+18:47:02: 0> Controller 9 already exists
+18:47:02: 0> Controller 9 already exists
+18:47:02: 0> Controller 9 already exists
+18:47:02: 0> Controller 9 already exists
+18:47:02: 0> Dispatch Controller 9: Elevator 46 added to dispatch controller 9
+18:47:02: 0> Dispatch Controller 9: Elevator 47 added to dispatch controller 9
+18:47:03: 0> Dispatch Controller 9: Elevator 48 added to dispatch controller 9
+18:47:03: 0> Dispatch Controller 9: Elevator 49 added to dispatch controller 9
+18:47:03: 0> Controller 9 already exists
+18:47:03: 0> Finished controller
+18:47:03: 0> Processing elevator 50...
+18:47:03: 0> Elevator 50: created at 10.5830, 8.9560
+18:47:03: 0> Elevator 50: created on floor 40
+18:47:03: 0> Finished elevator
+18:47:03: 0> Processing elevator 51...
+18:47:03: 0> Elevator 51: created at 19.5830, 8.9560
+18:47:03: 0> Elevator 51: created on floor 40
+18:47:03: 0> Finished elevator
+18:47:03: 0> Processing elevator 52...
+18:47:03: 0> Elevator 52: created at 28.5830, 8.9560
+18:47:03: 0> Elevator 52: created on floor 78
+18:47:03: 0> Finished elevator
+18:47:03: 0> Processing elevator 53...
+18:47:03: 0> Elevator 53: created at 37.5830, 8.9560
+18:47:03: 0> Elevator 53: created on floor 78
+18:47:03: 0> Finished elevator
+18:47:03: 0> Processing elevators 50 to 53...
+18:47:03: 0> Elevator 50: Adding shaft doors...
+18:47:03: 0> Elevator 51: Adding shaft doors...
+18:47:03: 0> Elevator 52: Adding shaft doors...
+18:47:03: 0> Elevator 53: Adding shaft doors...
+18:47:03: 0> Finished elevators
+18:47:03: 0> Processing controller 10...
+18:47:03: 0> Dispatch Controller 10: Created
+18:47:03: 0> Controller 10 already exists
+18:47:03: 0> Controller 10 already exists
+18:47:03: 0> Controller 10 already exists
+18:47:03: 0> Controller 10 already exists
+18:47:03: 0> Dispatch Controller 10: Elevator 50 added to dispatch controller 10
+18:47:03: 0> Dispatch Controller 10: Elevator 51 added to dispatch controller 10
+18:47:03: 0> Dispatch Controller 10: Elevator 52 added to dispatch controller 10
+18:47:03: 0> Dispatch Controller 10: Elevator 53 added to dispatch controller 10
+18:47:03: 0> Controller 10 already exists
+18:47:03: 0> Finished controller
+18:47:03: 0> Processing elevator 54...
+18:47:03: 0> Elevator 54: created at -19.1670, -18.0440
+18:47:03: 0> Elevator 54: created on floor 80
+18:47:03: 0> Finished elevator
+18:47:03: 0> Processing elevator 55...
+18:47:03: 0> Elevator 55: created at -10.1670, -18.0440
+18:47:03: 0> Elevator 55: created on floor 80
+18:47:03: 0> Finished elevator
+18:47:03: 0> Processing elevators 54 to 55...
+18:47:03: 0> Elevator 54: Adding shaft doors...
+18:47:03: 0> Elevator 55: Adding shaft doors...
+18:47:03: 0> Finished elevators
+18:47:03: 0> Processing elevator 56...
+18:47:03: 0> Elevator 56: created at -19.1670, -35.9560
+18:47:03: 0> Elevator 56: created on floor 99
+18:47:03: 0> Finished elevator
+18:47:03: 0> Processing elevator 57...
+18:47:03: 0> 60%
+18:47:03: 0> Elevator 57: created at -10.1670, -35.9560
+18:47:03: 0> Elevator 57: created on floor 99
+18:47:03: 0> Finished elevator
+18:47:03: 0> Processing elevators 56 to 57...
+18:47:03: 0> Elevator 56: Adding shaft doors...
+18:47:03: 0> Elevator 57: Adding shaft doors...
+18:47:04: 0> Finished elevators
+18:47:04: 0> Processing controller 11...
+18:47:04: 0> Dispatch Controller 11: Created
+18:47:04: 0> Controller 11 already exists
+18:47:04: 0> Controller 11 already exists
+18:47:04: 0> Controller 11 already exists
+18:47:04: 0> Controller 11 already exists
+18:47:04: 0> Dispatch Controller 11: Elevator 54 added to dispatch controller 11
+18:47:04: 0> Dispatch Controller 11: Elevator 55 added to dispatch controller 11
+18:47:04: 0> Dispatch Controller 11: Elevator 56 added to dispatch controller 11
+18:47:04: 0> Dispatch Controller 11: Elevator 57 added to dispatch controller 11
+18:47:04: 0> Controller 11 already exists
+18:47:04: 0> Finished controller
+18:47:04: 0> Processing elevator 58...
+18:47:04: 0> Elevator 58: created at -10.1670, 8.9560
+18:47:04: 0> Elevator 58: created on floor 80
+18:47:04: 0> Elevator 58: Adding shaft doors...
+18:47:04: 0> Finished elevator
+18:47:04: 0> Processing controller 12...
+18:47:04: 0> Dispatch Controller 12: Created
+18:47:04: 0> Controller 12 already exists
+18:47:04: 0> Controller 12 already exists
+18:47:04: 0> Controller 12 already exists
+18:47:04: 0> Controller 12 already exists
+18:47:04: 0> Dispatch Controller 12: Elevator 58 added to dispatch controller 12
+18:47:04: 0> Controller 12 already exists
+18:47:04: 0> Finished controller
+18:47:04: 0> Processing elevator 59...
+18:47:04: 0> Elevator 59: created at -19.2500, 8.9560
+18:47:04: 0> Elevator 59: created on floor 100
+18:47:04: 0> Finished elevator
+18:47:04: 0> Processing elevator 60...
+18:47:04: 0> Elevator 60: created at 10.2500, 8.9560
+18:47:04: 0> Elevator 60: created on floor 100
+18:47:04: 0> Finished elevator
+18:47:04: 0> Processing elevator 61...
+18:47:04: 0> Elevator 61: created at 19.2500, 8.9560
+18:47:04: 0> Elevator 61: created on floor 100
+18:47:04: 0> Finished elevator
+18:47:04: 0> Processing elevators 60 to 61...
+18:47:04: 0> Finished elevators
+18:47:04: 0> Processing elevators 59 to 61...
+18:47:04: 0> Elevator 59: Adding shaft doors...
+18:47:04: 0> Elevator 60: Adding shaft doors...
+18:47:04: 0> Elevator 61: Adding shaft doors...
+18:47:04: 0> Finished elevators
+18:47:04: 0> Processing elevator 62...
+18:47:04: 0> Elevator 62: created at -10.1670, -8.9560
+18:47:04: 0> Elevator 62: created on floor 100
+18:47:04: 0> Finished elevator
+18:47:04: 0> Processing elevator 63...
+18:47:04: 0> Elevator 63: created at -19.2500, -8.9560
+18:47:04: 0> Elevator 63: created on floor 129
+18:47:04: 0> Finished elevator
+18:47:04: 0> Processing elevator 64...
+18:47:04: 0> Elevator 64: created at 10.2500, -8.9560
+18:47:04: 0> Elevator 64: created on floor 118
+18:47:04: 0> Finished elevator
+18:47:04: 0> Processing elevator 65...
+18:47:04: 0> Elevator 65: created at 19.2500, -8.9560
+18:47:04: 0> Elevator 65: created on floor 118
+18:47:04: 0> Finished elevator
+18:47:04: 0> Processing elevators 62 to 63...
+18:47:04: 0> Finished elevators
+18:47:04: 0> Processing elevators 64 to 65...
+18:47:04: 0> Finished elevators
+18:47:04: 0> Processing elevators 62 to 65...
+18:47:04: 0> Elevator 62: Adding shaft doors...
+18:47:04: 0> Elevator 63: Adding shaft doors...
+18:47:04: 0> Elevator 64: Adding shaft doors...
+18:47:04: 0> Elevator 65: Adding shaft doors...
+18:47:05: 0> Finished elevators
+18:47:05: 0> Processing controller 13...
+18:47:05: 0> Dispatch Controller 13: Created
+18:47:05: 0> Controller 13 already exists
+18:47:05: 0> Controller 13 already exists
+18:47:05: 0> Controller 13 already exists
+18:47:05: 0> Controller 13 already exists
+18:47:05: 0> Dispatch Controller 13: Elevator 60 added to dispatch controller 13
+18:47:05: 0> Dispatch Controller 13: Elevator 61 added to dispatch controller 13
+18:47:05: 0> Dispatch Controller 13: Elevator 64 added to dispatch controller 13
+18:47:05: 0> Dispatch Controller 13: Elevator 65 added to dispatch controller 13
+18:47:05: 0> Controller 13 already exists
+18:47:05: 0> Finished controller
+18:47:05: 0> Processing controller 14...
+18:47:05: 0> Dispatch Controller 14: Created
+18:47:05: 0> Controller 14 already exists
+18:47:05: 0> Controller 14 already exists
+18:47:05: 0> Controller 14 already exists
+18:47:05: 0> Controller 14 already exists
+18:47:05: 0> Dispatch Controller 14: Elevator 59 added to dispatch controller 14
+18:47:05: 0> Dispatch Controller 14: Elevator 62 added to dispatch controller 14
+18:47:05: 0> Dispatch Controller 14: Elevator 63 added to dispatch controller 14
+18:47:05: 0> Controller 14 already exists
+18:47:05: 0> Finished controller
+18:47:05: 0> Processing elevator 66...
+18:47:05: 0> Elevator 66: created at -8.9530, 18.5420
+18:47:05: 0> Elevator 66: created on floor 0
+18:47:05: 0> Elevator 66: Adding shaft doors...
+18:47:05: 0> Finished elevator
+18:47:05: 0> Processing controller 15...
+18:47:05: 0> Dispatch Controller 15: Created
+18:47:05: 0> Controller 15 already exists
+18:47:05: 0> Controller 15 already exists
+18:47:05: 0> Dispatch Controller 15: Elevator 66 added to dispatch controller 15
+18:47:05: 0> Controller 15 already exists
+18:47:05: 0> Finished controller
+18:47:05: 0> Processing elevator 67...
+18:47:05: 0> Elevator 67: created at 8.7910, 18.5420
+18:47:05: 0> Elevator 67: created on floor 0
+18:47:05: 0> Elevator 67: Adding shaft doors...
+18:47:05: 0> Finished elevator
+18:47:05: 0> Processing controller 16...
+18:47:05: 0> Dispatch Controller 16: Created
+18:47:05: 0> Controller 16 already exists
+18:47:05: 0> Controller 16 already exists
+18:47:05: 0> Dispatch Controller 16: Elevator 67 added to dispatch controller 16
+18:47:05: 0> Controller 16 already exists
+18:47:05: 0> Finished controller
+18:47:05: 0> Processing elevator 68...
+18:47:05: 0> Elevator 68: created at -9.2450, 30.3750
+18:47:05: 0> Elevator 68: created on floor 0
+18:47:05: 0> Elevator 68: Adding shaft doors component...
+18:47:05: 0> Elevator 68: Adding shaft doors component...
+18:47:05: 0> Elevator 68: Adding shaft doors component...
+18:47:05: 0> Elevator 68: Adding shaft doors component...
+18:47:06: 0> 70%
+18:47:06: 0> Finished elevator
+18:47:06: 0> Processing controller 17...
+18:47:06: 0> Dispatch Controller 17: Created
+18:47:06: 0> Controller 17 already exists
+18:47:06: 0> Controller 17 already exists
+18:47:06: 0> Dispatch Controller 17: Elevator 68 added to dispatch controller 17
+18:47:06: 0> Controller 17 already exists
+18:47:06: 0> Finished controller
+18:47:06: 0> Processing elevator 69...
+18:47:06: 0> Elevator 69: created at -18.9560, 51.5790
+18:47:06: 0> Elevator 69: created on floor 80
+18:47:06: 0> Finished elevator
+18:47:06: 0> Processing elevator 70...
+18:47:06: 0> Elevator 70: created at -9.1240, 51.5790
+18:47:06: 0> Elevator 70: created on floor 81
+18:47:06: 0> Finished elevator
+18:47:06: 0> Processing elevators 69 to 70...
+18:47:06: 0> Elevator 69: Adding shaft doors...
+18:47:06: 0> Elevator 70: Adding shaft doors...
+18:47:06: 0> Finished elevators
+18:47:06: 0> Processing controller 18...
+18:47:06: 0> Dispatch Controller 18: Created
+18:47:06: 0> Controller 18 already exists
+18:47:06: 0> Controller 18 already exists
+18:47:06: 0> Dispatch Controller 18: Elevator 69 added to dispatch controller 18
+18:47:06: 0> Dispatch Controller 18: Elevator 70 added to dispatch controller 18
+18:47:06: 0> Controller 18 already exists
+18:47:06: 0> Finished controller
+18:47:06: 0> Processing elevator 71...
+18:47:06: 0> Elevator 71: created at 8.7910, 18.5420
+18:47:06: 0> Elevator 71: created on floor 100
+18:47:06: 0> Elevator 71: Adding shaft doors...
+18:47:06: 0> Finished elevator
+18:47:06: 0> Processing controller 19...
+18:47:06: 0> Dispatch Controller 19: Created
+18:47:06: 0> Controller 19 already exists
+18:47:06: 0> Controller 19 already exists
+18:47:06: 0> Dispatch Controller 19: Elevator 71 added to dispatch controller 19
+18:47:06: 0> Controller 19 already exists
+18:47:06: 0> Finished controller
+18:47:06: 0> Processing floor 0...
+18:47:06: 0> Finished floor
+18:47:06: 0> Processing floors 0 to 136...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floors -7 to 1...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floors 1 to 136...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floor 40...
+18:47:07: 0> Finished floor
+18:47:07: 0> Processing floor 80...
+18:47:07: 0> Finished floor
+18:47:07: 0> Processing floor 100...
+18:47:07: 0> Finished floor
+18:47:07: 0> Processing floor 137...
+18:47:07: 0> Finished floor
+18:47:07: 0> Processing floors 40 to 78...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floors 80 to 99...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floors 80 to 132...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floors -8 to 141...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floors 100 to 130...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floor 0...
+18:47:07: 0> Finished floor
+18:47:07: 0> Processing floors 27 to 37...
+18:47:07: 0> Finished floors
+18:47:07: 0> Processing floors 15 to 26...
+18:47:08: 0> Finished floors
+18:47:08: 0> Processing floors 2 to 14...
+18:47:08: 0> Finished floors
+18:47:08: 0> Processing floor 0...
+18:47:08: 0> Finished floor
+18:47:08: 0> Processing floor 40...
+18:47:08: 0> Finished floor
+18:47:08: 0> Processing floors -7 to 1...
+18:47:08: 0> Finished floors
+18:47:08: 0> Processing floor 40...
+18:47:08: 0> Finished floor
+18:47:08: 0> Processing floors 41 to 50...
+18:47:08: 0> Finished floors
+18:47:08: 0> Processing floors 61 to 70...
+18:47:08: 0> Finished floors
+18:47:08: 0> Processing floors 51 to 60...
+18:47:08: 0> 80%
+18:47:08: 0> Finished floors
+18:47:08: 0> Processing floors 71 to 78...
+18:47:08: 0> Finished floors
+18:47:08: 0> Processing floor 0...
+18:47:08: 0> Finished floor
+18:47:08: 0> Processing floor 100...
+18:47:08: 0> Finished floor
+18:47:09: 0> Processing floor 0...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floors 134 to 136...
+18:47:09: 0> Finished floors
+18:47:09: 0> Processing floor 0...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floor 80...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floor 80...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floors 82 to 99...
+18:47:09: 0> Finished floors
+18:47:09: 0> Processing floor 100...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floors 102 to 118...
+18:47:09: 0> Finished floors
+18:47:09: 0> Processing floors 120 to 129...
+18:47:09: 0> Finished floors
+18:47:09: 0> Processing floor 80...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floor 100...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floor 132...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floor -1...
+18:47:09: 0> Finished floor
+18:47:09: 0> Processing floor 137...
+18:47:09: 0> Finished floor
+18:47:10: 0> Processing floor 0...
+18:47:10: 0> Finished floor
+18:47:10: 0> Processing floors -8 to 79...
+18:47:10: 0> Finished floors
+18:47:10: 0> Processing floors 79 to 141...
+18:47:10: 0> Finished floors
+18:47:10: 0> Processing floors -8 to 141...
+18:47:11: 0> Finished floors
+18:47:11: 0> Processing floor 0...
+18:47:11: 0> Finished floor
+18:47:11: 0> Processing floors 80 to 99...
+18:47:11: 0> Finished floors
+18:47:11: 0> Processing floors 100 to 130...
+18:47:11: 0> Finished floors
+18:47:11: 0> Processing floors -8 to 141...
+18:47:11: 0> Finished floors
+18:47:11: 0> Processing floors 80 to 99...
+18:47:11: 0> Finished floors
+18:47:11: 0> Processing floors 100 to 130...
+18:47:11: 0> Finished floors
+18:47:11: 0> Processing floor 0...
+18:47:11: 0> Finished floor
+18:47:11: 0> Defined function MainPanel
+18:47:11: 0> Processing floors -8 to 141...
+18:47:11: 0> Finished floors
+18:47:11: 0> Processing floor 0...
+18:47:11: 0> Finished floor
+18:47:11: 0> Processing floor -1...
+18:47:11: 0> Finished floor
+18:47:11: 0> Processing floor 40...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 79...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 80...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floors 134 to 136...
+18:47:12: 0> Finished floors
+18:47:12: 0> Processing floor 137...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 40...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 79...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 80...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 100...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 40...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 100...
+18:47:12: 0> Finished floor
+18:47:12: 0> Stairwell 1: created at -46.6700, -3.7080
+18:47:12: 0> Stairwell 1: cutting...
+18:47:12: 0> Processing floor -8...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floors -7 to -1...
+18:47:12: 0> Finished floors
+18:47:12: 0> Processing floor 0...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floor 1...
+18:47:12: 0> Finished floor
+18:47:12: 0> Processing floors 2 to 38...
+18:47:12: 0> Finished floors
+18:47:12: 0> 90%
+18:47:12: 0> Processing floors -8 to 39...
+18:47:12: 0> Finished floors
+18:47:12: 0> Stairwell 2: created at 46.6700, 3.7080
+18:47:12: 0> Stairwell 2: cutting...
+18:47:13: 0> Processing floor -8...
+18:47:13: 0> Finished floor
+18:47:13: 0> Processing floors -7 to -1...
+18:47:13: 0> Finished floors
+18:47:13: 0> Processing floor 0...
+18:47:13: 0> Finished floor
+18:47:13: 0> Processing floor 1...
+18:47:13: 0> Finished floor
+18:47:13: 0> Processing floors 2 to 38...
+18:47:13: 0> Finished floors
+18:47:13: 0> Processing floors -8 to 39...
+18:47:13: 0> Finished floors
+18:47:13: 0> Stairwell 3: created at -29.0830, 23.5370
+18:47:13: 0> Stairwell 3: cutting...
+18:47:13: 0> Processing floor 38...
+18:47:13: 0> Finished floor
+18:47:13: 0> Processing floor 39...
+18:47:13: 0> Finished floor
+18:47:13: 0> Processing floors 40 to 79...
+18:47:13: 0> Finished floors
+18:47:13: 0> Processing floors 38 to 79...
+18:47:13: 0> Finished floors
+18:47:13: 0> Stairwell 4: created at 26.4200, -33.7080
+18:47:13: 0> Stairwell 4: cutting...
+18:47:14: 0> Processing floor 38...
+18:47:14: 0> Finished floor
+18:47:14: 0> Processing floor 39...
+18:47:14: 0> Finished floor
+18:47:14: 0> Processing floors 40 to 79...
+18:47:14: 0> Finished floors
+18:47:14: 0> Processing floors 38 to 79...
+18:47:14: 0> Finished floors
+18:47:14: 0> Stairwell 5: created at 0, -13.5000
+18:47:14: 0> Stairwell 5: cutting...
+18:47:14: 0> Processing floor 79...
+18:47:14: 0> Finished floor
+18:47:14: 0> Processing floors 80 to 119...
+18:47:14: 0> Finished floors
+18:47:14: 0> Processing floors 79 to 119...
+18:47:14: 0> Finished floors
+18:47:14: 0> Stairwell 6: created at 4.7515, 51.6600
+18:47:14: 0> Stairwell 6: cutting...
+18:47:15: 0> Processing floors 119 to 142...
+18:47:15: 0> Finished floors
+18:47:15: 0> Processing floor 79...
+18:47:15: 0> Finished floor
+18:47:15: 0> Processing floors 119 to 141...
+18:47:15: 0> Finished floors
+18:47:15: 0> Processing floors 80 to 137...
+18:47:15: 0> Finished floors
+18:47:15: 0> Processing floors 79 to 142...
+18:47:15: 0> Finished floors
+18:47:15: 0> Stairwell 7: created at 0, -5
+18:47:15: 0> Stairwell 7: cutting...
+18:47:15: 0> Processing floor 141...
+18:47:15: 0> Finished floor
+18:47:15: 0> Processing floor 142...
+18:47:15: 0> Finished floor
+18:47:15: 0> Processing floor 143...
+18:47:15: 0> Finished floor
+18:47:15: 0> Processing floor 132...
+18:47:15: 0> Loading material script data/pool/swimmingpool.material
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(14): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(50): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(71): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(92): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(113): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(133): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(153): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(173): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(193): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(214): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(234): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(255): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(275): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(295): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(317): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(338): texture_alias. Use 'texture $variable'
+18:47:15: Warning: ScriptCompiler - deprecated symbol in data/pool/swimmingpool.material(358): texture_alias. Use 'texture $variable'
+18:47:15: 0> Loading material swimmingpool/YELLOW_EGG_YOLK
+18:47:15: 0> Loading material swimmingpool/WHITE_PLASTIC_2S
+18:47:15: 0> Loading material swimmingpool/GRAY_(DARK)_NS2S
+18:47:15: 0> Loading material swimmingpool/GREY_ROUGH
+18:47:15: 0> Loading material swimmingpool/CONCRETE_DECK
+18:47:15: 0> Loading material swimmingpool/DIRT-6
+18:47:15: 0> Loading material swimmingpool/0_WHITE_PLASTIC
+18:47:15: 0> Loading material swimmingpool/0_SEAT_CUSH
+18:47:15: 0> Loading material swimmingpool/0_TOWEL
+18:47:15: 0> Loading material swimmingpool/0_UMBRELLA
+18:47:15: 0> Loading material swimmingpool/0_BANA_LEAF
+18:47:15: 0> Loading material swimmingpool/DARK_BROWN_MATTE
+18:47:15: 0> Loading material swimmingpool/BLACK_MATTE
+18:47:15: 0> Loading material swimmingpool/0_BANA_LEAF3
+18:47:15: 0> Loading material swimmingpool/0_BANA_LEAF2
+18:47:15: 0> Loading material swimmingpool/AQUIFER-BUMP
+18:47:15: 0> Loading material swimmingpool/GRAY_(MED)_NS2S
+18:47:15: 0> Loading material swimmingpool/0_BEACH_BALL
+18:47:15: Mesh: Loading data/pool/swimmingpool.mesh.
+18:47:15: Mesh: Loading data/pool/swimmingpool.collider.mesh.
+18:47:15: 0> Finished floor
+18:47:15: 0> Processing elevators 1 to 71...
+18:47:18: 0> Finished elevators
+18:47:18: Caelum plugin version 0.6.4 installed
+18:47:18: Registering ResourceManager for type PropertyScript
+18:47:18: Creating resource group Caelum
+18:47:18: Added resource location 'data/caelum' of type 'FileSystem' to resource group 'Caelum'
+18:47:18: Initialising resource group Caelum
+18:47:18: Parsing scripts for resource group Caelum
+18:47:18: Parsing script DepthRender.program
+18:47:18: Parsing script GroundFog.program
+18:47:18: Parsing script Haze.program
+18:47:18: Parsing script MinimalCompositorVP.program
+18:47:18: Parsing script DepthComposer.material
+18:47:18: Parsing script GroundFog.material
+18:47:18: Parsing script LayeredClouds.material
+18:47:18: Cg high level output for CaelumLayeredCloudsVP:
+// glslv output by Cg compiler
+// cgc version 3.1.0013, build date Apr 24 2012
+// command line args: -q -no_uniform_blocks -profile glslv -entry LayeredClouds_vp -DOGRE_CG
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile glslv
+//program LayeredClouds_vp
+//semantic LayeredClouds_vp.worldViewProj
+//semantic LayeredClouds_vp.worldMatrix
+//semantic LayeredClouds_vp.sunDirection
+//semantic cloud_shape1 : TEXUNIT0
+//semantic cloud_shape2 : TEXUNIT1
+//semantic cloud_detail : TEXUNIT2
+//var float4x4 worldViewProj :  : _worldViewProj1[0], 4 : 2 : 1
+//var float4x4 worldMatrix :  : _worldMatrix1[0], 4 : 3 : 1
+//var float3 sunDirection :  : _sunDirection1 : 4 : 1
+//var float4 position : $vin.POSITION : ATTR0 : 0 : 1
+//var float2 uv : $vin.TEXCOORD0 : ATTR8 : 1 : 1
+//var float4 oPosition : $vout.POSITION : HPOS : 5 : 1
+//var float2 oUv : $vout.TEXCOORD0 : TEX0 : 6 : 1
+//var float3 relPosition : $vout.TEXCOORD1 : TEX1 : 7 : 1
+//var float sunGlow : $vout.TEXCOORD2 : TEX2 : 8 : 1
+//var float4 worldPosition : $vout.TEXCOORD3 : TEX3 : 9 : 1
+
+#version 110
+
+vec4 _oPosition1;
+vec3 _relPosition1;
+vec4 _worldPosition1;
+vec2 _oUv1;
+float _sunGlow1;
+vec3 _TMP0;
+float _TMP2;
+float _TMP1;
+uniform vec4 _worldViewProj1[4];
+uniform vec4 _worldMatrix1[4];
+uniform vec3 _sunDirection1;
+vec4 _r0010;
+vec4 _r0020;
+vec3 _v0036;
+
+ // main procedure, the original name was LayeredClouds_vp
+void main()
+{
+
+
+    _r0010.x = dot(_worldViewProj1[0], gl_Vertex);
+    _r0010.y = dot(_worldViewProj1[1], gl_Vertex);
+    _r0010.z = dot(_worldViewProj1[2], gl_Vertex);
+    _r0010.w = dot(_worldViewProj1[3], gl_Vertex);
+    _oPosition1 = _r0010;
+    _r0020.x = dot(_worldMatrix1[0], gl_Vertex);
+    _r0020.y = dot(_worldMatrix1[1], gl_Vertex);
+    _r0020.z = dot(_worldMatrix1[2], gl_Vertex);
+    _r0020.w = dot(_worldMatrix1[3], gl_Vertex);
+    _worldPosition1 = _r0020;
+    _oUv1 = gl_MultiTexCoord0.xy;
+    _TMP1 = dot(gl_Vertex.xyz, gl_Vertex.xyz);
+    _TMP2 = inversesqrt(_TMP1);
+    _relPosition1 = _TMP2*gl_Vertex.xyz;
+    _v0036 = -_sunDirection1;
+    _TMP1 = dot(_v0036, _v0036);
+    _TMP2 = inversesqrt(_TMP1);
+    _TMP0 = _TMP2*_v0036;
+    _sunGlow1 = dot(_relPosition1, _TMP0);
+    gl_TexCoord[2].x = _sunGlow1;
+    gl_TexCoord[0].xy = gl_MultiTexCoord0.xy;
+    gl_TexCoord[3] = _r0020;
+    gl_TexCoord[1].xyz = _relPosition1;
+    gl_Position = _r0010;
+} // main end
+
+18:47:18: Replacing parameter name: _worldViewProj1 -> worldViewProj
+18:47:18: Replacing parameter name: _worldMatrix1 -> worldMatrix
+18:47:18: Replacing parameter name: _sunDirection1 -> sunDirection
+18:47:18: Cleaned high level output for CaelumLayeredCloudsVP:
+
+#version 110
+
+vec4 _oPosition1;
+vec3 _relPosition1;
+vec4 _worldPosition1;
+vec2 _oUv1;
+float _sunGlow1;
+vec3 _TMP0;
+float _TMP2;
+float _TMP1;
+uniform mat4 worldViewProj;
+uniform mat4 worldMatrix;
+uniform vec3 sunDirection;
+vec4 _r0010;
+vec4 _r0020;
+vec3 _v0036;
+
+ // main procedure, the original name was LayeredClouds_vp
+void main()
+{
+
+
+    _r0010.x = dot(worldViewProj[0], gl_Vertex);
+    _r0010.y = dot(worldViewProj[1], gl_Vertex);
+    _r0010.z = dot(worldViewProj[2], gl_Vertex);
+    _r0010.w = dot(worldViewProj[3], gl_Vertex);
+    _oPosition1 = _r0010;
+    _r0020.x = dot(worldMatrix[0], gl_Vertex);
+    _r0020.y = dot(worldMatrix[1], gl_Vertex);
+    _r0020.z = dot(worldMatrix[2], gl_Vertex);
+    _r0020.w = dot(worldMatrix[3], gl_Vertex);
+    _worldPosition1 = _r0020;
+    _oUv1 = gl_MultiTexCoord0.xy;
+    _TMP1 = dot(gl_Vertex.xyz, gl_Vertex.xyz);
+    _TMP2 = inversesqrt(_TMP1);
+    _relPosition1 = _TMP2*gl_Vertex.xyz;
+    _v0036 = -sunDirection;
+    _TMP1 = dot(_v0036, _v0036);
+    _TMP2 = inversesqrt(_TMP1);
+    _TMP0 = _TMP2*_v0036;
+    _sunGlow1 = dot(_relPosition1, _TMP0);
+    gl_TexCoord[2].x = _sunGlow1;
+    gl_TexCoord[0].xy = gl_MultiTexCoord0.xy;
+    gl_TexCoord[3] = _r0020;
+    gl_TexCoord[1].xyz = _relPosition1;
+    gl_Position = _r0010;
+} // main end
+
+18:47:18: Cg high level output for CaelumLayeredCloudsFP:
+// glslf output by Cg compiler
+// cgc version 3.1.0013, build date Apr 24 2012
+// command line args: -q -no_uniform_blocks -profile glslf -entry LayeredClouds_fp -DOGRE_CG
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile glslf
+//program LayeredClouds_fp
+//semantic LayeredClouds_fp.cloudMassInvScale
+//semantic LayeredClouds_fp.cloudDetailInvScale
+//semantic LayeredClouds_fp.cloudMassOffset
+//semantic LayeredClouds_fp.cloudDetailOffset
+//semantic LayeredClouds_fp.cloudMassBlend
+//semantic LayeredClouds_fp.cloudDetailBlend
+//semantic LayeredClouds_fp.cloudCoverageThreshold
+//semantic LayeredClouds_fp.sunLightColour
+//semantic LayeredClouds_fp.sunSphereColour
+//semantic LayeredClouds_fp.fogColour
+//semantic LayeredClouds_fp.sunDirection
+//semantic LayeredClouds_fp.cloudSharpness
+//semantic LayeredClouds_fp.cloudThickness
+//semantic LayeredClouds_fp.camera_position
+//semantic LayeredClouds_fp.fadeDistMeasurementVector
+//semantic LayeredClouds_fp.layerHeight
+//semantic LayeredClouds_fp.cloudUVFactor
+//semantic LayeredClouds_fp.heightRedFactor
+//semantic LayeredClouds_fp.nearFadeDist
+//semantic LayeredClouds_fp.farFadeDist
+//semantic cloud_shape1 : TEXUNIT0
+//semantic cloud_shape2 : TEXUNIT1
+//semantic cloud_detail : TEXUNIT2
+//var float cloudMassInvScale :  : _cloudMassInvScale3 : 4 : 1
+//var float cloudDetailInvScale :  : _cloudDetailInvScale3 : 5 : 1
+//var float2 cloudMassOffset :  : _cloudMassOffset3 : 6 : 1
+//var float2 cloudDetailOffset :  : _cloudDetailOffset3 : 7 : 1
+//var float cloudMassBlend :  : _cloudMassBlend3 : 8 : 1
+//var float cloudDetailBlend :  : _cloudDetailBlend3 : 9 : 1
+//var float cloudCoverageThreshold :  : _cloudCoverageThreshold3 : 10 : 1
+//var float4 sunLightColour :  : _sunLightColour1 : 11 : 1
+//var float4 sunSphereColour :  : _sunSphereColour1 : 12 : 1
+//var float4 fogColour :  : _fogColour2 : 13 : 1
+//var float4 sunDirection :  : _sunDirection1 : 14 : 1
+//var float cloudSharpness :  : _cloudSharpness2 : 15 : 1
+//var float cloudThickness :  : _cloudThickness2 : 16 : 1
+//var float3 camera_position :  : _camera_position1 : 17 : 1
+//var float3 fadeDistMeasurementVector :  : _fadeDistMeasurementVector1 : 18 : 1
+//var float layerHeight :  : _layerHeight1 : 19 : 1
+//var float cloudUVFactor :  : _cloudUVFactor1 : 20 : 1
+//var float heightRedFactor :  : _heightRedFactor1 : 21 : 1
+//var float nearFadeDist :  : _nearFadeDist1 : 22 : 1
+//var float farFadeDist :  : _farFadeDist1 : 23 : 1
+//var sampler cloud_shape1 : TEXUNIT0 : _TMP170 0 : -1 : 1
+//var sampler cloud_shape2 : TEXUNIT1 : _TMP171 1 : -1 : 1
+//var sampler cloud_detail : TEXUNIT2 : _TMP172 2 : -1 : 1
+//var float2 uv : $vin.TEXCOORD0 : TEX0 : 0 : 1
+//var float3 relPosition : $vin.TEXCOORD1 :  : 1 : 0
+//var float sunGlow : $vin.TEXCOORD2 : TEX2 : 2 : 1
+//var float4 worldPosition : $vin.TEXCOORD3 : TEX3 : 3 : 1
+//var float4 oCol : $vout.COLOR : COL : 24 : 1
+
+#version 110
+
+vec4 _oCol2;
+vec3 _TMP12;
+vec3 _TMP23;
+vec3 _TMP11;
+vec3 _TMP10;
+float _TMP22;
+float _TMP21;
+float _TMP20;
+float _TMP19;
+float _TMP18;
+float _TMP17;
+float _TMP2;
+float _TMP16;
+vec3 _TMP1;
+float _TMP9;
+float _TMP8;
+vec2 _uv2;
+float _TMP6;
+vec4 _TMP15;
+vec4 _TMP14;
+vec4 _TMP13;
+uniform float _cloudMassInvScale3;
+uniform float _cloudDetailInvScale3;
+uniform vec2 _cloudMassOffset3;
+uniform vec2 _cloudDetailOffset3;
+uniform float _cloudMassBlend3;
+uniform float _cloudDetailBlend3;
+uniform float _cloudCoverageThreshold3;
+uniform vec4 _sunLightColour1;
+uniform vec4 _sunSphereColour1;
+uniform vec4 _fogColour2;
+uniform vec4 _sunDirection1;
+uniform float _cloudSharpness2;
+uniform float _cloudThickness2;
+uniform vec3 _camera_position1;
+uniform vec3 _fadeDistMeasurementVector1;
+uniform float _layerHeight1;
+uniform float _cloudUVFactor1;
+uniform float _heightRedFactor1;
+uniform float _nearFadeDist1;
+uniform float _farFadeDist1;
+vec4 _oCol0049;
+float _shine0049;
+vec4 _sunColour0049;
+vec3 _cloudColour0049;
+float _TMP50;
+vec2 _finalMassOffset0051;
+float _aCloud0051;
+vec2 _c0053;
+vec2 _c0055;
+vec2 _c0059;
+float _b0061;
+float _TMP62;
+float _x0063;
+float _x0067;
+float _TMP68;
+float _TMP76;
+float _TMP84;
+float _x0085;
+float _x0089;
+float _TMP90;
+vec3 _a0099;
+float _t0101;
+float _TMP104;
+vec3 _v0111;
+float _TMP126;
+vec3 _col0151;
+vec3 _TMP160;
+uniform sampler2D _TMP170;
+uniform sampler2D _TMP171;
+uniform sampler2D _TMP172;
+
+ // main procedure, the original name was LayeredClouds_fp
+void main()
+{
+
+    float _dist;
+    float _aMod;
+    float _alfa;
+    vec3 _cloudDir;
+    vec3 _lCol;
+
+    _uv2 = gl_TexCoord[0].xy*_cloudUVFactor1;
+    _finalMassOffset0051 = _cloudMassOffset3 + _uv2;
+    _c0053 = _finalMassOffset0051*_cloudMassInvScale3;
+    _TMP13 = texture2D(_TMP170, _c0053);
+    _c0055 = _finalMassOffset0051*_cloudMassInvScale3;
+    _TMP14 = texture2D(_TMP171, _c0055);
+    _aCloud0051 = _TMP13.x + _cloudMassBlend3*(_TMP14.x - _TMP13.x);
+    _c0059 = (_cloudDetailOffset3 + _uv2)*_cloudDetailInvScale3;
+    _TMP15 = texture2D(_TMP172, _c0059);
+    _aCloud0051 = (_aCloud0051 + _TMP15.x*_cloudDetailBlend3)/(1.00000000E+00 + _cloudDetailBlend3);
+    _b0061 = _aCloud0051 - _cloudCoverageThreshold3;
+    _TMP50 = max(0.00000000E+00, _b0061);
+    _x0063 = _cloudSharpness2*_TMP50;
+    _TMP62 = pow(2.71828198E+00, _x0063);
+    _x0067 = _TMP62 - 1.00000000E+00;
+    _TMP16 = min(1.00000000E+00, _x0067);
+    _TMP68 = max(0.00000000E+00, _TMP16);
+    _TMP16 = min(1.00000000E+00, gl_TexCoord[2].x);
+    _TMP76 = max(0.00000000E+00, _TMP16);
+    _TMP6 = pow(_TMP76, 8.00000000E+00);
+    _shine0049 = _TMP6/4.00000000E+00;
+    _sunColour0049.xyz = _sunLightColour1.xyz*1.50000000E+00;
+    _cloudColour0049 = _fogColour2.xyz*(1.00000000E+00 - _TMP50/3.00000000E+00);
+    _x0085 = -_cloudThickness2*((_TMP50 + 2.00000003E-01) - _shine0049);
+    _TMP84 = pow(2.71828198E+00, _x0085);
+    _x0089 = 8.00000012E-01 - _TMP84;
+    _TMP16 = min(1.00000000E+00, _x0089);
+    _TMP90 = max(0.00000000E+00, _TMP16);
+    _oCol0049.xyz = _sunColour0049.xyz + _TMP90*(_cloudColour0049.xyz - _sunColour0049.xyz);
+    _oCol0049.w = _TMP68;
+    _oCol2 = _oCol0049;
+    _oCol2.x = _oCol0049.x + _layerHeight1/_heightRedFactor1;
+    _a0099 = (gl_TexCoord[3].xyz - _camera_position1)*_fadeDistMeasurementVector1;
+    _dist = length(_a0099);
+    _aMod = 1.00000000E+00;
+    if (_dist > _nearFadeDist1) { // if begin
+        _t0101 = (_farFadeDist1 - _dist)/(_farFadeDist1 - _nearFadeDist1);
+        _TMP16 = min(1.00000000E+00, _t0101);
+        _TMP104 = max(0.00000000E+00, _TMP16);
+        _aMod = _TMP104;
+    } // end if
+    _alfa = _TMP68*_aMod;
+    _v0111 = vec3(gl_TexCoord[3].x, _layerHeight1, gl_TexCoord[3].y) - _camera_position1;
+    _TMP8 = dot(_v0111, _v0111);
+    _TMP9 = inversesqrt(_TMP8);
+    _cloudDir = _TMP9*_v0111;
+    _TMP8 = dot(_sunDirection1.xyz, _sunDirection1.xyz);
+    _TMP9 = inversesqrt(_TMP8);
+    _TMP1 = _TMP9*_sunDirection1.xyz;
+    _TMP2 = dot(_cloudDir, _TMP1);
+    _TMP16 = min(1.00000000E+00, _TMP2);
+    _TMP126 = max(0.00000000E+00, _TMP16);
+    _TMP17 = dot(_oCol2.xyz, vec3( 2.98999995E-01, 5.87000012E-01, 1.14000000E-01));
+    _TMP18 = dot(_oCol2.xyz, vec3( -1.47129998E-01, -2.88859993E-01, 4.35999990E-01));
+    _TMP19 = dot(_oCol2.xyz, vec3( 6.15000010E-01, -5.14989972E-01, -1.00010000E-01));
+    _TMP10 = vec3(_TMP17, _TMP18, _TMP19);
+    _TMP17 = dot(_sunSphereColour1.xyz, vec3( 2.98999995E-01, 5.87000012E-01, 1.14000000E-01));
+    _TMP18 = dot(_sunSphereColour1.xyz, vec3( -1.47129998E-01, -2.88859993E-01, 4.35999990E-01));
+    _TMP19 = dot(_sunSphereColour1.xyz, vec3( 6.15000010E-01, -5.14989972E-01, -1.00010000E-01));
+    _TMP11 = vec3(_TMP17, _TMP18, _TMP19);
+    _col0151 = vec3(_TMP10.x, _TMP11.y, _TMP11.z);
+    _TMP20 = dot(_col0151, vec3( 1.00000000E+00, 0.00000000E+00, 1.13982999E+00));
+    _TMP21 = dot(_col0151, vec3( 1.00000000E+00, -3.94650012E-01, -5.80600023E-01));
+    _TMP22 = dot(_col0151, vec3( 1.00000000E+00, 2.03210998E+00, 0.00000000E+00));
+    _TMP12 = vec3(_TMP20, _TMP21, _TMP22);
+    _TMP23 = min(vec3( 1.00000000E+00, 1.00000000E+00, 1.00000000E+00), _TMP12);
+    _TMP160 = max(vec3( 0.00000000E+00, 0.00000000E+00, 0.00000000E+00), _TMP23);
+    _lCol = _oCol2.xyz + _TMP126*(_TMP160 - _oCol2.xyz);
+    _oCol2.xyz = _lCol + _alfa*(_oCol2.xyz - _lCol);
+    _oCol2.w = _alfa;
+    gl_FragColor = _oCol2;
+} // main end
+
+18:47:18: Replacing parameter name: _cloudMassInvScale3 -> cloudMassInvScale
+18:47:18: Replacing parameter name: _cloudDetailInvScale3 -> cloudDetailInvScale
+18:47:18: Replacing parameter name: _cloudMassOffset3 -> cloudMassOffset
+18:47:18: Replacing parameter name: _cloudDetailOffset3 -> cloudDetailOffset
+18:47:18: Replacing parameter name: _cloudMassBlend3 -> cloudMassBlend
+18:47:18: Replacing parameter name: _cloudDetailBlend3 -> cloudDetailBlend
+18:47:18: Replacing parameter name: _cloudCoverageThreshold3 -> cloudCoverageThreshold
+18:47:18: Replacing parameter name: _sunLightColour1 -> sunLightColour
+18:47:18: Replacing parameter name: _sunSphereColour1 -> sunSphereColour
+18:47:18: Replacing parameter name: _fogColour2 -> fogColour
+18:47:18: Replacing parameter name: _sunDirection1 -> sunDirection
+18:47:18: Replacing parameter name: _cloudSharpness2 -> cloudSharpness
+18:47:18: Replacing parameter name: _cloudThickness2 -> cloudThickness
+18:47:18: Replacing parameter name: _camera_position1 -> camera_position
+18:47:18: Replacing parameter name: _fadeDistMeasurementVector1 -> fadeDistMeasurementVector
+18:47:18: Replacing parameter name: _layerHeight1 -> layerHeight
+18:47:18: Replacing parameter name: _cloudUVFactor1 -> cloudUVFactor
+18:47:18: Replacing parameter name: _heightRedFactor1 -> heightRedFactor
+18:47:18: Replacing parameter name: _nearFadeDist1 -> nearFadeDist
+18:47:18: Replacing parameter name: _farFadeDist1 -> farFadeDist
+18:47:18: Replacing parameter name: _TMP170 -> cloud_shape1
+18:47:18: Replacing parameter name: _TMP171 -> cloud_shape2
+18:47:18: Replacing parameter name: _TMP172 -> cloud_detail
+18:47:18: Cleaned high level output for CaelumLayeredCloudsFP:
+
+#version 110
+
+vec4 _oCol2;
+vec3 _TMP12;
+vec3 _TMP23;
+vec3 _TMP11;
+vec3 _TMP10;
+float _TMP22;
+float _TMP21;
+float _TMP20;
+float _TMP19;
+float _TMP18;
+float _TMP17;
+float _TMP2;
+float _TMP16;
+vec3 _TMP1;
+float _TMP9;
+float _TMP8;
+vec2 _uv2;
+float _TMP6;
+vec4 _TMP15;
+vec4 _TMP14;
+vec4 _TMP13;
+uniform float cloudMassInvScale;
+uniform float cloudDetailInvScale;
+uniform vec2 cloudMassOffset;
+uniform vec2 cloudDetailOffset;
+uniform float cloudMassBlend;
+uniform float cloudDetailBlend;
+uniform float cloudCoverageThreshold;
+uniform vec4 sunLightColour;
+uniform vec4 sunSphereColour;
+uniform vec4 fogColour;
+uniform vec4 sunDirection;
+uniform float cloudSharpness;
+uniform float cloudThickness;
+uniform vec3 camera_position;
+uniform vec3 fadeDistMeasurementVector;
+uniform float layerHeight;
+uniform float cloudUVFactor;
+uniform float heightRedFactor;
+uniform float nearFadeDist;
+uniform float farFadeDist;
+vec4 _oCol0049;
+float _shine0049;
+vec4 _sunColour0049;
+vec3 _cloudColour0049;
+float _TMP50;
+vec2 _finalMassOffset0051;
+float _aCloud0051;
+vec2 _c0053;
+vec2 _c0055;
+vec2 _c0059;
+float _b0061;
+float _TMP62;
+float _x0063;
+float _x0067;
+float _TMP68;
+float _TMP76;
+float _TMP84;
+float _x0085;
+float _x0089;
+float _TMP90;
+vec3 _a0099;
+float _t0101;
+float _TMP104;
+vec3 _v0111;
+float _TMP126;
+vec3 _col0151;
+vec3 _TMP160;
+uniform sampler2D cloud_shape1;
+uniform sampler2D cloud_shape2;
+uniform sampler2D cloud_detail;
+
+ // main procedure, the original name was LayeredClouds_fp
+void main()
+{
+
+    float _dist;
+    float _aMod;
+    float _alfa;
+    vec3 _cloudDir;
+    vec3 _lCol;
+
+    _uv2 = gl_TexCoord[0].xy*cloudUVFactor;
+    _finalMassOffset0051 = cloudMassOffset + _uv2;
+    _c0053 = _finalMassOffset0051*cloudMassInvScale;
+    _TMP13 = texture2D(cloud_shape1, _c0053);
+    _c0055 = _finalMassOffset0051*cloudMassInvScale;
+    _TMP14 = texture2D(cloud_shape2, _c0055);
+    _aCloud0051 = _TMP13.x + cloudMassBlend*(_TMP14.x - _TMP13.x);
+    _c0059 = (cloudDetailOffset + _uv2)*cloudDetailInvScale;
+    _TMP15 = texture2D(cloud_detail, _c0059);
+    _aCloud0051 = (_aCloud0051 + _TMP15.x*cloudDetailBlend)/(1.00000000E+00 + cloudDetailBlend);
+    _b0061 = _aCloud0051 - cloudCoverageThreshold;
+    _TMP50 = max(0.00000000E+00, _b0061);
+    _x0063 = cloudSharpness*_TMP50;
+    _TMP62 = pow(2.71828198E+00, _x0063);
+    _x0067 = _TMP62 - 1.00000000E+00;
+    _TMP16 = min(1.00000000E+00, _x0067);
+    _TMP68 = max(0.00000000E+00, _TMP16);
+    _TMP16 = min(1.00000000E+00, gl_TexCoord[2].x);
+    _TMP76 = max(0.00000000E+00, _TMP16);
+    _TMP6 = pow(_TMP76, 8.00000000E+00);
+    _shine0049 = _TMP6/4.00000000E+00;
+    _sunColour0049.xyz = sunLightColour.xyz*1.50000000E+00;
+    _cloudColour0049 = fogColour.xyz*(1.00000000E+00 - _TMP50/3.00000000E+00);
+    _x0085 = -cloudThickness*((_TMP50 + 2.00000003E-01) - _shine0049);
+    _TMP84 = pow(2.71828198E+00, _x0085);
+    _x0089 = 8.00000012E-01 - _TMP84;
+    _TMP16 = min(1.00000000E+00, _x0089);
+    _TMP90 = max(0.00000000E+00, _TMP16);
+    _oCol0049.xyz = _sunColour0049.xyz + _TMP90*(_cloudColour0049.xyz - _sunColour0049.xyz);
+    _oCol0049.w = _TMP68;
+    _oCol2 = _oCol0049;
+    _oCol2.x = _oCol0049.x + layerHeight/heightRedFactor;
+    _a0099 = (gl_TexCoord[3].xyz - camera_position)*fadeDistMeasurementVector;
+    _dist = length(_a0099);
+    _aMod = 1.00000000E+00;
+    if (_dist > nearFadeDist) { // if begin
+        _t0101 = (farFadeDist - _dist)/(farFadeDist - nearFadeDist);
+        _TMP16 = min(1.00000000E+00, _t0101);
+        _TMP104 = max(0.00000000E+00, _TMP16);
+        _aMod = _TMP104;
+    } // end if
+    _alfa = _TMP68*_aMod;
+    _v0111 = vec3(gl_TexCoord[3].x, layerHeight, gl_TexCoord[3].y) - camera_position;
+    _TMP8 = dot(_v0111, _v0111);
+    _TMP9 = inversesqrt(_TMP8);
+    _cloudDir = _TMP9*_v0111;
+    _TMP8 = dot(sunDirection.xyz, sunDirection.xyz);
+    _TMP9 = inversesqrt(_TMP8);
+    _TMP1 = _TMP9*sunDirection.xyz;
+    _TMP2 = dot(_cloudDir, _TMP1);
+    _TMP16 = min(1.00000000E+00, _TMP2);
+    _TMP126 = max(0.00000000E+00, _TMP16);
+    _TMP17 = dot(_oCol2.xyz, vec3( 2.98999995E-01, 5.87000012E-01, 1.14000000E-01));
+    _TMP18 = dot(_oCol2.xyz, vec3( -1.47129998E-01, -2.88859993E-01, 4.35999990E-01));
+    _TMP19 = dot(_oCol2.xyz, vec3( 6.15000010E-01, -5.14989972E-01, -1.00010000E-01));
+    _TMP10 = vec3(_TMP17, _TMP18, _TMP19);
+    _TMP17 = dot(sunSphereColour.xyz, vec3( 2.98999995E-01, 5.87000012E-01, 1.14000000E-01));
+    _TMP18 = dot(sunSphereColour.xyz, vec3( -1.47129998E-01, -2.88859993E-01, 4.35999990E-01));
+    _TMP19 = dot(sunSphereColour.xyz, vec3( 6.15000010E-01, -5.14989972E-01, -1.00010000E-01));
+    _TMP11 = vec3(_TMP17, _TMP18, _TMP19);
+    _col0151 = vec3(_TMP10.x, _TMP11.y, _TMP11.z);
+    _TMP20 = dot(_col0151, vec3( 1.00000000E+00, 0.00000000E+00, 1.13982999E+00));
+    _TMP21 = dot(_col0151, vec3( 1.00000000E+00, -3.94650012E-01, -5.80600023E-01));
+    _TMP22 = dot(_col0151, vec3( 1.00000000E+00, 2.03210998E+00, 0.00000000E+00));
+    _TMP12 = vec3(_TMP20, _TMP21, _TMP22);
+    _TMP23 = min(vec3( 1.00000000E+00, 1.00000000E+00, 1.00000000E+00), _TMP12);
+    _TMP160 = max(vec3( 0.00000000E+00, 0.00000000E+00, 0.00000000E+00), _TMP23);
+    _lCol = _oCol2.xyz + _TMP126*(_TMP160 - _oCol2.xyz);
+    _oCol2.xyz = _lCol + _alfa*(_oCol2.xyz - _lCol);
+    _oCol2.w = _alfa;
+    gl_FragColor = _oCol2;
+} // main end
+
+18:47:18: Parsing script PointStarfield.material
+18:47:18: Cg high level output for Caelum/StarPointVP:
+// glslv output by Cg compiler
+// cgc version 3.1.0013, build date Apr 24 2012
+// command line args: -q -no_uniform_blocks -profile glslv -entry StarPointVP -DOGRE_CG
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile glslv
+//program StarPointVP
+//semantic StarPointVP.worldviewproj_matrix
+//semantic StarPointVP.mag_scale
+//semantic StarPointVP.mag0_size
+//semantic StarPointVP.min_size
+//semantic StarPointVP.max_size
+//semantic StarPointVP.render_target_flipping
+//semantic StarPointVP.aspect_ratio
+//var float4x4 worldviewproj_matrix :  : _worldviewproj_matrix1[0], 4 : 2 : 1
+//var float mag_scale :  : _mag_scale1 : 3 : 1
+//var float mag0_size :  : _mag0_size1 : 4 : 1
+//var float min_size :  : _min_size1 : 5 : 1
+//var float max_size :  : _max_size1 : 6 : 1
+//var float render_target_flipping :  : _render_target_flipping1 : 7 : 1
+//var float aspect_ratio :  : _aspect_ratio1 : 8 : 1
+//var float4 in_position : $vin.POSITION : ATTR0 : 0 : 1
+//var float3 in_texcoord : $vin.TEXCOORD0 : ATTR8 : 1 : 1
+//var float2 out_texcoord : $vout.TEXCOORD0 : TEX0 : 9 : 1
+//var float4 out_position : $vout.POSITION : HPOS : 10 : 1
+//var float4 out_color : $vout.COLOR : COL0 : 11 : 1
+
+#version 110
+
+vec4 _out_color1;
+vec4 _out_position1;
+vec2 _out_texcoord1;
+float _TMP1;
+uniform vec4 _worldviewproj_matrix1[4];
+uniform float _mag_scale1;
+uniform float _mag0_size1;
+uniform float _min_size1;
+uniform float _max_size1;
+uniform float _render_target_flipping1;
+uniform float _aspect_ratio1;
+vec4 _r0011;
+float _TMP20;
+float _x0021;
+float _x0025;
+float _TMP26;
+float _TMP32;
+
+ // main procedure, the original name was StarPointVP
+void main()
+{
+
+    float _size;
+
+    _r0011.x = dot(_worldviewproj_matrix1[0], gl_Vertex);
+    _r0011.y = dot(_worldviewproj_matrix1[1], gl_Vertex);
+    _r0011.z = dot(_worldviewproj_matrix1[2], gl_Vertex);
+    _r0011.w = dot(_worldviewproj_matrix1[3], gl_Vertex);
+    _out_position1 = _r0011;
+    _out_texcoord1 = gl_MultiTexCoord0.xy;
+    _x0021 = _mag_scale1*gl_MultiTexCoord0.z;
+    _TMP20 = pow(2.71828198E+00, _x0021);
+    _size = _TMP20*_mag0_size1;
+    _x0025 = _size/_min_size1;
+    _TMP1 = min(1.00000000E+00, _x0025);
+    _TMP26 = max(0.00000000E+00, _TMP1);
+    _out_color1 = vec4(1.00000000E+00, 1.00000000E+00, 1.00000000E+00, _TMP26*_TMP26);
+    _TMP1 = min(_max_size1, _size);
+    _TMP32 = max(_min_size1, _TMP1);
+    _out_position1.xy = _r0011.xy + (_r0011.w*gl_MultiTexCoord0.xy)*vec2(_TMP32, _TMP32*_aspect_ratio1*_render_target_flipping1);
+    gl_TexCoord[0].xy = gl_MultiTexCoord0.xy;
+    gl_Position = _out_position1;
+    gl_FrontColor = _out_color1;
+} // main end
+
+18:47:18: Replacing parameter name: _worldviewproj_matrix1 -> worldviewproj_matrix
+18:47:18: Replacing parameter name: _mag_scale1 -> mag_scale
+18:47:18: Replacing parameter name: _mag0_size1 -> mag0_size
+18:47:18: Replacing parameter name: _min_size1 -> min_size
+18:47:18: Replacing parameter name: _max_size1 -> max_size
+18:47:18: Replacing parameter name: _render_target_flipping1 -> render_target_flipping
+18:47:18: Replacing parameter name: _aspect_ratio1 -> aspect_ratio
+18:47:18: Cleaned high level output for Caelum/StarPointVP:
+
+#version 110
+
+vec4 _out_color1;
+vec4 _out_position1;
+vec2 _out_texcoord1;
+float _TMP1;
+uniform mat4 worldviewproj_matrix;
+uniform float mag_scale;
+uniform float mag0_size;
+uniform float min_size;
+uniform float max_size;
+uniform float render_target_flipping;
+uniform float aspect_ratio;
+vec4 _r0011;
+float _TMP20;
+float _x0021;
+float _x0025;
+float _TMP26;
+float _TMP32;
+
+ // main procedure, the original name was StarPointVP
+void main()
+{
+
+    float _size;
+
+    _r0011.x = dot(worldviewproj_matrix[0], gl_Vertex);
+    _r0011.y = dot(worldviewproj_matrix[1], gl_Vertex);
+    _r0011.z = dot(worldviewproj_matrix[2], gl_Vertex);
+    _r0011.w = dot(worldviewproj_matrix[3], gl_Vertex);
+    _out_position1 = _r0011;
+    _out_texcoord1 = gl_MultiTexCoord0.xy;
+    _x0021 = mag_scale*gl_MultiTexCoord0.z;
+    _TMP20 = pow(2.71828198E+00, _x0021);
+    _size = _TMP20*mag0_size;
+    _x0025 = _size/min_size;
+    _TMP1 = min(1.00000000E+00, _x0025);
+    _TMP26 = max(0.00000000E+00, _TMP1);
+    _out_color1 = vec4(1.00000000E+00, 1.00000000E+00, 1.00000000E+00, _TMP26*_TMP26);
+    _TMP1 = min(max_size, _size);
+    _TMP32 = max(min_size, _TMP1);
+    _out_position1.xy = _r0011.xy + (_r0011.w*gl_MultiTexCoord0.xy)*vec2(_TMP32, _TMP32*aspect_ratio*render_target_flipping);
+    gl_TexCoord[0].xy = gl_MultiTexCoord0.xy;
+    gl_Position = _out_position1;
+    gl_FrontColor = _out_color1;
+} // main end
+
+18:47:18: Cg high level output for Caelum/StarPointFP:
+// glslf output by Cg compiler
+// cgc version 3.1.0013, build date Apr 24 2012
+// command line args: -q -no_uniform_blocks -profile glslf -entry StarPointFP -DOGRE_CG
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile glslf
+//program StarPointFP
+//var float4 in_color : $vin.COLOR : COL0 : 0 : 1
+//var float2 in_texcoord : $vin.TEXCOORD0 : TEX0 : 1 : 1
+//var float4 out_color : $vout.COLOR : COL : 2 : 1
+
+#version 110
+
+vec4 _out_color1;
+float _TMP3;
+float _x0004;
+
+ // main procedure, the original name was StarPointFP
+void main()
+{
+
+    float _sqlen;
+
+    _out_color1 = gl_Color;
+    _sqlen = dot(gl_TexCoord[0].xy, gl_TexCoord[0].xy);
+    _x0004 = -(_sqlen*8.00000000E+00);
+    _TMP3 = pow(2.71828198E+00, _x0004);
+    _out_color1.w = gl_Color.w*1.50000000E+00*_TMP3;
+    gl_FragColor = _out_color1;
+} // main end
+
+18:47:18: Cleaned high level output for Caelum/StarPointFP:
+
+#version 110
+
+vec4 _out_color1;
+float _TMP3;
+float _x0004;
+
+ // main procedure, the original name was StarPointFP
+void main()
+{
+
+    float _sqlen;
+
+    _out_color1 = gl_Color;
+    _sqlen = dot(gl_TexCoord[0].xy, gl_TexCoord[0].xy);
+    _x0004 = -(_sqlen*8.00000000E+00);
+    _TMP3 = pow(2.71828198E+00, _x0004);
+    _out_color1.w = gl_Color.w*1.50000000E+00*_TMP3;
+    gl_FragColor = _out_color1;
+} // main end
+
+18:47:18: Parsing script Precipitation.material
+18:47:18: Parsing script SkyDome.material
+18:47:18: Parsing script Starfield.material
+18:47:18: Parsing script Sun.material
+18:47:18: Parsing script moon.material
+18:47:18: Cg high level output for Caelum/PhaseMoonFP:
+// glslf output by Cg compiler
+// cgc version 3.1.0013, build date Apr 24 2012
+// command line args: -q -no_uniform_blocks -profile glslf -entry PhaseMoonFP -DOGRE_CG
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile glslf
+//program PhaseMoonFP
+//semantic PhaseMoonFP.phase
+//semantic PhaseMoonFP.moonDisc : TEXUNIT0
+//var float phase :  : _phase2 : 1 : 1
+//var sampler2D moonDisc : TEXUNIT0 : _moonDisc1 0 : 2 : 1
+//var float2 uv : $vin.TEXCOORD0 : TEX0 : 0 : 1
+//var float4 outcol : $vout.COLOR : COL : 3 : 1
+
+#version 110
+
+vec4 _outcol1;
+float _TMP2;
+float _TMP1;
+float _TMP0;
+float _TMP3;
+uniform float _phase2;
+uniform sampler2D _moonDisc1;
+float _cY0009;
+float _cX0009;
+float _termX0009;
+float _refX0009;
+float _a0011;
+float _a0015;
+float _val0017;
+float _a0017;
+float _val0019;
+float _a0019;
+float _b0023;
+
+ // main procedure, the original name was PhaseMoonFP
+void main()
+{
+
+    float _alpha;
+    float _lum;
+
+    _outcol1 = texture2D(_moonDisc1, gl_TexCoord[0].xy);
+    _cY0009 = gl_TexCoord[0].y - 5.00000000E-01;
+    _a0011 = 2.50000000E-01 - _cY0009*_cY0009;
+    _TMP3 = inversesqrt(_a0011);
+    _cX0009 = 1.00000000E+00/_TMP3;
+    _a0015 = 6.28319979E+00*_phase2;
+    _TMP0 = cos(_a0015);
+    _termX0009 = _cX0009*_TMP0;
+    _a0017 = 5.00000000E-01 - _phase2;
+    _val0017 = float((_a0017 > 0.00000000E+00));
+    _TMP1 = _val0017 - float((_a0017 < 0.00000000E+00));
+    _refX0009 = (gl_TexCoord[0].x - 5.00000000E-01)*_TMP1;
+    _a0019 = _termX0009 - _refX0009;
+    _val0019 = float((_a0019 > 0.00000000E+00));
+    _TMP2 = _val0019 - float((_a0019 < 0.00000000E+00));
+    _alpha = 5.00000000E-01*_TMP2 + 5.00000000E-01;
+    _lum = dot(_outcol1.xyz, vec3( 3.33299994E-01, 3.33299994E-01, 3.33299994E-01));
+    _b0023 = _lum*_alpha;
+    _outcol1.w = min(_outcol1.w, _b0023);
+    _outcol1.xyz = _outcol1.xyz/_lum;
+    gl_FragColor = _outcol1;
+} // main end
+
+18:47:18: Replacing parameter name: _phase2 -> phase
+18:47:18: Replacing parameter name: _moonDisc1 -> moonDisc
+18:47:18: Cleaned high level output for Caelum/PhaseMoonFP:
+
+#version 110
+
+vec4 _outcol1;
+float _TMP2;
+float _TMP1;
+float _TMP0;
+float _TMP3;
+uniform float phase;
+uniform sampler2D moonDisc;
+float _cY0009;
+float _cX0009;
+float _termX0009;
+float _refX0009;
+float _a0011;
+float _a0015;
+float _val0017;
+float _a0017;
+float _val0019;
+float _a0019;
+float _b0023;
+
+ // main procedure, the original name was PhaseMoonFP
+void main()
+{
+
+    float _alpha;
+    float _lum;
+
+    _outcol1 = texture2D(moonDisc, gl_TexCoord[0].xy);
+    _cY0009 = gl_TexCoord[0].y - 5.00000000E-01;
+    _a0011 = 2.50000000E-01 - _cY0009*_cY0009;
+    _TMP3 = inversesqrt(_a0011);
+    _cX0009 = 1.00000000E+00/_TMP3;
+    _a0015 = 6.28319979E+00*phase;
+    _TMP0 = cos(_a0015);
+    _termX0009 = _cX0009*_TMP0;
+    _a0017 = 5.00000000E-01 - phase;
+    _val0017 = float((_a0017 > 0.00000000E+00));
+    _TMP1 = _val0017 - float((_a0017 < 0.00000000E+00));
+    _refX0009 = (gl_TexCoord[0].x - 5.00000000E-01)*_TMP1;
+    _a0019 = _termX0009 - _refX0009;
+    _val0019 = float((_a0019 > 0.00000000E+00));
+    _TMP2 = _val0019 - float((_a0019 < 0.00000000E+00));
+    _alpha = 5.00000000E-01*_TMP2 + 5.00000000E-01;
+    _lum = dot(_outcol1.xyz, vec3( 3.33299994E-01, 3.33299994E-01, 3.33299994E-01));
+    _b0023 = _lum*_alpha;
+    _outcol1.w = min(_outcol1.w, _b0023);
+    _outcol1.xyz = _outcol1.xyz/_lum;
+    gl_FragColor = _outcol1;
+} // main end
+
+18:47:18: Cg high level output for Caelum/PhaseMoonVP:
+// glslv output by Cg compiler
+// cgc version 3.1.0013, build date Apr 24 2012
+// command line args: -q -no_uniform_blocks -profile glslv -entry PhaseMoonVP -DOGRE_CG
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile glslv
+//program PhaseMoonVP
+//semantic PhaseMoonVP.worldviewproj_matrix
+//var float4x4 worldviewproj_matrix :  : _worldviewproj_matrix1[0], 4 : 2 : 1
+//var float4 iPosition : $vin.POSITION : ATTR0 : 0 : 1
+//var float2 iTexCoord : $vin.TEXCOORD0 : ATTR8 : 1 : 1
+//var float2 oTexCoord : $vout.TEXCOORD0 : TEX0 : 3 : 1
+//var float4 oPosition : $vout.POSITION : HPOS : 4 : 1
+
+#version 110
+
+vec4 _oPosition1;
+vec2 _oTexCoord1;
+uniform vec4 _worldviewproj_matrix1[4];
+vec4 _r0002;
+
+ // main procedure, the original name was PhaseMoonVP
+void main()
+{
+
+
+    _r0002.x = dot(_worldviewproj_matrix1[0], gl_Vertex);
+    _r0002.y = dot(_worldviewproj_matrix1[1], gl_Vertex);
+    _r0002.z = dot(_worldviewproj_matrix1[2], gl_Vertex);
+    _r0002.w = dot(_worldviewproj_matrix1[3], gl_Vertex);
+    _oPosition1 = _r0002;
+    _oTexCoord1 = gl_MultiTexCoord0.xy;
+    gl_TexCoord[0].xy = gl_MultiTexCoord0.xy;
+    gl_Position = _r0002;
+} // main end
+
+18:47:18: Replacing parameter name: _worldviewproj_matrix1 -> worldviewproj_matrix
+18:47:18: Cleaned high level output for Caelum/PhaseMoonVP:
+
+#version 110
+
+vec4 _oPosition1;
+vec2 _oTexCoord1;
+uniform mat4 worldviewproj_matrix;
+vec4 _r0002;
+
+ // main procedure, the original name was PhaseMoonVP
+void main()
+{
+
+
+    _r0002.x = dot(worldviewproj_matrix[0], gl_Vertex);
+    _r0002.y = dot(worldviewproj_matrix[1], gl_Vertex);
+    _r0002.z = dot(worldviewproj_matrix[2], gl_Vertex);
+    _r0002.w = dot(worldviewproj_matrix[3], gl_Vertex);
+    _oPosition1 = _r0002;
+    _oTexCoord1 = gl_MultiTexCoord0.xy;
+    gl_TexCoord[0].xy = gl_MultiTexCoord0.xy;
+    gl_Position = _r0002;
+} // main end
+
+18:47:18: Parsing script DepthComposer.compositor
+18:47:18: Parsing script Precipitation.compositor
+18:47:18: Parsing script sky.os
+18:47:18: Finished parsing scripts for resource group Caelum
+18:47:18: Creating resources for group Caelum
+18:47:18: All done
+18:47:18: Caelum: Initialising Caelum system...
+18:47:18: Caelum: Creating CaelumSphericDome sphere mesh resource...
+18:47:18: Caelum: generateSphericDome DONE
+18:47:18: CaelumSystem: Attached to viewport 94416913492992 render target 
+18:47:18: 0> Preparing objects...
+18:47:18: 0> Processing geometry...
+18:47:18: 0> Floor Container: Combined: 202  - Separate (3): 20 - using separate
+18:47:18: 0> Interfloor Container: Combined: 3  - Separate (3): 3 - using combined
+18:47:18: 0> Columnframe Container: Combined: 1  - Separate (3): 0 - using combined
+18:47:18: 0> Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 38 Door Container: Combined: 1  - Separate (3): 2 - using combined
+18:47:18: 0> Floor 79 Door Container: Combined: 1  - Separate (3): 2 - using combined
+18:47:18: 0> Floor 82 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 83 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 84 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 85 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 86 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 87 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 88 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 89 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 90 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 91 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 92 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 93 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 94 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 95 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 96 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 97 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 98 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Floor 99 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Shaft 1: Combined: 4  - Separate (3): 10 - using combined
+18:47:18: 0> Shaft 1 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:18: 0> Shaft 2: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 2 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 3: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 3 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 4: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 4 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 5: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 5 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 6: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 6 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 7: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 7 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 8: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 8 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 9: Combined: 4  - Separate (3): 11 - using combined
+18:47:19: 0> Shaft 9 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 10: Combined: 4  - Separate (3): 11 - using combined
+18:47:19: 0> Shaft 10 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 11: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 11 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 12: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 12 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 13: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 13 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 14: Combined: 4  - Separate (3): 12 - using combined
+18:47:19: 0> Shaft 14 Shaft Door Container: Combined: 7  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 15: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 15 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 16: Combined: 4  - Separate (3): 12 - using combined
+18:47:19: 0> Shaft 16 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 17: Combined: 2  - Separate (3): 6 - using combined
+18:47:19: 0> Shaft 18: Combined: 4  - Separate (3): 10 - using combined
+18:47:19: 0> Shaft 18 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 19: Combined: 4  - Separate (3): 11 - using combined
+18:47:19: 0> Shaft 19 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:19: 0> Shaft 20: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 20 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 21: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 21 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 22: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 22 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 23: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 23 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 24: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 24 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 25: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 25 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 26: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 26 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 27: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 27 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 28: Combined: 4  - Separate (3): 10 - using combined
+18:47:20: 0> Shaft 28 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 29: Combined: 1  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 30: Combined: 1  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 31: Combined: 1  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 32: Combined: 1  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 33: Combined: 1  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 34: Combined: 1  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 35: Combined: 4  - Separate (3): 11 - using combined
+18:47:20: 0> Shaft 35 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Shaft 36: Combined: 4  - Separate (3): 11 - using combined
+18:47:20: 0> Shaft 36 Shaft Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:20: 0> Elevator 1 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 2 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 3 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 4 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 5 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 6 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 7 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 8 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 9 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 10 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 11 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 12 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 13 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 14 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 15 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 16 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 17 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 18 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 19 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 20 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 21 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 22 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 23 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 24 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 25 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 26 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 27 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 28 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 29 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 30 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 31 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 32 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 33 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 34 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 35 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 36 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 37 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 38 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 39 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 40 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 41 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 42 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 43 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 44 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 45 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 46 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 47 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 48 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 49 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 50 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 51 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 52 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 53 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 54 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 55 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 56 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 57 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 58 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 59 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 60 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 61 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 62 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 63 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 64 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 65 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 66 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 67 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 68 Door Container: Combined: 3  - Separate (3): 6 - using combined
+18:47:20: 0> Elevator 69 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 70 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:20: 0> Elevator 71 Door Container: Combined: 2  - Separate (3): 2 - using combined
+18:47:21: 0> Stairwell 1: Combined: 54  - Separate (3): 21 - using separate
+18:47:21: 0> Stairwell 1 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:21: 0> Stairwell 2: Combined: 54  - Separate (3): 21 - using separate
+18:47:21: 0> Stairwell 2 Door Container: Combined: 2  - Separate (3): 3 - using combined
+18:47:21: 0> Stairwell 3: Combined: 48  - Separate (3): 18 - using separate
+18:47:21: 0> Stairwell 3 Door Container: Combined: 1  - Separate (3): 3 - using combined
+18:47:21: 0> Stairwell 4: Combined: 49  - Separate (3): 21 - using separate
+18:47:21: 0> Stairwell 4 Door Container: Combined: 1  - Separate (3): 3 - using combined
+18:47:21: 0> Stairwell 5: Combined: 48  - Separate (3): 21 - using separate
+18:47:21: 0> Stairwell 5 Door Container: Combined: 1  - Separate (3): 3 - using combined
+18:47:21: 0> Stairwell 6: Combined: 71  - Separate (3): 21 - using separate
+18:47:21: 0> Stairwell 6 Door Container: Combined: 1  - Separate (3): 3 - using combined
+18:47:21: 0> Stairwell 7: Combined: 3  - Separate (3): 6 - using combined
+18:47:21: 0> Creating colliders...
+18:47:22: 0> Finished prepare
+18:47:24: Running simulation...
+18:47:25: 0> Clicked on object 14863: Mesh: Level 1, Wall: Shaft7RightE
+18:47:29: 0> Clicked on object 92045: Mesh: Button Panel 0: Control 2, Wall: Button Panel 0: Control 2
+18:47:29: 0> Action 'Call Station 1:37': object 'Call Station 1' using command '37'
+18:47:29: 0> Call Station 0:1 - Selecting floor 37
+18:47:29: 0> Dispatch Controller 1: Requesting route from origin floor 0 to destination floor 37
+18:47:29: 0> Dispatch Controller 1: Using elevator 1
+18:47:29: 0> Dispatch Controller 1: Dispatching elevator 1 to floor 0 (L)
+18:47:29: 0> Dispatch Controller 1: Elevator 1 arrived at floor 0 (L)
+18:47:29: 0> Elevator 1: opening doors
+18:47:29: 0> Dispatch Controller 1: Dispatching elevator 1 to floor 37 (37)
+18:47:29: 0> Elevator 1: adding route to floor 37 (37) direction Up
+18:47:33: 0> Clicked on object 92053: Mesh: Button Panel 0: Control 4, Wall: Button Panel 0: Control 4
+18:47:33: 0> Action 'Call Station 1:33': object 'Call Station 1' using command '33'
+18:47:33: 0> Call Station 0:1 - Selecting floor 33
+18:47:33: 0> Dispatch Controller 1: Requesting route from origin floor 0 to destination floor 33
+18:47:33: 0> Dispatch Controller 1: Using elevator 2
+18:47:33: 0> Dispatch Controller 1: Dispatching elevator 2 to floor 0 (L)
+18:47:33: 0> Dispatch Controller 1: Elevator 2 arrived at floor 0 (L)
+18:47:33: 0> Elevator 2: opening doors
+18:47:33: 0> Dispatch Controller 1: Dispatching elevator 2 to floor 33 (33)
+18:47:33: 0> Elevator 2: adding route to floor 33 (33) direction Up
+18:47:34: 0> Clicked on object 92073: Mesh: Button Panel 0: Control 9, Wall: Button Panel 0: Control 9
+18:47:34: 0> Action 'Call Station 1:27': object 'Call Station 1' using command '27'
+18:47:34: 0> Call Station 0:1 - Selecting floor 27
+18:47:34: 0> Dispatch Controller 1: Requesting route from origin floor 0 to destination floor 27
+18:47:34: 0> Dispatch Controller 1: Using elevator 3
+18:47:34: 0> Dispatch Controller 1: Dispatching elevator 3 to floor 0 (L)
+18:47:34: 0> Dispatch Controller 1: Elevator 3 arrived at floor 0 (L)
+18:47:34: 0> Elevator 3: opening doors
+18:47:34: 0> Dispatch Controller 1: Dispatching elevator 3 to floor 27 (27)
+18:47:34: 0> Elevator 3: adding route to floor 27 (27) direction Up
+18:47:36: Cleaning up...
+18:47:36: CaelumSystem: Detached from  viewport 94416913492992 render target 
+18:47:36: Caelum: Delete UniversalClock
+18:47:36: Caelum: CaelumSystem destroyed.
+18:47:36: Destroying resource group Caelum
+18:47:36: Unloading resource group Caelum
+18:47:36: Finished unloading resource group Caelum
+18:47:36: Unregistering ResourceManager for type PropertyScript
+18:47:36: Caelum plugin uninstalled
+18:47:36: 0> Deleting simulator objects...
+18:47:39: 0> Exiting
+18:47:39: 0> 
+SBS instance 0 unloaded
+18:47:39: Unregistering ResourceManager for type Font
+18:47:39: OverlayElementFactory for type Panel registered.
+18:47:39: OverlayElementFactory for type BorderPanel registered.
+18:47:39: OverlayElementFactory for type TextArea registered.
+18:47:39: Registering ResourceManager for type Font
+18:47:39: Clearing resource group Materials
+18:47:39: Finished clearing resource group Materials
+18:47:39: Initialising resource group Materials
+18:47:39: Parsing scripts for resource group Materials
+18:47:39: Parsing script testmat.material
+18:47:39: Finished parsing scripts for resource group Materials
+18:47:39: Creating resources for group Materials
+18:47:39: All done
+18:47:39: Clearing resource group Trays
+18:47:39: Finished clearing resource group Trays
+18:47:39: Initialising resource group Trays
+18:47:39: Parsing scripts for resource group Trays
+18:47:39: Parsing script SdkTrays.material
+18:47:39: Parsing script SdkTrays.fontdef
+18:47:39: Parsing script SdkTrays.overlay
+18:47:39: Finished parsing scripts for resource group Trays
+18:47:39: Creating resources for group Trays
+18:47:39: All done
+18:47:39: Unregistering ResourceManager for type Font
+18:47:39: DefaultWorkQueue('Root') shutting down on thread main.
+18:47:39: *-*-* OGRE Shutdown

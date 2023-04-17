@@ -122,40 +122,6 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		station->SetController(num);
 		return sNextLine;
 	}
-	//ElevatorsLeft parameter
-	if (linecheck.substr(0, 13) == "elevatorsleft")
-	{
-		//copy string listing of elevators into array
-		int params = SplitAfterEquals(LineData, false);
-		if (params < 1)
-			return ScriptError("Syntax Error");
-
-		std::vector<std::string> elevs;
-
-		for (int line = 0; line < params; line++)
-			elevs.push_back(tempdata[line]);
-
-		station->ElevatorsLeft = elevs;
-
-		return sNextLine;
-	}
-	//ElevatorsRight parameter
-	if (linecheck.substr(0, 14) == "elevatorsright")
-	{
-		//copy string listing of elevators into array
-		int params = SplitAfterEquals(LineData, false);
-		if (params < 1)
-			return ScriptError("Syntax Error");
-
-		std::vector<std::string> elevs;
-
-		for (int line = 0; line < params; line++)
-			elevs.push_back(tempdata[line]);
-
-		station->ElevatorsRight = elevs;
-
-		return sNextLine;
-	}
 	//InvalidInput parameter
 	if (linecheck.substr(0, 12) == "invalidinput")
 	{

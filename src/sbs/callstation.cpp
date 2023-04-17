@@ -30,6 +30,7 @@
 #include "timer.h"
 #include "manager.h"
 #include "callstation.h"
+#include "elevator.h"
 
 namespace SBS {
 
@@ -337,32 +338,46 @@ int CallStation::GetRecallFloor()
 	return 0;
 }
 
-void CallStation::ReportElevator(const std::string &elevator_id)
+void CallStation::ReportElevator(Elevator *elevator)
 {
 	//report which elevator is assigned, on indicator
 
 	//update indicator with direction of elevator
-	for (int i = 0; i < (int)ElevatorsLeft.size(); i++)
+	std::string Direction = this->GetPanel()->Direction;
+	Ogre::Vector3 ButtonPos = this->GetPanel()->GetPosition();
+	Ogre::Vector3 ShaftPos  = elevator->GetPosition();
+
+	if (Direction == "front")
 	{
-		if (ElevatorsLeft[i] == elevator_id)
-		{
-			std::string message = "<" + elevator_id;
-			UpdateIndicator(message);
-			return;
-		}
+		if (ButtonPos.x > ShaftPos.x)
+			return UpdateIndicator((ButtonPos.z < ShaftPos.z ? "<" : "[]") + elevator->ID);
+		else
+			return UpdateIndicator(elevator->ID + (ButtonPos.z < ShaftPos.z ? ">" : "[]"));
 	}
-	for (int i = 0; i < (int)ElevatorsRight.size(); i++)
+	else if (Direction == "back")
 	{
-		if (ElevatorsRight[i] == elevator_id)
-		{
-			std::string message = elevator_id + ">";
-			UpdateIndicator(message);
-			return;
-		}
+		if (ButtonPos.x < ShaftPos.x)
+			return UpdateIndicator((ButtonPos.z > ShaftPos.z ? "<" : "[]") + elevator->ID);
+		else
+			return UpdateIndicator(elevator->ID + (ButtonPos.z > ShaftPos.z ? ">" : "[]"));
+	}
+	else if (Direction == "left")
+	{
+		if (ButtonPos.z < ShaftPos.z)
+			return UpdateIndicator((ButtonPos.x < ShaftPos.x ? "<" : "[]") + elevator->ID);
+		else
+			return UpdateIndicator(elevator->ID + (ButtonPos.x < ShaftPos.x ? ">" : "[]"));
+	}
+	else if (Direction == "right")
+	{
+		if (ButtonPos.z > ShaftPos.z)
+			return UpdateIndicator((ButtonPos.x > ShaftPos.x ? "<" : "[]") + elevator->ID);
+		else
+			return UpdateIndicator(elevator->ID + (ButtonPos.x > ShaftPos.x ? ">" : "[]"));
 	}
 
 	//otherwise update indicator with just elevator ID
-	UpdateIndicator(elevator_id);
+	UpdateIndicator(elevator->ID);
 	return;
 }
 

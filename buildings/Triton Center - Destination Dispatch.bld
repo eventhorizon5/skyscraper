@@ -207,6 +207,18 @@
     AddText Black, ButtonD>, nimbus_sans.ttf, 47, D>, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonE>, nimbus_sans.ttf, 47, E>, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonF>, nimbus_sans.ttf, 47, F>, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]A, nimbus_sans.ttf, 47, []A, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]B, nimbus_sans.ttf, 47, []B, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]C, nimbus_sans.ttf, 47, []C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]D, nimbus_sans.ttf, 47, []D, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]E, nimbus_sans.ttf, 47, []E, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]F, nimbus_sans.ttf, 47, []F, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonA[], nimbus_sans.ttf, 47, A[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonB[], nimbus_sans.ttf, 47, B[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonC[], nimbus_sans.ttf, 47, C[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonD[], nimbus_sans.ttf, 47, D[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonE[], nimbus_sans.ttf, 47, E[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonF[], nimbus_sans.ttf, 47, F[], -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonXX, nimbus_sans.ttf, 47, XX, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, Button??, nimbus_sans.ttf, 47, ??, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, Button-, nimbus_sans.ttf, 47, -, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -7882,8 +7894,6 @@ SetAutoSize = false, false
     <CallStation 1>
         Name = Call Station %callstation%
         Controller = 1
-        ElevatorsLeft = C, F
-        ElevatorsRight = A, B, D, E
         CreatePanel ElevExtPanels, 6, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -9.583 + 4.25 + 0.33 + 0.01, 4, -4.5
         AddIndicator mechchime9.wav, Button, Black, right, 0, 0, 0.5, 0.5, 1, 5
@@ -7892,8 +7902,6 @@ SetAutoSize = false, false
     <CallStation 2>
         Name = Call Station %callstation%
         Controller = 1
-        ElevatorsLeft = A, D
-        ElevatorsRight = B, C, E, F
         CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 9.583 - 4.25 - 0.33 - 0.01, 4, 4.5
         AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 1, 5
@@ -7918,8 +7926,6 @@ SetAutoSize = false, false
     <CallStation 3>
         Name = Call Station %callstation%
         Controller = 2
-        ElevatorsLeft = C, F
-        ElevatorsRight = A, B, D, E
         CreatePanel ElevExtPanels, 6, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 18.083 + 4.25 + 0.33 + 0.01, 4, -4.5
         AddIndicator mechchime9.wav, Button, Black, right, 0, 0, 0.5, 0.5, 1, 5
@@ -7928,8 +7934,6 @@ SetAutoSize = false, false
     <CallStation 4>
         Name = Call Station %callstation%
         Controller = 2
-        ElevatorsLeft = A, D
-        ElevatorsRight = B, C, E, F
         CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 37.25 - 4.25 - 0.33 - 0.01, 4, 4.5
         AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 1, 5
@@ -7955,8 +7959,6 @@ SetAutoSize = false, false
     <CallStation 5>
         Name = Call Station %callstation%
         Controller = 3
-        ElevatorsLeft = C, F
-        ElevatorsRight = A, B, D, E
         CreatePanel ElevExtPanels, 7, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -37.25 + 4.25 + 0.33 + 0.01, 4, -4.5
         AddIndicator mechchime9.wav, Button, Black, right, 0, 0, 0.5, 0.5, 1, 5
@@ -7965,8 +7967,6 @@ SetAutoSize = false, false
     <CallStation 6>
         Name = Call Station %callstation%
         Controller = 3
-        ElevatorsLeft = A, D
-        ElevatorsRight = B, C, E, F
         CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -18.083 - 4.25 - 0.33 - 0.01, 4, 4.5
         AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 1, 5
@@ -7996,8 +7996,6 @@ SetAutoSize = false, false
     <CallStation 1>
         Name = Call Station %callstation%
         Controller = 1
-        ElevatorsLeft = C, F
-        ElevatorsRight = A, B, D, E
         CreatePanel ElevExtPanels, 6, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -9.583 + 4.25 + 0.33 + 0.01, 4, -4.5
         AddIndicator mechchime9.wav, Button, Black, right, 0, 0, 0.5, 0.5, 1, 5
@@ -8006,8 +8004,6 @@ SetAutoSize = false, false
     <CallStation 2>
         Name = Call Station %callstation%
         Controller = 1
-        ElevatorsLeft = A, D
-        ElevatorsRight = B, C, E, F
         CreatePanel ElevExtPanels, 6, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 9.583 - 4.25 - 0.33 - 0.01, 4, 4.5
         AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 1, 5
@@ -8033,8 +8029,6 @@ SetAutoSize = false, false
     <CallStation 3>
         Name = Call Station %callstation%
         Controller = 2
-        ElevatorsLeft = C, F
-        ElevatorsRight = A, B, D, E
         CreatePanel ElevExtPanels, 7, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 18.083 + 4.25 + 0.33 + 0.01, 4, -4.5
         AddIndicator mechchime9.wav, Button, Black, right, 0, 0, 0.5, 0.5, 1, 5
@@ -8043,8 +8037,6 @@ SetAutoSize = false, false
     <CallStation 4>
         Name = Call Station %callstation%
         Controller = 2
-        ElevatorsLeft = A, D
-        ElevatorsRight = B, C, E, F
         CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 37.25 - 4.25 - 0.33 - 0.01, 4, 4.5
         AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 1, 5
@@ -8071,8 +8063,6 @@ SetAutoSize = false, false
     <CallStation 5>
         Name = Call Station %callstation%
         Controller = 3
-        ElevatorsLeft = C, F
-        ElevatorsRight = A, B, D, E
         CreatePanel ElevExtPanels, 7, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -37.25 + 4.25 + 0.33 + 0.01, 4, -4.5
         AddIndicator mechchime9.wav, Button, Black, right, 0, 0, 0.5, 0.5, 1, 5
@@ -8081,8 +8071,6 @@ SetAutoSize = false, false
     <CallStation 6>
         Name = Call Station %callstation%
         Controller = 3
-        ElevatorsLeft = A, D
-        ElevatorsRight = B, C, E, F
         CreatePanel ElevExtPanels, 7, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -18.083 - 4.25 - 0.33 - 0.01, 4, 4.5
         AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 1, 5
@@ -8138,8 +8126,6 @@ AddAction FireServiceBypass27, Elevator27, Fire1Bypass
     <CallStation 7>
         Name = Call Station %callstation%
         Controller = 4
-        ElevatorsLeft = B
-        ElevatorsRight = A
         CreatePanel ElevExtPanels, 5, 5, right, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition 46.95 + 4.25 + 0.33 + 0.01, 4, -33.25
         AddIndicator mechchime9.wav, Button, Black, right, 0, 0, 0.5, 0.5, 0.75, 5
@@ -8157,8 +8143,6 @@ AddAction FireServiceBypass27, Elevator27, Fire1Bypass
     <CallStation 8>
         Name = Call Station %callstation%
         Controller = 5
-        ElevatorsLeft = A
-        ElevatorsRight = B
         CreatePanel ElevExtPanels, 5, 5, left, 0.15, 0.15, 0.3, 0.45, 0, 0
         SetPosition -46.95 - 4.25 - 0.33 - 0.01, 4, -33.25
         AddIndicator mechchime9.wav, Button, Black, left, 0, 0, 0.5, 0.5, 0.75, 5
