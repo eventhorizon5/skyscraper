@@ -65,7 +65,7 @@ void DispatchController::Loop()
 
 void DispatchController::Process()
 {
-	//destination dispatch processing
+	//call processing
 
 	//process pending requests
 	ProcessRoutes();
