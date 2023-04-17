@@ -55,7 +55,7 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 
 	is_enabled = true;
 
-	std::string base = "Floor " + ToString(floornum) + ":Call Station " + ToString(number);
+	std::string base = "Call Station " + ToString(number);
 	SetName(base);
 
 	//set variables
