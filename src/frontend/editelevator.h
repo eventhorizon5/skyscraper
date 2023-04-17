@@ -91,6 +91,9 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT5;
 		static const long ID_txtName;
 		static const long ID_bSetName;
+		static const long ID_STATICTEXT90;
+		static const long ID_txtID;
+		static const long ID_bSetID;
 		static const long ID_STATICTEXT9;
 		static const long ID_txtType;
 		static const long ID_bSetType;
@@ -386,6 +389,7 @@ class editelevator: public wxDialog
 		void On_bSetUpSpeed_Click(wxCommandEvent& event);
 		void On_bSetDownSpeed_Click(wxCommandEvent& event);
 		void On_bNotifyLate_Click(wxCommandEvent& event);
+		void On_bSetID_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -431,6 +435,7 @@ class editelevator: public wxDialog
 		wxButton* bSetDownSpeed;
 		wxButton* bSetFloorBeeps;
 		wxButton* bSetFloorSounds;
+		wxButton* bSetID;
 		wxButton* bSetInspectionSpeed;
 		wxButton* bSetLevelingOffset;
 		wxButton* bSetLevelingSpeed;
@@ -564,6 +569,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText88;
 		wxStaticText* StaticText89;
 		wxStaticText* StaticText8;
+		wxStaticText* StaticText90;
 		wxStaticText* StaticText9;
 		wxStaticText* tCar;
 		wxStaticText* tDoor;
@@ -603,6 +609,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtFloorBeeps;
 		wxTextCtrl* txtFloorSounds;
 		wxTextCtrl* txtHeight;
+		wxTextCtrl* txtID;
 		wxTextCtrl* txtInspectionSpeed;
 		wxTextCtrl* txtInterlocks;
 		wxTextCtrl* txtIsIdle;

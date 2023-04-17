@@ -515,6 +515,33 @@
 												<flag>wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT90" variable="StaticText90" member="yes">
+													<label>ID:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtID" variable="txtID" member="yes">
+													<size>75,-1</size>
+													<tooltip>Name</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetID" variable="bSetID" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetID_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
 													<label>Type:</label>
 												</object>
