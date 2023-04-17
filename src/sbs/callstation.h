@@ -61,6 +61,7 @@ public:
 	void Error(bool type = 0);
 	int GetRecallFloor();
 	void ReportElevator(const std::string &elevator_id);
+	bool Call(bool direction);
 
 private:
 	ButtonPanel* panel; //button panel object

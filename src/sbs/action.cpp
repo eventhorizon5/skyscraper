@@ -711,6 +711,10 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callstation->Input("*");
 		if (command_name == "inputbackspace")
 			return callstation->Input("<");
+		if (command_name == "up")
+			return callstation->Call(true);
+		if (command_name == "down")
+			return callstation->Call(false);
 	}
 
 	//escalator-specific commands
