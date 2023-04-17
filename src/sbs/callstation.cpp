@@ -357,7 +357,8 @@ void CallStation::ReportElevator(const std::string &elevator_id)
 
 bool CallStation::Call(bool direction)
 {
-	//request up call
+	//call elevator in the specified direction
+
 	if (GetController())
 	{
 		if (direction == true)
