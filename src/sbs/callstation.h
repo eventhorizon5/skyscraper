@@ -36,6 +36,7 @@ public:
 	int Number;
 	std::vector<std::string> ElevatorsLeft;
 	std::vector<std::string> ElevatorsRight;
+	std::vector<std::string> InvalidInput;
 
 	//functions
 	CallStation(Object *parent, int floornum, int number);

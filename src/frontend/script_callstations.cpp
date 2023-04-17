@@ -156,6 +156,23 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 
 		return sNextLine;
 	}
+	//InvalidInput parameter
+	if (linecheck.substr(0, 12) == "invalidinput")
+	{
+		//copy string listing of elevators into array
+		int params = SplitAfterEquals(LineData, false);
+		if (params < 1)
+			return ScriptError("Syntax Error");
+
+		std::vector<std::string> inputs;
+
+		for (int line = 0; line < params; line++)
+			inputs.push_back(tempdata[line]);
+
+		station->InvalidInput = inputs;
+
+		return sNextLine;
+	}
 
 	//CreatePanel command
 	if (linecheck.substr(0, 11) == "createpanel")

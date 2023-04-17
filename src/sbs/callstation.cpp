@@ -293,6 +293,17 @@ void CallStation::ProcessCache()
 		return;
 	}
 
+	//don't allow input values in the InvalidInput list
+	for (int i = 0; i < (int)InvalidInput.size(); i++)
+	{
+		if (InputCache == InvalidInput[i])
+		{
+			InputCache = "";
+			Error();
+			return;
+		}
+	}
+
 	int floor = ToInt(InputCache);
 
 	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(InputCache);
