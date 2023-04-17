@@ -151,7 +151,7 @@ bool CallStation::ReportError(const std::string &message)
 
 int CallStation::GetFloor()
 {
-	//return floor number this call button is on
+	//return floor number this call station is on
 
 	return floor->Number;
 }

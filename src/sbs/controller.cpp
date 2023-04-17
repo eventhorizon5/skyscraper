@@ -60,72 +60,95 @@ void DispatchController::Loop()
 {
 	//this function runs for every registered dispatch controller via timer callback
 
-	if (DestinationDispatch == false || Hybrid == true)
-	{
-		//this is reserved for future use
-
-		//process up calls
-		Process(1);
-
-		//process down calls
-		Process(-1);
-	}
-
-	if (DestinationDispatch == true)
-		ProcessDestinationDispatch();
+	Process();
 }
 
-void DispatchController::Process(int direction)
-{
-	//this is reserved for future use
-}
-
-void DispatchController::ProcessDestinationDispatch()
+void DispatchController::Process()
 {
 	//destination dispatch processing
 
 	//process pending requests
 	ProcessRoutes();
 
-	//check elevators to see if any have arrived, and if so, dispatch to destination floor
-	for (int i = 0; i < Elevators.size(); i++)
+	if (DestinationDispatch == true)
 	{
-		Elevator *elev = sbs->GetElevator(Elevators[i].number);
+		//check elevators to see if any have arrived, and if so, dispatch to destination floor
 
-		//determine if elevator has arrived
-		if (Elevators[i].arrived == true)
+		for (int i = 0; i < Elevators.size(); i++)
 		{
-			//step through requests table and find a request that matches the arrived elevator
-			for (int j = 0; j < Routes.size(); j++)
+			Elevator *elev = sbs->GetElevator(Elevators[i].number);
+
+			//determine if elevator has arrived
+			if (Elevators[i].arrived == true)
 			{
-				//get request's direction of travel
-				int direction = 0;
-				if (Routes[j].starting_floor < Routes[j].destination_floor)
-					direction = 1;
-				else
-					direction = -1;
-
-				//if route matches elevator
-				if (Routes[j].processed == true && Routes[j].assigned_elevator == Elevators[i].number)
+				//step through requests table and find a request that matches the arrived elevator
+				for (int j = 0; j < Routes.size(); j++)
 				{
-					//if request matches the elevator arrival and assignment
-					if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true)
-					{
-						bool result = false;
+					//get request's direction of travel
+					int direction = 0;
+					if (Routes[j].starting_floor < Routes[j].destination_floor)
+						direction = 1;
+					else
+						direction = -1;
 
-						//dispatch elevator to destination floor for each registered assignment
-						for (int k = 0; k < Elevators[i].assigned_destination.size(); k++)
+					//if route matches elevator
+					if (Routes[j].processed == true && Routes[j].assigned_elevator == Elevators[i].number)
+					{
+						//if request matches the elevator arrival and assignment
+						if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true)
 						{
-							if (Routes[j].destination_floor == Elevators[i].assigned_destination[k])
+							bool result = false;
+
+							//dispatch elevator to destination floor for each registered assignment
+							for (int k = 0; k < Elevators[i].assigned_destination.size(); k++)
 							{
-								DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
-								result = true;
+								if (Routes[j].destination_floor == Elevators[i].assigned_destination[k])
+								{
+									DispatchElevator(Elevators[i].number, Routes[j].destination_floor, direction, false);
+									result = true;
+								}
+							}
+
+							//remove route from table
+							if (result == true)
+							{
+								RemoveRoute(Routes[j]);
+								j--;
 							}
 						}
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		//for standard mode, check elevators to see if any have arrived, and if so
+		//turn off call buttons and remove route
 
-						//remove route from table
-						if (result == true)
+		for (int i = 0; i < Elevators.size(); i++)
+		{
+			Elevator *elev = sbs->GetElevator(Elevators[i].number);
+
+			//determine if elevator has arrived
+			if (Elevators[i].arrived == true)
+			{
+				//step through requests table and find a request that matches the arrived elevator
+				for (int j = 0; j < Routes.size(); j++)
+				{
+					//get request's direction of travel
+					int direction = Routes[j].direction;
+
+					//if route matches elevator
+					if (Routes[j].processed == true && Routes[j].assigned_elevator == Elevators[i].number)
+					{
+						//if request matches the elevator arrival and assignment
+						if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true)
 						{
+							//turn off related call buttons
+							//NOT IMPLEMENTED
+
+							//remove route from table
 							RemoveRoute(Routes[j]);
 							j--;
 						}
@@ -246,6 +269,88 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	route.processed = false;
 	route.station = station;
 	route.assigned_elevator = 0;
+	route.direction = 0;
+	Routes.push_back(route);
+
+	return true;
+}
+
+bool DispatchController::CallElevator(CallStation *station, bool direction)
+{
+	//call an elevator (request a standard route)
+
+	if (DestinationDispatch == true || Hybrid == true)
+	{
+		if (station)
+			station->Error();
+		ReportError("RequestRoute: Destination Dispatch is enabled");
+		return false;
+	}
+
+	if (!station)
+		return false;
+
+	Report("Calling an elevator from origin floor " + ToString(station->GetFloor()));
+
+	//make sure this controller has elevators that serve the specified floor
+	if (IsServicedFloor(station->GetFloor()) == false)
+	{
+		if (station)
+			station->Error(1);
+		return ReportError("No elevators found for floor " + ToString(station->GetFloor()));
+	}
+
+	//check to make sure elevator objects are valid
+	bool isvalid = false;
+	for (size_t i = 0; i < Elevators.size(); i++)
+	{
+		Elevator *elevator = sbs->GetElevator(Elevators[i].number);
+		if (elevator)
+		{
+			isvalid = true;
+			break;
+		}
+	}
+	if (isvalid == false)
+	{
+		if (station)
+			station->Error();
+		return ReportError("No valid elevators found");
+	}
+
+	int dir = 0;
+	if (direction == true)
+		dir = 1;
+	else
+		dir = -1;
+
+	//use existing entry if found
+	for (int i = 0; i < Routes.size(); i++)
+	{
+		if (Routes[i].starting_floor == station->GetFloor() && Routes[i].direction == dir)
+		{
+			//report on indicator for new request
+			if (Routes[i].assigned_elevator > 0)
+			{
+				Elevator *e = sbs->GetElevator(Routes[i].assigned_elevator);
+
+				if (Routes[i].station && e)
+					Routes[i].station->ReportElevator(e->ID);
+			}
+			return true;
+		}
+	}
+
+	//otherwise add route request to table
+	Route route;
+	route.starting_floor = station->GetFloor();
+	route.destination_floor = 0;
+	route.requests = 1;
+	route.processed = false;
+	route.station = station;
+	route.assigned_elevator = 0;
+	route.direction = dir;
+
 	Routes.push_back(route);
 
 	return true;
@@ -253,7 +358,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 
 void DispatchController::ProcessRoutes()
 {
-	//process destination dispatch routes
+	//process routes
 
 	for (int i = 0; i < Routes.size(); i++)
 	{

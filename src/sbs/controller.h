@@ -59,6 +59,7 @@ public:
 	bool FireService(int value);
 	bool AtMaxRequests(int elevator, int destination_floor);
 	int GetRecallFloor();
+	bool CallElevator(CallStation *station, bool direction);
 
 private:
 
@@ -67,8 +68,7 @@ private:
 	int FindClosestElevator(bool destination, int starting_floor, int destination_floor);
 	void DispatchElevator(int number, int destination_floor, int direction, bool call);
 	void RemoveRoute(Route &route);
-	void Process(int direction);
-	void ProcessDestinationDispatch();
+	void Process();
 	void ProcessRoutes();
 	void GetFloorRange();
 	bool ElevatorUnavailable(int elevator);
@@ -94,7 +94,8 @@ private:
 	struct Route
 	{
 		int starting_floor;
-		int destination_floor;
+		int destination_floor; //used for destination dispatch mode
+		int direction; //used for standard mode
 		int requests;
 		bool processed;
 		int assigned_elevator;
