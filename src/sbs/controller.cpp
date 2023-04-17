@@ -279,7 +279,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 {
 	//call an elevator (request a standard route)
 
-	if (DestinationDispatch == true || Hybrid == true)
+	if (DestinationDispatch == true && Hybrid == false)
 	{
 		if (station)
 			station->Error();
@@ -379,7 +379,11 @@ void DispatchController::ProcessRoutes()
 		int destination_floor = Routes[i].destination_floor;
 
 		//get closest elevator
-		int closest = FindClosestElevator(true, starting_floor, destination_floor);
+		int closest = -1;
+		if (Routes[i].direction == 0)
+			closest = FindClosestElevator(true, starting_floor, destination_floor); //destination dispatch mode
+		else
+			closest = FindClosestElevator(false, starting_floor, destination_floor, Routes[i].direction); //standard mode
 
 		//if none found, report an error and withdraw the route
 		if (closest == -1)
@@ -400,11 +404,15 @@ void DispatchController::ProcessRoutes()
 		if (!car)
 			return;
 
-		int direction = 0;
-		if (destination_floor > starting_floor)
-			direction = 1;
-		else
-			direction = -1;
+		int direction = Routes[i].direction;
+		if (direction == 0)
+		{
+			//determine direction for destination dispatch mode
+			if (destination_floor > starting_floor)
+				direction = 1;
+			else
+				direction = -1;
+		}
 
 		//update destination indicator with elevator ID
 		if (Routes[i].station)
@@ -423,7 +431,7 @@ void DispatchController::ProcessRoutes()
 		}
 
 		//assign and dispatch elevator to starting floor
-		AssignElevator(elevator->Number, destination_floor);
+		AssignElevator(elevator->Number, destination_floor, Routes[i].direction);
 		DispatchElevator(elevator->Number, starting_floor, direction, true);
 
 		Routes[i].processed = true;
@@ -507,9 +515,10 @@ bool DispatchController::ServicesElevator(int elevator)
 	return false;
 }
 
-int DispatchController::FindClosestElevator(bool destination, int starting_floor, int destination_floor)
+int DispatchController::FindClosestElevator(bool destination, int starting_floor, int destination_floor, int direction)
 {
-	//finds closest elevator for destination dispatch mode
+	//finds closest elevator
+	//if destination is true, use Destination Dispatch mode, otherwise use Standard Mode
 
 	//initialize values
 	int closest = 0;
@@ -518,12 +527,14 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 	bool check = false;
 	int errors = 0;
 	int result = 0;
-	int direction = 0;
 
-	if (destination_floor > starting_floor)
-		direction = 1;
-	else
-		direction = -1;
+	if (DestinationDispatch == true)
+	{
+		if (destination_floor > starting_floor)
+			direction = 1;
+		else
+			direction = -1;
+	}
 
 	int count = (int)Elevators.size();
 
@@ -689,18 +700,23 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 
 			if (Elevators[i].assigned == true)
 			{
-				//unassign route from elevator
-				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+				if (DestinationDispatch == true)
 				{
-					if (Elevators[i].assigned_destination[j] == floor)
+					//unassign route from elevator
+					for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
 					{
-						Elevators[i].assigned_destination.erase(Elevators[i].assigned_destination.begin() + j);
-						break;
+						if (Elevators[i].assigned_destination[j] == floor)
+						{
+							Elevators[i].assigned_destination.erase(Elevators[i].assigned_destination.begin() + j);
+							break;
+						}
 					}
-				}
 
-				//unassign elevator if no more routes
-				if (Elevators[i].assigned_destination.size() == 0)
+					//unassign elevator if no more routes
+					if (Elevators[i].assigned_destination.size() == 0)
+						Elevators[i].assigned = false;
+				}
+				else
 					Elevators[i].assigned = false;
 			}
 			break;
@@ -720,7 +736,7 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 		Report("Dispatching elevator " + ToString(number) + " to floor " + ToString(destination_floor) + " (" + floor->ID + ")");
 
 		int type = 0;
-		if (call == true && DestinationDispatch == true)
+		if (call == true)
 			type = 1;
 		else if (DestinationDispatch == false)
 			type = 2;
@@ -733,6 +749,9 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 bool DispatchController::IsElevatorAssigned(int number, int destination_floor)
 {
 	//return true if the specified elevator is assigned to the destination floor
+
+	if (DestinationDispatch == false)
+		return false;
 
 	for (int i = 0; i < Elevators.size(); i++)
 	{
@@ -754,6 +773,9 @@ bool DispatchController::IsElevatorAssignedToOther(int number, int destination_f
 	//return true if the specified elevator is assigned to a destination floor other than the specified one
 	//while also taking the serviced floor range into account if more than one elevator is assigned
 
+	if (DestinationDispatch == false)
+		return false;
+
 	for (int i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == number)
@@ -771,7 +793,7 @@ bool DispatchController::IsElevatorAssignedToOther(int number, int destination_f
 	return false;
 }
 
-void DispatchController::AssignElevator(int number, int destination_floor)
+void DispatchController::AssignElevator(int number, int destination_floor, int direction)
 {
 	//assign an elevator to the specified destination floor
 
@@ -782,17 +804,20 @@ void DispatchController::AssignElevator(int number, int destination_floor)
 			Elevators[i].assigned = true;
 
 			//exit if elevator has already been assigned to the floor
-			for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+			if (DestinationDispatch == true)
 			{
-				if (Elevators[i].assigned_destination[j] == destination_floor)
+				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
 				{
-					Report("Elevator already assigned to destination floor " + ToString(destination_floor));
-					return;
+					if (Elevators[i].assigned_destination[j] == destination_floor)
+					{
+						Report("Elevator already assigned to destination floor " + ToString(destination_floor));
+						return;
+					}
 				}
-			}
 
-			//add floor to assignment list
-			Elevators[i].assigned_destination.push_back(destination_floor);
+				//add floor to assignment list
+				Elevators[i].assigned_destination.push_back(destination_floor);
+			}
 		}
 	}
 }

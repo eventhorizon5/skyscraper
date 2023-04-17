@@ -51,7 +51,7 @@ public:
 	void ElevatorMoving(int number);
 	bool IsElevatorAssigned(int number, int destination_floor);
 	bool IsElevatorAssignedToOther(int number, int destination_floor);
-	void AssignElevator(int number, int destination_floor);
+	void AssignElevator(int number, int destination_floor, int direction);
 	void RegisterCallStation(CallStation *station);
 	void UnregisterCallStation(CallStation *station);
 	int GetElevatorArrived(int starting_floor, int destination_floor);
@@ -65,7 +65,7 @@ private:
 
 	struct Route;
 
-	int FindClosestElevator(bool destination, int starting_floor, int destination_floor);
+	int FindClosestElevator(bool destination, int starting_floor, int destination_floor, int direction = 0);
 	void DispatchElevator(int number, int destination_floor, int direction, bool call);
 	void RemoveRoute(Route &route);
 	void Process();
