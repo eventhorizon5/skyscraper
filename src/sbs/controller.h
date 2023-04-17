@@ -36,6 +36,7 @@ public:
 	bool Hybrid; //if true, allow both standard and destination dispatch modes
 	int Range; //elevator selection range
 	int MaxPassengers; //maximum passengers per route
+	bool Reprocess; //if true, reprocess routes instead of dropping them when an elevator becomes unavailable
 
 	//functions
 	DispatchController(Object *parent, int number);

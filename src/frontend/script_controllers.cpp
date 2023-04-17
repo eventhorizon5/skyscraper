@@ -156,6 +156,14 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 9) == "reprocess")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		c->Reprocess = ToBool(value);
+		return sNextLine;
+	}
 
 	//handle end of controller section
 	if (linecheck == "<endcontroller>" && config->RangeL == config->RangeH)

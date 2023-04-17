@@ -43,6 +43,7 @@ DispatchController::DispatchController(Object *parent, int number) : Object(pare
 	DestinationDispatch = false;
 	MaxPassengers = 5;
 	Hybrid = false;
+	Reprocess = false;
 
 	EnableLoop(true);
 
@@ -366,10 +367,19 @@ void DispatchController::ProcessRoutes()
 		{
 			if (ElevatorUnavailable(Routes[i].assigned_elevator) == true)
 			{
-				//if active elevator becomes unavailable during call wait, reprocess route
-				Report("Assigned elevator " + ToString(Routes[i].assigned_elevator) + " became unavailable, reprocessing route");
-				Routes[i].processed = false;
-				Routes[i].assigned_elevator = 0;
+				if (Reprocess == true)
+				{
+					//if active elevator becomes unavailable during call wait, reprocess route
+					Report("Assigned elevator " + ToString(Routes[i].assigned_elevator) + " became unavailable, reprocessing route");
+					Routes[i].processed = false;
+					Routes[i].assigned_elevator = 0;
+				}
+				else
+				{
+					//otherwise drop the route
+					Routes.erase(Routes.begin() + i);
+					return;
+				}
 			}
 			else
 				continue; //skip route if elevator is still available
