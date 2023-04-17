@@ -320,7 +320,6 @@ void DispatchController::ProcessRoutes()
 		//assign and dispatch elevator to starting floor
 		AssignElevator(elevator->Number, destination_floor);
 		DispatchElevator(elevator->Number, starting_floor, direction, true);
-		//ActiveElevator = elevator->Number;
 
 		Routes[i].processed = true;
 		Routes[i].assigned_elevator = elevator->Number;
