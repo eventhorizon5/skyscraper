@@ -1018,11 +1018,11 @@ bool DispatchController::ElevatorUnavailable(int elevator)
 		Report("Elevator " + ToString(elevator) + " stopped");
 		return true;
 	}
-	if (elev->Error == true)
+	/*if (elev->Error == true)
 	{
 		Report("Elevator " + ToString(elevator) + " movement processing error");
 		return true;
-	}
+	}*/
 
 	return false;
 }
