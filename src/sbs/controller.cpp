@@ -421,15 +421,6 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 	else
 		direction = -1;
 
-	int ActiveElevator = 0;
-
-	//***NOTE - recheck and ActiveElevator need to be rewritten for Destination Dispatch
-
-	//if an elevator is already servicing the call, set recheck to true
-	bool recheck = false;
-	if (ActiveElevator > 0)
-		recheck = true;
-
 	int count = (int)Elevators.size();
 
 	//exit if no elevators are associated
@@ -437,7 +428,7 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 		return -1;
 
 	//search through elevator list
-	if (sbs->Verbose && count > 1 && recheck == false)
+	if (sbs->Verbose && count > 1)
 		Report("Finding nearest available elevator...");
 
 	//check each elevator associated with this controller to find the closest available one
@@ -457,7 +448,7 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 			ElevatorCar *car = elevator->GetCarForFloor(starting_floor);
 			if (car)
 			{
-				if (sbs->Verbose && recheck == false)
+				if (sbs->Verbose)
 					Report("Checking elevator " + ToString(elevator->Number) + " car " + ToString(car->Number));
 
 				if (destination == true)
@@ -475,20 +466,7 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy >= 0)
 				{
 					//see if elevator is available for the call
-
-					/*if (recheck == true && elevator->Number == ActiveElevator)
-					{
-						if (elevator->Error == true)
-						{
-							Report("Failing active elevator " + ToString(elevator->Number) + " due to movement error");
-							result = 2; //fail active elevator if it had a movement processing error
-							ActiveElevator = 0;
-						}
-						else
-							result = 1; //if rechecking elevators, consider the active one
-					}
-					else*/
-						result = elevator->AvailableForCall(starting_floor, direction, !recheck);
+					result = elevator->AvailableForCall(starting_floor, direction, true);
 
 					//if an elevator is not busy and available, reset closest_busy value
 					if (closest_busy >= 0 && result == 1)
@@ -512,7 +490,7 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 						//mark as closest busy elevator
 						if (result == 0)
 						{
-							if (sbs->Verbose && count > 1 && recheck == false)
+							if (sbs->Verbose && count > 1)
 								Report("Marking - closest so far as busy");
 							closest = abs(car->GetFloor() - starting_floor);
 							closest_busy = i;
@@ -520,7 +498,7 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 						else
 						{
 							//mark as closest elevator
-							if (sbs->Verbose && count > 1 && recheck == false)
+							if (sbs->Verbose && count > 1)
 								Report("Marking - closest so far");
 							closest = abs(car->GetFloor() - starting_floor);
 							closest_notbusy = i;
