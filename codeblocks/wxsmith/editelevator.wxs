@@ -537,7 +537,7 @@
 													<style>wxBU_EXACTFIT</style>
 													<handler function="On_bSetID_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+												<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>

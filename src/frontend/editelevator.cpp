@@ -471,7 +471,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	txtID->SetToolTip(_("Name"));
 	FlexGridSizer1->Add(txtID, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bSetID = new wxButton(this, ID_bSetID, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetID"));
-	FlexGridSizer1->Add(bSetID, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_TOP, 5);
+	FlexGridSizer1->Add(bSetID, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText9 = new wxStaticText(this, ID_STATICTEXT9, _("Type:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
 	FlexGridSizer1->Add(StaticText9, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	txtType = new wxTextCtrl(this, ID_txtType, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtType"));
