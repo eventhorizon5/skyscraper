@@ -60,7 +60,7 @@ public:
 	void ProcessCache();
 	void Error(bool type = 0);
 	int GetRecallFloor();
-	void ReportElevator(const std::string &elevator_id);
+	void ReportElevator(Elevator *elevator);
 
 private:
 	ButtonPanel* panel; //button panel object
