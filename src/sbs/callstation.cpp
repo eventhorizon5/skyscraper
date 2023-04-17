@@ -336,30 +336,30 @@ void CallStation::ReportElevator(Elevator *elevator)
 	Ogre::Vector3 ButtonPos = this->GetPanel()->GetPosition();
 	Ogre::Vector3 ShaftPos  = elevator->GetPosition();
 
-	if(Direction == "front")
+	if (Direction == "front")
 	{
-		if(ButtonPos.x > ShaftPos.x) 
+		if (ButtonPos.x > ShaftPos.x)
 			return UpdateIndicator((ButtonPos.z < ShaftPos.z ? "<" : "[]") + elevator->ID);
 		else
 			return UpdateIndicator(elevator->ID + (ButtonPos.z < ShaftPos.z ? ">" : "[]"));
 	}
-	else if(Direction == "back")
+	else if (Direction == "back")
 	{
-		if(ButtonPos.x < ShaftPos.x) 
+		if (ButtonPos.x < ShaftPos.x)
 			return UpdateIndicator((ButtonPos.z > ShaftPos.z ? "<" : "[]") + elevator->ID);
 		else
 			return UpdateIndicator(elevator->ID + (ButtonPos.z > ShaftPos.z ? ">" : "[]"));
 	}
-	else if(Direction == "left")
+	else if (Direction == "left")
 	{
-		if(ButtonPos.z < ShaftPos.z) 
+		if (ButtonPos.z < ShaftPos.z)
 			return UpdateIndicator((ButtonPos.x < ShaftPos.x ? "<" : "[]") + elevator->ID);
 		else
 			return UpdateIndicator(elevator->ID + (ButtonPos.x < ShaftPos.x ? ">" : "[]"));
 	}
-	else if(Direction == "right")
+	else if (Direction == "right")
 	{
-		if(ButtonPos.z > ShaftPos.z) 
+		if (ButtonPos.z > ShaftPos.z)
 			return UpdateIndicator((ButtonPos.x > ShaftPos.x ? "<" : "[]") + elevator->ID);
 		else
 			return UpdateIndicator(elevator->ID + (ButtonPos.x > ShaftPos.x ? ">" : "[]"));

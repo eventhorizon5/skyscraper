@@ -34,8 +34,6 @@ public:
 
 	std::string Name;
 	int Number;
-	std::vector<std::string> ElevatorsLeft;
-	std::vector<std::string> ElevatorsRight;
 
 	//functions
 	CallStation(Object *parent, int floornum, int number);
