@@ -367,7 +367,7 @@ void DispatchController::ProcessRoutes()
 		{
 			if (ElevatorUnavailable(Routes[i].assigned_elevator) == true)
 			{
-				if (Reprocess == true)
+				if (Reprocess == true || DestinationDispatch == false)
 				{
 					//if active elevator becomes unavailable during call wait, reprocess route
 					Report("Assigned elevator " + ToString(Routes[i].assigned_elevator) + " became unavailable, reprocessing route");
