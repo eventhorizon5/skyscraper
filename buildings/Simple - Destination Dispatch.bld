@@ -519,9 +519,9 @@ SetAutoSize = false, false
 
 #Now to add an external fire service button, we first create the fire service actions
 #these call the Fire1 modes on Elevator 1
-AddAction FireServiceOn, Elevator1, Fire1On
-AddAction FireServiceOff, Elevator1, Fire1Off
-AddAction FireServiceBypass, Elevator1, Fire1Bypass
+AddAction FireServiceOn, Floor0:CallStation1, FireOn
+AddAction FireServiceOff, Floor0:CallStation1, FireOff
+AddAction FireServiceBypass, Floor0:CallStation1, FireBypass
 
 #Create the fire service button itself, and map the previously created actions with the textures FireOff, FireOn, and FireBypass
 <Floor 0>
