@@ -143,7 +143,7 @@ void DispatchController::Process()
 					if (Routes[j].processed == true && Routes[j].assigned_elevator == Elevators[i].number)
 					{
 						//if request matches the elevator arrival and assignment
-						if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true)
+						if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].arrival_direction == direction)
 						{
 							//turn off related call buttons
 							//NOT IMPLEMENTED
@@ -932,6 +932,9 @@ bool DispatchController::FireService(int value)
 bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
 {
 	//return true if the specified elevator is at the maximum requests level for the specified destination floor
+
+	if (DestinationDispatch == false)
+		return false;
 
 	if (!sbs->GetElevator(elevator))
 		return false;

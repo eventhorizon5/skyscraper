@@ -82,7 +82,7 @@ private:
 		bool arrived; //has elevator arrived at call floor?
 		int arrival_floor; //arrival floor
 		bool arrival_direction; //arrival direction
-		std::vector<int> assigned_destination;
+		std::vector<int> assigned_destination; //destinations assigned to this elevator
 		bool assigned;
 		int destination_floor;
 		int call_floor;
