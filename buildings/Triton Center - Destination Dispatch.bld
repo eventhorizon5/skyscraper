@@ -207,6 +207,18 @@
     AddText Black, ButtonD>, nimbus_sans.ttf, 47, D>, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonE>, nimbus_sans.ttf, 47, E>, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonF>, nimbus_sans.ttf, 47, F>, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]A, nimbus_sans.ttf, 47, []A, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]B, nimbus_sans.ttf, 47, []B, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]C, nimbus_sans.ttf, 47, []C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]D, nimbus_sans.ttf, 47, []D, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]E, nimbus_sans.ttf, 47, []E, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, Button[]F, nimbus_sans.ttf, 47, []F, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonA[], nimbus_sans.ttf, 47, A[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonB[], nimbus_sans.ttf, 47, B[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonC[], nimbus_sans.ttf, 47, C[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonD[], nimbus_sans.ttf, 47, D[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonE[], nimbus_sans.ttf, 47, E[], -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonF[], nimbus_sans.ttf, 47, F[], -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonXX, nimbus_sans.ttf, 47, XX, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, Button??, nimbus_sans.ttf, 47, ??, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, Button-, nimbus_sans.ttf, 47, -, -1, -1, -1, -1, center, center, 255, 255, 255
