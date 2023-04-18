@@ -269,6 +269,25 @@ bool CallStation::Input(const std::string &text)
 	//update indicator display
 	UpdateIndicator(InputCache, false);
 
+	//automatically error if multiple special characters were entered and/or combined with numbers
+	ptrdiff_t StarCount = std::count(InputCache.begin(), InputCache.end(), '*');
+	ptrdiff_t MinCount  = std::count(InputCache.begin(), InputCache.end(), '-');
+	if (((StarCount >= 1 || MinCount > 1) && InputCache.length() > 1))
+	{
+		timer->Stop();
+		InputCache = "";
+		Error(1);
+		return true;
+	}
+
+	//automatically process input if a InputCache reaches the same length as the longest floor ID.
+	if (InputCache.length() >= std::to_string(this->GetController()->bottom_floor-1).length() && InputCache.length() >= std::to_string(this->GetController()->top_floor+1).length())
+	{
+		timer->Stop();
+		ProcessCache();
+		return true;
+	}
+
 	//start timeout timer
 	timer->Start(2000, true);
 

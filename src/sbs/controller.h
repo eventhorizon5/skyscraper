@@ -37,6 +37,8 @@ public:
 	int Range; //elevator selection range
 	int MaxPassengers; //maximum passengers per route
 	bool Reprocess; //if true, reprocess routes instead of dropping them when an elevator becomes unavailable
+	int bottom_floor;
+	int top_floor;
 
 	//functions
 	DispatchController(Object *parent, int number);
@@ -73,9 +75,6 @@ private:
 	void ProcessRoutes();
 	void GetFloorRange();
 	bool ElevatorUnavailable(int elevator);
-
-	int bottom_floor;
-	int top_floor;
 
 	struct ElevMap
 	{
