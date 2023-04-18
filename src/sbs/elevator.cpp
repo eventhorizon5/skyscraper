@@ -193,7 +193,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WeightRopeMesh = 0;
 	RopeMesh = 0;
 	Error = false;
-	Controller = 0;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -347,8 +346,11 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	if (AssignedShaft <= 0)
 		return ReportError("Not assigned to a shaft");
 
-	if (Controller < 0)
-		return ReportError("Invalid value for Controller");
+	for (int i = 0; i < (int)Controllers.size(); i++)
+	{
+		if (Controllers[i] < 0)
+			return ReportError("Invalid value for Controller");
+	}
 
 	if (!GetShaft())
 		return ReportError("Shaft " + ToString(AssignedShaft) + " doesn't exist");
@@ -370,9 +372,12 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	//add elevator to associated shaft
 	GetShaft()->AddElevator(Number);
 
-	//add elevator to associated destination controller
-	if (GetController())
-		GetController()->AddElevator(Number);
+	//add elevator to associated dispatch controllers
+	for (int i = 0; i < (int)Controllers.size(); i++)
+	{
+		if (sbs->GetController(Controllers[i]))
+			sbs->GetController(Controllers[i])->AddElevator(Number);
+	}
 
 	//set recall/ACP floors if not already set
 	if (RecallSet == false)
@@ -1295,9 +1300,12 @@ void Elevator::MoveElevatorToFloor()
 
 		Notified = false;
 
-		//notify controller of movement
-		if (GetController())
-			GetController()->ResetArrival(Number);
+		//reset arrival status on controllers
+		for (int i = 0; i < (int)Controllers.size(); i++)
+		{
+			if (sbs->GetController(Controllers[i]))
+				sbs->GetController(Controllers[i])->ResetArrival(Number);
+		}
 
 		//get elevator's current altitude
 		elevposition = GetPosition();
@@ -2028,9 +2036,12 @@ void Elevator::FinishMove()
 				{
 					int floor = GetFloorForCar(i, GotoFloor);
 
-					//notify dispatch controller of arrival
-					if (GetController())
-						GetController()->ElevatorArrived(Number, floor, GetArrivalDirection(floor));
+					//notify dispatch controllers of arrival
+					for (int i = 0; i < (int)Controllers.size(); i++)
+					{
+						if (sbs->GetController(Controllers[i]))
+							sbs->GetController(Controllers[i])->ElevatorArrived(Number, floor, GetArrivalDirection(floor));
+					}
 				}
 			}
 		}
@@ -3516,7 +3527,7 @@ bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
 	return false;
 }
 
-int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
+int Elevator::AvailableForCall(bool destination, int floor, int direction, bool report_on_failure)
 {
 	//determines if the elevator is available for the specified hall call
 	//if report_on_failure is true, and verbose mode is enabled, report the reason for call rejection
@@ -3564,13 +3575,9 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 											//current floor and called up, or on the same floor and not moving, or idle, or proceeding to call floor
 											if ((car->GetFloor() > floor && direction == -1) || (car->GetFloor() < floor && direction == 1) || (car->GetFloor() == floor && MoveElevator == false) || IsIdle() || car->RespondingToCall(floor, direction) == true)
 											{
-												bool DD = false;
-												if (GetController())
-													DD = GetController()->DestinationDispatch;
-
 												//and if it's either going the same direction as the call, or queue is not active, or idle, or on the same floor with the queues empty
 												if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle() ||
-														(DD && car->GetFloor() == floor && MoveElevator == false && QueuePositionDirection != 0 && UpQueue.size() == 0 && DownQueue.size() == 0)) //this is an exception if a controller is used
+														(destination == true && car->GetFloor() == floor && MoveElevator == false && QueuePositionDirection != 0 && UpQueue.size() == 0 && DownQueue.size() == 0)) //this is an exception if a controller is used
 												{
 													if (sbs->Verbose)
 														Report("Available for call");
@@ -3680,10 +3687,15 @@ bool Elevator::SelectFloor(int floor)
 		return ReportError("Floor " + ToString(floor) + " not a serviced floor");
 
 	//SelectFloor won't work if Destination Dispatch is enabled, if set
-	if (GetController())
+	if (Controllers.size() > 0)
 	{
-		if (GetController()->DestinationDispatch == true && GetController()->Hybrid == false && InServiceMode() == false)
-			return ReportError("Cannot select floor " + ToString(floor) + ": Hybrid mode is not enabled");
+		DispatchController *controller = sbs->GetController(Controllers[0]);
+
+		if (controller)
+		{
+			if (controller->DestinationDispatch == true && controller->Hybrid == false && InServiceMode() == false)
+				return ReportError("Cannot select floor " + ToString(floor) + ": Hybrid mode is not enabled");
+		}
 	}
 
 	bool result = false;
@@ -3903,12 +3915,6 @@ Shaft* Elevator::GetShaft()
 {
 	//get associated shaft object
 	return sbs->GetShaft(AssignedShaft);
-}
-
-DispatchController* Elevator::GetController()
-{
-	//get associated destination controller
-	return sbs->GetController(Controller);
 }
 
 CallButton* Elevator::GetPrimaryCallButton()
@@ -4715,8 +4721,11 @@ bool Elevator::GetDestinationDispatch()
 {
 	//return true if Destination Dispatch is enabled
 
-	if (sbs->GetController(Controller))
-		return sbs->GetController(Controller)->DestinationDispatch;
+	if (Controllers.size() > 0)
+	{
+		if (sbs->GetController(Controllers[0]))
+			return sbs->GetController(Controllers[0])->DestinationDispatch;
+	}
 	return false;
 }
 
@@ -4734,20 +4743,25 @@ void Elevator::SameFloorArrival(int floor, int direction)
 		return;
 	}
 
-	//notify controller of movement
-	if (GetController())
-		GetController()->ResetArrival(Number);
+	for (int i = 0; i < (int)Controllers.size(); i++)
+	{
+		DispatchController *controller = sbs->GetController(Controllers[i]);
 
-	//update arrival information
-	if (direction == -1)
-	{
-		if (GetController())
-			GetController()->ElevatorArrived(Number, floor, false);
-	}
-	else
-	{
-		if (GetController())
-			GetController()->ElevatorArrived(Number, floor, true);
+		//notify controllers of movement
+		if (controller)
+			controller->ResetArrival(Number);
+
+		//update arrival information
+		if (direction == -1)
+		{
+			if (controller)
+				controller->ElevatorArrived(Number, floor, false);
+		}
+		else
+		{
+			if (controller)
+				controller->ElevatorArrived(Number, floor, true);
+		}
 	}
 
 	//notify on arrival
@@ -4760,6 +4774,37 @@ void Elevator::SameFloorArrival(int floor, int direction)
 
 	//open elevator if it's on the same floor
 	car->OpenDoors();
+}
+
+void Elevator::AddController(int controller)
+{
+	//add a controller to this elevator
+
+	if (!sbs->GetController(controller))
+		return;
+
+	//exit if already in table
+	for (size_t i = 0; i < (int)Controllers.size(); i++)
+	{
+		if (Controllers[i] == controller)
+			return;
+	}
+
+	Controllers.push_back(controller);
+}
+
+void Elevator::RemoveController(int controller)
+{
+	//remove a controller from this elevator
+
+	for (size_t i = 0; i < (int)Controllers.size(); i++)
+	{
+		if (Controllers[i] == controller)
+		{
+			Controllers.erase(Controllers.begin() + i);
+			return;
+		}
+	}
 }
 
 }

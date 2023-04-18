@@ -3050,7 +3050,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 
 		//when a controller is assigned, set direction to be the call response direction
 		//the above GetCallButtonStatus should probably be migrated to this function
-		if (parent->GetController())
+		if (parent->GetDestinationDispatch() == true)
 			direction = RespondingToCall(floor);
 	}
 
@@ -3083,17 +3083,10 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 		}
 	}
 
-	DispatchController *controller = 0;
-	if (parent->Controller > 0)
-	{
-		controller = sbs->GetController(parent->Controller);
-
-	}
-
 	//play chime sound and change indicator
 	if (new_direction == true)
 	{
-		if (up == true || direction == 1 || parent->NotifyLate == true || (controller && parent->ChimeOnArrival == true))
+		if (up == true || direction == 1 || parent->NotifyLate == true || (parent->GetDestinationDispatch() == true && parent->ChimeOnArrival == true))
 		{
 			Chime(0, floor, true, early);
 			SetDirectionalIndicators(floor, true, false);
@@ -3102,7 +3095,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 	}
 	else
 	{
-		if (down == true || direction == -1 || parent->NotifyLate == true || (controller && parent->ChimeOnArrival == true))
+		if (down == true || direction == -1 || parent->NotifyLate == true || (parent->GetDestinationDispatch() == true && parent->ChimeOnArrival == true))
 		{
 			Chime(0, floor, false, early);
 			SetDirectionalIndicators(floor, false, true);

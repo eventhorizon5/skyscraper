@@ -124,7 +124,6 @@ public:
 	std::string CounterweightStopSound; //counterweight stopping sound
 	bool Counterweight; //if true, elevator has a counterweight
 	bool Error; //true if an error occurred during movement processing
-	int Controller; //destination controller this elevator is assigned to, 0 is default (none)
 
 	//functions
 	Elevator(Object *parent, int number);
@@ -187,7 +186,7 @@ public:
 	void MoveObjects(Real offset);
 	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
-	int AvailableForCall(int floor, int direction, bool report_on_failure = true);
+	int AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);
 	bool ReturnToNearestFloor();
@@ -198,7 +197,6 @@ public:
 	bool Up(bool value);
 	bool Down(bool value);
 	Shaft* GetShaft();
-	DispatchController* GetController();
 	CallButton* GetPrimaryCallButton();
 	CallStation* GetPrimaryCallStation();
 	int GetActiveCallFloor();
@@ -240,6 +238,8 @@ public:
 	void SetControls(const std::string &action_name);
 	bool GetDestinationDispatch();
 	int GetRecallFloor();
+	void AddController(int controller);
+	void RemoveController(int controller);
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
@@ -313,6 +313,7 @@ private:
 	bool ManualStop; //true if elevator has been manually stopped
 	int HoistwayAccess; //INS mode Hoistway Access; -1 for Down, 0 for Off, 1 for Up
 	int HoistwayAccessFloor; //floor used for Hoistway Access
+	std::vector<int> Controllers; //dispatch controllers this elevator is assigned to
 
 	//functions
 	void MoveElevatorToFloor();

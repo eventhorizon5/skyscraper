@@ -580,7 +580,7 @@ bool DispatchController::AddElevator(int elevator)
 	newelevator.use_call_floor = false;
 
 	//assign controller to elevator
-	sbs->GetElevator(elevator)->Controller = Number;
+	sbs->GetElevator(elevator)->AddController(Number);
 
 	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
 	Elevators.push_back(newelevator);
@@ -602,7 +602,7 @@ bool DispatchController::RemoveElevator(int elevator)
 			Report ("Elevator " + ToString(elevator) + " removed from dispatch controller " + ToString(Number));
 
 			if (sbs->GetElevator(elevator))
-				sbs->GetElevator(elevator)->Controller = 0;
+				sbs->GetElevator(elevator)->RemoveController(Number);
 
 			Elevators.erase(Elevators.begin() + i);
 
