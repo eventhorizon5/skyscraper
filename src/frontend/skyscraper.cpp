@@ -206,9 +206,12 @@ bool Skyscraper::OnInit(void)
 	{
 		wxSetWorkingDirectory(path); //set working directory to Application Data folder on Mac if exists
 		//ensure folders exist
-		wxMkdir(path + wxT("buildings"));
-		wxMkdir(path + wxT("data"));
-		wxMkdir(path + wxT("screenshots"));
+		if (!wxDirExists(path + wxT("buildings")))
+			wxMkdir(path + wxT("buildings"));
+		if (!wxDirExists(path + wxT("data")))
+			wxMkdir(path + wxT("data"));
+		if (!wxDirExists(path + wxT("screenshots")))
+			wxMkdir(path + wxT("screenshots"));
 	}
 	else
 		wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
