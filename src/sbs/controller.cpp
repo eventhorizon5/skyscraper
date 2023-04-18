@@ -568,10 +568,6 @@ bool DispatchController::AddElevator(int elevator)
 			return false;
 	}
 
-	//exit if elevator is already assigned to another controller
-	if (sbs->GetElevator(elevator)->Controller > 0)
-		return ReportError("Elevator " + ToString(elevator) + " already assigned to a controller");
-
 	//create a new elevator map
 	ElevMap newelevator;
 	newelevator.number = elevator;
