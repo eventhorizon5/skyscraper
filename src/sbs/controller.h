@@ -50,8 +50,8 @@ public:
 	bool ReportError(const std::string &message);
 	void ElevatorArrived(int number, int floor, bool direction);
 	void ElevatorMoving(int number);
-	bool IsElevatorAssigned(int number, int destination_floor);
-	bool IsElevatorAssignedToOther(int number, int destination_floor);
+	bool IsElevatorAssigned(int number, int destination_floor, int direction);
+	bool IsElevatorAssignedToOther(int number, int destination_floor, int direction);
 	void AssignElevator(int number, int destination_floor, int direction);
 	void RegisterCallStation(CallStation *station);
 	void UnregisterCallStation(CallStation *station);
@@ -83,7 +83,8 @@ private:
 		bool arrived; //has elevator arrived at call floor?
 		int arrival_floor; //arrival floor
 		bool arrival_direction; //arrival direction
-		std::vector<int> assigned_destination; //destinations assigned to this elevator
+		std::vector<int> assigned_destination; //destinations assigned to this elevator (DD mode)
+		std::vector<int> assigned_directions; //directions assigned to this elevator (standard mode)
 		bool assigned;
 		int destination_floor;
 		int call_floor;

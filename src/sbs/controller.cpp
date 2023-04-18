@@ -138,7 +138,9 @@ void DispatchController::Process()
 				for (int j = 0; j < Routes.size(); j++)
 				{
 					//get request's direction of travel
-					int direction = Routes[j].direction;
+					bool direction = false;
+					if (Routes[j].direction == 1)
+						direction = true;
 
 					//if route matches elevator
 					if (Routes[j].processed == true && Routes[j].assigned_elevator == Elevators[i].number)
@@ -602,14 +604,12 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 					if (result < 2) //available or busy
 					{
 						//skip if elevator has already been assigned for another destination
-						//outside of the serviced floor range, but only if multiple elevators are assigned
-						if (destination == true)
+						//outside of the serviced floor range but only if multiple elevators are assigned
+						//or direction if in standard mode
+						if (IsElevatorAssignedToOther(elevator->Number, destination_floor, direction) == true)
 						{
-							if (IsElevatorAssignedToOther(elevator->Number, destination_floor) == true)
-							{
-								closest_busy = i;
-								continue;
-							}
+							closest_busy = i;
+							continue;
 						}
 
 						//mark as closest busy elevator
@@ -712,7 +712,7 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 			{
 				if (DestinationDispatch == true)
 				{
-					//unassign route from elevator
+					//unassign route from elevator in destination dispatch mode
 					for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
 					{
 						if (Elevators[i].assigned_destination[j] == floor)
@@ -727,7 +727,21 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 						Elevators[i].assigned = false;
 				}
 				else
-					Elevators[i].assigned = false;
+				{
+					//unassign route from elevator in standard mode
+					for (int j = 0; j < Elevators[i].assigned_directions.size(); j++)
+					{
+						if (Elevators[i].assigned_directions[j] == direction)
+						{
+							Elevators[i].assigned_directions.erase(Elevators[i].assigned_directions.begin() + j);
+							break;
+						}
+					}
+
+					//unassign elevator if no more routes
+					if (Elevators[i].assigned_directions.size() == 0)
+						Elevators[i].assigned = false;
+				}
 			}
 			break;
 		}
@@ -756,21 +770,31 @@ void DispatchController::DispatchElevator(int number, int destination_floor, int
 	}
 }
 
-bool DispatchController::IsElevatorAssigned(int number, int destination_floor)
+bool DispatchController::IsElevatorAssigned(int number, int destination_floor, int direction)
 {
-	//return true if the specified elevator is assigned to the destination floor
-
-	if (DestinationDispatch == false)
-		return false;
+	//return true if the specified elevator is assigned to the specified destination floor or direction
 
 	for (int i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == number)
 		{
-			for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+			if (DestinationDispatch == true)
 			{
-				if (Elevators[i].assigned_destination[j] == destination_floor && Elevators[i].assigned == true)
-					return true;
+				//destination dispatch mode
+				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+				{
+					if (Elevators[i].assigned_destination[j] == destination_floor && Elevators[i].assigned == true)
+						return true;
+				}
+			}
+			else
+			{
+				//standard mode
+				for (int j = 0; j < Elevators[i].assigned_directions.size(); j++)
+				{
+					if (Elevators[i].assigned_directions[j] == direction && Elevators[i].assigned == true)
+						return true;
+				}
 			}
 			break;
 		}
@@ -778,10 +802,10 @@ bool DispatchController::IsElevatorAssigned(int number, int destination_floor)
 	return false;
 }
 
-bool DispatchController::IsElevatorAssignedToOther(int number, int destination_floor)
+bool DispatchController::IsElevatorAssignedToOther(int number, int destination_floor, int direction)
 {
-	//return true if the specified elevator is assigned to a destination floor other than the specified one
-	//while also taking the serviced floor range into account if more than one elevator is assigned
+	//return true if the specified elevator is assigned to a destination floor or direction other than
+	//the specified one, while also taking the serviced floor range into account if more than one elevator is assigned
 
 	if (DestinationDispatch == false)
 		return false;
@@ -790,14 +814,29 @@ bool DispatchController::IsElevatorAssignedToOther(int number, int destination_f
 	{
 		if (Elevators[i].number == number)
 		{
-			if (Elevators[i].assigned == false || Elevators[i].assigned_destination.size() == 0)
-				return false;
+			if (DestinationDispatch == true)
+			{
+				//destination dispatch mode
+				if (Elevators[i].assigned == false || Elevators[i].assigned_destination.size() == 0)
+					return false;
 
-			if (Elevators[i].assigned_destination[0] != destination_floor && Elevators[i].assigned == true &&
-				((abs(Elevators[i].assigned_destination[0] - destination_floor) > Range) && Elevators.size() > 1))
-				return true;
-			else
-				break;
+				if (Elevators[i].assigned_destination[0] != destination_floor && Elevators[i].assigned == true &&
+						((abs(Elevators[i].assigned_destination[0] - destination_floor) > Range) && Elevators.size() > 1))
+					return true;
+				else
+					break;
+			}
+			else if (direction != 0)
+			{
+				//standard mode
+				if (Elevators[i].assigned == false || Elevators[i].assigned_directions.size() == 0)
+					return false;
+
+				if (Elevators[i].assigned_directions[0] != direction && Elevators[i].assigned == true)
+					return true;
+				else
+					break;
+			}
 		}
 	}
 	return false;
@@ -813,9 +852,9 @@ void DispatchController::AssignElevator(int number, int destination_floor, int d
 		{
 			Elevators[i].assigned = true;
 
-			//exit if elevator has already been assigned to the floor
 			if (DestinationDispatch == true)
 			{
+				//exit if elevator has already been assigned to the floor
 				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
 				{
 					if (Elevators[i].assigned_destination[j] == destination_floor)
@@ -827,6 +866,21 @@ void DispatchController::AssignElevator(int number, int destination_floor, int d
 
 				//add floor to assignment list
 				Elevators[i].assigned_destination.push_back(destination_floor);
+			}
+			else
+			{
+				//exit if elevator has already been assigned to the direction
+				for (int j = 0; j < Elevators[i].assigned_directions.size(); j++)
+				{
+					if (Elevators[i].assigned_directions[j] == direction)
+					{
+						Report("Elevator already assigned to direction");
+						return;
+					}
+				}
+
+				//add direction to assignment list
+				Elevators[i].assigned_directions.push_back(direction);
 			}
 		}
 	}
