@@ -481,11 +481,11 @@ bool DispatchController::AddElevator(int elevator)
 	//assign controller to elevator
 	sbs->GetElevator(elevator)->Controller = Number;
 
-	//process floor range
-	GetFloorRange();
-
 	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
 	Elevators.push_back(newelevator);
+
+	//process floor range
+	GetFloorRange();
 	return true;
 }
 
@@ -881,7 +881,7 @@ void DispatchController::GetFloorRange()
 	//determine floor range of associated elevators
 
 	bool firstrun = true;
-
+	
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		Elevator *elev = sbs->GetElevator(Elevators[i].number);
