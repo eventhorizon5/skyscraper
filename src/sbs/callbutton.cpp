@@ -315,35 +315,6 @@ bool CallButton::ServicesElevator(int elevator)
 	return false;
 }
 
-/*void CallButton::Process(int direction)
-{
-	//process call button
-	//direction is the call direction to process
-
-	//if a closer elevator has been found than the elevator actively serving the call,
-	//reprocess the call
-	if (ActiveElevator > 0 && Elevators[closest] != ActiveElevator)
-	{
-		//make sure elevator is idle before continuing
-		Elevator *newelevator = sbs->GetElevator(Elevators[closest]);
-		if (newelevator->IsIdle() == true)
-		{
-			Elevator *elevator = sbs->GetElevator(ActiveElevator);
-			if (elevator)
-				elevator->CancelHallCall(GetFloor(), direction);
-
-			if (sbs->Verbose)
-				Report("Switching to closer elevator " + ToString(newelevator->Number));
-
-			//reset processed state
-			if (direction == 1)
-				ProcessedUp = false;
-			else
-				ProcessedDown = false;
-		}
-	}
-}*/
-
 void CallButton::Report(const std::string &message)
 {
 	//general reporting function

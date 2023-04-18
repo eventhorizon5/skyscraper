@@ -47,6 +47,7 @@ DispatchController::DispatchController(Object *parent, int number) : Object(pare
 	Reprocess = false;
 	bottom_floor = 0;
 	top_floor = 0;
+	recheck = 0;
 
 	EnableLoop(true);
 
@@ -400,7 +401,48 @@ void DispatchController::ProcessRoutes()
 				}
 			}
 			else
-				continue; //skip route if elevator is still available
+			{
+				//if destination dispatch is off, check to see if there's a closer elevator
+				if (Routes[i].destination == false)
+				{
+					recheck++;
+					if (recheck == 100) //don't recheck elevator every frame
+					{
+						recheck = 0;
+						int closest = -1;
+						bool busy = false;
+						closest = FindClosestElevator(busy, false, Routes[i].starting_floor, 0, Routes[i].direction);
+
+						//if a closer elevator has been found than the elevator actively serving the call,
+						//reprocess the call
+						if (Elevators[closest].number != Routes[i].assigned_elevator && busy == false)
+						{
+							//make sure elevator is idle before continuing
+							Elevator *newelevator = sbs->GetElevator(Elevators[closest].number);
+							if (newelevator->IsIdle() == true)
+							{
+								Elevator *elevator = sbs->GetElevator(Routes[i].assigned_elevator);
+								if (elevator)
+									elevator->CancelHallCall(Routes[i].starting_floor, Routes[i].direction);
+
+								Report("Switching to closer elevator " + ToString(newelevator->Number));
+
+								//unassign elevator
+								Routes[i].assigned_elevator = 0;
+
+								//reset processed state
+								Routes[i].processed = false;
+							}
+						}
+						else
+							continue; //skip route if elevator is still closest
+					}
+					else
+						continue; //skip route if not checking
+				}
+				else
+					continue; //skip route if elevator is still available
+			}
 		}
 
 		int starting_floor = Routes[i].starting_floor;

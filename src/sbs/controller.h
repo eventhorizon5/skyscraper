@@ -118,6 +118,8 @@ private:
 
 	std::vector<CallStation*> CallStations; //call station registrations
 	std::vector<CallButton*> CallButtons; //call button registrations
+
+	int recheck;
 };
 
 }
