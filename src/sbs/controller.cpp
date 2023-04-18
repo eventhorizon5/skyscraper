@@ -397,13 +397,17 @@ void DispatchController::ProcessRoutes()
 		else
 			closest = FindClosestElevator(false, starting_floor, destination_floor, Routes[i].direction); //standard mode
 
-		//if none found, report an error and withdraw the route
 		if (closest == -1)
 		{
-			Report("ProcessRoutes: No available elevators found");
-			if (Routes[i].station)
-				Routes[i].station->Error();
-			Routes.erase(Routes.begin() + i);
+			if (DestinationDispatch == true)
+			{
+				//if none found, report an error and withdraw the route
+				Report("ProcessRoutes: No available elevators found");
+				if (Routes[i].station)
+					Routes[i].station->Error();
+				Routes.erase(Routes.begin() + i);
+			}
+			//in standard mode, keep trying the route
 			return;
 		}
 
@@ -661,10 +665,15 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 		return -1;
 	}
 
-	if (closest_notbusy >= 0)
-		return closest_notbusy;
+	if (DestinationDispatch == true)
+	{
+		if (closest_notbusy >= 0)
+			return closest_notbusy;
+		else
+			return closest_busy;
+	}
 	else
-		return closest_busy;
+		return closest_notbusy;
 }
 
 void DispatchController::Report(const std::string &message)
