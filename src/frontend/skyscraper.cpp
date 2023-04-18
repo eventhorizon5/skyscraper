@@ -203,7 +203,13 @@ bool Skyscraper::OnInit(void)
 #if defined(__WXMAC__)
 	std::string path = settingsPath() + "/Skyscraper/";
 	if (wxDirExists(path) == true)
+	{
 		wxSetWorkingDirectory(path); //set working directory to Application Data folder on Mac if exists
+		//ensure folders exist
+		wxMkdir(path + wxT("buildings"));
+		wxMkdir(path + wxT("data"));
+		wxMkdir(path + wxT("screenshots"));
+	}
 	else
 		wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
 #elif defined (__WXGTK__)
