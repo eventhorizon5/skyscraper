@@ -3593,7 +3593,7 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 											{
 												//and if it's either going the same direction as the call, or queue is not active, or idle, or on the same floor with the queues empty
 												if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle() ||
-														(car->GetFloor() == floor && MoveElevator == false && QueuePositionDirection != 0 && UpQueue.size() == 0 && DownQueue.size() == 0))
+														(GetController() && car->GetFloor() == floor && MoveElevator == false && QueuePositionDirection != 0 && UpQueue.size() == 0 && DownQueue.size() == 0)) //this is an exception if a controller is used
 												{
 													if (sbs->Verbose)
 														Report("Available for call");
