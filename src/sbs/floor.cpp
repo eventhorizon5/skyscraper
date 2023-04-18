@@ -529,32 +529,13 @@ Real Floor::FullHeight()
 	return InterfloorHeight + Height;
 }
 
-CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string &sound_file_up, const std::string &sound_file_down, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
+CallButton* Floor::AddCallButtons(int controller, const std::string &sound_file_up, const std::string &sound_file_down, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
 {
 	//adds call buttons
 
-	//check if any of the elevators serve the current floor
-	bool check = false;
-	for (size_t i = 0; i < elevators.size(); i++)
-	{
-		Elevator *elev = sbs->GetElevator(elevators[i]);
-		if (elev)
-		{
-			if (elev->IsServicedFloor(Number) == true)
-			{
-				check = true;
-				break;
-			}
-		}
-	}
-
-	//exit if none of the elevators serve the floor
-	if (check == false)
-		return 0;
-
 	//create call button
 	int Current = (int)CallButtonArray.size() + 1;
-	CallButton *button = new CallButton(this, elevators, Number, Current, sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	CallButton *button = new CallButton(this, controller, Number, Current, sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	CallButtonArray.push_back(button);
 	return button;
 }

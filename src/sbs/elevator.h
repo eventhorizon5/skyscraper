@@ -173,7 +173,6 @@ public:
 	int GetTopFloor();
 	int GetBottomFloor();
 	void UpdateDirectionalIndicators();
-	void NotifyCallButtons(int floor, bool direction);
 	bool IsIdle();
 	void ResetQueue(bool up, bool down, bool stop_if_empty = true);
 	void DeleteActiveRoute();

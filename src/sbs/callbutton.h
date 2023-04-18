@@ -33,7 +33,7 @@ class SBSIMPEXP CallButton : public Object, public Lock
 public:
 
 	//functions
-	CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
+	CallButton(Object *parent, int controller, int floornum, int number, const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 	~CallButton();
 	void Enabled(bool value);
 	bool Call(bool direction); //true is up, false is down
@@ -41,7 +41,6 @@ public:
 	void DownLight(bool value);
 	void SetLights(int up, int down);
 	bool ServicesElevator(int elevator);
-	void Loop();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool FireService(int value);
@@ -52,40 +51,29 @@ public:
 	bool GetUpStatus();
 	bool GetDownStatus();
 	bool IsEnabled() { return is_enabled; }
-	void ElevatorArrived(int number, bool direction);
 	int GetElevatorArrived(bool direction);
-	int FindClosestElevator(int direction);
 	Control* GetUpControl();
 	Control* GetDownControl();
 	bool Press(bool up);
+	void SetController(int number);
+	DispatchController* GetController();
 
 private:
-	void Process(int direction);
 
 	ButtonPanel* panel; //button panel object
 
 	int Number; //call button index number (on the specified floor)
 	bool is_enabled;
-	int elevator_arrived_up;
-	int elevator_arrived_down;
 
-	std::vector<int> Elevators; //elevators this call button set is assigned to
+	int controller;
 
 	Floor *floor; //floor this call button set is on
 
-	bool ProcessedUp;
-	bool ProcessedDown;
 	bool Locked;
 	int KeyID;
 	bool UpExists; //does up button exist?
 	bool DownExists; //does down button exist?
-	int ActiveElevatorUp; //elevator the up call button is waiting for
-	int ActiveElevatorDown; //elevator the down call button is waiting for
 
-	class Timer; //internal timer class
-
-	//timer object
-	Timer *timer;
 };
 
 }

@@ -1297,7 +1297,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//notify controller of movement
 		if (GetController())
-			GetController()->ElevatorMoving(Number);
+			GetController()->ResetArrival(Number);
 
 		//get elevator's current altitude
 		elevposition = GetPosition();
@@ -2027,9 +2027,6 @@ void Elevator::FinishMove()
 				if (GetCar(i)->GotoFloor == true)
 				{
 					int floor = GetFloorForCar(i, GotoFloor);
-
-					//notify call buttons of arrival (which also disables call button lights)
-					NotifyCallButtons(floor, GetArrivalDirection(floor));
 
 					//notify dispatch controller of arrival
 					if (GetController())
@@ -3140,30 +3137,6 @@ void Elevator::UpdateDirectionalIndicators()
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
 		Cars[i]->UpdateDirectionalIndicators();
-	}
-}
-
-void Elevator::NotifyCallButtons(int floor, bool direction)
-{
-	//notifies call buttons on specified floor of an elevator arrival
-	//for direction, true is up and false is down
-
-	//get call buttons associated with this elevator
-	if (sbs->Verbose)
-		Report("NotifyCallButtons: getting associated call buttons");
-
-	if (!sbs->GetFloor(floor))
-		return;
-
-	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
-
-	for (size_t i = 0; i < buttons.size(); i++)
-	{
-		CallButton *button = 0;
-		if ((int)sbs->GetFloor(floor)->CallButtonArray.size() > buttons[i])
-			button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
-		if (button)
-			button->ElevatorArrived(Number, direction);
 	}
 }
 
@@ -4761,16 +4734,18 @@ void Elevator::SameFloorArrival(int floor, int direction)
 		return;
 	}
 
+	//notify controller of movement
+	if (GetController())
+		GetController()->ResetArrival(Number);
+
 	//update arrival information
 	if (direction == -1)
 	{
-		NotifyCallButtons(floor, false);
 		if (GetController())
 			GetController()->ElevatorArrived(Number, floor, false);
 	}
 	else
 	{
-		NotifyCallButtons(floor, true);
 		if (GetController())
 			GetController()->ElevatorArrived(Number, floor, true);
 	}

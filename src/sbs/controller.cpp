@@ -27,6 +27,7 @@
 #include "elevatorcar.h"
 #include "floor.h"
 #include "callstation.h"
+#include "callbutton.h"
 #include "controller.h"
 
 namespace SBS {
@@ -98,6 +99,8 @@ void DispatchController::Process()
 				{
 					if (Routes[j].direction == 1)
 						direction_standard = true;
+					else
+						direction_standard = false;
 				}
 
 				//if route matches elevator
@@ -138,7 +141,13 @@ void DispatchController::Process()
 						if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].arrival_direction == direction_standard)
 						{
 							//turn off related call buttons
-							//NOT IMPLEMENTED
+							if (Routes[j].button)
+							{
+								if (direction_standard == true)
+									Routes[j].button->UpLight(false);
+								else
+									Routes[j].button->DownLight(false);
+							}
 
 							//remove route from table
 							RemoveRoute(Routes[j]);
@@ -260,6 +269,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	route.requests = 1;
 	route.processed = false;
 	route.station = station;
+	route.button = 0;
 	route.assigned_elevator = 0;
 	route.direction = 0;
 	route.destination = true;
@@ -268,7 +278,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	return true;
 }
 
-bool DispatchController::CallElevator(CallStation *station, bool direction)
+bool DispatchController::CallElevator(CallStation *station, CallButton *button, bool direction)
 {
 	//call an elevator (request a standard route)
 
@@ -280,17 +290,23 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 		return false;
 	}
 
-	if (!station)
+	if (!station && !button)
 		return false;
 
-	Report("Calling an elevator from origin floor " + ToString(station->GetFloor()));
+	int floor = 0;
+	if (station)
+		floor = station->GetFloor();
+	else
+		floor = button->GetFloor();
+
+	Report("Calling an elevator from origin floor " + ToString(floor));
 
 	//make sure this controller has elevators that serve the specified floor
-	if (IsServicedFloor(station->GetFloor()) == false)
+	if (IsServicedFloor(floor) == false)
 	{
 		if (station)
 			station->Error(1);
-		return ReportError("No elevators found for floor " + ToString(station->GetFloor()));
+		return ReportError("No elevators found for floor " + ToString(floor));
 	}
 
 	//check to make sure elevator objects are valid
@@ -320,7 +336,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	//use existing entry if found
 	for (int i = 0; i < Routes.size(); i++)
 	{
-		if (Routes[i].starting_floor == station->GetFloor() && Routes[i].direction == dir)
+		if (Routes[i].starting_floor == floor && Routes[i].direction == dir)
 		{
 			//report on indicator for new request
 			if (Routes[i].assigned_elevator > 0)
@@ -336,11 +352,12 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 
 	//otherwise add route request to table
 	Route route;
-	route.starting_floor = station->GetFloor();
+	route.starting_floor = floor;
 	route.destination_floor = 0;
 	route.requests = 1;
 	route.processed = false;
 	route.station = station;
+	route.button = button;
 	route.assigned_elevator = 0;
 	route.direction = dir;
 	route.destination = false;
@@ -394,6 +411,16 @@ void DispatchController::ProcessRoutes()
 			Report("ProcessRoutes: No available elevators found");
 			if (Routes[i].station)
 				Routes[i].station->Error();
+
+			//turn off button lights
+			if (Routes[i].button)
+			{
+				if (Routes[i].direction == 1)
+					Routes[i].button->UpLight(false);
+				else
+					Routes[i].button->DownLight(false);
+			}
+
 			Routes.erase(Routes.begin() + i);
 			return;
 		}
@@ -494,11 +521,12 @@ bool DispatchController::AddElevator(int elevator)
 	//assign controller to elevator
 	sbs->GetElevator(elevator)->Controller = Number;
 
+	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
+	Elevators.push_back(newelevator);
+
 	//process floor range
 	GetFloorRange();
 
-	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
-	Elevators.push_back(newelevator);
 	return true;
 }
 
@@ -516,6 +544,10 @@ bool DispatchController::RemoveElevator(int elevator)
 				sbs->GetElevator(elevator)->Controller = 0;
 
 			Elevators.erase(Elevators.begin() + i);
+
+			//process floor range
+			GetFloorRange();
+
 			return true;
 		}
 	}
@@ -707,6 +739,7 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 
 	for (int i = 0; i < Elevators.size(); i++)
 	{
+		//exit if elevator already arrived
 		if (Elevators[i].number == number && Elevators[i].arrived == true)
 			return;
 
@@ -926,6 +959,34 @@ void DispatchController::UnregisterCallStation(CallStation *station)
 	}
 }
 
+void DispatchController::RegisterCallButton(CallButton *button)
+{
+	//register the specified call station
+
+	//exit if already registered
+	for (int i = 0; i < CallButtons.size(); i++)
+	{
+		if (CallButtons[i] == button)
+			return;
+	}
+
+	CallButtons.push_back(button);
+}
+
+void DispatchController::UnregisterCallButton(CallButton *button)
+{
+	//unregister the specified call station
+
+	for (size_t i = 0; i < CallButtons.size(); i++)
+	{
+		if (CallButtons[i] == button)
+		{
+			CallButtons.erase(CallButtons.begin() + i);
+			return;
+		}
+	}
+}
+
 int DispatchController::GetElevatorArrived(int starting_floor, int destination_floor)
 {
 	//return the number of the elevator that has arrived, for the specified route
@@ -936,6 +997,22 @@ int DispatchController::GetElevatorArrived(int starting_floor, int destination_f
 		if (Elevators[i].arrived == true)
 		{
 			if (Elevators[i].arrival_floor == starting_floor && Elevators[i].destination_floor == destination_floor)
+				return Elevators[i].number;
+		}
+	}
+	return 0;
+}
+
+int DispatchController::GetElevatorArrivedStandard(int floor, bool direction)
+{
+	//return the number of the elevator that has arrived, for the specified direction
+	//return 0 if no elevator has arrived yet
+
+	for (int i = 0; i < Elevators.size(); i++)
+	{
+		if (Elevators[i].arrived == true)
+		{
+			if (Elevators[i].arrival_floor == floor && Elevators[i].arrival_direction == direction)
 				return Elevators[i].number;
 		}
 	}
@@ -1042,10 +1119,8 @@ bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
 	return false;
 }
 
-void DispatchController::ElevatorMoving(int number)
+void DispatchController::ResetArrival(int number)
 {
-	//runs when elevator notifies that it's started moving
-
 	//reset arrival status
 	for (int i = 0; i < Elevators.size(); i++)
 	{
@@ -1101,6 +1176,40 @@ bool DispatchController::ElevatorUnavailable(int elevator)
 	}*/
 
 	return false;
+}
+
+int DispatchController::GetBottomFloor()
+{
+	return bottom_floor;
+}
+
+int DispatchController::GetTopFloor()
+{
+	return top_floor;
+}
+
+int DispatchController::GetElevator(int index)
+{
+	//return number of the specified elevator index
+
+	if (index < 0 || index > Elevators.size() - 1)
+		return 0;
+	return Elevators[index].number;
+}
+
+bool DispatchController::SameElevators(const std::vector<int> &elevators)
+{
+	//return true if the list of elevators matches this controller's elevators
+
+	if (Elevators.size() != elevators.size())
+		return false;
+
+	for (int i = 0; i < (int)Elevators.size(); i++)
+	{
+		if (Elevators[i].number != elevators[i])
+			return false;
+	}
+	return true;
 }
 
 }

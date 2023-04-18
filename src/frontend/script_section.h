@@ -124,7 +124,7 @@ public:
 
 private:
 	int FloorCheck;
-	std::vector<int> callbutton_elevators;
+	bool callbutton_elevators;
 
 	bool floorcache_firstrun;
 	int cache_current;

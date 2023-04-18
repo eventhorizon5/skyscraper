@@ -386,7 +386,7 @@ bool CallStation::Call(bool direction)
 	//call elevator in the specified direction
 
 	if (GetController())
-		return GetController()->CallElevator(this, direction);
+		return GetController()->CallElevator(this, 0, direction);
 
 	return false;
 }

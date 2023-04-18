@@ -49,18 +49,25 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void ElevatorArrived(int number, int floor, bool direction);
-	void ElevatorMoving(int number);
+	void ResetArrival(int number);
 	bool IsElevatorAssigned(int number, int destination_floor, int direction);
 	bool IsElevatorAssignedToOther(int number, int destination_floor, int direction);
 	void AssignElevator(int number, int destination_floor, int direction);
 	void RegisterCallStation(CallStation *station);
 	void UnregisterCallStation(CallStation *station);
+	void RegisterCallButton(CallButton *button);
+	void UnregisterCallButton(CallButton *button);
 	int GetElevatorArrived(int starting_floor, int destination_floor);
+	int GetElevatorArrivedStandard(int floor, bool direction);
 	bool IsServicedFloor(int floor);
 	bool FireService(int value);
 	bool AtMaxRequests(int elevator, int destination_floor);
 	int GetRecallFloor();
-	bool CallElevator(CallStation *station, bool direction);
+	bool CallElevator(CallStation *station, CallButton *button, bool direction);
+	int GetBottomFloor();
+	int GetTopFloor();
+	int GetElevator(int index);
+	bool SameElevators(const std::vector<int> &elevators);
 
 private:
 
@@ -102,12 +109,14 @@ private:
 		bool processed;
 		int assigned_elevator;
 		CallStation* station;
+		CallButton* button;
 		bool destination; //true if a destination dispatch route
 	};
 
 	std::vector<Route> Routes; //destination dispatch requests
 
 	std::vector<CallStation*> CallStations; //call station registrations
+	std::vector<CallButton*> CallButtons; //call button registrations
 };
 
 }

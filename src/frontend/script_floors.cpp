@@ -42,6 +42,7 @@
 #include "escalator.h"
 #include "movingwalkway.h"
 #include "light.h"
+#include "controller.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -69,7 +70,7 @@ ScriptProcessor::FloorSection::FloorSection(ScriptProcessor *parent) : Section(p
 void ScriptProcessor::FloorSection::Reset()
 {
 	FloorCheck = 0;
-	callbutton_elevators.clear();
+	callbutton_elevators = false;
 }
 
 int ScriptProcessor::FloorSection::Run(std::string &LineData)
@@ -699,7 +700,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (params < 1)
 			return ScriptError("Syntax Error");
 
-		callbutton_elevators.clear();
+		std::vector<int> callbutton_elevators;
 		callbutton_elevators.resize(params);
 
 		for (int line = 0; line < params; line++)
@@ -711,13 +712,37 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return ScriptError("Invalid elevator number");
 			callbutton_elevators[line] = elevnumber;
 		}
+
+		//find an existing controller that matches the list of elevators
+		DispatchController *controller = 0;
+		for (int i = 1; i <= Simcore->GetControllerCount(); i++)
+		{
+			if (Simcore->GetController(i)->SameElevators(callbutton_elevators) == true)
+			{
+				controller = Simcore->GetController(i);
+				break;
+			}
+		}
+
+		//otherwise create a new dispatch controller and add elevators to it
+		if (controller == 0)
+		{
+			controller = Simcore->NewController(Simcore->GetControllerCount() + 1);
+			controller->DestinationDispatch = false;
+			controller->Name = "Dispatch Controller " + ToString(Simcore->GetControllerCount());
+			for (int i = 0; i < (int)callbutton_elevators.size(); i++)
+				controller->AddElevator(callbutton_elevators[i]);
+		}
+
+		this->callbutton_elevators = true;
+
 		return sNextLine;
 	}
 
 	//CreateCallButtons command
 	if (linecheck.substr(0, 17) == "createcallbuttons")
 	{
-		if (callbutton_elevators.size() == 0)
+		if (callbutton_elevators == false)
 			return ScriptError("No elevators specified");
 
 		//get data
