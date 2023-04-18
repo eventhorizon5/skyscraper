@@ -881,7 +881,7 @@ void DispatchController::GetFloorRange()
 	//determine floor range of associated elevators
 
 	bool firstrun = true;
-	
+
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		Elevator *elev = sbs->GetElevator(Elevators[i].number);

@@ -281,7 +281,7 @@ bool CallStation::Input(const std::string &text)
 	}
 
 	//automatically process input if a InputCache reaches the same length as the longest floor ID.
-	if (InputCache.length() >= std::to_string(this->GetController()->bottom_floor-1).length() && InputCache.length() >= std::to_string(this->GetController()->top_floor+1).length())
+	if (InputCache.length() >= std::to_string(this->GetController()->bottom_floor - 1).length() && InputCache.length() >= std::to_string(this->GetController()->top_floor + 1).length())
 	{
 		timer->Stop();
 		ProcessCache();
