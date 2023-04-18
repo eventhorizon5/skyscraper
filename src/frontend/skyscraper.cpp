@@ -54,6 +54,12 @@
 #include "loaddialog.h"
 #include "profiler.h"
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#include <sysdir.h>  // for sysdir_start_search_path_enumeration
+#include <glob.h>    // for glob needed to expand ~ to user dir
+#include <stdio.h>
+#endif
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include "malloc.h"
 #endif
@@ -84,8 +90,39 @@ IMPLEMENT_APP_NO_MAIN(Skyscraper)
 	#define SW_SHOWNORMAL 1
 #endif
 
+#if OGRE_PLATFORM_APPLE
+
+//code to get Application Support folder
+
+std::string expandTilde(const char* str) {
+    if (!str) return {};
+
+    glob_t globbuf;
+    if (glob(str, GLOB_TILDE, nullptr, &globbuf) == 0) {
+        std::string result(globbuf.gl_pathv[0]);
+        globfree(&globbuf);
+        return result;
+    } else {
+        throw "Unable to expand tilde";
+    }
+}
+
+std::string settingsPath() {
+    char path[PATH_MAX];
+    auto state = sysdir_start_search_path_enumeration(SYSDIR_DIRECTORY_APPLICATION_SUPPORT,
+                                                      SYSDIR_DOMAIN_MASK_USER);
+    if ((state = sysdir_get_next_search_path_enumeration(state, path))) {
+        return expandTilde(path);
+    } else {
+        throw "Failed to get settings folder";
+    }
+}
+#endif
+
 int main (int argc, char* argv[])
 {
+	//printf("%s\n", settingsPath().c_str());
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//initialize top-level exception handler
 	Skyscraper::InitUnhandledExceptionFilter();
