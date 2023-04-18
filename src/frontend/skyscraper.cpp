@@ -90,9 +90,9 @@ IMPLEMENT_APP_NO_MAIN(Skyscraper)
 	#define SW_SHOWNORMAL 1
 #endif
 
-#if OGRE_PLATFORM_APPLE
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 
-//code to get Application Support folder
+//code to get Application Support folder on Mac
 
 std::string expandTilde(const char* str) {
     if (!str) return {};
