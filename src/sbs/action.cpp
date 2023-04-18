@@ -207,6 +207,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//InputMinus
 	//InputStar
 	//InputBackspace
+	//Up
+	//Down
 
 	//Escalator and MovingWalkway actions:
 	//Forward

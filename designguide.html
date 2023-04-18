@@ -69,7 +69,7 @@
         file has this header:<br>
         <font size="2" face="Courier New, Courier, mono">#The Triton
           Center<br>
-          #Copyright Â©2002-2013 Ryan Thoryk</font></p>
+          #Copyright ©2002-2013 Ryan Thoryk</font></p>
       <p align="left"><br>
         <strong>2. Variables</strong></p>
       <p align="left">Variables are marked with percent signs (%), and
@@ -754,7 +754,7 @@ manual's
         always be enabled.</p>
       <p align="left"><strong>7. AddTextRange</strong> - similar to
         LoadRange, but draws text onto a texture<br>
-        Syntax: <font size="2" face="Courier New, Courier, mono">AddTextRange
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddText
 
 
 
@@ -769,7 +769,7 @@ manual's
           <em>startnumber, endnumber, texture_name, name, font_filename,
             font_size, text, x1, y1, x2, y2, h_align, v_align, ColorR,
             ColorG, ColorB[, force</em></font><em>]<br>
-        </em>Example: <font size="2" face="Courier New, Courier, mono">AddTextRange
+        </em>Example: <font size="2" face="Courier New, Courier, mono">AddText
 
 
 
@@ -5360,10 +5360,12 @@ filename,
 
             The <i>Controller</i> Section</font></strong></p>
       <p align="left">The <i>Controller</i> section allows you to
-        create dispatch controllers for your elevators.&nbsp; Currently
-        this is only used for Destination Dispatch elevators, but
-        eventually will also be used for standard elevators.&nbsp;
-        Controllers are numbered, starting with 1.</p>
+        create dispatch controllers for your elevators.&nbsp;
+        Controllers support both Destination Dispatch routes, and
+        Standard routes.&nbsp; Controllers are numbered, starting with
+        1.&nbsp; When Call Buttons are created, they automatically
+        create controllers.<br>
+      </p>
       <p align="left">The section headers and footers are similar to the
         ones in the <em>Floor</em> section.<br>
         To specify a single controller, you would type something like:<br>
@@ -5390,23 +5392,23 @@ filename,
         </font></p>
       <p align="left"><strong>2. DestinationDispatch</strong> - enables
         or disables <i>DestinationDispatch</i> for this
-        controller.&nbsp; Eventually this will also be able to handle
-        standard mode elevators when this is false.&nbsp; The default is
-        false.<br>
+        controller.&nbsp; Right now this is used only by a few elevator
+        functions for checks, and the controller doesn't make much use
+        of it, since it processes routes on a type basis.&nbsp; The
+        default is false.<br>
         Example: <font size="2"><font face="Courier New, Courier, mono">DestinationDispatch</font></font><font
           size="2" face="Courier New, Courier, mono"> = true</font></p>
       <p align="left"><strong>3. Hybrid</strong> - enables hybrid mode
         for this controller.&nbsp; When true, allows elevators to both
         operate in <i>Destination Dispatch</i> and <i>Standard</i>
-        modes.&nbsp; When this is false and DestinationDispatch is
-        enabled, standard floor selections on longer will work.&nbsp;
-        The default is False.<br>
+        modes.&nbsp; When this is false and <i>DestinationDispatch</i>
+        is enabled, standard elevator floor selections no longer will
+        work.&nbsp; The default is False.<br>
         Example: <font size="2"><font face="Courier New, Courier, mono">Hybrid</font></font><font
           size="2" face="Courier New, Courier, mono"> = false</font></p>
       <p align="left"><strong>4. Range</strong> - specifies the range of
         floors that dispatches will handle for a single elevator for
-        Destination Dispatch mode.&nbsp; Currently does nothing, and the
-        default is 5.<br>
+        Destination Dispatch mode.&nbsp; The default is 5.<br>
         Example: <font size="2"><font face="Courier New, Courier, mono">Range</font></font><font
           size="2" face="Courier New, Courier, mono"> = 5<br>
         </font></p>
@@ -5444,12 +5446,13 @@ filename,
 
             The <i>CallStation</i> Section</font></strong></p>
       <p align="left">The <i>CallStation</i> section allows you to
-        create call stations for your elevators.&nbsp; This must be
-        created within a <i>Floor</i> section, in order to specify what
-        floor the call station is on.&nbsp; Call Stations are numbered,
-        starting with 1, this is a global number, not per-floor.&nbsp;
-        This section along with the <i>Controller</i> section are
-        intended to eventually replace Call Buttons.<br>
+        create call stations for your elevators.&nbsp; Currently this is
+        used only for Destination Dispatch mode, but eventually might be
+        used for ordinary call buttons.&nbsp; This must be created
+        within a <i>Floor</i> section, in order to specify what floor
+        the call station is on.&nbsp; Call Stations are numbered,
+        starting with 1, this is a global number, not per-floor, even
+        though call stations are created individually on each floor.<br>
       </p>
       <p align="left">The section headers and footers are similar to the
         ones in the <em>Floor</em> section.<br>
@@ -5495,10 +5498,14 @@ filename,
         <em>Input0</em> (number 0 on keypad)<br>
         <em>InputMinus</em> (minus on keypad)<br>
         <em>InputStar</em> (star on keypad)<br>
-        <em>InputBackspace</em> (extra feature with character "&lt;")</p>
+        <em>InputBackspace</em> (extra feature with character "&lt;")<br>
+        <em>Up</em> (call elevator up)<br>
+        <em>Down </em>(call elevator down)</p>
       <p align="left"><strong>Variables:</strong></p>
       <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%callstation%</strong></font>
         - number of the current call station, on the current floor<br>
+        <font size="2" face="Courier New, Courier, mono"><strong>%floor%</strong></font>
+        - the current floor<br>
       </p>
       <p align="left"><strong>Parameters</strong>:</p>
       <p align="left"><strong>1. Name</strong> - sets the name of the
