@@ -202,8 +202,6 @@ bool CallButton::Call(bool direction)
 		DownLight(true);
 
 	return GetController()->CallElevator(0, this, direction);
-
-	return true;
 }
 
 void CallButton::UpLight(bool value)
@@ -367,7 +365,7 @@ bool CallButton::AddElevator(int elevator)
 
 	if (GetController())
 		return GetController()->AddElevator(elevator);
-	return true;
+	return false;
 }
 
 bool CallButton::RemoveElevator(int elevator)
