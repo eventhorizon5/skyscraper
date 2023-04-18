@@ -66,7 +66,7 @@ private:
 
 	struct Route;
 
-	int FindClosestElevator(bool destination, int starting_floor, int destination_floor, int direction = 0);
+	int FindClosestElevator(bool &busy, bool destination, int starting_floor, int destination_floor, int direction = 0);
 	void DispatchElevator(int number, int destination_floor, int direction, bool call);
 	void RemoveRoute(Route &route);
 	void Process();

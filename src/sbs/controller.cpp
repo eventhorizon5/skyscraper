@@ -392,10 +392,11 @@ void DispatchController::ProcessRoutes()
 
 		//get closest elevator
 		int closest = -1;
+		bool busy = false;
 		if (Routes[i].direction == 0)
-			closest = FindClosestElevator(true, starting_floor, destination_floor); //destination dispatch mode
+			closest = FindClosestElevator(busy, true, starting_floor, destination_floor); //destination dispatch mode
 		else
-			closest = FindClosestElevator(false, starting_floor, destination_floor, Routes[i].direction); //standard mode
+			closest = FindClosestElevator(busy, false, starting_floor, destination_floor, Routes[i].direction); //standard mode
 
 		//if none found, report an error and withdraw the route
 		if (closest == -1)
@@ -405,6 +406,18 @@ void DispatchController::ProcessRoutes()
 				Routes[i].station->Error();
 			Routes.erase(Routes.begin() + i);
 			return;
+		}
+
+		if (DestinationDispatch == false && Routes[i].assigned_elevator > 0)
+		{
+			if (busy == true)
+				return;
+			else
+			{
+				DispatchElevator(Routes[i].assigned_elevator, starting_floor, Routes[i].direction, true);
+				Routes[i].processed = true;
+				return;
+			}
 		}
 
 		//get elevator and car for route
@@ -444,9 +457,14 @@ void DispatchController::ProcessRoutes()
 
 		//assign and dispatch elevator to starting floor
 		AssignElevator(elevator->Number, destination_floor, Routes[i].direction);
-		DispatchElevator(elevator->Number, starting_floor, direction, true);
 
-		Routes[i].processed = true;
+		//dispatch elevator in DD mode, dispatch later in standard mode
+		if (DestinationDispatch == true)
+		{
+			DispatchElevator(elevator->Number, starting_floor, direction, true);
+			Routes[i].processed = true;
+		}
+
 		Routes[i].assigned_elevator = elevator->Number;
 	}
 }
@@ -527,7 +545,7 @@ bool DispatchController::ServicesElevator(int elevator)
 	return false;
 }
 
-int DispatchController::FindClosestElevator(bool destination, int starting_floor, int destination_floor, int direction)
+int DispatchController::FindClosestElevator(bool &busy, bool destination, int starting_floor, int destination_floor, int direction)
 {
 	//finds closest elevator
 	//if destination is true, use Destination Dispatch mode, otherwise use Standard Mode
@@ -662,9 +680,15 @@ int DispatchController::FindClosestElevator(bool destination, int starting_floor
 	}
 
 	if (closest_notbusy >= 0)
+	{
+		busy = false;
 		return closest_notbusy;
+	}
 	else
+	{
+		busy = true;
 		return closest_busy;
+	}
 }
 
 void DispatchController::Report(const std::string &message)
