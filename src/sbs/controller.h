@@ -80,6 +80,7 @@ private:
 	void ProcessRoutes();
 	void GetFloorRange();
 	bool ElevatorUnavailable(int elevator);
+	void CheckArrivals();
 
 	int bottom_floor;
 	int top_floor;

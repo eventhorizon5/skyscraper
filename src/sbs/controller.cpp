@@ -74,8 +74,15 @@ void DispatchController::Process()
 	//process pending requests
 	ProcessRoutes();
 
-	//for DD mode, check elevators to see if any have arrived, and if so, dispatch to destination floor
-	//for standard mode, check elevators to see if any have arrived, and if so turn off call buttons and remove route
+	//check arrivals
+	CheckArrivals();
+}
+
+void DispatchController::CheckArrivals()
+{
+	//check elevators to see if any have arrived
+	//for DD mode, dispatch to destination floor
+	//for standard mode, turn off call buttons and remove route
 
 	for (int i = 0; i < Elevators.size(); i++)
 	{
