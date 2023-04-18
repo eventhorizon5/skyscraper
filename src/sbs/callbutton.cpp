@@ -190,6 +190,9 @@ bool CallButton::Call(bool direction)
 	if (IsLocked() == true)
 		return ReportError("Call button is locked");
 
+	if (!GetController())
+		return ReportError("No controller");
+
 	//exit if direction not possible
 	if (direction == true && UpExists == false)
 		return false;
@@ -202,8 +205,7 @@ bool CallButton::Call(bool direction)
 	else
 		DownLight(true);
 
-	if (GetController())
-		return GetController()->CallElevator(0, this, direction);
+	return GetController()->CallElevator(0, this, direction);
 
 	return true;
 }
