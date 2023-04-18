@@ -45,6 +45,8 @@ DispatchController::DispatchController(Object *parent, int number) : Object(pare
 	MaxPassengers = 5;
 	Hybrid = false;
 	Reprocess = false;
+	bottom_floor = 0;
+	top_floor = 0;
 
 	EnableLoop(true);
 
@@ -518,7 +520,7 @@ bool DispatchController::AddElevator(int elevator)
 	}
 
 	//exit if elevator is already assigned to another controller
-	if (sbs->GetElevator(elevator)->Controller)
+	if (sbs->GetElevator(elevator)->Controller > 0)
 		return ReportError("Elevator " + ToString(elevator) + " already assigned to a controller");
 
 	//create a new elevator map
