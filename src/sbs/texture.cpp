@@ -2066,6 +2066,10 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 	//set verbosity level
 	Ogre::TextureManager::getSingleton().setVerbose(sbs->Verbose);
 
+	//exit if no texture specified
+	if (filename == "")
+		return 0;
+
 	std::string filename2 = filename;
 
 	//determine if the file is a GIF image, to force keycolor alpha
