@@ -697,7 +697,7 @@ int DispatchController::FindClosestElevator(bool &busy, bool destination, int st
 				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy >= 0)
 				{
 					//see if elevator is available for the call
-					result = elevator->AvailableForCall(starting_floor, direction, true);
+					result = elevator->AvailableForCall(destination, starting_floor, direction, true);
 
 					//if an elevator is not busy and available, reset closest_busy value
 					if (closest_busy >= 0 && result == 1)
