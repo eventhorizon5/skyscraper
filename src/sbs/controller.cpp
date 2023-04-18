@@ -1206,6 +1206,9 @@ int DispatchController::GetElevator(int index)
 {
 	//return number of the specified elevator index
 
+	if (Elevators.size() == 0)
+		return 0;
+
 	if (index < 0 || index > Elevators.size() - 1)
 		return 0;
 	return Elevators[index].number;
