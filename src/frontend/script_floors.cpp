@@ -70,7 +70,7 @@ ScriptProcessor::FloorSection::FloorSection(ScriptProcessor *parent) : Section(p
 void ScriptProcessor::FloorSection::Reset()
 {
 	FloorCheck = 0;
-	callbutton_elevators = false;
+	callbutton_controller = 0;
 }
 
 int ScriptProcessor::FloorSection::Run(std::string &LineData)
@@ -734,7 +734,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				controller->AddElevator(callbutton_elevators[i]);
 		}
 
-		this->callbutton_elevators = true;
+		callbutton_controller = controller->Number;
 
 		return sNextLine;
 	}
@@ -742,7 +742,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	//CreateCallButtons command
 	if (linecheck.substr(0, 17) == "createcallbuttons")
 	{
-		if (callbutton_elevators == false)
+		if (callbutton_controller == 0)
 			return ScriptError("No elevators specified");
 
 		//get data
@@ -814,13 +814,13 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//create call button
 		CallButton* callbutton = 0;
 		if (compat == 1)
-			callbutton = floor->AddCallButtons(callbutton_elevators, "", "", tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
+			callbutton = floor->AddCallButtons(callbutton_controller, "", "", tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
 		else if (compat == 2)
-			callbutton = floor->AddCallButtons(callbutton_elevators, "", "", tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			callbutton = floor->AddCallButtons(callbutton_controller, "", "", tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else if (compat == 3)
-			callbutton = floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			callbutton = floor->AddCallButtons(callbutton_controller, tempdata[0], tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 		else
-			callbutton = floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), tempdata[10], ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToBool(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
+			callbutton = floor->AddCallButtons(callbutton_controller, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), tempdata[10], ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToBool(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
 		if (callbutton)
 		{

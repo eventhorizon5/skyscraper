@@ -124,7 +124,7 @@ public:
 
 private:
 	int FloorCheck;
-	bool callbutton_elevators;
+	int callbutton_controller;
 
 	bool floorcache_firstrun;
 	int cache_current;
