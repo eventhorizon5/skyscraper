@@ -433,7 +433,18 @@ void DispatchController::ProcessRoutes()
 				return;
 			else
 			{
-				//dispatch eleavator if available
+				//update elevator's call information
+				for (int i = 0; i < Elevators.size(); i++)
+				{
+					if (Elevators[i].number == Routes[i].assigned_elevator)
+					{
+						Elevators[i].call_floor = starting_floor;
+						Elevators[i].use_call_floor = true;
+						break;
+					}
+				}
+
+				//dispatch elevator if available
 				DispatchElevator(false, Routes[i].assigned_elevator, starting_floor, Routes[i].direction, true);
 				Routes[i].processed = true;
 				return;
@@ -464,14 +475,17 @@ void DispatchController::ProcessRoutes()
 			Routes[i].station->ReportElevator(elevator);
 
 		//update elevator's call information
-		for (int i = 0; i < Elevators.size(); i++)
+		if (Routes[i].destination == true)
 		{
-			if (Elevators[i].number == elevator->Number)
+			for (int i = 0; i < Elevators.size(); i++)
 			{
-				Elevators[i].destination_floor = destination_floor;
-				Elevators[i].call_floor = starting_floor;
-				Elevators[i].use_call_floor = true;
-				break;
+				if (Elevators[i].number == elevator->Number)
+				{
+					Elevators[i].destination_floor = destination_floor;
+					Elevators[i].call_floor = starting_floor;
+					Elevators[i].use_call_floor = true;
+					break;
+				}
 			}
 		}
 
