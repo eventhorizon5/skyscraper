@@ -121,7 +121,6 @@ std::string settingsPath() {
 
 int main (int argc, char* argv[])
 {
-	//printf("%s\n", settingsPath().c_str());
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//initialize top-level exception handler
@@ -202,7 +201,11 @@ bool Skyscraper::OnInit(void)
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
 	wxString app_path = wxPathOnly(exefile); //strip off filename
 #if defined(__WXMAC__)
-	wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
+	std::string path = settingsPath() + "/Skyscraper/";
+	if (wxDirExists(path) == true)
+		wxSetWorkingDirectory(path); //set working directory to Application Data folder on Mac if exists
+	else
+		wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
 #elif defined (__WXGTK__)
 	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory
 #else
