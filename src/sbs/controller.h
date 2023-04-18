@@ -67,7 +67,7 @@ private:
 	struct Route;
 
 	int FindClosestElevator(bool &busy, bool destination, int starting_floor, int destination_floor, int direction = 0);
-	void DispatchElevator(int number, int destination_floor, int direction, bool call);
+	void DispatchElevator(bool destination, int number, int destination_floor, int direction, bool call);
 	void RemoveRoute(Route &route);
 	void Process();
 	void ProcessRoutes();
@@ -102,6 +102,7 @@ private:
 		bool processed;
 		int assigned_elevator;
 		CallStation* station;
+		bool destination; //true if a destination dispatch route
 	};
 
 	std::vector<Route> Routes; //destination dispatch requests
