@@ -24,13 +24,9 @@
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
-#include "elevator.h"
-#include "elevatorcar.h"
-#include "profiler.h"
 #include "buttonpanel.h"
 #include "control.h"
 #include "texture.h"
-#include "manager.h"
 #include "controller.h"
 #include "callbutton.h"
 
