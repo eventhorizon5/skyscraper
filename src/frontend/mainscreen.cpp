@@ -764,9 +764,9 @@ void MainScreen::EnableFreelook(bool value)
 
 	camera->Freelook = value;
 	if (value == true)
-		SetCursor(wxCURSOR_CROSS);
+		wxSetCursor(wxCURSOR_CROSS);
 	else
-		SetCursor(wxNullCursor);
+		wxSetCursor(wxNullCursor);
 }
 
 }
