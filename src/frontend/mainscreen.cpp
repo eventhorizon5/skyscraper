@@ -81,6 +81,8 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	step_forward = false;
 	step_backward = false;
 
+	freelook = false;
+
 	key_right = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Right", "D")[0];
 	key_left = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Left", "A")[0];
 	key_up = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Up", "W")[0];
@@ -706,6 +708,8 @@ void MainScreen::HandleMouseMovement()
 	//freelook mode
 	if (camera->Freelook == true)
 	{
+		freelook = true;
+
 		//get window dimensions
 		Real width = GetClientSize().GetWidth();
 		Real height = GetClientSize().GetHeight();
@@ -731,6 +735,16 @@ void MainScreen::HandleMouseMovement()
 			//reset rotation by reprocessing keyboard-based rotation
 			ProcessMovement(engine, false, false, true);
 		}
+	}
+	else
+	{
+		if (freelook == true)
+		{
+			if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
+				camera->FreelookMove(Ogre::Vector3::ZERO);
+			ProcessMovement(engine, false, false, true);
+		}
+		freelook = false;
 	}
 }
 

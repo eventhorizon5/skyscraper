@@ -69,6 +69,8 @@ private:
 	char key_binoculars, key_crouch, key_floatup, key_floatdown, key_noclip;
 	char key_pickup, key_load, key_enter;
 
+	bool freelook;
+
 	DECLARE_EVENT_TABLE()
 };
 
