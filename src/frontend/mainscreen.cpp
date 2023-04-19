@@ -109,6 +109,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_DOWN, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_MOUSEWHEEL, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
@@ -640,6 +641,18 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 
 	//get SBS camera
 	Camera *camera = engine->GetSystem()->camera;
+
+	//enter or exit freelook mode using mouse scroll wheel
+	if (event.GetWheelRotation() > 0)
+	{
+		EnableFreelook(true);
+		return;
+	}
+	else if (event.GetWheelRotation() < 0)
+	{
+		EnableFreelook(false);
+		return;
+	}
 
 	//check if the user clicked on an object, and process it
 	bool left = event.LeftDown();
