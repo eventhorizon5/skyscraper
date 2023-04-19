@@ -1580,7 +1580,9 @@ bool Skyscraper::Start(EngineContext *engine)
 		//resize main window
 		if (FullScreen == false)
 		{
+#if !defined(__WXMAC__)
 			window->SetBackgroundColour(*wxBLACK);
+#endif
 			window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 1024), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 768));
 			window->Center();
 		}
@@ -1763,12 +1765,7 @@ const std::string Skyscraper::getOgreHandle() const
 	return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
-	bool metal = false;
-	if (metal == true)
-		return Ogre::StringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
-	else
-		return Ogre::StringConverter::toString((size_t)window->panel->GetHandle());
-
+	return Ogre::StringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
 #else
 	#error Not supported on this platform!
 #endif
