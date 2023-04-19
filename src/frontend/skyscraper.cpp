@@ -1763,7 +1763,11 @@ const std::string Skyscraper::getOgreHandle() const
 	return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
-	return Ogre::StringConverter::toString((size_t)window->panel->GetHandle());
+	bool metal = false;
+	if (metal == true)
+		return Ogre::StringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
+	else
+		return Ogre::StringConverter::toString((size_t)window->panel->GetHandle());
 
 #else
 	#error Not supported on this platform!
