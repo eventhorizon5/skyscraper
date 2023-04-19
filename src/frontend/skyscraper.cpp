@@ -1745,7 +1745,7 @@ const std::string Skyscraper::getOgreHandle() const
 	gtk_widget_realize(privHandle);
 
 	// grab the window object
-	GdkWindow* gdkWin = gtk_widget_get_window((GtkWidget*)window->panel->GetHandle());
+	GdkWindow* gdkWin = gtk_widget_get_window((GtkWidget*)window->GetHandle());
 	Display* display = GDK_WINDOW_XDISPLAY(gdkWin);
 	Window wid = GDK_WINDOW_XID(gdkWin);
 
