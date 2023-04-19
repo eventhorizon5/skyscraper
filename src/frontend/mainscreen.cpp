@@ -708,6 +708,13 @@ void MainScreen::HandleMouseMovement()
 	//freelook mode
 	if (camera->Freelook == true)
 	{
+		if (freelook == false)
+		{
+			//reset values to prevent movement from getting stuck
+			turn_right = 0;
+			turn_left = 0;
+		}
+
 		freelook = true;
 
 		//get window dimensions
@@ -740,6 +747,9 @@ void MainScreen::HandleMouseMovement()
 	{
 		if (freelook == true)
 		{
+			//reset values to prevent movement from getting stuck
+			strafe_right = 0;
+			strafe_left = 0;
 			if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
 				camera->FreelookMove(Ogre::Vector3::ZERO);
 			ProcessMovement(engine, false, false, true);
