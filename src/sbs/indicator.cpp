@@ -191,8 +191,16 @@ bool Indicator::PlaySound()
 		Report("playing indicator sound");
 
 	std::string newsound = soundfile;
+	std::string expanded = active_text;
+
+	//don't use a sound file name with the "??" characters, expand to a full name for both error types
+	if (active_text == "??")
+		expanded = "invalid";
+	if (active_text == "XX")
+		expanded = "error";
+
 	//change the asterisk into the current active text value
-	ReplaceAll(newsound, "*", active_text);
+	ReplaceAll(newsound, "*", expanded);
 	TrimString(newsound);
 	sound->Stop();
 	sound->Load(newsound);
