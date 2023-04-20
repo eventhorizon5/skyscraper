@@ -35,6 +35,7 @@ public:
 	std::string Name;
 	int Number;
 	std::vector<std::string> InvalidInput;
+	Real TimerDelay;
 
 	//functions
 	CallStation(Object *parent, int floornum, int number);

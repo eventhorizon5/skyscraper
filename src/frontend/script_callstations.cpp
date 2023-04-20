@@ -139,6 +139,18 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 
 		return sNextLine;
 	}
+	//TimerDelay parameter
+	if (linecheck.substr(0, 10) == "timerdelay")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		std::string str = Calc(value);
+		float num = 0;
+		if (!IsNumeric(str, num))
+			return ScriptError("Invalid value");
+		station->TimerDelay = num;
+		return sNextLine;
+	}
 
 	//CreatePanel command
 	if (linecheck.substr(0, 11) == "createpanel")
