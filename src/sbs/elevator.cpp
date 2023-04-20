@@ -1340,7 +1340,7 @@ void Elevator::MoveElevatorToFloor()
 			return;
 		}
 
-		//if elevator is already on specified floor, open doors and exit
+		//if elevator is already on specified floor, open doors and finish
 		if (GetCar(GotoFloorCar)->CurrentFloor == GotoFloor && InspectionService == false && IsLeveled() == true && ManualMove == 0)
 		{
 			ReportError("Elevator already on specified floor");
@@ -1348,7 +1348,6 @@ void Elevator::MoveElevatorToFloor()
 			MovementRunning = false;
 			SkipFloorSound = true; //don't play floor announcement if on same floor
 			Error = true;
-			DeleteActiveRoute();
 			goto finish; //skip main processing and run cleanup section
 		}
 
@@ -1903,14 +1902,14 @@ finish:
 
 	StopSounds();
 
-	//dequeue floor route
-	if (EmergencyStop == 0 && IsManuallyStopped() == false)
-		DeleteActiveRoute();
-
 	if (FinishedMove == false)
 		FinishMove();
 	else
 		EmergencyStop = 0; //make sure emergency stop status is cleared
+
+	//dequeue floor route
+	if (EmergencyStop == 0 && IsManuallyStopped() == false)
+		DeleteActiveRoute();
 
 	//reset cars' GotoFloor states
 	for (int i = 1; i <= GetCarCount(); i++)
