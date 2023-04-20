@@ -109,7 +109,7 @@ public:
 	bool Loop();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
-	void DrawBackground();
+	bool DrawBackground();
 
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
@@ -121,7 +121,7 @@ public:
 	void ShowError(const std::string &message);
 	void ShowMessage(const std::string &message);
 	bool Initialize();
-	void GetMenuInput();
+	bool GetMenuInput();
 	void StartSound();
 	void StopSound();
 	std::string SelectBuilding();
@@ -200,7 +200,7 @@ private:
 	Ogre::Rectangle2D* background_rect;
 	Ogre::SceneNode* background_node;
 	std::string background_image;
-	void DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
+	bool DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
 	void Click(int index);
 	void UnloadSim();
 	void DeleteButtons();

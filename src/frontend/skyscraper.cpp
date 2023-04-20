@@ -906,8 +906,17 @@ bool Skyscraper::Loop()
 	//main menu routine
 	if (StartupRunning == true)
 	{
-		DrawBackground();
-		GetMenuInput();
+		bool result = false;
+
+		result = DrawBackground();
+
+		if (result == false)
+			return false;
+
+		result = GetMenuInput();
+
+		if (result == false)
+			return false;
 
 		return Render();
 	}
@@ -969,11 +978,16 @@ bool Skyscraper::Loop()
 	return true;
 }
 
-void Skyscraper::DrawBackground()
+bool Skyscraper::DrawBackground()
 {
 	//draw menu background
 
-	DrawImage("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png"), 0, -1, -1, false);
+	bool result = false;
+
+	result = DrawImage("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png"), 0, -1, -1, false);
+
+	if (result == false)
+		return false;
 
 	if (buttoncount == 0)
 	{
@@ -1052,11 +1066,16 @@ void Skyscraper::DrawBackground()
 			center = GetConfigBool("Skyscraper.Frontend.Menu.Button" + number + ".Center", true);
 		}
 
-		DrawImage(b1, &buttons[i], x, y, center, b2, b3);
+		result = DrawImage(b1, &buttons[i], x, y, center, b2, b3);
+
+		if (result == false)
+			return false;
 	}
+
+	return true;
 }
 
-void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected, const std::string &filename_pressed)
+bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected, const std::string &filename_pressed)
 {
 	//X and Y represent the image's top-left location.
 	//values are -1 for the top left, 1 for the top right, -1 for the top, and 1 for the bottom
@@ -1070,11 +1089,11 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	std::string Filename = filename;
 
 	if (filename == "")
-		return;
+		return false;
 
 	//exit if background has already been drawn
 	if (background_image == Filename)
-		return;
+		return true;
 
 	Ogre::TextureManager::getSingleton().setVerbose(false);
 	Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(Filename);
@@ -1105,8 +1124,7 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 			}
 			catch (Ogre::Exception& e)
 			{
-				ReportError("Error creating material for texture " + Filename + "\n" + e.getDescription());
-				return;
+				return ReportFatalError("Error creating material for texture " + Filename + "\n" + e.getDescription());
 			}
 
 			//load image data from file
@@ -1117,8 +1135,7 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 			}
 			catch (Ogre::Exception &e)
 			{
-				ReportError("Error loading texture " + Filename + "\n" + e.getDescription());
-				return;
+				return ReportFatalError("Error loading texture " + Filename + "\n" + e.getDescription());
 			}
 
 			w_orig = img.getWidth();
@@ -1172,7 +1189,7 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 		if (button->drawn_selected == false && button->drawn_pressed == false)
 		{
 			if (button->active_button == 1)
-				return;
+				return true;
 			else
 			{
 				button->active_button = 1;
@@ -1183,7 +1200,7 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 		if (button->drawn_selected == true)
 		{
 			if (button->active_button == 2)
-				return;
+				return true;
 			else
 			{
 				button->active_button = 2;
@@ -1194,7 +1211,7 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 		if (button->drawn_pressed == true)
 		{
 			if (button->active_button == 3)
-				return;
+				return true;
 			else
 			{
 				button->active_button = 3;
@@ -1286,15 +1303,16 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 			background_rect = rect;
 		}
 	}
+	return true;
 }
 
-void Skyscraper::GetMenuInput()
+bool Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
 	//exit if there aren't any buttons
 	if (!buttons || buttoncount == 0)
-		return;
+		return false;
 
 	//get mouse coordinates
 	int mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
@@ -1324,7 +1342,7 @@ void Skyscraper::GetMenuInput()
         				//user clicked on button
         				button->drawn_selected = true;
         				Click(i);
-        				return;
+					return true;
         			}
         			button->drawn_selected = true;
         		}
@@ -1341,6 +1359,8 @@ void Skyscraper::GetMenuInput()
         	}
         }
 	}
+
+	return true;
 }
 
 void Skyscraper::Click(int index)
