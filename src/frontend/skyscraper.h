@@ -244,6 +244,9 @@ private:
 	double datetime;
 	bool sky_error;
 
+	//additional path for user data
+	std::string data_path;
+
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
 };

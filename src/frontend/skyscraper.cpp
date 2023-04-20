@@ -201,20 +201,18 @@ bool Skyscraper::OnInit(void)
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
 	wxString app_path = wxPathOnly(exefile); //strip off filename
 #if defined(__WXMAC__)
-	std::string path = settingsPath() + "/Skyscraper/";
-	if (wxDirExists(path) == true)
+	data_path = settingsPath() + "/Skyscraper/"; //Application Support folder
+
+	if (wxDirExists(data_path) == true)
 	{
-		wxSetWorkingDirectory(path); //set working directory to Application Data folder on Mac if exists
-		//ensure folders exist
-		if (!wxDirExists(path + wxT("buildings")))
-			wxMkdir(path + wxT("buildings"));
-		if (!wxDirExists(path + wxT("data")))
-			wxMkdir(path + wxT("data"));
-		if (!wxDirExists(path + wxT("screenshots")))
-			wxMkdir(path + wxT("screenshots"));
+		if (!wxDirExists(data_path + wxT("buildings")))
+			wxMkdir(data_path + wxT("buildings"));
+		if (!wxDirExists(data_path + wxT("data")))
+			wxMkdir(data_path + wxT("data"));
+		if (!wxDirExists(data_path + wxT("screenshots")))
+			wxMkdir(data_path + wxT("screenshots"));
 	}
-	else
-		wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
+	wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
 #elif defined (__WXGTK__)
 	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory
 #else
@@ -656,6 +654,8 @@ bool Skyscraper::Initialize()
 		//add app's directory to resource manager
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("General");
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
+		if (data_path != "")
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(data_path, "FileSystem", "General", true);
 
 		//add materials group, and autoload
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/materials", "FileSystem", "Materials", true);
