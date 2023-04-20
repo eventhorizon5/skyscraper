@@ -773,10 +773,18 @@ void MainScreen::EnableFreelook(bool value)
 	Camera *camera = Simcore->camera;
 
 	camera->Freelook = value;
+
+#if defined(__WXMSW__)
+	if (value == true)
+		SetCursor(wxCURSOR_CROSS);
+	else
+		SetCursor(wxNullCursor);
+#else
 	if (value == true)
 		wxSetCursor(wxCURSOR_CROSS);
 	else
 		wxSetCursor(wxNullCursor);
+#endif
 }
 
 }
