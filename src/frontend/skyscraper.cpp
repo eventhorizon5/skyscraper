@@ -1489,7 +1489,17 @@ std::string Skyscraper::SelectBuilding()
 
 	for (int i = 0; i < filelist2.size(); i++)
 	{
-		filelist.Add(filelist2[i]);
+		bool found = false;
+		for (int j = 0; j < filelist.size(); j++)
+		{
+			if (filelist[j] == filelist2[i])
+			{
+				found = true;
+				break;
+			}
+		}
+		if (found == false)
+			filelist.Add(filelist2[i]);
 	}
 
 	//sort list
