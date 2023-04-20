@@ -280,6 +280,16 @@ bool CallStation::Input(const std::string &text)
 	//update indicator display
 	UpdateIndicator(InputCache, false);
 
+	//verify that the floor entry is valid, error if not
+	int result = 0;
+	if (GetFloorFromID(InputCache, result) == false)
+	{
+		timer->Stop();
+		InputCache = "";
+		Error(1);
+		return true;
+	}
+
 	//start timeout timer
 	timer->Start(2000, true);
 
@@ -316,19 +326,41 @@ void CallStation::ProcessCache()
 		}
 	}
 
-	int floor = ToInt(InputCache);
-
-	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(InputCache);
-	Floor *floorobj2 = sbs->GetFloorManager()->GetByID(InputCache);
-
-	if (floorobj)
-		SelectFloor(floorobj->Number); //get by number ID first
-	else if (floorobj2)
-		SelectFloor(floorobj2->Number); //next try floor ID
-	else
-		SelectFloor(floor); //and last, get by raw floor number
+	int floor = 0;
+	GetFloorFromID(InputCache, floor);
+	SelectFloor(floor);
 
 	InputCache = "";
+}
+
+bool CallStation::GetFloorFromID(const std::string &floor, int &result)
+{
+	if (!IsNumeric(floor))
+		return false;
+
+	int rawfloor = ToInt(floor);
+
+	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(floor);
+	Floor *floorobj2 = sbs->GetFloorManager()->GetByID(floor);
+	Floor *floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
+
+	if (floorobj)
+	{
+		result = floorobj->Number; //get by number ID first
+		return true;
+	}
+	else if (floorobj2)
+	{
+		result = floorobj2->Number; //next try floor ID
+		return true;
+	}
+	else if (floorobj3)
+	{
+		result = rawfloor; //and last, get by raw floor number
+		return true;
+	}
+
+	return false;
 }
 
 void CallStation::Error(bool type)
