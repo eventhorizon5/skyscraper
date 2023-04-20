@@ -4807,7 +4807,7 @@ void Elevator::RemoveController(int controller)
 	}
 }
 
-int Elevator::PendingDDRoutes(int floor)
+int Elevator::PendingRoutes(int floor)
 {
 	//returns the direction of travel if a Destination Dispatch route is pending for the specified floor
 
@@ -4815,7 +4815,7 @@ int Elevator::PendingDDRoutes(int floor)
 	{
 		int result = 0;
 		if (sbs->GetController(Controllers[i]))
-			result = sbs->GetController(Controllers[i])->PendingDDRoutes(floor, Number);
+			result = sbs->GetController(Controllers[i])->PendingRoutes(floor, Number);
 
 		if (result > 0)
 			return result;
