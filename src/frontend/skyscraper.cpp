@@ -2547,7 +2547,8 @@ void Skyscraper::CreateSky(EngineContext *engine)
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
+			if (e.getDescription() != "!msSingleton failed. There can be only one singleton")
+				ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
 			return;
 		}
 	}
