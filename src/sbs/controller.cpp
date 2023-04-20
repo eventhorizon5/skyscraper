@@ -171,8 +171,7 @@ void DispatchController::RemoveRoute(Route &route)
 	{
 		if (Routes[i].starting_floor == route.starting_floor && Routes[i].destination_floor == route.destination_floor)
 		{
-			if (sbs->Verbose)
-				Report("Removing route from " + ToString(route.starting_floor) + " to " + ToString(route.destination_floor));
+			Report("Removing route " + ToString(i) + " from floors " + ToString(route.starting_floor) + " to " + ToString(route.destination_floor));
 			Routes.erase(Routes.begin() + i);
 			return;
 		}
@@ -276,6 +275,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	route.assigned_elevator = 0;
 	route.direction = 0;
 	route.destination = true;
+	Report("Adding destination route " + ToString((int)Routes.size()) + " from floor " + ToString(starting_floor) + " to floor " + ToString(destination_floor));
 	Routes.push_back(route);
 
 	return true;
@@ -364,6 +364,7 @@ bool DispatchController::CallElevator(CallStation *station, CallButton *button, 
 	route.assigned_elevator = 0;
 	route.direction = dir;
 	route.destination = false;
+	Report("Adding standard route " + ToString((int)Routes.size()) + " to floor " + ToString(floor));
 	Routes.push_back(route);
 
 	return true;
@@ -389,6 +390,7 @@ void DispatchController::ProcessRoutes()
 				else
 				{
 					//otherwise drop the route
+					Report("Dropping route " + ToString(i) + " for elevator " + ToString(Routes[i].assigned_elevator));
 					Routes.erase(Routes.begin() + i);
 					return;
 				}
@@ -465,6 +467,7 @@ void DispatchController::ProcessRoutes()
 					Routes[i].button->DownLight(false);
 			}
 
+			Report("Withdrawing route " + ToString(i));
 			Routes.erase(Routes.begin() + i);
 			return;
 		}
