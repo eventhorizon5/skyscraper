@@ -3054,7 +3054,7 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 			direction = RespondingToCall(floor);
 
 		//ask controller if this elevator has a route pending for the specified floor, if so, get it's call direction
-		if (direction == 0 && up == false && down == false)
+		if (up == false && down == false)
 			direction = parent->PendingRoutes(floor);
 	}
 
