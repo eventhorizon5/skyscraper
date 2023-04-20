@@ -277,26 +277,6 @@ bool CallStation::Input(const std::string &text)
 		return true;
 	}
 
-	//reject numbers greater than the length of the controller's bottom or top floor
-	if (InputCache[0] == '-')
-	{
-		if (InputCache.length() > ToString(GetController()->GetBottomFloor()).length())
-		{
-			timer->Stop();
-			ProcessCache();
-			return true;
-		}
-	}
-	else
-	{
-		if (InputCache.length() > ToString(GetController()->GetTopFloor()).length())
-		{
-			timer->Stop();
-			ProcessCache();
-			return true;
-		}
-	}
-
 	//update indicator display
 	UpdateIndicator(InputCache, false);
 
