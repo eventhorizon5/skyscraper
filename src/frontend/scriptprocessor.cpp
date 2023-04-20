@@ -309,23 +309,42 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	if (Simcore->Verbose)
 		Simcore->Report("Filename: '" + Filename + "'");
 
-	Ogre::FileSystemArchiveFactory *factory = new Ogre::FileSystemArchiveFactory();
-        Ogre::Archive *filesystem = factory->createInstance(".", true);
-        Ogre::ArchiveManager::getSingleton().addArchiveFactory(factory);
-
+	Ogre::Archive *filesystem = 0;
+	Ogre::ArchiveManager::ArchiveMapIterator it = Ogre::ArchiveManager::getSingleton().getArchiveIterator();
 	Ogre::DataStreamPtr filedata;
-	try
+	while(it.hasMoreElements())
 	{
-		filedata = filesystem->open(Filename, true);
-	}
-	catch (Ogre::Exception &e)
-	{
-		std::string msg = "Error loading building file\nDetails: " + e.getDescription();
-		if (insert == false)
-			engine->ReportFatalError(msg);
-		else
-			ScriptError(msg);
-		return false;
+		//search each filesystem entry for the file
+		const std::string& key = it.peekNextKey();
+		filesystem = it.getNext();
+
+		if (!filesystem)
+			return "";
+
+		//check for a mount point
+		std::string shortname;
+		std::string group = Simcore->GetMountPath(Filename, shortname);
+
+		if (group == "General")
+		{
+			//for the General group, check the native filesystem
+			if (filesystem->exists(Filename) == true)
+			{
+				try
+				{
+					filedata = filesystem->open(Filename, true);
+				}
+				catch (Ogre::Exception &e)
+				{
+					std::string msg = "Error loading building file\nDetails: " + e.getDescription();
+					if (insert == false)
+					engine->ReportFatalError(msg);
+					else
+					ScriptError(msg);
+					return false;
+				}
+			}
+		}
 	}
 
 	//exit if an error occurred while loading
