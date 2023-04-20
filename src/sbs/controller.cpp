@@ -485,8 +485,12 @@ void DispatchController::ProcessRoutes()
 				{
 					if (Elevators[j].number == Routes[i].assigned_elevator)
 					{
-						Elevators[j].call_floor = starting_floor;
-						Elevators[j].use_call_floor = true;
+						Call call;
+						call.floor = starting_floor;
+						call.direction = false;
+						if (Routes[i].direction == 1)
+							call.direction = true;
+						Elevators[j].calls.push_back(call);
 						break;
 					}
 				}
@@ -529,8 +533,12 @@ void DispatchController::ProcessRoutes()
 				if (Elevators[j].number == elevator->Number)
 				{
 					Elevators[j].destination_floor = destination_floor;
-					Elevators[j].call_floor = starting_floor;
-					Elevators[j].use_call_floor = true;
+					Call call;
+					call.floor = starting_floor;
+					call.direction = false;
+					if (direction == 1)
+						call.direction = true;
+					Elevators[j].calls.push_back(call);
 					break;
 				}
 			}
@@ -572,8 +580,7 @@ bool DispatchController::AddElevator(int elevator)
 	newelevator.arrival_direction = false;
 	newelevator.assigned = false;
 	newelevator.destination_floor = 0;
-	newelevator.call_floor = 0;
-	newelevator.use_call_floor = false;
+	newelevator.calls.clear();
 
 	//assign controller to elevator
 	sbs->GetElevator(elevator)->AddController(Number);
@@ -809,13 +816,16 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 			Report("Elevator " + ToString(number) + " arrived at floor " + ToString(floor) + " (" + floorobj->ID + ")");
 
 			//only set values if arriving at starting floor
-			if (Elevators[i].call_floor == floor && Elevators[i].use_call_floor == true)
+			for (int j = 0; j < (int)Elevators[i].calls.size(); j++)
 			{
-				Elevators[i].arrived = true;
-				Elevators[i].arrival_floor = floor;
-				Elevators[i].arrival_direction = direction;
-				Elevators[i].call_floor = 0;
-				Elevators[i].use_call_floor = false;
+				if (Elevators[i].calls[j].floor == floor && Elevators[i].calls[j].direction == direction)
+				{
+					Elevators[i].arrived = true;
+					Elevators[i].arrival_floor = floor;
+					Elevators[i].arrival_direction = direction;
+					Elevators[i].calls.erase(Elevators[i].calls.begin() + j);
+					break;
+				}
 			}
 
 			if (Elevators[i].assigned == true)

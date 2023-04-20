@@ -85,6 +85,12 @@ private:
 	int bottom_floor;
 	int top_floor;
 
+	struct Call
+	{
+		int floor;
+		bool direction;
+	};
+
 	struct ElevMap
 	{
 		int number; //elevator number
@@ -95,8 +101,7 @@ private:
 		std::vector<int> assigned_directions; //directions assigned to this elevator (standard mode)
 		bool assigned;
 		int destination_floor;
-		int call_floor;
-		bool use_call_floor;
+		std::vector<Call> calls;
 	};
 
 	std::vector<ElevMap> Elevators; //controller object array
