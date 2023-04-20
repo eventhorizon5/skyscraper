@@ -68,6 +68,7 @@ public:
 	int GetTopFloor();
 	int GetElevator(int index);
 	bool SameElevators(const std::vector<int> &elevators);
+	int PendingDDRoutes(int floor, int elevator);
 
 private:
 

@@ -1269,4 +1269,20 @@ bool DispatchController::SameElevators(const std::vector<int> &elevators)
 	return true;
 }
 
+int DispatchController::PendingDDRoutes(int floor, int elevator)
+{
+	//returns the direction of travel if a Destination Dispatch route is pending for the specified floor and elevator
+	for (int i = 0; i < (int)Routes.size(); i++)
+	{
+		if (Routes[i].starting_floor == floor && Routes[i].assigned_elevator == elevator && Routes[i].destination == true)
+		{
+			if (Routes[i].starting_floor < Routes[i].destination_floor)
+				return 1;
+			if (Routes[i].starting_floor > Routes[i].destination_floor)
+				return -1;
+		}
+	}
+	return 0;
+}
+
 }
