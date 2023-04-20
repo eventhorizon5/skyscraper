@@ -76,7 +76,6 @@ private:
 	int FindClosestElevator(bool &busy, bool destination, int starting_floor, int destination_floor, int direction = 0);
 	void DispatchElevator(bool destination, int number, int destination_floor, int direction, bool call);
 	void RemoveRoute(Route &route);
-	void Process();
 	void ProcessRoutes();
 	void GetFloorRange();
 	bool ElevatorUnavailable(int elevator);

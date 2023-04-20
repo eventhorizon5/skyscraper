@@ -65,13 +65,6 @@ void DispatchController::Loop()
 {
 	//this function runs for every registered dispatch controller via timer callback
 
-	Process();
-}
-
-void DispatchController::Process()
-{
-	//call processing
-
 	//process pending requests
 	ProcessRoutes();
 
