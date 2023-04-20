@@ -113,8 +113,12 @@ void DispatchController::CheckArrivals()
 					{
 						//destination dispatch mode
 
-						//if request matches the elevator arrival and assignment
-						if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true)
+						bool route_direction = false;
+						if (direction_dd == 1)
+							route_direction = true;
+
+						//if request matches the elevator arrival, assignment and direction
+						if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].assigned == true && route_direction == Elevators[i].arrival_direction)
 						{
 							bool result = false;
 
