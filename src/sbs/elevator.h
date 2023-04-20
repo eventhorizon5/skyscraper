@@ -240,7 +240,6 @@ public:
 	int GetRecallFloor();
 	void AddController(int controller);
 	void RemoveController(int controller);
-	int PendingRoutes(int floor);
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
