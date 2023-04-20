@@ -1286,28 +1286,24 @@ bool DispatchController::SameElevators(const std::vector<int> &elevators)
 	return true;
 }
 
-int DispatchController::PendingRoutes(int floor, int elevator)
+bool DispatchController::ActiveCall(int elevator, int floor, bool direction)
 {
-	//returns the direction of travel if a Destination Dispatch route is pending for the specified floor and elevator
-	for (int i = 0; i < (int)Routes.size(); i++)
+	//returns true if a matching call is active on the specified floor and direction
+
+	for (int i = 0; i < Elevators.size(); i++)
 	{
-		if (Routes[i].destination == true)
+		if (Elevators[i].number == elevator)
 		{
-			if (Routes[i].starting_floor == floor && Routes[i].assigned_elevator == elevator)
+			for (int j = 0; j < (int)Elevators[i].calls.size(); j++)
 			{
-				if (Routes[i].starting_floor < Routes[i].destination_floor)
-					return 1;
-				if (Routes[i].starting_floor > Routes[i].destination_floor)
-					return -1;
+				if (Elevators[i].calls[j].floor == floor && Elevators[i].calls[j].direction == direction)
+					return true;
 			}
-		}
-		else
-		{
-			if (Routes[i].starting_floor == floor && Routes[i].assigned_elevator == elevator)
-				return Routes[i].direction;
+			break;
 		}
 	}
-	return 0;
+
+	return false;
 }
 
 }

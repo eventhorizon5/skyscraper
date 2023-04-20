@@ -4806,20 +4806,20 @@ void Elevator::RemoveController(int controller)
 	}
 }
 
-int Elevator::PendingRoutes(int floor)
+int Elevator::IsCallActive(int floor, bool direction)
 {
-	//returns the direction of travel if a Destination Dispatch route is pending for the specified floor
+	//returns true if a call is active on the controller for the specified floor and direction
 
 	for (int i = 0; i < (int)Controllers.size(); i++)
 	{
-		int result = 0;
+		bool result = false;
 		if (sbs->GetController(Controllers[i]))
-			result = sbs->GetController(Controllers[i])->PendingRoutes(floor, Number);
+			result = sbs->GetController(Controllers[i])->ActiveCall(Number, floor, direction);
 
-		if (result > 0)
+		if (result == true)
 			return result;
 	}
-	return 0;
+	return false;
 }
 
 }
