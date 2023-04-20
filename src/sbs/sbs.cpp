@@ -2848,67 +2848,62 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 	while(it.hasMoreElements())
 	{
 		const std::string& key = it.peekNextKey();
-		Ogre::Archive* arch = it.getNext();
-		if(key == ".")
+		filesystem = it.getNext();
+
+		if (!filesystem)
+			return "";
+
+		//check for a mount point
+		Ogre::StringVectorPtr listing;
+		std::string shortname;
+		std::string group = GetMountPath(filename, shortname);
+
+		if (group == "General")
 		{
-			filesystem = arch;
-			break;
+			//for the General group, check the native filesystem
+
+			if (filesystem->exists(filename) == true)
+			{
+				//if exact filename exists, cache and exit
+				CacheFilename(filename, filename);
+				result = true;
+				return filename;
+			}
+
+			//otherwise get listing of files to check
+			if (!filesystem_listing)
+				filesystem_listing = filesystem->list();
+			listing = filesystem_listing;
 		}
-	}
-
-	if (!filesystem)
-		return "";
-
-	//check for a mount point
-	Ogre::StringVectorPtr listing;
-	std::string shortname;
-	std::string group = GetMountPath(filename, shortname);
-
-	if (group == "General")
-	{
-		//for the General group, check the native filesystem
-
-		if (filesystem->exists(filename) == true)
+		else
 		{
-			//if exact filename exists, cache and exit
-			CacheFilename(filename, filename);
-			result = true;
-			return filename;
-		}
+			//for other groups, check resource mount points
 
-		//otherwise get listing of files to check
-		if (!filesystem_listing)
-			filesystem_listing = filesystem->list();
-		listing = filesystem_listing;
-	}
-	else
-	{
-		//for other groups, check resource mount points
+			if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
+			{
+				//if exact filename exists, cache and exit
+				CacheFilename(filename, filename);
+				result = true;
+				return filename;
+			}
 
-		if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
-		{
-			//if exact filename exists, cache and exit
-			CacheFilename(filename, filename);
-			result = true;
-			return filename;
+			//otherwise get listing of files to check
+			listing = Ogre::ResourceGroupManager::getSingleton().listResourceNames(group);
 		}
 
-		//otherwise get listing of files to check
-		listing = Ogre::ResourceGroupManager::getSingleton().listResourceNames(group);
-	}
-
-	//go through file listing, to find a match with a different case
-	for (size_t i = 0; i < listing->size(); i++)
-	{
-		std::string check = listing->at(i);
-		std::string checkoriginal = SetCaseCopy(check, false);
-		std::string checkfile = SetCaseCopy(filename, false);
-		if (checkoriginal == checkfile)
+		//go through file listing, to find a match with a different case
+		for (size_t i = 0; i < listing->size(); i++)
 		{
-			//if match is found, cache and exit
-			CacheFilename(filename, check);
-			result = true;
-			return check;
+			std::string check = listing->at(i);
+			std::string checkoriginal = SetCaseCopy(check, false);
+			std::string checkfile = SetCaseCopy(filename, false);
+			if (checkoriginal == checkfile)
+			{
+				//if match is found, cache and exit
+				CacheFilename(filename, check);
+				result = true;
+				return check;
+			}
 		}
 	}
 
