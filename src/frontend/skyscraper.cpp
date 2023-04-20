@@ -1473,7 +1473,7 @@ std::string Skyscraper::SelectBuilding()
 	wxArrayString filelist;
 	wxArrayString filelist2;
 	wxDir::GetAllFiles(_("buildings/"), &filelist, _("*.bld"), wxDIR_FILES);
-	wxDir::GetAllFiles(_(data_path), &filelist2, _("*.bld"), wxDIR_FILES);
+	wxDir::GetAllFiles(_(data_path + "buildings/"), &filelist2, _("*.bld"), wxDIR_FILES);
 
 	//strip directory name and extension from entries
 	for (size_t i = 0; i < filelist.size(); i++)
@@ -1483,7 +1483,7 @@ std::string Skyscraper::SelectBuilding()
 	}
 	for (size_t i = 0; i < filelist2.size(); i++)
 	{
-		filelist2[i] = filelist2[i].substr(data_path.length());
+		filelist2[i] = filelist2[i].substr(data_path.length() + 10);
 		filelist2[i] = filelist2[i].substr(0, filelist2[i].length() - 4);
 	}
 
