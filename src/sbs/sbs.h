@@ -395,6 +395,7 @@ public:
 	void UnregisterCameraTexture(CameraTexture *camtex);
 	int GetCameraTextureCount();
 	CameraTexture* GetCameraTexture(int number);
+	std::string GetFilesystemPath(std::string filename);
 
 	//Meshes
 	MeshObject* Buildings;

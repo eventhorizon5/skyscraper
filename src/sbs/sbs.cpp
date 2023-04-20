@@ -2912,6 +2912,46 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 	return filename;
 }
 
+std::string SBS::GetFilesystemPath(std::string filename)
+{
+	//returns the filesystem path for the specified file
+	//the filename needs to be processed by VerifyFile first
+
+	TrimString(filename);
+	ReplaceAll(filename, "\\", "/");
+
+	//get filesystem archive
+	Ogre::Archive *filesystem = 0;
+	Ogre::ArchiveManager::ArchiveMapIterator it = Ogre::ArchiveManager::getSingleton().getArchiveIterator();
+	while(it.hasMoreElements())
+	{
+		const std::string& key = it.peekNextKey();
+		filesystem = it.getNext();
+
+		if (!filesystem)
+			return "";
+
+		//check for a mount point
+		std::string shortname;
+		std::string group = GetMountPath(filename, shortname);
+
+		if (group == "General")
+		{
+			//for the General group, check the native filesystem
+
+			if (filesystem->exists(filename) == true)
+			{
+				std::string path = key;
+				if (key == ".")
+					path = "";
+				return std::string(path + filename);
+			}
+		}
+	}
+
+	return "";
+}
+
 bool SBS::FileExists(const std::string &filename)
 {
 	//check to see if the specified file exists
