@@ -266,9 +266,6 @@ bool CallStation::Input(const std::string &text)
 	//add text to cache
 	InputCache += text;
 
-	//update indicator display
-	UpdateIndicator(InputCache, false);
-
 	//automatically error if multiple special characters were entered and/or combined with numbers
 	int StarCount = std::count(InputCache.begin(), InputCache.end(), '*');
 	int MinCount  = std::count(InputCache.begin(), InputCache.end(), '-');
@@ -279,6 +276,9 @@ bool CallStation::Input(const std::string &text)
 		Error(1);
 		return true;
 	}
+
+	//update indicator display
+	UpdateIndicator(InputCache, false);
 
 	//automatically process input if a InputCache reaches the same length as the longest floor ID.
 	if (InputCache.length() >= ToString(GetController()->GetBottomFloor() - 1).length() && InputCache.length() >= ToString(GetController()->GetTopFloor() + 1).length())
