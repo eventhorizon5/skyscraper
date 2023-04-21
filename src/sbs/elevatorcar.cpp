@@ -3046,16 +3046,12 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 	//if ChimeOnArrival is off, only chime if responding to a hall call
 	if (parent->ChimeOnArrival == false && direction == 0)
 	{
-		parent->GetCallButtonStatus(floor, up, down);
+		//get call status from controller
+		parent->GetCallStatus(floor, up, down);
 
 		//in DD mode, set direction to be the call response direction
-		//the above GetCallButtonStatus should probably be migrated to this and the next function
 		if (parent->GetDestinationDispatch() == true)
 			direction = RespondingToCall(floor);
-
-		//get call status from controller
-		if (up == false && down == false)
-			parent->GetCallStatus(floor, up, down);
 	}
 
 	bool new_direction = false;

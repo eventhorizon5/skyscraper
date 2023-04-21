@@ -185,7 +185,6 @@ public:
 	bool GetArrivalDirection(int floor);
 	void MoveObjects(Real offset);
 	void OnInit();
-	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 	int AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);

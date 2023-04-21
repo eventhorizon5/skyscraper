@@ -2027,7 +2027,7 @@ void Elevator::FinishMove()
 				NotifyArrival(false);
 
 			//get status of call buttons before switching off
-			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
+			GetCallStatus(GotoFloor, UpCall, DownCall);
 
 			for (int i = 1; i <= GetCarCount(); i++)
 			{
@@ -3359,7 +3359,7 @@ bool Elevator::GetArrivalDirection(int floor)
 
 	//check for active hall calls
 	bool UpStatus, DownStatus;
-	GetCallButtonStatus(floor, UpStatus, DownStatus);
+	GetCallStatus(floor, UpStatus, DownStatus);
 	if (UpStatus == true && QueuePositionDirection == 1)
 		return true;
 	if (DownStatus == true && QueuePositionDirection == -1)
@@ -3500,30 +3500,6 @@ void Elevator::OnInit()
 
 	if (enable_elevators == false)
 		Enabled(false);
-}
-
-bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
-{
-	//returns status of associated call buttons on specified floor in UpStatus and DownStatus variables
-
-	if (sbs->GetFloor(floor))
-	{
-		std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
-		if (buttons.size() > 0)
-		{
-			CallButton *button =  sbs->GetFloor(floor)->CallButtonArray[buttons[0]];
-			if (button)
-			{
-				Up = button->GetUpStatus();
-				Down = button->GetDownStatus();
-				return true;
-			}
-		}
-	}
-
-	Up = false;
-	Down = false;
-	return false;
 }
 
 int Elevator::AvailableForCall(bool destination, int floor, int direction, bool report_on_failure)
