@@ -148,12 +148,12 @@ void DispatchController::CheckArrivals()
 						if (Routes[j].starting_floor == Elevators[i].arrival_floor && Elevators[i].arrival_direction == direction_standard)
 						{
 							//turn off related call buttons
-							if (Routes[j].button)
+							if (Routes[j].station)
 							{
 								if (direction_standard == true)
-									Routes[j].button->UpLight(false);
+									Routes[j].station->UpLight(false);
 								else
-									Routes[j].button->DownLight(false);
+									Routes[j].station->DownLight(false);
 							}
 
 							//remove route from table
@@ -463,12 +463,12 @@ void DispatchController::ProcessRoutes()
 				Routes[i].station->Error();
 
 			//turn off button lights
-			if (Routes[i].button)
+			if (Routes[i].station)
 			{
 				if (Routes[i].direction == 1)
-					Routes[i].button->UpLight(false);
+					Routes[i].station->UpLight(false);
 				else
-					Routes[i].button->DownLight(false);
+					Routes[i].station->DownLight(false);
 			}
 
 			Report("Withdrawing route " + ToString(i));

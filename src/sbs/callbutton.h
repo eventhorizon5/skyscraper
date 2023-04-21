@@ -37,24 +37,15 @@ public:
 	~CallButton();
 	void Enabled(bool value);
 	bool Call(bool direction); //true is up, false is down
-	void UpLight(bool value);
-	void DownLight(bool value);
-	void SetLights(int up, int down);
 	bool ServicesElevator(int elevator);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool FireService(int value);
 	int GetFloor();
-	void SetLightsGroup(int up, int down);
 	bool AddElevator(int elevator);
 	bool RemoveElevator(int elevator);
-	bool GetUpStatus();
-	bool GetDownStatus();
 	bool IsEnabled() { return is_enabled; }
 	int GetElevatorArrived(bool direction);
-	Control* GetUpControl();
-	Control* GetDownControl();
-	bool Press(bool up);
 	void SetController(int number);
 	DispatchController* GetController();
 

@@ -29,6 +29,7 @@
 #include "indicator.h"
 #include "timer.h"
 #include "manager.h"
+#include "control.h"
 #include "callstation.h"
 #include "elevator.h"
 
@@ -436,6 +437,157 @@ bool CallStation::Call(bool direction)
 		return GetController()->CallElevator(this, 0, direction);
 
 	return false;
+}
+
+void CallStation::SetLightsGroup(int up, int down)
+{
+	//set status of call button lights for whole group
+	//values are 0 for no change, 1 for on, and 2 for off
+
+	if (sbs->Verbose)
+		Report("Call: finding grouped call buttons");
+
+	//this call will return at least this call button
+	std::vector<CallStation*> stations;
+	if (GetController())
+		stations = GetController()->GetCallStations(floor->Number);
+
+	//set status on each call button
+	for (size_t i = 0; i < stations.size(); i++)
+	{
+		if (stations[i])
+			stations[i]->SetLights(up, down);
+	}
+}
+
+void CallStation::UpLight(bool value)
+{
+	//turn on the 'up' directional light
+
+	//set light status
+	if (value == true)
+		SetLightsGroup(1, 0);
+	else
+		SetLightsGroup(2, 0);
+}
+
+void CallStation::DownLight(bool value)
+{
+	//turn on the 'down' directional light
+
+	//set light status
+	if (value == true)
+		SetLightsGroup(0, 1);
+	else
+		SetLightsGroup(0, 2);
+}
+
+void CallStation::SetLights(int up, int down)
+{
+	//set status of call button lights
+	//values are 0 for no change, 1 for on, and 2 for off
+
+	if (up == 1)
+	{
+		if (GetUpStatus() == true)
+		{
+			if (sbs->Verbose)
+				Report("SetLights: up light already in requested status");
+			return;
+		}
+
+		if (sbs->Verbose)
+			Report("SetLights: turning on up light");
+
+		if (GetUpControl())
+			GetUpControl()->SetSelectPosition(2);
+	}
+
+	if (up == 2)
+	{
+		if (GetUpStatus() == false)
+		{
+			if (sbs->Verbose)
+				Report("SetLights: up light already in requested status");
+			return;
+		}
+
+		if (sbs->Verbose)
+			Report("SetLights: turning off up light");
+
+		if (GetUpControl())
+			GetUpControl()->SetSelectPosition(1);
+	}
+
+	if (down == 1)
+	{
+		if (GetDownStatus() == true)
+		{
+			if (sbs->Verbose)
+				Report("SetLights: down light already in requested status");
+			return;
+		}
+
+		if (sbs->Verbose)
+			Report("SetLights: turning on down light");
+
+		if (GetDownControl())
+			GetDownControl()->SetSelectPosition(2);
+	}
+	if (down == 2)
+	{
+		if (GetDownStatus() == false)
+		{
+			if (sbs->Verbose)
+				Report("SetLights: down light already in requested status");
+			return;
+		}
+
+		if (sbs->Verbose)
+			Report("SetLights: turning off down light");
+
+		if (GetDownControl())
+			GetDownControl()->SetSelectPosition(1);
+	}
+}
+
+bool CallStation::GetUpStatus()
+{
+	if (GetUpControl())
+		return (GetUpControl()->GetSelectPosition() == 2);
+	return false;
+}
+
+bool CallStation::GetDownStatus()
+{
+	if (GetDownControl())
+		return (GetDownControl()->GetSelectPosition() == 2);
+	return false;
+}
+
+Control* CallStation::GetUpControl()
+{
+	return panel->GetControl("up");
+}
+
+Control* CallStation::GetDownControl()
+{
+	return panel->GetControl("down");
+}
+
+bool CallStation::Press(bool up)
+{
+	//press the related call button (the control object)
+	//which also initiates the call via the Call() function
+
+	bool result = false;
+
+	if (up == true && GetUpControl())
+		result = GetUpControl()->Press();
+	if (up == false && GetDownControl())
+		result = GetDownControl()->Press();
+
+	return result;
 }
 
 }

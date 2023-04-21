@@ -190,6 +190,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//FireBypass
 
 	//CallStation actions:
+	//Off
 	//(floor number)
 	//FireOff
 	//FireOn
@@ -656,16 +657,6 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callbutton->Call(true);
 		if (command_name == "down")
 			return callbutton->Call(false);
-		if (command_name == "pressup")
-			return callbutton->Press(true);
-		if (command_name == "pressdown")
-			return callbutton->Press(false);
-		if (command_name == "fireoff")
-			return callbutton->FireService(0);
-		if (command_name == "fireon")
-			return callbutton->FireService(1);
-		if (command_name == "firebypass")
-			return callbutton->FireService(2);
 	}
 
 	//if parent is a call station, get parent floor object
@@ -675,6 +666,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//callstation-specific commands
 	if (floor && callstation)
 	{
+		if (command_name == "off")
+			return false;
 		//numeric commands for station floor selections
 		if (IsNumeric(command_name) == true)
 		{

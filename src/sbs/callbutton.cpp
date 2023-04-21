@@ -135,8 +135,8 @@ CallButton::CallButton(Object *parent, int controller, int floornum, int number,
 	Move(CenterX, floor->GetBase(true) + voffset, CenterZ);
 
 	//reset light status
-	UpLight(false);
-	DownLight(false);
+	//UpLight(false);
+	//DownLight(false);
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -196,108 +196,12 @@ bool CallButton::Call(bool direction)
 		return false;
 
 	//turn on button lights
-	if (direction == true)
-		UpLight(true);
-	else
-		DownLight(true);
+	//if (direction == true)
+		//UpLight(true);
+	//else
+		//DownLight(true);
 
 	return GetController()->CallElevator(0, this, direction);
-}
-
-void CallButton::UpLight(bool value)
-{
-	//turn on the 'up' directional light
-
-	//set light status
-	if (value == true)
-		SetLightsGroup(1, 0);
-	else
-		SetLightsGroup(2, 0);
-}
-
-void CallButton::DownLight(bool value)
-{
-	//turn on the 'down' directional light
-
-	//set light status
-	if (value == true)
-		SetLightsGroup(0, 1);
-	else
-		SetLightsGroup(0, 2);
-}
-
-void CallButton::SetLights(int up, int down)
-{
-	//set status of call button lights
-	//values are 0 for no change, 1 for on, and 2 for off
-
-	if (UpExists == true)
-	{
-		if (up == 1)
-		{
-			if (GetUpStatus() == true)
-			{
-				if (sbs->Verbose)
-					Report("SetLights: up light already in requested status");
-				return;
-			}
-
-			if (sbs->Verbose)
-				Report("SetLights: turning on up light");
-
-			if (GetUpControl())
-				GetUpControl()->SetSelectPosition(2);
-		}
-		if (up == 2)
-		{
-			if (GetUpStatus() == false)
-			{
-				if (sbs->Verbose)
-					Report("SetLights: up light already in requested status");
-				return;
-			}
-
-			if (sbs->Verbose)
-				Report("SetLights: turning off up light");
-
-			if (GetUpControl())
-				GetUpControl()->SetSelectPosition(1);
-		}
-	}
-
-	if (DownExists == true)
-	{
-		if (down == 1)
-		{
-			if (GetDownStatus() == true)
-			{
-				if (sbs->Verbose)
-					Report("SetLights: down light already in requested status");
-				return;
-			}
-
-			if (sbs->Verbose)
-				Report("SetLights: turning on down light");
-
-			if (GetDownControl())
-				GetDownControl()->SetSelectPosition(2);
-		}
-		if (down == 2)
-		{
-			if (GetDownStatus() == false)
-			{
-				if (sbs->Verbose)
-					Report("SetLights: down light already in requested status");
-				return;
-			}
-
-			if (sbs->Verbose)
-				Report("SetLights: turning off down light");
-
-			if (GetDownControl())
-				GetDownControl()->SetSelectPosition(1);
-		}
-	}
 }
 
 bool CallButton::ServicesElevator(int elevator)
@@ -339,26 +243,6 @@ int CallButton::GetFloor()
 	return floor->Number;
 }
 
-void CallButton::SetLightsGroup(int up, int down)
-{
-	//set status of call button lights for whole group
-	//values are 0 for no change, 1 for on, and 2 for off
-
-	if (sbs->Verbose)
-		Report("Call: finding grouped call buttons");
-
-	//this call will return at least this call button
-	std::vector<int> buttons;
-	if (GetController())
-		buttons = floor->GetCallButtons(GetController()->GetElevator(0));
-
-	//set status on each call button
-	for (size_t i = 0; i < buttons.size(); i++)
-	{
-		floor->CallButtonArray[buttons[i]]->SetLights(up, down);
-	}
-}
-
 bool CallButton::AddElevator(int elevator)
 {
 	//add an elevator to this call button
@@ -385,51 +269,6 @@ int CallButton::GetElevatorArrived(bool direction)
 	if (GetController())
 		return GetController()->GetElevatorArrivedStandard(GetFloor(), direction);
 	return 0;
-}
-
-bool CallButton::GetUpStatus()
-{
-	if (GetUpControl())
-		return (GetUpControl()->GetSelectPosition() == 2);
-	return false;
-}
-
-bool CallButton::GetDownStatus()
-{
-	if (GetDownControl())
-		return (GetDownControl()->GetSelectPosition() == 2);
-	return false;
-}
-
-Control* CallButton::GetUpControl()
-{
-	if (UpExists == false)
-		return 0;
-
-	return panel->GetControl("up");
-}
-
-Control* CallButton::GetDownControl()
-{
-	if (DownExists == false)
-		return 0;
-
-	return panel->GetControl("down");
-}
-
-bool CallButton::Press(bool up)
-{
-	//press the related call button (the control object)
-	//which also initiates the call via the Call() function
-
-	bool result = false;
-
-	if (up == true && GetUpControl())
-		result = GetUpControl()->Press();
-	if (up == false && GetDownControl())
-		result = GetDownControl()->Press();
-
-	return result;
 }
 
 void CallButton::SetController(int number)

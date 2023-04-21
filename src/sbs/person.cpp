@@ -208,18 +208,18 @@ void Person::ProcessRoute()
 
 		bool result = false;
 
-		if (button)
+		if (station && route[0].destination == false)
 		{
 			Report("Pressing call button for elevator " + ToString(elevator->Number));
 
 			if (floor_selection > current_floor)
 			{
-				result = button->Press(true);
+				result = station->Press(true);
 				route[0].call_made = 1;
 			}
 			else
 			{
-				result = button->Press(false);
+				result = station->Press(false);
 				route[0].call_made = -1;
 			}
 		}
@@ -323,10 +323,10 @@ void Person::ProcessRoute()
 		else
 		{
 			//if call has become invalid, stop route
-			if (button)
+			if (station)
 			{
-				if ((direction == true && button->GetUpStatus() == false) ||
-						(direction == false && button->GetDownStatus() == false))
+				if ((direction == true && station->GetUpStatus() == false) ||
+						(direction == false && station->GetDownStatus() == false))
 				{
 					Stop();
 					return;

@@ -63,6 +63,15 @@ public:
 	void ReportElevator(Elevator *elevator);
 	bool Call(bool direction);
 	bool GetFloorFromID(const std::string &floor, int &result);
+	void SetLightsGroup(int up, int down);
+	void UpLight(bool value);
+	void DownLight(bool value);
+	void SetLights(int up, int down);
+	bool GetUpStatus();
+	bool GetDownStatus();
+	Control* GetUpControl();
+	Control* GetDownControl();
+	bool Press(bool up);
 
 private:
 	ButtonPanel* panel; //button panel object
