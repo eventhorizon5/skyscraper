@@ -1286,9 +1286,14 @@ bool DispatchController::SameElevators(const std::vector<int> &elevators)
 	return true;
 }
 
-bool DispatchController::ActiveCall(int elevator, int floor, bool direction)
+bool DispatchController::GetCallStatus(int elevator, int floor, bool &up, bool &down)
 {
-	//returns true if a matching call is active on the specified floor and direction
+	//returns call status for the specified elevator and floor
+	//returns true if a matching call was found
+
+	up = false;
+	down = false;
+	bool result = false;
 
 	for (int i = 0; i < Elevators.size(); i++)
 	{
@@ -1296,14 +1301,21 @@ bool DispatchController::ActiveCall(int elevator, int floor, bool direction)
 		{
 			for (int j = 0; j < (int)Elevators[i].calls.size(); j++)
 			{
-				if (Elevators[i].calls[j].floor == floor && Elevators[i].calls[j].direction == direction)
-					return true;
+				if (Elevators[i].calls[j].floor == floor)
+				{
+					if (Elevators[i].calls[j].direction == true)
+						up = true;
+					else
+						down = true;
+
+					result = true;
+				}
 			}
 			break;
 		}
 	}
 
-	return false;
+	return result;
 }
 
 }

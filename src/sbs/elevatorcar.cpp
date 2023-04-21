@@ -3048,21 +3048,14 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 	{
 		parent->GetCallButtonStatus(floor, up, down);
 
-		//when a controller is assigned, set direction to be the call response direction
-		//the above GetCallButtonStatus should probably be migrated to this function
+		//in DD mode, set direction to be the call response direction
+		//the above GetCallButtonStatus should probably be migrated to this and the next function
 		if (parent->GetDestinationDispatch() == true)
 			direction = RespondingToCall(floor);
 
-		//ask controller if this elevator has a route pending for the specified floor, if so, get it's call direction
+		//get call status from controller
 		if (up == false && down == false)
-		{
-			if (parent->IsCallActive(floor, parent->GetArrivalDirection(floor)))
-			{
-				direction = -1;
-				if (parent->GetArrivalDirection(floor) == true)
-					direction = 1;
-			}
-		}
+			parent->GetCallStatus(floor, up, down);
 	}
 
 	bool new_direction = false;

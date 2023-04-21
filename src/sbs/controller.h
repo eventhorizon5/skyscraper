@@ -68,7 +68,7 @@ public:
 	int GetTopFloor();
 	int GetElevator(int index);
 	bool SameElevators(const std::vector<int> &elevators);
-	bool ActiveCall(int elevator, int floor, bool direction);
+	bool GetCallStatus(int elevator, int floor, bool &up, bool &down);
 
 private:
 

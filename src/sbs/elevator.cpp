@@ -4806,15 +4806,15 @@ void Elevator::RemoveController(int controller)
 	}
 }
 
-int Elevator::IsCallActive(int floor, bool direction)
+bool Elevator::GetCallStatus(int floor, bool &up, bool &down)
 {
-	//returns true if a call is active on the controller for the specified floor and direction
+	//returns call status for the specified floor
 
 	for (int i = 0; i < (int)Controllers.size(); i++)
 	{
 		bool result = false;
 		if (sbs->GetController(Controllers[i]))
-			result = sbs->GetController(Controllers[i])->ActiveCall(Number, floor, direction);
+			result = sbs->GetController(Controllers[i])->GetCallStatus(Number, floor, up, down);
 
 		if (result == true)
 			return result;
