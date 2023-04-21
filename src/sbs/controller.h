@@ -69,6 +69,7 @@ public:
 	int GetElevator(int index);
 	bool SameElevators(const std::vector<int> &elevators);
 	bool GetCallStatus(int elevator, int floor, bool &up, bool &down);
+	std::vector<CallStation*> GetCallStations(int floor);
 
 private:
 

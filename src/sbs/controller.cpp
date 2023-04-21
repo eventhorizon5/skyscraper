@@ -1030,6 +1030,22 @@ void DispatchController::UnregisterCallStation(CallStation *station)
 	}
 }
 
+std::vector<CallStation*> DispatchController::GetCallStations(int floor)
+{
+	//returns list of callstations for the specified floor
+
+	std::vector<CallStation*> stationlist;
+
+	for (size_t i = 0; i < CallStations.size(); i++)
+	{
+		if (CallStations[i]->GetFloor() == floor)
+		{
+			stationlist.push_back(CallStations[i]);
+		}
+	}
+	return stationlist;
+}
+
 void DispatchController::RegisterCallButton(CallButton *button)
 {
 	//register the specified call station
