@@ -27,7 +27,6 @@
 #include "elevatorcar.h"
 #include "floor.h"
 #include "callstation.h"
-#include "callbutton.h"
 #include "controller.h"
 
 namespace SBS {
@@ -275,7 +274,6 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	route.requests = 1;
 	route.processed = false;
 	route.station = station;
-	route.button = 0;
 	route.assigned_elevator = 0;
 	route.direction = 0;
 	route.destination = true;
@@ -285,7 +283,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	return true;
 }
 
-bool DispatchController::CallElevator(CallStation *station, CallButton *button, bool direction)
+bool DispatchController::CallElevator(CallStation *station, bool direction)
 {
 	//call an elevator (request a standard route)
 
@@ -297,14 +295,11 @@ bool DispatchController::CallElevator(CallStation *station, CallButton *button, 
 		return false;
 	}
 
-	if (!station && !button)
+	if (!station)
 		return false;
 
 	int floor = 0;
-	if (station)
-		floor = station->GetFloor();
-	else
-		floor = button->GetFloor();
+	floor = station->GetFloor();
 
 	Report("Calling an elevator from origin floor " + ToString(floor));
 
@@ -364,7 +359,6 @@ bool DispatchController::CallElevator(CallStation *station, CallButton *button, 
 	route.requests = 1;
 	route.processed = false;
 	route.station = station;
-	route.button = button;
 	route.assigned_elevator = 0;
 	route.direction = dir;
 	route.destination = false;
@@ -1044,34 +1038,6 @@ std::vector<CallStation*> DispatchController::GetCallStations(int floor)
 		}
 	}
 	return stationlist;
-}
-
-void DispatchController::RegisterCallButton(CallButton *button)
-{
-	//register the specified call station
-
-	//exit if already registered
-	for (int i = 0; i < CallButtons.size(); i++)
-	{
-		if (CallButtons[i] == button)
-			return;
-	}
-
-	CallButtons.push_back(button);
-}
-
-void DispatchController::UnregisterCallButton(CallButton *button)
-{
-	//unregister the specified call station
-
-	for (size_t i = 0; i < CallButtons.size(); i++)
-	{
-		if (CallButtons[i] == button)
-		{
-			CallButtons.erase(CallButtons.begin() + i);
-			return;
-		}
-	}
 }
 
 int DispatchController::GetElevatorArrived(int starting_floor, int destination_floor)

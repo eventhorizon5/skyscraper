@@ -29,7 +29,6 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "camera.h"
-#include "callbutton.h"
 #include "callstation.h"
 #include "sound.h"
 #include "mesh.h"
@@ -179,16 +178,6 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//AccessUp
 	//AccessOff
 
-	////CallButton actions:
-	//Off
-	//Up
-	//Down
-	//PressUp
-	//PressDown
-	//FireOff
-	//FireOn
-	//FireBypass
-
 	//CallStation actions:
 	//Off
 	//(floor number)
@@ -210,6 +199,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//InputBackspace
 	//Up
 	//Down
+	//PressUp
+	//PressDown
 
 	//Escalator and MovingWalkway actions:
 	//Forward
@@ -229,7 +220,6 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	Floor *floor = dynamic_cast<Floor*>(parent);
 	Shaft *shaft = dynamic_cast<Shaft*>(parent);
 	Stairwell *stairs = dynamic_cast<Stairwell*>(parent);
-	CallButton *callbutton = dynamic_cast<CallButton*>(parent);
 	CallStation *callstation = dynamic_cast<CallStation*>(parent);
 	Escalator *escalator = dynamic_cast<Escalator*>(parent);
 	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
@@ -496,15 +486,6 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return true;
 		}
 
-		if (callbutton)
-		{
-			if (command_name == "fire1off")
-				return callbutton->FireService(0);
-			if (command_name == "fire1on")
-				return callbutton->FireService(1);
-			if (command_name == "fire1bypass")
-				return callbutton->FireService(2);
-		}
 		if (station)
 		{
 			if (command_name == "fire1off")
@@ -648,17 +629,6 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		}
 	}
 
-	//callbutton-specific commands
-	if (callbutton)
-	{
-		if (command_name == "off")
-			return false;
-		if (command_name == "up")
-			return callbutton->Call(true);
-		if (command_name == "down")
-			return callbutton->Call(false);
-	}
-
 	//if parent is a call station, get parent floor object
 	if (callstation)
 		floor = sbs->GetFloor(callstation->GetFloor());
@@ -710,6 +680,10 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callstation->Call(true);
 		if (command_name == "down")
 			return callstation->Call(false);
+		if (command_name == "pressup")
+			return callstation->Press(true);
+		if (command_name == "pressdown")
+			return callstation->Press(false);
 	}
 
 	//escalator-specific commands

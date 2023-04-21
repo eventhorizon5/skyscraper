@@ -37,7 +37,6 @@
 #include "route.h"
 #include "escalator.h"
 #include "cameratexture.h"
-#include "callbutton.h"
 #include "callstation.h"
 #include "control.h"
 #include "trigger.h"
@@ -173,17 +172,6 @@ Floor::~Floor()
 			delete lights[i];
 		}
 		lights[i] = 0;
-	}
-
-	//delete call buttons
-	for (size_t i = 0; i < CallButtonArray.size(); i++)
-	{
-		if (CallButtonArray[i])
-		{
-			CallButtonArray[i]->parent_deleting = true;
-			delete CallButtonArray[i];
-		}
-		CallButtonArray[i] = 0;
 	}
 
 	//delete call stations
@@ -445,13 +433,6 @@ void Floor::Enabled(bool value)
 	{
 		if (ModelArray[i])
 			ModelArray[i]->Enabled(value);
-	}
-
-	//call buttons
-	for (size_t i = 0; i < CallButtonArray.size(); i++)
-	{
-		if (CallButtonArray[i])
-			CallButtonArray[i]->Enabled(value);
 	}
 
 	//call stations

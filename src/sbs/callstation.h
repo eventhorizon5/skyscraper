@@ -72,6 +72,7 @@ public:
 	Control* GetUpControl();
 	Control* GetDownControl();
 	bool Press(bool up);
+	bool CreateCallButtons(const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 
 private:
 	ButtonPanel* panel; //button panel object

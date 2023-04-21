@@ -29,6 +29,7 @@
 #include "indicator.h"
 #include "timer.h"
 #include "manager.h"
+#include "texture.h"
 #include "control.h"
 #include "callstation.h"
 #include "elevator.h"
@@ -261,6 +262,10 @@ bool CallStation::Input(const std::string &text)
 	if (text.length() != 1)
 		return false;
 
+	//check lock state
+	if (IsLocked() == true)
+		return ReportError("Call station is locked");
+
 	//erase last character if specified
 	if (text == "<" && InputCache.size() >= 1)
 		InputCache.pop_back();
@@ -433,8 +438,12 @@ bool CallStation::Call(bool direction)
 {
 	//call elevator in the specified direction
 
+	//check lock state
+	if (IsLocked() == true)
+		return ReportError("Call station is locked");
+
 	if (GetController())
-		return GetController()->CallElevator(this, 0, direction);
+		return GetController()->CallElevator(this, direction);
 
 	return false;
 }
@@ -588,6 +597,75 @@ bool CallStation::Press(bool up)
 		result = GetDownControl()->Press();
 
 	return result;
+}
+
+bool CallStation::CreateCallButtons(const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
+{
+	int topfloor = GetController()->GetTopFloor();
+	int bottomfloor = GetController()->GetBottomFloor();
+	bool UpExists = false;
+	bool DownExists = false;
+
+	if (floor->Number > bottomfloor && floor->Number < topfloor)
+	{
+		UpExists = true;
+		DownExists = true;
+	}
+	else if (floor->Number == bottomfloor)
+		UpExists = true;
+	else if (floor->Number == topfloor)
+		DownExists = true;
+
+	int rows = 0;
+	if (UpExists == true)
+		rows++;
+	if (DownExists == true)
+		rows++;
+
+	//create button panel
+	Real button_height = BackHeight / 3.5;
+	Real button_width = BackWidth / 2;
+	Real h_spacing = 0.5;
+	Real v_spacing = 1.25;
+	if (UpExists == true && DownExists == true)
+		v_spacing = 0.5;
+
+	panel = new ButtonPanel(this, 1, BackTexture, rows, 1, direction, 0, 0, button_width, button_height, h_spacing, v_spacing, BackHeight / 2, tw, th, false);
+
+	//create controls
+	if (sbs->Verbose)
+		Report("Creating controls");
+
+	if (UpExists == true)
+	{
+		int row = 1;
+		std::vector<std::string> names, textures;
+
+		textures.push_back(UpButtonTexture);
+		textures.push_back(UpButtonTexture_Lit);
+		sbs->GetTextureManager()->EnableLighting(UpButtonTexture_Lit, false);
+		names.push_back("off");
+		names.push_back("up");
+
+		panel->AddControl(sound_file_up, row, 1, 1, 1, 0, 0, 1, names, textures);
+	}
+	if (DownExists == true)
+	{
+		int row = 1;
+		if (UpExists == true)
+			row = 2;
+
+		std::vector<std::string> names, textures;
+
+		textures.push_back(DownButtonTexture);
+		textures.push_back(DownButtonTexture_Lit);
+		sbs->GetTextureManager()->EnableLighting(DownButtonTexture_Lit, false);
+		names.push_back("off");
+		names.push_back("down");
+
+		panel->AddControl(sound_file_down, row, 1, 1, 1, 0, 0, 1, names, textures);
+	}
+	return true;
 }
 
 }
