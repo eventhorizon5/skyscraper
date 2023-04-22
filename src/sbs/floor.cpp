@@ -864,39 +864,6 @@ void Floor::Loop()
 	LoopChildren();
 }
 
-std::vector<int> Floor::GetCallButtons(int elevator)
-{
-	//get numbers of call buttons that service the specified elevator
-
-	std::vector<int> buttons;
-	buttons.reserve(CallButtonArray.size());
-	for (size_t i = 0; i < CallButtonArray.size(); i++)
-	{
-		//put button number onto the array if it serves the elevator
-		if (CallButtonArray[i])
-		{
-			if (CallButtonArray[i]->ServicesElevator(elevator) == true)
-				buttons.push_back((int)i);
-		}
-	}
-	return buttons;
-}
-
-CallButton* Floor::GetCallButton(int elevator)
-{
-	//returns the first call button object that services the specified elevator
-
-	for (size_t i = 0; i < CallButtonArray.size(); i++)
-	{
-		if (CallButtonArray[i])
-		{
-			if (CallButtonArray[i]->ServicesElevator(elevator) == true)
-				return CallButtonArray[i];
-		}
-	}
-	return 0;
-}
-
 std::vector<int> Floor::GetCallStations(int elevator)
 {
 	//get numbers of call stations that service the specified elevator
@@ -1659,10 +1626,9 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 			{
 				std::string type = SetCaseCopy(elev->Type, false);
 				bool serviced = car->IsServicedFloor(DestinationFloor);
-				CallButton *button = GetCallButton(elev->Number);
 				CallStation *station = GetCallStationForElevator(elev->Number);
 
-				if (serviced == true && type == ElevatorType && (button || station))
+				if (serviced == true && type == ElevatorType && station)
 				{
 					ElevatorRoute* route = new ElevatorRoute(car, DestinationFloor);
 					return route;

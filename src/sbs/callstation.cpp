@@ -229,6 +229,17 @@ int CallStation::GetElevatorArrived(int starting_floor, int destination_floor)
 	return GetController()->GetElevatorArrived(starting_floor, destination_floor);
 }
 
+int CallStation::GetElevatorArrivedStandard(int floor, bool direction)
+{
+	//return the number of the elevator that has arrived, for the specified route
+	//return 0 if no elevator has arrived yet
+
+	if (!GetController())
+		return 0;
+
+	return GetController()->GetElevatorArrivedStandard(floor, direction);
+}
+
 bool CallStation::FireService(int value)
 {
 	if (GetController())

@@ -250,18 +250,20 @@ void Person::ProcessRoute()
 	//then press floor button for standard elevators, or ride elevator for destination dispatch
 	if (route[0].floor_selected == false || (route[0].destination == true && route[0].in_elevator == false))
 	{
-		CallButton *button = route[0].callbutton;
 		CallStation *station = route[0].callstation;
 
-		if (!button && !station)
+		if (!station)
 			return;
 
 		bool direction = (floor_selection > current_floor);
 		int number = 0;
-		if (button)
-			number = button->GetElevatorArrived(direction);
-		if (station && route[0].destination == true)
-			number = station->GetElevatorArrived(current_floor, floor_selection);
+		if (station)
+		{
+			if (route[0].destination == false)
+				number = station->GetElevatorArrivedStandard(current_floor, direction);
+			else
+				number = station->GetElevatorArrived(current_floor, floor_selection);
+		}
 
 		if (number > 0)
 		{
