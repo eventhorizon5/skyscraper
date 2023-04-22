@@ -626,6 +626,9 @@ bool CallStation::CreateCallButtons(const std::string &sound_file_up, const std:
 	if (!GetController())
 		return false;
 
+	if (ShowBack == false)
+		BackTexture = "";
+
 	int topfloor = GetController()->GetTopFloor();
 	int bottomfloor = GetController()->GetBottomFloor();
 	bool UpExists = false;
