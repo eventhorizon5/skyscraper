@@ -655,7 +655,7 @@ bool CallStation::CreateCallButtons(const std::string &sound_file_up, const std:
 	if (UpExists == true && DownExists == true)
 		v_spacing = 0.5;
 
-	panel = CreateButtonPanel(BackTexture, rows, 1, direction, button_width, button_height, h_spacing, v_spacing, tw, th);
+	panel = new ButtonPanel(this, 1, BackTexture, rows, 1, direction, 0, 0, button_width, button_height, h_spacing, v_spacing, BackHeight / 2, tw, th);
 
 	//create controls
 	if (sbs->Verbose)
