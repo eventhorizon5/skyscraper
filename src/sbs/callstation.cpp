@@ -114,7 +114,7 @@ ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows
 	if (sbs->Verbose)
 		Report("Creating button panel");
 
-	panel = new ButtonPanel(this, 0, texture, rows, columns, direction, 0, 0, buttonwidth, buttonheight, spacingX, spacingY, 0, tw, th);
+	panel = new ButtonPanel(this, 1, texture, rows, columns, direction, 0, 0, buttonwidth, buttonheight, spacingX, spacingY, 0, tw, th);
 	return panel;
 }
 
