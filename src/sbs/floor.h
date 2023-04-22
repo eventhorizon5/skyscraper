@@ -46,7 +46,6 @@ public:
 	bool IsEnabled; //is floor enabled?
 	bool IsColumnFrameEnabled; //is columnframe enabled?
 	bool IsInterfloorEnabled; //is interfloor enabled?
-	std::vector<CallButton*> CallButtonArray; //pointer array to call button objects
 	std::vector<CallStation*> CallStationArray; //pointer array to call station objects
 	std::vector<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
 	std::vector<int> Group; //floor group
@@ -63,7 +62,7 @@ public:
 	Wall* AddInterfloorWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real voffset1, Real voffset2, Real tw, Real th);
 	void Enabled(bool value);
 	Real FullHeight();
-	CallButton* AddCallButtons(int controller, const std::string &sound_file_up, const std::string &sound_file_down, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
+	CallStation* AddCallButtons(int controller, const std::string &sound_file_up, const std::string &sound_file_down, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 	CallStation* AddCallStation(int number);
 	void Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber = 0, bool prepare = false);
 	void CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool prepare = false);
@@ -94,7 +93,6 @@ public:
 	bool ReportError(const std::string &message);
 	Real GetBase(bool relative = false);
 	Door* GetDoor(int number);
-	void RemoveCallButton(CallButton *callbutton);
 	void RemoveCallStation(CallStation* station);
 	void RemoveFloorIndicator(FloorIndicator *indicator);
 	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);

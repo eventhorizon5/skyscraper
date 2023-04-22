@@ -160,7 +160,6 @@ void Person::GotoFloor(int floor)
 
 		RouteEntry route_entry;
 		route_entry.elevator_route = elevators[i];
-		route_entry.callbutton = 0;
 		route_entry.callstation = 0;
 		route_entry.call_made = 0;
 		route_entry.floor_selected = false;
@@ -200,9 +199,7 @@ void Person::ProcessRoute()
 	//if a call has not been made, press first elevator's associated call button
 	if (route[0].call_made == 0)
 	{
-		route[0].callbutton = floor_obj->GetCallButton(elevator->Number);
 		route[0].callstation = floor_obj->GetCallStationForElevator(elevator->Number);
-		CallButton *button = route[0].callbutton;
 		CallStation *station = route[0].callstation;
 
 		bool result = false;

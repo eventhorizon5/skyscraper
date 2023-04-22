@@ -254,8 +254,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return elevator->SelectFloor(floor);
 		}
 
-		//get first callbutton on recall floor
-		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		//get first call station on recall floor
 		CallStation *station = elevator->GetPrimaryCallStation();
 
 		//if called from a control and mouse button is held down, notify elevator

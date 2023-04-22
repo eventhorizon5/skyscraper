@@ -3891,18 +3891,9 @@ Shaft* Elevator::GetShaft()
 	return sbs->GetShaft(AssignedShaft);
 }
 
-CallButton* Elevator::GetPrimaryCallButton()
-{
-	//returns the first call button associated with this elevator, on the fire recall (lobby) floor
-	Floor *floor = sbs->GetFloor(RecallFloor);
-	if (floor)
-		return floor->GetCallButton(Number);
-	return 0;
-}
-
 CallStation* Elevator::GetPrimaryCallStation()
 {
-	//returns the first call button associated with this elevator, on the fire recall (lobby) floor
+	//returns the first call station associated with this elevator, on the fire recall (lobby) floor
 	Floor *floor = sbs->GetFloor(RecallFloor);
 	if (floor)
 		return floor->GetCallStationForElevator(Number);

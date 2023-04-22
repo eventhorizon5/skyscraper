@@ -42,6 +42,7 @@
 #include "movingwalkway.h"
 #include "light.h"
 #include "controller.h"
+#include "callstation.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -811,24 +812,24 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create call button
-		CallButton* callbutton = 0;
+		CallStation* callstation = 0;
 		if (compat == 1)
-			callbutton = floor->AddCallButtons(callbutton_controller, "", "", tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
+			callstation = floor->AddCallButtons(callbutton_controller, "", "", tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
 		else if (compat == 2)
-			callbutton = floor->AddCallButtons(callbutton_controller, "", "", tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			callstation = floor->AddCallButtons(callbutton_controller, "", "", tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else if (compat == 3)
-			callbutton = floor->AddCallButtons(callbutton_controller, tempdata[0], tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			callstation = floor->AddCallButtons(callbutton_controller, tempdata[0], tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 		else
-			callbutton = floor->AddCallButtons(callbutton_controller, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), tempdata[10], ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToBool(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
+			callstation = floor->AddCallButtons(callbutton_controller, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), tempdata[10], ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToBool(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
-		if (callbutton)
+		if (callstation)
 		{
 			if (config->lockvalue == 0)
-				callbutton->SetLocked(false, config->keyvalue);
+				callstation->SetLocked(false, config->keyvalue);
 			else
-				callbutton->SetLocked(true, config->keyvalue);
+				callstation->SetLocked(true, config->keyvalue);
 		}
-		StoreCommand(callbutton);
+		StoreCommand(callstation);
 		return sNextLine;
 	}
 

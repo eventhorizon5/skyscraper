@@ -57,7 +57,6 @@ private:
 	struct RouteEntry
 	{
 		ElevatorRoute* elevator_route;
-		CallButton* callbutton;
 		CallStation* callstation;
 		int call_made;
 		bool floor_selected;

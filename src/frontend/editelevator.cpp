@@ -32,6 +32,7 @@
 #include "elevatordoor.h"
 #include "elevatorcar.h"
 #include "debugpanel.h"
+#include "callstation.h"
 #include "editelevator.h"
 #include "skyscraper.h"
 
@@ -1614,9 +1615,9 @@ void editelevator::On_Fire1Off_Select(wxCommandEvent& event)
 {
 	if (elevator)
 	{
-		CallButton *callbutton = elevator->GetPrimaryCallButton();
-		if (callbutton)
-			callbutton->FireService(0);
+		CallStation *callstation = elevator->GetPrimaryCallStation();
+		if (callstation)
+			callstation->FireService(0);
 	}
 }
 
@@ -1624,9 +1625,9 @@ void editelevator::On_Fire1On_Select(wxCommandEvent& event)
 {
 	if (elevator)
 	{
-		CallButton *callbutton = elevator->GetPrimaryCallButton();
-		if (callbutton)
-			callbutton->FireService(1);
+		CallStation *callstation = elevator->GetPrimaryCallStation();
+		if (callstation)
+			callstation->FireService(1);
 	}
 }
 
@@ -1634,9 +1635,9 @@ void editelevator::On_Fire1Bypass_Select(wxCommandEvent& event)
 {
 	if (elevator)
 	{
-		CallButton *callbutton = elevator->GetPrimaryCallButton();
-		if (callbutton)
-			callbutton->FireService(2);
+		CallStation *callstation = elevator->GetPrimaryCallStation();
+		if (callstation)
+			callstation->FireService(2);
 	}
 }
 
