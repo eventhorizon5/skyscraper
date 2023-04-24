@@ -287,7 +287,7 @@ bool CallStation::Input(const std::string &text)
 	//automatically error if multiple special characters were entered and/or combined with numbers
 	int StarCount = std::count(InputCache.begin(), InputCache.end(), '*');
 	int MinCount  = std::count(InputCache.begin(), InputCache.end(), '-');
-	if ((StarCount >= 1 || MinCount > 1) && InputCache.length() > 1)
+	if ((StarCount > 1 || MinCount > 1) && InputCache.length() > 1)
 	{
 		timer->Stop();
 		InputCache = "";
@@ -300,7 +300,7 @@ bool CallStation::Input(const std::string &text)
 
 	//verify that the floor entry is valid, error if not
 	int result = 0;
-	if (GetFloorFromID(InputCache, result) == false)
+	if (GetFloorFromID(InputCache, result) == false && InputCache != "*" && InputCache != "-")
 	{
 		timer->Stop();
 		InputCache = "";
