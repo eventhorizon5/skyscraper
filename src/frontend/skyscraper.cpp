@@ -203,15 +203,16 @@ bool Skyscraper::OnInit(void)
 #if defined(__WXMAC__)
 	data_path = settingsPath() + "/Skyscraper/"; //Application Support folder
 
-	if (wxDirExists(data_path) == true)
-	{
-		if (!wxDirExists(data_path + wxT("buildings")))
-			wxMkdir(data_path + wxT("buildings"));
-		if (!wxDirExists(data_path + wxT("data")))
-			wxMkdir(data_path + wxT("data"));
-		if (!wxDirExists(data_path + wxT("screenshots")))
-			wxMkdir(data_path + wxT("screenshots"));
-	}
+	if (!wxDirExists(data_path))
+		wxMkdir(data_path);
+
+	if (!wxDirExists(data_path + wxT("buildings")))
+		wxMkdir(data_path + wxT("buildings"));
+	if (!wxDirExists(data_path + wxT("data")))
+		wxMkdir(data_path + wxT("data"));
+	if (!wxDirExists(data_path + wxT("screenshots")))
+		wxMkdir(data_path + wxT("screenshots"));
+
 	wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
 #elif defined (__WXGTK__)
 	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory
