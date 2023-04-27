@@ -514,7 +514,7 @@ CallStation* Floor::AddCallButtons(int controller, const std::string &sound_file
 {
 	//create call buttons
 
-	CallStation *station = AddCallStation(CallStationArray.size() + 1);
+	CallStation *station = AddCallStation(0);
 	station->SetController(controller);
 	station->CreateCallButtons(sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, direction, BackWidth, BackHeight, ShowBack, tw, th);
 
