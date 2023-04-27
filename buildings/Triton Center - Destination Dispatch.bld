@@ -6868,6 +6868,7 @@ DrawWalls = true, true, false, false, false, false
 #Service Elevators
 <Elevator 66>
     Name = Upper Service
+    ID = A
     Type = Service
     Speed = 21
     Acceleration = 0.3
@@ -7027,6 +7028,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 67>
     Name = Lower Service
+    ID = A
     Type = Service
     Speed = 21
     Acceleration = 0.3
@@ -7213,6 +7215,7 @@ DrawWalls = true, true, false, false, false, false
 #Freight Elevator
 <Elevator 68>
     Name = Freight
+    ID = A
     Type = Freight
     Speed = 15
     Acceleration = 0.2
@@ -7470,6 +7473,7 @@ DrawWalls = true, true, false, false, false, false
 #Hotel Service
 <Elevator 69>
     Name = Hotel Service 1
+    ID = A
     Type = Service
     Speed = 14
     Acceleration = 0.2
@@ -7484,6 +7488,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 70>
     Name = Hotel Service 2
+    ID = B
     Type = Service
     Speed = 14
     Acceleration = 0.2
@@ -7596,6 +7601,7 @@ DrawWalls = true, true, false, false, false, false
 #Residential service
 <Elevator 71>
     Name = Residential Service
+    ID = A
     Type = Service
     Speed = 16
     Acceleration = 0.3
