@@ -358,8 +358,11 @@ bool CallStation::GetFloorFromID(const std::string &floor, int &result)
 
 	int rawfloor = ToInt(floor);
 
-	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(floor);
-	Floor *floorobj2 = sbs->GetFloorManager()->GetByID(floor);
+	//convert back to string, to strip off any leading 0's
+	std::string converted = ToString(rawfloor);
+
+	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
+	Floor *floorobj2 = sbs->GetFloorManager()->GetByID(converted);
 	Floor *floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
 
 	if (floorobj)
