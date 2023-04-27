@@ -964,16 +964,6 @@ void DispatchController::AssignElevator(int number, int destination_floor, int d
 
 			if (direction == 0) //destination dispatch mode
 			{
-				//exit if elevator has already been assigned to the floor
-				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
-				{
-					if (Elevators[i].assigned_destination[j] == destination_floor)
-					{
-						Report("Elevator already assigned to destination floor " + ToString(destination_floor));
-						return;
-					}
-				}
-
 				//add floor to assignment list
 				Elevators[i].assigned_destination.push_back(destination_floor);
 			}
