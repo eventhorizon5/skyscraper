@@ -1148,7 +1148,7 @@ void editelevator::On_bCall_Click(wxCommandEvent& event)
 	{
 		if (car->GetFloor() > Simcore->camera->CurrentFloor)
 			elevator->AddRoute(Simcore->camera->CurrentFloor, -1, 1);
-		if (car->GetFloor() < Simcore->camera->CurrentFloor)
+		if (car->GetFloor() <= Simcore->camera->CurrentFloor)
 			elevator->AddRoute(Simcore->camera->CurrentFloor, 1, 1);
 	}
 }
