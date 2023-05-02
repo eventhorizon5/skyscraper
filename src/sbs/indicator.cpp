@@ -199,6 +199,11 @@ bool Indicator::PlaySound()
 	if (active_text == "XX")
 		expanded = "error";
 
+	//remove direction characters
+	ReplaceAll(expanded, "<", "");
+	ReplaceAll(expanded, ">", "");
+	ReplaceAll(expanded, "[]", "");
+
 	//change the asterisk into the current active text value
 	ReplaceAll(newsound, "*", expanded);
 	TrimString(newsound);
