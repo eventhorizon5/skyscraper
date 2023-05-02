@@ -504,8 +504,8 @@ SetAutoSize = false, false
 
         #create a button panel and controls
         CreatePanel ElevExtPanels, 4, 3, front, 0.15, 0.15, 0.3, 0.45, 0, 0
-        AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, Off, Up, ButtonUp, ButtonUpLit
-        AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, Off, Down, ButtonDown, ButtonDownLit
+        if[%floor% < 9] AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, Off, Up, ButtonUp, ButtonUpLit
+        if[%floor% > 0] AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, Off, Down, ButtonDown, ButtonDownLit
 
         #set position of call station
         SetPosition 3, 4, 6 - 4.125 - 0.33 - 0.1
