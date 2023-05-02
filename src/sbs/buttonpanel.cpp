@@ -52,6 +52,9 @@ ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, 
 	SpacingY = ButtonHeight * spacingY;
 	off_action = 0;
 
+	SetCase(Direction, false);
+	TrimString(Direction);
+
 	//total spacing plus total button widths
 	Width = ((Columns + 1) * SpacingX) + (Columns * ButtonWidth);
 	Height = ((Rows + 1) * SpacingY) + (Rows * ButtonHeight);
