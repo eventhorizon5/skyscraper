@@ -77,6 +77,10 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	if (!Car)
 		return;
 
+	//exit if the car starting floor is invalid
+	if (!sbs->GetFloor(Car->StartingFloor))
+		return;
+
 	std::string texture = Prefix + sbs->GetFloor(Car->StartingFloor)->ID;
 	sbs->GetTextureManager()->EnableLighting(texture, false);
 	std::string tmpdirection = direction;
