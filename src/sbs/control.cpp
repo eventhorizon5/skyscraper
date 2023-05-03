@@ -58,6 +58,9 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	sound = 0;
 	action_hold = false;
 
+	SetCase(Direction, false);
+	TrimString(Direction);
+
 	//create object mesh
 	ControlMesh = new MeshObject(this, name2, 0, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 

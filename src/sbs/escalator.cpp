@@ -193,6 +193,9 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 	SetCase(Direction, false);
 	int num_steps = (int)Steps.size();
 
+	SetCase(Direction, false);
+	TrimString(Direction);
+
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
 		sbs->SetWallOrientation("right");

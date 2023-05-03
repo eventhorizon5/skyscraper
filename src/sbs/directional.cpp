@@ -72,6 +72,9 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 	timer = 0;
 	timer_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Timer", 15000);
 
+	SetCase(Direction, false);
+	TrimString(Direction);
+
 	//validate objects
 	if (!sbs->GetElevator(elevator))
 		return;
