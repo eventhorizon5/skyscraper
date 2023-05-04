@@ -84,7 +84,6 @@ namespace SBS {
 	class Sound;
 	class SoundSystem;
 	struct SoundData;
-	class CallButton;
 	class Profiler;
 	class Control;
 	class Trigger;
