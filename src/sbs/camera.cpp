@@ -211,7 +211,7 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 
 	//keep rotation within 360 degree boundaries
 	Ogre::Vector3 vector = rotation;
-	if (RestrictRotation && vector.x > 90 && vector.x < 270) 
+	if (RestrictRotation && vector.x > 90 && vector.x < 270)
 		vector.x = vector.x > 180 ? 270 : 90;
 	if (vector.x > 359)
 		vector.x -= 360;
@@ -602,20 +602,20 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	if (!mesh_parent)
 		return;
 
-	//show result
-	if (!wall)
-		Report("Clicked on object " + number + ": " + mesh_parent->GetName()+ " - Mesh: " + meshname);
-
 	if (mesh_parent->GetType() == "ButtonPanel")
 	{
-		//for call button panels, the object needs to be the third level
+		//for call station panels, the object needs to be the third level
 		Object* callpanel = mesh_parent->GetParent();
 		if (callpanel)
 		{
-			if (callpanel->GetType() == "CallButton")
+			if (callpanel->GetType() == "CallStation")
 				mesh_parent = callpanel;
 		}
 	}
+
+	//show result
+	if (!wall)
+		Report("Clicked on object " + number + ": " + mesh_parent->GetName()+ " - Mesh: " + meshname);
 
 	//delete object if ctrl and alt keys are pressed
 	if (ctrl == true && alt == true && shift == false && right == false)
