@@ -1290,4 +1290,21 @@ bool DispatchController::GetCallStatus(int elevator, int floor, bool &up, bool &
 	return result;
 }
 
+bool DispatchController::ServesFloor(int floor)
+{
+	//return true if an associated elevator serves the specified floor
+
+	for (int i = 0; i < Elevators.size(); i++)
+	{
+		Elevator *elev = sbs->GetElevator(Elevators[i].number);
+		if (elev)
+		{
+			if (elev->IsServicedFloor(floor) == true)
+				return true;
+		}
+	}
+
+	return false;
+}
+
 }

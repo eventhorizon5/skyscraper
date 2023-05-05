@@ -46,6 +46,7 @@
 #include "profiler.h"
 #include "revolvingdoor.h"
 #include "movingwalkway.h"
+#include "controller.h"
 #include "floor.h"
 
 namespace SBS {
@@ -513,6 +514,13 @@ Real Floor::FullHeight()
 CallStation* Floor::AddCallButtons(int controller, const std::string &sound_file_up, const std::string &sound_file_down, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th)
 {
 	//create call buttons
+
+	//make sure the controller serves this floor before proceeding
+	if (sbs->GetController(controller))
+	{
+		if (sbs->GetController(controller)->ServesFloor(Number) == false)
+			return 0;
+	}
 
 	CallStation *station = AddCallStation(0);
 	station->SetController(controller);

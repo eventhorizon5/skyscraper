@@ -64,6 +64,7 @@ public:
 	bool CallElevator(CallStation *station, bool direction);
 	int GetBottomFloor();
 	int GetTopFloor();
+	bool ServesFloor(int floor);
 	int GetElevator(int index);
 	bool SameElevators(const std::vector<int> &elevators);
 	bool GetCallStatus(int elevator, int floor, bool &up, bool &down);
