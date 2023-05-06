@@ -1451,6 +1451,10 @@ void Skyscraper::StartSound()
 	std::string filename = GetConfigString("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
 	std::string filename_full = "data/" + filename;
 
+	//check for an intro sound file in the data path location instead
+	if (wxFileExists(data_path + filename_full))
+		filename_full = data_path + filename_full;
+
 	//load new sound
 #if (FMOD_VERSION >> 16 == 4)
 		FMOD_RESULT result = soundsys->createSound(filename_full.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
