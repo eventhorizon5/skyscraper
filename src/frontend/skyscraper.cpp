@@ -214,6 +214,12 @@ bool Skyscraper::OnInit(void)
 		wxMkdir(data_path + wxT("screenshots"));
 
 	wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
+
+	if (!wxFileExists(data_path + wxT("skyscraper.ini")))
+		wxCopyFile("skyscraper.ini", data_path + wxT("skyscraper.ini"));
+	if (!wxFileExists(data_path + wxT("keyboard.ini")))
+		wxCopyFile("skyscraper.ini", data_path + wxT("keyboard.ini"));
+
 #elif defined (__WXGTK__)
 	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory
 #else
@@ -311,9 +317,9 @@ bool Skyscraper::OnInit(void)
 	try
 	{
 		configfile = new Ogre::ConfigFile();
-		configfile->load("skyscraper.ini");
+		configfile->load(data_path + "skyscraper.ini");
 		keyconfigfile = new Ogre::ConfigFile();
-		keyconfigfile->load("keyboard.ini");
+		keyconfigfile->load(data_path + "keyboard.ini");
 		Ogre::ConfigFile *plugins = new Ogre::ConfigFile();
 		plugins->load("plugins.cfg");
 		delete plugins;
