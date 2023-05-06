@@ -337,7 +337,8 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 		if (key == WXK_F11)
 		{
-			frontend->mRenderWindow->writeContentsToTimestampedFile("screenshots/skyscraper-", ".jpg");
+			std::string prefix = frontend->GetDataPath();
+			frontend->mRenderWindow->writeContentsToTimestampedFile(prefix + "screenshots/skyscraper-", ".jpg");
 		}
 
 		if (key == WXK_F12 && !frontend->dpanel)

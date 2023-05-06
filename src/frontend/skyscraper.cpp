@@ -539,7 +539,7 @@ bool Skyscraper::Initialize()
 			if (!logger)
 			{
 				logger = new Ogre::LogManager();
-				Ogre::Log *log = logger->createLog("skyscraper.log", true, !showconsole, false);
+				Ogre::Log *log = logger->createLog(data_path + "skyscraper.log", true, !showconsole, false);
 				log->addListener(this);
 			}
 
@@ -2692,6 +2692,11 @@ void Skyscraper::ReInit()
 	}
 
 	show_stats = -1;
+}
+
+std::string Skyscraper::GetDataPath()
+{
+	return data_path;
 }
 
 }

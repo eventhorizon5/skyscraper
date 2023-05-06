@@ -170,6 +170,7 @@ public:
 	void CreateSky(EngineContext* engine);
 	void ToggleStats();
 	void EnableStats(bool value);
+	std::string GetDataPath();
 
 private:
 	//sound data
