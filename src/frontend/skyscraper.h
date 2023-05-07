@@ -105,6 +105,8 @@ public:
 	bool CheckScript;
 	bool Headless;
 	bool RTSS;
+	int macos_major; //macos major version
+	int macos_minor; //macos minor version
 
 	bool Loop();
 	virtual bool OnInit(void);

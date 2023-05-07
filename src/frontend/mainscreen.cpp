@@ -679,6 +679,12 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 		//apply content scaling factor, fixes issues for example on Retina displays
 		Real scale = frontend->window->GetContentScaleFactor();
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+		//set scale to 1.0 on MacOS versions earlier than 10.15
+		if (frontend->macos_major == 10 && frontend->macos_minor < 15)
+			scale = 1.0;
+#endif
+
 		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick), scale);
 	}
 }

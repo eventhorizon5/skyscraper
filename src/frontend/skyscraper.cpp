@@ -235,6 +235,8 @@ bool Skyscraper::OnInit(void)
 	sky_error = 0;
 	mTrayMgr = 0;
 	show_stats = -1;
+	macos_major = 0;
+	macos_minor = 0;
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -892,15 +894,23 @@ bool Skyscraper::Initialize()
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-        //report MacOS version if applicable
-        uint32_t major = 0, minor = 0;
-        bool osx = true;
-        get_macos_version(major, minor, osx);
+	//report MacOS version if applicable
+	uint32_t major = 0, minor = 0;
+	bool osx = true;
+	get_macos_version(major, minor, osx);
 
-        if (osx == true)
-                Report("Running on MacOS 10." + ToString((int)major) + "." + ToString((int)minor));
-        else
-                Report("Running on MacOS " + ToString((int)major) + "." + ToString((int)minor));
+	if (osx == true)
+	{
+		Report("Running on MacOS 10." + ToString((int)major) + "." + ToString((int)minor));
+		macos_major = 10;
+		macos_minor = (int)major;
+	}
+	else
+	{
+		Report("Running on MacOS " + ToString((int)major) + "." + ToString((int)minor));
+		macos_major = (int)major;
+		macos_minor = (int)minor;
+	}
 #endif
 
 	return true;
@@ -1283,6 +1293,12 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	{
 		//apply content scaling factor, fixes issues for example on Retina displays
 		Real scale = window->GetContentScaleFactor();
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+		//set scale to 1.0 on MacOS versions earlier than 10.15
+		if (macos_major == 10 && macos_minor < 15)
+			scale = 1.0;
+#endif
 
 		w = w_orig / (mRenderWindow->getWidth() / 2.0 / scale);
 		h = h_orig / (mRenderWindow->getHeight() / 2.0 / scale);
