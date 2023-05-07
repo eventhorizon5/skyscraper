@@ -141,16 +141,10 @@ int get_macos_version(uint32_t &major, uint32_t &minor, bool &osx)
 
 	if (major >= 20) {
 		major -= 9;
-		osx = false;
-
-		// macOS 11 and newer
-		//printf("%u.%u\n", major, minor);
+		osx = false; //macOS 11 and newer
 	} else {
 		major -= 4;
-		osx = true;
-
-		// macOS 10.1.1 and newer
-		//printf("10.%u.%u\n", major, minor);
+		osx = true; //macOS 10.1.1 and newer
 	}
 
 	return 0;
