@@ -58,6 +58,7 @@
 #include <sysdir.h>  // for sysdir_start_search_path_enumeration
 #include <glob.h>    // for glob needed to expand ~ to user dir
 #include <stdio.h>
+#include <sys/sysctl.h>
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -117,6 +118,44 @@ std::string settingsPath() {
         throw "Failed to get settings folder";
     }
 }
+
+// Code to get OS version on Mac
+int get_macos_version(uint32_t &major, uint32_t &minor, bool &osx)
+{
+	//returns the OS major and minor version
+	//if osx is true, os is 10.x.x releases, otherwise is 11.x or greater
+
+	char osversion[32];
+	size_t osversion_len = sizeof(osversion) - 1;
+	int osversion_name[] = { CTL_KERN, KERN_OSRELEASE };
+
+	if (sysctl(osversion_name, 2, osversion, &osversion_len, NULL, 0) == -1) {
+		printf("get_macos_version: sysctl() failed\n");
+		return 1;
+	}
+
+	if (sscanf(osversion, "%u.%u", &major, &minor) != 2) {
+		printf("get_macos_version: sscanf() failed\n");
+		return 1;
+	}
+
+	if (major >= 20) {
+		major -= 9;
+		osx = false;
+
+		// macOS 11 and newer
+		//printf("%u.%u\n", major, minor);
+	} else {
+		major -= 4;
+		osx = true;
+
+		// macOS 10.1.1 and newer
+		//printf("10.%u.%u\n", major, minor);
+	}
+
+	return 0;
+}
+
 #endif
 
 int main (int argc, char* argv[])
