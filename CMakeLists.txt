@@ -105,6 +105,11 @@ add_library(SBS SHARED ${SBS_FILES})
 
 #frontend executable
 add_executable(skyscraper ${FRONTEND_FILES})
+
+target_precompile_headers(OgreBulletCol PRIVATE ogrebullet/Collisions/include/OgreBulletCollisionsPreRequisites.h)
+target_precompile_headers(OgreBulletDyn PRIVATE ogrebullet/Dynamics/include/OgreBulletDynamicsPreRequisites.h)
+target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
+target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
  
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
