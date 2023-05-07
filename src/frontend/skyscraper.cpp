@@ -218,7 +218,7 @@ bool Skyscraper::OnInit(void)
 	if (!wxFileExists(data_path + wxT("skyscraper.ini")))
 		wxCopyFile("skyscraper.ini", data_path + wxT("skyscraper.ini"));
 	if (!wxFileExists(data_path + wxT("keyboard.ini")))
-		wxCopyFile("skyscraper.ini", data_path + wxT("keyboard.ini"));
+		wxCopyFile("keyboard.ini", data_path + wxT("keyboard.ini"));
 
 #elif defined (__WXGTK__)
 	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory
