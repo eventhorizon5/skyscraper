@@ -891,6 +891,18 @@ bool Skyscraper::Initialize()
 	Platform = "MacOS " + Architecture + " " + bits;
 #endif
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+        //report MacOS version if applicable
+        uint32_t major = 0, minor = 0;
+        bool osx = true;
+        get_macos_version(major, minor, osx);
+
+        if (osx == true)
+                Report("Running on MacOS 10." + ToString((int)major) + "." + ToString((int)minor));
+        else
+                Report("Running on MacOS " + ToString((int)major) + "." + ToString((int)minor));
+#endif
+
 	return true;
 }
 
