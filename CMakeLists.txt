@@ -137,6 +137,10 @@ set_target_properties(SBS PROPERTIES
 		FRAMEWORK_VERSION 0.12
 		VERSION 0.12.0)
 
+ADD_CUSTOM_COMMAND(TARGET skyscraper
+		POST_BUILD
+		COMMAND ${CMAKE_HOME_DIRECTORY}/tools/mac/copyframework.sh)
+
 #install(CODE "execute_process(COMMAND bash \".macos_app.sh\" \"${OGRE_LIBRARY_DIRS}/macosx/release\")")
 endif()
 
