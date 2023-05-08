@@ -119,9 +119,19 @@ target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_L
 target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  
 if (APPLE)
-set_target_properties(skyscraper PROPERTIES BUILD_WITH_INSTALL_RPATH 1
-		INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/Libs")
-install(CODE "execute_process(COMMAND bash \".macos_app.sh\" \"${OGRE_LIBRARY_DIRS}/macosx/release\")")
+set_target_properties(skyscraper PROPERTIES
+		MACOSX_BUNDLE ON
+		OUTPUT_NAME "Skyscraper"
+		BUILD_WITH_INSTALL_RPATH 1
+		INSTALL_RPATH "@executable_path/../Frameworks")
+set_target_properties(OgreBulletCol PROPERTIES
+		FRAMEWORK TRUE)
+set_target_properties(OgreBulletDyn PROPERTIES
+		FRAMEWORK TRUE)
+set_target_properties(SBS PROPERTIES
+		FRAMEWORK TRUE)
+
+#install(CODE "execute_process(COMMAND bash \".macos_app.sh\" \"${OGRE_LIBRARY_DIRS}/macosx/release\")")
 endif()
 
 if (UNIX AND NOT APPLE)
