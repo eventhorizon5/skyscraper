@@ -907,7 +907,7 @@ bool Skyscraper::Initialize()
 	}
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINDOWS
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	Report("Running on Microsoft Windows");
 #endif
 
