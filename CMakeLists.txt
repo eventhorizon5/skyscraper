@@ -123,7 +123,7 @@ set_target_properties(skyscraper PROPERTIES
 		MACOSX_BUNDLE ON
 		OUTPUT_NAME "Skyscraper"
 		BUILD_WITH_INSTALL_RPATH 1
-		INSTALL_RPATH "@executable_path/../Frameworks")
+		INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/Libs")
 set_target_properties(OgreBulletCol PROPERTIES
 		FRAMEWORK TRUE)
 set_target_properties(OgreBulletDyn PROPERTIES
