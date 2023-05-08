@@ -225,9 +225,11 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 	int key = event.GetKeyCode();
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
 	//don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
 	if (wxGetKeyState((wxKeyCode)key) == false)
 		return;
+#endif
 
 	if (key == WXK_ESCAPE)
 	{
