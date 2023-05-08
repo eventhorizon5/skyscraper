@@ -61,6 +61,10 @@
 #include <sys/sysctl.h>
 #endif
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#include <windows.h>
+#endif
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include "malloc.h"
 #endif
@@ -908,7 +912,19 @@ bool Skyscraper::Initialize()
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Report("Running on Microsoft Windows");
+	//get Windows version
+
+	NTSTATUS(WINAPI* RtlGetVersion)(LPOSVERSIONINFOEXW);
+	OSVERSIONINFOEXW osInfo;
+
+	*(FARPROC*)&RtlGetVersion = GetProcAddress(GetModuleHandleA("ntdll"), "RtlGetVersion");
+
+	if (NULL != RtlGetVersion)
+	{
+		osInfo.dwOSVersionInfoSize = sizeof(osInfo);
+		RtlGetVersion(&osInfo);
+		Report("Running on Microsoft Windows " + ToString((int)osInfo.dwMajorVersion) + "." + ToString((int)osInfo.dwMinorVersion));
+	}
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
