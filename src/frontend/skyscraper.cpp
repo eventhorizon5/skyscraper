@@ -66,6 +66,7 @@
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#include <sys/utsname.h>
 #include "malloc.h"
 #endif
 
@@ -928,7 +929,9 @@ bool Skyscraper::Initialize()
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	Report("Running on Linux");
+	struct utsname osInfo{};
+	uname(&osInfo);
+	Report("Running on Linux " + std::string(osInfo.release));
 #endif
 
 	return true;
