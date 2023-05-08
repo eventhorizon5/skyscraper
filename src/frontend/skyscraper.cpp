@@ -907,6 +907,14 @@ bool Skyscraper::Initialize()
 	}
 #endif
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINDOWS
+	Report("Running on Microsoft Windows");
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	Report("Running on Linux");
+#endif
+
 	return true;
 }
 
