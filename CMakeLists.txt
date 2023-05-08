@@ -125,11 +125,17 @@ set_target_properties(skyscraper PROPERTIES
 		BUILD_WITH_INSTALL_RPATH 1
 		INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/Libs")
 set_target_properties(OgreBulletCol PROPERTIES
-		FRAMEWORK TRUE)
+		FRAMEWORK TRUE
+		FRAMEWORK_VERSION 1.0
+		VERSION 1.0.0)
 set_target_properties(OgreBulletDyn PROPERTIES
-		FRAMEWORK TRUE)
+		FRAMEWORK TRUE
+		FRAMEWORK_VERSION 1.0
+		VERSION 1.0.0)
 set_target_properties(SBS PROPERTIES
-		FRAMEWORK TRUE)
+		FRAMEWORK TRUE
+		FRAMEWORK_VERSION 0.12
+		VERSION 0.12.0)
 
 #install(CODE "execute_process(COMMAND bash \".macos_app.sh\" \"${OGRE_LIBRARY_DIRS}/macosx/release\")")
 endif()
