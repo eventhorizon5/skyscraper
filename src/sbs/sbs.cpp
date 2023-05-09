@@ -54,6 +54,7 @@
 #include "profiler.h"
 #include "controller.h"
 #include "callstation.h"
+#include "gitrev.h"
 #include "buttonpanel.h"
 
 namespace SBS {
@@ -63,7 +64,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	sbs = this;
 	this->mSceneManager = mSceneManager;
 
-	version = "0.12.0.0";
+	version = "0.12.0." + ToString(GIT_REV);
 	version_state = "Alpha";
 
 	//root object needs to self-register

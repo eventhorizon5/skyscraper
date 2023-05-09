@@ -53,6 +53,7 @@
 #include "mainscreen.h"
 #include "loaddialog.h"
 #include "profiler.h"
+#include "gitrev.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #include <sysdir.h>  // for sysdir_start_search_path_enumeration
@@ -181,7 +182,7 @@ namespace Skyscraper {
 bool Skyscraper::OnInit(void)
 {
 	version = "1.12";
-	version_rev = "0";
+	version_rev = ToString(GIT_REV);
 	version_state = "Alpha";
 	version_frontend = version + ".0." + version_rev;
 	StartupRunning = false;
