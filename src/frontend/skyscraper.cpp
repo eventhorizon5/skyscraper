@@ -590,6 +590,9 @@ bool Skyscraper::Initialize()
 				log->addListener(this);
 			}
 
+			//report on system startup
+			Report("Skyscraper version " + version_frontend + " starting...\n");
+
 			//load OGRE
 			mRoot = new Ogre::Root();
 		}
