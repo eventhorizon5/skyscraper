@@ -132,6 +132,10 @@ ADD_CUSTOM_COMMAND(TARGET skyscraper
 #install(CODE "execute_process(COMMAND bash \".macos_app.sh\" \"${OGRE_LIBRARY_DIRS}/macosx/release\")")
 endif()
 
+ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
+		POST_BUILD
+		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.sh)
+
 if (UNIX AND NOT APPLE)
 	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tools/scripts/skyscraper
 	     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
