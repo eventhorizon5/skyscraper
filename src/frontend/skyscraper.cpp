@@ -934,6 +934,8 @@ bool Skyscraper::Initialize()
 	Report("Running on Linux " + std::string(osInfo.release));
 #endif
 
+	Report("");
+
 	return true;
 }
 
