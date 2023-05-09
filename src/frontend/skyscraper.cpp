@@ -594,6 +594,7 @@ bool Skyscraper::Initialize()
 			Report("Skyscraper version " + version_frontend + " starting...\n");
 
 			//load OGRE
+			Report("Loading OGRE...");
 			mRoot = new Ogre::Root();
 		}
 		catch (Ogre::Exception &e)
@@ -609,6 +610,8 @@ bool Skyscraper::Initialize()
 	//set up overlay system
 	try
 	{
+		Report("");
+		Report("Loading Overlay System...");
 		mOverlaySystem = new Ogre::OverlaySystem();
 	}
 	catch (Ogre::Exception &e)
@@ -654,10 +657,16 @@ bool Skyscraper::Initialize()
 	//initialize render window
 	try
 	{
+		Report("");
+		Report("Initializing OGRE...");
 		mRoot->initialise(false);
 
 		if (Headless == false)
+		{
+			Report("");
+			Report("Creating render window...");
 			mRenderWindow = CreateRenderWindow();
+		}
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -682,6 +691,8 @@ bool Skyscraper::Initialize()
 	Ogre::ConfigFile cf;
 	try
 	{
+		Report("");
+		Report("Loading resources...");
 		cf.load("resources.cfg");
 	}
 	catch (Ogre::Exception &e)
