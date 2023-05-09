@@ -298,6 +298,7 @@ void EngineContext::StartSim()
 	//Pause for 2 seconds, if first instance
 	if (instance == 0)
 	{
+		wxYield(); //this allows the banner to be printed before the sleep() call
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);
 #else
