@@ -789,8 +789,20 @@ void MainScreen::EnableFreelook(bool value)
 	else
 		SetCursor(wxNullCursor);
 #else
+
+	//detect for Wayland on Linux
+	bool wayland = false;
+	const char * val = std::getenv("WAYLAND_DISPLAY");
+	if (val != 0)
+		wayland = true;
+
 	if (value == true)
-		wxSetCursor(wxCURSOR_CROSS);
+	{
+		if (wayland == false)
+			wxSetCursor(wxCURSOR_CROSS);
+		else
+			wxSetCursor(wxCURSOR_BLANK); //set to blank for FreeLook to work on Wayland
+	}
 	else
 		wxSetCursor(wxNullCursor);
 #endif
