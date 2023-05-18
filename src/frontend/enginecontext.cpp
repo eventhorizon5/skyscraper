@@ -298,7 +298,9 @@ void EngineContext::StartSim()
 	//Pause for 2 seconds, if first instance
 	if (instance == 0)
 	{
+		frontend->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
 		wxYield(); //this allows the banner to be printed before the sleep() call
+		frontend->Pause = false;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);
 #else

@@ -427,6 +427,18 @@ void DebugPanel::OnInit()
 
 void DebugPanel::Loop()
 {
+	//disable debug panel and exit if paused
+	if (skyscraper->Pause == true)
+	{
+		Enable(false);
+		return;
+	}
+	else
+	{
+		if (IsEnabled() == false)
+			Enable(true);
+	}
+
 	if (skyscraper->GetActiveEngine())
 	{
 		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
