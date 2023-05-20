@@ -1660,7 +1660,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	SBS_PROFILE("ElevatorDoor::DoorObject::MoveDoors");
 	Real tempposition, temporigin;
 
-	if (finished == true)
+	if (finished == true && parent->door_changed == false)
 		return;
 
 	if (direction > 1)
@@ -1698,7 +1698,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//debug - show current section as function is running
 	//Report("Door section: " + ToString(door_section));
 
-	if (parent->door_changed == false && door_section == 0)
+	if ((parent->door_changed == false && door_section == 0) || (parent->door_changed == true && finished == true))
 	{
 		//initialization code
 
