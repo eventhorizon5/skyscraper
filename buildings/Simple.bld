@@ -265,6 +265,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0 - 9
     AssignedShaft = 1
     LevelingOpen = 0.2
+    QueueResets = true
     
     #then create the elevator at position (0, 5.706) on the first floor (0)
     CreateElevator false, 0, 5.706, 0

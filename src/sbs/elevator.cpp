@@ -2048,9 +2048,9 @@ void Elevator::FinishMove()
 		if (QueueResets == true)
 		{
 			//if last entry in current queue, reset opposite queue
-			if (QueuePositionDirection == 1 && UpQueue.empty() == true && DownQueue.empty() == false)
+			if (QueuePositionDirection == 1 && UpQueue.size() <= 1 && DownQueue.empty() == false)
 				ResetQueue(false, true, false);
-			else if (QueuePositionDirection == -1 && DownQueue.empty() == true && UpQueue.empty() == false)
+			else if (QueuePositionDirection == -1 && DownQueue.size() <= 1 && UpQueue.empty() == false)
 				ResetQueue(true, false, false);
 		}
 
