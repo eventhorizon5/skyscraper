@@ -212,11 +212,13 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 			Ogre::AxisAlignedBox polybounds = Ogre::AxisAlignedBox::BOX_NULL;
 			bool polycheck2 = false;
 
+
 			//copy source polygon vertices
+			temppoly.resize(origpolys[j].size());
 			//for (size_t k = 0; k < origpolys[j].size(); k++)
 			tbb::parallel_for (size_t(0), origpolys[j].size(), [&](size_t k)
 			{
-				temppoly.push_back(origpolys[j][k]);
+				temppoly[k] = origpolys[j][k];
 				polybounds.merge(origpolys[j][k]);
 			});
 
