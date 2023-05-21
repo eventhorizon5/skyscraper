@@ -339,6 +339,109 @@ void SBS::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray 
 	}
 }
 
+void SBS::SplitWithPlane(int axis, tbb::concurrent_vector<Ogre::Vector3> &orig, tbb::concurrent_vector<Ogre::Vector3> &poly1, tbb::concurrent_vector<Ogre::Vector3> &poly2, Real value)
+{
+	//from Crystal Space libs/csgeom/poly3d.cpp
+	//axis is 0 for X, 1 for Y, 2 for Z
+	//splits the "orig" polygon on the desired plane into two resulting polygons
+
+	poly1.clear();
+	poly2.clear();
+
+	//preallocate memory for a worst-case scenario
+	poly1.reserve(orig.size());
+	poly2.reserve(orig.size());
+
+	Ogre::Vector3 ptB;
+	Real sideA = 0, sideB = 0;
+	Ogre::Vector3 ptA = orig[orig.size() - 1];
+
+	if (axis == 0)
+		sideA = ptA.x - value;
+	if (axis == 1)
+		sideA = ptA.y - value;
+	if (axis == 2)
+		sideA = ptA.z - value;
+
+	if (std::abs(sideA) < SMALL_EPSILON)
+		sideA = 0;
+
+	for (int i = -1; ++i < (int)orig.size();)
+	{
+		ptB = orig[i];
+		if (axis == 0)
+			sideB = ptB.x - value;
+		if (axis == 1)
+			sideB = ptB.y - value;
+		if (axis == 2)
+			sideB = ptB.z - value;
+
+		if (std::abs(sideB) < SMALL_EPSILON)
+			sideB = 0;
+
+		if (sideB > 0)
+		{
+			if (sideA < 0)
+			{
+				// Compute the intersection point of the line
+				// from point A to point B with the partition
+				// plane. This is a simple ray-plane intersection.
+
+				Ogre::Vector3 v = ptB;
+				v -= ptA;
+
+				Real sect = 0;
+				if (axis == 0)
+					sect = -(ptA.x - value) / v.x;
+				if (axis == 1)
+					sect = -(ptA.y - value) / v.y;
+				if (axis == 2)
+					sect = -(ptA.z - value) / v.z;
+				v *= sect;
+				v += ptA;
+				poly1.push_back(v);
+				poly2.push_back(v);
+			}
+
+			poly2.push_back(ptB);
+		}
+		else if (sideB < 0)
+		{
+			if (sideA > 0)
+			{
+				// Compute the intersection point of the line
+				// from point A to point B with the partition
+				// plane. This is a simple ray-plane intersection.
+
+				Ogre::Vector3 v = ptB;
+				v -= ptA;
+
+				Real sect = 0;
+				if (axis == 0)
+					sect = -(ptA.x - value) / v.x;
+				if (axis == 1)
+					sect = -(ptA.y - value) / v.y;
+				if (axis == 2)
+					sect = -(ptA.z - value) / v.z;
+				v *= sect;
+				v += ptA;
+				poly1.push_back(v);
+				poly2.push_back(v);
+			}
+
+			poly1.push_back(ptB);
+		}
+		else
+		{
+			poly1.push_back(ptB);
+			poly2.push_back(ptB);
+		}
+
+		ptA = ptB;
+		sideA = sideB;
+	}
+}
+
 Ogre::Vector3 SBS::ComputeNormal(PolyArray &vertices, Real &D)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp

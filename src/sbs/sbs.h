@@ -26,6 +26,7 @@
 
 #include <deque>
 #include <queue>
+#include <tbb/tbb.h>
 #include "OgrePrerequisites.h"
 #include "OgreSharedPtr.h"
 
@@ -298,6 +299,7 @@ public:
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
 	Ogre::Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
+	Ogre::Vector2 GetExtents(tbb::concurrent_vector<Ogre::Vector3> &varray, int coord, bool flip_z = false);
 	void Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	Ogre::Vector3 GetPolygonDirection(PolyArray &polygon);
 	int GetConfigInt(const std::string &key, int default_value);
@@ -305,6 +307,7 @@ public:
 	bool GetConfigBool(const std::string &key, bool default_value);
 	Real GetConfigFloat(const std::string &key, Real default_value);
 	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
+	void SplitWithPlane(int axis, tbb::concurrent_vector<Ogre::Vector3> &orig, tbb::concurrent_vector<Ogre::Vector3> &poly1, tbb::concurrent_vector<Ogre::Vector3> &poly2, Real value);
 	Ogre::Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
 	void AdvanceClock();
@@ -345,6 +348,7 @@ public:
 	Ogre::Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
 	void ShowSceneNodes(bool value);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
+	void GetDoorwayExtents(MeshObject *mesh, int checknumber, tbb::concurrent_vector<Ogre::Vector3> &polygon);
 	void ShowBoundingBoxes(bool value);
 	void ListVisibleMeshes();
 	int GetEscalatorCount();

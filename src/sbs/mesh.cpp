@@ -92,6 +92,53 @@ Ogre::Vector2 SBS::GetExtents(PolyArray &varray, int coord, bool flip_z)
 	return Ogre::Vector2(esmall, ebig);
 }
 
+Ogre::Vector2 SBS::GetExtents(tbb::concurrent_vector<Ogre::Vector3> &varray, int coord, bool flip_z)
+{
+	//returns the smallest and largest values from a specified coordinate type
+	//(x, y, or z) from a vertex array (polygon).
+	//first parameter must be a vertex array
+	//second must be either 1 (for x), 2 (for y) or 3 (for z)
+
+	Real esmall = 0;
+	Real ebig = 0;
+	Real tempnum = 0;
+	size_t i = 0;
+
+	//return 0,0 if coord value is out of range
+	if (coord < 1 || coord > 3)
+		return Ogre::Vector2(0, 0);
+
+	for (i = 0; i < varray.size(); i++)
+	{
+		if (coord == 1)
+			tempnum = varray[i].x;
+		if (coord == 2)
+			tempnum = varray[i].y;
+		if (coord == 3)
+		{
+			if (flip_z == false)
+				tempnum = varray[i].z;
+			else
+				tempnum = -varray[i].z;
+		}
+
+		if (i == 0)
+		{
+			esmall = tempnum;
+			ebig = tempnum;
+		}
+		else
+		{
+			if (tempnum < esmall)
+				esmall = tempnum;
+			if (tempnum > ebig)
+				ebig = tempnum;
+		}
+	}
+
+	return Ogre::Vector2(esmall, ebig);
+}
+
 void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
@@ -107,7 +154,7 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 	if (start.z > end.z)
 		std::swap(start.z, end.z);
 
-	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+	tbb::concurrent_vector<Ogre::Vector3> temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 
 	temppoly.reserve(32);
 	temppoly2.reserve(32);
@@ -166,11 +213,12 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 			bool polycheck2 = false;
 
 			//copy source polygon vertices
-			for (size_t k = 0; k < origpolys[j].size(); k++)
+			//for (size_t k = 0; k < origpolys[j].size(); k++)
+			tbb::parallel_for (size_t(0), origpolys[j].size(), [&](size_t k)
 			{
 				temppoly.push_back(origpolys[j][k]);
 				polybounds.merge(origpolys[j][k]);
-			}
+			});
 
 			//skip if the polygon is completely inside the bounding box
 			/*if (bounds.contains(polybounds) == true)
@@ -402,6 +450,49 @@ void SBS::Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls,
 }
 
 void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon)
+{
+	//calculate doorway extents, for use with AddDoorwayWalls function
+	//checknumber is 1 when checking shaft walls, and 2 when checking floor walls
+
+	if (checknumber > 0 && checknumber < 3)
+	{
+		Ogre::Vector3 mesh_position = mesh->GetPosition();
+		Real extent;
+
+		if (wall2a == false || wall2b == false)
+		{
+			if (checknumber == 2)
+			{
+				//level walls
+				if (wall2a == true)
+					wall2b = true;
+				wall2a = true;
+				extent = GetExtents(polygon, 1).x + mesh_position.x;
+				if (wall2b == false || (wall2b == true && std::abs(extent - mesh_position.x) > std::abs(wall_extents_x.x - mesh_position.x)))
+					wall_extents_x.x = extent;
+				extent = GetExtents(polygon, 3).x + mesh_position.z;
+				if (wall2b == false || (wall2b == true && std::abs(extent - mesh_position.z) > std::abs(wall_extents_z.x - mesh_position.z)))
+					wall_extents_z.x = extent;
+				wall_extents_y = GetExtents(polygon, 2) + mesh_position.y;
+			}
+			else
+			{
+				//shaft walls
+				if (wall1a == true)
+					wall1b = true;
+				wall1a = true;
+				extent = GetExtents(polygon, 1).y + mesh_position.x;
+				if (wall1b == false || (wall1b == true && std::abs(extent - mesh_position.x) < std::abs(wall_extents_x.y - mesh_position.x)))
+					wall_extents_x.y = extent;
+				extent = GetExtents(polygon, 3).y + mesh_position.z;
+				if (wall1b == false || (wall1b == true && std::abs(extent - mesh_position.z) < std::abs(wall_extents_z.y - mesh_position.z)))
+					wall_extents_z.y = extent;
+			}
+		}
+	}
+}
+
+void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, tbb::concurrent_vector<Ogre::Vector3> &polygon)
 {
 	//calculate doorway extents, for use with AddDoorwayWalls function
 	//checknumber is 1 when checking shaft walls, and 2 when checking floor walls
