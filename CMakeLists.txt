@@ -90,6 +90,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
+	${TBB_INCLUDE_DIR}
 	src/sbs
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
