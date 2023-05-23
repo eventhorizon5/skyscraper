@@ -949,6 +949,10 @@ bool Skyscraper::Initialize()
 	Report("Running on Linux " + std::string(osInfo.release));
 #endif
 
+	//report hardware concurrency
+	int c = std::thread::hardware_concurrency();
+	Report("Reported hardware concurrency: " + ToString(c) + "\n");
+
 	Report("Initialization complete");
 	Report("");
 
