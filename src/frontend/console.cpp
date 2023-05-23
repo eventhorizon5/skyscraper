@@ -20,6 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <mutex>
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
@@ -48,6 +49,8 @@ BEGIN_EVENT_TABLE(Console,wxFrame)
 	//(*EventTable(Console)
 	//*)
 END_EVENT_TABLE()
+
+std::mutex mtx;
 
 Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
@@ -141,8 +144,10 @@ void Console::On_Close(wxCloseEvent& event)
 
 void Console::Write(const std::string &message)
 {
+	mtx.lock();
 	tConsole->AppendText(message + wxT("\n"));
 	tConsole->SetInsertionPointEnd();
+	mtx.unlock();
 }
 
 void Console::On_bClear_Click(wxCommandEvent& event)
