@@ -221,7 +221,13 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 	//get SBS instance
 	::SBS::SBS *Simcore = engine->GetSystem();
 
+	if (!Simcore)
+		return;
+
 	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return;
 
 	int key = event.GetKeyCode();
 
@@ -483,6 +489,9 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 	//get SBS camera
 	Camera *camera = engine->GetSystem()->camera;
 
+	if (!camera)
+		return;
+
 	int key = event.GetKeyCode();
 
 	//alt modifier
@@ -580,6 +589,9 @@ void MainScreen::ProcessMovement(EngineContext *engine, bool control, bool shift
 	//get SBS camera
 	Camera *camera = engine->GetSystem()->camera;
 
+	if (!camera)
+		return;
+
 	Real speed_normal = camera->cfg_speed;
 	Real speed_fast = camera->cfg_speedfast;
 	Real speed_slow = camera->cfg_speedslow;
@@ -647,6 +659,9 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 	//get SBS camera
 	Camera *camera = engine->GetSystem()->camera;
 
+	if (!camera)
+		return;
+
 	//enter or exit freelook mode using mouse scroll wheel
 	if (event.GetWheelRotation() > 0)
 	{
@@ -704,7 +719,13 @@ void MainScreen::HandleMouseMovement()
 	//get SBS instance
 	::SBS::SBS *Simcore = engine->GetSystem();
 
+	if (!Simcore)
+		return;
+
 	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return;
 
 	//get old mouse coordinates
 	int old_mouse_x = camera->mouse_x;
@@ -780,6 +801,9 @@ void MainScreen::EnableFreelook(bool value)
 	::SBS::SBS *Simcore = engine->GetSystem();
 
 	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return;
 
 	camera->Freelook = value;
 
