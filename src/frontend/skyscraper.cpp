@@ -32,6 +32,7 @@
 #endif
 #include <locale>
 #include <time.h>
+#include <thread>
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreConfigFile.h>
