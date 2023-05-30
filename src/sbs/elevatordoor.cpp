@@ -1793,9 +1793,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				Real height = std::abs(extents_max.y - extents_min.y);
 				Real mainheight = wrapper->Height / 2;
 				if (direction == 0)
-					offset = wrapper->Height - extents_max.y;
+					offset = wrapper->Height - (extents_max.y - wrapper->voffset);
 				else
-					offset = extents_min.y;
+					offset = extents_min.y - wrapper->voffset;
 
 				marker1 = 0;
 				marker2 = mainheight + (height - mainheight) + offset;
