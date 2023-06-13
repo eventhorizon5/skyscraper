@@ -178,7 +178,7 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 	v = v_orig;
 
 	Real det = m.Determinant();
-	if (std::abs(det) < SMALL_EPSILON)
+	/*if (std::abs(det) < SMALL_EPSILON)
 	{
 		//m = m.IDENTITY;
 		//return ReportError("Error computing texture space");
@@ -230,8 +230,8 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 		else
 			m[2][2] = 1 / v_w.z;
 	}
-	else
-		m = m.Inverse(); //standard inversion
+	else*/
+		m = m.Inverse(1e-10f); //standard inversion
 
 	return true;
 }
