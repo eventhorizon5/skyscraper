@@ -376,9 +376,9 @@ void DirectionalIndicator::UpLight(bool value)
 	if (value == UpStatus)
 		return;
 
-	//ignore if turning off other indicator in single mode
-	if (Single == true && value == false && DownStatus == true)
-		return;
+	//turn off up status if in single mode, and switching directions
+	if (Single == true && DownStatus == true)
+		DownStatus = false;
 
 	//set light status
 	if (value == true)
@@ -411,9 +411,9 @@ void DirectionalIndicator::DownLight(bool value)
 	if (value == DownStatus)
 		return;
 
-	//ignore if turning off other indicator in single mode
-	if (Single == true && value == false && UpStatus == true)
-		return;
+	//turn off up status if in single mode, and switching directions
+	if (Single == true && UpStatus == true)
+		UpStatus = false;
 
 	//set light status
 	if (value == true)
