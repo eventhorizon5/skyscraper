@@ -713,6 +713,12 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 			//font->setAntialiasColour(true);
 			font->addCodePointRange(Ogre::Font::CodePointRange(32, 126));
 			font->load();
+
+			//report font loaded and texture size
+			std::string texname = GetTextureName(font->getMaterial());
+			Ogre::TexturePtr fontTexture = GetTextureByName(texname);
+			if (fontTexture)
+				Report("Font " + font_filename2 + " loaded as size " + ToString(font_size) + ", with texture size " + ToString((int)fontTexture->getSize()));
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -2105,6 +2111,12 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 			}
 			texturename = mTex->getName();
 			has_alpha = mTex->hasAlpha();
+
+			if (sbs->Verbose)
+			{
+				//report resource size of texture
+				Report("Texture " + filename2 + " has a resource size of " + ToString((int)mTex->getSize()));
+			}
 		}
 		else
 		{
