@@ -148,7 +148,10 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
-	Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
+	if (sbs->Verbose)
+		Report("Loaded texture '" + filename2 + "' as '" + matname + "', size " + ToString((int)mTex->getSize()));
+	else
+		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
 }
@@ -186,7 +189,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 			has_alpha = true;
 
 		if (sbs->Verbose)
-			Report("Loaded texture " + filenames2[i]);
+			Report("Loaded texture " + filenames2[i] + ", size " + ToString((int)mTex->getSize()));
 	}
 
 	//create a new material
@@ -437,7 +440,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (sbs->Verbose)
-		Report("Loaded cropped texture '" + filename2 + "' as '" + name + "'");
+		Report("Loaded cropped texture '" + filename2 + "' as '" + name + "', size " + ToString((int)new_texture->getSize()));
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
@@ -2111,12 +2114,6 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 			}
 			texturename = mTex->getName();
 			has_alpha = mTex->hasAlpha();
-
-			if (sbs->Verbose)
-			{
-				//report resource size of texture
-				Report("Texture " + filename2 + " has a resource size of " + ToString((int)mTex->getSize()));
-			}
 		}
 		else
 		{
