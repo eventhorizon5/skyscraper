@@ -638,7 +638,7 @@ bool Skyscraper::Initialize()
 		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription());
 	}
 
-	//if using DirectX, prevent it from switching into single-point floating point mode
+	//set rendersystem options
 	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
 	if (rendersystem)
 	{
@@ -649,10 +649,20 @@ bool Skyscraper::Initialize()
 		{
 			if ((configItr)->first == "Floating-point mode")
 			{
+				//if using DirectX, prevent it from switching into single-point floating point mode
 				rendersystem->setConfigOption("Floating-point mode", "Consistent");
 				break;
 			}
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+			if ((configItr)->first == "Auto hardware buffer management")
+			{
+				//fix black screen when resizing window using DirectX on Windows
+				rendersystem->setConfigOption("Auto hardware buffer management", "Yes");
+			}
+#endif
 		}
+
 	}
 
 	//initialize render window
