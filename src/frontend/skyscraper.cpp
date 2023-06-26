@@ -638,6 +638,7 @@ bool Skyscraper::Initialize()
 		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription());
 	}
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//set rendersystem options
 	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
 	if (rendersystem)
@@ -654,16 +655,14 @@ bool Skyscraper::Initialize()
 				break;
 			}
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 			if ((configItr)->first == "Auto hardware buffer management")
 			{
 				//fix black screen when resizing window using DirectX on Windows
 				rendersystem->setConfigOption("Auto hardware buffer management", "Yes");
 			}
-#endif
 		}
-
 	}
+#endif
 
 	//initialize render window
 	try
