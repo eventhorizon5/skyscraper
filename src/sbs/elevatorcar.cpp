@@ -1331,7 +1331,7 @@ void ElevatorCar::StopDoors(int number)
 	}
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, bool direction, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, bool direction, Real tw, Real th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -1358,7 +1358,7 @@ bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, cons
 	return false;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1369,7 +1369,7 @@ ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, cons
 		return 0;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1803,7 +1803,7 @@ void ElevatorCar::ChangeLight(int floor, bool value)
 		PanelArray[i]->ChangeLight(floor, value);
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
+DoorWrapper* ElevatorCar::AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//adds an elevator door component to the specified door at a relative central position (off of elevator origin)
 
@@ -1814,7 +1814,7 @@ ElevatorDoor::DoorWrapper* ElevatorCar::AddDoorComponent(int number, const std::
 	return 0;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
+DoorWrapper* ElevatorCar::AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//adds a single elevator shaft door component on the specified floor
 
@@ -1837,7 +1837,7 @@ void ElevatorCar::AddShaftDoorsComponent(int number, const std::string &name, co
 		ReportError("Invalid door " + ToString(number));
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::FinishDoors(int number, bool DoorWalls, bool TrackWalls)
+DoorWrapper* ElevatorCar::FinishDoors(int number, bool DoorWalls, bool TrackWalls)
 {
 	//finishes elevator door
 
@@ -1848,7 +1848,7 @@ ElevatorDoor::DoorWrapper* ElevatorCar::FinishDoors(int number, bool DoorWalls, 
 	return 0;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorCar::FinishShaftDoor(int number, int floor, bool DoorWalls, bool TrackWalls)
+DoorWrapper* ElevatorCar::FinishShaftDoor(int number, int floor, bool DoorWalls, bool TrackWalls)
 {
 	//finishes a single shaft door
 

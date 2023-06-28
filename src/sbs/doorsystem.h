@@ -1,0 +1,99 @@
+/*
+	Scalable Building Simulator - Door System
+	The Skyscraper Project - Version 1.12 Alpha
+	Copyright (C)2004-2023 Ryan Thoryk
+	https://www.skyscrapersim.net
+	https://sourceforge.net/projects/skyscraper/
+	Contact - ryan@thoryk.com
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+#ifndef _SBS_DOORSYSTEM_H
+#define _SBS_DOORSYSTEM_H
+
+namespace SBS {
+
+//door component object
+struct DoorWrapper;
+struct DoorObject
+{
+	DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, Real OpenSpeed, Real CloseSpeed);
+	~DoorObject();
+	void MoveDoors(bool open, bool manual);
+	void Move();
+	void Reset(bool open);
+
+	MeshObject* mesh;
+	int direction; //direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
+	Real open_speed;
+	Real close_speed;
+	Real active_speed;
+	Real openchange;
+	std::string name;
+	DoorWrapper *wrapper; //associated wrapper
+	ElevatorDoor *parent;
+	Real marker1;
+	Real marker2;
+	int door_section; //door movement section; used for both reversal tracking and debugging
+	Real stopping_distance;
+	Real temp_change;
+	bool accelerating;
+	bool is_open;
+	bool finished;
+	Ogre::Vector3 extents_min;
+	Ogre::Vector3 extents_max;
+	bool sign_changed;
+	Real old_difference;
+	Real offset;
+	bool recheck_difference;
+	bool reversed;
+};
+
+//wrapper that represents the entire set of doors
+struct DoorWrapper : public Object
+{
+	DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor = 0);
+	~DoorWrapper();
+
+	DoorObject* CreateDoor(const std::string &doorname, const std::string &Direction, Real OpenSpeed, Real CloseSpeed);
+	void Enabled(bool value);
+	bool CheckDoorsOpen();
+	bool IsFinished();
+	void ResetFinished();
+	void MoveDoors(bool open, bool manual);
+	void StopDoors();
+	void ResetState();
+	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void OnHit();
+
+	std::vector<DoorObject*> doors;
+	std::string name;
+	bool Open;
+	bool IsEnabled;
+	Real Width;
+	Real Height;
+	Real Thickness;
+	ElevatorDoor *parent;
+	bool IsShaftDoor;
+	Real Shift;
+	Real voffset;
+	int floor;
+};
+
+}
+
+#endif
+

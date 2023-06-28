@@ -26,6 +26,7 @@
 #include "enginecontext.h"
 #include "elevator.h"
 #include "elevatorcar.h"
+#include "elevatordoor.h"
 #include "trigger.h"
 #include "control.h"
 #include "door.h"
@@ -1852,7 +1853,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		ElevatorDoor::DoorWrapper *wrapper = 0;
+		DoorWrapper *wrapper = 0;
 
 		if (params == 1 || legacy == true)
 			wrapper = car->FinishDoors(ToInt(tempdata[0]));

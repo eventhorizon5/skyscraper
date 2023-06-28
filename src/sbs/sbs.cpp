@@ -54,6 +54,7 @@
 #include "profiler.h"
 #include "controller.h"
 #include "callstation.h"
+#include "doorsystem.h"
 #include "gitrev.h"
 #include "buttonpanel.h"
 
@@ -2617,7 +2618,7 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "DoorWrapper")
 	{
-		ElevatorDoor::DoorWrapper* wrapper = static_cast<ElevatorDoor::DoorWrapper*>(object);
+		DoorWrapper* wrapper = static_cast<DoorWrapper*>(object);
 		if (wrapper->IsShaftDoor == false)
 			return ReportError("Deleting the main elevator door wrapper is not supported yet");
 
