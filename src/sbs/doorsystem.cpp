@@ -34,6 +34,10 @@
 
 namespace SBS {
 
+//
+// Door Object
+//
+
 DoorObject::DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, Real OpenSpeed, Real CloseSpeed)
 {
 	name = doorname;
@@ -86,67 +90,6 @@ DoorObject::~DoorObject()
 	if (mesh)
 		delete mesh;
 	mesh = 0;
-}
-
-DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor) : Object(parent_obj)
-{
-	parent = door_object;
-	Open = false;
-	IsEnabled = true;
-	Width = 0;
-	Height = 0;
-	Thickness = 0;
-	IsShaftDoor = shaftdoor;
-	Shift = 0;
-	voffset = 0;
-	floor = shaftdoor_floor;
-
-	std::string name;
-	if (IsShaftDoor == true)
-		name = "Shaft Door " + ToString(parent->elev->Number) + ":" + ToString(parent->car->Number) + ":" + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
-	else
-		name = "Elevator Door " + ToString(parent->car->Number) + ":" + ToString(parent->Number);
-
-	SetValues("DoorWrapper", name, false);
-
-	if (IsShaftDoor == true)
-		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);
-}
-
-DoorWrapper::~DoorWrapper()
-{
-	for (size_t i = 0; i < doors.size(); i++)
-	{
-		if (doors[i])
-			delete doors[i];
-	}
-	doors.clear();
-
-	//unregister from parent
-	if (parent_deleting == false)
-		parent->RemoveShaftDoor(this);
-}
-
-DoorObject* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed)
-{
-	//initialize a door component
-
-	DoorObject *door = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
-	doors.push_back(door);
-	return door;
-}
-
-void DoorWrapper::Enabled(bool value)
-{
-	//enable/disable door meshes
-
-	if (value == IsEnabled)
-		return;
-
-	for (size_t i = 0; i < doors.size(); i++)
-		doors[i]->mesh->Enabled(value);
-
-	IsEnabled = value;
 }
 
 void DoorObject::MoveDoors(bool open, bool manual)
@@ -526,6 +469,71 @@ void DoorObject::Reset(bool open)
 		stopping_distance = 0;
 		reversed = false;
 	}
+}
+
+//
+// Door Wrapper
+//
+
+DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor) : Object(parent_obj)
+{
+	parent = door_object;
+	Open = false;
+	IsEnabled = true;
+	Width = 0;
+	Height = 0;
+	Thickness = 0;
+	IsShaftDoor = shaftdoor;
+	Shift = 0;
+	voffset = 0;
+	floor = shaftdoor_floor;
+
+	std::string name;
+	if (IsShaftDoor == true)
+		name = "Shaft Door " + ToString(parent->elev->Number) + ":" + ToString(parent->car->Number) + ":" + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
+	else
+		name = "Elevator Door " + ToString(parent->car->Number) + ":" + ToString(parent->Number);
+
+	SetValues("DoorWrapper", name, false);
+
+	if (IsShaftDoor == true)
+		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);
+}
+
+DoorWrapper::~DoorWrapper()
+{
+	for (size_t i = 0; i < doors.size(); i++)
+	{
+		if (doors[i])
+			delete doors[i];
+	}
+	doors.clear();
+
+	//unregister from parent
+	if (parent_deleting == false)
+		parent->RemoveShaftDoor(this);
+}
+
+DoorObject* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed)
+{
+	//initialize a door component
+
+	DoorObject *door = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
+	doors.push_back(door);
+	return door;
+}
+
+void DoorWrapper::Enabled(bool value)
+{
+	//enable/disable door meshes
+
+	if (value == IsEnabled)
+		return;
+
+	for (size_t i = 0; i < doors.size(); i++)
+		doors[i]->mesh->Enabled(value);
+
+	IsEnabled = value;
 }
 
 void DoorWrapper::MoveDoors(bool open, bool manual)
