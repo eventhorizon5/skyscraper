@@ -35,10 +35,10 @@
 namespace SBS {
 
 //
-// Door Object
+// Door Component
 //
 
-DoorObject::DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, Real OpenSpeed, Real CloseSpeed)
+DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, Real OpenSpeed, Real CloseSpeed)
 {
 	name = doorname;
 	wrapper = Wrapper;
@@ -85,14 +85,14 @@ DoorObject::DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const 
 	offset = 0;
 }
 
-DoorObject::~DoorObject()
+DoorComponent::~DoorComponent()
 {
 	if (mesh)
 		delete mesh;
 	mesh = 0;
 }
 
-void DoorObject::MoveDoors(bool open, bool manual)
+void DoorComponent::MoveDoors(bool open, bool manual)
 {
 	//opens or closes elevator doors
 	//currently only supports doors on either the left/right or front/back
@@ -107,7 +107,7 @@ void DoorObject::MoveDoors(bool open, bool manual)
 	//direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
-	SBS_PROFILE("DoorObject::MoveDoors");
+	SBS_PROFILE("DoorComponent::MoveDoors");
 	Real tempposition, temporigin;
 
 	if (finished == true && parent->GetDoorChanged() == false)
@@ -362,7 +362,7 @@ void DoorObject::MoveDoors(bool open, bool manual)
 	Reset(open);
 }
 
-void DoorObject::Move()
+void DoorComponent::Move()
 {
 	//move elevator doors
 
@@ -398,7 +398,7 @@ void DoorObject::Move()
 	}
 }
 
-void DoorObject::Reset(bool open)
+void DoorComponent::Reset(bool open)
 {
 	//reset door state in case of an internal malfunction
 
@@ -514,11 +514,11 @@ DoorWrapper::~DoorWrapper()
 		parent->RemoveShaftDoor(this);
 }
 
-DoorObject* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed)
+DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed)
 {
 	//initialize a door component
 
-	DoorObject *door = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
+	DoorComponent *door = new DoorComponent(doorname, this, direction, OpenSpeed, CloseSpeed);
 	doors.push_back(door);
 	return door;
 }

@@ -803,12 +803,12 @@ DoorWrapper* ElevatorDoor::AddDoors(const std::string &lefttexture, const std::s
 	return FinishDoors();
 }
 
-DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
+DoorComponent* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//creates a door component - finish with FinishDoor()
 
 	//create door object
-	DoorObject *door = wrapper->CreateDoor(meshname, direction, OpenSpeed, CloseSpeed);
+	DoorComponent *door = wrapper->CreateDoor(meshname, direction, OpenSpeed, CloseSpeed);
 
 	if (tw == 0)
 		tw = 1;

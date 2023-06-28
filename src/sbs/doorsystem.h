@@ -26,12 +26,13 @@
 
 namespace SBS {
 
-//door component object
 struct DoorWrapper;
-struct DoorObject
+
+//door component object
+struct DoorComponent
 {
-	DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, Real OpenSpeed, Real CloseSpeed);
-	~DoorObject();
+	DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, Real OpenSpeed, Real CloseSpeed);
+	~DoorComponent();
 	void MoveDoors(bool open, bool manual);
 	void Move();
 	void Reset(bool open);
@@ -68,7 +69,7 @@ struct DoorWrapper : public Object
 	DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor = 0);
 	~DoorWrapper();
 
-	DoorObject* CreateDoor(const std::string &doorname, const std::string &Direction, Real OpenSpeed, Real CloseSpeed);
+	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, Real OpenSpeed, Real CloseSpeed);
 	void Enabled(bool value);
 	bool CheckDoorsOpen();
 	bool IsFinished();
@@ -79,7 +80,7 @@ struct DoorWrapper : public Object
 	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void OnHit();
 
-	std::vector<DoorObject*> doors;
+	std::vector<DoorComponent*> doors;
 	std::string name;
 	bool Open;
 	bool IsEnabled;
