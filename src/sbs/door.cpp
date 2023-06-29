@@ -41,16 +41,6 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	//creates a door, the 'direction' parameter is for the lock direction
 	//wall cuts must be performed by the calling (parent) function
 
-	//direction table:
-	//1 = faces left, opens left
-	//2 = faces left, opens right
-	//3 = faces right, opens right
-	//4 = faces right, opens left
-	//5 = faces front, opens front
-	//6 = faces front, opens back
-	//7 = faces back, opens back
-	//8 = faces back, opens front
-
 	//set up SBS object
 	SetValues("Door", name, false);
 
@@ -275,6 +265,8 @@ bool Door::GetPreviousOpen()
 
 DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
+	//legacy door creation function
+
 	//direction table:
 	//1 = faces left, opens left
 	//2 = faces left, opens right
@@ -284,6 +276,31 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 	//6 = faces front, opens back
 	//7 = faces back, opens back
 	//8 = faces back, opens front
+
+	std::string face_direction;
+	std::string open_direction;
+
+	if (direction == 1 || direction == 2)
+		face_direction = "left";
+	if (direction == 3 || direction == 4)
+		face_direction = "right";
+	if (direction == 5 || direction == 6)
+		face_direction = "front";
+	if (direction == 7 || direction == 8)
+		face_direction = "back";
+
+	if (direction == 1 || direction == 4 || direction == 5 || direction == 8)
+		open_direction = "left";
+	else
+		open_direction = "right";
+
+	CreateDoor(open_state, texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	return door;
+}
+
+DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+{
+	//create a door
 
 	Ogre::Vector3 position;
 	std::string dir;
@@ -297,7 +314,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		speed = 75;
 
 	//set origin to location of the door's hinge/pivot point and set up door coordinates
-	if (direction == 1 || direction == 2)
+	if (face_direction == "left")
 	{
 		position = Ogre::Vector3(CenterX, voffset, CenterZ - (width / 2)); //front
 		x1 = 0;
@@ -306,7 +323,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		z2 = width;
 		DoorDirection = false;
 	}
-	if (direction == 3 || direction == 4)
+	if (face_direction == "right")
 	{
 		position = Ogre::Vector3(CenterX, voffset, CenterZ + (width / 2)); //back
 		x1 = 0;
@@ -315,7 +332,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		z2 = 0;
 		DoorDirection = true;
 	}
-	if (direction == 5 || direction == 6)
+	if (face_direction == "front")
 	{
 		position = Ogre::Vector3(CenterX + (width / 2), voffset, CenterZ); //right
 		x1 = -width;
@@ -324,7 +341,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		z2 = 0;
 		DoorDirection = false;
 	}
-	if (direction == 7 || direction == 8)
+	if (face_direction == "back")
 	{
 		position = Ogre::Vector3(CenterX - (width / 2), voffset, CenterZ); //left
 		x1 = 0;
@@ -334,13 +351,8 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		DoorDirection = true;
 	}
 
-	if (direction == 1 || direction == 4 || direction == 5 || direction == 8)
-		dir = "left";
-	else
-		dir = "right";
-
 	bool Clockwise = true;
-	if (direction == 1 || direction == 3 || direction == 5 || direction == 7)
+	if (face_direction == open_direction)
 		Clockwise = false;
 
 	//create door
