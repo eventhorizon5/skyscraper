@@ -36,7 +36,7 @@
 
 namespace SBS {
 
-Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, int direction) : Object(parent), DoorLock(this, direction)
+Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, int direction, bool rotate) : Object(parent), DoorLock(this, direction)
 {
 	//creates a door, the 'direction' parameter is for the lock direction
 	//wall cuts must be performed by the calling (parent) function
@@ -69,7 +69,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	DoorDirection = false;
 
 	//create door wrapper
-	door = new DoorWrapper(this, true);
+	door = new DoorWrapper(this, rotate);
 
 	//create sound object
 	if (open_sound != "" || close_sound != "")
