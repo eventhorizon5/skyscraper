@@ -165,7 +165,7 @@ class SBSIMPEXP RevolvingDoorManager : public Object
 public:
 	RevolvingDoorManager(Object* parent);
 	~RevolvingDoorManager();
-	RevolvingDoor* AddDoor(const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
+	RevolvingDoor* AddDoor(std::string name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	void RemoveDoor(RevolvingDoor *door);
 	int GetCount();
 	RevolvingDoor* GetIndex(int index);

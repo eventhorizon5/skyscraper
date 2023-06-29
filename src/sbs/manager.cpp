@@ -783,10 +783,12 @@ RevolvingDoorManager::~RevolvingDoorManager()
 	wrapper = 0;
 }
 
-RevolvingDoor* RevolvingDoorManager::AddDoor(const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+RevolvingDoor* RevolvingDoorManager::AddDoor(std::string name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	int number = (int)Array.size() + 1;
-	std::string name = "Door " + ToString(number);
+	if (name == "")
+		name = "Door " + ToString(number);
+
 	RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
 	Array.push_back(door);
 	return door;

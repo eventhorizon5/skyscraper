@@ -36,6 +36,8 @@
 #include "movingwalkway.h"
 #include "cameratexture.h"
 #include "light.h"
+#include "door.h"
+#include "revolvingdoor.h"
 #include "action.h"
 
 namespace SBS {
@@ -225,6 +227,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	MovingWalkway *walkway = dynamic_cast<MovingWalkway*>(parent);
 	CameraTexture *camtex = dynamic_cast<CameraTexture*>(parent);
 	Light *light = dynamic_cast<Light*>(parent);
+	Door *door = dynamic_cast<Door*>(parent);
+	RevolvingDoor *revdoor = dynamic_cast<RevolvingDoor*>(parent);
 
 	std::string caller_name = caller->GetName();
 	std::string caller_type = caller->GetType();
@@ -751,6 +755,37 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		if (command_name == "off")
 		{
 			light->Enabled(false);
+			return true;
+		}
+	}
+
+	//door-specific commands
+	if (door)
+	{
+		if (command_name == "open")
+		{
+			Ogre::Vector3 pos = door->GetPosition();
+			door->Open(pos);
+			return true;
+		}
+		if (command_name == "close")
+		{
+			door->Close();
+			return true;
+		}
+	}
+
+	//revolvingdoor-specific commands
+	if (revdoor)
+	{
+		if (command_name == "on")
+		{
+			revdoor->Run(true);
+			return true;
+		}
+		if (command_name == "off")
+		{
+			revdoor->Run(false);
 			return true;
 		}
 	}

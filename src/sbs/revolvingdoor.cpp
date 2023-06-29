@@ -227,4 +227,14 @@ bool RevolvingDoor::ReportError(const std::string &message)
 	return Object::ReportError("Revolving Door " + GetName() + ": " + message);
 }
 
+void RevolvingDoor::Run(bool value)
+{
+	//start or stop the revolving door
+
+	if (value == true)
+		OnHit();
+	else
+		brake = true;
+}
+
 }
