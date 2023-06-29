@@ -55,11 +55,6 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	SetValues("Door", name, false);
 
 	is_enabled = true;
-	int Direction = direction;
-
-	DoorDirection = false;
-	if (direction == 3 || direction == 4 || direction == 7 || direction == 8)
-		DoorDirection = true;
 
 	OpenState = false;
 	IsMoving = false;
@@ -81,54 +76,53 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 		Speed = 75;
 
 	Ogre::Vector3 position;
+	std::string dir;
 
 	//set origin to location of the door's hinge/pivot point and set up door coordinates
-	if (Direction == 1 || Direction == 2)
+	if (direction == 1 || direction == 2)
 	{
 		position = Ogre::Vector3(CenterX, voffset, CenterZ - (width / 2)); //front
 		x1 = 0;
 		x2 = 0;
 		z1 = 0;
 		z2 = width;
+		dir = "left";
+		DoorDirection = false;
 	}
-	if (Direction == 3 || Direction == 4)
+	if (direction == 3 || direction == 4)
 	{
 		position = Ogre::Vector3(CenterX, voffset, CenterZ + (width / 2)); //back
 		x1 = 0;
 		x2 = 0;
 		z1 = -width;
 		z2 = 0;
+		dir = "right";
+		DoorDirection = true;
 	}
-	if (Direction == 5 || Direction == 6)
+	if (direction == 5 || direction == 6)
 	{
 		position = Ogre::Vector3(CenterX + (width / 2), voffset, CenterZ); //right
 		x1 = -width;
 		x2 = 0;
 		z1 = 0;
 		z2 = 0;
+		dir = "front";
+		DoorDirection = false;
 	}
-	if (Direction == 7 || Direction == 8)
+	if (direction == 7 || direction == 8)
 	{
 		position = Ogre::Vector3(CenterX - (width / 2), voffset, CenterZ); //left
 		x1 = 0;
 		x2 = width;
 		z1 = 0;
 		z2 = 0;
+		dir = "back";
+		DoorDirection = true;
 	}
 
 	bool Clockwise = true;
-	if (Direction == 1 || Direction == 3 || Direction == 5 || Direction == 7)
+	if (direction == 1 || direction == 3 || direction == 5 || direction == 7)
 		Clockwise = false;
-
-	std::string dir;
-	if (direction == 1 || direction == 2)
-		dir = "left";
-	if (direction == 3 || direction == 4)
-		dir = "right";
-	if (direction == 5 || direction == 6)
-		dir = "front";
-	if (direction == 7 || direction == 8)
-		dir = "back";
 
 	//create door
 	door = new DoorWrapper(this, true);
