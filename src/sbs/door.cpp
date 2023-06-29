@@ -61,10 +61,6 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	if (direction == 3 || direction == 4 || direction == 7 || direction == 8)
 		DoorDirection = true;
 
-	OpenDirection = false;
-	if (direction == 2 || direction == 3 || direction == 6 || direction == 7)
-		OpenDirection = true;
-
 	OpenState = false;
 	IsMoving = false;
 	Real x1 = 0, z1 = 0, x2 = 0, z2 = 0;
@@ -135,7 +131,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 
 	//Create mesh
 	door = new DoorWrapper(this);
-	DoorComponent *dc = door->CreateDoor(name, dir, Clockwise, Speed, Speed, wrapper);
+	DoorComponent *component = door->CreateDoor(name, dir, Clockwise, Speed, Speed, wrapper);
 	Move(position);
 
 	//create sound object
@@ -151,7 +147,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	Wall *wall;
-	wall = dc->mesh->CreateWallObject(name);
+	wall = component->mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();

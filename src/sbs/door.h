@@ -35,7 +35,6 @@ class SBSIMPEXP Door : public Object, public DoorLock
 public:
 
 	bool DoorDirection;
-	bool OpenDirection;
 	bool OpenState;
 	bool IsMoving; //is door moving?
 	bool OpenDoor; //open or close door?
