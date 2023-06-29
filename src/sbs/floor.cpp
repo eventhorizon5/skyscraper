@@ -698,7 +698,7 @@ bool Floor::IsInGroup(int floor)
 	return false;
 }
 
-Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
+Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
 {
 	//add a door to the floor
 
@@ -731,12 +731,12 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 
 	//create an external (global) door if specified
 	if (external == true)
-		return sbs->GetDoorManager()->AddDoor(open_sound, close_sound, open_state, texture, thickness, face_direction, open_direction, rotate, speed, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
+		return sbs->GetDoorManager()->AddDoor(open_sound, close_sound, open_state, texture, side_texture, thickness, face_direction, open_direction, rotate, speed, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
 	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
-	door->CreateDoor(open_state, texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, base + voffset, tw, th);
+	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, base + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
 }

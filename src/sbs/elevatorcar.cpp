@@ -1920,7 +1920,7 @@ void ElevatorCar::HoldDoors(int number, bool sensor)
 	}
 }
 
-Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//interface to the SBS AddDoor function
 
@@ -1953,7 +1953,7 @@ Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &clo
 	std::string num = ToString((int)StdDoorArray.size());
 	std::string name = "Elevator " + elevnum + ": Car " + carnum + ": Door " + num;
 	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
-	door->CreateDoor(open_state, texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door;
 }

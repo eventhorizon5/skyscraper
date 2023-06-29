@@ -263,7 +263,7 @@ bool Door::GetPreviousOpen()
 	return previous_open;
 }
 
-DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//create a door
 
@@ -316,7 +316,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		Clockwise = false;
 
 	//create door
-	AddDoorComponent(GetName(), texture, texture, thickness, face_direction, open_direction, Clockwise, speed, speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
+	AddDoorComponent(GetName(), texture, side_texture, thickness, face_direction, open_direction, Clockwise, speed, speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
 	FinishDoor();
 	Move(position);
 
@@ -336,19 +336,26 @@ DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &
 
 	DoorComponent *component = door->CreateDoor(name, open_direction, OpenClockwise, OpenSpeed, CloseSpeed, wrapper);
 
-	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (DoorDirection == false)
 		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
 	else
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
+	//add main walls
+	sbs->DrawWalls(true, true, false, false, false, false);
 	Wall *wall;
 	wall = component->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
-
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();
+
+	//add side walls
+	sbs->DrawWalls(false, false, true, true, true, true);
+	wall = component->mesh->CreateWallObject(name);
+	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	sbs->ResetWalls();
+
 
 	//store extents
 	if (x1 < x2)

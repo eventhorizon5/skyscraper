@@ -55,7 +55,7 @@ public:
 	bool ReportError(const std::string &message);
 	bool GetDoorChanged();
 	bool GetPreviousOpen();
-	DoorWrapper* CreateDoor(bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
+	DoorWrapper* CreateDoor(bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	DoorWrapper* AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	DoorWrapper* FinishDoor();
 
