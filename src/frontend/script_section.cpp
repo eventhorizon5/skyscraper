@@ -1192,10 +1192,14 @@ void ScriptProcessor::Section::GetDirectionStrings(int direction, std::string &f
 	if (direction == 7 || direction == 8)
 		face_direction = "back";
 
-	if (direction == 1 || direction == 4 || direction == 5 || direction == 8)
+	if (direction == 1 || direction == 4)
 		open_direction = "left";
-	else
+	else if (direction == 2 || direction == 3)
 		open_direction = "right";
+	else if (direction == 5 || direction == 8)
+		open_direction = "front";
+	else if (direction == 6 || direction == 7)
+		open_direction = "back";
 }
 
 ScriptProcessor::ConfigHandler::ConfigHandler()
