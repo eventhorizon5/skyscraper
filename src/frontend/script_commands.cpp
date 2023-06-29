@@ -2241,7 +2241,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 15);
 
-		if (params != 18)
+		if (params != 19)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -2287,16 +2287,88 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create door
-		Door* door;
+		Door* door = 0;
 
 		if (floorobj)
-			door = floorobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), false);
+			door = floorobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), ToBool(tempdata[18]));
 		else if (elevatorcarobj)
 			door = elevatorcarobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		else if (shaftobj)
 			door = shaftobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		else if (stairsobj)
 			door = stairsobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
+		else
+			return ScriptError("Invalid object");
+
+		if (door)
+			door->SetLocked(config->lockvalue, config->keyvalue);
+
+		StoreCommand(door);
+		return sNextLine;
+	}
+
+	//AddStdDoor command
+	if (linecheck.substr(0, 10) == "addstddoor")
+	{
+		//get data
+		int params = SplitData(LineData, 15);
+
+		if (params != 19)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 7; i <= 17; i++)
+		{
+			if (i == 8)
+				i = 10;
+
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//create door
+		Door* door = 0;
+
+		if (floorobj)
+			door = floorobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], true, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), ToBool(tempdata[18]));
+		else if (elevatorcarobj)
+			door = elevatorcarobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], true, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
+		else if (shaftobj)
+			door = shaftobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], true, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
+		else if (stairsobj)
+			door = stairsobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], true, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		else
 			return ScriptError("Invalid object");
 

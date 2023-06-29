@@ -9657,7 +9657,7 @@ starty,
           size="2" face="Courier New, Courier, mono"> <em>parent, name,
             open_sound, close_sound, open_state, texture, side_texture,
             thickness, face_direction, open_direction, speed, CenterX,
-            CenterZ, width, height, voffset, tw, th</em></font><br>
+            CenterZ, width, height, voffset, tw, th, IsExternal</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
           size="2" face="Courier New, Courier, mono"> Floor 0, MyDoor,
           open.wav, close.wav, false, Door, Brick, 0.2, left, right, 10,
@@ -9669,8 +9669,33 @@ starty,
         sides of the door.&nbsp; Face_direction is the direction the
         door faces, such as "left", "right", "front" or "back".&nbsp;
         Open_direction is either "up", "down", "left"/"front" or
-        "right"/"back".<br>
+        "right"/"back".&nbsp; The IsExternal value is only used when the
+        parent is a Floor object, and when set to true, it'll create a
+        global (external) door instead.<br>
       </p>
+      <p align="left"> <strong>j. AddStdDoor</strong> - creates a
+        standard door object, which is a door with the rotation setting
+        turned on.&nbsp; This command replaces the older <i>AddDoor</i>
+        and related commands.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            open_sound, close_sound, open_state, texture, side_texture,
+            thickness, face_direction, open_direction, speed, CenterX,
+            CenterZ, width, height, voffset, tw, th, IsExternal</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, MyDoor,
+          open.wav, close.wav, false, Door, Brick, 0.2, left, right, 10,
+          5, 5, 3.5, 8, 0, 1, 1</font><br>
+      </p>
+      <p align="left">The example will create a standard door on Floor
+        0.&nbsp; Open_state determines if the door is open on
+        startup.&nbsp; Side_texture defines the texture used on the
+        sides of the door.&nbsp; Face_direction is the direction the
+        door faces, such as "left", "right", "front" or "back".&nbsp;
+        Open_direction is either "left", "right", "front" or
+        "back".&nbsp; The IsExternal value is only used when the parent
+        is a Floor object, and when set to true, it'll create a global
+        (external) door instead.</p>
       <p align="left"> </p>
       <p align="left"><br>
         <strong></strong></p>
