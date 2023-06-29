@@ -31,6 +31,7 @@
 #include "stairs.h"
 #include "texture.h"
 #include "sound.h"
+#include "doorsystem.h"
 #include "door.h"
 
 namespace SBS {
@@ -122,8 +123,19 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	if (Direction == 1 || Direction == 3 || Direction == 5 || Direction == 7)
 		Clockwise = false;
 
+	std::string dir;
+	if (direction == 1 || direction == 2)
+		dir = "left";
+	if (direction == 3 || direction == 4)
+		dir = "right";
+	if (direction == 5 || direction == 6)
+		dir = "front";
+	if (direction == 7 || direction == 8)
+		dir = "back";
+
 	//Create mesh
-	DoorMesh = new MeshObject(this, name, wrapper);
+	door = new DoorWrapper(this);
+	DoorComponent *dc = door->CreateDoor(name, dir, Clockwise, Speed, Speed, wrapper);
 	Move(position);
 
 	//create sound object
@@ -139,7 +151,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	Wall *wall;
-	wall = DoorMesh->CreateWallObject(name);
+	wall = dc->mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();
@@ -160,12 +172,12 @@ Door::~Door()
 	}
 	sound = 0;
 
-	if (DoorMesh)
+	if (door)
 	{
-		DoorMesh->parent_deleting = true;
-		delete DoorMesh;
+		door->parent_deleting = true;
+		delete door;
 	}
-	DoorMesh = 0;
+	door = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
@@ -214,6 +226,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 
 	OpenState = false;
 	IsMoving = true;
+	door->ResetFinished();
 
 	return true;
 }
@@ -234,6 +247,7 @@ void Door::Close(bool playsound)
 
 	OpenState = true;
 	IsMoving = true;
+	door->ResetFinished();
 }
 
 bool Door::IsOpen()
@@ -246,7 +260,7 @@ void Door::Enabled(bool value)
 	if (is_enabled == value)
 		return;
 
-	DoorMesh->Enabled(value);
+	door->Enabled(value);
 	is_enabled = value;
 }
 
@@ -261,6 +275,28 @@ void Door::Loop()
 void Door::MoveDoor()
 {
 	//door movement callback function
+
+	//if a different direction was specified during movement
+	if (previous_open != OpenDoor && door_changed == false)
+		door_changed = true;
+
+	//perform door movement and get open state of each door
+	door->MoveDoors(OpenDoor);
+
+	previous_open = OpenDoor;
+
+	//wait until all door components are finished moving
+	door->CheckDoorsOpen();
+	if (door->IsFinished() == false)
+		return;
+
+	//the doors are open or closed now
+	door_changed = false;
+	IsMoving = false;
+	if (OpenDoor == true)
+		OpenState = true;
+	else
+		OpenState = false;
 }
 
 void Door::ClickDoor(Ogre::Vector3 &position)

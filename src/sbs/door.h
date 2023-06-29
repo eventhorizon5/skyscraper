@@ -28,6 +28,8 @@
 
 namespace SBS {
 
+struct DoorWrapper;
+
 class SBSIMPEXP Door : public Object, public DoorLock
 {
 public:
@@ -58,7 +60,7 @@ public:
 	bool GetPreviousOpen();
 
 private:
-	MeshObject* DoorMesh; //door mesh
+	DoorWrapper *door; //door wrapper
 
 	//sound object
 	Sound *sound;

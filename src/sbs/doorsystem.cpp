@@ -731,6 +731,12 @@ void DoorWrapper::ResetState()
 
 void DoorWrapper::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
+	if (parent_door)
+	{
+		parent_door->OnClick(position, shift, ctrl, alt, right);
+		return;
+	}
+
 	if (shift == true && right == false)
 	{
 		if (parent_elevdoor)
@@ -768,8 +774,6 @@ void DoorWrapper::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool a
 				}
 			}
 		}
-		else
-			parent_door->OnClick(position, shift, ctrl, alt, right);
 	}
 }
 
