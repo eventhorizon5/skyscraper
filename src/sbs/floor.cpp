@@ -741,7 +741,7 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
-	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, direction);
+	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound);
 	door->CreateDoor(open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, base + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;

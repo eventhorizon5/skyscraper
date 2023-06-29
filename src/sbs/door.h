@@ -41,7 +41,7 @@ public:
 	std::string OpenSound; //opening sound
 	std::string CloseSound; //closing sound
 
-	Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, int direction = 0, bool rotate = true);
+	Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate = true);
 	~Door();
 	bool Open(Ogre::Vector3 &position, bool playsound = true, bool force = false);
 	void Close(bool playsound = true);

@@ -45,8 +45,9 @@ private:
 class SBSIMPEXP DoorLock
 {
 public:
-	DoorLock(Object *parent, int direction);
+	DoorLock(Object *parent);
 	virtual ~DoorLock() {}
+	void SetDirection(bool direction);
 	void SetLocked(int side, int keyid);
 	bool GetSide(const Ogre::Vector3 &position);
 	bool IsLocked(const Ogre::Vector3 &position);
@@ -54,7 +55,7 @@ public:
 	int GetKeyID();
 
 private:
-	int Direction;
+	bool Direction;
 	int Locked;
 	int KeyID;
 	Object *Parent; //parent object

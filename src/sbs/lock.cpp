@@ -73,12 +73,19 @@ int Lock::GetKeyID()
 	return KeyID;
 }
 
-DoorLock::DoorLock(Object *parent, int direction)
+DoorLock::DoorLock(Object *parent)
 {
-	Direction = direction;
+	//direction is false for left/right, true for front/back
+
+	Direction = false;
 	Locked = false;
 	KeyID = 0;
 	this->Parent = parent;
+}
+
+void DoorLock::SetDirection(bool direction)
+{
+	Direction = direction;
 }
 
 void DoorLock::SetLocked(int side, int keyid)
@@ -159,10 +166,10 @@ bool DoorLock::GetSide(const Ogre::Vector3 &position)
 {
 	//return which side of the door the position is (false for negative/left/front, true for positive/right/back)
 
-	if ((Direction >= 1 && Direction <= 4) && position.x > Parent->GetPosition().x)
+	if (Direction == false && position.x > Parent->GetPosition().x)
 		return true;
 
-	if ((Direction >= 5 && Direction <= 8) && position.z > Parent->GetPosition().z)
+	if (Direction == true && position.z > Parent->GetPosition().z)
 		return true;
 
 	return false;
