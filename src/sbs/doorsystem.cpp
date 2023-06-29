@@ -30,6 +30,7 @@
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "elevatordoor.h"
+#include "door.h"
 #include "doorsystem.h"
 
 namespace SBS {
@@ -42,13 +43,17 @@ DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, 
 {
 	name = doorname;
 	wrapper = Wrapper;
-	parent = wrapper->parent;
 
 	//create object mesh
-	if (wrapper->IsShaftDoor == false)
-		mesh = new MeshObject(wrapper, doorname, parent->elev->GetDoorContainer());
+	if (wrapper->parent_elevdoor)
+	{
+		if (wrapper->IsShaftDoor == false)
+			mesh = new MeshObject(wrapper, doorname, wrapper->parent_elevdoor->elev->GetDoorContainer());
+		else
+			mesh = new MeshObject(wrapper, doorname, wrapper->parent_elevdoor->elev->GetShaft()->GetShaftDoorContainer());
+	}
 	else
-		mesh = new MeshObject(wrapper, doorname, parent->elev->GetShaft()->GetShaftDoorContainer());
+		mesh = new MeshObject(wrapper, doorname); //NEEDS FIXING
 
 	//keep colliders attached, to fix performance issues when moving in and out of an elevator
 	mesh->remove_on_disable = false;
@@ -110,12 +115,36 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 	SBS_PROFILE("DoorComponent::MoveDoors");
 	Real tempposition, temporigin;
 
-	if (finished == true && parent->GetDoorChanged() == false)
+	//get parent values
+	bool DoorChanged = false;
+	bool DoorDirection = false;
+	bool NudgeStatus = false;
+	bool PreviousOpen = false;
+	if (wrapper->parent_elevdoor)
+	{
+		DoorChanged = wrapper->parent_elevdoor->GetDoorChanged();
+		DoorDirection = wrapper->parent_elevdoor->DoorDirection;
+		NudgeStatus = wrapper->parent_elevdoor->GetNudgeStatus();
+		PreviousOpen = wrapper->parent_elevdoor->GetPreviousOpen();
+	}
+	else
+	{
+		DoorChanged = wrapper->parent_door->GetDoorChanged();
+		DoorDirection = wrapper->parent_door->DoorDirection;
+		NudgeStatus = false;
+		PreviousOpen = wrapper->parent_door->GetPreviousOpen();
+
+		//exit if trying to run standard doors in manual mode
+		if (manual == true)
+			return;
+	}
+
+	if (finished == true && DoorChanged == false)
 		return;
 
 	if (direction > 1)
 	{
-		if (parent->DoorDirection == false)
+		if (DoorDirection == false)
 			tempposition = mesh->GetPosition(true).z + wrapper->Shift;
 		else
 			tempposition = mesh->GetPosition(true).x + wrapper->Shift;
@@ -148,7 +177,7 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 	//debug - show current section as function is running
 	//Report("Door section: " + ToString(door_section));
 
-	if ((parent->GetDoorChanged() == false && door_section == 0) || (parent->GetDoorChanged() == true && finished == true))
+	if ((DoorChanged == false && door_section == 0) || (DoorChanged == true && finished == true))
 	{
 		//initialization code
 
@@ -165,10 +194,15 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 			else
 				speed = close_speed;
 
-			if (parent->GetNudgeStatus() == false || parent->SlowSpeed == 0)
-				openchange = speed / 50;
+			if (wrapper->parent_elevdoor)
+			{
+				if (NudgeStatus == false || wrapper->parent_elevdoor->SlowSpeed == 0)
+					openchange = speed / 50;
+				else
+					openchange = (speed * wrapper->parent_elevdoor->SlowSpeed) / 50;
+			}
 			else
-				openchange = (speed * parent->SlowSpeed) / 50;
+				openchange = speed / 50;
 
 			if (direction > 1)
 			{
@@ -176,7 +210,7 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 				//is from the edge of the door frame)
 				Real width;
 				Real mainwidth = wrapper->Width / 2;
-				if (parent->DoorDirection == false)
+				if (DoorDirection == false)
 				{
 					width = std::abs(extents_max.z - extents_min.z);
 					if (direction == 2)
@@ -219,7 +253,7 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 			{
 				Real width;
 				Real mainwidth = wrapper->Width / 2;
-				if (parent->DoorDirection == false)
+				if (DoorDirection == false)
 				{
 					width = std::abs(extents_max.z - extents_min.z);
 					if (direction == 2)
@@ -252,12 +286,12 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 			}
 
 			if (open == true)
-				active_speed = parent->ManualSpeed;
+				active_speed = wrapper->parent_elevdoor->ManualSpeed;
 			else
-				active_speed = -parent->ManualSpeed;
+				active_speed = -wrapper->parent_elevdoor->ManualSpeed;
 		}
 	}
-	else if (parent->GetPreviousOpen() != open && parent->GetDoorChanged() == true && reversed == false)
+	else if (PreviousOpen != open && DoorChanged == true && reversed == false)
 	{
 		//if a different direction was specified during movement
 		//change directions immediately
@@ -294,7 +328,7 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 		if ((difference <= marker1 && open == true) || (difference >= marker2 && open == false))
 		{
 			accelerating = true;
-			if (parent->GetDoorChanged() == false)
+			if (DoorChanged == false)
 			{
 				//normal door acceleration
 				if (open == true)
@@ -366,7 +400,18 @@ void DoorComponent::Move()
 {
 	//move elevator doors
 
-	Real speed = active_speed * parent->GetRoot()->delta;
+	bool DoorDirection = false;
+	Real speed = 0;
+	if (wrapper->parent_elevdoor)
+	{
+		DoorDirection = wrapper->parent_elevdoor->DoorDirection;
+		speed = active_speed * wrapper->parent_elevdoor->GetRoot()->delta;
+	}
+	else
+	{
+		DoorDirection = wrapper->parent_door->DoorDirection;
+		speed = active_speed * wrapper->parent_door->GetRoot()->delta;
+	}
 
 	//up movement
 	if (direction == 0)
@@ -376,7 +421,7 @@ void DoorComponent::Move()
 	if (direction == 1)
 		mesh->Move(Ogre::Vector3(0, -1, 0), speed);
 
-	if (parent->DoorDirection == false)
+	if (DoorDirection == false)
 	{
 		//left movement
 		if (direction == 2)
@@ -402,7 +447,18 @@ void DoorComponent::Reset(bool open)
 {
 	//reset door state in case of an internal malfunction
 
-	mesh->SetPosition(parent->elev->GetPosition().x, mesh->GetParent()->GetPosition().y, parent->elev->GetPosition().z);
+	//get parent values
+	bool DoorDirection = false;
+	if (wrapper->parent_elevdoor)
+	{
+		DoorDirection = wrapper->parent_elevdoor->DoorDirection;
+		mesh->SetPosition(wrapper->parent_elevdoor->elev->GetPosition().x, mesh->GetParent()->GetPosition().y, wrapper->parent_elevdoor->elev->GetPosition().z);
+	}
+	else
+	{
+		DoorDirection = wrapper->parent_door->DoorDirection;
+		mesh->SetPosition(wrapper->parent_door->GetPosition());
+	}
 
 	if (open == true)
 	{
@@ -410,7 +466,7 @@ void DoorComponent::Reset(bool open)
 		if (direction > 1)
 		{
 			Real mainwidth = wrapper->Width / 2;
-			if (parent->DoorDirection == false)
+			if (DoorDirection == false)
 			{
 				Real width = std::abs(extents_max.z - extents_min.z);
 				if (direction == 2)
@@ -477,7 +533,8 @@ void DoorComponent::Reset(bool open)
 
 DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor) : Object(parent_obj)
 {
-	parent = door_object;
+	parent_elevdoor = door_object;
+	parent_door = 0;
 	Open = false;
 	IsEnabled = true;
 	Width = 0;
@@ -490,14 +547,32 @@ DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool sha
 
 	std::string name;
 	if (IsShaftDoor == true)
-		name = "Shaft Door " + ToString(parent->elev->Number) + ":" + ToString(parent->car->Number) + ":" + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
+		name = "Shaft Door " + ToString(parent_elevdoor->elev->Number) + ":" + ToString(parent_elevdoor->car->Number) + ":" + ToString(parent_elevdoor->Number) + ":" + ToString(shaftdoor_floor);
 	else
-		name = "Elevator Door " + ToString(parent->car->Number) + ":" + ToString(parent->Number);
+		name = "Elevator Door " + ToString(parent_elevdoor->car->Number) + ":" + ToString(parent_elevdoor->Number);
 
 	SetValues("DoorWrapper", name, false);
 
 	if (IsShaftDoor == true)
-		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);
+		SetPosition(parent_elevdoor->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent_elevdoor->elev->GetPosition().z);
+}
+
+DoorWrapper::DoorWrapper(Door *parent) : Object(parent)
+{
+	parent_elevdoor = 0;
+	parent_door = parent;
+	Open = false;
+	IsEnabled = true;
+	Width = 0;
+	Height = 0;
+	Thickness = 0;
+	IsShaftDoor = false;
+	Shift = 0;
+	voffset = 0;
+	floor = 0;
+
+	std::string name = parent->GetName();
+	SetValues("DoorWrapper", name, false);
 }
 
 DoorWrapper::~DoorWrapper()
@@ -511,7 +586,10 @@ DoorWrapper::~DoorWrapper()
 
 	//unregister from parent
 	if (parent_deleting == false)
-		parent->RemoveShaftDoor(this);
+	{
+		if (parent_elevdoor)
+			parent_elevdoor->RemoveShaftDoor(this);
+	}
 }
 
 DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed)
@@ -607,39 +685,39 @@ void DoorWrapper::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool a
 {
 	if (shift == true && right == false)
 	{
-		if (!parent)
-			return;
-
-		ElevatorCar *car = parent->car;
-		if (!car)
-			return;
-
-		int number = parent->Number;
-
-		if (IsShaftDoor == true)
+		if (parent_elevdoor)
 		{
-			//check shaft doors
-			if (abs(car->AreDoorsMoving(number, false, true)) == 2)
-				car->StopDoors(number);
-			else
+			ElevatorCar *car = parent_elevdoor->car;
+			if (!car)
+				return;
+
+			int number = parent_elevdoor->Number;
+
+			if (IsShaftDoor == true)
 			{
-				if (car->AreShaftDoorsOpen(number, floor) == false)
-					car->OpenDoorsEmergency(number, 3, floor);
+				//check shaft doors
+				if (abs(car->AreDoorsMoving(number, false, true)) == 2)
+					car->StopDoors(number);
 				else
-					car->CloseDoorsEmergency(number, 3, floor);
+				{
+					if (car->AreShaftDoorsOpen(number, floor) == false)
+						car->OpenDoorsEmergency(number, 3, floor);
+					else
+						car->CloseDoorsEmergency(number, 3, floor);
+				}
 			}
-		}
-		else
-		{
-			//check elevator doors
-			if (abs(car->AreDoorsMoving(number, true, false)) == 2)
-				car->StopDoors(number);
 			else
 			{
-				if (car->AreDoorsOpen(number) == false)
-					car->OpenDoorsEmergency(number, 2);
+				//check elevator doors
+				if (abs(car->AreDoorsMoving(number, true, false)) == 2)
+					car->StopDoors(number);
 				else
-					car->CloseDoorsEmergency(number, 2);
+				{
+					if (car->AreDoorsOpen(number) == false)
+						car->OpenDoorsEmergency(number, 2);
+					else
+						car->CloseDoorsEmergency(number, 2);
+				}
 			}
 		}
 	}
@@ -649,12 +727,15 @@ void DoorWrapper::OnHit()
 {
 	//check elevator doors (door bumpers feature)
 
-	//make sure both internal and external doors are closing
-	if (parent->OpenDoor == -1 && parent->GetWhichDoors() == 1)
+	if (parent_elevdoor)
 	{
-		//either open doors if the hit door was an internal door or a shaft door on the elevator floor
-		if (IsShaftDoor == false || (IsShaftDoor == true && floor == parent->car->GetFloor()))
-			parent->car->OpenDoors(parent->Number, 1);
+		//make sure both internal and external doors are closing
+		if (parent_elevdoor->OpenDoor == -1 && parent_elevdoor->GetWhichDoors() == 1)
+		{
+			//either open doors if the hit door was an internal door or a shaft door on the elevator floor
+			if (IsShaftDoor == false || (IsShaftDoor == true && floor == parent_elevdoor->car->GetFloor()))
+				parent_elevdoor->car->OpenDoors(parent_elevdoor->Number, 1);
+		}
 	}
 }
 

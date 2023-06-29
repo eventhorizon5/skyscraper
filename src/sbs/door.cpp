@@ -55,6 +55,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 
 	is_enabled = true;
 	Direction = direction;
+	DoorDirection = false; //NEEDS FIXING
 	OpenState = false;
 	IsMoving = false;
 	Real x1 = 0, z1 = 0, x2 = 0, z2 = 0;
@@ -64,6 +65,8 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	CloseSound = close_sound;
 	Speed = speed;
 	sound = 0;
+	door_changed = false; //needs to be implemented
+	previous_open = false; //needs to be implemented
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
@@ -332,6 +335,16 @@ bool Door::ReportError(const std::string &message)
 {
 	//general error reporting function
 	return Object::ReportError("Door " + GetName() + ": " + message);
+}
+
+bool Door::GetDoorChanged()
+{
+	return door_changed;
+}
+
+bool Door::GetPreviousOpen()
+{
+	return previous_open;
 }
 
 }

@@ -33,6 +33,7 @@ class SBSIMPEXP Door : public Object, public DoorLock
 public:
 
 	int Direction;
+	bool DoorDirection;
 	bool OpenState;
 	bool IsMoving; //is door moving?
 	bool OpenDoor; //open or close door?
@@ -54,6 +55,8 @@ public:
 	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
+	bool GetDoorChanged();
+	bool GetPreviousOpen();
 
 private:
 	MeshObject* DoorMesh; //door mesh
@@ -63,6 +66,8 @@ private:
 
 	bool is_enabled;
 	Real rotation;
+	bool door_changed;
+	bool previous_open;
 };
 
 }

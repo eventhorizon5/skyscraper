@@ -45,7 +45,6 @@ struct DoorComponent
 	Real openchange;
 	std::string name;
 	DoorWrapper *wrapper; //associated wrapper
-	ElevatorDoor *parent;
 	Real marker1;
 	Real marker2;
 	int door_section; //door movement section; used for both reversal tracking and debugging
@@ -67,6 +66,7 @@ struct DoorComponent
 struct DoorWrapper : public Object
 {
 	DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor = 0);
+	DoorWrapper(Door *parent);
 	~DoorWrapper();
 
 	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, Real OpenSpeed, Real CloseSpeed);
@@ -87,7 +87,8 @@ struct DoorWrapper : public Object
 	Real Width;
 	Real Height;
 	Real Thickness;
-	ElevatorDoor *parent;
+	ElevatorDoor *parent_elevdoor;
+	Door *parent_door;
 	bool IsShaftDoor;
 	Real Shift;
 	Real voffset;
