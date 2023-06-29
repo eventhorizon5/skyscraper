@@ -69,7 +69,7 @@ struct DoorComponent
 struct DoorWrapper : public Object
 {
 	DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor = 0);
-	DoorWrapper(Door *parent);
+	DoorWrapper(Door *parent, bool rotate);
 	~DoorWrapper();
 
 	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);

@@ -48,7 +48,6 @@ public:
 	void Close(bool playsound = true);
 	bool IsOpen();
 	void Enabled(bool value);
-	void MoveDoor();
 	bool IsEnabled() { return is_enabled; }
 	void Loop();
 	void ClickDoor(Ogre::Vector3 &position);
@@ -57,9 +56,14 @@ public:
 	bool ReportError(const std::string &message);
 	bool GetDoorChanged();
 	bool GetPreviousOpen();
+	DoorWrapper* AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
+	DoorWrapper* FinishDoor();
 
 private:
+	void MoveDoor();
+
 	DoorWrapper *door; //door wrapper
+	DynamicMesh *wrapper;
 
 	//sound object
 	Sound *sound;

@@ -599,7 +599,7 @@ DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool sha
 		SetPosition(parent_elevdoor->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent_elevdoor->elev->GetPosition().z);
 }
 
-DoorWrapper::DoorWrapper(Door *parent) : Object(parent)
+DoorWrapper::DoorWrapper(Door *parent, bool rotate) : Object(parent)
 {
 	parent_elevdoor = 0;
 	parent_door = parent;
@@ -612,7 +612,7 @@ DoorWrapper::DoorWrapper(Door *parent) : Object(parent)
 	Shift = 0;
 	voffset = 0;
 	floor = 0;
-	rotate = true;
+	this->rotate = rotate;
 
 	std::string name = parent->GetName();
 	SetValues("DoorWrapper", name, false);

@@ -71,6 +71,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	sound = 0;
 	door_changed = false;
 	previous_open = false;
+	this->wrapper = wrapper;
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
@@ -129,28 +130,15 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	if (direction == 7 || direction == 8)
 		dir = "back";
 
-	//Create mesh
-	door = new DoorWrapper(this);
-	DoorComponent *component = door->CreateDoor(name, dir, Clockwise, Speed, Speed, wrapper);
+	//create door
+	door = new DoorWrapper(this, true);
+	AddDoorComponent(name, texture, texture, 0, dir, Clockwise, Speed, Speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
+	FinishDoor();
 	Move(position);
 
 	//create sound object
 	if (open_sound != "" || close_sound != "")
 		sound = new Sound(this, "DoorSound", true);
-
-	//create door
-	sbs->DrawWalls(true, true, true, true, true, true);
-	sbs->GetTextureManager()->ResetTextureMapping(true);
-	if (Direction == 1 || Direction == 2 || Direction == 5 || Direction == 6)
-		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-	if (Direction == 3 || Direction == 4 || Direction == 7 || Direction == 8)
-		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-
-	Wall *wall;
-	wall = component->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
-	sbs->ResetWalls();
-	sbs->GetTextureManager()->ResetTextureMapping();
 
 	//open door on startup (without sound) if specified
 	if (open_state == true)
@@ -348,6 +336,123 @@ bool Door::GetDoorChanged()
 bool Door::GetPreviousOpen()
 {
 	return previous_open;
+}
+
+DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
+{
+	//create door component
+
+	DoorComponent *component = door->CreateDoor(name, direction, OpenClockwise, OpenSpeed, CloseSpeed, wrapper);
+
+	sbs->DrawWalls(true, true, true, true, true, true);
+	sbs->GetTextureManager()->ResetTextureMapping(true);
+	if (DoorDirection == false)
+		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
+	else
+		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
+
+	Wall *wall;
+	wall = component->mesh->CreateWallObject(name);
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
+
+	sbs->ResetWalls();
+	sbs->GetTextureManager()->ResetTextureMapping();
+
+	//store extents
+	if (x1 < x2)
+	{
+		component->extents_min.x = x1;
+		component->extents_max.x = x2;
+	}
+	else
+	{
+		component->extents_min.x = x2;
+		component->extents_max.x = x1;
+	}
+	if (z1 < z2)
+	{
+		component->extents_min.z = z1;
+		component->extents_max.z = z2;
+	}
+	else
+	{
+		component->extents_min.z = z2;
+		component->extents_max.z = z1;
+	}
+	component->extents_min.y = voffset;
+	component->extents_max.y = voffset + height;
+
+	return door;
+}
+
+DoorWrapper* Door::FinishDoor()
+{
+	//finishes a door creation
+
+	//exit if no doors exist
+	if (door->doors.empty() == true)
+	{
+		ReportError("FinishDoors: no door components have been created");
+		return 0;
+	}
+
+	//get full width and height of doors
+	Real x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
+	bool firstrun = true;
+	for (size_t i = 0; i < door->doors.size(); i++)
+	{
+		for (int j = 1; j <= 3; j++)
+		{
+			Ogre::Vector2 extents = door->doors[i]->mesh->GetExtents(j, true);
+			extents.x = sbs->ToLocal(extents.x);
+			extents.y = sbs->ToLocal(extents.y);
+
+			if (j == 1)
+			{
+				if (extents.x < x1 || firstrun == true)
+					x1 = extents.x;
+				if (extents.y > x2 || firstrun == true)
+					x2 = extents.y;
+			}
+			if (j == 2)
+			{
+				if (extents.x < y1 || firstrun == true)
+					y1 = extents.x;
+				if (extents.y > y2 || firstrun == true)
+					y2 = extents.y;
+			}
+			if (j == 3)
+			{
+				if (extents.x < z1 || firstrun == true)
+					z1 = extents.x;
+				if (extents.y > z2 || firstrun == true)
+					z2 = extents.y;
+				firstrun = false;
+			}
+		}
+	}
+
+	if (x2 - x1 > z2 - z1)
+	{
+		//DoorDirection = true;
+		door->Width = x2 - x1;
+		door->Thickness = z2 - z1;
+		door->Shift = x2 - (door->Width / 2);
+	}
+	else
+	{
+		//DoorDirection = false;
+		door->Width = z2 - z1;
+		door->Thickness = x2 - x1;
+		door->Shift = z2 - (door->Width / 2);
+	}
+	door->Height = y2 - y1;
+	if (y2 < y1)
+		door->voffset = y2;
+	else
+		door->voffset = y1;
+
+	return door;
 }
 
 }
