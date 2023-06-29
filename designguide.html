@@ -9656,12 +9656,13 @@ starty,
         Syntax: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
           size="2" face="Courier New, Courier, mono"> <em>parent, name,
             open_sound, close_sound, open_state, texture, side_texture,
-            thickness, face_direction, open_direction, speed, CenterX,
-            CenterZ, width, height, voffset, tw, th, IsExternal</em></font><br>
+            thickness, face_direction, open_direction, open_speed,
+            close_speed, CenterX, CenterZ, width, height, voffset, tw,
+            th, side_tw, side_th, IsExternal</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
           size="2" face="Courier New, Courier, mono"> Floor 0, MyDoor,
           open.wav, close.wav, false, Door, Brick, 0.2, left, right, 10,
-          5, 5, 3.5, 8, 0, 1, 1</font><br>
+          5, 5, 3.5, 8, 0, 1, 1, false</font><br>
       </p>
       <p align="left">The example will create a sliding door on Floor
         0.&nbsp; Open_state determines if the door is open on
@@ -9680,12 +9681,13 @@ starty,
         Syntax: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
           size="2" face="Courier New, Courier, mono"> <em>parent, name,
             open_sound, close_sound, open_state, texture, side_texture,
-            thickness, face_direction, open_direction, speed, CenterX,
-            CenterZ, width, height, voffset, tw, th, IsExternal</em></font><br>
+            thickness, face_direction, open_direction, open_speed,
+            close_speed, CenterX, CenterZ, width, height, voffset, tw,
+            th, side_tw, side_th, IsExternal</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
           size="2" face="Courier New, Courier, mono"> Floor 0, MyDoor,
           open.wav, close.wav, false, Door, Brick, 0.2, left, right, 10,
-          5, 5, 3.5, 8, 0, 1, 1</font><br>
+          10, 5, 5, 3.5, 8, 0, 1, 1, 1, 1, false</font><br>
       </p>
       <p align="left">The example will create a standard door on Floor
         0.&nbsp; Open_state determines if the door is open on

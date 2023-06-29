@@ -698,7 +698,7 @@ bool Floor::IsInGroup(int floor)
 	return false;
 }
 
-Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
+Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th, bool external)
 {
 	//add a door to the floor
 
@@ -731,7 +731,7 @@ Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std:
 
 	//create an external (global) door if specified
 	if (external == true)
-		return sbs->GetDoorManager()->AddDoor(name, open_sound, close_sound, open_state, texture, side_texture, thickness, face_direction, open_direction, rotate, speed, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
+		return sbs->GetDoorManager()->AddDoor(name, open_sound, close_sound, open_state, texture, side_texture, thickness, face_direction, open_direction, rotate, open_speed, close_speed, CenterX, CenterZ, width, height, Altitude + voffset, tw, th, side_tw, side_th);
 
 	int number = (int)DoorArray.size();
 	if (name == "")
@@ -740,7 +740,7 @@ Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std:
 		name = "Floor " + ToString(Number) + ":" + name;
 
 	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
-	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, base + voffset, tw, th);
+	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, base + voffset, tw, th, side_tw, side_th);
 	DoorArray.push_back(door);
 	return door;
 }

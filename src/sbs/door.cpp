@@ -263,7 +263,7 @@ bool Door::GetPreviousOpen()
 	return previous_open;
 }
 
-DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//create a door
 
@@ -271,11 +271,14 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 	Real x1 = 0, z1 = 0, x2 = 0, z2 = 0;
 
 	//set speed to default value if invalid
-	if (speed <= 0)
-		speed = sbs->GetConfigFloat("Skyscraper.SBS.DoorSpeed", 75.0);
+	if (open_speed <= 0)
+		open_speed = sbs->GetConfigFloat("Skyscraper.SBS.DoorSpeed", 75.0);
 
-	if (speed <= 0)
-		speed = 75;
+	if (open_speed <= 0)
+		open_speed = 75;
+
+	if (close_speed <= 0)
+		close_speed = open_speed;
 
 	//set origin to location of the door's hinge/pivot point and set up door coordinates
 	if (face_direction == "left")
@@ -316,7 +319,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 		Clockwise = false;
 
 	//create door
-	AddDoorComponent(GetName(), texture, side_texture, thickness, face_direction, open_direction, Clockwise, speed, speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
+	AddDoorComponent(GetName(), texture, side_texture, thickness, face_direction, open_direction, Clockwise, open_speed, close_speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
 	FinishDoor();
 	Move(position);
 

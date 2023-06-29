@@ -791,7 +791,7 @@ void Stairwell::Level::Enabled(bool value)
 	}
 }
 
-Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//add a door
 
@@ -846,7 +846,7 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 		name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(floornum) + ": " + name;
 
 	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
-	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
 	DoorArray.push_back(door);
 
 	floorptr = 0;
