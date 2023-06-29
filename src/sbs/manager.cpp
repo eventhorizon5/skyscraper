@@ -710,10 +710,11 @@ DoorManager::~DoorManager()
 	wrapper = 0;
 }
 
-Door* DoorManager::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+Door* DoorManager::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	int number = (int)Array.size() + 1;
-	std::string name = "Door " + ToString(number);
+	if (name == "")
+		name = "Door " + ToString(number);
 	Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	Array.push_back(door);

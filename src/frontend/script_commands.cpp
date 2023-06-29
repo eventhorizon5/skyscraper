@@ -2241,14 +2241,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 15);
 
-		if (params != 15)
+		if (params != 17)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 5; i <= 15; i++)
+		for (int i = 7; i <= 17; i++)
 		{
-			if (i == 6)
-				i = 8;
+			if (i == 8)
+				i = 10;
 
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -2287,13 +2287,13 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		if (floorobj)
-			StoreCommand(floorobj->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[5], ToFloat(tempdata[6]), tempdata[7], tempdata[8], false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), false));
+			StoreCommand(floorobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), false));
 		else if (elevatorcarobj)
-			StoreCommand(elevatorcarobj->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[5], ToFloat(tempdata[6]), tempdata[7], tempdata[8], false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
+			StoreCommand(elevatorcarobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		else if (shaftobj)
-			StoreCommand(shaftobj->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[5], ToFloat(tempdata[6]), tempdata[7], tempdata[8], false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
+			StoreCommand(shaftobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		else if (stairsobj)
-			StoreCommand(stairsobj->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[5], ToFloat(tempdata[6]), tempdata[7], tempdata[8], false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
+			StoreCommand(stairsobj->AddDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), tempdata[5], tempdata[6], ToFloat(tempdata[7]), tempdata[8], tempdata[9], false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		else
 			return ScriptError("Invalid object");
 

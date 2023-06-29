@@ -1089,7 +1089,7 @@ void Shaft::Level::Loop()
 	LoopChildren();
 }
 
-Door* Shaft::Level::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//add a door
 
@@ -1138,7 +1138,10 @@ Door* Shaft::Level::AddDoor(const std::string &open_sound, const std::string &cl
 	sbs->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
 
 	std::string num = ToString((int)DoorArray.size());
-	std::string name = "Shaft " + ToString(parent->ShaftNumber) + ":Door " + ToString(floornum) + ":" + num;
+	if (name == "")
+		name = "Shaft " + ToString(parent->ShaftNumber) + ": Level " + ToString(floornum) + ": Door " + num;
+	else
+		name = "Shaft " + ToString(parent->ShaftNumber) + ": Level " + ToString(floornum) + ": " + name;
 
 	Door* door = new Door(mesh, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
