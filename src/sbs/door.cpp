@@ -73,8 +73,8 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	CloseSound = close_sound;
 	Speed = speed;
 	sound = 0;
-	door_changed = false; //needs to be implemented
-	previous_open = false; //needs to be implemented
+	door_changed = false;
+	previous_open = false;
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
