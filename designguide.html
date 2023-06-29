@@ -2739,17 +2739,19 @@ filename,
 
 
 
-          <em>name, sound, texturename, thickness</em>, <em>clockwise,
+          <em>name, run, sound, texturename, thickness</em>, <em>clockwise,
+
             segments, speed, rotation, CenterX</em>, <em>CenterZ</em>,
           <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>,
           <em>th, external<br>
           </em></font>Example:<font size="2" face="Courier New, Courier,
-          mono">&nbsp;AddRevolvingDoor MyRevDoor, , DoorTexture, 0.2,
-          false, 4, 0.2, -8.5, 0, 3.5, 8, 0, 1, 1, false</font></p>
-      <p align="left"><em>Clockwise</em> determines the direction the
-        door rotates. <em>Segments</em> determines how many door
-        segments to create (2-4). Leave the sound field blank for no
-        sounds to be played.<br>
+          mono">&nbsp;AddRevolvingDoor MyRevDoor, false, , DoorTexture,
+          0.2, false, 4, 0.2, -8.5, 0, 3.5, 8, 0, 1, 1, false</font></p>
+      <p align="left"><em>Run is either true or false, and determines if
+          the door should move on startup.&nbsp; Clockwise</em>
+        determines the direction the door rotates. <em>Segments</em>
+        determines how many door segments to create (2-4). Leave the
+        sound field blank for no sounds to be played.<br>
         <em>Rotation</em> determines the starting rotation of the door.
       </p>
       <p align="left"><strong>36. AddEscalator</strong> - creates an

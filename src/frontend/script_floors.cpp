@@ -2214,7 +2214,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 17);
 
-		if (params != 15 && params != 16)
+		if (params != 15 && params != 17)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -2238,9 +2238,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 		else
 		{
-			for (int i = 3; i <= 14; i++)
+			for (int i = 4; i <= 15; i++)
 			{
-				if (i == 4)
+				if (i == 5)
 					i++;
 
 				if (!IsNumeric(tempdata[i]))
@@ -2248,7 +2248,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			}
 
 			//check to see if file exists
-			parent->CheckFile("data/" + tempdata[1]);
+			parent->CheckFile("data/" + tempdata[2]);
 		}
 
 		//stop here if in Check mode
@@ -2258,9 +2258,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//create door
 		RevolvingDoor* door = 0;
 		if (compat == false)
-			door = floor->AddRevolvingDoor(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToBool(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]));
+			door = floor->AddRevolvingDoor(tempdata[0], ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToBool(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToBool(tempdata[16]));
 		else
-			door = floor->AddRevolvingDoor("", tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToBool(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]));
+			door = floor->AddRevolvingDoor("", false, tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToBool(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]));
 
 		if (door)
 		{

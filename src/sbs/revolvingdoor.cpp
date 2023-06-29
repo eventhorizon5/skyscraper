@@ -32,7 +32,7 @@
 
 namespace SBS {
 
-RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), Lock(this)
+RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), Lock(this)
 {
 	//creates a revolving door
 	//wall cuts must be performed by the calling (parent) function
@@ -48,7 +48,7 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	Speed = speed;
 	sound = 0;
 	brake = false;
-	run = false;
+	this->run = false;
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
@@ -103,6 +103,10 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	sbs->GetTextureManager()->ResetTextureMapping();
 
 	Rotate(GetRotation().x, rotation, GetRotation().z);
+
+	//start motion on startup, if specified
+	if (run == true)
+		Run(true);
 }
 
 RevolvingDoor::~RevolvingDoor()

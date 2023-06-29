@@ -124,7 +124,7 @@ public:
 	ElevatorRoute* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
 	std::vector<int> GetDirectFloors(bool include_service);
 	Model* GetModel(std::string name);
-	RevolvingDoor* AddRevolvingDoor(std::string name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external);
+	RevolvingDoor* AddRevolvingDoor(std::string name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external);
 	void RemoveRevolvingDoor(RevolvingDoor *door);
 	RevolvingDoor* GetRevolvingDoor(int number);
 	CameraTexture* GetCameraTexture(int number);

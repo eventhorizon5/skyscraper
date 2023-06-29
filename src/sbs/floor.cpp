@@ -1698,11 +1698,11 @@ Model* Floor::GetModel(std::string name)
 	return 0;
 }
 
-RevolvingDoor* Floor::AddRevolvingDoor(std::string name, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
+RevolvingDoor* Floor::AddRevolvingDoor(std::string name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
 {
 	//create an external (global) door if specified
 	if (external == true)
-		return sbs->GetRevolvingDoorManager()->AddDoor(name, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
+		return sbs->GetRevolvingDoorManager()->AddDoor(name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
 
 	int number = (int)RDoorArray.size();
 	if (name == "")
@@ -1710,7 +1710,7 @@ RevolvingDoor* Floor::AddRevolvingDoor(std::string name, const std::string &soun
 	else
 		name = "Floor " + ToString(Number) + ": " + name;
 
-	RevolvingDoor* door = new RevolvingDoor(this, DoorWrapper, name, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+	RevolvingDoor* door = new RevolvingDoor(this, DoorWrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 	RDoorArray.push_back(door);
 	return door;
 }
