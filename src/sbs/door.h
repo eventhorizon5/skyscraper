@@ -57,7 +57,7 @@ public:
 	bool GetPreviousOpen();
 	DoorWrapper* CreateDoor(bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	DoorWrapper* AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
-	DoorWrapper* FinishDoor();
+	DoorWrapper* FinishDoor(bool open_state);
 
 private:
 	void MoveDoor();

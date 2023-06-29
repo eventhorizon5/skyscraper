@@ -320,12 +320,8 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 
 	//create door
 	AddDoorComponent(GetName(), texture, side_texture, thickness, face_direction, open_direction, Clockwise, open_speed, close_speed, x1, z1, x2, z2, height, 0, tw, th, 0, 0);
-	FinishDoor();
+	FinishDoor(open_state);
 	Move(position);
-
-	//open door on startup (without sound) if specified
-	if (open_state == true)
-		Open(position, false, true);
 
 	return door;
 }
@@ -360,7 +356,6 @@ DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &
 	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
 	sbs->ResetWalls();
 
-
 	//store extents
 	if (x1 < x2)
 	{
@@ -388,7 +383,7 @@ DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &
 	return door;
 }
 
-DoorWrapper* Door::FinishDoor()
+DoorWrapper* Door::FinishDoor(bool open_state)
 {
 	//finishes a door creation
 
@@ -456,6 +451,13 @@ DoorWrapper* Door::FinishDoor()
 		door->voffset = y2;
 	else
 		door->voffset = y1;
+
+	//open door on startup (without sound) if specified
+	if (open_state == true)
+	{
+		Ogre::Vector3 pos = GetPosition();
+		Open(pos, false, true);
+	}
 
 	return door;
 }
