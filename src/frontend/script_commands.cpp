@@ -40,6 +40,7 @@
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "cameratexture.h"
+#include "door.h"
 #include "scriptprocessor.h"
 #include "script_section.h"
 
@@ -2228,6 +2229,71 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			StoreCommand(shaftobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		else if (stairsobj)
 			StoreCommand(stairsobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		else
+			return ScriptError("Invalid object");
+
+		return sNextLine;
+	}
+
+	//AddSlidingDoor command
+	if (linecheck.substr(0, 14) == "addslidingdoor")
+	{
+		//get data
+		int params = SplitData(LineData, 15);
+
+		if (params != 15)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 5; i <= 15; i++)
+		{
+			if (i == 6)
+				i = 8;
+
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		if (floorobj)
+			StoreCommand(floorobj->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), tempdata[6], tempdata[7], false, ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), false));
+		else if (elevatorcarobj)
+			StoreCommand(elevatorcarobj->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), tempdata[6], tempdata[7], false, ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15])));
+		else if (shaftobj)
+			StoreCommand(shaftobj->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), tempdata[6], tempdata[7], false, ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15])));
+		else if (stairsobj)
+			StoreCommand(stairsobj->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), tempdata[6], tempdata[7], false, ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15])));
 		else
 			return ScriptError("Invalid object");
 
