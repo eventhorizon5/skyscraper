@@ -319,7 +319,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 		Clockwise = false;
 
 	//create door
-	AddDoorComponent(GetName(), texture, side_texture, thickness, face_direction, open_direction, Clockwise, open_speed, close_speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
+	AddDoorComponent(GetName(), texture, side_texture, thickness, face_direction, open_direction, Clockwise, open_speed, close_speed, x1, z1, x2, z2, height, 0, tw, th, 0, 0);
 	FinishDoor();
 	Move(position);
 
