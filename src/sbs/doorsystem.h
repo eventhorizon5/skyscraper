@@ -31,7 +31,7 @@ struct DoorWrapper;
 //door component object
 struct DoorComponent
 {
-	DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, Real OpenSpeed, Real CloseSpeed);
+	DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
 	~DoorComponent();
 	void MoveDoors(bool open, bool manual);
 	void Move();
@@ -69,7 +69,7 @@ struct DoorWrapper : public Object
 	DoorWrapper(Door *parent);
 	~DoorWrapper();
 
-	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, Real OpenSpeed, Real CloseSpeed);
+	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
 	void Enabled(bool value);
 	bool CheckDoorsOpen();
 	bool IsFinished();

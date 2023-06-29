@@ -28,7 +28,6 @@
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
-#include "shaft.h"
 #include "elevatordoor.h"
 #include "door.h"
 #include "doorsystem.h"
@@ -39,21 +38,13 @@ namespace SBS {
 // Door Component
 //
 
-DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, Real OpenSpeed, Real CloseSpeed)
+DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
 {
 	name = doorname;
 	wrapper = Wrapper;
 
 	//create object mesh
-	if (wrapper->parent_elevdoor)
-	{
-		if (wrapper->IsShaftDoor == false)
-			mesh = new MeshObject(wrapper, doorname, wrapper->parent_elevdoor->elev->GetDoorContainer());
-		else
-			mesh = new MeshObject(wrapper, doorname, wrapper->parent_elevdoor->elev->GetShaft()->GetShaftDoorContainer());
-	}
-	else
-		mesh = new MeshObject(wrapper, doorname); //NEEDS FIXING
+	mesh = new MeshObject(wrapper, doorname, dynmesh);
 
 	//keep colliders attached, to fix performance issues when moving in and out of an elevator
 	mesh->remove_on_disable = false;
@@ -592,11 +583,11 @@ DoorWrapper::~DoorWrapper()
 	}
 }
 
-DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed)
+DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
 {
 	//initialize a door component
 
-	DoorComponent *door = new DoorComponent(doorname, this, direction, OpenSpeed, CloseSpeed);
+	DoorComponent *door = new DoorComponent(doorname, this, direction, OpenSpeed, CloseSpeed, dynmesh);
 	doors.push_back(door);
 	return door;
 }
