@@ -1168,6 +1168,36 @@ bool ScriptProcessor::Section::GetElevatorCar(std::string &value, int floor, int
 	return true;
 }
 
+void ScriptProcessor::Section::GetDirectionStrings(int direction, std::string &face_direction, std::string &open_direction)
+{
+	//direction table:
+	//1 = faces left, opens left
+	//2 = faces left, opens right
+	//3 = faces right, opens right
+	//4 = faces right, opens left
+	//5 = faces front, opens front
+	//6 = faces front, opens back
+	//7 = faces back, opens back
+	//8 = faces back, opens front
+
+	face_direction = "";
+	open_direction = "";
+
+	if (direction == 1 || direction == 2)
+		face_direction = "left";
+	if (direction == 3 || direction == 4)
+		face_direction = "right";
+	if (direction == 5 || direction == 6)
+		face_direction = "front";
+	if (direction == 7 || direction == 8)
+		face_direction = "back";
+
+	if (direction == 1 || direction == 4 || direction == 5 || direction == 8)
+		open_direction = "left";
+	else
+		open_direction = "right";
+}
+
 ScriptProcessor::ConfigHandler::ConfigHandler()
 {
 	Reset();

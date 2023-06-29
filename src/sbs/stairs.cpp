@@ -791,7 +791,7 @@ void Stairwell::Level::Enabled(bool value)
 	}
 }
 
-Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//add a door
 
@@ -806,9 +806,9 @@ Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string
 	if (!floorptr)
 		return 0;
 
-	Real x1, z1, x2, z2;
 	//set up coordinates
-	if (direction < 5)
+	Real x1, z1, x2, z2;
+	if (face_direction == "left" || face_direction == "right")
 	{
 		x1 = CenterX;
 		x2 = CenterX;
@@ -825,7 +825,7 @@ Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string
 
 	//cut area
 	sbs->ResetDoorwayWalls();
-	if (direction < 5)
+	if (face_direction == "left" || face_direction == "right")
 	{
 		Cut(1, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
 		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
@@ -842,8 +842,8 @@ Door* Stairwell::Level::AddDoor(const std::string &open_sound, const std::string
 	std::string num = ToString((int)DoorArray.size());
 	std::string name = "Stairwell " + ToString(parent->StairsNum) + ":Door " + ToString(floornum) + ":" + num;
 
-	Door* door = new Door(mesh, parent->DoorWrapper, name, open_sound, close_sound);
-	door->CreateDoor(open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Door* door = new Door(mesh, parent->DoorWrapper, name, open_sound, close_sound, rotate);
+	door->CreateDoor(open_state, texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	DoorArray.push_back(door);
 
 	floorptr = 0;

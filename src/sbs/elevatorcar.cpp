@@ -1920,19 +1920,13 @@ void ElevatorCar::HoldDoors(int number, bool sensor)
 	}
 }
 
-Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//interface to the SBS AddDoor function
 
-	if (direction > 8 || direction < 1)
-	{
-		ReportError("Door direction out of range");
-		return 0;
-	}
-
-	/*Real x1, z1, x2, z2;
 	//set up coordinates
-	if (direction < 5)
+	/*Real x1, z1, x2, z2;
+	if (face_direction == "left" || face_direction == "right")
 	{
 		x1 = CenterX;
 		x2 = CenterX;
@@ -1948,7 +1942,7 @@ Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &clo
 	}
 
 	//cut area
-	if (direction < 5)
+	if (face_direction == "left" || face_direction == "right")
 		CutAll(Ogre::Vector3(x1 - 1, GetBase(true) + voffset, z1), Ogre::Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
 	else
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
@@ -1958,8 +1952,8 @@ Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &clo
 	std::string carnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
 	std::string name = "Elevator " + elevnum + ": Car " + carnum + ": Door " + num;
-	Door* door = new Door(this, 0, name, open_sound, close_sound);
-	door->CreateDoor(open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
+	door->CreateDoor(open_state, texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door;
 }

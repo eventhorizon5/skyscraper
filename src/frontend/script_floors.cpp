@@ -958,17 +958,29 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
+		//get directions
+		std::string face_direction;
+		std::string open_direction;
+		int direction = 0;
+		if (compat == 1)
+			direction = ToInt(tempdata[2]);
+		else if (compat > 1)
+			direction = ToInt(tempdata[4]);
+		else
+			direction = ToInt(tempdata[5]);
+		GetDirectionStrings(direction, face_direction, open_direction);
+
 		//create door
 		Door* door;
 
 		if (compat == 1)
-			door = floor->AddDoor("", "", false, tempdata[0], ToFloat(tempdata[1]), ToInt(tempdata[2]), 0, ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+			door = floor->AddDoor("", "", false, tempdata[0], ToFloat(tempdata[1]), face_direction, open_direction, true, 0, ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
 		if (compat == 2)
-			door = floor->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
+			door = floor->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), face_direction, open_direction, true, 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
 		if (compat == 3)
-			door = floor->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
+			door = floor->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), face_direction, open_direction, true, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 		if (compat == 0)
-			door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 
 		if (door)
 			door->SetLocked(config->lockvalue, config->keyvalue);
@@ -1058,16 +1070,28 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return sNextLine;
 			}
 
+			//get directions
+			std::string face_direction;
+			std::string open_direction;
+			int direction = 0;
+			if (compat == 1)
+				direction = ToInt(tempdata[3]);
+			else if (compat == 2 || compat == 3)
+				direction = ToInt(tempdata[5]);
+			else
+				direction = ToInt(tempdata[6]);
+			GetDirectionStrings(direction, face_direction, open_direction);
+
 			Door* door = 0;
 
 			if (compat == 1)
-				door = level->AddDoor("", "", false, tempdata[1], ToFloat(tempdata[2]), ToInt(tempdata[3]), 0, ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]));
+				door = level->AddDoor("", "", false, tempdata[1], ToFloat(tempdata[2]), face_direction, open_direction, true, 0, ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]));
 			if (compat == 2)
-				door = level->AddDoor(tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
+				door = level->AddDoor(tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 			if (compat == 3)
-				door = level->AddDoor(tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+				door = level->AddDoor(tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 			if (compat == 0)
-				door = level->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+				door = level->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
 				door->SetLocked(config->lockvalue, config->keyvalue);
@@ -1116,7 +1140,14 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return sNextLine;
 			}
 
-			Door* door = level->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			//get directions
+			std::string face_direction;
+			std::string open_direction;
+			int direction = 0;
+			direction = ToInt(tempdata[6]);
+			GetDirectionStrings(direction, face_direction, open_direction);
+
+			Door* door = level->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
 				door->SetLocked(config->lockvalue, config->keyvalue);
@@ -1152,8 +1183,15 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
+		//get directions
+		std::string face_direction;
+		std::string open_direction;
+		int direction = 0;
+		direction = ToInt(tempdata[5]);
+		GetDirectionStrings(direction, face_direction, open_direction);
+
 		//create door
-		Door* door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), true);
+		Door* door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), true);
 
 		if (door)
 			door->SetLocked(config->lockvalue, config->keyvalue);

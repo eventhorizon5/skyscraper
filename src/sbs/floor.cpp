@@ -698,19 +698,13 @@ bool Floor::IsInGroup(int floor)
 	return false;
 }
 
-Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
+Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
 {
-	//interface to the SBS AddDoor function
+	//add a door to the floor
 
-	if (direction > 8 || direction < 1)
-	{
-		ReportError("Door direction out of range");
-		return 0;
-	}
-
-	Real x1, z1, x2, z2;
 	//set up coordinates
-	if (direction < 5)
+	Real x1, z1, x2, z2;
+	if (face_direction == "left" || face_direction == "right")
 	{
 		x1 = CenterX;
 		x2 = CenterX;
@@ -730,19 +724,19 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 		base = GetBase(true);
 
 	//cut area
-	if (direction < 5)
+	if (face_direction == "left" || face_direction == "right")
 		CutAll(Ogre::Vector3(x1 - 1, base + voffset, z1), Ogre::Vector3(x2 + 1, base + voffset + height, z2), true, false);
 	else
 		CutAll(Ogre::Vector3(x1, base + voffset, z1 - 1), Ogre::Vector3(x2, base + voffset + height, z2 + 1), true, false);
 
 	//create an external (global) door if specified
 	if (external == true)
-		return sbs->GetDoorManager()->AddDoor(open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
+		return sbs->GetDoorManager()->AddDoor(open_sound, close_sound, open_state, texture, thickness, face_direction, open_direction, rotate, speed, CenterX, CenterZ, width, height, Altitude + voffset, tw, th);
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
-	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound);
-	door->CreateDoor(open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, base + voffset, tw, th);
+	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
+	door->CreateDoor(open_state, texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, base + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
 }

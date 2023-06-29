@@ -149,7 +149,7 @@ class SBSIMPEXP DoorManager : public Object
 public:
 	DoorManager(Object* parent);
 	~DoorManager();
-	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
+	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	void RemoveDoor(Door *door);
 	int GetCount();
 	Door* GetIndex(int index);

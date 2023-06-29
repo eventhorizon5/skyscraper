@@ -263,47 +263,11 @@ bool Door::GetPreviousOpen()
 	return previous_open;
 }
 
-DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
-{
-	//legacy door creation function
-
-	//direction table:
-	//1 = faces left, opens left
-	//2 = faces left, opens right
-	//3 = faces right, opens right
-	//4 = faces right, opens left
-	//5 = faces front, opens front
-	//6 = faces front, opens back
-	//7 = faces back, opens back
-	//8 = faces back, opens front
-
-	std::string face_direction;
-	std::string open_direction;
-
-	if (direction == 1 || direction == 2)
-		face_direction = "left";
-	if (direction == 3 || direction == 4)
-		face_direction = "right";
-	if (direction == 5 || direction == 6)
-		face_direction = "front";
-	if (direction == 7 || direction == 8)
-		face_direction = "back";
-
-	if (direction == 1 || direction == 4 || direction == 5 || direction == 8)
-		open_direction = "left";
-	else
-		open_direction = "right";
-
-	CreateDoor(open_state, texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
-	return door;
-}
-
 DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real thickness, const std::string &face_direction, const std::string &open_direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
 {
 	//create a door
 
 	Ogre::Vector3 position;
-	std::string dir;
 	Real x1 = 0, z1 = 0, x2 = 0, z2 = 0;
 
 	//set speed to default value if invalid
@@ -321,7 +285,6 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		x2 = 0;
 		z1 = 0;
 		z2 = width;
-		DoorDirection = false;
 	}
 	if (face_direction == "right")
 	{
@@ -330,7 +293,6 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		x2 = 0;
 		z1 = -width;
 		z2 = 0;
-		DoorDirection = true;
 	}
 	if (face_direction == "front")
 	{
@@ -339,7 +301,6 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		x2 = 0;
 		z1 = 0;
 		z2 = 0;
-		DoorDirection = false;
 	}
 	if (face_direction == "back")
 	{
@@ -348,7 +309,6 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		x2 = width;
 		z1 = 0;
 		z2 = 0;
-		DoorDirection = true;
 	}
 
 	bool Clockwise = true;
@@ -356,7 +316,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 		Clockwise = false;
 
 	//create door
-	AddDoorComponent(GetName(), texture, texture, thickness, dir, Clockwise, speed, speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
+	AddDoorComponent(GetName(), texture, texture, thickness, face_direction, open_direction, Clockwise, speed, speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
 	FinishDoor();
 	Move(position);
 
@@ -367,11 +327,14 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real 
 	return door;
 }
 
-DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
+DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
 {
 	//create door component
 
-	DoorComponent *component = door->CreateDoor(name, direction, OpenClockwise, OpenSpeed, CloseSpeed, wrapper);
+	if (face_direction == "right" || face_direction == "back")
+		DoorDirection = true;
+
+	DoorComponent *component = door->CreateDoor(name, open_direction, OpenClockwise, OpenSpeed, CloseSpeed, wrapper);
 
 	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->GetTextureManager()->ResetTextureMapping(true);
@@ -463,7 +426,6 @@ DoorWrapper* Door::FinishDoor()
 
 	if (x2 - x1 > z2 - z1)
 	{
-		//DoorDirection = true;
 		door->Width = x2 - x1;
 		door->Thickness = z2 - z1;
 		door->Shift = x2 - (door->Width / 2);
@@ -471,7 +433,6 @@ DoorWrapper* Door::FinishDoor()
 	}
 	else
 	{
-		//DoorDirection = false;
 		door->Width = z2 - z1;
 		door->Thickness = x2 - x1;
 		door->Shift = z2 - (door->Width / 2);

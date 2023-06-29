@@ -1990,15 +1990,25 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
+		//get directions
+		std::string face_direction;
+		std::string open_direction;
+		int direction = 0;
+		if (compat >= 1)
+			direction = ToInt(tempdata[4]);
+		else
+			direction = ToInt(tempdata[5]);
+		GetDirectionStrings(direction, face_direction, open_direction);
+
 		//create door
 		Door* door;
 
 		if (compat == 1)
-			door = car->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
+			door = car->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), face_direction, open_direction, true, 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
 		else if (compat == 2)
-			door = car->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
+			door = car->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), face_direction, open_direction, true, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 		else
-			door = car->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			door = car->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 
 		if (door)
 			door->SetLocked(config->lockvalue, config->keyvalue);
