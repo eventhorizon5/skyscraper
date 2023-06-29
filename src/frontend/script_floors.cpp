@@ -1143,8 +1143,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			//get directions
 			std::string face_direction;
 			std::string open_direction;
-			int direction = 0;
-			direction = ToInt(tempdata[6]);
+			int direction = ToInt(tempdata[6]);
 			GetDirectionStrings(direction, face_direction, open_direction);
 
 			Door* door = level->AddDoor(tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
@@ -1186,8 +1185,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get directions
 		std::string face_direction;
 		std::string open_direction;
-		int direction = 0;
-		direction = ToInt(tempdata[5]);
+		int direction = ToInt(tempdata[5]);
 		GetDirectionStrings(direction, face_direction, open_direction);
 
 		//create door
