@@ -334,13 +334,14 @@ DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &
 {
 	//create door component
 
+	bool direction = false;
 	if (face_direction == "right" || face_direction == "back")
-		DoorDirection = true;
+		direction = true;
 
 	DoorComponent *component = door->CreateDoor(name, open_direction, OpenClockwise, OpenSpeed, CloseSpeed, wrapper);
 
 	sbs->GetTextureManager()->ResetTextureMapping(true);
-	if (DoorDirection == false)
+	if (direction == false)
 		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
 	else
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
@@ -440,6 +441,7 @@ DoorWrapper* Door::FinishDoor()
 		door->Thickness = z2 - z1;
 		door->Shift = x2 - (door->Width / 2);
 		SetDirection(true);
+		DoorDirection = true;
 	}
 	else
 	{
@@ -447,6 +449,7 @@ DoorWrapper* Door::FinishDoor()
 		door->Thickness = x2 - x1;
 		door->Shift = z2 - (door->Width / 2);
 		SetDirection(false);
+		DoorDirection = false;
 	}
 	door->Height = y2 - y1;
 	if (y2 < y1)
