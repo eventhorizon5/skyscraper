@@ -2241,7 +2241,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 15);
 
-		if (params != 17)
+		if (params != 18)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
