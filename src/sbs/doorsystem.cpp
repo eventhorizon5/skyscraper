@@ -711,6 +711,8 @@ void DoorWrapper::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool a
 				}
 			}
 		}
+		else
+			parent_door->OnClick(position, shift, ctrl, alt, right);
 	}
 }
 
