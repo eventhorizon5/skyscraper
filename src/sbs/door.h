@@ -32,12 +32,11 @@ class SBSIMPEXP Door : public Object, public DoorLock
 {
 public:
 
-	int Direction;
 	bool DoorDirection;
+	bool OpenDirection;
 	bool OpenState;
 	bool IsMoving; //is door moving?
 	bool OpenDoor; //open or close door?
-	bool Clockwise; //if door should rotate clockwise
 	Real Speed; //rotation speed
 	std::string OpenSound; //opening sound
 	std::string CloseSound; //closing sound
@@ -65,7 +64,6 @@ private:
 	Sound *sound;
 
 	bool is_enabled;
-	Real rotation;
 	bool door_changed;
 	bool previous_open;
 };

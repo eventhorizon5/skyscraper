@@ -31,9 +31,10 @@ struct DoorWrapper;
 //door component object
 struct DoorComponent
 {
-	DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
+	DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
 	~DoorComponent();
 	void MoveDoors(bool open, bool manual);
+	void RotateDoors(bool open);
 	void Move();
 	void Reset(bool open);
 
@@ -60,6 +61,8 @@ struct DoorComponent
 	Real offset;
 	bool recheck_difference;
 	bool reversed;
+	Real rotation;
+	bool Clockwise; //if door should rotate clockwise
 };
 
 //wrapper that represents the entire set of doors
@@ -69,7 +72,7 @@ struct DoorWrapper : public Object
 	DoorWrapper(Door *parent);
 	~DoorWrapper();
 
-	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
+	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
 	void Enabled(bool value);
 	bool CheckDoorsOpen();
 	bool IsFinished();
@@ -93,6 +96,7 @@ struct DoorWrapper : public Object
 	Real Shift;
 	Real voffset;
 	int floor;
+	bool rotate;
 };
 
 }

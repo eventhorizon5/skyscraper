@@ -38,7 +38,7 @@ namespace SBS {
 // Door Component
 //
 
-DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
+DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
 {
 	name = doorname;
 	wrapper = Wrapper;
@@ -79,6 +79,8 @@ DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, 
 	recheck_difference = false;
 	reversed = false;
 	offset = 0;
+	rotation = 0;
+	Clockwise = OpenClockwise;
 }
 
 DoorComponent::~DoorComponent()
@@ -105,6 +107,9 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	SBS_PROFILE("DoorComponent::MoveDoors");
 	Real tempposition, temporigin;
+
+	if (wrapper->rotate == true)
+		return;
 
 	//get parent values
 	bool DoorChanged = false;
@@ -387,6 +392,48 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 	Reset(open);
 }
 
+void DoorComponent::RotateDoors(bool open)
+{
+	if (wrapper->rotate == false)
+		return;
+
+	if (Clockwise == true)
+	{
+		if (open == true)
+			rotation += open_speed * wrapper->GetRoot()->delta;
+		else
+			rotation -= close_speed * wrapper->GetRoot()->delta;
+	}
+	else
+	{
+		if (open == true)
+			rotation -= open_speed * wrapper->GetRoot()->delta;
+		else
+			rotation += close_speed * wrapper->GetRoot()->delta;
+	}
+
+	//if opened fully, set state to opened
+	if (rotation >= 90 || rotation <= -90)
+	{
+		is_open = true;
+		finished = true;
+		if (rotation >= 90)
+			rotation = 90;
+		else
+			rotation = -90;
+	}
+
+	//if closed fully, set state to closed
+	if ((Clockwise == true && rotation <= 0) || (Clockwise == false && rotation >= 0))
+	{
+		is_open = false;
+		finished = true;
+		rotation = 0;
+	}
+
+	mesh->SetRotation(0, rotation, 0);
+}
+
 void DoorComponent::Move()
 {
 	//move elevator doors
@@ -436,7 +483,10 @@ void DoorComponent::Move()
 
 void DoorComponent::Reset(bool open)
 {
-	//reset door state in case of an internal malfunction
+	//reset door state
+
+	if (wrapper->rotate == true)
+		return;
 
 	//get parent values
 	bool DoorDirection = false;
@@ -535,6 +585,7 @@ DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool sha
 	Shift = 0;
 	voffset = 0;
 	floor = shaftdoor_floor;
+	rotate = false;
 
 	std::string name;
 	if (IsShaftDoor == true)
@@ -561,6 +612,7 @@ DoorWrapper::DoorWrapper(Door *parent) : Object(parent)
 	Shift = 0;
 	voffset = 0;
 	floor = 0;
+	rotate = true;
 
 	std::string name = parent->GetName();
 	SetValues("DoorWrapper", name, false);
@@ -583,11 +635,11 @@ DoorWrapper::~DoorWrapper()
 	}
 }
 
-DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
+DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
 {
 	//initialize a door component
 
-	DoorComponent *door = new DoorComponent(doorname, this, direction, OpenSpeed, CloseSpeed, dynmesh);
+	DoorComponent *door = new DoorComponent(doorname, this, direction, OpenClockwise, OpenSpeed, CloseSpeed, dynmesh);
 	doors.push_back(door);
 	return door;
 }
@@ -609,7 +661,12 @@ void DoorWrapper::MoveDoors(bool open, bool manual)
 {
 	//calls per-door move function
 	for (size_t i = 0; i < doors.size(); i++)
-		doors[i]->MoveDoors(open, manual);
+	{
+		if (rotate == false)
+			doors[i]->MoveDoors(open, manual);
+		else
+			doors[i]->RotateDoors(open);
+	}
 }
 
 bool DoorWrapper::CheckDoorsOpen()

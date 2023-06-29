@@ -810,9 +810,9 @@ DoorComponent* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::s
 	//create door object
 	DoorComponent *door = 0;
 	if (wrapper->IsShaftDoor == false)
-		door = wrapper->CreateDoor(meshname, direction, OpenSpeed, CloseSpeed, elev->GetDoorContainer());
+		door = wrapper->CreateDoor(meshname, direction, false, OpenSpeed, CloseSpeed, elev->GetDoorContainer());
 	else
-		door = wrapper->CreateDoor(meshname, direction, OpenSpeed, CloseSpeed, elev->GetShaft()->GetShaftDoorContainer());
+		door = wrapper->CreateDoor(meshname, direction, false, OpenSpeed, CloseSpeed, elev->GetShaft()->GetShaftDoorContainer());
 
 	if (tw == 0)
 		tw = 1;

@@ -54,12 +54,19 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	SetValues("Door", name, false);
 
 	is_enabled = true;
-	Direction = direction;
-	DoorDirection = false; //NEEDS FIXING
+	int Direction = direction;
+
+	DoorDirection = false;
+	if (direction == 3 || direction == 4 || direction == 7 || direction == 8)
+		DoorDirection = true;
+
+	OpenDirection = false;
+	if (direction == 2 || direction == 3 || direction == 6 || direction == 7)
+		OpenDirection = true;
+
 	OpenState = false;
 	IsMoving = false;
 	Real x1 = 0, z1 = 0, x2 = 0, z2 = 0;
-	rotation = 0;
 	OpenDoor = false;
 	OpenSound = open_sound;
 	CloseSound = close_sound;
@@ -111,10 +118,9 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 		z2 = 0;
 	}
 
+	bool Clockwise = true;
 	if (Direction == 1 || Direction == 3 || Direction == 5 || Direction == 7)
 		Clockwise = false;
-	else
-		Clockwise = true;
 
 	//Create mesh
 	DoorMesh = new MeshObject(this, name, wrapper);
@@ -255,41 +261,6 @@ void Door::Loop()
 void Door::MoveDoor()
 {
 	//door movement callback function
-	if (Clockwise == true)
-	{
-		if (OpenDoor == true)
-			rotation += Speed * sbs->delta;
-		else
-			rotation -= Speed * sbs->delta;
-	}
-	else
-	{
-		if (OpenDoor == true)
-			rotation -= Speed * sbs->delta;
-		else
-			rotation += Speed * sbs->delta;
-	}
-
-	//if opened fully, set state to opened
-	if (rotation >= 90 || rotation <= -90)
-	{
-		OpenState = true;
-		IsMoving = false;
-		if (rotation >= 90)
-			rotation = 90;
-		else
-			rotation = -90;
-	}
-
-	//if closed fully, set state to closed
-	if ((Clockwise == true && rotation <= 0) || (Clockwise == false && rotation >= 0))
-	{
-		OpenState = false;
-		IsMoving = false;
-		rotation = 0;
-	}
-
-	SetRotation(0, rotation, 0);
 }
 
 void Door::ClickDoor(Ogre::Vector3 &position)
