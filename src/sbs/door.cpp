@@ -67,6 +67,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	door_changed = false;
 	previous_open = false;
 	this->wrapper = wrapper;
+	running = false;
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
@@ -86,7 +87,6 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 		x2 = 0;
 		z1 = 0;
 		z2 = width;
-		dir = "left";
 		DoorDirection = false;
 	}
 	if (direction == 3 || direction == 4)
@@ -96,7 +96,6 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 		x2 = 0;
 		z1 = -width;
 		z2 = 0;
-		dir = "right";
 		DoorDirection = true;
 	}
 	if (direction == 5 || direction == 6)
@@ -106,7 +105,6 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 		x2 = 0;
 		z1 = 0;
 		z2 = 0;
-		dir = "front";
 		DoorDirection = false;
 	}
 	if (direction == 7 || direction == 8)
@@ -116,9 +114,13 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 		x2 = width;
 		z1 = 0;
 		z2 = 0;
-		dir = "back";
 		DoorDirection = true;
 	}
+
+	if (direction == 1 || direction == 4 || direction == 5 || direction == 8)
+		dir = "left";
+	else
+		dir = "right";
 
 	bool Clockwise = true;
 	if (direction == 1 || direction == 3 || direction == 5 || direction == 7)
@@ -255,8 +257,10 @@ void Door::MoveDoor()
 	//door movement callback function
 
 	//if a different direction was specified during movement
-	if (previous_open != OpenDoor && door_changed == false)
+	if (running == true && previous_open != OpenDoor && door_changed == false)
 		door_changed = true;
+
+	running = true;
 
 	//perform door movement and get open state of each door
 	door->MoveDoors(OpenDoor);
@@ -271,6 +275,8 @@ void Door::MoveDoor()
 	//the doors are open or closed now
 	door_changed = false;
 	IsMoving = false;
+	running = false;
+
 	if (OpenDoor == true)
 		OpenState = true;
 	else

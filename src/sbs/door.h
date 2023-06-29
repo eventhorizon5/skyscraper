@@ -71,6 +71,7 @@ private:
 	bool is_enabled;
 	bool door_changed;
 	bool previous_open;
+	bool running;
 };
 
 }
