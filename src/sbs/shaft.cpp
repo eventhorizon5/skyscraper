@@ -1143,7 +1143,7 @@ Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, con
 	else
 		name = "Shaft " + ToString(parent->ShaftNumber) + ": Level " + ToString(floornum) + ": " + name;
 
-	Door* door = new Door(mesh, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
 	DoorArray.push_back(door);
 

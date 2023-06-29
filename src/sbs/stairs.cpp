@@ -845,7 +845,7 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 	else
 		name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(floornum) + ": " + name;
 
-	Door* door = new Door(mesh, parent->DoorWrapper, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	DoorArray.push_back(door);
 
