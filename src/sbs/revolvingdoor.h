@@ -59,6 +59,7 @@ private:
 	bool brake;
 	bool is_enabled;
 	Real rotation;
+	bool run;
 };
 
 }

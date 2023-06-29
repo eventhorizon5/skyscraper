@@ -48,6 +48,7 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	Speed = speed;
 	sound = 0;
 	brake = false;
+	run = false;
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
@@ -185,14 +186,14 @@ void RevolvingDoor::MoveDoor()
 	{
 		if (rotation < Speed)
 			rotation += Speed * sbs->delta;
-		else
+		else if (run == false)
 			brake = !brake;
 	}
 	else if ((Clockwise == false && brake == false) || (Clockwise == true && brake == true))
 	{
 		if (rotation > -Speed)
 			rotation -= Speed * sbs->delta;
-		else
+		else if (run == false)
 			brake = !brake;
 	}
 
@@ -230,6 +231,8 @@ bool RevolvingDoor::ReportError(const std::string &message)
 void RevolvingDoor::Run(bool value)
 {
 	//start or stop the revolving door
+
+	run = value;
 
 	if (value == true)
 		OnHit();

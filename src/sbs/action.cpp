@@ -217,6 +217,14 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//On
 	//Off
 
+	//Door actions:
+	//Open
+	//Close
+
+	//RevolvingDoor actions:
+	//On
+	//Off
+
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
 	Floor *floor = dynamic_cast<Floor*>(parent);
