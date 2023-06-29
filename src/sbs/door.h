@@ -38,11 +38,10 @@ public:
 	bool OpenState;
 	bool IsMoving; //is door moving?
 	bool OpenDoor; //open or close door?
-	Real Speed; //rotation speed
 	std::string OpenSound; //opening sound
 	std::string CloseSound; //closing sound
 
-	Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
+	Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, int direction = 0);
 	~Door();
 	bool Open(Ogre::Vector3 &position, bool playsound = true, bool force = false);
 	void Close(bool playsound = true);
@@ -56,6 +55,7 @@ public:
 	bool ReportError(const std::string &message);
 	bool GetDoorChanged();
 	bool GetPreviousOpen();
+	DoorWrapper* CreateDoor(bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	DoorWrapper* AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	DoorWrapper* FinishDoor();
 

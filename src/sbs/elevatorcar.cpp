@@ -1958,7 +1958,8 @@ Door* ElevatorCar::AddDoor(const std::string &open_sound, const std::string &clo
 	std::string carnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
 	std::string name = "Elevator " + elevnum + ": Car " + carnum + ": Door " + num;
-	Door* door = new Door(this, 0, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Door* door = new Door(this, 0, name, open_sound, close_sound, direction);
+	door->CreateDoor(open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door;
 }

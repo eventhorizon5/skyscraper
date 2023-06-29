@@ -36,9 +36,9 @@
 
 namespace SBS {
 
-Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), DoorLock(this, direction)
+Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, int direction) : Object(parent), DoorLock(this, direction)
 {
-	//creates a door
+	//creates a door, the 'direction' parameter is for the lock direction
 	//wall cuts must be performed by the calling (parent) function
 
 	//direction table:
@@ -58,87 +58,22 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 
 	OpenState = false;
 	IsMoving = false;
-	Real x1 = 0, z1 = 0, x2 = 0, z2 = 0;
 	OpenDoor = false;
 	OpenSound = open_sound;
 	CloseSound = close_sound;
-	Speed = speed;
 	sound = 0;
 	door_changed = false;
 	previous_open = false;
 	this->wrapper = wrapper;
 	running = false;
+	DoorDirection = false;
 
-	//set speed to default value if invalid
-	if (Speed <= 0)
-		Speed = sbs->GetConfigFloat("Skyscraper.SBS.DoorSpeed", 75.0);
-
-	if (Speed <= 0)
-		Speed = 75;
-
-	Ogre::Vector3 position;
-	std::string dir;
-
-	//set origin to location of the door's hinge/pivot point and set up door coordinates
-	if (direction == 1 || direction == 2)
-	{
-		position = Ogre::Vector3(CenterX, voffset, CenterZ - (width / 2)); //front
-		x1 = 0;
-		x2 = 0;
-		z1 = 0;
-		z2 = width;
-		DoorDirection = false;
-	}
-	if (direction == 3 || direction == 4)
-	{
-		position = Ogre::Vector3(CenterX, voffset, CenterZ + (width / 2)); //back
-		x1 = 0;
-		x2 = 0;
-		z1 = -width;
-		z2 = 0;
-		DoorDirection = true;
-	}
-	if (direction == 5 || direction == 6)
-	{
-		position = Ogre::Vector3(CenterX + (width / 2), voffset, CenterZ); //right
-		x1 = -width;
-		x2 = 0;
-		z1 = 0;
-		z2 = 0;
-		DoorDirection = false;
-	}
-	if (direction == 7 || direction == 8)
-	{
-		position = Ogre::Vector3(CenterX - (width / 2), voffset, CenterZ); //left
-		x1 = 0;
-		x2 = width;
-		z1 = 0;
-		z2 = 0;
-		DoorDirection = true;
-	}
-
-	if (direction == 1 || direction == 4 || direction == 5 || direction == 8)
-		dir = "left";
-	else
-		dir = "right";
-
-	bool Clockwise = true;
-	if (direction == 1 || direction == 3 || direction == 5 || direction == 7)
-		Clockwise = false;
-
-	//create door
+	//create door wrapper
 	door = new DoorWrapper(this, true);
-	AddDoorComponent(name, texture, texture, 0, dir, Clockwise, Speed, Speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
-	FinishDoor();
-	Move(position);
 
 	//create sound object
 	if (open_sound != "" || close_sound != "")
 		sound = new Sound(this, "DoorSound", true);
-
-	//open door on startup (without sound) if specified
-	if (open_state == true)
-		Open(position, false, true);
 }
 
 Door::~Door()
@@ -336,6 +271,88 @@ bool Door::GetDoorChanged()
 bool Door::GetPreviousOpen()
 {
 	return previous_open;
+}
+
+DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, Real thickness, int direction, Real speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
+{
+	//direction table:
+	//1 = faces left, opens left
+	//2 = faces left, opens right
+	//3 = faces right, opens right
+	//4 = faces right, opens left
+	//5 = faces front, opens front
+	//6 = faces front, opens back
+	//7 = faces back, opens back
+	//8 = faces back, opens front
+
+	Ogre::Vector3 position;
+	std::string dir;
+	Real x1 = 0, z1 = 0, x2 = 0, z2 = 0;
+
+	//set speed to default value if invalid
+	if (speed <= 0)
+		speed = sbs->GetConfigFloat("Skyscraper.SBS.DoorSpeed", 75.0);
+
+	if (speed <= 0)
+		speed = 75;
+
+	//set origin to location of the door's hinge/pivot point and set up door coordinates
+	if (direction == 1 || direction == 2)
+	{
+		position = Ogre::Vector3(CenterX, voffset, CenterZ - (width / 2)); //front
+		x1 = 0;
+		x2 = 0;
+		z1 = 0;
+		z2 = width;
+		DoorDirection = false;
+	}
+	if (direction == 3 || direction == 4)
+	{
+		position = Ogre::Vector3(CenterX, voffset, CenterZ + (width / 2)); //back
+		x1 = 0;
+		x2 = 0;
+		z1 = -width;
+		z2 = 0;
+		DoorDirection = true;
+	}
+	if (direction == 5 || direction == 6)
+	{
+		position = Ogre::Vector3(CenterX + (width / 2), voffset, CenterZ); //right
+		x1 = -width;
+		x2 = 0;
+		z1 = 0;
+		z2 = 0;
+		DoorDirection = false;
+	}
+	if (direction == 7 || direction == 8)
+	{
+		position = Ogre::Vector3(CenterX - (width / 2), voffset, CenterZ); //left
+		x1 = 0;
+		x2 = width;
+		z1 = 0;
+		z2 = 0;
+		DoorDirection = true;
+	}
+
+	if (direction == 1 || direction == 4 || direction == 5 || direction == 8)
+		dir = "left";
+	else
+		dir = "right";
+
+	bool Clockwise = true;
+	if (direction == 1 || direction == 3 || direction == 5 || direction == 7)
+		Clockwise = false;
+
+	//create door
+	AddDoorComponent(GetName(), texture, texture, 0, dir, Clockwise, speed, speed, x1, z1, x2, z2, height, voffset, tw, th, 0, 0);
+	FinishDoor();
+	Move(position);
+
+	//open door on startup (without sound) if specified
+	if (open_state == true)
+		Open(position, false, true);
+
+	return door;
 }
 
 DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
