@@ -809,7 +809,7 @@ RevolvingDoor* RevolvingDoorManager::AddDoor(std::string name, bool run, const s
 {
 	int number = (int)Array.size() + 1;
 	if (name == "")
-		name = "Door " + ToString(number);
+		name = "RevolvingDoor " + ToString(number);
 
 	RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
 	Array.push_back(door);

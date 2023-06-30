@@ -1729,9 +1729,7 @@ RevolvingDoor* Floor::AddRevolvingDoor(std::string name, bool run, const std::st
 
 	int number = (int)RDoorArray.size();
 	if (name == "")
-		name = "Floor " + ToString(Number) + ": Door " + ToString(number);
-	else
-		name = "Floor " + ToString(Number) + ": " + name;
+		name = "RevolvingDoor " + ToString(number);
 
 	RevolvingDoor* door = new RevolvingDoor(this, DoorWrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 	RDoorArray.push_back(door);
