@@ -503,9 +503,6 @@ void Door::Timer::Notify()
 {
 	//when auto-close timer triggers, close door
 
-	if (door->IsOpen() == false)
-		return;
-
 	//close door
 	door->Close();
 }
