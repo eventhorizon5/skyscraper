@@ -1,11 +1,9 @@
-echo off
+@echo off
 echo Generating GitRev header...
-erase src\sbs\gitrev.h
-echo #ifndef GITREV_H>> src\sbs\gitrev.h
+echo #ifndef GITREV_H> src\sbs\gitrev.h
 echo #define GITREV_H>> src\sbs\gitrev.h
 echo.>> src\sbs\gitrev.h
-git rev-list HEAD | find /c /v "" > out
-set /p VV=<out
-echo #define GIT_REV %VV%>> src\sbs\gitrev.h
-erase out
+echo|set /p="#define GIT_REV ">> src\sbs\gitrev.h
+git rev-list HEAD | find /c /v "">> src\sbs\gitrev.h
+echo.>> src\sbs\gitrev.h
 echo #endif>> src\sbs\gitrev.h

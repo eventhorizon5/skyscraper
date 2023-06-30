@@ -329,6 +329,7 @@
     <ClInclude Include="..\src\sbs\escalator.h" />
     <ClInclude Include="..\src\sbs\floor.h" />
     <ClInclude Include="..\src\sbs\floorindicator.h" />
+    <ClInclude Include="..\src\sbs\gitrev.h" />
     <ClInclude Include="..\src\sbs\globals.h" />
     <ClInclude Include="..\src\sbs\indicator.h" />
     <ClInclude Include="..\src\sbs\light.h" />
