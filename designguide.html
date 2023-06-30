@@ -9509,6 +9509,7 @@ starty,
           Elevator 1:Car 1<br>
           Shaft 1:Level 2<br>
           Stairwell 5:Level 6<br>
+          DoorManager</i> (used for creating global/external Doors)<i><br>
         </i></p>
       <br>
       <p align="left"> <strong>a. AddLight</strong> - adds a light, the
@@ -9660,11 +9661,11 @@ starty,
             open_sound, close_sound, open_state, texture, side_texture,
             thickness, face_direction, open_direction, open_speed,
             close_speed, CenterX, CenterZ, width, height, voffset, tw,
-            th, side_tw, side_th, IsExternal</em></font><br>
+            th, side_tw, side_th</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
           size="2" face="Courier New, Courier, mono"> Floor 0, MyDoor,
           open.wav, close.wav, false, Door, Brick, 0.2, left, right, 10,
-          5, 5, 3.5, 8, 0, 1, 1, false</font><br>
+          5, 5, 3.5, 8, 0, 1, 1</font><br>
       </p>
       <p align="left">The example will create a sliding door on Floor
         0.&nbsp; Open_state determines if the door is open on
@@ -9672,9 +9673,7 @@ starty,
         sides of the door.&nbsp; Face_direction is the direction the
         door faces, such as "left", "right", "front" or "back".&nbsp;
         Open_direction is either "up", "down", "left"/"front" or
-        "right"/"back".&nbsp; The IsExternal value is only used when the
-        parent is a Floor object, and when set to true, it'll create a
-        global (external) door instead.<br>
+        "right"/"back".<br>
       </p>
       <p align="left"> <strong>j. AddStdDoor</strong> - creates a
         standard door object, which is a door with the rotation setting
@@ -9685,21 +9684,18 @@ starty,
             open_sound, close_sound, open_state, texture, side_texture,
             thickness, face_direction, open_direction, open_speed,
             close_speed, CenterX, CenterZ, width, height, voffset, tw,
-            th, side_tw, side_th, IsExternal</em></font><br>
+            th, side_tw, side_th</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddStdDoor</font></font><font
           size="2" face="Courier New, Courier, mono"> Floor 0, MyDoor,
           open.wav, close.wav, false, Door, Brick, 0.2, left, right, 10,
-          10, 5, 5, 3.5, 8, 0, 1, 1, 1, 1, false</font><br>
+          10, 5, 5, 3.5, 8, 0, 1, 1, 1, 1</font><br>
       </p>
       <p align="left">The example will create a standard door on Floor
         0.&nbsp; Open_state determines if the door is open on
         startup.&nbsp; Side_texture defines the texture used on the
         sides of the door.&nbsp; Face_direction is the direction the
         door faces, such as "left", "right", "front" or "back".&nbsp;
-        Open_direction is either "left", "right", "front" or
-        "back".&nbsp; The IsExternal value is only used when the parent
-        is a Floor object, and when set to true, it'll create a global
-        (external) door instead.<br>
+        Open_direction is either "left", "right", "front" or "back".<br>
       </p>
       <p align="left"> <strong>k. CreateCustomDoor</strong> - starts a
         manually-created (custom) door.&nbsp; The commands <i>CustomDoorComponent</i>
