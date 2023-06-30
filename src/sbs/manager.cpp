@@ -715,6 +715,7 @@ Door* DoorManager::AddDoor(std::string name, const std::string &open_sound, cons
 	int number = (int)Array.size() + 1;
 	if (name == "")
 		name = "Door " + ToString(number);
+
 	Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
 	Array.push_back(door);
@@ -726,6 +727,7 @@ Door* DoorManager::CreateDoor(std::string name, const std::string &open_sound, c
 	int number = (int)Array.size() + 1;
 	if (name == "")
 		name = "Door " + ToString(number);
+
 	Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
 	Array.push_back(door);
 	return door;

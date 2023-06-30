@@ -841,9 +841,7 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 
 	std::string num = ToString((int)DoorArray.size());
 	if (name == "")
-		name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(floornum) + ": Door " + num;
-	else
-		name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(floornum) + ": " + name;
+		name = "Door " + num;
 
 	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
@@ -860,9 +858,7 @@ Door* Stairwell::Level::CreateDoor(std::string name, const std::string &open_sou
 
 	std::string num = ToString((int)DoorArray.size());
 	if (name == "")
-		name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(floornum) + ": Door " + num;
-	else
-		name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(floornum) + ": " + name;
+		name = "Door " + num;
 
 	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
 	DoorArray.push_back(door);

@@ -2512,7 +2512,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 11) == "finishdoor ")
 	{
 		//get data
-		int params = SplitData(LineData, 12);
+		int params = SplitData(LineData, 11);
 
 		if (params != 3)
 			return ScriptError("Incorrect number of parameters");
@@ -2567,6 +2567,67 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		door->FinishDoor(ToBool(tempdata[2]));
 
 		door->SetLocked(config->lockvalue, config->keyvalue);
+
+		return sNextLine;
+	}
+
+	//MoveDoor command
+	if (linecheck.substr(0, 8) == "movedoor")
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get door object
+		Door *door = 0;
+		if (floorobj)
+			door = floorobj->GetDoor(tempdata[1]);
+		if (elevatorcarobj)
+			door = elevatorcarobj->GetDoor(tempdata[1]);
+		if (shaftobj)
+			door = shaftobj->GetDoor(tempdata[1]);
+		if (stairsobj)
+			door = stairsobj->GetDoor(tempdata[1]);
+
+		if (!door)
+			return ScriptError("Invalid door " + tempdata[1] + " in " + name);
+
+		//move door
+		door->Move(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 
 		return sNextLine;
 	}

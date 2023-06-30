@@ -1948,13 +1948,9 @@ Door* ElevatorCar::AddDoor(std::string name, const std::string &open_sound, cons
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 	*/
 
-	std::string elevnum = ToString(parent->Number);
-	std::string carnum = ToString(Number);
-	std::string num = ToString((int)StdDoorArray.size());
+	std::string number = ToString((int)StdDoorArray.size());
 	if (name == "")
-		name = "Elevator " + elevnum + ": Car " + carnum + ": Door " + num;
-	else
-		name = "Elevator " + elevnum + ": Car " + carnum + ": " + name;
+		name = "Door " + number;
 
 	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
@@ -1967,13 +1963,9 @@ Door* ElevatorCar::CreateDoor(std::string name, const std::string &open_sound, c
 	//start creation of a manual door
 	//since the door is unfinished, AddDoorComponent and FinishDoor need to be run on the returned Door object
 
-	std::string elevnum = ToString(parent->Number);
-	std::string carnum = ToString(Number);
-	std::string num = ToString((int)StdDoorArray.size());
+	std::string number = ToString((int)StdDoorArray.size());
 	if (name == "")
-		name = "Elevator " + elevnum + ": Car " + carnum + ": Door " + num;
-	else
-		name = "Elevator " + elevnum + ": Car " + carnum + ": " + name;
+		name = "Door " + number;
 
 	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
 	StdDoorArray.push_back(door);

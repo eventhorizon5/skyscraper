@@ -735,9 +735,7 @@ Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std:
 
 	int number = (int)DoorArray.size();
 	if (name == "")
-		name = "Floor " + ToString(Number) + ":Door " + ToString(number);
-	else
-		name = "Floor " + ToString(Number) + ":" + name;
+		name = "Door " + ToString(number);
 
 	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, base + voffset, tw, th, side_tw, side_th);
@@ -752,9 +750,7 @@ Door* Floor::CreateDoor(std::string name, const std::string &open_sound, const s
 
 	int number = (int)DoorArray.size();
 	if (name == "")
-		name = "Floor " + ToString(Number) + ":Door " + ToString(number);
-	else
-		name = "Floor " + ToString(Number) + ":" + name;
+		name = "Door " + ToString(number);
 
 	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
 	DoorArray.push_back(door);
