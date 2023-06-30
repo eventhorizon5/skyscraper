@@ -721,6 +721,26 @@ Door* DoorManager::AddDoor(std::string name, const std::string &open_sound, cons
 	return door;
 }
 
+Door* DoorManager::CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate)
+{
+	int number = (int)Array.size() + 1;
+	if (name == "")
+		name = "Door " + ToString(number);
+	Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
+	Array.push_back(door);
+	return door;
+}
+
+Door* DoorManager::GetDoor(const std::string &name)
+{
+	for (int i = 0; i < Array.size(); i++)
+	{
+		if (Array[i]->GetName() == name)
+			return Array[i];
+	}
+	return 0;
+}
+
 void DoorManager::RemoveDoor(Door *door)
 {
 	//remove a door from the array

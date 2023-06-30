@@ -1962,6 +1962,24 @@ Door* ElevatorCar::AddDoor(std::string name, const std::string &open_sound, cons
 	return door;
 }
 
+Door* ElevatorCar::CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate)
+{
+	//start creation of a manual door
+	//since the door is unfinished, AddDoorComponent and FinishDoor need to be run on the returned Door object
+
+	std::string elevnum = ToString(parent->Number);
+	std::string carnum = ToString(Number);
+	std::string num = ToString((int)StdDoorArray.size());
+	if (name == "")
+		name = "Elevator " + elevnum + ": Car " + carnum + ": Door " + num;
+	else
+		name = "Elevator " + elevnum + ": Car " + carnum + ": " + name;
+
+	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
+	StdDoorArray.push_back(door);
+	return door;
+}
+
 Door* ElevatorCar::GetStdDoor(int number)
 {
 	//get door object
@@ -1973,6 +1991,17 @@ Door* ElevatorCar::GetStdDoor(int number)
 
 	return 0;
 }
+
+Door* ElevatorCar::GetDoor(const std::string &name)
+{
+	for (int i = 0; i < StdDoorArray.size(); i++)
+	{
+		if (StdDoorArray[i]->GetName() == name)
+			return StdDoorArray[i];
+	}
+	return 0;
+}
+
 void ElevatorCar::RemovePanel(ButtonPanel* panel)
 {
 	//remove a button panel reference (does not delete the object itself)

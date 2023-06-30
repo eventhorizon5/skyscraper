@@ -9699,7 +9699,58 @@ starty,
         Open_direction is either "left", "right", "front" or
         "back".&nbsp; The IsExternal value is only used when the parent
         is a Floor object, and when set to true, it'll create a global
-        (external) door instead.</p>
+        (external) door instead.<br>
+      </p>
+      <p align="left"> <strong>k. CreateCustomDoor</strong> - starts a
+        manually-created (custom) door.&nbsp; The commands <i>CustomDoorComponent</i>
+        and <i>FinishDoor</i> need to be used after this command.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">CreateCustomDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            open_sound, close_sound, rotate</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">CreateCustomDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, My Custom
+          Door, open.wav, close.wav, false<br>
+        </font></p>
+      <div align="left"> The example will create a sliding door "My
+        Custom Door" on floor 0.<br>
+        <p align="left"> <strong>l. CustomDoorComponent</strong> -
+          creates a door component in the specified custom door.<br>
+          Syntax: <font size="2"><font face="Courier New, Courier,
+              mono">CustomDoorComponent</font></font><font size="2"
+            face="Courier New, Courier, mono"> <em>parent, name,
+              component_name, texture, side_texture, thickness,
+              face_direction, open_direction, OpenClockwise, OpenSpeed,
+              CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th,
+              side_tw, side_th</em></font><br>
+          Example: <font size="2"><font face="Courier New, Courier,
+              mono">CustomDoorComponent</font></font><font size="2"
+            face="Courier New, Courier, mono"> Floor 0, My Custom Door,
+            RightDoor, StairsDoor, Brick, 0.2, front, front, false, 10,
+            10, -5, -5, 0, -5, 8, 0, 0, 0, 0, 0<br>
+          </font></p>
+        <div align="left"> The example will create a custom door
+          component on floor 0's door "My Custom Door" named
+          "RightDoor".&nbsp; Face_direction can either be "left",
+          "right", "front" or "back", open_direction can be "up",
+          "down", "left"/"front", or "right"/"back".&nbsp; OpenClockwise
+          is used when door rotation is on, it determines if the door
+          opens clockwise or not. <strong><br>
+            <br>
+            m. FinishDoor</strong> - finishes a manually-created
+          (custom) door.<br>
+          <p align="left"> Syntax: <font size="2"><font face="Courier
+                New, Courier, mono">FinishDoor</font></font><font
+              size="2" face="Courier New, Courier, mono"> <em>parent,
+                name, open_state</em></font><br>
+            Example: <font size="2"><font face="Courier New, Courier,
+                mono">FinishDoor</font></font><font size="2"
+              face="Courier New, Courier, mono"> Floor 0, My Custom
+              Door, true<br>
+            </font></p>
+          <div align="left"> The example will finish the custom door,
+            and open it on startup.</div>
+        </div>
+      </div>
       <p align="left"> </p>
       <p align="left"><br>
         <strong></strong></p>

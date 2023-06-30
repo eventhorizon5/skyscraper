@@ -1151,6 +1151,32 @@ Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, con
 	return door;
 }
 
+Door* Shaft::Level::CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate)
+{
+	//start creation of a manual door
+	//since the door is unfinished, AddDoorComponent and FinishDoor need to be run on the returned Door object
+
+	std::string num = ToString((int)DoorArray.size());
+	if (name == "")
+		name = "Shaft " + ToString(parent->ShaftNumber) + ": Level " + ToString(floornum) + ": Door " + num;
+	else
+		name = "Shaft " + ToString(parent->ShaftNumber) + ": Level " + ToString(floornum) + ": " + name;
+
+	Door* door = new Door(this, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
+	DoorArray.push_back(door);
+	return door;
+}
+
+Door* Shaft::Level::GetDoor(const std::string &name)
+{
+	for (int i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i]->GetName() == name)
+			return DoorArray[i];
+	}
+	return 0;
+}
+
 void Shaft::Level::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)

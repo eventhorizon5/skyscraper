@@ -853,6 +853,32 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 	return door;
 }
 
+Door* Stairwell::Level::CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate)
+{
+	//start creation of a manual door
+	//since the door is unfinished, AddDoorComponent and FinishDoor need to be run on the returned Door object
+
+	std::string num = ToString((int)DoorArray.size());
+	if (name == "")
+		name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(floornum) + ": Door " + num;
+	else
+		name = "Stairwell " + ToString(parent->StairsNum) + ": Level " + ToString(floornum) + ": " + name;
+
+	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
+	DoorArray.push_back(door);
+	return door;
+}
+
+Door* Stairwell::Level::GetDoor(const std::string &name)
+{
+	for (int i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i]->GetName() == name)
+			return DoorArray[i];
+	}
+	return 0;
+}
+
 bool Stairwell::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
 {
 	//Cut through a wall segment

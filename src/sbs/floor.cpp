@@ -745,6 +745,22 @@ Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std:
 	return door;
 }
 
+Door* Floor::CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate)
+{
+	//start creation of a manual door
+	//since the door is unfinished, AddDoorComponent and FinishDoor need to be run on the returned Door object
+
+	int number = (int)DoorArray.size();
+	if (name == "")
+		name = "Floor " + ToString(Number) + ":Door " + ToString(number);
+	else
+		name = "Floor " + ToString(Number) + ":" + name;
+
+	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
+	DoorArray.push_back(door);
+	return door;
+}
+
 bool Floor::CalculateAltitude()
 {
 	//calculate the floor's altitude in relation to floor below (or above it, if it's a basement level)
@@ -1206,6 +1222,16 @@ Door* Floor::GetDoor(int number)
 			return DoorArray[number];
 	}
 
+	return 0;
+}
+
+Door* Floor::GetDoor(const std::string &name)
+{
+	for (int i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i]->GetName() == name)
+			return DoorArray[i];
+	}
 	return 0;
 }
 

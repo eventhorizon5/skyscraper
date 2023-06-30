@@ -2379,6 +2379,198 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//CreateCustomDoor command
+	if (linecheck.substr(0, 16) == "createcustomdoor")
+	{
+		//get data
+		int params = SplitData(LineData, 17);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//create door
+		Door* door = 0;
+
+		if (floorobj)
+			door = floorobj->CreateDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]));
+		else if (elevatorcarobj)
+			door = elevatorcarobj->CreateDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]));
+		else if (shaftobj)
+			door = shaftobj->CreateDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]));
+		else if (stairsobj)
+			door = stairsobj->CreateDoor(tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]));
+		else
+			return ScriptError("Invalid object");
+
+		StoreCommand(door);
+		return sNextLine;
+	}
+
+	//CustomDoorComponent command
+	if (linecheck.substr(0, 19) == "customdoorcomponent")
+	{
+		//get data
+		int params = SplitData(LineData, 20);
+
+		if (params != 21)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 5; i <= 20; i++)
+		{
+			if (i == 6)
+				i = 9;
+
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get door object
+		Door *door = 0;
+		if (floorobj)
+			door = floorobj->GetDoor(tempdata[1]);
+		if (elevatorcarobj)
+			door = elevatorcarobj->GetDoor(tempdata[1]);
+		if (shaftobj)
+			door = shaftobj->GetDoor(tempdata[1]);
+		if (stairsobj)
+			door = stairsobj->GetDoor(tempdata[1]);
+
+		if (!door)
+			return ScriptError("Invalid door " + tempdata[1] + " in " + name);
+
+		door->AddDoorComponent(tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), tempdata[6], tempdata[7], ToBool(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18]), ToFloat(tempdata[19]), ToFloat(tempdata[20]));
+
+		return sNextLine;
+	}
+
+	//FinishDoor command
+	if (linecheck.substr(0, 11) == "finishdoor ")
+	{
+		//get data
+		int params = SplitData(LineData, 12);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get door object
+		Door *door = 0;
+		if (floorobj)
+			door = floorobj->GetDoor(tempdata[1]);
+		if (elevatorcarobj)
+			door = elevatorcarobj->GetDoor(tempdata[1]);
+		if (shaftobj)
+			door = shaftobj->GetDoor(tempdata[1]);
+		if (stairsobj)
+			door = stairsobj->GetDoor(tempdata[1]);
+
+		if (!door)
+			return ScriptError("Invalid door " + tempdata[1] + " in " + name);
+
+		//finish door
+		door->FinishDoor(ToBool(tempdata[2]));
+
+		door->SetLocked(config->lockvalue, config->keyvalue);
+
+		return sNextLine;
+	}
+
 	//CreateWallObject command
 	if (linecheck.substr(0, 16) == "createwallobject")
 	{

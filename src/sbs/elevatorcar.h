@@ -145,6 +145,8 @@ public:
 	ButtonPanel* GetPanel(int index);
 	Control* GetFloorButton(int floor);
 	Door* AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
+	Door* CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate);
+	Door* GetDoor(const std::string &name);
 	Door* GetStdDoor(int number);
 	void RemovePanel(ButtonPanel* panel);
 	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
