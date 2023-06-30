@@ -17,3 +17,21 @@ Makefile
 
 # macOS App
 Skyscraper.app
+
+# Windows
+msvc/Release
+msvc/Debug
+ogrebullet/Release
+ogrebullet/Debug
+*.dll
+*.pdb
+Skyscraper.exe
+
+# Misc.
+skyscraper.log
+ogre.cfg
+OgreBulletCollisions.exp
+OgreBulletCollisions.lib
+OgreBulletDynamics.exp
+OgreBulletDynamics.lib
+src/sbs/gitrev.h
