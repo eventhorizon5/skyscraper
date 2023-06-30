@@ -754,6 +754,7 @@ Door* Floor::CreateDoor(std::string name, const std::string &open_sound, const s
 
 	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
 	DoorArray.push_back(door);
+	door->Move(0, GetBase(true), 0);
 	return door;
 }
 
