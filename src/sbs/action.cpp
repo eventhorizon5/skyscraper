@@ -220,6 +220,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//Door actions:
 	//Open
 	//Close
+	//AutoClose
 
 	//RevolvingDoor actions:
 	//On
@@ -779,6 +780,16 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		if (command_name == "close")
 		{
 			door->Close();
+			return true;
+		}
+		if (command_name == "autoclose")
+		{
+			if ((int)command_parameters.size() == 1)
+			{
+				int param = 0;
+				if (IsNumeric(command_parameters[0], param))
+					door->AutoClose(param);
+			}
 			return true;
 		}
 	}
