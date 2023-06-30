@@ -269,7 +269,7 @@ CAELUM_HOME_64 points to C:\caelum-win64
 
 FMOD_HOME points to C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows
 
-OGRE_HOME_64 points to C:\ogre-13.6.2\SDK
+OGRE_HOME_64 points to C:\ogre-13.6.4\SDK
 
 WXWIN_64 points to C:\wxWidgets-3.2.2.1
 
@@ -281,6 +281,11 @@ In a terminal or Powershell, go to the folder where you'd like to store Skyscrap
 
     git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
     cd skyscraper
+
+Make sure you run the gitrev script before a build, otherwise the build will fail.  I did this by typing:
+
+    cmd
+    gitrev.cmd
 
 Download the file at https://www.skyscrapersim.net/downloads/dev/other_apps/plugins-windows.cfg and place it into your new Skyscraper folder, rename it to plugins.cfg.
 
