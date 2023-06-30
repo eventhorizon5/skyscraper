@@ -31,10 +31,23 @@
 #include "stairs.h"
 #include "texture.h"
 #include "sound.h"
+#include "timer.h"
 #include "doorsystem.h"
 #include "door.h"
 
 namespace SBS {
+
+//auto-close timer
+class Door::Timer : public TimerObject
+{
+public:
+	Door *door;
+	Timer(const std::string &name, Door *parent) : TimerObject(parent, name)
+	{
+		door = parent;
+	}
+	virtual void Notify();
+};
 
 Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate) : Object(parent), DoorLock(this)
 {
@@ -57,6 +70,8 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	this->wrapper = wrapper;
 	running = false;
 	DoorDirection = false;
+	timer = new Timer("Auto-close Timer", this);
+	timer_interval = 0;
 
 	//create door wrapper
 	door = new DoorWrapper(this, rotate);
@@ -69,6 +84,13 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 Door::~Door()
 {
 	//destructor
+
+	if (timer)
+	{
+		timer->parent_deleting = true;
+		delete timer;
+	}
+	timer = 0;
 
 	if (sound)
 	{
@@ -132,6 +154,9 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	OpenState = false;
 	IsMoving = true;
 	door->ResetFinished();
+
+	//enable autoclose timer if needed
+	AutoClose(timer_interval);
 
 	return true;
 }
@@ -460,6 +485,29 @@ DoorWrapper* Door::FinishDoor(bool open_state)
 	}
 
 	return door;
+}
+
+void Door::AutoClose(int interval)
+{
+	//start or stop autoclose timer
+
+	if (interval <= 0)
+		timer->Stop();
+	else
+		timer->Start(interval * 1000, true);
+
+	timer_interval = interval;
+}
+
+void Door::Timer::Notify()
+{
+	//when auto-close timer triggers, close door
+
+	if (door->IsOpen() == false)
+		return;
+
+	//close door
+	door->Close();
 }
 
 }
