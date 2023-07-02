@@ -57,7 +57,7 @@ DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, 
 	direction = 0;
 	if (direction_check == "down")
 		direction = 1;
-	if (direction_check == "left" || direction_check == "forward")
+	if (direction_check == "left" || direction_check == "forward" || direction_check == "front")
 		direction = 2;
 	if (direction_check == "right" || direction_check == "back")
 		direction = 3;
