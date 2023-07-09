@@ -3442,6 +3442,18 @@ Object* SBS::GetObject(std::string name, bool case_sensitive)
 				//get by "parentname:objectname"
 				if (name == parent_name + ":" + tmpname)
 					return ObjectArray[i];
+
+				if (ObjectArray[i]->GetParent()->GetParent())
+				{
+					std::string grandparent_name = ObjectArray[i]->GetParent()->GetParent()->GetName();
+					ReplaceAll(grandparent_name, " ", "");
+					if (case_sensitive == false)
+						SetCase(grandparent_name, false);
+
+					//get by "grandparentname:parentname:objectname"
+					if (name == grandparent_name + ":" + parent_name + ":" + tmpname)
+						return ObjectArray[i];
+				}
 			}
 		}
 	}
