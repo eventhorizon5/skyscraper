@@ -2729,6 +2729,201 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//Rotate command
+	if (linecheck.substr(0, 7) == "rotate ")
+	{
+		//get data
+		int params = SplitData(LineData, 7);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//rotate object
+		obj->Rotate(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
+
+		return sNextLine;
+	}
+
+	//SetRotation command
+	if (linecheck.substr(0, 11) == "setrotation")
+	{
+		//get data
+		int params = SplitData(LineData, 12);
+
+		if (params != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 3; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//rotate object
+		obj->SetRotation(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+
+		return sNextLine;
+	}
+
+	//Move command
+	if (linecheck.substr(0, 5) == "move ")
+	{
+		//get data
+		int params = SplitData(LineData, 5);
+
+		if (params != 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 4; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//rotate object
+		obj->Move(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
+
+		return sNextLine;
+	}
+
+	//SetPosition command
+	if (linecheck.substr(0, 12) == "setposition ")
+	{
+		//get data
+		int params = SplitData(LineData, 12);
+
+		if (params != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 3; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//rotate object
+		obj->SetPosition(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+
+		return sNextLine;
+	}
+
+	//SetPositionY command
+	if (linecheck.substr(0, 12) == "setpositiony")
+	{
+		//get data
+		int params = SplitData(LineData, 13);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		if (!IsNumeric(tempdata[1]))
+			return ScriptError("Invalid value: " + tempdata[1]);
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//rotate object
+		obj->SetPositionY(ToFloat(tempdata[1]));
+
+		return sNextLine;
+	}
+
+	//SetPositionRelative command
+	if (linecheck.substr(0, 19) == "setpositionrelative")
+	{
+		//get data
+		int params = SplitData(LineData, 20);
+
+		if (params != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 3; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//rotate object
+		obj->SetPositionRelative(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+
+		return sNextLine;
+	}
+
 	//CreateWallObject command
 	if (linecheck.substr(0, 16) == "createwallobject")
 	{
