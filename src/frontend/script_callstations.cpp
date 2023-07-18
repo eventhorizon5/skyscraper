@@ -48,21 +48,11 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	//get call station object
 	CallStation *station = 0;
 	Floor *floor = 0;
-	if (config->SectionNum == 9)
-	{
-		floor = Simcore->GetFloor(config->CurrentOld);
-		if (floor)
-			station = floor->GetCallStation(config->Current);
-	}
-	else
-	{
-		//get default station if not in a separate callstation section
-		floor = Simcore->GetFloor(config->Current);
-		if (floor)
-			station = floor->GetCallStation(1);
-	}
 
-	if (!floor)
+	floor = Simcore->GetFloor(config->CurrentOld);
+	if (floor)
+		station = floor->GetCallStation(config->Current);
+	else
 		return sError;
 
 	//create call station if not created already
