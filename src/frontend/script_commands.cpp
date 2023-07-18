@@ -2829,7 +2829,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetPosition command
-	if (linecheck.substr(0, 12) == "setposition ")
+	if (linecheck.substr(0, 12) == "setposition " && config->SectionNum != 9)
 	{
 		//get data
 		int params = SplitData(LineData, 12);
