@@ -2649,12 +2649,12 @@ Cut Landscape, -130, -1, -70, 130, 1, 78.83, false, true
     SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddTrianglewall external, Front, MainWindows, -75, 2.24, -70, 75, 0, -70, 0, 3803, 0, 0, 10
-    AddTrianglewall external, Left, MainWindows, -75, 2.24, 70, -75, 0, -70, 0, 3803, 0, 0, 10
+    AddTrianglewall external, Front, MainWindows, -75, 2.24, -70, 75, 0, -70, 0, 154, 0, 0, 10
+    AddTrianglewall external, Left, MainWindows, -75, 2.24, 70, -75, 0, -70, 0, 154, 0, 0, 10
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddTrianglewall external, Right, MainWindows, 75, 2.24, -70, 75, 0, 70, 0, 3803, 0, 0, 10
-    AddTrianglewall external, Back, MainWindows, 75, 2.24, 70, -75, 0, 70, 0, 3803, 0, 0, 10
+    AddTrianglewall external, Right, MainWindows, 75, 2.24, -70, 75, 0, 70, 0, 154, 0, 0, 10
+    AddTrianglewall external, Back, MainWindows, 75, 2.24, 70, -75, 0, 70, 0, 154, 0, 0, 10
 
     #Glass Elevator Back
     SetAutoSize = true, true
