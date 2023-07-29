@@ -2730,7 +2730,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Rotate command
-	if (linecheck.substr(0, 7) == "rotate ")
+	/*if (linecheck.substr(0, 7) == "rotate ")
 	{
 		//get data
 		int params = SplitData(LineData, 7);
@@ -2922,7 +2922,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		obj->SetPositionRelative(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 
 		return sNextLine;
-	}
+	}*/
 
 	//CreateWallObject command
 	if (linecheck.substr(0, 16) == "createwallobject")
