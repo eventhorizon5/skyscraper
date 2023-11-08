@@ -20,17 +20,27 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//#include "globals.h"
+#include "globals.h"
 //#include "sbs.h"
 //#include "camera.h"
 //#include "processor.h"
 #include "server.h"
 
 #include <stdio.h>
+#include <unistd.h>
+#include <locale>
+#include <time.h>
+#include <thread>
+#include <OgreRoot.h>
+#include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
+#include <OgreRectangle2D.h>
+//#include "gitrev.h"
 
-//#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-//#include "malloc.h"
-//#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#include <sys/utsname.h>
+#include "malloc.h"
+#endif
 
 //using namespace SBS;
 
@@ -38,11 +48,45 @@ int main (int argc, char* argv[])
 {
 	printf("Server initializing...\n");
 
-	// -- do things here
+	Ogre::Root* root = new Ogre::Root("plugins.cfg", "ogre.cfg", "server.log");
+
+	Ogre::ConfigFile configfile;
+	configfile.load("resources.cfg");
+
+	// Go through all sections & settings in the file
+	/*Ogre::ConfigFile::SectionIterator seci = configfile.getSectionIterator();
+
+	Ogre::String secName, typeName, archName;
+	while (seci.hasMoreElements())
+	{
+		secName = seci.peekNextKey();
+		Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
+		Ogre::ConfigFile::SettingsMultiMap::iterator i;
+		for (i = settings->begin(); i != settings->end(); ++i)
+		{
+			typeName = i->first;
+			archName = i->second;
+
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+		}
+	}*/
+
+	//Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
+	//Ogre::RenderWindow* window = root->initialise(true);
+	Ogre::SceneManager* smgr = root->createSceneManager();
+
+	while (1)
+	{
+		//if(root->renderOneFrame() == false)
+			//break;
+		usleep(10);
+	}
 
 	printf("Server terminating...\n");
 
-        return 0;
+	delete root;
+	return 0;
 }
 
 namespace Server {
