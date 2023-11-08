@@ -34,11 +34,17 @@ file(GLOB MAIN_FILES
 )
  
 file(GLOB SBS_FILES
-	src/sbs/*.cpp
+	#src/sbs/*.cpp
+	src/sbs/globals.cpp
+	src/sbs/sbs.cpp
+	src/sbs/object.cpp
+	src/sbs/unix.cpp
+	src/sbs/scenenode.cpp
 )
  
 file(GLOB SCRIPT_FILES
-	src/script/*.cpp
+	#src/script/*.cpp
+	src/script/processor.cpp
 )
 
 include_directories( ${OGRE_INCLUDE_DIRS}
@@ -48,7 +54,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 )
  
 #SBS library
-#add_library(SBS SHARED ${SBS_FILES})
+add_library(SBS SHARED ${SBS_FILES})
 
 #Script Processor Library
 #add_library(ScriptProc SHARED ${SCRIPT_FILES})
@@ -56,14 +62,13 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 #frontend executable
 add_executable(server ${MAIN_FILES})
 
-#target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
+target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
 #target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
 target_precompile_headers(server PRIVATE src/sbs/globals.h)
  
-#target_link_libraries(SBS ${OGRE_LIBRARIES})
+target_link_libraries(SBS ${OGRE_LIBRARIES})
 #target_link_libraries(ScriptProc SBS)
-#target_link_libraries(server SBS ${OGRE_LIBRARIES})
-target_link_libraries(server ${OGRE_LIBRARIES})
+target_link_libraries(server SBS ${OGRE_LIBRARIES})
  
 #ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 #		POST_BUILD

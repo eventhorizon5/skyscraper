@@ -21,7 +21,7 @@
 */
 
 #include "globals.h"
-//#include "sbs.h"
+#include "sbs.h"
 //#include "camera.h"
 //#include "processor.h"
 #include "server.h"
@@ -42,7 +42,7 @@
 #include "malloc.h"
 #endif
 
-//using namespace SBS;
+using namespace SBS;
 
 int main (int argc, char* argv[])
 {
@@ -76,6 +76,10 @@ int main (int argc, char* argv[])
 	//Ogre::RenderWindow* window = root->initialise(true);
 	Ogre::SceneManager* smgr = root->createSceneManager();
 
+	//create server instance
+	::Server::Server *server = new ::Server::Server(smgr);
+
+	//main runloop
 	while (1)
 	{
 		//if(root->renderOneFrame() == false)
@@ -85,67 +89,70 @@ int main (int argc, char* argv[])
 
 	printf("Server terminating...\n");
 
+	delete server;
 	delete root;
 	return 0;
 }
 
 namespace Server {
 
-/*
-Server::Server(Server *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+//Server::Server(Server *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+Server::Server(Ogre::SceneManager* mSceneManager) //, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
-	this->frontend = frontend;
+	//this->frontend = frontend;
 	finish_time = 0;
 	shutdown = false;
 	loading = false;
 	running = false;
 	reloading = false;
 	Reload = false;
-	reload_state = new CameraState;
-	reload_state->floor = 0;
-	reload_state->collisions = false;
-	reload_state->gravity = false;
-	reload_state->freelook = false;
+	//reload_state = new CameraState;
+	//reload_state->floor = 0;
+	//reload_state->collisions = false;
+	//reload_state->gravity = false;
+	//reload_state->freelook = false;
 	this->mSceneManager = mSceneManager;
-	this->fmodsystem = fmodsystem;
-	this->position = position;
-	this->area_min = area_min;
-	this->area_max = area_max;
-	this->rotation = rotation;
-	this->parent = parent;
+	//this->fmodsystem = fmodsystem;
+	//this->position = position;
+	//this->area_min = area_min;
+	//this->area_max = area_max;
+	//this->rotation = rotation;
+	//this->parent = parent;
+	this->parent = 0;
 	Simcore = 0;
-	processor = 0;
+	//processor = 0;
 	raised = false;
 	progress = 0;
 	inside = false;
 	Moved = false;
 
 	//register this engine, and get it's instance number
-	instance = frontend->RegisterEngine(this);
+	//instance = frontend->RegisterEngine(this);
+	instance = 0;
 
 	Report("\nStarting instance " + ToString(instance) + "...");
 
 	//add instance number to reports
 	InstancePrompt = ToString(instance) + "> ";
 
-	if (parent)
-		parent->AddChild(this);
+	//if (parent)
+		//parent->AddChild(this);
 
 	StartSim();
 }
 
 Server::~Server()
 {
-	if (frontend->IsValidEngine(parent) == true)
-		parent->RemoveChild(this);
+	//if (frontend->IsValidEngine(parent) == true)
+		//parent->RemoveChild(this);
 
-	if (children.empty() == false)
+	/*if (children.empty() == false)
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			children[i]->RemoveParent();
 		}
-	}
+	}*/
 
 	UnloadSim();
 
@@ -154,17 +161,18 @@ Server::~Server()
 	reload_state = 0;
 }
 
-ScriptProcessor* Server::GetScriptProcessor()
+/*ScriptProcessor* Server::GetScriptProcessor()
 {
 	return processor;
-}
+}*/
 
 bool Server::IsCameraActive()
 {
 	if (!Simcore)
 		return false;
 
-	return Simcore->camera->IsActive();
+	//return Simcore->camera->IsActive();
+	return true;
 }
 
 void Server::Shutdown()
@@ -180,7 +188,7 @@ bool Server::Run()
 		return false;
 
 	//run script processor
-	if (processor)
+	/*if (processor)
 	{
 		bool result = processor->Run();
 
@@ -190,7 +198,7 @@ bool Server::Run()
 			{
 				ReportError("Error processing building\n");
 				Shutdown();
-				frontend->CloseProgressDialog();
+				//frontend->CloseProgressDialog();
 				return false;
 			}
 			else if (processor->IsFinished == true)
@@ -210,15 +218,15 @@ bool Server::Run()
 		}
 	}
 	else
-		return false;
+		return false;*/
 
 	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 	{
-		frontend->RaiseWindow();
+		//frontend->RaiseWindow();
 		raised = true;
 
-		processor->ReportMissingFiles();
+		//processor->ReportMissingFiles();
 	}
 
 	//process internal clock
@@ -245,7 +253,7 @@ bool Server::Load(std::string filename)
 {
 	//load simulator and data file
 
-	if (!Simcore || !processor)
+	if (!Simcore)// || !processor)
 		return false;
 
 	//exit if no building specified
@@ -265,20 +273,20 @@ bool Server::Load(std::string filename)
 
 	//load script processor object and load building
 
-	processor->Reset();
+	//processor->Reset();
 
-	if (!processor->LoadDataFile(filename))
+	/*if (!processor->LoadDataFile(filename))
 	{
 		loading = false;
 		return false;
-	}
+	}*/
 
 	//create progress dialog
-	frontend->CreateProgressDialog(filename);
+	//frontend->CreateProgressDialog(filename);
 
 	//override SBS startup render option, if specified
-	if (frontend->RenderOnStartup == true)
-		Simcore->RenderOnStartup = true;
+	//if (frontend->RenderOnStartup == true)
+		//Simcore->RenderOnStartup = true;
 
 	return true;
 }
@@ -294,7 +302,7 @@ void Server::DoReload()
 
 	//store camera state information
 	std::string filename = Simcore->BuildingFilename;
-	*reload_state = GetCameraState();
+	//*reload_state = GetCameraState();
 
 	//unload current simulator
 	UnloadSim();
@@ -329,39 +337,31 @@ void Server::StartSim()
 	else
 		offset = Ogre::Vector3::ZERO;
 
-	if (position != Ogre::Vector3::ZERO)
-		Moved = true;
+	//if (position != Ogre::Vector3::ZERO)
+		//Moved = true;
 
 	//Create simulator object
 	if (!Simcore)
-		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position + offset, rotation, area_min, area_max);
+		//Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position + offset, rotation, area_min, area_max);
+		Simcore = new ::SBS::SBS(mSceneManager);
 
 	//load script processor
-	if (!processor)
-		processor = new ScriptProcessor(this);
+	//if (!processor)
+		//processor = new ScriptProcessor(this);
 
 	//refresh console to fix banner message on Linux
-	frontend->RefreshConsole();
+	//frontend->RefreshConsole();
 
 	//override verbose mode if specified
-	if (frontend->Verbose == true)
-		Simcore->Verbose = true;
+	//if (frontend->Verbose == true)
+		//Simcore->Verbose = true;
 
-	//set headless mode
-	if (frontend->Headless == true)
-		Simcore->Headless = true;
-
-	//Pause for 2 seconds, if first instance
-	if (instance == 0)
-	{
-		frontend->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
-		frontend->Pause = false;
+	//Pause for 2 seconds
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-		Sleep(2000);
+	Sleep(2000);
 #else
-		sleep(2);
+	sleep(2);
 #endif
-	}
 }
 
 void Server::UnloadSim()
@@ -374,9 +374,9 @@ void Server::UnloadSim()
 	Simcore = 0;
 
 	//unload script processor
-	if (processor)
-		delete processor;
-	processor = 0;
+	//if (processor)
+		//delete processor;
+	//processor = 0;
 
 	loading = false;
 	running = false;
@@ -395,11 +395,11 @@ bool Server::Start(Ogre::Camera *camera)
 		return false;
 
 	//cut outside sim boundaries if specified
-	Simcore->CutOutsideBoundaries(frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
+	//Simcore->CutOutsideBoundaries(frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
 
 	//if this has a parent engine, cut the parent for this new engine
-	if (frontend->IsValidEngine(parent) == true)
-		parent->CutForEngine(this);
+	//if (frontend->IsValidEngine(parent) == true)
+		//parent->CutForEngine(this);
 
 	//if this has child engines, and has reloaded, cut for the child engines
 	if (children.empty() == false && reloading == true)
@@ -418,7 +418,7 @@ bool Server::Start(Ogre::Camera *camera)
 	if (reloading == true)
 	{
 		reloading = false;
-		SetCameraState(*reload_state);
+		//SetCameraState(*reload_state);
 	}
 
 	loading = false;
@@ -429,27 +429,45 @@ bool Server::Start(Ogre::Camera *camera)
 
 void Server::Report(const std::string &message)
 {
-	frontend->Report(InstancePrompt + message);
+	try
+	{
+		if (Ogre::LogManager::getSingletonPtr())
+			Ogre::LogManager::getSingleton().logMessage(InstancePrompt + message);
+	}
+	catch (Ogre::Exception &e)
+	{
+		//ShowError("Error writing message to log\n" + e.getDescription());
+	}
 }
 
 bool Server::ReportError(const std::string &message)
 {
-	return frontend->ReportError(InstancePrompt + message);
+	try
+	{
+		if (Ogre::LogManager::getSingletonPtr())
+			Ogre::LogManager::getSingleton().logMessage(InstancePrompt + message, Ogre::LML_CRITICAL);
+	}
+	catch (Ogre::Exception &e)
+	{
+		//ShowError("Error writing message to log\n" + e.getDescription());
+	}
+	return false;
 }
 
 bool Server::ReportFatalError(const std::string &message)
 {
 	ReportError(message);
-	frontend->ShowError(message);
+	//frontend->ShowError(message);
 	return false;
 }
 
 bool Server::IsLoadingFinished()
 {
-	if (!processor)
-		return false;
+	//if (!processor)
+		//return false;
 
-	return (loading == true && processor->IsFinished == true);
+	//return (loading == true && processor->IsFinished == true);
+	return (loading == true);
 }
 
 void Server::UpdateProgress(int percent)
@@ -457,10 +475,10 @@ void Server::UpdateProgress(int percent)
 	//update progress bar
 
 	progress = percent;
-	frontend->UpdateProgress();
+	//frontend->UpdateProgress();
 }
 
-CameraState Server::GetCameraState()
+/*CameraState Server::GetCameraState()
 {
 	return Simcore->camera->GetCameraState();
 }
@@ -468,7 +486,7 @@ CameraState Server::GetCameraState()
 void Server::SetCameraState(const CameraState &state, bool set_floor)
 {
 	Simcore->camera->SetCameraState(state, set_floor);
-}
+}*/
 
 bool Server::IsInside()
 {
@@ -477,11 +495,13 @@ bool Server::IsInside()
 	if (!Simcore)
 		return false;
 
-	if (!frontend->GetActiveEngine())
-		return Simcore->IsInside();
+	//if (!frontend->GetActiveEngine())
+		//return Simcore->IsInside();
 
 	//make sure the global camera's position is actually inside this engine
-	return IsInside(frontend->GetActiveEngine()->GetCameraPosition());
+	//return IsInside(frontend->GetActiveEngine()->GetCameraPosition());
+
+	return true;
 }
 
 bool Server::IsInside(const Ogre::Vector3 &position)
@@ -491,14 +511,15 @@ bool Server::IsInside(const Ogre::Vector3 &position)
 	if (!Simcore)
 		return false;
 
-	return Simcore->IsInside(Simcore->FromGlobal(position));
+	//return Simcore->IsInside(Simcore->FromGlobal(position));
+	return true;
 }
 
 void Server::DetachCamera(bool reset_building)
 {
 	//detach the camera from this engine
 
-	Simcore->DetachCamera();
+	//Simcore->DetachCamera();
 
 	if (reset_building == true)
 		Simcore->ResetState();
@@ -508,7 +529,7 @@ void Server::AttachCamera(Ogre::Camera *camera, bool init_state)
 {
 	//attach the camera to this engine
 
-	Simcore->AttachCamera(camera, init_state);
+	//Simcore->AttachCamera(camera, init_state);
 
 	//reset camera position if camera is outside of the engine's area when attaching
 	if (IsInside() == false)
@@ -517,26 +538,27 @@ void Server::AttachCamera(Ogre::Camera *camera, bool init_state)
 
 void Server::RefreshCamera()
 {
-	Simcore->camera->Refresh();
+	//Simcore->camera->Refresh();
 }
 
 void Server::ResetCamera()
 {
 	//reset camera position
-	Simcore->camera->SetToStartPosition(true);
+	//Simcore->camera->SetToStartPosition(true);
 }
 
 void Server::RevertMovement()
 {
 	//revert camera movement
-	Simcore->camera->RevertMovement();
+	//Simcore->camera->RevertMovement();
 }
 
 Ogre::Vector3 Server::GetCameraPosition()
 {
 	//get this engine's camera position, in global positioning
 
-	return Simcore->ToGlobal(Simcore->camera->GetPosition());
+	//return Simcore->ToGlobal(Simcore->camera->GetPosition());
+	return Ogre::Vector3::ZERO;
 }
 
 void Server::OnEnter()
@@ -545,7 +567,7 @@ void Server::OnEnter()
 
 	inside = true;
 
-	if (frontend->GetActiveEngine())
+	/*if (frontend->GetActiveEngine())
 	{
 		//if this engine is an ancestor of the active engine, don't switch to this engine
 		if (frontend->GetActiveEngine()->IsParent(this) == true)
@@ -553,7 +575,7 @@ void Server::OnEnter()
 	}
 
 	//make this engine active
-	frontend->SetActiveEngine(instance, true);
+	frontend->SetActiveEngine(instance, true);*/
 }
 
 void Server::OnExit()
@@ -568,12 +590,14 @@ void Server::CutForEngine(Server *engine)
 	if (!engine || engine == this)
 		return;
 
+	return;
+
 	::SBS::SBS *newsimcore = engine->GetSystem();
 
 	Ogre::Vector3 min, max, a, b, c, d, newmin, newmax;
 
 	//get new engine's boundaries
-	newsimcore->GetBounds(min, max);
+	//newsimcore->GetBounds(min, max);
 
 	if (min == Ogre::Vector3::ZERO && max == Ogre::Vector3::ZERO)
 		return;
@@ -600,15 +624,15 @@ void Server::CutForEngine(Server *engine)
 
 	//cut for new bounds
 	Simcore->DeleteColliders = true;
-	Simcore->CutInsideBoundaries(newmin, newmax, frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
+	//Simcore->CutInsideBoundaries(newmin, newmax, frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
 	Simcore->DeleteColliders = false;
 
 	if (IsRunning() == true)
 		Simcore->Prepare();
 
 	//if this has a valid parent, have parent cut for the specified engine
-	if (frontend->IsValidEngine(parent) == true)
-		parent->CutForEngine(engine);
+	//if (frontend->IsValidEngine(parent) == true)
+		//parent->CutForEngine(engine);
 }
 
 void Server::AddChild(Server *engine)
@@ -634,7 +658,7 @@ void Server::Move(Ogre::Vector3 &position, bool move_children)
 	//move this engine
 	//if move_children is true, recursively call this function on all children
 
-	this->position += position;
+	//this->position += position;
 	Simcore->Move(position);
 
 	if (move_children == true)
@@ -666,6 +690,5 @@ bool Server::IsParent(Server *engine, bool recursive)
 
 	return false;
 }
-*/
 
 }

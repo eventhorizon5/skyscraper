@@ -271,7 +271,7 @@ void Object::Move(const Ogre::Vector3 &vector, Real speed)
 {
 	//move an object
 
-	SBS_PROFILE("Object::Move");
+	//SBS_PROFILE("Object::Move");
 
 	if (!node)
 		return;
@@ -350,7 +350,7 @@ void Object::SetRotation(const Ogre::Vector3 &rotation)
 {
 	//rotate object
 
-	SBS_PROFILE("Object::Rotate");
+	//SBS_PROFILE("Object::Rotate");
 
 	if (!node)
 		return;
@@ -443,7 +443,7 @@ void Object::NotifyChildren(bool move, bool rotate)
 {
 	//notify child objects about a parent move or rotate
 
-	SBS_PROFILE("Object::NotifyChildren");
+	//SBS_PROFILE("Object::NotifyChildren");
 
 	int count = GetChildrenCount();
 

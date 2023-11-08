@@ -23,7 +23,7 @@
 #ifndef SCRIPTPROCESSOR_H
 #define SCRIPTPROCESSOR_H
 
-namespace Skyscraper {
+namespace Server {
 
 class ScriptProcessor
 {
@@ -43,7 +43,7 @@ public:
 	class ControllerSection;
 	class CallStationSection;
 
-	ScriptProcessor(EngineContext *instance);
+	ScriptProcessor(Server *instance);
 	~ScriptProcessor();
 	bool Run();
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
@@ -53,7 +53,7 @@ public:
 	std::vector<std::string> *GetBuildingData();
 	bool IsFunctionDefined(const std::string &name);
 	std::string DumpState();
-	EngineContext* GetEngine();
+	Server* GetEngine();
 	ElevatorCarSection* GetElevatorCarSection();
 	ConfigHandler* GetConfigHandler();
 
@@ -84,7 +84,7 @@ public:
 private:
 
 	SBS::SBS *Simcore;
-	EngineContext *engine;
+	Server *engine;
 
 	ConfigHandler *config;
 	GlobalsSection *globals_section;

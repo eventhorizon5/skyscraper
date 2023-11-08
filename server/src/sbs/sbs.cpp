@@ -27,12 +27,12 @@
 #include <OgreConfigFile.h>
 #include <OgreTimer.h>
 #include "OgreStringVector.h"
-#include <fmod.hpp>
-#include <OgreBulletDynamicsRigidBody.h>
-#include <OgreBulletCollisionsRay.h>
+//#include <fmod.hpp>
+//#include <OgreBulletDynamicsRigidBody.h>
+//#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
-#include "manager.h"
+/*#include "manager.h"
 #include "camera.h"
 #include "dynamicmesh.h"
 #include "floor.h"
@@ -54,24 +54,27 @@
 #include "profiler.h"
 #include "controller.h"
 #include "callstation.h"
-#include "doorsystem.h"
-#include "gitrev.h"
-#include "buttonpanel.h"
+#include "doorsystem.h"*/
+//#include "gitrev.h"
+//#include "buttonpanel.h"
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
+//SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
 
-	version = "0.12.0." + ToString(GIT_REV);
+	//version = "0.12.0." + ToString(GIT_REV);
+	version = "2.0.0.0";
 	version_state = "Alpha";
 
 	//root object needs to self-register
 	ObjectCount = 0;
-	RegisterObject(this);
-	InstanceNumber = instance_number;
+	//RegisterObject(this);
+	//InstanceNumber = instance_number;
+	InstanceNumber = 0;
 
 	//set up SBS object
 	SetValues("SBS", "SBS", true);
@@ -80,7 +83,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 
 	//load config file
 	configfile = new Ogre::ConfigFile();
-	configfile->load("skyscraper.ini");
+	//configfile->load("skyscraper.ini");
 
 	//initialize variables
 	BuildingName = "";
@@ -103,8 +106,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	FPS = 0;
 	FrameRate = 30;
 	FrameLimiter = false;
-	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
-	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
+	//AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
+	//AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
 	ElevatorNumber = 1;
 	CarNumber = 1;
@@ -127,23 +130,23 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	wall1b = false;
 	wall2a = false;
 	wall2b = false;
-	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
+	//ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
 	remaining_delta = 0;
 	start_time = 0;
 	running_time = 0;
 	InShaft = false;
 	DeleteColliders = false;
-	soundcount = 0;
-	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
-	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
+	//soundcount = 0;
+	//UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
+	//Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
 	FastDelete = false;
 	WallCount = 0;
 	PolygonCount = 0;
-	SkyBox = 0;
-	Landscape = 0;
-	External = 0;
-	Buildings = 0;
+	//SkyBox = 0;
+	//Landscape = 0;
+	//External = 0;
+	//Buildings = 0;
 	current_time = 0;
 	current_virtual_time = 0;
 	elapsed_time = 0;
@@ -156,29 +159,29 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	OldAmbientG = 1;
 	OldAmbientB = 1;
 	TexelOverride = false;
-	enable_profiling = false;
-	enable_advanced_profiling = false;
-	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
-	ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
-	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
-	ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
-	StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
-	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
-	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
-	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
+	//enable_profiling = false;
+	//enable_advanced_profiling = false;
+	//SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
+	//ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
+	//StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
+	//ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
+	//StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
+	//FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
+	//SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
+	//RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 	EscalatorCount = 0;
 	MovingWalkwayCount = 0;
-	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
+	//RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Headless = false;
 
 	camera = 0;
-	Buildings = 0;
-	External = 0;
-	Landscape = 0;
-	mWorld = 0;
-	soundsystem = 0;
-	area_trigger = 0;
-	texturemanager = 0;
+	//Buildings = 0;
+	//External = 0;
+	//Landscape = 0;
+	//mWorld = 0;
+	//soundsystem = 0;
+	//area_trigger = 0;
+	//texturemanager = 0;
 
 	if (UnitScale <= 0)
 		UnitScale = 1;
@@ -190,28 +193,28 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	InstancePrompt = ToString(InstanceNumber) + "> ";
 
 	//move to specified position
-	Move(position);
+	//Move(position);
 
 	//rotate engine
-	Rotate(0.0, rotation, 0.0);
+	//Rotate(0.0, rotation, 0.0);
 
 	//create main engine area trigger
-	SetBounds(area_min, area_max);
+	//SetBounds(area_min, area_max);
 
 	//create sound system object if sound is enabled
-	if (fmodsystem)
-		soundsystem = new SoundSystem(this, fmodsystem);
+	//if (fmodsystem)
+		//soundsystem = new SoundSystem(this, fmodsystem);
 }
 
 void SBS::Initialize()
 {
 	//create texture manager
-	texturemanager = new TextureManager(this);
+	//texturemanager = new TextureManager(this);
 
 	//set up physics
-	Ogre::AxisAlignedBox box (Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Ogre::Vector3::ZERO, true);
-	mWorld->setAllowedCcdPenetration(0);
+	//Ogre::AxisAlignedBox box (Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
+	//mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Ogre::Vector3::ZERO, true);
+	//mWorld->setAllowedCcdPenetration(0);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);
@@ -227,23 +230,23 @@ void SBS::Initialize()
 	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
 
 	//create object meshes
-	Buildings = new MeshObject(this, "Buildings");
-	External = new MeshObject(this, "External");
-	Landscape = new MeshObject(this, "Landscape");
-	//Landscape->tricollider = false;
+	//Buildings = new MeshObject(this, "Buildings");
+	//External = new MeshObject(this, "External");
+	//Landscape = new MeshObject(this, "Landscape");
+	////Landscape->tricollider = false;
 
 	//create manager objects
-	floor_manager = new FloorManager(this);
-	elevator_manager = new ElevatorManager(this);
-	shaft_manager = new ShaftManager(this);
-	stairwell_manager = new StairwellManager(this);
-	door_manager = new DoorManager(this);
-	revolvingdoor_manager = new RevolvingDoorManager(this);
-	vehicle_manager = new VehicleManager(this);
-	controller_manager = new ControllerManager(this);
+	//floor_manager = new FloorManager(this);
+	//elevator_manager = new ElevatorManager(this);
+	//shaft_manager = new ShaftManager(this);
+	//stairwell_manager = new StairwellManager(this);
+	//door_manager = new DoorManager(this);
+	//revolvingdoor_manager = new RevolvingDoorManager(this);
+	//vehicle_manager = new VehicleManager(this);
+	//controller_manager = new ControllerManager(this);
 
 	//create camera object
-	this->camera = new Camera(this);
+	//this->camera = new Camera(this);
 }
 
 SBS::~SBS()
@@ -255,7 +258,7 @@ SBS::~SBS()
 	FastDelete = true;
 
 	//delete people
-	for (size_t i = 0; i < PersonArray.size(); i++)
+	/*for (size_t i = 0; i < PersonArray.size(); i++)
 	{
 		if (PersonArray[i])
 		{
@@ -450,7 +453,7 @@ SBS::~SBS()
 		//mWorld->setDebugDrawer(0);
 		delete mWorld;
 	}
-	mWorld = 0;
+	mWorld = 0;*/
 
 	ObjectArray.clear();
 	verify_results.clear();
@@ -477,7 +480,7 @@ bool SBS::Start(Ogre::Camera *camera)
 	Prepare();
 
 	//free text texture memory
-	texturemanager->FreeTextureBoxes();
+	//texturemanager->FreeTextureBoxes();
 
 	//reset building state
 	ResetState();
@@ -486,21 +489,21 @@ bool SBS::Start(Ogre::Camera *camera)
 	Init();
 
 	//play looping global sounds
-	for (size_t i = 0; i < sounds.size(); i++)
+	/*for (size_t i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
 			if (sounds[i]->GetLoopState() == true)
 				sounds[i]->Play();
 		}
-	}
+	}*/
 
 	//attach camera object
-	AttachCamera(camera);
+	//AttachCamera(camera);
 
 	//enable random activity if specified
-	if (RandomActivity == true)
-		EnableRandomActivity(true);
+	//if (RandomActivity == true)
+		//EnableRandomActivity(true);
 
 	IsRunning = true;
 
@@ -520,7 +523,7 @@ void SBS::PrintBanner()
 void SBS::Loop()
 {
 	//Main simulator loop
-	SBS_PROFILE("SBS::Loop");
+	//SBS_PROFILE("SBS::Loop");
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
@@ -540,10 +543,10 @@ void SBS::Loop()
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
 	//move camera or update character movement
-	camera->MoveCharacter();
+	//camera->MoveCharacter();
 
 	//update physics
-	if (camera->EnableBullet == true)
+	/*if (camera->EnableBullet == true)
 	{
 		if (enable_advanced_profiling == false)
 			ProfileManager::Start_Profile("Collisions/Physics");
@@ -551,14 +554,14 @@ void SBS::Loop()
 			ProfileManager::Start_Profile("Bullet");
 		mWorld->stepSimulation(elapsed, 0);
 		ProfileManager::Stop_Profile();
-	}
+	}*/
 
 	//sync camera to physics
-	camera->Sync();
+	//camera->Sync();
 
 	//update sound
-	if (soundsystem)
-		soundsystem->Loop();
+	//if (soundsystem)
+		//soundsystem->Loop();
 
 	elapsed += remaining_delta;
 
@@ -566,19 +569,19 @@ void SBS::Loop()
 	if (elapsed > .5)
 		elapsed = .5;
 
-	ProfileManager::Start_Profile("Simulator Loop");
+	//ProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
 	{
 		//Determine floor that the camera is on
-		camera->UpdateCameraFloor();
+		//camera->UpdateCameraFloor();
 
 		//process child object dynamic runloops
 		LoopChildren();
 
-		camera->CheckObjects();
+		//camera->CheckObjects();
 
 		//process auto areas
-		CheckAutoAreas();
+		//CheckAutoAreas();
 
 		elapsed -= delta;
 	}
@@ -588,13 +591,13 @@ void SBS::Loop()
 	ProcessTimers();
 
 	//process engine boundary trigger
-	if (area_trigger)
-		area_trigger->Loop();
+	//if (area_trigger)
+		//area_trigger->Loop();
 
-	ProfileManager::Stop_Profile();
+	//ProfileManager::Stop_Profile();
 
 	//process camera loop
-	camera->Loop();
+	//camera->Loop();
 }
 
 void SBS::CalculateFrameRate()
@@ -610,6 +613,78 @@ void SBS::CalculateFrameRate()
 	}
 }
 
+void SBS::AdvanceClock()
+{
+	//advance the clock
+
+	unsigned long last = current_time;
+
+	//get current time
+	current_time = GetCurrentTime();
+	if (last == 0)
+		last = current_time;
+
+	if (current_time < last)
+		elapsed_time = current_time + ((unsigned long)-1 - last) + 1;
+	else
+		elapsed_time = current_time - last;
+	current_virtual_time += elapsed_time;
+	frame_times.push_back(current_time);
+	CalculateAverageTime();
+}
+
+unsigned long SBS::GetCurrentTime()
+{
+	//get current time
+	return timer->getMilliseconds();
+}
+
+unsigned long SBS::GetRunTime()
+{
+	//returns simulator run time
+	return current_virtual_time;
+}
+
+unsigned long SBS::GetElapsedTime()
+{
+	//returns the actual elapsed time between frames
+	return elapsed_time;
+}
+
+unsigned long SBS::GetAverageTime()
+{
+	//returns the average elapsed time between frames
+	return average_time;
+}
+
+void SBS::CalculateAverageTime()
+{
+	//calculates the average frame processing time for a specified number of frames
+
+	if (frame_times.size() <= 1)
+		return;
+
+	//SmoothFrames is the maximum number of milliseconds to hold timing info
+
+	//find oldest time to keep
+	std::deque<unsigned long>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
+
+	while (it != end)
+	{
+		if (frame_times.back() - *it > SmoothFrames)
+			++it;
+		else
+			break;
+	}
+
+	//remove old times
+	frame_times.erase(frame_times.begin(), it);
+
+	//calculate average time
+	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
+}
+
+/*
 bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
 {
 	Wall *object = new Wall(mesh, parent, true);
@@ -2142,16 +2217,17 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 
 	return false;
 }
+*/
 
 void SBS::ProcessTimers()
 {
-	SBS_PROFILE("SBS::ProcessTimers");
+	//SBS_PROFILE("SBS::ProcessTimers");
 
 	//process all registered timers
 	for (size_t i = 0; i < timercallbacks.size(); i++)
 	{
-		if (timercallbacks[i])
-			timercallbacks[i]->Loop();
+		//if (timercallbacks[i])
+			//timercallbacks[i]->Loop();
 	}
 }
 
@@ -2165,21 +2241,24 @@ bool SBS::Mount(const std::string &filename, const std::string &path)
 {
 	//mounts a zip file into the virtual filesystem
 
-	std::string newfile = "data/" + filename;
-	std::string file = VerifyFile(newfile);
+	return true;
 
-	Report("Mounting " + file + " as path " + path);
+	std::string newfile = "data/" + filename;
+	//std::string file = VerifyFile(newfile);
+
+	//Report("Mounting " + file + " as path " + path);
 	try
 	{
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(file, "Zip", path, true);
+		//Ogre::ResourceGroupManager::getSingleton().addResourceLocation(file, "Zip", path, true);
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportError("Error mounting file " + file + "\n" + e.getDescription());
+		//return ReportError("Error mounting file " + file + "\n" + e.getDescription());
 	}
 	return true;
 }
 
+/*
 void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
 {
 	//adds an auto area that enables/disables floors
@@ -2311,6 +2390,8 @@ void SBS::DecrementSoundCount()
 	soundcount--;
 }
 
+*/
+
 Real SBS::ToLocal(Real remote_value)
 {
 	//convert remote (OGRE) vertex positions to local (SBS) positions
@@ -2390,6 +2471,7 @@ Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value, bool rescale, bool
 		return newvalue;
 }
 
+/*
 int SBS::GetObjectCount()
 {
 	//return number of registered SBS objects
@@ -2404,6 +2486,7 @@ Object* SBS::GetObject(int number)
 	else
 		return 0;
 }
+*/
 
 int SBS::RegisterObject(Object *object)
 {
@@ -2426,7 +2509,7 @@ bool SBS::UnregisterObject(int number)
 			{
 				std::vector<Object*> objects;
 				objects.push_back(ObjectArray[number]);
-				RemoveActionParent(objects);
+				//RemoveActionParent(objects);
 				ObjectArray[number] = 0;
 				ObjectCount--;
 				return true;
@@ -2436,6 +2519,7 @@ bool SBS::UnregisterObject(int number)
 	return false;
 }
 
+/*
 bool SBS::IsValidFloor(int floor)
 {
 	//determine if a floor is valid
@@ -2510,12 +2594,16 @@ std::string SBS::DumpState()
 
 	return output;
 }
+*/
 
 bool SBS::DeleteObject(Object *object)
 {
 	//object deletion routine
 	//this should be called to delete a simulator object during runtime
 
+	return true;
+};
+/*
 	if (!object)
 		return ReportError("Invalid object");
 
@@ -2975,6 +3063,7 @@ int SBS::GetPolygonCount()
 	//return total number of registered walls
 	return PolygonCount;
 }
+*/
 
 void SBS::Prepare(bool report)
 {
@@ -2987,7 +3076,7 @@ void SBS::Prepare(bool report)
 	}
 
 	//prepare mesh objects
-	for (size_t i = 0; i < meshes.size(); i++)
+	/*for (size_t i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
 	}
@@ -3007,12 +3096,13 @@ void SBS::Prepare(bool report)
 			meshes[i]->CreateCollider();
 		else
 			meshes[i]->CreateBoxCollider();
-	}
+	}*/
 
 	if (report == true)
 		Report("Finished prepare");
 }
 
+/*
 Light* SBS::AddLight(const std::string &name, int type)
 {
 	//add a global light
@@ -3109,77 +3199,6 @@ bool SBS::InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre
 	if (test.x > start.x && test.y > start.y && test.z > start.z && test.x < end.x && test.y < end.y && test.z < end.z)
 		return true;
 	return false;
-}
-
-void SBS::AdvanceClock()
-{
-	//advance the clock
-
-	unsigned long last = current_time;
-
-	//get current time
-	current_time = GetCurrentTime();
-	if (last == 0)
-		last = current_time;
-
-	if (current_time < last)
-		elapsed_time = current_time + ((unsigned long)-1 - last) + 1;
-	else
-		elapsed_time = current_time - last;
-	current_virtual_time += elapsed_time;
-	frame_times.push_back(current_time);
-	CalculateAverageTime();
-}
-
-unsigned long SBS::GetCurrentTime()
-{
-	//get current time
-	return timer->getMilliseconds();
-}
-
-unsigned long SBS::GetRunTime()
-{
-	//returns simulator run time
-	return current_virtual_time;
-}
-
-unsigned long SBS::GetElapsedTime()
-{
-	//returns the actual elapsed time between frames
-	return elapsed_time;
-}
-
-unsigned long SBS::GetAverageTime()
-{
-	//returns the average elapsed time between frames
-	return average_time;
-}
-
-void SBS::CalculateAverageTime()
-{
-	//calculates the average frame processing time for a specified number of frames
-
-	if (frame_times.size() <= 1)
-		return;
-
-	//SmoothFrames is the maximum number of milliseconds to hold timing info
-
-	//find oldest time to keep
-	std::deque<unsigned long>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
-
-	while (it != end)
-	{
-		if (frame_times.back() - *it > SmoothFrames)
-			++it;
-		else
-			break;
-	}
-
-	//remove old times
-	frame_times.erase(frame_times.begin(), it);
-
-	//calculate average time
-	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
 }
 
 std::string SBS::GetMountPath(std::string filename, std::string &newfilename)
@@ -4081,6 +4100,7 @@ void SBS::ResetState()
 	//reset camera state
 	camera->ResetState();
 }
+*/
 
 Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)
 {
@@ -4110,6 +4130,7 @@ Ogre::Quaternion SBS::FromGlobal(const Ogre::Quaternion &orientation)
 	return (GetOrientation().Inverse() * orientation);
 }
 
+/*
 Model* SBS::GetModel(std::string name)
 {
 	//get a model by name
@@ -4238,5 +4259,7 @@ CameraTexture* SBS::GetCameraTexture(int number)
 		return camtexarray[number];
 	return 0;
 }
+
+*/
 
 }

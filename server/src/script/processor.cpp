@@ -20,8 +20,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <wx/app.h>
-#include <wx/msgdlg.h>
+//#include <wx/app.h>
+//#include <wx/msgdlg.h>
 #include "globals.h"
 #include "sbs.h"
 #include <OgreFileSystem.h>
@@ -30,20 +30,19 @@
 #include <OgreException.h>
 #include <stdlib.h>
 #include <cmath>
-#include "skyscraper.h"
-#include "enginecontext.h"
-#include "texture.h"
-#include "floor.h"
-#include "random.h"
-#include "textwindow.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "server.h"
+//#include "texture.h"
+//#include "floor.h"
+//#include "random.h"
+//#include "textwindow.h"
+#include "processor.h"
+//#include "section.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-ScriptProcessor::ScriptProcessor(EngineContext *instance)
+ScriptProcessor::ScriptProcessor(Server *instance)
 {
 	if (!instance)
 		return;

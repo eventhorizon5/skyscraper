@@ -34,7 +34,7 @@
 #undef GetCurrentTime
 
 //external class declarations
-namespace OgreBulletDynamics {
+/*namespace OgreBulletDynamics {
 	class DynamicsWorld;
 	class RigidBody;
 	class CharacterController;
@@ -42,7 +42,7 @@ namespace OgreBulletDynamics {
 namespace OgreBulletCollisions {
 	class DebugDrawer;
 	class CollisionShape;
-}
+}*/
 
 namespace Ogre {
 	class ConfigFile;
@@ -51,10 +51,10 @@ namespace Ogre {
 	typedef SharedPtr<StringVector> StringVectorPtr;
 }
 
-namespace FMOD {
+/*namespace FMOD {
 	class System;
 	class Channel;
-}
+}*/
 
 namespace SBS {
 	//forward declarations
@@ -116,13 +116,13 @@ namespace SBS {
 
 namespace SBS {
 
-extern bool SBSIMPEXP enable_profiling; //enable general profiling
-extern bool SBSIMPEXP enable_advanced_profiling;
+//extern bool SBSIMPEXP enable_profiling; //enable general profiling
+//extern bool SBSIMPEXP enable_advanced_profiling;
 
 //SBS class
 class SBSIMPEXP SBS : public Object
 {
-	friend class MeshObject;
+	//friend class MeshObject;
 public:
 
 	Real delta;
@@ -144,8 +144,8 @@ public:
 	std::string BuildingVersion;
 
 	//physics objects
-	OgreBulletDynamics::DynamicsWorld *mWorld;
-	OgreBulletCollisions::DebugDrawer *debugDrawer;
+	//OgreBulletDynamics::DynamicsWorld *mWorld;
+	//OgreBulletCollisions::DebugDrawer *debugDrawer;
 
 	//Internal data
 	bool IsRunning; //is sim engine running?
@@ -193,17 +193,42 @@ public:
 	bool Headless; //true if running in headless mode
 
 	//public functions
-	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+
+	//SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	SBS(Ogre::SceneManager* mSceneManager);
 	~SBS();
 	void Initialize();
 	bool Start(Ogre::Camera *camera = 0);
-	void CreateSky();
+	void CalculateFrameRate();
+	void Loop();
+	bool Mount(const std::string &filename, const std::string &path);
+	void Prepare(bool report = true);
+	void AdvanceClock();
+	unsigned long GetCurrentTime();
+	unsigned long GetRunTime();
+	unsigned long GetElapsedTime();
+	unsigned long GetAverageTime();
+	void ProcessTimers();
+	int RegisterObject(Object *object);
+	bool UnregisterObject(int number);
+	bool DeleteObject(Object *object);
+	bool DeleteObject(int object);
+	int GetTimerCallbackCount();
+	Real ToLocal(Real remote_value);
+	Ogre::Vector2 ToLocal(const Ogre::Vector2& remote_value);
+	Ogre::Vector3 ToLocal(const Ogre::Vector3& remote_value, bool rescale = true, bool flip_z = true);
+	Real ToRemote(Real local_value);
+	Ogre::Vector2 ToRemote(const Ogre::Vector2& local_value);
+	Ogre::Vector3 ToRemote(const Ogre::Vector3& local_value, bool rescale = true, bool flip_z = true);
+	Ogre::Vector3 ToGlobal(const Ogre::Vector3 &position);
+	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
+	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
+	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
+	/*void CreateSky();
 	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
 	bool AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
 	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false);
 	bool AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false);
-	void CalculateFrameRate();
-	void Loop();
 	Wall* CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	Wall* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th);
@@ -250,31 +275,18 @@ public:
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0, int stairsnumber = 0);
 	bool RegisterTimerCallback(TimerObject *timer);
 	bool UnregisterTimerCallback(TimerObject *timer);
-	void ProcessTimers();
-	int GetTimerCallbackCount();
-	bool Mount(const std::string &filename, const std::string &path);
 	void AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end);
 	int GetMeshCount();
 	Sound* AddSound(const std::string &name, const std::string &filename, const Ogre::Vector3 &position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, const Ogre::Vector3 &direction = Ogre::Vector3(0, 0, 0));
 	int GetSoundCount();
 	void IncrementSoundCount();
 	void DecrementSoundCount();
-	Real ToLocal(Real remote_value);
-	Ogre::Vector2 ToLocal(const Ogre::Vector2& remote_value);
-	Ogre::Vector3 ToLocal(const Ogre::Vector3& remote_value, bool rescale = true, bool flip_z = true);
-	Real ToRemote(Real local_value);
-	Ogre::Vector2 ToRemote(const Ogre::Vector2& local_value);
-	Ogre::Vector3 ToRemote(const Ogre::Vector3& local_value, bool rescale = true, bool flip_z = true);
 	int GetObjectCount();
 	Object* GetObject(int number);
 	Object* GetObject(std::string name, bool case_sensitive = true);
 	std::vector<Object*> GetObjectRange(const std::string &expression);
-	int RegisterObject(Object *object);
-	bool UnregisterObject(int number);
 	bool IsValidFloor(int floor);
 	std::string DumpState();
-	bool DeleteObject(Object *object);
-	bool DeleteObject(int object);
 	void RemoveFloor(Floor *floor);
 	void RemoveElevator(Elevator *elevator);
 	void RemoveShaft(Shaft *shaft);
@@ -292,7 +304,6 @@ public:
 	int GetPolygonCount();
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
-	void Prepare(bool report = true);
 	Light* AddLight(const std::string &name, int type);
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
@@ -307,11 +318,6 @@ public:
 	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
 	Ogre::Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
-	void AdvanceClock();
-	unsigned long GetCurrentTime();
-	unsigned long GetRunTime();
-	unsigned long GetElapsedTime();
-	unsigned long GetAverageTime();
 	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void ShowColliders(bool value);
 	void CacheFilename(const std::string &filename, const std::string &result);
@@ -374,10 +380,6 @@ public:
 	void SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max);
 	bool HasBounds();
 	void ResetState();
-	Ogre::Vector3 ToGlobal(const Ogre::Vector3 &position);
-	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
-	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
-	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
 	Model* GetModel(std::string name);
 	FloorManager* GetFloorManager();
 	ElevatorManager* GetElevatorManager();
@@ -400,7 +402,7 @@ public:
 	MeshObject* Buildings;
 	MeshObject* External;
 	MeshObject* Landscape;
-	MeshObject* SkyBox;
+	MeshObject* SkyBox;*/
 
 	Real AmbientR, AmbientG, AmbientB, OldAmbientR, OldAmbientG, OldAmbientB; //ambient colors
 	bool TexelOverride; //used for small square-shaped controls
@@ -439,26 +441,26 @@ private:
 	std::vector<Object*> ObjectArray;
 
 	//manager objects
-	FloorManager* floor_manager;
-	ElevatorManager* elevator_manager;
-	ShaftManager* shaft_manager;
-	StairwellManager* stairwell_manager;
-	DoorManager* door_manager;
-	VehicleManager* vehicle_manager;
-	ControllerManager* controller_manager;
+	//FloorManager* floor_manager;
+	//ElevatorManager* elevator_manager;
+	//ShaftManager* shaft_manager;
+	//StairwellManager* stairwell_manager;
+	//DoorManager* door_manager;
+	//VehicleManager* vehicle_manager;
+	//ControllerManager* controller_manager;
 
 	//dynamic meshes
-	std::vector<DynamicMesh*> dynamic_meshes;
+	//std::vector<DynamicMesh*> dynamic_meshes;
 
 	//action array
-	std::vector<Action*> ActionArray;
+	//std::vector<Action*> ActionArray;
 
 	//private functions
 	void PrintBanner();
-	void CheckAutoAreas();
+	//void CheckAutoAreas();
 	void CalculateAverageTime();
-	std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
-	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
+	//std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
+	//ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
@@ -480,35 +482,35 @@ private:
 	std::vector<AutoArea> FloorAutoArea;
 
 	//global lights
-	std::vector<Light*> lights;
+	//std::vector<Light*> lights;
 
 	//generic sound objects
-	std::vector<Sound*> sounds;
-	int soundcount;
+	//std::vector<Sound*> sounds;
+	//int soundcount;
 
 	//texture manager
-	TextureManager *texturemanager;
+	//TextureManager *texturemanager;
 
 	//revolving door manager'
-	RevolvingDoorManager *revolvingdoor_manager;
+	//RevolvingDoorManager *revolvingdoor_manager;
 
 	//sound system
-	SoundSystem *soundsystem;
+	//SoundSystem *soundsystem;
 
 	//mesh objects
-	std::vector<MeshObject*> meshes;
+	//std::vector<MeshObject*> meshes;
 
 	//global models
-	std::vector<Model*> ModelArray;
+	//std::vector<Model*> ModelArray;
 
 	//global controls
-	std::vector<Control*> ControlArray;
+	//std::vector<Control*> ControlArray;
 
 	//global triggers
-	std::vector<Trigger*> TriggerArray;
+	//std::vector<Trigger*> TriggerArray;
 
 	//person objects
-	std::vector<Person*> PersonArray;
+	//std::vector<Person*> PersonArray;
 
 	int ObjectCount; //number of simulator objects
 
@@ -544,16 +546,16 @@ private:
 	std::vector<Key> keys;
 
 	//index of all controls used for action deletion callback
-	std::vector<Control*> control_index;
+	//std::vector<Control*> control_index;
 
 	//file listing cache
 	Ogre::StringVectorPtr filesystem_listing;
 
 	//sim engine area trigger
-	Trigger *area_trigger;
+	//Trigger *area_trigger;
 
 	//camera texture references
-	std::vector<CameraTexture*> camtexarray;
+	//std::vector<CameraTexture*> camtexarray;
 };
 
 }

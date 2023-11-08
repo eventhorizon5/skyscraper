@@ -30,15 +30,15 @@ namespace Server {
 class Server
 {
 public:
-/*
+
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
 
-	EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
-	~EngineContext();
-	ScriptProcessor* GetScriptProcessor();
+	Server(Ogre::SceneManager* mSceneManager);
+	~Server();
+	//ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
-	Skyscraper *GetFrontend() { return frontend; }
+	//Skyscraper *GetFrontend() { return frontend; }
 	bool IsCameraActive();
 	bool Run();
 	void Shutdown();
@@ -57,8 +57,8 @@ public:
 	void UpdateProgress(int percent);
 	int GetProgress() { return progress; }
 	int GetNumber() { return instance; }
-	SBS::CameraState GetCameraState();
-	void SetCameraState(const SBS::CameraState &state, bool set_floor = true);
+	//SBS::CameraState GetCameraState();
+	//void SetCameraState(const SBS::CameraState &state, bool set_floor = true);
 	bool IsInside();
 	bool IsInside(const Ogre::Vector3 &position);
 	void DetachCamera(bool reset_building = false);
@@ -69,24 +69,24 @@ public:
 	Ogre::Vector3 GetCameraPosition();
 	void OnEnter();
 	void OnExit();
-	void CutForEngine(EngineContext *engine);
-	void AddChild(EngineContext *engine);
-	void RemoveChild(EngineContext *engine);
+	void CutForEngine(Server *engine);
+	void AddChild(Server *engine);
+	void RemoveChild(Server *engine);
 	void RemoveParent() { parent = 0; }
 	void Move(Ogre::Vector3 &position, bool move_children = false);
-	EngineContext* GetParent() { return parent; }
-	bool IsParent(EngineContext *engine, bool recursive = false);
+	Server* GetParent() { return parent; }
+	bool IsParent(Server *engine, bool recursive = false);
 
 private:
 
 	void StartSim();
 	void UnloadSim();
 
-	Skyscraper* frontend; //frontend
-	ScriptProcessor* processor; //script processor
+	//Skyscraper* frontend; //frontend
+	//ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
-	EngineContext *parent; //parent engine
+	Server *parent; //parent engine
 	unsigned long finish_time;
 	bool shutdown;
 	bool loading;
@@ -101,15 +101,14 @@ private:
 	SBS::CameraState *reload_state;
 
 	Ogre::SceneManager* mSceneManager;
-	FMOD::System *fmodsystem;
-	Ogre::Vector3 position;
-	Ogre::Vector3 area_min;
-	Ogre::Vector3 area_max;
-	Real rotation;
+	//FMOD::System *fmodsystem;
+	//Ogre::Vector3 position;
+	//Ogre::Vector3 area_min;
+	//Ogre::Vector3 area_max;
+	//Real rotation;
 
 	//child engines
-	std::vector<EngineContext*> children;
-*/
+	std::vector<Server*> children;
 };
 
 }
