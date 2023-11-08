@@ -23,7 +23,9 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-namespace Skyscraper {
+int main (int argc, char* argv[]);
+
+namespace Server {
 
 class Server
 {

@@ -21,13 +21,13 @@ if (UNIX AND NOT APPLE)
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif ()
 
-find_package(OGRE REQUIRED)
+#find_package(OGRE REQUIRED)
  
-if(NOT OGRE_FOUND)
-  message(SEND_ERROR "Failed to find OGRE.")
-endif()
+#if(NOT OGRE_FOUND)
+#  message(SEND_ERROR "Failed to find OGRE.")
+#endif()
  
-set (OGRE_LIBRARIES ${OGRE_LIBRARIES})
+#set (OGRE_LIBRARIES ${OGRE_LIBRARIES})
 
 file(GLOB MAIN_FILES
 	src/main/*.cpp
@@ -56,13 +56,14 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 #frontend executable
 add_executable(server ${MAIN_FILES})
 
-target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
-target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
-target_precompile_headers(server PRIVATE src/sbs/globals.h)
+#target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
+#target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+#target_precompile_headers(server PRIVATE src/sbs/globals.h)
  
-target_link_libraries(SBS ${OGRE_LIBRARIES})
-target_link_libraries(ScriptProc SBS)
-target_link_libraries(server SBS ${OGRE_LIBRARIES})
+#target_link_libraries(SBS ${OGRE_LIBRARIES})
+#target_link_libraries(ScriptProc SBS)
+#target_link_libraries(server SBS ${OGRE_LIBRARIES})
+target_link_libraries(server)
  
 #ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 #		POST_BUILD

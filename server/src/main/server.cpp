@@ -26,20 +26,26 @@
 //#include "processor.h"
 #include "server.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-#include "malloc.h"
-#endif
+#include <stdio.h>
 
-using namespace SBS;
+//#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+//#include "malloc.h"
+//#endif
 
-namespace Skyscraper {
+//using namespace SBS;
 
 int main (int argc, char* argv[])
 {
 	printf("Server initializing...\n");
 
+	// -- do things here
+
+	printf("Server terminating...\n");
+
         return 0;
 }
+
+namespace Server {
 
 /*
 Server::Server(Server *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
