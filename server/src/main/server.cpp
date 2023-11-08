@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Engine Context
+	Skyscraper 3.0 Alpha - Server Core
 	Copyright (C)2003-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,13 +20,11 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "globals.h"
-#include "skyscraper.h"
-#include "sbs.h"
-#include "camera.h"
-#include "debugpanel.h"
-#include "scriptprocessor.h"
-#include "enginecontext.h"
+//#include "globals.h"
+//#include "sbs.h"
+//#include "camera.h"
+//#include "processor.h"
+#include "server.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include "malloc.h"
@@ -36,7 +34,15 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+int main (int argc, char* argv[])
+{
+	printf("Server initializing...\n");
+
+        return 0;
+}
+
+/*
+Server::Server(Server *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	this->frontend = frontend;
 	finish_time = 0;
@@ -78,7 +84,7 @@ EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::
 	StartSim();
 }
 
-EngineContext::~EngineContext()
+Server::~Server()
 {
 	if (frontend->IsValidEngine(parent) == true)
 		parent->RemoveChild(this);
@@ -98,12 +104,12 @@ EngineContext::~EngineContext()
 	reload_state = 0;
 }
 
-ScriptProcessor* EngineContext::GetScriptProcessor()
+ScriptProcessor* Server::GetScriptProcessor()
 {
 	return processor;
 }
 
-bool EngineContext::IsCameraActive()
+bool Server::IsCameraActive()
 {
 	if (!Simcore)
 		return false;
@@ -111,14 +117,14 @@ bool EngineContext::IsCameraActive()
 	return Simcore->camera->IsActive();
 }
 
-void EngineContext::Shutdown()
+void Server::Shutdown()
 {
 	//request a shutdown
 
 	shutdown = true;
 }
 
-bool EngineContext::Run()
+bool Server::Run()
 {
 	if (!Simcore)
 		return false;
@@ -185,7 +191,7 @@ bool EngineContext::Run()
 	return true;
 }
 
-bool EngineContext::Load(std::string filename)
+bool Server::Load(std::string filename)
 {
 	//load simulator and data file
 
@@ -227,7 +233,7 @@ bool EngineContext::Load(std::string filename)
 	return true;
 }
 
-void EngineContext::DoReload()
+void Server::DoReload()
 {
 	//reload the current building
 
@@ -257,14 +263,14 @@ void EngineContext::DoReload()
 	Reload = false;
 }
 
-std::string EngineContext::GetFilename()
+std::string Server::GetFilename()
 {
 	if (Simcore)
 		return Simcore->BuildingFilename;
 	return "";
 }
 
-void EngineContext::StartSim()
+void Server::StartSim()
 {
 	//get offset of parent engine
 	Ogre::Vector3 offset;
@@ -299,7 +305,6 @@ void EngineContext::StartSim()
 	if (instance == 0)
 	{
 		frontend->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
-		wxYield(); //this allows the banner to be printed before the sleep() call
 		frontend->Pause = false;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);
@@ -309,7 +314,7 @@ void EngineContext::StartSim()
 	}
 }
 
-void EngineContext::UnloadSim()
+void Server::UnloadSim()
 {
 	if (Simcore)
 	{
@@ -334,7 +339,7 @@ void EngineContext::UnloadSim()
 #endif
 }
 
-bool EngineContext::Start(Ogre::Camera *camera)
+bool Server::Start(Ogre::Camera *camera)
 {
 	if (!Simcore)
 		return false;
@@ -372,24 +377,24 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	return true;
 }
 
-void EngineContext::Report(const std::string &message)
+void Server::Report(const std::string &message)
 {
 	frontend->Report(InstancePrompt + message);
 }
 
-bool EngineContext::ReportError(const std::string &message)
+bool Server::ReportError(const std::string &message)
 {
 	return frontend->ReportError(InstancePrompt + message);
 }
 
-bool EngineContext::ReportFatalError(const std::string &message)
+bool Server::ReportFatalError(const std::string &message)
 {
 	ReportError(message);
 	frontend->ShowError(message);
 	return false;
 }
 
-bool EngineContext::IsLoadingFinished()
+bool Server::IsLoadingFinished()
 {
 	if (!processor)
 		return false;
@@ -397,7 +402,7 @@ bool EngineContext::IsLoadingFinished()
 	return (loading == true && processor->IsFinished == true);
 }
 
-void EngineContext::UpdateProgress(int percent)
+void Server::UpdateProgress(int percent)
 {
 	//update progress bar
 
@@ -405,17 +410,17 @@ void EngineContext::UpdateProgress(int percent)
 	frontend->UpdateProgress();
 }
 
-CameraState EngineContext::GetCameraState()
+CameraState Server::GetCameraState()
 {
 	return Simcore->camera->GetCameraState();
 }
 
-void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
+void Server::SetCameraState(const CameraState &state, bool set_floor)
 {
 	Simcore->camera->SetCameraState(state, set_floor);
 }
 
-bool EngineContext::IsInside()
+bool Server::IsInside()
 {
 	//return true if user is inside the boundaries of this engine context
 
@@ -429,7 +434,7 @@ bool EngineContext::IsInside()
 	return IsInside(frontend->GetActiveEngine()->GetCameraPosition());
 }
 
-bool EngineContext::IsInside(const Ogre::Vector3 &position)
+bool Server::IsInside(const Ogre::Vector3 &position)
 {
 	//return true if user is inside the boundaries of this engine context
 
@@ -439,7 +444,7 @@ bool EngineContext::IsInside(const Ogre::Vector3 &position)
 	return Simcore->IsInside(Simcore->FromGlobal(position));
 }
 
-void EngineContext::DetachCamera(bool reset_building)
+void Server::DetachCamera(bool reset_building)
 {
 	//detach the camera from this engine
 
@@ -449,7 +454,7 @@ void EngineContext::DetachCamera(bool reset_building)
 		Simcore->ResetState();
 }
 
-void EngineContext::AttachCamera(Ogre::Camera *camera, bool init_state)
+void Server::AttachCamera(Ogre::Camera *camera, bool init_state)
 {
 	//attach the camera to this engine
 
@@ -460,31 +465,31 @@ void EngineContext::AttachCamera(Ogre::Camera *camera, bool init_state)
 		ResetCamera();
 }
 
-void EngineContext::RefreshCamera()
+void Server::RefreshCamera()
 {
 	Simcore->camera->Refresh();
 }
 
-void EngineContext::ResetCamera()
+void Server::ResetCamera()
 {
 	//reset camera position
 	Simcore->camera->SetToStartPosition(true);
 }
 
-void EngineContext::RevertMovement()
+void Server::RevertMovement()
 {
 	//revert camera movement
 	Simcore->camera->RevertMovement();
 }
 
-Ogre::Vector3 EngineContext::GetCameraPosition()
+Ogre::Vector3 Server::GetCameraPosition()
 {
 	//get this engine's camera position, in global positioning
 
 	return Simcore->ToGlobal(Simcore->camera->GetPosition());
 }
 
-void EngineContext::OnEnter()
+void Server::OnEnter()
 {
 	//switch to this engine on entry
 
@@ -501,12 +506,12 @@ void EngineContext::OnEnter()
 	frontend->SetActiveEngine(instance, true);
 }
 
-void EngineContext::OnExit()
+void Server::OnExit()
 {
 	inside = false;
 }
 
-void EngineContext::CutForEngine(EngineContext *engine)
+void Server::CutForEngine(Server *engine)
 {
 	//cut holes in this sim engine, for a newly loaded building, if possible
 
@@ -556,13 +561,13 @@ void EngineContext::CutForEngine(EngineContext *engine)
 		parent->CutForEngine(engine);
 }
 
-void EngineContext::AddChild(EngineContext *engine)
+void Server::AddChild(Server *engine)
 {
 	if (engine)
 		children.push_back(engine);
 }
 
-void EngineContext::RemoveChild(EngineContext *engine)
+void Server::RemoveChild(Server *engine)
 {
 	for (size_t i = 0; i < children.size(); i++)
 	{
@@ -574,7 +579,7 @@ void EngineContext::RemoveChild(EngineContext *engine)
 	}
 }
 
-void EngineContext::Move(Ogre::Vector3 &position, bool move_children)
+void Server::Move(Ogre::Vector3 &position, bool move_children)
 {
 	//move this engine
 	//if move_children is true, recursively call this function on all children
@@ -591,7 +596,7 @@ void EngineContext::Move(Ogre::Vector3 &position, bool move_children)
 	}
 }
 
-bool EngineContext::IsParent(EngineContext *engine, bool recursive)
+bool Server::IsParent(Server *engine, bool recursive)
 {
 	//returns true if the specified engine is a parent, or ancestor (if recursive is true) of this engine
 
@@ -611,5 +616,6 @@ bool EngineContext::IsParent(EngineContext *engine, bool recursive)
 
 	return false;
 }
+*/
 
 }

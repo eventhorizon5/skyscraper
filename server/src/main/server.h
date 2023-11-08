@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Engine Context
+	Skyscraper 3.0 Alpha - Server Core
 	Copyright (C)2004-2023 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,15 +20,15 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef ENGINECONTEXT_H
-#define ENGINECONTEXT_H
+#ifndef SERVER_H
+#define SERVER_H
 
 namespace Skyscraper {
 
-class EngineContext
+class Server
 {
 public:
-
+/*
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
 
@@ -107,6 +107,7 @@ private:
 
 	//child engines
 	std::vector<EngineContext*> children;
+*/
 };
 
 }
