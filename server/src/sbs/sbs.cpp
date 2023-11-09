@@ -83,7 +83,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 
 	//load config file
 	configfile = new Ogre::ConfigFile();
-	//configfile->load("skyscraper.ini");
+	configfile->load("skyscraper.ini");
 
 	//initialize variables
 	BuildingName = "";
@@ -106,8 +106,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 	FPS = 0;
 	FrameRate = 30;
 	FrameLimiter = false;
-	//AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
-	//AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
+	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
+	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
 	ElevatorNumber = 1;
 	CarNumber = 1;
@@ -130,15 +130,15 @@ SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 	wall1b = false;
 	wall2a = false;
 	wall2b = false;
-	//ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
+	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
 	remaining_delta = 0;
 	start_time = 0;
 	running_time = 0;
 	InShaft = false;
 	DeleteColliders = false;
 	//soundcount = 0;
-	//UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
-	//Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
+	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
+	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
 	FastDelete = false;
 	WallCount = 0;
@@ -161,17 +161,17 @@ SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 	TexelOverride = false;
 	//enable_profiling = false;
 	//enable_advanced_profiling = false;
-	//SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
-	//ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
-	//StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
-	//ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
-	//StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
-	//FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
-	//SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
-	//RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
+	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
+	ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
+	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
+	ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
+	StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
+	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
+	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
+	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 	EscalatorCount = 0;
 	MovingWalkwayCount = 0;
-	//RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
+	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Headless = false;
 
 	camera = 0;
@@ -3168,6 +3168,7 @@ void SBS::AddModel(Model *model)
 
 	ModelArray.push_back(model);
 }
+*/
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
 {
@@ -3192,6 +3193,7 @@ Real SBS::GetConfigFloat(const std::string &key, Real default_value)
 	return ToFloat(result);
 }
 
+/*
 bool SBS::InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test)
 {
 	//determine if a point (test) is inside the box defines by start and end vertices

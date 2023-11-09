@@ -310,11 +310,11 @@ public:
 	void AddModel(Model *model);
 	Ogre::Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
 	void Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	Ogre::Vector3 GetPolygonDirection(PolyArray &polygon);
+	Ogre::Vector3 GetPolygonDirection(PolyArray &polygon);*/
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
-	Real GetConfigFloat(const std::string &key, Real default_value);
+	Real GetConfigFloat(const std::string &key, Real default_value);/*
 	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
 	Ogre::Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
