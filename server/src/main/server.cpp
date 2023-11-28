@@ -124,7 +124,7 @@ int main (int argc, char* argv[])
 
 namespace Server {
 
-//Server::Server(Serve->Startr *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+//Server::Server(Server *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 Server::Server(Ogre::SceneManager* mSceneManager) //, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	//this->frontend = frontend;
