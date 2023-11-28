@@ -55,7 +55,7 @@
 #include "controller.h"
 #include "callstation.h"
 #include "doorsystem.h"*/
-//#include "gitrev.h"
+#include "gitrev.h"
 //#include "buttonpanel.h"
 
 namespace SBS {
@@ -66,8 +66,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 	sbs = this;
 	this->mSceneManager = mSceneManager;
 
-	//version = "0.12.0." + ToString(GIT_REV);
-	version = "2.0.0.0";
+	version = "2.0.0." + ToString(GIT_REV);
 	version_state = "Alpha";
 
 	//root object needs to self-register
