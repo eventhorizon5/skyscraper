@@ -79,11 +79,39 @@ int main (int argc, char* argv[])
 	//create server instance
 	::Server::Server *server = new ::Server::Server(smgr);
 
+	bool result = server->Load("Simple.bld");
+
+	if (result == false)
+		return 0;
+
 	//main runloop
+	result = true;
 	while (1)
 	{
 		//if(root->renderOneFrame() == false)
 			//break;
+
+		//process engine run loop
+		if (server->IsLoading() == true)
+		{
+			bool run = true;
+			if (server->IsLoadingFinished() == false && run == true)
+			{
+				if (server->Run() == false)
+					result = false;
+			}
+		}
+
+		//start engine if loading is finished
+		if (server->IsLoadingFinished() == true)
+		{
+			//start simulator
+
+			::SBS::SBS *Simcore = server->GetSystem();
+			if (!server->Start(0))
+				return false;
+		}
+
 		usleep(10);
 	}
 
@@ -96,7 +124,7 @@ int main (int argc, char* argv[])
 
 namespace Server {
 
-//Server::Server(Server *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+//Server::Server(Serve->Startr *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 Server::Server(Ogre::SceneManager* mSceneManager) //, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	//this->frontend = frontend;
