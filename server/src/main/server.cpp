@@ -54,7 +54,7 @@ int main (int argc, char* argv[])
 	configfile.load("resources.cfg");
 
 	// Go through all sections & settings in the file
-	/*Ogre::ConfigFile::SectionIterator seci = configfile.getSectionIterator();
+	Ogre::ConfigFile::SectionIterator seci = configfile.getSectionIterator();
 
 	Ogre::String secName, typeName, archName;
 	while (seci.hasMoreElements())
@@ -69,9 +69,9 @@ int main (int argc, char* argv[])
 
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
 		}
-	}*/
+	}
 
-	//Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
 	//Ogre::RenderWindow* window = root->initialise(true);
 	Ogre::SceneManager* smgr = root->createSceneManager();
