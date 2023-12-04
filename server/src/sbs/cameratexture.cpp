@@ -56,6 +56,9 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	if (quality == 3)
 		texture_size = 1024;
 
+	Report("Texture loading disabled...");
+	return;
+
 	try
 	{
 		if (sbs->GetTextureManager()->GetTextureByName(name, "General") || sbs->GetTextureManager()->GetMaterialByName(name, "General"))
