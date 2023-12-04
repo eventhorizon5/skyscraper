@@ -53,25 +53,16 @@ int main (int argc, char* argv[])
 	Ogre::ConfigFile configfile;
 	configfile.load("resources.cfg");
 
-	// Go through all sections & settings in the file
-	Ogre::ConfigFile::SectionIterator seci = configfile.getSectionIterator();
-
-	Ogre::String secName, typeName, archName;
-	while (seci.hasMoreElements())
+	//add app's directory to resource manager
+	try
 	{
-		secName = seci.peekNextKey();
-		Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
-		Ogre::ConfigFile::SettingsMultiMap::iterator i;
-		for (i = settings->begin(); i != settings->end(); ++i)
-		{
-			typeName = i->first;
-			archName = i->second;
-
-			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
-		}
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("General");
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
 	}
-
-	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+	catch (Ogre::Exception &e)
+	{
+		printf("Error initializing resources\n");
+	}
 
 	//Ogre::RenderWindow* window = root->initialise(true);
 	Ogre::SceneManager* smgr = root->createSceneManager();
