@@ -27,6 +27,8 @@ int main (int argc, char* argv[]);
 
 namespace Server {
 
+class ScriptProcessor;
+
 class Server
 {
 public:
@@ -36,7 +38,7 @@ public:
 
 	Server(Ogre::SceneManager* mSceneManager);
 	~Server();
-	//ScriptProcessor* GetScriptProcessor();
+	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
 	//Skyscraper *GetFrontend() { return frontend; }
 	bool IsCameraActive();
@@ -83,7 +85,7 @@ private:
 	void UnloadSim();
 
 	//Skyscraper* frontend; //frontend
-	//ScriptProcessor* processor; //script processor
+	ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
 	Server *parent; //parent engine

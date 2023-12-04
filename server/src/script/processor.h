@@ -25,6 +25,8 @@
 
 namespace Server {
 
+class Server;
+
 class ScriptProcessor
 {
 public:

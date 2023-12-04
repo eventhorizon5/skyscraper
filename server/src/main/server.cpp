@@ -23,7 +23,7 @@
 #include "globals.h"
 #include "sbs.h"
 //#include "camera.h"
-//#include "processor.h"
+#include "processor.h"
 #include "server.h"
 
 #include <stdio.h>
@@ -148,7 +148,7 @@ Server::Server(Ogre::SceneManager* mSceneManager) //, const Ogre::Vector3 &posit
 	//this->parent = parent;
 	this->parent = 0;
 	Simcore = 0;
-	//processor = 0;
+	processor = 0;
 	raised = false;
 	progress = 0;
 	inside = false;
@@ -189,10 +189,10 @@ Server::~Server()
 	reload_state = 0;
 }
 
-/*ScriptProcessor* Server::GetScriptProcessor()
+ScriptProcessor* Server::GetScriptProcessor()
 {
 	return processor;
-}*/
+}
 
 bool Server::IsCameraActive()
 {
@@ -216,7 +216,7 @@ bool Server::Run()
 		return false;
 
 	//run script processor
-	/*if (processor)
+	if (processor)
 	{
 		bool result = processor->Run();
 
@@ -246,7 +246,7 @@ bool Server::Run()
 		}
 	}
 	else
-		return false;*/
+		return false;
 
 	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
@@ -254,7 +254,7 @@ bool Server::Run()
 		//frontend->RaiseWindow();
 		raised = true;
 
-		//processor->ReportMissingFiles();
+		processor->ReportMissingFiles();
 	}
 
 	//process internal clock
@@ -301,13 +301,13 @@ bool Server::Load(std::string filename)
 
 	//load script processor object and load building
 
-	//processor->Reset();
+	processor->Reset();
 
-	/*if (!processor->LoadDataFile(filename))
+	if (!processor->LoadDataFile(filename))
 	{
 		loading = false;
 		return false;
-	}*/
+	}
 
 	//create progress dialog
 	//frontend->CreateProgressDialog(filename);
@@ -374,8 +374,8 @@ void Server::StartSim()
 		Simcore = new ::SBS::SBS(mSceneManager);
 
 	//load script processor
-	//if (!processor)
-		//processor = new ScriptProcessor(this);
+	if (!processor)
+		processor = new ScriptProcessor(this);
 
 	//refresh console to fix banner message on Linux
 	//frontend->RefreshConsole();
@@ -402,9 +402,9 @@ void Server::UnloadSim()
 	Simcore = 0;
 
 	//unload script processor
-	//if (processor)
-		//delete processor;
-	//processor = 0;
+	if (processor)
+		delete processor;
+	processor = 0;
 
 	loading = false;
 	running = false;
@@ -491,11 +491,10 @@ bool Server::ReportFatalError(const std::string &message)
 
 bool Server::IsLoadingFinished()
 {
-	//if (!processor)
-		//return false;
+	if (!processor)
+		return false;
 
-	//return (loading == true && processor->IsFinished == true);
-	return (loading == true);
+	return (loading == true && processor->IsFinished == true);
 }
 
 void Server::UpdateProgress(int percent)
@@ -539,15 +538,14 @@ bool Server::IsInside(const Ogre::Vector3 &position)
 	if (!Simcore)
 		return false;
 
-	//return Simcore->IsInside(Simcore->FromGlobal(position));
-	return true;
+	return Simcore->IsInside(Simcore->FromGlobal(position));
 }
 
 void Server::DetachCamera(bool reset_building)
 {
 	//detach the camera from this engine
 
-	//Simcore->DetachCamera();
+	Simcore->DetachCamera();
 
 	if (reset_building == true)
 		Simcore->ResetState();
@@ -557,7 +555,7 @@ void Server::AttachCamera(Ogre::Camera *camera, bool init_state)
 {
 	//attach the camera to this engine
 
-	//Simcore->AttachCamera(camera, init_state);
+	Simcore->AttachCamera(camera, init_state);
 
 	//reset camera position if camera is outside of the engine's area when attaching
 	if (IsInside() == false)

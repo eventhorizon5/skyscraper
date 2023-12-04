@@ -62,7 +62,7 @@ target_precompile_headers(server PRIVATE src/sbs/globals.h)
  
 target_link_libraries(SBS ${OGRE_LIBRARIES})
 target_link_libraries(ScriptProc SBS)
-target_link_libraries(server SBS ${OGRE_LIBRARIES})
+target_link_libraries(server SBS ScriptProc ${OGRE_LIBRARIES})
  
 #ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 #		POST_BUILD
