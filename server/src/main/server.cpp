@@ -70,7 +70,7 @@ int main (int argc, char* argv[])
 	//create server instance
 	::Server::Server *server = new ::Server::Server(smgr);
 
-	bool result = server->Load("Simple.bld");
+	bool result = server->Load("Triton Center.bld");
 
 	if (result == false)
 		return 0;
