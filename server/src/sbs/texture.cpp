@@ -1005,7 +1005,7 @@ std::string TextureManager::GetTextureMaterial(const std::string &name, bool &re
 	if (!material.get())
 	{
 		//if material's not found, display a warning and use a default material
-		if (report == true)
+		/*if (report == true)
 		{
 			std::string message;
 			if (polygon_name != "")
@@ -1013,7 +1013,7 @@ std::string TextureManager::GetTextureMaterial(const std::string &name, bool &re
 			else
 				message = "Texture '" + matname + "' not found; using default material";
 			ReportError(message);
-		}
+		}*/
 
 		//set to default material
 		matname = "Default";
