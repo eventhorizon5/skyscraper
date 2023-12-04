@@ -229,20 +229,20 @@ void SBS::Initialize()
 	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
 
 	//create object meshes
-	//Buildings = new MeshObject(this, "Buildings");
-	//External = new MeshObject(this, "External");
-	//Landscape = new MeshObject(this, "Landscape");
-	////Landscape->tricollider = false;
+	Buildings = new MeshObject(this, "Buildings");
+	External = new MeshObject(this, "External");
+	Landscape = new MeshObject(this, "Landscape");
+	//Landscape->tricollider = false;
 
 	//create manager objects
-	//floor_manager = new FloorManager(this);
-	//elevator_manager = new ElevatorManager(this);
-	//shaft_manager = new ShaftManager(this);
-	//stairwell_manager = new StairwellManager(this);
-	//door_manager = new DoorManager(this);
-	//revolvingdoor_manager = new RevolvingDoorManager(this);
-	//vehicle_manager = new VehicleManager(this);
-	//controller_manager = new ControllerManager(this);
+	floor_manager = new FloorManager(this);
+	elevator_manager = new ElevatorManager(this);
+	shaft_manager = new ShaftManager(this);
+	stairwell_manager = new StairwellManager(this);
+	door_manager = new DoorManager(this);
+	revolvingdoor_manager = new RevolvingDoorManager(this);
+	vehicle_manager = new VehicleManager(this);
+	controller_manager = new ControllerManager(this);
 
 	//create camera object
 	//this->camera = new Camera(this);
