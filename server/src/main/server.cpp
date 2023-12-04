@@ -101,6 +101,8 @@ int main (int argc, char* argv[])
 			::SBS::SBS *Simcore = server->GetSystem();
 			if (!server->Start(0))
 				return false;
+
+			printf("Loading finished, running simulator...\n\n");
 		}
 
 		usleep(10);
