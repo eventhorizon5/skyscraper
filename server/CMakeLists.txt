@@ -64,6 +64,10 @@ target_link_libraries(SBS ${OGRE_LIBRARIES})
 target_link_libraries(ScriptProc SBS)
 target_link_libraries(server SBS ScriptProc ${OGRE_LIBRARIES})
  
+if (APPLE)
+	set(CMAKE_SHARED_LINKER_FLAGS "-undefined dynamic_lookup")
+endif ()
+
 #ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 #		POST_BUILD
 #		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.sh)
