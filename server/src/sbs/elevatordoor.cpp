@@ -28,10 +28,10 @@
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "mesh.h"
-#include "camera.h"
+//#include "camera.h"
 #include "texture.h"
 #include "trigger.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "sound.h"
 #include "timer.h"
 #include "doorsystem.h"
@@ -578,7 +578,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//this is the parent controller function that runs the movement function for each
 	//individual door component.
 
-	SBS_PROFILE("ElevatorDoor::MoveDoors");
+	//SBS_PROFILE("ElevatorDoor::MoveDoors");
 
 	//find which doors should be moved
 	bool elevdoors = false, shaftdoors = false, playsounds = false;
@@ -809,10 +809,11 @@ DoorComponent* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::s
 
 	//create door object
 	DoorComponent *door = 0;
-	if (wrapper->IsShaftDoor == false)
-		door = wrapper->CreateDoor(meshname, direction, false, OpenSpeed, CloseSpeed, elev->GetDoorContainer());
-	else
-		door = wrapper->CreateDoor(meshname, direction, false, OpenSpeed, CloseSpeed, elev->GetShaft()->GetShaftDoorContainer());
+	//if (wrapper->IsShaftDoor == false)
+		//door = wrapper->CreateDoor(meshname, direction, false, OpenSpeed, CloseSpeed, elev->GetDoorContainer());
+	//else
+		//door = wrapper->CreateDoor(meshname, direction, false, OpenSpeed, CloseSpeed, elev->GetShaft()->GetShaftDoorContainer());
+		door = wrapper->CreateDoor(meshname, direction, false, OpenSpeed, CloseSpeed);
 
 	if (tw == 0)
 		tw = 1;
@@ -1089,13 +1090,13 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 	}
 
 	//create door sensor
-	if (GetSensorStatus() == true && ShaftDoor == false && elev->AutoDoors == true)
+	/*if (GetSensorStatus() == true && ShaftDoor == false && elev->AutoDoors == true)
 	{
 		Real sensor_width = sbs->camera->cfg_body_width / 4;
 		Ogre::Vector3 min (x1 - sensor_width, wrapper->voffset, z1 - sensor_width);
 		Ogre::Vector3 max (x2 + sensor_width, wrapper->voffset + wrapper->Height, z2 + sensor_width);
 		CreateSensor(min, max);
-	}
+	}*/
 
 	return wrapper;
 }
@@ -1242,7 +1243,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
-	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabled");
+	//SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabled");
 
 	//exit if shaft's ShowFullShaft is set
 	if (elev->GetShaft()->GetShowFull() == true && value == false)
@@ -1267,7 +1268,7 @@ void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
 	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show door on only the current floor (floor)
 
-	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabledRange");
+	//SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabledRange");
 
 	//exit if shaft's ShowFullShaft is set
 	if (elev->GetShaft()->GetShowFull() == true)
@@ -1449,7 +1450,7 @@ bool ElevatorDoor::DoorsStopped()
 void ElevatorDoor::Loop()
 {
 	//main loop
-	SBS_PROFILE("ElevatorDoor::Loop");
+	//SBS_PROFILE("ElevatorDoor::Loop");
 
 	if (OpenDoor == 1)
 		MoveDoors(true, false);

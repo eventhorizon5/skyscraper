@@ -34,12 +34,7 @@ file(GLOB MAIN_FILES
 )
  
 file(GLOB SBS_FILES
-	#src/sbs/*.cpp
-	src/sbs/globals.cpp
-	src/sbs/sbs.cpp
-	src/sbs/object.cpp
-	src/sbs/unix.cpp
-	src/sbs/scenenode.cpp
+	src/sbs/*.cpp
 )
  
 file(GLOB SCRIPT_FILES

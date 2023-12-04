@@ -23,7 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "camera.h"
+//#include "camera.h"
 #include "step.h"
 
 namespace SBS {
@@ -48,7 +48,7 @@ void Step::OnHit()
 {
 	//move camera along with step, when user is on it
 
-	sbs->camera->MovePosition(vector * 1.675, speed);
+	//sbs->camera->MovePosition(vector * 1.675, speed);
 }
 
 }

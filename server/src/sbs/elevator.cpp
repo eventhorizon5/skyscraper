@@ -24,15 +24,15 @@
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
-#include "dynamicmesh.h"
+//#include "dynamicmesh.h"
 #include "mesh.h"
-#include "camera.h"
+//#include "camera.h"
 #include "shaft.h"
 #include "control.h"
 #include "sound.h"
 #include "elevatorcar.h"
 #include "timer.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "texture.h"
 #include "controller.h"
 #include "elevator.h"
@@ -206,8 +206,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	AddCar();
 
 	//create a dynamic mesh for elevator doors
-	DoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Door Container", 0, true);
-	DoorContainer->force_combine = true;
+	//DoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Door Container", 0, true);
+	//DoorContainer->force_combine = true;
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -290,9 +290,9 @@ Elevator::~Elevator()
 	Cars.clear();
 
 	//delete door container
-	if (DoorContainer)
-		delete DoorContainer;
-	DoorContainer = 0;
+	//if (DoorContainer)
+		//delete DoorContainer;
+	//DoorContainer = 0;
 
 	//delete sounds
 	if (sbs->Verbose)
@@ -793,7 +793,7 @@ bool Elevator::Stop(bool emergency)
 void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
-	SBS_PROFILE("Elevator::ProcessCallQueue");
+	//SBS_PROFILE("Elevator::ProcessCallQueue");
 
 	//exit if elevator is not running
 	if (Running == false)
@@ -1116,7 +1116,7 @@ void Elevator::Loop()
 {
 	//Monitors elevator and starts actions if needed
 
-	SBS_PROFILE("Elevator::Loop");
+	//SBS_PROFILE("Elevator::Loop");
 
 	if (Created == false)
 		return;
@@ -1248,7 +1248,7 @@ void Elevator::MoveElevatorToFloor()
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	//if InspectionService or manual movements are enabled, this function ignores GotoFloor values, since the elevator is manually moved
 
-	SBS_PROFILE("Elevator::MoveElevatorToFloor");
+	//SBS_PROFILE("Elevator::MoveElevatorToFloor");
 
 	Ogre::Vector3 movement = Ogre::Vector3(0, 0, 0);
 	bool StartLeveling = false;
@@ -1448,7 +1448,7 @@ void Elevator::MoveElevatorToFloor()
 				Report("user in elevator - turning off objects");
 
 			//turn off floor
-			if (GetShaft()->ShowFloors == 0)
+			/*if (GetShaft()->ShowFloors == 0)
 			{
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
@@ -1457,7 +1457,7 @@ void Elevator::MoveElevatorToFloor()
 			{
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
-			}
+			}*/
 
 			//turn off sky, buildings, and landscape
 			if (GetShaft()->ShowOutside == false)
@@ -1467,13 +1467,13 @@ void Elevator::MoveElevatorToFloor()
 				sbs->EnableLandscape(false);
 				sbs->EnableExternal(false);
 			}
-			else if (GetShaft()->IsShowOutside(sbs->camera->CurrentFloor) == false)
+			/*else if (GetShaft()->IsShowOutside(sbs->camera->CurrentFloor) == false)
 			{
 				sbs->EnableSkybox(false);
 				sbs->EnableBuildings(false);
 				sbs->EnableLandscape(false);
 				sbs->EnableExternal(false);
-			}
+			}*/
 
 			//reset shaft doors
 			ResetShaftDoors(GetCar(sbs->CarNumber)->GetFloor());
@@ -1483,8 +1483,8 @@ void Elevator::MoveElevatorToFloor()
 		UpdateDirectionalIndicators();
 
 		//set external active-direction indicators
-		if (sbs->GetFloor(sbs->camera->CurrentFloor))
-			sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
+		//if (sbs->GetFloor(sbs->camera->CurrentFloor))
+			//sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 		std::string car_msg = "";
 		if (GetCarCount() > 1)
@@ -1799,8 +1799,8 @@ void Elevator::MoveElevatorToFloor()
 			UpdateFloorIndicators();
 
 			//update floor indicators on current camera floor
-			if (sbs->GetFloor(sbs->camera->CurrentFloor))
-				sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
+			//if (sbs->GetFloor(sbs->camera->CurrentFloor))
+				//sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 
 			oldfloor = GetCar(1)->GetFloor();
 		}
@@ -1921,7 +1921,7 @@ void Elevator::MoveObjects(Real offset)
 {
 	//move elevator and objects vertically
 
-	SBS_PROFILE("Elevator::MoveObjects");
+	//SBS_PROFILE("Elevator::MoveObjects");
 
 	Ogre::Vector3 vector (0, offset, 0);
 
@@ -1941,8 +1941,8 @@ void Elevator::MoveObjects(Real offset)
 	}
 
 	//move camera
-	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		sbs->camera->MovePosition(vector);
+	//if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		//sbs->camera->MovePosition(vector);
 }
 
 void Elevator::FinishMove()
@@ -1970,18 +1970,19 @@ void Elevator::FinishMove()
 	UpdateDirectionalIndicators();
 
 	//update external active-direction indicators
-	if (sbs->GetFloor(sbs->camera->CurrentFloor))
-		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
+	//if (sbs->GetFloor(sbs->camera->CurrentFloor))
+		//sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 	if ((EmergencyStop == 0 || IsManuallyStopped() == true) && InspectionService == false)
 	{
 		//update floor indicators on current camera floor
-		if (sbs->GetFloor(sbs->camera->CurrentFloor))
-			sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
+		//if (sbs->GetFloor(sbs->camera->CurrentFloor))
+			//sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 
 		UpdateFloorIndicators();
 
-		ElevatorCar *cameracar = GetCarForFloor(sbs->camera->CurrentFloor);
+		//ElevatorCar *cameracar = GetCarForFloor(sbs->camera->CurrentFloor);
+		ElevatorCar *cameracar = 0;
 
 		if (!cameracar)
 			cameracar = GetCar(GotoFloorCar);
@@ -1994,8 +1995,8 @@ void Elevator::FinishMove()
 
 			//turn on floor
 			int floor = GotoFloor;
-			if (GotoFloor != sbs->camera->CurrentFloor)
-				floor = sbs->camera->CurrentFloor;
+			//if (GotoFloor != sbs->camera->CurrentFloor)
+				//floor = sbs->camera->CurrentFloor;
 			sbs->GetFloor(floor)->Enabled(true);
 			sbs->GetFloor(floor)->EnableGroup(true);
 
@@ -2259,7 +2260,7 @@ void Elevator::UpdateFloorIndicators()
 {
 	//updates all floor indicators
 
-	SBS_PROFILE("Elevator::UpdateFloorIndicators");
+	//SBS_PROFILE("Elevator::UpdateFloorIndicators");
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
@@ -2357,7 +2358,7 @@ bool Elevator::Go(int floor, bool hold)
 		}
 		MoveElevator = true;
 	}
-	else if (GoActive == true && hold == true && sbs->camera->MouseDown() == false)
+	else if (GoActive == true && hold == true /*&& sbs->camera->MouseDown() == false*/)
 	{
 		//stop go movement
 		GoActive = false;
@@ -3141,7 +3142,7 @@ void Elevator::UpdateDirectionalIndicators()
 {
 	//updates all interior active direction indicators
 
-	SBS_PROFILE("Elevator::UpdateDirectionalIndicators");
+	//SBS_PROFILE("Elevator::UpdateDirectionalIndicators");
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
@@ -3252,7 +3253,7 @@ void Elevator::Timer::Notify()
 	if (elevator->IsRunning() == false)
 		return;
 
-	SBS_PROFILE("Elevator::Timer::Notify");
+	//SBS_PROFILE("Elevator::Timer::Notify");
 	if (type == 0)
 	{
 		//parking timer
@@ -3511,7 +3512,7 @@ int Elevator::AvailableForCall(bool destination, int floor, int direction, bool 
 	//1 - available for call
 	//2 - unavailable due to a service mode or error
 
-	SBS_PROFILE("Elevator::AvailableForCall");
+	//SBS_PROFILE("Elevator::AvailableForCall");
 
 	ElevatorCar *car = GetCarForFloor(floor, report_on_failure);
 
@@ -3732,7 +3733,7 @@ bool Elevator::Check(Ogre::Vector3 position)
 	if (IsEnabled == false)
 		return false;
 
-	SBS_PROFILE("Elevator::Check");
+	//SBS_PROFILE("Elevator::Check");
 
 	for (size_t i = Cars.size() - 1; i < Cars.size(); --i)
 	{
@@ -3795,7 +3796,7 @@ bool Elevator::Up()
 		ManualMoveHold = true;
 		return Up(true);
 	}
-	else if (ManualMove == 1 && sbs->camera->MouseDown() == false)
+	else if (ManualMove == 1/* && sbs->camera->MouseDown() == false*/)
 	{
 		ManualMoveHold = false;
 		return Up(false);
@@ -3813,7 +3814,7 @@ bool Elevator::Down()
 		ManualMoveHold = true;
 		return Down(true);
 	}
-	else if (ManualMove == -1 && sbs->camera->MouseDown() == false)
+	else if (ManualMove == -1/* && sbs->camera->MouseDown() == false*/)
 	{
 		ManualMoveHold = false;
 		return Down(false);
@@ -4058,7 +4059,7 @@ void Elevator::PlayMovingSounds()
 {
 	//play elevator movement sounds
 
-	SBS_PROFILE("Elevator::PlayMovingSounds");
+	//SBS_PROFILE("Elevator::PlayMovingSounds");
 
 	//car sounds
 	for (size_t i = 0; i < Cars.size(); i++)
@@ -4612,7 +4613,7 @@ bool Elevator::SetHoistwayAccess(int floor, int access)
 	if (InspectionService == false)
 		return ReportError("SetHoistwayAccess: Not in inspection service mode");
 
-	if (access == 0 || (HoistwayAccessHold == true && HoistwayAccess != 0 && sbs->camera->MouseDown() == false))
+	if (access == 0 || (HoistwayAccessHold == true && HoistwayAccess != 0/* && sbs->camera->MouseDown() == false*/))
 	{
 		//disable mode
 		HoistwayAccess = 0;

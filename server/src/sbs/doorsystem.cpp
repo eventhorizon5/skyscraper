@@ -23,7 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "mesh.h"
 #include "floor.h"
 #include "elevator.h"
@@ -38,13 +38,15 @@ namespace SBS {
 // Door Component
 //
 
-DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
+//DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
+DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed)
 {
 	name = doorname;
 	wrapper = Wrapper;
 
 	//create object mesh
-	mesh = new MeshObject(wrapper, doorname, dynmesh);
+	//mesh = new MeshObject(wrapper, doorname, dynmesh);
+	mesh = new MeshObject(wrapper, doorname);
 
 	//keep colliders attached, to fix performance issues when moving in and out of an elevator
 	mesh->remove_on_disable = false;
@@ -105,7 +107,7 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 	//direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
-	SBS_PROFILE("DoorComponent::MoveDoors");
+	//SBS_PROFILE("DoorComponent::MoveDoors");
 	Real tempposition, temporigin;
 
 	if (wrapper->rotate == true)
@@ -635,11 +637,13 @@ DoorWrapper::~DoorWrapper()
 	}
 }
 
-DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
+//DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
+DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed)
 {
 	//initialize a door component
 
-	DoorComponent *door = new DoorComponent(doorname, this, direction, OpenClockwise, OpenSpeed, CloseSpeed, dynmesh);
+	//DoorComponent *door = new DoorComponent(doorname, this, direction, OpenClockwise, OpenSpeed, CloseSpeed, dynmesh);
+	DoorComponent *door = new DoorComponent(doorname, this, direction, OpenClockwise, OpenSpeed, CloseSpeed);
 	doors.push_back(door);
 	return door;
 }

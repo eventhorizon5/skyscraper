@@ -26,7 +26,7 @@
 #include "mesh.h"
 #include "elevator.h"
 #include "elevatorcar.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "floor.h"
 #include "timer.h"
 #include "texture.h"
@@ -150,7 +150,7 @@ void FloorIndicator::Update(bool blank)
 {
 	//update indicator display with elevator's current floor identifier
 
-	SBS_PROFILE("FloorIndicator::Update");
+	//SBS_PROFILE("FloorIndicator::Update");
 
 	if (blank == true && Blank != "")
 	{

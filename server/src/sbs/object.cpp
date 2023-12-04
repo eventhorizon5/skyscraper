@@ -25,7 +25,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "scenenode.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "object.h"
 
 namespace SBS {

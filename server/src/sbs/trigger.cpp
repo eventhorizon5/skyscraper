@@ -28,10 +28,10 @@
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
-#include "camera.h"
+//#include "camera.h"
 #include "sound.h"
 #include "action.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "trigger.h"
 
 namespace SBS {
@@ -271,9 +271,13 @@ void Trigger::Loop()
 	if (is_enabled == false)
 		return;
 
-	SBS_PROFILE("Trigger::Loop");
+	//SBS_PROFILE("Trigger::Loop");
 
-	Ogre::Vector3 cam = sbs->camera->GetPosition();
+	return;
+
+	//Ogre::Vector3 cam = sbs->camera->GetPosition();
+	Ogre::Vector3 cam = Ogre::Vector3::ZERO;
+
 	bool changed = false;
 	if (IsInside(cam) == true)
 	{

@@ -49,7 +49,8 @@ public:
 	virtual void Notify();
 };
 
-Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate) : Object(parent), DoorLock(this)
+//Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate) : Object(parent), DoorLock(this)
+Door::Door(Object *parent, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate) : Object(parent), DoorLock(this)
 {
 	//creates a door, the 'direction' parameter is for the lock direction
 	//wall cuts must be performed by the calling (parent) function
@@ -67,7 +68,7 @@ Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const 
 	sound = 0;
 	door_changed = false;
 	previous_open = false;
-	this->wrapper = wrapper;
+	//this->wrapper = wrapper;
 	running = false;
 	DoorDirection = false;
 	timer = new Timer("Auto-close Timer", this);
@@ -359,7 +360,8 @@ DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &
 	if (face_direction == "right" || face_direction == "back")
 		direction = true;
 
-	DoorComponent *component = door->CreateDoor(name, open_direction, OpenClockwise, OpenSpeed, CloseSpeed, wrapper);
+	//DoorComponent *component = door->CreateDoor(name, open_direction, OpenClockwise, OpenSpeed, CloseSpeed, wrapper);
+	DoorComponent *component = door->CreateDoor(name, open_direction, OpenClockwise, OpenSpeed, CloseSpeed);
 
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (direction == false)

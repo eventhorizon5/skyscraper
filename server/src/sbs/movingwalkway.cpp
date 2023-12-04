@@ -23,13 +23,13 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "camera.h"
+//#include "camera.h"
 #include "mesh.h"
 #include "floor.h"
 #include "sound.h"
 #include "texture.h"
-#include "profiler.h"
-#include "dynamicmesh.h"
+//#include "profiler.h"
+//#include "dynamicmesh.h"
 #include "step.h"
 #include "movingwalkway.h"
 
@@ -161,7 +161,7 @@ void MovingWalkway::Loop()
 {
 	//run loop
 
-	SBS_PROFILE("MovingWalkway::Loop");
+	//SBS_PROFILE("MovingWalkway::Loop");
 
 	if (!IsEnabled() || Run == 0)
 	{
@@ -247,7 +247,7 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 
 void MovingWalkway::MoveSteps()
 {
-	if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
+	//if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
 		return;
 
 	for (size_t i = 0; i < Steps.size(); i++)

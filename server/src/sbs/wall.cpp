@@ -26,7 +26,7 @@
 #include "mesh.h"
 #include "triangle.h"
 #include "texture.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "wall.h"
 
 namespace SBS {
@@ -196,7 +196,7 @@ int Wall::FindPolygon(const std::string &name)
 {
 	//find a polygon object by name
 
-	SBS_PROFILE("Wall::FindPolygon");
+	//SBS_PROFILE("Wall::FindPolygon");
 
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
@@ -226,7 +226,7 @@ bool Wall::IntersectsWall(Ogre::Vector3 start, Ogre::Vector3 end, Ogre::Vector3 
 {
 	//check through polygons to see if the specified line intersects with this wall object
 
-	SBS_PROFILE("Wall::IntersectsWall");
+	//SBS_PROFILE("Wall::IntersectsWall");
 	Real pr, best_pr = 2000000000.;
 	int best_i = -1;
 	Ogre::Vector3 cur_isect, normal;

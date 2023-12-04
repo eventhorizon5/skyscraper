@@ -24,7 +24,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "manager.h"
-#include "dynamicmesh.h"
+//#include "dynamicmesh.h"
 #include "mesh.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -33,7 +33,7 @@
 #include "door.h"
 #include "model.h"
 #include "light.h"
-#include "camera.h"
+//#include "camera.h"
 #include "route.h"
 #include "escalator.h"
 #include "cameratexture.h"
@@ -43,7 +43,7 @@
 #include "floorindicator.h"
 #include "directional.h"
 #include "sound.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "revolvingdoor.h"
 #include "movingwalkway.h"
 #include "controller.h"
@@ -62,13 +62,16 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	SetName("Floor " + num);
 
 	//Create primary level mesh
-	Level = new MeshObject(this, "Level " + num, manager->GetFloorDynMesh());
+	//Level = new MeshObject(this, "Level " + num, manager->GetFloorDynMesh());
+	Level = new MeshObject(this, "Level " + num);
 
 	//Create interfloor mesh
-	Interfloor = new MeshObject(this, "Interfloor " + num, manager->GetIFloorDynMesh());
+	//Interfloor = new MeshObject(this, "Interfloor " + num, manager->GetIFloorDynMesh());
+	Interfloor = new MeshObject(this, "Interfloor " + num);
 
 	//Create columnframe mesh
-	ColumnFrame = new MeshObject(this, "ColumnFrame " + num, manager->GetColumnDynMesh());
+	//ColumnFrame = new MeshObject(this, "ColumnFrame " + num, manager->GetColumnDynMesh());
+	ColumnFrame = new MeshObject(this, "ColumnFrame " + num);
 
 	//set enabled flags
 	IsEnabled = true;
@@ -90,8 +93,8 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	AltitudeSet = false;
 
 	//create a dynamic mesh for doors
-	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
-	DoorWrapper->force_combine = true;
+	//DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
+	//DoorWrapper->force_combine = true;
 }
 
 Floor::~Floor()
@@ -208,9 +211,9 @@ Floor::~Floor()
 		RDoorArray[i] = 0;
 	}
 
-	if (DoorWrapper)
-		delete DoorWrapper;
-	DoorWrapper = 0;
+	//if (DoorWrapper)
+		//delete DoorWrapper;
+	//DoorWrapper = 0;
 
 	//delete floor indicators
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
@@ -338,7 +341,7 @@ void Floor::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	SBS_PROFILE("Floor::Enabled");
+	//SBS_PROFILE("Floor::Enabled");
 	Level->Enabled(value);
 	IsEnabled = value;
 
@@ -449,7 +452,7 @@ void Floor::Enabled(bool value)
 		if (DoorArray[i])
 			DoorArray[i]->Enabled(value);
 	}
-	DoorWrapper->Enabled(value);
+	//DoorWrapper->Enabled(value);
 
 	//turn on/off directional indicators
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
@@ -629,7 +632,7 @@ void Floor::EnableGroup(bool value)
 {
 	//enable floors grouped with this floor
 
-	SBS_PROFILE("Floor::EnableGroup");
+	//SBS_PROFILE("Floor::EnableGroup");
 	if (Group.size() > 0)
 	{
 		for (size_t i = 0; i < Group.size(); i++)
@@ -737,7 +740,8 @@ Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std:
 	if (name == "")
 		name = "Door " + ToString(number);
 
-	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, base + voffset, tw, th, side_tw, side_th);
 	DoorArray.push_back(door);
 	return door;
@@ -752,7 +756,8 @@ Door* Floor::CreateDoor(std::string name, const std::string &open_sound, const s
 	if (name == "")
 		name = "Door " + ToString(number);
 
-	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	DoorArray.push_back(door);
 	door->Move(0, GetBase(true), 0);
 	return door;
@@ -865,7 +870,7 @@ void Floor::UpdateFloorIndicators()
 {
 	//updates all floor indicators
 
-	SBS_PROFILE("Floor::UpdateFloorIndicators");
+	//SBS_PROFILE("Floor::UpdateFloorIndicators");
 
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
@@ -881,7 +886,7 @@ void Floor::Loop()
 	if (IsEnabled == false)
 		return;
 
-	SBS_PROFILE("Floor::Loop");
+	//SBS_PROFILE("Floor::Loop");
 
 	LoopChildren();
 }
@@ -1021,8 +1026,8 @@ Sound* Floor::AddSound(const std::string &name, const std::string &filename, Ogr
 	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
 	sound->SetLoopState(loop);
-	if (loop && sbs->IsRunning == true && sbs->camera->CurrentFloor == Number)
-		sound->Play();
+	//if (loop && sbs->IsRunning == true && sbs->camera->CurrentFloor == Number)
+		//sound->Play();
 
 	return sound;
 }
@@ -1138,7 +1143,7 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 {
 	//updates the active-direction indicators associated with the given elevator
 
-	SBS_PROFILE("Floor::UpdateDirectionalIndicators1");
+	//SBS_PROFILE("Floor::UpdateDirectionalIndicators1");
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		DirectionalIndicator *indicator = DirIndicatorArray[i];
@@ -1176,7 +1181,7 @@ void Floor::UpdateDirectionalIndicators()
 {
 	//updates all active-direction indicators
 
-	SBS_PROFILE("Floor::UpdateDirectionalIndicators2");
+	//SBS_PROFILE("Floor::UpdateDirectionalIndicators2");
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		DirectionalIndicator *indicator = DirIndicatorArray[i];
@@ -1731,7 +1736,8 @@ RevolvingDoor* Floor::AddRevolvingDoor(std::string name, bool run, const std::st
 	if (name == "")
 		name = "RevolvingDoor " + ToString(number);
 
-	RevolvingDoor* door = new RevolvingDoor(this, DoorWrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+	//RevolvingDoor* door = new RevolvingDoor(this, DoorWrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+	RevolvingDoor* door = new RevolvingDoor(this, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 	RDoorArray.push_back(door);
 	return door;
 }

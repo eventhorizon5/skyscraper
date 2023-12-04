@@ -59,7 +59,7 @@ public:
 	void SetShowFull(int value);
 	Level* GetLevel(int floor);
 	bool IsValidFloor(int floor);
-	DynamicMesh* GetDynamicMesh();
+	//DynamicMesh* GetDynamicMesh();
 
 	class SBSIMPEXP Level : public Object
 	{
@@ -130,10 +130,10 @@ private:
 	bool lastfloorset;
 
 	//Doors
-	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
+	//DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//dynamic mesh object
-	DynamicMesh *dynamic_mesh;
+	//DynamicMesh *dynamic_mesh;
 
 	//cache objects for IsInStairwell()
 	Ogre::Vector3 lastposition;

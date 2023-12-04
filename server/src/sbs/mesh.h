@@ -114,7 +114,7 @@ public:
 	void ChangeHeight(Real newheight);
 	void EnableShadows(bool value);
 
-	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
+	//DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<SubMesh> Submeshes; //submeshes
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
 
@@ -122,8 +122,8 @@ public:
 
 	Ogre::AxisAlignedBox *Bounds; //mesh bounds
 
-	OgreBulletDynamics::RigidBody* mBody;
-	OgreBulletCollisions::CollisionShape* mShape;
+	//OgreBulletDynamics::RigidBody* mBody;
+	//OgreBulletCollisions::CollisionShape* mShape;
 
 	std::string Filename; //filename, if a loaded model
 	bool model_loaded; //true if a model was loaded successfully

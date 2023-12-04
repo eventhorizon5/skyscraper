@@ -26,15 +26,15 @@
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
-#include "dynamicmesh.h"
+//#include "dynamicmesh.h"
 #include "mesh.h"
 #include "sound.h"
 #include "door.h"
 #include "model.h"
 #include "light.h"
-#include "camera.h"
+//#include "camera.h"
 #include "control.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "cameratexture.h"
 #include "shaft.h"
 
@@ -80,7 +80,7 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->Altitude, CenterZ);
 
-	dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
+	//dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -88,10 +88,10 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	}
 
 	//create a dynamic mesh for doors
-	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
+	//DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 
 	//create a dynamic mesh for doors
-	ShaftDoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Shaft Door Container", 0, true);
+	//ShaftDoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Shaft Door Container", 0, true);
 
 	Report("created at " + TruncateNumber(CenterX, 4) + ", " + TruncateNumber(CenterZ, 4));
 
@@ -110,13 +110,13 @@ Shaft::~Shaft()
 		Levels[i] = 0;
 	}
 
-	if (DoorWrapper)
-		delete DoorWrapper;
-	DoorWrapper = 0;
+	//if (DoorWrapper)
+		//delete DoorWrapper;
+	//DoorWrapper = 0;
 
-	if (ShaftDoorContainer)
-		delete ShaftDoorContainer;
-	ShaftDoorContainer = 0;
+	//if (ShaftDoorContainer)
+		//delete ShaftDoorContainer;
+	//ShaftDoorContainer = 0;
 
 	//delete dynamic mesh
 	if (dynamic_mesh)
@@ -159,9 +159,9 @@ void Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
 	}
 
 	//enable/disable dynamic meshes
-	dynamic_mesh->Enabled(value);
-	ShaftDoorContainer->Enabled(value);
-	DoorWrapper->Enabled(value);
+	//dynamic_mesh->Enabled(value);
+	//ShaftDoorContainer->Enabled(value);
+	//DoorWrapper->Enabled(value);
 
 	IsEnabled = value;
 	if (ShowFullShaft == true)
@@ -270,7 +270,7 @@ void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 	if (!sbs->GetFloor(floor))
 		return;
 
-	SBS_PROFILE("Shaft::EnableRange");
+	//SBS_PROFILE("Shaft::EnableRange");
 
 	//range must be greater than 0
 	if (range < 1)
@@ -495,12 +495,14 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 	if (!elevator)
 		return;
 
-	ElevatorCar *car = elevator->GetCar(sbs->CarNumber);
+	return;
+
+	/*ElevatorCar *car = elevator->GetCar(sbs->CarNumber);
 
 	if (!car)
 		return;
 
-	SBS_PROFILE("Shaft::Check");
+	//SBS_PROFILE("Shaft::Check");
 
 	if (IsInside(position) == true)
 	{
@@ -631,19 +633,19 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 	{
 		//show specified shaft range if outside the shaft
 		EnableRange(current_floor, sbs->ShaftOutsideDisplayRange, true, true);
-	}
+	}*/
 }
 
 void Shaft::Loop()
 {
 	//shaft runloop
 
-	SBS_PROFILE("Shaft::Loop");
+	//SBS_PROFILE("Shaft::Loop");
 
 	LoopChildren();
 }
 
-DynamicMesh* Shaft::GetDynamicMesh()
+/*DynamicMesh* Shaft::GetDynamicMesh()
 {
 	return dynamic_mesh;
 }
@@ -651,16 +653,16 @@ DynamicMesh* Shaft::GetDynamicMesh()
 DynamicMesh* Shaft::GetDoorWrapper()
 {
 	return DoorWrapper;
-}
+}*/
 
 void Shaft::SetShowFull(bool value)
 {
 	ShowFullShaft = value;
 
 	//force the combining of dynamic meshes, since they'll be fully shown
-	dynamic_mesh->force_combine = value;
-	DoorWrapper->force_combine = value;
-	ShaftDoorContainer->force_combine = value;
+	//dynamic_mesh->force_combine = value;
+	//DoorWrapper->force_combine = value;
+	//ShaftDoorContainer->force_combine = value;
 }
 
 Shaft::Level::Level(Shaft *parent, int number) : Object(parent)
@@ -677,7 +679,8 @@ Shaft::Level::Level(Shaft *parent, int number) : Object(parent)
 	SetName(name);
 
 	//Create level mesh
-	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
+	//mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
+	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum));
 	SetPositionY(sbs->GetFloor(number)->Altitude);
 
 	EnableLoop(true);
@@ -817,7 +820,7 @@ bool Shaft::Level::AddFloor(Wall *wall, const std::string &name, const std::stri
 
 void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 {
-	SBS_PROFILE("Shaft::Enabled");
+	//SBS_PROFILE("Shaft::Enabled");
 	if (IsEnabled() != value && parent->EnableCheck == false)
 	{
 		//turns shaft on/off for a specific floor
@@ -1084,7 +1087,7 @@ void Shaft::Level::Loop()
 {
 	//level runloop
 
-	SBS_PROFILE("Stairwell::Level::Loop");
+	//SBS_PROFILE("Stairwell::Level::Loop");
 
 	LoopChildren();
 }
@@ -1141,7 +1144,8 @@ Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, con
 	if (name == "")
 		name = "Door " + num;
 
-	Door* door = new Door(this, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th, side_tw, side_th);
 	DoorArray.push_back(door);
 
@@ -1158,7 +1162,8 @@ Door* Shaft::Level::CreateDoor(std::string name, const std::string &open_sound, 
 	if (name == "")
 		name = "Door " + num;
 
-	Door* door = new Door(this, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	DoorArray.push_back(door);
 	return door;
 }

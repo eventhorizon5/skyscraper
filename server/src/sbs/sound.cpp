@@ -25,7 +25,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevatorcar.h"
-#include "soundsystem.h"
+//#include "soundsystem.h"
 #include "sound.h"
 
 namespace SBS {
@@ -47,7 +47,7 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 	Percent = 0;
 	sbs->IncrementSoundCount();
 	sound = 0;
-	channel = 0;
+	//channel = 0;
 	default_speed = 0;
 	doppler_level = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 	position_queued = false;
@@ -89,7 +89,7 @@ Sound::~Sound()
 
 void Sound::OnMove(bool parent)
 {
-	Ogre::Vector3 global_position = sbs->ToGlobal(GetPosition());
+	/*Ogre::Vector3 global_position = sbs->ToGlobal(GetPosition());
 
 	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
 	FMOD_VECTOR vel = { 0, 0, 0 };
@@ -107,7 +107,7 @@ void Sound::OnMove(bool parent)
 	Velocity.y = vel.y;
 	Velocity.z = vel.z;
 	if (channel)
-		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
+		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning*/
 }
 
 void Sound::OnRotate(bool parent)
@@ -124,8 +124,8 @@ void Sound::SetVolume(Real value)
 		Report("Setting volume to " + ToString(value));
 
 	Volume = (float)value;
-	if (channel)
-		channel->setVolume((float)value);
+	//if (channel)
+		//channel->setVolume((float)value);
 }
 
 Real Sound::GetVolume()
@@ -139,8 +139,8 @@ void Sound::SetDistances(Real min, Real max)
 	//set minimum and maximum unattenuated distances
 	MinDistance = (float)min;
 	MaxDistance = (float)max;
-	if (channel)
-		channel->set3DMinMaxDistance((float)min, (float)max);
+	//if (channel)
+		//channel->set3DMinMaxDistance((float)min, (float)max);
 }
 
 Real Sound::GetMinimumDistance()
@@ -157,10 +157,10 @@ void Sound::SetDirection(const Ogre::Vector3 &direction)
 {
 	Direction = direction;
 	Ogre::Vector3 global_direction = sbs->GetOrientation() * direction;
-	FMOD_VECTOR vec = { (float)global_direction.x, (float)global_direction.y, (float)global_direction.z };
+	//FMOD_VECTOR vec = { (float)global_direction.x, (float)global_direction.y, (float)global_direction.z };
 
-	if (channel)
-		channel->set3DConeOrientation(&vec);
+	//if (channel)
+		//channel->set3DConeOrientation(&vec);
 }
 
 Ogre::Vector3 Sound::GetDirection()
@@ -170,20 +170,20 @@ Ogre::Vector3 Sound::GetDirection()
 
 void Sound::SetConeSettings(Real inside_angle, Real outside_angle, Real outside_volume)
 {
-	if (channel)
-		channel->set3DConeSettings((float)inside_angle, (float)outside_angle, (float)outside_volume);
+	//if (channel)
+		//channel->set3DConeSettings((float)inside_angle, (float)outside_angle, (float)outside_volume);
 }
 
 void Sound::SetLoopState(bool value)
 {
 	SoundLoop = value;
-	if (channel)
+	/*if (channel)
 	{
 		if (value == true)
 			channel->setLoopCount(-1);
 		else
 			channel->setLoopCount(0);
-	}
+	}*/
 }
 
 bool Sound::GetLoopState()
@@ -204,8 +204,8 @@ void Sound::Pause(bool value)
 			Report("Unpause");
 	}
 
-	if (channel)
-		channel->setPaused(value);
+	//if (channel)
+		//channel->setPaused(value);
 }
 
 bool Sound::IsPaused()
@@ -213,8 +213,8 @@ bool Sound::IsPaused()
 	bool paused = false;
 	if (!IsValid())
 		return true;
-	if (channel)
-		channel->getPaused(&paused);
+	//if (channel)
+		//channel->getPaused(&paused);
 	return paused;
 }
 
@@ -225,10 +225,10 @@ bool Sound::IsPlaying()
 	if (!IsValid())
 		return false;
 
-	if (!channel)
+	//if (!channel)
 		return false;
 
-	channel->isPlaying(&result);
+	//channel->isPlaying(&result);
 	if (result == true && IsPaused() == false)
 		return true;
 	return false;
@@ -237,13 +237,13 @@ bool Sound::IsPlaying()
 void Sound::SetSpeed(int percent)
 {
 	Speed = percent;
-	if (!channel)
+	//if (!channel)
 		return;
 
 	if (sbs->Verbose)
 		Report("Setting speed to " + ToString(percent));
 
-	channel->setFrequency(default_speed * ((float)percent / 100));
+	//channel->setFrequency(default_speed * ((float)percent / 100));
 }
 
 int Sound::GetSpeed()
@@ -256,13 +256,13 @@ void Sound::Stop()
 	if (sbs->Verbose == true)
 		Report("Stopping");
 
-	if (channel)
-		channel->stop();
+	//if (channel)
+		//channel->stop();
 }
 
 bool Sound::IsValid()
 {
-	if (!channel)
+	/*if (!channel)
 		return false;
 	bool playing;
 	FMOD_RESULT result = channel->isPlaying(&playing);
@@ -272,7 +272,7 @@ bool Sound::IsValid()
 			sound->RemoveChannel(channel);
 		channel = 0;
 		return false;
-	}
+	}*/
 	return true;
 }
 
@@ -284,7 +284,7 @@ bool Sound::Play(bool reset)
 
 	if (!sound)
 	{
-		sound = system->GetSoundData(Filename);
+		//sound = system->GetSoundData(Filename);
 
 		if (!sound)
 		{
@@ -292,7 +292,7 @@ bool Sound::Play(bool reset)
 				ReportError("No sound loaded");
 			return false;
 		}
-		sound->AddHandle(this);
+		//sound->AddHandle(this);
 	}
 
 	if (sbs->Verbose)
@@ -301,13 +301,13 @@ bool Sound::Play(bool reset)
 	if (!IsValid())
 	{
 		//prepare sound (and keep paused)
-		channel = system->Prepare(sound);
+		//channel = system->Prepare(sound);
 
-		if (!channel)
+		//if (!channel)
 			return false;
 
 		//get default speed value
-		channel->getFrequency(&default_speed);
+		//channel->getFrequency(&default_speed);
 
 		//load previously stored values into new sound objects
 		SetPosition(Position);
@@ -325,8 +325,8 @@ bool Sound::Play(bool reset)
 	if (reset == true)
 		Reset();
 
-	if (channel)
-		channel->setPaused(false);
+	//if (channel)
+		//channel->setPaused(false);
 
 	return true;
 }
@@ -356,12 +356,12 @@ bool Sound::Load(const std::string &filename, bool force)
 		Report("Loading sound " + filename);
 
 	//have sound system load sound file
-	sound = system->Load(filename);
+	//sound = system->Load(filename);
 	Filename = filename;
 
 	if (sound)
 	{
-		sound->AddHandle(this);
+		//sound->AddHandle(this);
 		return true;
 	}
 	return false;
@@ -374,18 +374,18 @@ Real Sound::GetPlayPosition()
 	if (!IsValid())
 		return Percent;
 
-	if (!channel)
+	//if (!channel)
 		return -1;
 
 	//get length of sound in milliseconds
-	unsigned int length = system->GetLength(sound);
+	//unsigned int length = system->GetLength(sound);
 
 	//get sound position in milliseconds
 	unsigned int position;
-	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
+	//channel->getPosition(&position, FMOD_TIMEUNIT_MS);
 
-	if (length > 0)
-		Percent = (float)position / (float)length;
+	//if (length > 0)
+		//Percent = (float)position / (float)length;
 	return Percent;
 }
 
@@ -395,16 +395,17 @@ void Sound::SetPlayPosition(Real percent)
 
 	Percent = (float)percent;
 
-	if (channel)
+	//if (channel)
+	if (true)
 	{
 		if (sbs->Verbose)
 			Report("Setting play position to " + ToString(percent));
 
 		//get length of sound in milliseconds
-		unsigned int length = system->GetLength(sound);
+		//unsigned int length = system->GetLength(sound);
 
-		unsigned int position = (unsigned int)(percent * length);
-		channel->setPosition(position, FMOD_TIMEUNIT_MS);
+		//unsigned int position = (unsigned int)(percent * length);
+		//channel->setPosition(position, FMOD_TIMEUNIT_MS);
 
 		position_queued = true;
 	}
@@ -417,8 +418,8 @@ void Sound::SetDopplerLevel(Real level)
 
 	doppler_level = (float)level;
 
-	if (channel)
-		channel->set3DDopplerLevel((float)level);
+	//if (channel)
+		//channel->set3DDopplerLevel((float)level);
 }
 
 bool Sound::IsLoaded()
@@ -495,16 +496,16 @@ void Sound::Unload()
 	if (sbs->Verbose)
 		Report("Unloading");
 
-	if (sound)
-		sound->RemoveHandle(this);
+	//if (sound)
+		//sound->RemoveHandle(this);
 	sound = 0;
-	channel = 0;
+	//channel = 0;
 
 }
 
-FMOD::Channel* Sound::GetChannel()
+/*FMOD::Channel* Sound::GetChannel()
 {
 	return channel;
-}
+}*/
 
 }

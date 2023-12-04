@@ -78,13 +78,13 @@ namespace SBS {
 	class ElevatorCar;
 	class ElevatorDoor;
 	class Shaft;
-	class Camera;
+	//class Camera;
 	struct CameraState;
 	class Stairwell;
 	class Sound;
 	class SoundSystem;
 	struct SoundData;
-	class Profiler;
+	//class Profiler;
 	class Control;
 	class Trigger;
 	class Escalator;
@@ -122,7 +122,7 @@ namespace SBS {
 //SBS class
 class SBSIMPEXP SBS : public Object
 {
-	//friend class MeshObject;
+	friend class MeshObject;
 public:
 
 	Real delta;
@@ -151,7 +151,7 @@ public:
 	bool IsRunning; //is sim engine running?
 	int Floors; //number of above-ground floors including 0
 	int Basements; //number of basement floors
-	Camera *camera; //camera object
+	//Camera *camera; //camera object
 	bool IsFalling; //make user fall
 	bool InStairwell; //true if user is in a stairwell
 	bool InElevator; //true if user is in an elevator
@@ -224,7 +224,7 @@ public:
 	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
 	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
 	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
-	/*void CreateSky();
+	void CreateSky();
 	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
 	bool AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
 	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false);
@@ -310,11 +310,11 @@ public:
 	void AddModel(Model *model);
 	Ogre::Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
 	void Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	Ogre::Vector3 GetPolygonDirection(PolyArray &polygon);*/
+	Ogre::Vector3 GetPolygonDirection(PolyArray &polygon);
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
-	Real GetConfigFloat(const std::string &key, Real default_value);/*
+	Real GetConfigFloat(const std::string &key, Real default_value);
 	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
 	Ogre::Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
@@ -352,14 +352,14 @@ public:
 	void ShowSceneNodes(bool value);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
 	void ShowBoundingBoxes(bool value);
-	void ListVisibleMeshes();
+	//void ListVisibleMeshes();
 	int GetEscalatorCount();
 	void IncrementEscalatorCount();
 	void DecrementEscalatorCount();
 	int GetMovingWalkwayCount();
 	void IncrementMovingWalkwayCount();
 	void DecrementMovingWalkwayCount();
-	bool HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position);
+	//bool HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem();
 	bool IsObjectValid(Object* object, std::string type = "");
@@ -387,8 +387,8 @@ public:
 	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
 	ControllerManager* GetControllerManager();
-	void RegisterDynamicMesh(DynamicMesh *dynmesh);
-	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
+	//void RegisterDynamicMesh(DynamicMesh *dynmesh);
+	//void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
 	RevolvingDoorManager* GetRevolvingDoorManager();
 	VehicleManager* GetVehicleManager();
@@ -402,7 +402,7 @@ public:
 	MeshObject* Buildings;
 	MeshObject* External;
 	MeshObject* Landscape;
-	MeshObject* SkyBox;*/
+	MeshObject* SkyBox;
 
 	Real AmbientR, AmbientG, AmbientB, OldAmbientR, OldAmbientG, OldAmbientB; //ambient colors
 	bool TexelOverride; //used for small square-shaped controls
@@ -441,26 +441,26 @@ private:
 	std::vector<Object*> ObjectArray;
 
 	//manager objects
-	//FloorManager* floor_manager;
-	//ElevatorManager* elevator_manager;
-	//ShaftManager* shaft_manager;
-	//StairwellManager* stairwell_manager;
-	//DoorManager* door_manager;
-	//VehicleManager* vehicle_manager;
-	//ControllerManager* controller_manager;
+	FloorManager* floor_manager;
+	ElevatorManager* elevator_manager;
+	ShaftManager* shaft_manager;
+	StairwellManager* stairwell_manager;
+	DoorManager* door_manager;
+	VehicleManager* vehicle_manager;
+	ControllerManager* controller_manager;
 
 	//dynamic meshes
 	//std::vector<DynamicMesh*> dynamic_meshes;
 
 	//action array
-	//std::vector<Action*> ActionArray;
+	std::vector<Action*> ActionArray;
 
 	//private functions
 	void PrintBanner();
-	//void CheckAutoAreas();
+	void CheckAutoAreas();
 	void CalculateAverageTime();
-	//std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
-	//ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
+	std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
+	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
@@ -482,35 +482,35 @@ private:
 	std::vector<AutoArea> FloorAutoArea;
 
 	//global lights
-	//std::vector<Light*> lights;
+	std::vector<Light*> lights;
 
 	//generic sound objects
-	//std::vector<Sound*> sounds;
-	//int soundcount;
+	std::vector<Sound*> sounds;
+	int soundcount;
 
 	//texture manager
-	//TextureManager *texturemanager;
+	TextureManager *texturemanager;
 
 	//revolving door manager'
-	//RevolvingDoorManager *revolvingdoor_manager;
+	RevolvingDoorManager *revolvingdoor_manager;
 
 	//sound system
-	//SoundSystem *soundsystem;
+	SoundSystem *soundsystem;
 
 	//mesh objects
-	//std::vector<MeshObject*> meshes;
+	std::vector<MeshObject*> meshes;
 
 	//global models
-	//std::vector<Model*> ModelArray;
+	std::vector<Model*> ModelArray;
 
 	//global controls
-	//std::vector<Control*> ControlArray;
+	std::vector<Control*> ControlArray;
 
 	//global triggers
-	//std::vector<Trigger*> TriggerArray;
+	std::vector<Trigger*> TriggerArray;
 
 	//person objects
-	//std::vector<Person*> PersonArray;
+	std::vector<Person*> PersonArray;
 
 	int ObjectCount; //number of simulator objects
 
@@ -546,16 +546,16 @@ private:
 	std::vector<Key> keys;
 
 	//index of all controls used for action deletion callback
-	//std::vector<Control*> control_index;
+	std::vector<Control*> control_index;
 
 	//file listing cache
 	Ogre::StringVectorPtr filesystem_listing;
 
 	//sim engine area trigger
-	//Trigger *area_trigger;
+	Trigger *area_trigger;
 
 	//camera texture references
-	//std::vector<CameraTexture*> camtexarray;
+	std::vector<CameraTexture*> camtexarray;
 };
 
 }

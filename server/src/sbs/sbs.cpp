@@ -32,9 +32,9 @@
 //#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
-/*#include "manager.h"
-#include "camera.h"
-#include "dynamicmesh.h"
+#include "manager.h"
+//#include "camera.h"
+//#include "dynamicmesh.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -47,14 +47,14 @@
 #include "wall.h"
 #include "control.h"
 #include "trigger.h"
-#include "soundsystem.h"
+//#include "soundsystem.h"
 #include "sound.h"
 #include "model.h"
 #include "timer.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "controller.h"
 #include "callstation.h"
-#include "doorsystem.h"*/
+#include "doorsystem.h"
 #include "gitrev.h"
 //#include "buttonpanel.h"
 
@@ -135,17 +135,17 @@ SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 	running_time = 0;
 	InShaft = false;
 	DeleteColliders = false;
-	//soundcount = 0;
+	soundcount = 0;
 	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
 	FastDelete = false;
 	WallCount = 0;
 	PolygonCount = 0;
-	//SkyBox = 0;
-	//Landscape = 0;
-	//External = 0;
-	//Buildings = 0;
+	SkyBox = 0;
+	Landscape = 0;
+	External = 0;
+	Buildings = 0;
 	current_time = 0;
 	current_virtual_time = 0;
 	elapsed_time = 0;
@@ -173,14 +173,14 @@ SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Headless = false;
 
-	camera = 0;
-	//Buildings = 0;
-	//External = 0;
-	//Landscape = 0;
+	//camera = 0;
+	Buildings = 0;
+	External = 0;
+	Landscape = 0;
 	//mWorld = 0;
-	//soundsystem = 0;
-	//area_trigger = 0;
-	//texturemanager = 0;
+	soundsystem = 0;
+	area_trigger = 0;
+	texturemanager = 0;
 
 	if (UnitScale <= 0)
 		UnitScale = 1;
@@ -208,7 +208,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager) : Object(0)
 void SBS::Initialize()
 {
 	//create texture manager
-	//texturemanager = new TextureManager(this);
+	texturemanager = new TextureManager(this);
 
 	//set up physics
 	//Ogre::AxisAlignedBox box (Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
@@ -683,7 +683,6 @@ void SBS::CalculateAverageTime()
 	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
 }
 
-/*
 bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
 {
 	Wall *object = new Wall(mesh, parent, true);
@@ -2053,7 +2052,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	//if range is 3, show shaft on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show only the current floor (floor)
 
-	SBS_PROFILE("SBS::EnableFloorRange");
+	//SBS_PROFILE("SBS::EnableFloorRange");
 
 	//range must be greater than 0
 	if (range < 1)
@@ -2216,7 +2215,6 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 
 	return false;
 }
-*/
 
 void SBS::ProcessTimers()
 {
@@ -2257,7 +2255,6 @@ bool SBS::Mount(const std::string &filename, const std::string &path)
 	return true;
 }
 
-/*
 void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
 {
 	//adds an auto area that enables/disables floors
@@ -2274,10 +2271,12 @@ void SBS::CheckAutoAreas()
 {
 	//check all automatic areas
 
-	SBS_PROFILE("SBS::CheckAutoAreas");
+	//SBS_PROFILE("SBS::CheckAutoAreas");
 
-	Ogre::Vector3 position = camera->GetPosition();
-	int floor = camera->CurrentFloor;
+	//Ogre::Vector3 position = camera->GetPosition();
+	//int floor = camera->CurrentFloor;
+	Ogre::Vector3 position = Ogre::Vector3::ZERO;
+	int floor = 0;
 
 	for (size_t i = 0; i < FloorAutoArea.size(); i++)
 	{
@@ -2389,8 +2388,6 @@ void SBS::DecrementSoundCount()
 	soundcount--;
 }
 
-*/
-
 Real SBS::ToLocal(Real remote_value)
 {
 	//convert remote (OGRE) vertex positions to local (SBS) positions
@@ -2470,7 +2467,6 @@ Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value, bool rescale, bool
 		return newvalue;
 }
 
-/*
 int SBS::GetObjectCount()
 {
 	//return number of registered SBS objects
@@ -2485,7 +2481,6 @@ Object* SBS::GetObject(int number)
 	else
 		return 0;
 }
-*/
 
 int SBS::RegisterObject(Object *object)
 {
@@ -2518,7 +2513,6 @@ bool SBS::UnregisterObject(int number)
 	return false;
 }
 
-/*
 bool SBS::IsValidFloor(int floor)
 {
 	//determine if a floor is valid
@@ -2547,8 +2541,8 @@ std::string SBS::DumpState()
 	output.append(BoolToString(InShaft));
 	output.append("\n");
 	output.append("CameraFloor: ");
-	if (camera)
-		output.append(ToString(camera->CurrentFloor));
+	//if (camera)
+		//output.append(ToString(camera->CurrentFloor));
 	output.append("\n");
 	output.append("ElevatorNumber: ");
 	output.append(ToString(ElevatorNumber));
@@ -2583,26 +2577,22 @@ std::string SBS::DumpState()
 	output.append("Object Count: ");
 	output.append(ToString(ObjectCount));
 	output.append("\n");
-	if (camera)
+	/*if (camera)
 	{
 		output.append("Camera Floor: ");
 		output.append(ToString(camera->CurrentFloor));
 		output.append("\n");
 		output.append("Camera Position: " + TruncateNumber(camera->GetPosition().x, 2) + ", " + TruncateNumber(camera->GetPosition().y, 2) + ", " + TruncateNumber(camera->GetPosition().z, 2) + "\n");
-	}
+	}*/
 
 	return output;
 }
-*/
 
 bool SBS::DeleteObject(Object *object)
 {
 	//object deletion routine
 	//this should be called to delete a simulator object during runtime
 
-	return true;
-};
-/*
 	if (!object)
 		return ReportError("Invalid object");
 
@@ -2740,7 +2730,7 @@ bool SBS::DeleteObject(Object *object)
 	if (deleted == true)
 		delete object;
 
-	camera->ResetCollisions();
+	//camera->ResetCollisions();
 
 	return deleted;
 }
@@ -3062,7 +3052,6 @@ int SBS::GetPolygonCount()
 	//return total number of registered walls
 	return PolygonCount;
 }
-*/
 
 void SBS::Prepare(bool report)
 {
@@ -3101,7 +3090,6 @@ void SBS::Prepare(bool report)
 		Report("Finished prepare");
 }
 
-/*
 Light* SBS::AddLight(const std::string &name, int type)
 {
 	//add a global light
@@ -3167,7 +3155,6 @@ void SBS::AddModel(Model *model)
 
 	ModelArray.push_back(model);
 }
-*/
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
 {
@@ -3192,7 +3179,6 @@ Real SBS::GetConfigFloat(const std::string &key, Real default_value)
 	return ToFloat(result);
 }
 
-/*
 bool SBS::InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test)
 {
 	//determine if a point (test) is inside the box defines by start and end vertices
@@ -3226,9 +3212,9 @@ void SBS::ShowColliders(bool value)
 {
 	try
 	{
-		if (mWorld)
-			mWorld->setShowDebugShapes(value);
-		camera->ShowDebugShape(value);
+		//if (mWorld)
+			//mWorld->setShowDebugShapes(value);
+		//camera->ShowDebugShape(value);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -3697,7 +3683,7 @@ void SBS::ShowBoundingBoxes(bool value)
 	mSceneManager->showBoundingBoxes(value);
 }
 
-void SBS::ListVisibleMeshes()
+/*void SBS::ListVisibleMeshes()
 {
 	//list all meshes visible by the main camera
 
@@ -3722,7 +3708,7 @@ void SBS::ListVisibleMeshes()
 	}
 	Report("Total: " + ToString(count) + " meshes, " + ToString(total) + " submeshes");
 	Report("");
-}
+}*/
 
 int SBS::GetEscalatorCount()
 {
@@ -3756,7 +3742,7 @@ void SBS::DecrementMovingWalkwayCount()
 	MovingWalkwayCount--;
 }
 
-bool SBS::HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position)
+/*bool SBS::HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
@@ -3802,7 +3788,7 @@ bool SBS::HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wa
 	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
-}
+}*/
 
 void SBS::EnableRandomActivity(bool value)
 {
@@ -3947,14 +3933,15 @@ void SBS::RemovePerson(Person *person)
 
 bool SBS::AttachCamera(Ogre::Camera *camera, bool init_state)
 {
-	if (camera)
-		return this->camera->Attach(camera, init_state);
+	//if (camera)
+		//return this->camera->Attach(camera, init_state);
 	return false;
 }
 
 bool SBS::DetachCamera()
 {
-	return camera->Detach();
+	//return camera->Detach();
+	return false;
 }
 
 std::string SBS::ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number)
@@ -4099,9 +4086,8 @@ void SBS::ResetState()
 	elevator_manager->EnableAll(false);
 
 	//reset camera state
-	camera->ResetState();
+	//camera->ResetState();
 }
-*/
 
 Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)
 {
@@ -4131,7 +4117,6 @@ Ogre::Quaternion SBS::FromGlobal(const Ogre::Quaternion &orientation)
 	return (GetOrientation().Inverse() * orientation);
 }
 
-/*
 Model* SBS::GetModel(std::string name)
 {
 	//get a model by name
@@ -4147,7 +4132,7 @@ Model* SBS::GetModel(std::string name)
 	return 0;
 }
 
-void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
+/*void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//register a dynamic mesh with the system
 
@@ -4166,7 +4151,7 @@ void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
 			return;
 		}
 	}
-}
+}*/
 
 SoundSystem* SBS::GetSoundSystem()
 {
@@ -4260,7 +4245,5 @@ CameraTexture* SBS::GetCameraTexture(int number)
 		return camtexarray[number];
 	return 0;
 }
-
-*/
 
 }

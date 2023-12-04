@@ -24,7 +24,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
-#include "dynamicmesh.h"
+//#include "dynamicmesh.h"
 #include "mesh.h"
 #include "control.h"
 #include "sound.h"
@@ -32,7 +32,7 @@
 #include "model.h"
 #include "texture.h"
 #include "light.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "cameratexture.h"
 #include "stairs.h"
 
@@ -66,7 +66,7 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->GetBase(), CenterZ);
 
-	dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
+	//dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -74,7 +74,7 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 	}
 
 	//create a dynamic mesh for doors
-	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
+	//DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 
 	Report("created at " + TruncateNumber(CenterX, 4) + ", " + TruncateNumber(CenterZ, 4));
 
@@ -91,14 +91,14 @@ Stairwell::~Stairwell()
 		Levels[i] = 0;
 	}
 
-	if (DoorWrapper)
-		delete DoorWrapper;
-	DoorWrapper = 0;
+	//if (DoorWrapper)
+		//delete DoorWrapper;
+	//DoorWrapper = 0;
 
 	//delete dynamic mesh
-	if (dynamic_mesh)
-		delete dynamic_mesh;
-	dynamic_mesh = 0;
+	//if (dynamic_mesh)
+		//delete dynamic_mesh;
+	//dynamic_mesh = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
@@ -122,8 +122,8 @@ void Stairwell::SetShowFull(int value)
 	//force the combining of dynamic meshes, since they'll be fully shown
 	if (value == 2)
 	{
-		dynamic_mesh->force_combine = true;
-		DoorWrapper->force_combine = true;
+		//dynamic_mesh->force_combine = true;
+		//DoorWrapper->force_combine = true;
 	}
 }
 
@@ -148,8 +148,8 @@ void Stairwell::EnableWhole(bool value, bool force)
 	}
 
 	//enable/disable dynamic meshes
-	dynamic_mesh->Enabled(value);
-	DoorWrapper->Enabled(value);
+	//dynamic_mesh->Enabled(value);
+	//DoorWrapper->Enabled(value);
 
 	IsEnabled = value;
 }
@@ -273,7 +273,7 @@ void Stairwell::EnableRange(int floor, int range, bool value)
 	if (!sbs->GetFloor(floor))
 		return;
 
-	SBS_PROFILE("Stairwell::EnableRange");
+	//SBS_PROFILE("Stairwell::EnableRange");
 
 	//range must be greater than 0
 	if (range < 1)
@@ -394,7 +394,7 @@ void Stairwell::Check(Ogre::Vector3 position, int current_floor, int previous_fl
 {
 	//check to see if user (camera) is in the stairwell
 
-	SBS_PROFILE("Stairwell::Check");
+	//SBS_PROFILE("Stairwell::Check");
 
 	if (IsInside(position) == true)
 	{
@@ -484,15 +484,15 @@ void Stairwell::Loop()
 {
 	//stairwell runloop
 
-	SBS_PROFILE("Stairwell::Loop");
+	//SBS_PROFILE("Stairwell::Loop");
 
 	LoopChildren();
 }
 
-DynamicMesh* Stairwell::GetDynamicMesh()
+/*DynamicMesh* Stairwell::GetDynamicMesh()
 {
 	return dynamic_mesh;
-}
+}*/
 
 Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 {
@@ -508,7 +508,8 @@ Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 	SetName(name);
 
 	//Create level mesh
-	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
+	//mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
+	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum));
 	SetPositionY(sbs->GetFloor(number)->GetBase());
 
 	EnableLoop(true);
@@ -748,7 +749,7 @@ void Stairwell::Level::Enabled(bool value)
 {
 	//turns stairwell on/off for a specific floor
 
-	SBS_PROFILE("Stairwell::Level::Enabled");
+	//SBS_PROFILE("Stairwell::Level::Enabled");
 	if (IsEnabled() != value)
 	{
 		mesh->Enabled(value);
@@ -843,7 +844,8 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 	if (name == "")
 		name = "Door " + num;
 
-	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
 	DoorArray.push_back(door);
 
@@ -860,7 +862,8 @@ Door* Stairwell::Level::CreateDoor(std::string name, const std::string &open_sou
 	if (name == "")
 		name = "Door " + num;
 
-	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	DoorArray.push_back(door);
 	return door;
 }
@@ -1090,7 +1093,7 @@ void Stairwell::Level::Loop()
 {
 	//level runloop
 
-	SBS_PROFILE("Stairwell::Level::Loop");
+	//SBS_PROFILE("Stairwell::Level::Loop");
 
 	LoopChildren();
 }

@@ -29,7 +29,7 @@
 #include "stairs.h"
 #include "door.h"
 #include "revolvingdoor.h"
-#include "dynamicmesh.h"
+//#include "dynamicmesh.h"
 #include "vehicle.h"
 #include "controller.h"
 #include "manager.h"
@@ -43,9 +43,9 @@ FloorManager::FloorManager(Object* parent) : Object(parent)
 
 	get_result = 0;
 	get_number = 0;
-	floors = new DynamicMesh(this, GetSceneNode(), "Floor Container");
-	interfloors = new DynamicMesh(this, GetSceneNode(), "Interfloor Container");
-	columnframes = new DynamicMesh(this, GetSceneNode(), "Columnframe Container");
+	//floors = new DynamicMesh(this, GetSceneNode(), "Floor Container");
+	//interfloors = new DynamicMesh(this, GetSceneNode(), "Interfloor Container");
+	//columnframes = new DynamicMesh(this, GetSceneNode(), "Columnframe Container");
 	EnableLoop(true);
 }
 
@@ -63,7 +63,7 @@ FloorManager::~FloorManager()
 	}
 
 	//delete dynamic meshes
-	if (floors)
+	/*if (floors)
 		delete floors;
 	floors = 0;
 	if (interfloors)
@@ -71,7 +71,7 @@ FloorManager::~FloorManager()
 	interfloors = 0;
 	if (columnframes)
 		delete columnframes;
-	columnframes = 0;
+	columnframes = 0;*/
 }
 
 Floor* FloorManager::Create(int number)
@@ -231,9 +231,9 @@ void FloorManager::EnableAll(bool value)
 		Array[i].object->Enabled(value);
 
 	//enable/disable dynamic meshes
-	floors->Enabled(value);
-	interfloors->Enabled(value);
-	columnframes->Enabled(value);
+	//floors->Enabled(value);
+	//interfloors->Enabled(value);
+	//columnframes->Enabled(value);
 }
 
 void FloorManager::Loop()
@@ -687,8 +687,8 @@ DoorManager::DoorManager(Object* parent) : Object(parent)
 	SetValues("DoorManager", "Door Manager", true);
 
 	//create a dynamic mesh for doors
-	wrapper = new DynamicMesh(this, GetSceneNode(), "Door Container", 0, true);
-	wrapper->force_combine = true;
+	//wrapper = new DynamicMesh(this, GetSceneNode(), "Door Container", 0, true);
+	//wrapper->force_combine = true;
 	EnableLoop(true);
 }
 
@@ -705,9 +705,9 @@ DoorManager::~DoorManager()
 		Array[i] = 0;
 	}
 
-	if (wrapper)
-		delete wrapper;
-	wrapper = 0;
+	//if (wrapper)
+		//delete wrapper;
+	//wrapper = 0;
 }
 
 Door* DoorManager::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
@@ -716,7 +716,8 @@ Door* DoorManager::AddDoor(std::string name, const std::string &open_sound, cons
 	if (name == "")
 		name = "Door " + ToString(number);
 
-	Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
 	Array.push_back(door);
 	return door;
@@ -728,7 +729,8 @@ Door* DoorManager::CreateDoor(std::string name, const std::string &open_sound, c
 	if (name == "")
 		name = "Door " + ToString(number);
 
-	Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	Array.push_back(door);
 	return door;
 }
@@ -782,8 +784,8 @@ RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Object(parent)
 	SetValues("RevolvingDoorManager", "Revolving Door Manager", true);
 
 	//create a dynamic mesh for doors
-	wrapper = new DynamicMesh(this, GetSceneNode(), "Revolving Door Container", 0, true);
-	wrapper->force_combine = true;
+	//wrapper = new DynamicMesh(this, GetSceneNode(), "Revolving Door Container", 0, true);
+	//wrapper->force_combine = true;
 	EnableLoop(true);
 }
 
@@ -800,9 +802,9 @@ RevolvingDoorManager::~RevolvingDoorManager()
 		Array[i] = 0;
 	}
 
-	if (wrapper)
-		delete wrapper;
-	wrapper = 0;
+	//if (wrapper)
+		//delete wrapper;
+	//wrapper = 0;
 }
 
 RevolvingDoor* RevolvingDoorManager::AddDoor(std::string name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th)
@@ -811,7 +813,8 @@ RevolvingDoor* RevolvingDoorManager::AddDoor(std::string name, bool run, const s
 	if (name == "")
 		name = "RevolvingDoor " + ToString(number);
 
-	RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
+	//RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
+	RevolvingDoor* door = new RevolvingDoor(this, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
 	Array.push_back(door);
 	return door;
 }

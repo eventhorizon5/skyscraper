@@ -23,13 +23,13 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "camera.h"
+//#include "camera.h"
 #include "mesh.h"
 #include "floor.h"
 #include "sound.h"
 #include "texture.h"
-#include "profiler.h"
-#include "dynamicmesh.h"
+//#include "profiler.h"
+//#include "dynamicmesh.h"
 #include "step.h"
 #include "escalator.h"
 
@@ -163,7 +163,7 @@ void Escalator::Loop()
 {
 	//run loop
 
-	SBS_PROFILE("Escalator::Loop");
+	//SBS_PROFILE("Escalator::Loop");
 
 	if (!IsEnabled() || Run == 0)
 	{
@@ -315,7 +315,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 
 void Escalator::MoveSteps()
 {
-	if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
+	//if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
 		return;
 
 	for (size_t i = 0; i < Steps.size(); i++)

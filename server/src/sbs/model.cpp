@@ -29,8 +29,8 @@
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
-#include "camera.h"
-#include "profiler.h"
+//#include "camera.h"
+//#include "profiler.h"
 #include "model.h"
 
 namespace SBS {
@@ -152,7 +152,7 @@ void Model::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
-	SBS_PROFILE("Model::Loop");
+	//SBS_PROFILE("Model::Loop");
 
 	Floor *floor = GetParent()->ConvertTo<Floor>();
 	Elevator *elevator = GetParent()->ConvertTo<Elevator>();
@@ -217,7 +217,7 @@ void Model::PickUp()
 
 	//pick-up model (make model a child of the camera)
 	RemoveFromParent();
-	ChangeParent(sbs->camera);
+	//ChangeParent(sbs->camera);
 }
 
 void Model::Drop()
@@ -263,7 +263,8 @@ void Model::Drop()
 
 bool Model::IsPickedUp()
 {
-	return (GetParent() == sbs->camera);
+	//return (GetParent() == sbs->camera);
+	return false;
 }
 
 void Model::OnInit()

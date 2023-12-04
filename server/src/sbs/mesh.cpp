@@ -24,21 +24,21 @@
 #include <OgreMesh.h>
 #include <OgreResourceGroupManager.h>
 #include <OgreMaterialManager.h>
-#include <OgreBulletDynamicsRigidBody.h>
+//#include <OgreBulletDynamicsRigidBody.h>
 #include <OgreMath.h>
 #include <OgreAxisAlignedBox.h>
-#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
-#include <Shapes/OgreBulletCollisionsBoxShape.h>
+//#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
+//#include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <math.h>
 #include "globals.h"
 #include "sbs.h"
-#include "camera.h"
+//#include "camera.h"
 #include "polygon.h"
 #include "wall.h"
 #include "texture.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "scenenode.h"
-#include "dynamicmesh.h"
+//#include "dynamicmesh.h"
 #include "mesh.h"
 
 //this file includes function implementations of the low-level SBS geometry and mesh code
@@ -525,8 +525,8 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	SetValues("Mesh", name, true);
 
 	enabled = true;
-	mBody = 0;
-	mShape = 0;
+	//mBody = 0;
+	//mShape = 0;
 	prepared = false;
 	is_physical = enable_physics;
 	this->restitution = restitution;
@@ -551,16 +551,16 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
 
-	if (wrapper == 0)
+	/*if (wrapper == 0)
 	{
 		wrapper_selfcreate = true;
 		MeshWrapper = new DynamicMesh(this, GetSceneNode(), name, max_render_distance, dynamic_buffers);
 	}
 	else
-		MeshWrapper = wrapper;
+		MeshWrapper = wrapper;*/
 
 	//add this mesh object as a client to the dynamic mesh wrapper
-	MeshWrapper->AddClient(this);
+	//MeshWrapper->AddClient(this);
 
 	//load mesh from a file if specified
 	if (filename != "")
@@ -617,18 +617,18 @@ MeshObject::~MeshObject()
 		delete collider_node;
 	collider_node = 0;
 
-	MeshWrapper->DetachClient(this);
+	//MeshWrapper->DetachClient(this);
 
 	if (sbs->FastDelete == false)
 	{
-		MeshWrapper->RemoveClient(this);
+		//MeshWrapper->RemoveClient(this);
 		sbs->DeleteMeshHandle(this);
 	}
 
 	//delete dynamic mesh wrapper if needed
-	if (wrapper_selfcreate == true)
-		delete MeshWrapper;
-	MeshWrapper = 0;
+	//if (wrapper_selfcreate == true)
+		//delete MeshWrapper;
+	//MeshWrapper = 0;
 
 	if (Bounds)
 		delete Bounds;
@@ -637,7 +637,7 @@ MeshObject::~MeshObject()
 
 void MeshObject::GetBounds()
 {
-	*Bounds = MeshWrapper->GetBounds(this);
+	//*Bounds = MeshWrapper->GetBounds(this);
 }
 
 void MeshObject::Enabled(bool value)
@@ -646,7 +646,7 @@ void MeshObject::Enabled(bool value)
 
 	if (value == enabled)
 	{
-		if (remove_on_disable == false && sbs->camera->IsActive() == false && value == false)
+		if (remove_on_disable == false /*&& sbs->camera->IsActive() == false*/ && value == false)
 		{
 			//if camera is detached from this engine, and mesh is disabled, detach a persistent collider
 			remove_on_disable = true;
@@ -656,9 +656,9 @@ void MeshObject::Enabled(bool value)
 		return;
 	}
 
-	SBS_PROFILE("MeshObject::Enable");
+	//SBS_PROFILE("MeshObject::Enable");
 
-	MeshWrapper->Enabled(value, this);
+	//MeshWrapper->Enabled(value, this);
 
 	EnableCollider(value);
 
@@ -669,7 +669,7 @@ void MeshObject::EnableCollider(bool value)
 {
 	//enable or disable collision detection
 
-	if (!mBody)
+	/*if (!mBody)
 		return;
 
 	SBS_PROFILE("MeshObject::EnableCollider");
@@ -691,7 +691,7 @@ void MeshObject::EnableCollider(bool value)
 		else
 			mBody->addToWorld();
 	}
-	sbs->camera->ResetCollisions();
+	sbs->camera->ResetCollisions();*/
 }
 
 Wall* MeshObject::CreateWallObject(const std::string &name)
@@ -724,7 +724,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	SBS_PROFILE("MeshObject::ChangeTexture");
@@ -764,7 +764,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 			if (poly->material == old)
 				poly->material = material;
 		}
-	}
+	}*/
 
 	return true;
 }
@@ -785,7 +785,7 @@ Wall* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vect
 	//positions need to be in remote (Ogre) positioning
 	//if wall_number is 0 or greater, this will only check that specified wall
 
-	SBS_PROFILE("MeshObject::FindWallIntersect");
+	/*SBS_PROFILE("MeshObject::FindWallIntersect");
 	Real pr, best_pr = 2000000000.;
 	Real dist, best_dist = 2000000000.;
 	int best_i = -1;
@@ -825,7 +825,7 @@ Wall* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vect
 
 	if (best_i >= 0)
 		return Walls[best_i];
-	else
+	else*/
 		return 0;
 }
 
@@ -1148,7 +1148,7 @@ void MeshObject::Prepare(bool force)
 	}
 
 	//update dynamic mesh
-	MeshWrapper->NeedsUpdate(this);
+	//MeshWrapper->NeedsUpdate(this);
 
 	prepared = true;
 }
@@ -1374,14 +1374,14 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 void MeshObject::EnableDebugView(bool value)
 {
 	//enable or disable debug view of mesh
-	MeshWrapper->EnableDebugView(value, this);
+	//MeshWrapper->EnableDebugView(value, this);
 }
 
 void MeshObject::CreateCollider()
 {
 	//set up triangle collider based on raw SBS mesh geometry
 
-	SBS_PROFILE("MeshObject::CreateCollider");
+	/*SBS_PROFILE("MeshObject::CreateCollider");
 
 	if (create_collider == false)
 		return;
@@ -1442,9 +1442,9 @@ void MeshObject::CreateCollider()
 			collider_node = GetSceneNode()->CreateChild(GetName() + " collider");
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
-		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
-		mShape = shape;
+		//mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		//mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
+		//mShape = shape;
 
 		if (sbs->DeleteColliders == true)
 		{
@@ -1465,14 +1465,14 @@ void MeshObject::CreateCollider()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 void MeshObject::DeleteCollider()
 {
 	//delete mesh collider
 
-	SBS_PROFILE("MeshObject::DeleteCollider");
+	/*SBS_PROFILE("MeshObject::DeleteCollider");
 
 	//exit if collider doesn't exist
 	if (!mBody)
@@ -1484,14 +1484,14 @@ void MeshObject::DeleteCollider()
 	//delete collider object
 	delete mBody;
 	mBody = 0;
-	mShape = 0;
+	mShape = 0;*/
 }
 
 void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices)
 {
 	//set up triangle collider based on loaded model geometry
 
-	if (create_collider == false)
+	/*if (create_collider == false)
 		return;
 
 	//exit of collider already exists
@@ -1520,21 +1520,21 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 			collider_node = GetSceneNode()->CreateChild(GetName() + " collider");
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
-		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
-		mShape = shape;
+		//mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		//mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
+		//mShape = shape;
 	}
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating model collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 void MeshObject::CreateBoxCollider()
 {
 	//set up a box collider for full extents of a mesh
 
-	if (create_collider == false)
+	/*if (create_collider == false)
 		return;
 
 	//exit of collider already exists
@@ -1570,7 +1570,7 @@ void MeshObject::CreateBoxCollider()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating box collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 Real MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, Real max_distance)
@@ -1579,7 +1579,7 @@ Real MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direc
 	//return -1 if no hit
 
 	//cast a ray from the camera position downwards
-	SBS_PROFILE("MeshObject::HitBeam");
+	//SBS_PROFILE("MeshObject::HitBeam");
 
 	Ogre::Vector3 position = sbs->ToRemote(origin - GetPosition());
 	Ogre::Ray ray (position, sbs->ToRemote(direction, false));
@@ -1881,11 +1881,11 @@ void MeshObject::OnMove(bool parent)
 	if (collider_node)
 		collider_node->Update();
 
-	if (mBody)
-		mBody->updateTransform(true, false, false);
+	//if (mBody)
+		//mBody->updateTransform(true, false, false);
 
-	if (UsingDynamicBuffers() == true)
-		MeshWrapper->UpdateVertices(this);
+	//if (UsingDynamicBuffers() == true)
+		//MeshWrapper->UpdateVertices(this);
 }
 
 void MeshObject::OnRotate(bool parent)
@@ -1893,7 +1893,7 @@ void MeshObject::OnRotate(bool parent)
 	if (collider_node)
 		collider_node->Update();
 
-	if (mBody)
+	/*if (mBody)
 	{
 		if (parent == true)
 			OnMove(parent); //update position if parent object has been rotated
@@ -1902,7 +1902,7 @@ void MeshObject::OnRotate(bool parent)
 	}
 
 	if (UsingDynamicBuffers() == true)
-		MeshWrapper->UpdateVertices(this);
+		MeshWrapper->UpdateVertices(this);*/
 }
 
 int MeshObject::GetSubmeshCount()
@@ -1918,8 +1918,8 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 		return false;
 
 	//if beyond the max render distance
-	if (MeshWrapper->IsVisible(this) == false)
-		return false;
+	//if (MeshWrapper->IsVisible(this) == false)
+		//return false;
 
 	if (GetSubmeshCount() == 0)
 		return false;
@@ -1986,7 +1986,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 {
 	//load mesh object from a file
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	std::string filename1 = "data/";
@@ -2069,7 +2069,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 		}
 	}
 
-	model_loaded = true;
+	model_loaded = true;*/
 	return true;
 }
 
@@ -2107,14 +2107,15 @@ unsigned int MeshObject::GetTriangleCount(int submesh)
 
 bool MeshObject::UsingDynamicBuffers()
 {
-	return MeshWrapper->UseDynamicBuffers();
+	return false;
+	//return MeshWrapper->UseDynamicBuffers();
 }
 
 void MeshObject::ChangeHeight(Real newheight)
 {
 	//change height of all walls associated with this mesh object
 
-	SBS_PROFILE("MeshObject::ChangeHeight");
+	//SBS_PROFILE("MeshObject::ChangeHeight");
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
@@ -2126,7 +2127,7 @@ void MeshObject::EnableShadows(bool value)
 {
 	//enable shadows
 
-	MeshWrapper->EnableShadows(value);
+	//MeshWrapper->EnableShadows(value);
 }
 
 }

@@ -37,10 +37,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "directional.h"
 #include "floorindicator.h"
 #include "shaft.h"
-#include "camera.h"
-#include "dynamicmesh.h"
+//#include "camera.h"
+//#include "dynamicmesh.h"
 #include "texture.h"
-#include "profiler.h"
+//#include "profiler.h"
 #include "cameratexture.h"
 #include "elevatorcar.h"
 
@@ -610,7 +610,7 @@ void ElevatorCar::Alarm()
 			alarm->Play();
 		}
 	}
-	else if (AlarmActive == true && sbs->camera->MouseDown() == false)
+	else if (AlarmActive == true/* && sbs->camera->MouseDown() == false*/)
 	{
 		//stop alarm
 		AlarmActive = false;
@@ -651,7 +651,7 @@ void ElevatorCar::Loop()
 {
 	//elevator car monitor loop
 
-	SBS_PROFILE("ElevatorCar::Loop");
+	//SBS_PROFILE("ElevatorCar::Loop");
 
 	ControlPressActive = false;
 
@@ -1153,7 +1153,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 				ReportError("Invalid door " + ToString(i));
 		}
 	}
-	else if (doorhold_direction == 1 && sbs->camera->MouseDown() == false)
+	else if (doorhold_direction == 1/* && sbs->camera->MouseDown() == false*/)
 	{
 		//require button to be held down to open doors
 
@@ -1196,7 +1196,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 	{
 		//hold doors while button is held
 
-		if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
+		/*if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
 		{
 			if (sbs->camera->MouseDown() == true)
 			{
@@ -1216,16 +1216,16 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 						ReportError("Invalid door " + ToString(i));
 				}
 			}
-		}
+		}*/
 
-		if (sbs->camera->MouseDown() == false)
+		/*if (sbs->camera->MouseDown() == false)
 		{
 			//reset persistent values
 			doorhold_direction = 0;
 			doorhold_whichdoors = 0;
 			doorhold_floor = 0;
 			doorhold_manual = false;
-		}
+		}*/
 	}
 
 	return true;
@@ -1270,7 +1270,7 @@ void ElevatorCar::CloseDoors(int number, int whichdoors, int floor, bool manual,
 			doorhold_manual = manual;
 		}
 	}
-	else if (doorhold_direction == -1 && sbs->camera->MouseDown() == false)
+	else if (doorhold_direction == -1/* && sbs->camera->MouseDown() == false*/)
 	{
 		bool openstate = false;
 		for (int i = start; i <= end; i++)
@@ -1384,7 +1384,7 @@ void ElevatorCar::ShaftDoorsEnabled(int number, int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
-	SBS_PROFILE("Elevator::ShaftDoorsEnabled");
+	//SBS_PROFILE("Elevator::ShaftDoorsEnabled");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1408,7 +1408,7 @@ void ElevatorCar::ShaftDoorsEnabledRange(int number, int floor, int range)
 	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show door on only the current floor (floor)
 
-	SBS_PROFILE("Elevator::ShaftDoorsEnabledRange");
+	//SBS_PROFILE("Elevator::ShaftDoorsEnabledRange");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1430,7 +1430,7 @@ bool ElevatorCar::AreDoorsOpen(int number)
 {
 	//returns the internal door state
 
-	SBS_PROFILE("Elevator::AreDoorsOpen");
+	//SBS_PROFILE("Elevator::AreDoorsOpen");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1456,7 +1456,7 @@ bool ElevatorCar::AreShaftDoorsOpen(int number, int floor)
 {
 	//returns the internal shaft door state
 
-	SBS_PROFILE("Elevator::AreShaftDoorsOpen");
+	//SBS_PROFILE("Elevator::AreShaftDoorsOpen");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1497,7 +1497,7 @@ void ElevatorCar::Chime(int number, int floor, bool direction, bool early)
 {
 	//play chime sound on specified floor
 
-	SBS_PROFILE("Elevator::Chime");
+	//SBS_PROFILE("Elevator::Chime");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1615,7 +1615,7 @@ void ElevatorCar::EnableDoors(bool value)
 {
 	//enable/disable all doors
 
-	SBS_PROFILE("Elevator::EnableDoors");
+	//SBS_PROFILE("Elevator::EnableDoors");
 	if (sbs->Verbose)
 	{
 		if (value == true)
@@ -1631,7 +1631,7 @@ void ElevatorCar::EnableDoors(bool value)
 			door->Enabled(value);
 	}
 
-	parent->DoorContainer->Enabled(value);
+	//parent->DoorContainer->Enabled(value);
 }
 
 void ElevatorCar::SetShaftDoors(int number, Real thickness, Real CenterX, Real CenterZ)
@@ -1952,7 +1952,8 @@ Door* ElevatorCar::AddDoor(std::string name, const std::string &open_sound, cons
 	if (name == "")
 		name = "Door " + number;
 
-	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
 	StdDoorArray.push_back(door);
 	return door;
@@ -1967,7 +1968,8 @@ Door* ElevatorCar::CreateDoor(std::string name, const std::string &open_sound, c
 	if (name == "")
 		name = "Door " + number;
 
-	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
+	//Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
+	Door* door = new Door(this, name, open_sound, close_sound, rotate);
 	StdDoorArray.push_back(door);
 	return door;
 }

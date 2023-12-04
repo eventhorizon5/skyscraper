@@ -70,12 +70,12 @@ public:
 	void OnInit();
 	void Check(Ogre::Vector3 position, int current_floor);
 	void Loop();
-	DynamicMesh* GetShaftDoorContainer() { return ShaftDoorContainer; }
+	//DynamicMesh* GetShaftDoorContainer() { return ShaftDoorContainer; }
 	void SetShowFull(bool value);
 	bool GetShowFull() { return ShowFullShaft; }
 	Level* GetLevel(int floor);
-	DynamicMesh* GetDynamicMesh();
-	DynamicMesh* GetDoorWrapper();
+	//DynamicMesh* GetDynamicMesh();
+	//DynamicMesh* GetDoorWrapper();
 
 	class SBSIMPEXP Level : public Object
 	{
@@ -146,10 +146,10 @@ private:
 	bool ShowFullShaft; //if true, always show full shaft instead of only a selected range
 
 	//Doors
-	DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
+	//DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
 
 	//mesh container for shaft doors
-	DynamicMesh *ShaftDoorContainer; //shaft door dynamic mesh container
+	//DynamicMesh *ShaftDoorContainer; //shaft door dynamic mesh container
 
 	//cache objects for IsInShaft()
 	Ogre::Vector3 lastposition;

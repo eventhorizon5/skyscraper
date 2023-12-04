@@ -28,7 +28,7 @@
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
-#include "camera.h"
+//#include "camera.h"
 #include "callstation.h"
 #include "sound.h"
 #include "mesh.h"
@@ -271,8 +271,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		CallStation *station = elevator->GetPrimaryCallStation();
 
 		//if called from a control and mouse button is held down, notify elevator
-		if (caller_type == "Control" && sbs->camera->MouseDown() == true)
-			car->ControlPressActive = true;
+		//if (caller_type == "Control" && sbs->camera->MouseDown() == true)
+			//car->ControlPressActive = true;
 
 		if (command_name == "off")
 			return true;
@@ -941,7 +941,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	{
 		if ((int)command_parameters.size() == 3)
 		{
-			sbs->camera->Teleport(ToFloat(command_parameters[0]), ToFloat(command_parameters[1]), ToFloat(command_parameters[2]));
+			//sbs->camera->Teleport(ToFloat(command_parameters[0]), ToFloat(command_parameters[1]), ToFloat(command_parameters[2]));
 			return true;
 		}
 		return false;
@@ -951,7 +951,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	{
 		if ((int)command_parameters.size() == 1)
 		{
-			sbs->camera->GotoFloor(ToInt(command_parameters[0]));
+			//sbs->camera->GotoFloor(ToInt(command_parameters[0]));
 			return true;
 		}
 		return false;
