@@ -124,6 +124,9 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	if (sbs->Headless == true)
 		return true;
 
+	Report("Texture loading disabled...");
+	return true;
+
 	//first verify the filename
 	std::string filename2 = sbs->VerifyFile(filename);
 
@@ -160,6 +163,9 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 {
 	if (sbs->Headless == true)
 		return true;
+
+	Report("Texture loading disabled...");
+	return true;
 
 	std::vector<std::string> filenames2;
 
@@ -225,6 +231,9 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	if (sbs->Headless == true)
 		return true;
 
+	Report("Texture loading disabled...");
+	return true;
+
 	//first verify the filenames
 	std::string filename2 = sbs->VerifyFile(filename);
 	std::string specular_filename2 = sbs->VerifyFile(specular_filename);
@@ -286,6 +295,9 @@ bool TextureManager::LoadMaterial(const std::string &materialname, const std::st
 {
 	if (sbs->Headless == true)
 		return true;
+
+	Report("Texture loading disabled...");
+	return true;
 
 	//set verbosity level
 	Ogre::MaterialPtr mMat;
@@ -379,6 +391,9 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	if (sbs->Headless == true)
 		return true;
 
+	Report("Texture loading disabled...");
+	return true;
+
 	Ogre::ColourValue alpha_color = Ogre::ColourValue::Black;
 	int mipmaps = -1;
 	bool use_alpha_color = false;
@@ -455,6 +470,9 @@ bool TextureManager::RotateTexture(const std::string &name, Real angle)
 	if (sbs->Headless == true)
 		return true;
 
+	Report("Texture loading disabled...");
+	return true;
+
 	bool result;
 	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
@@ -486,6 +504,9 @@ bool TextureManager::RotateAnimTexture(const std::string &name, Real speed)
 
 	if (sbs->Headless == true)
 		return true;
+
+	Report("Texture loading disabled...");
+	return true;
 
 	bool result;
 	std::string texname = TrimStringCopy(name);
@@ -519,6 +540,9 @@ bool TextureManager::ScrollTexture(const std::string &name, Real x_offset, Real 
 	if (sbs->Headless == true)
 		return true;
 
+	Report("Texture loading disabled...");
+	return true;
+
 	bool result;
 	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
@@ -550,6 +574,9 @@ bool TextureManager::ScrollAnimTexture(const std::string &name, Real x_speed, Re
 
 	if (sbs->Headless == true)
 		return true;
+
+	Report("Texture loading disabled...");
+	return true;
 
 	bool result;
 	std::string texname = TrimStringCopy(name);
@@ -583,6 +610,9 @@ bool TextureManager::ScaleTexture(const std::string &name, Real x_scale, Real y_
 	if (sbs->Headless == true)
 		return true;
 
+	Report("Texture loading disabled...");
+	return true;
+
 	bool result;
 	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
@@ -614,6 +644,9 @@ bool TextureManager::TransformTexture(const std::string &name, const std::string
 
 	if (sbs->Headless == true)
 		return true;
+
+	Report("Texture loading disabled...");
+	return true;
 
 	bool result;
 	std::string texname = TrimStringCopy(name);
@@ -689,6 +722,9 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	if (sbs->Headless == true)
 		return true;
+
+	Report("Texture loading disabled...");
+	return true;
 
 	std::string hAlign = h_align;
 	std::string vAlign = v_align;
@@ -843,6 +879,9 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 
 	if (sbs->Headless == true)
 		return true;
+
+	Report("Texture loading disabled...");
+	return true;
 
 	std::string Name = name;
 	std::string Origname = orig_texture;
@@ -1794,6 +1833,9 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 
 	if (sbs->Headless == true)
 		return true;
+
+	Report("Texture loading disabled...");
+	return true;
 
 	using namespace Ogre;
 
