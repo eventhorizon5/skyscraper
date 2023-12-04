@@ -22,15 +22,14 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
+#include "server.h"
 #include "vehicle.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::VehicleSection::VehicleSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -312,7 +311,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished vehicle");
+		server->Report("Finished vehicle");
 		return sNextLine;
 	}
 
@@ -331,7 +330,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			config->Context = "None";
 			config->RangeL = 0;
 			config->RangeH = 0;
-			engine->Report("Finished vehicles");
+			server->Report("Finished vehicles");
 			return sNextLine;
 		}
 	}

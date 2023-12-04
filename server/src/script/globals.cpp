@@ -22,15 +22,14 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
-#include "camera.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "server.h"
+//#include "camera.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::GlobalsSection::GlobalsSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -80,17 +79,17 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 10) == "dynamicsky")
 	{
-		engine->GetFrontend()->SkyName = value;
+		//server->GetFrontend()->SkyName = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "collisions")
 	{
-		Simcore->camera->EnableCollisions(ToBool(value));
+		//Simcore->camera->EnableCollisions(ToBool(value));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "gravity")
 	{
-		Simcore->camera->EnableGravity(ToBool(value));
+		//Simcore->camera->EnableGravity(ToBool(value));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "camerafloor")
@@ -99,7 +98,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(value, data))
 			return ScriptError("Invalid floor");
 
-		Simcore->camera->StartFloor = data;
+		//Simcore->camera->StartFloor = data;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "cameraposition")
@@ -112,8 +111,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, z))
 			return ScriptError("Invalid position");
 
-		Simcore->camera->StartPositionX  = x;
-		Simcore->camera->StartPositionZ  = z;
+		//Simcore->camera->StartPositionX  = x;
+		//Simcore->camera->StartPositionZ  = z;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "cameradirection")
@@ -130,7 +129,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, y) || !IsNumeric(str3, z))
 			return ScriptError("Invalid direction");
 
-		Simcore->camera->SetStartDirection(Ogre::Vector3(x, y, z));
+		//Simcore->camera->SetStartDirection(Ogre::Vector3(x, y, z));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "camerarotation")
@@ -147,7 +146,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, y) || !IsNumeric(str3, z))
 			return ScriptError("Invalid direction");
 
-		Simcore->camera->SetStartRotation(Ogre::Vector3(x, y, z));
+		//Simcore->camera->SetStartRotation(Ogre::Vector3(x, y, z));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "interfloorontop")
@@ -166,21 +165,21 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(str1, latitude) || !IsNumeric(str2, longitude))
 			return ScriptError("Invalid latitude");
 
-		engine->GetFrontend()->SetLocation(latitude, longitude);
+		//server->GetFrontend()->SetLocation(latitude, longitude);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "datetime")
 	{
-		if (value == "now")
-			engine->GetFrontend()->SetDateTimeNow();
+		/*if (value == "now")
+			server->GetFrontend()->SetDateTimeNow();
 		else
 		{
 			double data;
 			if (!IsNumeric(value, data))
 				return ScriptError("Invalid Julian date/time");
 
-			engine->GetFrontend()->SetDateTime(data);
-		}
+			server->GetFrontend()->SetDateTime(data);
+		}*/
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "timescale")
@@ -189,7 +188,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(value, data))
 			return ScriptError("Invalid time scale value");
 
-		engine->GetFrontend()->SkyMult = data;
+		//server->GetFrontend()->SkyMult = data;
 	}
 	if (linecheck.substr(0, 8) == "position")
 	{
@@ -209,10 +208,10 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		position.y = ToFloat(tempdata[1]);
 		position.z = ToFloat(tempdata[2]);
 
-		if (engine->Moved == false)
+		if (server->Moved == false)
 		{
-			engine->Move(position, true);
-			engine->Moved = true;
+			server->Move(position, true);
+			server->Moved = true;
 		}
 		return sNextLine;
 	}
@@ -256,7 +255,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished globals");
+		server->Report("Finished globals");
 		return sNextLine;
 	}
 

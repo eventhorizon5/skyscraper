@@ -22,8 +22,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
+#include "server.h"
 #include "floor.h"
 #include "wall.h"
 #include "model.h"
@@ -43,12 +42,12 @@
 #include "light.h"
 #include "controller.h"
 #include "callstation.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::FloorSection::FloorSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -2365,7 +2364,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished floor");
+		server->Report("Finished floor");
 		return sNextLine;
 	}
 
@@ -2390,7 +2389,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				config->Context = "None";
 				config->RangeL = 0;
 				config->RangeH = 0;
-				engine->Report("Finished floors");
+				server->Report("Finished floors");
 				return sNextLine;
 			}
 		}
@@ -2408,7 +2407,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				config->Context = "None";
 				config->RangeL = 0;
 				config->RangeH = 0;
-				engine->Report("Finished floors");
+				server->Report("Finished floors");
 				return sNextLine;
 			}
 		}

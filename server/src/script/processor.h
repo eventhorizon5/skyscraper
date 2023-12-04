@@ -53,7 +53,7 @@ public:
 	std::vector<std::string> *GetBuildingData();
 	bool IsFunctionDefined(const std::string &name);
 	std::string DumpState();
-	Server* GetEngine();
+	Server* GetServer();
 	ElevatorCarSection* GetElevatorCarSection();
 	ConfigHandler* GetConfigHandler();
 
@@ -84,7 +84,7 @@ public:
 private:
 
 	SBS::SBS *Simcore;
-	Server *engine;
+	Server *server;
 
 	ConfigHandler *config;
 	GlobalsSection *globals_section;

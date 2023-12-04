@@ -23,7 +23,7 @@
 #ifndef SCRIPTSECTION_H
 #define SCRIPTSECTION_H
 
-namespace Skyscraper {
+namespace Server {
 
 class ScriptProcessor::Section
 {
@@ -50,7 +50,7 @@ public:
 protected:
 	ScriptProcessor *parent;
 	SBS::SBS *Simcore;
-	EngineContext *engine;
+	Server *server;
 	std::vector<std::string> tempdata;
 	bool warn_deprecated;
 	ScriptProcessor::ConfigHandler *config;

@@ -22,15 +22,14 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
+#include "server.h"
 #include "texture.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::TexturesSection::TexturesSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -504,7 +503,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		Simcore->GetTextureManager()->FreeTextureImages();
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished textures");
+		server->Report("Finished textures");
 		return sNextLine;
 	}
 

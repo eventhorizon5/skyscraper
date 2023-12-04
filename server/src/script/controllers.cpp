@@ -22,15 +22,14 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
+#include "server.h"
 #include "controller.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::ControllerSection::ControllerSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -170,7 +169,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished controller");
+		server->Report("Finished controller");
 		return sNextLine;
 	}
 
@@ -189,7 +188,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 			config->Context = "None";
 			config->RangeL = 0;
 			config->RangeH = 0;
-			engine->Report("Finished controllers");
+			server->Report("Finished controllers");
 			return sNextLine;
 		}
 	}

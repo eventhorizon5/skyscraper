@@ -31,23 +31,23 @@
 #include <stdlib.h>
 #include <cmath>
 #include "server.h"
-//#include "texture.h"
-//#include "floor.h"
-//#include "random.h"
+#include "texture.h"
+#include "floor.h"
+#include "random.h"
 //#include "textwindow.h"
 #include "processor.h"
-//#include "section.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::ScriptProcessor(Server *instance)
 {
 	if (!instance)
 		return;
 
-	engine = instance;
+	server = instance;
 	Simcore = instance->GetSystem();
 
 	//create configuration handler
@@ -121,7 +121,8 @@ void ScriptProcessor::Reset()
 	config->Reset();
 
 	//set CheckScript state
-	config->CheckScript = engine->GetFrontend()->CheckScript;
+	//config->CheckScript = server->GetFrontend()->CheckScript;
+	config->CheckScript = false;
 
 	//reset section objects
 	globals_section->Reset();
@@ -299,7 +300,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	if (Simcore->FileExists(Filename) == false)
 	{
 		if (insert == false)
-			engine->ReportFatalError("Error loading building file:\nFile '" + Filename + "' does not exist");
+			server->ReportFatalError("Error loading building file:\nFile '" + Filename + "' does not exist");
 		else
 			ScriptError("File not found");
 		return false;
@@ -337,7 +338,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 				{
 					std::string msg = "Error loading building file\nDetails: " + e.getDescription();
 					if (insert == false)
-					engine->ReportFatalError(msg);
+						server->ReportFatalError(msg);
 					else
 					ScriptError(msg);
 					return false;
@@ -351,7 +352,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	{
 		std::string msg = "Error loading building file";
 		if (insert == false)
-			engine->ReportFatalError(msg);
+			server->ReportFatalError(msg);
 		else
 			ScriptError(msg);
 		return false;
@@ -464,7 +465,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	if (IsInclude == true)
 		error += "in included file " + IncludeFile + " ";
 
-	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + engine->GetFilename() + "\nContext: " + config->Context;
+	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + server->GetFilename() + "\nContext: " + config->Context;
 
 	if (config->RangeL != config->RangeH)
 		error += "\nIteration Number: " + ToString(config->Current);
@@ -481,16 +482,16 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		error += "\nFunction call line: " + ToString(FunctionLine) + "\nLine Text: " + LineData;
 	}
 
-	if (engine->GetFrontend()->GetEngineCount() > 1)
-		error += "\nEngine context: " + ToString(engine->GetNumber());
+	//if (server->GetFrontend()->GetEngineCount() > 1)
+		//error += "\nEngine context: " + ToString(server->GetNumber());
 
-	engine->ReportError(error);
+	server->ReportError(error);
 
 	//show error dialog
 	if (warning == false)
 	{
-		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
-		dialog.ShowModal();
+		//wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
+		//dialog.ShowModal();
 	}
 	return sError;
 }
@@ -620,7 +621,7 @@ bool ScriptProcessor::ReportMissingFiles()
 			Simcore->Report("Missing file: " + nonexistent_files[i]);
 
 		//create text window
-		TextWindow *twindow = new TextWindow(NULL, -1);
+		/*TextWindow *twindow = new TextWindow(NULL, -1);
 		twindow->SetMinSize(wxSize(350, 250));
 		twindow->tMain->SetMinSize(wxSize(350, 250));
 		twindow->Fit();
@@ -635,7 +636,7 @@ bool ScriptProcessor::ReportMissingFiles()
 			message.Append(wxT("\n"));
 		}
 		twindow->tMain->WriteText(message);
-		twindow->tMain->SetInsertionPoint(0);
+		twindow->tMain->SetInsertionPoint(0);*/
 		return true;
 	}
 	else
@@ -1065,9 +1066,9 @@ std::string ScriptProcessor::DumpState()
 	return output;
 }
 
-EngineContext* ScriptProcessor::GetEngine()
+Server* ScriptProcessor::GetServer()
 {
-	return engine;
+	return server;
 }
 
 ScriptProcessor::ElevatorCarSection* ScriptProcessor::GetElevatorCarSection()
@@ -1141,8 +1142,8 @@ void ScriptProcessor::ProcessFunctionParameters()
 		if (marker > progress_marker)
 		{
 			progress_marker = marker;
-			engine->Report(percent_s + "%");
-			engine->UpdateProgress(percent);
+			server->Report(percent_s + "%");
+			server->UpdateProgress(percent);
 		}
 	}
 }
@@ -1221,14 +1222,14 @@ int ScriptProcessor::ProcessSections()
 		}
 		config->SectionNum = 1;
 		config->Context = "Globals";
-		engine->Report("Processing globals...");
+		server->Report("Processing globals...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "<end>")
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Exiting building script");
+		server->Report("Exiting building script");
 		IsFinished = true;
 		show_percent = false;
 		line = (int)BuildingData.size(); //jump to end of script
@@ -1262,7 +1263,7 @@ int ScriptProcessor::ProcessSections()
 		bool result = LoadDataFile(filename, true, line);
 		if (result == false)
 			return sError;
-		engine->Report("Inserted file " + includefile);
+		server->Report("Inserted file " + includefile);
 
 		line--;
 		return sNextLine;
@@ -1292,7 +1293,7 @@ int ScriptProcessor::ProcessSections()
 		bool defined = IsFunctionDefined(function);
 
 		if (defined == true)
-			engine->Report("Function '" + function + "' already defined");
+			server->Report("Function '" + function + "' already defined");
 		else
 		{
 			//store function info in array
@@ -1313,7 +1314,7 @@ int ScriptProcessor::ProcessSections()
 		}
 
 		if (defined == false)
-			engine->Report("Defined function " + function);
+			server->Report("Defined function " + function);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "<textures>")
@@ -1325,7 +1326,7 @@ int ScriptProcessor::ProcessSections()
 		}
 		config->SectionNum = 5;
 		config->Context = "Textures";
-		engine->Report("Processing textures...");
+		server->Report("Processing textures...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
@@ -1366,7 +1367,7 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Floor range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing floors " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		server->Report("Processing floors " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "<floor ")
@@ -1387,7 +1388,7 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->Context = "Floor " + ToString(config->Current);
-		engine->Report("Processing floor " + ToString(config->Current) + "...");
+		server->Report("Processing floor " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "<elevators")
@@ -1416,7 +1417,7 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Elevator range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing elevators " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		server->Report("Processing elevators " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "<elevator ")
@@ -1442,13 +1443,13 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->Context = "Elevator " + ToString(config->Current);
-		engine->Report("Processing elevator " + ToString(config->Current) + "...");
+		server->Report("Processing elevator " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "<buildings>")
 	{
 		//skip this section if reloading
-		if (engine->IsReloading() == true)
+		if (server->IsReloading() == true)
 			return sNextLine;
 
 		if (config->SectionNum > 0)
@@ -1458,7 +1459,7 @@ int ScriptProcessor::ProcessSections()
 		}
 		config->SectionNum = 3;
 		config->Context = "Buildings";
-		engine->Report("Loading other buildings...");
+		server->Report("Loading other buildings...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "<cars" && config->SectionNum == 4)
@@ -1498,7 +1499,7 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Elevator " + ToString(config->CurrentOld) + " Car range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing elevator " + ToString(config->CurrentOld) + " cars " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		server->Report("Processing elevator " + ToString(config->CurrentOld) + " cars " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "<car " && config->SectionNum == 4)
@@ -1530,7 +1531,7 @@ int ScriptProcessor::ProcessSections()
 		}
 
 		config->Context = "Elevator " + ToString(config->CurrentOld) + " Car " + ToString(config->Current);
-		engine->Report("Processing elevator " + ToString(config->CurrentOld) + " car " + ToString(config->Current) + "...");
+		server->Report("Processing elevator " + ToString(config->CurrentOld) + " car " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "<vehicles")
@@ -1559,7 +1560,7 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Vehicle range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing vehicles " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		server->Report("Processing vehicles " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "<vehicle ")
@@ -1585,7 +1586,7 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->Context = "Vehicle " + ToString(config->Current);
-		engine->Report("Processing vehicle " + ToString(config->Current) + "...");
+		server->Report("Processing vehicle " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "<controllers")
@@ -1614,7 +1615,7 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Controller range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing controllers " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		server->Report("Processing controllers " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "<controller ")
@@ -1640,7 +1641,7 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->Context = "Controller " + ToString(config->Current);
-		engine->Report("Processing controller " + ToString(config->Current) + "...");
+		server->Report("Processing controller " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "<callstations" && config->SectionNum == 2)
@@ -1681,7 +1682,7 @@ int ScriptProcessor::ProcessSections()
 		config->Current = config->RangeL;
 		config->RangeStart = line;
 		if (Simcore->Verbose)
-			engine->Report("Processing floor " + ToString(config->CurrentOld) + " call stations " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+			server->Report("Processing floor " + ToString(config->CurrentOld) + " call stations " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "<callstation " && config->SectionNum == 2)
@@ -1714,7 +1715,7 @@ int ScriptProcessor::ProcessSections()
 
 		config->Context = "Floor " + ToString(config->CurrentOld) + " Call Station " + ToString(config->Current);
 		if (Simcore->Verbose)
-			engine->Report("Processing floor " + ToString(config->CurrentOld) + " call station " + ToString(config->Current) + "...");
+			server->Report("Processing floor " + ToString(config->CurrentOld) + " call station " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 
@@ -1838,7 +1839,7 @@ int ScriptProcessor::ProcessFloorObjects()
 void ScriptProcessor::Breakpoint()
 {
 	//breakpoint function for debugging scripts
-	engine->Report("Script breakpoint reached");
+	server->Report("Script breakpoint reached");
 }
 
 void ScriptProcessor::ProcessExtents()

@@ -22,8 +22,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
+#include "server.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -31,19 +30,20 @@
 #include "stairs.h"
 #include "model.h"
 #include "random.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::Section::Section(ScriptProcessor *parent)
 {
 	this->parent = parent;
-	engine = parent->GetEngine();
-	Simcore = engine->GetSystem();
-	warn_deprecated = engine->GetFrontend()->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
+	server = parent->GetServer();
+	Simcore = server->GetSystem();
+	//warn_deprecated = server->GetFrontend()->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
+	warn_deprecated = false;
 	config = parent->GetConfigHandler();
 }
 

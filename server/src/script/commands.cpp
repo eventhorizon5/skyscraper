@@ -22,13 +22,12 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
+#include "server.h"
 #include "floor.h"
-#include "camera.h"
+//#include "camera.h"
 #include "texture.h"
 #include "mesh.h"
-#include "soundsystem.h"
+//#include "soundsystem.h"
 #include "sound.h"
 #include "wall.h"
 #include "trigger.h"
@@ -42,12 +41,12 @@
 #include "cameratexture.h"
 #include "door.h"
 #include "manager.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::CommandsSection::CommandsSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -348,7 +347,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		if (Simcore->Verbose == true)
-			engine->Report("Variable '" + str + "' set to " + value);
+			server->Report("Variable '" + str + "' set to " + value);
 		return sNextLine;
 	}
 
@@ -3051,7 +3050,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Simcore->camera->Teleport(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		//Simcore->camera->Teleport(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 
 		return sNextLine;
 	}
@@ -3069,7 +3068,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!IsNumeric(value, num))
 			return ScriptError("Invalid value: " + value);
 
-		Simcore->camera->GotoFloor(num);
+		//Simcore->camera->GotoFloor(num);
 
 		return sNextLine;
 	}
@@ -3105,23 +3104,23 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	//ListVisibleMeshes command
 	if (linecheck.substr(0, 17) == "listvisiblemeshes")
 	{
-		Simcore->ListVisibleMeshes();
+		//Simcore->ListVisibleMeshes();
 		return sNextLine;
 	}
 
 	//ShowLoadedSounds command
 	if (linecheck.substr(0, 16) == "showloadedsounds")
 	{
-		if (Simcore->GetSoundSystem())
-			Simcore->GetSoundSystem()->ShowLoadedSounds();
+		//if (Simcore->GetSoundSystem())
+			//Simcore->GetSoundSystem()->ShowLoadedSounds();
 		return sNextLine;
 	}
 
 	//ShowPlayingSounds command
 	if (linecheck.substr(0, 17) == "showplayingsounds")
 	{
-		if (Simcore->GetSoundSystem())
-			Simcore->GetSoundSystem()->ShowPlayingSounds();
+		//if (Simcore->GetSoundSystem())
+			//Simcore->GetSoundSystem()->ShowPlayingSounds();
 		return sNextLine;
 	}
 
@@ -3132,7 +3131,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		std::string value = Calc(LineData.substr(5));
 
 		//print line
-		engine->Report(value);
+		server->Report(value);
 
 		return sNextLine;
 	}

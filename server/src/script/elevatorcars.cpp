@@ -22,8 +22,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
+#include "server.h"
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "elevatordoor.h"
@@ -36,12 +35,12 @@
 #include "model.h"
 #include "sound.h"
 #include "wall.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::ElevatorCarSection::ElevatorCarSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -2212,7 +2211,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		config->RangeH = config->RangeHOld;
 		config->RangeStart = config->RangeStartOld;
 
-		engine->Report("Finished car");
+		server->Report("Finished car");
 		return sNextLine;
 	}
 
@@ -2233,7 +2232,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			config->RangeH = config->RangeHOld;
 			config->RangeStart = config->RangeStartOld;
 			config->Current = config->CurrentOld;
-			engine->Report("Finished cars");
+			server->Report("Finished cars");
 			return sNextLine;
 		}
 	}

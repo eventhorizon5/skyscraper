@@ -38,8 +38,7 @@ file(GLOB SBS_FILES
 )
  
 file(GLOB SCRIPT_FILES
-	#src/script/*.cpp
-	src/script/processor.cpp
+	src/script/*.cpp
 )
 
 include_directories( ${OGRE_INCLUDE_DIRS}
@@ -52,17 +51,17 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 add_library(SBS SHARED ${SBS_FILES})
 
 #Script Processor Library
-#add_library(ScriptProc SHARED ${SCRIPT_FILES})
+add_library(ScriptProc SHARED ${SCRIPT_FILES})
 
 #frontend executable
 add_executable(server ${MAIN_FILES})
 
 target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
-#target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
 target_precompile_headers(server PRIVATE src/sbs/globals.h)
  
 target_link_libraries(SBS ${OGRE_LIBRARIES})
-#target_link_libraries(ScriptProc SBS)
+target_link_libraries(ScriptProc SBS)
 target_link_libraries(server SBS ${OGRE_LIBRARIES})
  
 #ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn

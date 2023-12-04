@@ -22,14 +22,13 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "server.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::BuildingsSection::BuildingsSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -67,7 +66,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->ConcurrentLoads = ToBool(value);
+		//server->GetFrontend()->ConcurrentLoads = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "cutlandscape")
@@ -75,7 +74,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutLandscape = ToBool(value);
+		//server->GetFrontend()->CutLandscape = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "cutbuildings")
@@ -83,7 +82,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutBuildings = ToBool(value);
+		//server->GetFrontend()->CutBuildings = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "cutexternal")
@@ -91,7 +90,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutExternal = ToBool(value);
+		//server->GetFrontend()->CutExternal = ToBool(value);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "cutfloors")
@@ -99,7 +98,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutFloors = ToBool(value);
+		//server->GetFrontend()->CutFloors = ToBool(value);
 		return sNextLine;
 	}
 
@@ -145,7 +144,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			max.z = ToFloat(tempdata[10]);
 		}
 
-		bool result = engine->GetFrontend()->Load(tempdata[0], engine, position, rotation, min, max);
+		//bool result = server->GetFrontend()->Load(tempdata[0], engine, position, rotation, min, max);
 
 		return sNextLine;
 	}
@@ -155,7 +154,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished loading other buildings");
+		server->Report("Finished loading other buildings");
 		return sNextLine;
 	}
 

@@ -22,19 +22,18 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
+#include "server.h"
 #include "floor.h"
 #include "callstation.h"
 #include "buttonpanel.h"
 #include "control.h"
 #include "indicator.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "processor.h"
+#include "section.h"
 
 using namespace SBS;
 
-namespace Skyscraper {
+namespace Server {
 
 ScriptProcessor::CallStationSection::CallStationSection(ScriptProcessor *parent) : Section(parent)
 {
@@ -278,7 +277,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		config->RangeStart = config->RangeStartOld;
 
 		if (Simcore->Verbose)
-			engine->Report("Finished call station");
+			server->Report("Finished call station");
 		return sNextLine;
 	}
 
@@ -300,7 +299,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 			config->RangeStart = config->RangeStartOld;
 			config->Current = config->CurrentOld;
 			if (Simcore->Verbose)
-				engine->Report("Finished call stations");
+				server->Report("Finished call stations");
 			return sNextLine;
 		}
 	}
