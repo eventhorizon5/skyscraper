@@ -164,7 +164,7 @@ class MoveObject: public wxDialog
 		wxTextCtrl* txtRotationY;
 		wxTextCtrl* txtRotationZ;
 		//*)
-		Ogre::Vector3 hold_vector;
+		Vector3 hold_vector;
 		SBS::Object *object;
 		int object_num; //object number
 

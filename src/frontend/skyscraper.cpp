@@ -795,7 +795,7 @@ bool Skyscraper::Initialize()
 		{
 			mCamera = mSceneMgr->createCamera("Main Camera");
 			mViewport = mRenderWindow->addViewport(mCamera);
-			mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
+			mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -1279,8 +1279,8 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 			pass->setTextureFiltering(Ogre::TFO_NONE);
 
 			//rescale texture
-			state->setTextureScale((Ogre::Real)w2 / (Ogre::Real)w_orig, (Ogre::Real)h2 / (Ogre::Real)h_orig);
-			state->setTextureScroll(-(Ogre::Real(w2 - w_orig) / (Ogre::Real)w2) / 2.0, -(Ogre::Real(h2 - h_orig) / (Ogre::Real)h2) / 2.0);
+			state->setTextureScale((Real)w2 / (Real)w_orig, (Real)h2 / (Real)h_orig);
+			state->setTextureScroll(-(Real(w2 - w_orig) / (Real)w2) / 2.0, -(Real(h2 - h_orig) / (Real)h2) / 2.0);
 
 			if (tex->hasAlpha() == true && button)
 			{
@@ -1670,7 +1670,7 @@ std::string Skyscraper::SelectBuilding()
 	return filename;
 }
 
-bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -1901,7 +1901,7 @@ const std::string Skyscraper::getOgreHandle() const
 {
 #if defined(__WXMSW__)
 	// Handle for Windows systems
-	return Ogre::StringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
+	return std::stringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
 #elif defined(__WXGTK__)
 	// Handle for GTK-based systems
 
@@ -1938,7 +1938,7 @@ const std::string Skyscraper::getOgreHandle() const
 	return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
-	return Ogre::StringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
+	return std::stringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
 #else
 	#error Not supported on this platform!
 #endif
@@ -2058,7 +2058,7 @@ bool Skyscraper::InitSky(EngineContext *engine)
 		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.Caelum.ModifyAmbient", false));
 
 		//fix sky rotation
-		Ogre::Quaternion rot(Ogre::Degree(180.0), Ogre::Vector3::UNIT_Y);
+		Quaternion rot(Degree(180.0), Vector3::UNIT_Y);
 		mCaelumSystem->getCaelumGroundNode()->setOrientation(rot);
 		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
 
@@ -2085,8 +2085,8 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	//set location if specified
 	if (new_location == true)
 	{
-		mCaelumSystem->setObserverLatitude(Ogre::Degree(latitude));
-		mCaelumSystem->setObserverLongitude(Ogre::Degree(longitude));
+		mCaelumSystem->setObserverLatitude(Degree(latitude));
+		mCaelumSystem->setObserverLongitude(Degree(longitude));
 		new_location = false;
 	}
 
@@ -2117,7 +2117,7 @@ void Skyscraper::UpdateSky()
 	}
 }
 
-void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage)
+void Skyscraper::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)
 {
 	//callback function that receives OGRE log messages
 	if (console)
@@ -2253,7 +2253,7 @@ void Skyscraper::SetDateTime(double julian_date_time)
 		mCaelumSystem->setJulianDay(datetime);
 }
 
-EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	EngineContext* engine = new EngineContext(parent, this, mSceneMgr, soundsys, position, rotation, area_min, area_max);
 	return engine;

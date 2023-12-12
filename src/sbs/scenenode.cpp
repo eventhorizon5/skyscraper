@@ -33,7 +33,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 {
 	SetName(name);
 	node = 0;
-	Rotation = Ogre::Vector3::ZERO;
+	Rotation = Vector3::ZERO;
 
 	if (!sbs->mSceneManager || !parent)
 		return;
@@ -98,7 +98,7 @@ void SceneNode::ShowBoundingBox(bool value)
 		node->showBoundingBox(value);
 }
 
-void SceneNode::SetPosition(const Ogre::Vector3 &position)
+void SceneNode::SetPosition(const Vector3 &position)
 {
 	//set position of scene node
 
@@ -112,7 +112,7 @@ void SceneNode::SetPosition(const Ogre::Vector3 &position)
 	Update();
 }
 
-void SceneNode::SetPositionRelative(const Ogre::Vector3 &position)
+void SceneNode::SetPositionRelative(const Vector3 &position)
 {
 	//set position of scene node
 	//position is relative of parent scene node
@@ -120,22 +120,22 @@ void SceneNode::SetPositionRelative(const Ogre::Vector3 &position)
 	if (!node)
 		return;
 
-	Ogre::Vector3 pos = sbs->ToRemote(position);
+	Vector3 pos = sbs->ToRemote(position);
 	node->setPosition(pos);
 	Update();
 }
 
-Ogre::Vector3 SceneNode::GetPosition(bool relative)
+Vector3 SceneNode::GetPosition(bool relative)
 {
 	//get position of scene node
 	//if relative is true, position is relative of parent scene node
 
 	if (!node)
-		return Ogre::Vector3::ZERO;
+		return Vector3::ZERO;
 
 	if (relative == false)
 	{
-		Ogre::Vector3 pos = GetDerivedPosition();
+		Vector3 pos = GetDerivedPosition();
 		if (IsRoot() == false)
 			return sbs->FromGlobal(pos);
 		else
@@ -145,7 +145,7 @@ Ogre::Vector3 SceneNode::GetPosition(bool relative)
 	return sbs->ToLocal(node->getPosition());
 }
 
-void SceneNode::SetRotation(const Ogre::Vector3 &rotation)
+void SceneNode::SetRotation(const Vector3 &rotation)
 {
 	//set rotation of scene node in degrees
 	//this sets the rotation of all three vectors
@@ -168,15 +168,15 @@ void SceneNode::SetRotation(const Ogre::Vector3 &rotation)
 	if (Rotation.z < 0)
 		Rotation.z += 360;
 
-	Ogre::Quaternion x(Ogre::Degree(Rotation.x), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion y(Ogre::Degree(Rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(Rotation.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion rot = x * y * z;
+	Quaternion x(Degree(Rotation.x), Vector3::UNIT_X);
+	Quaternion y(Degree(Rotation.y), Vector3::NEGATIVE_UNIT_Y);
+	Quaternion z(Degree(Rotation.z), Vector3::UNIT_Z);
+	Quaternion rot = x * y * z;
 
 	SetOrientation(rot, true);
 }
 
-Ogre::Vector3 SceneNode::GetRotation()
+Vector3 SceneNode::GetRotation()
 {
 	//get rotation of scene node in degrees
 	//this returns the rotation of all three vectors
@@ -194,7 +194,7 @@ void SceneNode::Update()
 		node->needUpdate();
 }
 
-Ogre::Quaternion SceneNode::GetOrientation(bool relative)
+Quaternion SceneNode::GetOrientation(bool relative)
 {
 	//return raw orientation
 
@@ -211,10 +211,10 @@ Ogre::Quaternion SceneNode::GetOrientation(bool relative)
 			return node->getOrientation();
 	}
 
-	return Ogre::Quaternion::ZERO;
+	return Quaternion::ZERO;
 }
 
-void SceneNode::SetOrientation(const Ogre::Quaternion &q, bool relative)
+void SceneNode::SetOrientation(const Quaternion &q, bool relative)
 {
 	//set raw orientation
 
@@ -234,14 +234,14 @@ void SceneNode::SetOrientation(const Ogre::Quaternion &q, bool relative)
 	Update();
 }
 
-void SceneNode::Move(const Ogre::Vector3 &vector, Real speed)
+void SceneNode::Move(const Vector3 &vector, Real speed)
 {
 	//move this scene node
 
 	if (!node)
 		return;
 
-	Ogre::Vector3 v = vector * speed;
+	Vector3 v = vector * speed;
 	node->translate(sbs->ToRemote(v));
 
 	Update();
@@ -298,10 +298,10 @@ void SceneNode::SetScale(Real scale)
 	if (!node)
 		return;
 
-	node->setScale(Ogre::Vector3(scale, scale, scale));
+	node->setScale(Vector3(scale, scale, scale));
 }
 
-SceneNode* SceneNode::CreateChild(std::string name, const Ogre::Vector3 &offset)
+SceneNode* SceneNode::CreateChild(std::string name, const Vector3 &offset)
 {
 	//create a raw child scenenode, at the specified offset
 
@@ -334,42 +334,42 @@ void SceneNode::Pitch(Real &degree)
 {
 	//rotate on X axis
 
-	node->pitch(Ogre::Degree(degree));
+	node->pitch(Degree(degree));
 }
 
 void SceneNode::Yaw(Real &degree)
 {
 	//rotate on Y axis
 
-	node->yaw(Ogre::Degree(-degree));
+	node->yaw(Degree(-degree));
 }
 
 void SceneNode::Roll(Real &degree)
 {
 	//rotate on Z axis
 
-	node->roll(Ogre::Degree(degree));
+	node->roll(Degree(degree));
 }
 
-Ogre::Vector3 SceneNode::GetDerivedPosition()
+Vector3 SceneNode::GetDerivedPosition()
 {
 	//gets the position of the node as derived from all parents
 	return sbs->ToLocal(node->_getDerivedPosition());
 }
 
-Ogre::Quaternion SceneNode::GetDerivedOrientation()
+Quaternion SceneNode::GetDerivedOrientation()
 {
 	//gets the orientation of the node as derived from all parents
 
 	return node->_getDerivedOrientation();
 }
 
-void SceneNode::SetDirection(const Ogre::Vector3 &direction)
+void SceneNode::SetDirection(const Vector3 &direction)
 {
 	node->setDirection(sbs->ToRemote(direction));
 }
 
-void SceneNode::LookAt(const Ogre::Vector3 &point)
+void SceneNode::LookAt(const Vector3 &point)
 {
 	node->lookAt(sbs->ToRemote(point), Ogre::Node::TS_PARENT);
 }

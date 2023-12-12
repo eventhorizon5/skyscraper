@@ -773,7 +773,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	{
 		if (command_name == "open")
 		{
-			Ogre::Vector3 pos = door->GetPosition();
+			Vector3 pos = door->GetPosition();
 			door->Open(pos);
 			return true;
 		}

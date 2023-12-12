@@ -91,7 +91,7 @@ private:
 			unsigned int vertex_offset;
 			unsigned int vertex_count;
 			Ogre::AxisAlignedBox* bounds;
-			Ogre::Real radius;
+			Real radius;
 		};
 
 		struct Submesh

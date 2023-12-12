@@ -48,7 +48,7 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 	listener_up.x = 0;
 	listener_up.y = 0;
 	listener_up.z = 0;
-	Position = Ogre::Vector3::ZERO;
+	Position = Vector3::ZERO;
 
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
@@ -73,7 +73,7 @@ void SoundSystem::Loop()
 		SetListenerPosition(sbs->camera->GetPosition());
 
 	//set direction of listener to camera's direction
-	Ogre::Vector3 front, top;
+	Vector3 front, top;
 	sbs->camera->GetDirection(front, top, true);
 	SetListenerDirection(front, top);
 
@@ -83,7 +83,7 @@ void SoundSystem::Loop()
 	ProfileManager::Stop_Profile();
 }
 
-void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
+void SoundSystem::SetListenerPosition(const Vector3 &position)
 {
 	//set position of sound listener object
 
@@ -103,7 +103,7 @@ void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
 
 	Position = position;
 
-	Ogre::Vector3 global_position = sbs->ToGlobal(position);
+	Vector3 global_position = sbs->ToGlobal(position);
 
 	listener_position.x = (float)global_position.x;
 	listener_position.y = (float)global_position.y;
@@ -112,7 +112,7 @@ void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
 	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
 
-void SoundSystem::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
+void SoundSystem::SetListenerDirection(const Vector3 &front, const Vector3 &top)
 {
 	//set direction of sound listener object
 

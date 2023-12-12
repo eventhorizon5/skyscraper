@@ -60,7 +60,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -209,14 +209,14 @@ void SBS::Initialize()
 	texturemanager = new TextureManager(this);
 
 	//set up physics
-	Ogre::AxisAlignedBox box (Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Ogre::Vector3::ZERO, true);
+	Ogre::AxisAlignedBox box (Vector3::ZERO, Vector3::ZERO);
+	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Vector3::ZERO, true);
 	mWorld->setAllowedCcdPenetration(0);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);
 	mWorld->setDebugDrawer(debugDrawer);
-	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Ogre::Vector3::ZERO);
+	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Vector3::ZERO);
 	node->attachObject(static_cast<Ogre::SimpleRenderable*> (debugDrawer));
 	*/
 
@@ -649,21 +649,21 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 	}
 
 	//map coordinates
-	Ogre::Vector3 v1 (x1, altitude1 + height_in1, z1); //left top
-	Ogre::Vector3 v2 (x2, altitude2 + height_in2, z2); //right top
-	Ogre::Vector3 v3 (x2, altitude2, z2); //right base
-	Ogre::Vector3 v4 (x1, altitude1, z1); //left base
+	Vector3 v1 (x1, altitude1 + height_in1, z1); //left top
+	Vector3 v2 (x2, altitude2 + height_in2, z2); //right top
+	Vector3 v3 (x2, altitude2, z2); //right base
+	Vector3 v4 (x1, altitude1, z1); //left base
 
-	Ogre::Vector3 v5 = v1;
-	Ogre::Vector3 v6 = v2;
-	Ogre::Vector3 v7 = v3;
-	Ogre::Vector3 v8 = v4;
+	Vector3 v5 = v1;
+	Vector3 v6 = v2;
+	Vector3 v7 = v3;
+	Vector3 v8 = v4;
 
 	//exit if outside of the engine boundaries
 	if (area_trigger)
 	{
-		Ogre::Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
-		Ogre::Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
+		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
+		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (area_trigger->IsOutside(v1x, v2x) == true)
 			return false;
 	}
@@ -913,43 +913,43 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 	}
 
 	//map coordinates
-	Ogre::Vector3 v1, v2, v3, v4;
+	Vector3 v1, v2, v3, v4;
 
 	if (reverse_axis == false)
 	{
-		v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
-		v2 = Ogre::Vector3(x2, altitude1, z1); //bottom right
-		v3 = Ogre::Vector3(x2, altitude2, z2); //top right
-		v4 = Ogre::Vector3(x1, altitude2, z2); //top left
+		v1 = Vector3(x1, altitude1, z1); //bottom left
+		v2 = Vector3(x2, altitude1, z1); //bottom right
+		v3 = Vector3(x2, altitude2, z2); //top right
+		v4 = Vector3(x1, altitude2, z2); //top left
 	}
 	else
 	{
 		if (legacy_behavior == true)
 		{
-			v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
-			v2 = Ogre::Vector3(x1, altitude1, z2); //top left
-			v3 = Ogre::Vector3(x2, altitude2, z2); //top right
-			v4 = Ogre::Vector3(x2, altitude2, z1); //bottom right
+			v1 = Vector3(x1, altitude1, z1); //bottom left
+			v2 = Vector3(x1, altitude1, z2); //top left
+			v3 = Vector3(x2, altitude2, z2); //top right
+			v4 = Vector3(x2, altitude2, z1); //bottom right
 		}
 		else
 		{
-			v1 = Ogre::Vector3(x2, altitude2, z1); //bottom right
-			v2 = Ogre::Vector3(x2, altitude2, z2); //top right
-			v3 = Ogre::Vector3(x1, altitude1, z2); //top left
-			v4 = Ogre::Vector3(x1, altitude1, z1); //bottom left
+			v1 = Vector3(x2, altitude2, z1); //bottom right
+			v2 = Vector3(x2, altitude2, z2); //top right
+			v3 = Vector3(x1, altitude1, z2); //top left
+			v4 = Vector3(x1, altitude1, z1); //bottom left
 		}
 	}
 
-	Ogre::Vector3 v5 = v1;
-	Ogre::Vector3 v6 = v2;
-	Ogre::Vector3 v7 = v3;
-	Ogre::Vector3 v8 = v4;
+	Vector3 v5 = v1;
+	Vector3 v6 = v2;
+	Vector3 v7 = v3;
+	Vector3 v8 = v4;
 
 	//exit if outside of the engine boundaries
 	if (area_trigger)
 	{
-		Ogre::Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
-		Ogre::Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
+		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
+		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (area_trigger->IsOutside(v1x, v2x) == true)
 			return false;
 	}
@@ -1147,10 +1147,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 			wall->AddQuad( //front
 					NewName,
 					texture2,
-					Ogre::Vector3(x1, voffset, z1),
-					Ogre::Vector3(x2, voffset, z1),
-					Ogre::Vector3(x2, voffset + height_in, z1),
-					Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
+					Vector3(x1, voffset, z1),
+					Vector3(x2, voffset, z1),
+					Vector3(x2, voffset + height_in, z1),
+					Vector3(x1, voffset + height_in, z1), tw, th, autosize);
 
 			if (TextureOverride == true)
 				texture2 = texturemanager->mainpostex;
@@ -1158,10 +1158,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 			wall->AddQuad( //back
 					NewName,
 					texture2,
-					Ogre::Vector3(x2, voffset, z2),
-					Ogre::Vector3(x1, voffset, z2),
-					Ogre::Vector3(x1, voffset + height_in, z2),
-					Ogre::Vector3(x2, voffset + height_in, z2), tw, th, autosize);
+					Vector3(x2, voffset, z2),
+					Vector3(x1, voffset, z2),
+					Vector3(x1, voffset + height_in, z2),
+					Vector3(x2, voffset + height_in, z2), tw, th, autosize);
 		}
 		if (z_thickness == true)
 		{
@@ -1171,10 +1171,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 			wall->AddQuad( //right
 					NewName,
 					texture2,
-					Ogre::Vector3(x2, voffset, z1),
-					Ogre::Vector3(x2, voffset, z2),
-					Ogre::Vector3(x2, voffset + height_in, z2),
-					Ogre::Vector3(x2, voffset + height_in, z1), tw, th, autosize);
+					Vector3(x2, voffset, z1),
+					Vector3(x2, voffset, z2),
+					Vector3(x2, voffset + height_in, z2),
+					Vector3(x2, voffset + height_in, z1), tw, th, autosize);
 
 			if (TextureOverride == true)
 				texture2 = texturemanager->sidenegtex;
@@ -1182,10 +1182,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 			wall->AddQuad( //left
 					NewName,
 					texture2,
-					Ogre::Vector3(x1, voffset, z2),
-					Ogre::Vector3(x1, voffset, z1),
-					Ogre::Vector3(x1, voffset + height_in, z1),
-					Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
+					Vector3(x1, voffset, z2),
+					Vector3(x1, voffset, z1),
+					Vector3(x1, voffset + height_in, z1),
+					Vector3(x1, voffset + height_in, z2), tw, th, autosize);
 		}
 		if (x_thickness == true && z_thickness == true)
 		{
@@ -1197,10 +1197,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 				wall->AddQuad( //bottom
 						NewName,
 						texture2,
-						Ogre::Vector3(x1, voffset, z2),
-						Ogre::Vector3(x2, voffset, z2),
-						Ogre::Vector3(x2, voffset, z1),
-						Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
+						Vector3(x1, voffset, z2),
+						Vector3(x2, voffset, z2),
+						Vector3(x2, voffset, z1),
+						Vector3(x1, voffset, z1), tw, th, autosize);
 			}
 
 			if (top == true)
@@ -1211,10 +1211,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 				wall->AddQuad( //top
 						NewName,
 						texture2,
-						Ogre::Vector3(x1, voffset + height_in, z1),
-						Ogre::Vector3(x2, voffset + height_in, z1),
-						Ogre::Vector3(x2, voffset + height_in, z2),
-						Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
+						Vector3(x1, voffset + height_in, z1),
+						Vector3(x2, voffset + height_in, z1),
+						Vector3(x2, voffset + height_in, z2),
+						Vector3(x1, voffset + height_in, z2), tw, th, autosize);
 			}
 		}
 	}
@@ -1232,10 +1232,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 			wall->AddQuad( //front
 					NewName,
 					texture2,
-					Ogre::Vector3(x1, voffset + height_in, z1),
-					Ogre::Vector3(x2, voffset + height_in, z1),
-					Ogre::Vector3(x2, voffset, z1),
-					Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
+					Vector3(x1, voffset + height_in, z1),
+					Vector3(x2, voffset + height_in, z1),
+					Vector3(x2, voffset, z1),
+					Vector3(x1, voffset, z1), tw, th, autosize);
 
 			if (TextureOverride == true)
 				texture2 = texturemanager->mainpostex;
@@ -1243,10 +1243,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 			wall->AddQuad( //back
 					NewName,
 					texture2,
-					Ogre::Vector3(x2, voffset + height_in, z2),
-					Ogre::Vector3(x1, voffset + height_in, z2),
-					Ogre::Vector3(x1, voffset, z2),
-					Ogre::Vector3(x2, voffset, z2), tw, th, autosize);
+					Vector3(x2, voffset + height_in, z2),
+					Vector3(x1, voffset + height_in, z2),
+					Vector3(x1, voffset, z2),
+					Vector3(x2, voffset, z2), tw, th, autosize);
 		}
 		if (z_thickness == true)
 		{
@@ -1256,10 +1256,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 			wall->AddQuad( //right
 					NewName,
 					texture2,
-					Ogre::Vector3(x2, voffset + height_in, z1),
-					Ogre::Vector3(x2, voffset + height_in, z2),
-					Ogre::Vector3(x2, voffset, z2),
-					Ogre::Vector3(x2, voffset, z1), tw, th, autosize);
+					Vector3(x2, voffset + height_in, z1),
+					Vector3(x2, voffset + height_in, z2),
+					Vector3(x2, voffset, z2),
+					Vector3(x2, voffset, z1), tw, th, autosize);
 
 			if (TextureOverride == true)
 				texture2 = texturemanager->sidenegtex;
@@ -1267,10 +1267,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 			wall->AddQuad( //left
 					NewName,
 					texture2,
-					Ogre::Vector3(x1, voffset + height_in, z2),
-					Ogre::Vector3(x1, voffset + height_in, z1),
-					Ogre::Vector3(x1, voffset, z1),
-					Ogre::Vector3(x1, voffset, z2), tw, th, autosize);
+					Vector3(x1, voffset + height_in, z2),
+					Vector3(x1, voffset + height_in, z1),
+					Vector3(x1, voffset, z1),
+					Vector3(x1, voffset, z2), tw, th, autosize);
 		}
 		if (x_thickness == true && z_thickness == true)
 		{
@@ -1282,10 +1282,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 				wall->AddQuad( //bottom
 						NewName,
 						texture2,
-						Ogre::Vector3(x1, voffset, z1),
-						Ogre::Vector3(x2, voffset, z1),
-						Ogre::Vector3(x2, voffset, z2),
-						Ogre::Vector3(x1, voffset, z2), tw, th, autosize);
+						Vector3(x1, voffset, z1),
+						Vector3(x2, voffset, z1),
+						Vector3(x2, voffset, z2),
+						Vector3(x1, voffset, z2), tw, th, autosize);
 			}
 			if (top == true)
 			{
@@ -1295,10 +1295,10 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 				wall->AddQuad( //top
 						NewName,
 						texture2,
-						Ogre::Vector3(x1, voffset + height_in, z2),
-						Ogre::Vector3(x2, voffset + height_in, z2),
-						Ogre::Vector3(x2, voffset + height_in, z1),
-						Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
+						Vector3(x1, voffset + height_in, z2),
+						Vector3(x2, voffset + height_in, z2),
+						Vector3(x2, voffset + height_in, z1),
+						Vector3(x1, voffset + height_in, z1), tw, th, autosize);
 			}
 		}
 	}
@@ -1338,7 +1338,7 @@ void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &va
 	//create 2 polygons (front and back) from the vertex array
 
 	//get polygon native direction
-	Ogre::Vector3 direction = GetPolygonDirection(varray1);
+	Vector3 direction = GetPolygonDirection(varray1);
 
 	//if the polygon is facing right, down or to the back, reverse faces
 	//to keep the vertices clockwise
@@ -1380,7 +1380,7 @@ Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::s
 	return wall;
 }
 
-Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, Real altitude, Real tw, Real th)
+Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Vector2> &varray, Real altitude, Real tw, Real th)
 {
 	//Same as AddCustomWall, with only one altitude value value
 	PolyArray varray3;
@@ -1389,7 +1389,7 @@ Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::
 	varray3.reserve(varray.size());
 	for (size_t i = 0; i < varray.size(); i++)
 	{
-		varray3.push_back(Ogre::Vector3(varray[i].x, altitude, varray[i].y));
+		varray3.push_back(Vector3(varray[i].x, altitude, varray[i].y));
 	}
 
 	//pass data on to AddCustomWall function
@@ -1403,9 +1403,9 @@ Wall* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std:
 
 	//set up temporary vertex array
 	varray.reserve(3);
-	varray.push_back(Ogre::Vector3(x1, y1, z1));
-	varray.push_back(Ogre::Vector3(x2, y2, z2));
-	varray.push_back(Ogre::Vector3(x3, y3, z3));
+	varray.push_back(Vector3(x1, y1, z1));
+	varray.push_back(Vector3(x2, y2, z2));
+	varray.push_back(Vector3(x3, y3, z3));
 
 	//pass data on to AddCustomWall function
 	return AddCustomWall(mesh, name, texture, varray, tw, th);
@@ -1475,45 +1475,45 @@ void SBS::CreateSky()
 	wall->AddQuad( //front
 		"SkyFront",
 		"SkyFront",
-		Ogre::Vector3(-skysize, -skysize, -skysize),
-		Ogre::Vector3(skysize, -skysize, -skysize),
-		Ogre::Vector3(skysize, skysize, -skysize),
-		Ogre::Vector3(-skysize, skysize, -skysize), 1, 1, false);
+		Vector3(-skysize, -skysize, -skysize),
+		Vector3(skysize, -skysize, -skysize),
+		Vector3(skysize, skysize, -skysize),
+		Vector3(-skysize, skysize, -skysize), 1, 1, false);
 	wall->AddQuad( //right
 		"SkyRight",
 		"SkyRight",
-		Ogre::Vector3(skysize, -skysize, -skysize),
-		Ogre::Vector3(skysize, -skysize, skysize),
-		Ogre::Vector3(skysize, skysize, skysize),
-		Ogre::Vector3(skysize, skysize, -skysize), 1, 1, false);
+		Vector3(skysize, -skysize, -skysize),
+		Vector3(skysize, -skysize, skysize),
+		Vector3(skysize, skysize, skysize),
+		Vector3(skysize, skysize, -skysize), 1, 1, false);
 	wall->AddQuad( //back
 		"SkyBack",
 		"SkyBack",
-		Ogre::Vector3(skysize, -skysize, skysize),
-		Ogre::Vector3(-skysize, -skysize, skysize),
-		Ogre::Vector3(-skysize, skysize, skysize),
-		Ogre::Vector3(skysize, skysize, skysize), 1, 1, false);
+		Vector3(skysize, -skysize, skysize),
+		Vector3(-skysize, -skysize, skysize),
+		Vector3(-skysize, skysize, skysize),
+		Vector3(skysize, skysize, skysize), 1, 1, false);
 	wall->AddQuad( //left
 		"SkyLeft",
 		"SkyLeft",
-		Ogre::Vector3(-skysize, -skysize, skysize),
-		Ogre::Vector3(-skysize, -skysize, -skysize),
-		Ogre::Vector3(-skysize, skysize, -skysize),
-		Ogre::Vector3(-skysize, skysize, skysize), 1, 1, false);
+		Vector3(-skysize, -skysize, skysize),
+		Vector3(-skysize, -skysize, -skysize),
+		Vector3(-skysize, skysize, -skysize),
+		Vector3(-skysize, skysize, skysize), 1, 1, false);
 	wall->AddQuad( //bottom
 		"SkyBottom",
 		"SkyBottom",
-		Ogre::Vector3(-skysize, -skysize, skysize),
-		Ogre::Vector3(skysize, -skysize, skysize),
-		Ogre::Vector3(skysize, -skysize, -skysize),
-		Ogre::Vector3(-skysize, -skysize, -skysize), 1, -1, false);
+		Vector3(-skysize, -skysize, skysize),
+		Vector3(skysize, -skysize, skysize),
+		Vector3(skysize, -skysize, -skysize),
+		Vector3(-skysize, -skysize, -skysize), 1, -1, false);
 	wall->AddQuad( //top
 		"SkyTop",
 		"SkyTop",
-		Ogre::Vector3(-skysize, skysize, -skysize),
-		Ogre::Vector3(skysize, skysize, -skysize),
-		Ogre::Vector3(skysize, skysize, skysize),
-		Ogre::Vector3(-skysize, skysize, skysize), -1, -1, false);
+		Vector3(-skysize, skysize, -skysize),
+		Vector3(skysize, skysize, -skysize),
+		Vector3(skysize, skysize, skysize),
+		Vector3(-skysize, skysize, skysize), -1, -1, false);
 
 	texturemanager->ResetTextureMapping();
 	delete wall;
@@ -1843,9 +1843,9 @@ Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const 
 		Wall *wall = mesh->CreateWallObject(wallname);
 
 		//convert extents to relative positioning
-		Ogre::Vector2 extents_x = wall_extents_x - wall->GetMesh()->GetPosition().x;
-		Ogre::Vector2 extents_y = wall_extents_y - wall->GetMesh()->GetPosition().y;
-		Ogre::Vector2 extents_z = wall_extents_z - wall->GetMesh()->GetPosition().z;
+		Vector2 extents_x = wall_extents_x - wall->GetMesh()->GetPosition().x;
+		Vector2 extents_y = wall_extents_y - wall->GetMesh()->GetPosition().y;
+		Vector2 extents_z = wall_extents_z - wall->GetMesh()->GetPosition().z;
 
 		//true if doorway is facing forward/backward
 		//false if doorway is facing left/right
@@ -1881,9 +1881,9 @@ void SBS::ResetDoorwayWalls()
 	wall1b = false;
 	wall2a = false;
 	wall2b = false;
-	wall_extents_x = Ogre::Vector2::ZERO;
-	wall_extents_y = Ogre::Vector2::ZERO;
-	wall_extents_z = Ogre::Vector2::ZERO;
+	wall_extents_x = Vector2::ZERO;
+	wall_extents_y = Vector2::ZERO;
+	wall_extents_z = Vector2::ZERO;
 }
 
 Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th)
@@ -1917,7 +1917,7 @@ Wall* SBS::AddGround(const std::string &name, const std::string &texture, Real x
 	//Adds ground based on a tiled-floor layout, with the specified dimensions and vertical offset
 	//this does not support thickness
 
-	Ogre::Vector3 v1, v2, v3, v4;
+	Vector3 v1, v2, v3, v4;
 
 	Real minx, minz, maxx, maxz;
 
@@ -2180,7 +2180,7 @@ bool SBS::Mount(const std::string &filename, const std::string &path)
 	return true;
 }
 
-void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
+void SBS::AddFloorAutoArea(Vector3 start, Vector3 end)
 {
 	//adds an auto area that enables/disables floors
 
@@ -2198,7 +2198,7 @@ void SBS::CheckAutoAreas()
 
 	SBS_PROFILE("SBS::CheckAutoAreas");
 
-	Ogre::Vector3 position = camera->GetPosition();
+	Vector3 position = camera->GetPosition();
 	int floor = camera->CurrentFloor;
 
 	for (size_t i = 0; i < FloorAutoArea.size(); i++)
@@ -2252,7 +2252,7 @@ int SBS::GetMeshCount()
 	return (int)meshes.size();
 }
 
-Sound* SBS::AddSound(const std::string &name, const std::string &filename, const Ogre::Vector3 &position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, const Ogre::Vector3 &direction)
+Sound* SBS::AddSound(const std::string &name, const std::string &filename, const Vector3 &position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, const Vector3 &direction)
 {
 	//create a looping sound object
 	Sound *sound = new Sound(this, name, false);
@@ -2321,7 +2321,7 @@ Real SBS::ToLocal(Real remote_value)
 	return remote_value * UnitScale;
 }
 
-Ogre::Vector2 SBS::ToLocal(const Ogre::Vector2& remote_value)
+Vector2 SBS::ToLocal(const Vector2& remote_value)
 {
 	//convert remote (OGRE) vertex positions to local (SBS) positions
 
@@ -2331,12 +2331,12 @@ Ogre::Vector2 SBS::ToLocal(const Ogre::Vector2& remote_value)
 	return remote_value * UnitScale;
 }
 
-Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value, bool rescale, bool flip_z)
+Vector3 SBS::ToLocal(const Vector3& remote_value, bool rescale, bool flip_z)
 {
 	//convert remote (OGRE) vertex positions to local (SBS) positions
 	//also convert Z value to OGRE's right-hand coordinate system
 
-	Ogre::Vector3 newvalue;
+	Vector3 newvalue;
 	newvalue.x = remote_value.x;
 	newvalue.y = remote_value.y;
 
@@ -2361,7 +2361,7 @@ Real SBS::ToRemote(Real local_value)
 	return local_value / UnitScale;
 }
 
-Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
+Vector2 SBS::ToRemote(const Vector2& local_value)
 {
 	//convert local (SBS) vertex positions to remote (OGRE) positions
 
@@ -2371,11 +2371,11 @@ Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 	return local_value / UnitScale;
 }
 
-Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value, bool rescale, bool flip_z)
+Vector3 SBS::ToRemote(const Vector3& local_value, bool rescale, bool flip_z)
 {
 	//convert local (SBS) vertex positions to remote (OGRE) positions
 
-	Ogre::Vector3 newvalue;
+	Vector3 newvalue;
 	newvalue.x = local_value.x;
 	newvalue.y = local_value.y;
 
@@ -2664,7 +2664,7 @@ bool SBS::DeleteObject(int object)
 	return DeleteObject(GetObject(object));
 }
 
-bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool X, bool Y, bool Z)
+bool SBS::MoveObject(Object *object, Vector3 position, bool relative, bool X, bool Y, bool Z)
 {
 	//move an object by reference
 	//if relative is false, the X, Y and Z values determine which position axes should be set
@@ -2689,7 +2689,7 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool
 	return true;
 }
 
-bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, Real speed, bool relative, bool X, bool Y, bool Z)
+bool SBS::RotateObject(Object *object, Vector3 rotation, Real speed, bool relative, bool X, bool Y, bool Z)
 {
 	//rotate an object by reference
 	//if relative is false, the X, Y and Z values determine which position axes should be set
@@ -3050,7 +3050,7 @@ MeshObject* SBS::FindMeshObject(const std::string &name)
 	return 0;
 }
 
-Model* SBS::AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
+Model* SBS::AddModel(const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -3102,7 +3102,7 @@ Real SBS::GetConfigFloat(const std::string &key, Real default_value)
 	return ToFloat(result);
 }
 
-bool SBS::InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test)
+bool SBS::InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test)
 {
 	//determine if a point (test) is inside the box defines by start and end vertices
 
@@ -3252,7 +3252,7 @@ Control* SBS::AddControl(const std::string &name, const std::string &sound, cons
 	return control;
 }
 
-Trigger* SBS::AddTrigger(const std::string &name, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* SBS::AddTrigger(const std::string &name, const std::string &sound_file, const Vector3 &area_min, const Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
@@ -3736,13 +3736,13 @@ void SBS::DecrementMovingWalkwayCount()
 	MovingWalkwayCount--;
 }
 
-bool SBS::HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position)
+bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
 
 	//create a new ray that has absolute positioning, for engine offsets
-	Ogre::Ray ray2 (ToRemote(ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
+	Ray ray2 (ToRemote(ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
 
 	//get a collision callback from Bullet
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray2, mWorld, max_distance);
@@ -3776,9 +3776,9 @@ bool SBS::HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wa
 		return false;
 
 	//get wall object, if any
-	Ogre::Vector3 isect;
+	Vector3 isect;
 	Real distance = 2000000000.;
-	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
+	Vector3 normal = Vector3::ZERO;
 	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
@@ -3978,7 +3978,7 @@ bool SBS::IsInside()
 	return true;
 }
 
-bool SBS::IsInside(const Ogre::Vector3 &position)
+bool SBS::IsInside(const Vector3 &position)
 {
 	//return true if the specified position is inside the sim engine's area
 
@@ -3989,7 +3989,7 @@ bool SBS::IsInside(const Ogre::Vector3 &position)
 	return true;
 }
 
-bool SBS::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max)
+bool SBS::GetBounds(Vector3 &min, Vector3 &max)
 {
 	if (area_trigger)
 	{
@@ -3998,8 +3998,8 @@ bool SBS::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max)
 		return true;
 	}
 
-	min = Ogre::Vector3::ZERO;
-	max = Ogre::Vector3::ZERO;
+	min = Vector3::ZERO;
+	max = Vector3::ZERO;
 	return false;
 }
 
@@ -4012,8 +4012,8 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 		return;
 
 	Report("Cutting outside boundaries...");
-	Ogre::Vector3 min = area_trigger->GetMin();
-	Ogre::Vector3 max = area_trigger->GetMax();
+	Vector3 min = area_trigger->GetMin();
+	Vector3 max = area_trigger->GetMax();
 
 	if (landscape == true)
 		Landscape->CutOutsideBounds(min, max, true, true);
@@ -4029,7 +4029,7 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 	}
 }
 
-void SBS::CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max, bool landscape, bool buildings, bool external, bool floors)
+void SBS::CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool landscape, bool buildings, bool external, bool floors)
 {
 	//cut landscape and buildings for specified bounds
 	//run this function before calling Start()
@@ -4048,13 +4048,13 @@ void SBS::CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max
 	}
 }
 
-void SBS::SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+void SBS::SetBounds(const Vector3 &area_min, const Vector3 &area_max)
 {
 	//don't set bounds if the primary engine
 	if (InstanceNumber == 0)
 		return;
 
-	if (area_min != Ogre::Vector3::ZERO && area_max != Ogre::Vector3::ZERO && !area_trigger)
+	if (area_min != Vector3::ZERO && area_max != Vector3::ZERO && !area_trigger)
 	{
 		std::vector<std::string> names;
 		names.push_back("Off");
@@ -4082,28 +4082,28 @@ void SBS::ResetState()
 	camera->ResetState();
 }
 
-Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)
+Vector3 SBS::ToGlobal(const Vector3 &position)
 {
 	//convert an engine-relative position to a global (scene) position
 
 	return (GetOrientation().Inverse() * position) + GetPosition();
 }
 
-Ogre::Vector3 SBS::FromGlobal(const Ogre::Vector3 &position)
+Vector3 SBS::FromGlobal(const Vector3 &position)
 {
 	//convert a global (scene) position to an engine-relative position
 
 	return (GetOrientation() * (position - GetPosition()));
 }
 
-Ogre::Quaternion SBS::ToGlobal(const Ogre::Quaternion &orientation)
+Quaternion SBS::ToGlobal(const Quaternion &orientation)
 {
 	//convert an engine-relative orientation (rotation) to a global (scene) orientation
 
 	return (GetOrientation() * orientation);
 }
 
-Ogre::Quaternion SBS::FromGlobal(const Ogre::Quaternion &orientation)
+Quaternion SBS::FromGlobal(const Quaternion &orientation)
 {
 	//convert a global (scene) orientation (rotation) to an engine-relative orientation
 

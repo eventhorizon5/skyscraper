@@ -192,8 +192,8 @@ void SkyControl::OnInit()
 	if (!system)
 		return;
 
-	tLatitude->SetValue(TruncateNumber(Ogre::Degree(system->getObserverLatitude()).valueDegrees(), 4));
-	tLongitude->SetValue(TruncateNumber(Ogre::Degree(system->getObserverLongitude()).valueDegrees(), 4));
+	tLatitude->SetValue(TruncateNumber(Degree(system->getObserverLatitude()).valueDegrees(), 4));
+	tLongitude->SetValue(TruncateNumber(Degree(system->getObserverLongitude()).valueDegrees(), 4));
 	tMultiplier->SetValue(TruncateNumber(system->getTimeScale(), 4));
 }
 
@@ -225,13 +225,13 @@ void SkyControl::Loop()
 void SkyControl::On_bSetLatitude_Click(wxCommandEvent& event)
 {
 	if (system)
-		system->setObserverLatitude(Ogre::Degree(atof(tLatitude->GetValue())));
+		system->setObserverLatitude(Degree(atof(tLatitude->GetValue())));
 }
 
 void SkyControl::On_bSetLongitude_Click(wxCommandEvent& event)
 {
 	if (system)
-		system->setObserverLongitude(Ogre::Degree(atof(tLongitude->GetValue())));
+		system->setObserverLongitude(Degree(atof(tLongitude->GetValue())));
 }
 
 void SkyControl::On_bSet_Toggle(wxCommandEvent& event)

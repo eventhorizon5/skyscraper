@@ -31,7 +31,7 @@ class SBSIMPEXP Trigger : public Object
 public:
 
 	//functions
-	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Ogre::Vector3 area_min, Ogre::Vector3 area_max, const std::vector<std::string> &action_names);
+	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Vector3 area_min, Vector3 area_max, const std::vector<std::string> &action_names);
 	~Trigger();
 	void Enabled(bool value);
 	bool SetSelectPosition(int position);
@@ -49,12 +49,12 @@ public:
 	bool DoAction();
 	void Loop();
 	bool IsInside();
-	bool IsInside(const Ogre::Vector3 &position);
+	bool IsInside(const Vector3 &position);
 	bool IsEnabled() { return is_enabled; }
 	Ogre::AxisAlignedBox GetBounds(bool relative = false);
-	Ogre::Vector3 GetMin();
-	Ogre::Vector3 GetMax();
-	bool IsOutside(Ogre::Vector3 v1, Ogre::Vector3 v2);
+	Vector3 GetMin();
+	Vector3 GetMax();
+	bool IsOutside(Vector3 v1, Vector3 v2);
 	virtual void OnEntry() {}
 	virtual void OnExit() {}
 

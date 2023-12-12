@@ -62,8 +62,8 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	IsEnabled = true;
 	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 	bottom = sbs->GetFloor(startfloor)->Altitude;
-	cutstart = Ogre::Vector2::ZERO;
-	cutend = Ogre::Vector2::ZERO;
+	cutstart = Vector2::ZERO;
+	cutend = Vector2::ZERO;
 	ShowFloors = 0;
 	ShowOutside = false;
 	ShowInterfloors = false;
@@ -71,7 +71,7 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	EnableCheck = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = Ogre::Vector3::ZERO;
+	lastposition = Vector3::ZERO;
 	InElevator = false;
 	ShowFloorsFull_Enabled = false;
 
@@ -168,7 +168,7 @@ void Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
 		EnableCheck = true;
 }
 
-bool Shaft::IsInside(const Ogre::Vector3 &position)
+bool Shaft::IsInside(const Vector3 &position)
 {
 	//SBS_PROFILE("Shaft::IsInShaft");
 
@@ -184,7 +184,7 @@ bool Shaft::IsInside(const Ogre::Vector3 &position)
 		if (Levels[0]->GetMeshObject()->InBoundingBox(position, false) == true)
 		{
 			//do a hit beam test from the position to the bottom of the shaft, to see if it hits a shaft floor
-			bool result = (Levels[0]->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
+			bool result = (Levels[0]->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
 
 			//cache values
 			lastcheckresult = result;
@@ -201,7 +201,7 @@ bool Shaft::IsInside(const Ogre::Vector3 &position)
 	return false;
 }
 
-void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset)
+void Shaft::CutFloors(bool relative, const Vector2 &start, const Vector2 &end, Real startvoffset, Real endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
@@ -216,8 +216,8 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	}
 	else
 	{
-		cutstart = Ogre::Vector2(start.x - GetPosition().x, start.y - GetPosition().z);
-		cutend =  Ogre::Vector2(end.x - GetPosition().x, end.y - GetPosition().z);
+		cutstart = Vector2(start.x - GetPosition().x, start.y - GetPosition().z);
+		cutend =  Vector2(end.x - GetPosition().x, end.y - GetPosition().z);
 	}
 
 	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
@@ -238,9 +238,9 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 			voffset2 = endvoffset;
 
 		if (relative == true)
-			floorptr->Cut(Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true, false);
+			floorptr->Cut(Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true, false);
 		else
-			floorptr->Cut(Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, false);
+			floorptr->Cut(Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true, false);
 		floorptr = 0;
 	}
 
@@ -251,9 +251,9 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
-			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
+			sbs->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
 		else
-			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true);
+			sbs->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
 	}
 }
 
@@ -488,7 +488,7 @@ void Shaft::OnInit()
 		EnableWhole(true, true, true);
 }
 
-void Shaft::Check(Ogre::Vector3 position, int current_floor)
+void Shaft::Check(Vector3 position, int current_floor)
 {
 	Elevator *elevator = sbs->GetElevator(sbs->ElevatorNumber);
 
@@ -883,7 +883,7 @@ void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 	}
 }
 
-bool Shaft::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
+bool Shaft::Level::Cut(bool relative, const Vector3 &start, const Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude
@@ -908,9 +908,9 @@ bool Shaft::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Ve
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(mesh->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->Cut(mesh->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 		else
-			sbs->Cut(mesh->Walls[i], Ogre::Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Ogre::Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->Cut(mesh->Walls[i], Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 	return true;
 }
@@ -998,7 +998,7 @@ Light* Shaft::Level::GetLight(const std::string &name)
 	return 0;
 }
 
-Model* Shaft::Level::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
+Model* Shaft::Level::AddModel(const std::string &name, const std::string &filename, bool center, Vector3 position, Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 
@@ -1039,7 +1039,7 @@ Control* Shaft::Level::AddControl(const std::string &name, const std::string &so
 	return control;
 }
 
-Trigger* Shaft::Level::AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* Shaft::Level::AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//triggers are disabled for now
 
@@ -1125,13 +1125,13 @@ Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, con
 	sbs->ResetDoorwayWalls();
 	if (face_direction == "left" || face_direction == "right")
 	{
-		Cut(1, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
+		Cut(1, Vector3(x1 - 0.5, voffset, z1), Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
+		floorptr->Cut(Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
 	}
 	else
 	{
-		Cut(1, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
+		Cut(1, Vector3(x1, voffset, z1 - 0.5), Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
+		floorptr->Cut(Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
 	}
 
 	//create doorway walls
@@ -1186,7 +1186,7 @@ void Shaft::Level::RemoveDoor(Door *door)
 	}
 }
 
-CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);

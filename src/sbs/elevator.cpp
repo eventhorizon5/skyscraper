@@ -127,7 +127,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	RecallUnavailable = false;
 	ManualGo = false;
 	Created = false;
-	MotorPosition = Ogre::Vector3::ZERO;
+	MotorPosition = Vector3::ZERO;
 	QueueResets = sbs->GetConfigBool("Skyscraper.SBS.Elevator.QueueResets", false);
 	FirstRun = true;
 	ParkingFloor = 0;
@@ -152,7 +152,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WaitForTimer = false;
 	SoundsQueued = false;
 	HeightSet = false;
-	elevposition = Ogre::Vector3::ZERO;
+	elevposition = Vector3::ZERO;
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
@@ -182,7 +182,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	HoistwayAccess = 0;
 	HoistwayAccessFloor = 0;
 	HoistwayAccessHold = sbs->GetConfigBool("Skyscraper.SBS.Elevator.HoistwayAccessHold", true);
-	RopePosition = Ogre::Vector3::ZERO;
+	RopePosition = Vector3::ZERO;
 	CounterweightStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightStartSound", "");
 	CounterweightMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightMoveSound", "");
 	CounterweightStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightStopSound", "");
@@ -355,7 +355,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 		return ReportError("Shaft " + ToString(AssignedShaft) + " doesn't exist");
 
 	//set starting position
-	Ogre::Vector3 position = Ogre::Vector3::ZERO;
+	Vector3 position = Vector3::ZERO;
 
 	if (relative == false)
 	{
@@ -398,7 +398,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	motoridlesound = new Sound(GetShaft(), motorname, true);
 
 	//move motor to top of shaft if location not specified, or to location
-	if (MotorPosition != Ogre::Vector3(0, 0, 0))
+	if (MotorPosition != Vector3(0, 0, 0))
 		motorsound->SetPosition(MotorPosition.x + GetPosition().x, MotorPosition.y, MotorPosition.z + GetPosition().z);
 	else
 	{
@@ -406,7 +406,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 		if (floor)
 			motorsound->SetPositionY(floor->GetBase());
 	}
-	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - GetPosition().x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition().z);
+	MotorPosition = Vector3(motorsound->GetPosition().x - GetPosition().x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition().z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
 
 	Created = true;
@@ -422,7 +422,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	return true;
 }
 
-Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std::string &weight_texture, Real x, Real z, const Ogre::Vector3 &size, Real weight_voffset)
+Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std::string &weight_texture, Real x, Real z, const Vector3 &size, Real weight_voffset)
 {
 	//create a counterweight and ropes for this elevator
 
@@ -457,8 +457,8 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 	x += GetCar(1)->GetPosition().x;
 	z += GetCar(1)->GetPosition().z;
 
-	WeightMesh->SetPosition(Ogre::Vector3(x, topfloor->GetBase() - (carfloor->GetBase() - bottomfloor->GetBase()), z));
-	WeightRopeMesh->SetPosition(Ogre::Vector3(x, WeightMesh->GetPosition().y + (size.y - 0.5), z));
+	WeightMesh->SetPosition(Vector3(x, topfloor->GetBase() - (carfloor->GetBase() - bottomfloor->GetBase()), z));
+	WeightRopeMesh->SetPosition(Vector3(x, WeightMesh->GetPosition().y + (size.y - 0.5), z));
 	RopeMesh->SetPosition(GetCar(GetCarCount() - 1)->GetPosition() + RopePosition);
 
 	Real counterweight_rope_height = MotorPosition.y - (WeightMesh->GetPosition().y + (size.y - 0.5));
@@ -491,7 +491,7 @@ void Elevator::AddRails(const std::string &main_texture, const std::string &edge
 	//creates rails for the elevator cars or counterweight
 	//if orientation is false, create rails along the X axis, otherwise the Z axis
 
-	Ogre::Vector3 offset;
+	Vector3 offset;
 	offset = GetPosition() - GetShaft()->GetPosition();
 
 	int MotorRoom = sbs->GetFloorNumber(MotorPosition.y);
@@ -1250,7 +1250,7 @@ void Elevator::MoveElevatorToFloor()
 
 	SBS_PROFILE("Elevator::MoveElevatorToFloor");
 
-	Ogre::Vector3 movement = Ogre::Vector3(0, 0, 0);
+	Vector3 movement = Vector3(0, 0, 0);
 	bool StartLeveling = false;
 	Error = false;
 
@@ -1923,7 +1923,7 @@ void Elevator::MoveObjects(Real offset)
 
 	SBS_PROFILE("Elevator::MoveObjects");
 
-	Ogre::Vector3 vector (0, offset, 0);
+	Vector3 vector (0, offset, 0);
 
 	Move(vector);
 	elevposition.y = GetPosition().y;
@@ -2202,7 +2202,7 @@ void Elevator::Enabled(bool value)
 	IsEnabled = value;
 }
 
-ElevatorCar* Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
+ElevatorCar* Elevator::IsInElevator(const Vector3 &position, bool camera)
 {
 	//determine if the given 3D position is inside the elevator
 	//returns the related car object, or 0 if not found
@@ -3725,7 +3725,7 @@ bool Elevator::SelectFloor(int floor)
 	return result;
 }
 
-bool Elevator::Check(Ogre::Vector3 position)
+bool Elevator::Check(Vector3 position)
 {
 	//check to see if user (camera) is in the elevator
 

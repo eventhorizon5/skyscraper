@@ -236,8 +236,8 @@ void EngineManager::Loop()
 		if (!engine->GetSystem())
 			return;
 
-		Ogre::Vector3 position = engine->GetSystem()->GetPosition();
-		Ogre::Vector3 min, max;
+		Vector3 position = engine->GetSystem()->GetPosition();
+		Vector3 min, max;
 		engine->GetSystem()->GetBounds(min, max);
 
 		if (min.y <= -999999)

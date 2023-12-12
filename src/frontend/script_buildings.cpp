@@ -123,10 +123,10 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			}
 		}
 
-		Ogre::Vector3 position (Ogre::Vector3::ZERO);
+		Vector3 position (Vector3::ZERO);
 		Real rotation = 0.0;
-		Ogre::Vector3 min (Ogre::Vector3::ZERO);
-		Ogre::Vector3 max (Ogre::Vector3::ZERO);
+		Vector3 min (Vector3::ZERO);
+		Vector3 max (Vector3::ZERO);
 
 		if (params > 1)
 		{

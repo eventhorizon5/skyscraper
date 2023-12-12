@@ -59,7 +59,7 @@ public:
 	void RemoveAction(Action *action);
 	bool IsEnabled() { return is_enabled; }
 	bool GetLightStatus() { return light_status; }
-	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void OnUnclick(bool right);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);

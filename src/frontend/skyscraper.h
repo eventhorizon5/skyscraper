@@ -127,7 +127,7 @@ public:
 	void StartSound();
 	void StopSound();
 	std::string SelectBuilding();
-	bool Load(const std::string &filename, EngineContext *parent = 0, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void UnloadToMenu();
@@ -149,7 +149,7 @@ public:
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
-	EngineContext* CreateEngine(EngineContext *parent = 0, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount();
@@ -207,7 +207,7 @@ private:
 	void Click(int index);
 	void UnloadSim();
 	void DeleteButtons();
-	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
+	void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
 	bool RunEngines();
 	void SwitchEngines();
 	void HandleEngineShutdown();

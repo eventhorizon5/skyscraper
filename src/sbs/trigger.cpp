@@ -36,7 +36,7 @@
 
 namespace SBS {
 
-Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Ogre::Vector3 area_min, Ogre::Vector3 area_max, const std::vector<std::string> &action_names) : Object(parent)
+Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Vector3 area_min, Vector3 area_max, const std::vector<std::string> &action_names) : Object(parent)
 {
 	//create a proximity trigger at the specified location
 
@@ -273,7 +273,7 @@ void Trigger::Loop()
 
 	SBS_PROFILE("Trigger::Loop");
 
-	Ogre::Vector3 cam = sbs->camera->GetPosition();
+	Vector3 cam = sbs->camera->GetPosition();
 	bool changed = false;
 	if (IsInside(cam) == true)
 	{
@@ -334,7 +334,7 @@ bool Trigger::IsInside()
 	return is_inside;
 }
 
-bool Trigger::IsInside(const Ogre::Vector3 &position)
+bool Trigger::IsInside(const Vector3 &position)
 {
 	//return true if the given absolute position is inside the trigger area
 
@@ -345,8 +345,8 @@ Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 {
 	//get bounds information for this trigger
 
-	Ogre::Vector3 min = area_box->getMinimum();
-	Ogre::Vector3 max = area_box->getMaximum();
+	Vector3 min = area_box->getMinimum();
+	Vector3 max = area_box->getMaximum();
 
 	if (relative == false)
 	{
@@ -357,14 +357,14 @@ Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 	return Ogre::AxisAlignedBox(min, max);
 }
 
-bool Trigger::IsOutside(Ogre::Vector3 v1, Ogre::Vector3 v2)
+bool Trigger::IsOutside(Vector3 v1, Vector3 v2)
 {
 	//return true if the given rectangle is outside of the trigger area
 
 	v1 -= GetPosition();
 	v2 -= GetPosition();
-	Ogre::Vector3 min = area_box->getMinimum();
-	Ogre::Vector3 max = area_box->getMaximum();
+	Vector3 min = area_box->getMinimum();
+	Vector3 max = area_box->getMaximum();
 
 	if ((v1.x < min.x && v2.x < min.x) ||
 		(v1.y < min.y && v2.y < min.y) ||
@@ -376,12 +376,12 @@ bool Trigger::IsOutside(Ogre::Vector3 v1, Ogre::Vector3 v2)
 	return false;
 }
 
-Ogre::Vector3 Trigger::GetMin()
+Vector3 Trigger::GetMin()
 {
 	return area_box->getMinimum();
 }
 
-Ogre::Vector3 Trigger::GetMax()
+Vector3 Trigger::GetMax()
 {
 	return area_box->getMaximum();
 }

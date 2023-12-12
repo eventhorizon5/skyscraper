@@ -141,7 +141,7 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 #endif
 	}
 	if (frontend->mCamera)
-		frontend->mCamera->setAspectRatio(Ogre::Real(frontend->mViewport->getActualWidth()) / Ogre::Real(frontend->mViewport->getActualHeight()));
+		frontend->mCamera->setAspectRatio(Real(frontend->mViewport->getActualWidth()) / Real(frontend->mViewport->getActualHeight()));
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
@@ -756,7 +756,7 @@ void MainScreen::HandleMouseMovement()
 		{
 			WarpPointer(width * 0.5, height * 0.5);
 
-			Ogre::Vector3 rotational;
+			Vector3 rotational;
 			rotational.x = -(((Real)camera->mouse_y - (height / 2))) / (height * 2);
 			rotational.y = -((width / 2) - (Real)camera->mouse_x) / (width * 2);
 			rotational.z = 0;
@@ -781,7 +781,7 @@ void MainScreen::HandleMouseMovement()
 			strafe_right = 0;
 			strafe_left = 0;
 			if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
-				camera->FreelookMove(Ogre::Vector3::ZERO);
+				camera->FreelookMove(Vector3::ZERO);
 			ProcessMovement(engine, false, false, true);
 		}
 		freelook = false;

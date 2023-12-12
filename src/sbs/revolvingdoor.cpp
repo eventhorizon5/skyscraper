@@ -57,7 +57,7 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	if (Speed <= 0)
 		Speed = 75;
 
-	Ogre::Vector3 position (CenterX, voffset, CenterZ);
+	Vector3 position (CenterX, voffset, CenterZ);
 
 	Clockwise = clockwise;
 
@@ -210,7 +210,7 @@ void RevolvingDoor::MoveDoor()
 	Rotate(0, rotation, 0);
 }
 
-void RevolvingDoor::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+void RevolvingDoor::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	if (right == false)
 	{

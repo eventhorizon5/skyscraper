@@ -32,7 +32,7 @@ namespace SBS {
 #undef SMALL_EPSILON
 #define SMALL_EPSILON 0.000001f
 
-bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, PolyArray &vertices, const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3, Real tw, Real th)
+bool TextureManager::ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, PolyArray &vertices, const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, Real tw, Real th)
 {
 	//this is modified code from the Crystal Space thingmesh system (SetTextureSpace function),
 	//from the "plugins/mesh/thing/object/polygon.cpp" file.
@@ -67,7 +67,7 @@ bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t
 	//     (1/M) * (UV - UV1) = PL
 
 	//get stored UV mappings and adjust according to width and height
-	Ogre::Vector2 uv1, uv2, uv3;
+	Vector2 uv1, uv2, uv3;
 	uv1.x = MapUV[0].x * tw;
 	uv1.y = MapUV[0].y * th;
 	uv2.x = MapUV[1].x * tw;
@@ -103,37 +103,37 @@ bool TextureManager::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t
 		m22 = tmp1 * inv_det;
 	}
 
-	Ogre::Vector2 pl;
-	Ogre::Vector3 po, pu, pv;
+	Vector2 pl;
+	Vector3 po, pu, pv;
 
 	// For (0,0) and Po
-	Ogre::Vector2 v = Ogre::Vector2(0, 0) - uv1;
-	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
+	Vector2 v = Vector2(0, 0) - uv1;
+	pl = Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	po = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 	po = Round(po, 7); //round result to prevent precision errors
 
 	// For (1,0) and Pu
-	v = Ogre::Vector2(1, 0) - uv1;
-	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
+	v = Vector2(1, 0) - uv1;
+	pl = Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	pu = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 	pu = Round(pu, 7); //round result to prevent precision errors
 
 	// For (0,1) and Pv
-	v = Ogre::Vector2(0, 1) - uv1;
-	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
+	v = Vector2(0, 1) - uv1;
+	pl = Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 	pv = Round(pv, 7); //round result to prevent precision errors
 
 	//compute norms of vectors
-	Ogre::Vector3 len1 = pu - po;
-	Ogre::Vector3 len2 = pv - po;
+	Vector3 len1 = pu - po;
+	Vector3 len2 = pv - po;
 	Real len1f = sqrt(len1.x * len1.x + len1.y * len1.y + len1.z * len1.z);
 	Real len2f = sqrt(len2.x * len2.x + len2.y * len2.y + len2.z * len2.z);
 
 	return ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
 }
 
-bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, Real len1, const Ogre::Vector3 &v2, Real len2)
+bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2)
 {
 	//originally from Crystal Space's libs/csgeom/textrans.cpp file
 
@@ -161,9 +161,9 @@ bool TextureManager::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, con
 	//get inverse square of d
 	Real invl2 = (d) ? 1 / sqrt(d) : 0;
 
-	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
-	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
-	Ogre::Vector3 v_w = v_u.crossProduct(v_v);
+	Vector3 v_u = (v1 - v_orig) * len1 * invl1;
+	Vector3 v_v = (v2 - v_orig) * len2 * invl2;
+	Vector3 v_w = v_u.crossProduct(v_v);
 
 	m[0][0] = v_u.x;
 	m[0][1] = v_v.x;
@@ -249,9 +249,9 @@ void SBS::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray 
 	poly1.reserve(orig.size());
 	poly2.reserve(orig.size());
 
-	Ogre::Vector3 ptB;
+	Vector3 ptB;
 	Real sideA = 0, sideB = 0;
-	Ogre::Vector3 ptA = orig[orig.size() - 1];
+	Vector3 ptA = orig[orig.size() - 1];
 
 	if (axis == 0)
 		sideA = ptA.x - value;
@@ -284,7 +284,7 @@ void SBS::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray 
 				// from point A to point B with the partition
 				// plane. This is a simple ray-plane intersection.
 
-				Ogre::Vector3 v = ptB;
+				Vector3 v = ptB;
 				v -= ptA;
 
 				Real sect = 0;
@@ -310,7 +310,7 @@ void SBS::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray 
 				// from point A to point B with the partition
 				// plane. This is a simple ray-plane intersection.
 
-				Ogre::Vector3 v = ptB;
+				Vector3 v = ptB;
 				v -= ptA;
 
 				Real sect = 0;
@@ -339,7 +339,7 @@ void SBS::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray 
 	}
 }
 
-Ogre::Vector3 SBS::ComputeNormal(PolyArray &vertices, Real &D)
+Vector3 SBS::ComputeNormal(PolyArray &vertices, Real &D)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//calculate polygon normal
@@ -373,7 +373,7 @@ Ogre::Vector3 SBS::ComputeNormal(PolyArray &vertices, Real &D)
 		invd = 1.0f / SMALL_EPSILON;
 	else
 		invd = 1.0f / sqrt(sqd);
-	Ogre::Vector3 norm;
+	Vector3 norm;
 	norm.x = ayz * invd;
 	norm.y = azx * invd;
 	norm.z = axy * invd;
@@ -381,7 +381,7 @@ Ogre::Vector3 SBS::ComputeNormal(PolyArray &vertices, Real &D)
 	return norm;
 }
 
-bool Polygon::IntersectRay(PolyArray &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+bool Polygon::IntersectRay(PolyArray &vertices, const Vector3 &start, const Vector3 &end)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -396,7 +396,7 @@ bool Polygon::IntersectRay(PolyArray &vertices, const Ogre::Vector3 &start, cons
 	// First we do backface culling on the polygon with respect to
 	// the starting point of the beam.
 
-	Ogre::Plane plane = GetAbsolutePlane();
+	Plane plane = GetAbsolutePlane();
 
 	Real dot1 = plane.d + plane.normal.x * start.x + plane.normal.y * start.y + plane.normal.z * start.z;
 	if (dot1 > 0)
@@ -412,14 +412,14 @@ bool Polygon::IntersectRay(PolyArray &vertices, const Ogre::Vector3 &start, cons
 	// every edge of the polygon. With the plane normal of that plane we
 	// can then check if the end of the ray is on the same side for all
 	// these planes.
-	Ogre::Vector3 normal;
-	Ogre::Vector3 relend = end;
+	Vector3 normal;
+	Vector3 relend = end;
 	relend -= start;
 
 	size_t i1 = vertices.size() - 1;
 	for (size_t i = 0; i < vertices.size(); i++)
 	{
-		Ogre::Vector3 start2 = start - vertices[i1];
+		Vector3 start2 = start - vertices[i1];
 		normal = start2.crossProduct(start - vertices[i]);
 		if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
 			return false;
@@ -429,7 +429,7 @@ bool Polygon::IntersectRay(PolyArray &vertices, const Ogre::Vector3 &start, cons
 	return true;
 }
 
-bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal)
+bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -454,7 +454,7 @@ bool Polygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &
 	return false;
 }
 
-bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal)
+bool Polygon::IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -477,7 +477,7 @@ bool Polygon::IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vect
 	if (pr)
 		*pr = -1;
 
-	Ogre::Plane plane = GetAbsolutePlane();
+	Plane plane = GetAbsolutePlane();
 
 	Real denom = plane.normal.x * (end.x) +
 			plane.normal.y * (end.y - start.y) +

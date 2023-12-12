@@ -34,8 +34,8 @@ public:
 	int StairsNum; //number
 	int startfloor; //starting floor
 	int endfloor; //ending floor
-	Ogre::Vector2 cutstart; //cut starting vector
-	Ogre::Vector2 cutend; //cut ending vector
+	Vector2 cutstart; //cut starting vector
+	Vector2 cutend; //cut ending vector
 	bool Inside; //true if user/camera is in the stairwell
 	bool IsEnabled; //true if the entire stairwell has been enabled
 	bool ShowFloors; //true if floors should be shown while inside the stairwell; floor list in ShowFloorsList
@@ -44,8 +44,8 @@ public:
 	Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	~Stairwell();
 	void EnableWhole(bool value, bool force = false);
-	bool IsInside(const Ogre::Vector3 &position);
-	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset);
+	bool IsInside(const Vector3 &position);
+	void CutFloors(bool relative, const Vector2 &start, const Vector2 &end, Real startvoffset, Real endvoffset);
 	void EnableRange(int floor, int range, bool value);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
@@ -54,7 +54,7 @@ public:
 	void AddShowFloor(int floor);
 	void RemoveShowFloor(int floor);
 	bool IsShowFloor(int floor);
-	void Check(Ogre::Vector3 position, int current_floor, int previous_floor);
+	void Check(Vector3 position, int current_floor, int previous_floor);
 	void Loop();
 	void SetShowFull(int value);
 	Level* GetLevel(int floor);
@@ -75,7 +75,7 @@ public:
 		Door* AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 		Door* CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate);
 		Door* GetDoor(const std::string &name);
-		bool Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0);
+		bool Cut(bool relative, const Vector3 &start, const Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0);
 		bool IsEnabled();
 		void RemoveDoor(Door *door);
 		void RemoveLight(Light *light);
@@ -85,15 +85,15 @@ public:
 		Light* AddLight(const std::string &name, int type);
 		Light* GetLight(const std::string &name);
 		MeshObject* GetMeshObject();
-		Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
+		Model* AddModel(const std::string &name, const std::string &filename, bool center, Vector3 position, Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 		void AddModel(Model *model);
 		Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
-		Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
+		Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names);
 		Model* GetModel(std::string name);
 		void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 		int GetFloor();
 		void Loop();
-		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
+		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
 
 		bool enabled;
 
@@ -136,7 +136,7 @@ private:
 	DynamicMesh *dynamic_mesh;
 
 	//cache objects for IsInStairwell()
-	Ogre::Vector3 lastposition;
+	Vector3 lastposition;
 	bool lastcheckresult;
 	bool checkfirstrun;
 };

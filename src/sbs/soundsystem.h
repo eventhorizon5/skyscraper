@@ -34,8 +34,8 @@ public:
 
 	SoundSystem(Object *parent, FMOD::System *fmodsystem);
 	~SoundSystem();
-	void SetListenerPosition(const Ogre::Vector3 &position);
-	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);
+	void SetListenerPosition(const Vector3 &position);
+	void SetListenerDirection(const Vector3 &front, const Vector3 &top);
 	void Loop();
 	FMOD::System *GetFmodSystem() { return soundsys; } //temporary for transition
 	void Cleanup(int index = -1);
@@ -66,7 +66,7 @@ private:
 	//sound data array
 	std::vector<SoundData*> sounds;
 
-	Ogre::Vector3 Position;
+	Vector3 Position;
 };
 
 struct SBSIMPEXP SoundData

@@ -50,7 +50,7 @@ public:
 	std::string SensorSound; //door sensor sound
 	int OpenDoor; //1=open doors, -1=close doors, 2=open manual, -2=close manual
 	Real ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command) - deprecated
-	Ogre::Vector3 ShaftDoorOrigin; //shaft door origin (deprecated)
+	Vector3 ShaftDoorOrigin; //shaft door origin (deprecated)
 	Real ManualSpeed; //manual speed multiplier
 	Real SlowSpeed; //slow speed multiplier, mainly for nudge mode
 	bool EarlyUpSet;
@@ -78,7 +78,7 @@ public:
 	void Chime(int floor, bool direction);
 	void EarlyChime(int floor, bool direction);
 	void Loop();
-	void MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
+	void MoveSound(const Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
 	void Enabled(bool value);
 	bool IsEnabled();
 	void SetShaftDoors(Real thickness, Real CenterX, Real CenterZ);
@@ -100,7 +100,7 @@ public:
 	int GetManualIndex(int floor);
 	Real GetShaftDoorAltitude(int floor);
 	void CheckSensor();
-	void CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
+	void CreateSensor(Vector3 &area_min, Vector3 &area_max);
 	bool AreDoorsMoving(int doors = 0, bool car_doors = true, bool shaft_doors = true);
 	void EnableSensor(bool value, bool persistent = true);
 	bool GetSensorStatus(bool persistent = true);

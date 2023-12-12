@@ -32,7 +32,7 @@ public:
 	bool load_error;
 
 	//functions
-	Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
+	Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	~Model();
 	bool IsEnabled();
 	void Enabled(bool value);
@@ -47,14 +47,14 @@ public:
 	MeshObject* GetMeshObject() { return mesh; }
 	void OnInit();
 	bool IsCustom() { return custom; }
-	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 
 private:
 	void RemoveFromParent();
 	void AddToParent();
 
 	MeshObject* mesh;
-	Ogre::Vector3 Offset;
+	Vector3 Offset;
 	bool is_key;
 	int KeyID;
 	bool global;

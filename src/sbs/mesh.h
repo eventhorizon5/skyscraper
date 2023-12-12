@@ -52,9 +52,9 @@ public:
 	struct Geometry
 	{
 		//basic 3D geometry
-		Ogre::Vector3 vertex;
-		Ogre::Vector2 texel;
-		Ogre::Vector3 normal;
+		Vector3 vertex;
+		Vector2 texel;
+		Vector3 normal;
 	};
 	struct TriangleIndices
 	{
@@ -77,10 +77,10 @@ public:
 	Wall* GetWallByName(std::string name);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true, int submesh = 0);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	Wall* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real &distance, Ogre::Vector3 &normal, Wall *wall = 0);
-	bool PolyMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
-	bool PolyMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
-	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th);
+	Wall* FindWallIntersect(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall = 0);
+	bool PolyMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
+	bool PolyMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
+	Vector2* GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th);
 	int ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add);
 	int FindMatchingSubMesh(const std::string &material);
 	void DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices);
@@ -88,25 +88,25 @@ public:
 	void EnableDebugView(bool value);
 	void CreateCollider();
 	void DeleteCollider();
-	Real HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, Real max_distance);
-	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
-	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
-	void CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices);
+	Real HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance);
+	bool InBoundingBox(const Vector3 &pos, bool check_y);
+	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
+	void CreateColliderFromModel(int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices);
 	void CreateBoxCollider();
 	void DeleteWalls();
 	void DeleteWalls(Object *parent);
-	Ogre::Vector3 GetPoint(const std::string &wallname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	Ogre::Vector3 GetWallExtents(const std::string &name, Real altitude, bool get_max);
-	Ogre::Vector2 GetExtents(int coord, bool flip_z = false);
+	Vector3 GetPoint(const std::string &wallname, const Vector3 &start, const Vector3 &end);
+	Vector3 GetWallExtents(const std::string &name, Real altitude, bool get_max);
+	Vector2 GetExtents(int coord, bool flip_z = false);
 	Wall* FindPolygon(const std::string &name, int &index);
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
 	int GetSubmeshCount();
 	bool IsVisible(Ogre::Camera *camera);
 	bool IsPhysical();
-	Ogre::Vector3 GetOffset();
-	void Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	void CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors);
+	Vector3 GetOffset();
+	void Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
+	void CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors);
 	unsigned int GetVertexCount(int submesh = -1);
 	unsigned int GetTriangleCount(int submesh = -1);
 	bool UsingDynamicBuffers();

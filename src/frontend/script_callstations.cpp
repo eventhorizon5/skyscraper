@@ -242,7 +242,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Ogre::Vector3 position = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		Vector3 position = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		station->SetPosition(position);
 	}
 

@@ -267,7 +267,7 @@ void Object::ShowBoundingBox(bool value)
 		node->ShowBoundingBox(value);
 }
 
-void Object::Move(const Ogre::Vector3 &vector, Real speed)
+void Object::Move(const Vector3 &vector, Real speed)
 {
 	//move an object
 
@@ -284,11 +284,11 @@ void Object::Move(const Ogre::Vector3 &vector, Real speed)
 
 void Object::Move(Real X, Real Y, Real Z, Real speed)
 {
-	Ogre::Vector3 pos (X, Y, Z);
+	Vector3 pos (X, Y, Z);
 	Move(pos, speed);
 }
 
-void Object::SetPosition(const Ogre::Vector3 &position)
+void Object::SetPosition(const Vector3 &position)
 {
 	//set position of object
 
@@ -301,7 +301,7 @@ void Object::SetPosition(const Ogre::Vector3 &position)
 	NotifyMove();
 }
 
-void Object::SetPositionRelative(const Ogre::Vector3 &position)
+void Object::SetPositionRelative(const Vector3 &position)
 {
 	//set position of object
 	//position is relative of parent object
@@ -317,13 +317,13 @@ void Object::SetPositionRelative(const Ogre::Vector3 &position)
 
 void Object::SetPosition(Real X, Real Y, Real Z)
 {
-	Ogre::Vector3 pos (X, Y, Z);
+	Vector3 pos (X, Y, Z);
 	SetPosition(pos);
 }
 
 void Object::SetPositionRelative(Real X, Real Y, Real Z)
 {
-	Ogre::Vector3 pos (X, Y, Z);
+	Vector3 pos (X, Y, Z);
 	SetPositionRelative(pos);
 }
 
@@ -331,22 +331,22 @@ void Object::SetPositionY(Real value)
 {
 	//set position of only Y vector
 
-	Ogre::Vector3 pos (GetPosition().x, value, GetPosition().z);
+	Vector3 pos (GetPosition().x, value, GetPosition().z);
 	SetPosition(pos);
 }
 
-Ogre::Vector3 Object::GetPosition(bool relative)
+Vector3 Object::GetPosition(bool relative)
 {
 	//get position of object
 	//if relative is true, position is relative of parent object
 
 	if (!node)
-		return Ogre::Vector3::ZERO;
+		return Vector3::ZERO;
 
 	return node->GetPosition(relative);
 }
 
-void Object::SetRotation(const Ogre::Vector3 &rotation)
+void Object::SetRotation(const Vector3 &rotation)
 {
 	//rotate object
 
@@ -363,43 +363,43 @@ void Object::SetRotation(const Ogre::Vector3 &rotation)
 
 void Object::SetRotation(Real X, Real Y, Real Z)
 {
-	Ogre::Vector3 rot (X, Y, Z);
+	Vector3 rot (X, Y, Z);
 	SetRotation(rot);
 }
 
-void Object::Rotate(const Ogre::Vector3 &vector, Real speed)
+void Object::Rotate(const Vector3 &vector, Real speed)
 {
 	//rotates object in a relative amount
 
-	Ogre::Vector3 rot = GetRotation() + (vector * speed);
+	Vector3 rot = GetRotation() + (vector * speed);
 	SetRotation(rot);
 }
 
 void Object::Rotate(Real X, Real Y, Real Z, Real speed)
 {
-	Ogre::Vector3 rot (X, Y, Z);
+	Vector3 rot (X, Y, Z);
 	Rotate(rot, speed);
 }
 
-Ogre::Vector3 Object::GetRotation()
+Vector3 Object::GetRotation()
 {
 	//get rotation of object
 
 	if (!node)
-		return Ogre::Vector3::ZERO;
+		return Vector3::ZERO;
 
 	return node->GetRotation();
 }
 
-Ogre::Quaternion Object::GetOrientation(bool relative)
+Quaternion Object::GetOrientation(bool relative)
 {
 	if (!node)
-		return Ogre::Quaternion::ZERO;
+		return Quaternion::ZERO;
 
 	return node->GetOrientation(relative);
 }
 
-void Object::SetOrientation(const Ogre::Quaternion &q, bool relative)
+void Object::SetOrientation(const Quaternion &q, bool relative)
 {
 	if (!node)
 		return;
@@ -471,10 +471,10 @@ void Object::ChangeParent(Object *new_parent)
 		return;
 
 	//get original positioning
-	Ogre::Vector3 pos = GetPosition();
+	Vector3 pos = GetPosition();
 
 	//get original orientation
-	Ogre::Quaternion q;
+	Quaternion q;
 	if (node)
 		q = node->GetOrientation();
 

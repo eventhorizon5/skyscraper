@@ -33,12 +33,12 @@ class SBSIMPEXP Step : public MeshObject
 public:
 	Step(Object* parent, const std::string &name, DynamicMesh* wrapper, int max_render_distance = 0);
 	~Step() {}
-	void Move(const Ogre::Vector3 &vector, Real speed = 1.0f);
+	void Move(const Vector3 &vector, Real speed = 1.0f);
 	void OnHit();
 
-	Ogre::Vector3 vector;
+	Vector3 vector;
 	Real speed;
-	Ogre::Vector3 start;
+	Vector3 start;
 };
 
 }

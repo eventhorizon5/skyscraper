@@ -130,7 +130,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, y) || !IsNumeric(str3, z))
 			return ScriptError("Invalid direction");
 
-		Simcore->camera->SetStartDirection(Ogre::Vector3(x, y, z));
+		Simcore->camera->SetStartDirection(Vector3(x, y, z));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "camerarotation")
@@ -147,7 +147,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, y) || !IsNumeric(str3, z))
 			return ScriptError("Invalid direction");
 
-		Simcore->camera->SetStartRotation(Ogre::Vector3(x, y, z));
+		Simcore->camera->SetStartRotation(Vector3(x, y, z));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "interfloorontop")
@@ -204,7 +204,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Ogre::Vector3 position;
+		Vector3 position;
 		position.x = ToFloat(tempdata[0]);
 		position.y = ToFloat(tempdata[1]);
 		position.z = ToFloat(tempdata[2]);
@@ -238,7 +238,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Ogre::Vector3 min, max;
+		Vector3 min, max;
 		min.x = ToFloat(tempdata[0]);
 		min.y = ToFloat(tempdata[1]);
 		min.z = ToFloat(tempdata[2]);

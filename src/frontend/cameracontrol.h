@@ -274,7 +274,7 @@ class CameraControl: public wxDialog
 		wxTextCtrl* txtStartPosition;
 		wxTextCtrl* txtVelocity;
 		//*)
-		Ogre::Vector3 hold_vector;
+		Vector3 hold_vector;
 
 	private:
 

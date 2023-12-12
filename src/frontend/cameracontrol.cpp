@@ -453,7 +453,7 @@ void CameraControl::OnInit()
 
 	txtGravity->SetValue(TruncateNumber(Simcore->camera->GetGravity(), 4));
 	txtFreelookSpeed->SetValue(TruncateNumber(Simcore->camera->Freelook_speed, 2));
-	hold_vector = Ogre::Vector3(0, 0, 0);
+	hold_vector = Vector3(0, 0, 0);
 	txtBinocularsFOV->SetValue(TruncateNumber(Simcore->camera->BinocularsFOV, 4));
 }
 
@@ -466,7 +466,7 @@ void CameraControl::Loop()
 	if (!Simcore)
 		return;
 
-	Ogre::Vector3 direction_front, direction_top;
+	Vector3 direction_front, direction_top;
 	Simcore->camera->GetDirection(direction_front, direction_top);
 	txtDirectionFront->SetValue(TruncateNumber(direction_front.x, 2) + wxT(", ") + TruncateNumber(direction_front.y, 2) + wxT(", ") + TruncateNumber(direction_front.z, 2));
 	txtDirectionTop->SetValue(TruncateNumber(direction_top.x, 2) + wxT(", ") + TruncateNumber(direction_top.y, 2) + wxT(", ") + TruncateNumber(direction_top.z, 2));
@@ -489,7 +489,7 @@ void CameraControl::Loop()
 	txtFOV->SetValue(TruncateNumber(Simcore->camera->GetFOVAngle(), 4));
 
 	//move if hold vector is not zero
-	if (hold_vector != Ogre::Vector3(0, 0, 0))
+	if (hold_vector != Vector3(0, 0, 0))
 	{
 		if (rPosition->GetValue() == true)
 			Simcore->camera->Move(hold_vector, 1);
@@ -512,84 +512,84 @@ void CameraControl::On_bZPlus_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
+		hold_vector += Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Move(Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Rotate(Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bYPlus_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
+		hold_vector += Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Move(Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Rotate(Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bXNeg_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
+		hold_vector -= Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Move(Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Rotate(Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bXPlus_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
+		hold_vector += Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Move(Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Rotate(Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bZNeg_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
+		hold_vector -= Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Move(Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Rotate(Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bYNeg_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
+		hold_vector -= Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Move(Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()));
 	else
-		Simcore->camera->Rotate(Ogre::Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()));
+		Simcore->camera->Rotate(Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()));
 }
 
 void CameraControl::On_bStartPosition_Click(wxCommandEvent& event)
@@ -634,38 +634,38 @@ void CameraControl::On_bFreelookSpeed_Click(wxCommandEvent& event)
 
 void CameraControl::On_bPositionX_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetPosition(Ogre::Vector3(atof(txtPositionX->GetValue()), Simcore->camera->GetPosition().y, Simcore->camera->GetPosition().z));
+	Simcore->camera->SetPosition(Vector3(atof(txtPositionX->GetValue()), Simcore->camera->GetPosition().y, Simcore->camera->GetPosition().z));
 }
 
 void CameraControl::On_bPositionY_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetPosition(Ogre::Vector3(Simcore->camera->GetPosition().x, atof(txtPositionY->GetValue()), Simcore->camera->GetPosition().z));
+	Simcore->camera->SetPosition(Vector3(Simcore->camera->GetPosition().x, atof(txtPositionY->GetValue()), Simcore->camera->GetPosition().z));
 }
 
 void CameraControl::On_bPositionZ_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetPosition(Ogre::Vector3(Simcore->camera->GetPosition().x, Simcore->camera->GetPosition().y, atof(txtPositionZ->GetValue())));
+	Simcore->camera->SetPosition(Vector3(Simcore->camera->GetPosition().x, Simcore->camera->GetPosition().y, atof(txtPositionZ->GetValue())));
 }
 
 void CameraControl::On_bRotationX_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetRotation(Ogre::Vector3(atof(txtRotationX->GetValue()), Simcore->camera->GetRotation().y, Simcore->camera->GetRotation().z));
+	Simcore->camera->SetRotation(Vector3(atof(txtRotationX->GetValue()), Simcore->camera->GetRotation().y, Simcore->camera->GetRotation().z));
 }
 
 void CameraControl::On_bRotationY_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetRotation(Ogre::Vector3(Simcore->camera->GetRotation().x, atof(txtRotationY->GetValue()), Simcore->camera->GetRotation().z));
+	Simcore->camera->SetRotation(Vector3(Simcore->camera->GetRotation().x, atof(txtRotationY->GetValue()), Simcore->camera->GetRotation().z));
 }
 
 void CameraControl::On_bRotationZ_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetRotation(Ogre::Vector3(Simcore->camera->GetRotation().x, Simcore->camera->GetRotation().y, atof(txtRotationZ->GetValue())));
+	Simcore->camera->SetRotation(Vector3(Simcore->camera->GetRotation().x, Simcore->camera->GetRotation().y, atof(txtRotationZ->GetValue())));
 }
 
 void CameraControl::On_chkHold_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == false)
-		hold_vector = Ogre::Vector3(0, 0, 0);
+		hold_vector = Vector3(0, 0, 0);
 }
 
 void CameraControl::On_bSetFOV_Click(wxCommandEvent& event)

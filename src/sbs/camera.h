@@ -28,17 +28,17 @@ namespace SBS {
 
 struct SBSIMPEXP CameraState
 {
-	Ogre::Vector3 position;
-	Ogre::Vector3 rotation;
+	Vector3 position;
+	Vector3 rotation;
 	int floor;
 	bool collisions;
 	bool gravity;
 	bool freelook;
-	Ogre::Vector3 desired_velocity;
-	Ogre::Vector3 velocity;
-	Ogre::Vector3 desired_angle_velocity;
-	Ogre::Vector3 angle_velocity;
-	Ogre::Vector3 accum_movement;
+	Vector3 desired_velocity;
+	Vector3 velocity;
+	Vector3 desired_angle_velocity;
+	Vector3 angle_velocity;
+	Vector3 accum_movement;
 	Real fov;
 };
 
@@ -73,10 +73,10 @@ public:
 	Real cfg_speedfast; //camera fast speed multiplier
 	Real cfg_speedslow; //camera slow speed multiplier
 	Real cfg_zoomspeed; //camera zoom speed
-	Ogre::Vector3 desired_velocity;
-	Ogre::Vector3 velocity;
-	Ogre::Vector3 desired_angle_velocity;
-	Ogre::Vector3 angle_velocity;
+	Vector3 desired_velocity;
+	Vector3 velocity;
+	Vector3 desired_angle_velocity;
+	Vector3 angle_velocity;
 	Real speed; //movement speed base
 	bool MouseLeftDown; //mouse left button status
 	bool MouseRightDown; //mouse right button status
@@ -85,7 +85,7 @@ public:
 	int LastHitMeshNumber; //object number of last hit mesh
 	bool Freelook; //freelook (mouselook) is enabled/disabled
 	Real Freelook_speed; //freelook speed
-	Ogre::Vector3 HitPosition; //last hit position
+	Vector3 HitPosition; //last hit position
 	bool EnableBullet;
 	Real BinocularsFOV; //binoculars mode FOV
 	bool RestrictRotation;
@@ -99,21 +99,21 @@ public:
 	//functions
 	Camera(Object *parent);
 	~Camera();
-	void SetPosition(const Ogre::Vector3 &position);
-	void SetDirection(const Ogre::Vector3 &direction);
-	void SetRotation(const Ogre::Vector3 &rotation);
-	Ogre::Vector3 GetPosition(bool relative = false);
-	void GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top, bool global = false);
-	Ogre::Vector3 GetRotation();
+	void SetPosition(const Vector3 &position);
+	void SetDirection(const Vector3 &direction);
+	void SetRotation(const Vector3 &rotation);
+	Vector3 GetPosition(bool relative = false);
+	void GetDirection(Vector3 &front, Vector3 &top, bool global = false);
+	Vector3 GetRotation();
 	void UpdateCameraFloor();
-	bool Move(Ogre::Vector3 vector, Real speed = 1.0, bool flip = true);
-	bool MovePosition(Ogre::Vector3 vector, Real speed = 1.0);
-	void Rotate(const Ogre::Vector3 &position, Real speed = 1.0);
-	void RotateLocal(const Ogre::Vector3 &position, Real speed = 1.0);
-	void SetStartDirection(const Ogre::Vector3 &direction);
-	Ogre::Vector3 GetStartDirection();
-	void SetStartRotation(const Ogre::Vector3 &rotation);
-	Ogre::Vector3 GetStartRotation();
+	bool Move(Vector3 vector, Real speed = 1.0, bool flip = true);
+	bool MovePosition(Vector3 vector, Real speed = 1.0);
+	void Rotate(const Vector3 &position, Real speed = 1.0);
+	void RotateLocal(const Vector3 &position, Real speed = 1.0);
+	void SetStartDirection(const Vector3 &direction);
+	Vector3 GetStartDirection();
+	void SetStartRotation(const Vector3 &rotation);
+	Vector3 GetStartRotation();
 	void SetToStartPosition(bool disable_current_floor);
 	void SetToStartDirection();
 	void SetToStartRotation();
@@ -176,19 +176,19 @@ public:
 	CameraState GetCameraState();
 	void SetCameraState(const CameraState &state, bool set_floor = true);
 	void RevertMovement();
-	void FreelookMove(const Ogre::Vector3 &rotation);
+	void FreelookMove(const Vector3 &rotation);
 	bool MouseDown();
 	void CheckObjects();
 	void Teleport(Real X, Real Y, Real Z);
 	void Drive(bool left, bool right, bool down, bool up, bool key_down);
 	void Crouch(bool value);
-	void SetOrientation(const Ogre::Quaternion &orientation);
+	void SetOrientation(const Quaternion &orientation);
 	void AttachToVehicle(bool value);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
-	Ogre::Vector3 StartDirection; //direction camera faces on start
-	Ogre::Vector3 StartRotation; //camera's startup rotation
+	Vector3 StartDirection; //direction camera faces on start
+	Vector3 StartRotation; //camera's startup rotation
 	std::string meshname; //last clicked mesh name
 	std::string wallname; //last clicked wall name
 	int object_number; //last clicked object number
@@ -201,17 +201,17 @@ private:
 	int lastfloor;
 	bool lastfloorset;
 	Real FOV; //default FOV angle
-	Ogre::Vector3 Rotation;
+	Vector3 Rotation;
 	bool Collisions; //collision detection status
 	bool RotationStopped;
 	bool MovementStopped;
 	Real FarClip;
-	Ogre::Vector3 accum_movement;
-	Ogre::Vector3 prev_accum_movement;
+	Vector3 accum_movement;
+	Vector3 prev_accum_movement;
 	bool collision_reset;
 	bool use_startdirection;
-	Ogre::Quaternion prev_orientation;
-	Ogre::Vector3 prev_position;
+	Quaternion prev_orientation;
+	Vector3 prev_position;
 
 	//Models
 	Model*	AttachedModel;
@@ -221,8 +221,8 @@ private:
 	OgreBulletCollisions::CollisionShape* mShape;
 
 	//used for restoring values when exiting vehicle
-	Ogre::Quaternion old_camera_orientation;
-	Ogre::Quaternion old_character_orientation;
+	Quaternion old_camera_orientation;
+	Quaternion old_character_orientation;
 	bool old_freelook_mode;
 };
 

@@ -40,7 +40,7 @@ public:
 	Real Height; //car height
 	bool HeightSet;
 	bool Fan; //fan enabled status
-	Ogre::Vector3 MusicPosition; //music emitter position, relative of elevator center
+	Vector3 MusicPosition; //music emitter position, relative of elevator center
 	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 	bool ControlPressActive; //true if a control associated with this elevator has just been pressed
 	bool IsEnabled; //true if car is enabled
@@ -135,7 +135,7 @@ public:
 	void SetShaftDoors(int number, Real thickness, Real CenterX, Real CenterZ);
 	bool DoorExists(int number);
 	bool ShaftDoorsExist(int number, int floor);
-	Sound* AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
+	Sound* AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, Vector3 direction = Vector3(0, 0, 0));
 	DoorWrapper* AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	DoorWrapper* AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	void AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
@@ -162,11 +162,11 @@ public:
 	void EnableNudgeMode(bool value, int number = 0);
 	Light* AddLight(const std::string &name, int type);
 	Light* GetLight(const std::string &name);
-	Model* AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
+	Model* AddModel(const std::string &name, const std::string &filename, bool center, Vector3 position, Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
 	void AddDisplayFloor(int floor);
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
-	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
+	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	std::vector<Sound*> GetSound(const std::string &name);
 	void ResetLights();
@@ -186,8 +186,8 @@ public:
 	bool PlayFloorSound();
 	bool PlayMessageSound(bool type);
 	Real SetHeight();
-	bool IsInCar(const Ogre::Vector3 &position, bool camera = false);
-	bool Check(Ogre::Vector3 &position);
+	bool IsInCar(const Vector3 &position, bool camera = false);
+	bool Check(Vector3 &position);
 	void StopCarSound();
 	int GetFloor();
 	bool OnTopFloor();
@@ -206,7 +206,7 @@ public:
 	bool FirePhase2OnOtherCar();
 	void SetControls(const std::string &action_name);
 	void FlashIndicators(bool value);
-	CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
+	CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
 	bool RespondingToCall(int floor, int direction);
 	int RespondingToCall(int floor);
 
@@ -279,7 +279,7 @@ private:
 	bool doorhold_manual;
 
 	//cache objects for IsInCar()
-	Ogre::Vector3 lastposition;
+	Vector3 lastposition;
 	bool lastcheckresult;
 	bool checkfirstrun;
 };

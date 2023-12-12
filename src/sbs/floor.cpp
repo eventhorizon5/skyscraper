@@ -540,7 +540,7 @@ CallStation* Floor::AddCallStation(int number)
 	return station;
 }
 
-void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, bool prepare)
+void Floor::Cut(const Vector3 &start, const Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, bool prepare)
 {
 	//caller to SBS cut function
 	//Y values are relative to the floor's altitude
@@ -552,18 +552,18 @@ void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwa
 		if (i > 0)
 			reset = false;
 
-		sbs->Cut(Level->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+		sbs->Cut(Level->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 	if (fast == false)
 	{
 		for (size_t i = 0; i < Interfloor->Walls.size(); i++)
 		{
-			sbs->Cut(Interfloor->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, false);
+			sbs->Cut(Interfloor->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, false);
 		}
 	}
 }
 
-void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool prepare)
+void Floor::CutAll(const Vector3 &start, const Vector3 &end, bool cutwalls, bool cutfloors, bool prepare)
 {
 	//cuts all objects related to this floor (floor, interfloor, shafts, stairs and external)
 	//Y values are relative to the floor's altitude
@@ -581,7 +581,7 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 		}
 	}
 
-	Ogre::Vector3 offset (0, GetBase(true), 0);
+	Vector3 offset (0, GetBase(true), 0);
 
 	//cut stairs
 	for (int i = 1; i <= sbs->GetStairwellCount(); i++)
@@ -595,7 +595,7 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 
 	//cut external
 	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
-		sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
+		sbs->Cut(sbs->External->Walls[i], Vector3(start.x, Altitude + start.y, start.z), Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
 }
 
 void Floor::AddGroupFloor(int number)
@@ -725,9 +725,9 @@ Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std:
 
 	//cut area
 	if (face_direction == "left" || face_direction == "right")
-		CutAll(Ogre::Vector3(x1 - 1, base + voffset, z1), Ogre::Vector3(x2 + 1, base + voffset + height, z2), true, false);
+		CutAll(Vector3(x1 - 1, base + voffset, z1), Vector3(x2 + 1, base + voffset + height, z2), true, false);
 	else
-		CutAll(Ogre::Vector3(x1, base + voffset, z1 - 1), Ogre::Vector3(x2, base + voffset + height, z2 + 1), true, false);
+		CutAll(Vector3(x1, base + voffset, z1 - 1), Vector3(x2, base + voffset + height, z2 + 1), true, false);
 
 	//create an external (global) door if specified
 	if (external == true)
@@ -981,9 +981,9 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 
 	//perform a cut in the area
 	if (isexternal == false)
-		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2), true, false);
+		CutAll(Vector3(x1, GetBase(true) + voffset, z1), Vector3(x2, GetBase(true) + voffset + height, z2), true, false);
 	else
-		CutAll(Ogre::Vector3(x1, voffset, z1), Ogre::Vector3(x2, voffset + height, z2), true, false);
+		CutAll(Vector3(x1, voffset, z1), Vector3(x2, voffset + height, z2), true, false);
 
 	//create walls
 	sbs->DrawWalls(false, true, false, false, false, false);
@@ -1003,7 +1003,7 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 	sbs->ResetWalls();
 }
 
-Sound* Floor::AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Ogre::Vector3 direction)
+Sound* Floor::AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Vector3 direction)
 {
 	//create a looping sound object
 
@@ -1397,7 +1397,7 @@ Light* Floor::AddLight(const std::string &name, int type)
 	//add a light
 
 	Light* light = new Light(this, name, type);
-	light->Move(Ogre::Vector3(0, GetBase(true), 0));
+	light->Move(Vector3(0, GetBase(true), 0));
 	lights.push_back(light);
 	return light;
 }
@@ -1412,10 +1412,10 @@ Light* Floor::GetLight(const std::string &name)
 	return 0;
 }
 
-Model* Floor::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
+Model* Floor::AddModel(const std::string &name, const std::string &filename, bool center, Vector3 position, Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
-	Model* model = new Model(this, name, filename, center, position + Ogre::Vector3(0, GetBase(true), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position + Vector3(0, GetBase(true), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -1459,7 +1459,7 @@ Control* Floor::AddControl(const std::string &name, const std::string &sound, co
 	return control;
 }
 
-Trigger* Floor::AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* Floor::AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
@@ -1468,7 +1468,7 @@ Trigger* Floor::AddTrigger(const std::string &name, const std::string &sound_fil
 	return trigger;
 }
 
-CameraTexture* Floor::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+CameraTexture* Floor::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, GetBase(true) + position, use_rotation, rotation);

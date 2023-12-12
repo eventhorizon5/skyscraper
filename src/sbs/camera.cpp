@@ -55,13 +55,13 @@ Camera::Camera(Object *parent) : Object(parent)
 	StartFloor = 0;
 	StartPositionX = 0;
 	StartPositionZ = 0;
-	StartDirection = Ogre::Vector3(0, 0, 0);
-	StartRotation = Ogre::Vector3(0, 0, 0);
+	StartDirection = Vector3(0, 0, 0);
+	StartRotation = Vector3(0, 0, 0);
 	FloorTemp = 0;
-	velocity = Ogre::Vector3(0, 0, 0);
-	desired_velocity = Ogre::Vector3(0, 0, 0);
-	angle_velocity = Ogre::Vector3(0, 0, 0);
-	desired_angle_velocity = Ogre::Vector3(0, 0, 0);
+	velocity = Vector3(0, 0, 0);
+	desired_velocity = Vector3(0, 0, 0);
+	angle_velocity = Vector3(0, 0, 0);
+	desired_angle_velocity = Vector3(0, 0, 0);
 	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 9.0);
 	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
 	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
@@ -98,19 +98,19 @@ Camera::Camera(Object *parent) : Object(parent)
 	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0);
 	object_number = 0;
 	object_line = 0;
-	HitPosition = Ogre::Vector3::ZERO;
+	HitPosition = Vector3::ZERO;
 	RotationStopped = false;
 	MovementStopped = false;
-	accum_movement = Ogre::Vector3::ZERO;
-	prev_accum_movement = Ogre::Vector3::ZERO;
+	accum_movement = Vector3::ZERO;
+	prev_accum_movement = Vector3::ZERO;
 	collision_reset = false;
 	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
 	use_startdirection = false;
 	BinocularsFOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BinocularsFOV", 10.0);
 	RestrictRotation = sbs->GetConfigBool("Skyscraper.SBS.Camera.RestrictRotation", false);
 	AttachedModel = 0;
-	prev_orientation = Ogre::Quaternion::ZERO;
-	prev_position = Ogre::Vector3::ZERO;
+	prev_orientation = Quaternion::ZERO;
+	prev_position = Vector3::ZERO;
 	MainCamera = 0;
 	Gravity = 0;
 	GravityStatus = false;
@@ -140,7 +140,7 @@ Camera::Camera(Object *parent) : Object(parent)
 		mCharacter = new OgreBulletDynamics::CharacterController(GetSceneNode()->GetFullName() + " Character", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 
 		//create debug shape
-		mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(width), sbs->ToRemote(height), Ogre::Vector3::UNIT_Y);
+		mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(width), sbs->ToRemote(height), Vector3::UNIT_Y);
 		mCharacter->setShape(mShape);
 
 		//other movement options
@@ -177,7 +177,7 @@ Camera::~Camera()
 	}
 }
 
-void Camera::SetPosition(const Ogre::Vector3 &position)
+void Camera::SetPosition(const Vector3 &position)
 {
 	//sets the camera to an absolute position in 3D space
 
@@ -192,7 +192,7 @@ void Camera::SetPosition(const Ogre::Vector3 &position)
 	OnMove(false);
 }
 
-void Camera::SetDirection(const Ogre::Vector3 &direction)
+void Camera::SetDirection(const Vector3 &direction)
 {
 	//sets the camera's direction to an absolute position
 
@@ -202,7 +202,7 @@ void Camera::SetDirection(const Ogre::Vector3 &direction)
 	//MainCamera->lookAt(sbs->ToRemote(direction));
 }
 
-void Camera::SetRotation(const Ogre::Vector3 &rotation)
+void Camera::SetRotation(const Vector3 &rotation)
 {
 	//sets the camera's rotation in degrees
 
@@ -210,7 +210,7 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 		return;
 
 	//keep rotation within 360 degree boundaries
-	Ogre::Vector3 vector = rotation;
+	Vector3 vector = rotation;
 	if (RestrictRotation && vector.x > 90 && vector.x < 270)
 		vector.x = vector.x > 180 ? 270 : 90;
 	if (vector.x > 359)
@@ -226,11 +226,11 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	if (vector.z < 0)
 		vector.z += 360;
 
-	Ogre::Quaternion x(Ogre::Degree(vector.x), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion camrot = x * z;
-	Ogre::Quaternion bodyrot = y;
+	Quaternion x(Degree(vector.x), Vector3::UNIT_X);
+	Quaternion y(Degree(vector.y), Vector3::NEGATIVE_UNIT_Y);
+	Quaternion z(Degree(vector.z), Vector3::UNIT_Z);
+	Quaternion camrot = x * z;
+	Quaternion bodyrot = y;
 	Rotation = vector;
 	MainCamera->setOrientation(camrot);
 
@@ -240,12 +240,12 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	OnRotate(false);
 }
 
-Ogre::Vector3 Camera::GetPosition(bool relative)
+Vector3 Camera::GetPosition(bool relative)
 {
 	//returns the camera's current position
 	//"relative" value is ignored for camera object
 
-	Ogre::Vector3 cameraposition = Ogre::Vector3::ZERO;
+	Vector3 cameraposition = Vector3::ZERO;
 
 	if (MainCamera)
 		cameraposition = sbs->ToLocal(MainCamera->getPosition());
@@ -253,14 +253,14 @@ Ogre::Vector3 Camera::GetPosition(bool relative)
 	return GetSceneNode()->GetPosition() + cameraposition;
 }
 
-void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top, bool global)
+void Camera::GetDirection(Vector3 &front, Vector3 &top, bool global)
 {
 	//returns the camera's current direction in front and top vectors
 
 	if (!MainCamera)
 		return;
 
-	Ogre::Quaternion dir;
+	Quaternion dir;
 	if (global == false)
 		dir = sbs->FromGlobal(MainCamera->getDerivedOrientation());
 	else
@@ -275,7 +275,7 @@ void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top, bool global)
 	top.normalise();
 }
 
-Ogre::Vector3 Camera::GetRotation()
+Vector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
 
@@ -307,25 +307,25 @@ void Camera::UpdateCameraFloor()
 		CurrentFloorID = sbs->GetFloor(CurrentFloor)->ID;
 }
 
-bool Camera::Move(Ogre::Vector3 vector, Real speed, bool flip)
+bool Camera::Move(Vector3 vector, Real speed, bool flip)
 {
 	//moves the camera in a relative amount specified by a vector
 
 	if (!MainCamera)
 		return false;
 
-	if (MovementStopped == true && vector == Ogre::Vector3::ZERO)
+	if (MovementStopped == true && vector == Vector3::ZERO)
 		return false;
 
 	MovementStopped = false;
 
-	if (vector == Ogre::Vector3::ZERO)
+	if (vector == Vector3::ZERO)
 		MovementStopped = true;
 
 	if (flip == true)
-		vector *= Ogre::Vector3(-1, 1, 1);
+		vector *= Vector3(-1, 1, 1);
 
-	Ogre::Quaternion orientation;
+	Quaternion orientation;
 
 	if (EnableBullet == true)
 		orientation = GetSceneNode()->GetRawSceneNode()->_getDerivedOrientation();
@@ -333,7 +333,7 @@ bool Camera::Move(Ogre::Vector3 vector, Real speed, bool flip)
 		orientation = MainCamera->getOrientation();
 
 	//flip X axis
-	vector *= Ogre::Vector3(-1, 1, 1);
+	vector *= Vector3(-1, 1, 1);
 
 	//multiply vector with camera's orientation
 	vector = orientation * sbs->ToRemote(vector);
@@ -343,44 +343,44 @@ bool Camera::Move(Ogre::Vector3 vector, Real speed, bool flip)
 	return true;
 }
 
-bool Camera::MovePosition(Ogre::Vector3 vector, Real speed)
+bool Camera::MovePosition(Vector3 vector, Real speed)
 {
 	//moves the camera in a relative amount, using SetPosition, instead of character movement
 
 	if (!MainCamera)
 		return false;
 
-	if (vector == Ogre::Vector3::ZERO)
+	if (vector == Vector3::ZERO)
 		return false;
 
 	SetPosition(GetPosition() + (vector * speed));
 	return true;
 }
 
-void Camera::Rotate(const Ogre::Vector3 &rotation, Real speed)
+void Camera::Rotate(const Vector3 &rotation, Real speed)
 {
 	//rotates the camera in a relative amount in world space
 
 	if (!MainCamera)
 		return;
 
-	Ogre::Vector3 rot = GetRotation() + (rotation * speed);
+	Vector3 rot = GetRotation() + (rotation * speed);
 	SetRotation(rot);
 }
 
-void Camera::RotateLocal(const Ogre::Vector3 &rotation, Real speed)
+void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 {
 	//rotates the camera in a relative amount in local camera space
 
 	if (!MainCamera)
 		return;
 
-	if (RotationStopped == true && rotation == Ogre::Vector3::ZERO)
+	if (RotationStopped == true && rotation == Vector3::ZERO)
 		return;
 
 	RotationStopped = false;
 
-	if (rotation == Ogre::Vector3::ZERO)
+	if (rotation == Vector3::ZERO)
 		RotationStopped = true;
 
 	//convert rotation values to degrees
@@ -406,15 +406,15 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, Real speed)
 	if (Rotation.z < 0)
 		Rotation.z += 360;
 
-	Ogre::Quaternion rot(Ogre::Degree(Rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Quaternion rot(Degree(Rotation.y), Vector3::NEGATIVE_UNIT_Y);
 	if (EnableBullet == true)
 	{
 		//rotate character collider
 		mCharacter->setOrientation(sbs->ToGlobal(rot));
 
 		//rotate camera
-		MainCamera->pitch(Ogre::Degree(xdeg));
-		MainCamera->roll(Ogre::Degree(zdeg));
+		MainCamera->pitch(Degree(xdeg));
+		MainCamera->roll(Degree(zdeg));
 	}
 	else
 		MainCamera->setOrientation(rot);
@@ -422,23 +422,23 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, Real speed)
 	OnRotate(false);
 }
 
-void Camera::SetStartDirection(const Ogre::Vector3 &direction)
+void Camera::SetStartDirection(const Vector3 &direction)
 {
 	StartDirection = direction;
 	use_startdirection = true;
 }
 
-Ogre::Vector3 Camera::GetStartDirection()
+Vector3 Camera::GetStartDirection()
 {
 	return StartDirection;
 }
 
-void Camera::SetStartRotation(const Ogre::Vector3 &rotation)
+void Camera::SetStartRotation(const Vector3 &rotation)
 {
 	StartRotation = rotation;
 }
 
-Ogre::Vector3 Camera::GetStartRotation()
+Vector3 Camera::GetStartRotation()
 {
 	return StartRotation;
 }
@@ -447,11 +447,11 @@ void Camera::SetToStartPosition(bool disable_current_floor)
 {
 	if (sbs->GetFloor(StartFloor))
 	{
-		SetPosition(Ogre::Vector3(StartPositionX, 0, StartPositionZ));
+		SetPosition(Vector3(StartPositionX, 0, StartPositionZ));
 		GotoFloor(StartFloor, disable_current_floor);
 	}
 	else
-		SetPosition(Ogre::Vector3(StartPositionX, GetHeight(), StartPositionZ));
+		SetPosition(Vector3(StartPositionX, GetHeight(), StartPositionZ));
 }
 
 void Camera::SetToStartDirection()
@@ -548,7 +548,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 
 	SBS_PROFILE("Camera::ClickedObject");
 
-	Ogre::Vector3 pos = GetPosition();
+	Vector3 pos = GetPosition();
 
 	//cast a ray from the camera in the direction of the clicked position
 	int width = MainCamera->getViewport()->getActualWidth();
@@ -559,7 +559,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 
 	Real x = (float)mouse_x / (float)width * scale;
 	Real y = (float)mouse_y / (float)height * scale;
-	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
+	Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
 	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
@@ -856,7 +856,7 @@ void Camera::Spin(Real speed)
 	desired_angle_velocity.z = cfg_spinspeed * speed * cfg_rotate_maxspeed;
 }
 
-void Camera::FreelookMove(const Ogre::Vector3 &rotation)
+void Camera::FreelookMove(const Vector3 &rotation)
 {
 	desired_angle_velocity = rotation * Freelook_speed;
 	angle_velocity = desired_angle_velocity;
@@ -909,7 +909,7 @@ void Camera::SetGravity(Real gravity, bool save_value, bool camera_only)
 	if (EnableBullet == true && MainCamera)
 	{
 		if (camera_only == false)
-			sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-gravity), 0));
+			sbs->mWorld->setGravity(Vector3(0, sbs->ToRemote(-gravity), 0));
 		mCharacter->setGravity(sbs->ToRemote(gravity));
 	}
 }
@@ -953,7 +953,7 @@ void Camera::SetFOVAngle(Real angle)
 	{
 		Real ratio = (float)MainCamera->getAspectRatio();
 		if (ratio > 0)
-			MainCamera->setFOVy(Ogre::Degree(angle / ratio));
+			MainCamera->setFOVy(Degree(angle / ratio));
 	}
 }
 
@@ -1036,8 +1036,8 @@ void Camera::Sync()
 		mCharacter->sync();
 
 	//notify on movement or rotation
-	Ogre::Vector3 position = sbs->ToRemote(GetPosition());
-	Ogre::Quaternion orientation = GetOrientation();
+	Vector3 position = sbs->ToRemote(GetPosition());
+	Quaternion orientation = GetOrientation();
 
 	if (prev_position.positionEquals(position) == false)
 	{
@@ -1089,7 +1089,7 @@ void Camera::MoveCharacter()
 	else
 		MainCamera->move(accum_movement);
 	prev_accum_movement = accum_movement;
-	accum_movement = Ogre::Vector3::ZERO;
+	accum_movement = Vector3::ZERO;
 }
 
 void Camera::ResetCollisions()
@@ -1117,7 +1117,7 @@ void Camera::GotoFloor(int floor, bool disable_current)
 		Floor* floorobj = sbs->GetFloor(floor);
 		if (floorobj)
 		{
-			Ogre::Vector3 pos = GetPosition();
+			Vector3 pos = GetPosition();
 			pos.y = floorobj->GetBase() + GetHeight();
 			SetPosition(pos);
 			floorobj->Enabled(true);
@@ -1178,21 +1178,21 @@ void Camera::DetachModel()
 bool Camera::PickUpModel()
 {
 	//pick up model
-	Ogre::Vector3 front, top;
+	Vector3 front, top;
 	GetDirection(front, top);
 
-	Ogre::Vector3 hit_position;
+	Vector3 hit_position;
 	MeshObject *mesh = 0;
 	Wall *wall = 0;
 	bool hit = false;
 
 	//do a raycast from the collider's position, in the forward direction
-	Ogre::Vector3 position = GetPosition();
+	Vector3 position = GetPosition();
 
 	for (int i = (int)GetPosition().y; i > 0; i--)
 	{
 		position.y = i;
-		Ogre::Ray ray (sbs->ToRemote(position), sbs->ToRemote(front, false));
+		Ray ray (sbs->ToRemote(position), sbs->ToRemote(front, false));
 
 		hit = sbs->HitBeam(ray, 2.0, mesh, wall, hit_position);
 
@@ -1385,7 +1385,7 @@ void Camera::SetCameraState(const CameraState &state, bool set_floor)
 	//sets camera state
 	//the position value is in a global/absolute scene format, not engine-relative
 
-	Ogre::Vector3 position = sbs->FromGlobal(state.position);
+	Vector3 position = sbs->FromGlobal(state.position);
 	if (set_floor == true)
 		GotoFloor(state.floor, true);
 	else
@@ -1431,7 +1431,7 @@ void Camera::Teleport(Real X, Real Y, Real Z)
 {
 	//teleport/warp user to specified location
 
-	Ogre::Vector3 destination (X, Y, Z);
+	Vector3 destination (X, Y, Z);
 
 	GotoFloor(sbs->GetFloorNumber(destination.y));
 	SetPosition(destination);
@@ -1454,7 +1454,7 @@ void Camera::Crouch(bool value)
 		mCharacter->crouch(value);
 }
 
-void Camera::SetOrientation(const Ogre::Quaternion &orientation)
+void Camera::SetOrientation(const Quaternion &orientation)
 {
 	//set orientation of main camera object, not collider
 
@@ -1471,7 +1471,7 @@ void Camera::AttachToVehicle(bool value)
 
 	if (vehicle && value == false)
 	{
-		Ogre::Vector3 newpos = GetPosition() + (vehicle->GetOrientation() * Ogre::Vector3(vehicle->GetWidth(), 0, 0));
+		Vector3 newpos = GetPosition() + (vehicle->GetOrientation() * Vector3(vehicle->GetWidth(), 0, 0));
 		SetPosition(newpos);
 
 		Freelook = old_freelook_mode;
@@ -1487,9 +1487,9 @@ void Camera::AttachToVehicle(bool value)
 	{
 		//search for a vehicle
 
-		Ogre::Vector3 direction, other;
+		Vector3 direction, other;
 		GetDirection(direction, other);
-		Ogre::Ray ray = Ogre::Ray(sbs->ToRemote(GetPosition()), direction);
+		Ray ray = Ray(sbs->ToRemote(GetPosition()), direction);
 
 		MeshObject* mesh = 0;
 		Wall* wall = 0;

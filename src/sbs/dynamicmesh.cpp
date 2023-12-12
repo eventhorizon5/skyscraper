@@ -883,7 +883,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		{
 			MeshObject *mesh = Parent->GetClient(num);
 			Ogre::AxisAlignedBox client_box = Ogre::AxisAlignedBox::BOX_NULL;
-			Ogre::Real radius = 0;
+			Real radius = 0;
 
 			ClientEntry entry;
 
@@ -891,7 +891,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			entry.vertex_offset = vindex;
 
 			//get mesh's offset of associated scene node
-			Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
+			Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
 			//fill array with mesh's geometry data, from each submesh
 			for (int index = 0; index < mesh->GetSubmeshCount(); index++)
@@ -901,10 +901,10 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 					MeshObject::Geometry &element = mesh->Submeshes[index].MeshGeometry[i];
 
 					//make mesh's vertex relative to this scene node
-					Ogre::Vector3 vertex;
+					Vector3 vertex;
 					if (client == -1)
 					{
-						Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+						Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
 						vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
 					}
 					else
@@ -1142,9 +1142,9 @@ bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 	if (Bounds.isNull())
 		return false;
 
-	Ogre::Vector3 min = Bounds.getMinimum();
-	Ogre::Vector3 max = Bounds.getMaximum();
-	Ogre::Vector3 pos = sbs->ToRemote(node->GetPosition());
+	Vector3 min = Bounds.getMinimum();
+	Vector3 max = Bounds.getMaximum();
+	Vector3 pos = sbs->ToRemote(node->GetPosition());
 	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
 
 	return camera->isVisible(global_box);
@@ -1181,7 +1181,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	MeshObject *mesh = Parent->GetClient(client);
 
 	//get mesh's offset of associated scene node
-	Ogre::Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
+	Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
 	unsigned int vertex_count = mesh->GetVertexCount();
 
@@ -1244,8 +1244,8 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 			MeshObject::Geometry &element = geometry[i];
 
 			//make mesh's vertex relative to this scene node
-			Ogre::Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-			Ogre::Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+			Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+			Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
 
 			//add elements to array
 			mVertexElements[pos] = (float)vertex2.x;
@@ -1327,7 +1327,7 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 	if (Parent->GetMeshCount() == 1)
 	{
 		Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
-		Ogre::Real radius = 0;
+		Real radius = 0;
 
 		if (Parent->GetClientCount() != (int)client_entries.size())
 			return;

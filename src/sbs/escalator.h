@@ -38,7 +38,7 @@ public:
 	bool ReportError(const std::string &message);
 	void Loop();
 	bool IsEnabled() { return is_enabled; }
-	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void ResetState();
 	void SetRun(int value);
 	int GetRun() { return Run; }
@@ -47,7 +47,7 @@ private:
 	Sound *sound; //sound object
 	int Run; //-1 is reverse, 0 is stop, 1 is forward
 	bool is_enabled;
-	Ogre::Vector3 start, end;
+	Vector3 start, end;
 	std::string Direction;
 	Real treadsize;
 	Real risersize;

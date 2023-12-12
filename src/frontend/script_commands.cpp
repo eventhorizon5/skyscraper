@@ -298,7 +298,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//perform cut
-		mesh->Cut(Ogre::Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), ToBool(tempdata[8]));
+		mesh->Cut(Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])), Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), ToBool(tempdata[8]));
 		return sNextLine;
 	}
 
@@ -384,9 +384,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->SectionNum == 2)
 		{
 			if (meshname == "floor")
-				voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase(true));
+				voffset += Real(Simcore->GetFloor(config->Current)->GetBase(true));
 			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
-				voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase());
+				voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
 		}
 
 		StoreCommand(Simcore->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
@@ -426,9 +426,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->SectionNum == 2)
 		{
 			if (meshname == "floor")
-				voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase(true));
+				voffset += Real(Simcore->GetFloor(config->Current)->GetBase(true));
 			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
-				voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase());
+				voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
 		}
 
 		StoreCommand(Simcore->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
@@ -481,9 +481,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			if (relative == true)
 			{
 				if (meshname == "floor")
-					voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase(true));
+					voffset += Real(Simcore->GetFloor(config->Current)->GetBase(true));
 				else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
-					voffset += Ogre::Real(Simcore->GetFloor(config->Current)->GetBase());
+					voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
 			}
 			else if (relative_option == false)
 			{
@@ -494,7 +494,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		PolyArray varray;
 		for (int i = start; i < params - 2; i += 3)
-			varray.push_back(Ogre::Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
+			varray.push_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
 		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
@@ -535,9 +535,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				altitude += Simcore->GetFloor(config->Current)->GetBase();
 		}
 
-		std::vector<Ogre::Vector2> varray;
+		std::vector<Vector2> varray;
 		for (int i = 3; i < params - 3; i += 2)
-			varray.push_back(Ogre::Vector2(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1])));
+			varray.push_back(Vector2(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1])));
 
 		StoreCommand(Simcore->AddCustomFloor(mesh, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
@@ -585,7 +585,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		PolyArray varray;
 		for (int i = 3; i < params - 2; i += 3)
-			varray.push_back(Ogre::Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
+			varray.push_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
 		Simcore->AddPolygon(wall, tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 
@@ -680,7 +680,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Simcore->GetShaft(shaftnum)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		Simcore->GetShaft(shaftnum)->CutFloors(true, Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
 	}
 
@@ -924,7 +924,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Simcore->GetStairwell(stairwell)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		Simcore->GetStairwell(stairwell)->CutFloors(true, Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
 	}
 
@@ -1079,9 +1079,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		texturemanager->SetTextureMapping(ToInt(tempdata[0]), Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])),
-									ToInt(tempdata[3]), Ogre::Vector2(ToFloat(tempdata[4]), ToFloat(tempdata[5])),
-									ToInt(tempdata[6]), Ogre::Vector2(ToFloat(tempdata[7]), ToFloat(tempdata[8])));
+		texturemanager->SetTextureMapping(ToInt(tempdata[0]), Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])),
+									ToInt(tempdata[3]), Vector2(ToFloat(tempdata[4]), ToFloat(tempdata[5])),
+									ToInt(tempdata[6]), Vector2(ToFloat(tempdata[7]), ToFloat(tempdata[8])));
 		return sNextLine;
 	}
 
@@ -1105,9 +1105,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		texturemanager->SetTextureMapping2(tempdata[0], tempdata[1], tempdata[2], Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])),
-									tempdata[5], tempdata[6], tempdata[7], Ogre::Vector2(ToFloat(tempdata[8]), ToFloat(tempdata[9])),
-									tempdata[10], tempdata[11], tempdata[12], Ogre::Vector2(ToFloat(tempdata[13]), ToFloat(tempdata[14])));
+		texturemanager->SetTextureMapping2(tempdata[0], tempdata[1], tempdata[2], Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])),
+									tempdata[5], tempdata[6], tempdata[7], Vector2(ToFloat(tempdata[8]), ToFloat(tempdata[9])),
+									tempdata[10], tempdata[11], tempdata[12], Vector2(ToFloat(tempdata[13]), ToFloat(tempdata[14])));
 		return sNextLine;
 	}
 
@@ -1205,7 +1205,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Ogre::Vector3 isect = mesh->GetPoint(tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+		Vector3 isect = mesh->GetPoint(tempdata[1], Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
 
 		buffer = LineData.substr(0, found) + ToString(isect.x) + ", " + ToString(isect.y) + ", " + ToString(isect.z) + LineData.substr(loc2 + 1);
 		LineData = buffer;
@@ -1243,8 +1243,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Ogre::Vector2 startpoint (ToFloat(tempdata[0]), ToFloat(tempdata[1]));
-		Ogre::Vector2 endpoint = Simcore->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		Vector2 startpoint (ToFloat(tempdata[0]), ToFloat(tempdata[1]));
+		Vector2 endpoint = Simcore->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 
 		buffer = LineData.substr(0, found) + ToString(endpoint.x) + ", " + ToString(endpoint.y) + LineData.substr(loc2 + 1);
 		LineData = buffer;
@@ -1371,7 +1371,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create floor auto area
-		Simcore->AddFloorAutoArea(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+		Simcore->AddFloorAutoArea(Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		return sNextLine;
 	}
 
@@ -1435,16 +1435,16 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (compat == true)
 		{
 			if (partial == true)
-				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]))));
+				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]))));
 			else
-				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), true, ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 0.0, 360, 360, 1.0, Ogre::Vector3(ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]))));
+				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), true, ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), 0.0, 360, 360, 1.0, Vector3(ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]))));
 		}
 		else
 		{
 			if (partial == true)
-				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
+				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
 			else
-				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
+				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
 		}
 		return sNextLine;
 	}
@@ -1499,9 +1499,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//create model
 		Model* model;
 		if (compat == true)
-			model = Simcore->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			model = Simcore->AddModel(tempdata[0], tempdata[1], false, Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
-			model = Simcore->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			model = Simcore->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 		if (config->setkey == true && model)
 			model->SetKey(config->keyvalue);
@@ -1696,8 +1696,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
-		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+		Vector3 min = Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
+		Vector3 max = Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		StoreCommand(Simcore->AddTrigger(tempdata[0], tempdata[1], min, max, action_array));
 		return sNextLine;
 	}
@@ -2098,7 +2098,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
 
 		//modify light
-		light->SetDirection(Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+		light->SetDirection(Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
 
 		return sNextLine;
 	}
@@ -2166,7 +2166,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
 
 		//move light
-		light->Move(Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+		light->Move(Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])));
 
 		return sNextLine;
 	}
@@ -2223,13 +2223,13 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		if (floorobj)
-			StoreCommand(floorobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+			StoreCommand(floorobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		else if (elevatorcarobj)
-			StoreCommand(elevatorcarobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+			StoreCommand(elevatorcarobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		else if (shaftobj)
-			StoreCommand(shaftobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+			StoreCommand(shaftobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		else if (stairsobj)
-			StoreCommand(stairsobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+			StoreCommand(stairsobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		else
 			return ScriptError("Invalid object");
 

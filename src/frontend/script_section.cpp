@@ -1213,8 +1213,8 @@ void ScriptProcessor::ConfigHandler::Reset()
 	setkey = false;
 	keyvalue = 0;
 	lockvalue = 0;
-	MinExtent = Ogre::Vector3::ZERO;
-	MaxExtent = Ogre::Vector3::ZERO;
+	MinExtent = Vector3::ZERO;
+	MaxExtent = Vector3::ZERO;
 	RangeL = 0;
 	RangeLOld = 0;
 	RangeH = 0;

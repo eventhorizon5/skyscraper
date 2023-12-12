@@ -32,7 +32,7 @@ public:
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
 
-	EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
@@ -58,20 +58,20 @@ public:
 	SBS::CameraState GetCameraState();
 	void SetCameraState(const SBS::CameraState &state, bool set_floor = true);
 	bool IsInside();
-	bool IsInside(const Ogre::Vector3 &position);
+	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
 	void AttachCamera(Ogre::Camera *camera, bool init_state = true);
 	void RefreshCamera();
 	void ResetCamera();
 	void RevertMovement();
-	Ogre::Vector3 GetCameraPosition();
+	Vector3 GetCameraPosition();
 	void OnEnter();
 	void OnExit();
 	void CutForEngine(EngineContext *engine);
 	void AddChild(EngineContext *engine);
 	void RemoveChild(EngineContext *engine);
 	void RemoveParent() { parent = 0; }
-	void Move(Ogre::Vector3 &position, bool move_children = false);
+	void Move(Vector3 &position, bool move_children = false);
 	EngineContext* GetParent() { return parent; }
 	bool IsParent(EngineContext *engine, bool recursive = false);
 
@@ -100,9 +100,9 @@ private:
 
 	Ogre::SceneManager* mSceneManager;
 	FMOD::System *fmodsystem;
-	Ogre::Vector3 position;
-	Ogre::Vector3 area_min;
-	Ogre::Vector3 area_max;
+	Vector3 position;
+	Vector3 area_min;
+	Vector3 area_max;
 	Real rotation;
 
 	//child engines

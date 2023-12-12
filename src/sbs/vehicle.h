@@ -40,12 +40,12 @@ public:
 	std::string Name; //vehicle name
 	bool Created; //has vehicle been created?
 
-	Ogre::Vector3 ChassisShift;
+	Vector3 ChassisShift;
 	std::string ChassisMesh;
 	std::string WheelMesh;
 	Real ChassisScale;
 	Real WheelScale;
-	Ogre::Vector3 CameraPoint;
+	Vector3 CameraPoint;
 
 	Real MaxEngineForce;
 	Real SteeringIncrement;
@@ -62,12 +62,12 @@ public:
 	Vehicle(Object *parent, const int number);
 	~Vehicle();
 	bool CreateChassis(Real restitution, Real friction, Real mass, Real linear_dampening, Real angular_dampening);
-	bool AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radius, const Ogre::Vector3 &ConnectionPoint, const Ogre::Vector3 &Direction = Ogre::Vector3(0, -1, 0), const Ogre::Vector3 &Axle = Ogre::Vector3(-1, 0, 0));
+	bool AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radius, const Vector3 &ConnectionPoint, const Vector3 &Direction = Vector3(0, -1, 0), const Vector3 &Axle = Vector3(-1, 0, 0));
 	void KeyPressed(bool left, bool right, bool down, bool up);
 	void KeyReleased(bool left, bool right, bool down, bool up);
 	void Loop();
 	void Enabled(bool value);
-	bool Create(const Ogre::Vector3 &position);
+	bool Create(const Vector3 &position);
 	void OnMove(bool parent);
 	void AttachCamera(bool value);
 	Real GetWidth();

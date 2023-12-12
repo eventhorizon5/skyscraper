@@ -224,7 +224,7 @@ void LoadDialog::On_bSelect_Click(wxCommandEvent& event)
 
 void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 {
-	Ogre::Vector3 position, min, max;
+	Vector3 position, min, max;
 	Real rotation;
 
 	//get position values

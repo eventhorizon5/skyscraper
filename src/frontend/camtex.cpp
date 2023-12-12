@@ -269,7 +269,7 @@ void CameraTextureControl::On_bSetRotation_Click(wxCommandEvent& event)
 {
 	if (camera)
 	{
-		camera->SetRotation(Ogre::Vector3(atof(txtRotationX->GetValue()), atof(txtRotationY->GetValue()), atof(txtRotationZ->GetValue())));
+		camera->SetRotation(Vector3(atof(txtRotationX->GetValue()), atof(txtRotationY->GetValue()), atof(txtRotationZ->GetValue())));
 	}
 }
 
@@ -283,7 +283,7 @@ void CameraTextureControl::On_bSetLookAt_Click(wxCommandEvent& event)
 {
 	if (camera)
 	{
-		camera->LookAt(Ogre::Vector3(atof(txtRotationX->GetValue()), atof(txtRotationY->GetValue()), atof(txtRotationZ->GetValue())));
+		camera->LookAt(Vector3(atof(txtRotationX->GetValue()), atof(txtRotationY->GetValue()), atof(txtRotationZ->GetValue())));
 	}
 }
 

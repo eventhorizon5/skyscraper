@@ -69,8 +69,8 @@ public:
 	bool setkey;
 	int keyvalue;
 	int lockvalue;
-	Ogre::Vector3 MinExtent;
-	Ogre::Vector3 MaxExtent;
+	Vector3 MinExtent;
+	Vector3 MaxExtent;
 	int RangeL, RangeLOld;
 	int RangeH, RangeHOld;
 	long RangeStart, RangeStartOld;

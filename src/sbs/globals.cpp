@@ -333,22 +333,22 @@ double Round(double number, int decimal_places)
 	return rounded;
 }
 
-Ogre::Vector3 Round(const Ogre::Vector3 &value, int decimal_places)
+Vector3 Round(const Vector3 &value, int decimal_places)
 {
 	//round a 3D vector to specified decimal places
 
-	Ogre::Vector3 result;
+	Vector3 result;
 	result.x = Round(value.x, decimal_places);
 	result.y = Round(value.y, decimal_places);
 	result.z = Round(value.z, decimal_places);
 	return result;
 }
 
-Ogre::Vector2 Round(const Ogre::Vector2 &value, int decimal_places)
+Vector2 Round(const Vector2 &value, int decimal_places)
 {
 	//round a 2D vector to specified decimal places
 
-	Ogre::Vector2 result;
+	Vector2 result;
 	result.x = Round(value.x, decimal_places);
 	result.y = Round(value.y, decimal_places);
 	return result;
