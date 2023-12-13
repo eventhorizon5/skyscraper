@@ -111,7 +111,7 @@ TextureManager::~TextureManager()
 	{
 		if (manual_textures[i])
 		{
-			Ogre::TextureManager::getSingleton().remove(manual_textures[i]->getHandle());
+			Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->destroyTexture(manual_textures[i]);
 		}
 	}
 	manual_textures.clear();
@@ -131,7 +131,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 
 	if (!mTex)
 		return false;
-	std::string texturename = mTex->getName();
+	std::string texturename = mTex->getNameStr();
 
 	//create a new material
 	std::string matname = TrimStringCopy(name);
@@ -181,7 +181,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 
 		if (!mTex)
 			return false;
-		std::string texturename = mTex->getName();
+		std::string texturename = mTex->getNameStr();
 
 		if (has_alpha2 == true)
 			has_alpha = true;
@@ -234,21 +234,21 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 
 	if (!mTex)
 		return false;
-	std::string texturename = mTex->getName();
+	std::string texturename = mTex->getNameStr();
 
 	//load specular texture
 	mTex = LoadTexture(specular_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
 	if (!mTex)
 		return ReportError("Error loading texture" + specular_filename2);
-	std::string specular_texturename = mTex->getName();
+	std::string specular_texturename = mTex->getNameStr();
 
 	//load blend texture
 	mTex = LoadTexture(blend_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
 	if (!mTex)
 		return ReportError("Error loading texture" + blend_filename2);
-	std::string blend_texturename = mTex->getName();
+	std::string blend_texturename = mTex->getNameStr();
 
 	//create a new material
 	std::string matname = TrimStringCopy(name);
@@ -295,7 +295,7 @@ bool TextureManager::LoadMaterial(const std::string &materialname, const std::st
 		return false;
 
 	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
+	//mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//add texture multipliers
 	RegisterTextureInfo(name, materialname, "", widthmult, heightmult, enable_force, force_mode);
@@ -348,10 +348,10 @@ bool TextureManager::UnloadTexture(const std::string &name, const std::string &g
 {
 	//unloads a texture
 
-	Ogre::ResourcePtr wrapper = GetTextureByName(name, group);
+	Ogre::TextureGpu *wrapper = GetTextureByName(name, group);
 	if (!wrapper)
 		return false;
-	Ogre::TextureManager::getSingleton().remove(wrapper);
+	Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->destroyTexture(wrapper);
 	DecrementTextureCount();
 
 	return true;
@@ -386,7 +386,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 
 	//load texture
 	bool has_alpha = false;
-	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
+	Ogre::TextureGpu *mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
 	if (!mTex)
 		return false;
@@ -413,10 +413,10 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + name;
-	Ogre::TexturePtr new_texture;
+	Ogre::TextureGpu *new_texture;
 	try
 	{
-		new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
+		new_texture = Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->createTexture(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
 		manual_textures.push_back(new_texture);
 		IncrementTextureCount();
 	}
@@ -437,8 +437,8 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	//bind texture to material
 	BindTextureToMaterial(mMat, texturename, has_alpha);
 
-	if (sbs->Verbose)
-		Report("Loaded cropped texture '" + filename2 + "' as '" + name + "', size " + ToString((int)new_texture->getSize()));
+	//if (sbs->Verbose)
+		//Report("Loaded cropped texture '" + filename2 + "' as '" + name + "', size " + ToString((int)new_texture->getSize()));
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
@@ -717,7 +717,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 			//report font loaded and texture size
 			std::string texname = GetTextureName(font->getMaterial());
-			Ogre::TexturePtr fontTexture = GetTextureByName(texname);
+			Ogre::TextureGpu *fontTexture = GetTextureByName(texname);
 			if (fontTexture)
 				Report("Font " + font_filename2 + " loaded as size " + ToString(font_size) + ", with texture size " + ToString((int)fontTexture->getSize()));
 		}
