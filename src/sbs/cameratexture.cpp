@@ -21,14 +21,14 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreCamera.h>
+/*#include <OgreCamera.h>
 #include <OgreSceneManager.h>
 #include <OgreTextureManager.h>
 #include <OgreTechnique.h>
 #include <OgreMaterialManager.h>
 #include <OgreRenderTexture.h>
 #include <OgreViewport.h>
-#include <OgreHardwarePixelBuffer.h>
+#include <OgreHardwarePixelBuffer.h>*/
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
@@ -48,7 +48,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 
 	FOV = fov;
 	camera = 0;
-	renderTexture = 0;
+	/*renderTexture = 0;
 
 	unsigned int texture_size = 256;
 	if (quality == 2)
@@ -113,12 +113,12 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating camera texture:\n" + e.getDescription());
-	}
+	}*/
 }
 
 CameraTexture::~CameraTexture()
 {
-	renderTexture->removeAllViewports();
+	//renderTexture->removeAllViewports();
 	if (camera)
 	{
 		GetSceneNode()->DetachObject(camera);
@@ -137,12 +137,13 @@ CameraTexture::~CameraTexture()
 
 void CameraTexture::Enabled(bool value)
 {
-	renderTexture->setActive(value);
+	//renderTexture->setActive(value);
 }
 
 bool CameraTexture::IsEnabled()
 {
-	return renderTexture->isActive();
+	//return renderTexture->isActive();
+	return false;
 }
 
 void CameraTexture::SetFOVAngle(Real angle)

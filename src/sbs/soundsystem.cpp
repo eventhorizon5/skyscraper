@@ -63,10 +63,10 @@ SoundSystem::~SoundSystem()
 void SoundSystem::Loop()
 {
 	//update sound
-	if (enable_advanced_profiling == false)
+	/*if (enable_advanced_profiling == false)
 		ProfileManager::Start_Profile("Sound");
 	else
-		ProfileManager::Start_Profile("FMOD");
+		ProfileManager::Start_Profile("FMOD");*/
 
 	//sync sound listener object to camera position
 	if (sbs->camera->IsActive() == true)
@@ -80,7 +80,7 @@ void SoundSystem::Loop()
 	//update FMOD
 	soundsys->update();
 
-	ProfileManager::Stop_Profile();
+	//ProfileManager::Stop_Profile();
 }
 
 void SoundSystem::SetListenerPosition(const Vector3 &position)

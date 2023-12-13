@@ -179,7 +179,7 @@ void Person::ProcessRoute()
 	if (IsRouteActive() == false)
 		return;
 
-	SBS_PROFILE("Person::ProcessRoute");
+	//SBS_PROFILE("Person::ProcessRoute");
 
 	Floor *floor_obj = sbs->GetFloor(current_floor);
 

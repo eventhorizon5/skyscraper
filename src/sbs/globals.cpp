@@ -28,6 +28,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <math.h>
+#include <sstream>
 #include <OgreString.h>
 #include <OgreStringConverter.h>
 #include "globals.h"

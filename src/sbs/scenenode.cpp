@@ -43,7 +43,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 
 	try
 	{
-		node = sbs->mSceneManager->createSceneNode(node_name);
+		node = sbs->mSceneManager->createSceneNode(Ogre::SCENE_DYNAMIC);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -94,8 +94,8 @@ void SceneNode::ShowBoundingBox(bool value)
 {
 	//show scene node's 3D bounding box
 
-	if (node)
-		node->showBoundingBox(value);
+	//if (node)
+		//node->showBoundingBox(value);
 }
 
 void SceneNode::SetPosition(const Vector3 &position)
@@ -190,8 +190,8 @@ void SceneNode::Update()
 	//this mainly needs to be called on child scenenodes of a parent that has moved/rotated,
 	//to recalculate offsets
 
-	if (node)
-		node->needUpdate();
+	//if (node)
+		//node->needUpdate();
 }
 
 Quaternion SceneNode::GetOrientation(bool relative)

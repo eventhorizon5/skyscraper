@@ -96,16 +96,16 @@ private:
 
 		struct Submesh
 		{
-			Ogre::SubMesh* object;
+			Ogre::v1::SubMesh* object;
 			int clients;
 			std::string material;
 		};
 
 		std::string name;
-		Ogre::MeshPtr MeshWrapper; //mesh
+		Ogre::v1::MeshPtr MeshWrapper; //mesh
 		std::vector<Submesh> Submeshes; //submeshes (per-material mesh)
 		std::vector<ClientEntry> client_entries; //per-client information
-		Ogre::Entity *Movable;
+		Ogre::v1::Entity *Movable;
 		SceneNode *node;
 		DynamicMesh *Parent;
 		::SBS::SBS *sbs;

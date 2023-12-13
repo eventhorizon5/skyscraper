@@ -21,16 +21,14 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreRoot.h>
-#include <OgreImage.h>
-#include <OgreTextureManager.h>
+#include <OgreTextureGpuManager.h>
+#include <OgreTextureGpu.h>
 #include <OgreTechnique.h>
 #include <OgreMaterialManager.h>
 #include <OgreFont.h>
 #include <OgreFontManager.h>
-#include <OgreHardwarePixelBuffer.h>
 #include <OgreResourceGroupManager.h>
-#include <OgreRTShaderSystem.h>
+//#include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
@@ -129,7 +127,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 
 	//load texture
 	bool has_alpha = false;
-	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
+	Ogre::TextureGpu *mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
 	if (!mTex)
 		return false;
@@ -148,9 +146,9 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
-	if (sbs->Verbose)
-		Report("Loaded texture '" + filename2 + "' as '" + matname + "', size " + ToString((int)mTex->getSize()));
-	else
+	//if (sbs->Verbose)
+		//Report("Loaded texture '" + filename2 + "' as '" + matname + "', size " + ToString((int)mTex->getSize()));
+	//else
 		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
@@ -179,7 +177,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 		bool has_alpha2 = false;
 
 		//load texture
-		Ogre::TexturePtr mTex = LoadTexture(filenames2[i], mipmaps, has_alpha2, use_alpha_color, alpha_color);
+		Ogre::TextureGpu *mTex = LoadTexture(filenames2[i], mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
 		if (!mTex)
 			return false;
@@ -188,8 +186,8 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 		if (has_alpha2 == true)
 			has_alpha = true;
 
-		if (sbs->Verbose)
-			Report("Loaded texture " + filenames2[i] + ", size " + ToString((int)mTex->getSize()));
+		//if (sbs->Verbose)
+			//Report("Loaded texture " + filenames2[i] + ", size " + ToString((int)mTex->getSize()));
 	}
 
 	//create a new material
@@ -232,7 +230,7 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 
 	//load texture
 	bool has_alpha = false, has_alpha2 = false;
-	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
+	Ogre::TextureGpu *mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
 	if (!mTex)
 		return false;

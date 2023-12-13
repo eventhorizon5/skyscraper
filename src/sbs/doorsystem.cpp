@@ -105,7 +105,7 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 	//direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
-	SBS_PROFILE("DoorComponent::MoveDoors");
+	//SBS_PROFILE("DoorComponent::MoveDoors");
 	Real tempposition, temporigin;
 
 	if (wrapper->rotate == true)

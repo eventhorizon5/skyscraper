@@ -34,10 +34,10 @@ Copyright (c) 2007 tuan.kuranes@gmail.com (Use it Freely, even Statically, but h
 This source file is not LGPL, it's public source code that you can reuse.
 -----------------------------------------------------------------------------*/
 
-#include <OgreBulletDynamicsRigidBody.h>
+/*#include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletDynamicsRaycastVehicle.h>
 #include <OgreBulletCollisionsBoxShape.h>
-#include <OgreBulletCollisionsCompoundShape.h>
+#include <OgreBulletCollisionsCompoundShape.h>*/
 #include "globals.h"
 #include "sbs.h"
 #include "scenenode.h"
@@ -59,10 +59,10 @@ Vehicle::Vehicle(Object *parent, const int number) : Object(parent)
 	Enabled(true);
 
 	//initialize main values
-	mCarChassis = 0;
-	mTuning = 0;
-	mVehicleRayCaster = 0;
-	mVehicle = 0;
+	//mCarChassis = 0;
+	//mTuning = 0;
+	//mVehicleRayCaster = 0;
+	//mVehicle = 0;
 	mChassis = 0;
 	WheelCount = 0;
 	mEngineForce = 0;
@@ -110,7 +110,7 @@ Vehicle::~Vehicle()
 	}
 	mWheels.clear();
 
-	if (mCarChassis)
+	/*if (mCarChassis)
 	{
 		mCarChassis->removeFromWorld();
 		delete mCarChassis;
@@ -127,7 +127,7 @@ Vehicle::~Vehicle()
 
 	if (mVehicle)
 		delete mVehicle;
-	mVehicle = 0;
+	mVehicle = 0;*/
 
 	if (vehicle)
 	{
@@ -158,7 +158,7 @@ bool Vehicle::Create(const Vector3 &position)
 
 bool Vehicle::CreateChassis(Real restitution, Real friction, Real mass, Real linear_dampening, Real angular_dampening)
 {
-	if (vehicle)
+	/*if (vehicle)
 		return ReportError("Chassis already created");
 
 	vehicle = new Object(this);
@@ -200,13 +200,13 @@ bool Vehicle::CreateChassis(Real restitution, Real friction, Real mass, Real lin
 	int forwardIndex = 2;
 
 	mVehicle->setCoordinateSystem(rightIndex, upIndex, forwardIndex);
-
+*/
 	return true;
 }
 
 bool Vehicle::AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radius, const Vector3 &ConnectionPoint, const Vector3 &Direction, const Vector3 &Axle)
 {
-	if (!mVehicle)
+	/*if (!mVehicle)
 		return ReportError("Chassis not created yet");
 
 	if (engine == true)
@@ -225,7 +225,7 @@ bool Vehicle::AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radi
 		Axle,
 		SuspensionRestLength,
 		sbs->ToRemote(radius),
-		IsFrontWheel, WheelFriction, RollInfluence);
+		IsFrontWheel, WheelFriction, RollInfluence);*/
 
 	//mVehicle->setWheelsAttached();
 
@@ -256,7 +256,7 @@ void Vehicle::KeyReleased(bool left, bool right, bool down, bool up)
 
 void Vehicle::Loop()
 {
-	if (!mVehicle)
+	/*if (!mVehicle)
 		return;
 
 	// apply engine force on relevant wheels
@@ -301,7 +301,7 @@ void Vehicle::Loop()
 	{
 		sbs->camera->SetPosition(GetPosition() + CameraPoint);
 		sbs->camera->SetOrientation(GetOrientation());
-	}
+	}*/
 }
 
 void Vehicle::Enabled(bool value)
@@ -311,8 +311,8 @@ void Vehicle::Enabled(bool value)
 
 void Vehicle::OnMove(bool parent)
 {
-	if (mCarChassis)
-		mCarChassis->updateTransform(true, true, true);
+	//if (mCarChassis)
+		//mCarChassis->updateTransform(true, true, true);
 }
 
 void Vehicle::AttachCamera(bool value)

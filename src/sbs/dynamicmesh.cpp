@@ -217,7 +217,7 @@ bool DynamicMesh::IsVisible(Ogre::Camera *camera, int mesh_index)
 
 void DynamicMesh::Prepare(MeshObject *client)
 {
-	SBS_PROFILE("DynamicMesh::Prepare");
+	//SBS_PROFILE("DynamicMesh::Prepare");
 
 	if (file_model == true || prepared == true)
 		return;
@@ -598,7 +598,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		this->name = name;
 
 		//create mesh
-		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		MeshWrapper = Ogre::v1::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	}
 	else
 	{
@@ -607,18 +607,20 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		//load model
 		try
 		{
-			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename, path);
+			MeshWrapper = Ogre::v1::MeshManager::getSingleton().load(filename, path);
 		}
 		catch (Ogre::Exception &e)
 		{
 			sbs->ReportError("Error loading model " + filename + "\n" + e.getDescription());
-			MeshWrapper = 0;
+			//MeshWrapper = 0;
+			MeshWrapper.setNull();
 			return;
 		}
 	}
 
 	//create and enable movable
-	Movable = sbs->mSceneManager->createEntity(node->GetNameBase() + name, MeshWrapper);
+	//Movable = sbs->mSceneManager->createEntity(node->GetNameBase() + name, MeshWrapper);
+	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
 	Enabled(true);
 
 	//set maximum render distance
@@ -639,15 +641,16 @@ DynamicMesh::Mesh::~Mesh()
 	{
 		if (MeshWrapper)
 		{
-			if (Ogre::MeshManager::getSingleton().getByHandle(MeshWrapper->getHandle()))
-				Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
+			if (Ogre::v1::MeshManager::getSingleton().getByHandle(MeshWrapper->getHandle()))
+				Ogre::v1::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
 		}
 	}
 	catch (Ogre::Exception &e)
 	{
 		sbs->ReportError("Error unloading mesh: " + e.getDescription());
 	}
-	MeshWrapper = 0;
+	//MeshWrapper = 0;
+	MeshWrapper.setNull();
 }
 
 void DynamicMesh::Mesh::Enabled(bool value)
@@ -676,7 +679,7 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	//re-prepare mesh to move client's triangles into the proper new submesh,
 	//to prevent changing (and interfering with) other clients' textures
 
-	SBS_PROFILE("DynamicMesh::Mesh::ChangeTexture");
+	//SBS_PROFILE("DynamicMesh::Mesh::ChangeTexture");
 
 	//get new material
 	Ogre::MaterialPtr newmat = sbs->GetTextureManager()->GetMaterialByName(new_texture, "General");
@@ -800,7 +803,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
 
-	SBS_PROFILE("DynamicMesh::Mesh::Prepare");
+	//SBS_PROFILE("DynamicMesh::Mesh::Prepare");
 
 	if (prepared == true || !node)
 		return;
@@ -818,7 +821,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	{
 		if (MeshWrapper->sharedVertexData)
 			delete MeshWrapper->sharedVertexData;
-		MeshWrapper->sharedVertexData = new Ogre::VertexData();
+		//MeshWrapper->sharedVertexData = new Ogre::v1::VertexData();
 
 		//delete any existing submeshes
 		for (size_t i = 0; i < Submeshes.size(); i++)
@@ -849,20 +852,20 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		//set up vertex buffer
 		if (MeshWrapper->sharedVertexData)
 		{
-			previous_count = MeshWrapper->sharedVertexData->vertexCount;
+			previous_count = MeshWrapper->sharedVertexData[0]->vertexCount;
 			delete MeshWrapper->sharedVertexData;
 		}
-		Ogre::VertexData* data = new Ogre::VertexData();
-		MeshWrapper->sharedVertexData = data;
+		Ogre::v1::VertexData* data = new Ogre::v1::VertexData(0);
+		MeshWrapper->sharedVertexData[0] = data;
 		data->vertexCount = vertex_count;
-		Ogre::VertexDeclaration* decl = data->vertexDeclaration;
+		Ogre::v1::VertexDeclaration* decl = data->vertexDeclaration;
 
 		//set up vertex data elements
 		size_t offset = 0;
 		decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION); //vertices
-		offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
+		offset += Ogre::v1::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
 		decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_NORMAL); //normals
-		offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
+		offset += Ogre::v1::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
 		decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
 
 		//set up vertex data arrays
@@ -938,11 +941,11 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		}
 
 		//create vertex hardware buffer
-		Ogre::HardwareVertexBufferSharedPtr vbuffer;
+		Ogre::v1::HardwareVertexBufferSharedPtr vbuffer;
 		if (Parent->UseDynamicBuffers() == false)
-			vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+			vbuffer = Ogre::v1::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::v1::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 		else
-			vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
+			vbuffer = Ogre::v1::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::v1::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
 
 		vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
 		delete [] mVertexElements;
@@ -993,7 +996,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 		//set up index data array
 		unsigned int isize = triangle_count * 3;
-		Ogre::HardwareIndexBufferSharedPtr ibuffer;
+		Ogre::v1::HardwareIndexBufferSharedPtr ibuffer;
 
 		//if the number of vertices is greater than what can fit in a 16-bit index, use 32-bit indexes instead
 		if (vertex_count > 65536)
@@ -1031,7 +1034,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			}
 
 			//create index hardware buffer
-			ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+			ibuffer = Ogre::v1::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::v1::HardwareIndexBuffer::IT_32BIT, isize, Ogre::v1::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
 			//write data to index buffer
 			ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
@@ -1072,7 +1075,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			}
 
 			//create index hardware buffer
-			ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+			ibuffer = Ogre::v1::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::v1::HardwareIndexBuffer::IT_16BIT, isize, Ogre::v1::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
 			//write data to index buffer
 			ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
@@ -1083,13 +1086,13 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		if (submesh->object->indexData)
 		{
 			delete submesh->object->indexData;
-			submesh->object->indexData = new Ogre::IndexData();
+			submesh->object->indexData[0] = new Ogre::v1::IndexData();
 		}
 
 		//bind index data to submesh
-		submesh->object->indexData->indexCount = isize;
-		submesh->object->indexData->indexBuffer = ibuffer;
-		submesh->object->indexData->indexStart = 0;
+		submesh->object->indexData[0]->indexCount = isize;
+		submesh->object->indexData[0]->indexBuffer = ibuffer;
+		submesh->object->indexData[0]->indexStart = 0;
 	}
 
 	//mark ogre mesh as dirty to update changes
@@ -1115,7 +1118,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 void DynamicMesh::Mesh::EnableDebugView(bool value)
 {
 	//enable or disable debug view of mesh
-	Movable->setDebugDisplayEnabled(value);
+	//Movable->setDebugDisplayEnabled(value);
 }
 
 bool DynamicMesh::Mesh::IsVisible()
@@ -1154,7 +1157,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
-	SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
+	//SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
 
 	if (Parent->UseDynamicBuffers() == false || !node)
 		return;
@@ -1269,10 +1272,10 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 		*client_entries[0].bounds = box;
 
 	//get vertex data
-	Ogre::VertexData* data = MeshWrapper->sharedVertexData;
+	Ogre::v1::VertexData* data = MeshWrapper->sharedVertexData[0];
 
 	//get vertex buffer and size
-	Ogre::HardwareVertexBufferSharedPtr vbuffer = data->vertexBufferBinding->getBuffer(0);
+	Ogre::v1::HardwareVertexBufferSharedPtr vbuffer = data->vertexBufferBinding->getBuffer(0);
 	size_t vsize = data->vertexDeclaration->getVertexSize(0);
 
 	/*

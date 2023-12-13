@@ -270,7 +270,7 @@ void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 	if (!sbs->GetFloor(floor))
 		return;
 
-	SBS_PROFILE("Shaft::EnableRange");
+	//SBS_PROFILE("Shaft::EnableRange");
 
 	//range must be greater than 0
 	if (range < 1)
@@ -500,7 +500,7 @@ void Shaft::Check(Vector3 position, int current_floor)
 	if (!car)
 		return;
 
-	SBS_PROFILE("Shaft::Check");
+	//SBS_PROFILE("Shaft::Check");
 
 	if (IsInside(position) == true)
 	{
@@ -638,7 +638,7 @@ void Shaft::Loop()
 {
 	//shaft runloop
 
-	SBS_PROFILE("Shaft::Loop");
+	//SBS_PROFILE("Shaft::Loop");
 
 	LoopChildren();
 }
@@ -817,7 +817,7 @@ bool Shaft::Level::AddFloor(Wall *wall, const std::string &name, const std::stri
 
 void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 {
-	SBS_PROFILE("Shaft::Enabled");
+	//SBS_PROFILE("Shaft::Enabled");
 	if (IsEnabled() != value && parent->EnableCheck == false)
 	{
 		//turns shaft on/off for a specific floor
@@ -1084,7 +1084,7 @@ void Shaft::Level::Loop()
 {
 	//level runloop
 
-	SBS_PROFILE("Stairwell::Level::Loop");
+	//SBS_PROFILE("Stairwell::Level::Loop");
 
 	LoopChildren();
 }

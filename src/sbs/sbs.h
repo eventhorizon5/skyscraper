@@ -34,7 +34,7 @@
 #undef GetCurrentTime
 
 //external class declarations
-namespace OgreBulletDynamics {
+/*namespace OgreBulletDynamics {
 	class DynamicsWorld;
 	class RigidBody;
 	class CharacterController;
@@ -42,13 +42,13 @@ namespace OgreBulletDynamics {
 namespace OgreBulletCollisions {
 	class DebugDrawer;
 	class CollisionShape;
-}
+}*/
 
 namespace Ogre {
 	class ConfigFile;
 	struct Box;
-	typedef std::vector<String> StringVector;
-	typedef SharedPtr<StringVector> StringVectorPtr;
+	//typedef std::vector<String> StringVector;
+	//typedef SharedPtr<StringVector> StringVectorPtr;
 }
 
 namespace FMOD {
@@ -144,8 +144,8 @@ public:
 	std::string BuildingVersion;
 
 	//physics objects
-	OgreBulletDynamics::DynamicsWorld *mWorld;
-	OgreBulletCollisions::DebugDrawer *debugDrawer;
+	//OgreBulletDynamics::DynamicsWorld *mWorld;
+	//OgreBulletCollisions::DebugDrawer *debugDrawer;
 
 	//Internal data
 	bool IsRunning; //is sim engine running?

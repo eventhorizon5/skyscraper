@@ -28,8 +28,8 @@
 #include <OgreTimer.h>
 #include "OgreStringVector.h"
 #include <fmod.hpp>
-#include <OgreBulletDynamicsRigidBody.h>
-#include <OgreBulletCollisionsRay.h>
+//#include <OgreBulletDynamicsRigidBody.h>
+//#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
 #include "manager.h"
@@ -175,7 +175,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Buildings = 0;
 	External = 0;
 	Landscape = 0;
-	mWorld = 0;
+	//mWorld = 0;
 	soundsystem = 0;
 	area_trigger = 0;
 	texturemanager = 0;
@@ -210,8 +210,8 @@ void SBS::Initialize()
 
 	//set up physics
 	Ogre::AxisAlignedBox box (Vector3::ZERO, Vector3::ZERO);
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Vector3::ZERO, true);
-	mWorld->setAllowedCcdPenetration(0);
+	//mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Vector3::ZERO, true);
+	//mWorld->setAllowedCcdPenetration(0);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);
@@ -444,13 +444,13 @@ SBS::~SBS()
 	area_trigger = 0;
 
 	//delete physics objects
-	if (mWorld)
+	/*if (mWorld)
 	{
 		//delete mWorld->getDebugDrawer();
 		//mWorld->setDebugDrawer(0);
 		delete mWorld;
 	}
-	mWorld = 0;
+	mWorld = 0;*/
 
 	ObjectArray.clear();
 	verify_results.clear();
@@ -520,7 +520,7 @@ void SBS::PrintBanner()
 void SBS::Loop()
 {
 	//Main simulator loop
-	SBS_PROFILE("SBS::Loop");
+	//SBS_PROFILE("SBS::Loop");
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
@@ -545,12 +545,12 @@ void SBS::Loop()
 	//update physics
 	if (camera->EnableBullet == true)
 	{
-		if (enable_advanced_profiling == false)
-			ProfileManager::Start_Profile("Collisions/Physics");
-		else
-			ProfileManager::Start_Profile("Bullet");
-		mWorld->stepSimulation(elapsed, 0);
-		ProfileManager::Stop_Profile();
+		//if (enable_advanced_profiling == false)
+			//ProfileManager::Start_Profile("Collisions/Physics");
+		//else
+			//ProfileManager::Start_Profile("Bullet");
+		//mWorld->stepSimulation(elapsed, 0);
+		//ProfileManager::Stop_Profile();
 	}
 
 	//sync camera to physics
@@ -566,7 +566,7 @@ void SBS::Loop()
 	if (elapsed > .5)
 		elapsed = .5;
 
-	ProfileManager::Start_Profile("Simulator Loop");
+	///ProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
 	{
 		//Determine floor that the camera is on
@@ -591,7 +591,7 @@ void SBS::Loop()
 	if (area_trigger)
 		area_trigger->Loop();
 
-	ProfileManager::Stop_Profile();
+	//ProfileManager::Stop_Profile();
 
 	//process camera loop
 	camera->Loop();
@@ -1979,7 +1979,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	//if range is 3, show shaft on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show only the current floor (floor)
 
-	SBS_PROFILE("SBS::EnableFloorRange");
+	//SBS_PROFILE("SBS::EnableFloorRange");
 
 	//range must be greater than 0
 	if (range < 1)
@@ -2145,7 +2145,7 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 
 void SBS::ProcessTimers()
 {
-	SBS_PROFILE("SBS::ProcessTimers");
+	//SBS_PROFILE("SBS::ProcessTimers");
 
 	//process all registered timers
 	for (size_t i = 0; i < timercallbacks.size(); i++)
@@ -2196,7 +2196,7 @@ void SBS::CheckAutoAreas()
 {
 	//check all automatic areas
 
-	SBS_PROFILE("SBS::CheckAutoAreas");
+	//SBS_PROFILE("SBS::CheckAutoAreas");
 
 	Vector3 position = camera->GetPosition();
 	int floor = camera->CurrentFloor;
@@ -3206,8 +3206,8 @@ void SBS::ShowColliders(bool value)
 {
 	try
 	{
-		if (mWorld)
-			mWorld->setShowDebugShapes(value);
+		//if (mWorld)
+			//mWorld->setShowDebugShapes(value);
 		camera->ShowDebugShape(value);
 	}
 	catch (Ogre::Exception &e)
@@ -3742,7 +3742,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	//note that the ray's origin and direction need to be in engine-relative values
 
 	//create a new ray that has absolute positioning, for engine offsets
-	Ray ray2 (ToRemote(ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
+	/*Ray ray2 (ToRemote(ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
 
 	//get a collision callback from Bullet
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray2, mWorld, max_distance);
@@ -3779,7 +3779,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	Vector3 isect;
 	Real distance = 2000000000.;
 	Vector3 normal = Vector3::ZERO;
-	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
+	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);*/
 
 	return true;
 }

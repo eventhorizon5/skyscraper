@@ -161,7 +161,7 @@ void MovingWalkway::Loop()
 {
 	//run loop
 
-	SBS_PROFILE("MovingWalkway::Loop");
+	//SBS_PROFILE("MovingWalkway::Loop");
 
 	if (!IsEnabled() || Run == 0)
 	{

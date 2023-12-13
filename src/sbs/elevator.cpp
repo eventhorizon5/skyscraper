@@ -793,7 +793,7 @@ bool Elevator::Stop(bool emergency)
 void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
-	SBS_PROFILE("Elevator::ProcessCallQueue");
+	//SBS_PROFILE("Elevator::ProcessCallQueue");
 
 	//exit if elevator is not running
 	if (Running == false)
@@ -1116,7 +1116,7 @@ void Elevator::Loop()
 {
 	//Monitors elevator and starts actions if needed
 
-	SBS_PROFILE("Elevator::Loop");
+	//SBS_PROFILE("Elevator::Loop");
 
 	if (Created == false)
 		return;
@@ -1248,7 +1248,7 @@ void Elevator::MoveElevatorToFloor()
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	//if InspectionService or manual movements are enabled, this function ignores GotoFloor values, since the elevator is manually moved
 
-	SBS_PROFILE("Elevator::MoveElevatorToFloor");
+	//SBS_PROFILE("Elevator::MoveElevatorToFloor");
 
 	Vector3 movement = Vector3(0, 0, 0);
 	bool StartLeveling = false;
@@ -1921,7 +1921,7 @@ void Elevator::MoveObjects(Real offset)
 {
 	//move elevator and objects vertically
 
-	SBS_PROFILE("Elevator::MoveObjects");
+	//SBS_PROFILE("Elevator::MoveObjects");
 
 	Vector3 vector (0, offset, 0);
 
@@ -2259,7 +2259,7 @@ void Elevator::UpdateFloorIndicators()
 {
 	//updates all floor indicators
 
-	SBS_PROFILE("Elevator::UpdateFloorIndicators");
+	//SBS_PROFILE("Elevator::UpdateFloorIndicators");
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
@@ -3141,7 +3141,7 @@ void Elevator::UpdateDirectionalIndicators()
 {
 	//updates all interior active direction indicators
 
-	SBS_PROFILE("Elevator::UpdateDirectionalIndicators");
+	//SBS_PROFILE("Elevator::UpdateDirectionalIndicators");
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
@@ -3252,7 +3252,7 @@ void Elevator::Timer::Notify()
 	if (elevator->IsRunning() == false)
 		return;
 
-	SBS_PROFILE("Elevator::Timer::Notify");
+	//SBS_PROFILE("Elevator::Timer::Notify");
 	if (type == 0)
 	{
 		//parking timer
@@ -3511,7 +3511,7 @@ int Elevator::AvailableForCall(bool destination, int floor, int direction, bool 
 	//1 - available for call
 	//2 - unavailable due to a service mode or error
 
-	SBS_PROFILE("Elevator::AvailableForCall");
+	//SBS_PROFILE("Elevator::AvailableForCall");
 
 	ElevatorCar *car = GetCarForFloor(floor, report_on_failure);
 
@@ -3732,7 +3732,7 @@ bool Elevator::Check(Vector3 position)
 	if (IsEnabled == false)
 		return false;
 
-	SBS_PROFILE("Elevator::Check");
+	//SBS_PROFILE("Elevator::Check");
 
 	for (size_t i = Cars.size() - 1; i < Cars.size(); --i)
 	{
@@ -4058,7 +4058,7 @@ void Elevator::PlayMovingSounds()
 {
 	//play elevator movement sounds
 
-	SBS_PROFILE("Elevator::PlayMovingSounds");
+	//SBS_PROFILE("Elevator::PlayMovingSounds");
 
 	//car sounds
 	for (size_t i = 0; i < Cars.size(); i++)

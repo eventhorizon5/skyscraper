@@ -33,14 +33,15 @@
 #include <locale>
 #include <time.h>
 #include <thread>
-#include <OgreRoot.h>
+#include <Ogre.h>
+/*#include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreConfigFile.h>
 #include <OgreFontManager.h>
 #include <OgreRectangle2D.h>
 #include <OgreRTShaderSystem.h>
 #include <OgreBitesConfigDialog.h>
-#include <OgreSGTechniqueResolverListener.h>
+#include <OgreSGTechniqueResolverListener.h>*/
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "globals.h"

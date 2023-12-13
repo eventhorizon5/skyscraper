@@ -578,7 +578,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//this is the parent controller function that runs the movement function for each
 	//individual door component.
 
-	SBS_PROFILE("ElevatorDoor::MoveDoors");
+	//SBS_PROFILE("ElevatorDoor::MoveDoors");
 
 	//find which doors should be moved
 	bool elevdoors = false, shaftdoors = false, playsounds = false;
@@ -1242,7 +1242,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
-	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabled");
+	//SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabled");
 
 	//exit if shaft's ShowFullShaft is set
 	if (elev->GetShaft()->GetShowFull() == true && value == false)
@@ -1267,7 +1267,7 @@ void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
 	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show door on only the current floor (floor)
 
-	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabledRange");
+	//SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabledRange");
 
 	//exit if shaft's ShowFullShaft is set
 	if (elev->GetShaft()->GetShowFull() == true)
@@ -1449,7 +1449,7 @@ bool ElevatorDoor::DoorsStopped()
 void ElevatorDoor::Loop()
 {
 	//main loop
-	SBS_PROFILE("ElevatorDoor::Loop");
+	//SBS_PROFILE("ElevatorDoor::Loop");
 
 	if (OpenDoor == 1)
 		MoveDoors(true, false);

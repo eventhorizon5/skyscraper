@@ -90,7 +90,7 @@ public:
 	void DeleteCollider();
 	Real HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance);
 	bool InBoundingBox(const Vector3 &pos, bool check_y);
-	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
+	void GetMeshInformation(const Ogre::v1::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
 	void CreateColliderFromModel(int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices);
 	void CreateBoxCollider();
 	void DeleteWalls();
@@ -122,8 +122,8 @@ public:
 
 	Ogre::AxisAlignedBox *Bounds; //mesh bounds
 
-	OgreBulletDynamics::RigidBody* mBody;
-	OgreBulletCollisions::CollisionShape* mShape;
+	//OgreBulletDynamics::RigidBody* mBody;
+	//OgreBulletCollisions::CollisionShape* mShape;
 
 	std::string Filename; //filename, if a loaded model
 	bool model_loaded; //true if a model was loaded successfully
@@ -134,7 +134,7 @@ private:
 	Real restitution, friction, mass;
 	bool prepared;
 	bool wrapper_selfcreate;
-	bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
+	bool LoadFromFile(const std::string &filename, Ogre::v1::MeshPtr &collidermesh);
 };
 
 }

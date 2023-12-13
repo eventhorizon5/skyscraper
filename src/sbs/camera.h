@@ -217,8 +217,8 @@ private:
 	Model*	AttachedModel;
 
 	//collision/physics
-	OgreBulletDynamics::CharacterController* mCharacter;
-	OgreBulletCollisions::CollisionShape* mShape;
+	//OgreBulletDynamics::CharacterController* mCharacter;
+	//OgreBulletCollisions::CollisionShape* mShape;
 
 	//used for restoring values when exiting vehicle
 	Quaternion old_camera_orientation;

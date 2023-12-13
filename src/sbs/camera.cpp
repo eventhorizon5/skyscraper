@@ -22,9 +22,9 @@
 */
 
 #include <OgreCamera.h>
-#include <OgreBulletDynamicsCharacter.h>
+/*#include <OgreBulletDynamicsCharacter.h>
 #include <OgreBulletCollisionsRay.h>
-#include <OgreBulletCollisionsCapsuleShape.h>
+#include <OgreBulletCollisionsCapsuleShape.h>*/
 #include "globals.h"
 #include "sbs.h"
 #include "manager.h"
@@ -132,10 +132,11 @@ Camera::Camera(Object *parent) : Object(parent)
 	Real height = (cfg_body_height + cfg_legs_height - 0.5) - (width * 2);
 	Real step_height = cfg_legs_height - 0.5;
 
-	mCharacter = 0;
-	mShape = 0;
+	//mCharacter = 0;
+	//mShape = 0;
 
-	if (EnableBullet == true)
+	EnableBullet = false;
+	/*if (EnableBullet == true)
 	{
 		mCharacter = new OgreBulletDynamics::CharacterController(GetSceneNode()->GetFullName() + " Character", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 
@@ -146,7 +147,7 @@ Camera::Camera(Object *parent) : Object(parent)
 		//other movement options
 		mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
 		mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65)));
-	}
+	}*/
 }
 
 Camera::~Camera()
@@ -164,17 +165,17 @@ Camera::~Camera()
 		AttachedModel = 0;
 	}
 
-	if (mCharacter)
-		delete mCharacter;
+	//if (mCharacter)
+		//delete mCharacter;
 
 	//detach the camera
 	Detach();
 
-	if (GetSceneNode()->GetRawSceneNode()->numChildren() > 0)
+	/*if (GetSceneNode()->GetRawSceneNode()->numChildren() > 0)
 	{
-		std::string nodename = GetSceneNode()->GetRawSceneNode()->getChild(0)->getName();
-		sbs->mSceneManager->destroySceneNode(nodename);
-	}
+		Ogre::SceneNode *node = GetSceneNode()->GetRawSceneNode()->getChild(0);
+		sbs->mSceneManager->destroySceneNode(node);
+	}*/
 }
 
 void Camera::SetPosition(const Vector3 &position)
@@ -234,8 +235,8 @@ void Camera::SetRotation(const Vector3 &rotation)
 	Rotation = vector;
 	MainCamera->setOrientation(camrot);
 
-	if (EnableBullet == true)
-		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
+	//if (EnableBullet == true)
+		//mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
 
 	OnRotate(false);
 }
@@ -284,7 +285,7 @@ Vector3 Camera::GetRotation()
 
 void Camera::UpdateCameraFloor()
 {
-	SBS_PROFILE("Camera::UpdateCameraFloor");
+	//SBS_PROFILE("Camera::UpdateCameraFloor");
 
 	if (!MainCamera)
 		return;
@@ -407,7 +408,7 @@ void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 		Rotation.z += 360;
 
 	Quaternion rot(Degree(Rotation.y), Vector3::NEGATIVE_UNIT_Y);
-	if (EnableBullet == true)
+	/*if (EnableBullet == true)
 	{
 		//rotate character collider
 		mCharacter->setOrientation(sbs->ToGlobal(rot));
@@ -416,7 +417,7 @@ void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 		MainCamera->pitch(Degree(xdeg));
 		MainCamera->roll(Degree(zdeg));
 	}
-	else
+	else*/
 		MainCamera->setOrientation(rot);
 
 	OnRotate(false);
@@ -470,7 +471,7 @@ void Camera::CheckElevator()
 {
 	//check to see if user (camera) is in an elevator
 
-	SBS_PROFILE("Camera::CheckElevator");
+	//SBS_PROFILE("Camera::CheckElevator");
 
 	if (!MainCamera)
 		return;
@@ -502,7 +503,7 @@ void Camera::CheckShaft()
 	if (sbs->AutoShafts == false)
 		return;
 
-	SBS_PROFILE("Camera::CheckShaft");
+	//SBS_PROFILE("Camera::CheckShaft");
 
 	for (int i = 1; i <= sbs->GetShaftCount(); i++)
 	{
@@ -525,7 +526,7 @@ void Camera::CheckStairwell()
 	if (sbs->AutoStairs == false)
 		return;
 
-	SBS_PROFILE("Camera::CheckStairwell");
+	//SBS_PROFILE("Camera::CheckStairwell");
 
 	for (int i = 1; i <= sbs->GetStairwellCount(); i++)
 	{
@@ -546,13 +547,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	if (!MainCamera)
 		return;
 
-	SBS_PROFILE("Camera::ClickedObject");
+	//SBS_PROFILE("Camera::ClickedObject");
 
 	Vector3 pos = GetPosition();
 
 	//cast a ray from the camera in the direction of the clicked position
-	int width = MainCamera->getViewport()->getActualWidth();
-	int height = MainCamera->getViewport()->getActualHeight();
+	int width = MainCamera->getLastViewport()->getActualWidth();
+	int height = MainCamera->getLastViewport()->getActualHeight();
 
 	if (width == 0 || height == 0)
 		return;
@@ -727,7 +728,7 @@ std::string Camera::GetClickedObjectCommandP()
 
 void Camera::Loop()
 {
-	SBS_PROFILE_MAIN("Camera Loop");
+	//SBS_PROFILE_MAIN("Camera Loop");
 
 	if (!MainCamera)
 		return;
@@ -741,14 +742,14 @@ void Camera::Loop()
 	Real delta = timing / 1000.0;
 
 	//reset collisions if needed
-	if (collision_reset == true && EnableBullet == true)
-		mCharacter->resetCollisions();
+	//if (collision_reset == true && EnableBullet == true)
+		//mCharacter->resetCollisions();
 	collision_reset = false;
 
 	//get name of the last hit mesh object
 	if (sbs->GetRunTime() > 10) //due to initialization-related crashes, wait before checking
 	{
-		if (EnableBullet == true)
+		/*if (EnableBullet == true)
 		{
 			if (mCharacter->getLastCollision())
 			{
@@ -765,7 +766,7 @@ void Camera::Loop()
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	//calculate acceleration
@@ -831,11 +832,11 @@ void Camera::Jump()
 
 	//velocity.y = cfg_jumpspeed;
 	//desired_velocity.y = 0.0;
-	if (EnableBullet == true)
+	/*if (EnableBullet == true)
 	{
 		if (mCharacter->getGravity() != 0)
 			mCharacter->jump();
-	}
+	}*/
 }
 
 void Camera::Look(Real speed)
@@ -906,12 +907,12 @@ void Camera::SetGravity(Real gravity, bool save_value, bool camera_only)
 	if (save_value == true)
 		Gravity = gravity;
 
-	if (EnableBullet == true && MainCamera)
+	/*if (EnableBullet == true && MainCamera)
 	{
 		if (camera_only == false)
 			sbs->mWorld->setGravity(Vector3(0, sbs->ToRemote(-gravity), 0));
 		mCharacter->setGravity(sbs->ToRemote(gravity));
-	}
+	}*/
 }
 
 Real Camera::GetGravity()
@@ -932,8 +933,8 @@ void Camera::EnableGravity(bool value)
 		velocity.y = 0;
 		desired_velocity.y = 0;
 	}
-	if (EnableBullet == true)
-		mCharacter->reset();
+	//if (EnableBullet == true)
+		//mCharacter->reset();
 	GravityStatus = value;
 }
 
@@ -988,12 +989,12 @@ void Camera::SetViewMode(int mode)
 	if (!MainCamera)
 		return;
 
-	if (mode == 0)
+	/*if (mode == 0)
 		MainCamera->setPolygonMode(Ogre::PM_SOLID);
 	if (mode == 1)
 		MainCamera->setPolygonMode(Ogre::PM_WIREFRAME);
 	if (mode == 2)
-		MainCamera->setPolygonMode(Ogre::PM_POINTS);
+		MainCamera->setPolygonMode(Ogre::PM_POINTS);*/
 }
 
 void Camera::EnableCollisions(bool value)
@@ -1005,8 +1006,8 @@ void Camera::EnableCollisions(bool value)
 		return;
 
 	Collisions = value;
-	if (EnableBullet == true)
-		mCharacter->enableCollisions(value);
+	//if (EnableBullet == true)
+		//mCharacter->enableCollisions(value);
 }
 
 bool Camera::CollisionsEnabled()
@@ -1019,9 +1020,9 @@ bool Camera::IsOnGround()
 	if (!MainCamera)
 		return false;
 
-	if (EnableBullet == true)
-		return mCharacter->onGround();
-	else
+	//if (EnableBullet == true)
+		//return mCharacter->onGround();
+	//else
 		return false;
 }
 
@@ -1032,8 +1033,8 @@ void Camera::Sync()
 	if (!MainCamera)
 		return;
 
-	if (EnableBullet == true)
-		mCharacter->sync();
+	//if (EnableBullet == true)
+		//mCharacter->sync();
 
 	//notify on movement or rotation
 	Vector3 position = sbs->ToRemote(GetPosition());
@@ -1075,8 +1076,8 @@ void Camera::ShowDebugShape(bool value)
 	if (!MainCamera)
 		return;
 
-	if (EnableBullet == true)
-		mCharacter->showDebugShape(value);
+	//if (EnableBullet == true)
+		//mCharacter->showDebugShape(value);
 }
 
 void Camera::MoveCharacter()
@@ -1084,9 +1085,9 @@ void Camera::MoveCharacter()
 	if (!MainCamera)
 		return;
 
-	if (EnableBullet == true)
-		mCharacter->setWalkDirection(accum_movement, 1);
-	else
+	//if (EnableBullet == true)
+		//mCharacter->setWalkDirection(accum_movement, 1);
+	//else
 		MainCamera->move(accum_movement);
 	prev_accum_movement = accum_movement;
 	accum_movement = Vector3::ZERO;
@@ -1283,8 +1284,8 @@ void Camera::ResetView()
 
 void Camera::Refresh()
 {
-	if (mCharacter)
-		mCharacter->resetLastCollision();
+	//if (mCharacter)
+		//mCharacter->resetLastCollision();
 }
 
 bool Camera::Attach(Ogre::Camera *camera, bool init_state)
@@ -1346,8 +1347,8 @@ bool Camera::Detach()
 
 void Camera::OnMove(bool parent)
 {
-	if (EnableBullet == true)
-		mCharacter->updateTransform(true, false, false);
+	//if (EnableBullet == true)
+		//mCharacter->updateTransform(true, false, false);
 }
 
 void Camera::OnRotate(bool parent)
@@ -1355,8 +1356,8 @@ void Camera::OnRotate(bool parent)
 	if (parent == true)
 		OnMove(parent); //update position if parent object has been rotated
 
-	if (EnableBullet == true)
-		mCharacter->updateTransform(false, true, false);
+	//if (EnableBullet == true)
+		//mCharacter->updateTransform(false, true, false);
 }
 
 CameraState Camera::GetCameraState()
@@ -1450,8 +1451,8 @@ void Camera::Drive(bool left, bool right, bool down, bool up, bool key_down)
 
 void Camera::Crouch(bool value)
 {
-	if (mCharacter)
-		mCharacter->crouch(value);
+	//if (mCharacter)
+		//mCharacter->crouch(value);
 }
 
 void Camera::SetOrientation(const Quaternion &orientation)
@@ -1480,8 +1481,8 @@ void Camera::AttachToVehicle(bool value)
 		vehicle = 0;
 		EnableCollisions(true);
 		MainCamera->setOrientation(old_camera_orientation);
-		if (EnableBullet == true)
-			mCharacter->setOrientation(old_character_orientation);
+		//if (EnableBullet == true)
+			//mCharacter->setOrientation(old_character_orientation);
 	}
 	else if (value == true)
 	{
@@ -1522,8 +1523,8 @@ void Camera::AttachToVehicle(bool value)
 				inside_vehicle = true;
 				EnableCollisions(false);
 				old_camera_orientation = MainCamera->getOrientation();
-				if (EnableBullet == true)
-					old_character_orientation = mCharacter->getWorldOrientation();
+				//if (EnableBullet == true)
+					//old_character_orientation = mCharacter->getWorldOrientation();
 				vehicle->AttachCamera(true);
 			}
 		}

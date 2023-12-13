@@ -150,7 +150,7 @@ void FloorIndicator::Update(bool blank)
 {
 	//update indicator display with elevator's current floor identifier
 
-	SBS_PROFILE("FloorIndicator::Update");
+	//SBS_PROFILE("FloorIndicator::Update");
 
 	if (blank == true && Blank != "")
 	{

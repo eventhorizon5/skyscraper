@@ -651,7 +651,7 @@ void ElevatorCar::Loop()
 {
 	//elevator car monitor loop
 
-	SBS_PROFILE("ElevatorCar::Loop");
+	//SBS_PROFILE("ElevatorCar::Loop");
 
 	ControlPressActive = false;
 
@@ -1384,7 +1384,7 @@ void ElevatorCar::ShaftDoorsEnabled(int number, int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
-	SBS_PROFILE("Elevator::ShaftDoorsEnabled");
+	//SBS_PROFILE("Elevator::ShaftDoorsEnabled");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1408,7 +1408,7 @@ void ElevatorCar::ShaftDoorsEnabledRange(int number, int floor, int range)
 	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show door on only the current floor (floor)
 
-	SBS_PROFILE("Elevator::ShaftDoorsEnabledRange");
+	//SBS_PROFILE("Elevator::ShaftDoorsEnabledRange");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1430,7 +1430,7 @@ bool ElevatorCar::AreDoorsOpen(int number)
 {
 	//returns the internal door state
 
-	SBS_PROFILE("Elevator::AreDoorsOpen");
+	//SBS_PROFILE("Elevator::AreDoorsOpen");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1456,7 +1456,7 @@ bool ElevatorCar::AreShaftDoorsOpen(int number, int floor)
 {
 	//returns the internal shaft door state
 
-	SBS_PROFILE("Elevator::AreShaftDoorsOpen");
+	//SBS_PROFILE("Elevator::AreShaftDoorsOpen");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1497,7 +1497,7 @@ void ElevatorCar::Chime(int number, int floor, bool direction, bool early)
 {
 	//play chime sound on specified floor
 
-	SBS_PROFILE("Elevator::Chime");
+	//SBS_PROFILE("Elevator::Chime");
 
 	int start = number, end = number;
 	if (number == 0)
@@ -1615,7 +1615,7 @@ void ElevatorCar::EnableDoors(bool value)
 {
 	//enable/disable all doors
 
-	SBS_PROFILE("Elevator::EnableDoors");
+	//SBS_PROFILE("Elevator::EnableDoors");
 	if (sbs->Verbose)
 	{
 		if (value == true)

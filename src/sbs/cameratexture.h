@@ -46,7 +46,7 @@ private:
 
 	Ogre::Camera *camera;
 	std::string texturename;
-	Ogre::RenderTexture *renderTexture;
+	//Ogre::RenderTexture *renderTexture;
 };
 
 }

@@ -273,7 +273,7 @@ void Stairwell::EnableRange(int floor, int range, bool value)
 	if (!sbs->GetFloor(floor))
 		return;
 
-	SBS_PROFILE("Stairwell::EnableRange");
+	//SBS_PROFILE("Stairwell::EnableRange");
 
 	//range must be greater than 0
 	if (range < 1)
@@ -394,7 +394,7 @@ void Stairwell::Check(Vector3 position, int current_floor, int previous_floor)
 {
 	//check to see if user (camera) is in the stairwell
 
-	SBS_PROFILE("Stairwell::Check");
+	//SBS_PROFILE("Stairwell::Check");
 
 	if (IsInside(position) == true)
 	{
@@ -484,7 +484,7 @@ void Stairwell::Loop()
 {
 	//stairwell runloop
 
-	SBS_PROFILE("Stairwell::Loop");
+	//SBS_PROFILE("Stairwell::Loop");
 
 	LoopChildren();
 }
@@ -748,7 +748,7 @@ void Stairwell::Level::Enabled(bool value)
 {
 	//turns stairwell on/off for a specific floor
 
-	SBS_PROFILE("Stairwell::Level::Enabled");
+	//SBS_PROFILE("Stairwell::Level::Enabled");
 	if (IsEnabled() != value)
 	{
 		mesh->Enabled(value);
@@ -1090,7 +1090,7 @@ void Stairwell::Level::Loop()
 {
 	//level runloop
 
-	SBS_PROFILE("Stairwell::Level::Loop");
+	//SBS_PROFILE("Stairwell::Level::Loop");
 
 	LoopChildren();
 }

@@ -163,7 +163,7 @@ void Escalator::Loop()
 {
 	//run loop
 
-	SBS_PROFILE("Escalator::Loop");
+	//SBS_PROFILE("Escalator::Loop");
 
 	if (!IsEnabled() || Run == 0)
 	{

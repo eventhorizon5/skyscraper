@@ -72,8 +72,8 @@ public:
 	void SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool FlipZ, bool rotate);
 	void GetPlanarMapping(bool &flat, bool &FlipX, bool &FlipY, bool &FlipZ, bool &rotate);
 	Vector2 CalculateSizing(const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, int direction, Real tw, Real th);
-	Ogre::TexturePtr loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, Real threshold = 0.003);
-	void SaveTexture(Ogre::TexturePtr texture, const std::string &filename);
+	Ogre::TextureGpu* loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, Real threshold = 0.003);
+	void SaveTexture(Ogre::TextureGpu* texture, const std::string &filename);
 	std::string ListTextures(bool show_filename = false);
 	void IncrementTextureCount();
 	void DecrementTextureCount();
@@ -86,10 +86,10 @@ public:
 	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
 	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
 	std::string GetTextureName(Ogre::MaterialPtr mMat);
-	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = "General");
+	Ogre::TextureGpu* GetTextureByName(const std::string &name, const std::string &group = "General");
 	std::string GetTextureMaterial(const std::string &name, bool &result, bool report = true, const std::string &polygon_name = "");
-	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination);
-	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
+	void CopyTexture(Ogre::TextureGpu* source, Ogre::TextureGpu* destination);
+	void CopyTexture(Ogre::TextureGpu* source, Ogre::TextureGpu* destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
 	void FreeTextureBoxes();
 	void SetPlanarRotate(bool value);
 	bool GetPlanarRotate();
@@ -128,8 +128,8 @@ private:
 	int DefaultMapper; //default texture mapper
 
 	void BackupMapping();
-	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
-	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	bool WriteToTexture(const std::string &str, Ogre::TextureGpu* destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
+	Ogre::TextureGpu* LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	void UnloadMaterials();
 	bool ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2);
 
@@ -146,7 +146,7 @@ private:
 	};
 
 	std::vector<TextureInfo> textureinfo;
-	std::vector<Ogre::TexturePtr> manual_textures;
+	std::vector<Ogre::TextureGpu*> manual_textures;
 
 	//textures/materials count
 	int texturecount;
@@ -155,7 +155,7 @@ private:
 	struct TexturePixelBox
 	{
 		Ogre::FontPtr font;
-		Ogre::PixelBox *box;
+		Ogre::TextureBox *box;
 		unsigned char *buffer;
 	};
 	std::vector<TexturePixelBox> textureboxes;

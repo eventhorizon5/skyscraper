@@ -1,3 +1,5 @@
+#ifdef ENABLE_PROFILING
+
 #include <OgreBulletDynamicsWorld.h>
 #include "globals.h"
 #include "sbs.h"
@@ -376,3 +378,5 @@ ProfileSample::~ProfileSample( void )
 }
 
 }
+#endif
+

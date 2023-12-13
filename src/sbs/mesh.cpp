@@ -21,14 +21,15 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreMeshManager.h>
 #include <OgreMesh.h>
 #include <OgreResourceGroupManager.h>
 #include <OgreMaterialManager.h>
-#include <OgreBulletDynamicsRigidBody.h>
+//#include <OgreBulletDynamicsRigidBody.h>
 #include <OgreMath.h>
 #include <OgreAxisAlignedBox.h>
-#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
-#include <Shapes/OgreBulletCollisionsBoxShape.h>
+//#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
+//#include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <math.h>
 #include "globals.h"
 #include "sbs.h"
@@ -525,8 +526,8 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	SetValues("Mesh", name, true);
 
 	enabled = true;
-	mBody = 0;
-	mShape = 0;
+	//mBody = 0;
+	//mShape = 0;
 	prepared = false;
 	is_physical = enable_physics;
 	this->restitution = restitution;
@@ -546,7 +547,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	else
 		tricollider = true;
 
-	Ogre::MeshPtr collidermesh;
+	Ogre::v1::MeshPtr collidermesh;
 
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
@@ -594,7 +595,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
 			delete[] indices;
-			Ogre::MeshManager::getSingleton().remove(collidermesh->getHandle());
+			Ogre::v1::MeshManager::getSingleton().remove(collidermesh->getHandle());
 		}
 		else
 		{
@@ -656,7 +657,7 @@ void MeshObject::Enabled(bool value)
 		return;
 	}
 
-	SBS_PROFILE("MeshObject::Enable");
+	//SBS_PROFILE("MeshObject::Enable");
 
 	MeshWrapper->Enabled(value, this);
 
@@ -669,10 +670,10 @@ void MeshObject::EnableCollider(bool value)
 {
 	//enable or disable collision detection
 
-	if (!mBody)
+	/*if (!mBody)
 		return;
 
-	SBS_PROFILE("MeshObject::EnableCollider");
+	//SBS_PROFILE("MeshObject::EnableCollider");
 
 	if (remove_on_disable == false && sbs->camera->IsActive() == true)
 	{
@@ -690,7 +691,7 @@ void MeshObject::EnableCollider(bool value)
 			mBody->removeFromWorld();
 		else
 			mBody->addToWorld();
-	}
+	}*/
 	sbs->camera->ResetCollisions();
 }
 
@@ -727,7 +728,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	if (sbs->Headless == true)
 		return true;
 
-	SBS_PROFILE("MeshObject::ChangeTexture");
+	//SBS_PROFILE("MeshObject::ChangeTexture");
 	std::string material = texture;
 	TrimString(material);
 
@@ -785,7 +786,7 @@ Wall* MeshObject::FindWallIntersect(const Vector3 &start, const Vector3 &end, Ve
 	//positions need to be in remote (Ogre) positioning
 	//if wall_number is 0 or greater, this will only check that specified wall
 
-	SBS_PROFILE("MeshObject::FindWallIntersect");
+	//SBS_PROFILE("MeshObject::FindWallIntersect");
 	Real pr, best_pr = 2000000000.;
 	Real dist, best_dist = 2000000000.;
 	int best_i = -1;
@@ -1381,9 +1382,9 @@ void MeshObject::CreateCollider()
 {
 	//set up triangle collider based on raw SBS mesh geometry
 
-	SBS_PROFILE("MeshObject::CreateCollider");
+	//SBS_PROFILE("MeshObject::CreateCollider");
 
-	if (create_collider == false)
+	/*if (create_collider == false)
 		return;
 
 	//exit if collider already exists
@@ -1465,17 +1466,17 @@ void MeshObject::CreateCollider()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 void MeshObject::DeleteCollider()
 {
 	//delete mesh collider
 
-	SBS_PROFILE("MeshObject::DeleteCollider");
+	//SBS_PROFILE("MeshObject::DeleteCollider");
 
 	//exit if collider doesn't exist
-	if (!mBody)
+	/*if (!mBody)
 		return;
 
 	//remove collider from world
@@ -1484,14 +1485,14 @@ void MeshObject::DeleteCollider()
 	//delete collider object
 	delete mBody;
 	mBody = 0;
-	mShape = 0;
+	mShape = 0;*/
 }
 
 void MeshObject::CreateColliderFromModel(int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices)
 {
 	//set up triangle collider based on loaded model geometry
 
-	if (create_collider == false)
+	/*if (create_collider == false)
 		return;
 
 	//exit of collider already exists
@@ -1527,14 +1528,14 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Vector3* &vertices, 
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating model collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 void MeshObject::CreateBoxCollider()
 {
 	//set up a box collider for full extents of a mesh
 
-	if (create_collider == false)
+	/*if (create_collider == false)
 		return;
 
 	//exit of collider already exists
@@ -1570,7 +1571,7 @@ void MeshObject::CreateBoxCollider()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating box collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance)
@@ -1579,7 +1580,7 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 	//return -1 if no hit
 
 	//cast a ray from the camera position downwards
-	SBS_PROFILE("MeshObject::HitBeam");
+	//SBS_PROFILE("MeshObject::HitBeam");
 
 	Vector3 position = sbs->ToRemote(origin - GetPosition());
 	Ray ray (position, sbs->ToRemote(direction, false));
@@ -1629,7 +1630,7 @@ bool MeshObject::InBoundingBox(const Vector3 &pos, bool check_y)
 	return false;
 }
 
-void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
+void MeshObject::GetMeshInformation(const Ogre::v1::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
 {
 	//read hardware buffers from a loaded model mesh, and return geometry arrays
 
@@ -1644,24 +1645,24 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 	// Calculate how many vertices and indices we're going to need
 	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); i++)
 	{
-		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
+		Ogre::v1::SubMesh* submesh = mesh->getSubMesh(i);
 
 		// We only need to add the shared vertices once
 		if (submesh->useSharedVertices)
 		{
 			if (!added_shared)
 			{
-				vertex_count += (int)mesh->sharedVertexData->vertexCount;
+				vertex_count += (int)mesh->sharedVertexData[0]->vertexCount;
 				added_shared = true;
 			}
 		}
 		else
 		{
-			vertex_count += (int)submesh->vertexData->vertexCount;
+			vertex_count += (int)submesh->vertexData[0]->vertexCount;
 		}
 
 		// Add the indices
-		index_count += (int)submesh->indexData->indexCount;
+		index_count += (int)submesh->indexData[0]->indexCount;
 	}
 
 	//ensure minimum index count
@@ -1677,8 +1678,8 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 	// Run through the submeshes again, adding the data into the arrays
 	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); i++)
 	{
-		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
-		Ogre::VertexData* vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData : submesh->vertexData;
+		Ogre::v1::SubMesh* submesh = mesh->getSubMesh(i);
+		Ogre::v1::VertexData* vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData[0] : submesh->vertexData[0];
 
 		if ((!submesh->useSharedVertices) || (submesh->useSharedVertices && !added_shared))
 		{
@@ -1688,14 +1689,14 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 				shared_offset = current_offset;
 			}
 
-			const Ogre::VertexElement* posElem =
+			const Ogre::v1::VertexElement* posElem =
 				vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);
 
-			Ogre::HardwareVertexBufferSharedPtr vbuf =
+			Ogre::v1::HardwareVertexBufferSharedPtr vbuf =
 				vertex_data->vertexBufferBinding->getBuffer(posElem->getSource());
 
 			unsigned char* vertex =
-				static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+				static_cast<unsigned char*>(vbuf->lock(Ogre::v1::HardwareBuffer::HBL_READ_ONLY));
 
 			float* pReal;
 
@@ -1712,13 +1713,13 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 			next_offset += vertex_data->vertexCount;
 		}
 
-		Ogre::IndexData* index_data = submesh->indexData;
+		Ogre::v1::IndexData* index_data = submesh->indexData[0];
 		size_t numTris = index_data->indexCount / 3;
-		Ogre::HardwareIndexBufferSharedPtr ibuf = index_data->indexBuffer;
+		Ogre::v1::HardwareIndexBufferSharedPtr ibuf = index_data->indexBuffer;
 
-		bool use32bitindexes = (ibuf->getType() == Ogre::HardwareIndexBuffer::IT_32BIT);
+		bool use32bitindexes = (ibuf->getType() == Ogre::v1::HardwareIndexBuffer::IT_32BIT);
 
-		unsigned long* pLong = static_cast<unsigned long*>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+		unsigned long* pLong = static_cast<unsigned long*>(ibuf->lock(Ogre::v1::HardwareBuffer::HBL_READ_ONLY));
 		unsigned short* pShort = reinterpret_cast<unsigned short*>(pLong);
 
 		size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset;
@@ -1881,8 +1882,8 @@ void MeshObject::OnMove(bool parent)
 	if (collider_node)
 		collider_node->Update();
 
-	if (mBody)
-		mBody->updateTransform(true, false, false);
+	//if (mBody)
+		//mBody->updateTransform(true, false, false);
 
 	if (UsingDynamicBuffers() == true)
 		MeshWrapper->UpdateVertices(this);
@@ -1893,13 +1894,13 @@ void MeshObject::OnRotate(bool parent)
 	if (collider_node)
 		collider_node->Update();
 
-	if (mBody)
+	/*if (mBody)
 	{
 		if (parent == true)
 			OnMove(parent); //update position if parent object has been rotated
 
 		mBody->updateTransform(false, true, false);
-	}
+	}*/
 
 	if (UsingDynamicBuffers() == true)
 		MeshWrapper->UpdateVertices(this);
@@ -1982,14 +1983,14 @@ void MeshObject::CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, boo
 	Cut(back_min, back_max, cutwalls, cutfloors);
 }
 
-bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh)
+bool MeshObject::LoadFromFile(const std::string &filename, Ogre::v1::MeshPtr &collidermesh)
 {
 	//load mesh object from a file
 
 	if (sbs->Headless == true)
 		return true;
 
-	std::string filename1 = "data/";
+	/*std::string filename1 = "data/";
 	filename1.append(filename);
 	std::string filename2 = sbs->VerifyFile(filename1);
 	std::string path = sbs->GetMountPath(filename2, filename2);
@@ -2069,7 +2070,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 		}
 	}
 
-	model_loaded = true;
+	model_loaded = true;*/
 	return true;
 }
 
@@ -2114,7 +2115,7 @@ void MeshObject::ChangeHeight(Real newheight)
 {
 	//change height of all walls associated with this mesh object
 
-	SBS_PROFILE("MeshObject::ChangeHeight");
+	//SBS_PROFILE("MeshObject::ChangeHeight");
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{

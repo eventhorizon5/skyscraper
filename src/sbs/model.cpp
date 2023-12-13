@@ -152,7 +152,7 @@ void Model::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
-	SBS_PROFILE("Model::Loop");
+	//SBS_PROFILE("Model::Loop");
 
 	Floor *floor = GetParent()->ConvertTo<Floor>();
 	Elevator *elevator = GetParent()->ConvertTo<Elevator>();

@@ -271,7 +271,7 @@ void Trigger::Loop()
 	if (is_enabled == false)
 		return;
 
-	SBS_PROFILE("Trigger::Loop");
+	//SBS_PROFILE("Trigger::Loop");
 
 	Vector3 cam = sbs->camera->GetPosition();
 	bool changed = false;

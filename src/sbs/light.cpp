@@ -50,7 +50,7 @@ Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 
 	try
 	{
-		light = sbs->mSceneManager->createLight(GetSceneNode()->GetFullName());
+		light = sbs->mSceneManager->createLight();
 		GetSceneNode()->AttachObject(light);
 
 		if (type == 0)
@@ -81,7 +81,7 @@ Light::~Light()
 {
 	if (light)
 		GetSceneNode()->DetachObject(light);
-	sbs->mSceneManager->destroyLight(GetSceneNode()->GetFullName());
+	sbs->mSceneManager->destroyLight(light);
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)

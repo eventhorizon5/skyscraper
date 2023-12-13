@@ -338,7 +338,7 @@ void Floor::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	SBS_PROFILE("Floor::Enabled");
+	//SBS_PROFILE("Floor::Enabled");
 	Level->Enabled(value);
 	IsEnabled = value;
 
@@ -629,7 +629,7 @@ void Floor::EnableGroup(bool value)
 {
 	//enable floors grouped with this floor
 
-	SBS_PROFILE("Floor::EnableGroup");
+	//SBS_PROFILE("Floor::EnableGroup");
 	if (Group.size() > 0)
 	{
 		for (size_t i = 0; i < Group.size(); i++)
@@ -865,7 +865,7 @@ void Floor::UpdateFloorIndicators()
 {
 	//updates all floor indicators
 
-	SBS_PROFILE("Floor::UpdateFloorIndicators");
+	//SBS_PROFILE("Floor::UpdateFloorIndicators");
 
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
@@ -881,7 +881,7 @@ void Floor::Loop()
 	if (IsEnabled == false)
 		return;
 
-	SBS_PROFILE("Floor::Loop");
+	//SBS_PROFILE("Floor::Loop");
 
 	LoopChildren();
 }
@@ -1138,7 +1138,7 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 {
 	//updates the active-direction indicators associated with the given elevator
 
-	SBS_PROFILE("Floor::UpdateDirectionalIndicators1");
+	//SBS_PROFILE("Floor::UpdateDirectionalIndicators1");
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		DirectionalIndicator *indicator = DirIndicatorArray[i];
@@ -1176,7 +1176,7 @@ void Floor::UpdateDirectionalIndicators()
 {
 	//updates all active-direction indicators
 
-	SBS_PROFILE("Floor::UpdateDirectionalIndicators2");
+	//SBS_PROFILE("Floor::UpdateDirectionalIndicators2");
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		DirectionalIndicator *indicator = DirIndicatorArray[i];

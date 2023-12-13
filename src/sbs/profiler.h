@@ -1,9 +1,11 @@
-#ifndef _SBS_PROFILER_H
-#define _SBS_PROFILER_H
+#ifndef _//SBS_PROFILER_H
+#define _//SBS_PROFILER_H
+
+#ifdef ENABLE_PROFILING
 
 namespace SBS {
 
-#define ENABLE_PROFILING
+//#define ENABLE_PROFILING
 
 /***************************************************************************************************
 **
@@ -118,7 +120,7 @@ private:
 
 
 ///ProfileSampleClass is a simple way to profile a function's scope
-///Use the SBS_PROFILE macro at the start of scope to time
+///Use the //SBS_PROFILE macro at the start of scope to time
 class SBSIMPEXP ProfileSample {
 public:
 	ProfileSample( const char * name, bool advanced = true );
@@ -128,13 +130,14 @@ private:
 };
 
 #ifdef ENABLE_PROFILING
-#define	SBS_PROFILE(name)			ProfileSample __profile(name, true)
-#define	SBS_PROFILE_MAIN(name)			ProfileSample __profile(name, false)
+#define	//SBS_PROFILE(name)			ProfileSample __profile(name, true)
+#define	//SBS_PROFILE_MAIN(name)			ProfileSample __profile(name, false)
 #else
-#define	SBS_PROFILE(name)
+#define	//SBS_PROFILE(name)
 #endif
 
 }
 
+#endif
 #endif
 
