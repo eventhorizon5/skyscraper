@@ -24,9 +24,11 @@
 #ifndef _SBS_SOUNDSYSTEM_H
 #define _SBS_SOUNDSYSTEM_H
 
-class FMOD::Sound;
-class FMOD::Channel;
-class FMOD::System;
+namespace FMOD {
+	class Sound;
+	class Channel;
+	class System;
+}
 
 namespace SBS {
 
