@@ -18,8 +18,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OgreBulletDynamics", "..\og
 		{791F594F-FF44-49D1-A882-FF4DB0DCD92A} = {791F594F-FF44-49D1-A882-FF4DB0DCD92A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScriptProc", "ScriptProc.vcxproj", "{AF69074D-9C2B-42F7-B69A-6B230841B71F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -60,14 +58,6 @@ Global
 		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|Win32.Build.0 = Release|Win32
 		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|x64.ActiveCfg = Release|x64
 		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|x64.Build.0 = Release|x64
-		{AF69074D-9C2B-42F7-B69A-6B230841B71F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AF69074D-9C2B-42F7-B69A-6B230841B71F}.Debug|Win32.Build.0 = Debug|Win32
-		{AF69074D-9C2B-42F7-B69A-6B230841B71F}.Debug|x64.ActiveCfg = Debug|x64
-		{AF69074D-9C2B-42F7-B69A-6B230841B71F}.Debug|x64.Build.0 = Debug|x64
-		{AF69074D-9C2B-42F7-B69A-6B230841B71F}.Release|Win32.ActiveCfg = Release|Win32
-		{AF69074D-9C2B-42F7-B69A-6B230841B71F}.Release|Win32.Build.0 = Release|Win32
-		{AF69074D-9C2B-42F7-B69A-6B230841B71F}.Release|x64.ActiveCfg = Release|x64
-		{AF69074D-9C2B-42F7-B69A-6B230841B71F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
