@@ -2319,13 +2319,13 @@ void TextureManager::CopyTexture(Ogre::TextureGpu *source, Ogre::TextureGpu *des
 
 void TextureManager::FreeTextureBoxes()
 {
-	for (size_t i = 0; i < textureboxes.size(); i++)
+	/*for (size_t i = 0; i < textureboxes.size(); i++)
 	{
 		free(textureboxes[i].buffer);
 
 		if (textureboxes[i].box)
 			delete textureboxes[i].box;
-	}
+	}*/
 	textureboxes.clear();
 }
 
