@@ -25,10 +25,10 @@
 #include "wx/wx.h"
 #endif
 #include <OgreRoot.h>
-#include <OgreRenderWindow.h>
+#include <OgreWindow.h>
 #include <OgreViewport.h>
 #include <OgreCamera.h>
-#include <OgreRTShaderSystem.h>
+//#include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -135,9 +135,9 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 	{
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 		Real scale = this->GetContentScaleFactor();
-		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
+		//frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
 #else
-		frontend->mRenderWindow->windowMovedOrResized();
+		//frontend->mRenderWindow->windowMovedOrResized();
 #endif
 	}
 	if (frontend->mCamera)
@@ -256,11 +256,11 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		Real fps = Simcore->FPS;
 		Ogre::RenderSystem *rendersystem = frontend->mRoot->getRenderSystem();
 
-		int batches = (int)rendersystem->_getBatchCount();
+		/*int batches = (int)rendersystem->_getBatchCount();
 		int triangles = (int)rendersystem->_getFaceCount();
 		int vertices = (int)rendersystem->_getVertexCount();
 
-		frontend->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Triangles: " + ToString(triangles) + " - Vertices: " + ToString(vertices));
+		frontend->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Triangles: " + ToString(triangles) + " - Vertices: " + ToString(vertices));*/
 	}
 
 	//alt modifier
@@ -345,8 +345,8 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 		if (key == WXK_F11)
 		{
-			std::string prefix = frontend->GetDataPath();
-			frontend->mRenderWindow->writeContentsToTimestampedFile(prefix + "screenshots/skyscraper-", ".jpg");
+			//std::string prefix = frontend->GetDataPath();
+			//frontend->mRenderWindow->writeContentsToTimestampedFile(prefix + "screenshots/skyscraper-", ".jpg");
 		}
 
 		if (key == WXK_F12 && !frontend->dpanel)

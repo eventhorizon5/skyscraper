@@ -28,7 +28,7 @@
 #include <OgreCommon.h>
 #include <Ogre.h>
 #include <OgreLog.h>
-#include <OgreTrays.h>
+//#include <OgreTrays.h>
 
 //wxWidgets definitions
 class wxCmdLineParser;
@@ -74,11 +74,11 @@ public:
 
 	//OGRE engine data
 	Ogre::Root* mRoot;
-	Ogre::RenderWindow* mRenderWindow;
+	Ogre::Window* mRenderWindow;
 	Ogre::Viewport* mViewport;
 	Ogre::SceneManager* mSceneMgr;
 	Ogre::Camera* mCamera;
-	Ogre::OverlaySystem* mOverlaySystem;
+	//Ogre::OverlaySystem* mOverlaySystem;
 
 	std::string version;
 	std::string version_rev;
@@ -113,7 +113,7 @@ public:
 	virtual int OnExit(void);
 	bool DrawBackground();
 
-	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
+	Ogre::Window* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
 	bool Render();
@@ -143,7 +143,7 @@ public:
 	void CloseProgressDialog();
 	void UpdateProgress();
 	void SetFullScreen(bool enabled);
-	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
+	//inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
 	void SetLocation(Real latitude, Real longitude);
 	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
@@ -218,12 +218,12 @@ private:
 
 	Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;
-	Caelum::CaelumSystem *mCaelumSystem;
+	//Caelum::CaelumSystem *mCaelumSystem;
 	Ogre::LogManager* logger;
 	bool showconsole;
 	wxProgressDialog *progdialog;
 	wxCmdLineParser *parser;
-	OgreBites::TrayManager* mTrayMgr;
+	//OgreBites::TrayManager* mTrayMgr;
 	int show_stats;
 
 	//control panel

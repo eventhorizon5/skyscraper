@@ -77,7 +77,7 @@ Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSiz
 
 Profiler::~Profiler()
 {
-	SBS::ProfileManager::CleanupMemory();
+	//SBS::ProfileManager::CleanupMemory();
 
 	//(*Destroy(Profiler)
 	//*)
@@ -85,11 +85,11 @@ Profiler::~Profiler()
 
 void Profiler::Loop()
 {
-	if (advanced != chkAdvanced->GetValue())
-		SBS::ProfileManager::CleanupMemory();
+	//if (advanced != chkAdvanced->GetValue())
+		//SBS::ProfileManager::CleanupMemory();
 
 	advanced = chkAdvanced->GetValue();
-	SBS::enable_advanced_profiling = advanced;
+	//SBS::enable_advanced_profiling = advanced;
 
 	if (count == 0)
 	{
@@ -101,7 +101,7 @@ void Profiler::Loop()
 
 		if (chkCapture->GetValue() == true)
 		{
-			SBS::ProfileManager::dumpAll(output);
+			//SBS::ProfileManager::dumpAll(output);
 			txtMain->SetValue(output);
 		}
 	}

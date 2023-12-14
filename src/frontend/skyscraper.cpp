@@ -33,6 +33,7 @@
 #include <locale>
 #include <time.h>
 #include <thread>
+#include <sstream>
 #include <Ogre.h>
 /*#include <OgreRoot.h>
 #include <OgreRenderWindow.h>
@@ -43,7 +44,7 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>*/
 #include <fmod.hpp>
-#include "Caelum.h"
+//#include "Caelum.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -191,7 +192,7 @@ bool Skyscraper::OnInit(void)
 	Pause = false;
 	FullScreen = false;
 	Shutdown = false;
-	mOverlaySystem = 0;
+	//mOverlaySystem = 0;
 	mRoot = 0;
 	mRenderWindow = 0;
 	mViewport = 0;
@@ -200,7 +201,7 @@ bool Skyscraper::OnInit(void)
 	sound = 0;
 	channel = 0;
 	SkyMult = 0;
-	mCaelumSystem = 0;
+	//mCaelumSystem = 0;
 	buttons = 0;
 	buttoncount = 0;
 	logger = 0;
@@ -235,7 +236,7 @@ bool Skyscraper::OnInit(void)
 	keyconfigfile = 0;
 	parser = 0;
 	sky_error = 0;
-	mTrayMgr = 0;
+	//mTrayMgr = 0;
 	show_stats = -1;
 	macos_major = 0;
 	macos_minor = 0;
@@ -455,8 +456,8 @@ int Skyscraper::OnExit()
 	UnloadSim();
 
 	//delete Caelum
-	if (mCaelumSystem)
-		delete mCaelumSystem;
+	//if (mCaelumSystem)
+		//delete mCaelumSystem;
 
 	//cleanup sound
 	StopSound();
@@ -486,7 +487,7 @@ int Skyscraper::OnExit()
 		delete parser;
 	parser = 0;
 
-	delete mOverlaySystem;
+	//delete mOverlaySystem;
 
 	Ogre::ResourceGroupManager::getSingleton().shutdownAll();
 
@@ -514,25 +515,25 @@ void Skyscraper::UnloadSim()
 	//do a full clear of Ogre objects
 
 	//remove all meshes
-	Ogre::MeshManager::getSingleton().removeAll();
+	Ogre::v1::MeshManager::getSingleton().removeAll();
 
 	//remove all materials
-	if (RTSS)
-		Ogre::RTShader::ShaderGenerator::getSingleton().removeAllShaderBasedTechniques();
+	//if (RTSS)
+		//Ogre::RTShader::ShaderGenerator::getSingleton().removeAllShaderBasedTechniques();
 	Ogre::MaterialManager::getSingleton().removeAll();
 	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
 
 	//remove all fonts
-	Ogre::FontManager::getSingleton().removeAll();
+	//Ogre::FontManager::getSingleton().removeAll();
 
 	//remove all textures
-	Ogre::TextureManager::getSingleton().removeAll();
+	//Ogre::TextureManager::getSingleton().removeAll();
 
 	//clear scene manager
-	mSceneMgr->clearScene();
+	mSceneMgr->clearScene(false, false);
 
 	//free unused hardware buffers
-	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
+	Ogre::v1::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
 	ReInit();
 
@@ -545,7 +546,7 @@ void Skyscraper::UnloadSim()
 
 bool Skyscraper::Render()
 {
-	SBS_PROFILE_MAIN("Render");
+	//SBS_PROFILE_MAIN("Render");
 
 	if (Headless == true)
 		return true;
@@ -561,9 +562,9 @@ bool Skyscraper::Render()
 	}
 
 	//update frame statistics
-	Ogre::FrameEvent a;
-	if (mTrayMgr)
-		mTrayMgr->frameRendered(a);
+	//Ogre::FrameEvent a;
+	//if (mTrayMgr)
+		//mTrayMgr->frameRendered(a);
 
 	return true;
 }
@@ -614,7 +615,7 @@ bool Skyscraper::Initialize()
 	{
 		Report("");
 		Report("Loading Overlay System...");
-		mOverlaySystem = new Ogre::OverlaySystem();
+		//mOverlaySystem = new Ogre::OverlaySystem();
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -630,7 +631,7 @@ bool Skyscraper::Initialize()
 			if(!mRoot->restoreConfig())
 			{
 				//show dialog if load failed
-				mRoot->showConfigDialog(OgreBites::getNativeConfigDialog());
+				//mRoot->showConfigDialog(OgreBites::getNativeConfigDialog());
 			}
 		}
 	}
@@ -685,7 +686,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (...)
 	{
-                return ReportFatalError("Error initializing render window");
+		return ReportFatalError("Error initializing render window");
 	}
 
 	if (Headless == false)
@@ -714,7 +715,7 @@ bool Skyscraper::Initialize()
 	//add resource locations
 	try
 	{
-		std::string name, locationType;
+		/*std::string name, locationType;
 		Ogre::ConfigFile::SettingsBySection_ settingsBySection = cf.getSettingsBySection();
 		for (const auto& p : settingsBySection) {
 			for (const auto& r : p.second) {
@@ -722,20 +723,20 @@ bool Skyscraper::Initialize()
 				name = r.second;
 				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(name, locationType);
 			}
-		}
+		}*/
 
 		//add app's directory to resource manager
-		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("General");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("General", false);
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
 		if (data_path != "")
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(data_path, "FileSystem", "General", true);
 
 		//add materials group, and autoload
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/materials", "FileSystem", "Materials", true);
-		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials", false);
 
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("media/packs/SdkTrays.zip", "Zip", "Trays", true);
-		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays", false);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -745,22 +746,22 @@ bool Skyscraper::Initialize()
 	//create scene manager
 	try
 	{
-		mSceneMgr = mRoot->createSceneManager();
+		mSceneMgr = mRoot->createSceneManager(Ogre::SceneType::ST_GENERIC, 1);
 	}
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error creating scene manager\nDetails: " + e.getDescription());
 	}
 
-	mSceneMgr->addRenderQueueListener(mOverlaySystem);
+	//mSceneMgr->addRenderQueueListener(mOverlaySystem);
 
 	//enable shadows
 	if (GetConfigBool("Skyscraper.Frontend.Shadows", false) == true)
 	{
 		try
 		{
-			Report("Enabling shadows");
-			mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+			//Report("Enabling shadows");
+			//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -776,7 +777,7 @@ bool Skyscraper::Initialize()
 	if (RTSS == true)
 	{
 		//Enable the RT Shader System
-		if (Ogre::RTShader::ShaderGenerator::initialize())
+		/*if (Ogre::RTShader::ShaderGenerator::initialize())
 		{
 			Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
 			shaderGenerator->addSceneManager(mSceneMgr);
@@ -787,7 +788,7 @@ bool Skyscraper::Initialize()
 
 			//uncomment this to dump RTSS shaders
 			//shaderGenerator->setShaderCachePath("shaders/");
-		}
+		}*/
 	}
 
 	if (Headless == false)
@@ -795,7 +796,7 @@ bool Skyscraper::Initialize()
 		try
 		{
 			mCamera = mSceneMgr->createCamera("Main Camera");
-			mViewport = mRenderWindow->addViewport(mCamera);
+			//mViewport = mRenderWindow->addViewport(mCamera);
 			mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 		}
 		catch (Ogre::Exception &e)
@@ -805,8 +806,8 @@ bool Skyscraper::Initialize()
 	}
 
 	//set up default material shader scheme
-	if (RTSS == true)
-		mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	//if (RTSS == true)
+		//mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 
 	//setup texture filtering
 	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
@@ -828,8 +829,8 @@ bool Skyscraper::Initialize()
 	else if (filtermode == 3)
 		filter = Ogre::TFO_ANISOTROPIC;
 
-	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
-	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
+	//Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
+	//Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
 	//initialize FMOD (sound)
 	DisableSound = GetConfigBool("Skyscraper.Frontend.DisableSound", false);
@@ -876,17 +877,17 @@ bool Skyscraper::Initialize()
 
 	try
 	{
-		mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindow);
+		//mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindow);
 	}
 	catch (Ogre::Exception &e)
 	{
 		ReportFatalError("Error starting tray manager:\nDetails: " + e.getDescription());
 	}
 
-	if (mTrayMgr)
+	/*if (mTrayMgr)
 	{
 		mTrayMgr->hideCursor();
-	}
+	}*/
 
 	//set platform name
 	std::string bits;
@@ -1022,8 +1023,8 @@ bool Skyscraper::Loop()
 {
 	//Main simulator loop
 
-	ProfileManager::Reset();
-	ProfileManager::Increment_Frame_Counter();
+	//ProfileManager::Reset();
+	//ProfileManager::Increment_Frame_Counter();
 
 	//main menu routine
 	if (StartupRunning == true)
@@ -1203,7 +1204,7 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	//values are -1 for the top left, 1 for the top right, -1 for the top, and 1 for the bottom
 	//center is at 0, 0
 
-	Real w, h;
+	/*Real w, h;
 	int w_orig = 0, h_orig = 0, w2 = 0, h2 = 0;
 	bool background = false;
 
@@ -1218,7 +1219,7 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 		return true;
 
 	Ogre::TextureManager::getSingleton().setVerbose(false);
-	Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(Filename);
+	Ogre::TextureGpu *tex = Ogre::TextureManager::getSingleton().getByName(Filename);
 	if (tex)
 		material = Filename;
 
@@ -1430,7 +1431,7 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 			background_node = node;
 			background_rect = rect;
 		}
-	}
+	}*/
 	return true;
 }
 
@@ -1523,7 +1524,7 @@ void Skyscraper::Click(int index)
 
 void Skyscraper::DeleteButtons()
 {
-	if (buttoncount > 0)
+	/*if (buttoncount > 0)
 	{
 		for (int i = 0; i < buttoncount; i++)
 		{
@@ -1553,7 +1554,7 @@ void Skyscraper::DeleteButtons()
 	if (background_rect)
 		delete background_rect;
 	background_rect = 0;
-	background_image = "";
+	background_image = "";*/
 }
 
 void Skyscraper::StartSound()
@@ -1691,12 +1692,12 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 		SkyName = GetConfigString("Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
 
 		//clear scene
-		mSceneMgr->clearScene();
+		//mSceneMgr->clearScene();
 	}
 
 	//clear screen
-	if (Headless == false)
-		mRenderWindow->update();
+	//if (Headless == false)
+		//mRenderWindow->update();
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
@@ -1794,7 +1795,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
 	{
 		Real value = GetConfigFloat("Skyscraper.SBS.AmbientLight", 0.5);
-		mSceneMgr->setAmbientLight(Ogre::ColourValue(value, value, value));
+		//mSceneMgr->setAmbientLight(Ogre::ColourValue(value, value, value));
 	}
 
 	//show frame stats
@@ -1857,7 +1858,7 @@ void Skyscraper::Quit()
 	wxGetApp().Exit();
 }
 
-Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
+Ogre::Window* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
 {
 	std::string name = windowName;
 
@@ -1883,18 +1884,18 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 
 	//create the render window
 	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-	mRenderWindow->setActive(true);
-	mRenderWindow->windowMovedOrResized();
+	//mRenderWindow->setActive(true);
+	//mRenderWindow->windowMovedOrResized();
 
 	return mRenderWindow;
 }
 
 void Skyscraper::destroyRenderWindow()
 {
-	if (mRenderWindow)
-	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
+	//if (mRenderWindow)
+	   //Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
 
-	mRenderWindow->destroy();
+	//mRenderWindow->destroy();
 	mRenderWindow = 0;
 }
 
@@ -1977,7 +1978,7 @@ bool Skyscraper::InitSky(EngineContext *engine)
 {
 	//initialize sky
 
-	if (!engine)
+	/*if (!engine)
 		return false;
 
 	if (Headless == true)
@@ -2101,21 +2102,21 @@ bool Skyscraper::InitSky(EngineContext *engine)
 		mCaelumSystem->setJulianDay(datetime);
 		new_time = false;
 	}
-
+*/
 	return true;
 }
 
 void Skyscraper::UpdateSky()
 {
 	//update sky
-	SBS_PROFILE_MAIN("Sky");
+	//SBS_PROFILE_MAIN("Sky");
 
-	if (mCaelumSystem)
+	/*if (mCaelumSystem)
 	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
 		mCaelumSystem->setTimeScale(SkyMult);
 		mCaelumSystem->updateSubcomponents(Real(active_engine->GetSystem()->GetElapsedTime()) / 1000);
-	}
+	}*/
 }
 
 void Skyscraper::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)
@@ -2241,8 +2242,8 @@ void Skyscraper::SetDateTimeNow()
 		return;
 
 	//convert time to Julian and set it
-	double julian = Caelum::Astronomy::getJulianDayFromGregorianDateTime(gmtm->tm_year + 1900, gmtm->tm_mon + 1, gmtm->tm_mday, gmtm->tm_hour, gmtm->tm_min, gmtm->tm_sec);
-	SetDateTime(julian);
+	//double julian = Caelum::Astronomy::getJulianDayFromGregorianDateTime(gmtm->tm_year + 1900, gmtm->tm_mon + 1, gmtm->tm_mday, gmtm->tm_hour, gmtm->tm_min, gmtm->tm_sec);
+	//SetDateTime(julian);
 }
 
 void Skyscraper::SetDateTime(double julian_date_time)
@@ -2250,8 +2251,8 @@ void Skyscraper::SetDateTime(double julian_date_time)
 	datetime = julian_date_time;
 	new_time = true;
 
-	if (mCaelumSystem)
-		mCaelumSystem->setJulianDay(datetime);
+	//if (mCaelumSystem)
+		//mCaelumSystem->setJulianDay(datetime);
 }
 
 EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -2665,11 +2666,11 @@ void Skyscraper::EnableSky(bool value)
 		GetEngine(0)->GetSystem()->EnableSkybox(value);
 
 	//enable/disable Caelum sky system
-	if (mCaelumSystem)
+	/*if (mCaelumSystem)
 	{
 		mCaelumSystem->getCaelumGroundNode()->setVisible(value);
 		mCaelumSystem->getCaelumCameraNode()->setVisible(value);
-	}
+	}*/
 }
 
 void Skyscraper::MacOpenFile(const wxString &filename)
@@ -2694,7 +2695,7 @@ void Skyscraper::UnloadSky()
 
 	new_time = false;
 
-	if (mCaelumSystem)
+	/*if (mCaelumSystem)
 	{
 		Caelum::CaelumPlugin* ptr = Caelum::CaelumPlugin::getSingletonPtr();
 		mCaelumSystem->clear();
@@ -2704,7 +2705,7 @@ void Skyscraper::UnloadSky()
 		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
 		Caelum::CaelumPlugin::getSingleton().shutdown();
 		delete ptr;
-	}
+	}*/
 }
 
 void Skyscraper::CreateSky(EngineContext *engine)
@@ -2712,7 +2713,7 @@ void Skyscraper::CreateSky(EngineContext *engine)
 	//create sky system
 
 	//load Caelum plugin
-	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+	/*if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
 	{
 		try
 		{
@@ -2725,7 +2726,7 @@ void Skyscraper::CreateSky(EngineContext *engine)
 				ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
 			return;
 		}
-	}
+	}*/
 
 	/*(if (sky_error == true)
 	{
@@ -2746,7 +2747,7 @@ void Skyscraper::ToggleStats()
 {
 	show_stats++;
 
-	if (show_stats == 0)
+	/*if (show_stats == 0)
 	{
 		mTrayMgr->showFrameStats(OgreBites::TrayLocation::TL_TOPRIGHT);
 		mTrayMgr->toggleAdvancedFrameStats();
@@ -2757,7 +2758,7 @@ void Skyscraper::ToggleStats()
 	{
 		mTrayMgr->hideFrameStats();
 		show_stats = -1;
-	}
+	}*/
 }
 
 void Skyscraper::EnableStats(bool value)
@@ -2778,16 +2779,16 @@ void Skyscraper::ReInit()
 {
 	EnableStats(false);
 
-	delete mTrayMgr;
-	mTrayMgr = 0;
+	//delete mTrayMgr;
+	//mTrayMgr = 0;
 
 	//reinit overlay system
 	try
 	{
-		mSceneMgr->removeRenderQueueListener(mOverlaySystem);
-		delete mOverlaySystem;
-		mOverlaySystem = new Ogre::OverlaySystem();
-		mSceneMgr->addRenderQueueListener(mOverlaySystem);
+		//mSceneMgr->removeRenderQueueListener(mOverlaySystem);
+		//delete mOverlaySystem;
+		//mOverlaySystem = new Ogre::OverlaySystem();
+		//mSceneMgr->addRenderQueueListener(mOverlaySystem);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -2798,9 +2799,9 @@ void Skyscraper::ReInit()
 	try
 	{
 		Ogre::ResourceGroupManager::getSingleton().clearResourceGroup("Materials");
-		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials", false);
 		Ogre::ResourceGroupManager::getSingleton().clearResourceGroup("Trays");
-		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays", false);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -2810,17 +2811,17 @@ void Skyscraper::ReInit()
 	//reinit tray manager
 	try
 	{
-		mTrayMgr = new OgreBites::TrayManager("Tray", mRenderWindow);
+		//mTrayMgr = new OgreBites::TrayManager("Tray", mRenderWindow);
 	}
 	catch (Ogre::Exception &e)
 	{
 		ReportFatalError("Error starting tray manager:\n" + e.getDescription());
 	}
 
-	if (mTrayMgr)
+	/*if (mTrayMgr)
 	{
 		mTrayMgr->hideCursor();
-	}
+	}*/
 
 	show_stats = -1;
 }

@@ -116,7 +116,7 @@ class SkyControl: public wxDialog {
 		void On_bGetSystemTime_Click(wxCommandEvent& event);
 		//*)
 		DebugPanel *panel;
-		Caelum::CaelumSystem* system;
+		//Caelum::CaelumSystem* system;
 
 		DECLARE_EVENT_TABLE()
 };
