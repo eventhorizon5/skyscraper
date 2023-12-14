@@ -21,6 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <fmod.hpp>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -36,18 +37,10 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 
 	soundsys = fmodsystem;
 
-	listener_position.x = 0;
-	listener_position.y = 0;
-	listener_position.z = 0;
-	listener_velocity.x = 0;
-	listener_velocity.y = 0;
-	listener_velocity.z = 0;
-	listener_forward.x = 0;
-	listener_forward.y = 0;
-	listener_forward.z = 0;
-	listener_up.x = 0;
-	listener_up.y = 0;
-	listener_up.z = 0;
+	listener_position = Vector3::ZERO;
+	listener_velocity = Vector3::ZERO;
+	listener_forward = Vector3::ZERO;
+	listener_up = Vector3::ZERO;
 	Position = Vector3::ZERO;
 
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
@@ -109,7 +102,26 @@ void SoundSystem::SetListenerPosition(const Vector3 &position)
 	listener_position.y = (float)global_position.y;
 	listener_position.z = (float)global_position.z;
 
-	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
+	//copy data structures
+	FMOD_VECTOR pos;
+	pos.x = listener_position.x;
+	pos.y = listener_position.y;
+	pos.z = listener_position.z;
+	FMOD_VECTOR vel;
+	vel.x = listener_velocity.x;
+	vel.y = listener_velocity.y;
+	vel.z = listener_velocity.z;
+	FMOD_VECTOR forward;
+	forward.x = listener_forward.x;
+	forward.y = listener_forward.y;
+	forward.z = listener_forward.z;
+	FMOD_VECTOR up;
+	up.x = listener_up.x;
+	up.y = listener_up.y;
+	up.z = listener_up.z;
+
+	//set attributes
+	soundsys->set3DListenerAttributes(0, &pos, &vel, &forward, &up);
 }
 
 void SoundSystem::SetListenerDirection(const Vector3 &front, const Vector3 &top)
@@ -123,7 +135,26 @@ void SoundSystem::SetListenerDirection(const Vector3 &front, const Vector3 &top)
 	listener_up.y = (float)top.y;
 	listener_up.z = (float)top.z;
 
-	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
+	//copy data structures
+	FMOD_VECTOR pos;
+	pos.x = listener_position.x;
+	pos.y = listener_position.y;
+	pos.z = listener_position.z;
+	FMOD_VECTOR vel;
+	vel.x = listener_velocity.x;
+	vel.y = listener_velocity.y;
+	vel.z = listener_velocity.z;
+	FMOD_VECTOR forward;
+	forward.x = listener_forward.x;
+	forward.y = listener_forward.y;
+	forward.z = listener_forward.z;
+	FMOD_VECTOR up;
+	up.x = listener_up.x;
+	up.y = listener_up.y;
+	up.z = listener_up.z;
+
+	//set attributes
+	soundsys->set3DListenerAttributes(0, &pos, &vel, &forward, &up);
 }
 
 void SoundSystem::Cleanup(int index)

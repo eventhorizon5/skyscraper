@@ -14,7 +14,8 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration> <Platform>x64</Platform>
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -366,18 +367,6 @@
     <ClCompile Include="..\src\frontend\stackwalker.cpp" />
     <ClCompile Include="..\src\frontend\stats.cpp" />
     <ClCompile Include="..\src\frontend\textwindow.cpp" />
-    <ClCompile Include="..\src\frontend\scriptprocessor.cpp" />
-    <ClCompile Include="..\src\frontend\script_globals.cpp" />
-    <ClCompile Include="..\src\frontend\script_buildings.cpp" />
-    <ClCompile Include="..\src\frontend\script_textures.cpp" />
-    <ClCompile Include="..\src\frontend\script_commands.cpp" />
-    <ClCompile Include="..\src\frontend\script_floors.cpp" />
-    <ClCompile Include="..\src\frontend\script_elevators.cpp" />
-    <ClCompile Include="..\src\frontend\script_elevatorcars.cpp" />
-    <ClCompile Include="..\src\frontend\script_section.cpp" />
-    <ClCompile Include="..\src\frontend\script_vehicles.cpp" />
-    <ClCompile Include="..\src\frontend\script_controllers.cpp" />
-    <ClCompile Include="..\src\frontend\script_callstations.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\frontend\actionviewer.h" />
@@ -389,7 +378,6 @@
     <ClInclude Include="..\src\frontend\editelevator.h" />
     <ClInclude Include="..\src\frontend\enginecontext.h" />
     <ClInclude Include="..\src\frontend\enginemanager.h" />
-    <ClInclude Include="..\src\frontend\scriptprocessor.h" />
     <ClInclude Include="..\src\frontend\keydialog.h" />
     <ClInclude Include="..\src\frontend\loaddialog.h" />
     <ClInclude Include="..\src\frontend\mainscreen.h" />
@@ -406,7 +394,6 @@
     <ClInclude Include="..\src\frontend\stats.h" />
     <ClInclude Include="..\src\frontend\textwindow.h" />
     <ClInclude Include="..\src\frontend\uexception.h" />
-    <ClInclude Include="..\src\frontend\script_section.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\skyscraper.ico" />

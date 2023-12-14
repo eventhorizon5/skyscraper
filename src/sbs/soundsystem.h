@@ -24,7 +24,9 @@
 #ifndef _SBS_SOUNDSYSTEM_H
 #define _SBS_SOUNDSYSTEM_H
 
-#include <fmod.hpp>
+class FMOD::Sound;
+class FMOD::Channel;
+class FMOD::System;
 
 namespace SBS {
 
@@ -37,7 +39,6 @@ public:
 	void SetListenerPosition(const Vector3 &position);
 	void SetListenerDirection(const Vector3 &front, const Vector3 &top);
 	void Loop();
-	FMOD::System *GetFmodSystem() { return soundsys; } //temporary for transition
 	void Cleanup(int index = -1);
 	unsigned int GetLength(SoundData *data);
 	SoundData* Load(const std::string &filename);
@@ -58,10 +59,10 @@ private:
 	FMOD::System *soundsys;
 
 	//listener sound objects
-	FMOD_VECTOR listener_position;
-	FMOD_VECTOR listener_velocity;
-	FMOD_VECTOR listener_forward;
-	FMOD_VECTOR listener_up;
+	Vector3 listener_position;
+	Vector3 listener_velocity;
+	Vector3 listener_forward;
+	Vector3 listener_up;
 
 	//sound data array
 	std::vector<SoundData*> sounds;
