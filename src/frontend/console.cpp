@@ -25,7 +25,7 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
-#include "scriptprocessor.h"
+#include "scriptproc.h"
 #include "enginecontext.h"
 #include "console.h"
 

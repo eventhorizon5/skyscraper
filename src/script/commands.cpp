@@ -42,8 +42,8 @@
 #include "cameratexture.h"
 #include "door.h"
 #include "manager.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "scriptproc.h"
+#include "section.h"
 
 using namespace SBS;
 

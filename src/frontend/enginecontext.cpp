@@ -25,7 +25,7 @@
 #include "sbs.h"
 #include "camera.h"
 #include "debugpanel.h"
-#include "scriptprocessor.h"
+#include "scriptproc.h"
 #include "enginecontext.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX

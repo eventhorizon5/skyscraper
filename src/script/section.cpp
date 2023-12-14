@@ -31,8 +31,8 @@
 #include "stairs.h"
 #include "model.h"
 #include "random.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "scriptproc.h"
+#include "section.h"
 
 using namespace SBS;
 

@@ -59,6 +59,10 @@ file(GLOB FRONTEND_FILES
 	src/frontend/*.cpp
 )
  
+file(GLOB SCRIPTPROC_FILES
+	src/script/*.cpp
+)
+
 file(GLOB SBS_FILES
 	src/sbs/*.cpp
 )
@@ -84,7 +88,9 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
+	src/frontend
 	src/sbs
+	src/script
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
@@ -103,12 +109,16 @@ add_library(OgreBulletDyn SHARED ${OGREBULLET_DYN_FILES})
 #SBS library
 add_library(SBS SHARED ${SBS_FILES})
 
+#ScriptProc Library
+add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
+
 #frontend executable
 add_executable(skyscraper ${FRONTEND_FILES})
 
 target_precompile_headers(OgreBulletCol PRIVATE ogrebullet/Collisions/include/OgreBulletCollisionsPreRequisites.h)
 target_precompile_headers(OgreBulletDyn PRIVATE ogrebullet/Dynamics/include/OgreBulletDynamicsPreRequisites.h)
 target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
+target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
 target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
  
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
@@ -116,7 +126,9 @@ target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIB
 
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
-target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
+
+target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES
@@ -131,6 +143,10 @@ ADD_CUSTOM_COMMAND(TARGET skyscraper
 
 #install(CODE "execute_process(COMMAND bash \".macos_app.sh\" \"${OGRE_LIBRARY_DIRS}/macosx/release\")")
 endif()
+
+if (APPLE)
+	set(CMAKE_SHARED_LINKER_FLAGS "-undefined dynamic_lookup")
+endif ()
 
 ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 		POST_BUILD

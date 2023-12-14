@@ -33,7 +33,7 @@
 #include "skyscraper.h"
 #include "debugpanel.h"
 #include "enginecontext.h"
-#include "scriptprocessor.h"
+#include "scriptproc.h"
 #include "objectinfo.h"
 #include "textwindow.h"
 #include "parameterviewer.h"

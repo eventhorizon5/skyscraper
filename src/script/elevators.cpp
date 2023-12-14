@@ -26,8 +26,8 @@
 #include "enginecontext.h"
 #include "elevator.h"
 #include "wall.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "scriptproc.h"
+#include "section.h"
 
 using namespace SBS;
 

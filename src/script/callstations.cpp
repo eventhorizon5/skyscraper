@@ -29,8 +29,8 @@
 #include "buttonpanel.h"
 #include "control.h"
 #include "indicator.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "scriptproc.h"
+#include "section.h"
 
 using namespace SBS;
 

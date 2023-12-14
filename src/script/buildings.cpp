@@ -24,8 +24,8 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "scriptproc.h"
+#include "section.h"
 
 using namespace SBS;
 

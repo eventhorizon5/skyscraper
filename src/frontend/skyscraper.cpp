@@ -49,7 +49,7 @@
 #include "debugpanel.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
-#include "scriptprocessor.h"
+#include "scriptproc.h"
 #include "console.h"
 #include "mainscreen.h"
 #include "loaddialog.h"

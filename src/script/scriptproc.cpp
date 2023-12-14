@@ -36,8 +36,8 @@
 #include "floor.h"
 #include "random.h"
 #include "textwindow.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "scriptproc.h"
+#include "section.h"
 
 using namespace SBS;
 

@@ -32,7 +32,7 @@
 #include "skyscraper.h"
 #include "debugpanel.h"
 #include "enginecontext.h"
-#include "scriptprocessor.h"
+#include "scriptproc.h"
 #include "createobject.h"
 #include "parameterviewer.h"
 #include "moveobject.h"

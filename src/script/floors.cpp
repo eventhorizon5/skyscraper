@@ -43,8 +43,8 @@
 #include "light.h"
 #include "controller.h"
 #include "callstation.h"
-#include "scriptprocessor.h"
-#include "script_section.h"
+#include "scriptproc.h"
+#include "section.h"
 
 using namespace SBS;
 
