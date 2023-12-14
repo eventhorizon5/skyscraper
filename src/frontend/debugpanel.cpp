@@ -503,11 +503,11 @@ void DebugPanel::Loop()
 	{
 		if (profiler->IsShown() == true)
 		{
-			SBS::enable_profiling = true;
+			//SBS::enable_profiling = true;
 			profiler->Loop();
 		}
-		else
-			SBS::enable_profiling = false;
+		//else
+			//SBS::enable_profiling = false;
 	}
 
 	if (actionviewer)

@@ -116,8 +116,8 @@ namespace SBS {
 
 namespace SBS {
 
-extern bool SBSIMPEXP enable_profiling; //enable general profiling
-extern bool SBSIMPEXP enable_advanced_profiling;
+//extern bool SBSIMPEXP enable_profiling; //enable general profiling
+//extern bool SBSIMPEXP enable_advanced_profiling;
 
 //SBS class
 class SBSIMPEXP SBS : public Object

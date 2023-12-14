@@ -632,6 +632,7 @@ bool Skyscraper::Initialize()
 			{
 				//show dialog if load failed
 				//mRoot->showConfigDialog(OgreBites::getNativeConfigDialog());
+				mRoot->showConfigDialog();
 			}
 		}
 	}

@@ -819,9 +819,9 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	//clear vertex data and exit if there's no associated submesh or geometry data
 	if (submesh_count == 0 || vertex_count == 0)
 	{
-		if (MeshWrapper->sharedVertexData)
-			delete MeshWrapper->sharedVertexData;
-		//MeshWrapper->sharedVertexData = new Ogre::v1::VertexData();
+		if (MeshWrapper->sharedVertexData[0])
+			delete MeshWrapper->sharedVertexData[0];
+		MeshWrapper->sharedVertexData[0] = new Ogre::v1::VertexData(0);
 
 		//delete any existing submeshes
 		for (size_t i = 0; i < Submeshes.size(); i++)
@@ -853,7 +853,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		if (MeshWrapper->sharedVertexData)
 		{
 			previous_count = MeshWrapper->sharedVertexData[0]->vertexCount;
-			delete MeshWrapper->sharedVertexData;
+			delete MeshWrapper->sharedVertexData[0];
 		}
 		Ogre::v1::VertexData* data = new Ogre::v1::VertexData(0);
 		MeshWrapper->sharedVertexData[0] = data;
@@ -1085,7 +1085,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		//delete any old index data
 		if (submesh->object->indexData)
 		{
-			delete submesh->object->indexData;
+			delete submesh->object->indexData[0];
 			submesh->object->indexData[0] = new Ogre::v1::IndexData();
 		}
 

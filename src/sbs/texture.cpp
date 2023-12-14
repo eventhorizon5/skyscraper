@@ -407,16 +407,17 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 		return ReportError("LoadTextureCropped: invalid size for '" + name + "'");
 
 	//determine pixel format
-	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
+	/*Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
 	if (has_alpha == true)
-		format = Ogre::PF_A8R8G8B8;
+		format = Ogre::PF_A8R8G8B8;*/
 
 	//create new empty texture
 	std::string texturename = ToString(sbs->InstanceNumber) + ":" + name;
 	Ogre::TextureGpu *new_texture;
 	try
 	{
-		new_texture = Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->createTexture(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
+		//new_texture = Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->createTexture(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
+		new_texture = Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->createTexture(texturename, Ogre::GpuPageOutStrategy::Discard, Ogre::TextureFlags::ManualTexture, Ogre::TextureTypes::Unknown, "General");
 		manual_textures.push_back(new_texture);
 		IncrementTextureCount();
 	}
@@ -685,7 +686,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	std::string hAlign = h_align;
@@ -830,7 +831,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	if (sbs->Verbose)
 		Report("AddTextToTexture: created texture '" + Name + "'");
 
-	sbs->CacheFilename(Name, Name);
+	sbs->CacheFilename(Name, Name);*/
 	return true;
 }
 
@@ -839,7 +840,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	std::string Name = name;
@@ -924,7 +925,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 		Report("AddTextureOverlay: created texture '" + Name + "'");
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);*/
 
 	return true;
 }
@@ -1669,9 +1670,9 @@ std::string TextureManager::ListTextures(bool show_filename)
  @return
      Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename)
  */
-Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, Real threshold)
+Ogre::TextureGpu* TextureManager::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, Real threshold)
 {
-	using namespace Ogre;
+	/*using namespace Ogre;
 	using std::fabs;
 	Image srcImg;
 	Ogre::ColourValue keyCol2 = keyCol;
@@ -1782,15 +1783,16 @@ Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filen
 	// chromaKeyedImg.save(resName);
 	Ogre::TexturePtr mTex = Ogre::TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
 	IncrementTextureCount();
-	return mTex;
+	return mTex;*/
+	return 0;
 }
 
-bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
+bool TextureManager::WriteToTexture(const std::string &str, Ogre::TextureGpu *destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
 {
 	//justify is left 'l' by default - set to 'r' or 'c' for right or center
 	//vert_justify is top 't' by default - set to 'c' or 'b' for center or bottom
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	using namespace Ogre;
@@ -1918,11 +1920,11 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 			default:
 			{
 				//wrapping
-				/*if ((cursorX + GlyphTexCoords[strindex].getWidth() > lineend) && !carriagereturn)
-				{
-					cursorY += charheight;
-					carriagereturn = true;
-				}*/
+				//if ((cursorX + GlyphTexCoords[strindex].getWidth() > lineend) && !carriagereturn)
+				//{
+					//cursorY += charheight;
+					//carriagereturn = true;
+				//}
 
 				//justify
 				if (carriagereturn)
@@ -2035,17 +2037,17 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	stop:
 	delete[] GlyphTexCoords;
 
-	destBuffer->unlock();
+	destBuffer->unlock();*/
 	return true;
 }
 
-void TextureManager::SaveTexture(Ogre::TexturePtr texture, const std::string & filename)
+void TextureManager::SaveTexture(Ogre::TextureGpu *texture, const std::string & filename)
 {
 	//save a raw texture to a file
 
-	Ogre::Image image;
-	texture->convertToImage(image);
-	image.save(filename);
+	//Ogre::Image image;
+	//texture->convertToImage(image);
+	//image.save(filename);
 }
 
 void TextureManager::IncrementTextureCount()
@@ -2068,10 +2070,10 @@ void TextureManager::DecrementMaterialCount()
 	materialcount--;
 }
 
-Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color, Ogre::ColourValue alpha_color)
+Ogre::TextureGpu* TextureManager::LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(sbs->Verbose);
+	//Ogre::TextureManager::getSingleton().setVerbose(sbs->Verbose);
 
 	//exit if no texture specified
 	if (filename == "")
@@ -2087,7 +2089,7 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 
 	//load the texture
 	std::string path = sbs->GetMountPath(filename2, filename2);
-	Ogre::TexturePtr mTex;
+	Ogre::TextureGpu *mTex;
 	std::string texturename;
 	has_alpha = false;
 
@@ -2101,7 +2103,8 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 			//if not found, load new texture
 			if (!mTex)
 			{
-				mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+				//mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+				mTex = Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->createTexture(filename2, Ogre::GpuPageOutStrategy::Discard, Ogre::TextureFlags::ManualTexture, Ogre::TextureTypes::Unknown, path);
 				IncrementTextureCount();
 			}
 
@@ -2110,8 +2113,9 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 				ReportError("Error loading texture" + filename2);
 				return mTex;
 			}
-			texturename = mTex->getName();
-			has_alpha = mTex->hasAlpha();
+			texturename = mTex->getNameStr();
+			//has_alpha = mTex->hasAlpha();
+			has_alpha = false;
 		}
 		else
 		{
@@ -2137,9 +2141,9 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 	catch (Ogre::Exception &e)
 	{
 		//texture needs to be removed if a load failed
-		Ogre::ResourcePtr wrapper = GetTextureByName(filename2, path);
-		if (wrapper.get())
-			Ogre::TextureManager::getSingleton().remove(wrapper);
+		Ogre::TextureGpu *wrapper = GetTextureByName(filename2, path);
+		if (wrapper)
+			Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->destroyTexture(wrapper);
 
 		ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
 		return mTex;
@@ -2163,7 +2167,8 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	catch (Ogre::Exception& e)
 	{
 		ReportError("Error creating material for texture " + name + "\n" + e.getDescription());
-		return 0;
+		mMat.setNull();
+		return mMat;
 	}
 
 	IncrementMaterialCount();
@@ -2172,7 +2177,7 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	EnableShadows(name, true);
 
 	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
+	//mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	return mMat;
 }
@@ -2183,7 +2188,7 @@ void TextureManager::EnableLighting(const std::string &material_name, bool value
 
 	Ogre::MaterialPtr mat = GetMaterialByName(material_name);
 
-	if (mat)
+	/*if (mat)
 	{
 		mat->setLightingEnabled(false);
 		if (sbs->GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
@@ -2191,7 +2196,7 @@ void TextureManager::EnableLighting(const std::string &material_name, bool value
 			mat->setLightingEnabled(value);
 			mat->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
 		}
-	}
+	}*/
 }
 
 Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, const std::string &group)
@@ -2216,7 +2221,7 @@ Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr 
 		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
 
 		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+		//mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 	return state;
 }
@@ -2238,14 +2243,14 @@ std::string TextureManager::GetTextureName(Ogre::MaterialPtr mMat)
 	return texname;
 }
 
-Ogre::TexturePtr TextureManager::GetTextureByName(const std::string &name, const std::string &group)
+Ogre::TextureGpu* TextureManager::GetTextureByName(const std::string &name, const std::string &group)
 {
-	Ogre::TexturePtr ptr;
+	Ogre::TextureGpu *ptr;
 
 	if (Ogre::ResourceGroupManager::getSingleton().resourceGroupExists(group) == false)
 		return ptr;
 
-	ptr = Ogre::TextureManager::getSingleton().getByName(name, group);
+	ptr = Ogre::Root::getSingletonPtr()->getRenderSystem()->getTextureGpuManager()->findTextureNoThrow(name);
 	return ptr;
 }
 
@@ -2259,7 +2264,7 @@ void TextureManager::UnloadMaterials()
 	}
 }
 
-void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination)
+void TextureManager::CopyTexture(Ogre::TextureGpu *source, Ogre::TextureGpu *destination)
 {
 	//copy a source texture onto a destination texture using the full sizes
 
@@ -2272,7 +2277,7 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 	CopyTexture(source, destination, srcbox, dstbox);
 }
 
-void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox)
+void TextureManager::CopyTexture(Ogre::TextureGpu *source, Ogre::TextureGpu *destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox)
 {
 	//copy a source texture onto a destination texture using specified sizes
 
@@ -2290,11 +2295,11 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 			dstBox.getHeight() == destination->getHeight() &&
 			sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem")
 		{
-			source->copyToTexture(destination);
+			//source->copyToTexture(destination);
 			return;
 		}
 
-		Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
+		//Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
 
 		//old method:
 		//buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
@@ -2303,7 +2308,7 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 		//buffer->unlock();
 
 		//new method:
-		destination->getBuffer()->blit(buffer, srcBox, dstBox);
+		//destination->getBuffer()->blit(buffer, srcBox, dstBox);
 	}
 	catch (Ogre::Exception& e)
 	{

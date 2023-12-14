@@ -156,8 +156,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	OldAmbientG = 1;
 	OldAmbientB = 1;
 	TexelOverride = false;
-	enable_profiling = false;
-	enable_advanced_profiling = false;
+	//enable_profiling = false;
+	//enable_advanced_profiling = false;
 	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
 	ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
 	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
