@@ -1901,7 +1901,7 @@ const std::string Skyscraper::getOgreHandle() const
 {
 #if defined(__WXMSW__)
 	// Handle for Windows systems
-	return std::stringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
+	return Ogre::StringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
 #elif defined(__WXGTK__)
 	// Handle for GTK-based systems
 
