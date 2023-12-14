@@ -798,7 +798,7 @@ bool Skyscraper::Initialize()
 		{
 			mCamera = mSceneMgr->createCamera("Main Camera");
 			//mViewport = mRenderWindow->addViewport(mCamera);
-			mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
+			//mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -2549,8 +2549,8 @@ void Skyscraper::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 
-	if (Headless == false)
-		mViewport->_updateDimensions();
+	//if (Headless == false)
+		//mViewport->_updateDimensions();
 }
 
 void Skyscraper::SwitchEngines()

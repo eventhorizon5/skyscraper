@@ -56,6 +56,10 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 	this->dynamic_buffers = dynamic_buffers;
 	force_combine = false;
 	auto_combine = sbs->GetConfigBool("Skyscraper.SBS.DynamicMesh.AutoCombine", true);
+
+	if (render_distance == 0)
+		render_distance = 1000;
+
 	sbs->RegisterDynamicMesh(this);
 }
 
@@ -850,7 +854,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	if (process_vertices == true)
 	{
 		//set up vertex buffer
-		if (MeshWrapper->sharedVertexData)
+		if (MeshWrapper->sharedVertexData[0])
 		{
 			previous_count = MeshWrapper->sharedVertexData[0]->vertexCount;
 			delete MeshWrapper->sharedVertexData[0];
