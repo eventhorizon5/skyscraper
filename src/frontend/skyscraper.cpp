@@ -1938,7 +1938,7 @@ const std::string Skyscraper::getOgreHandle() const
 	return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
-	return std::stringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
+	return Ogre::StringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
 #else
 	#error Not supported on this platform!
 #endif
