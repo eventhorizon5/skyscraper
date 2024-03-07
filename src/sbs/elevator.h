@@ -130,7 +130,7 @@ public:
 	~Elevator();
 	bool CreateElevator(bool relative, Real x, Real z, int floor);
 	Wall* CreateCounterweight(const std::string &frame_texture, const std::string &weight_texture, Real x, Real z, const Vector3 &size, Real weight_voffset);
-	void AddRails(const std::string &main_texture, const std::string &edge_texture, Real x, Real z, bool orientation, Real rail_distance, Real rail_width);
+	bool AddRails(const std::string &main_texture, const std::string &edge_texture, Real x, Real z, bool orientation, Real rail_distance, Real rail_width);
 	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);
 	bool RouteExists(bool direction, int floor);
