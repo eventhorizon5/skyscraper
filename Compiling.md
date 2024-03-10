@@ -58,6 +58,7 @@ For Intel/AMD systems, do this:
     cd
 
 For ARM systems, do this:
+
     sudo cp -a lib/arm64/* /usr/local/lib/
     cd
 
