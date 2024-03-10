@@ -8,11 +8,13 @@
 
 #### Install required stuff:
 
-Debian 11:
+Debian 12:
 ---
-    sudo apt-get install git cmake gcc g++ wx3.0-headers libwxgtk3.0-gtk3-dev freeglut3-dev zlib1g-dev libfreeimage-dev libfreetype-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev nvidia-cg-toolkit libgtk2.0-dev libboost-dev cmake-curses-gui libgtk-3-dev
+    sudo apt-get install git cmake gcc g++ wx3.2-headers libwxgtk3.2-dev freeglut3-dev zlib1g-dev libfreeimage-dev libfreetype-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev libboost-dev cmake-curses-gui libgtk-3-dev nvidia-cg-toolkit
 
 If you have a multi-core system, at the step that says to type "make", you can instead type "make -j2" to build using 2 cores, or "make -j4" for 4 cores.
+
+If building on a system with an ARM CPU (such as a Raspberry Pi), leave out the "nvidia-cg-toolkit" since that's not available on ARM systems.
 
 Step 1 - build and install Bullet
 ----------
@@ -29,8 +31,9 @@ Step 1 - build and install Bullet
 
     cd bullet-svn
     cmake . -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release
-    make
+    make -j4
     sudo make install
+    make clean
     cd
 
 If you want to play around with the Bullet demos, remove the "-DBUILD_DEMOS=OFF" portion when running cmake above and then build it.
@@ -48,9 +51,15 @@ http://www.fmod.org/download/
     cd fmodstudioapi20208linux/api/core
     sudo mkdir /usr/local/include/fmod
     sudo cp -a inc/* /usr/local/include/fmod/
+
+For Intel/AMD systems, do this:
+
     sudo cp -a lib/x86_64/* /usr/local/lib/
     cd
 
+For ARM systems, do this:
+    sudo cp -a lib/arm64/* /usr/local/lib/
+    cd
 
 Step 3 - build and install OGRE
 -----------
@@ -58,35 +67,36 @@ Step 3 - build and install OGRE
 #### First get the source:
     
     wget https://www.skyscrapersim.net/downloads/dev/other_apps/ogre-14-skyscraper.tar.bz2
-    tar xfvz ogre-14-skyscraper.tar.bz2
+    tar xfvj ogre-14-skyscraper.tar.bz2
     cd ogre-14.1.2
-    cmake . -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_NODELESS_POSITIONING=ON OGRE_BUILD_COMPONENT_BULLET=OFF
-    make
+    cmake . -DOGRE_CONFIG_DOUBLE=ON -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DOGRE_NODELESS_POSITIONING=ON -DOGRE_BUILD_COMPONENT_BULLET=OFF
+    make -j4
     sudo make install
+    make clean
     cd
 
-(if you want to install the OGRE samples, for the cmake line above do "cmake -DINSTALL_SAMPLES=ON" instead)
+(if you want to install the OGRE samples, for the cmake line above do "-DOGRE_BUILD_SAMPLES=ON" instead)
 
 
 Step 4 - build and install Caelum (sky system)
 -----------
-This one you can pull from Git, and I have custom-modified source code.
 So pull the source from Git, and build:
 
     git clone https://github.com/OGRECave/ogre-caelum.git caelum
     cd caelum
     cmake . -DCMAKE_BUILD_TYPE=Release
-    make
+    make -j4
     sudo make install
+    make clean
     cd
 
 
-Step 5 - build wxWidgets
+Step 5 - (optionally) build wxWidgets
 -----------
 
-    wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.2.1/wxWidgets-3.2.2.1.tar.bz2
-    tar xfj wxWidgets-3.2.2.1.tar.bz2
-    cd wxWidgets-3.2.2.1
+    wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.4/wxWidgets-3.2.4.tar.bz2
+    tar xfj wxWidgets-3.2.4.tar.bz2
+    cd wxWidgets-3.2.4
     ./configure --prefix=/opt/wx
     make
     make install
@@ -94,13 +104,27 @@ Step 5 - build wxWidgets
 
 Step 6 - build Skyscraper (this also builds the built-in OgreBullet libraries)
 -----------
-First grab the source via git, and build, pointing it to the wxWidgets you just built.
+First grab the source via git, and build.
 
     git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
     cd skyscraper
     wget https://www.skyscrapersim.net/downloads/dev/other_apps/plugins.cfg
+
+On ARM systems, you'll have to comment out the CG Program Manager plugin in the plugins.cfg file, for Skyscraper to run.
+
+If you built a custom wxWidgets, run CMake like this:
+
     cmake . -DwxWidgets_CONFIG_EXECUTABLE=/opt/wx/bin/wx-config
-    make
+
+Otherwise, just run CMake with defaults:
+
+    cmake .
+
+And build it:
+
+    make -j4
+
+This will build OgreBullet (the collisions and dynamics libraries), the Skyscraper Script Processor, the SBS engine, and Skyscraper's frontend.
 
 ##### Finally, run Skyscraper:
 
@@ -109,14 +133,14 @@ First grab the source via git, and build, pointing it to the wxWidgets you just 
 ##### To update the app in the future, first update git, rebuild and run:
 
     git pull
-    make
+    make -j4
     ./skyscraper
 
 ##### If any files were added in git, you'll have to run CMake before the "make" command, or else it'll have linking errors:
 
     git pull
     cmake .
-    make
+    make -j4
     ./skyscraper
 
 # Skyscraper source build for Apple Silicon
