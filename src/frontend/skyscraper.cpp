@@ -2034,7 +2034,9 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	}
 	catch (Ogre::Exception &e)
 	{
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE //ignore Caelum errors on Mac, due to a Cg error (Cg is not available on ARM CPUs, and is not bundled with the Mac version)
 		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
+#endif
 		sky_error = true;
 	}
 	catch (...)
