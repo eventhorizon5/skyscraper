@@ -481,10 +481,14 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 	return counterweight;
 }
 
-void Elevator::AddRails(const std::string &main_texture, const std::string &edge_texture, Real x, Real z, bool orientation, Real rail_distance, Real rail_width)
+bool Elevator::AddRails(const std::string &main_texture, const std::string &edge_texture, Real x, Real z, bool orientation, Real rail_distance, Real rail_width)
 {
 	//creates rails for the elevator cars or counterweight
 	//if orientation is false, create rails along the X axis, otherwise the Z axis
+
+	//check if shaft is associated
+	if (!GetShaft())
+		return ReportError("AddRails: no shaft available");
 
 	Vector3 offset;
 	offset = GetPosition() - GetShaft()->GetPosition();
@@ -527,6 +531,8 @@ void Elevator::AddRails(const std::string &main_texture, const std::string &edge
 			sbs->CreateWallBox2(mesh, "Rails B3", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
 		}
 	}
+
+	return true;
 }
 
 bool Elevator::AddRoute(int floor, int direction, int call_type)
