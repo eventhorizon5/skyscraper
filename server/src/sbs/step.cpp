@@ -28,7 +28,7 @@
 
 namespace SBS {
 
-Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper, int max_render_distance) : MeshObject(parent, name, wrapper, "", max_render_distance)
+Step::Step(Object* parent, const std::string &name, int max_render_distance) : MeshObject(parent, name, "", max_render_distance)
 {
 	vector = Vector3::ZERO;
 	speed = 0;

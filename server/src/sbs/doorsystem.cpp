@@ -38,7 +38,6 @@ namespace SBS {
 // Door Component
 //
 
-//DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
 DoorComponent::DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed)
 {
 	name = doorname;
@@ -637,7 +636,6 @@ DoorWrapper::~DoorWrapper()
 	}
 }
 
-//DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh)
 DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed)
 {
 	//initialize a door component

@@ -29,7 +29,6 @@
 #include "sound.h"
 #include "texture.h"
 //#include "profiler.h"
-//#include "dynamicmesh.h"
 #include "step.h"
 #include "escalator.h"
 
@@ -71,7 +70,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		Step *mesh = new Step(this, "Step " + ToString(i + 1), 0, 100);
+		Step *mesh = new Step(this, "Step " + ToString(i + 1), 100);
 		Steps.push_back(mesh);
 	}
 

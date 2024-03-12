@@ -24,7 +24,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
-//#include "dynamicmesh.h"
 #include "mesh.h"
 #include "control.h"
 #include "sound.h"
@@ -66,15 +65,10 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->GetBase(), CenterZ);
 
-	//dynamic_mesh = new DynamicMesh(this, GetSceneNode(), name);
-
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		Levels.push_back(new Level(this, i));
 	}
-
-	//create a dynamic mesh for doors
-	//DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 
 	Report("created at " + TruncateNumber(CenterX, 4) + ", " + TruncateNumber(CenterZ, 4));
 
@@ -90,15 +84,6 @@ Stairwell::~Stairwell()
 			delete Levels[i];
 		Levels[i] = 0;
 	}
-
-	//if (DoorWrapper)
-		//delete DoorWrapper;
-	//DoorWrapper = 0;
-
-	//delete dynamic mesh
-	//if (dynamic_mesh)
-		//delete dynamic_mesh;
-	//dynamic_mesh = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
@@ -118,13 +103,6 @@ Stairwell::Level* Stairwell::GetLevel(int floor)
 void Stairwell::SetShowFull(int value)
 {
 	ShowFullStairs = value;
-
-	//force the combining of dynamic meshes, since they'll be fully shown
-	if (value == 2)
-	{
-		//dynamic_mesh->force_combine = true;
-		//DoorWrapper->force_combine = true;
-	}
 }
 
 void Stairwell::EnableWhole(bool value, bool force)
@@ -146,10 +124,6 @@ void Stairwell::EnableWhole(bool value, bool force)
 			GetLevel(i)->Enabled(value);
 		}
 	}
-
-	//enable/disable dynamic meshes
-	//dynamic_mesh->Enabled(value);
-	//DoorWrapper->Enabled(value);
 
 	IsEnabled = value;
 }
@@ -489,11 +463,6 @@ void Stairwell::Loop()
 	LoopChildren();
 }
 
-/*DynamicMesh* Stairwell::GetDynamicMesh()
-{
-	return dynamic_mesh;
-}*/
-
 Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 {
 	//set up SBS object
@@ -508,7 +477,6 @@ Stairwell::Level::Level(Stairwell *parent, int number) : Object(parent)
 	SetName(name);
 
 	//Create level mesh
-	//mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum), parent->GetDynamicMesh());
 	mesh = new MeshObject(this, parent->GetName() + ":" + ToString(floornum));
 	SetPositionY(sbs->GetFloor(number)->GetBase());
 

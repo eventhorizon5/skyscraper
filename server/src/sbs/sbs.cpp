@@ -34,7 +34,6 @@
 #include "sbs.h"
 #include "manager.h"
 //#include "camera.h"
-//#include "dynamicmesh.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -4131,27 +4130,6 @@ Model* SBS::GetModel(std::string name)
 
 	return 0;
 }
-
-/*void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
-{
-	//register a dynamic mesh with the system
-
-	dynamic_meshes.push_back(dynmesh);
-}
-
-void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
-{
-	//unregister a dynamic mesh from the system
-
-	for (size_t i = 0; i < dynamic_meshes.size(); i++)
-	{
-		if (dynamic_meshes[i] == dynmesh)
-		{
-			dynamic_meshes.erase(dynamic_meshes.begin() + i);
-			return;
-		}
-	}
-}*/
 
 SoundSystem* SBS::GetSoundSystem()
 {

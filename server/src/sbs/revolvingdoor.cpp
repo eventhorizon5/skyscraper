@@ -32,7 +32,6 @@
 
 namespace SBS {
 
-//RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), Lock(this)
 RevolvingDoor::RevolvingDoor(Object *parent, const std::string &name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th) : Object(parent), Lock(this)
 {
 	//creates a revolving door
@@ -63,7 +62,6 @@ RevolvingDoor::RevolvingDoor(Object *parent, const std::string &name, bool run, 
 	Clockwise = clockwise;
 
 	//Create mesh
-	//DoorMesh = new MeshObject(this, name, wrapper);
 	DoorMesh = new MeshObject(this, name);
 	Move(position);
 

@@ -23,7 +23,6 @@
 
 #include "globals.h"
 #include "sbs.h"
-//#include "dynamicmesh.h"
 #include "triangle.h"
 #include "mesh.h"
 #include "polygon.h"

@@ -70,12 +70,9 @@ public:
 	void OnInit();
 	void Check(Vector3 position, int current_floor);
 	void Loop();
-	//DynamicMesh* GetShaftDoorContainer() { return ShaftDoorContainer; }
 	void SetShowFull(bool value);
 	bool GetShowFull() { return ShowFullShaft; }
 	Level* GetLevel(int floor);
-	//DynamicMesh* GetDynamicMesh();
-	//DynamicMesh* GetDoorWrapper();
 
 	class SBSIMPEXP Level : public Object
 	{
@@ -145,21 +142,12 @@ private:
 	std::vector<int> ShowInterfloorsList; //list of interfloors to enable while inside the shaft/elevator
 	bool ShowFullShaft; //if true, always show full shaft instead of only a selected range
 
-	//Doors
-	//DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
-
-	//mesh container for shaft doors
-	//DynamicMesh *ShaftDoorContainer; //shaft door dynamic mesh container
-
 	//cache objects for IsInShaft()
 	Vector3 lastposition;
 	bool lastcheckresult;
 	bool checkfirstrun;
 	bool InElevator;
 	bool ShowFloorsFull_Enabled;
-
-	//dynamic mesh object
-	DynamicMesh *dynamic_mesh;
 };
 
 }

@@ -38,7 +38,6 @@
 #include "texture.h"
 //#include "profiler.h"
 #include "scenenode.h"
-//#include "dynamicmesh.h"
 #include "mesh.h"
 
 //this file includes function implementations of the low-level SBS geometry and mesh code
@@ -519,7 +518,7 @@ Plane SBS::ComputePlane(PolyArray &vertices, bool flip_normal)
 	return Plane(normal, det);
 }
 
-MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
+MeshObject::MeshObject(Object* parent, const std::string &name, const std::string &filename, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Mesh", name, true);
@@ -550,17 +549,6 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
-
-	/*if (wrapper == 0)
-	{
-		wrapper_selfcreate = true;
-		MeshWrapper = new DynamicMesh(this, GetSceneNode(), name, max_render_distance, dynamic_buffers);
-	}
-	else
-		MeshWrapper = wrapper;*/
-
-	//add this mesh object as a client to the dynamic mesh wrapper
-	//MeshWrapper->AddClient(this);
 
 	//load mesh from a file if specified
 	if (filename != "")
@@ -617,18 +605,10 @@ MeshObject::~MeshObject()
 		delete collider_node;
 	collider_node = 0;
 
-	//MeshWrapper->DetachClient(this);
-
 	if (sbs->FastDelete == false)
 	{
-		//MeshWrapper->RemoveClient(this);
 		sbs->DeleteMeshHandle(this);
 	}
-
-	//delete dynamic mesh wrapper if needed
-	//if (wrapper_selfcreate == true)
-		//delete MeshWrapper;
-	//MeshWrapper = 0;
 
 	if (Bounds)
 		delete Bounds;

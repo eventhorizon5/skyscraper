@@ -209,7 +209,6 @@ public:
 	bool IsStopped();
 	void CancelHallCall(int floor, int direction);
 	bool IsManuallyStopped();
-	//DynamicMesh* GetDoorContainer() { return DoorContainer; }
 	bool CheckInterlocks(bool skip_current_floor = false);
 	bool AreDoorsOpen();
 	int AreDoorsMoving(bool car_doors = true, bool shaft_doors = true);
@@ -336,9 +335,6 @@ private:
 
 	//counterweight sound
 	Sound *counterweightsound;
-
-	//mesh container for elevator doors (not shaft doors)
-	//DynamicMesh *DoorContainer;
 
 	std::queue<std::string> ControlQueue;
 

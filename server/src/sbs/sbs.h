@@ -60,7 +60,6 @@ namespace SBS {
 	//forward declarations
 	class SBS;
 	class MeshObject;
-	class DynamicMesh;
 	class FloorManager;
 	class ElevatorManager;
 	class ShaftManager;
@@ -387,8 +386,6 @@ public:
 	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
 	ControllerManager* GetControllerManager();
-	//void RegisterDynamicMesh(DynamicMesh *dynmesh);
-	//void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
 	RevolvingDoorManager* GetRevolvingDoorManager();
 	VehicleManager* GetVehicleManager();
@@ -448,9 +445,6 @@ private:
 	DoorManager* door_manager;
 	VehicleManager* vehicle_manager;
 	ControllerManager* controller_manager;
-
-	//dynamic meshes
-	//std::vector<DynamicMesh*> dynamic_meshes;
 
 	//action array
 	std::vector<Action*> ActionArray;

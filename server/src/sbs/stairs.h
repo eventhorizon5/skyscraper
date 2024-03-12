@@ -59,7 +59,6 @@ public:
 	void SetShowFull(int value);
 	Level* GetLevel(int floor);
 	bool IsValidFloor(int floor);
-	//DynamicMesh* GetDynamicMesh();
 
 	class SBSIMPEXP Level : public Object
 	{
@@ -128,12 +127,6 @@ private:
 
 	int lastfloor;
 	bool lastfloorset;
-
-	//Doors
-	//DynamicMesh *DoorWrapper; //door dynamic mesh wrapper
-
-	//dynamic mesh object
-	//DynamicMesh *dynamic_mesh;
 
 	//cache objects for IsInStairwell()
 	Vector3 lastposition;

@@ -38,7 +38,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "floorindicator.h"
 #include "shaft.h"
 //#include "camera.h"
-//#include "dynamicmesh.h"
 #include "texture.h"
 //#include "profiler.h"
 #include "cameratexture.h"

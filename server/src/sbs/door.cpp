@@ -49,7 +49,6 @@ public:
 	virtual void Notify();
 };
 
-//Door::Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate) : Object(parent), DoorLock(this)
 Door::Door(Object *parent, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate) : Object(parent), DoorLock(this)
 {
 	//creates a door, the 'direction' parameter is for the lock direction

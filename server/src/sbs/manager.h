@@ -39,9 +39,6 @@ public:
 	Floor* GetByNumberID(const std::string &id);
 	void Remove(Floor *floor);
 	void EnableAll(bool value);
-	//DynamicMesh* GetFloorDynMesh() { return floors; }
-	//DynamicMesh* GetIFloorDynMesh() { return interfloors; }
-	//DynamicMesh* GetColumnDynMesh() { return columnframes; }
 	void Loop();
 
 private:
@@ -52,11 +49,6 @@ private:
 	};
 
 	std::vector<Map> Array; //floor object array
-
-	//dynamic mesh objects
-	//DynamicMesh* floors;
-	//DynamicMesh* interfloors;
-	//DynamicMesh* columnframes;
 
 	//function caching
 	Floor* get_result;
@@ -159,7 +151,6 @@ public:
 
 private:
 	std::vector<Door*> Array;
-	//DynamicMesh *wrapper; //door dynamic mesh wrapper
 };
 
 class SBSIMPEXP RevolvingDoorManager : public Object
@@ -175,7 +166,6 @@ public:
 
 private:
 	std::vector<RevolvingDoor*> Array;
-	//DynamicMesh *wrapper; //door dynamic mesh wrapper
 };
 
 class SBSIMPEXP VehicleManager : public Object

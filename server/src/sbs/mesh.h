@@ -68,7 +68,7 @@ public:
 		std::string Name;
 	};
 
-	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0, bool create_collider = true, bool dynamic_buffers = false);
+	MeshObject(Object* parent, const std::string &name, const std::string &filename = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0, bool create_collider = true, bool dynamic_buffers = false);
 	virtual ~MeshObject();
 	void Enabled(bool value);
 	void EnableCollider(bool value);
@@ -114,7 +114,6 @@ public:
 	void ChangeHeight(Real newheight);
 	void EnableShadows(bool value);
 
-	//DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<SubMesh> Submeshes; //submeshes
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
 

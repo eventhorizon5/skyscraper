@@ -24,7 +24,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
-//#include "dynamicmesh.h"
 #include "mesh.h"
 //#include "camera.h"
 #include "shaft.h"
@@ -204,10 +203,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 
 	//create a primary car object
 	AddCar();
-
-	//create a dynamic mesh for elevator doors
-	//DoorContainer = new DynamicMesh(this, GetSceneNode(), name + " Door Container", 0, true);
-	//DoorContainer->force_combine = true;
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -437,8 +432,8 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 
 	//create counterweight and rope meshes
 	WeightMesh = new MeshObject(this, GetName() + " Counterweight");
-	WeightRopeMesh = new MeshObject(this, GetName() + " Counterweight Rope", 0, "", 0, 1, false, 0, 0, 0, false, false);
-	RopeMesh = new MeshObject(this, GetName() + " Rope", 0, "", 0, 1, false, 0, 0, 0, false, false);
+	WeightRopeMesh = new MeshObject(this, GetName() + " Counterweight Rope", "", 0, 1, false, 0, 0, 0, false, false);
+	RopeMesh = new MeshObject(this, GetName() + " Rope", "", 0, 1, false, 0, 0, 0, false, false);
 
 	//save and change autosizing
 	bool autosize_x, autosize_y;

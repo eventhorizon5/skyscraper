@@ -24,7 +24,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "manager.h"
-//#include "dynamicmesh.h"
 #include "mesh.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -91,10 +90,6 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	EnabledGroup = false;
 	EnabledGroup_Floor = 0;
 	AltitudeSet = false;
-
-	//create a dynamic mesh for doors
-	//DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
-	//DoorWrapper->force_combine = true;
 }
 
 Floor::~Floor()
