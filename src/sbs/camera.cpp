@@ -107,7 +107,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
 	use_startdirection = false;
 	BinocularsFOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BinocularsFOV", 10.0);
-	RestrictRotation = sbs->GetConfigBool("Skyscraper.SBS.Camera.RestrictRotation", false);
+	RestrictRotation = sbs->GetConfigBool("Skyscraper.SBS.Camera.RestrictRotation", true);
 	AttachedModel = 0;
 	prev_orientation = Quaternion::ZERO;
 	prev_position = Vector3::ZERO;
