@@ -32,7 +32,6 @@
 #define	_gcvt gcvt
 #define _snprintf snprintf
 
-const char* itoa(int value, char* str, int radix);
 const char* strrev(char* szT);
 const char* StrRev(char* szT);
 

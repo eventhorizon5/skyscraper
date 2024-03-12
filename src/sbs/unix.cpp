@@ -30,13 +30,6 @@
 #include <algorithm>
 #include <stdio.h>
 
-const char* itoa(int value, char* str, int radix)
-{
-	//send data to sprintf, discarding the radix value
-	sprintf(str, "%d", value);
-	return str;
-}
-
 //strrev the standard way
 const char* strrev(char* szT)
 {
