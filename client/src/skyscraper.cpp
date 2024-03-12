@@ -489,8 +489,10 @@ int Skyscraper::OnExit()
 
 	Ogre::ResourceGroupManager::getSingleton().shutdownAll();
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
 	mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
 	//delete mRoot;
+#endif
 	delete logger;
 	return wxApp::OnExit();
 }
