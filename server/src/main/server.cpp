@@ -100,7 +100,7 @@ int main (int argc, char* argv[])
 
 			::SBS::SBS *Simcore = server->GetSystem();
 			if (!server->Start(0))
-				return false;
+				return 1;
 
 			printf("Loading finished, running simulator...\n\n");
 		}
@@ -177,9 +177,9 @@ Server::~Server()
 
 	UnloadSim();
 
-	if (reload_state)
+	/*if (reload_state)
 		delete reload_state;
-	reload_state = 0;
+	reload_state = 0;*/
 }
 
 ScriptProcessor* Server::GetScriptProcessor()

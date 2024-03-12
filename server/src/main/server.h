@@ -100,7 +100,7 @@ private:
 	std::string InstancePrompt;
 
 	//override information
-	SBS::CameraState *reload_state;
+	//SBS::CameraState *reload_state;
 
 	Ogre::SceneManager* mSceneManager;
 	//FMOD::System *fmodsystem;
