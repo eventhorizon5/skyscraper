@@ -1,10 +1,14 @@
 #include <OgreBulletDynamicsWorld.h>
+#include <OgrePlatform.h>
 #include "globals.h"
 #include "sbs.h"
-#include "unix.h"
 #include "profiler.h"
 
 static oClock gProfileClock;
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
+	#define _snprintf snprintf
+#endif
 
 namespace SBS {
 
