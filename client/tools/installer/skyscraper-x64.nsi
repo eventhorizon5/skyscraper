@@ -22,7 +22,7 @@ SetCompressor lzma
 VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "The Skyscraper Project"
-VIAddVersionKey LegalCopyright "Copyright 2003-2023 Ryan Thoryk"
+VIAddVersionKey LegalCopyright "Copyright 2003-2024 Ryan Thoryk"
 VIAddVersionKey FileVersion "1.11.0.0"
 VIAddVersionKey ProductVersion "1.11.0.0"
 VIProductVersion 1.11.0.0

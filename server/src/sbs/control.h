@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Control Object
 	The Skyscraper Project - Version 1.12 Alpha
-	Copyright (C)2004-2023 Ryan Thoryk
+	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com

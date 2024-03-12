@@ -1,6 +1,6 @@
 /*
 	Skyscraper 3.0 Alpha - Server Core
-	Copyright (C)2004-2023 Ryan Thoryk
+	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@thoryk.com
