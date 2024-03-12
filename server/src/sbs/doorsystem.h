@@ -55,8 +55,8 @@ struct DoorComponent
 	bool accelerating;
 	bool is_open;
 	bool finished;
-	Ogre::Vector3 extents_min;
-	Ogre::Vector3 extents_max;
+	Vector3 extents_min;
+	Vector3 extents_max;
 	bool sign_changed;
 	Real old_difference;
 	Real offset;
@@ -82,7 +82,7 @@ struct DoorWrapper : public Object
 	void MoveDoors(bool open, bool manual = false);
 	void StopDoors();
 	void ResetState();
-	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void OnHit();
 
 	std::vector<DoorComponent*> doors;

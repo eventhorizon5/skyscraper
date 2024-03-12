@@ -49,9 +49,9 @@ public:
 	virtual ~DoorLock() {}
 	void SetDirection(bool direction);
 	void SetLocked(int side, int keyid);
-	bool GetSide(const Ogre::Vector3 &position);
-	bool IsLocked(const Ogre::Vector3 &position);
-	bool ToggleLock(const Ogre::Vector3 &position, bool force = false);
+	bool GetSide(const Vector3 &position);
+	bool IsLocked(const Vector3 &position);
+	bool ToggleLock(const Vector3 &position, bool force = false);
 	int GetKeyID();
 
 private:

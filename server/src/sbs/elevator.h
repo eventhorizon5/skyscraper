@@ -83,7 +83,7 @@ public:
 	bool ManualGo; //go toggle for inspection service mode
 	bool ManualUp; //up toggle for inspection service mode
 	bool ManualDown;  //down toggle for inspection service mode
-	Ogre::Vector3 MotorPosition; //position of motor sound emitter
+	Vector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
 	int ParkingFloor; //floor to automatically park the elevator on when idle
 	Real ParkingDelay; //time to wait in idle mode before parking
@@ -117,7 +117,7 @@ public:
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
 	bool ChimeOnArrival; //set to true for elevator to always chime on arrival, instead of just when responding to a hall call
 	bool HoistwayAccessHold; //if true, the user needs to hold the mouse button on the control, in Hoistway Access mode
-	Ogre::Vector3 RopePosition; //position of rope
+	Vector3 RopePosition; //position of rope
 	std::string RopeTexture; //texture for rope
 	std::string CounterweightStartSound; //counterweight starting sound
 	std::string CounterweightMoveSound; //counterweight moving sound
@@ -129,7 +129,7 @@ public:
 	Elevator(Object *parent, int number);
 	~Elevator();
 	bool CreateElevator(bool relative, Real x, Real z, int floor);
-	Wall* CreateCounterweight(const std::string &frame_texture, const std::string &weight_texture, Real x, Real z, const Ogre::Vector3 &size, Real weight_voffset);
+	Wall* CreateCounterweight(const std::string &frame_texture, const std::string &weight_texture, Real x, Real z, const Vector3 &size, Real weight_voffset);
 	void AddRails(const std::string &main_texture, const std::string &edge_texture, Real x, Real z, bool orientation, Real rail_distance, Real rail_width);
 	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);
@@ -140,7 +140,7 @@ public:
 	void Loop();
 	void DumpQueues();
 	void Enabled(bool value);
-	ElevatorCar* IsInElevator(const Ogre::Vector3 &position, bool camera = false);
+	ElevatorCar* IsInElevator(const Vector3 &position, bool camera = false);
 	Real GetElevatorStart();
 	Real GetDestination();
 	Real GetStoppingDistance();
@@ -187,7 +187,7 @@ public:
 	void OnInit();
 	int AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
-	bool Check(Ogre::Vector3 position);
+	bool Check(Vector3 position);
 	bool ReturnToNearestFloor();
 	bool ReturnToBottomFloor();
 	bool IsLeveled();
@@ -344,7 +344,7 @@ private:
 
 	MeshObject* WeightMesh; //counterweight mesh object
 	MeshObject* WeightRopeMesh; //counterweight rope mesh
-	Ogre::Vector3 weight_size; //counterweight size
+	Vector3 weight_size; //counterweight size
 	MeshObject* RopeMesh; //rope mesh
 
 	//elevator misc internals
@@ -357,7 +357,7 @@ private:
 	bool RecallAltSet;
 	bool ACPFloorSet;
 	bool RecallUnavailable; //true if recall floor is unavailable (alarm has been triggered on that floor)
-	Ogre::Vector3 elevposition;
+	Vector3 elevposition;
 	Real tmpDecelJerk;
 	bool FinishedMove;
 	bool SoundsQueued;

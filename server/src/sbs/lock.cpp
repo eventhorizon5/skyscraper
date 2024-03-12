@@ -103,7 +103,7 @@ void DoorLock::SetLocked(int side, int keyid)
 	KeyID = keyid;
 }
 
-bool DoorLock::ToggleLock(const Ogre::Vector3 &position, bool force)
+bool DoorLock::ToggleLock(const Vector3 &position, bool force)
 {
 	//toggle lock state of the related door side
 	//if force is true, bypass key check
@@ -162,7 +162,7 @@ bool DoorLock::ToggleLock(const Ogre::Vector3 &position, bool force)
 	return true;
 }
 
-bool DoorLock::GetSide(const Ogre::Vector3 &position)
+bool DoorLock::GetSide(const Vector3 &position)
 {
 	//return which side of the door the position is (false for negative/left/front, true for positive/right/back)
 
@@ -175,7 +175,7 @@ bool DoorLock::GetSide(const Ogre::Vector3 &position)
 	return false;
 }
 
-bool DoorLock::IsLocked(const Ogre::Vector3 &position)
+bool DoorLock::IsLocked(const Vector3 &position)
 {
 	//returns if the door's side (in relation to the given position) is locked or not
 

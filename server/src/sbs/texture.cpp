@@ -69,8 +69,8 @@ TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 	{
 		MapIndex[i] = 0;
 		OldMapIndex[i] = 0;
-		OldMapUV[i] = Ogre::Vector2::ZERO;
-		MapUV[i] = Ogre::Vector2::ZERO;
+		OldMapUV[i] = Vector2::ZERO;
+		MapUV[i] = Vector2::ZERO;
 	}
 	DefaultMapper = sbs->GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	texturecount = 0;
@@ -491,7 +491,7 @@ bool TextureManager::RotateTexture(const std::string &name, Real angle)
 
 	//set rotation
 	if (state)
-		state->setTextureRotate(Ogre::Degree(-angle));
+		state->setTextureRotate(Degree(-angle));
 	else
 		return false;
 
@@ -1156,7 +1156,7 @@ void TextureManager::GetAutoSize(bool &x, bool &y)
 	y = AutoY;
 }
 
-Ogre::Vector2 TextureManager::CalculateSizing(const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, int direction, Real tw, Real th)
+Vector2 TextureManager::CalculateSizing(const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, int direction, Real tw, Real th)
 {
 	//calculate texture autosizing based on polygon extents
 
@@ -1173,10 +1173,10 @@ Ogre::Vector2 TextureManager::CalculateSizing(const std::string &texture, const 
 	th2 = AutoSize(0, height, false, th, force_enable, force_mode);
 
 	//return results
-	return Ogre::Vector2(tw2, th2);
+	return Vector2(tw2, th2);
 }
 
-bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction)
+bool TextureManager::GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3 &v2, Vector3 &v3, int &direction)
 {
 	//returns texture mapping coordinates for the specified vertices, in the v1, v2, and v3 vectors
 	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
@@ -1185,14 +1185,14 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, O
 	{
 		//planar method
 
-		Ogre::Vector2 x, y, z;
+		Vector2 x, y, z;
 		PolyArray varray;
 		bool rev_x = false, rev_y = false, rev_z = false;
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Ogre::Plane plane = sbs->ComputePlane(vertices);
-		Ogre::Vector3 normal = plane.normal;
+		Plane plane = sbs->ComputePlane(vertices);
+		Vector3 normal = plane.normal;
 
 		direction = 0; //x; faces left/right
 
@@ -1209,7 +1209,7 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, O
 		varray.reserve(vertices.size());
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
-			varray.push_back(Ogre::Vector3(vertices[i][selX], vertices[i][selY], 0));
+			varray.push_back(Vector3(vertices[i][selX], vertices[i][selY], 0));
 		}
 
 		//automatically flip texture based on largest normal (corrects some situations where the texture is incorrectly reversed)
@@ -1256,24 +1256,24 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, O
 			rev_z = !rev_z;
 
 		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
-		Ogre::Vector2 a, b;
+		Vector2 a, b;
 		a = sbs->GetExtents(varray, 1);
 		b = sbs->GetExtents(varray, 2);
 
 		//set the result 2D coordinates
 		if (direction == 0)
 		{
-			Ogre::Vector2 pos, pos2;
+			Vector2 pos, pos2;
 
 			if (rev_z == false)
-				pos = Ogre::Vector2(b.y, b.x);
+				pos = Vector2(b.y, b.x);
 			else
-				pos = Ogre::Vector2(b.x, b.y);
+				pos = Vector2(b.x, b.y);
 
 			if (rev_y == false)
-				pos2 = Ogre::Vector2(a.y, a.x);
+				pos2 = Vector2(a.y, a.x);
 			else
-				pos2 = Ogre::Vector2(a.x, a.y);
+				pos2 = Vector2(a.x, a.y);
 
 			if (PlanarRotate == false)
 			{
@@ -1296,17 +1296,17 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, O
 		}
 		if (direction == 1)
 		{
-			Ogre::Vector2 pos, pos2;
+			Vector2 pos, pos2;
 
 			if (rev_x == false)
-				pos = Ogre::Vector2(b.x, b.y);
+				pos = Vector2(b.x, b.y);
 			else
-				pos = Ogre::Vector2(b.y, b.x);
+				pos = Vector2(b.y, b.x);
 
 			if (rev_z == false)
-				pos2 = Ogre::Vector2(a.x, a.y);
+				pos2 = Vector2(a.x, a.y);
 			else
-				pos2 = Ogre::Vector2(a.y, a.x);
+				pos2 = Vector2(a.y, a.x);
 
 			if (PlanarRotate == false)
 			{
@@ -1329,17 +1329,17 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, O
 		}
 		if (direction == 2)
 		{
-			Ogre::Vector2 pos, pos2;
+			Vector2 pos, pos2;
 
 			if (rev_x == false)
-				pos = Ogre::Vector2(a.y, a.x);
+				pos = Vector2(a.y, a.x);
 			else
-				pos = Ogre::Vector2(a.x, a.y);
+				pos = Vector2(a.x, a.y);
 
 			if (rev_y == false)
-				pos2 = Ogre::Vector2(b.y, b.x);
+				pos2 = Vector2(b.y, b.x);
 			else
-				pos2 = Ogre::Vector2(b.x, b.y);
+				pos2 = Vector2(b.x, b.y);
 
 			if (PlanarRotate == false)
 			{
@@ -1399,8 +1399,8 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, O
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Ogre::Plane plane = Ogre::Plane(v1, v2, v3);
-		Ogre::Vector3 normal = plane.normal;
+		Plane plane = Plane(v1, v2, v3);
+		Vector3 normal = plane.normal;
 
 		direction = 0; //x; faces left/right
 
@@ -1495,8 +1495,8 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, O
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Ogre::Plane plane = Ogre::Plane(v1, v2, v3);
-		Ogre::Vector3 normal = plane.normal;
+		Plane plane = Plane(v1, v2, v3);
+		Vector3 normal = plane.normal;
 
 		direction = 0; //x; faces left/right
 
@@ -1519,9 +1519,9 @@ void TextureManager::ResetTextureMapping(bool todefaults)
 		if (DefaultMapper == 0)
 			SetPlanarMapping(false, false, false, false, false);
 		if (DefaultMapper == 1)
-			SetTextureMapping(0, Ogre::Vector2(0, 0), 1, Ogre::Vector2(1, 0), 2, Ogre::Vector2(1, 1));
+			SetTextureMapping(0, Vector2(0, 0), 1, Vector2(1, 0), 2, Vector2(1, 1));
 		if (DefaultMapper == 2)
-			SetTextureMapping2("x0", "y0", "z0", Ogre::Vector2(0, 0), "x1", "y1", "z1", Ogre::Vector2(1, 0), "x2", "y2", "z2", Ogre::Vector2(1, 1));
+			SetTextureMapping2("x0", "y0", "z0", Vector2(0, 0), "x1", "y1", "z1", Vector2(1, 0), "x2", "y2", "z2", Vector2(1, 1));
 	}
 	else
 	{
@@ -1547,9 +1547,9 @@ void TextureManager::SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool Fl
 	RevX = FlipX;
 	RevY = FlipY;
 	RevZ = FlipZ;
-	MapUV[0] = Ogre::Vector2(0, 0);
-	MapUV[1] = Ogre::Vector2(1, 0);
-	MapUV[2] = Ogre::Vector2(1, 1);
+	MapUV[0] = Vector2(0, 0);
+	MapUV[1] = Vector2(1, 0);
+	MapUV[2] = Vector2(1, 1);
 	PlanarFlat = flat;
 	MapMethod = 0;
 	PlanarRotate = rotate;
@@ -1568,7 +1568,7 @@ void TextureManager::GetPlanarMapping(bool &flat, bool &FlipX, bool &FlipY, bool
 	rotate = PlanarRotate;
 }
 
-void TextureManager::SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int vertindex2, Ogre::Vector2 uv2, int vertindex3, Ogre::Vector2 uv3)
+void TextureManager::SetTextureMapping(int vertindex1, Vector2 uv1, int vertindex2, Vector2 uv2, int vertindex3, Vector2 uv3)
 {
 	//Manually sets UV texture mapping.  Use ResetTextureMapping to return to default values
 
@@ -1584,7 +1584,7 @@ void TextureManager::SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int ve
 	MapMethod = 1;
 }
 
-void TextureManager::SetTextureMapping2(const std::string & x1, const std::string & y1, const std::string & z1, Ogre::Vector2 uv1, const std::string & x2, const std::string & y2, const std::string & z2, Ogre::Vector2 uv2, const std::string & x3, const std::string & y3, const std::string & z3, Ogre::Vector2 uv3)
+void TextureManager::SetTextureMapping2(const std::string & x1, const std::string & y1, const std::string & z1, Vector2 uv1, const std::string & x2, const std::string & y2, const std::string & z2, Vector2 uv2, const std::string & x3, const std::string & y3, const std::string & z3, Vector2 uv3)
 {
 	//Manually sets UV texture mapping (advanced version)
 	//Use ResetTextureMapping to return to default values

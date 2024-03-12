@@ -79,24 +79,24 @@ public:
 	void SetNumber(int number);
 	bool IsTemporary();
 	void ShowBoundingBox(bool value);
-	virtual void Move(const Ogre::Vector3 &vector, Real speed = 1.0);
+	virtual void Move(const Vector3 &vector, Real speed = 1.0);
 	virtual void Move(Real X, Real Y, Real Z, Real speed = 1.0);
-	virtual void SetPosition(const Ogre::Vector3 &position);
-	void SetPositionRelative(const Ogre::Vector3 &position);
+	virtual void SetPosition(const Vector3 &position);
+	void SetPositionRelative(const Vector3 &position);
 	virtual void SetPosition(Real X, Real Y, Real Z);
 	void SetPositionRelative(Real X, Real Y, Real Z);
 	virtual void SetPositionY(Real value);
-	virtual Ogre::Vector3 GetPosition(bool relative = false);
-	virtual void Rotate(const Ogre::Vector3 &vector, Real speed = 1.0);
+	virtual Vector3 GetPosition(bool relative = false);
+	virtual void Rotate(const Vector3 &vector, Real speed = 1.0);
 	virtual void Rotate(Real X, Real Y, Real Z, Real speed = 1.0);
-	virtual void SetRotation(const Ogre::Vector3 &rotation);
+	virtual void SetRotation(const Vector3 &rotation);
 	virtual void SetRotation(Real X, Real Y, Real Z);
-	virtual Ogre::Vector3 GetRotation();
-	Ogre::Quaternion GetOrientation(bool relative = false);
-	void SetOrientation(const Ogre::Quaternion &q, bool relative = false);
+	virtual Vector3 GetRotation();
+	Quaternion GetOrientation(bool relative = false);
+	void SetOrientation(const Quaternion &q, bool relative = false);
 	virtual void OnMove(bool parent) {} //called when object is moved
 	virtual void OnRotate(bool parent) {} //called when object is rotated
-	virtual void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right) {} //called when object is clicked on
+	virtual void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right) {} //called when object is clicked on
 	virtual void OnUnclick(bool right) {} //called when mouse is held and released on object
 	virtual void OnHit() {} //called when user hits/collides with object
 	void NotifyMove(bool parent = false);

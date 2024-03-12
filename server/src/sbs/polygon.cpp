@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane) : ObjectBase(parent)
+Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
 	this->index_extents = index_extents;
@@ -46,7 +46,7 @@ Polygon::~Polygon()
 {
 }
 
-void Polygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
+void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)
 {
 	//return texture mapping matrix and vector
 	tm = t_matrix;
@@ -71,7 +71,7 @@ void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bo
 
 	vertices.resize(index_extents.size());
 
-	Ogre::Vector3 mesh_position;
+	Vector3 mesh_position;
 	if (convert == true)
 		mesh_position = mesh->GetPosition();
 	else
@@ -135,7 +135,7 @@ void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bo
 	}
 }
 
-void Polygon::Move(const Ogre::Vector3 &position, Real speed)
+void Polygon::Move(const Vector3 &position, Real speed)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();
 
@@ -170,31 +170,31 @@ void Polygon::Delete()
 	mesh->ProcessSubMesh(geometry, triangles, material, false);
 }
 
-Ogre::Plane Polygon::GetAbsolutePlane()
+Plane Polygon::GetAbsolutePlane()
 {
 	//convert to an absolute plane
-	Ogre::Plane plane2(this->plane.normal, sbs->ToRemote(mesh->GetPosition()));
-	return Ogre::Plane(this->plane.normal, -(this->plane.d + plane2.d));
+	Plane plane2(this->plane.normal, sbs->ToRemote(mesh->GetPosition()));
+	return Plane(this->plane.normal, -(this->plane.d + plane2.d));
 }
 
-Ogre::Vector2 Polygon::GetExtents(int coord)
+Vector2 Polygon::GetExtents(int coord)
 {
 	//returns the extents of a polygon
 	//coord must be either 1 (for x), 2 (for y) or 3 (for z)
 
 	//return 0,0 if coord value is out of range
 	if (coord < 1 || coord > 3)
-		return Ogre::Vector2(0, 0);
+		return Vector2(0, 0);
 
 	PolygonSet poly;
 	GetGeometry(poly);
 
 	//get polygon extents
-	Ogre::Vector2 extents = Ogre::Vector2::ZERO;
+	Vector2 extents = Vector2::ZERO;
 	bool firstrun = true;
 	for (size_t i = 0; i < poly.size(); i++)
 	{
-		Ogre::Vector2 extents2 = sbs->GetExtents(poly[i], coord);
+		Vector2 extents2 = sbs->GetExtents(poly[i], coord);
 		if (extents2.x < extents.x || firstrun == true)
 			extents.x = extents2.x;
 		if (extents2.y > extents.y || firstrun == true)
@@ -209,7 +209,7 @@ void Polygon::ChangeHeight(Real newheight)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();
 
-	Ogre::Vector2 extents = GetExtents(2);
+	Vector2 extents = GetExtents(2);
 
 	//modify polygon data
 	int submesh = mesh->FindMatchingSubMesh(material);

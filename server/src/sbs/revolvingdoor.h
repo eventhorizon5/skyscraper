@@ -45,7 +45,7 @@ public:
 	void MoveDoor();
 	bool IsEnabled() { return is_enabled; }
 	void Loop();
-	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void OnHit();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);

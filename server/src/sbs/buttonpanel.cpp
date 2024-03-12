@@ -171,7 +171,7 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 {
 	//create an elevator control (button, switch, knob)
 
-	Ogre::Vector3 position = Ogre::Vector3::ZERO;
+	Vector3 position = Vector3::ZERO;
 
 	//set to default if value is 0
 	if (bwidth == 0)

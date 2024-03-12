@@ -30,12 +30,12 @@ namespace SBS {
 
 Step::Step(Object* parent, const std::string &name, DynamicMesh* wrapper, int max_render_distance) : MeshObject(parent, name, wrapper, "", max_render_distance)
 {
-	vector = Ogre::Vector3::ZERO;
+	vector = Vector3::ZERO;
 	speed = 0;
-	start = Ogre::Vector3::ZERO;
+	start = Vector3::ZERO;
 }
 
-void Step::Move(const Ogre::Vector3 &vector, Real speed)
+void Step::Move(const Vector3 &vector, Real speed)
 {
 	//move step according to vector and speed
 

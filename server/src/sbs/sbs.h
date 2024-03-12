@@ -108,7 +108,7 @@ namespace SBS {
 	class CallStation;
 	class Indicator;
 
-	typedef std::vector<Ogre::Vector3> PolyArray;
+	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
 }
 
@@ -194,7 +194,7 @@ public:
 
 	//public functions
 
-	//SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, Real rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	//SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	SBS(Ogre::SceneManager* mSceneManager);
 	~SBS();
 	void Initialize();
@@ -215,15 +215,15 @@ public:
 	bool DeleteObject(int object);
 	int GetTimerCallbackCount();
 	Real ToLocal(Real remote_value);
-	Ogre::Vector2 ToLocal(const Ogre::Vector2& remote_value);
-	Ogre::Vector3 ToLocal(const Ogre::Vector3& remote_value, bool rescale = true, bool flip_z = true);
+	Vector2 ToLocal(const Vector2& remote_value);
+	Vector3 ToLocal(const Vector3& remote_value, bool rescale = true, bool flip_z = true);
 	Real ToRemote(Real local_value);
-	Ogre::Vector2 ToRemote(const Ogre::Vector2& local_value);
-	Ogre::Vector3 ToRemote(const Ogre::Vector3& local_value, bool rescale = true, bool flip_z = true);
-	Ogre::Vector3 ToGlobal(const Ogre::Vector3 &position);
-	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
-	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
-	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
+	Vector2 ToRemote(const Vector2& local_value);
+	Vector3 ToRemote(const Vector3& local_value, bool rescale = true, bool flip_z = true);
+	Vector3 ToGlobal(const Vector3 &position);
+	Vector3 FromGlobal(const Vector3 &position);
+	Quaternion ToGlobal(const Quaternion &orientation);
+	Quaternion FromGlobal(const Quaternion &orientation);
 	void CreateSky();
 	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
 	bool AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
@@ -233,7 +233,7 @@ public:
 	Wall* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th);
 	Wall* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, PolyArray &varray, Real tw, Real th);
-	Wall* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, Real altitude, Real tw, Real th);
+	Wall* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Vector2> &varray, Real altitude, Real tw, Real th);
 	void AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th);
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
@@ -275,9 +275,9 @@ public:
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0, int stairsnumber = 0);
 	bool RegisterTimerCallback(TimerObject *timer);
 	bool UnregisterTimerCallback(TimerObject *timer);
-	void AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end);
+	void AddFloorAutoArea(Vector3 start, Vector3 end);
 	int GetMeshCount();
-	Sound* AddSound(const std::string &name, const std::string &filename, const Ogre::Vector3 &position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, const Ogre::Vector3 &direction = Ogre::Vector3(0, 0, 0));
+	Sound* AddSound(const std::string &name, const std::string &filename, const Vector3 &position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, const Vector3 &direction = Vector3(0, 0, 0));
 	int GetSoundCount();
 	void IncrementSoundCount();
 	void DecrementSoundCount();
@@ -306,18 +306,18 @@ public:
 	void DeleteMeshHandle(MeshObject* handle);
 	Light* AddLight(const std::string &name, int type);
 	MeshObject* FindMeshObject(const std::string &name);
-	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
+	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
-	Ogre::Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
-	void Cut(Wall *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	Ogre::Vector3 GetPolygonDirection(PolyArray &polygon);
+	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
+	void Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
+	Vector3 GetPolygonDirection(PolyArray &polygon);
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
 	Real GetConfigFloat(const std::string &key, Real default_value);
 	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
-	Ogre::Vector3 ComputeNormal(PolyArray &vertices, Real &D);
-	bool InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test);
+	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
+	bool InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test);
 	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void ShowColliders(bool value);
 	void CacheFilename(const std::string &filename, const std::string &result);
@@ -325,7 +325,7 @@ public:
 	void SetLighting(Real red = 1.0, Real green = 1.0, Real blue = 1.0);
 	void ResetLighting();
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
-	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
+	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, const Vector3 &area_min, const Vector3 &area_max, std::vector<std::string> &action_names);
 	Action* AddAction(const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
 	Action* AddAction(const std::string &name, std::vector<Object*> &action_parents, const std::string &command);
 	std::vector<Action*> GetAction(std::string name);
@@ -342,13 +342,13 @@ public:
 	void AddKey(int keyid, const std::string &name);
 	bool CheckKey(int keyid);
 	void ListKeys();
-	bool MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool X, bool Y, bool Z);
-	bool RotateObject(Object *object, Ogre::Vector3 rotation, Real speed, bool relative, bool X, bool Y, bool Z);
+	bool MoveObject(Object *object, Vector3 position, bool relative, bool X, bool Y, bool Z);
+	bool RotateObject(Object *object, Vector3 rotation, Real speed, bool relative, bool X, bool Y, bool Z);
 	void RegisterControl(Control *control);
 	void UnregisterControl(Control *control);
-	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, Real angle, Real distance);
+	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
 	void ShowFloorList();
-	Ogre::Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
+	Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
 	void ShowSceneNodes(bool value);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
 	void ShowBoundingBoxes(bool value);
@@ -359,7 +359,7 @@ public:
 	int GetMovingWalkwayCount();
 	void IncrementMovingWalkwayCount();
 	void DecrementMovingWalkwayCount();
-	//bool HitBeam(const Ogre::Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Ogre::Vector3 &hit_position);
+	//bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem();
 	bool IsObjectValid(Object* object, std::string type = "");
@@ -373,11 +373,11 @@ public:
 	int GetPersonCount();
 	Person* GetPerson(int number);
 	bool IsInside();
-	bool GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max);
-	bool IsInside(const Ogre::Vector3 &position);
+	bool GetBounds(Vector3 &min, Vector3 &max);
+	bool IsInside(const Vector3 &position);
 	void CutOutsideBoundaries(bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
-	void CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max, bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
-	void SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max);
+	void CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
+	void SetBounds(const Vector3 &area_min, const Vector3 &area_max);
 	bool HasBounds();
 	void ResetState();
 	Model* GetModel(std::string name);
@@ -464,7 +464,7 @@ private:
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
-	Ogre::Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
+	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
 
 	//timer callback array
 	std::vector<TimerObject*> timercallbacks;
@@ -472,8 +472,8 @@ private:
 	//auto area structure
 	struct AutoArea
 	{
-		Ogre::Vector3 start;
-		Ogre::Vector3 end;
+		Vector3 start;
+		Vector3 end;
 		bool inside;
 		int camerafloor;
 	};

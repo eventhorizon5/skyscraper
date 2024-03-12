@@ -205,7 +205,7 @@ DispatchController* CallStation::GetController()
 	return sbs->GetController(controller);
 }
 
-void CallStation::SetPosition(Ogre::Vector3 &position)
+void CallStation::SetPosition(Vector3 &position)
 {
 	position.y += sbs->GetFloor(GetFloor())->GetBase();
 	Object::SetPosition(position);
@@ -411,8 +411,8 @@ void CallStation::ReportElevator(Elevator *elevator)
 
 	//update indicator with direction of elevator
 	std::string Direction = this->GetPanel()->Direction;
-	Ogre::Vector3 ButtonPos = this->GetPanel()->GetPosition();
-	Ogre::Vector3 ShaftPos  = elevator->GetPosition();
+	Vector3 ButtonPos = this->GetPanel()->GetPosition();
+	Vector3 ShaftPos  = elevator->GetPosition();
 
 	if (Direction == "front")
 	{

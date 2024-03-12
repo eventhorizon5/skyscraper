@@ -50,7 +50,7 @@ public:
 	bool SelectFloor(int floor);
 	void SetController(int number);
 	DispatchController* GetController();
-	void SetPosition(Ogre::Vector3 &position);
+	void SetPosition(Vector3 &position);
 	bool ServicesElevator(int elevator);
 	int GetElevatorArrived(int starting_floor, int destination_floor);
 	bool FireService(int value);

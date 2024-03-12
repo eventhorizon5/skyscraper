@@ -37,7 +37,7 @@
 
 namespace SBS {
 
-CameraTexture::CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation) : Object(parent)
+CameraTexture::CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation) : Object(parent)
 {
 	//creates a CameraTexture object
 
@@ -156,7 +156,7 @@ void CameraTexture::SetFOVAngle(Real angle)
 	{
 		Real ratio = (float)camera->getAspectRatio();
 		if (ratio > 0)
-			camera->setFOVy(Ogre::Degree(angle / ratio));
+			camera->setFOVy(Degree(angle / ratio));
 	}
 }
 
@@ -171,7 +171,7 @@ void CameraTexture::SetToDefaultFOV()
 	SetFOVAngle(FOV);
 }
 
-void CameraTexture::LookAt(const Ogre::Vector3 &position)
+void CameraTexture::LookAt(const Vector3 &position)
 {
 	GetSceneNode()->LookAt(position);
 }

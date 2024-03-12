@@ -327,7 +327,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		elev->MotorPosition = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		elev->MotorPosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "queueresets")
@@ -567,7 +567,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		elev->RopePosition = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		elev->RopePosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "ropetexture")
@@ -658,7 +658,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Ogre::Vector3 size = Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		Vector3 size = Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		StoreCommand(elev->CreateCounterweight(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), size, ToFloat(tempdata[7])));
 		return sNextLine;
 	}

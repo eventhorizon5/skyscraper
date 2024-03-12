@@ -53,8 +53,8 @@ public:
 	bool ScaleTexture(const std::string &name, Real x_scale, Real y_scale);
 	bool TransformTexture(const std::string &name, const std::string &type, const std::string &wave_type, Real base, Real frequency, Real phase, Real amplitude);
 	Real AutoSize(Real n1, Real n2, bool iswidth, Real offset, bool enable_force, bool force_mode);
-	void SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int vertindex2, Ogre::Vector2 uv2, int vertindex3, Ogre::Vector2 uv3);
-	void SetTextureMapping2(const std::string &x1, const std::string &y1, const std::string &z1, Ogre::Vector2 uv1, const std::string &x2, const std::string &y2, const std::string &z2, Ogre::Vector2 uv2, const std::string &x3, const std::string &y3, const std::string &z3, Ogre::Vector2 uv3);
+	void SetTextureMapping(int vertindex1, Vector2 uv1, int vertindex2, Vector2 uv2, int vertindex3, Vector2 uv3);
+	void SetTextureMapping2(const std::string &x1, const std::string &y1, const std::string &z1, Vector2 uv1, const std::string &x2, const std::string &y2, const std::string &z2, Vector2 uv2, const std::string &x3, const std::string &y3, const std::string &z3, Vector2 uv3);
 	void ResetTextureMapping(bool todefaults = false);
 	void SetAutoSize(bool x, bool y);
 	void GetAutoSize(bool &x, bool &y);
@@ -68,10 +68,10 @@ public:
 	void FreeTextureImages();
 	int GetTextureCount();
 	int GetMaterialCount();
-	bool GetTextureMapping(PolyArray &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction);
+	bool GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3 &v2, Vector3 &v3, int &direction);
 	void SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool FlipZ, bool rotate);
 	void GetPlanarMapping(bool &flat, bool &FlipX, bool &FlipY, bool &FlipZ, bool &rotate);
-	Ogre::Vector2 CalculateSizing(const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, int direction, Real tw, Real th);
+	Vector2 CalculateSizing(const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, int direction, Real tw, Real th);
 	Ogre::TexturePtr loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, Real threshold = 0.003);
 	void SaveTexture(Ogre::TexturePtr texture, const std::string &filename);
 	std::string ListTextures(bool show_filename = false);
@@ -93,7 +93,7 @@ public:
 	void FreeTextureBoxes();
 	void SetPlanarRotate(bool value);
 	bool GetPlanarRotate();
-	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, PolyArray &vertices, const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3, Real tw, Real th);
+	bool ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, PolyArray &vertices, const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, Real tw, Real th);
 	void EnableLighting(const std::string &material_name, bool value);
 	void EnableShadows(const std::string &material_name, bool value);
 
@@ -110,8 +110,8 @@ private:
 	//texture mapping
 	std::vector<int> MapIndex;
 	std::vector<int> OldMapIndex;
-	std::vector<Ogre::Vector2> MapUV;
-	std::vector<Ogre::Vector2> OldMapUV;
+	std::vector<Vector2> MapUV;
+	std::vector<Vector2> OldMapUV;
 	std::vector<std::string> MapVerts1;
 	std::vector<std::string> MapVerts2;
 	std::vector<std::string> MapVerts3;
@@ -131,7 +131,7 @@ private:
 	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
 	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	void UnloadMaterials();
-	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, Real len1, const Ogre::Vector3 &v2, Real len2);
+	bool ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2);
 
 	//texture information structure
 	struct TextureInfo

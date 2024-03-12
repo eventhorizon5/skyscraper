@@ -37,11 +37,11 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 
 	//first set default values
 	system = sbs->GetSoundSystem();
-	Position = Ogre::Vector3::ZERO;
+	Position = Vector3::ZERO;
 	Volume = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Volume", 1.0);
 	MaxDistance = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", 10000.0);
 	MinDistance =(float) sbs->GetConfigFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
-	Direction = Ogre::Vector3::ZERO;
+	Direction = Vector3::ZERO;
 	SoundLoop = sbs->GetConfigBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->GetConfigInt("Skyscraper.SBS.Sound.Speed", 100);
 	Percent = 0;
@@ -89,7 +89,7 @@ Sound::~Sound()
 
 void Sound::OnMove(bool parent)
 {
-	/*Ogre::Vector3 global_position = sbs->ToGlobal(GetPosition());
+	/*Vector3 global_position = sbs->ToGlobal(GetPosition());
 
 	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
 	FMOD_VECTOR vel = { 0, 0, 0 };
@@ -153,17 +153,17 @@ Real Sound::GetMaximumDistance()
 	return MaxDistance;
 }
 
-void Sound::SetDirection(const Ogre::Vector3 &direction)
+void Sound::SetDirection(const Vector3 &direction)
 {
 	Direction = direction;
-	Ogre::Vector3 global_direction = sbs->GetOrientation() * direction;
+	Vector3 global_direction = sbs->GetOrientation() * direction;
 	//FMOD_VECTOR vec = { (float)global_direction.x, (float)global_direction.y, (float)global_direction.z };
 
 	//if (channel)
 		//channel->set3DConeOrientation(&vec);
 }
 
-Ogre::Vector3 Sound::GetDirection()
+Vector3 Sound::GetDirection()
 {
 	return Direction;
 }

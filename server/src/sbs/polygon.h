@@ -36,29 +36,29 @@ class SBSIMPEXP Polygon : public ObjectBase
 public:
 	MeshObject* mesh;
 	std::vector<Triangle> triangles;
-	Ogre::Plane plane; //plane in remote (Ogre) form, relative positioning
+	Plane plane; //plane in remote (Ogre) form, relative positioning
 
 	//array holding index extents, to get original geometry
 	std::vector<Extents> index_extents;
 
 	//texture mapping matrix and vector
-	Ogre::Matrix3 t_matrix;
-	Ogre::Vector3 t_vector;
+	Matrix3 t_matrix;
+	Vector3 t_vector;
 
 	std::string material; //polygon material
 
-	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane);
+	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane);
 	~Polygon();
-	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
+	void GetTextureMapping(Matrix3 &t_matrix, Vector3 &t_vector);
 	int GetSubMesh();
 	void GetGeometry(PolygonSet &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
-	bool IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal);
-	bool IntersectRay(PolyArray &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	bool IntersectSegmentPlane(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, Real *pr, Ogre::Vector3 &normal);
-	void Move(const Ogre::Vector3 &position, Real speed = 1.0);
+	bool IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal);
+	bool IntersectRay(PolyArray &vertices, const Vector3 &start, const Vector3 &end);
+	bool IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal);
+	void Move(const Vector3 &position, Real speed = 1.0);
 	void Delete();
-	Ogre::Plane GetAbsolutePlane();
-	Ogre::Vector2 GetExtents(int coord);
+	Plane GetAbsolutePlane();
+	Vector2 GetExtents(int coord);
 	void ChangeHeight(Real newheight);
 };
 

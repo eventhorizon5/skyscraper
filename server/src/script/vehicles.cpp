@@ -190,7 +190,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		v->ChassisShift = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		v->ChassisShift = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "chassismesh")
@@ -242,7 +242,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Ogre::Vector3 position = Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToInt(tempdata[2]));
+		Vector3 position = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToInt(tempdata[2]));
 		bool result = v->Create(position);
 		if (result == false)
 			return ScriptError();
@@ -288,12 +288,12 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Ogre::Vector3 connection = Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
-		Ogre::Vector3 direction, axle;
+		Vector3 connection = Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		Vector3 direction, axle;
 		if (params > 7)
 		{
-			direction = Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
-			axle = Ogre::Vector3(ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
+			direction = Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+			axle = Vector3(ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 		}
 		bool result;
 		if (params == 7)

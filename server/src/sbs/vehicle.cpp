@@ -69,11 +69,11 @@ Vehicle::Vehicle(Object *parent, const int number) : Object(parent)
 	mSteering = 0;
 	mSteeringLeft = false;
 	mSteeringRight = false;
-	ChassisShift = Ogre::Vector3::ZERO;
+	ChassisShift = Vector3::ZERO;
 	ChassisScale = 1;
 	WheelScale = 1;
 	vehicle = 0;
-	CameraPoint = Ogre::Vector3::ZERO;
+	CameraPoint = Vector3::ZERO;
 	camera_attached = false;
 	Created = false;
 
@@ -141,7 +141,7 @@ Vehicle::~Vehicle()
 		sbs->GetVehicleManager()->Remove(this);
 }
 
-bool Vehicle::Create(const Ogre::Vector3 &position)
+bool Vehicle::Create(const Vector3 &position)
 {
 	if (Created == true)
 		return ReportError("Vehicle already created");
@@ -174,11 +174,11 @@ bool Vehicle::CreateChassis(Real restitution, Real friction, Real mass, Real lin
 	if (mChassis->Bounds->isNull() == true)
 		return false;
 
-	Ogre::Vector3 bounds = mChassis->Bounds->getHalfSize() * scale;
+	Vector3 bounds = mChassis->Bounds->getHalfSize() * scale;
 
 	//OgreBulletCollisions::BoxCollisionShape* chassisShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	//OgreBulletCollisions::CompoundCollisionShape* compound = new OgreBulletCollisions::CompoundCollisionShape();
-	//compound->addChildShape(chassisShape, sbs->ToRemote(ChassisShift), Ogre::Quaternion::IDENTITY);
+	//compound->addChildShape(chassisShape, sbs->ToRemote(ChassisShift), Quaternion::IDENTITY);
 
 	/*mCarChassis = new OgreBulletDynamics::WheeledRigidBody(GetName() + " Chassis", sbs->mWorld);
 
@@ -204,7 +204,7 @@ bool Vehicle::CreateChassis(Real restitution, Real friction, Real mass, Real lin
 	return true;
 }
 
-bool Vehicle::AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radius, const Ogre::Vector3 &ConnectionPoint, const Ogre::Vector3 &Direction, const Ogre::Vector3 &Axle)
+bool Vehicle::AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radius, const Vector3 &ConnectionPoint, const Vector3 &Direction, const Vector3 &Axle)
 {
 	return false;
 	//if (!mVehicle)
@@ -322,7 +322,7 @@ void Vehicle::AttachCamera(bool value)
 	if (camera_attached == value)
 		return;
 
-	CameraPoint = Ogre::Vector3(0, 5, 0);
+	CameraPoint = Vector3(0, 5, 0);
 	camera_attached = value;
 
 	if (value == true)
@@ -336,7 +336,7 @@ Real Vehicle::GetWidth()
 	if (!mChassis)
 		return 0.0;
 
-	Ogre::Vector3 size = mChassis->Bounds->getSize();
+	Vector3 size = mChassis->Bounds->getSize();
 	if (size.x > size.z)
 		return size.z;
 	else

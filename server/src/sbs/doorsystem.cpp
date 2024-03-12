@@ -455,31 +455,31 @@ void DoorComponent::Move()
 
 	//up movement
 	if (direction == 0)
-		mesh->Move(Ogre::Vector3(0, 1, 0), speed);
+		mesh->Move(Vector3(0, 1, 0), speed);
 
 	//down movement
 	if (direction == 1)
-		mesh->Move(Ogre::Vector3(0, -1, 0), speed);
+		mesh->Move(Vector3(0, -1, 0), speed);
 
 	if (DoorDirection == false)
 	{
 		//left movement
 		if (direction == 2)
-			mesh->Move(Ogre::Vector3(0, 0, -1), speed);
+			mesh->Move(Vector3(0, 0, -1), speed);
 
 		//right movement
 		if (direction == 3)
-			mesh->Move(Ogre::Vector3(0, 0, 1), speed);
+			mesh->Move(Vector3(0, 0, 1), speed);
 	}
 	else
 	{
 		//left movement
 		if (direction == 2)
-			mesh->Move(Ogre::Vector3(-1, 0, 0), speed);
+			mesh->Move(Vector3(-1, 0, 0), speed);
 
 		//right movement
 		if (direction == 3)
-			mesh->Move(Ogre::Vector3(1, 0, 0), speed);
+			mesh->Move(Vector3(1, 0, 0), speed);
 	}
 }
 
@@ -513,17 +513,17 @@ void DoorComponent::Reset(bool open)
 			{
 				Real width = std::abs(extents_max.z - extents_min.z);
 				if (direction == 2)
-					mesh->Move(Ogre::Vector3(0, 0, -(mainwidth + (width - mainwidth) + offset)));
+					mesh->Move(Vector3(0, 0, -(mainwidth + (width - mainwidth) + offset)));
 				else
-					mesh->Move(Ogre::Vector3(0, 0, mainwidth + (width - mainwidth) + offset));
+					mesh->Move(Vector3(0, 0, mainwidth + (width - mainwidth) + offset));
 			}
 			else
 			{
 				Real width = std::abs(extents_max.x - extents_min.x);
 				if (direction == 2)
-					mesh->Move(Ogre::Vector3(-(mainwidth + (width - mainwidth) + offset), 0, 0));
+					mesh->Move(Vector3(-(mainwidth + (width - mainwidth) + offset), 0, 0));
 				else
-					mesh->Move(Ogre::Vector3(mainwidth + (width - mainwidth) + offset, 0, 0));
+					mesh->Move(Vector3(mainwidth + (width - mainwidth) + offset, 0, 0));
 			}
 		}
 		else
@@ -531,9 +531,9 @@ void DoorComponent::Reset(bool open)
 			Real mainheight = wrapper->Height / 2;
 			Real height = std::abs(extents_max.y - extents_min.y);
 			if (direction == 0)
-				mesh->Move(Ogre::Vector3(0, mainheight + (height - mainheight) + offset, 0));
+				mesh->Move(Vector3(0, mainheight + (height - mainheight) + offset, 0));
 			else
-				mesh->Move(Ogre::Vector3(0, -(mainheight + (height - mainheight) + offset), 0));
+				mesh->Move(Vector3(0, -(mainheight + (height - mainheight) + offset), 0));
 		}
 
 		//the door is open now
@@ -733,7 +733,7 @@ void DoorWrapper::ResetState()
 		doors[i]->Reset(false);
 }
 
-void DoorWrapper::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+void DoorWrapper::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	if (parent_door)
 	{

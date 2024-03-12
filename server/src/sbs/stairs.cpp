@@ -49,15 +49,15 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 	StairsNum = number;
 	this->startfloor = startfloor;
 	this->endfloor = endfloor;
-	cutstart = Ogre::Vector2::ZERO;
-	cutend = Ogre::Vector2::ZERO;
+	cutstart = Vector2::ZERO;
+	cutend = Vector2::ZERO;
 	Inside = false;
 	IsEnabled = true;
 	lastfloor = 0;
 	lastfloorset = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = Ogre::Vector3::ZERO;
+	lastposition = Vector3::ZERO;
 	ShowFloors = false;
 	ShowFullStairs = 0;
 
@@ -154,7 +154,7 @@ void Stairwell::EnableWhole(bool value, bool force)
 	IsEnabled = value;
 }
 
-bool Stairwell::IsInside(const Ogre::Vector3 &position)
+bool Stairwell::IsInside(const Vector3 &position)
 {
 	//determine if user is in the stairwell
 
@@ -191,21 +191,21 @@ bool Stairwell::IsInside(const Ogre::Vector3 &position)
 		//check for hit with current floor
 		Real distance = floorptr->FullHeight();
 		if (GetLevel(floor))
-			hit = GetLevel(floor)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			hit = GetLevel(floor)->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 
 		//if no hit, check hit against lower floor
 		if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
 		{
 			distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
 			if (GetLevel(floor - 1))
-				hit = GetLevel(floor - 1)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+				hit = GetLevel(floor - 1)->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
 
 		//if no hit, check hit against starting floor
 		if (hit == false && sbs->GetFloor(startfloor))
 		{
 			distance = position.y - sbs->GetFloor(startfloor)->Altitude;
-			hit = GetLevel(startfloor)->GetMeshObject()->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			hit = GetLevel(startfloor)->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
 	}
 	floorptr = 0;
@@ -218,7 +218,7 @@ bool Stairwell::IsInside(const Ogre::Vector3 &position)
 	return hit;
 }
 
-void Stairwell::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, Real startvoffset, Real endvoffset)
+void Stairwell::CutFloors(bool relative, const Vector2 &start, const Vector2 &end, Real startvoffset, Real endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
@@ -246,9 +246,9 @@ void Stairwell::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre:
 			voffset2 = endvoffset;
 
 		if (relative == true)
-			floorptr->Cut(Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true, false);
+			floorptr->Cut(Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true, false);
 		else
-			floorptr->Cut(Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, false);
+			floorptr->Cut(Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true, false);
 		floorptr = 0;
 	}
 
@@ -258,9 +258,9 @@ void Stairwell::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre:
 	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
-			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
+			sbs->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
 		else
-			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true);
+			sbs->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
 	}
 }
 
@@ -390,7 +390,7 @@ bool Stairwell::IsShowFloor(int floor)
 	return false;
 }
 
-void Stairwell::Check(Ogre::Vector3 position, int current_floor, int previous_floor)
+void Stairwell::Check(Vector3 position, int current_floor, int previous_floor)
 {
 	//check to see if user (camera) is in the stairwell
 
@@ -828,13 +828,13 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 	sbs->ResetDoorwayWalls();
 	if (face_direction == "left" || face_direction == "right")
 	{
-		Cut(1, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
+		Cut(1, Vector3(x1 - 0.5, voffset, z1), Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
+		floorptr->Cut(Vector3(GetPosition().x + x1 - 0.5, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Vector3(GetPosition().x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
 	}
 	else
 	{
-		Cut(1, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
+		Cut(1, Vector3(x1, voffset, z1 - 0.5), Vector3(x2, voffset + height, z2 + 0.5), true, false, 1);
+		floorptr->Cut(Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5), Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5), true, false, true, 2);
 	}
 
 	//create doorway walls
@@ -878,7 +878,7 @@ Door* Stairwell::Level::GetDoor(const std::string &name)
 	return 0;
 }
 
-bool Stairwell::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
+bool Stairwell::Level::Cut(bool relative, const Vector3 &start, const Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's base
@@ -903,9 +903,9 @@ bool Stairwell::Level::Cut(bool relative, const Ogre::Vector3 &start, const Ogre
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(mesh->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->Cut(mesh->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 		else
-			sbs->Cut(mesh->Walls[i], Ogre::Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Ogre::Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->Cut(mesh->Walls[i], Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 
 	return true;
@@ -1007,7 +1007,7 @@ MeshObject* Stairwell::Level::GetMeshObject()
 	return mesh;
 }
 
-Model* Stairwell::Level::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
+Model* Stairwell::Level::AddModel(const std::string &name, const std::string &filename, bool center, Vector3 position, Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 
@@ -1048,7 +1048,7 @@ Control* Stairwell::Level::AddControl(const std::string &name, const std::string
 	return control;
 }
 
-Trigger* Stairwell::Level::AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* Stairwell::Level::AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//triggers are disabled for now
 
@@ -1098,7 +1098,7 @@ void Stairwell::Level::Loop()
 	LoopChildren();
 }
 
-CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);

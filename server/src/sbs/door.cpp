@@ -128,7 +128,7 @@ Door::~Door()
 	}
 }
 
-bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
+bool Door::Open(Vector3 &position, bool playsound, bool force)
 {
 	//position is the camera position, used to check if the door is locked
 	//if force is true, locking/position check will be bypassed
@@ -234,7 +234,7 @@ void Door::MoveDoor()
 		OpenState = false;
 }
 
-void Door::ClickDoor(Ogre::Vector3 &position)
+void Door::ClickDoor(Vector3 &position)
 {
 	//code that runs when a user clicks on a door
 
@@ -255,7 +255,7 @@ void Door::ClickDoor(Ogre::Vector3 &position)
 	}
 }
 
-void Door::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+void Door::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	if (right == false)
 	{
@@ -293,7 +293,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 {
 	//create a door
 
-	Ogre::Vector3 position;
+	Vector3 position;
 	Real x1 = 0, z1 = 0, x2 = 0, z2 = 0;
 
 	//set speed to default value if invalid
@@ -309,7 +309,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 	//set origin to location of the door's hinge/pivot point and set up door coordinates
 	if (face_direction == "left")
 	{
-		position = Ogre::Vector3(CenterX, voffset, CenterZ - (width / 2)); //front
+		position = Vector3(CenterX, voffset, CenterZ - (width / 2)); //front
 		x1 = 0;
 		x2 = 0;
 		z1 = 0;
@@ -317,7 +317,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 	}
 	if (face_direction == "right")
 	{
-		position = Ogre::Vector3(CenterX, voffset, CenterZ + (width / 2)); //back
+		position = Vector3(CenterX, voffset, CenterZ + (width / 2)); //back
 		x1 = 0;
 		x2 = 0;
 		z1 = -width;
@@ -325,7 +325,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 	}
 	if (face_direction == "front")
 	{
-		position = Ogre::Vector3(CenterX + (width / 2), voffset, CenterZ); //right
+		position = Vector3(CenterX + (width / 2), voffset, CenterZ); //right
 		x1 = -width;
 		x2 = 0;
 		z1 = 0;
@@ -333,7 +333,7 @@ DoorWrapper* Door::CreateDoor(bool open_state, const std::string &texture, const
 	}
 	if (face_direction == "back")
 	{
-		position = Ogre::Vector3(CenterX - (width / 2), voffset, CenterZ); //left
+		position = Vector3(CenterX - (width / 2), voffset, CenterZ); //left
 		x1 = 0;
 		x2 = width;
 		z1 = 0;
@@ -428,7 +428,7 @@ DoorWrapper* Door::FinishDoor(bool open_state)
 	{
 		for (int j = 1; j <= 3; j++)
 		{
-			Ogre::Vector2 extents = door->doors[i]->mesh->GetExtents(j, true);
+			Vector2 extents = door->doors[i]->mesh->GetExtents(j, true);
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
 
@@ -482,7 +482,7 @@ DoorWrapper* Door::FinishDoor(bool open_state)
 	//open door on startup (without sound) if specified
 	if (open_state == true)
 	{
-		Ogre::Vector3 pos = GetPosition();
+		Vector3 pos = GetPosition();
 		Open(pos, false, true);
 	}
 

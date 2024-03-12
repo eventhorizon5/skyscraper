@@ -36,35 +36,35 @@ public:
 	void AddChild(SceneNode *scenenode);
 	void RemoveChild(SceneNode *scenenode);
 	void ShowBoundingBox(bool value);
-	void SetPosition(const Ogre::Vector3 &position);
-	void SetPositionRelative(const Ogre::Vector3 &position);
-	Ogre::Vector3 GetPosition(bool relative = false);
-	void SetRotation(const Ogre::Vector3 &rotation);
-	Ogre::Vector3 GetRotation();
+	void SetPosition(const Vector3 &position);
+	void SetPositionRelative(const Vector3 &position);
+	Vector3 GetPosition(bool relative = false);
+	void SetRotation(const Vector3 &rotation);
+	Vector3 GetRotation();
 	void Update();
-	Ogre::Quaternion GetOrientation(bool relative = false);
-	void SetOrientation(const Ogre::Quaternion &q, bool relative = false);
-	void Move(const Ogre::Vector3 &vector, Real speed = 1.0);
+	Quaternion GetOrientation(bool relative = false);
+	void SetOrientation(const Quaternion &q, bool relative = false);
+	void Move(const Vector3 &vector, Real speed = 1.0);
 	void DetachAllObjects();
 	void AttachObject(Ogre::MovableObject *object);
 	void DetachObject(Ogre::MovableObject *object);
 	Real GetScale();
 	void SetScale(Real scale);
-	SceneNode* CreateChild(std::string name, const Ogre::Vector3 &offset = Ogre::Vector3::ZERO);
+	SceneNode* CreateChild(std::string name, const Vector3 &offset = Vector3::ZERO);
 	std::string GetFullName();
 	bool IsRoot();
 	void Pitch(Real &degree);
 	void Yaw(Real &degree);
 	void Roll(Real &degree);
-	Ogre::Vector3 GetDerivedPosition();
-	Ogre::Quaternion GetDerivedOrientation();
-	void SetDirection(const Ogre::Vector3 &direction);
-	void LookAt(const Ogre::Vector3 &point);
+	Vector3 GetDerivedPosition();
+	Quaternion GetDerivedOrientation();
+	void SetDirection(const Vector3 &direction);
+	void LookAt(const Vector3 &point);
 
 private:
 
 	Ogre::SceneNode *node; //node in scene graph
-	Ogre::Vector3 Rotation; //rotation vector
+	Vector3 Rotation; //rotation vector
 };
 
 }

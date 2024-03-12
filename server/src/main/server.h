@@ -62,20 +62,20 @@ public:
 	//SBS::CameraState GetCameraState();
 	//void SetCameraState(const SBS::CameraState &state, bool set_floor = true);
 	bool IsInside();
-	bool IsInside(const Ogre::Vector3 &position);
+	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
 	void AttachCamera(Ogre::Camera *camera, bool init_state = true);
 	void RefreshCamera();
 	void ResetCamera();
 	void RevertMovement();
-	Ogre::Vector3 GetCameraPosition();
+	Vector3 GetCameraPosition();
 	void OnEnter();
 	void OnExit();
 	void CutForEngine(Server *engine);
 	void AddChild(Server *engine);
 	void RemoveChild(Server *engine);
 	void RemoveParent() { parent = 0; }
-	void Move(Ogre::Vector3 &position, bool move_children = false);
+	void Move(Vector3 &position, bool move_children = false);
 	Server* GetParent() { return parent; }
 	bool IsParent(Server *engine, bool recursive = false);
 
@@ -104,9 +104,9 @@ private:
 
 	Ogre::SceneManager* mSceneManager;
 	//FMOD::System *fmodsystem;
-	//Ogre::Vector3 position;
-	//Ogre::Vector3 area_min;
-	//Ogre::Vector3 area_max;
+	//Vector3 position;
+	//Vector3 area_min;
+	//Vector3 area_max;
 	//Real rotation;
 
 	//child engines

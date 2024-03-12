@@ -117,8 +117,8 @@ int main (int argc, char* argv[])
 
 namespace Server {
 
-//Server::Server(Server *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
-Server::Server(Ogre::SceneManager* mSceneManager) //, const Ogre::Vector3 &position, Real rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+//Server::Server(Server *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+Server::Server(Ogre::SceneManager* mSceneManager) //, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//this->frontend = frontend;
 	finish_time = 0;
@@ -352,13 +352,13 @@ std::string Server::GetFilename()
 void Server::StartSim()
 {
 	//get offset of parent engine
-	Ogre::Vector3 offset;
+	Vector3 offset;
 	if (parent)
 		offset = parent->GetSystem()->GetPosition();
 	else
-		offset = Ogre::Vector3::ZERO;
+		offset = Vector3::ZERO;
 
-	//if (position != Ogre::Vector3::ZERO)
+	//if (position != Vector3::ZERO)
 		//Moved = true;
 
 	//Create simulator object
@@ -524,7 +524,7 @@ bool Server::IsInside()
 	return true;
 }
 
-bool Server::IsInside(const Ogre::Vector3 &position)
+bool Server::IsInside(const Vector3 &position)
 {
 	//return true if user is inside the boundaries of this engine context
 
@@ -572,12 +572,12 @@ void Server::RevertMovement()
 	//Simcore->camera->RevertMovement();
 }
 
-Ogre::Vector3 Server::GetCameraPosition()
+Vector3 Server::GetCameraPosition()
 {
 	//get this engine's camera position, in global positioning
 
 	//return Simcore->ToGlobal(Simcore->camera->GetPosition());
-	return Ogre::Vector3::ZERO;
+	return Vector3::ZERO;
 }
 
 void Server::OnEnter()
@@ -613,19 +613,19 @@ void Server::CutForEngine(Server *engine)
 
 	::SBS::SBS *newsimcore = engine->GetSystem();
 
-	Ogre::Vector3 min, max, a, b, c, d, newmin, newmax;
+	Vector3 min, max, a, b, c, d, newmin, newmax;
 
 	//get new engine's boundaries
 	//newsimcore->GetBounds(min, max);
 
-	if (min == Ogre::Vector3::ZERO && max == Ogre::Vector3::ZERO)
+	if (min == Vector3::ZERO && max == Vector3::ZERO)
 		return;
 
 	//get global positions of engine's boundaries, in 4 points representing a rectangle
-	a = newsimcore->ToGlobal(Ogre::Vector3(min.x, min.y, min.z));
-	b = newsimcore->ToGlobal(Ogre::Vector3(min.x, min.y, max.z));
-	c = newsimcore->ToGlobal(Ogre::Vector3(max.x, max.y, max.z));
-	d = newsimcore->ToGlobal(Ogre::Vector3(max.x, max.y, min.z));
+	a = newsimcore->ToGlobal(Vector3(min.x, min.y, min.z));
+	b = newsimcore->ToGlobal(Vector3(min.x, min.y, max.z));
+	c = newsimcore->ToGlobal(Vector3(max.x, max.y, max.z));
+	d = newsimcore->ToGlobal(Vector3(max.x, max.y, min.z));
 
 	//convert global positions to this engine's relative positions
 	a = Simcore->FromGlobal(a);
@@ -672,7 +672,7 @@ void Server::RemoveChild(Server *engine)
 	}
 }
 
-void Server::Move(Ogre::Vector3 &position, bool move_children)
+void Server::Move(Vector3 &position, bool move_children)
 {
 	//move this engine
 	//if move_children is true, recursively call this function on all children

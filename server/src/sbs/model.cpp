@@ -35,13 +35,13 @@
 
 namespace SBS {
 
-Model::Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass) : Object(parent)
+Model::Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass) : Object(parent)
 {
 	//loads a 3D model into the simulation
 
 	//set up SBS object
 	SetValues("Model", name, false);
-	Offset = Ogre::Vector3::ZERO;
+	Offset = Vector3::ZERO;
 	is_key = false;
 	KeyID = 0;
 	global = IsGlobal();
@@ -278,7 +278,7 @@ void Model::OnInit()
 	}
 }
 
-void Model::OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+void Model::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	if (right == false)
 	{

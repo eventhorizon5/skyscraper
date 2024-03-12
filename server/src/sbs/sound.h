@@ -39,8 +39,8 @@ public:
 	void SetDistances(Real min, Real max);
 	Real GetMinimumDistance();
 	Real GetMaximumDistance();
-	void SetDirection(const Ogre::Vector3 &direction);
-	Ogre::Vector3 GetDirection();
+	void SetDirection(const Vector3 &direction);
+	Vector3 GetDirection();
 	void SetLoopState(bool value);
 	bool GetLoopState();
 	void Pause(bool value = true);
@@ -79,12 +79,12 @@ private:
 	SoundSystem *system;
 
 	// sound parameters
-	Ogre::Vector3 Position;
-	Ogre::Vector3 Velocity;
+	Vector3 Position;
+	Vector3 Velocity;
 	float Volume;
 	float MaxDistance;
 	float MinDistance;
-	Ogre::Vector3 Direction;
+	Vector3 Direction;
 	bool SoundLoop;
 	int Speed;
 	float Percent;

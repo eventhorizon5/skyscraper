@@ -55,6 +55,14 @@
 #endif
 
 typedef Ogre::Real Real;
+typedef Ogre::Vector3 Vector3;
+typedef Ogre::Vector2 Vector2;
+typedef Ogre::Quaternion Quaternion;
+typedef Ogre::Degree Degree;
+typedef Ogre::Radian Radian;
+typedef Ogre::Ray Ray;
+typedef Ogre::Matrix3 Matrix3;
+typedef Ogre::Plane Plane;
 
 namespace SBS {
 
@@ -88,8 +96,8 @@ SBSIMPEXP float Log2(float number);
 SBSIMPEXP double Log2(double number);
 SBSIMPEXP float Round(float number, int decimal_places = 0);
 SBSIMPEXP double Round(double number, int decimal_places = 0);
-SBSIMPEXP Ogre::Vector3 Round(const Ogre::Vector3 &value, int decimal_places = 0);
-SBSIMPEXP Ogre::Vector2 Round(const Ogre::Vector2 &value, int decimal_places = 0);
+SBSIMPEXP Vector3 Round(const Vector3 &value, int decimal_places = 0);
+SBSIMPEXP Vector2 Round(const Vector2 &value, int decimal_places = 0);
 SBSIMPEXP bool IsBoolean(std::string string);
 SBSIMPEXP Real ToFloat(const std::string &string);
 SBSIMPEXP int ToInt(const std::string &string);

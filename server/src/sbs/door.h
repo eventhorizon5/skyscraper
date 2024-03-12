@@ -44,14 +44,14 @@ public:
 	//Door(Object *parent, DynamicMesh *wrapper, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate);
 	Door(Object *parent, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool rotate);
 	~Door();
-	bool Open(Ogre::Vector3 &position, bool playsound = true, bool force = false);
+	bool Open(Vector3 &position, bool playsound = true, bool force = false);
 	void Close(bool playsound = true);
 	bool IsOpen();
 	void Enabled(bool value);
 	bool IsEnabled() { return is_enabled; }
 	void Loop();
-	void ClickDoor(Ogre::Vector3 &position);
-	void OnClick(Ogre::Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	void ClickDoor(Vector3 &position);
+	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool GetDoorChanged();

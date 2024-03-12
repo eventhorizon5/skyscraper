@@ -120,10 +120,10 @@ void Light::SetAttenuation(Real att_range, Real att_constant, Real att_linear, R
 void Light::SetSpotlightRange(Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff)
 {
 	if (Type == 2)
-		light->setSpotlightRange(Ogre::Degree(spot_inner_angle), Ogre::Degree(spot_outer_angle), spot_falloff);
+		light->setSpotlightRange(Degree(spot_inner_angle), Degree(spot_outer_angle), spot_falloff);
 }
 
-void Light::SetDirection(const Ogre::Vector3 &direction)
+void Light::SetDirection(const Vector3 &direction)
 {
 	GetSceneNode()->SetDirection(direction);
 }

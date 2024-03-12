@@ -68,7 +68,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	DirMessageSound = false;
 	DoorMessageSound = false;
 	Fan = true;
-	MusicPosition = Ogre::Vector3::ZERO;
+	MusicPosition = Vector3::ZERO;
 	Height = 0;
 	HeightSet = false;
 	lastdoor_result = 0;
@@ -99,7 +99,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	FirstRun = true;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = Ogre::Vector3::ZERO;
+	lastposition = Vector3::ZERO;
 	lastfloor = 0;
 	lastfloorset = false;
 	StartingFloor = 0;
@@ -1751,7 +1751,7 @@ bool ElevatorCar::ShaftDoorsExist(int number, int floor)
 	return false;
 }
 
-Sound* ElevatorCar::AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Ogre::Vector3 direction)
+Sound* ElevatorCar::AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Vector3 direction)
 {
 	//create a sound object
 	Sound *sound = new Sound(this, name, false);
@@ -1943,9 +1943,9 @@ Door* ElevatorCar::AddDoor(std::string name, const std::string &open_sound, cons
 
 	//cut area
 	if (face_direction == "left" || face_direction == "right")
-		CutAll(Ogre::Vector3(x1 - 1, GetBase(true) + voffset, z1), Ogre::Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
+		CutAll(Vector3(x1 - 1, GetBase(true) + voffset, z1), Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
 	else
-		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
+		CutAll(Vector3(x1, GetBase(true) + voffset, z1 - 1), Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 	*/
 
 	std::string number = ToString((int)StdDoorArray.size());
@@ -2218,7 +2218,7 @@ Light* ElevatorCar::GetLight(const std::string &name)
 	return 0;
 }
 
-Model* ElevatorCar::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
+Model* ElevatorCar::AddModel(const std::string &name, const std::string &filename, bool center, Vector3 position, Vector3 rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -2290,12 +2290,12 @@ Control* ElevatorCar::AddControl(const std::string &name, const std::string &sou
 	//add a control
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
-	control->Move(Ogre::Vector3(CenterX, voffset, CenterZ));
+	control->Move(Vector3(CenterX, voffset, CenterZ));
 	ControlArray.push_back(control);
 	return control;
 }
 
-Trigger* ElevatorCar::AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* ElevatorCar::AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
@@ -2757,14 +2757,14 @@ Real ElevatorCar::SetHeight()
 		HeightSet = true;
 
 		//position sounds at top of elevator car
-		Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
+		Vector3 top = Vector3(0, Height, 0);
 		idlesound->SetPositionRelative(top);
 		alarm->SetPositionRelative(top);
 		floorbeep->SetPositionRelative(top);
 		announcesnd->SetPositionRelative(top);
 
 		//set default music position to elevator height
-		if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
+		if (MusicPosition == Vector3(0, 0, 0) && Height > 0)
 			MusicPosition = top;
 		musicsound->SetPositionRelative(MusicPosition);
 	}
@@ -2772,7 +2772,7 @@ Real ElevatorCar::SetHeight()
 	return Height;
 }
 
-bool ElevatorCar::IsInCar(const Ogre::Vector3 &position, bool camera)
+bool ElevatorCar::IsInCar(const Vector3 &position, bool camera)
 {
 	//determine if the given 3D position is inside the car
 
@@ -2797,7 +2797,7 @@ bool ElevatorCar::IsInCar(const Ogre::Vector3 &position, bool camera)
 	{
 		if (Mesh->InBoundingBox(position, false) == true)
 		{
-			if (Mesh->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
+			if (Mesh->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
 				if (camera == true)
 					CameraOffset = position.y - GetPosition().y;
@@ -2826,7 +2826,7 @@ bool ElevatorCar::IsInCar(const Ogre::Vector3 &position, bool camera)
 	return false;
 }
 
-bool ElevatorCar::Check(Ogre::Vector3 &position)
+bool ElevatorCar::Check(Vector3 &position)
 {
 	//check to see if user (camera) is in the car
 
@@ -3015,7 +3015,7 @@ void ElevatorCar::SetFloor(int floor, bool move_parent)
 	else
 	{
 		//move just this car
-		Ogre::Vector3 vector (0, altitude - GetPosition().y, 0);
+		Vector3 vector (0, altitude - GetPosition().y, 0);
 		Move(vector);
 	}
 }
@@ -3175,7 +3175,7 @@ void ElevatorCar::FlashIndicators(bool value)
 		FloorIndicatorArray[i]->Flash(value);
 }
 
-CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int quality, Real fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
