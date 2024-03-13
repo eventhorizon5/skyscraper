@@ -24,7 +24,7 @@
 #include "skyscraper.h"
 #include "sbs.h"
 #include "camera.h"
-#include "debugpanel.h"
+#include "gui/debugpanel.h"
 #include "scriptproc.h"
 #include "enginecontext.h"
 

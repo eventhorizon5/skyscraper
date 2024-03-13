@@ -35,7 +35,7 @@
 #include "texture.h"
 #include "floor.h"
 #include "random.h"
-#include "textwindow.h"
+#include "gui/textwindow.h"
 #include "scriptproc.h"
 #include "section.h"
 

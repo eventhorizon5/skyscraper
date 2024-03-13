@@ -57,6 +57,7 @@ find_package(Caelum REQUIRED)
 
 file(GLOB FRONTEND_FILES
 	src/frontend/*.cpp
+	src/frontend/gui/*.cpp
 )
  
 file(GLOB SCRIPTPROC_FILES
