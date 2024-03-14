@@ -228,5 +228,5 @@ Off
 7. Contact
 
 Bug-Reports, suggestions, and requests should be posted to GitHub
-I can be contacted directly at ryan@thoryk.com
+I can be contacted directly at ryan@skyscrapersim.net
 
