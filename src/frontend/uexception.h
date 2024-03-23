@@ -9,7 +9,7 @@
 
 #include <windows.h>
 #include "stackwalker.h"
-#include "textwindow.h"
+#include "gui/textwindow.h"
 
 namespace Skyscraper {
 
