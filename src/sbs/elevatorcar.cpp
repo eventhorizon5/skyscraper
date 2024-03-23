@@ -111,6 +111,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	GotoFloor = false;
 	LateDirection = 0;
 	last_music_direction = 0;
+	MessageOnMove = false;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -2630,10 +2631,17 @@ bool ElevatorCar::PlayMessageSound(bool type)
 		if (UseDirMessageSounds == false || DirMessageSound == true)
 			return false;
 
-		int direction = parent->LastChimeDirection;
+		int direction = 0;
 
-		if (parent->LastChimeDirection == 0)
-			direction = parent->LastQueueDirection;
+		if (MessageOnMove == false)
+		{
+			direction = parent->LastChimeDirection;
+
+			if (parent->LastChimeDirection == 0)
+				direction = parent->LastQueueDirection;
+		}
+		else
+			direction = parent->ActiveDirection;
 
 		if (direction == 1)
 		{

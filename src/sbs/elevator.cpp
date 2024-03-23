@@ -1527,6 +1527,13 @@ void Elevator::MoveElevatorToFloor()
 			departure_delay->Stop();
 		}
 
+		//play directional message sound if MessageOnDoor is false
+		for (size_t i = 0; i < Cars.size(); i++)
+		{
+			if (Cars[i]->MessageOnMove == true)
+				Cars[i]->PlayMessageSound(true);
+		}
+
 		PlayStartingSounds();
 	}
 

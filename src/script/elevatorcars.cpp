@@ -785,6 +785,14 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(true, false, value);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 13) == "messageonmove")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		car->MessageOnMove = ToBool(value);
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 11) == "openmessage")
 	{
 		if (equals == false)

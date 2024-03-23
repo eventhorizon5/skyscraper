@@ -5483,21 +5483,28 @@ filename,
 
 
 
-          = doorsclosing.wav</font></p>
-      <p align="left"><strong>28. Music</strong> - the sound file to
+          = doorsclosing.wav<br>
+        </font></p>
+      <p align="left"><strong>28. MessageOnMove</strong> - if set to
+        true, the Up/Down messages will be played when the elevator
+        starts moving, otherwise it'll play after the doors open.&nbsp;
+        The default is false.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">MessageOnMove
+          = true</font></p>
+      <p align="left"><strong>29. Music</strong> - the sound file to
         play for the elevator car music in both movement directions -
         the sound is automatically looped. There is no default; if this
         is set, the sound will be automatically enabled. <br>
         Example: <font size="2" face="Courier New, Courier, mono">Music
           = musicfile.wav</font></p>
-      <p align="left"><strong>29. MusicUp</strong> - the sound file to
+      <p align="left"><strong>30. MusicUp</strong> - the sound file to
         play for the elevator car music in the up direction - the sound
         is automatically looped. There is no default; if this is set,
         the sound will be automatically enabled. <br>
         Example: <font size="2" face="Courier New, Courier, mono">MusicUp
 
           = musicfile.wav</font></p>
-      <p align="left"><strong>30. MusicDown</strong> - the sound file to
+      <p align="left"><strong>31. MusicDown</strong> - the sound file to
         play for the elevator car music in the down direction - the
         sound is automatically looped. There is no default; if this is
         set, the sound will be automatically enabled. <br>
@@ -5505,7 +5512,7 @@ filename,
 
           = musicfile.wav</font></p>
       <strong></strong>
-      <p align="left"><strong>31. NudgeSound</strong> - the sound file
+      <p align="left"><strong>32. NudgeSound</strong> - the sound file
         to play while in nudge mode. Default is <em>buzz.wav</em>.
         Leave the filename field blank for no sound. This must be
         specified after the CreateCar command.<br>
@@ -5549,12 +5556,12 @@ filename,
 
 
           1 = buzz.wav</font></p>
-      <p align="left"><strong>32. Doors</strong> - sets the number of
+      <p align="left"><strong>33. Doors</strong> - sets the number of
         doors the elevator car will have. The default is 1. Set to 0 in
         order to have a doorless elevator car.<br>
         Example: <font size="2" face="Courier New, Courier, mono">Doors
           = 2</font></p>
-      <p align="left"><strong>33. MusicPosition</strong> - sets the
+      <p align="left"><strong>34. MusicPosition</strong> - sets the
         position of the music sound emitter relative of the elevator
         car's position. If this command is not specified, it'll be
         placed in the center of the elevator car on the ceiling.<br>
@@ -5580,7 +5587,7 @@ filename,
           = <em>x, y, z</em><br>
         </font>Example: <font size="2" face="Courier New, Courier,
           mono">MusicPosition = 0, 8, 0</font></p>
-      <p align="left"><strong>34. MusicOn</strong> - Enables or disables
+      <p align="left"><strong>35. MusicOn</strong> - Enables or disables
         music on start. Default is true.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">MusicOn
 
@@ -5602,7 +5609,7 @@ filename,
 
 
           = false</font></p>
-      <p align="left"><strong>35. MusicOnMove</strong> - Determines if
+      <p align="left"><strong>36. MusicOnMove</strong> - Determines if
         music should only be played while the elevator is moving or not.
         Default is false.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">MusicOnMove
@@ -5625,7 +5632,7 @@ filename,
 
 
           = true</font></p>
-      <p align="left"><strong>36. DisplayFloors</strong> - sets the
+      <p align="left"><strong>37. DisplayFloors</strong> - sets the
         floors that will be displayed by the elevator car's indicators.
         This command uses the same syntax as the ServicedFloors command.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">DisplayFloors
@@ -5648,7 +5655,7 @@ filename,
 
 
           = <em>0, 9, 19, 29</em></font></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>37.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>38.
 
 
 
@@ -5690,7 +5697,7 @@ filename,
 
 
           = false</font></p>
-      <p align="left"><strong>38. DoorSensor</strong> - enable or
+      <p align="left"><strong>39. DoorSensor</strong> - enable or
         disable the door sensor (electric eye), which is a trigger
         object placed in the elevator door area. Default is enabled for
         automatic doors. A second parameter specifies the sound file to
@@ -5747,7 +5754,7 @@ filename,
         action named "Elevator 1:Car 1:sensor", and the action would do
         a "playsound" command on the sound you created.<br>
       </p>
-      <p align="left"><strong>39. CarEmergencyStopSound</strong> - the
+      <p align="left"><strong>40. CarEmergencyStopSound</strong> - the
         sound file to play for the elevator car when an emergency stop
         is initiated. Leave the filename field blank to use the normal
         car stop sound, if specified. By default no sound is played.<br>
@@ -5771,7 +5778,7 @@ filename,
 
 
           = emergstop_car.wav</font></p>
-      <p align="left"><strong>40. IndependentService</strong> - enables
+      <p align="left"><strong>41. IndependentService</strong> - enables
         independent service mode for the elevator, and makes this car
         the active car for the mode.<br>
         Example: <font size="2" face="Courier New, Courier, mono">IndependentService
@@ -5794,7 +5801,7 @@ filename,
 
 
           = true</font></p>
-      <p align="left"><strong>41. FireService2</strong> - sets the fire
+      <p align="left"><strong>42. FireService2</strong> - sets the fire
         service phase 2 mode that the elevator will start with, and
         makes this car the active car for the mode. Default is 0. Values
         are 0 for off, 1 for on, 2 for hold.<br>
