@@ -69,6 +69,7 @@ public:
 	bool UseDoorMessageSounds; //true if door message sounds should be used
 	bool MusicOn; //music enabled status
 	bool MusicOnMove; //true if music should only play during move
+	bool MusicAlwaysOn; //true if music should always be played, and the on/off state should be volume-based
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 	Real CameraOffset; //camera vertical offset
 	int StartingFloor; //car starting floor

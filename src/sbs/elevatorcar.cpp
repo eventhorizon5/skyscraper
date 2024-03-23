@@ -95,6 +95,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MusicDown = sbs->GetConfigString("Skyscraper.SBS.Elevator.Car.MusicDown", "");
 	MusicOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.MusicOn", true);
 	MusicOnMove = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.MusicOnMove", false);
+	MusicAlwaysOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.MusicAlwaysOn", false);
 	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Car.AutoEnable", true);
 	CameraOffset = 0;
 	FirstRun = true;
@@ -700,14 +701,72 @@ void ElevatorCar::Loop()
 		}
 	}
 
-	//play music sound if in elevator, or if doors open
+	//music processing
 	if (MusicUp != "" || MusicDown != "")
 	{
-		if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && parent->IsMoving == true) || MusicOnMove == false))
+		if (MusicAlwaysOn == false) //standard mode
 		{
-			if (parent->InServiceMode() == false)
+			//play music sound if in elevator, or if doors open
+			if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && parent->IsMoving == true) || MusicOnMove == false))
 			{
-				if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+				if (parent->InServiceMode() == false)
+				{
+					if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+					{
+						if (sbs->Verbose)
+							Report("playing music");
+
+						int direction = parent->ActiveDirection;
+
+						//load music if not already loaded, or if music direction has changed
+						if (musicsound->IsLoaded() == false || (last_music_direction != direction && MusicOn == true))
+						{
+							if (direction == 0 && last_music_direction != 0)
+								direction = last_music_direction;
+
+							if (direction >= 0)
+								musicsound->Load(MusicUp);
+							else
+								musicsound->Load(MusicDown);
+
+							last_music_direction = direction;
+						}
+
+						musicsound->SetLoopState(true);
+						musicsound->Play(false);
+					}
+				}
+			}
+			else
+			{
+				if ((MusicOn == false || parent->InServiceMode() == true || (MusicOnMove == true && parent->IsMoving == false)) && musicsound->IsPlaying() == true)
+				{
+					if (sbs->Verbose)
+						Report("stopping music");
+					musicsound->Pause();
+				}
+				else if (InCar() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
+				{
+					//turn off music if outside elevator car and doors are closed
+					if (sbs->Verbose)
+						Report("stopping music");
+					musicsound->Pause();
+				}
+				else if (MusicOn == true && MusicOnMove == false && musicsound->IsPlaying() == true)
+				{
+					//stop music if elevator changes direction while music is on
+					if (last_music_direction != parent->ActiveDirection && parent->ActiveDirection != 0)
+						musicsound->Pause();
+				}
+			}
+		}
+		else if (MusicAlwaysOn == true) //always-on mode
+		{
+			if (musicsound->IsPlaying() == false && MusicOn == true && MusicOnMove == false)
+			{
+				//enable music if in always-on mode
+
+				if (parent->InServiceMode() == false)
 				{
 					if (sbs->Verbose)
 						Report("playing music");
@@ -729,30 +788,26 @@ void ElevatorCar::Loop()
 					}
 
 					musicsound->SetLoopState(true);
+					musicsound->SetVolume(0.0);
 					musicsound->Play(false);
 				}
 			}
-		}
-		else
-		{
-			if ((MusicOn == false || parent->InServiceMode() == true || (MusicOnMove == true && parent->IsMoving == false)) && musicsound->IsPlaying() == true)
-			{
-				if (sbs->Verbose)
-					Report("stopping music");
-				musicsound->Pause();
-			}
-			else if (InCar() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
-			{
-				//turn off music if outside elevator car and doors are closed
-				if (sbs->Verbose)
-					Report("stopping music");
-				musicsound->Pause();
-			}
 			else if (MusicOn == true && MusicOnMove == false && musicsound->IsPlaying() == true)
 			{
-				//stop music if elevator changes direction while music is on
 				if (last_music_direction != parent->ActiveDirection && parent->ActiveDirection != 0)
+				{
+					//stop music if elevator changes direction while music is on
 					musicsound->Pause();
+				}
+				else
+				{
+					//manage music volume state
+					//(turn on volume only if inside the elevator, or if the doors are open)
+					if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+						musicsound->SetVolume(1.0);
+					else
+						musicsound->SetVolume(0.0);
+				}
 			}
 		}
 	}

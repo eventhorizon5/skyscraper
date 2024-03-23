@@ -849,6 +849,14 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicOn = ToBool(value);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 13) == "musicalwayson")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		car->MusicAlwaysOn = ToBool(value);
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 11) == "musiconmove")
 	{
 		if (equals == false)
