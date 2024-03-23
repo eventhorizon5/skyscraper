@@ -59,7 +59,8 @@ public:
 	std::string DownMessageSound; //sound to play with message of elevator's direction if going down
 	std::string OpenMessageSound; //sound to play with message of elevator's doors are opening
 	std::string CloseMessageSound; //sound to play with message of elevator's doors are closing
-	std::string Music; //car music sound to play
+	std::string MusicUp; //car up music sound to play
+	std::string MusicDown; //car down music sound to play
 	std::string EmergencyStopSound; //car emergency stop sound
 	bool AlarmActive; //true if alarm is active
 	bool UseFloorBeeps; //true if floor beeps should be used
@@ -271,6 +272,7 @@ private:
 	bool FirstRun; //used for setting first-run items in the run loop
 	int lastfloor;
 	bool lastfloorset;
+	int last_music_direction;
 
 	//internal data for door open/close hold feature
 	int doorhold_direction;

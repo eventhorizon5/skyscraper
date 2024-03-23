@@ -815,7 +815,30 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		//check to see if file exists
 		parent->CheckFile("data/" + value);
 
-		car->Music = value;
+		car->MusicUp = value;
+		car->MusicDown = value;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 7) == "musicup")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		car->MusicUp = value;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "musicdown")
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		parent->CheckFile("data/" + value);
+
+		car->MusicDown = value;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "musicon ")
