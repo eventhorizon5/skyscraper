@@ -329,6 +329,7 @@ private:
 	void ProcessGotoFloor(int floor, int direction);
 	void DoSetControls();
 	void SameFloorArrival(int floor, int direction);
+	void ThreadWait();
 
 	//motor sound objects
 	Sound *motorsound;
@@ -363,6 +364,7 @@ private:
 	bool SoundsQueued;
 
 	std::thread ex;
+	bool Shutdown;
 
 };
 

@@ -539,6 +539,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	wrapper_selfcreate = false;
 	model_loaded = false;
 	Bounds = new Ogre::AxisAlignedBox();
+	needs_prepare = false;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -603,6 +604,9 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			CreateBoxCollider();
 		}
 	}
+
+	//enable update runloop
+	EnableLoop(true);
 }
 
 MeshObject::~MeshObject()
@@ -633,6 +637,13 @@ MeshObject::~MeshObject()
 	if (Bounds)
 		delete Bounds;
 	Bounds = 0;
+}
+
+void MeshObject::Loop()
+{
+	if (needs_prepare == true)
+		PrepareQueued();
+	needs_prepare = false;
 }
 
 void MeshObject::GetBounds()
@@ -1137,7 +1148,14 @@ void MeshObject::Prepare(bool force)
 	if (prepared == true && force == false)
 		return;
 
+	needs_prepare = true;
+}
+
+void MeshObject::PrepareQueued()
+{
 	//set up bounding box
+	sbs->RenderWait = true;
+
 	if (model_loaded == false)
 	{
 		for (size_t i = 0; i < Submeshes.size(); i++)
@@ -1151,6 +1169,7 @@ void MeshObject::Prepare(bool force)
 	MeshWrapper->NeedsUpdate(this);
 
 	prepared = true;
+	sbs->RenderWait = false;
 }
 
 int MeshObject::FindMatchingSubMesh(const std::string &material)
@@ -1878,6 +1897,8 @@ Wall* MeshObject::FindPolygon(const std::string &name, int &index)
 
 void MeshObject::OnMove(bool parent)
 {
+	sbs->RenderWait = true;
+
 	if (collider_node)
 		collider_node->Update();
 
@@ -1886,10 +1907,14 @@ void MeshObject::OnMove(bool parent)
 
 	if (UsingDynamicBuffers() == true)
 		MeshWrapper->UpdateVertices(this);
+
+	sbs->RenderWait = false;
 }
 
 void MeshObject::OnRotate(bool parent)
 {
+	sbs->RenderWait = true;
+
 	if (collider_node)
 		collider_node->Update();
 
@@ -1903,6 +1928,8 @@ void MeshObject::OnRotate(bool parent)
 
 	if (UsingDynamicBuffers() == true)
 		MeshWrapper->UpdateVertices(this);
+
+	sbs->RenderWait = false;
 }
 
 int MeshObject::GetSubmeshCount()

@@ -612,4 +612,12 @@ bool EngineContext::IsParent(EngineContext *engine, bool recursive)
 	return false;
 }
 
+bool EngineContext::NeedWait()
+{
+	if (!Simcore)
+		return false;
+
+	return Simcore->RenderWait;
+}
+
 }

@@ -192,6 +192,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent), ex{}
 	WeightRopeMesh = 0;
 	RopeMesh = 0;
 	Error = false;
+	Shutdown = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -218,6 +219,10 @@ Elevator::Elevator(Object *parent, int number) : Object(parent), ex{}
 
 Elevator::~Elevator()
 {
+	//shutdown runloop thread
+	Shutdown = true;
+	ex.join();
+
 	//delete counterweight and rope meshes
 	if (sbs->Verbose)
 		Report("deleting meshes");
@@ -1252,7 +1257,10 @@ void Elevator::Loop()
 		}
 
 		//prevent thread from taking up all of the CPU
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		ThreadWait();
+
+		if (Shutdown == true)
+			break;
 	}
 }
 
@@ -4806,6 +4814,11 @@ bool Elevator::GetCallStatus(int floor, bool &up, bool &down)
 			return result;
 	}
 	return false;
+}
+
+void Elevator::ThreadWait()
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 }

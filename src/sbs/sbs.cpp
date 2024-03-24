@@ -170,6 +170,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	MovingWalkwayCount = 0;
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Headless = false;
+	RenderWait = false;
+	Waiting = false;
 
 	camera = 0;
 	Buildings = 0;
@@ -522,6 +524,11 @@ void SBS::Loop()
 	//Main simulator loop
 	SBS_PROFILE("SBS::Loop");
 
+	if (RenderWait == true && Waiting == true)
+		return;
+
+	Waiting = false;
+
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
 
@@ -595,6 +602,9 @@ void SBS::Loop()
 
 	//process camera loop
 	camera->Loop();
+
+	if (RenderWait == true)
+		Waiting = true;
 }
 
 void SBS::CalculateFrameRate()

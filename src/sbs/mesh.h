@@ -113,6 +113,7 @@ public:
 	void GetBounds();
 	void ChangeHeight(Real newheight);
 	void EnableShadows(bool value);
+	void Loop();
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<SubMesh> Submeshes; //submeshes
@@ -135,6 +136,8 @@ private:
 	bool prepared;
 	bool wrapper_selfcreate;
 	bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
+	void PrepareQueued();
+	bool needs_prepare;
 };
 
 }

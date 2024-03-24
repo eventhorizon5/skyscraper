@@ -191,6 +191,8 @@ public:
 	bool RandomActivity; //random activity is enabled
 	int InstanceNumber; //SBS engine instance number
 	bool Headless; //true if running in headless mode
+	bool RenderWait; //if true, pause the render to wait for updates
+	bool Waiting;
 
 	//public functions
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);

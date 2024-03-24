@@ -29,6 +29,8 @@
 
 namespace SBS {
 
+std::mutex move_mtx;
+
 SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 {
 	SetName(name);
@@ -242,9 +244,22 @@ void SceneNode::Move(const Vector3 &vector, Real speed)
 		return;
 
 	Vector3 v = vector * speed;
+	move_mtx.lock();
+
+	//wait for render lock
+	/*sbs->RenderWait = true;
+	while (true)
+	{
+		if (sbs->Waiting == false)
+			ThreadWait();
+		else
+			break;
+	}*/
+
 	node->translate(sbs->ToRemote(v));
 
 	Update();
+	move_mtx.unlock();
 }
 
 void SceneNode::AttachObject(Ogre::MovableObject *object)

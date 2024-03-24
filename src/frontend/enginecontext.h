@@ -74,6 +74,7 @@ public:
 	void Move(Vector3 &position, bool move_children = false);
 	EngineContext* GetParent() { return parent; }
 	bool IsParent(EngineContext *engine, bool recursive = false);
+	bool NeedWait();
 
 private:
 

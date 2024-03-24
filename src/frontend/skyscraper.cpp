@@ -551,6 +551,10 @@ bool Skyscraper::Render()
 	if (Headless == true)
 		return true;
 
+	//don't process rendering if NeedWait result is true
+	if (NeedWait() == true)
+		return true;
+
 	// Render to the frame buffer
 	try
 	{
@@ -2835,6 +2839,19 @@ void Skyscraper::ReInit()
 std::string Skyscraper::GetDataPath()
 {
 	return data_path;
+}
+
+bool Skyscraper::NeedWait()
+{
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		if (!engines[i])
+			continue;
+
+		if (engines[i]->NeedWait() == true)
+			return true;
+	}
+	return false;
 }
 
 }
