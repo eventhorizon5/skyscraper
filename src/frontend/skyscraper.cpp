@@ -1026,6 +1026,10 @@ bool Skyscraper::Loop()
 	ProfileManager::Reset();
 	ProfileManager::Increment_Frame_Counter();
 
+	//console loop
+	if (console)
+		console->Loop();
+
 	//main menu routine
 	if (StartupRunning == true)
 	{

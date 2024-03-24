@@ -50,6 +50,7 @@ class Console: public wxFrame
 		wxTextCtrl* tConsole;
 		//*)
 		void Write(const std::string &message);
+		void Loop();
 
 	protected:
 
@@ -73,6 +74,7 @@ class Console: public wxFrame
 
 		SBS::SBS *Simcore;
 		Skyscraper *skyscraper;
+		std::vector<std::string> appendtext;
 
 		DECLARE_EVENT_TABLE()
 };

@@ -144,15 +144,8 @@ void Console::On_Close(wxCloseEvent& event)
 
 void Console::Write(const std::string &message)
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	//due to hangs, don't allow Windows to write to the console from multiple threads
-	if (mtx.try_lock() == false)
-		return;
-#else
 	mtx.lock();
-#endif
-	tConsole->AppendText(message + wxT("\n"));
-	tConsole->SetInsertionPointEnd();
+	appendtext.push_back(message);
 	mtx.unlock();
 }
 
@@ -161,5 +154,19 @@ void Console::On_bClear_Click(wxCommandEvent& event)
 	tConsole->Clear();
 }
 
+void Console::Loop()
+{
+	//process queued text appends
+	if (appendtext.size() > 0)
+	{
+		for (int i = 0; i < appendtext.size(); i++)
+		{
+			tConsole->AppendText(appendtext[i] + wxT("\n"));
+		}
+
+		tConsole->SetInsertionPointEnd();
+		appendtext.clear();
+	}
 }
 
+}
