@@ -1250,9 +1250,10 @@ void Elevator::Loop()
 			if (MoveElevator == true)
 				MoveElevatorToFloor();
 		}
-	}
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		//prevent thread from taking up all of the CPU
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	}
 }
 
 void Elevator::MoveElevatorToFloor()
