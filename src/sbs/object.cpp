@@ -30,6 +30,9 @@
 
 namespace SBS {
 
+std::mutex m1;
+std::mutex m2;
+
 ObjectBase::ObjectBase(Object *parent)
 {
 	Parent = parent;
@@ -77,14 +80,18 @@ void ObjectBase::SetName(const std::string &name)
 
 void ObjectBase::Report(const std::string &message)
 {
+	m1.lock();
 	Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message);
 	sbs->LastNotification = message;
+	m1.unlock();
 }
 
 bool ObjectBase::ReportError(const std::string &message)
 {
+	m2.lock();
 	Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message, Ogre::LML_CRITICAL);
 	sbs->LastError = message;
+	m2.unlock();
 	return false;
 }
 

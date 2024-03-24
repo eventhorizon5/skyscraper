@@ -361,6 +361,9 @@ private:
 	Real tmpDecelJerk;
 	bool FinishedMove;
 	bool SoundsQueued;
+
+	std::thread ex;
+
 };
 
 }

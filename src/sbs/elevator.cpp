@@ -55,7 +55,7 @@ public:
 	virtual void Notify();
 };
 
-Elevator::Elevator(Object *parent, int number) : Object(parent)
+Elevator::Elevator(Object *parent, int number) : Object(parent), ex{}
 {
 	//set up SBS object
 	SetValues("Elevator", "", false);
@@ -212,7 +212,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	if (sbs->Verbose)
 		Report("elevator object created");
 
-	EnableLoop(true);
+	//EnableLoop(true);
+	ex = std::thread{&Elevator::Loop, this};
 }
 
 Elevator::~Elevator()
@@ -409,15 +410,15 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	MotorPosition = Vector3(motorsound->GetPosition().x - GetPosition().x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition().z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
 
-	Created = true;
-
 	Report("created at " + TruncateNumber(position.x, 4) + ", " + TruncateNumber(position.z, 4));
 
 	//set up primary car
-	if (!GetCar(1)->CreateCar(floor))
+	if (!GetCar(1)->CreateCar(floor, true))
 		return false;
 
 	elevposition = GetPosition();
+
+	Created = true;
 
 	return true;
 }
@@ -1124,129 +1125,134 @@ void Elevator::Loop()
 
 	SBS_PROFILE("Elevator::Loop");
 
-	if (Created == false)
-		return;
-
-	//make sure height value is set
-	if (HeightSet == false)
+	while (true)
 	{
-		for (int i = 1; i <= GetCarCount(); i++)
+		if (Created == true)
 		{
-			GetCar(i)->SetHeight();
+			//make sure height value is set
+			if (HeightSet == false)
+			{
+				for (int i = 1; i <= GetCarCount(); i++)
+				{
+					GetCar(i)->SetHeight();
+				}
+				HeightSet = true;
+			}
+
+			//perform first-run tasks
+			if (FirstRun == true && Running == true)
+			{
+				FirstRun = false;
+
+				if (UpPeak == true)
+				{
+					UpPeak = false;
+					EnableUpPeak(true);
+				}
+				if (DownPeak == true)
+				{
+					DownPeak = false;
+					EnableDownPeak(true);
+				}
+				if (IndependentService == true)
+				{
+					IndependentService = false;
+					EnableIndependentService(true, IndependentServiceCar);
+				}
+				if (InspectionService == true)
+				{
+					InspectionService = false;
+					EnableInspectionService(true);
+				}
+				if (FireServicePhase1 > 0)
+				{
+					int value = FireServicePhase1;
+					FireServicePhase1 = 0;
+					EnableFireService1(value);
+				}
+				if (FireServicePhase2 > 0)
+				{
+					int value = FireServicePhase2;
+					FireServicePhase2 = 0;
+					EnableFireService2(value, FireServicePhase2Car);
+				}
+				if (ACP == true)
+				{
+					ACP = false;
+					EnableACP(true);
+				}
+				if (ACPFloor != 0)
+				{
+					int tmp = ACPFloor;
+					ACPFloor = 0;
+					SetACPFloor(tmp);
+				}
+
+				UpdateFloorIndicators();
+			}
+
+			DoSetControls();
+
+			if (MotorIdleSound != "")
+			{
+				//play motor idle sound
+				if (motoridlesound->IsPlaying() == false && Running == true)
+				{
+					if (sbs->Verbose)
+						Report("playing motor idle sound");
+
+					if (motoridlesound->IsLoaded() == false)
+						motoridlesound->Load(MotorIdleSound);
+
+					motoridlesound->SetLoopState(true);
+					motoridlesound->Play();
+				}
+
+				//stop motor sound if elevator is stopped and not running
+				if (motoridlesound->IsPlaying() == true && Running == false)
+				{
+					if (sbs->Verbose)
+						Report("stopping motor idle sound");
+					motoridlesound->Stop();
+				}
+			}
+
+			//process up/down buttons
+			if (ManualMoveHold == true)
+			{
+				if (ManualMove == 1)
+					Up();
+				if (ManualMove == -1)
+					Down();
+			}
+
+			//process Go function hold
+			if (GoActive == true)
+				Go(GoActiveFloor, true);
+
+			if (HoistwayAccess != 0 && HoistwayAccessHold == true)
+				SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);
+
+			//call queue processor
+			ProcessCallQueue();
+
+			//enable auto-park timer if specified
+			if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false && AutoDoors == true)
+				parking_timer->Start(int(ParkingDelay * 1000), true);
+
+			//run per-car loops
+			for (int i = 1; i <= GetCarCount(); i++)
+			{
+				GetCar(i)->Loop();
+			}
+
+			//elevator movement
+			if (MoveElevator == true)
+				MoveElevatorToFloor();
 		}
-		HeightSet = true;
 	}
 
-	//perform first-run tasks
-	if (FirstRun == true && Running == true)
-	{
-		FirstRun = false;
-
-		if (UpPeak == true)
-		{
-			UpPeak = false;
-			EnableUpPeak(true);
-		}
-		if (DownPeak == true)
-		{
-			DownPeak = false;
-			EnableDownPeak(true);
-		}
-		if (IndependentService == true)
-		{
-			IndependentService = false;
-			EnableIndependentService(true, IndependentServiceCar);
-		}
-		if (InspectionService == true)
-		{
-			InspectionService = false;
-			EnableInspectionService(true);
-		}
-		if (FireServicePhase1 > 0)
-		{
-			int value = FireServicePhase1;
-			FireServicePhase1 = 0;
-			EnableFireService1(value);
-		}
-		if (FireServicePhase2 > 0)
-		{
-			int value = FireServicePhase2;
-			FireServicePhase2 = 0;
-			EnableFireService2(value, FireServicePhase2Car);
-		}
-		if (ACP == true)
-		{
-			ACP = false;
-			EnableACP(true);
-		}
-		if (ACPFloor != 0)
-		{
-			int tmp = ACPFloor;
-			ACPFloor = 0;
-			SetACPFloor(tmp);
-		}
-
-		UpdateFloorIndicators();
-	}
-
-	DoSetControls();
-
-	if (MotorIdleSound != "")
-	{
-		//play motor idle sound
-		if (motoridlesound->IsPlaying() == false && Running == true)
-		{
-			if (sbs->Verbose)
-				Report("playing motor idle sound");
-
-			if (motoridlesound->IsLoaded() == false)
-				motoridlesound->Load(MotorIdleSound);
-
-			motoridlesound->SetLoopState(true);
-			motoridlesound->Play();
-		}
-
-		//stop motor sound if elevator is stopped and not running
-		if (motoridlesound->IsPlaying() == true && Running == false)
-		{
-			if (sbs->Verbose)
-				Report("stopping motor idle sound");
-			motoridlesound->Stop();
-		}
-	}
-
-	//process up/down buttons
-	if (ManualMoveHold == true)
-	{
-		if (ManualMove == 1)
-			Up();
-		if (ManualMove == -1)
-			Down();
-	}
-
-	//process Go function hold
-	if (GoActive == true)
-		Go(GoActiveFloor, true);
-
-	if (HoistwayAccess != 0 && HoistwayAccessHold == true)
-		SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);
-
-	//call queue processor
-	ProcessCallQueue();
-
-	//enable auto-park timer if specified
-	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false && AutoDoors == true)
-		parking_timer->Start(int(ParkingDelay * 1000), true);
-
-	//run per-car loops
-	for (int i = 1; i <= GetCarCount(); i++)
-	{
-		GetCar(i)->Loop();
-	}
-
-	//elevator movement
-	if (MoveElevator == true)
-		MoveElevatorToFloor();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 void Elevator::MoveElevatorToFloor()
@@ -2198,7 +2204,7 @@ void Elevator::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	EnableLoop(value);
+	//EnableLoop(value);
 
 	if (sbs->Verbose)
 	{

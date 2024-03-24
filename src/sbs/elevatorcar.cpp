@@ -321,14 +321,14 @@ ElevatorCar::~ElevatorCar()
 	}
 }
 
-bool ElevatorCar::CreateCar(int floor)
+bool ElevatorCar::CreateCar(int floor, bool primary)
 {
 	//used with CreateElevator function; this is the car-specific code
 
 	if (Created == true)
 		return ReportError("Has already been created");
 
-	if (parent->Created == false)
+	if (parent->Created == false && primary == false)
 		return ReportError("Elevator has not been created yet");
 
 	StartingFloor = floor;
