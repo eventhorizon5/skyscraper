@@ -74,6 +74,7 @@ class Console: public wxFrame
 
 		SBS::SBS *Simcore;
 		Skyscraper *skyscraper;
+		bool need_update;
 		std::vector<std::string> appendtext;
 
 		DECLARE_EVENT_TABLE()

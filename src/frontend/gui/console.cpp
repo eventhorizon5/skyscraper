@@ -101,6 +101,7 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	//*)
 	Simcore = 0;
 	skyscraper = root;
+	need_update = false;
 }
 
 Console::~Console()
@@ -147,6 +148,7 @@ void Console::Write(const std::string &message)
 	mtx.lock();
 	appendtext.push_back(message);
 	mtx.unlock();
+	need_update = true;
 }
 
 void Console::On_bClear_Click(wxCommandEvent& event)
@@ -157,7 +159,7 @@ void Console::On_bClear_Click(wxCommandEvent& event)
 void Console::Loop()
 {
 	//process queued text appends
-	if (appendtext.size() > 0)
+	if (appendtext.size() > 0 && need_update == true)
 	{
 		for (int i = 0; i < appendtext.size(); i++)
 		{
@@ -166,6 +168,7 @@ void Console::Loop()
 
 		tConsole->SetInsertionPointEnd();
 		appendtext.clear();
+		need_update = false;
 	}
 }
 
