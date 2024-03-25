@@ -540,6 +540,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	model_loaded = false;
 	Bounds = new Ogre::AxisAlignedBox();
 	needs_prepare = false;
+	needs_move = false;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -644,6 +645,10 @@ void MeshObject::Loop()
 	if (needs_prepare == true)
 		PrepareQueued();
 	needs_prepare = false;
+
+	if (needs_move == true)
+		OnMoveQueued();
+	needs_move = false;
 }
 
 void MeshObject::GetBounds()
@@ -1149,12 +1154,30 @@ void MeshObject::Prepare(bool force)
 		return;
 
 	needs_prepare = true;
+
+	bool result = false;
+	while (result == false)
+	{
+		result = sbs->ProcessMesh(this);
+
+		if (std::this_thread::get_id() == sbs->main_id)
+			break;
+		else
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
 }
 
 void MeshObject::PrepareQueued()
 {
 	//set up bounding box
-	sbs->RenderWait = true;
+
+	std::thread::id a = std::this_thread::get_id();
+
+	//only run code on main thread
+	if (a != sbs->main_id)
+		return;
+
+	//sbs->RenderWait = true;
 
 	if (model_loaded == false)
 	{
@@ -1169,7 +1192,7 @@ void MeshObject::PrepareQueued()
 	MeshWrapper->NeedsUpdate(this);
 
 	prepared = true;
-	sbs->RenderWait = false;
+	//sbs->RenderWait = false;
 }
 
 int MeshObject::FindMatchingSubMesh(const std::string &material)
@@ -1897,7 +1920,33 @@ Wall* MeshObject::FindPolygon(const std::string &name, int &index)
 
 void MeshObject::OnMove(bool parent)
 {
-	sbs->RenderWait = true;
+	needs_move = true;
+
+	bool result = false;
+	while (result == false)
+	{
+		result = sbs->ProcessMesh(this);
+
+		if (std::this_thread::get_id() == sbs->main_id)
+			break;
+		else
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+}
+
+void MeshObject::OnMoveQueued()
+{
+	//only run on main thread
+	std::thread::id a = std::this_thread::get_id();
+	if (a != sbs->main_id)
+		return;
+
+	//sbs->RenderWait = true;
+
+	//while (sbs->Waiting == false)
+	//{
+		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	//}
 
 	if (collider_node)
 		collider_node->Update();
@@ -1908,7 +1957,7 @@ void MeshObject::OnMove(bool parent)
 	if (UsingDynamicBuffers() == true)
 		MeshWrapper->UpdateVertices(this);
 
-	sbs->RenderWait = false;
+	//sbs->RenderWait = false;
 }
 
 void MeshObject::OnRotate(bool parent)

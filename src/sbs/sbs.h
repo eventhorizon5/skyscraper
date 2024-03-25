@@ -397,6 +397,7 @@ public:
 	int GetCameraTextureCount();
 	CameraTexture* GetCameraTexture(int number);
 	std::string GetFilesystemPath(std::string filename);
+	bool ProcessMesh(MeshObject *mesh);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -461,6 +462,7 @@ private:
 	void CalculateAverageTime();
 	std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
 	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
+	void ProcessMeshImpl();
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
@@ -556,6 +558,11 @@ private:
 
 	//camera texture references
 	std::vector<CameraTexture*> camtexarray;
+
+	//ID of main thread
+	std::thread::id main_id;
+
+	MeshObject *meshprocess;
 };
 
 }

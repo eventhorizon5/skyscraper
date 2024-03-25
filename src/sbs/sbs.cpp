@@ -63,6 +63,8 @@ namespace SBS {
 SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
+	main_id = std::this_thread::get_id();
+
 	this->mSceneManager = mSceneManager;
 
 	version = "0.12.0." + ToString(GIT_REV);
@@ -172,6 +174,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Headless = false;
 	RenderWait = false;
 	Waiting = false;
+	meshprocess = 0;
 
 	camera = 0;
 	Buildings = 0;
@@ -602,6 +605,9 @@ void SBS::Loop()
 
 	//process camera loop
 	camera->Loop();
+
+	//process any queued meshes
+	ProcessMeshImpl();
 
 	if (RenderWait == true)
 		Waiting = true;
@@ -4247,6 +4253,23 @@ CameraTexture* SBS::GetCameraTexture(int number)
 	if (number < camtexarray.size())
 		return camtexarray[number];
 	return 0;
+}
+
+bool SBS::ProcessMesh(MeshObject *mesh)
+{
+	if (meshprocess)
+		return false;
+
+	meshprocess = mesh;
+	return true;
+}
+
+void SBS::ProcessMeshImpl()
+{
+	if (meshprocess)
+		meshprocess->Loop();
+
+	meshprocess = 0;
 }
 
 }

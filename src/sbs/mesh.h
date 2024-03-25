@@ -137,7 +137,9 @@ private:
 	bool wrapper_selfcreate;
 	bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
 	void PrepareQueued();
+	void OnMoveQueued();
 	bool needs_prepare;
+	bool needs_move;
 };
 
 }
