@@ -397,7 +397,7 @@ public:
 	int GetCameraTextureCount();
 	CameraTexture* GetCameraTexture(int number);
 	std::string GetFilesystemPath(std::string filename);
-	bool ProcessMesh(MeshObject *mesh);
+	void ProcessMesh(MeshObject *mesh);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -562,7 +562,7 @@ private:
 	//ID of main thread
 	std::thread::id main_id;
 
-	MeshObject *meshprocess;
+	std::vector<MeshObject*> meshprocesses;
 };
 
 }

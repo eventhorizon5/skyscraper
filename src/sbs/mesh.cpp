@@ -1154,17 +1154,7 @@ void MeshObject::Prepare(bool force)
 		return;
 
 	needs_prepare = true;
-
-	bool result = false;
-	while (result == false)
-	{
-		result = sbs->ProcessMesh(this);
-
-		if (std::this_thread::get_id() == sbs->main_id)
-			break;
-		else
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
+	sbs->ProcessMesh(this);
 }
 
 void MeshObject::PrepareQueued()
@@ -1176,8 +1166,6 @@ void MeshObject::PrepareQueued()
 	//only run code on main thread
 	if (a != sbs->main_id)
 		return;
-
-	//sbs->RenderWait = true;
 
 	if (model_loaded == false)
 	{
@@ -1192,7 +1180,6 @@ void MeshObject::PrepareQueued()
 	MeshWrapper->NeedsUpdate(this);
 
 	prepared = true;
-	//sbs->RenderWait = false;
 }
 
 int MeshObject::FindMatchingSubMesh(const std::string &material)
@@ -1921,17 +1908,7 @@ Wall* MeshObject::FindPolygon(const std::string &name, int &index)
 void MeshObject::OnMove(bool parent)
 {
 	needs_move = true;
-
-	bool result = false;
-	while (result == false)
-	{
-		result = sbs->ProcessMesh(this);
-
-		if (std::this_thread::get_id() == sbs->main_id)
-			break;
-		else
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
+	sbs->ProcessMesh(this);
 }
 
 void MeshObject::OnMoveQueued()
@@ -1941,13 +1918,6 @@ void MeshObject::OnMoveQueued()
 	if (a != sbs->main_id)
 		return;
 
-	//sbs->RenderWait = true;
-
-	//while (sbs->Waiting == false)
-	//{
-		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	//}
-
 	if (collider_node)
 		collider_node->Update();
 
@@ -1956,8 +1926,6 @@ void MeshObject::OnMoveQueued()
 
 	if (UsingDynamicBuffers() == true)
 		MeshWrapper->UpdateVertices(this);
-
-	//sbs->RenderWait = false;
 }
 
 void MeshObject::OnRotate(bool parent)

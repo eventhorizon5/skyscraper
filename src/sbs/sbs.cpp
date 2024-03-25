@@ -60,6 +60,8 @@
 
 namespace SBS {
 
+std::mutex mesh_mtx;
+
 SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
@@ -174,7 +176,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Headless = false;
 	RenderWait = false;
 	Waiting = false;
-	meshprocess = 0;
 
 	camera = 0;
 	Buildings = 0;
@@ -4255,21 +4256,23 @@ CameraTexture* SBS::GetCameraTexture(int number)
 	return 0;
 }
 
-bool SBS::ProcessMesh(MeshObject *mesh)
+void SBS::ProcessMesh(MeshObject *mesh)
 {
-	if (meshprocess)
-		return false;
-
-	meshprocess = mesh;
-	return true;
+	mesh_mtx.lock();
+	meshprocesses.push_back(mesh);
+	mesh_mtx.unlock();
 }
 
 void SBS::ProcessMeshImpl()
 {
-	if (meshprocess)
-		meshprocess->Loop();
-
-	meshprocess = 0;
+	for (int i = 0; i < meshprocesses.size(); i++)
+	{
+		if (meshprocesses[i])
+		{
+			meshprocesses[i]->Loop();
+		}
+	}
+	meshprocesses.clear();
 }
 
 }
