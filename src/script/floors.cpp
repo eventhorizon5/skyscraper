@@ -144,8 +144,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	bool equals = StartsWith(LineData, "=");
 	std::string value = GetAfterEquals(LineData);
+	bool equals = !value.empty();
 
 	//parameters
 	if (StartsWithNoCase(LineData, "height"))

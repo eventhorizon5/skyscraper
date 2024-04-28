@@ -61,8 +61,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	bool equals = StartsWith(LineData, "=");
 	std::string value = GetAfterEquals(LineData);
+	bool equals = !value.empty();
 
 	//get elevator object
 	Elevator *elev = Simcore->GetElevator(config->Current);
