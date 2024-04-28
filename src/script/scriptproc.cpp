@@ -1207,13 +1207,10 @@ void ScriptProcessor::ProcessUserVariables()
 
 int ScriptProcessor::ProcessSections()
 {
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
-
 	//////////////////////
 	//Section information
 	//////////////////////
-	if (linecheck == "<globals>")
+	if (StartsWithNoCase(LineData, "<globals>"))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1225,7 +1222,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing globals...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "<end>")
+	if (StartsWithNoCase(LineData, "<end>"))
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
@@ -1235,12 +1232,12 @@ int ScriptProcessor::ProcessSections()
 		line = (int)BuildingData.size(); //jump to end of script
 		return sExit; //exit data file parser
 	}
-	if (linecheck.substr(0, 7) == "<break>")
+	if (StartsWithNoCase(LineData, "<break>"))
 	{
 		Breakpoint();
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "<include")
+	if (StartsWithNoCase(LineData, "<include"))
 	{
 		//include another file at the current script location
 
@@ -1268,7 +1265,7 @@ int ScriptProcessor::ProcessSections()
 		line--;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "<function")
+	if (StartsWithNoCase(LineData, "<function"))
 	{
 		//define a function
 
@@ -1317,7 +1314,7 @@ int ScriptProcessor::ProcessSections()
 			engine->Report("Defined function " + function);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "<textures>")
+	if (StartsWithNoCase(LineData, "<textures>"))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1329,7 +1326,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing textures...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
+	if (StartsWithNoCase(LineData, "<endfunction>") && InFunction > 0)
 	{
 		//end function and return to original line
 		line = FunctionStack[InFunction - 1].CallLine - 1;
@@ -1339,7 +1336,7 @@ int ScriptProcessor::ProcessSections()
 		ReplaceLine = true;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 7) == "<floors")
+	if (StartsWithNoCase(LineData, "<floors"))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1347,6 +1344,7 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->SectionNum = 2;
+		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 0);
 		if (loc < 0)
 		{
@@ -1370,7 +1368,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing floors " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 7) == "<floor ")
+	if (StartsWithNoCase(LineData, "<floor "))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1391,7 +1389,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing floor " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "<elevators")
+	if (StartsWithNoCase(LineData, "<elevators"))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1399,6 +1397,7 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->SectionNum = 4;
+		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 10);
 		if (loc < 0)
 		{
@@ -1420,7 +1419,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing elevators " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "<elevator ")
+	if (StartsWithNoCase(LineData, "<elevator "))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1446,7 +1445,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing elevator " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "<buildings>")
+	if (StartsWithNoCase(LineData, "<buildings>"))
 	{
 		//skip this section if reloading
 		if (engine->IsReloading() == true)
@@ -1462,9 +1461,10 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Loading other buildings...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "<cars" && config->SectionNum == 4)
+	if (StartsWithNoCase(LineData, "<cars") && config->SectionNum == 4)
 	{
 		config->SectionNum = 6;
+		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 5);
 		if (loc < 0)
 		{
@@ -1502,7 +1502,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing elevator " + ToString(config->CurrentOld) + " cars " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "<car " && config->SectionNum == 4)
+	if (StartsWithNoCase(LineData, "<car ") && config->SectionNum == 4)
 	{
 		config->SectionNum = 6;
 
@@ -1534,7 +1534,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing elevator " + ToString(config->CurrentOld) + " car " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "<vehicles")
+	if (StartsWithNoCase(LineData, "<vehicles"))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1542,6 +1542,7 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->SectionNum = 7;
+		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 9);
 		if (loc < 0)
 		{
@@ -1563,7 +1564,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing vehicles " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "<vehicle ")
+	if (StartsWithNoCase(LineData, "<vehicle "))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1589,7 +1590,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing vehicle " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "<controllers")
+	if (StartsWithNoCase(LineData, "<controllers"))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1597,6 +1598,7 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->SectionNum = 8;
+		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 12);
 		if (loc < 0)
 		{
@@ -1618,7 +1620,7 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing controllers " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "<controller ")
+	if (StartsWithNoCase(LineData, "<controller "))
 	{
 		if (config->SectionNum > 0)
 		{
@@ -1644,9 +1646,10 @@ int ScriptProcessor::ProcessSections()
 		engine->Report("Processing controller " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "<callstations" && config->SectionNum == 2)
+	if (StartsWithNoCase(LineData, "<callstations") && config->SectionNum == 2)
 	{
 		config->SectionNum = 9;
+		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 13);
 		if (loc < 0)
 		{
@@ -1685,7 +1688,7 @@ int ScriptProcessor::ProcessSections()
 			engine->Report("Processing floor " + ToString(config->CurrentOld) + " call stations " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "<callstation " && config->SectionNum == 2)
+	if (StartsWithNoCase(LineData, "<callstation ") && config->SectionNum == 2)
 	{
 		config->SectionNum = 9;
 

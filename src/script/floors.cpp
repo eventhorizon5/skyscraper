@@ -149,11 +149,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		equals = false;
 	std::string value = GetAfterEquals(LineData);
 
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
-
 	//parameters
-	if (linecheck.substr(0, 6) == "height")
+	if (StartsWithNoCase(LineData, "height"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -165,7 +162,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		else
 			FloorCheck = 3;
 	}
-	if (linecheck.substr(0, 16) == "interfloorheight")
+	if (StartsWithNoCase(LineData, "interfloorheight"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -177,7 +174,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		else
 			FloorCheck = 3;
 	}
-	if (linecheck.substr(0, 8) == "altitude")
+	if (StartsWithNoCase(LineData, "altitude"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -188,49 +185,49 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		floor->SetAltitude(alt);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 2) == "id")
+	if (StartsWithNoCase(LineData, "id"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		floor->ID = Calc(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "numberid")
+	if (StartsWithNoCase(LineData, "numberid"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		floor->NumberID = Calc(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 4) == "name")
+	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		floor->Name = Calc(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 4) == "type")
+	if (StartsWithNoCase(LineData, "type"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		floor->FloorType = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "description")
+	if (StartsWithNoCase(LineData, "description"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		floor->Description = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 16) == "indicatortexture")
+	if (StartsWithNoCase(LineData, "indicatortexture"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		floor->IndicatorTexture = Calc(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "group")
+	if (StartsWithNoCase(LineData, "group"))
 	{
 		//copy string listing of group floors into array
 
@@ -268,19 +265,16 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//Exit command
-	if (linecheck.substr(0, 4) == "exit")
+	if (StartsWithNoCase(LineData, "exit"))
 	{
 		if (config->RangeL != config->RangeH)
 			LineData = "<endfloors>";
 		else
 			LineData = "<endfloor>";
-
-		//update linecheck
-		linecheck = SetCaseCopy(LineData, false);
 	}
 
 	//AddFloor command
-	if (linecheck.substr(0, 9) == "addfloor ")
+	if (StartsWithNoCase(LineData, "addfloor "))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -327,7 +321,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftFloor command
-	if (linecheck.substr(0, 13) == "addshaftfloor")
+	if (StartsWithNoCase(LineData, "addshaftfloor"))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -391,7 +385,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddStairsFloor command
-	if (linecheck.substr(0, 14) == "addstairsfloor")
+	if (StartsWithNoCase(LineData, "addstairsfloor"))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -455,7 +449,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddInterFloorFloor command
-	if (linecheck.substr(0, 18) == "addinterfloorfloor")
+	if (StartsWithNoCase(LineData, "addinterfloorfloor"))
 	{
 		//get data
 		int params = SplitData(LineData, 19);
@@ -502,7 +496,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddWall command
-	if (linecheck.substr(0, 7) == "addwall")
+	if (StartsWithNoCase(LineData, "addwall"))
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -527,7 +521,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftWall command
-	if (linecheck.substr(0, 12) == "addshaftwall")
+	if (StartsWithNoCase(LineData, "addshaftwall"))
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -567,7 +561,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddStairsWall command
-	if (linecheck.substr(0, 13) == "addstairswall")
+	if (StartsWithNoCase(LineData, "addstairswall"))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -607,7 +601,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddInterFloorWall command
-	if (linecheck.substr(0, 17) == "addinterfloorwall")
+	if (StartsWithNoCase(LineData, "addinterfloorwall"))
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -632,7 +626,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//ColumnWallBox command
-	if (linecheck.substr(0, 14) == "columnwallbox ")
+	if (StartsWithNoCase(LineData, "columnwallbox "))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -656,7 +650,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//ColumnWallBox2 command
-	if (linecheck.substr(0, 14) == "columnwallbox2")
+	if (StartsWithNoCase(LineData, "columnwallbox2"))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -680,7 +674,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//CallButtonElevators command
-	if (linecheck.substr(0, 19) == "callbuttonelevators")
+	if (StartsWithNoCase(LineData, "callbuttonelevators"))
 	{
 		//copy string listing of elevators into array
 		int params = SplitAfterEquals(LineData, false);
@@ -745,7 +739,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//CreateCallButtons command
-	if (linecheck.substr(0, 17) == "createcallbuttons")
+	if (StartsWithNoCase(LineData, "createcallbuttons"))
 	{
 		if (callbutton_controller == 0)
 			return ScriptError("No elevators specified");
@@ -839,7 +833,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddStairs command
-	if (linecheck.substr(0, 10) == "addstairs ")
+	if (StartsWithNoCase(LineData, "addstairs "))
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -902,7 +896,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddDoor command
-	if (linecheck.substr(0, 8) == "adddoor ")
+	if (StartsWithNoCase(LineData, "adddoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -995,7 +989,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddStairsDoor command
-	if (linecheck.substr(0, 14) == "addstairsdoor ")
+	if (StartsWithNoCase(LineData, "addstairsdoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -1109,7 +1103,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftStdDoor command
-	if (linecheck.substr(0, 16) == "addshaftstddoor ")
+	if (StartsWithNoCase(LineData, "addshaftstddoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -1164,7 +1158,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddExternalDoor command
-	if (linecheck.substr(0, 16) == "addexternaldoor ")
+	if (StartsWithNoCase(LineData, "addexternaldoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -1204,7 +1198,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddDirectionalIndicator command
-	if (linecheck.substr(0, 23) == "adddirectionalindicator")
+	if (StartsWithNoCase(LineData, "adddirectionalindicator"))
 	{
 		//get data
 		int params = SplitData(LineData, 24);
@@ -1259,7 +1253,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftDoor command
-	if (linecheck.substr(0, 13) == "addshaftdoor ")
+	if (StartsWithNoCase(LineData, "addshaftdoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -1333,7 +1327,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddFloorIndicator command
-	if (linecheck.substr(0, 17) == "addfloorindicator")
+	if (StartsWithNoCase(LineData, "addfloorindicator"))
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -1393,7 +1387,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddFillerWalls command
-	if (linecheck.substr(0, 14) == "addfillerwalls")
+	if (StartsWithNoCase(LineData, "addfillerwalls"))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -1428,7 +1422,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddSound command
-	if (linecheck.substr(0, 8) == "addsound")
+	if (StartsWithNoCase(LineData, "addsound"))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -1502,7 +1496,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftDoorComponent command
-	if (linecheck.substr(0, 21) == "addshaftdoorcomponent")
+	if (StartsWithNoCase(LineData, "addshaftdoorcomponent"))
 	{
 		//get data
 		int params = SplitData(LineData, 22);
@@ -1548,7 +1542,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//FinishShaftDoor command
-	if (linecheck.substr(0, 16) == "finishshaftdoor ")
+	if (StartsWithNoCase(LineData, "finishshaftdoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -1596,7 +1590,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddModel command
-	if (linecheck.substr(0, 8) == "addmodel")
+	if (StartsWithNoCase(LineData, "addmodel"))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -1658,7 +1652,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddStairsModel command
-	if (linecheck.substr(0, 14) == "addstairsmodel")
+	if (StartsWithNoCase(LineData, "addstairsmodel"))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -1734,7 +1728,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftModel command
-	if (linecheck.substr(0, 13) == "addshaftmodel")
+	if (StartsWithNoCase(LineData, "addshaftmodel"))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -1809,7 +1803,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddActionControl command
-	if (linecheck.substr(0, 16) == "addactioncontrol")
+	if (StartsWithNoCase(LineData, "addactioncontrol"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1879,7 +1873,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftActionControl command
-	if (linecheck.substr(0, 21) == "addshaftactioncontrol")
+	if (StartsWithNoCase(LineData, "addshaftactioncontrol"))
 	{
 		//get data
 		int params = SplitData(LineData, 21);
@@ -1964,7 +1958,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddStairsActionControl command
-	if (linecheck.substr(0, 21) == "addstairsactioncontrol")
+	if (StartsWithNoCase(LineData, "addstairsactioncontrol"))
 	{
 		//get data
 		int params = SplitData(LineData, 21);
@@ -2049,7 +2043,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddTrigger command
-	if (linecheck.substr(0, 10) == "addtrigger")
+	if (StartsWithNoCase(LineData, "addtrigger"))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -2084,7 +2078,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftTrigger command
-	/*if (linecheck.substr(0, 15) == "addshafttrigger")
+	/*if (StartsWithNoCase(LineData, "addshafttrigger"))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -2124,7 +2118,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddStairsTrigger command
-	if (linecheck.substr(0, 15) == "addstairstrigger")
+	if (StartsWithNoCase(LineData, "addstairstrigger"))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -2164,7 +2158,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}*/
 
 	//Cut command
-	if (linecheck.substr(0, 4) == "cut ")
+	if (StartsWithNoCase(LineData, "cut "))
 	{
 		//get data
 		int params = SplitData(LineData, 4);
@@ -2189,7 +2183,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//CutAll command
-	if (linecheck.substr(0, 6) == "cutall")
+	if (StartsWithNoCase(LineData, "cutall"))
 	{
 		//get data
 		int params = SplitData(LineData, 7);
@@ -2214,7 +2208,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddRevolvingDoor command
-	if (linecheck.substr(0, 17) == "addrevolvingdoor ")
+	if (StartsWithNoCase(LineData, "addrevolvingdoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -2280,7 +2274,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddEscalator command
-	if (linecheck.substr(0, 13) == "addescalator ")
+	if (StartsWithNoCase(LineData, "addescalator "))
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -2333,7 +2327,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddMovingWalkway command
-	if (linecheck.substr(0, 17) == "addmovingwalkway ")
+	if (StartsWithNoCase(LineData, "addmovingwalkway "))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -2362,7 +2356,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//handle end of floor section
-	if (linecheck == "<endfloor>" && config->RangeL == config->RangeH)
+	if (StartsWithNoCase(LineData, "<endfloor>") && config->RangeL == config->RangeH)
 	{
 		//when finishing a floor, make sure the altitude is valid
 		if (floor->AltitudeSet == false)
@@ -2375,7 +2369,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//handle floor range
-	if (config->RangeL != config->RangeH && linecheck.substr(0, 9) == "<endfloor")
+	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endfloor"))
 	{
 		//when finishing a floor, make sure the altitude is valid
 		if (floor->AltitudeSet == false)

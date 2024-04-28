@@ -68,18 +68,15 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	//get vehicle object
 	Vehicle *v = Simcore->GetVehicle(config->Current);
 
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
-
 	//parameters
-	if (linecheck.substr(0, 4) == "name")
+	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		v->Name = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "maxengineforce")
+	if (StartsWithNoCase(LineData, "maxengineforce"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -88,7 +85,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 17) == "steeringincrement")
+	if (StartsWithNoCase(LineData, "steeringincrement"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -97,7 +94,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "steeringclamp")
+	if (StartsWithNoCase(LineData, "steeringclamp"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -106,7 +103,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "wheelfriction")
+	if (StartsWithNoCase(LineData, "wheelfriction"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -115,7 +112,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 19) == "suspensionstiffness")
+	if (StartsWithNoCase(LineData, "suspensionstiffness"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -124,7 +121,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 17) == "suspensiondamping")
+	if (StartsWithNoCase(LineData, "suspensiondamping"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -133,7 +130,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 21) == "suspensioncompression")
+	if (StartsWithNoCase(LineData, "suspensioncompression"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -142,7 +139,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "rollinfluence")
+	if (StartsWithNoCase(LineData, "rollinfluence"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -151,7 +148,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 20) == "suspensionrestlength")
+	if (StartsWithNoCase(LineData, "suspensionrestlength"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -160,7 +157,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 21) == "maxsuspensiontravelcm")
+	if (StartsWithNoCase(LineData, "maxsuspensiontravelcm"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -169,7 +166,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "frictionslip")
+	if (StartsWithNoCase(LineData, "frictionslip"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -178,7 +175,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "chassisshift")
+	if (StartsWithNoCase(LineData, "chassisshift"))
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params != 3)
@@ -194,21 +191,21 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 		v->ChassisShift = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "chassismesh")
+	if (StartsWithNoCase(LineData, "chassismesh"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		v->ChassisMesh = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "wheelmesh")
+	if (StartsWithNoCase(LineData, "wheelmesh"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		v->WheelMesh = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "chassisscale")
+	if (StartsWithNoCase(LineData, "chassisscale"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -217,7 +214,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "wheelscale")
+	if (StartsWithNoCase(LineData, "wheelscale"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -228,7 +225,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	}
 
 	//CreateVehicle command
-	if (linecheck.substr(0, 13) == "createvehicle")
+	if (StartsWithNoCase(LineData, "createvehicle"))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -252,7 +249,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	}
 
 	//CreateChassis command
-	if (linecheck.substr(0, 13) == "createchassis")
+	if (StartsWithNoCase(LineData, "createchassis"))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -274,7 +271,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	}
 
 	//AddWheel command
-	if (linecheck.substr(0, 8) == "addwheel")
+	if (StartsWithNoCase(LineData, "addwheel"))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -308,7 +305,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	}
 
 	//handle end of vehicle section
-	if (linecheck == "<endvehicle>" && config->RangeL == config->RangeH)
+	if (StartsWithNoCase(LineData, "<endvehicle>") && config->RangeL == config->RangeH)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
@@ -317,7 +314,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	}
 
 	//handle vehicle range
-	if (config->RangeL != config->RangeH && linecheck.substr(0, 12) == "<endvehicle")
+	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endvehicle"))
 	{
 		if (config->Current < config->RangeH)
 		{

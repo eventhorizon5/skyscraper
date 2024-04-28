@@ -58,11 +58,8 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		equals = false;
 	std::string value = GetAfterEquals(LineData);
 
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
-
 	//parameters
-	if (linecheck.substr(0, 15) == "concurrentloads")
+	if (StartsWithNoCase(LineData, "concurrentloads"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -70,7 +67,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		engine->GetFrontend()->ConcurrentLoads = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "cutlandscape")
+	if (StartsWithNoCase(LineData, "cutlandscape"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -78,7 +75,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		engine->GetFrontend()->CutLandscape = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "cutbuildings")
+	if (StartsWithNoCase(LineData, "cutbuildings"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -86,7 +83,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		engine->GetFrontend()->CutBuildings = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "cutexternal")
+	if (StartsWithNoCase(LineData, "cutexternal"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -94,7 +91,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		engine->GetFrontend()->CutExternal = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "cutfloors")
+	if (StartsWithNoCase(LineData, "cutfloors"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -104,7 +101,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	}
 
 	//Load command
-	if (linecheck.substr(0, 4) == "load")
+	if (StartsWithNoCase(LineData, "load"))
 	{
 		//get data
 		int params = SplitData(LineData, 5, false);
@@ -151,7 +148,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	}
 
 	//handle end of buildings section
-	if (linecheck.substr(0, 14) == "<endbuildings>")
+	if (StartsWithNoCase(LineData, "<endbuildings>"))
 	{
 		config->SectionNum = 0;
 		config->Context = "None";

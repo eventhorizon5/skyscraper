@@ -88,6 +88,7 @@ SBSIMPEXP void TrimString(std::string &string);
 SBSIMPEXP std::string TrimStringCopy(std::string string);
 SBSIMPEXP void ReplaceAll(std::string &string, const std::string &original, const std::string &replacement);
 SBSIMPEXP bool StartsWith(const std::string &string, const std::string &check_string, bool ignore_case = false);
+SBSIMPEXP bool StartsWithNoCase(const std::string &string, const std::string &check_string);
 SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const std::string &original_string, char separator);
 SBSIMPEXP std::string ToString(int number);
 SBSIMPEXP std::string ToString(float number);
