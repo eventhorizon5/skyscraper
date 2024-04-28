@@ -1649,6 +1649,21 @@ std::string TextureManager::ListTextures(bool show_filename)
 	return list;
 }
 
+int TextureManager::GetTextureInfoCount()
+{
+	return (int)textureinfo.size();
+}
+
+bool TextureManager::GetTextureInfo(int index, TextureManager::TextureInfo &info)
+{
+	if (index >= 0 && index < textureinfo.size())
+	{
+		info = textureinfo[index];
+		return true;
+	}
+
+	return false;
+}
 
 // from http://www.ogre3d.org/tikiwiki/tiki-index.php?page=Creating+transparency+based+on+a+key+colour+in+code
 /** Utility function that generates a texture with transparency based on a certain colour value

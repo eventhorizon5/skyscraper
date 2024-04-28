@@ -25,6 +25,7 @@
 
 //(*Headers(TextureManager)
 #include <wx/button.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/listbox.h>
 #include <wx/sizer.h>
@@ -44,7 +45,10 @@ class TextureManager: public wxDialog
         //(*Declarations(TextureManager)
         wxButton* bFree;
         wxButton* bOK;
+        wxButton* bSave;
         wxButton* bUnload;
+        wxCheckBox* chkEnableForce;
+        wxCheckBox* chkForceMode;
         wxListBox* TextureList;
         wxStaticText* StaticText1;
         wxStaticText* StaticText2;
@@ -52,9 +56,7 @@ class TextureManager: public wxDialog
         wxStaticText* StaticText4;
         wxStaticText* StaticText5;
         wxStaticText* StaticText6;
-        wxTextCtrl* tEnableForce;
         wxTextCtrl* tFilename;
-        wxTextCtrl* tForceMode;
         wxTextCtrl* tHeightMult;
         wxTextCtrl* tMaterial;
         wxTextCtrl* tWidthMult;
@@ -74,9 +76,10 @@ class TextureManager: public wxDialog
         static const long ID_STATICTEXT6;
         static const long ID_tHeightMult;
         static const long ID_STATICTEXT2;
-        static const long ID_tEnableForce;
+        static const long ID_chkEnableForce;
         static const long ID_STATICTEXT3;
-        static const long ID_tForceMode;
+        static const long ID_chkForceMode;
+        static const long ID_bSave;
         static const long ID_bUnload;
         static const long ID_bOK;
         static const long ID_bFree;
@@ -88,6 +91,8 @@ class TextureManager: public wxDialog
         void On_bUnload_Click(wxCommandEvent& event);
         void On_bOK_Click(wxCommandEvent& event);
         void On_bFree_Click(wxCommandEvent& event);
+        void On_TextureList_Select(wxCommandEvent& event);
+        void On_bSave_Click(wxCommandEvent& event);
         //*)
 
         SBS::SBS *Simcore;

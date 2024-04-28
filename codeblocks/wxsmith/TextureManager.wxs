@@ -14,6 +14,7 @@
 							<default>-1</default>
 							<size>200,300</size>
 							<style>wxVSCROLL</style>
+							<handler function="On_TextureList_Select" entry="EVT_LISTBOX" />
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
@@ -34,7 +35,10 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tMaterial" variable="tMaterial" member="yes" />
+										<object class="wxTextCtrl" name="ID_tMaterial" variable="tMaterial" member="yes">
+											<size>150,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
@@ -48,8 +52,10 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tFilename" variable="tFilename" member="yes" />
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<object class="wxTextCtrl" name="ID_tFilename" variable="tFilename" member="yes">
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALL|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -63,7 +69,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tWidthMult" variable="tWidthMult" member="yes" />
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALL|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -77,7 +83,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tHeightMult" variable="tHeightMult" member="yes" />
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALL|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -90,7 +96,7 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tEnableForce" variable="tEnableForce" member="yes" />
+										<object class="wxCheckBox" name="ID_chkEnableForce" variable="chkEnableForce" member="yes" />
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
@@ -104,7 +110,7 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tForceMode" variable="tForceMode" member="yes" />
+										<object class="wxCheckBox" name="ID_chkForceMode" variable="chkForceMode" member="yes" />
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
@@ -115,9 +121,25 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxButton" name="ID_bUnload" variable="bUnload" member="yes">
-									<label>Unload</label>
-									<handler function="On_bUnload_Click" entry="EVT_BUTTON" />
+								<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSave" variable="bSave" member="yes">
+											<label>Save</label>
+											<handler function="On_bSave_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bUnload" variable="bUnload" member="yes">
+											<label>Unload</label>
+											<handler function="On_bUnload_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>

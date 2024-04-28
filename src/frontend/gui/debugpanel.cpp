@@ -547,6 +547,12 @@ void DebugPanel::Loop()
 		if (smanager->IsShown() == true)
 			smanager->Loop();
 	}
+
+	if (tmanager)
+	{
+		if (tmanager->IsShown() == true)
+			tmanager->Loop();
+	}
 }
 
 void DebugPanel::Timer::Notify()
