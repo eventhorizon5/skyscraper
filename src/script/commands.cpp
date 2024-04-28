@@ -60,9 +60,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 	//IF/While statement
 	int IsIf = 0;
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
+	if (StartsWithNoCase(LineData, "if"))
 		IsIf = 1;
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "while")
+	if (StartsWithNoCase(LineData, "while"))
 		IsIf = 2;
 	if (IsIf > 0)
 	{

@@ -49,7 +49,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	ReplaceAll(LineData, "%elevator%", ToString(config->Current));
 
 	//IF/While statement stub (continue to global commands for processing)
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+	if (StartsWithNoCase(LineData, "if") || StartsWithNoCase(LineData, "while"))
 		return sContinue;
 
 	//process math functions
@@ -61,9 +61,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	bool equals = true;
-	if ((int)LineData.find("=", 0) == -1)
-		equals = false;
+	bool equals = StartsWith(LineData, "=");
 	std::string value = GetAfterEquals(LineData);
 
 	//get elevator object
