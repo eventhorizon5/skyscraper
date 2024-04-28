@@ -622,7 +622,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->ID = value;
+		elev->ID = Calc(value);
 		return sNextLine;
 	}
 
