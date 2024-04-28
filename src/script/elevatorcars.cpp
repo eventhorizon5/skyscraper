@@ -123,8 +123,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -153,23 +152,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end) == true)
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 				{
 					if (!car->AddServicedFloor(k))
@@ -179,8 +164,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			else
 			{
 				int data;
-				if (!IsNumeric(tempdata[line], data))
+				std::string str = Calc(tempdata[line]);
+				if (!IsNumeric(str, data))
 					return ScriptError("Invalid value");
+
 				if (!car->AddServicedFloor(data))
 					return ScriptError();
 			}
@@ -196,23 +183,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end) == true)
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 				{
 					car->AddDisplayFloor(k);
@@ -236,8 +209,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -256,8 +228,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -276,8 +247,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -296,8 +266,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -316,8 +285,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(11, LineData.find("=", 0) - 11);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -336,8 +304,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -358,8 +325,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -380,8 +346,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -614,8 +579,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -637,8 +601,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(12, LineData.find("=", 0) - 12);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -659,8 +622,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(14, LineData.find("=", 0) - 14);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -681,8 +643,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(17, LineData.find("=", 0) - 17);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -704,8 +665,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(19, LineData.find("=", 0) - 19);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -906,8 +866,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
 
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -1715,7 +1674,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -2060,7 +2019,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");

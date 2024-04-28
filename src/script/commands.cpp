@@ -309,8 +309,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (loc < 0)
 			return ScriptError("Syntax Error");
 
-		std::string str = LineData.substr(4, loc - 5);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData, false);
 
 		//reserved keywords
 		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param" || str == "floorname" || str == "floortype" || str == "floorid" || str == "description")
@@ -692,8 +691,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		std::string str = LineData.substr(15, loc - 16);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 
@@ -756,8 +754,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		std::string str = LineData.substr(20, loc - 21);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
@@ -770,23 +767,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 					Simcore->GetShaft(shaftnum)->AddShowInterfloor(k);
 			}
@@ -809,8 +792,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		std::string str = LineData.substr(16, loc - 17);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
@@ -823,23 +805,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 					Simcore->GetShaft(shaftnum)->AddShowOutside(k);
 			}
@@ -862,8 +830,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		std::string str = LineData.substr(13, loc - 14);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
@@ -936,8 +903,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int stairnum;
-		std::string str = LineData.substr(16, loc - 17);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
 
@@ -952,24 +918,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 					Simcore->GetStairwell(stairnum)->AddShowFloor(k);
 			}
@@ -992,8 +943,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int stairnum;
-		std::string str = LineData.substr(14, loc - 15);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
 		if (stairnum < 1 || stairnum > Simcore->GetStairwellCount())
@@ -1379,7 +1329,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -1453,7 +1403,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");

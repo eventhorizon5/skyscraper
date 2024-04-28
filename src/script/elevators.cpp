@@ -377,7 +377,13 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->FireServicePhase1 = ToInt(value);
+
+		int value2;
+		std::string str = Calc(value);
+		if (!IsNumeric(str, value2))
+			return ScriptError("Invalid value");
+
+		elev->FireServicePhase1 = value2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "parking")

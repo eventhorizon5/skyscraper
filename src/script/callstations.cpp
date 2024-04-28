@@ -116,7 +116,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 12) == "invalidinput")
 	{
 		//copy string listing of elevators into array
-		int params = SplitAfterEquals(LineData, false);
+		int params = SplitAfterEquals(LineData);
 		if (params < 1)
 			return ScriptError("Syntax Error");
 

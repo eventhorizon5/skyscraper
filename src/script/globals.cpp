@@ -96,7 +96,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 11) == "camerafloor")
 	{
 		int data;
-		if (!IsNumeric(value, data))
+		std::string str = Calc(value);
+		if (!IsNumeric(str, data))
 			return ScriptError("Invalid floor");
 
 		Simcore->camera->StartFloor = data;
@@ -107,8 +108,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Real x, z;
 		std::string str1 = value.substr(0, value.find(",", 0));
 		std::string str2 = value.substr(value.find(",", 0) + 1);
-		TrimString(str1);
-		TrimString(str2);
+		str1 = Calc(str1);
+		str2 = Calc(str2);
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, z))
 			return ScriptError("Invalid position");
 
@@ -124,9 +125,9 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		std::string str1 = value.substr(0, loc1);
 		std::string str2 = value.substr(loc1 + 1, loc2 - loc1 - 1);
 		std::string str3 = value.substr(loc2 + 1);
-		TrimString(str1);
-		TrimString(str2);
-		TrimString(str3);
+		str1 = Calc(str1);
+		str2 = Calc(str2);
+		str3 = Calc(str3);
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, y) || !IsNumeric(str3, z))
 			return ScriptError("Invalid direction");
 
@@ -141,9 +142,9 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		std::string str1 = value.substr(0, loc1);
 		std::string str2 = value.substr(loc1 + 1, loc2 - loc1 - 1);
 		std::string str3 = value.substr(loc2 + 1);
-		TrimString(str1);
-		TrimString(str2);
-		TrimString(str3);
+		str1 = Calc(str1);
+		str2 = Calc(str2);
+		str3 = Calc(str3);
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, y) || !IsNumeric(str3, z))
 			return ScriptError("Invalid direction");
 
@@ -161,8 +162,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Real latitude, longitude;
 		std::string str1 = value.substr(0, loc);
 		std::string str2 = value.substr(loc + 1);
-		TrimString(str1);
-		TrimString(str2);
+		str1 = Calc(str1);
+		str2 = Calc(str2);
 		if (!IsNumeric(str1, latitude) || !IsNumeric(str2, longitude))
 			return ScriptError("Invalid latitude");
 
@@ -186,7 +187,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 9) == "timescale")
 	{
 		int data;
-		if (!IsNumeric(value, data))
+		std::string str = Calc(value);
+		if (!IsNumeric(str, data))
 			return ScriptError("Invalid time scale value");
 
 		engine->GetFrontend()->SkyMult = data;
@@ -218,8 +220,9 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 	if (linecheck.substr(0, 8) == "rotation")
 	{
-		Real rotation;
-		if (!IsNumeric(value, rotation))
+		int rotation;
+		std::string str = Calc(value);
+		if (!IsNumeric(str, rotation))
 			return ScriptError("Invalid rotation");
 
 		Simcore->Rotate(0.0, rotation, 0.0);

@@ -240,30 +240,17 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end) == true)
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 					floor->AddGroupFloor(k);
 			}
 			else
 			{
 				int data;
-				if (!IsNumeric(tempdata[line], data))
+				std::string str = Calc(tempdata[line]);
+				if (!IsNumeric(str, data))
 					return ScriptError("Invalid value");
 				floor->AddGroupFloor(data);
 			}
@@ -692,10 +679,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//CallButtonElevators command
 	if (linecheck.substr(0, 19) == "callbuttonelevators")
 	{
-		//construct array containing floor numbers
+		//copy string listing of elevators into array
 		int params = SplitAfterEquals(LineData, false);
 		if (params < 1)
 			return ScriptError("Syntax Error");
@@ -705,12 +691,28 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			int elevnumber;
-			if (!IsNumeric(tempdata[line], elevnumber))
-				return ScriptError("Invalid elevator number");
-			if (elevnumber < 1 || elevnumber > Simcore->GetElevatorCount())
-				return ScriptError("Invalid elevator number");
-			callbutton_elevators[line] = elevnumber;
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
+			{
+				for (int k = start; k <= end; k++)
+				{
+					if (k < 1 || k > Simcore->GetElevatorCount())
+						return ScriptError("Invalid elevator number");
+
+					callbutton_elevators.push_back(k);
+				}
+			}
+			else
+			{
+				std::string str = Calc(tempdata[line]);
+				int data;
+				if (!IsNumeric(str, data))
+					return ScriptError("Invalid elevator number");
+
+				if (data < 1 || data > Simcore->GetElevatorCount())
+					return ScriptError("Invalid elevator number");
+				callbutton_elevators.push_back(data);
+			}
 		}
 
 		//find an existing controller that matches the list of elevators
@@ -1426,7 +1428,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -1594,7 +1596,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -1656,7 +1658,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 14) == "addstairsmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 15, true);
+		int params = SplitData(LineData, 15);
 
 		if (params != 15 && params != 16)
 			return ScriptError("Incorrect number of parameters");
@@ -1732,7 +1734,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	if (linecheck.substr(0, 13) == "addshaftmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 14, true);
+		int params = SplitData(LineData, 14);
 
 		if (params != 15 && params != 16)
 			return ScriptError("Incorrect number of parameters");

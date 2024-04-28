@@ -116,6 +116,52 @@ std::string ScriptProcessor::Section::GetAfterEquals(const std::string &string)
 	return temp;
 }
 
+std::string ScriptProcessor::Section::GetBeforeEquals(const std::string &string, bool calc)
+{
+	//return data right before equal sign, starting at location 'start'
+
+	//trim string
+	std::string str = string;
+	TrimString(str);
+
+	//find space before equal sign
+	int loc = string.find_first_of(" ", 0);
+
+	std::string str2 = str.substr(loc, str.find("=", 0) - loc);
+	TrimString(str2);
+
+	if (calc == true)
+		return Calc(str2);
+
+	return str2;
+}
+
+bool ScriptProcessor::Section::GetRange(const std::string &string, int &start, int &end)
+{
+	//calculate range value, such as "1 - 3", and fill in the 'start' and 'end' values
+
+	if (string.find("-", 1) > 0)
+	{
+		//found a range marker
+		std::string str1 = string.substr(0, string.find("-", 1));
+		std::string str2 = string.substr(string.find("-", 1) + 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
+			return ScriptError("Invalid value");
+		if (end < start)
+		{
+			int temp = start;
+			start = end;
+			end = temp;
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
 int ScriptProcessor::Section::ScriptError(std::string message, bool warning)
 {
 	return parent->ScriptError(message, warning);

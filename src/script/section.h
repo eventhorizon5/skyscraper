@@ -37,6 +37,8 @@ public:
 	int SplitData(const std::string &string, int start, bool calc = true);
 	int SplitAfterEquals(const std::string &string, bool calc = true);
 	std::string GetAfterEquals(const std::string &string);
+	std::string GetBeforeEquals(const std::string &string, bool calc = true);
+	bool GetRange(const std::string &string, int &start, int &end);
 	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();
 	int ScriptWarning(std::string message);

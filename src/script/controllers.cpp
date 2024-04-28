@@ -122,23 +122,9 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 				{
 					if (!c->AddElevator(k))
@@ -147,8 +133,9 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 			}
 			else
 			{
+				std::string str = Calc(tempdata[line]);
 				int data;
-				if (!IsNumeric(tempdata[line], data))
+				if (!IsNumeric(str, data))
 					return ScriptError("Invalid value");
 				if (!c->AddElevator(data))
 					return ScriptError();
