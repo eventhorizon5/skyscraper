@@ -1015,7 +1015,7 @@ DispatchController* ControllerManager::Create(int number)
 
 int ControllerManager::GetCount()
 {
-	//return the number of shafts
+	//return the number of controllers
 	return (int)Array.size();
 }
 

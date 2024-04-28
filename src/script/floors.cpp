@@ -679,6 +679,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//CallButtonElevators command
 	if (linecheck.substr(0, 19) == "callbuttonelevators")
 	{
 		//copy string listing of elevators into array
@@ -687,7 +688,6 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return ScriptError("Syntax Error");
 
 		std::vector<int> callbutton_elevators;
-		callbutton_elevators.resize(params);
 
 		for (int line = 0; line < params; line++)
 		{
@@ -714,6 +714,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				callbutton_elevators.push_back(data);
 			}
 		}
+
+		//sort list
+		std::sort(callbutton_elevators.begin(), callbutton_elevators.end());
 
 		//find an existing controller that matches the list of elevators
 		DispatchController *controller = 0;
