@@ -366,6 +366,7 @@
     <ClCompile Include="..\src\frontend\gui\skycontrol.cpp" />
     <ClCompile Include="..\src\frontend\gui\soundmanager.cpp" />
     <ClCompile Include="..\src\frontend\gui\stats.cpp" />
+    <ClCompile Include="..\src\frontend\gui\texturemanager.cpp" />
     <ClCompile Include="..\src\frontend\gui\textwindow.cpp" />
     <ClCompile Include="..\src\script\buildings.cpp" />
     <ClCompile Include="..\src\script\callstations.cpp" />
@@ -405,6 +406,7 @@
     <ClInclude Include="..\src\frontend\gui\skycontrol.h" />
     <ClInclude Include="..\src\frontend\gui\soundmanager.h" />
     <ClInclude Include="..\src\frontend\gui\stats.h" />
+    <ClInclude Include="..\src\frontend\gui\texturemanager.h" />
     <ClInclude Include="..\src\frontend\gui\textwindow.h" />
     <ClInclude Include="..\src\script\scriptproc.h" />
     <ClInclude Include="..\src\script\section.h" />
