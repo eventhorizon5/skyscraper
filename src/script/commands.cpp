@@ -103,7 +103,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	TextureManager *texturemanager = Simcore->GetTextureManager();
 
 	//AddTriangleWall command
-	if (StartsWithNoCase(LineData,  "addtrianglewall"))
+	if (StartsWithNoCase(LineData, "addtrianglewall"))
 	{
 		//get data
 		int params = SplitData(LineData, 16);

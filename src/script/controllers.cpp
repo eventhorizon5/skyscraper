@@ -148,7 +148,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 	}
 
 	//handle end of controller section
-	if (StartsWithNoCase(LineData,  "<endcontroller>") && config->RangeL == config->RangeH)
+	if (StartsWithNoCase(LineData, "<endcontroller>") && config->RangeL == config->RangeH)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
