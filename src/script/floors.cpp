@@ -148,6 +148,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	bool equals = !value.empty();
 
 	//parameters
+
+	//Height parameter
 	if (StartsWithNoCase(LineData, "height"))
 	{
 		if (equals == false)
@@ -160,6 +162,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		else
 			FloorCheck = 3;
 	}
+	//InterfloorHeight parameter
 	if (StartsWithNoCase(LineData, "interfloorheight"))
 	{
 		if (equals == false)
@@ -172,6 +175,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		else
 			FloorCheck = 3;
 	}
+	//Altitude parameter
 	if (StartsWithNoCase(LineData, "altitude"))
 	{
 		if (equals == false)
@@ -183,6 +187,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		floor->SetAltitude(alt);
 		return sNextLine;
 	}
+	//ID parameter
 	if (StartsWithNoCase(LineData, "id"))
 	{
 		if (equals == false)
@@ -190,6 +195,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		floor->ID = Calc(value);
 		return sNextLine;
 	}
+	//NumberID parameter
 	if (StartsWithNoCase(LineData, "numberid"))
 	{
 		if (equals == false)
@@ -197,6 +203,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		floor->NumberID = Calc(value);
 		return sNextLine;
 	}
+	//Name parameter
 	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
@@ -204,6 +211,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		floor->Name = Calc(value);
 		return sNextLine;
 	}
+	//Type parameter
 	if (StartsWithNoCase(LineData, "type"))
 	{
 		if (equals == false)
@@ -211,6 +219,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		floor->FloorType = value;
 		return sNextLine;
 	}
+	//Description parameter
 	if (StartsWithNoCase(LineData, "description"))
 	{
 		if (equals == false)
@@ -218,6 +227,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		floor->Description = value;
 		return sNextLine;
 	}
+	//IndicatorTexture parameter
 	if (StartsWithNoCase(LineData, "indicatortexture"))
 	{
 		if (equals == false)
@@ -225,6 +235,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		floor->IndicatorTexture = Calc(value);
 		return sNextLine;
 	}
+	//Group parameter
 	if (StartsWithNoCase(LineData, "group"))
 	{
 		//copy string listing of group floors into array

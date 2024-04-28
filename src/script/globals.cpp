@@ -45,51 +45,62 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	std::string value = GetAfterEquals(LineData);
 
 	//store variable values
+
+	//Name parameter
 	if (StartsWithNoCase(LineData, "name"))
 	{
 		Simcore->BuildingName = value;
 		return sNextLine;
 	}
+	//Designer parameter
 	if (StartsWithNoCase(LineData, "designer"))
 	{
 		Simcore->BuildingDesigner = value;
 		return sNextLine;
 	}
+	//Location parameter
 	if (StartsWithNoCase(LineData, "location"))
 	{
 		Simcore->BuildingLocation = value;
 		return sNextLine;
 	}
+	//Description parameter
 	if (StartsWithNoCase(LineData, "description"))
 	{
 		Simcore->BuildingDescription = value;
 		return sNextLine;
 	}
+	//Version parameter
 	if (StartsWithNoCase(LineData, "version"))
 	{
 		Simcore->BuildingVersion = value;
 		return sNextLine;
 	}
+	//Sky parameter
 	if (StartsWithNoCase(LineData, "sky"))
 	{
 		Simcore->SkyName = value;
 		return sNextLine;
 	}
+	//DynamicSky parameter
 	if (StartsWithNoCase(LineData, "dynamicsky"))
 	{
 		engine->GetFrontend()->SkyName = value;
 		return sNextLine;
 	}
+	//Collisions parameter
 	if (StartsWithNoCase(LineData, "collisions"))
 	{
 		Simcore->camera->EnableCollisions(ToBool(value));
 		return sNextLine;
 	}
+	//Gravity parameter
 	if (StartsWithNoCase(LineData, "gravity"))
 	{
 		Simcore->camera->EnableGravity(ToBool(value));
 		return sNextLine;
 	}
+	//CameraFloor parameter
 	if (StartsWithNoCase(LineData, "camerafloor"))
 	{
 		int data;
@@ -100,6 +111,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Simcore->camera->StartFloor = data;
 		return sNextLine;
 	}
+	//CameraPosition parameter
 	if (StartsWithNoCase(LineData, "cameraposition"))
 	{
 		Real x, z;
@@ -114,6 +126,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Simcore->camera->StartPositionZ  = z;
 		return sNextLine;
 	}
+	//CameraDirection parameter
 	if (StartsWithNoCase(LineData, "cameradirection"))
 	{
 		int loc1 = value.find(",", 0);
@@ -131,6 +144,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Simcore->camera->SetStartDirection(Vector3(x, y, z));
 		return sNextLine;
 	}
+	//CameraRotation parameter
 	if (StartsWithNoCase(LineData, "camerarotation"))
 	{
 		int loc1 = value.find(",", 0);
@@ -148,11 +162,13 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Simcore->camera->SetStartRotation(Vector3(x, y, z));
 		return sNextLine;
 	}
+	//InterfloorOnTop parameter
 	if (StartsWithNoCase(LineData, "interfloorontop"))
 	{
 		Simcore->InterfloorOnTop = ToBool(value);
 		return sNextLine;
 	}
+	//Coordinates parameter
 	if (StartsWithNoCase(LineData, "coordinates"))
 	{
 		int loc = value.find(",", 0);
@@ -167,6 +183,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		engine->GetFrontend()->SetLocation(latitude, longitude);
 		return sNextLine;
 	}
+	//DateTime parameter
 	if (StartsWithNoCase(LineData, "datetime"))
 	{
 		if (value == "now")
@@ -181,6 +198,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
+	//TimeScale parameter
 	if (StartsWithNoCase(LineData, "timescale"))
 	{
 		int data;
@@ -190,6 +208,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 
 		engine->GetFrontend()->SkyMult = data;
 	}
+	//Position parameter
 	if (StartsWithNoCase(LineData, "position"))
 	{
 		int params = SplitAfterEquals(LineData);
@@ -215,6 +234,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
+	//Rotation parameter
 	if (StartsWithNoCase(LineData, "rotation"))
 	{
 		int rotation;
@@ -225,6 +245,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Simcore->Rotate(0.0, rotation, 0.0);
 		return sNextLine;
 	}
+	//Bounds parameter
 	if (StartsWithNoCase(LineData, "bounds"))
 	{
 		int params = SplitAfterEquals(LineData);

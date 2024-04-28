@@ -57,6 +57,8 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	bool equals = !value.empty();
 
 	//parameters
+
+	//ConcurrentLoads parameter
 	if (StartsWithNoCase(LineData, "concurrentloads"))
 	{
 		if (equals == false)
@@ -65,6 +67,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		engine->GetFrontend()->ConcurrentLoads = ToBool(value);
 		return sNextLine;
 	}
+	//CutLandscape parameter
 	if (StartsWithNoCase(LineData, "cutlandscape"))
 	{
 		if (equals == false)
@@ -73,6 +76,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		engine->GetFrontend()->CutLandscape = ToBool(value);
 		return sNextLine;
 	}
+	//CutBuildings parameter
 	if (StartsWithNoCase(LineData, "cutbuildings"))
 	{
 		if (equals == false)
@@ -81,6 +85,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		engine->GetFrontend()->CutBuildings = ToBool(value);
 		return sNextLine;
 	}
+	//CutExternal parameter
 	if (StartsWithNoCase(LineData, "cutexternal"))
 	{
 		if (equals == false)
@@ -89,6 +94,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		engine->GetFrontend()->CutExternal = ToBool(value);
 		return sNextLine;
 	}
+	//CutFloors parameter
 	if (StartsWithNoCase(LineData, "cutfloors"))
 	{
 		if (equals == false)

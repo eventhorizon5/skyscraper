@@ -137,6 +137,8 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//commands
+
 	//CreatePanel command
 	if (StartsWithNoCase(LineData, "createpanel"))
 	{
@@ -158,8 +160,6 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		StoreCommand(station->CreateButtonPanel(tempdata[0], ToInt(tempdata[1]), ToInt(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		return sNextLine;
 	}
-
-	//commands
 
 	//AddControl command
 	if (StartsWithNoCase(LineData, "addcontrol "))
@@ -262,7 +262,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//handle end of call station section
-	if (StartsWithNoCase(LineData, "<endcallstation>") == true && config->RangeL == config->RangeH)
+	if (StartsWithNoCase(LineData, "<endcallstation>") && config->RangeL == config->RangeH)
 	{
 		//return to floor section
 		config->SectionNum = 2;
@@ -278,7 +278,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//handle call station range
-	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endcallstation") == true)
+	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endcallstation"))
 	{
 		if (config->Current < config->RangeH)
 		{

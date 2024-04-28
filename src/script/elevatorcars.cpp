@@ -103,6 +103,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	bool equals = !value.empty();
 
 	//parameters
+
+	//Name parameter
 	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
@@ -110,6 +112,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->Name = value;
 		return sNextLine;
 	}
+	//OpenSpeed parameter
 	if (StartsWithNoCase(LineData, "openspeed"))
 	{
 		if (equals == false)
@@ -129,6 +132,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//Doors parameter
 	if (StartsWithNoCase(LineData, "doors "))
 	{
 		if (equals == false)
@@ -138,6 +142,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//ServicedFloors parameter
 	if (StartsWithNoCase(LineData, "servicedfloors"))
 	{
 		//copy string listing of serviced floors into array
@@ -169,6 +174,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
+	//DisplayFloors parameter
 	if (StartsWithNoCase(LineData, "displayfloors"))
 	{
 		//copy string listing of serviced floors into array
@@ -196,6 +202,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
+	//DoorTimer parameter
 	if (StartsWithNoCase(LineData, "doortimer"))
 	{
 		if (equals == false)
@@ -215,6 +222,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//QuickClose parameter
 	if (StartsWithNoCase(LineData, "quickclose"))
 	{
 		if (equals == false)
@@ -234,6 +242,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//NudgeTimer parameter
 	if (StartsWithNoCase(LineData, "nudgetimer"))
 	{
 		if (equals == false)
@@ -253,6 +262,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//SlowSpeed parameter
 	if (StartsWithNoCase(LineData, "slowspeed"))
 	{
 		if (equals == false)
@@ -272,6 +282,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//ManualSpeed parameter
 	if (StartsWithNoCase(LineData, "manualspeed"))
 	{
 		if (equals == false)
@@ -291,6 +302,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//OpenSound parameter
 	if (StartsWithNoCase(LineData, "opensound"))
 	{
 		if (equals == false)
@@ -312,6 +324,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->OpenSound = value;
 		return sNextLine;
 	}
+	//CloseSound parameter
 	if (StartsWithNoCase(LineData, "closesound"))
 	{
 		if (equals == false)
@@ -333,6 +346,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->CloseSound = value;
 		return sNextLine;
 	}
+	//NudgeSound parameter
 	if (StartsWithNoCase(LineData, "nudgesound"))
 	{
 		if (equals == false)
@@ -354,6 +368,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->NudgeSound = value;
 		return sNextLine;
 	}
+	//StartSound parameter
 	if (StartsWithNoCase(LineData, "startsound"))
 	{
 		//backwards compatibility
@@ -379,6 +394,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->MotorIdleSound = "";
 		return sNextLine;
 	}
+	//MoveSound parameter
 	if (StartsWithNoCase(LineData, "movesound"))
 	{
 		//backwards compatibility
@@ -404,6 +420,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->MotorIdleSound = "";
 		return sNextLine;
 	}
+	//StopSound parameter
 	if (StartsWithNoCase(LineData, "stopsound"))
 	{
 		//backwards compatibility
@@ -429,6 +446,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->MotorIdleSound = "";
 		return sNextLine;
 	}
+	//IdleSound parameter
 	if (StartsWithNoCase(LineData, "idlesound"))
 	{
 		//backwards compatibility
@@ -453,6 +471,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->MotorIdleSound = "";
 		return sNextLine;
 	}
+	//CarStartSound parameter
 	if (StartsWithNoCase(LineData, "carstartsound"))
 	{
 		if (equals == false)
@@ -465,6 +484,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownStartSound = value;
 		return sNextLine;
 	}
+	//CarUpStartSound parameter
 	if (StartsWithNoCase(LineData, "carupstartsound"))
 	{
 		if (equals == false)
@@ -476,6 +496,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->UpStartSound = value;
 		return sNextLine;
 	}
+	//CarDownStartSound parameter
 	if (StartsWithNoCase(LineData, "cardownstartsound"))
 	{
 		if (equals == false)
@@ -487,6 +508,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownStartSound = value;
 		return sNextLine;
 	}
+	//CarMoveSound parameter
 	if (StartsWithNoCase(LineData, "carmovesound"))
 	{
 		if (equals == false)
@@ -499,6 +521,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownMoveSound = value;
 		return sNextLine;
 	}
+	//CarUpMoveSound parameter
 	if (StartsWithNoCase(LineData, "carupmovesound"))
 	{
 		if (equals == false)
@@ -510,6 +533,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->UpMoveSound = value;
 		return sNextLine;
 	}
+	//CarDownMoveSound parameter
 	if (StartsWithNoCase(LineData, "cardownmovesound"))
 	{
 		if (equals == false)
@@ -521,6 +545,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownMoveSound = value;
 		return sNextLine;
 	}
+	//CarStopSound parameter
 	if (StartsWithNoCase(LineData, "carstopsound"))
 	{
 		if (equals == false)
@@ -533,6 +558,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownStopSound = value;
 		return sNextLine;
 	}
+	//CarUpStopSound parameter
 	if (StartsWithNoCase(LineData, "carupstopsound"))
 	{
 		if (equals == false)
@@ -544,6 +570,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->UpStopSound = value;
 		return sNextLine;
 	}
+	//CarDownStopSound parameter
 	if (StartsWithNoCase(LineData, "cardownstopsound"))
 	{
 		if (equals == false)
@@ -555,6 +582,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownStopSound = value;
 		return sNextLine;
 	}
+	//CarIdleSound parameter
 	if (StartsWithNoCase(LineData, "caridlesound"))
 	{
 		if (equals == false)
@@ -566,6 +594,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->IdleSound = value;
 		return sNextLine;
 	}
+	//ChimeSound parameter
 	if (StartsWithNoCase(LineData, "chimesound"))
 	{
 		if (equals == false)
@@ -588,6 +617,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
+	//UpChimeSound parameter
 	if (StartsWithNoCase(LineData, "upchimesound"))
 	{
 		if (equals == false)
@@ -609,6 +639,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->UpChimeSound = value;
 		return sNextLine;
 	}
+	//DownChimeSound parameter
 	if (StartsWithNoCase(LineData, "downchimesound"))
 	{
 		if (equals == false)
@@ -630,6 +661,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
+	//EarlyUpChimeSound parameter
 	if (StartsWithNoCase(LineData, "earlyupchimesound"))
 	{
 		if (equals == false)
@@ -652,6 +684,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->EarlyUpSet = true;
 		return sNextLine;
 	}
+	//EarlyDownChimeSound parameter
 	if (StartsWithNoCase(LineData, "earlydownchimesound"))
 	{
 		if (equals == false)
@@ -674,6 +707,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->EarlyDownSet = true;
 		return sNextLine;
 	}
+	//AlarmSoundStop parameter
 	if (StartsWithNoCase(LineData, "alarmsoundstop"))
 	{
 		if (equals == false)
@@ -685,6 +719,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->AlarmSoundStop = value;
 		return sNextLine;
 	}
+	//AlarmSound parameter
 	if (StartsWithNoCase(LineData, "alarmsound"))
 	{
 		if (equals == false)
@@ -696,6 +731,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->AlarmSound = value;
 		return sNextLine;
 	}
+	//BeepSound parameter
 	if (StartsWithNoCase(LineData, "beepsound"))
 	{
 		if (equals == false)
@@ -707,6 +743,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetBeepSound(value);
 		return sNextLine;
 	}
+	//FloorSound parameter
 	if (StartsWithNoCase(LineData, "floorsound"))
 	{
 		if (equals == false)
@@ -718,6 +755,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetFloorSound(value);
 		return sNextLine;
 	}
+	//UpMessage parameter
 	if (StartsWithNoCase(LineData, "upmessage"))
 	{
 		if (equals == false)
@@ -729,6 +767,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(true, true, value);
 		return sNextLine;
 	}
+	//DownMessage parameter
 	if (StartsWithNoCase(LineData, "downmessage"))
 	{
 		if (equals == false)
@@ -740,6 +779,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(true, false, value);
 		return sNextLine;
 	}
+	//MessageOnMove parameter
 	if (StartsWithNoCase(LineData, "messageonmove"))
 	{
 		if (equals == false)
@@ -748,6 +788,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MessageOnMove = ToBool(value);
 		return sNextLine;
 	}
+	//OpenMessage parameter
 	if (StartsWithNoCase(LineData, "openmessage"))
 	{
 		if (equals == false)
@@ -759,6 +800,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(false, true, value);
 		return sNextLine;
 	}
+	//CloseMessage parameter
 	if (StartsWithNoCase(LineData, "closemessage"))
 	{
 		if (equals == false)
@@ -770,6 +812,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(false, false, value);
 		return sNextLine;
 	}
+	//Music parameter
 	if (StartsWithNoCase(LineData, "music "))
 	{
 		if (equals == false)
@@ -782,6 +825,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicDown = value;
 		return sNextLine;
 	}
+	//MusicUp parameter
 	if (StartsWithNoCase(LineData, "musicup"))
 	{
 		if (equals == false)
@@ -793,6 +837,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicUp = value;
 		return sNextLine;
 	}
+	//MusicDown parameter
 	if (StartsWithNoCase(LineData, "musicdown"))
 	{
 		if (equals == false)
@@ -804,6 +849,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicDown = value;
 		return sNextLine;
 	}
+	//MusicOn parameter
 	if (StartsWithNoCase(LineData, "musicon "))
 	{
 		if (equals == false)
@@ -812,6 +858,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicOn = ToBool(value);
 		return sNextLine;
 	}
+	//MusicAlwaysOn parameter
 	if (StartsWithNoCase(LineData, "musicalwayson"))
 	{
 		if (equals == false)
@@ -820,6 +867,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicAlwaysOn = ToBool(value);
 		return sNextLine;
 	}
+	//MusicOnMove parameter
 	if (StartsWithNoCase(LineData, "musiconmove"))
 	{
 		if (equals == false)
@@ -827,6 +875,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		car->MusicOnMove = ToBool(value);
 	}
+	//MusicPosition parameter
 	if (StartsWithNoCase(LineData, "musicposition"))
 	{
 		int params = SplitAfterEquals(LineData);
@@ -843,6 +892,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicPosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
+	//AutoEnable parameter
 	if (StartsWithNoCase(LineData, "autoenable"))
 	{
 		if (equals == false)
@@ -851,6 +901,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->AutoEnable = ToBool(value);
 		return sNextLine;
 	}
+	//DoorSensor parameter
 	if (StartsWithNoCase(LineData, "doorsensor"))
 	{
 		if (equals == false)
@@ -882,6 +933,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
+	//CarEmergencyStopSound parameter
 	if (StartsWithNoCase(LineData, "caremergencystopsound"))
 	{
 		if (equals == false)
@@ -893,6 +945,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->EmergencyStopSound = value;
 		return sNextLine;
 	}
+	//IndependentService parameter
 	if (StartsWithNoCase(LineData, "independentservice"))
 	{
 		if (equals == false)
@@ -901,6 +954,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->IndependentServiceCar = car->Number;
 		return sNextLine;
 	}
+	//FireService2 parameter
 	if (StartsWithNoCase(LineData, "fireservice2"))
 	{
 		if (equals == false)

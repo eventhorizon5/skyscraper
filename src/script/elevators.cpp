@@ -68,6 +68,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	Elevator *elev = Simcore->GetElevator(config->Current);
 
 	//parameters
+
+	//Name parameter
 	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
@@ -75,6 +77,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->Name = value;
 		return sNextLine;
 	}
+	//Type parameter
 	if (StartsWithNoCase(LineData, "type"))
 	{
 		if (equals == false)
@@ -82,6 +85,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->Type = value;
 		return sNextLine;
 	}
+	//Speed parameter
 	if (StartsWithNoCase(LineData, "speed"))
 	{
 		if (equals == false)
@@ -94,6 +98,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->DownSpeed = Speed;
 		return sNextLine;
 	}
+	//UpSpeed parameter
 	if (StartsWithNoCase(LineData, "upspeed"))
 	{
 		if (equals == false)
@@ -103,6 +108,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//DownSpeed parameter
 	if (StartsWithNoCase(LineData, "downspeed"))
 	{
 		if (equals == false)
@@ -112,6 +118,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//Acceleration parameter
 	if (StartsWithNoCase(LineData, "acceleration"))
 	{
 		if (equals == false)
@@ -121,6 +128,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//Deceleration parameter
 	if (StartsWithNoCase(LineData, "deceleration"))
 	{
 		if (equals == false)
@@ -130,6 +138,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//AccelJerk parameter
 	if (StartsWithNoCase(LineData, "acceljerk"))
 	{
 		if (equals == false)
@@ -139,6 +148,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//DecelJerk parameter
 	if (StartsWithNoCase(LineData, "deceljerk"))
 	{
 		if (equals == false)
@@ -148,6 +158,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//AssignedShaft parameter
 	if (StartsWithNoCase(LineData, "assignedshaft"))
 	{
 		if (equals == false)
@@ -157,6 +168,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//MotorStartSound parameter
 	if (StartsWithNoCase(LineData, "motorstartsound"))
 	{
 		if (equals == false)
@@ -169,6 +181,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownStartSound = value;
 		return sNextLine;
 	}
+	//MotorUpStartSound parameter
 	if (StartsWithNoCase(LineData, "motorupstartsound"))
 	{
 		if (equals == false)
@@ -180,6 +193,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorUpStartSound = value;
 		return sNextLine;
 	}
+	//MotorDownStartSound parameter
 	if (StartsWithNoCase(LineData, "motordownstartsound"))
 	{
 		if (equals == false)
@@ -191,6 +205,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownStartSound = value;
 		return sNextLine;
 	}
+	//MotorRunSound parameter
 	if (StartsWithNoCase(LineData, "motorrunsound"))
 	{
 		if (equals == false)
@@ -203,6 +218,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownRunSound = value;
 		return sNextLine;
 	}
+	//MotorUpRunSound parameter
 	if (StartsWithNoCase(LineData, "motoruprunsound"))
 	{
 		if (equals == false)
@@ -214,6 +230,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorUpRunSound = value;
 		return sNextLine;
 	}
+	//MotorDownRunSound parameter
 	if (StartsWithNoCase(LineData, "motordownrunsound"))
 	{
 		if (equals == false)
@@ -225,6 +242,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownRunSound = value;
 		return sNextLine;
 	}
+	//MotorStopSound parameter
 	if (StartsWithNoCase(LineData, "motorstopsound"))
 	{
 		if (equals == false)
@@ -237,6 +255,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownStopSound = value;
 		return sNextLine;
 	}
+	//MotorUpStopSound parameter
 	if (StartsWithNoCase(LineData, "motorupstopsound"))
 	{
 		if (equals == false)
@@ -248,6 +267,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorUpStopSound = value;
 		return sNextLine;
 	}
+	//MotorDownStopSound parameter
 	if (StartsWithNoCase(LineData, "motordownstopsound"))
 	{
 		if (equals == false)
@@ -259,6 +279,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownStopSound = value;
 		return sNextLine;
 	}
+	//MotorIdleSound parameter
 	if (StartsWithNoCase(LineData, "motoridlesound"))
 	{
 		if (equals == false)
@@ -270,6 +291,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorIdleSound = value;
 		return sNextLine;
 	}
+	//FloorSkipText parameter
 	if (StartsWithNoCase(LineData, "floorskiptext"))
 	{
 		if (equals == false)
@@ -277,6 +299,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetFloorSkipText(value);
 		return sNextLine;
 	}
+	//RecallFloor parameter
 	if (StartsWithNoCase(LineData, "recallfloor"))
 	{
 		if (equals == false)
@@ -288,6 +311,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetRecallFloor(floortemp);
 		return sNextLine;
 	}
+	//AlternateRecallFloor parameter
 	if (StartsWithNoCase(LineData, "alternaterecallfloor"))
 	{
 		if (equals == false)
@@ -299,6 +323,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetAlternateRecallFloor(floortemp);
 		return sNextLine;
 	}
+	//ACPFloor parameter
 	if (StartsWithNoCase(LineData, "acpfloor"))
 	{
 		if (equals == false)
@@ -310,6 +335,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetACPFloor(floortemp);
 		return sNextLine;
 	}
+	//MotorPosition parameter
 	if (StartsWithNoCase(LineData, "motorposition"))
 	{
 		int params = SplitAfterEquals(LineData);
@@ -326,6 +352,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorPosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
+	//QueueResets parameter
 	if (StartsWithNoCase(LineData, "queueresets"))
 	{
 		if (equals == false)
@@ -333,6 +360,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->QueueResets = ToBool(value);
 		return sNextLine;
 	}
+	//LimitQueue parameter
 	if (StartsWithNoCase(LineData, "limitqueue"))
 	{
 		if (equals == false)
@@ -340,6 +368,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->LimitQueue = ToBool(value);
 		return sNextLine;
 	}
+	//ACP parameter
 	if (StartsWithNoCase(LineData, "acp"))
 	{
 		if (equals == false)
@@ -347,6 +376,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ACP = ToBool(value);
 		return sNextLine;
 	}
+	//UpPeak parameter
 	if (StartsWithNoCase(LineData, "uppeak"))
 	{
 		if (equals == false)
@@ -354,6 +384,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->UpPeak = ToBool(value);
 		return sNextLine;
 	}
+	//DownPeak parameter
 	if (StartsWithNoCase(LineData, "downpeak"))
 	{
 		if (equals == false)
@@ -361,6 +392,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->DownPeak = ToBool(value);
 		return sNextLine;
 	}
+	//InspectionService parameter
 	if (StartsWithNoCase(LineData, "inspectionservice"))
 	{
 		if (equals == false)
@@ -368,6 +400,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->InspectionService = ToBool(value);
 		return sNextLine;
 	}
+	//FireService1 parameter
 	if (StartsWithNoCase(LineData, "fireservice1"))
 	{
 		if (equals == false)
@@ -381,6 +414,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->FireServicePhase1 = value2;
 		return sNextLine;
 	}
+	//Parking parameter
 	if (StartsWithNoCase(LineData, "parking"))
 	{
 		int params = SplitAfterEquals(LineData);
@@ -398,6 +432,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ParkingDelay = ToFloat(tempdata[1]);
 		return sNextLine;
 	}
+	//LevelingSpeed parameter
 	if (StartsWithNoCase(LineData, "levelingspeed"))
 	{
 		if (equals == false)
@@ -409,6 +444,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->LevelingSpeed = leveling;
 		return sNextLine;
 	}
+	//LevelingOffset parameter
 	if (StartsWithNoCase(LineData, "levelingoffset"))
 	{
 		if (equals == false)
@@ -420,6 +456,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->LevelingOffset = leveling;
 		return sNextLine;
 	}
+	//LevelingOpen parameter
 	if (StartsWithNoCase(LineData, "levelingopen"))
 	{
 		if (equals == false)
@@ -431,6 +468,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->LevelingOpen = leveling;
 		return sNextLine;
 	}
+	//NotifyEarly parameter
 	if (StartsWithNoCase(LineData, "notifyearly"))
 	{
 		if (equals == false)
@@ -442,6 +480,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->NotifyEarly = notify;
 		return sNextLine;
 	}
+	//DepartureDelay parameter
 	if (StartsWithNoCase(LineData, "departuredelay"))
 	{
 		if (equals == false)
@@ -453,6 +492,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->DepartureDelay = delay;
 		return sNextLine;
 	}
+	//ArrivalDelay parameter
 	if (StartsWithNoCase(LineData, "arrivaldelay"))
 	{
 		if (equals == false)
@@ -464,6 +504,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ArrivalDelay = delay;
 		return sNextLine;
 	}
+	//InspectionSpeed parameter
 	if (StartsWithNoCase(LineData, "inspectionspeed"))
 	{
 		if (equals == false)
@@ -473,6 +514,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//AutoDoors parameter
 	if (StartsWithNoCase(LineData, "autodoors"))
 	{
 		if (equals == false)
@@ -481,6 +523,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->AutoDoors = ToBool(value);
 		return sNextLine;
 	}
+	//OpenOnStart parameter
 	if (StartsWithNoCase(LineData, "openonstart"))
 	{
 		if (equals == false)
@@ -489,6 +532,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->OpenOnStart = ToBool(value);
 		return sNextLine;
 	}
+	//Interlocks parameter
 	if (StartsWithNoCase(LineData, "interlocks"))
 	{
 		if (equals == false)
@@ -497,6 +541,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->Interlocks = ToBool(value);
 		return sNextLine;
 	}
+	//FloorHold parameter
 	if (StartsWithNoCase(LineData, "floorhold"))
 	{
 		if (equals == false)
@@ -505,6 +550,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->FloorHold = ToBool(value);
 		return sNextLine;
 	}
+	//MotorEmergencyStopSound parameter
 	if (StartsWithNoCase(LineData, "motoremergencystopsound"))
 	{
 		if (equals == false)
@@ -516,6 +562,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorEmergencyStopSound = value;
 		return sNextLine;
 	}
+	//EmergencyStopSpeed parameter
 	if (StartsWithNoCase(LineData, "emergencystopspeed"))
 	{
 		if (equals == false)
@@ -525,6 +572,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//ChimeOnArrival parameter
 	if (StartsWithNoCase(LineData, "chimeonarrival"))
 	{
 		if (equals == false)
@@ -532,6 +580,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ChimeOnArrival = ToBool(value);
 		return sNextLine;
 	}
+	//ReOpen parameter
 	if (StartsWithNoCase(LineData, "reopen"))
 	{
 		if (equals == false)
@@ -540,6 +589,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ReOpen = ToBool(value);
 		return sNextLine;
 	}
+	//HoistwayAccessHold parameter
 	if (StartsWithNoCase(LineData, "hoistwayaccesshold"))
 	{
 		if (equals == false)
@@ -548,6 +598,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->HoistwayAccessHold = ToBool(value);
 		return sNextLine;
 	}
+	//RunState parameter
 	if (StartsWithNoCase(LineData, "runstate"))
 	{
 		if (equals == false)
@@ -556,6 +607,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetRunState(ToBool(value));
 		return sNextLine;
 	}
+	//RopePosition parameter
 	if (StartsWithNoCase(LineData, "ropeposition"))
 	{
 		int params = SplitAfterEquals(LineData);
@@ -572,6 +624,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->RopePosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
+	//RopeTexture parameter
 	if (StartsWithNoCase(LineData, "ropetexture"))
 	{
 		if (equals == false)
@@ -580,6 +633,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->RopeTexture = value;
 		return sNextLine;
 	}
+	//CounterweightStartSound parameter
 	if (StartsWithNoCase(LineData, "counterweightstartsound"))
 	{
 		if (equals == false)
@@ -591,6 +645,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->CounterweightStartSound = value;
 		return sNextLine;
 	}
+	//CounterweightMoveSound parameter
 	if (StartsWithNoCase(LineData, "counterweightmovesound"))
 	{
 		if (equals == false)
@@ -602,6 +657,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->CounterweightMoveSound = value;
 		return sNextLine;
 	}
+	//CounterweightStopSound parameter
 	if (StartsWithNoCase(LineData, "counterweightstopsound"))
 	{
 		if (equals == false)
@@ -613,6 +669,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->CounterweightStopSound = value;
 		return sNextLine;
 	}
+	//ID parameter
 	if (StartsWithNoCase(LineData, "id "))
 	{
 		if (equals == false)

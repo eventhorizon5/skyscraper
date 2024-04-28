@@ -67,6 +67,8 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 	DispatchController *c = Simcore->GetController(config->Current);
 
 	//parameters
+
+	//Name parameter
 	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
@@ -74,6 +76,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		c->Name = value;
 		return sNextLine;
 	}
+	//DestinationDispatch parameter
 	if (StartsWithNoCase(LineData, "destinationdispatch"))
 	{
 		if (equals == false)
@@ -82,6 +85,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		c->DestinationDispatch = ToBool(value);
 		return sNextLine;
 	}
+	//Hybrid parameter
 	if (StartsWithNoCase(LineData, "hybrid"))
 	{
 		if (equals == false)
@@ -90,6 +94,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		c->Hybrid = ToBool(value);
 		return sNextLine;
 	}
+	//Range parameter
 	if (StartsWithNoCase(LineData, "range"))
 	{
 		if (equals == false)
@@ -99,6 +104,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//MaxPassengers parameter
 	if (StartsWithNoCase(LineData, "maxpassengers"))
 	{
 		if (equals == false)
@@ -108,6 +114,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//Elevators parameter
 	if (StartsWithNoCase(LineData, "elevators"))
 	{
 		//copy string listing of elevators into array
@@ -138,6 +145,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
+	//Reprocess parameter
 	if (StartsWithNoCase(LineData, "reprocess"))
 	{
 		if (equals == false)

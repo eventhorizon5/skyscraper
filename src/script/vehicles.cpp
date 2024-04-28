@@ -67,6 +67,8 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	Vehicle *v = Simcore->GetVehicle(config->Current);
 
 	//parameters
+
+	//Name parameter
 	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
@@ -74,6 +76,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 		v->Name = value;
 		return sNextLine;
 	}
+	//MaxEngineForce parameter
 	if (StartsWithNoCase(LineData, "maxengineforce"))
 	{
 		if (equals == false)
@@ -83,6 +86,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//SteeringIncrement parameter
 	if (StartsWithNoCase(LineData, "steeringincrement"))
 	{
 		if (equals == false)
@@ -92,6 +96,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//SteeringClamp parameter
 	if (StartsWithNoCase(LineData, "steeringclamp"))
 	{
 		if (equals == false)
@@ -101,6 +106,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//WheelFriction parameter
 	if (StartsWithNoCase(LineData, "wheelfriction"))
 	{
 		if (equals == false)
@@ -110,6 +116,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//SuspensionStiffness parameter
 	if (StartsWithNoCase(LineData, "suspensionstiffness"))
 	{
 		if (equals == false)
@@ -119,6 +126,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//SuspensionDamping parameter
 	if (StartsWithNoCase(LineData, "suspensiondamping"))
 	{
 		if (equals == false)
@@ -128,6 +136,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//SuspensionCompression parameter
 	if (StartsWithNoCase(LineData, "suspensioncompression"))
 	{
 		if (equals == false)
@@ -137,6 +146,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//RollInfluence parameter
 	if (StartsWithNoCase(LineData, "rollinfluence"))
 	{
 		if (equals == false)
@@ -146,6 +156,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//SuspensionRestLength parameter
 	if (StartsWithNoCase(LineData, "suspensionrestlength"))
 	{
 		if (equals == false)
@@ -155,6 +166,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//MaxSuspensionTravelCm parameter
 	if (StartsWithNoCase(LineData, "maxsuspensiontravelcm"))
 	{
 		if (equals == false)
@@ -164,6 +176,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//FrictionSlip parameter
 	if (StartsWithNoCase(LineData, "frictionslip"))
 	{
 		if (equals == false)
@@ -173,6 +186,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//ChassisShift parameter
 	if (StartsWithNoCase(LineData, "chassisshift"))
 	{
 		int params = SplitAfterEquals(LineData);
@@ -189,6 +203,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 		v->ChassisShift = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
+	//ChassisMesh parameter
 	if (StartsWithNoCase(LineData, "chassismesh"))
 	{
 		if (equals == false)
@@ -196,6 +211,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 		v->ChassisMesh = value;
 		return sNextLine;
 	}
+	//WheelMesh parameter
 	if (StartsWithNoCase(LineData, "wheelmesh"))
 	{
 		if (equals == false)
@@ -203,6 +219,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 		v->WheelMesh = value;
 		return sNextLine;
 	}
+	//ChassisScale parameter
 	if (StartsWithNoCase(LineData, "chassisscale"))
 	{
 		if (equals == false)
@@ -212,6 +229,7 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
+	//WheelScale parameter
 	if (StartsWithNoCase(LineData, "wheelscale"))
 	{
 		if (equals == false)
