@@ -910,7 +910,13 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->FireServicePhase2 = ToInt(value);
+
+		std::string str = Calc(value);
+		int mode;
+		if (!IsNumeric(str, mode))
+			return ScriptError("Invalid value: " + str);
+
+		elev->FireServicePhase2 = mode;
 		elev->FireServicePhase2Car = car->Number;
 		return sNextLine;
 	}
