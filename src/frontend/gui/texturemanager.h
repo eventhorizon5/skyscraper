@@ -43,6 +43,7 @@ class TextureManager: public wxDialog
         virtual ~TextureManager();
 
         //(*Declarations(TextureManager)
+        wxButton* bExport;
         wxButton* bOK;
         wxButton* bSave;
         wxButton* bUnload;
@@ -103,6 +104,7 @@ class TextureManager: public wxDialog
         static const long ID_STATICTEXT3;
         static const long ID_chkForceMode;
         static const long ID_bSave;
+        static const long ID_bExport;
         static const long ID_bUnload;
         static const long ID_bOK;
         //*)
@@ -114,7 +116,10 @@ class TextureManager: public wxDialog
         void On_bOK_Click(wxCommandEvent& event);
         void On_TextureList_Select(wxCommandEvent& event);
         void On_bSave_Click(wxCommandEvent& event);
+        void On_bExport_Click(wxCommandEvent& event);
         //*)
+
+        std::string GetTextureName(const std::string &material);
 
         SBS::SBS *Simcore;
 		DebugPanel *panel;

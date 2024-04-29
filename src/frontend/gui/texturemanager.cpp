@@ -61,6 +61,7 @@ const long TextureManager::ID_chkEnableForce = wxNewId();
 const long TextureManager::ID_STATICTEXT3 = wxNewId();
 const long TextureManager::ID_chkForceMode = wxNewId();
 const long TextureManager::ID_bSave = wxNewId();
+const long TextureManager::ID_bExport = wxNewId();
 const long TextureManager::ID_bUnload = wxNewId();
 const long TextureManager::ID_bOK = wxNewId();
 //*)
@@ -141,6 +142,8 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
     bSave = new wxButton(this, ID_bSave, _("Save"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSave"));
     BoxSizer2->Add(bSave, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bExport = new wxButton(this, ID_bExport, _("Export"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bExport"));
+    BoxSizer2->Add(bExport, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     bUnload = new wxButton(this, ID_bUnload, _("Unload"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bUnload"));
     BoxSizer2->Add(bUnload, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(BoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -156,6 +159,7 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
 
     Connect(ID_TextureList,wxEVT_COMMAND_LISTBOX_SELECTED,(wxObjectEventFunction)&TextureManager::On_TextureList_Select);
     Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bSave_Click);
+    Connect(ID_bExport,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bExport_Click);
     Connect(ID_bUnload,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bUnload_Click);
     Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bOK_Click);
     //*)
@@ -261,15 +265,10 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 		chkForceMode->SetValue(texture.force_mode);
 		tDependencies->SetValue(SBS::ToString(texture.dependencies));
 
-		//get material
-		Ogre::MaterialPtr mat = Simcore->GetTextureManager()->GetMaterialByName(texture.name);
+		std::string name = GetTextureName(texture.name);
 
-		Ogre::TextureUnitState *state = 0;
-		std::string name;
-		if (mat)
-			state = mat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-		if (state)
-			name = state->getTextureName();
+		if (name.empty())
+			return;
 
 		//get raw texture
 		Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name, "General");
@@ -306,6 +305,47 @@ void TextureManager::On_bSave_Click(wxCommandEvent& event)
 
 		Simcore->GetTextureManager()->SetTextureInfo(selection, texture);
 	}
+}
+
+void TextureManager::On_bExport_Click(wxCommandEvent& event)
+{
+	int selection = TextureList->GetSelection();
+	if (selection < 0)
+		return;
+
+	SBS::TextureManager::TextureInfo texture;
+	Simcore->GetTextureManager()->GetTextureInfo(selection, texture);
+
+	if (texture.name != "")
+	{
+		std::string name = GetTextureName(texture.name);
+
+		if (name.empty())
+			return;
+
+		//get raw texture
+		Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name, "General");
+		if (tex)
+			Simcore->GetTextureManager()->SaveTexture(tex, "texture.png");
+	}
+}
+
+std::string TextureManager::GetTextureName(const std::string &material)
+{
+	if (material != "")
+	{
+		//get material
+		Ogre::MaterialPtr mat = Simcore->GetTextureManager()->GetMaterialByName(material);
+
+		Ogre::TextureUnitState *state = 0;
+		std::string name;
+		if (mat)
+			state = mat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
+		if (state)
+			return state->getTextureName();
+	}
+
+	return "";
 }
 
 }

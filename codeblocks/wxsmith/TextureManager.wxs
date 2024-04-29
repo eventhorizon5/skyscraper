@@ -232,6 +232,15 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
+										<object class="wxButton" name="ID_bExport" variable="bExport" member="yes">
+											<label>Export</label>
+											<handler function="On_bExport_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
 										<object class="wxButton" name="ID_bUnload" variable="bUnload" member="yes">
 											<label>Unload</label>
 											<handler function="On_bUnload_Click" entry="EVT_BUTTON" />
