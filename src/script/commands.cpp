@@ -313,7 +313,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Cannot use system variable name");
 
 		//get text after equal sign
-		std::string value = Calc(GetAfterEquals(LineData));
+		bool equals;
+		std::string value = Calc(GetAfterEquals(LineData, equals));
 
 		//find existing variable by name
 		int index = -1;
@@ -834,7 +835,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Invalid shaft number");
 
 		//get text after equal sign
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		Simcore->GetShaft(shaftnum)->SetShowFull(ToBool(value));
 		return sNextLine;
@@ -947,7 +949,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Invalid stairwell number");
 
 		//get text after equal sign
-		std::string strvalue = GetAfterEquals(LineData);
+		bool equals;
+		std::string strvalue = GetAfterEquals(LineData, equals);
 		SetCase(strvalue, false);
 
 		int value = 0;
@@ -975,7 +978,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "wallorientation"))
 	{
 		//get text after equal sign
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		if (!Simcore->SetWallOrientation(value))
 			return ScriptError();
@@ -986,7 +990,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "floororientation"))
 	{
 		//get text after equal sign
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		if (!Simcore->SetFloorOrientation(value))
 			return ScriptError();
@@ -1066,7 +1071,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Syntax Error");
 
 		//get text after equal sign
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		texturemanager->ResetTextureMapping(ToBool(value));
 		return sNextLine;
@@ -1111,7 +1117,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		int check = (int)LineData.find("=", 0);
 		if (check < 0)
 			return ScriptError("Syntax Error");
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		config->ReverseAxis = ToBool(value);
 		return sNextLine;

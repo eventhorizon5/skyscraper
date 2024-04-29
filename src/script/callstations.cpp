@@ -82,8 +82,8 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//get text after equal sign
-	std::string value = GetAfterEquals(LineData);
-	bool equals = !value.empty();
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//parameters
 

@@ -42,7 +42,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	//process global parameters
 
 	//get text after equal sign
-	std::string value = GetAfterEquals(LineData);
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//store variable values
 

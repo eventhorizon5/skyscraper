@@ -102,30 +102,33 @@ int ScriptProcessor::Section::SplitAfterEquals(const std::string &string, bool c
 	return (int)tempdata.size();
 }
 
-std::string ScriptProcessor::Section::GetAfterEquals(const std::string &string)
+std::string ScriptProcessor::Section::GetAfterEquals(const std::string &string, bool &found_equals)
 {
 	//return data after equal sign
 
-	std::string data = string;
-	int loc = data.find("=", 0);
+	found_equals = false;
+
+	int loc = string.find("=", 0);
 	if (loc < 0)
 		return "";
 
-	std::string temp = data.substr(loc + 1);
+	found_equals = true;
+
+	std::string temp = string.substr(loc + 1);
 	TrimString(temp);
 	return temp;
 }
 
 std::string ScriptProcessor::Section::GetBeforeEquals(const std::string &string, bool calc)
 {
-	//return data right before equal sign, starting at location 'start'
+	//return data right before equal sign
 
 	//trim string
 	std::string str = string;
 	TrimString(str);
 
 	//find space before equal sign
-	int loc = string.find_first_of(" ", 0);
+	int loc = str.find_first_of(" ", 0);
 
 	std::string str2 = str.substr(loc, str.find("=", 0) - loc);
 	TrimString(str2);

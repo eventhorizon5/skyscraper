@@ -53,8 +53,8 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	std::string value = GetAfterEquals(LineData);
-	bool equals = !value.empty();
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//parameters
 

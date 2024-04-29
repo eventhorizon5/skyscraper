@@ -60,8 +60,8 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	std::string value = GetAfterEquals(LineData);
-	bool equals = !value.empty();
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//get vehicle object
 	Vehicle *v = Simcore->GetVehicle(config->Current);

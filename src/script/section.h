@@ -36,7 +36,7 @@ public:
 	virtual int Run(std::string &LineData) { return 0; }
 	int SplitData(const std::string &string, int start, bool calc = true);
 	int SplitAfterEquals(const std::string &string, bool calc = true);
-	std::string GetAfterEquals(const std::string &string);
+	std::string GetAfterEquals(const std::string &string, bool &found_equals);
 	std::string GetBeforeEquals(const std::string &string, bool calc = true);
 	bool GetRange(const std::string &string, int &start, int &end);
 	int ScriptError(std::string message, bool warning = false);
