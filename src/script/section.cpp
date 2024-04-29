@@ -123,14 +123,22 @@ std::string ScriptProcessor::Section::GetBeforeEquals(const std::string &string,
 {
 	//return data right before equal sign
 
-	//trim string
-	std::string str = string;
+	if (string.size() == 0)
+		return "";
+
+	//find equal sign
+	int equals = string.find("=", 1);
+
+	if (equals == -1)
+		return "";
+
+	std::string str = string.substr(0, equals);
 	TrimString(str);
 
 	//find space before equal sign
 	int loc = str.find_first_of(" ", 0);
 
-	std::string str2 = str.substr(loc, str.find("=", 0) - loc);
+	std::string str2 = str.substr(loc);
 	TrimString(str2);
 
 	if (calc == true)
