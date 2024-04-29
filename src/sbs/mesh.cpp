@@ -743,8 +743,12 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 
 	std::string old = Submeshes[submesh].Name;
 
+	sbs->GetTextureManager()->DecrementTextureUsage(old);
+
 	//update submesh
 	Submeshes[submesh].Name = material;
+
+	sbs->GetTextureManager()->IncrementTextureUsage(material);
 
 	bool result = MeshWrapper->ChangeTexture(old, material, this);
 
