@@ -2101,7 +2101,7 @@ void TextureManager::SaveTexture(Ogre::TexturePtr texture, const std::string & f
 	//save a raw texture to a file
 
 	Ogre::Image image;
-	texture->convertToImage(image);
+	texture->convertToImage(image, true);
 	image.save(filename);
 }
 
