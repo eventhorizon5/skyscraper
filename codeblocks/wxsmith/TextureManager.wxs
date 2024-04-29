@@ -53,7 +53,7 @@
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tMaterial" variable="tMaterial" member="yes">
 											<size>200,-1</size>
-											<style>wxTE_READONLY</style>
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>

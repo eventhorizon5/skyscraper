@@ -83,7 +83,7 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     FlexGridSizer4->Add(tDependencies, 1, wxALL|wxEXPAND, 5);
     StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Material:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
     FlexGridSizer4->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    tMaterial = new wxTextCtrl(this, ID_tMaterial, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_tMaterial"));
+    tMaterial = new wxTextCtrl(this, ID_tMaterial, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tMaterial"));
     FlexGridSizer4->Add(tMaterial, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Filename:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     FlexGridSizer4->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
