@@ -36,7 +36,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tMaterial" variable="tMaterial" member="yes">
-											<size>150,-1</size>
+											<size>200,-1</size>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -53,7 +53,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tFilename" variable="tFilename" member="yes">
-											<style>wxTE_READONLY</style>
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxALL|wxEXPAND</flag>
 										<border>5</border>
@@ -68,7 +68,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tWidthMult" variable="tWidthMult" member="yes" />
+										<object class="wxTextCtrl" name="ID_tWidthMult" variable="tWidthMult" member="yes">
+											<style>wxTE_CENTRE</style>
+										</object>
 										<flag>wxALL|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
@@ -82,7 +84,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tHeightMult" variable="tHeightMult" member="yes" />
+										<object class="wxTextCtrl" name="ID_tHeightMult" variable="tHeightMult" member="yes">
+											<style>wxTE_CENTRE</style>
+										</object>
 										<flag>wxALL|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>

@@ -100,6 +100,7 @@ public:
 	void EnableShadows(const std::string &material_name, bool value);
 	int GetTextureInfoCount();
 	bool GetTextureInfo(int index, TextureInfo &info);
+	bool SetTextureInfo(int index, TextureInfo &info);
 
 	//override textures
 	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;

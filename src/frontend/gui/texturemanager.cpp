@@ -78,19 +78,19 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     FlexGridSizer4 = new wxFlexGridSizer(0, 2, 0, 0);
     StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Material:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
     FlexGridSizer4->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    tMaterial = new wxTextCtrl(this, ID_tMaterial, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_tMaterial"));
+    tMaterial = new wxTextCtrl(this, ID_tMaterial, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_tMaterial"));
     FlexGridSizer4->Add(tMaterial, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Filename:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     FlexGridSizer4->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    tFilename = new wxTextCtrl(this, ID_tFilename, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tFilename"));
+    tFilename = new wxTextCtrl(this, ID_tFilename, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tFilename"));
     FlexGridSizer4->Add(tFilename, 1, wxALL|wxEXPAND, 5);
     StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("WidthMult:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
     FlexGridSizer4->Add(StaticText5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    tWidthMult = new wxTextCtrl(this, ID_tWidthMult, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tWidthMult"));
+    tWidthMult = new wxTextCtrl(this, ID_tWidthMult, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tWidthMult"));
     FlexGridSizer4->Add(tWidthMult, 1, wxALL|wxEXPAND, 5);
     StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("HeightMult:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
     FlexGridSizer4->Add(StaticText6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    tHeightMult = new wxTextCtrl(this, ID_tHeightMult, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tHeightMult"));
+    tHeightMult = new wxTextCtrl(this, ID_tHeightMult, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tHeightMult"));
     FlexGridSizer4->Add(tHeightMult, 1, wxALL|wxEXPAND, 5);
     StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Enable Force:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
     FlexGridSizer4->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -226,6 +226,22 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 
 void TextureManager::On_bSave_Click(wxCommandEvent& event)
 {
+	int selection = TextureList->GetSelection();
+	if (selection < 0)
+		return;
+
+	SBS::TextureManager::TextureInfo texture;
+	Simcore->GetTextureManager()->GetTextureInfo(selection, texture);
+
+	if (texture.name != "")
+	{
+		texture.widthmult = atof(tWidthMult->GetValue());
+		texture.heightmult = atof(tHeightMult->GetValue());
+		texture.enable_force = chkEnableForce->GetValue();
+		texture.force_mode = chkForceMode->GetValue();
+
+		Simcore->GetTextureManager()->SetTextureInfo(selection, texture);
+	}
 }
 
 }
