@@ -357,6 +357,8 @@ bool TextureManager::UnloadTexture(const std::string &name, const std::string &g
 	Ogre::TextureManager::getSingleton().remove(wrapper);
 	DecrementTextureCount();
 
+	Report("Unloaded texture " + name);
+
 	return true;
 }
 
@@ -369,6 +371,8 @@ bool TextureManager::UnloadMaterial(const std::string &name, const std::string &
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(wrapper);
 	DecrementMaterialCount();
+
+	Report("Unloaded material " + name);
 
 	return true;
 }
