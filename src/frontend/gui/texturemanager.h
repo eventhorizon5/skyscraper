@@ -49,6 +49,9 @@ class TextureManager: public wxDialog
         wxCheckBox* chkEnableForce;
         wxCheckBox* chkForceMode;
         wxListBox* TextureList;
+        wxStaticText* StaticText10;
+        wxStaticText* StaticText11;
+        wxStaticText* StaticText12;
         wxStaticText* StaticText1;
         wxStaticText* StaticText2;
         wxStaticText* StaticText3;
@@ -56,10 +59,17 @@ class TextureManager: public wxDialog
         wxStaticText* StaticText5;
         wxStaticText* StaticText6;
         wxStaticText* StaticText7;
+        wxStaticText* StaticText8;
+        wxStaticText* StaticText9;
+        wxTextCtrl* tAlpha;
         wxTextCtrl* tDependencies;
         wxTextCtrl* tFilename;
+        wxTextCtrl* tHeight;
         wxTextCtrl* tHeightMult;
         wxTextCtrl* tMaterial;
+        wxTextCtrl* tMemory;
+        wxTextCtrl* tMipMaps;
+        wxTextCtrl* tWidth;
         wxTextCtrl* tWidthMult;
         //*)
         void Loop();
@@ -74,6 +84,16 @@ class TextureManager: public wxDialog
         static const long ID_tMaterial;
         static const long ID_STATICTEXT1;
         static const long ID_tFilename;
+        static const long ID_STATICTEXT8;
+        static const long ID_tWidth;
+        static const long ID_STATICTEXT9;
+        static const long ID_tHeight;
+        static const long ID_STATICTEXT11;
+        static const long ID_tAlpha;
+        static const long ID_STATICTEXT12;
+        static const long ID_tMipMaps;
+        static const long ID_STATICTEXT10;
+        static const long ID_tMemory;
         static const long ID_STATICTEXT5;
         static const long ID_tWidthMult;
         static const long ID_STATICTEXT6;

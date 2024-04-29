@@ -12,7 +12,7 @@
 					<object class="sizeritem">
 						<object class="wxListBox" name="ID_TextureList" variable="TextureList" member="yes">
 							<default>-1</default>
-							<size>200,300</size>
+							<size>200,400</size>
 							<style>wxVSCROLL</style>
 							<handler function="On_TextureList_Select" entry="EVT_LISTBOX" />
 						</object>
@@ -46,7 +46,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
 											<label>Material:</label>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -55,7 +55,7 @@
 											<size>200,-1</size>
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -63,7 +63,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
 											<label>Filename:</label>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -71,7 +71,87 @@
 										<object class="wxTextCtrl" name="ID_tFilename" variable="tFilename" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxALL|wxEXPAND</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
+											<label>Width:</label>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tWidth" variable="tWidth" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
+											<label>Height:</label>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tHeight" variable="tHeight" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT11" variable="StaticText11" member="yes">
+											<label>Has Alpha:</label>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tAlpha" variable="tAlpha" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT12" variable="StaticText12" member="yes">
+											<label>MipMaps:</label>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tMipMaps" variable="tMipMaps" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText10" member="yes">
+											<label>Memory:</label>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tMemory" variable="tMemory" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -79,7 +159,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
 											<label>WidthMult:</label>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -87,7 +167,7 @@
 										<object class="wxTextCtrl" name="ID_tWidthMult" variable="tWidthMult" member="yes">
 											<style>wxTE_CENTRE</style>
 										</object>
-										<flag>wxALL|wxEXPAND</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -95,7 +175,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
 											<label>HeightMult:</label>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -103,7 +183,7 @@
 										<object class="wxTextCtrl" name="ID_tHeightMult" variable="tHeightMult" member="yes">
 											<style>wxTE_CENTRE</style>
 										</object>
-										<flag>wxALL|wxEXPAND</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -111,13 +191,13 @@
 										<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
 											<label>Enable Force:</label>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
 										<object class="wxCheckBox" name="ID_chkEnableForce" variable="chkEnableForce" member="yes" />
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -125,13 +205,13 @@
 										<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
 											<label>Force Mode:</label>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
 										<object class="wxCheckBox" name="ID_chkForceMode" variable="chkForceMode" member="yes" />
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>

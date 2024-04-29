@@ -2290,7 +2290,7 @@ std::string TextureManager::GetTextureName(Ogre::MaterialPtr mMat)
 
 	Ogre::TextureUnitState *state = GetTextureUnitState(mMat);
 	if (state)
-		texname = GetTextureUnitState(mMat)->getTextureName();
+		texname = state->getTextureName();
 
 	return texname;
 }

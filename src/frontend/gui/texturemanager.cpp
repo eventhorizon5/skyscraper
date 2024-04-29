@@ -42,6 +42,16 @@ const long TextureManager::ID_STATICTEXT4 = wxNewId();
 const long TextureManager::ID_tMaterial = wxNewId();
 const long TextureManager::ID_STATICTEXT1 = wxNewId();
 const long TextureManager::ID_tFilename = wxNewId();
+const long TextureManager::ID_STATICTEXT8 = wxNewId();
+const long TextureManager::ID_tWidth = wxNewId();
+const long TextureManager::ID_STATICTEXT9 = wxNewId();
+const long TextureManager::ID_tHeight = wxNewId();
+const long TextureManager::ID_STATICTEXT11 = wxNewId();
+const long TextureManager::ID_tAlpha = wxNewId();
+const long TextureManager::ID_STATICTEXT12 = wxNewId();
+const long TextureManager::ID_tMipMaps = wxNewId();
+const long TextureManager::ID_STATICTEXT10 = wxNewId();
+const long TextureManager::ID_tMemory = wxNewId();
 const long TextureManager::ID_STATICTEXT5 = wxNewId();
 const long TextureManager::ID_tWidthMult = wxNewId();
 const long TextureManager::ID_STATICTEXT6 = wxNewId();
@@ -73,7 +83,7 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     Create(parent, wxID_ANY, _("Texture Manager"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
     FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
     FlexGridSizer3 = new wxFlexGridSizer(0, 2, 0, 0);
-    TextureList = new wxListBox(this, ID_TextureList, wxDefaultPosition, wxSize(200,300), 0, 0, wxVSCROLL, wxDefaultValidator, _T("ID_TextureList"));
+    TextureList = new wxListBox(this, ID_TextureList, wxDefaultPosition, wxSize(200,400), 0, 0, wxVSCROLL, wxDefaultValidator, _T("ID_TextureList"));
     FlexGridSizer3->Add(TextureList, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
     FlexGridSizer4 = new wxFlexGridSizer(0, 2, 0, 0);
@@ -82,31 +92,51 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     tDependencies = new wxTextCtrl(this, ID_tDependencies, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tDependencies"));
     FlexGridSizer4->Add(tDependencies, 1, wxALL|wxEXPAND, 5);
     StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Material:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
-    FlexGridSizer4->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(StaticText4, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tMaterial = new wxTextCtrl(this, ID_tMaterial, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tMaterial"));
-    FlexGridSizer4->Add(tMaterial, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(tMaterial, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Filename:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
-    FlexGridSizer4->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(StaticText1, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tFilename = new wxTextCtrl(this, ID_tFilename, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tFilename"));
-    FlexGridSizer4->Add(tFilename, 1, wxALL|wxEXPAND, 5);
+    FlexGridSizer4->Add(tFilename, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
+    StaticText8 = new wxStaticText(this, ID_STATICTEXT8, _("Width:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
+    FlexGridSizer4->Add(StaticText8, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tWidth = new wxTextCtrl(this, ID_tWidth, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tWidth"));
+    FlexGridSizer4->Add(tWidth, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
+    StaticText9 = new wxStaticText(this, ID_STATICTEXT9, _("Height:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
+    FlexGridSizer4->Add(StaticText9, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tHeight = new wxTextCtrl(this, ID_tHeight, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tHeight"));
+    FlexGridSizer4->Add(tHeight, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
+    StaticText11 = new wxStaticText(this, ID_STATICTEXT11, _("Has Alpha:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
+    FlexGridSizer4->Add(StaticText11, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tAlpha = new wxTextCtrl(this, ID_tAlpha, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tAlpha"));
+    FlexGridSizer4->Add(tAlpha, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
+    StaticText12 = new wxStaticText(this, ID_STATICTEXT12, _("MipMaps:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT12"));
+    FlexGridSizer4->Add(StaticText12, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tMipMaps = new wxTextCtrl(this, ID_tMipMaps, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tMipMaps"));
+    FlexGridSizer4->Add(tMipMaps, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
+    StaticText10 = new wxStaticText(this, ID_STATICTEXT10, _("Memory:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
+    FlexGridSizer4->Add(StaticText10, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tMemory = new wxTextCtrl(this, ID_tMemory, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tMemory"));
+    FlexGridSizer4->Add(tMemory, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
     StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("WidthMult:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
-    FlexGridSizer4->Add(StaticText5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(StaticText5, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tWidthMult = new wxTextCtrl(this, ID_tWidthMult, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tWidthMult"));
-    FlexGridSizer4->Add(tWidthMult, 1, wxALL|wxEXPAND, 5);
+    FlexGridSizer4->Add(tWidthMult, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
     StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("HeightMult:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
-    FlexGridSizer4->Add(StaticText6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(StaticText6, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tHeightMult = new wxTextCtrl(this, ID_tHeightMult, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tHeightMult"));
-    FlexGridSizer4->Add(tHeightMult, 1, wxALL|wxEXPAND, 5);
+    FlexGridSizer4->Add(tHeightMult, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5);
     StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Enable Force:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-    FlexGridSizer4->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(StaticText2, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     chkEnableForce = new wxCheckBox(this, ID_chkEnableForce, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkEnableForce"));
     chkEnableForce->SetValue(false);
-    FlexGridSizer4->Add(chkEnableForce, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(chkEnableForce, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Force Mode:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-    FlexGridSizer4->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(StaticText3, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     chkForceMode = new wxCheckBox(this, ID_chkForceMode, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkForceMode"));
     chkForceMode->SetValue(false);
-    FlexGridSizer4->Add(chkForceMode, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(chkForceMode, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(FlexGridSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
     bSave = new wxButton(this, ID_bSave, _("Save"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSave"));
@@ -171,6 +201,11 @@ void TextureManager::Loop()
 		tHeightMult->Clear();
 		tWidthMult->Clear();
 		tDependencies->Clear();
+		tWidth->Clear();
+		tHeight->Clear();
+		tAlpha->Clear();
+		tMipMaps->Clear();
+		tMemory->Clear();
 
 		for (int i = 0; i < manager->GetTextureInfoCount(); i++)
 		{
@@ -225,6 +260,27 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 		chkEnableForce->SetValue(texture.enable_force);
 		chkForceMode->SetValue(texture.force_mode);
 		tDependencies->SetValue(SBS::ToString(texture.dependencies));
+
+		Ogre::MaterialPtr mat = Simcore->GetTextureManager()->GetMaterialByName(texture.name);
+		Ogre::TextureUnitState *state = mat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
+		std::string name;
+
+		if (state)
+			name = state->getTextureName();
+
+		Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name, "General");
+		if (tex)
+		{
+			tWidth->SetValue(SBS::ToString((int)tex->getWidth()));
+			tHeight->SetValue(SBS::ToString((int)tex->getHeight()));
+			tMipMaps->SetValue(SBS::ToString((int)tex->getNumMipmaps()));
+			tMemory->SetValue(SBS::ToString((int)tex->getSize()));
+
+			if (tex->hasAlpha() == true)
+				tAlpha->SetValue("true");
+			else
+				tAlpha->SetValue("false");
+		}
 	}
 }
 
