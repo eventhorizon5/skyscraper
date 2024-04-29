@@ -151,9 +151,14 @@ void TextureManager::Loop()
 	if (!Simcore)
 		return;
 
-	if (Simcore->GetTextureManager()->GetTextureCount() != lastcount)
+	SBS::TextureManager *manager = Simcore->GetTextureManager();
+
+	if (!manager)
+		return;
+
+	if (manager->GetTextureInfoCount() != lastcount)
 	{
-		lastcount = Simcore->GetTextureManager()->GetTextureCount();
+		lastcount = manager->GetTextureInfoCount();
 
 		//clear values
 		TextureList->Clear();
@@ -164,10 +169,10 @@ void TextureManager::Loop()
 		tHeightMult->Clear();
 		tWidthMult->Clear();
 
-		for (int i = 0; i < Simcore->GetTextureManager()->GetTextureInfoCount(); i++)
+		for (int i = 0; i < manager->GetTextureInfoCount(); i++)
 		{
 			SBS::TextureManager::TextureInfo info;
-			if (Simcore->GetTextureManager()->GetTextureInfo(i, info))
+			if (manager->GetTextureInfo(i, info))
 				TextureList->Append(SBS::ToString(i + 1) + wxT(" - ") + info.name);
 		}
 	}
@@ -183,7 +188,11 @@ void TextureManager::On_bUnload_Click(wxCommandEvent& event)
 	Simcore->GetTextureManager()->GetTextureInfo(selection, texture);
 
 	if (texture.name != "")
-		Simcore->GetTextureManager()->UnloadTexture(texture.name, "General");
+	{
+		bool result = Simcore->GetTextureManager()->UnloadMaterial(texture.name, "General");
+		if (result == true)
+			Simcore->GetTextureManager()->UnregisterTextureInfo(texture.name, texture.material_name);
+	}
 }
 
 void TextureManager::On_bOK_Click(wxCommandEvent& event)
