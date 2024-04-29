@@ -101,6 +101,8 @@ public:
 	int GetTextureInfoCount();
 	bool GetTextureInfo(int index, TextureInfo &info);
 	bool SetTextureInfo(int index, TextureInfo &info);
+	void IncrementTextureUsage(const std::string &name);
+	void DecrementTextureUsage(const std::string &name);
 
 	//override textures
 	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
@@ -120,6 +122,7 @@ public:
 		Real heightmult;
 		bool enable_force; //enable forcing of tile or stretch mode?
 		bool force_mode; //false to disable autosizing, true to enable autosizing
+		int dependencies; //number of submeshes depending on this texture
 	};
 
 private:

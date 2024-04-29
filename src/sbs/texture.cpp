@@ -326,6 +326,7 @@ void TextureManager::RegisterTextureInfo(const std::string &name, const std::str
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
+	info.dependencies = 0;
 
 	textureinfo.push_back(info);
 }
@@ -1674,6 +1675,30 @@ bool TextureManager::SetTextureInfo(int index, TextureManager::TextureInfo &info
 	}
 
 	return false;
+}
+
+void TextureManager::IncrementTextureUsage(const std::string &name)
+{
+	for (int i = 0; i < textureinfo.size(); i++)
+	{
+		if (textureinfo[i].name == name)
+		{
+			textureinfo[i].dependencies++;
+			return;
+		}
+	}
+}
+
+void TextureManager::DecrementTextureUsage(const std::string &name)
+{
+	for (int i = 0; i < textureinfo.size(); i++)
+	{
+		if (textureinfo[i].name == name)
+		{
+			textureinfo[i].dependencies--;
+			return;
+		}
+	}
 }
 
 // from http://www.ogre3d.org/tikiwiki/tiki-index.php?page=Creating+transparency+based+on+a+key+colour+in+code

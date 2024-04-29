@@ -36,6 +36,8 @@ namespace Skyscraper {
 
 //(*IdInit(TextureManager)
 const long TextureManager::ID_TextureList = wxNewId();
+const long TextureManager::ID_STATICTEXT7 = wxNewId();
+const long TextureManager::ID_tDependencies = wxNewId();
 const long TextureManager::ID_STATICTEXT4 = wxNewId();
 const long TextureManager::ID_tMaterial = wxNewId();
 const long TextureManager::ID_STATICTEXT1 = wxNewId();
@@ -75,6 +77,10 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     FlexGridSizer3->Add(TextureList, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
     FlexGridSizer4 = new wxFlexGridSizer(0, 2, 0, 0);
+    StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Dependencies:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
+    FlexGridSizer4->Add(StaticText7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tDependencies = new wxTextCtrl(this, ID_tDependencies, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tDependencies"));
+    FlexGridSizer4->Add(tDependencies, 1, wxALL|wxEXPAND, 5);
     StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Material:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
     FlexGridSizer4->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tMaterial = new wxTextCtrl(this, ID_tMaterial, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_tMaterial"));
@@ -164,6 +170,7 @@ void TextureManager::Loop()
 		chkForceMode->SetValue(false);
 		tHeightMult->Clear();
 		tWidthMult->Clear();
+		tDependencies->Clear();
 
 		for (int i = 0; i < manager->GetTextureInfoCount(); i++)
 		{
@@ -185,6 +192,10 @@ void TextureManager::On_bUnload_Click(wxCommandEvent& event)
 
 	if (texture.name != "")
 	{
+		//don't unload texture if submeshes are using it
+		if (texture.dependencies > 0)
+			return;
+
 		bool result = Simcore->GetTextureManager()->UnloadMaterial(texture.name, "General");
 		if (result == true)
 			Simcore->GetTextureManager()->UnregisterTextureInfo(texture.name, texture.material_name);
@@ -213,6 +224,7 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 		tHeightMult->SetValue(SBS::TruncateNumber(texture.heightmult, 2));
 		chkEnableForce->SetValue(texture.enable_force);
 		chkForceMode->SetValue(texture.force_mode);
+		tDependencies->SetValue(SBS::ToString(texture.dependencies));
 	}
 }
 

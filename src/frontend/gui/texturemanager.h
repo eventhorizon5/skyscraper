@@ -55,6 +55,8 @@ class TextureManager: public wxDialog
         wxStaticText* StaticText4;
         wxStaticText* StaticText5;
         wxStaticText* StaticText6;
+        wxStaticText* StaticText7;
+        wxTextCtrl* tDependencies;
         wxTextCtrl* tFilename;
         wxTextCtrl* tHeightMult;
         wxTextCtrl* tMaterial;
@@ -66,6 +68,8 @@ class TextureManager: public wxDialog
 
         //(*Identifiers(TextureManager)
         static const long ID_TextureList;
+        static const long ID_STATICTEXT7;
+        static const long ID_tDependencies;
         static const long ID_STATICTEXT4;
         static const long ID_tMaterial;
         static const long ID_STATICTEXT1;

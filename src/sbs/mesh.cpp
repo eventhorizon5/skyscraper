@@ -1082,6 +1082,11 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 	{
 		if ((int)Submeshes[index].Triangles.size() - (int)indices.size() <= 0)
 		{
+			//unregister texture usage
+			if (Submeshes[index].Name != "")
+				sbs->GetTextureManager()->DecrementTextureUsage(Submeshes[index].Name);
+
+			//remove submesh
 			Submeshes.erase(Submeshes.begin() + index);
 			prepared = false; //need to re-prepare mesh
 			return -1;
@@ -1126,6 +1131,10 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 	//bind material
 	Submeshes[index].Name = material;
 	prepared = false; //need to re-prepare mesh
+
+	//register texture usage
+	if (createnew == true && material != "")
+		sbs->GetTextureManager()->IncrementTextureUsage(Submeshes[index].Name);
 
 	return index;
 }
