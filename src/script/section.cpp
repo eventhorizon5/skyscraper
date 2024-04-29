@@ -108,7 +108,12 @@ std::string ScriptProcessor::Section::GetAfterEquals(const std::string &string, 
 
 	found_equals = false;
 
-	int loc = string.find("=", 0);
+	if (string.size() <= 1)
+		return "";
+
+	//find equals sign
+	int loc = string.find("=", 1);
+
 	if (loc < 0)
 		return "";
 
@@ -123,7 +128,7 @@ std::string ScriptProcessor::Section::GetBeforeEquals(const std::string &string,
 {
 	//return data right before equal sign
 
-	if (string.size() == 0)
+	if (string.size() <= 1)
 		return "";
 
 	//find equal sign
