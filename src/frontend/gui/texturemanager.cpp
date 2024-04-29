@@ -261,13 +261,17 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 		chkForceMode->SetValue(texture.force_mode);
 		tDependencies->SetValue(SBS::ToString(texture.dependencies));
 
+		//get material
 		Ogre::MaterialPtr mat = Simcore->GetTextureManager()->GetMaterialByName(texture.name);
-		Ogre::TextureUnitState *state = mat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-		std::string name;
 
+		Ogre::TextureUnitState *state = 0;
+		std::string name;
+		if (mat)
+			state = mat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
 		if (state)
 			name = state->getTextureName();
 
+		//get raw texture
 		Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name, "General");
 		if (tex)
 		{
