@@ -51,7 +51,6 @@ const long TextureManager::ID_chkForceMode = wxNewId();
 const long TextureManager::ID_bSave = wxNewId();
 const long TextureManager::ID_bUnload = wxNewId();
 const long TextureManager::ID_bOK = wxNewId();
-const long TextureManager::ID_bFree = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(TextureManager,wxDialog)
@@ -114,8 +113,6 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
     bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
     BoxSizer1->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    bFree = new wxButton(this, ID_bFree, _("Free Boxes"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFree"));
-    BoxSizer1->Add(bFree, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
@@ -125,7 +122,6 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bSave_Click);
     Connect(ID_bUnload,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bUnload_Click);
     Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bOK_Click);
-    Connect(ID_bFree,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bFree_Click);
     //*)
 
     lastcount = 0;
@@ -198,10 +194,6 @@ void TextureManager::On_bUnload_Click(wxCommandEvent& event)
 void TextureManager::On_bOK_Click(wxCommandEvent& event)
 {
 	this->Close();
-}
-
-void TextureManager::On_bFree_Click(wxCommandEvent& event)
-{
 }
 
 void TextureManager::On_TextureList_Select(wxCommandEvent& event)

@@ -43,7 +43,6 @@ class TextureManager: public wxDialog
         virtual ~TextureManager();
 
         //(*Declarations(TextureManager)
-        wxButton* bFree;
         wxButton* bOK;
         wxButton* bSave;
         wxButton* bUnload;
@@ -82,7 +81,6 @@ class TextureManager: public wxDialog
         static const long ID_bSave;
         static const long ID_bUnload;
         static const long ID_bOK;
-        static const long ID_bFree;
         //*)
 
     private:
@@ -90,7 +88,6 @@ class TextureManager: public wxDialog
         //(*Handlers(TextureManager)
         void On_bUnload_Click(wxCommandEvent& event);
         void On_bOK_Click(wxCommandEvent& event);
-        void On_bFree_Click(wxCommandEvent& event);
         void On_TextureList_Select(wxCommandEvent& event);
         void On_bSave_Click(wxCommandEvent& event);
         //*)
