@@ -142,8 +142,27 @@ std::string ScriptProcessor::Section::GetBeforeEquals(const std::string &string,
 
 	//find space before equal sign
 	int loc = str.find_first_of(" ", 0);
+	int loc2 = -1;
 
-	std::string str2 = str.substr(loc);
+	//if a space is missing, find start of numeric characters
+	if (loc == -1)
+	{
+		for (int i = 0; i < str.size(); i++)
+		{
+			if (IsNumeric(str[i]))
+			{
+				loc2 = i;
+				break;
+			}
+		}
+	}
+
+	std::string str2;
+
+	if (loc2 == -1)
+		str2 = str.substr(loc);
+	else
+		str2 = str.substr(loc2);
 	TrimString(str2);
 
 	if (calc == true)
