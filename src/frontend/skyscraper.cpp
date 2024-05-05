@@ -490,6 +490,8 @@ int Skyscraper::OnExit()
 
 	delete mOverlaySystem;
 
+	delete server;
+
 	Ogre::ResourceGroupManager::getSingleton().shutdownAll();
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
