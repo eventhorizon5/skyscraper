@@ -502,6 +502,9 @@ bool SBS::Start(Ogre::Camera *camera)
 	if (RandomActivity == true)
 		EnableRandomActivity(true);
 
+	//print a memory report
+	MemoryReport();
+
 	IsRunning = true;
 
 	return true;
@@ -4237,6 +4240,24 @@ CameraTexture* SBS::GetCameraTexture(int number)
 	if (number < camtexarray.size())
 		return camtexarray[number];
 	return 0;
+}
+
+void SBS::MemoryReport()
+{
+	//report on simulator memory usage
+
+	Real mesh_total = 0;
+
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		mesh_total += (meshes[i]->GetSize() / 1024.0) / 1024.0; //convert to megabytes
+	}
+
+	Report("Memory Usage Report");
+	Report("-------------------");
+	Report("");
+	Report("Meshes: " + TruncateNumber(ToString(mesh_total), 2) + " megabytes");
+	Report("");
 }
 
 }

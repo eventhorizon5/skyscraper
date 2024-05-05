@@ -113,6 +113,7 @@ public:
 	void GetBounds();
 	void ChangeHeight(Real newheight);
 	void EnableShadows(bool value);
+	unsigned int GetSize();
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<SubMesh> Submeshes; //submeshes

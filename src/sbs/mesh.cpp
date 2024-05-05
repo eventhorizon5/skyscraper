@@ -2142,4 +2142,24 @@ void MeshObject::EnableShadows(bool value)
 	MeshWrapper->EnableShadows(value);
 }
 
+unsigned int MeshObject::GetSize()
+{
+	//get general size of mesh object
+
+	//get size of geometry tables
+	unsigned int geo_size = sizeof(Geometry);
+	unsigned int tri_size = sizeof(Triangle);
+	unsigned long geometry = 0;
+	unsigned long triangles = 0;
+
+	for (int i = 0; i < Submeshes.size(); i++)
+	{
+		geometry += geo_size * Submeshes[i].MeshGeometry.size();
+		triangles += tri_size * Submeshes[i].Triangles.size();
+	}
+
+	unsigned int total = geometry + triangles;
+	return total;
+}
+
 }
