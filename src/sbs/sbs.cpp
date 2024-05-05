@@ -4247,16 +4247,20 @@ void SBS::MemoryReport()
 	//report on simulator memory usage
 
 	Real mesh_total = 0;
+	Real mesh_part = 0;
 
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		mesh_total += (meshes[i]->GetSize() / 1024.0) / 1024.0; //convert to megabytes
+		if (meshes[i]->IsEnabled() == true)
+			mesh_part += (meshes[i]->GetSize() / 1024.0) / 1024.0; //convert to megabytes
 	}
 
 	Report("Memory Usage Report");
 	Report("-------------------");
 	Report("");
-	Report("Meshes: " + TruncateNumber(ToString(mesh_total), 2) + " megabytes");
+	Report("Meshes Total: " + TruncateNumber(ToString(mesh_total), 2) + " megabytes");
+	Report("Enabled Meshes: " + TruncateNumber(ToString(mesh_part), 2) + " megabytes");
 	Report("");
 }
 
