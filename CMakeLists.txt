@@ -96,6 +96,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/frontend
 	src/sbs
 	src/script
+	src/server
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
