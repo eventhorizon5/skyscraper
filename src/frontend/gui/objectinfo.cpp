@@ -31,6 +31,7 @@
 #include "camera.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
+#include "server.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
 #include "createobject.h"
@@ -422,7 +423,7 @@ void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 	twindow->SetTitle(wxT("Current Script"));
 	twindow->Show(true);
 
-	std::vector<std::string> *data = panel->GetRoot()->GetActiveEngine()->GetScriptProcessor()->GetBuildingData();
+	std::vector<std::string> *data = panel->GetRoot()->GetServer()->GetActiveEngine()->GetScriptProcessor()->GetBuildingData();
 	for (size_t i = 0; i < data->size(); i++)
 	{
 		twindow->tMain->WriteText(data->at(i) + wxT("\n"));
@@ -448,7 +449,7 @@ void ObjectInfo::On_bMove_Click(wxCommandEvent& event)
 		delete moveobject;
 	moveobject = 0;
 
-	moveobject = new MoveObject(panel, this, -1, panel->GetRoot()->GetActiveEngine(), number);
+	moveobject = new MoveObject(panel, this, -1, panel->GetRoot()->GetServer()->GetActiveEngine(), number);
 	moveobject->Show();
 }
 

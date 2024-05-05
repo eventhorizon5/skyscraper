@@ -31,11 +31,37 @@ public:
 
 	Server(Skyscraper *frontend);
 	~Server();
+	bool Loop();
+	void Handler();
+	EngineContext* GetEngine(int number);
+	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool DeleteEngine(EngineContext *engine);
+	void DeleteEngines();
+	int GetEngineCount();
+	int GetEngineListSize() { return (int)engines.size(); }
+	EngineContext* GetActiveEngine() { return active_engine; }
+	EngineContext* FindActiveEngine();
+	void SetActiveEngine(EngineContext *engine, bool switch_engines = false);
+	bool IsEngineLoading();
+	bool IsValidEngine(EngineContext *engine);
+	bool IsValidSystem(::SBS::SBS *sbs);
+	int RegisterEngine(EngineContext *engine);
+	EngineContext* GetFirstValidEngine();
+	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 
 private:
 
+	bool RunEngines();
+	void SwitchEngines();
+	void HandleEngineShutdown();
+	void HandleReload();
+	int GetFreeInstanceNumber();
+
 	Skyscraper *frontend;
 
+	EngineContext *active_engine;
+
+	std::vector<EngineContext*> engines;
 };
 
 }

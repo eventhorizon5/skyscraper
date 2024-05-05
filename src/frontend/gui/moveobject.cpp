@@ -29,6 +29,7 @@
 #include "camera.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "server.h"
 #include "enginecontext.h"
 #include "moveobject.h"
 
@@ -262,7 +263,7 @@ void MoveObject::Loop()
 		return;
 
 	//validate engine
-	if (panel->GetRoot()->IsValidEngine(engine) == false)
+	if (panel->GetRoot()->GetServer()->IsValidEngine(engine) == false)
 	{
 		engine = 0;
 		Simcore = 0;

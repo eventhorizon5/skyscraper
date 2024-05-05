@@ -81,6 +81,7 @@ private:
 	void UnloadSim();
 
 	Skyscraper* frontend; //frontend
+	Server* server; //server instance
 	ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number

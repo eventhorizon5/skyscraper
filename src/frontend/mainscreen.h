@@ -25,6 +25,8 @@
 
 #include <wx/frame.h>
 
+class wxPanel;
+
 namespace Skyscraper {
 
 class MainScreen : public wxFrame

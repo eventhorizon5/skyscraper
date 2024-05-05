@@ -27,6 +27,7 @@
 
 #include "globals.h"
 #include "skyscraper.h"
+#include "server.h"
 #include "debugpanel.h"
 #include "loaddialog.h"
 
@@ -272,7 +273,7 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	frontend->CutExternal = chkCutExternal->GetValue();
 	frontend->CutFloors = chkCutFloors->GetValue();
 
-	frontend->Load(filename, frontend->GetActiveEngine(), position, rotation, min, max);
+	frontend->Load(filename, frontend->GetServer()->GetActiveEngine(), position, rotation, min, max);
 
 	this->Close();
 }

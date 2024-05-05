@@ -34,6 +34,7 @@
 #include "camera.h"
 #include "gui/debugpanel.h"
 #include "skyscraper.h"
+#include "server.h"
 #include "enginecontext.h"
 #include "gui/loaddialog.h"
 #include "mainscreen.h"
@@ -213,7 +214,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 {
 	//this function is run when a key is pressed
 
-	EngineContext *engine = frontend->GetActiveEngine();
+	EngineContext *engine = frontend->GetServer()->GetActiveEngine();
 
 	if (!engine)
 		return;
@@ -416,46 +417,46 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		}
 
 		//engine selection
-		if (key == (wxKeyCode)'1')
+		/*if (key == (wxKeyCode)'1')
 		{
-			frontend->SetActiveEngine(0);
+			frontend->GetServer()->SetActiveEngine(0);
 		}
 		else if (key == (wxKeyCode)'2')
 		{
-			frontend->SetActiveEngine(1);
+			frontend->GetServer()->SetActiveEngine(1);
 		}
 		else if (key == (wxKeyCode)'3')
 		{
-			frontend->SetActiveEngine(2);
+			frontend->GetServer()->SetActiveEngine(2);
 		}
 		else if (key == (wxKeyCode)'4')
 		{
-			frontend->SetActiveEngine(3);
+			frontend->GetServer()->SetActiveEngine(3);
 		}
 		else if (key == (wxKeyCode)'5')
 		{
-			frontend->SetActiveEngine(4);
+			frontend->GetServer()->SetActiveEngine(4);
 		}
 		else if (key == (wxKeyCode)'6')
 		{
-			frontend->SetActiveEngine(5);
+			frontend->GetServer()->SetActiveEngine(5);
 		}
 		else if (key == (wxKeyCode)'7')
 		{
-			frontend->SetActiveEngine(6);
+			frontend->GetServer()->SetActiveEngine(6);
 		}
 		else if (key == (wxKeyCode)'8')
 		{
-			frontend->SetActiveEngine(7);
+			frontend->GetServer()->SetActiveEngine(7);
 		}
 		else if (key == (wxKeyCode)'9')
 		{
-			frontend->SetActiveEngine(8);
+			frontend->GetServer()->SetActiveEngine(8);
 		}
 		else if (key == (wxKeyCode)'0')
 		{
-			frontend->SetActiveEngine(9);
-		}
+			frontend->GetServer()->SetActiveEngine(9);
+		}*/
 
 		//enter and exit a vehicle
 		if (key == (wxKeyCode)key_enter)
@@ -474,7 +475,7 @@ void MainScreen::OnKeyUp(wxKeyEvent& event)
 {
 	//this function is run when a key is released
 
-	EngineContext *engine = frontend->GetActiveEngine();
+	EngineContext *engine = frontend->GetServer()->GetActiveEngine();
 
 	if (!engine)
 		return;
@@ -651,7 +652,7 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 {
 	//this function is run when a mouse button is pressed
 
-	EngineContext *engine = frontend->GetActiveEngine();
+	EngineContext *engine = frontend->GetServer()->GetActiveEngine();
 
 	if (!engine)
 		return;
@@ -708,7 +709,7 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 
 void MainScreen::HandleMouseMovement()
 {
-	EngineContext *engine = frontend->GetActiveEngine();
+	EngineContext *engine = frontend->GetServer()->GetActiveEngine();
 
 	if (!engine || IsActive() == false)
 		return;
@@ -792,7 +793,7 @@ void MainScreen::EnableFreelook(bool value)
 {
 	//enable or disable freelook mode
 
-	EngineContext *engine = frontend->GetActiveEngine();
+	EngineContext *engine = frontend->GetServer()->GetActiveEngine();
 
 	if (!engine)
 		return;
