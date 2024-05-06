@@ -38,10 +38,10 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, std::vector<Client*> &clients, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, std::vector<Client*> &clients, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->frontend = frontend;
-	server = frontend->GetServer();
+	this->server = frontend->GetServer();
 	finish_time = 0;
 	shutdown = false;
 	loading = false;
