@@ -60,6 +60,10 @@ file(GLOB FRONTEND_FILES
 	src/frontend/gui/*.cpp
 )
  
+file(GLOB CLIENT_FILES
+	src/client/*.cpp
+)
+
 file(GLOB SERVER_FILES
 	src/server/*.cpp
 )
@@ -97,6 +101,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/sbs
 	src/script
 	src/server
+	src/client
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
@@ -118,6 +123,9 @@ add_library(SBS SHARED ${SBS_FILES})
 #ScriptProc Library
 add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
 
+#Client Library
+add_library(Client SHARED ${CLIENT_FILES})
+
 #Server Library
 add_library(Server SHARED ${SERVER_FILES})
 
@@ -134,13 +142,15 @@ target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
+target_link_libraries(SBS Client OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
 target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 
+target_link_libraries(Client ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
+
 target_link_libraries(Server ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 
-target_link_libraries(skyscraper Server ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+target_link_libraries(skyscraper Client Server ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES
