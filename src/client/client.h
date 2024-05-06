@@ -32,6 +32,7 @@ public:
 	Client(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem);
 	~Client();
 	FMOD::System* GetSoundSystem();
+	void PrepareSound(FMOD::Sound *sound);
 
 private:
 

@@ -273,6 +273,12 @@ FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 	if (result != FMOD_OK || !channel)
 		return 0;
 
+	//prepare sound on all clients
+	for (int i = 0; i < sbs->clients.size(); i++)
+	{
+		sbs->clients[i]->PrepareSound(data->sound);
+	}
+
 	data->AddChannel(channel);
 
 	return channel;

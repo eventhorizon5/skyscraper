@@ -44,4 +44,10 @@ FMOD::System* Client::GetSoundSystem()
 	return soundsys;
 }
 
+void Client::PrepareSound(FMOD::Sound *sound)
+{
+	FMOD::Channel *channel;
+	FMOD_RESULT result = soundsys->playSound(sound, 0, true, &channel);
+}
+
 }

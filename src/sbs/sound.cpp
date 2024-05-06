@@ -26,6 +26,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevatorcar.h"
+#include "client.h"
 #include "soundsystem.h"
 #include "sound.h"
 
@@ -109,6 +110,11 @@ void Sound::OnMove(bool parent)
 	Velocity.z = vel.z;
 	if (channel)
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
+
+	for (int i = 0; i < sbs->clients.size(); i++)
+	{
+		sbs->clients[i]->GetSoundSystem()->set3DAttributes(&pos, &vel);
+	}
 }
 
 void Sound::OnRotate(bool parent)
