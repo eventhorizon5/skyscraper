@@ -62,7 +62,7 @@
 
 namespace SBS {
 
-SBS::SBS(std::vector<Skyscraper::Client*> &clients, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, std::vector<Skyscraper::Client*> &clients, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;

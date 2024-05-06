@@ -38,7 +38,7 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, std::vector<Client*> &clients, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(EngineContext *parent, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, std::vector<Client*> &clients, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->frontend = frontend;
 	server = frontend->GetServer();
@@ -53,6 +53,8 @@ EngineContext::EngineContext(EngineContext *parent, std::vector<Client*> &client
 	reload_state->collisions = false;
 	reload_state->gravity = false;
 	reload_state->freelook = false;
+	this->mSceneManager = mSceneManager;
+	this->fmodsystem = fmodsystem;
 	this->position = position;
 	this->area_min = area_min;
 	this->area_max = area_max;
@@ -279,7 +281,7 @@ void EngineContext::StartSim()
 
 	//Create simulator object
 	if (!Simcore)
-		Simcore = new ::SBS::SBS(server->clients, instance, position + offset, rotation, area_min, area_max);
+		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, server->clients, instance, position + offset, rotation, area_min, area_max);
 
 	//load script processor
 	if (!processor)

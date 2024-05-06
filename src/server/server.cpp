@@ -70,7 +70,7 @@ void Server::Handler()
 
 EngineContext* Server::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(parent, clients, position, rotation, area_min, area_max);
+	EngineContext* engine = new EngineContext(parent, frontend->mSceneMgr, frontend->GetSoundSystem(), clients, position, rotation, area_min, area_max);
 	return engine;
 }
 
