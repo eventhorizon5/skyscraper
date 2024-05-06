@@ -184,9 +184,6 @@ namespace Skyscraper {
 
 bool Skyscraper::OnInit(void)
 {
-	//create a client instance
-	client = new Client();
-
 	version = "1.12";
 	version_rev = ToString(GIT_REV);
 	version_state = "Alpha";
@@ -242,11 +239,6 @@ bool Skyscraper::OnInit(void)
 	show_stats = -1;
 	macos_major = 0;
 	macos_minor = 0;
-
-	//create a default server instance
-	std::vector<Client*> clients;
-	clients.push_back(client);
-	server = new Server(this, clients);
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -405,6 +397,13 @@ bool Skyscraper::OnInit(void)
 	//start and initialize OGRE
 	if (!Initialize())
 		return ReportError("Error initializing frontend");
+
+	//create a server instance
+	server = new Server(this);
+
+	//create a client instance and connect to server
+	client = new Client(mSceneMgr, soundsys);
+	server->Connect(client);
 
 	//autoload a building file if specified
 	std::string filename;

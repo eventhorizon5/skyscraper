@@ -31,7 +31,7 @@
 
 namespace Skyscraper {
 
-Server::Server(Skyscraper *frontend, std::vector<Client*> &clients)
+Server::Server(Skyscraper *frontend)
 {
 	active_engine = 0;
 
@@ -39,7 +39,6 @@ Server::Server(Skyscraper *frontend, std::vector<Client*> &clients)
 		return;
 
 	this->frontend = frontend;
-	this->clients = clients;
 }
 
 Server::~Server()
@@ -458,6 +457,11 @@ bool Server::Load(const std::string &filename, EngineContext *parent, const Vect
 		DeleteEngine(engine);
 
 	return result;
+}
+
+void Server::Connect(Client *client)
+{
+	clients.push_back(client);
 }
 
 }

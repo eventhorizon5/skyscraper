@@ -29,7 +29,7 @@ class Server
 {
 public:
 
-	Server(Skyscraper *frontend, std::vector<Client*> &clients);
+	Server(Skyscraper *frontend);
 	~Server();
 	bool Loop();
 	void Handler();
@@ -48,6 +48,7 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	void Connect(Client* client);
 
 	std::vector<Client*> clients;
 

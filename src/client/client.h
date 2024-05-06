@@ -29,7 +29,7 @@ class Client
 {
 public:
 
-	Client();
+	Client(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem);
 	~Client();
 	void Print(const char *text);
 

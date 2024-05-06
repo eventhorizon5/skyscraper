@@ -20,12 +20,16 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgrePrerequisites.h>
+#include <OgreCommon.h>
+#include <Ogre.h>
+#include <fmod.hpp>
 #include <stdio.h>
 #include "client.h"
 
 namespace Skyscraper {
 
-Client::Client()
+Client::Client(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 {
 }
 
