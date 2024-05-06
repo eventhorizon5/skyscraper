@@ -28,6 +28,7 @@
 #include "elevatorcar.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
+#include "polymesh.h"
 #include "sound.h"
 #include "door.h"
 #include "model.h"
@@ -181,10 +182,10 @@ bool Shaft::IsInside(const Vector3 &position)
 	if (position.y > bottom && position.y < top && Levels.size() > 0)
 	{
 		//first determine if camera has X and Z values within the first shaft floor's bounding box
-		if (Levels[0]->GetMeshObject()->InBoundingBox(position, false) == true)
+		if (Levels[0]->GetMeshObject()->GetPolyMesh()->InBoundingBox(position, false) == true)
 		{
 			//do a hit beam test from the position to the bottom of the shaft, to see if it hits a shaft floor
-			bool result = (Levels[0]->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
+			bool result = (Levels[0]->GetMeshObject()->GetPolyMesh()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
 
 			//cache values
 			lastcheckresult = result;

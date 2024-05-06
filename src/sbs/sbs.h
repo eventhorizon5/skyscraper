@@ -107,6 +107,7 @@ namespace SBS {
 	class ControllerManager;
 	class CallStation;
 	class Indicator;
+	class PolyMesh;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;

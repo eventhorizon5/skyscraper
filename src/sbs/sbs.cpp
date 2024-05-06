@@ -57,6 +57,7 @@
 #include "doorsystem.h"
 #include "gitrev.h"
 #include "buttonpanel.h"
+#include "polymesh.h"
 
 namespace SBS {
 
@@ -3007,7 +3008,7 @@ void SBS::Prepare(bool report)
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i]->tricollider == true)
-			meshes[i]->CreateCollider();
+			meshes[i]->GetPolyMesh()->CreateCollider();
 		else
 			meshes[i]->CreateBoxCollider();
 	}
@@ -3782,7 +3783,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	Vector3 isect;
 	Real distance = 2000000000.;
 	Vector3 normal = Vector3::ZERO;
-	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
+	wall = mesh->GetPolyMesh()->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
 }
@@ -4251,9 +4252,9 @@ void SBS::MemoryReport()
 
 	for (int i = 0; i < meshes.size(); i++)
 	{
-		mesh_total += (meshes[i]->GetSize() / 1024.0) / 1024.0; //convert to megabytes
+		mesh_total += (meshes[i]->GetPolyMesh()->GetSize() / 1024.0) / 1024.0; //convert to megabytes
 		if (meshes[i]->IsEnabled() == true)
-			mesh_part += (meshes[i]->GetSize() / 1024.0) / 1024.0; //convert to megabytes
+			mesh_part += (meshes[i]->GetPolyMesh()->GetSize() / 1024.0) / 1024.0; //convert to megabytes
 	}
 
 	Report("Memory Usage Report");

@@ -32,6 +32,7 @@
 #include "scenenode.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
+#include "polymesh.h"
 
 //this file includes function implementations of the low-level SBS geometry processing code
 
@@ -511,7 +512,16 @@ Plane SBS::ComputePlane(PolyArray &vertices, bool flip_normal)
 	return Plane(normal, det);
 }
 
-bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int submesh)
+PolyMesh::PolyMesh(MeshObject *mesh) : ObjectBase(mesh)
+{
+	this->mesh = mesh;
+}
+
+PolyMesh::~PolyMesh()
+{
+}
+
+bool PolyMesh::ChangeTexture(const std::string &texture, bool matcheck, int submesh)
 {
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
@@ -542,7 +552,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 
 	sbs->GetTextureManager()->IncrementTextureUsage(material);
 
-	bool result = MeshWrapper->ChangeTexture(old, material, this);
+	bool result = mesh->MeshWrapper->ChangeTexture(old, material, mesh);
 
 	if (result == false)
 	{
@@ -551,11 +561,11 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	}
 
 	//update associated polygons
-	for (size_t i = 0; i < Walls.size(); i++)
+	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
-		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 		{
-			Polygon *poly = Walls[i]->GetPolygon(j);
+			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
 
 			if (poly->material == old)
 				poly->material = material;
@@ -565,7 +575,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	return true;
 }
 
-bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+bool PolyMesh::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
 	//replace submesh materials named oldtexture with newtexture
 	int submesh = FindMatchingSubMesh(oldtexture);
@@ -575,7 +585,7 @@ bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string
 	return result;
 }
 
-Wall* MeshObject::FindWallIntersect(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall)
+Wall* PolyMesh::FindWallIntersect(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall)
 {
 	//find a wall from a 3D point
 	//positions need to be in remote (Ogre) positioning
@@ -588,14 +598,14 @@ Wall* MeshObject::FindWallIntersect(const Vector3 &start, const Vector3 &end, Ve
 	Vector3 cur_isect;
 	Vector3 tmpnormal;
 
-	for (size_t i = 0; i < Walls.size(); i++)
+	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
-		if (wall && Walls[i] != wall)
+		if (wall && mesh->Walls[i] != wall)
 			continue;
 
-		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 		{
-			if (Walls[i]->GetPolygon(j)->IntersectSegment(start, end, cur_isect, &pr, tmpnormal) == true)
+			if (mesh->Walls[i]->GetPolygon(j)->IntersectSegment(start, end, cur_isect, &pr, tmpnormal) == true)
 			{
 				if (pr < best_pr)
 				{
@@ -620,17 +630,17 @@ Wall* MeshObject::FindWallIntersect(const Vector3 &start, const Vector3 &end, Ve
 	}
 
 	if (best_i >= 0)
-		return Walls[best_i];
+		return mesh->Walls[best_i];
 	else
 		return 0;
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
+bool PolyMesh::CreateMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
 	//exit if this mesh is a loaded file
-	if (Filename != "")
+	if (mesh->Filename != "")
 		return ReportError("PolyMesh: Cannot create geometry in a file-loaded mesh");
 
 	//get texture material
@@ -680,10 +690,10 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, P
 	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, converted_vertices[0], v1, v2, v3, tw2, th2))
 		return false;
 
-	return PolyMesh(name, material, converted_vertices, t_matrix, t_vector, mesh_indices, triangles, converted_vertices, tw2, th2, false);
+	return CreateMesh(name, material, converted_vertices, t_matrix, t_vector, mesh_indices, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -792,12 +802,12 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 		DeleteCollider();
 
 	if (sbs->RenderOnStartup == true)
-		Prepare();
+		mesh->Prepare();
 
 	return true;
 }
 
-Vector2* MeshObject::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th)
+Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th)
 {
 	//return texel array for specified texture transformation matrix and vector
 
@@ -840,7 +850,7 @@ Vector2* MeshObject::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, Polygon
 	return 0;
 }
 
-int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add)
+int PolyMesh::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//the Prepare() function must be called when the mesh is ready to view
@@ -879,7 +889,7 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 
 			//remove submesh
 			Submeshes.erase(Submeshes.begin() + index);
-			prepared = false; //need to re-prepare mesh
+			mesh->ResetPrepare(); //need to re-prepare mesh
 			return -1;
 		}
 	}
@@ -921,7 +931,7 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 
 	//bind material
 	Submeshes[index].Name = material;
-	prepared = false; //need to re-prepare mesh
+	mesh->ResetPrepare(); //need to re-prepare mesh
 
 	//register texture usage
 	if (createnew == true && material != "")
@@ -930,7 +940,7 @@ int MeshObject::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Tria
 	return index;
 }
 
-int MeshObject::FindMatchingSubMesh(const std::string &material)
+int PolyMesh::FindMatchingSubMesh(const std::string &material)
 {
 	//find a submesh with a matching material
 	//returns array index
@@ -943,7 +953,7 @@ int MeshObject::FindMatchingSubMesh(const std::string &material)
 	return -1;
 }
 
-void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices)
+void PolyMesh::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes.
@@ -1050,16 +1060,16 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 	}
 
 	//reindex triangle indices in all wall objects
-	for (size_t i = 0; i < Walls.size(); i++)
+	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
-		if (!Walls[i])
+		if (!mesh->Walls[i])
 			continue;
 
-		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 		{
 			//reindex triangle indices
 
-			Polygon *poly = Walls[i]->GetPolygon(j);
+			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
 
 			if (poly->material != Submeshes[submesh].Name)
 				continue;
@@ -1144,24 +1154,24 @@ void MeshObject::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indi
 			delete [] valid;
 		}
 	}
-	prepared = false; //need to re-prepare mesh
+	mesh->ResetPrepare(); //need to re-prepare mesh
 	delete [] deleted;
 }
 
-void MeshObject::CreateCollider()
+void PolyMesh::CreateCollider()
 {
 	//set up triangle collider based on raw SBS mesh geometry
 
 	SBS_PROFILE("MeshObject::CreateCollider");
 
-	if (create_collider == false)
+	if (mesh->create_collider == false)
 		return;
 
 	//exit if collider already exists
-	if (mBody)
+	if (mesh->mBody)
 		return;
 
-	if (!GetSceneNode())
+	if (!mesh->GetSceneNode())
 		return;
 
 	//exit if mesh is empty
@@ -1181,7 +1191,7 @@ void MeshObject::CreateCollider()
 		//initialize collider shape
 		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vcount, tricount * 3);
 
-		Real scale = GetSceneNode()->GetScale();
+		Real scale = mesh->GetSceneNode()->GetScale();
 
 		//add vertices to shape
 		for (size_t i = 0; i < Submeshes.size(); i++)
@@ -1209,56 +1219,56 @@ void MeshObject::CreateCollider()
 		shape->Finish();
 
 		//create a collider scene node
-		if (!collider_node)
-			collider_node = GetSceneNode()->CreateChild(GetName() + " collider");
+		if (!mesh->collider_node)
+			mesh->collider_node = mesh->GetSceneNode()->CreateChild(GetName() + " collider");
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
-		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
-		mShape = shape;
+		mesh->mBody = new OgreBulletDynamics::RigidBody(mesh->name, sbs->mWorld);
+		mesh->mBody->setStaticShape(mesh->collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
+		mesh->mShape = shape;
 
 		if (sbs->DeleteColliders == true)
 		{
 			bool revert = false;
-			if (remove_on_disable == false)
+			if (mesh->remove_on_disable == false)
 			{
-				remove_on_disable = true;
+				mesh->remove_on_disable = true;
 				revert = true;
 			}
 
-			Enabled(false);
-			Enabled(true);
+			mesh->Enabled(false);
+			mesh->Enabled(true);
 
 			if (revert == true)
-				remove_on_disable = false;
+				mesh->remove_on_disable = false;
 		}
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
+		mesh->ReportError("Error creating collider for '" + mesh->name + "'\n" + e.getDescription());
 	}
 }
 
-void MeshObject::DeleteCollider()
+void PolyMesh::DeleteCollider()
 {
 	//delete mesh collider
 
 	SBS_PROFILE("MeshObject::DeleteCollider");
 
 	//exit if collider doesn't exist
-	if (!mBody)
+	if (!mesh->mBody)
 		return;
 
 	//remove collider from world
-	mBody->removeFromWorld();
+	mesh->mBody->removeFromWorld();
 
 	//delete collider object
-	delete mBody;
-	mBody = 0;
-	mShape = 0;
+	delete mesh->mBody;
+	mesh->mBody = 0;
+	mesh->mShape = 0;
 }
 
-Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance)
+Real PolyMesh::HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance)
 {
 	//cast a ray and return the collision distance to the mesh
 	//return -1 if no hit
@@ -1266,7 +1276,7 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 	//cast a ray from the camera position downwards
 	SBS_PROFILE("MeshObject::HitBeam");
 
-	Vector3 position = sbs->ToRemote(origin - GetPosition());
+	Vector3 position = sbs->ToRemote(origin - mesh->GetPosition());
 	Ray ray (position, sbs->ToRemote(direction, false));
 
 	for (size_t i = 0; i < Submeshes.size(); i++)
@@ -1289,17 +1299,17 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 	return -1;
 }
 
-bool MeshObject::InBoundingBox(const Vector3 &pos, bool check_y)
+bool PolyMesh::InBoundingBox(const Vector3 &pos, bool check_y)
 {
 	//determine if position 'pos' is inside the mesh's bounding box
 
-	Vector3 position = sbs->ToRemote(pos - GetPosition());
+	Vector3 position = sbs->ToRemote(pos - mesh->GetPosition());
 
-	if (Bounds->isNull() == true)
+	if (mesh->Bounds->isNull() == true)
 		return false;
 
-	Vector3 min = Bounds->getMinimum();
-	Vector3 max = Bounds->getMaximum();
+	Vector3 min = mesh->Bounds->getMinimum();
+	Vector3 max = mesh->Bounds->getMaximum();
 
 	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
 	{
@@ -1314,7 +1324,7 @@ bool MeshObject::InBoundingBox(const Vector3 &pos, bool check_y)
 	return false;
 }
 
-void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
+void PolyMesh::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
 {
 	//read hardware buffers from a loaded model mesh, and return geometry arrays
 
@@ -1389,7 +1399,7 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 				posElem->baseVertexPointerToElement(vertex, &pReal);
 				Vector3 pt(pReal[0], pReal[1], pReal[2]);
 				//vertices[current_offset + j] = (orient * (pt * scale)) + position;
-				vertices[current_offset + j] = pt * sbs->ToRemote(GetSceneNode()->GetScale());
+				vertices[current_offset + j] = pt * sbs->ToRemote(this->mesh->GetSceneNode()->GetScale());
 				extents.merge(vertices[current_offset + j]);
 			}
 
@@ -1428,7 +1438,7 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 	}
 }
 
-Vector2 MeshObject::GetExtents(int coord, bool flip_z)
+Vector2 PolyMesh::GetExtents(int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from the polygons of this mesh object.
@@ -1478,30 +1488,30 @@ Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	return Vector2(esmall, ebig);
 }
 
-Wall* MeshObject::FindPolygon(const std::string &name, int &index)
+Wall* PolyMesh::FindPolygon(const std::string &name, int &index)
 {
 	//finds a polygon by name in all associated wall objects
 	//returns associated wall object and polygon index
 
-	for (size_t i = 0; i < Walls.size(); i++)
+	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
-		int polygon = Walls[i]->FindPolygon(name);
+		int polygon = mesh->Walls[i]->FindPolygon(name);
 		if (polygon > -1)
 		{
 			index = polygon;
-			return Walls[i];
+			return mesh->Walls[i];
 		}
 	}
 	index = -1;
 	return 0;
 }
 
-int MeshObject::GetSubmeshCount()
+int PolyMesh::GetSubmeshCount()
 {
 	return (int)Submeshes.size();
 }
 
-unsigned int MeshObject::GetVertexCount(int submesh)
+unsigned int PolyMesh::GetVertexCount(int submesh)
 {
 	if (submesh < 0 || submesh >= (int)Submeshes.size())
 	{
@@ -1517,7 +1527,7 @@ unsigned int MeshObject::GetVertexCount(int submesh)
 	return Submeshes[submesh].MeshGeometry.size();
 }
 
-unsigned int MeshObject::GetTriangleCount(int submesh)
+unsigned int PolyMesh::GetTriangleCount(int submesh)
 {
 	if (submesh < 0 || submesh >= (int)Submeshes.size())
 	{
@@ -1533,7 +1543,7 @@ unsigned int MeshObject::GetTriangleCount(int submesh)
 	return Submeshes[submesh].Triangles.size();
 }
 
-unsigned int MeshObject::GetSize()
+unsigned int PolyMesh::GetSize()
 {
 	//get general size of mesh object
 
