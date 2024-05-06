@@ -37,9 +37,8 @@
 #include "profiler.h"
 #include "scenenode.h"
 #include "dynamicmesh.h"
+#include "polymesh.h"
 #include "mesh.h"
-
-//this file includes function implementations of the SBS mesh code
 
 namespace SBS {
 
@@ -48,6 +47,10 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	//set up SBS object
 	SetValues("Mesh", name, true);
 
+	//create an instance of the geometry processor
+	polymesh = new PolyMesh(this);
+
+	//initialize mesh object
 	enabled = true;
 	mBody = 0;
 	mShape = 0;
@@ -114,7 +117,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			Vector3* vertices;
 			long unsigned int* indices;
 			Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
-			GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
+			polymesh->GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
 			delete[] indices;
@@ -132,7 +135,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 MeshObject::~MeshObject()
 {
 	//delete physics/collider components
-	DeleteCollider();
+	polymesh->DeleteCollider();
 
 	//delete wall objects
 	DeleteWalls();
@@ -157,6 +160,8 @@ MeshObject::~MeshObject()
 	if (Bounds)
 		delete Bounds;
 	Bounds = 0;
+
+	delete polymesh;
 }
 
 void MeshObject::GetBounds()
@@ -191,7 +196,8 @@ void MeshObject::Enabled(bool value)
 
 void MeshObject::EnableCollider(bool value)
 {
-	//enable or disable collision detection
+	//enable or disable collision detection//#include "polygon.h"
+
 
 	if (!mBody)
 		return;
@@ -258,10 +264,10 @@ void MeshObject::Prepare(bool force)
 	//set up bounding box
 	if (model_loaded == false)
 	{
-		for (size_t i = 0; i < Submeshes.size(); i++)
+		for (size_t i = 0; i < polymesh->Submeshes.size(); i++)
 		{
-			for (size_t j = 0; j < Submeshes[i].MeshGeometry.size(); j++)
-				Bounds->merge(Submeshes[i].MeshGeometry[j].vertex);
+			for (size_t j = 0; j < polymesh->Submeshes[i].MeshGeometry.size(); j++)
+				Bounds->merge(polymesh->Submeshes[i].MeshGeometry[j].vertex);
 		}
 	}
 
@@ -468,7 +474,7 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	if (MeshWrapper->IsVisible(this) == false)
 		return false;
 
-	if (GetSubmeshCount() == 0)
+	if (polymesh->GetSubmeshCount() == 0)
 		return false;
 
 	if (Bounds->isNull() == true)
@@ -642,6 +648,36 @@ void MeshObject::EnableShadows(bool value)
 	//enable shadows
 
 	MeshWrapper->EnableShadows(value);
+}
+
+PolyMesh* MeshObject::GetPolyMesh()
+{
+	return polymesh;
+}
+
+bool MeshObject::IsPrepared()
+{
+	return prepared;
+}
+
+void MeshObject::ResetPrepare()
+{
+	prepared = false;
+}
+
+bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	return polymesh->ReplaceTexture(oldtexture, newtexture);
+}
+
+bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int submesh)
+{
+	return polymesh->ChangeTexture(texture, matcheck, submesh);
+}
+
+Vector2 MeshObject::GetExtents(int coord, bool flip_z)
+{
+	return polymesh->GetExtents(coord, flip_z);
 }
 
 }

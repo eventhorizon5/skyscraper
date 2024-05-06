@@ -30,6 +30,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "mesh.h"
+#include "polymesh.h"
 #include "triangle.h"
 #include "texture.h"
 #include "scenenode.h"
@@ -242,7 +243,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 				if (i == limit)
 					break;
 
-				separate_total += clients[i]->GetSubmeshCount();
+				separate_total += clients[i]->GetPolyMesh()->GetSubmeshCount();
 			}
 
 			//if combined submesh/material count is less than three separate meshes
@@ -385,9 +386,9 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 	for (int i = start; i <= end; i++)
 	{
 		//for each client submesh entry
-		for (size_t j = 0; j < clients[i]->Submeshes.size(); j++)
+		for (size_t j = 0; j < clients[i]->GetPolyMesh()->Submeshes.size(); j++)
 		{
-			std::string material = clients[i]->Submeshes[j].Name;
+			std::string material = clients[i]->GetPolyMesh()->Submeshes[j].Name;
 
 			//find material in current list
 			bool found = false;
@@ -436,13 +437,13 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 	{
 		if (material != "")
 		{
-			int index = clients[i]->FindMatchingSubMesh(material);
+			int index = clients[i]->GetPolyMesh()->FindMatchingSubMesh(material);
 
 			if (index >= 0)
-				total += clients[i]->GetVertexCount(index);
+				total += clients[i]->GetPolyMesh()->GetVertexCount(index);
 		}
 		else
-			total += clients[i]->GetVertexCount();
+			total += clients[i]->GetPolyMesh()->GetVertexCount();
 	}
 
 	return total;
@@ -466,11 +467,11 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 
 	for (int i = start; i <= end; i++)
 	{
-		int index = clients[i]->FindMatchingSubMesh(material);
+		int index = clients[i]->GetPolyMesh()->FindMatchingSubMesh(material);
 
 		if (index >= 0)
 		{
-			total += clients[i]->GetTriangleCount(index);
+			total += clients[i]->GetPolyMesh()->GetTriangleCount(index);
 			client_count += 1;
 		}
 	}
@@ -485,13 +486,13 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 
 	unsigned int index = 0;
 
-	if (submesh < 0 || submesh >= client->GetSubmeshCount())
+	if (submesh < 0 || submesh >= client->GetPolyMesh()->GetSubmeshCount())
 		return 0;
 
 	//get per-submesh index offset
 	for (int i = 0; i < submesh; i++)
 	{
-		index += client->GetVertexCount(i);
+		index += client->GetPolyMesh()->GetVertexCount(i);
 	}
 
 	//return value if using separate meshes
@@ -505,7 +506,7 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 			return index;
 
 		//if not found, increment by client's vertex count
-		index += clients[i]->GetVertexCount();
+		index += clients[i]->GetPolyMesh()->GetVertexCount();
 	}
 
 	return index;
@@ -767,7 +768,7 @@ void DynamicMesh::Mesh::DeleteSubMesh(int index)
 
 			for (int j = 0; j < Parent->GetClientCount(); j++)
 			{
-				if (Parent->GetClient(j)->FindMatchingSubMesh(Submeshes[i].material) >= 0)
+				if (Parent->GetClient(j)->GetPolyMesh()->FindMatchingSubMesh(Submeshes[i].material) >= 0)
 				{
 					used = true;
 					break;
@@ -894,11 +895,11 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
 			//fill array with mesh's geometry data, from each submesh
-			for (int index = 0; index < mesh->GetSubmeshCount(); index++)
+			for (int index = 0; index < mesh->GetPolyMesh()->GetSubmeshCount(); index++)
 			{
-				for (size_t i = 0; i < mesh->GetVertexCount(index); i++)
+				for (size_t i = 0; i < mesh->GetPolyMesh()->GetVertexCount(index); i++)
 				{
-					MeshObject::Geometry &element = mesh->Submeshes[index].MeshGeometry[i];
+					PolyMesh::Geometry &element = mesh->GetPolyMesh()->Submeshes[index].MeshGeometry[i];
 
 					//make mesh's vertex relative to this scene node
 					Vector3 vertex;
@@ -908,7 +909,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 						vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
 					}
 					else
-						vertex = mesh->Submeshes[index].MeshGeometry[i].vertex;
+						vertex = mesh->GetPolyMesh()->Submeshes[index].MeshGeometry[i].vertex;
 
 					//add elements to array
 					mVertexElements[loc] = (float)vertex.x;
@@ -930,7 +931,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			entry.radius = radius;
 
 			//add client vertex count to list
-			entry.vertex_count = mesh->GetVertexCount();
+			entry.vertex_count = mesh->GetPolyMesh()->GetVertexCount();
 			vindex += entry.vertex_count;
 
 			//store client information
@@ -1008,7 +1009,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
-				int index = mesh->FindMatchingSubMesh(material);
+				int index = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
 
 				if (index >= 0)
 				{
@@ -1016,9 +1017,9 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 					unsigned int offset = Parent->GetIndexOffset(index, mesh);
 
 					//add mesh's triangles to array and adjust for offset
-					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
+					for (size_t i = 0; i < mesh->GetPolyMesh()->GetTriangleCount(index); i++)
 					{
-						Triangle &tri = mesh->Submeshes[index].Triangles[i];
+						Triangle &tri = mesh->GetPolyMesh()->Submeshes[index].Triangles[i];
 						mIndices[loc] = tri.a + offset;
 						mIndices[loc + 1] = tri.b + offset;
 						mIndices[loc + 2] = tri.c + offset;
@@ -1049,7 +1050,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
-				int index = mesh->FindMatchingSubMesh(material);
+				int index = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
 
 				if (index >= 0)
 				{
@@ -1057,9 +1058,9 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 					unsigned int offset = Parent->GetIndexOffset(index, mesh);
 
 					//add mesh's triangles to array and adjust for offset
-					for (size_t i = 0; i < mesh->GetTriangleCount(index); i++)
+					for (size_t i = 0; i < mesh->GetPolyMesh()->GetTriangleCount(index); i++)
 					{
-						Triangle &tri = mesh->Submeshes[index].Triangles[i];
+						Triangle &tri = mesh->GetPolyMesh()->Submeshes[index].Triangles[i];
 						mIndices[loc] = tri.a + offset;
 						mIndices[loc + 1] = tri.b + offset;
 						mIndices[loc + 2] = tri.c + offset;
@@ -1183,10 +1184,10 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	//get mesh's offset of associated scene node
 	Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
-	unsigned int vertex_count = mesh->GetVertexCount();
+	unsigned int vertex_count = mesh->GetPolyMesh()->GetVertexCount();
 
 	//exit if client mesh is empty, or if no submeshes have been defined
-	if (vertex_count == 0 || mesh->Submeshes.empty() == true)
+	if (vertex_count == 0 || mesh->GetPolyMesh()->Submeshes.empty() == true)
 		return;
 
 	//set up vertex data arrays
@@ -1218,14 +1219,14 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	unsigned int pos = 0;
 	unsigned int add = 0;
 
-	for (size_t submesh = 0; submesh < mesh->Submeshes.size(); submesh++)
+	for (size_t submesh = 0; submesh < mesh->GetPolyMesh()->Submeshes.size(); submesh++)
 	{
 		unsigned int start;
 		unsigned int end;
 
 		if (single == true)
 		{
-			if (mesh->Submeshes[submesh].Name != material)
+			if (mesh->GetPolyMesh()->Submeshes[submesh].Name != material)
 				continue;
 
 			start = index;
@@ -1234,14 +1235,14 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 		else
 		{
 			start = 0;
-			end = mesh->Submeshes[submesh].MeshGeometry.size() - 1;
+			end = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry.size() - 1;
 		}
 
-		std::vector<MeshObject::Geometry> &geometry = mesh->Submeshes[submesh].MeshGeometry;
+		std::vector<PolyMesh::Geometry> &geometry = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry;
 
 		for (unsigned int i = start; i <= end; i++)
 		{
-			MeshObject::Geometry &element = geometry[i];
+			PolyMesh::Geometry &element = geometry[i];
 
 			//make mesh's vertex relative to this scene node
 			Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
