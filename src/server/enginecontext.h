@@ -32,7 +32,7 @@ public:
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
 
-	EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(EngineContext *parent, std::vector<Client*> &clients, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
@@ -99,8 +99,6 @@ private:
 	//override information
 	SBS::CameraState *reload_state;
 
-	Ogre::SceneManager* mSceneManager;
-	FMOD::System *fmodsystem;
 	Vector3 position;
 	Vector3 area_min;
 	Vector3 area_max;

@@ -58,10 +58,11 @@
 #include "gitrev.h"
 #include "buttonpanel.h"
 #include "polymesh.h"
+#include "client.h"
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
+SBS::SBS(std::vector<Skyscraper::Client*> &clients, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
