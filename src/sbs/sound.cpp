@@ -111,10 +111,10 @@ void Sound::OnMove(bool parent)
 	if (channel)
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
 
-	for (int i = 0; i < sbs->clients.size(); i++)
+	/*for (int i = 0; i < sbs->clients.size(); i++)
 	{
 		sbs->clients[i]->GetSoundSystem()->set3DAttributes(&pos, &vel);
-	}
+	}*/
 }
 
 void Sound::OnRotate(bool parent)
