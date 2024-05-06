@@ -31,6 +31,7 @@ public:
 
 	Client();
 	~Client();
+	void Print(const char *text);
 
 private:
 

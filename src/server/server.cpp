@@ -26,11 +26,12 @@
 #include "skyscraper.h"
 #include "mainscreen.h"
 #include "enginecontext.h"
+#include "client.h"
 #include "server.h"
 
 namespace Skyscraper {
 
-Server::Server(Skyscraper *frontend)
+Server::Server(Skyscraper *frontend, std::vector<Client*> &clients)
 {
 	active_engine = 0;
 
@@ -38,6 +39,7 @@ Server::Server(Skyscraper *frontend)
 		return;
 
 	this->frontend = frontend;
+	this->clients = clients;
 }
 
 Server::~Server()

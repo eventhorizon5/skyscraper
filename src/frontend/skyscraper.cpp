@@ -48,6 +48,7 @@
 #include "camera.h"
 #include "gui/debugpanel.h"
 #include "skyscraper.h"
+#include "client.h"
 #include "server.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
@@ -183,6 +184,9 @@ namespace Skyscraper {
 
 bool Skyscraper::OnInit(void)
 {
+	//create a client instance
+	client = new Client();
+
 	version = "1.12";
 	version_rev = ToString(GIT_REV);
 	version_state = "Alpha";
@@ -240,7 +244,9 @@ bool Skyscraper::OnInit(void)
 	macos_minor = 0;
 
 	//create a default server instance
-	server = new Server(this);
+	std::vector<Client*> clients;
+	clients.push_back(client);
+	server = new Server(this, clients);
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -489,6 +495,8 @@ int Skyscraper::OnExit()
 	parser = 0;
 
 	delete mOverlaySystem;
+
+	delete client;
 
 	delete server;
 

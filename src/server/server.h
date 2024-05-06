@@ -29,7 +29,7 @@ class Server
 {
 public:
 
-	Server(Skyscraper *frontend);
+	Server(Skyscraper *frontend, std::vector<Client*> &clients);
 	~Server();
 	bool Loop();
 	void Handler();
@@ -62,6 +62,7 @@ private:
 	EngineContext *active_engine;
 
 	std::vector<EngineContext*> engines;
+	std::vector<Client*> clients;
 };
 
 }

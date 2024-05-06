@@ -65,6 +65,7 @@ class EngineContext;
 class Console;
 class LoadDialog;
 class ScriptProcessor;
+class Client;
 class Server;
 
 class Skyscraper : public wxApp, public Ogre::LogListener
@@ -234,6 +235,9 @@ private:
 
 	//additional path for user data
 	std::string data_path;
+
+	//client instance
+	Client *client;
 
 	//server instance
 	Server *server;

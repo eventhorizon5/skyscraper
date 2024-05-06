@@ -20,6 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <stdio.h>
 #include "client.h"
 
 namespace Skyscraper {
@@ -30,6 +31,11 @@ Client::Client()
 
 Client::~Client()
 {
+}
+
+void Client::Print(const char *text)
+{
+	printf("%s\n", text);
 }
 
 }
