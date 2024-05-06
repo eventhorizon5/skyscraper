@@ -2191,17 +2191,17 @@ void Skyscraper::UpdateProgress()
 	if (!progdialog)
 		return;
 
-	/*int total_percent = GetEngineCount() * 100;
+	int total_percent = server->GetEngineCount() * 100;
 	int current_percent = 0;
 
-	for (size_t i = 0; i < engines.size(); i++)
+	for (size_t i = 0; i < server->GetEngineCount(); i++)
 	{
-		if (engines[i])
-			current_percent += engines[i]->GetProgress();
+		if (server->GetEngine(i))
+			current_percent += server->GetEngine(i)->GetProgress();
 	}
 
 	int final = ((Real)current_percent / (Real)total_percent) * 100;
-	progdialog->Update(final);*/
+	progdialog->Update(final);
 }
 
 void Skyscraper::SetFullScreen(bool enabled)
