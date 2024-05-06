@@ -57,6 +57,8 @@ public:
 
 private:
 
+	void SetAttributes();
+
 	//FMOD system
 	FMOD::System *soundsys;
 

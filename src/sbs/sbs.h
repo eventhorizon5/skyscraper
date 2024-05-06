@@ -414,6 +414,9 @@ public:
 	//instance prompt string
 	std::string InstancePrompt;
 
+	//client instances
+	std::vector<Skyscraper::Client*> clients;
+
 private:
 
 	//fps

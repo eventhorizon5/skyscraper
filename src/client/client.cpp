@@ -31,15 +31,17 @@ namespace Skyscraper {
 
 Client::Client(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 {
+	scenemgr = mSceneManager;
+	soundsys = fmodsystem;
 }
 
 Client::~Client()
 {
 }
 
-void Client::Print(const char *text)
+FMOD::System* Client::GetSoundSystem()
 {
-	printf("%s\n", text);
+	return soundsys;
 }
 
 }

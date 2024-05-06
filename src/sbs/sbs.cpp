@@ -66,6 +66,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, std::vecto
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
+	this->clients = clients;
 
 	version = "0.12.0." + ToString(GIT_REV);
 	version_state = "Alpha";

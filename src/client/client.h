@@ -31,10 +31,12 @@ public:
 
 	Client(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem);
 	~Client();
-	void Print(const char *text);
+	FMOD::System* GetSoundSystem();
 
 private:
 
+	FMOD::System *soundsys;
+	Ogre::SceneManager *scenemgr;
 };
 
 }
