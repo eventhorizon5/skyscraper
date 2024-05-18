@@ -91,7 +91,9 @@ IMPLEMENT_APP_NO_MAIN(Skyscraper)
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_CPU != OGRE_CPU_ARM
 #include "uexception.h"
+#endif
 #endif
 
 #ifndef SW_SHOWNORMAL
@@ -163,8 +165,10 @@ int main (int argc, char* argv[])
 {
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_CPU != OGRE_CPU_ARM
 	//initialize top-level exception handler
 	Skyscraper::InitUnhandledExceptionFilter();
+#endif
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -326,7 +330,9 @@ bool Skyscraper::OnInit(void)
 
 	//set up unhandled exception handler (crash report system)
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_CPU != OGRE_CPU_ARM
 	UnhandledExceptionSetRoot(this);
+#endif
 #endif
 
 	//set locale to default for conversion functions

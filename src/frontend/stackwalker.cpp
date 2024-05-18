@@ -73,6 +73,7 @@
  **********************************************************************/
 #include "globals.h"
 
+#if OGRE_CPU != OGRE_CPU_ARM
 #ifdef _WIN32
 #include <windows.h>
 #include <tchar.h>
@@ -1348,4 +1349,5 @@ void StackWalker::OnOutput(LPCSTR buffer)
 {
   OutputDebugStringA(buffer);
 }
+#endif
 #endif
