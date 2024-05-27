@@ -94,7 +94,7 @@
 <EndTextures>
 
 #Next you'll need to create the ground. The following code is the default ground code.
-#The second command is needed to cut a whole in the ground for the building.  In this
+#The second command is needed to cut a hole in the ground for the building.  In this
 #example I'm giving the building dimensions of 40x40 feet, so it needs to be cut from
 #-20 to 20 horizontally, and -20 to 20 depth-wise.
 
@@ -387,7 +387,7 @@ DrawWalls = true, true, false, false, false, false
 
 #Stairs
 #The stairs can be tricky, but make sense once you've worked with them a little bit.
-#First you need to create the stairwell and cut a whole in the floors for the new stairwell
+#First you need to create the stairwell and cut a hole in the floors for the new stairwell
 #(this is almost identical to creating a shaft) - in this we say that the stairwell is centered at
 #(10, 15) and is servicing floors 0 to 9 (1-10):
 
