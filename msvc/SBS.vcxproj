@@ -414,6 +414,7 @@
     <ClCompile Include="..\src\sbs\object.cpp" />
     <ClCompile Include="..\src\sbs\person.cpp" />
     <ClCompile Include="..\src\sbs\polygon.cpp" />
+    <ClCompile Include="..\src\sbs\polymesh.cpp" />
     <ClCompile Include="..\src\sbs\profiler.cpp" />
     <ClCompile Include="..\src\sbs\random.cpp" />
     <ClCompile Include="..\src\sbs\revolvingdoor.cpp" />
@@ -462,6 +463,7 @@
     <ClInclude Include="..\src\sbs\object.h" />
     <ClInclude Include="..\src\sbs\person.h" />
     <ClInclude Include="..\src\sbs\polygon.h" />
+    <ClInclude Include="..\src\sbs\polymesh.h" />
     <ClInclude Include="..\src\sbs\profiler.h" />
     <ClInclude Include="..\src\sbs\random.h" />
     <ClInclude Include="..\src\sbs\revolvingdoor.h" />
