@@ -2345,7 +2345,8 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 			srcBox.getHeight() == source->getHeight() &&
 			dstBox.getWidth() == destination->getWidth() &&
 			dstBox.getHeight() == destination->getHeight() &&
-			sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem")
+			sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem" &&
+			sbs->mRoot->getRenderSystem()->getName() != "Direct3D11 Rendering Subsystem")
 		{
 			source->copyToTexture(destination);
 			return;
@@ -2353,14 +2354,19 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 
 		Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
 
-		//old method:
-		//buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
-		//const Ogre::PixelBox& pb = buffer->getCurrentLock();
-		//destination->getBuffer()->blitFromMemory(pb, dstBox);
-		//buffer->unlock();
-
-		//new method:
-		destination->getBuffer()->blit(buffer, srcBox, dstBox);
+		if (sbs->mRoot->getRenderSystem()->getName() == "Direct3D11 Rendering Subsystem")
+		{
+			//old method:
+			buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
+			const Ogre::PixelBox& pb = buffer->getCurrentLock();
+			destination->getBuffer()->blitFromMemory(pb, dstBox);
+			buffer->unlock();
+		}
+		else
+		{
+			//new method:
+			destination->getBuffer()->blit(buffer, srcBox, dstBox);
+		}
 	}
 	catch (Ogre::Exception& e)
 	{
