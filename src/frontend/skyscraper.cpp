@@ -777,7 +777,7 @@ bool Skyscraper::Initialize()
 
 	std::string renderer = mRoot->getRenderSystem()->getName();
 
-	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem")
+	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem" && renderer != "Metal Rendering Subsystem")
 		RTSS = true;
 
 	if (RTSS == true)
