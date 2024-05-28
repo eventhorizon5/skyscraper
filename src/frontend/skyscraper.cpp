@@ -1990,6 +1990,9 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	if (Headless == true)
 		return true;
 
+	if (Renderer == "Direct3D11")
+		return true;
+
 	//ensure graphics card and render system are capable of Caelum's shaders
 	if (Renderer == "Direct3D9")
 	{
