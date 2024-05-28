@@ -425,7 +425,12 @@ std::string TruncateNumber(const std::string &value, int decimals)
 
 	if (decimals < 1)
 		return number;
-	number.erase((int)number.find(".") + decimals + 1);
+
+	int decimal = number.find(".");
+	if (decimal < 0)
+		return number;
+
+	number.erase(decimal + decimals + 1);
 	if (number.at(number.length() - 1) == '.')
 		number = number.substr(0, number.length() - 1); //strip of extra decimal point if even
 	return number;
