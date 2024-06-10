@@ -504,7 +504,7 @@ bool SBS::Start(Ogre::Camera *camera)
 		EnableRandomActivity(true);
 
 	//print a memory report
-	MemoryReport();
+	//MemoryReport();
 
 	IsRunning = true;
 
