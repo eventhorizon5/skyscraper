@@ -1432,7 +1432,9 @@ void SBS::EnableLandscape(bool value)
 void SBS::EnableExternal(bool value)
 {
 	//turns external on/off
-	External->Enabled(value);
+
+	if (External)
+		External->Enabled(value);
 	IsExternalEnabled = value;
 }
 
@@ -4023,7 +4025,7 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 		Landscape->CutOutsideBounds(min, max, true, true);
 	if (buildings == true)
 		Buildings->CutOutsideBounds(min, max, true, true);
-	if (external == true)
+	if (external == true && External)
 		External->CutOutsideBounds(min, max, true, true);
 
 	if (floors == true)
@@ -4042,7 +4044,7 @@ void SBS::CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool lands
 		Landscape->Cut(min, max, true, true);
 	if (buildings == true)
 		Buildings->Cut(min, max, true, true);
-	if (external == true)
+	if (external == true && External)
 		External->Cut(min, max, true, true);
 
 	if (floors == true)
