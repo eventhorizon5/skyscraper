@@ -1262,6 +1262,9 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		engine->Report("Inserted file " + includefile);
 
+		//reset progress
+		progress_marker = 0;
+
 		line--;
 		return sNextLine;
 	}
