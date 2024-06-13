@@ -32,6 +32,7 @@
 #include "scenenode.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
+#include "polygon.h"
 #include "polymesh.h"
 
 //this file includes function implementations of the low-level SBS geometry processing code
