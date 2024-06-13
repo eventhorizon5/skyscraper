@@ -34,6 +34,9 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(DoorComponent, 0, 0)
+IMPLEMENT_ALLOCATOR(DoorWrapper, 0, 0)
+
 //
 // Door Component
 //

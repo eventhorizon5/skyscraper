@@ -39,7 +39,7 @@
 
 namespace SBS {
 
-IMPLEMENT_ALLOCATOR(Stairs, 0, 0)
+IMPLEMENT_ALLOCATOR(Stairwell, 0, 0)
 
 Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor) : Object(parent)
 {

@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP PolyMesh : public ObjectBase
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	//define geometry type

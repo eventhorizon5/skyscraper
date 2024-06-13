@@ -31,6 +31,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(DispatchController, 0, 0)
+
 DispatchController::DispatchController(Object *parent, int number) : Object(parent)
 {
 	//create a dispatch controller object

@@ -36,6 +36,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(CallStation, 0, 0)
+
 class CallStation::Timer : public TimerObject
 {
 public:

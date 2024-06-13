@@ -40,8 +40,6 @@
 namespace SBS {
 
 IMPLEMENT_ALLOCATOR(ElevatorDoor, 0, 0)
-IMPLEMENT_ALLOCATOR(ElevatorDoor::DoorWrapper, 0, 0)
-IMPLEMENT_ALLOCATOR(ElevatorDoor::DoorObject, 0, 0)
 
 //door autoclose timer
 class ElevatorDoor::Timer : public TimerObject

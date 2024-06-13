@@ -30,6 +30,8 @@ namespace SBS {
 
 class SBSIMPEXP CallStation : public Object, public Lock
 {
+	DECLARE_ALLOCATOR
+
 public:
 
 	std::string Name;

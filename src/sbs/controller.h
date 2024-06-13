@@ -28,6 +28,8 @@ namespace SBS {
 
 class SBSIMPEXP DispatchController : public Object
 {
+	DECLARE_ALLOCATOR	
+
 public:
 
 	int Number;

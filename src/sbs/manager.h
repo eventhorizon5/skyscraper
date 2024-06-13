@@ -220,6 +220,8 @@ private:
 
 class SBSIMPEXP ControllerManager : public Object
 {
+	DECLARE_ALLOCATOR
+
 public:
 	ControllerManager(Object* parent);
 	~ControllerManager();

@@ -31,6 +31,9 @@ struct DoorWrapper;
 //door component object
 struct DoorComponent
 {
+	DECLARE_ALLOCATOR
+
+public:
 	DoorComponent(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
 	~DoorComponent();
 	void MoveDoors(bool open, bool manual);
@@ -68,6 +71,9 @@ struct DoorComponent
 //wrapper that represents the entire set of doors
 struct DoorWrapper : public Object
 {
+	DECLARE_ALLOCATOR
+
+public:
 	DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor = 0);
 	DoorWrapper(Door *parent, bool rotate);
 	~DoorWrapper();

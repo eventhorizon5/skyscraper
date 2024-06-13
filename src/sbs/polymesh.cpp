@@ -38,6 +38,8 @@
 
 namespace SBS {
 
+IMPLEMENT_ALLOCATOR(PolyMesh, 0, 0)
+
 Vector2 SBS::GetExtents(PolyArray &varray, int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
