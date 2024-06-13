@@ -41,10 +41,13 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 	this->plane = plane;
 	this->triangles = triangles;
 	SetName(name);
+
+	sbs->PolygonCount++;
 }
 
 Polygon::~Polygon()
 {
+	sbs->PolygonCount--;
 }
 
 void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)

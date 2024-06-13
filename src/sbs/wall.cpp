@@ -140,7 +140,6 @@ Polygon* Wall::CreatePolygon(std::vector<Triangle> &triangles, std::vector<Exten
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
 	polygons.push_back(poly);
-	sbs->PolygonCount++;
 
 	return poly;
 }
@@ -172,8 +171,6 @@ void Wall::DeletePolygon(int index, bool recreate_colliders)
 		//delete polygon
 		polygons[index]->Delete();
 		polygons.erase(polygons.begin() + index);
-
-		sbs->PolygonCount--;
 
 		//recreate colliders if specified
 		if (recreate_colliders == true)
