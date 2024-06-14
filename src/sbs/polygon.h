@@ -31,10 +31,20 @@
 
 namespace SBS {
 
+//define geometry type
+struct Geometry
+{
+	//basic 3D geometry
+	Vector3 vertex;
+	Vector2 texel;
+	Vector3 normal;
+};
+
 class SBSIMPEXP Polygon : public ObjectBase
 {
 public:
 	MeshObject* mesh;
+	std::vector<Geometry> geometry;
 	std::vector<Triangle> triangles;
 	Plane plane; //plane in remote (Ogre) form, relative positioning
 

@@ -1520,7 +1520,10 @@ unsigned int PolyMesh::GetVertexCount(int submesh)
 		unsigned int total = 0;
 
 		for (size_t i = 0; i < Submeshes.size(); i++)
-			total += Submeshes[i].MeshGeometry.size();
+		{
+			for (size_t j = 0; j < Submeshes[i].polys.size(); j++)
+				total += Submeshes[i].polys[j]->GetVertexCount();
+		}
 
 		return total;
 	}
