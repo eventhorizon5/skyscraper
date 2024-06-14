@@ -30,6 +30,14 @@ class SBSIMPEXP PolyMesh : public ObjectBase
 {
 public:
 
+	//define geometry type
+	struct Geometry
+	{
+		//basic 3D geometry
+		Vector3 vertex;
+		Vector2 texel;
+		Vector3 normal;
+	};
 	struct TriangleIndices
 	{
 		//per-submesh triangle indices
@@ -37,7 +45,8 @@ public:
 	};
 	struct SubMesh
 	{
-		std::vector<Polygon*> polys;
+		std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
+		std::vector<Triangle> Triangles; //per-submesh triangles
 		std::string Name;
 	};
 	std::vector<SubMesh> Submeshes; //submeshes
