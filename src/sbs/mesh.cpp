@@ -684,4 +684,162 @@ Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	return polymesh->GetExtents(coord, flip_z);
 }
 
+Real MeshObject::GetHeight()
+{
+	//returns the height of the mesh
+
+	Real y;
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		{
+			for (size_t k = 0; k < Walls[i]->GetPolygon(j)->geometry.size(); k++)
+				y = Walls[i]->GetPolygon(j)->geometry[k].vertex.y;
+		}
+	}
+
+	return y;
+}
+
+Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance)
+{
+	//cast a ray and return the collision distance to the mesh
+	//return -1 if no hit
+
+	//cast a ray from the camera position downwards
+	SBS_PROFILE("MeshObject::HitBeam");
+
+	Vector3 position = sbs->ToRemote(origin - GetPosition());
+	Ray ray (position, sbs->ToRemote(direction, false));
+
+	for (size_t i = 0; i < Submeshes.size(); i++)
+	{
+		for (size_t j = 0; j < Submeshes[i].Triangles.size(); j++)
+		{
+			const Triangle &tri = Submeshes[i].Triangles[j];
+			Vector3 &tri_a = Submeshes[i].MeshGeometry[tri.a].vertex;
+			Vector3 &tri_b = Submeshes[i].MeshGeometry[tri.b].vertex;
+			Vector3 &tri_c = Submeshes[i].MeshGeometry[tri.c].vertex;
+
+			std::pair<bool, Real> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
+			if (result.first == true)
+			{
+				if (result.second <= sbs->ToRemote(max_distance))
+					return sbs->ToLocal(result.second);
+			}
+		}
+	}
+	return -1;
+}
+
+void MeshObject::CreateCollider()
+{
+	//set up triangle collider based on raw SBS mesh geometry
+
+	SBS_PROFILE("MeshObject::CreateCollider");
+
+	if (create_collider == false)
+		return;
+
+	//exit if collider already exists
+	if (mBody)
+		return;
+
+	if (!GetSceneNode())
+		return;
+
+	//exit if mesh is empty
+	if (Submeshes.size() == 0)
+		return;
+
+	unsigned int tricount = 0;
+	unsigned int vcount = 0;
+	for (size_t i = 0; i < Submeshes.size(); i++)
+	{
+		tricount += Submeshes[i].Triangles.size();
+		vcount += Submeshes[i].MeshGeometry.size();
+	}
+
+	try
+	{
+		//initialize collider shape
+		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vcount, tricount * 3);
+
+		Real scale = GetSceneNode()->GetScale();
+
+		//add vertices to shape
+		for (size_t i = 0; i < Submeshes.size(); i++)
+		{
+			for (size_t j = 0; j < Submeshes[i].Triangles.size(); j++)
+			{
+				const Triangle &tri = Submeshes[i].Triangles[j];
+
+				Vector3 a = Submeshes[i].MeshGeometry[tri.a].vertex;
+				Vector3 b = Submeshes[i].MeshGeometry[tri.b].vertex;
+				Vector3 c = Submeshes[i].MeshGeometry[tri.c].vertex;
+
+				if (scale != 1.0)
+				{
+					a *= scale;
+					b *= scale;
+					c *= scale;
+				}
+
+				shape->AddTriangle(a, b, c);
+			}
+		}
+
+		//finalize shape
+		shape->Finish();
+
+		//create a collider scene node
+		if (!collider_node)
+			collider_node = GetSceneNode()->CreateChild(GetName() + " collider");
+
+		//physics is not supported on triangle meshes; use CreateBoxCollider instead
+		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
+		mShape = shape;
+
+		if (sbs->DeleteColliders == true)
+		{
+			bool revert = false;
+			if (remove_on_disable == false)
+			{
+				remove_on_disable = true;
+				revert = true;
+			}
+
+			Enabled(false);
+			Enabled(true);
+
+			if (revert == true)
+				remove_on_disable = false;
+		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
+	}
+}
+
+void MeshObject::DeleteCollider()
+{
+	//delete mesh collider
+
+	SBS_PROFILE("MeshObject::DeleteCollider");
+
+	//exit if collider doesn't exist
+	if (!mBody)
+		return;
+
+	//remove collider from world
+	mBody->removeFromWorld();
+
+	//delete collider object
+	delete mBody;
+	mBody = 0;
+	mShape = 0;
+}
+
 }

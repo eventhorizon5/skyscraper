@@ -2825,19 +2825,7 @@ Real ElevatorCar::SetHeight()
 	//make sure height value is set
 	if (HeightSet == false)
 	{
-		Height = 0;
-		//search through mesh geometry to find actual height
-		for (size_t i = 0; i < Mesh->GetPolyMesh()->Submeshes.size(); i++)
-		{
-			for (size_t j = 0; j < Mesh->GetPolyMesh()->Submeshes[i].MeshGeometry.size(); j++)
-			{
-				Real y = sbs->ToLocal(Mesh->GetPolyMesh()->Submeshes[i].MeshGeometry[j].vertex.y);
-
-				//set height value
-				if (y > Height)
-					Height = y;
-			}
-		}
+		Height = Mesh->GetHeight();
 		HeightSet = true;
 
 		//position sounds at top of elevator car

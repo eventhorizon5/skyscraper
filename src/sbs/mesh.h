@@ -80,6 +80,10 @@ public:
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true, int submesh = 0);
 	Vector2 GetExtents(int coord, bool flip_z = false);
+	Real GetHeight();
+	Real HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance);
+	void CreateCollider();
+	void DeleteCollider();
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects

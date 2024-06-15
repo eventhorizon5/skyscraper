@@ -1130,147 +1130,6 @@ void PolyMesh::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indice
 	delete [] deleted;
 }
 
-void PolyMesh::CreateCollider()
-{
-	//set up triangle collider based on raw SBS mesh geometry
-
-	SBS_PROFILE("MeshObject::CreateCollider");
-
-	if (mesh->create_collider == false)
-		return;
-
-	//exit if collider already exists
-	if (mesh->mBody)
-		return;
-
-	if (!mesh->GetSceneNode())
-		return;
-
-	//exit if mesh is empty
-	if (Submeshes.size() == 0)
-		return;
-
-	unsigned int tricount = 0;
-	unsigned int vcount = 0;
-	for (size_t i = 0; i < Submeshes.size(); i++)
-	{
-		tricount += Submeshes[i].Triangles.size();
-		vcount += Submeshes[i].MeshGeometry.size();
-	}
-
-	try
-	{
-		//initialize collider shape
-		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vcount, tricount * 3);
-
-		Real scale = mesh->GetSceneNode()->GetScale();
-
-		//add vertices to shape
-		for (size_t i = 0; i < Submeshes.size(); i++)
-		{
-			for (size_t j = 0; j < Submeshes[i].Triangles.size(); j++)
-			{
-				const Triangle &tri = Submeshes[i].Triangles[j];
-
-				Vector3 a = Submeshes[i].MeshGeometry[tri.a].vertex;
-				Vector3 b = Submeshes[i].MeshGeometry[tri.b].vertex;
-				Vector3 c = Submeshes[i].MeshGeometry[tri.c].vertex;
-
-				if (scale != 1.0)
-				{
-					a *= scale;
-					b *= scale;
-					c *= scale;
-				}
-
-				shape->AddTriangle(a, b, c);
-			}
-		}
-
-		//finalize shape
-		shape->Finish();
-
-		//create a collider scene node
-		if (!mesh->collider_node)
-			mesh->collider_node = mesh->GetSceneNode()->CreateChild(GetName() + " collider");
-
-		//physics is not supported on triangle meshes; use CreateBoxCollider instead
-		mesh->mBody = new OgreBulletDynamics::RigidBody(mesh->name, sbs->mWorld);
-		mesh->mBody->setStaticShape(mesh->collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
-		mesh->mShape = shape;
-
-		if (sbs->DeleteColliders == true)
-		{
-			bool revert = false;
-			if (mesh->remove_on_disable == false)
-			{
-				mesh->remove_on_disable = true;
-				revert = true;
-			}
-
-			mesh->Enabled(false);
-			mesh->Enabled(true);
-
-			if (revert == true)
-				mesh->remove_on_disable = false;
-		}
-	}
-	catch (Ogre::Exception &e)
-	{
-		mesh->ReportError("Error creating collider for '" + mesh->name + "'\n" + e.getDescription());
-	}
-}
-
-void PolyMesh::DeleteCollider()
-{
-	//delete mesh collider
-
-	SBS_PROFILE("MeshObject::DeleteCollider");
-
-	//exit if collider doesn't exist
-	if (!mesh->mBody)
-		return;
-
-	//remove collider from world
-	mesh->mBody->removeFromWorld();
-
-	//delete collider object
-	delete mesh->mBody;
-	mesh->mBody = 0;
-	mesh->mShape = 0;
-}
-
-Real PolyMesh::HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance)
-{
-	//cast a ray and return the collision distance to the mesh
-	//return -1 if no hit
-
-	//cast a ray from the camera position downwards
-	SBS_PROFILE("MeshObject::HitBeam");
-
-	Vector3 position = sbs->ToRemote(origin - mesh->GetPosition());
-	Ray ray (position, sbs->ToRemote(direction, false));
-
-	for (size_t i = 0; i < Submeshes.size(); i++)
-	{
-		for (size_t j = 0; j < Submeshes[i].Triangles.size(); j++)
-		{
-			const Triangle &tri = Submeshes[i].Triangles[j];
-			Vector3 &tri_a = Submeshes[i].MeshGeometry[tri.a].vertex;
-			Vector3 &tri_b = Submeshes[i].MeshGeometry[tri.b].vertex;
-			Vector3 &tri_c = Submeshes[i].MeshGeometry[tri.c].vertex;
-
-			std::pair<bool, Real> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
-			if (result.first == true)
-			{
-				if (result.second <= sbs->ToRemote(max_distance))
-					return sbs->ToLocal(result.second);
-			}
-		}
-	}
-	return -1;
-}
-
 bool PolyMesh::InBoundingBox(const Vector3 &pos, bool check_y)
 {
 	//determine if position 'pos' is inside the mesh's bounding box
@@ -1410,7 +1269,7 @@ void PolyMesh::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_coun
 	}
 }
 
-/*Vector2 PolyMesh::GetExtents(int coord, bool flip_z)
+Vector2 PolyMesh::GetExtents(int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from the polygons of this mesh object.
@@ -1458,7 +1317,7 @@ void PolyMesh::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_coun
 	}
 
 	return Vector2(esmall, ebig);
-}*/
+}
 
 Wall* PolyMesh::FindPolygon(const std::string &name, int &index)
 {
