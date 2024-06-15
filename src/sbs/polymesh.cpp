@@ -515,7 +515,7 @@ bool PolyMesh::ChangeTexture(const std::string &texture, bool matcheck, int subm
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	SBS_PROFILE("MeshObject::ChangeTexture");
@@ -559,7 +559,7 @@ bool PolyMesh::ChangeTexture(const std::string &texture, bool matcheck, int subm
 			if (poly->material == old)
 				poly->material = material;
 		}
-	}
+	}*/
 
 	return true;
 }
@@ -625,7 +625,7 @@ Wall* PolyMesh::FindWallIntersect(const Vector3 &start, const Vector3 &end, Vect
 		return 0;
 }
 
-bool PolyMesh::CreateMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
+bool PolyMesh::CreateMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -680,10 +680,10 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &texture, P
 	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, converted_vertices[0], v1, v2, v3, tw2, th2))
 		return false;
 
-	return CreateMesh(name, material, converted_vertices, t_matrix, t_vector, triangles, converted_vertices, tw2, th2, false);
+	return CreateMesh(name, material, converted_vertices, t_matrix, t_vector, geometry, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -718,14 +718,14 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 			trimesh[i].triangles.push_back(Triangle(0, j - 1, j));
 	}
 
-	//set up geometry array
-	std::vector<Polygon::Geometry> geometry;
-
 	//initialize geometry arrays
 	size_t size = 0;
+	geometry.resize(trimesh_size);
+
 	for (size_t i = 0; i < trimesh_size; i++)
-		size += converted_vertices[i].size();
-	geometry.resize(size);
+	{
+		geometry[i].resize(converted_vertices[i].size());
+	}
 
 	//populate vertices, normals, and texels for mesh data
 	unsigned int k = 0;
@@ -737,9 +737,9 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 			//calculate normal
 			Vector3 normal = sbs->ComputePlane(converted_vertices[i], false).normal;
 
-			geometry[k].vertex = converted_vertices[i][j];
-			geometry[k].normal = normal;
-			geometry[k].texel = table[k];
+			geometry[i][j].vertex = converted_vertices[i][j];
+			geometry[i][j].normal = normal;
+			geometry[i][j].texel = table[k];
 			k++;
 		}
 	}
@@ -769,14 +769,14 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 	trimesh = 0;
 
 	//create submesh and set material
-	//int index = ProcessSubMesh(geometry, triangles, material, true);
+	//int index = Process(geometry, triangles, material, true);
 
 	//recreate colliders if specified
 	if (sbs->DeleteColliders == true)
 		mesh->DeleteCollider();
 
-	if (sbs->RenderOnStartup == true)
-		mesh->Prepare();
+	//if (sbs->RenderOnStartup == true)
+		//mesh->Prepare();
 
 	return true;
 }
@@ -824,7 +824,7 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 	return 0;
 }
 
-/*int PolyMesh::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add)
+/*int PolyMesh::Process(std::vector<Polygon::Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//the Prepare() function must be called when the mesh is ready to view
@@ -848,24 +848,8 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 		index = (int)Submeshes.size();
 		Submeshes.resize(Submeshes.size() + 1);
 		createnew = true;
-	}*/
+	}
 
-	//delete submesh and exit if it's going to be emptied
-	//if (createnew == false && add == false)
-	//{
-		/*if ((int)Submeshes[index].Triangles.size() - (int)indices.size() <= 0)
-		{
-			//unregister texture usage
-			if (Submeshes[index].Name != "")
-				sbs->GetTextureManager()->DecrementTextureUsage(Submeshes[index].Name);
-
-			//remove submesh
-			Submeshes.erase(Submeshes.begin() + index);
-			mesh->ResetPrepare(); //need to re-prepare mesh
-			return -1;
-		}*/
-	//}
-/*
 	if (add == true)
 	{
 		//add triangles

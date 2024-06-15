@@ -31,13 +31,14 @@
 
 namespace SBS {
 
-Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
+Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Geometry> &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
 	t_matrix = tex_matrix;
 	t_vector = tex_vector;
 	this->material = material;
 	this->plane = plane;
+	this->geometry = geometry;
 	this->triangles = triangles;
 	SetName(name);
 

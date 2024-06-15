@@ -53,7 +53,7 @@ public:
 
 	std::string material; //polygon material
 
-	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane);
+	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Geometry> &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane);
 	~Polygon();
 	void GetTextureMapping(Matrix3 &t_matrix, Vector3 &t_vector);
 	int GetSubMesh();

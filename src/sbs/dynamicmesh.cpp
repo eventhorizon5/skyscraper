@@ -385,7 +385,7 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 	}
 
 	//for each client
-	for (int i = start; i <= end; i++)
+	/*for (int i = start; i <= end; i++)
 	{
 		//for each client submesh entry
 		for (size_t j = 0; j < clients[i]->GetPolyMesh()->Submeshes.size(); j++)
@@ -406,7 +406,7 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 			if (found == false)
 				materials.push_back(material);
 		}
-	}
+	}*/
 
 	return (int)materials.size();
 }

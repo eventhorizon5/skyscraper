@@ -92,9 +92,10 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	Matrix3 tm;
 	Vector3 tv;
 	std::vector<Extents> index_extents;
+	std::vector<std::vector<Polygon::Geometry> > geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!meshwrapper->GetPolyMesh()->CreateMesh(name, texture, vertices, tw, th, autosize, tm, tv, triangles, converted_vertices))
+	if (!meshwrapper->GetPolyMesh()->CreateMesh(name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -109,16 +110,19 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	//compute plane
 	Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
-	return CreatePolygon(triangles, tm, tv, material, name, plane);
+	Polygon* poly = new Polygon(this, name, meshwrapper, geometry[0], triangles, tm, tv, material, plane);
+	polygons.push_back(poly);
+	return poly;
 }
 
 Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector)
 {
-	//add a set of polygons, providing the original material and texture mapping
+	//create a set of polygons, providing the original material and texture mapping
 
+	std::vector<std::vector<Polygon::Geometry> > geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!meshwrapper->GetPolyMesh()->CreateMesh(name, material, vertices, tex_matrix, tex_vector, triangles, converted_vertices, 0, 0))
+	if (!meshwrapper->GetPolyMesh()->CreateMesh(name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -130,17 +134,13 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	//compute plane
 	Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
-	return CreatePolygon(triangles, tex_matrix, tex_vector, material, name, plane);
-}
+	for (int i = 0; i < geometry.size(); i++)
+	{
+		Polygon* poly = new Polygon(this, name, meshwrapper, geometry[i], triangles, tex_matrix, tex_vector, material, plane);
+		polygons.push_back(poly);
+	}
 
-Polygon* Wall::CreatePolygon(std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, const std::string &name, Plane &plane)
-{
-	//create a polygon handle
-
-	Polygon* poly = new Polygon(this, name, meshwrapper, triangles, tex_matrix, tex_vector, material, plane);
-	polygons.push_back(poly);
-
-	return poly;
+	return polygons[0];
 }
 
 void Wall::DeletePolygons(bool recreate_collider)

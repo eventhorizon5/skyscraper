@@ -28,6 +28,8 @@
 
 namespace SBS {
 
+typedef std::vector<Polygon*> Polygons;
+
 class SBSIMPEXP PolyMesh : public ObjectBase
 {
 public:
@@ -38,25 +40,18 @@ public:
 		//per-submesh triangle indices
 		std::vector<Triangle> triangles; //triangle data, in A B C values
 	};
-	struct SubMesh
-	{
-		//std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
-		//std::vector<Triangle> Triangles; //per-submesh triangles
-		std::string Name;
-	};
-	std::vector<SubMesh> Submeshes; //submeshes
 
 	//functions
 
 	PolyMesh(MeshObject *mesh);
 	~PolyMesh();
-	bool CreateMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
-	bool CreateMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
+	bool CreateMesh(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
+	bool CreateMesh(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true, int submesh = 0);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	Wall* FindWallIntersect(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall = 0);
 	Vector2* GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th);
-	//int ProcessSubMesh(std::vector<Polygon::Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add);
+	int Process(std::vector<Polygon::Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add);
 	//int FindMatchingSubMesh(const std::string &material);
 	//void DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices);
 	//void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
