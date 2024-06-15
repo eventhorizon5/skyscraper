@@ -136,7 +136,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 MeshObject::~MeshObject()
 {
 	//delete physics/collider components
-	polymesh->DeleteCollider();
+	DeleteCollider();
 
 	//delete wall objects
 	DeleteWalls();
@@ -709,7 +709,7 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 	//cast a ray from the camera position downwards
 	SBS_PROFILE("MeshObject::HitBeam");
 
-	Vector3 position = sbs->ToRemote(origin - GetPosition());
+	/*Vector3 position = sbs->ToRemote(origin - GetPosition());
 	Ray ray (position, sbs->ToRemote(direction, false));
 
 	for (size_t i = 0; i < Submeshes.size(); i++)
@@ -728,7 +728,7 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 					return sbs->ToLocal(result.second);
 			}
 		}
-	}
+	}*/
 	return -1;
 }
 
@@ -736,7 +736,9 @@ void MeshObject::CreateCollider()
 {
 	//set up triangle collider based on raw SBS mesh geometry
 
-	SBS_PROFILE("MeshObject::CreateCollider");
+	return;
+
+	/*SBS_PROFILE("MeshObject::CreateCollider");
 
 	if (create_collider == false)
 		return;
@@ -820,7 +822,7 @@ void MeshObject::CreateCollider()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 void MeshObject::DeleteCollider()
