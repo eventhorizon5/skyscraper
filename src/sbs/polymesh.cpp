@@ -567,7 +567,8 @@ bool PolyMesh::ChangeTexture(const std::string &texture, bool matcheck, int subm
 bool PolyMesh::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
 	//replace submesh materials named oldtexture with newtexture
-	int submesh = FindMatchingSubMesh(oldtexture);
+	//int submesh = FindMatchingSubMesh(oldtexture);
+	int submesh = -1;
 	bool result = false;
 	if (submesh >= 0)
 		result = ChangeTexture(newtexture, true, submesh);
@@ -718,7 +719,7 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 	}
 
 	//set up geometry array
-	std::vector<Geometry> geometry;
+	std::vector<Polygon::Geometry> geometry;
 
 	//initialize geometry arrays
 	size_t size = 0;
@@ -768,11 +769,11 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 	trimesh = 0;
 
 	//create submesh and set material
-	int index = ProcessSubMesh(geometry, triangles, material, true);
+	//int index = ProcessSubMesh(geometry, triangles, material, true);
 
 	//recreate colliders if specified
 	if (sbs->DeleteColliders == true)
-		DeleteCollider();
+		mesh->DeleteCollider();
 
 	if (sbs->RenderOnStartup == true)
 		mesh->Prepare();
@@ -823,7 +824,7 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 	return 0;
 }
 
-int PolyMesh::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add)
+/*int PolyMesh::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//the Prepare() function must be called when the mesh is ready to view
@@ -847,11 +848,11 @@ int PolyMesh::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triang
 		index = (int)Submeshes.size();
 		Submeshes.resize(Submeshes.size() + 1);
 		createnew = true;
-	}
+	}*/
 
 	//delete submesh and exit if it's going to be emptied
-	if (createnew == false && add == false)
-	{
+	//if (createnew == false && add == false)
+	//{
 		/*if ((int)Submeshes[index].Triangles.size() - (int)indices.size() <= 0)
 		{
 			//unregister texture usage
@@ -863,8 +864,8 @@ int PolyMesh::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triang
 			mesh->ResetPrepare(); //need to re-prepare mesh
 			return -1;
 		}*/
-	}
-
+	//}
+/*
 	if (add == true)
 	{
 		//add triangles
@@ -910,9 +911,9 @@ int PolyMesh::ProcessSubMesh(std::vector<Geometry> &vertices, std::vector<Triang
 		sbs->GetTextureManager()->IncrementTextureUsage(Submeshes[index].Name);
 
 	return index;
-}
+}*/
 
-int PolyMesh::FindMatchingSubMesh(const std::string &material)
+/*int PolyMesh::FindMatchingSubMesh(const std::string &material)
 {
 	//find a submesh with a matching material
 	//returns array index
@@ -923,9 +924,9 @@ int PolyMesh::FindMatchingSubMesh(const std::string &material)
 			return (int)i;
 	}
 	return -1;
-}
+}*/
 
-void PolyMesh::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices)
+/*void PolyMesh::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes.
@@ -1108,54 +1109,15 @@ void PolyMesh::DeleteVertices(int submesh, std::vector<Triangle> &deleted_indice
 				element += 3;
 			}
 
-			//reindex extents, used for getting original geometry
-			for (int k = deleted_size - 1; k >= 0; k--)
-			{
-				size_t size = poly->index_extents.size();
-				for (size_t m = 0; m < size; m++)
-				{
-					Extents extents = poly->index_extents[m];
-					if (deleted[k] < extents.min)
-						extents.min--;
-					if (deleted[k] < extents.max)
-						extents.max--;
-					poly->index_extents[m] = extents;
-				}
-			}
 			delete [] elements;
 			delete [] valid;
 		}
 	}
 	mesh->ResetPrepare(); //need to re-prepare mesh
 	delete [] deleted;
-}
+}*/
 
-bool PolyMesh::InBoundingBox(const Vector3 &pos, bool check_y)
-{
-	//determine if position 'pos' is inside the mesh's bounding box
-
-	Vector3 position = sbs->ToRemote(pos - mesh->GetPosition());
-
-	if (mesh->Bounds->isNull() == true)
-		return false;
-
-	Vector3 min = mesh->Bounds->getMinimum();
-	Vector3 max = mesh->Bounds->getMaximum();
-
-	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
-	{
-		if (check_y == false)
-			return true;
-		else
-		{
-			if (position.y >= min.y && position.y <= max.y)
-				return true;
-		}
-	}
-	return false;
-}
-
-void PolyMesh::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
+/*void PolyMesh::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
 {
 	//read hardware buffers from a loaded model mesh, and return geometry arrays
 
@@ -1267,79 +1229,11 @@ void PolyMesh::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_coun
 		ibuf->unlock();
 		current_offset = next_offset;
 	}
-}
+}*/
 
-Vector2 PolyMesh::GetExtents(int coord, bool flip_z)
-{
-	//returns the smallest and largest values from a specified coordinate type
-	//(x, y, or z) from the polygons of this mesh object.
-	//first parameter must be either 1 (for x), 2 (for y) or 3 (for z)
-
-	Real esmall = 0;
-	Real ebig = 0;
-	Real tempnum = 0;
-
-	//return 0,0 if coord value is out of range
-	if (coord < 1 || coord > 3)
-		return Vector2(0, 0);
-
-	for (size_t i = 0; i < Submeshes.size(); i++)
-	{
-		for (size_t j = 0; j < Submeshes[i].MeshGeometry.size(); j++)
-		{
-			const Vector3 &vertex = Submeshes[i].MeshGeometry[j].vertex;
-
-			if (coord == 1)
-				tempnum = vertex.x;
-			if (coord == 2)
-				tempnum = vertex.y;
-			if (coord == 3)
-			{
-				if (flip_z == false)
-					tempnum = vertex.z;
-				else
-					tempnum = -vertex.z;
-			}
-
-			if (j == 0)
-			{
-				esmall = tempnum;
-				ebig = tempnum;
-			}
-			else
-			{
-				if (tempnum < esmall)
-					esmall = tempnum;
-				if (tempnum > ebig)
-					ebig = tempnum;
-			}
-		}
-	}
-
-	return Vector2(esmall, ebig);
-}
-
-Wall* PolyMesh::FindPolygon(const std::string &name, int &index)
-{
-	//finds a polygon by name in all associated wall objects
-	//returns associated wall object and polygon index
-
-	for (size_t i = 0; i < mesh->Walls.size(); i++)
-	{
-		int polygon = mesh->Walls[i]->FindPolygon(name);
-		if (polygon > -1)
-		{
-			index = polygon;
-			return mesh->Walls[i];
-		}
-	}
-	index = -1;
-	return 0;
-}
-
-int PolyMesh::GetSubmeshCount()
+/*int PolyMesh::GetSubmeshCount()
 {
 	return (int)Submeshes.size();
-}
+}*/
 
 }

@@ -192,21 +192,21 @@ bool Stairwell::IsInside(const Vector3 &position)
 		//check for hit with current floor
 		Real distance = floorptr->FullHeight();
 		if (GetLevel(floor))
-			hit = GetLevel(floor)->GetMeshObject()->GetPolyMesh()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			hit = GetLevel(floor)->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 
 		//if no hit, check hit against lower floor
 		if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
 		{
 			distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
 			if (GetLevel(floor - 1))
-				hit = GetLevel(floor - 1)->GetMeshObject()->GetPolyMesh()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+				hit = GetLevel(floor - 1)->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
 
 		//if no hit, check hit against starting floor
 		if (hit == false && sbs->GetFloor(startfloor))
 		{
 			distance = position.y - sbs->GetFloor(startfloor)->Altitude;
-			hit = GetLevel(startfloor)->GetMeshObject()->GetPolyMesh()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			hit = GetLevel(startfloor)->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
 	}
 	floorptr = 0;

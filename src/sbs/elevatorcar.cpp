@@ -2867,9 +2867,9 @@ bool ElevatorCar::IsInCar(const Vector3 &position, bool camera)
 
 	if (position.y >= (GetPosition().y - 0.1) && position.y < GetPosition().y + (Height * 2))
 	{
-		if (Mesh->GetPolyMesh()->InBoundingBox(position, false) == true)
+		if (Mesh->InBoundingBox(position, false) == true)
 		{
-			if (Mesh->GetPolyMesh()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
+			if (Mesh->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
 				if (camera == true)
 					CameraOffset = position.y - GetPosition().y;

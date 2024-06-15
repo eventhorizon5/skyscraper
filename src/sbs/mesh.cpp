@@ -109,7 +109,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	sbs->AddMeshHandle(this);
 
 	//set up collider for model (if mesh loaded from a filename)
-	if (filename != "" && create_collider == true)
+	/*if (filename != "" && create_collider == true)
 	{
 		if (collidermesh.get())
 		{
@@ -130,7 +130,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			GetBounds();
 			CreateBoxCollider();
 		}
-	}
+	}*/
 }
 
 MeshObject::~MeshObject()
@@ -478,8 +478,8 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	if (MeshWrapper->IsVisible(this) == false)
 		return false;
 
-	if (polymesh->GetSubmeshCount() == 0)
-		return false;
+	//if (polymesh->GetSubmeshCount() == 0)
+		//return false;
 
 	if (Bounds->isNull() == true)
 		return false;
@@ -679,11 +679,6 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	return polymesh->ChangeTexture(texture, matcheck, submesh);
 }
 
-Vector2 MeshObject::GetExtents(int coord, bool flip_z)
-{
-	return polymesh->GetExtents(coord, flip_z);
-}
-
 Real MeshObject::GetHeight()
 {
 	//returns the height of the mesh
@@ -842,6 +837,104 @@ void MeshObject::DeleteCollider()
 	delete mBody;
 	mBody = 0;
 	mShape = 0;
+}
+
+Vector2 MeshObject::GetExtents(int coord, bool flip_z)
+{
+	//returns the smallest and largest values from a specified coordinate type
+	//(x, y, or z) from the polygons of this mesh object.
+	//first parameter must be either 1 (for x), 2 (for y) or 3 (for z)
+
+	Real esmall = 0;
+	Real ebig = 0;
+	Real tempnum = 0;
+
+	//return 0,0 if coord value is out of range
+	if (coord < 1 || coord > 3)
+		return Vector2(0, 0);
+
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		{
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			for (size_t k = 0; k < poly->geometry.size(); k++)
+			{
+				Ogre::Vector3 vertex = poly->geometry[k].vertex;
+
+				if (coord == 1)
+					tempnum = poly->geometry[k].vertex.x;
+				if (coord == 2)
+					tempnum = poly->geometry[k].vertex.y;
+				if (coord == 3)
+				{
+					if (flip_z == false)
+						tempnum = poly->geometry[k].vertex.z;
+					else
+						tempnum = -poly->geometry[k].vertex.z;
+				}
+
+				if (j == 0)
+				{
+					esmall = tempnum;
+					ebig = tempnum;
+				}
+				else
+				{
+					if (tempnum < esmall)
+						esmall = tempnum;
+					if (tempnum > ebig)
+						ebig = tempnum;
+				}
+			}
+		}
+	}
+
+	return Vector2(esmall, ebig);
+}
+
+Wall* MeshObject::FindPolygon(const std::string &name, int &index)
+{
+	//finds a polygon by name in all associated wall objects
+	//returns associated wall object and polygon index
+
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		int polygon = Walls[i]->FindPolygon(name);
+		if (polygon > -1)
+		{
+			index = polygon;
+			return Walls[i];
+		}
+	}
+	index = -1;
+	return 0;
+}
+
+bool MeshObject::InBoundingBox(const Vector3 &pos, bool check_y)
+{
+	//determine if position 'pos' is inside the mesh's bounding box
+
+	Vector3 position = sbs->ToRemote(pos - GetPosition());
+
+	if (Bounds->isNull() == true)
+		return false;
+
+	Vector3 min = Bounds->getMinimum();
+	Vector3 max = Bounds->getMaximum();
+
+	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
+	{
+		if (check_y == false)
+			return true;
+		else
+		{
+			if (position.y >= min.y && position.y <= max.y)
+				return true;
+		}
+	}
+	return false;
 }
 
 }

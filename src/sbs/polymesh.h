@@ -56,14 +56,12 @@ public:
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	Wall* FindWallIntersect(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall = 0);
 	Vector2* GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th);
-	int ProcessSubMesh(std::vector<Polygon::Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add);
-	int FindMatchingSubMesh(const std::string &material);
-	void DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices);
-	bool InBoundingBox(const Vector3 &pos, bool check_y);
-	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
+	//int ProcessSubMesh(std::vector<Polygon::Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add);
+	//int FindMatchingSubMesh(const std::string &material);
+	//void DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices);
+	//void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
 	Vector2 GetExtents(int coord, bool flip_z = false);
-	Wall* FindPolygon(const std::string &name, int &index);
-	int GetSubmeshCount();
+	//int GetSubmeshCount();
 
 private:
 

@@ -84,6 +84,8 @@ public:
 	Real HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance);
 	void CreateCollider();
 	void DeleteCollider();
+	Wall* FindPolygon(const std::string &name, int &index);
+	bool InBoundingBox(const Vector3 &pos, bool check_y);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects

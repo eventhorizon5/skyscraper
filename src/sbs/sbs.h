@@ -396,7 +396,6 @@ public:
 	int GetCameraTextureCount();
 	CameraTexture* GetCameraTexture(int number);
 	std::string GetFilesystemPath(std::string filename);
-	void MemoryReport();
 
 	//Meshes
 	MeshObject* Buildings;

@@ -156,8 +156,8 @@ void Wall::DeletePolygons(bool recreate_collider)
 		//prepare mesh
 		meshwrapper->Prepare();
 
-		meshwrapper->GetPolyMesh()->DeleteCollider();
-		meshwrapper->GetPolyMesh()->CreateCollider();
+		meshwrapper->DeleteCollider();
+		meshwrapper->CreateCollider();
 	}
 }
 
@@ -175,8 +175,8 @@ void Wall::DeletePolygon(int index, bool recreate_colliders)
 		if (recreate_colliders == true)
 		{
 			meshwrapper->Prepare();
-			meshwrapper->GetPolyMesh()->DeleteCollider();
-			meshwrapper->GetPolyMesh()->CreateCollider();
+			meshwrapper->DeleteCollider();
+			meshwrapper->CreateCollider();
 		}
 	}
 }
@@ -269,8 +269,8 @@ void Wall::Move(const Vector3 &position, Real speed)
 	//prepare mesh
 	if (meshwrapper->UsingDynamicBuffers() == false)
 		meshwrapper->Prepare(true);
-	meshwrapper->GetPolyMesh()->DeleteCollider();
-	meshwrapper->GetPolyMesh()->CreateCollider();
+	meshwrapper->DeleteCollider();
+	meshwrapper->CreateCollider();
 }
 
 MeshObject* Wall::GetMesh()
@@ -355,8 +355,8 @@ void Wall::ChangeHeight(Real newheight)
 	//prepare mesh
 	if (meshwrapper->UsingDynamicBuffers() == false)
 		meshwrapper->Prepare(true);
-	meshwrapper->GetPolyMesh()->DeleteCollider();
-	meshwrapper->GetPolyMesh()->CreateCollider();
+	meshwrapper->DeleteCollider();
+	meshwrapper->CreateCollider();
 }
 
 unsigned int Wall::GetVertexCount()
