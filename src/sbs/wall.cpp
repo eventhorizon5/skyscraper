@@ -168,7 +168,7 @@ void Wall::DeletePolygon(int index, bool recreate_colliders)
 	if (index > -1 && index < (int)polygons.size())
 	{
 		//delete polygon
-		polygons[index]->Delete();
+		delete polygons[index];
 		polygons.erase(polygons.begin() + index);
 
 		//recreate colliders if specified

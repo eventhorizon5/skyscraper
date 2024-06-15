@@ -62,7 +62,6 @@ public:
 	bool IntersectRay(PolyArray &vertices, const Vector3 &start, const Vector3 &end);
 	bool IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal);
 	void Move(const Vector3 &position, Real speed = 1.0);
-	void Delete();
 	Plane GetAbsolutePlane();
 	Vector2 GetExtents(int coord);
 	void ChangeHeight(Real newheight);

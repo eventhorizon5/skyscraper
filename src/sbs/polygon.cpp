@@ -166,15 +166,6 @@ void Polygon::Move(const Vector3 &position, Real speed)
 	}*/
 }
 
-void Polygon::Delete()
-{
-	//delete polygon geometry
-
-	//delete triangles
-	//std::vector<PolyMesh::Geometry> geometry;
-	//mesh->GetPolyMesh()->ProcessSubMesh(geometry, triangles, material, false);
-}
-
 Plane Polygon::GetAbsolutePlane()
 {
 	//convert to an absolute plane
