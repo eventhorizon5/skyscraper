@@ -56,7 +56,9 @@ public:
 	//void DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices);
 	//void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
 	Vector2 GetExtents(int coord, bool flip_z = false);
-	//int GetSubmeshCount();
+	unsigned int GetVertexCount();
+	unsigned int GetTriangleCount();
+
 
 private:
 

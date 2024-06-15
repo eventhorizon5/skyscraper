@@ -1215,9 +1215,28 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 	}
 }*/
 
-/*int PolyMesh::GetSubmeshCount()
+unsigned int PolyMesh::GetVertexCount()
 {
-	return (int)Submeshes.size();
-}*/
+	unsigned int total = 0;
+
+	for (int i = 0; i < mesh->Walls.size(); i++)
+	{
+		total += mesh->Walls[i]->GetVertexCount();
+	}
+
+	return total;
+}
+
+unsigned int PolyMesh::GetTriangleCount()
+{
+	unsigned int total = 0;
+
+	for (int i = 0; i < mesh->Walls.size(); i++)
+	{
+		total += mesh->Walls[i]->GetTriangleCount();
+	}
+
+	return total;
+}
 
 }
