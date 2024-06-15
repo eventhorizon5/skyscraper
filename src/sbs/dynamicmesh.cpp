@@ -226,6 +226,8 @@ void DynamicMesh::Prepare(MeshObject *client)
 	if (clients.empty() == true)
 		return;
 
+	return;
+/*
 	//determine if meshes should be combined or separated
 	if (meshes.empty() == true)
 	{
@@ -300,7 +302,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 		if (index >= 0)
 			meshes[index]->Prepare(true, index);
 	}
-
+*/
 	prepared = true;
 }
 
@@ -433,7 +435,7 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 
 	unsigned int total = 0;
 
-	for (int i = start; i <= end; i++)
+	/*for (int i = start; i <= end; i++)
 	{
 		if (material != "")
 		{
@@ -444,7 +446,7 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 		}
 		else
 			total += clients[i]->GetPolyMesh()->GetVertexCount();
-	}
+	}*/
 
 	return total;
 }
@@ -465,7 +467,7 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 	unsigned int total = 0;
 	client_count = 0;
 
-	for (int i = start; i <= end; i++)
+	/*for (int i = start; i <= end; i++)
 	{
 		int index = clients[i]->GetPolyMesh()->FindMatchingSubMesh(material);
 
@@ -474,7 +476,7 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 			total += clients[i]->GetPolyMesh()->GetTriangleCount(index);
 			client_count += 1;
 		}
-	}
+	}*/
 
 	return total;
 }
@@ -486,7 +488,7 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 
 	unsigned int index = 0;
 
-	if (submesh < 0 || submesh >= client->GetPolyMesh()->GetSubmeshCount())
+	/*if (submesh < 0 || submesh >= client->GetPolyMesh()->GetSubmeshCount())
 		return 0;
 
 	//get per-submesh index offset
@@ -507,7 +509,7 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 
 		//if not found, increment by client's vertex count
 		index += clients[i]->GetPolyMesh()->GetVertexCount();
-	}
+	}*/
 
 	return index;
 }
@@ -760,7 +762,7 @@ void DynamicMesh::Mesh::DeleteSubMesh(int index)
 	//delete a submesh
 	//if no index is provided, delete any empty submeshes
 
-	if (index == -1)
+	/*if (index == -1)
 	{
 		for (size_t i = 0; i < Submeshes.size(); i++)
 		{
@@ -787,7 +789,7 @@ void DynamicMesh::Mesh::DeleteSubMesh(int index)
 	{
 		MeshWrapper->destroySubMesh(index);
 		Submeshes.erase(Submeshes.begin() + index);
-	}
+	}*/
 }
 
 void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
@@ -801,6 +803,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	//all submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
 
+/*
 	SBS_PROFILE("DynamicMesh::Mesh::Prepare");
 
 	if (prepared == true || !node)
@@ -1109,7 +1112,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			Enabled(true);
 		}
 	}
-
+*/
 	prepared = true;
 }
 
@@ -1155,7 +1158,9 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
-	SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
+	return;
+
+/*	SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
 
 	if (Parent->UseDynamicBuffers() == false || !node)
 		return;
@@ -1275,7 +1280,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	//get vertex buffer and size
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = data->vertexBufferBinding->getBuffer(0);
 	size_t vsize = data->vertexDeclaration->getVertexSize(0);
-
+*/
 	/*
 	//lock vertex buffer for writing
 	float *vdata = static_cast<float*>(vbuffer->lock(vsize * loc, vsize * add, Ogre::HardwareBuffer::HBL_NORMAL));
@@ -1291,12 +1296,12 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	*/
 
 	//write data to buffer
-	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
+/*	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
 
 	delete [] mVertexElements;
 
 	//update mesh bounding box
-	UpdateBoundingBox();
+	UpdateBoundingBox();*/
 }
 
 void DynamicMesh::Mesh::Detach()
