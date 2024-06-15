@@ -487,21 +487,21 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 	return total;
 }
 
-/*unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
+unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 {
 	//get vertex index offset of specific client mesh
 	//if multiple geometry sets are combined together, each set has a starting index number
 
 	unsigned int index = 0;
 
-	if (submesh < 0 || submesh >= client->GetPolyMesh()->GetSubmeshCount())
+	/*if (submesh < 0 || submesh >= client->GetPolyMesh()->GetSubmeshCount())
 		return 0;
 
 	//get per-submesh index offset
 	for (int i = 0; i < submesh; i++)
 	{
 		index += client->GetPolyMesh()->GetVertexCount(i);
-	}
+	}*/
 
 	//return value if using separate meshes
 	if (meshes.size() > 1)
@@ -518,7 +518,7 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 	}
 
 	return index;
-}*/
+}
 
 void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material, unsigned int index, bool single)
 {
