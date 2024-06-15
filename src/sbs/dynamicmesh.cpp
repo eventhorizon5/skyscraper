@@ -228,8 +228,6 @@ void DynamicMesh::Prepare(MeshObject *client)
 	if (clients.empty() == true)
 		return;
 
-	return;
-
 	//determine if meshes should be combined or separated
 	if (meshes.empty() == true)
 	{
@@ -817,7 +815,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 	SBS_PROFILE("DynamicMesh::Mesh::Prepare");
 
-/*	if (prepared == true || !node)
+	if (prepared == true || !node)
 		return;
 
 	if (sbs->Headless == true)
@@ -939,6 +937,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 						client_box.merge(vertex);
 						radius = std::max(radius, vertex.length());
 						loc += 8;
+					}
 				}
 			}
 
@@ -1025,25 +1024,31 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
-				int index = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
 
-				if (index >= 0)
+				for (size_t i = 0; i < mesh->Walls.size(); i++)
 				{
-					//get index offset of mesh
-					unsigned int offset = Parent->GetIndexOffset(index, mesh);
-
-					//add mesh's triangles to array and adjust for offset
-					for (size_t i = 0; i < mesh->GetPolyMesh()->GetTriangleCount(index); i++)
+					for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 					{
-						Triangle &tri = mesh->GetPolyMesh()->Submeshes[index].Triangles[i];
-						mIndices[loc] = tri.a + offset;
-						mIndices[loc + 1] = tri.b + offset;
-						mIndices[loc + 2] = tri.c + offset;
-						loc += 3;
-					}
+						Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+						if (poly->material == material)
+						{
+							//get index offset of mesh
+							unsigned int offset = Parent->GetIndexOffset(index, mesh);
 
-					//increment submesh's client reference count
-					submesh->clients += 1;
+							//add mesh's triangles to array and adjust for offset
+							for (size_t i = 0; i < poly->triangles.size(); i++)
+							{
+								Triangle &tri = poly->triangles[i];
+								mIndices[loc] = tri.a + offset;
+								mIndices[loc + 1] = tri.b + offset;
+								mIndices[loc + 2] = tri.c + offset;
+								loc += 3;
+							}
+
+							//increment submesh's client reference count
+							submesh->clients += 1;
+						}
+					}
 				}
 			}
 
@@ -1066,25 +1071,31 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
-				int index = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
 
-				if (index >= 0)
+				for (size_t i = 0; i < mesh->Walls.size(); i++)
 				{
-					//get index offset of mesh
-					unsigned int offset = Parent->GetIndexOffset(index, mesh);
-
-					//add mesh's triangles to array and adjust for offset
-					for (size_t i = 0; i < mesh->GetPolyMesh()->GetTriangleCount(index); i++)
+					for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 					{
-						Triangle &tri = mesh->GetPolyMesh()->Submeshes[index].Triangles[i];
-						mIndices[loc] = tri.a + offset;
-						mIndices[loc + 1] = tri.b + offset;
-						mIndices[loc + 2] = tri.c + offset;
-						loc += 3;
-					}
+						Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+						if (poly->material == material)
+						{
+							//get index offset of mesh
+							unsigned int offset = Parent->GetIndexOffset(index, mesh);
 
-					//increment submesh's client reference count
-					submesh->clients += 1;
+							//add mesh's triangles to array and adjust for offset
+							for (size_t i = 0; i < poly->triangles.size(); i++)
+							{
+								Triangle &tri = poly->triangles[i];
+								mIndices[loc] = tri.a + offset;
+								mIndices[loc + 1] = tri.b + offset;
+								mIndices[loc + 2] = tri.c + offset;
+								loc += 3;
+							}
+
+							//increment submesh's client reference count
+							submesh->clients += 1;
+						}
+					}
 				}
 			}
 
@@ -1124,7 +1135,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			Enabled(false);
 			Enabled(true);
 		}
-	}*/
+	}
 
 	prepared = true;
 }
