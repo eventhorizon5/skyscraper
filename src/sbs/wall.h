@@ -30,9 +30,12 @@
 namespace SBS {
 
 class Polygon;
+class PolyMesh;
 
 class SBSIMPEXP Wall : public Object
 {
+	friend class MeshObject;
+
 public:
 
 	//functions
@@ -41,13 +44,13 @@ public:
 	Polygon* AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize);
 	Polygon* AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize);
 	Polygon* AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector);
-	Polygon* CreatePolygon(std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, const std::string &name, Plane &plane);
+	Polygon* CreatePolygon(std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, const std::string &name, Plane &plane);
 	void DeletePolygons(bool recreate_collider = true);
 	void DeletePolygon(int index, bool recreate_colliders);
 	int GetPolygonCount();
 	Polygon* GetPolygon(int index);
 	int FindPolygon(const std::string &name);
-	void GetGeometry(int index, PolygonSet &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
+	//void GetGeometry(int index, PolygonSet &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectsWall(Vector3 start, Vector3 end, Vector3 &isect, bool convert = true);
 	void Move(const Vector3 &position, Real speed = 1.0);
 	MeshObject* GetMesh();
@@ -55,6 +58,8 @@ public:
 	Vector3 GetPoint(const Vector3 &start, const Vector3 &end);
 	Vector3 GetWallExtents(Real altitude, bool get_max);
 	void ChangeHeight(Real newheight);
+	unsigned int GetVertexCount();
+	unsigned int GetTriangleCount();
 
 private:
 	//mesh wrapper

@@ -94,7 +94,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!meshwrapper->GetPolyMesh()->CreateMesh(name, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles, converted_vertices))
+	if (!meshwrapper->GetPolyMesh()->CreateMesh(name, texture, vertices, tw, th, autosize, tm, tv, triangles, converted_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -109,17 +109,16 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	//compute plane
 	Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
-	return CreatePolygon(triangles, index_extents, tm, tv, material, name, plane);
+	return CreatePolygon(triangles, tm, tv, material, name, plane);
 }
 
 Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 
-	std::vector<Extents> index_extents;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!meshwrapper->GetPolyMesh()->CreateMesh(name, material, vertices, tex_matrix, tex_vector, index_extents, triangles, converted_vertices, 0, 0))
+	if (!meshwrapper->GetPolyMesh()->CreateMesh(name, material, vertices, tex_matrix, tex_vector, triangles, converted_vertices, 0, 0))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -131,14 +130,14 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	//compute plane
 	Plane plane = sbs->ComputePlane(converted_vertices[0]);
 
-	return CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, material, name, plane);
+	return CreatePolygon(triangles, tex_matrix, tex_vector, material, name, plane);
 }
 
-Polygon* Wall::CreatePolygon(std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, const std::string &name, Plane &plane)
+Polygon* Wall::CreatePolygon(std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, const std::string &name, Plane &plane)
 {
 	//create a polygon handle
 
-	Polygon* poly = new Polygon(this, name, meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
+	Polygon* poly = new Polygon(this, name, meshwrapper, triangles, tex_matrix, tex_vector, material, plane);
 	polygons.push_back(poly);
 
 	return poly;
@@ -208,7 +207,7 @@ int Wall::FindPolygon(const std::string &name)
 	return -1;
 }
 
-void Wall::GetGeometry(int index, PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+/*void Wall::GetGeometry(int index, PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -222,7 +221,7 @@ void Wall::GetGeometry(int index, PolygonSet &vertices, bool firstonly, bool con
 		return;
 
 	polygons[index]->GetGeometry(vertices, firstonly, convert, rescale, relative, reverse);
-}
+}*/
 
 bool Wall::IntersectsWall(Vector3 start, Vector3 end, Vector3 &isect, bool convert)
 {
@@ -306,38 +305,36 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
-		PolygonSet origpolys;
-		GetGeometry(i, origpolys, true);
-
-		PolyArray original, tmp1, tmp2;
-		original.reserve(origpolys[0].size());
-		for (size_t i = 0; i < origpolys[0].size(); i++)
-			original.push_back(origpolys[0][i]);
+		PolyArray poly, tmp1, tmp2;
+		for (int j = 0; j < polygons[i]->geometry.size(); j++)
+		{
+			poly.push_back(polygons[i]->geometry[j].vertex);
+		}
 
 		//if given altitude is outside of polygon's range, return 0
-		Vector2 yextents = sbs->GetExtents(original, 2);
+		Vector2 yextents = sbs->GetExtents(poly, 2);
 		Real tmpaltitude = altitude;
 		if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 			return Vector3(0, 0, 0);
 
 		//get upper
-		sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001);
+		sbs->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
 
 		//get lower part of upper
-		sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001);
+		sbs->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
 
 		Vector3 result;
 		if (get_max == false)
 		{
 			//get minimum extents
-			result.x = sbs->GetExtents(original, 1).x;
-			result.z = sbs->GetExtents(original, 3).x;
+			result.x = sbs->GetExtents(poly, 1).x;
+			result.z = sbs->GetExtents(poly, 3).x;
 		}
 		else
 		{
 			//get maximum extents
-			result.x = sbs->GetExtents(original, 1).y;
-			result.z = sbs->GetExtents(original, 3).y;
+			result.x = sbs->GetExtents(poly, 1).y;
+			result.z = sbs->GetExtents(poly, 3).y;
 		}
 		result.y = altitude;
 		return result; //only check the first polygon for now
@@ -360,6 +357,26 @@ void Wall::ChangeHeight(Real newheight)
 		meshwrapper->Prepare(true);
 	meshwrapper->GetPolyMesh()->DeleteCollider();
 	meshwrapper->GetPolyMesh()->CreateCollider();
+}
+
+unsigned int Wall::GetVertexCount()
+{
+	unsigned int total = 0;
+	for (size_t i = 0; i < polygons.size(); i++)
+	{
+		total += polygons[i]->geometry.size();
+	}
+	return total;
+}
+
+unsigned int Wall::GetTriangleCount()
+{
+	unsigned int total = 0;
+	for (size_t i = 0; i < polygons.size(); i++)
+	{
+		total += polygons[i]->triangles.size();
+	}
+	return total;
 }
 
 }

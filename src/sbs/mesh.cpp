@@ -38,6 +38,7 @@
 #include "scenenode.h"
 #include "dynamicmesh.h"
 #include "polymesh.h"
+#include "polygon.h"
 #include "mesh.h"
 
 namespace SBS {
@@ -264,10 +265,13 @@ void MeshObject::Prepare(bool force)
 	//set up bounding box
 	if (model_loaded == false)
 	{
-		for (size_t i = 0; i < polymesh->Submeshes.size(); i++)
+		for (size_t i = 0; i < Walls.size(); i++)
 		{
-			for (size_t j = 0; j < polymesh->Submeshes[i].MeshGeometry.size(); j++)
-				Bounds->merge(polymesh->Submeshes[i].MeshGeometry[j].vertex);
+			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
+			{
+				for (size_t k = 0; k < Walls[i]->polygons[j]->geometry.size(); k++)
+					Bounds->merge(Walls[i]->polygons[j]->geometry[k].vertex);
+			}
 		}
 	}
 

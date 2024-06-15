@@ -31,10 +31,9 @@
 
 namespace SBS {
 
-Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
+Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
-	this->index_extents = index_extents;
 	t_matrix = tex_matrix;
 	t_vector = tex_vector;
 	this->material = material;
@@ -63,7 +62,7 @@ int Polygon::GetSubMesh()
 	return  mesh->GetPolyMesh()->FindMatchingSubMesh(material);
 }
 
-void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+/*void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -137,11 +136,11 @@ void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bo
 		if (firstonly == true)
 			return;
 	}
-}
+}*/
 
 void Polygon::Move(const Vector3 &position, Real speed)
 {
-	bool dynamic = mesh->UsingDynamicBuffers();
+	/*bool dynamic = mesh->UsingDynamicBuffers();
 
 	int submesh = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
 
@@ -162,7 +161,7 @@ void Polygon::Move(const Vector3 &position, Real speed)
 			if (dynamic == true)
 				mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
 		}
-	}
+	}*/
 }
 
 void Polygon::Delete()
@@ -170,8 +169,8 @@ void Polygon::Delete()
 	//delete polygon geometry
 
 	//delete triangles
-	std::vector<PolyMesh::Geometry> geometry;
-	mesh->GetPolyMesh()->ProcessSubMesh(geometry, triangles, material, false);
+	//std::vector<PolyMesh::Geometry> geometry;
+	//mesh->GetPolyMesh()->ProcessSubMesh(geometry, triangles, material, false);
 }
 
 Plane Polygon::GetAbsolutePlane()
@@ -190,28 +189,22 @@ Vector2 Polygon::GetExtents(int coord)
 	if (coord < 1 || coord > 3)
 		return Vector2(0, 0);
 
-	PolygonSet poly;
-	GetGeometry(poly);
 
 	//get polygon extents
-	Vector2 extents = Vector2::ZERO;
-	bool firstrun = true;
-	for (size_t i = 0; i < poly.size(); i++)
+	PolyArray poly;
+	for (size_t i = 0; i < geometry.size(); i++)
 	{
-		Vector2 extents2 = sbs->GetExtents(poly[i], coord);
-		if (extents2.x < extents.x || firstrun == true)
-			extents.x = extents2.x;
-		if (extents2.y > extents.y || firstrun == true)
-			extents.y = extents2.y;
-		firstrun = false;
+		poly.push_back(geometry[i].vertex);
 	}
+
+	Vector2 extents = sbs->GetExtents(poly, coord);
 
 	return extents;
 }
 
 void Polygon::ChangeHeight(Real newheight)
 {
-	bool dynamic = mesh->UsingDynamicBuffers();
+	/*bool dynamic = mesh->UsingDynamicBuffers();
 
 	Vector2 extents = GetExtents(2);
 
@@ -238,7 +231,7 @@ void Polygon::ChangeHeight(Real newheight)
 					mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
 			}
 		}
-	}
+	}*/
 }
 
 }
