@@ -446,9 +446,14 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 			{
 				for (int k = 0; k < clients[i]->Walls[j]->GetPolygonCount(); k++)
 				{
-					if (clients[i]->Walls[j]->GetPolygon(k)->material == material)
+					Polygon *poly = clients[i]->Walls[j]->GetPolygon(k);
+
+					if (poly->material == material)
 					{
-						total += clients[i]->Walls[j]->GetPolygon(k)->geometry.size();
+						for (int l = 0; l < poly->geometry.size(); l++)
+						{
+								total += poly->geometry[l].size();
+						}
 					}
 				}
 			}
