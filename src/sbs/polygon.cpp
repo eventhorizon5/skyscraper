@@ -31,7 +31,7 @@
 
 namespace SBS {
 
-Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Geometry> &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
+Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
 	t_matrix = tex_matrix;
@@ -182,12 +182,14 @@ Vector2 Polygon::GetExtents(int coord)
 	if (coord < 1 || coord > 3)
 		return Vector2(0, 0);
 
-
 	//get polygon extents
 	PolyArray poly;
 	for (size_t i = 0; i < geometry.size(); i++)
 	{
-		poly.push_back(geometry[i].vertex);
+		for (size_t j = 0; j < geometry[i].size(); j++)
+		{
+			poly.push_back(geometry[i][j].vertex);
+		}
 	}
 
 	Vector2 extents = sbs->GetExtents(poly, coord);

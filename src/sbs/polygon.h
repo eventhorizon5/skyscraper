@@ -41,9 +41,10 @@ public:
 		Vector2 texel;
 		Vector3 normal;
 	};
+	typedef std::vector<std::vector<Geometry> > GeometrySet;
 
 	MeshObject* mesh;
-	std::vector<Geometry> geometry; //mesh geometry (vertices/texels/normals) container
+	GeometrySet geometry; //mesh geometry (vertices/texels/normals) container
 	std::vector<Triangle> triangles;
 	Plane plane; //plane in remote (Ogre) form, relative positioning
 
@@ -53,7 +54,7 @@ public:
 
 	std::string material; //polygon material
 
-	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Geometry> &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane);
+	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane);
 	~Polygon();
 	void GetTextureMapping(Matrix3 &t_matrix, Vector3 &t_vector);
 	int GetSubMesh();

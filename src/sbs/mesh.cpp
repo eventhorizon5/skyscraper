@@ -269,8 +269,13 @@ void MeshObject::Prepare(bool force)
 		{
 			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
 			{
-				for (size_t k = 0; k < Walls[i]->polygons[j]->geometry.size(); k++)
-					Bounds->merge(Walls[i]->polygons[j]->geometry[k].vertex);
+				Polygon *poly = Walls[i]->polygons[j];
+
+				for (size_t k = 0; k < poly->geometry.size(); k++)
+				{
+					for (size_t l = 0; l < poly->geometry[k].size(); l++)
+						Bounds->merge(Walls[i]->polygons[j]->geometry[k][l].vertex);
+				}
 			}
 		}
 	}
@@ -688,8 +693,13 @@ Real MeshObject::GetHeight()
 	{
 		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
-			for (size_t k = 0; k < Walls[i]->GetPolygon(j)->geometry.size(); k++)
-				y = Walls[i]->GetPolygon(j)->geometry[k].vertex.y;
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			for (size_t k = 0; k < poly->geometry.size(); k++)
+			{
+				for (size_t l = 0; l < poly->geometry[k].size(); l++)
+					y = poly->geometry[k][l].vertex.y;
+			}
 		}
 	}
 
@@ -861,31 +871,34 @@ Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 
 			for (size_t k = 0; k < poly->geometry.size(); k++)
 			{
-				Ogre::Vector3 vertex = poly->geometry[k].vertex;
+				for (size_t l = 0; l < poly->geometry[k].size(); l++)
+				{
+					Ogre::Vector3 vertex = poly->geometry[k][l].vertex;
 
-				if (coord == 1)
-					tempnum = poly->geometry[k].vertex.x;
-				if (coord == 2)
-					tempnum = poly->geometry[k].vertex.y;
-				if (coord == 3)
-				{
-					if (flip_z == false)
-						tempnum = poly->geometry[k].vertex.z;
-					else
-						tempnum = -poly->geometry[k].vertex.z;
-				}
+					if (coord == 1)
+						tempnum = poly->geometry[k][l].vertex.x;
+					if (coord == 2)
+						tempnum = poly->geometry[k][l].vertex.y;
+					if (coord == 3)
+					{
+						if (flip_z == false)
+							tempnum = poly->geometry[k][l].vertex.z;
+						else
+							tempnum = -poly->geometry[k][l].vertex.z;
+					}
 
-				if (j == 0)
-				{
-					esmall = tempnum;
-					ebig = tempnum;
-				}
-				else
-				{
-					if (tempnum < esmall)
+					if (j == 0)
+					{
 						esmall = tempnum;
-					if (tempnum > ebig)
 						ebig = tempnum;
+					}
+					else
+					{
+						if (tempnum < esmall)
+							esmall = tempnum;
+						if (tempnum > ebig)
+							ebig = tempnum;
+					}
 				}
 			}
 		}

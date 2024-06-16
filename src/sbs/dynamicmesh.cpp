@@ -911,32 +911,37 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			{
 				for (size_t i = 0; i < mesh->Walls[index]->GetPolygonCount(); i++)
 				{
-					for (size_t j = 0; j < mesh->Walls[index]->GetPolygon(i)->geometry.size(); j++)
+					Polygon *poly = mesh->Walls[index]->GetPolygon(i);
+
+					for (size_t j = 0; j < poly->geometry.size(); j++)
 					{
-						Polygon::Geometry &element = mesh->Walls[index]->GetPolygon(i)->geometry[j];
-
-						//make mesh's vertex relative to this scene node
-						Vector3 vertex;
-						if (client == -1)
+						for (size_t k = 0; k < poly->geometry[j].size(); k++)
 						{
-							Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-							vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
-						}
-						else
-							vertex = element.vertex;
+							Polygon::Geometry &element = poly->geometry[j][k];
 
-						//add elements to array
-						mVertexElements[loc] = (float)vertex.x;
-						mVertexElements[loc + 1] = (float)vertex.y;
-						mVertexElements[loc + 2] = (float)vertex.z;
-						mVertexElements[loc + 3] = (float)element.normal.x;
-						mVertexElements[loc + 4] = (float)element.normal.y;
-						mVertexElements[loc + 5] = (float)element.normal.z;
-						mVertexElements[loc + 6] = (float)element.texel.x;
-						mVertexElements[loc + 7] = (float)element.texel.y;
-						client_box.merge(vertex);
-						radius = std::max(radius, vertex.length());
-						loc += 8;
+							//make mesh's vertex relative to this scene node
+							Vector3 vertex;
+							if (client == -1)
+							{
+								Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+								vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+							}
+							else
+								vertex = element.vertex;
+
+							//add elements to array
+							mVertexElements[loc] = (float)vertex.x;
+							mVertexElements[loc + 1] = (float)vertex.y;
+							mVertexElements[loc + 2] = (float)vertex.z;
+							mVertexElements[loc + 3] = (float)element.normal.x;
+							mVertexElements[loc + 4] = (float)element.normal.y;
+							mVertexElements[loc + 5] = (float)element.normal.z;
+							mVertexElements[loc + 6] = (float)element.texel.x;
+							mVertexElements[loc + 7] = (float)element.texel.y;
+							client_box.merge(vertex);
+							radius = std::max(radius, vertex.length());
+							loc += 8;
+						}
 					}
 				}
 			}
