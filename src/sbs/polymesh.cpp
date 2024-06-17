@@ -40,78 +40,13 @@ PolyMesh::~PolyMesh()
 {
 }
 
-bool PolyMesh::ChangeTexture(const std::string &texture, bool matcheck, int submesh)
-{
-	//changes a texture
-	//if matcheck is true, exit if old and new textures are the same
-
-	/*if (sbs->Headless == true)
-		return true;
-
-	SBS_PROFILE("MeshObject::ChangeTexture");
-	std::string material = texture;
-	TrimString(material);
-
-	if (submesh < 0 || submesh >= (int)Submeshes.size())
-		return false;
-
-	//exit if old and new materials are the same
-	if (matcheck == true)
-	{
-		if (Submeshes[submesh].Name == material)
-			return false;
-	}
-
-	std::string old = Submeshes[submesh].Name;
-
-	sbs->GetTextureManager()->DecrementTextureUsage(old);
-
-	//update submesh
-	Submeshes[submesh].Name = material;
-
-	sbs->GetTextureManager()->IncrementTextureUsage(material);
-
-	bool result = mesh->MeshWrapper->ChangeTexture(old, material, mesh);
-
-	if (result == false)
-	{
-		Submeshes[submesh].Name = old; //revert name
-		return false;
-	}
-
-	//update associated polygons
-	for (size_t i = 0; i < mesh->Walls.size(); i++)
-	{
-		for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
-		{
-			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
-
-			if (poly->material == old)
-				poly->material = material;
-		}
-	}*/
-
-	return true;
-}
-
-bool PolyMesh::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
-{
-	//replace submesh materials named oldtexture with newtexture
-	//int submesh = FindMatchingSubMesh(oldtexture);
-	int submesh = -1;
-	bool result = false;
-	if (submesh >= 0)
-		result = ChangeTexture(newtexture, true, submesh);
-	return result;
-}
-
 Wall* PolyMesh::FindWallIntersect(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall)
 {
 	//find a wall from a 3D point
 	//positions need to be in remote (Ogre) positioning
 	//if wall_number is 0 or greater, this will only check that specified wall
 
-	SBS_PROFILE("MeshObject::FindWallIntersect");
+	SBS_PROFILE("PolyMesh::FindWallIntersect");
 	Real pr, best_pr = 2000000000.;
 	Real dist, best_dist = 2000000000.;
 	int best_i = -1;

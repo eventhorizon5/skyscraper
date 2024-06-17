@@ -65,6 +65,8 @@ public:
 	Plane GetAbsolutePlane();
 	Vector2 GetExtents(int coord);
 	void ChangeHeight(Real newheight);
+	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
+	bool ChangeTexture(const std::string &texture, bool matcheck = true);
 };
 
 }

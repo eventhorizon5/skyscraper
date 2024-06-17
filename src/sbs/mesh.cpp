@@ -675,12 +675,33 @@ void MeshObject::ResetPrepare()
 
 bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	return polymesh->ReplaceTexture(oldtexture, newtexture);
+	//replace polygon materials named oldtexture with newtexture
+
+	//update associated polygons
+	bool found = false;
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		bool result = Walls[i]->ReplaceTexture(oldtexture, newtexture);
+		if (result == true)
+			found = true;
+	}
+	return found;
 }
 
-bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int submesh)
+bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck)
 {
-	return polymesh->ChangeTexture(texture, matcheck, submesh);
+	//changes a texture
+	//if matcheck is true, exit if old and new textures are the same
+
+	//update associated polygons
+	bool found = false;
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		bool result = Walls[i]->ChangeTexture(texture, matcheck);
+		if (result == true)
+			found = true;
+	}
+	return found;
 }
 
 Real MeshObject::GetHeight()
@@ -953,6 +974,11 @@ bool MeshObject::InBoundingBox(const Vector3 &pos, bool check_y)
 		}
 	}
 	return false;
+}
+
+DynamicMesh* MeshObject::GetDynamicMesh()
+{
+	return MeshWrapper;
 }
 
 }

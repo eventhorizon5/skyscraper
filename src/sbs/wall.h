@@ -59,6 +59,8 @@ public:
 	void ChangeHeight(Real newheight);
 	unsigned int GetVertexCount();
 	unsigned int GetTriangleCount();
+	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
+	bool ChangeTexture(const std::string &texture, bool matcheck = true);
 
 private:
 	//mesh wrapper

@@ -78,7 +78,7 @@ public:
 	bool IsPrepared();
 	void ResetPrepare();
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	bool ChangeTexture(const std::string &texture, bool matcheck = true, int submesh = 0);
+	bool ChangeTexture(const std::string &texture, bool matcheck = true);
 	Vector2 GetExtents(int coord, bool flip_z = false);
 	Real GetHeight();
 	Real HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance);
@@ -86,6 +86,7 @@ public:
 	void DeleteCollider();
 	Wall* FindPolygon(const std::string &name, int &index);
 	bool InBoundingBox(const Vector3 &pos, bool check_y);
+	DynamicMesh* GetDynamicMesh();
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects

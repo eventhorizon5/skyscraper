@@ -234,4 +234,44 @@ void Polygon::ChangeHeight(Real newheight)
 	}*/
 }
 
+bool Polygon::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	//replace material named oldtexture with newtexture
+
+	if (oldtexture == newtexture)
+		return false;
+
+	if (material == oldtexture)
+	{
+		bool result = mesh->GetDynamicMesh()->ChangeTexture(oldtexture, newtexture, mesh);
+
+		if (result == false)
+			return false;
+
+		material = newtexture;
+		sbs->GetTextureManager()->DecrementTextureUsage(oldtexture);
+		sbs->GetTextureManager()->IncrementTextureUsage(newtexture);
+		//mesh->ResetPrepare();
+		return true;
+	}
+	return false;
+}
+
+bool Polygon::ChangeTexture(const std::string &texture, bool matcheck)
+{
+	//changes a texture
+	//if matcheck is true, exit if old and new textures are the same
+
+	if (matcheck == true)
+	{
+		if (material == texture)
+			return false;
+	}
+	sbs->GetTextureManager()->DecrementTextureUsage(material);
+	material = texture;
+	sbs->GetTextureManager()->IncrementTextureUsage(texture);
+	//mesh->ResetPrepare();
+	return true;
+}
+
 }

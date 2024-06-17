@@ -379,4 +379,32 @@ unsigned int Wall::GetTriangleCount()
 	return total;
 }
 
+bool Wall::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	bool found = false;
+
+	for (int i = 0; i < GetPolygonCount(); i++)
+	{
+		Polygon *poly = GetPolygon(i);
+		bool result = poly->ReplaceTexture(oldtexture, newtexture);
+		if (result == true)
+			found = true;
+	}
+	return found;
+}
+
+bool Wall::ChangeTexture(const std::string &texture, bool matcheck)
+{
+	bool found = false;
+
+	for (int i = 0; i < GetPolygonCount(); i++)
+	{
+		Polygon *poly = GetPolygon(i);
+		bool result = poly->ChangeTexture(texture, matcheck);
+		if (result == true)
+			found = true;
+	}
+	return found;
+}
+
 }
