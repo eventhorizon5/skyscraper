@@ -197,8 +197,7 @@ void MeshObject::Enabled(bool value)
 
 void MeshObject::EnableCollider(bool value)
 {
-	//enable or disable collision detection//#include "polygon.h"
-
+	//enable or disable collision detection
 
 	if (!mBody)
 		return;
