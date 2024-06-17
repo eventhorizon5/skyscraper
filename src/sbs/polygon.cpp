@@ -47,6 +47,8 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 
 Polygon::~Polygon()
 {
+	mesh->ResetPrepare();
+
 	sbs->PolygonCount--;
 }
 
