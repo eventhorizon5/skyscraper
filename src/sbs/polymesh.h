@@ -52,7 +52,6 @@ public:
 	int Process(std::vector<Polygon::Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add);
 	//int FindMatchingSubMesh(const std::string &material);
 	//void DeleteVertices(int submesh, std::vector<Triangle> &deleted_indices);
-	//void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
 	Vector2 GetExtents(int coord, bool flip_z = false);
 	unsigned int GetVertexCount();
 	unsigned int GetTriangleCount(const std::string &material);
