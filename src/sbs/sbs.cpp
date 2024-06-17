@@ -614,14 +614,6 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
-{
-	Wall *object = new Wall(mesh, parent, true);
-	bool result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
-	delete object;
-	return result;
-}
-
 bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
 {
 	//Adds a wall with the specified dimensions
@@ -851,14 +843,6 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 	}
 
 	return true;
-}
-
-bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
-{
-	Wall *object = new Wall(mesh, parent, true);
-	bool result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, autosize, legacy_behavior);
-	delete object;
-	return result;
 }
 
 bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
@@ -1476,7 +1460,7 @@ void SBS::CreateSky()
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
 	texturemanager->ResetTextureMapping(true);
-	Wall *wall = new Wall(SkyBox, SkyBox, true);
+	Wall *wall = new Wall(SkyBox);
 
 	wall->AddQuad( //front
 		"SkyFront",
@@ -1522,7 +1506,6 @@ void SBS::CreateSky()
 		Vector3(-skysize, skysize, skysize), -1, -1, false);
 
 	texturemanager->ResetTextureMapping();
-	delete wall;
 }
 
 int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)

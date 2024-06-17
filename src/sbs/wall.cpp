@@ -33,15 +33,12 @@
 
 namespace SBS {
 
-Wall::Wall(MeshObject* wrapper, Object *proxy, bool temporary) : Object(wrapper, temporary)
+Wall::Wall(MeshObject* wrapper) : Object(wrapper)
 {
 	//wall object constructor
 	meshwrapper = wrapper;
 	parent_array = 0;
 
-	//if proxy object is set, set object's number as proxy object's number
-	if (proxy)
-		SetNumber(proxy->GetNumber());
 	sbs->WallCount++;
 }
 
