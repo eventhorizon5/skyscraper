@@ -2982,6 +2982,8 @@ void SBS::Prepare(bool report)
 		Report("Processing geometry...");
 	for (size_t i = 0; i < dynamic_meshes.size(); i++)
 	{
+		if (sbs->Verbose)
+			Report("DynamicMesh " + ToString((int)i) + " of " + ToString((int)dynamic_meshes.size()));
 		dynamic_meshes[i]->Prepare();
 	}
 
