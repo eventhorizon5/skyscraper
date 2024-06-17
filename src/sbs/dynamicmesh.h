@@ -54,7 +54,7 @@ public:
 	unsigned int GetTriangleCount(const std::string &material, int &client_count, int client = -1);
 	unsigned int GetIndexOffset(MeshObject *client);
 	bool UseDynamicBuffers() { return dynamic_buffers; }
-	void UpdateVertices(MeshObject *client, const std::string &material = "", unsigned int index = 0, bool single = false);
+	void UpdateVertices(MeshObject *client, const std::string &material = "", Polygon *polygon = 0, bool single = false);
 	void DetachClient(MeshObject *client);
 	int GetMeshCount() { return (int)meshes.size(); }
 	int GetSubMeshCount(int mesh_index);
@@ -81,7 +81,7 @@ private:
 		bool IsVisible();
 		bool IsVisible(Ogre::Camera *camera);
 		int GetSubMeshCount();
-		void UpdateVertices(int client, const std::string &material, unsigned int index = 0, bool single = false);
+		void UpdateVertices(int client, const std::string &material, Polygon *polygon = 0, bool single = false);
 		void Detach();
 		void UpdateBoundingBox();
 		void EnableShadows(bool value);

@@ -77,28 +77,20 @@ void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)
 
 void Polygon::Move(const Vector3 &position, Real speed)
 {
-	/*bool dynamic = mesh->UsingDynamicBuffers();
+	bool dynamic = mesh->UsingDynamicBuffers();
 
-	int submesh = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
-
-	if (submesh == -1)
-		return;
-
-	for (size_t i = 0; i < index_extents.size(); i++)
+	for (size_t i = 0; i < geometry.size(); i++)
 	{
-		int min = index_extents[i].min;
-		int max = index_extents[i].max;
-
-		for (int index = min; index <= max; index++)
+		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
-			PolyMesh::Geometry &data = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry[index];
+			Polygon::Geometry &data = geometry[i][j];
 			data.vertex += sbs->ToRemote(position * speed);
-
-			//update vertices in render buffer, if using dynamic buffers
-			if (dynamic == true)
-				mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
 		}
-	}*/
+	}
+
+	//update vertices in render buffer, if using dynamic buffers
+	if (dynamic == true)
+		mesh->MeshWrapper->UpdateVertices(mesh, material, this, true);
 }
 
 Plane Polygon::GetAbsolutePlane()
@@ -134,34 +126,20 @@ Vector2 Polygon::GetExtents(int coord)
 
 void Polygon::ChangeHeight(Real newheight)
 {
-	/*bool dynamic = mesh->UsingDynamicBuffers();
+	bool dynamic = mesh->UsingDynamicBuffers();
 
-	Vector2 extents = GetExtents(2);
-
-	//modify polygon data
-	int submesh = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
-
-	if (submesh == -1)
-		return;
-
-	for (size_t i = 0; i < index_extents.size(); i++)
+	for (size_t i = 0; i < geometry.size(); i++)
 	{
-		unsigned int min = index_extents[i].min;
-		unsigned int max = index_extents[i].max;
-
-		for (unsigned int index = min; index <= max; index++)
+		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
-			PolyMesh::Geometry &data = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry[index];
-			if (data.vertex.y == sbs->ToRemote(extents.y))
-			{
-				data.vertex.y = sbs->ToRemote(extents.x + newheight);
-
-				//update vertices in render buffer, if using dynamic buffers
-				if (dynamic == true)
-					mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
-			}
+			Polygon::Geometry &data = geometry[i][j];
+			data.vertex.y = sbs->ToRemote(newheight);
 		}
-	}*/
+	}
+
+	//update vertices in render buffer, if using dynamic buffers
+	if (dynamic == true)
+		mesh->MeshWrapper->UpdateVertices(mesh, material, this, true);
 }
 
 bool Polygon::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)

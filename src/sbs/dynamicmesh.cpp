@@ -524,7 +524,7 @@ unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
 	return index;
 }
 
-void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material, unsigned int index, bool single)
+void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material, Polygon *polygon, bool single)
 {
 	int client_index = GetClientIndex(client);
 
@@ -532,9 +532,9 @@ void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material
 		return;
 
 	if (meshes.size() == 1)
-		meshes[0]->UpdateVertices(client_index, material, index, single);
+		meshes[0]->UpdateVertices(client_index, material, polygon, single);
 	else
-		meshes[client_index]->UpdateVertices(client_index, material, index, single);
+		meshes[client_index]->UpdateVertices(client_index, material, polygon, single);
 }
 
 void DynamicMesh::DetachClient(MeshObject *client)
@@ -1197,13 +1197,11 @@ bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 	return camera->isVisible(global_box);
 }
 
-void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, unsigned int index, bool single)
+void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, Polygon *polygon, bool single)
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
-	return;
-
-/*	SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
+	SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
 
 	if (Parent->UseDynamicBuffers() == false || !node)
 		return;
@@ -1223,19 +1221,15 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	if (combined == true)
 		loc = client_entries[client].vertex_offset;
 
-	//adjust if using a single vertex
-	if (single == true)
-		loc += index;
-
 	MeshObject *mesh = Parent->GetClient(client);
 
 	//get mesh's offset of associated scene node
 	Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
-	unsigned int vertex_count = mesh->GetPolyMesh()->GetVertexCount();
+	unsigned int vertex_count = mesh->GetVertexCount();
 
-	//exit if client mesh is empty, or if no submeshes have been defined
-	if (vertex_count == 0 || mesh->GetPolyMesh()->Submeshes.empty() == true)
+	//exit if client mesh is empty or if no walls have been defined
+	if (vertex_count == 0 || mesh->Walls.size() == 0)
 		return;
 
 	//set up vertex data arrays
@@ -1267,47 +1261,49 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	unsigned int pos = 0;
 	unsigned int add = 0;
 
-	for (size_t submesh = 0; submesh < mesh->GetPolyMesh()->Submeshes.size(); submesh++)
+	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
-		unsigned int start;
-		unsigned int end;
+		//skip empty walls
+		if (mesh->Walls[i]->GetPolygonCount() == 0)
+			continue;
 
-		if (single == true)
+		for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 		{
-			if (mesh->GetPolyMesh()->Submeshes[submesh].Name != material)
-				continue;
+			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
 
-			start = index;
-			end = index;
-		}
-		else
-		{
-			start = 0;
-			end = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry.size() - 1;
-		}
+			if (single == true)
+			{
+				//match material
+				if (poly->material != material)
+					continue;
 
-		std::vector<PolyMesh::Geometry> &geometry = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry;
+				if (poly != polygon)
+					continue;
+			}
 
-		for (unsigned int i = start; i <= end; i++)
-		{
-			PolyMesh::Geometry &element = geometry[i];
+			Polygon::GeometrySet &geometry = poly->geometry;
 
-			//make mesh's vertex relative to this scene node
-			Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-			Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+			for (size_t k = 0; k < poly->geometry.size(); k++)
+			{
+				Polygon::Geometry &element = geometry[j][k];
 
-			//add elements to array
-			mVertexElements[pos] = (float)vertex2.x;
-			mVertexElements[pos + 1] = (float)vertex2.y;
-			mVertexElements[pos + 2] = (float)vertex2.z;
-			mVertexElements[pos + 3] = (float)element.normal.x;
-			mVertexElements[pos + 4] = (float)element.normal.y;
-			mVertexElements[pos + 5] = (float)element.normal.z;
-			mVertexElements[pos + 6] = (float)element.texel.x;
-			mVertexElements[pos + 7] = (float)element.texel.y;
-			box.merge(vertex2);
-			pos += 8;
-			add += 1;
+				//make mesh's vertex relative to this scene node
+				Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+				Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+
+				//add elements to array
+				mVertexElements[pos] = (float)vertex2.x;
+				mVertexElements[pos + 1] = (float)vertex2.y;
+				mVertexElements[pos + 2] = (float)vertex2.z;
+				mVertexElements[pos + 3] = (float)element.normal.x;
+				mVertexElements[pos + 4] = (float)element.normal.y;
+				mVertexElements[pos + 5] = (float)element.normal.z;
+				mVertexElements[pos + 6] = (float)element.texel.x;
+				mVertexElements[pos + 7] = (float)element.texel.y;
+				box.merge(vertex2);
+				pos += 8;
+				add += 1;
+			}
 		}
 	}
 
@@ -1323,7 +1319,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	//get vertex buffer and size
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = data->vertexBufferBinding->getBuffer(0);
 	size_t vsize = data->vertexDeclaration->getVertexSize(0);
-*/
+
 	/*
 	//lock vertex buffer for writing
 	float *vdata = static_cast<float*>(vbuffer->lock(vsize * loc, vsize * add, Ogre::HardwareBuffer::HBL_NORMAL));
@@ -1339,12 +1335,12 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	*/
 
 	//write data to buffer
-/*	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
+	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
 
 	delete [] mVertexElements;
 
 	//update mesh bounding box
-	UpdateBoundingBox();*/
+	UpdateBoundingBox();
 }
 
 void DynamicMesh::Mesh::Detach()
