@@ -57,7 +57,6 @@ public:
 	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane);
 	~Polygon();
 	void GetTextureMapping(Matrix3 &t_matrix, Vector3 &t_vector);
-	int GetSubMesh();
 	//void GetGeometry(PolygonSet &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal);
 	bool IntersectRay(PolyArray &vertices, const Vector3 &start, const Vector3 &end);

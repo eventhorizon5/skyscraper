@@ -57,13 +57,6 @@ void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)
 	tv = t_vector;
 }
 
-int Polygon::GetSubMesh()
-{
-	//return the submesh this polygon is in
-	//return  mesh->GetPolyMesh()->FindMatchingSubMesh(material);
-	return -1;
-}
-
 /*void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'

@@ -483,7 +483,7 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 
 	for (int i = start; i <= end; i++)
 	{
-		total += clients[i]->GetPolyMesh()->GetTriangleCount();
+		total += clients[i]->GetPolyMesh()->GetTriangleCount(material);
 		client_count += 1;
 	}
 

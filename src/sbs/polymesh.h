@@ -57,7 +57,7 @@ public:
 	//void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
 	Vector2 GetExtents(int coord, bool flip_z = false);
 	unsigned int GetVertexCount();
-	unsigned int GetTriangleCount();
+	unsigned int GetTriangleCount(const std::string &material);
 
 
 private:

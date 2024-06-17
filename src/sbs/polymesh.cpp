@@ -1242,13 +1242,19 @@ unsigned int PolyMesh::GetVertexCount()
 	return total;
 }
 
-unsigned int PolyMesh::GetTriangleCount()
+unsigned int PolyMesh::GetTriangleCount(const std::string &material)
 {
 	unsigned int total = 0;
 
 	for (int i = 0; i < mesh->Walls.size(); i++)
 	{
-		total += mesh->Walls[i]->GetTriangleCount();
+		for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
+		{
+			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+
+			if (poly->material == material)
+				total += poly->triangles.size();
+		}
 	}
 
 	return total;
