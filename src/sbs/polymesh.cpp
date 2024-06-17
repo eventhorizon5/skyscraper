@@ -159,8 +159,9 @@ void SBS::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutflo
 			//copy source polygon vertices
 			for (size_t k = 0; k < polygon->geometry[j].size(); k++)
 			{
-				temppoly.push_back(polygon->geometry[j][k].vertex);
-				polybounds.merge(polygon->geometry[j][k].vertex);
+				Ogre::Vector3 vertex = ToLocal(polygon->geometry[j][k].vertex);
+				temppoly.push_back(vertex);
+				polybounds.merge(vertex);
 			}
 
 			//skip if the polygon is completely inside the bounding box
@@ -360,7 +361,7 @@ void SBS::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutflo
 				PolyArray poly;
 				for (size_t k = 0; k < polygon->geometry[j].size(); k++)
 				{
-					poly.push_back(polygon->geometry[j][k].vertex);
+					poly.push_back(ToLocal(polygon->geometry[j][k].vertex));
 				}
 				newpolys.push_back(poly);
 			}
