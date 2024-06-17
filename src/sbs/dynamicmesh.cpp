@@ -490,21 +490,12 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 	return total;
 }
 
-unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
+unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
 {
 	//get vertex index offset of specific client mesh
 	//if multiple geometry sets are combined together, each set has a starting index number
 
 	unsigned int index = 0;
-
-	/*if (submesh < 0 || submesh >= client->GetPolyMesh()->GetSubmeshCount())
-		return 0;
-
-	//get per-submesh index offset
-	for (int i = 0; i < submesh; i++)
-	{
-		index += client->GetPolyMesh()->GetVertexCount(i);
-	}*/
 
 	//return value if using separate meshes
 	if (meshes.size() > 1)
@@ -1045,7 +1036,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 						if (poly->material == material)
 						{
 							//get index offset of mesh
-							unsigned int offset = Parent->GetIndexOffset(index, mesh);
+							unsigned int offset = Parent->GetIndexOffset(mesh);
 
 							//add mesh's triangles to array and adjust for offset
 							for (size_t k = 0; k < poly->triangles.size(); k++)
@@ -1099,7 +1090,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 						if (poly->material == material)
 						{
 							//get index offset of mesh
-							unsigned int offset = Parent->GetIndexOffset(index, mesh);
+							unsigned int offset = Parent->GetIndexOffset(mesh);
 
 							//add mesh's triangles to array and adjust for offset
 							for (size_t k = 0; k < poly->triangles.size(); k++)
