@@ -43,6 +43,12 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 	this->triangles = triangles;
 	SetName(name);
 
+	vertex_count = 0;
+	for (size_t i = 0; i < geometry.size(); i++)
+	{
+		vertex_count += geometry[i].size();
+	}
+
 	mesh->ResetPrepare();
 
 	sbs->PolygonCount++;

@@ -45,6 +45,7 @@ public:
 
 	MeshObject* mesh;
 	GeometrySet geometry; //mesh geometry (vertices/texels/normals) container
+	int vertex_count;
 	std::vector<Triangle> triangles;
 	Plane plane; //plane in remote (Ogre) form, relative positioning
 

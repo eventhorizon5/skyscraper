@@ -358,10 +358,7 @@ unsigned int Wall::GetVertexCount()
 	unsigned int total = 0;
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
-		Polygon *poly = polygons[i];
-
-		for (size_t j = 0; j < poly->geometry.size(); j++)
-			total += poly->geometry[j].size();
+		total += polygons[i]->vertex_count;
 	}
 	return total;
 }
