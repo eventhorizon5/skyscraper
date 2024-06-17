@@ -21,8 +21,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreBulletDynamicsRigidBody.h>
-#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -30,8 +28,6 @@
 #include "texture.h"
 #include "profiler.h"
 #include "polymesh.h"
-
-//this file includes function implementations of the low-level SBS geometry processing code
 
 namespace SBS {
 
