@@ -469,7 +469,7 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 			}
 		}
 		else
-			total += clients[i]->GetPolyMesh()->GetVertexCount();
+			total += clients[i]->GetVertexCount();
 	}
 
 	return total;
@@ -493,7 +493,7 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 
 	for (int i = start; i <= end; i++)
 	{
-		total += clients[i]->GetPolyMesh()->GetTriangleCount(material);
+		total += clients[i]->GetTriangleCount(material);
 		client_count += 1;
 	}
 
@@ -518,7 +518,7 @@ unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
 			return index;
 
 		//if not found, increment by client's vertex count
-		index += clients[i]->GetPolyMesh()->GetVertexCount();
+		index += clients[i]->GetVertexCount();
 	}
 
 	return index;
@@ -957,7 +957,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			entry.radius = radius;
 
 			//add client vertex count to list
-			entry.vertex_count = mesh->GetPolyMesh()->GetVertexCount();
+			entry.vertex_count = mesh->GetVertexCount();
 			vindex += entry.vertex_count;
 
 			//store client information

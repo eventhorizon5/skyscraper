@@ -782,8 +782,8 @@ void MeshObject::CreateCollider()
 	if (Walls.size() == 0)
 		return;
 
-	unsigned int tricount = polymesh->GetTriangleCount("");
-	unsigned int vcount = polymesh->GetVertexCount();
+	unsigned int tricount = GetTriangleCount("");
+	unsigned int vcount = GetVertexCount();
 
 	try
 	{
@@ -1098,6 +1098,36 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 		ibuf->unlock();
 		current_offset = next_offset;
 	}
+}
+
+unsigned int MeshObject::GetVertexCount()
+{
+	unsigned int total = 0;
+
+	for (int i = 0; i < Walls.size(); i++)
+	{
+		total += Walls[i]->GetVertexCount();
+	}
+
+	return total;
+}
+
+unsigned int MeshObject::GetTriangleCount(const std::string &material)
+{
+	unsigned int total = 0;
+
+	for (int i = 0; i < Walls.size(); i++)
+	{
+		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		{
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			if (poly->material == material || material == "")
+				total += poly->triangles.size();
+		}
+	}
+
+	return total;
 }
 
 }

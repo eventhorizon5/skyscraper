@@ -283,47 +283,4 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 	return 0;
 }
 
-/*int PolyMesh::FindMatchingSubMesh(const std::string &material)
-{
-	//find a submesh with a matching material
-	//returns array index
-
-	for (size_t i = 0; i < Submeshes.size(); i++)
-	{
-		if (Submeshes[i].Name == material)
-			return (int)i;
-	}
-	return -1;
-}*/
-
-unsigned int PolyMesh::GetVertexCount()
-{
-	unsigned int total = 0;
-
-	for (int i = 0; i < mesh->Walls.size(); i++)
-	{
-		total += mesh->Walls[i]->GetVertexCount();
-	}
-
-	return total;
-}
-
-unsigned int PolyMesh::GetTriangleCount(const std::string &material)
-{
-	unsigned int total = 0;
-
-	for (int i = 0; i < mesh->Walls.size(); i++)
-	{
-		for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
-		{
-			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
-
-			if (poly->material == material || material == "")
-				total += poly->triangles.size();
-		}
-	}
-
-	return total;
-}
-
 }

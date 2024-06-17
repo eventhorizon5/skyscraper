@@ -88,6 +88,8 @@ public:
 	bool InBoundingBox(const Vector3 &pos, bool check_y);
 	DynamicMesh* GetDynamicMesh();
 	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
+	unsigned int GetVertexCount();
+	unsigned int GetTriangleCount(const std::string &material);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
