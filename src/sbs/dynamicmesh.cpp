@@ -1062,10 +1062,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 							submesh->clients += 1;
 						}
 
-						for (size_t k = 0; k < poly->geometry.size(); k++)
-						{
-							poly_index += poly->geometry[k].size();
-						}
+						poly_index += poly->vertex_count;
 					}
 				}
 			}
@@ -1116,10 +1113,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 							submesh->clients += 1;
 						}
 
-						for (size_t k = 0; k < poly->geometry.size(); k++)
-						{
-							poly_index += poly->geometry[k].size();
-						}
+						poly_index += poly->vertex_count;
 					}
 				}
 			}
