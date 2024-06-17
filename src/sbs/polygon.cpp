@@ -175,6 +175,12 @@ bool Polygon::ChangeTexture(const std::string &texture, bool matcheck)
 		if (material == texture)
 			return false;
 	}
+
+	bool result = mesh->GetDynamicMesh()->ChangeTexture(material, texture, mesh);
+
+	if (result == false)
+		return false;
+
 	sbs->GetTextureManager()->DecrementTextureUsage(material);
 	material = texture;
 	sbs->GetTextureManager()->IncrementTextureUsage(texture);
