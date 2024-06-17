@@ -64,7 +64,7 @@ public:
 	bool parent_deleting; //true if object's parent is deleting object
 
 	//functions
-	Object(Object *parent, bool temporary = false);
+	Object(Object *parent);
 	virtual ~Object();
 	void SetValues(const std::string &type, const std::string &name, bool is_permanent, bool is_movable = true);
 	bool IsPermanent();
@@ -76,8 +76,6 @@ public:
 	int GetChildrenCount();
 	void RemoveChild(Object *object);
 	SceneNode* GetSceneNode();
-	void SetNumber(int number);
-	bool IsTemporary();
 	void ShowBoundingBox(bool value);
 	virtual void Move(const Vector3 &vector, Real speed = 1.0);
 	virtual void Move(Real X, Real Y, Real Z, Real speed = 1.0);
@@ -135,7 +133,6 @@ private:
 	bool Permanent; //is object permanent?
 	std::string Type; //object type
 	int Number; //object identifier
-	bool Temporary; //true if object can be deleted during runtime
 	std::vector<Object*> children; //object's children
 	SceneNode *node; //node in scene graph
 	bool values_set;

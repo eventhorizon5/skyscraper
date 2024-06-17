@@ -88,12 +88,11 @@ bool ObjectBase::ReportError(const std::string &message)
 	return false;
 }
 
-Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
+Object::Object(Object *parent) : ObjectBase(parent)
 {
 	Permanent = false;
 	linenum = 0;
 	Number = -1;
-	Temporary = temporary;
 	parent_deleting = false;
 	node = 0;
 	values_set = false;
@@ -101,13 +100,10 @@ Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
 	loop_enabled = false;
 
 	//register object with engine
-	if (temporary == false)
-	{
-		if (parent)
-			Number = sbs->RegisterObject(this);
-		else
-			Number = 0; //root object
-	}
+	if (parent)
+		Number = sbs->RegisterObject(this);
+	else
+		Number = 0; //root object
 }
 
 Object::~Object()
@@ -138,7 +134,7 @@ Object::~Object()
 		return;
 
 	//if fastdelete is enabled, don't unregister (just delete)
-	if (sbs->FastDelete == true || Temporary == true)
+	if (sbs->FastDelete == true)
 		return;
 
 	sbs->UnregisterObject(Number);
@@ -244,19 +240,6 @@ int Object::GetChildrenCount()
 SceneNode* Object::GetSceneNode()
 {
 	return node;
-}
-
-void Object::SetNumber(int number)
-{
-	//set object's number - will only work if object is temporary
-
-	if (Temporary == true)
-		Number = number;
-}
-
-bool Object::IsTemporary()
-{
-	return Temporary;
 }
 
 void Object::ShowBoundingBox(bool value)

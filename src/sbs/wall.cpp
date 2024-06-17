@@ -46,7 +46,7 @@ Wall::~Wall()
 {
 	//wall object destructor
 
-	if (sbs->FastDelete == false && parent_array && parent_deleting == false && IsTemporary() == false)
+	if (sbs->FastDelete == false && parent_array && parent_deleting == false)
 	{
 		for (size_t i = 0; i < parent_array->size(); i++)
 		{
