@@ -1281,28 +1281,29 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 					continue;
 			}
 
-			Polygon::GeometrySet &geometry = poly->geometry;
-
 			for (size_t k = 0; k < poly->geometry.size(); k++)
 			{
-				Polygon::Geometry &element = geometry[j][k];
+				for (size_t l = 0; l < poly->geometry[k].size(); l++)
+				{
+					Polygon::Geometry &element = poly->geometry[k][l];
 
-				//make mesh's vertex relative to this scene node
-				Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-				Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+					//make mesh's vertex relative to this scene node
+					Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+					Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
 
-				//add elements to array
-				mVertexElements[pos] = (float)vertex2.x;
-				mVertexElements[pos + 1] = (float)vertex2.y;
-				mVertexElements[pos + 2] = (float)vertex2.z;
-				mVertexElements[pos + 3] = (float)element.normal.x;
-				mVertexElements[pos + 4] = (float)element.normal.y;
-				mVertexElements[pos + 5] = (float)element.normal.z;
-				mVertexElements[pos + 6] = (float)element.texel.x;
-				mVertexElements[pos + 7] = (float)element.texel.y;
-				box.merge(vertex2);
-				pos += 8;
-				add += 1;
+					//add elements to array
+					mVertexElements[pos] = (float)vertex2.x;
+					mVertexElements[pos + 1] = (float)vertex2.y;
+					mVertexElements[pos + 2] = (float)vertex2.z;
+					mVertexElements[pos + 3] = (float)element.normal.x;
+					mVertexElements[pos + 4] = (float)element.normal.y;
+					mVertexElements[pos + 5] = (float)element.normal.z;
+					mVertexElements[pos + 6] = (float)element.texel.x;
+					mVertexElements[pos + 7] = (float)element.texel.y;
+					box.merge(vertex2);
+					pos += 8;
+					add += 1;
+				}
 			}
 		}
 	}
