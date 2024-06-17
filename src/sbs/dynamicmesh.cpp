@@ -249,9 +249,14 @@ void DynamicMesh::Prepare(MeshObject *client)
 				separate_total += 1;
 			}
 
+			bool combined = false;
+
 			//if combined submesh/material count is less than three separate meshes
 			if (((total < separate_total || total <= 10) && auto_combine == true) || force_combine == true)
+			{
 				meshes_to_create = 1; //create a single combined mesh for all clients
+				combined = true;
+			}
 			else
 			{
 				meshes_to_create = (int)clients.size(); //create separate meshes for each client
@@ -259,7 +264,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 			}
 
 			std::string status;
-			if (meshes_to_create == 1)
+			if (combined == true)
 				status = "using combined";
 			else
 				status = "using separate";
