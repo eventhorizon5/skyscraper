@@ -2969,19 +2969,17 @@ void SBS::Prepare(bool report)
 {
 	//prepare objects for run
 
-	if (report == true)
-	{
-		Report("Preparing objects...");
-		Report("Processing geometry...");
-	}
-
 	//prepare mesh objects
+	if (report == true)
+		Report("Preparing meshes...");
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
 	}
 
 	//process dynamic meshes
+	if (report == true)
+		Report("Processing geometry...");
 	for (size_t i = 0; i < dynamic_meshes.size(); i++)
 	{
 		dynamic_meshes[i]->Prepare();
@@ -2989,7 +2987,6 @@ void SBS::Prepare(bool report)
 
 	if (report == true)
 		Report("Creating colliders...");
-
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i]->tricollider == true)
