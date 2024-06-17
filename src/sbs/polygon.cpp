@@ -27,6 +27,7 @@
 #include "triangle.h"
 #include "mesh.h"
 #include "polymesh.h"
+#include "texture.h"
 #include "polygon.h"
 
 namespace SBS {
@@ -42,11 +43,20 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 	this->triangles = triangles;
 	SetName(name);
 
+	mesh->ResetPrepare();
+
 	sbs->PolygonCount++;
+
+	//register texture usage
+	if (material != "")
+		sbs->GetTextureManager()->IncrementTextureUsage(material);
 }
 
 Polygon::~Polygon()
 {
+	if (material != "" && sbs->FastDelete == false)
+		sbs->GetTextureManager()->DecrementTextureUsage(material);
+
 	mesh->ResetPrepare();
 
 	sbs->PolygonCount--;

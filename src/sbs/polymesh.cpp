@@ -298,15 +298,9 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 	delete [] trimesh;
 	trimesh = 0;
 
-	//create submesh and set material
-	//int index = Process(geometry, triangles, material, true);
-
 	//recreate colliders if specified
 	if (sbs->DeleteColliders == true)
 		mesh->DeleteCollider();
-
-	//if (sbs->RenderOnStartup == true)
-		//mesh->Prepare();
 
 	return true;
 }
@@ -353,79 +347,6 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 	}
 	return 0;
 }
-
-/*int PolyMesh::Process(std::vector<Polygon::Geometry> &vertices, std::vector<Triangle> &indices, const std::string &material, bool add)
-{
-	//processes submeshes for new or removed geometry
-	//the Prepare() function must be called when the mesh is ready to view
-	//the 'vertices' data is not needed if removing triangles
-
-	//first get related submesh
-	int index = FindMatchingSubMesh(material);
-	bool createnew = false;
-
-	//exit if trying to remove indices from non-existing submesh
-	if (index == -1 && add == false)
-		return -1;
-
-	//create a new submesh if needed
-	if (index == -1)
-	{
-		//exit if vertex count is not valid
-		if (vertices.size() < 3)
-			return -1;
-
-		index = (int)Submeshes.size();
-		Submeshes.resize(Submeshes.size() + 1);
-		createnew = true;
-	}
-
-	if (add == true)
-	{
-		//add triangles
-
-		for (size_t i = 0; i < indices.size(); i++)
-		{
-			indices[i] += Submeshes[index].MeshGeometry.size();
-			Submeshes[index].Triangles.push_back(indices[i]);
-		}
-
-		//add vertices
-		for (size_t i = 0; i < vertices.size(); i++)
-			Submeshes[index].MeshGeometry.push_back(vertices[i]);
-	}
-	else
-	{
-		//remove triangles
-		for (size_t i = 0; i < Submeshes[index].Triangles.size(); i++)
-		{
-			Triangle &triangle = Submeshes[index].Triangles[i];
-			for (size_t j = 0; j < indices.size(); j++)
-			{
-				if (triangle == indices[j])
-				{
-					//delete match
-					Submeshes[index].Triangles.erase(Submeshes[index].Triangles.begin() + i);
-					i--;
-					break;
-				}
-			}
-		}
-
-		//delete related vertices
-		DeleteVertices(index, indices);
-	}
-
-	//bind material
-	Submeshes[index].Name = material;
-	mesh->ResetPrepare(); //need to re-prepare mesh
-
-	//register texture usage
-	if (createnew == true && material != "")
-		sbs->GetTextureManager()->IncrementTextureUsage(Submeshes[index].Name);
-
-	return index;
-}*/
 
 /*int PolyMesh::FindMatchingSubMesh(const std::string &material)
 {
