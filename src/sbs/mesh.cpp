@@ -273,7 +273,7 @@ void MeshObject::Prepare(bool force)
 				for (size_t k = 0; k < poly->geometry.size(); k++)
 				{
 					for (size_t l = 0; l < poly->geometry[k].size(); l++)
-						Bounds->merge(Walls[i]->polygons[j]->geometry[k][l].vertex);
+						Bounds->merge(poly->geometry[k][l].vertex);
 				}
 			}
 		}
@@ -708,7 +708,7 @@ Real MeshObject::GetHeight()
 {
 	//returns the height of the mesh
 
-	Real y;
+	Real y = 0.0;
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
 		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
@@ -718,12 +718,16 @@ Real MeshObject::GetHeight()
 			for (size_t k = 0; k < poly->geometry.size(); k++)
 			{
 				for (size_t l = 0; l < poly->geometry[k].size(); l++)
-					y = poly->geometry[k][l].vertex.y;
+				{
+					Real new_y = poly->geometry[k][l].vertex.y;
+					if (new_y > y)
+						y = new_y;
+				}
 			}
 		}
 	}
 
-	return y;
+	return sbs->ToLocal(y);
 }
 
 Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance)
