@@ -734,26 +734,31 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 	//cast a ray from the camera position downwards
 	SBS_PROFILE("MeshObject::HitBeam");
 
-	/*Vector3 position = sbs->ToRemote(origin - GetPosition());
+	Vector3 position = sbs->ToRemote(origin - GetPosition());
 	Ray ray (position, sbs->ToRemote(direction, false));
 
-	for (size_t i = 0; i < Submeshes.size(); i++)
+	for (size_t i = 0; i < Walls.size(); i++)
 	{
-		for (size_t j = 0; j < Submeshes[i].Triangles.size(); j++)
+		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
-			const Triangle &tri = Submeshes[i].Triangles[j];
-			Vector3 &tri_a = Submeshes[i].MeshGeometry[tri.a].vertex;
-			Vector3 &tri_b = Submeshes[i].MeshGeometry[tri.b].vertex;
-			Vector3 &tri_c = Submeshes[i].MeshGeometry[tri.c].vertex;
+			Polygon *poly = Walls[i]->GetPolygon(j);
 
-			std::pair<bool, Real> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
-			if (result.first == true)
+			for (size_t k = 0; k < poly->triangles.size(); k++)
 			{
-				if (result.second <= sbs->ToRemote(max_distance))
-					return sbs->ToLocal(result.second);
+				const Triangle &tri = poly->triangles[k];
+				Vector3 tri_a = poly->GetVertex(tri.a);
+				Vector3 tri_b = poly->GetVertex(tri.b);
+				Vector3 tri_c = poly->GetVertex(tri.c);
+
+				std::pair<bool, Real> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
+				if (result.first == true)
+				{
+					if (result.second <= sbs->ToRemote(max_distance))
+						return sbs->ToLocal(result.second);
+				}
 			}
 		}
-	}*/
+	}
 	return -1;
 }
 

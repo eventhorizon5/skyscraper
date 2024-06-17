@@ -67,6 +67,7 @@ public:
 	void ChangeHeight(Real newheight);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true);
+	Vector3 GetVertex(int index);
 };
 
 }

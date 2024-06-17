@@ -274,4 +274,19 @@ bool Polygon::ChangeTexture(const std::string &texture, bool matcheck)
 	return true;
 }
 
+Vector3 Polygon::GetVertex(int index)
+{
+	int offset = 0;
+	for (size_t i = 0; i < geometry.size(); i++)
+	{
+		for (size_t j = 0; j < geometry[i].size(); j++)
+		{
+			if (index == offset + j)
+				return geometry[i][j].vertex;
+		}
+		offset += geometry[i].size();
+	}
+	return Vector3::ZERO;
+}
+
 }
