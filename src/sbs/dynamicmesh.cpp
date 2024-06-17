@@ -1035,6 +1035,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
 
+				int poly_index = 0;
+
 				for (size_t i = 0; i < mesh->Walls.size(); i++)
 				{
 					for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
@@ -1046,17 +1048,22 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 							unsigned int offset = Parent->GetIndexOffset(index, mesh);
 
 							//add mesh's triangles to array and adjust for offset
-							for (size_t i = 0; i < poly->triangles.size(); i++)
+							for (size_t k = 0; k < poly->triangles.size(); k++)
 							{
-								Triangle &tri = poly->triangles[i];
-								mIndices[loc] = tri.a + offset;
-								mIndices[loc + 1] = tri.b + offset;
-								mIndices[loc + 2] = tri.c + offset;
+								Triangle &tri = poly->triangles[k];
+								mIndices[loc] = poly_index + tri.a + offset;
+								mIndices[loc + 1] = poly_index + tri.b + offset;
+								mIndices[loc + 2] = poly_index + tri.c + offset;
 								loc += 3;
 							}
 
 							//increment submesh's client reference count
 							submesh->clients += 1;
+						}
+
+						for (size_t k = 0; k < poly->geometry.size(); k++)
+						{
+							poly_index += poly->geometry[k].size();
 						}
 					}
 				}
@@ -1082,6 +1089,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
 
+				int poly_index = 0;
+
 				for (size_t i = 0; i < mesh->Walls.size(); i++)
 				{
 					for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
@@ -1093,17 +1102,22 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 							unsigned int offset = Parent->GetIndexOffset(index, mesh);
 
 							//add mesh's triangles to array and adjust for offset
-							for (size_t i = 0; i < poly->triangles.size(); i++)
+							for (size_t k = 0; k < poly->triangles.size(); k++)
 							{
-								Triangle &tri = poly->triangles[i];
-								mIndices[loc] = tri.a + offset;
-								mIndices[loc + 1] = tri.b + offset;
-								mIndices[loc + 2] = tri.c + offset;
+								Triangle &tri = poly->triangles[k];
+								mIndices[loc] = poly_index + tri.a + offset;
+								mIndices[loc + 1] = poly_index + tri.b + offset;
+								mIndices[loc + 2] = poly_index + tri.c + offset;
 								loc += 3;
 							}
 
 							//increment submesh's client reference count
 							submesh->clients += 1;
+						}
+
+						for (size_t k = 0; k < poly->geometry.size(); k++)
+						{
+							poly_index += poly->geometry[k].size();
 						}
 					}
 				}
