@@ -265,7 +265,12 @@ void DynamicMesh::Prepare(MeshObject *client)
 
 			std::string status;
 			if (combined == true)
-				status = "using combined";
+			{
+				if (force_combine == false)
+					status = "using combined";
+				else
+					status = "using force combined";
+			}
 			else
 				status = "using separate";
 
