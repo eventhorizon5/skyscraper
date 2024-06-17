@@ -740,9 +740,7 @@ void MeshObject::CreateCollider()
 {
 	//set up triangle collider based on raw SBS mesh geometry
 
-	return;
-
-	/*SBS_PROFILE("MeshObject::CreateCollider");
+	SBS_PROFILE("MeshObject::CreateCollider");
 
 	if (create_collider == false)
 		return;
@@ -755,16 +753,11 @@ void MeshObject::CreateCollider()
 		return;
 
 	//exit if mesh is empty
-	if (Submeshes.size() == 0)
+	if (Walls.size() == 0)
 		return;
 
-	unsigned int tricount = 0;
-	unsigned int vcount = 0;
-	for (size_t i = 0; i < Submeshes.size(); i++)
-	{
-		tricount += Submeshes[i].Triangles.size();
-		vcount += Submeshes[i].MeshGeometry.size();
-	}
+	unsigned int tricount = polymesh->GetTriangleCount("");
+	unsigned int vcount = polymesh->GetVertexCount();
 
 	try
 	{
@@ -774,24 +767,37 @@ void MeshObject::CreateCollider()
 		Real scale = GetSceneNode()->GetScale();
 
 		//add vertices to shape
-		for (size_t i = 0; i < Submeshes.size(); i++)
+
+		for (size_t i = 0; i < Walls.size(); i++)
 		{
-			for (size_t j = 0; j < Submeshes[i].Triangles.size(); j++)
+			for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
 			{
-				const Triangle &tri = Submeshes[i].Triangles[j];
+				Polygon *poly = Walls[i]->GetPolygon(j);
+				PolyArray polyarray;
 
-				Vector3 a = Submeshes[i].MeshGeometry[tri.a].vertex;
-				Vector3 b = Submeshes[i].MeshGeometry[tri.b].vertex;
-				Vector3 c = Submeshes[i].MeshGeometry[tri.c].vertex;
-
-				if (scale != 1.0)
+				for (size_t k = 0; k < poly->geometry.size(); k++)
 				{
-					a *= scale;
-					b *= scale;
-					c *= scale;
+					for (size_t l = 0; l < poly->geometry[k].size(); l++)
+						polyarray.push_back(poly->geometry[k][l].vertex);
 				}
 
-				shape->AddTriangle(a, b, c);
+				for (size_t k = 0; k < poly->triangles.size(); k++)
+				{
+					const Triangle &tri = poly->triangles[k];
+
+					Vector3 a = polyarray[tri.a];
+					Vector3 b = polyarray[tri.b];
+					Vector3 c = polyarray[tri.c];
+
+					if (scale != 1.0)
+					{
+						a *= scale;
+						b *= scale;
+						c *= scale;
+					}
+
+					shape->AddTriangle(a, b, c);
+				}
 			}
 		}
 
@@ -826,7 +832,7 @@ void MeshObject::CreateCollider()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
-	}*/
+	}
 }
 
 void MeshObject::DeleteCollider()

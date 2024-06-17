@@ -1252,7 +1252,7 @@ unsigned int PolyMesh::GetTriangleCount(const std::string &material)
 		{
 			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
 
-			if (poly->material == material)
+			if (poly->material == material || material == "")
 				total += poly->triangles.size();
 		}
 	}
