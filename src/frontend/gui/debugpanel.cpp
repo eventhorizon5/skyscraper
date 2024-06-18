@@ -49,6 +49,7 @@
 #include "peoplemanager.h"
 #include "camtex.h"
 #include "soundmanager.h"
+#include "texturemanager.h"
 
 namespace Skyscraper {
 
@@ -233,7 +234,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bProfiler, 1, wxEXPAND, 5);
 	bKeys = new wxButton(Panel1, ID_bKeys, _("List Keys"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bKeys"));
 	BoxSizer10->Add(bKeys, 1, wxEXPAND, 5);
-	bTextures = new wxButton(Panel1, ID_bTextures, _("List Textures"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bTextures"));
+	bTextures = new wxButton(Panel1, ID_bTextures, _("Texture Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bTextures"));
 	BoxSizer10->Add(bTextures, 1, wxEXPAND, 5);
 	bFloorInfo = new wxButton(Panel1, ID_bFloorInfo, _("Floor Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorInfo"));
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND, 5);
@@ -242,11 +243,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
-	BoxSizer11->Fit(Panel1);
-	BoxSizer11->SetSizeHints(Panel1);
 	BoxSizer1->Add(Panel1, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 
 	Connect(ID_chkCollisionDetection,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Click);
@@ -292,6 +290,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	camtex = 0;
 	timer = 0;
 	smanager = 0;
+	tmanager = 0;
 
 	OnInit();
 }
@@ -346,6 +345,9 @@ DebugPanel::~DebugPanel()
 	if (smanager)
 		smanager->Destroy();
 	smanager = 0;
+	if (tmanager)
+		tmanager->Destroy();
+	tmanager = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -449,6 +451,9 @@ void DebugPanel::Loop()
 
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 
+	if (!floor)
+		return;
+
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
 	t_camerafloor->SetLabel(SBS::ToString(Simcore->camera->CurrentFloor) + wxT(" (") + Simcore->camera->CurrentFloorID + wxT(")"));
@@ -544,6 +549,12 @@ void DebugPanel::Loop()
 	{
 		if (smanager->IsShown() == true)
 			smanager->Loop();
+	}
+
+	if (tmanager)
+	{
+		if (tmanager->IsShown() == true)
+			tmanager->Loop();
 	}
 }
 
@@ -645,8 +656,11 @@ void DebugPanel::On_bKeys_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 {
-	if (Simcore)
-		Simcore->Report("\n" + Simcore->GetTextureManager()->ListTextures(true));
+	if (!tmanager)
+		tmanager = new TextureManager(this, -1);
+
+	tmanager->CenterOnScreen();
+	tmanager->Show();
 }
 
 void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)

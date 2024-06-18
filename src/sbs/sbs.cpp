@@ -57,6 +57,7 @@
 #include "doorsystem.h"
 #include "gitrev.h"
 #include "buttonpanel.h"
+#include "polymesh.h"
 
 namespace SBS {
 
@@ -176,6 +177,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Headless = false;
 	RenderWait = false;
 	Waiting = false;
+	prepare_stage = 0;
+	prepare_iterator = 0;
 
 	camera = 0;
 	Buildings = 0;
@@ -479,9 +482,6 @@ bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
-	//prepare 3D geometry for use
-	Prepare();
-
 	//free text texture memory
 	texturemanager->FreeTextureBoxes();
 
@@ -507,6 +507,9 @@ bool SBS::Start(Ogre::Camera *camera)
 	//enable random activity if specified
 	if (RandomActivity == true)
 		EnableRandomActivity(true);
+
+	//print a memory report
+	//MemoryReport();
 
 	IsRunning = true;
 
@@ -625,14 +628,6 @@ void SBS::CalculateFrameRate()
 		fps_frame_count = 0;
 		fps_tottime = 0;
 	}
-}
-
-bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
-{
-	Wall *object = new Wall(mesh, parent, true);
-	bool result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
-	delete object;
-	return result;
 }
 
 bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
@@ -864,14 +859,6 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 	}
 
 	return true;
-}
-
-bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
-{
-	Wall *object = new Wall(mesh, parent, true);
-	bool result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, autosize, legacy_behavior);
-	delete object;
-	return result;
 }
 
 bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
@@ -1445,7 +1432,9 @@ void SBS::EnableLandscape(bool value)
 void SBS::EnableExternal(bool value)
 {
 	//turns external on/off
-	External->Enabled(value);
+
+	if (External)
+		External->Enabled(value);
 	IsExternalEnabled = value;
 }
 
@@ -1487,7 +1476,7 @@ void SBS::CreateSky()
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
 	texturemanager->ResetTextureMapping(true);
-	Wall *wall = new Wall(SkyBox, SkyBox, true);
+	Wall *wall = new Wall(SkyBox);
 
 	wall->AddQuad( //front
 		"SkyFront",
@@ -1533,7 +1522,6 @@ void SBS::CreateSky()
 		Vector3(-skysize, skysize, skysize), -1, -1, false);
 
 	texturemanager->ResetTextureMapping();
-	delete wall;
 }
 
 int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
@@ -2993,41 +2981,66 @@ int SBS::GetPolygonCount()
 	return PolygonCount;
 }
 
-void SBS::Prepare(bool report)
+bool SBS::Prepare(bool report)
 {
 	//prepare objects for run
 
-	if (report == true)
-	{
-		Report("Preparing objects...");
-		Report("Processing geometry...");
-	}
-
 	//prepare mesh objects
-	for (size_t i = 0; i < meshes.size(); i++)
+	if (meshes.size() > 0 && prepare_stage == 0)
 	{
-		meshes[i]->Prepare();
+		if (prepare_iterator == 0 && report == true)
+			Report("Preparing meshes...");
+
+		meshes[prepare_iterator]->Prepare();
+		prepare_iterator++;
+		if (prepare_iterator == meshes.size())
+		{
+			prepare_stage = 1;
+			prepare_iterator = 0;
+		}
 	}
 
 	//process dynamic meshes
-	for (size_t i = 0; i < dynamic_meshes.size(); i++)
+	if (dynamic_meshes.size() > 0 && prepare_stage == 1)
 	{
-		dynamic_meshes[i]->Prepare();
+		if (prepare_iterator == 0 && report == true)
+			Report("Processing geometry...");
+		if (sbs->Verbose)
+			Report("DynamicMesh " + ToString((int)prepare_iterator) + " of " + ToString((int)dynamic_meshes.size()));
+
+		dynamic_meshes[prepare_iterator]->Prepare();
+		prepare_iterator++;
+		if (prepare_iterator == dynamic_meshes.size())
+		{
+			prepare_stage = 2;
+			prepare_iterator = 0;
+		}
 	}
 
-	if (report == true)
-		Report("Creating colliders...");
-
-	for (size_t i = 0; i < meshes.size(); i++)
+	if (meshes.size() > 0 && prepare_stage == 2)
 	{
-		if (meshes[i]->tricollider == true)
-			meshes[i]->CreateCollider();
+		if (prepare_iterator == 0 && report == true)
+			Report("Creating colliders...");
+
+		if (meshes[prepare_iterator]->tricollider == true)
+			meshes[prepare_iterator]->CreateCollider();
 		else
-			meshes[i]->CreateBoxCollider();
+			meshes[prepare_iterator]->CreateBoxCollider();
+
+		prepare_iterator++;
+		if (prepare_iterator == meshes.size())
+		{
+			prepare_stage = 3;
+			prepare_iterator = 0;
+		}
 	}
 
-	if (report == true)
+	if (report == true && prepare_stage == 3)
+	{
 		Report("Finished prepare");
+		return true;
+	}
+	return false;
 }
 
 Light* SBS::AddLight(const std::string &name, int type)
@@ -3796,7 +3809,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	Vector3 isect;
 	Real distance = 2000000000.;
 	Vector3 normal = Vector3::ZERO;
-	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
+	wall = mesh->GetPolyMesh()->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
 }
@@ -4036,7 +4049,7 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 		Landscape->CutOutsideBounds(min, max, true, true);
 	if (buildings == true)
 		Buildings->CutOutsideBounds(min, max, true, true);
-	if (external == true)
+	if (external == true && External)
 		External->CutOutsideBounds(min, max, true, true);
 
 	if (floors == true)
@@ -4055,7 +4068,7 @@ void SBS::CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool lands
 		Landscape->Cut(min, max, true, true);
 	if (buildings == true)
 		Buildings->Cut(min, max, true, true);
-	if (external == true)
+	if (external == true && External)
 		External->Cut(min, max, true, true);
 
 	if (floors == true)

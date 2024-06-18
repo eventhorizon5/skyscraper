@@ -42,73 +42,84 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	//process global parameters
 
 	//get text after equal sign
-	std::string value = GetAfterEquals(LineData);
-
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//store variable values
-	if (linecheck.substr(0, 4) == "name")
+
+	//Name parameter
+	if (StartsWithNoCase(LineData, "name"))
 	{
 		Simcore->BuildingName = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "designer")
+	//Designer parameter
+	if (StartsWithNoCase(LineData, "designer"))
 	{
 		Simcore->BuildingDesigner = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "location")
+	//Location parameter
+	if (StartsWithNoCase(LineData, "location"))
 	{
 		Simcore->BuildingLocation = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "description")
+	//Description parameter
+	if (StartsWithNoCase(LineData, "description"))
 	{
 		Simcore->BuildingDescription = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 7) == "version")
+	//Version parameter
+	if (StartsWithNoCase(LineData, "version"))
 	{
 		Simcore->BuildingVersion = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 3) == "sky")
+	//Sky parameter
+	if (StartsWithNoCase(LineData, "sky"))
 	{
 		Simcore->SkyName = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "dynamicsky")
+	//DynamicSky parameter
+	if (StartsWithNoCase(LineData, "dynamicsky"))
 	{
 		engine->GetFrontend()->SkyName = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "collisions")
+	//Collisions parameter
+	if (StartsWithNoCase(LineData, "collisions"))
 	{
 		Simcore->camera->EnableCollisions(ToBool(value));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 7) == "gravity")
+	//Gravity parameter
+	if (StartsWithNoCase(LineData, "gravity"))
 	{
 		Simcore->camera->EnableGravity(ToBool(value));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "camerafloor")
+	//CameraFloor parameter
+	if (StartsWithNoCase(LineData, "camerafloor"))
 	{
 		int data;
-		if (!IsNumeric(value, data))
+		std::string str = Calc(value);
+		if (!IsNumeric(str, data))
 			return ScriptError("Invalid floor");
 
 		Simcore->camera->StartFloor = data;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "cameraposition")
+	//CameraPosition parameter
+	if (StartsWithNoCase(LineData, "cameraposition"))
 	{
 		Real x, z;
 		std::string str1 = value.substr(0, value.find(",", 0));
 		std::string str2 = value.substr(value.find(",", 0) + 1);
-		TrimString(str1);
-		TrimString(str2);
+		str1 = Calc(str1);
+		str2 = Calc(str2);
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, z))
 			return ScriptError("Invalid position");
 
@@ -116,7 +127,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Simcore->camera->StartPositionZ  = z;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 15) == "cameradirection")
+	//CameraDirection parameter
+	if (StartsWithNoCase(LineData, "cameradirection"))
 	{
 		int loc1 = value.find(",", 0);
 		int loc2 = value.find(",", loc1 + 1);
@@ -124,16 +136,17 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		std::string str1 = value.substr(0, loc1);
 		std::string str2 = value.substr(loc1 + 1, loc2 - loc1 - 1);
 		std::string str3 = value.substr(loc2 + 1);
-		TrimString(str1);
-		TrimString(str2);
-		TrimString(str3);
+		str1 = Calc(str1);
+		str2 = Calc(str2);
+		str3 = Calc(str3);
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, y) || !IsNumeric(str3, z))
 			return ScriptError("Invalid direction");
 
 		Simcore->camera->SetStartDirection(Vector3(x, y, z));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "camerarotation")
+	//CameraRotation parameter
+	if (StartsWithNoCase(LineData, "camerarotation"))
 	{
 		int loc1 = value.find(",", 0);
 		int loc2 = value.find(",", loc1 + 1);
@@ -141,35 +154,38 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		std::string str1 = value.substr(0, loc1);
 		std::string str2 = value.substr(loc1 + 1, loc2 - loc1 - 1);
 		std::string str3 = value.substr(loc2 + 1);
-		TrimString(str1);
-		TrimString(str2);
-		TrimString(str3);
+		str1 = Calc(str1);
+		str2 = Calc(str2);
+		str3 = Calc(str3);
 		if (!IsNumeric(str1, x) || !IsNumeric(str2, y) || !IsNumeric(str3, z))
 			return ScriptError("Invalid direction");
 
 		Simcore->camera->SetStartRotation(Vector3(x, y, z));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 15) == "interfloorontop")
+	//InterfloorOnTop parameter
+	if (StartsWithNoCase(LineData, "interfloorontop"))
 	{
 		Simcore->InterfloorOnTop = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "coordinates")
+	//Coordinates parameter
+	if (StartsWithNoCase(LineData, "coordinates"))
 	{
 		int loc = value.find(",", 0);
 		Real latitude, longitude;
 		std::string str1 = value.substr(0, loc);
 		std::string str2 = value.substr(loc + 1);
-		TrimString(str1);
-		TrimString(str2);
+		str1 = Calc(str1);
+		str2 = Calc(str2);
 		if (!IsNumeric(str1, latitude) || !IsNumeric(str2, longitude))
 			return ScriptError("Invalid latitude");
 
 		engine->GetFrontend()->SetLocation(latitude, longitude);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "datetime")
+	//DateTime parameter
+	if (StartsWithNoCase(LineData, "datetime"))
 	{
 		if (value == "now")
 			engine->GetFrontend()->SetDateTimeNow();
@@ -183,15 +199,18 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "timescale")
+	//TimeScale parameter
+	if (StartsWithNoCase(LineData, "timescale"))
 	{
 		int data;
-		if (!IsNumeric(value, data))
+		std::string str = Calc(value);
+		if (!IsNumeric(str, data))
 			return ScriptError("Invalid time scale value");
 
 		engine->GetFrontend()->SkyMult = data;
 	}
-	if (linecheck.substr(0, 8) == "position")
+	//Position parameter
+	if (StartsWithNoCase(LineData, "position"))
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params != 3)
@@ -216,16 +235,19 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "rotation")
+	//Rotation parameter
+	if (StartsWithNoCase(LineData, "rotation"))
 	{
-		Real rotation;
-		if (!IsNumeric(value, rotation))
+		int rotation;
+		std::string str = Calc(value);
+		if (!IsNumeric(str, rotation))
 			return ScriptError("Invalid rotation");
 
 		Simcore->Rotate(0.0, rotation, 0.0);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 6) == "bounds")
+	//Bounds parameter
+	if (StartsWithNoCase(LineData, "bounds"))
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params != 6)
@@ -252,7 +274,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	}
 
 	//handle end of globals section
-	if (linecheck == "<endglobals>")
+	if (StartsWithNoCase(LineData, "<endglobals>"))
 	{
 		config->SectionNum = 0;
 		config->Context = "None";

@@ -815,7 +815,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		{
 			if (parent_type == "Mesh")
 			{
-				if (parent_name == "External")
+				if (parent_name == "External" && sbs->External)
 					return sbs->External->ReplaceTexture(command_parameters[0], command_parameters[1]);
 				if (parent_name == "Landscape")
 					return sbs->Landscape->ReplaceTexture(command_parameters[0], command_parameters[1]);

@@ -86,7 +86,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		ReplaceAll(LineData, "%car%", ToString(config->Current));
 
 		//IF/While statement stub (continue to global commands for processing)
-		if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+		if (StartsWithNoCase(LineData, "if") || StartsWithNoCase(LineData, "while"))
 			return sContinue;
 
 		//process math functions
@@ -99,23 +99,21 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//get text after equal sign
-	bool equals = true;
-	if ((int)LineData.find("=", 0) == -1)
-		equals = false;
-	std::string value = GetAfterEquals(LineData);
-
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//parameters
-	if (linecheck.substr(0, 4) == "name")
+
+	//Name parameter
+	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		car->Name = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "openspeed")
+	//OpenSpeed parameter
+	if (StartsWithNoCase(LineData, "openspeed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -123,8 +121,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -135,7 +132,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 6) == "doors ")
+	//Doors parameter
+	if (StartsWithNoCase(LineData, "doors "))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -144,7 +142,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "servicedfloors")
+	//ServicedFloors parameter
+	if (StartsWithNoCase(LineData, "servicedfloors"))
 	{
 		//copy string listing of serviced floors into array
 		int params = SplitAfterEquals(LineData, false);
@@ -153,23 +152,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end) == true)
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 				{
 					if (!car->AddServicedFloor(k))
@@ -179,15 +164,18 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			else
 			{
 				int data;
-				if (!IsNumeric(tempdata[line], data))
+				std::string str = Calc(tempdata[line]);
+				if (!IsNumeric(str, data))
 					return ScriptError("Invalid value");
+
 				if (!car->AddServicedFloor(data))
 					return ScriptError();
 			}
 		}
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "displayfloors")
+	//DisplayFloors parameter
+	if (StartsWithNoCase(LineData, "displayfloors"))
 	{
 		//copy string listing of serviced floors into array
 		int params = SplitAfterEquals(LineData, false);
@@ -196,23 +184,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end) == true)
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 				{
 					car->AddDisplayFloor(k);
@@ -228,7 +202,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "doortimer")
+	//DoorTimer parameter
+	if (StartsWithNoCase(LineData, "doortimer"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -236,8 +211,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -248,7 +222,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "quickclose")
+	//QuickClose parameter
+	if (StartsWithNoCase(LineData, "quickclose"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -256,8 +231,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -268,7 +242,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "nudgetimer")
+	//NudgeTimer parameter
+	if (StartsWithNoCase(LineData, "nudgetimer"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -276,8 +251,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -288,7 +262,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "slowspeed")
+	//SlowSpeed parameter
+	if (StartsWithNoCase(LineData, "slowspeed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -296,8 +271,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -308,7 +282,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "manualspeed")
+	//ManualSpeed parameter
+	if (StartsWithNoCase(LineData, "manualspeed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -316,8 +291,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(11, LineData.find("=", 0) - 11);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -328,7 +302,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "opensound")
+	//OpenSound parameter
+	if (StartsWithNoCase(LineData, "opensound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -336,8 +311,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -350,7 +324,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->OpenSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "closesound")
+	//CloseSound parameter
+	if (StartsWithNoCase(LineData, "closesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -358,8 +333,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -372,7 +346,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->CloseSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "nudgesound")
+	//NudgeSound parameter
+	if (StartsWithNoCase(LineData, "nudgesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -380,8 +355,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -394,7 +368,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->NudgeSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "startsound")
+	//StartSound parameter
+	if (StartsWithNoCase(LineData, "startsound"))
 	{
 		//backwards compatibility
 		if (equals == false)
@@ -419,7 +394,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->MotorIdleSound = "";
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "movesound")
+	//MoveSound parameter
+	if (StartsWithNoCase(LineData, "movesound"))
 	{
 		//backwards compatibility
 		if (equals == false)
@@ -444,7 +420,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->MotorIdleSound = "";
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "stopsound")
+	//StopSound parameter
+	if (StartsWithNoCase(LineData, "stopsound"))
 	{
 		//backwards compatibility
 		if (equals == false)
@@ -469,7 +446,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->MotorIdleSound = "";
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "idlesound")
+	//IdleSound parameter
+	if (StartsWithNoCase(LineData, "idlesound"))
 	{
 		//backwards compatibility
 		if (equals == false)
@@ -493,7 +471,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->MotorIdleSound = "";
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "carstartsound")
+	//CarStartSound parameter
+	if (StartsWithNoCase(LineData, "carstartsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -505,7 +484,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownStartSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 15) == "carupstartsound")
+	//CarUpStartSound parameter
+	if (StartsWithNoCase(LineData, "carupstartsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -516,7 +496,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->UpStartSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 17) == "cardownstartsound")
+	//CarDownStartSound parameter
+	if (StartsWithNoCase(LineData, "cardownstartsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -527,7 +508,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownStartSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "carmovesound")
+	//CarMoveSound parameter
+	if (StartsWithNoCase(LineData, "carmovesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -539,7 +521,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownMoveSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "carupmovesound")
+	//CarUpMoveSound parameter
+	if (StartsWithNoCase(LineData, "carupmovesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -550,7 +533,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->UpMoveSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 16) == "cardownmovesound")
+	//CarDownMoveSound parameter
+	if (StartsWithNoCase(LineData, "cardownmovesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -561,7 +545,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownMoveSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "carstopsound")
+	//CarStopSound parameter
+	if (StartsWithNoCase(LineData, "carstopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -573,7 +558,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "carupstopsound")
+	//CarUpStopSound parameter
+	if (StartsWithNoCase(LineData, "carupstopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -584,7 +570,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->UpStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 16) == "cardownstopsound")
+	//CarDownStopSound parameter
+	if (StartsWithNoCase(LineData, "cardownstopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -595,7 +582,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->DownStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "caridlesound")
+	//CarIdleSound parameter
+	if (StartsWithNoCase(LineData, "caridlesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -606,7 +594,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->IdleSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "chimesound")
+	//ChimeSound parameter
+	if (StartsWithNoCase(LineData, "chimesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -614,8 +603,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -629,7 +617,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "upchimesound")
+	//UpChimeSound parameter
+	if (StartsWithNoCase(LineData, "upchimesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -637,8 +626,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(12, LineData.find("=", 0) - 12);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -651,7 +639,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->UpChimeSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "downchimesound")
+	//DownChimeSound parameter
+	if (StartsWithNoCase(LineData, "downchimesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -659,8 +648,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(14, LineData.find("=", 0) - 14);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -673,7 +661,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->DownChimeSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 17) == "earlyupchimesound")
+	//EarlyUpChimeSound parameter
+	if (StartsWithNoCase(LineData, "earlyupchimesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -681,8 +670,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(17, LineData.find("=", 0) - 17);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -696,7 +684,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->EarlyUpSet = true;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 19) == "earlydownchimesound")
+	//EarlyDownChimeSound parameter
+	if (StartsWithNoCase(LineData, "earlydownchimesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -704,8 +693,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Elevator not created yet");
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
-		std::string str = LineData.substr(19, LineData.find("=", 0) - 19);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -719,7 +707,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->GetDoor(door)->EarlyDownSet = true;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "alarmsoundstop")
+	//AlarmSoundStop parameter
+	if (StartsWithNoCase(LineData, "alarmsoundstop"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -730,7 +719,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->AlarmSoundStop = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "alarmsound")
+	//AlarmSound parameter
+	if (StartsWithNoCase(LineData, "alarmsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -741,7 +731,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->AlarmSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "beepsound")
+	//BeepSound parameter
+	if (StartsWithNoCase(LineData, "beepsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -752,7 +743,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetBeepSound(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "floorsound")
+	//FloorSound parameter
+	if (StartsWithNoCase(LineData, "floorsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -763,7 +755,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetFloorSound(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "upmessage")
+	//UpMessage parameter
+	if (StartsWithNoCase(LineData, "upmessage"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -774,7 +767,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(true, true, value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "downmessage")
+	//DownMessage parameter
+	if (StartsWithNoCase(LineData, "downmessage"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -785,7 +779,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(true, false, value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "messageonmove")
+	//MessageOnMove parameter
+	if (StartsWithNoCase(LineData, "messageonmove"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -793,7 +788,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MessageOnMove = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "openmessage")
+	//OpenMessage parameter
+	if (StartsWithNoCase(LineData, "openmessage"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -804,7 +800,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(false, true, value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "closemessage")
+	//CloseMessage parameter
+	if (StartsWithNoCase(LineData, "closemessage"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -815,7 +812,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->SetMessageSound(false, false, value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 6) == "music ")
+	//Music parameter
+	if (StartsWithNoCase(LineData, "music "))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -827,7 +825,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicDown = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 7) == "musicup")
+	//MusicUp parameter
+	if (StartsWithNoCase(LineData, "musicup"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -838,7 +837,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicUp = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "musicdown")
+	//MusicDown parameter
+	if (StartsWithNoCase(LineData, "musicdown"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -849,7 +849,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicDown = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "musicon ")
+	//MusicOn parameter
+	if (StartsWithNoCase(LineData, "musicon "))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -857,7 +858,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicOn = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "musicalwayson")
+	//MusicAlwaysOn parameter
+	if (StartsWithNoCase(LineData, "musicalwayson"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -865,14 +867,16 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicAlwaysOn = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "musiconmove")
+	//MusicOnMove parameter
+	if (StartsWithNoCase(LineData, "musiconmove"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 
 		car->MusicOnMove = ToBool(value);
 	}
-	if (linecheck.substr(0, 13) == "musicposition")
+	//MusicPosition parameter
+	if (StartsWithNoCase(LineData, "musicposition"))
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params != 3)
@@ -888,7 +892,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicPosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "autoenable")
+	//AutoEnable parameter
+	if (StartsWithNoCase(LineData, "autoenable"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -896,7 +901,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->AutoEnable = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "doorsensor")
+	//DoorSensor parameter
+	if (StartsWithNoCase(LineData, "doorsensor"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -906,8 +912,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (car->Created == false)
 			return ScriptError("Car not created yet");
 
-		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		str = Calc(str);
+		std::string str = GetBeforeEquals(LineData);
 		int door = 0;
 		if (!IsNumeric(str, door))
 			return ScriptError("No door specified");
@@ -928,7 +933,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 21) == "caremergencystopsound")
+	//CarEmergencyStopSound parameter
+	if (StartsWithNoCase(LineData, "caremergencystopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -939,7 +945,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->EmergencyStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 18) == "independentservice")
+	//IndependentService parameter
+	if (StartsWithNoCase(LineData, "independentservice"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -947,17 +954,24 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		elev->IndependentServiceCar = car->Number;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "fireservice2")
+	//FireService2 parameter
+	if (StartsWithNoCase(LineData, "fireservice2"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->FireServicePhase2 = ToInt(value);
+
+		std::string str = Calc(value);
+		int mode;
+		if (!IsNumeric(str, mode))
+			return ScriptError("Invalid value: " + str);
+
+		elev->FireServicePhase2 = mode;
 		elev->FireServicePhase2Car = car->Number;
 		return sNextLine;
 	}
 
 	//AddFloor command
-	if (linecheck.substr(0, 9) == "addfloor ")
+	if (StartsWithNoCase(LineData, "addfloor "))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -1004,7 +1018,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddWall command
-	if (linecheck.substr(0, 7) == "addwall")
+	if (StartsWithNoCase(LineData, "addwall"))
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -1029,7 +1043,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddDoors command
-	if (linecheck.substr(0, 8) == "adddoors")
+	if (StartsWithNoCase(LineData, "adddoors"))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -1081,7 +1095,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//SetShaftDoors command
-	if (linecheck.substr(0, 13) == "setshaftdoors")
+	if (StartsWithNoCase(LineData, "setshaftdoors"))
 	{
 		//backwards compatibility
 		if (warn_deprecated == true)
@@ -1111,7 +1125,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddShaftDoors command
-	if (linecheck.substr(0, 14) == "addshaftdoors ")
+	if (StartsWithNoCase(LineData, "addshaftdoors "))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -1178,7 +1192,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//CreatePanel command
-	if (linecheck.substr(0, 11) == "createpanel")
+	if (StartsWithNoCase(LineData, "createpanel"))
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -1200,7 +1214,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddFloorButton command
-	if (linecheck.substr(0, 14) == "addfloorbutton")
+	if (StartsWithNoCase(LineData, "addfloorbutton"))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -1313,7 +1327,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddControlButton command
-	if (linecheck.substr(0, 16) == "addcontrolbutton")
+	if (StartsWithNoCase(LineData, "addcontrolbutton"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1425,7 +1439,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddButton command
-	if (linecheck.substr(0, 10) == "addbutton ")
+	if (StartsWithNoCase(LineData, "addbutton "))
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -1475,7 +1489,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddControl command
-	if (linecheck.substr(0, 11) == "addcontrol ")
+	if (StartsWithNoCase(LineData, "addcontrol "))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -1550,7 +1564,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddFloorIndicator command
-	if (linecheck.substr(0, 17) == "addfloorindicator")
+	if (StartsWithNoCase(LineData, "addfloorindicator"))
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -1606,7 +1620,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddDirectionalIndicators command
-	if (linecheck.substr(0, 24) == "adddirectionalindicators")
+	if (StartsWithNoCase(LineData, "adddirectionalindicators"))
 	{
 		//get data
 		int params = SplitData(LineData, 25);
@@ -1652,7 +1666,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddFloorSigns command
-	if (linecheck.substr(0, 13) == "addfloorsigns")
+	if (StartsWithNoCase(LineData, "addfloorsigns"))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -1712,10 +1726,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddSound command
-	if (linecheck.substr(0, 8) == "addsound")
+	if (StartsWithNoCase(LineData, "addsound"))
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -1786,7 +1800,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddDoorComponent command
-	if (linecheck.substr(0, 16) == "adddoorcomponent")
+	if (StartsWithNoCase(LineData, "adddoorcomponent"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1825,7 +1839,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddShaftDoorsComponent command
-	if (linecheck.substr(0, 22) == "addshaftdoorscomponent")
+	if (StartsWithNoCase(LineData, "addshaftdoorscomponent"))
 	{
 		//get data
 		int params = SplitData(LineData, 23);
@@ -1864,7 +1878,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//FinishDoors command
-	if (linecheck.substr(0, 11) == "finishdoors")
+	if (StartsWithNoCase(LineData, "finishdoors"))
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -1909,7 +1923,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//FinishShaftDoors command
-	if (linecheck.substr(0, 16) == "finishshaftdoors")
+	if (StartsWithNoCase(LineData, "finishshaftdoors"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1955,7 +1969,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddDirectionalIndicator command
-	if (linecheck.substr(0, 24) == "adddirectionalindicator ")
+	if (StartsWithNoCase(LineData, "adddirectionalindicator "))
 	{
 		//get data
 		int params = SplitData(LineData, 24);
@@ -1981,7 +1995,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddDoor command
-	if (linecheck.substr(0, 8) == "adddoor ")
+	if (StartsWithNoCase(LineData, "adddoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -2057,10 +2071,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddModel command
-	if (linecheck.substr(0, 8) == "addmodel")
+	if (StartsWithNoCase(LineData, "addmodel"))
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -2119,7 +2133,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddActionControl command
-	if (linecheck.substr(0, 16) == "addactioncontrol")
+	if (StartsWithNoCase(LineData, "addactioncontrol"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -2189,7 +2203,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddTrigger command
-	if (linecheck.substr(0, 10) == "addtrigger")
+	if (StartsWithNoCase(LineData, "addtrigger"))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -2224,7 +2238,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//CreateCar command
-	if (linecheck.substr(0, 9) == "createcar")
+	if (StartsWithNoCase(LineData, "createcar"))
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -2241,7 +2255,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//handle end of car section
-	if (linecheck == "<endcar>" && config->RangeL == config->RangeH)
+	if (StartsWithNoCase(LineData, "<endcar>") == true && config->RangeL == config->RangeH)
 	{
 		//return to elevator section
 		config->SectionNum = 4;
@@ -2256,7 +2270,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//handle car range
-	if (config->RangeL != config->RangeH && linecheck.substr(0, 7) == "<endcar")
+	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endcar"))
 	{
 		if (config->Current < config->RangeH)
 		{

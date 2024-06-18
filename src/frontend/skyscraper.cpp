@@ -91,7 +91,9 @@ IMPLEMENT_APP_NO_MAIN(Skyscraper)
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_CPU != OGRE_CPU_ARM
 #include "uexception.h"
+#endif
 #endif
 
 #ifndef SW_SHOWNORMAL
@@ -163,8 +165,10 @@ int main (int argc, char* argv[])
 {
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_CPU != OGRE_CPU_ARM
 	//initialize top-level exception handler
 	Skyscraper::InitUnhandledExceptionFilter();
+#endif
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -326,7 +330,9 @@ bool Skyscraper::OnInit(void)
 
 	//set up unhandled exception handler (crash report system)
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_CPU != OGRE_CPU_ARM
 	UnhandledExceptionSetRoot(this);
+#endif
 #endif
 
 	//set locale to default for conversion functions
@@ -775,7 +781,7 @@ bool Skyscraper::Initialize()
 
 	std::string renderer = mRoot->getRenderSystem()->getName();
 
-	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem")
+	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem" && renderer != "Metal Rendering Subsystem")
 		RTSS = true;
 
 	if (RTSS == true)
@@ -1736,14 +1742,14 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	return true;
 }
 
-bool Skyscraper::Start(EngineContext *engine)
+bool Skyscraper::PrepareStart(EngineContext *engine)
 {
-	//start simulator
-
 	if (!engine)
 		return false;
 
 	::SBS::SBS *Simcore = engine->GetSystem();
+
+	engine->starting = true;
 
 	if (engine == active_engine)
 	{
@@ -1771,7 +1777,20 @@ bool Skyscraper::Start(EngineContext *engine)
 		}
 	}
 
-	//start simulation
+	return true;
+}
+
+bool Skyscraper::Prepare(EngineContext *engine)
+{
+	if (!engine)
+		return false;
+
+	return engine->Prepare();
+}
+
+bool Skyscraper::Start(EngineContext *engine)
+{
+	//start simulator
 	if (!engine->Start(mCamera))
 		return false;
 
@@ -1990,6 +2009,9 @@ bool Skyscraper::InitSky(EngineContext *engine)
 		return false;
 
 	if (Headless == true)
+		return true;
+
+	if (Renderer == "Direct3D11")
 		return true;
 
 	//ensure graphics card and render system are capable of Caelum's shaders
@@ -2435,8 +2457,18 @@ bool Skyscraper::RunEngines()
 				if (active_engine->IsLoadingFinished() == true && isloading == true)
 					continue;
 			}
-			Start(engines[i]);
+			PrepareStart(engines[i]);
 		}
+
+		//run sim engine Prepare after loading is finished
+		if (engines[i]->IsLoadingFinished() == true && engines[i]->IsStartingFinished() == false)
+		{
+			Prepare(engines[i]);
+		}
+
+		//start simulator
+		if (engines[i]->IsStartingFinished() == true)
+			Start(engines[i]);
 	}
 	return result;
 }

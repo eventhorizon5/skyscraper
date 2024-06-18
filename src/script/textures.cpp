@@ -41,19 +41,16 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 {
 	//Process Textures
 
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
-
 	TextureManager *texturemanager = Simcore->GetTextureManager();
 
 	//Load command
-	if (linecheck.substr(0, 5) == "load ")
+	if (StartsWithNoCase(LineData, "load "))
 	{
 		//get data
 		int params = SplitData(LineData, 5, false);
 
 		if (params != 4 && params != 5)
-			return ScriptError("Incorrect number of parameters");
+			return ScriptError("Incorrect number of )parameters");
 
 		//check numeric values
 		for (int i = 2; i <= 3; i++)
@@ -70,7 +67,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//LoadAnimated command
-	if (linecheck.substr(0, 12) == "loadanimated")
+	if (StartsWithNoCase(LineData, "loadanimated"))
 	{
 		//get data
 		int params = SplitData(LineData, 12, false);
@@ -126,7 +123,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//LoadAlphaBlend command
-	if (linecheck.substr(0, 14) == "loadalphablend")
+	if (StartsWithNoCase(LineData, "loadalphablend"))
 	{
 		//get data
 		int params = SplitData(LineData, 14, false);
@@ -154,7 +151,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//LoadMaterial command
-	if (linecheck.substr(0, 12) == "loadmaterial")
+	if (StartsWithNoCase(LineData, "loadmaterial"))
 	{
 		//get data
 		int params = SplitData(LineData, 12, false);
@@ -176,7 +173,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//LoadRange command
-	if (linecheck.substr(0, 9) == "loadrange")
+	if (StartsWithNoCase(LineData, "loadrange"))
 	{
 		//get data
 		int params = SplitData(LineData, 9, false);
@@ -213,7 +210,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//AddText command
-	if (linecheck.substr(0, 8) == "addtext ")
+	if (StartsWithNoCase(LineData, "addtext "))
 	{
 		//get data
 		int params = SplitData(LineData, 8, false);
@@ -244,7 +241,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//AddTextRange command
-	if (linecheck.substr(0, 12) == "addtextrange")
+	if (StartsWithNoCase(LineData, "addtextrange"))
 	{
 		//get data
 		int params = SplitData(LineData, 13, false);
@@ -287,12 +284,11 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			else
 				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], filename, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, ToBool(tempdata[16]));
 		}
-		linecheck = SetCaseCopy(LineData, false);
 		return sNextLine;
 	}
 
 	//LoadCropped command
-	if (linecheck.substr(0, 11) == "loadcropped")
+	if (StartsWithNoCase(LineData, "loadcropped"))
 	{
 		//get data
 		int params = SplitData(LineData, 12, false);
@@ -315,7 +311,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//AddOverlay command
-	if (linecheck.substr(0, 10) == "addoverlay")
+	if (StartsWithNoCase(LineData, "addoverlay"))
 	{
 		//get data
 		int params = SplitData(LineData, 11, false);
@@ -337,7 +333,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//SetLighting command
-	if (linecheck.substr(0, 11) == "setlighting")
+	if (StartsWithNoCase(LineData, "setlighting"))
 	{
 		//get data
 		int params = SplitData(LineData, 12, false);
@@ -361,7 +357,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//Rotate command
-	if (linecheck.substr(0, 7) == "rotate ")
+	if (StartsWithNoCase(LineData, "rotate "))
 	{
 		//get data
 		int params = SplitData(LineData, 7, false);
@@ -382,7 +378,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//RotateAnim command
-	if (linecheck.substr(0, 10) == "rotateanim")
+	if (StartsWithNoCase(LineData, "rotateanim"))
 	{
 		//get data
 		int params = SplitData(LineData, 10, false);
@@ -403,7 +399,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//Scroll command
-	if (linecheck.substr(0, 7) == "scroll ")
+	if (StartsWithNoCase(LineData, "scroll "))
 	{
 		//get data
 		int params = SplitData(LineData, 7, false);
@@ -427,7 +423,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//ScrollAnim command
-	if (linecheck.substr(0, 10) == "scrollanim")
+	if (StartsWithNoCase(LineData, "scrollanim"))
 	{
 		//get data
 		int params = SplitData(LineData, 10, false);
@@ -451,7 +447,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//Scale command
-	if (linecheck.substr(0, 5) == "scale")
+	if (StartsWithNoCase(LineData, "scale"))
 	{
 		//get data
 		int params = SplitData(LineData, 5, false);
@@ -475,7 +471,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//Transform command
-	if (linecheck.substr(0, 9) == "transform")
+	if (StartsWithNoCase(LineData, "transform"))
 	{
 		//get data
 		int params = SplitData(LineData, 9, false);
@@ -499,7 +495,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	}
 
 	//handle end of textures section
-	if (linecheck.substr(0, 13) == "<endtextures>")
+	if (StartsWithNoCase(LineData, "<endtextures>"))
 	{
 		Simcore->GetTextureManager()->FreeTextureImages();
 		config->SectionNum = 0;

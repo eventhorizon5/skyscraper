@@ -436,7 +436,7 @@
 										</object>
 										<object class="sizeritem">
 											<object class="wxButton" name="ID_bTextures" variable="bTextures" member="yes">
-												<label>List Textures</label>
+												<label>Texture Manager</label>
 												<handler function="On_bTextures_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>

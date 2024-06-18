@@ -268,7 +268,7 @@ Floor::~Floor()
 	ColumnFrame = 0;
 
 	//delete walls in external mesh
-	if (sbs->FastDelete == false)
+	if (sbs->FastDelete == false && sbs->External)
 		sbs->External->DeleteWalls(this);
 
 	//unregister from parent
@@ -280,7 +280,7 @@ Wall* Floor::AddFloor(const std::string &name, const std::string &texture, Real 
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
-	Wall *wall;
+	Wall *wall = 0;
 
 	if (isexternal == false)
 	{
@@ -289,8 +289,11 @@ Wall* Floor::AddFloor(const std::string &name, const std::string &texture, Real 
 	}
 	else
 	{
-		wall = sbs->External->CreateWallObject(name);
-		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+		if (sbs->External)
+		{
+			wall = sbs->External->CreateWallObject(name);
+			sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+		}
 	}
 	return wall;
 }
@@ -308,7 +311,7 @@ Wall* Floor::AddWall(const std::string &name, const std::string &texture, Real t
 {
 	//Adds a wall with the specified dimensions
 
-	Wall *wall;
+	Wall *wall = 0;
 	if (isexternal == false)
 	{
 		wall = Level->CreateWallObject(name);
@@ -316,8 +319,11 @@ Wall* Floor::AddWall(const std::string &name, const std::string &texture, Real t
 	}
 	else
 	{
-		wall = sbs->External->CreateWallObject(name);
-		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
+		if (sbs->External)
+		{
+			wall = sbs->External->CreateWallObject(name);
+			sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
+		}
 	}
 	return wall;
 }
@@ -594,8 +600,11 @@ void Floor::CutAll(const Vector3 &start, const Vector3 &end, bool cutwalls, bool
 	}
 
 	//cut external
-	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
-		sbs->Cut(sbs->External->Walls[i], Vector3(start.x, Altitude + start.y, start.z), Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
+	if (sbs->External)
+	{
+		for (size_t i = 0; i < sbs->External->Walls.size(); i++)
+			sbs->Cut(sbs->External->Walls[i], Vector3(start.x, Altitude + start.y, start.z), Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
+	}
 }
 
 void Floor::AddGroupFloor(int number)

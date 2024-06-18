@@ -28,6 +28,7 @@
 #include "elevatorcar.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
+#include "polymesh.h"
 #include "sound.h"
 #include "door.h"
 #include "model.h"
@@ -248,12 +249,15 @@ void Shaft::CutFloors(bool relative, const Vector2 &start, const Vector2 &end, R
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
 
-	for (size_t i = 0; i < sbs->External->Walls.size(); i++)
+	if (sbs->External)
 	{
-		if (relative == true)
-			sbs->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
-		else
-			sbs->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
+		for (size_t i = 0; i < sbs->External->Walls.size(); i++)
+		{
+			if (relative == true)
+				sbs->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
+			else
+				sbs->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
+		}
 	}
 }
 

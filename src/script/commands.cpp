@@ -58,14 +58,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 {
 	//process global commands
 
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
-
 	//IF/While statement
 	int IsIf = 0;
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
+	if (StartsWithNoCase(LineData, "if"))
 		IsIf = 1;
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "while")
+	if (StartsWithNoCase(LineData, "while"))
 		IsIf = 2;
 	if (IsIf > 0)
 	{
@@ -106,7 +103,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	TextureManager *texturemanager = Simcore->GetTextureManager();
 
 	//AddTriangleWall command
-	if (linecheck.substr(0, 15) == "addtrianglewall")
+	if (StartsWithNoCase(LineData, "addtrianglewall"))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -161,7 +158,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddWall command
-	if (linecheck.substr(0, 7) == "addwall")
+	if (StartsWithNoCase(LineData, "addwall"))
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -193,7 +190,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddFloor command
-	if (linecheck.substr(0, 9) == "addfloor ")
+	if (StartsWithNoCase(LineData, "addfloor "))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -248,7 +245,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddGround command
-	if (linecheck.substr(0, 9) == "addground")
+	if (StartsWithNoCase(LineData, "addground"))
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -273,7 +270,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Cut command
-	if (linecheck.substr(0, 4) == "cut ")
+	if (StartsWithNoCase(LineData, "cut "))
 	{
 		//get data
 		int params = SplitData(LineData, 4);
@@ -303,21 +300,21 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Set command
-	if (linecheck.substr(0, 4) == "set ")
+	if (StartsWithNoCase(LineData, "set "))
 	{
 		int loc = LineData.find("=", 0);
 		if (loc < 0)
 			return ScriptError("Syntax Error");
 
-		std::string str = LineData.substr(4, loc - 5);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData, false);
 
 		//reserved keywords
 		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param" || str == "floorname" || str == "floortype" || str == "floorid" || str == "description")
 			return ScriptError("Cannot use system variable name");
 
 		//get text after equal sign
-		std::string value = Calc(GetAfterEquals(LineData));
+		bool equals;
+		std::string value = Calc(GetAfterEquals(LineData, equals));
 
 		//find existing variable by name
 		int index = -1;
@@ -353,7 +350,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//CreateWallBox2 command
-	if (linecheck.substr(0, 14) == "createwallbox2")
+	if (StartsWithNoCase(LineData, "createwallbox2"))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -395,7 +392,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//CreateWallBox command
-	if (linecheck.substr(0, 14) == "createwallbox ")
+	if (StartsWithNoCase(LineData, "createwallbox "))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -437,7 +434,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddCustomWall command
-	if (linecheck.substr(0, 14) == "addcustomwall ")
+	if (StartsWithNoCase(LineData, "addcustomwall "))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -502,7 +499,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddCustomFloor command
-	if (linecheck.substr(0, 15) == "addcustomfloor ")
+	if (StartsWithNoCase(LineData, "addcustomfloor "))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -545,7 +542,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddPolygon command
-	if (linecheck.substr(0, 10) == "addpolygon")
+	if (StartsWithNoCase(LineData, "addpolygon"))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -593,7 +590,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddShaft command
-	if (linecheck.substr(0, 9) == "addshaft ")
+	if (StartsWithNoCase(LineData, "addshaft "))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -656,7 +653,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ShaftCut command
-	if (linecheck.substr(0, 9) == "shaftcut ")
+	if (StartsWithNoCase(LineData, "shaftcut "))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -685,15 +682,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ShaftShowFloors command
-	if (linecheck.substr(0, 15) == "shaftshowfloors")
+	if (StartsWithNoCase(LineData, "shaftshowfloors"))
 	{
 		//get shaft number
 		int loc = LineData.find("=");
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		std::string str = LineData.substr(15, loc - 16);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 
@@ -749,15 +745,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ShaftShowInterfloors command
-	if (linecheck.substr(0, 20) == "shaftshowinterfloors")
+	if (StartsWithNoCase(LineData, "shaftshowinterfloors"))
 	{
 		//get shaft number
 		int loc = LineData.find("=");
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		std::string str = LineData.substr(20, loc - 21);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
@@ -770,23 +765,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 					Simcore->GetShaft(shaftnum)->AddShowInterfloor(k);
 			}
@@ -802,15 +783,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ShaftShowOutside command
-	if (linecheck.substr(0, 16) == "shaftshowoutside")
+	if (StartsWithNoCase(LineData, "shaftshowoutside"))
 	{
 		//get shaft number
 		int loc = LineData.find("=");
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		std::string str = LineData.substr(16, loc - 17);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
@@ -823,23 +803,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 					Simcore->GetShaft(shaftnum)->AddShowOutside(k);
 			}
@@ -855,29 +821,29 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ShowFullShaft command
-	if (linecheck.substr(0, 13) == "showfullshaft")
+	if (StartsWithNoCase(LineData, "showfullshaft"))
 	{
 		//get shaft number
 		int loc = LineData.find("=");
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		std::string str = LineData.substr(13, loc - 14);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
 			return ScriptError("Invalid shaft number");
 
 		//get text after equal sign
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		Simcore->GetShaft(shaftnum)->SetShowFull(ToBool(value));
 		return sNextLine;
 	}
 
 	//CreateStairwell command
-	if (linecheck.substr(0, 15) == "createstairwell")
+	if (StartsWithNoCase(LineData, "createstairwell"))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -901,7 +867,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//CutStairwell command
-	if (linecheck.substr(0, 13) == "cutstairwell ")
+	if (StartsWithNoCase(LineData, "cutstairwell "))
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -929,15 +895,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//StairsShowFloors command
-	if (linecheck.substr(0, 16) == "stairsshowfloors")
+	if (StartsWithNoCase(LineData, "stairsshowfloors"))
 	{
 		//get stairwell number
 		int loc = LineData.find("=");
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int stairnum;
-		std::string str = LineData.substr(16, loc - 17);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
 
@@ -952,24 +917,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 					Simcore->GetStairwell(stairnum)->AddShowFloor(k);
 			}
@@ -985,22 +935,22 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ShowFullStairs command
-	if (linecheck.substr(0, 14) == "showfullstairs")
+	if (StartsWithNoCase(LineData, "showfullstairs"))
 	{
 		//get shaft number
 		int loc = LineData.find("=");
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int stairnum;
-		std::string str = LineData.substr(14, loc - 15);
-		TrimString(str);
+		std::string str = GetBeforeEquals(LineData);
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
 		if (stairnum < 1 || stairnum > Simcore->GetStairwellCount())
 			return ScriptError("Invalid stairwell number");
 
 		//get text after equal sign
-		std::string strvalue = GetAfterEquals(LineData);
+		bool equals;
+		std::string strvalue = GetAfterEquals(LineData, equals);
 		SetCase(strvalue, false);
 
 		int value = 0;
@@ -1025,10 +975,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//WallOrientation command
-	if (linecheck.substr(0, 15) == "wallorientation")
+	if (StartsWithNoCase(LineData, "wallorientation"))
 	{
 		//get text after equal sign
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		if (!Simcore->SetWallOrientation(value))
 			return ScriptError();
@@ -1036,10 +987,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//FloorOrientation command
-	if (linecheck.substr(0, 16) == "floororientation")
+	if (StartsWithNoCase(LineData, "floororientation"))
 	{
 		//get text after equal sign
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		if (!Simcore->SetFloorOrientation(value))
 			return ScriptError();
@@ -1047,7 +999,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//DrawWalls command
-	if (linecheck.substr(0, 9) == "drawwalls")
+	if (StartsWithNoCase(LineData, "drawwalls"))
 	{
 		int params = SplitAfterEquals(LineData);
 
@@ -1064,7 +1016,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetTextureMapping command
-	if (linecheck.substr(0, 18) == "settexturemapping ")
+	if (StartsWithNoCase(LineData, "settexturemapping "))
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -1086,7 +1038,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetTextureMapping2 command
-	if (linecheck.substr(0, 18) == "settexturemapping2")
+	if (StartsWithNoCase(LineData, "settexturemapping2"))
 	{
 		//get data
 		int params = SplitData(LineData, 19);
@@ -1112,21 +1064,22 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ResetTextureMapping command
-	if (linecheck.substr(0, 19) == "resettexturemapping")
+	if (StartsWithNoCase(LineData, "resettexturemapping"))
 	{
 		int check = (int)LineData.find("=", 0);
 		if (check < 0)
 			return ScriptError("Syntax Error");
 
 		//get text after equal sign
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		texturemanager->ResetTextureMapping(ToBool(value));
 		return sNextLine;
 	}
 
 	//SetPlanarMapping command
-	if (linecheck.substr(0, 16) == "setplanarmapping")
+	if (StartsWithNoCase(LineData, "setplanarmapping"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1155,7 +1108,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ReverseAxis command
-	if (linecheck.substr(0, 11) == "reverseaxis")
+	if (StartsWithNoCase(LineData, "reverseaxis"))
 	{
 		//backwards compatibility
 		if (warn_deprecated == true)
@@ -1164,13 +1117,15 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		int check = (int)LineData.find("=", 0);
 		if (check < 0)
 			return ScriptError("Syntax Error");
-		std::string value = GetAfterEquals(LineData);
+		bool equals;
+		std::string value = GetAfterEquals(LineData, equals);
 
 		config->ReverseAxis = ToBool(value);
 		return sNextLine;
 	}
 
 	//Intersection points
+	std::string linecheck = SetCaseCopy(LineData, false);
 	int found = (int)linecheck.find("isect(", 0);
 	while (found > -1)
 	{
@@ -1253,7 +1208,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//GetWallExtents command
-	if (linecheck.substr(0, 14) == "getwallextents")
+	if (StartsWithNoCase(LineData, "getwallextents"))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -1292,7 +1247,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetAutoSize command
-	if (linecheck.substr(0, 11) == "setautosize")
+	if (StartsWithNoCase(LineData, "setautosize"))
 	{
 		int params = SplitAfterEquals(LineData);
 
@@ -1305,7 +1260,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//TextureOverride command
-	if (linecheck.substr(0, 15) == "textureoverride")
+	if (StartsWithNoCase(LineData, "textureoverride"))
 	{
 		int params = SplitData(LineData, 16, false);
 
@@ -1317,7 +1272,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//TextureFlip command
-	if (linecheck.substr(0, 11) == "textureflip")
+	if (StartsWithNoCase(LineData, "textureflip"))
 	{
 		int params = SplitData(LineData, 12, false);
 
@@ -1336,7 +1291,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Mount command
-	if (linecheck.substr(0, 5) == "mount")
+	if (StartsWithNoCase(LineData, "mount"))
 	{
 		//get data
 		int params = SplitData(LineData, 6, false);
@@ -1351,7 +1306,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddFloorAutoArea command
-	if (linecheck.substr(0, 16) == "addfloorautoarea")
+	if (StartsWithNoCase(LineData, "addfloorautoarea"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1376,10 +1331,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddSound command
-	if (linecheck.substr(0, 8) == "addsound")
+	if (StartsWithNoCase(LineData, "addsound"))
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -1450,10 +1405,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddModel command
-	if (linecheck.substr(0, 8) == "addmodel")
+	if (StartsWithNoCase(LineData, "addmodel"))
 	{
 		//get data
-		int params = SplitData(LineData, 9, true);
+		int params = SplitData(LineData, 9);
 
 		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -1512,7 +1467,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddAction command
-	if (linecheck.substr(0, 10) == "addaction ")
+	if (StartsWithNoCase(LineData, "addaction "))
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -1550,7 +1505,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddActionParent command
-	if (linecheck.substr(0, 16) == "addactionparent ")
+	if (StartsWithNoCase(LineData, "addactionparent "))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -1574,7 +1529,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//RemoveActionParent command
-	if (linecheck.substr(0, 19) == "removeactionparent ")
+	if (StartsWithNoCase(LineData, "removeactionparent "))
 	{
 		//get data
 		int params = SplitData(LineData, 19);
@@ -1598,7 +1553,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddActionControl command
-	if (linecheck.substr(0, 16) == "addactioncontrol")
+	if (StartsWithNoCase(LineData, "addactioncontrol"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1668,7 +1623,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddTrigger command
-	if (linecheck.substr(0, 10) == "addtrigger")
+	if (StartsWithNoCase(LineData, "addtrigger"))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -1703,7 +1658,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddLight command
-	if (linecheck.substr(0, 9) == "addlight ")
+	if (StartsWithNoCase(LineData, "addlight "))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -1764,7 +1719,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetLightColor command
-	if (linecheck.substr(0, 14) == "setlightcolor ")
+	if (StartsWithNoCase(LineData, "setlightcolor "))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -1832,7 +1787,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetLightSpecular command
-	if (linecheck.substr(0, 17) == "setlightspecular ")
+	if (StartsWithNoCase(LineData, "setlightspecular "))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1900,7 +1855,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetLightAttenuation command
-	if (linecheck.substr(0, 20) == "setlightattenuation ")
+	if (StartsWithNoCase(LineData, "setlightattenuation "))
 	{
 		//get data
 		int params = SplitData(LineData, 20);
@@ -1968,7 +1923,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetSpotlightRange command
-	if (linecheck.substr(0, 18) == "setspotlightrange ")
+	if (StartsWithNoCase(LineData, "setspotlightrange "))
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -2036,7 +1991,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetLightDirection command
-	if (linecheck.substr(0, 18) == "setlightdirection ")
+	if (StartsWithNoCase(LineData, "setlightdirection "))
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -2104,7 +2059,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//MoveLight command
-	if (linecheck.substr(0, 10) == "movelight ")
+	if (StartsWithNoCase(LineData, "movelight "))
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -2172,7 +2127,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddCameraTexture command
-	if (linecheck.substr(0, 16) == "addcameratexture")
+	if (StartsWithNoCase(LineData, "addcameratexture"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -2237,7 +2192,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddSlidingDoor command
-	if (linecheck.substr(0, 14) == "addslidingdoor")
+	if (StartsWithNoCase(LineData, "addslidingdoor"))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -2314,7 +2269,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddStdDoor command
-	if (linecheck.substr(0, 10) == "addstddoor")
+	if (StartsWithNoCase(LineData, "addstddoor"))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -2391,7 +2346,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//CreateCustomDoor command
-	if (linecheck.substr(0, 16) == "createcustomdoor")
+	if (StartsWithNoCase(LineData, "createcustomdoor"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -2455,7 +2410,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//CustomDoorComponent command
-	if (linecheck.substr(0, 19) == "customdoorcomponent")
+	if (StartsWithNoCase(LineData, "customdoorcomponent"))
 	{
 		//get data
 		int params = SplitData(LineData, 20);
@@ -2530,7 +2485,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//FinishDoor command
-	if (linecheck.substr(0, 11) == "finishdoor ")
+	if (StartsWithNoCase(LineData, "finishdoor "))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -2598,7 +2553,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//MoveDoor command
-	if (linecheck.substr(0, 8) == "movedoor")
+	if (StartsWithNoCase(LineData, "movedoor"))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -2664,7 +2619,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetAutoClose command
-	if (linecheck.substr(0, 12) == "setautoclose")
+	if (StartsWithNoCase(LineData, "setautoclose"))
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -2730,7 +2685,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Rotate command
-	/*if (linecheck.substr(0, 7) == "rotate ")
+	/*if (StartsWithNoCase(LineData, "rotate "))
 	{
 		//get data
 		int params = SplitData(LineData, 7);
@@ -2763,7 +2718,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetRotation command
-	if (linecheck.substr(0, 11) == "setrotation")
+	if (StartsWithNoCase(LineData, "setrotation"))
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -2796,7 +2751,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Move command
-	if (linecheck.substr(0, 5) == "move ")
+	if (StartsWithNoCase(LineData, "move "))
 	{
 		//get data
 		int params = SplitData(LineData, 5);
@@ -2829,7 +2784,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetPosition command
-	if (linecheck.substr(0, 12) == "setposition " && config->SectionNum != 9)
+	if (StartsWithNoCase(LineData, "setposition " && config->SectionNum != 9)
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -2862,7 +2817,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetPositionY command
-	if (linecheck.substr(0, 12) == "setpositiony")
+	if (StartsWithNoCase(LineData, "setpositiony"))
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -2892,7 +2847,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetPositionRelative command
-	if (linecheck.substr(0, 19) == "setpositionrelative")
+	if (linecheck.substr(0, 19) == "setpositionrelative"))
 	{
 		//get data
 		int params = SplitData(LineData, 20);
@@ -2925,7 +2880,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}*/
 
 	//CreateWallObject command
-	if (linecheck.substr(0, 16) == "createwallobject")
+	if (StartsWithNoCase(LineData, "createwallobject"))
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -2944,7 +2899,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetKey command
-	if (linecheck.substr(0, 6) == "setkey")
+	if (StartsWithNoCase(LineData, "setkey"))
 	{
 		//get data
 		int params = SplitData(LineData, 7);
@@ -2968,7 +2923,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetLock command
-	if (linecheck.substr(0, 7) == "setlock")
+	if (StartsWithNoCase(LineData, "setlock"))
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -3002,7 +2957,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Delete command
-	if (linecheck.substr(0, 6) == "delete")
+	if (StartsWithNoCase(LineData, "delete"))
 	{
 		if (LineData.size() == 6)
 			return ScriptError("Incorrect number of parameters");
@@ -3021,7 +2976,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//RunAction command
-	if (linecheck.substr(0, 9) == "runaction")
+	if (StartsWithNoCase(LineData, "runaction"))
 	{
 		if (LineData.size() == 9)
 			return ScriptError("Incorrect number of parameters");
@@ -3036,7 +2991,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Teleport command
-	if (linecheck.substr(0, 8) == "teleport")
+	if (StartsWithNoCase(LineData, "teleport"))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -3057,7 +3012,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//GotoFloor command
-	if (linecheck.substr(0, 9) == "gotofloor")
+	if (StartsWithNoCase(LineData, "gotofloor"))
 	{
 		if (LineData.size() == 9)
 			return ScriptError("Incorrect number of parameters");
@@ -3075,7 +3030,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//FloorInfo command
-	if (linecheck.substr(0, 9) == "floorinfo")
+	if (StartsWithNoCase(LineData, "floorinfo"))
 	{
 		if (LineData.size() == 9)
 			Simcore->ShowFloorList();
@@ -3096,21 +3051,21 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ListTextures command
-	if (linecheck.substr(0, 12) == "listtextures")
+	if (StartsWithNoCase(LineData, "listtextures"))
 	{
 		Simcore->Report(texturemanager->ListTextures(true));
 		return sNextLine;
 	}
 
 	//ListVisibleMeshes command
-	if (linecheck.substr(0, 17) == "listvisiblemeshes")
+	if (StartsWithNoCase(LineData, "listvisiblemeshes"))
 	{
 		Simcore->ListVisibleMeshes();
 		return sNextLine;
 	}
 
 	//ShowLoadedSounds command
-	if (linecheck.substr(0, 16) == "showloadedsounds")
+	if (StartsWithNoCase(LineData, "showloadedsounds"))
 	{
 		if (Simcore->GetSoundSystem())
 			Simcore->GetSoundSystem()->ShowLoadedSounds();
@@ -3118,7 +3073,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//ShowPlayingSounds command
-	if (linecheck.substr(0, 17) == "showplayingsounds")
+	if (StartsWithNoCase(LineData, "showplayingsounds"))
 	{
 		if (Simcore->GetSoundSystem())
 			Simcore->GetSoundSystem()->ShowPlayingSounds();
@@ -3126,7 +3081,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Print command
-	if (linecheck.substr(0, 5) == "print")
+	if (StartsWithNoCase(LineData, "print"))
 	{
 		//calculate inline math
 		std::string value = Calc(LineData.substr(5));

@@ -1,0 +1,143 @@
+#This building is a very bare-bones building designed to help others learn how to
+#make their own buildings in Skyscraper's scripting language.
+#All of the commands and parameters used in this file are documented in the
+#script guide (designguide.html) which comes with the program.
+
+#For a general introduction, see the Simple.bld building.  This building is smaller, and doesn't
+#include elevators, stairs, and other objects.
+
+#The first thing to learn is about comments - if you put a number sign (#) anywhere
+#in a line, all text after it will be ignored.  If a line starts with that sign, the whole
+#line is ignored.
+
+#Then the thing you'll need to do when creating a building is define the global parameters.
+#These are contained inside the "Global" section.  The following code shows this building's
+#basic parameters:
+
+<Globals>
+    Name = My Basic Building
+    Designer = Me
+    CameraFloor = 0
+    CameraPosition = 0, -60
+    CameraRotation = 0, 0, 0
+    Sky = noon
+    Bounds = -75, 0, -75, 75, 0, 75
+<EndGlobals>
+
+#In the above code, I named the building "My Building", and set the designer as "Me".
+#I'm also telling the camera to start on the first floor with the CameraFloor parameter.  In Skyscraper,
+#floor 0 is the first floor, floor 1 is the second, etc, and by setting the floor to "0" in that parameter,
+#I'm setting it to the first floor.  Floors were numbered that way in order to make the numbering between
+#below ground and above ground floors seamless - so they'd go from -2, -1, 0, 1, 2 instead of skipping 0.
+#I also set the camera's position to be in the center of the map horizontally (0), and 60 feet to the front
+#of the map (-60)
+
+#Next you'll have to define your textures. Most of these commands simply load a texture file and give it
+#a name.  At the bottom of the section you'll see code that adds text to existing textures.
+
+<Textures>
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/cutston.jpg, InterExt, 0.269, 0.25
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+<EndTextures>
+
+#Next you'll need to create the ground. The following code is the default ground code.
+#The second command is needed to cut a hole in the ground for the building.  In this
+#example I'm giving the building dimensions of 40x40 feet, so it needs to be cut from
+#-20 to 20 horizontally, and -20 to 20 depth-wise.
+
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
+
+#Now it's time to start making the building's floors.  If you're making basement levels, they must
+#be specified before floor 0 and the other above-ground floors, and must also be in decending
+#order (-1, -2, -3, etc).  In this example, I'm just going to make above-ground floors. The following
+#code creates 10 floors (0 to 9).  Note that math can be used inside commands to make things easier.
+
+<Floors 0 to 1>
+    #The ID of a floor is it's commonly-used number or symbol - this sets floor 0 to be known as "1", etc.
+    ID = %floor% + 1
+    Name = Floor (%floor% + 1)
+    Type = Office
+    Height = 10 #This is the height in feet of the floor
+    #the interfloor area represents the area used by trusses (floor supports), below the floor's base
+    InterfloorHeight = 2.24 #This is the height in feet of the interfloor space between floors
+    #Floor 0 needs to have it's altitude manually set, since it's interfloor space is below the floor's base
+    if[%floor% = 0] Altitude = -%interfloorheight%
+
+    #create a basic carpeted floor
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, False
+
+    #create a ceiling
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, false, false, 0, 0, False
+
+    #External windows - this creates the outside versions of the windows, and also the walls outside the
+    #interfloor areas
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Internal windows - this creates the transparent windows on the inside of each floor
+    SetAutoSize = true, false
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -15, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, false, false, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
+
+#Finally create the roof (11th floor), and add a square brick floor on it.
+<Floor 2>
+    ID = R
+    Name = Roof
+    Type = Roof
+    Height = 10
+    InterfloorHeight = 2.24
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Roof, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, True #roof
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+
+#For information on how to create elevators, stairwells and more, see the demo building Simple.bld.
+

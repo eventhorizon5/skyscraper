@@ -58,6 +58,7 @@ class CreateObject;
 class MoveObject;
 class CameraTextureControl;
 class SoundManager;
+class TextureManager;
 
 class DebugPanel: public wxFrame
 {
@@ -240,6 +241,7 @@ class DebugPanel: public wxFrame
 		PeopleManager *pmanager;
 		CameraTextureControl *camtex;
 		SoundManager *smanager;
+		TextureManager *tmanager;
 
 		DECLARE_EVENT_TABLE()
 };

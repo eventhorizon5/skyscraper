@@ -198,7 +198,6 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 		for (int i = 0; i < action->GetParameterCount(); i++)
 			tParameters->AppendText(action->GetParameter(i) + wxT("\n"));
 	}
-
 }
 
 void ActionViewer::On_bDelete_Click(wxCommandEvent& event)

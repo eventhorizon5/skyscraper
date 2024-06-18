@@ -216,6 +216,8 @@ private:
 	void ShowProgressDialog();
 	void ReInit();
 	bool NeedWait();
+	bool PrepareStart(EngineContext *engine);
+	bool Prepare(EngineContext *engine);
 
 	Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;

@@ -24,6 +24,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "mesh.h"
+#include "polymesh.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatordoor.h"
@@ -2824,19 +2825,7 @@ Real ElevatorCar::SetHeight()
 	//make sure height value is set
 	if (HeightSet == false)
 	{
-		Height = 0;
-		//search through mesh geometry to find actual height
-		for (size_t i = 0; i < Mesh->Submeshes.size(); i++)
-		{
-			for (size_t j = 0; j < Mesh->Submeshes[i].MeshGeometry.size(); j++)
-			{
-				Real y = sbs->ToLocal(Mesh->Submeshes[i].MeshGeometry[j].vertex.y);
-
-				//set height value
-				if (y > Height)
-					Height = y;
-			}
-		}
+		Height = Mesh->GetHeight();
 		HeightSet = true;
 
 		//position sounds at top of elevator car
@@ -2876,21 +2865,23 @@ bool ElevatorCar::IsInCar(const Vector3 &position, bool camera)
 
 	checkfirstrun = false;
 
-	if (position.y >= (GetPosition().y - 0.1) && position.y < GetPosition().y + (Height * 2))
+	Real ypos = GetPosition().y;
+
+	if (position.y >= (ypos - 0.1) && position.y < ypos + (Height * 2))
 	{
 		if (Mesh->InBoundingBox(position, false) == true)
 		{
 			if (Mesh->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
 				if (camera == true)
-					CameraOffset = position.y - GetPosition().y;
+					CameraOffset = position.y - ypos;
 				result = true;
 			}
 		}
 		else if (camera == true)
 			CameraOffset = 0;
 
-		if (position.y < GetPosition().y + Height)
+		if (position.y < ypos + Height)
 		{
 			//cache values
 			lastcheckresult = result;

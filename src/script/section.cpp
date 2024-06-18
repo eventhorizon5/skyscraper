@@ -102,18 +102,99 @@ int ScriptProcessor::Section::SplitAfterEquals(const std::string &string, bool c
 	return (int)tempdata.size();
 }
 
-std::string ScriptProcessor::Section::GetAfterEquals(const std::string &string)
+std::string ScriptProcessor::Section::GetAfterEquals(const std::string &string, bool &found_equals)
 {
 	//return data after equal sign
 
-	std::string data = string;
-	int loc = data.find("=", 0);
+	found_equals = false;
+
+	if (string.size() <= 1)
+		return "";
+
+	//find equals sign
+	int loc = string.find("=", 1);
+
 	if (loc < 0)
 		return "";
 
-	std::string temp = data.substr(loc + 1);
+	found_equals = true;
+
+	std::string temp = string.substr(loc + 1);
 	TrimString(temp);
 	return temp;
+}
+
+std::string ScriptProcessor::Section::GetBeforeEquals(const std::string &string, bool calc)
+{
+	//return data right before equal sign
+
+	if (string.size() <= 1)
+		return "";
+
+	//find equal sign
+	int equals = string.find("=", 1);
+
+	if (equals == -1)
+		return "";
+
+	std::string str = string.substr(0, equals);
+	TrimString(str);
+
+	//find space before equal sign
+	int loc = str.find_first_of(" ", 0);
+	int loc2 = -1;
+
+	//if a space is missing, find start of numeric characters
+	if (loc == -1)
+	{
+		for (int i = 0; i < str.size(); i++)
+		{
+			if (IsNumeric(str[i]))
+			{
+				loc2 = i;
+				break;
+			}
+		}
+	}
+
+	std::string str2;
+
+	if (loc2 == -1)
+		str2 = str.substr(loc);
+	else
+		str2 = str.substr(loc2);
+	TrimString(str2);
+
+	if (calc == true)
+		return Calc(str2);
+
+	return str2;
+}
+
+bool ScriptProcessor::Section::GetRange(const std::string &string, int &start, int &end)
+{
+	//calculate range value, such as "1 - 3", and fill in the 'start' and 'end' values
+
+	if (string.find("-", 1) > 0)
+	{
+		//found a range marker
+		std::string str1 = string.substr(0, string.find("-", 1));
+		std::string str2 = string.substr(string.find("-", 1) + 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
+			return ScriptError("Invalid value");
+		if (end < start)
+		{
+			int temp = start;
+			start = end;
+			end = temp;
+		}
+
+		return true;
+	}
+
+	return false;
 }
 
 int ScriptProcessor::Section::ScriptError(std::string message, bool warning)

@@ -326,6 +326,7 @@ void TextureManager::RegisterTextureInfo(const std::string &name, const std::str
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
+	info.dependencies = 0;
 
 	textureinfo.push_back(info);
 }
@@ -356,6 +357,8 @@ bool TextureManager::UnloadTexture(const std::string &name, const std::string &g
 	Ogre::TextureManager::getSingleton().remove(wrapper);
 	DecrementTextureCount();
 
+	Report("Unloaded texture " + name);
+
 	return true;
 }
 
@@ -368,6 +371,8 @@ bool TextureManager::UnloadMaterial(const std::string &name, const std::string &
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(wrapper);
 	DecrementMaterialCount();
+
+	Report("Unloaded material " + name);
 
 	return true;
 }
@@ -1649,6 +1654,56 @@ std::string TextureManager::ListTextures(bool show_filename)
 	return list;
 }
 
+int TextureManager::GetTextureInfoCount()
+{
+	return (int)textureinfo.size();
+}
+
+bool TextureManager::GetTextureInfo(int index, TextureManager::TextureInfo &info)
+{
+	if (index >= 0 && index < textureinfo.size())
+	{
+		info = textureinfo[index];
+		return true;
+	}
+
+	return false;
+}
+
+bool TextureManager::SetTextureInfo(int index, TextureManager::TextureInfo &info)
+{
+	if (index >= 0 && index < textureinfo.size())
+	{
+		textureinfo[index] = info;
+		return true;
+	}
+
+	return false;
+}
+
+void TextureManager::IncrementTextureUsage(const std::string &name)
+{
+	for (int i = 0; i < textureinfo.size(); i++)
+	{
+		if (textureinfo[i].name == name)
+		{
+			textureinfo[i].dependencies++;
+			return;
+		}
+	}
+}
+
+void TextureManager::DecrementTextureUsage(const std::string &name)
+{
+	for (int i = 0; i < textureinfo.size(); i++)
+	{
+		if (textureinfo[i].name == name)
+		{
+			textureinfo[i].dependencies--;
+			return;
+		}
+	}
+}
 
 // from http://www.ogre3d.org/tikiwiki/tiki-index.php?page=Creating+transparency+based+on+a+key+colour+in+code
 /** Utility function that generates a texture with transparency based on a certain colour value
@@ -2046,7 +2101,7 @@ void TextureManager::SaveTexture(Ogre::TexturePtr texture, const std::string & f
 	//save a raw texture to a file
 
 	Ogre::Image image;
-	texture->convertToImage(image);
+	texture->convertToImage(image, true);
 	image.save(filename);
 }
 
@@ -2235,7 +2290,7 @@ std::string TextureManager::GetTextureName(Ogre::MaterialPtr mMat)
 
 	Ogre::TextureUnitState *state = GetTextureUnitState(mMat);
 	if (state)
-		texname = GetTextureUnitState(mMat)->getTextureName();
+		texname = state->getTextureName();
 
 	return texname;
 }
@@ -2290,7 +2345,8 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 			srcBox.getHeight() == source->getHeight() &&
 			dstBox.getWidth() == destination->getWidth() &&
 			dstBox.getHeight() == destination->getHeight() &&
-			sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem")
+			sbs->mRoot->getRenderSystem()->getName() != "Direct3D9 Rendering Subsystem" &&
+			sbs->mRoot->getRenderSystem()->getName() != "Direct3D11 Rendering Subsystem")
 		{
 			source->copyToTexture(destination);
 			return;
@@ -2298,14 +2354,19 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 
 		Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
 
-		//old method:
-		//buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
-		//const Ogre::PixelBox& pb = buffer->getCurrentLock();
-		//destination->getBuffer()->blitFromMemory(pb, dstBox);
-		//buffer->unlock();
-
-		//new method:
-		destination->getBuffer()->blit(buffer, srcBox, dstBox);
+		if (sbs->mRoot->getRenderSystem()->getName() == "Direct3D11 Rendering Subsystem")
+		{
+			//old method:
+			buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
+			const Ogre::PixelBox& pb = buffer->getCurrentLock();
+			destination->getBuffer()->blitFromMemory(pb, dstBox);
+			buffer->unlock();
+		}
+		else
+		{
+			//new method:
+			destination->getBuffer()->blit(buffer, srcBox, dstBox);
+		}
 	}
 	catch (Ogre::Exception& e)
 	{

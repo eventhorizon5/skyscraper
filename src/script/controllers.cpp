@@ -48,7 +48,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 	ReplaceAll(LineData, "%controller%", ToString(config->Current));
 
 	//IF/While statement stub (continue to global commands for processing)
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+	if (StartsWithNoCase(LineData, "if") || StartsWithNoCase(LineData, "while"))
 		return sContinue;
 
 	//process math functions
@@ -60,26 +60,24 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	bool equals = true;
-	if ((int)LineData.find("=", 0) == -1)
-		equals = false;
-	std::string value = GetAfterEquals(LineData);
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//get controller object
 	DispatchController *c = Simcore->GetController(config->Current);
 
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
-
 	//parameters
-	if (linecheck.substr(0, 4) == "name")
+
+	//Name parameter
+	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		c->Name = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 19) == "destinationdispatch")
+	//DestinationDispatch parameter
+	if (StartsWithNoCase(LineData, "destinationdispatch"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -87,7 +85,8 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		c->DestinationDispatch = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 6) == "hybrid")
+	//Hybrid parameter
+	if (StartsWithNoCase(LineData, "hybrid"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -95,7 +94,8 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		c->Hybrid = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "range")
+	//Range parameter
+	if (StartsWithNoCase(LineData, "range"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -104,7 +104,8 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "maxpassengers")
+	//MaxPassengers parameter
+	if (StartsWithNoCase(LineData, "maxpassengers"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -113,7 +114,8 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "elevators")
+	//Elevators parameter
+	if (StartsWithNoCase(LineData, "elevators"))
 	{
 		//copy string listing of elevators into array
 		int params = SplitAfterEquals(LineData, false);
@@ -122,23 +124,9 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 
 		for (int line = 0; line < params; line++)
 		{
-			if (tempdata[line].find("-", 1) > 0)
+			int start, end;
+			if (GetRange(tempdata[line], start, end))
 			{
-				int start, end;
-				//found a range marker
-				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
-				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
-				TrimString(str1);
-				TrimString(str2);
-				if (!IsNumeric(str1, start) || !IsNumeric(str2, end))
-					return ScriptError("Invalid value");
-				if (end < start)
-				{
-					int temp = start;
-					start = end;
-					end = temp;
-				}
-
 				for (int k = start; k <= end; k++)
 				{
 					if (!c->AddElevator(k))
@@ -147,8 +135,9 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 			}
 			else
 			{
+				std::string str = Calc(tempdata[line]);
 				int data;
-				if (!IsNumeric(tempdata[line], data))
+				if (!IsNumeric(str, data))
 					return ScriptError("Invalid value");
 				if (!c->AddElevator(data))
 					return ScriptError();
@@ -156,7 +145,8 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 		}
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "reprocess")
+	//Reprocess parameter
+	if (StartsWithNoCase(LineData, "reprocess"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -166,7 +156,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 	}
 
 	//handle end of controller section
-	if (linecheck == "<endcontroller>" && config->RangeL == config->RangeH)
+	if (StartsWithNoCase(LineData, "<endcontroller>") && config->RangeL == config->RangeH)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
@@ -175,7 +165,7 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 	}
 
 	//handle controller range
-	if (config->RangeL != config->RangeH && linecheck.substr(0, 12) == "<endcontroller")
+	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endcontroller"))
 	{
 		if (config->Current < config->RangeH)
 		{

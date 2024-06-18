@@ -217,16 +217,26 @@ bool StartsWith(const std::string &string, const std::string &check_string, bool
 {
 	//check if a string starts with the contents of "check_string"
 
-	int result;
-
 	if (ignore_case == true)
-		result = FindWithCase(string, false, check_string, 0);
-	else
-		result = (int)string.find(check_string, 0);
+	{
+		std::string lower = string.substr(0, check_string.size());
+		SetCase(lower, false);
 
-	if (result == 0)
-		return true;
+		if (lower == SetCaseCopy(check_string, false))
+			return true;
+	}
+	else
+	{
+		if (string.substr(0, check_string.size()) == check_string)
+			return true;
+	}
+
 	return false;
+}
+
+bool StartsWithNoCase(const std::string &string, const std::string &check_string)
+{
+	return StartsWith(string, check_string, true);
 }
 
 void SplitString(std::vector<std::string> &dest_array, const std::string &original_string, char separator)
@@ -415,7 +425,12 @@ std::string TruncateNumber(const std::string &value, int decimals)
 
 	if (decimals < 1)
 		return number;
-	number.erase((int)number.find(".") + decimals + 1);
+
+	int decimal = number.find(".");
+	if (decimal < 0)
+		return number;
+
+	number.erase(decimal + decimals + 1);
 	if (number.at(number.length() - 1) == '.')
 		number = number.substr(0, number.length() - 1); //strip of extra decimal point if even
 	return number;

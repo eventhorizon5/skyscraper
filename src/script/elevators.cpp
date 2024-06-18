@@ -49,7 +49,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	ReplaceAll(LineData, "%elevator%", ToString(config->Current));
 
 	//IF/While statement stub (continue to global commands for processing)
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+	if (StartsWithNoCase(LineData, "if") || StartsWithNoCase(LineData, "while"))
 		return sContinue;
 
 	//process math functions
@@ -61,33 +61,32 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		return sNextLine;
 
 	//get text after equal sign
-	bool equals = true;
-	if ((int)LineData.find("=", 0) == -1)
-		equals = false;
-	std::string value = GetAfterEquals(LineData);
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//get elevator object
 	Elevator *elev = Simcore->GetElevator(config->Current);
 
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
-
 	//parameters
-	if (linecheck.substr(0, 4) == "name")
+
+	//Name parameter
+	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->Name = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 4) == "type")
+	//Type parameter
+	if (StartsWithNoCase(LineData, "type"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->Type = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "speed")
+	//Speed parameter
+	if (StartsWithNoCase(LineData, "speed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -99,7 +98,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->DownSpeed = Speed;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 7) == "upspeed")
+	//UpSpeed parameter
+	if (StartsWithNoCase(LineData, "upspeed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -108,7 +108,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "downspeed")
+	//DownSpeed parameter
+	if (StartsWithNoCase(LineData, "downspeed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -117,7 +118,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "acceleration")
+	//Acceleration parameter
+	if (StartsWithNoCase(LineData, "acceleration"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -126,7 +128,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "deceleration")
+	//Deceleration parameter
+	if (StartsWithNoCase(LineData, "deceleration"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -135,7 +138,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "acceljerk")
+	//AccelJerk parameter
+	if (StartsWithNoCase(LineData, "acceljerk"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -144,7 +148,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "deceljerk")
+	//DecelJerk parameter
+	if (StartsWithNoCase(LineData, "deceljerk"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -153,7 +158,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "assignedshaft")
+	//AssignedShaft parameter
+	if (StartsWithNoCase(LineData, "assignedshaft"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -162,7 +168,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 15) == "motorstartsound")
+	//MotorStartSound parameter
+	if (StartsWithNoCase(LineData, "motorstartsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -174,7 +181,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownStartSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 17) == "motorupstartsound")
+	//MotorUpStartSound parameter
+	if (StartsWithNoCase(LineData, "motorupstartsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -185,7 +193,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorUpStartSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 19) == "motordownstartsound")
+	//MotorDownStartSound parameter
+	if (StartsWithNoCase(LineData, "motordownstartsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -196,7 +205,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownStartSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "motorrunsound")
+	//MotorRunSound parameter
+	if (StartsWithNoCase(LineData, "motorrunsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -208,7 +218,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownRunSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 15) == "motoruprunsound")
+	//MotorUpRunSound parameter
+	if (StartsWithNoCase(LineData, "motoruprunsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -219,7 +230,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorUpRunSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 17) == "motordownrunsound")
+	//MotorDownRunSound parameter
+	if (StartsWithNoCase(LineData, "motordownrunsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -230,7 +242,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownRunSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "motorstopsound")
+	//MotorStopSound parameter
+	if (StartsWithNoCase(LineData, "motorstopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -242,7 +255,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 16) == "motorupstopsound")
+	//MotorUpStopSound parameter
+	if (StartsWithNoCase(LineData, "motorupstopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -253,7 +267,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorUpStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 18) == "motordownstopsound")
+	//MotorDownStopSound parameter
+	if (StartsWithNoCase(LineData, "motordownstopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -264,7 +279,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorDownStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "motoridlesound")
+	//MotorIdleSound parameter
+	if (StartsWithNoCase(LineData, "motoridlesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -275,14 +291,16 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorIdleSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "floorskiptext")
+	//FloorSkipText parameter
+	if (StartsWithNoCase(LineData, "floorskiptext"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->SetFloorSkipText(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "recallfloor")
+	//RecallFloor parameter
+	if (StartsWithNoCase(LineData, "recallfloor"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -293,7 +311,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetRecallFloor(floortemp);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 20) == "alternaterecallfloor")
+	//AlternateRecallFloor parameter
+	if (StartsWithNoCase(LineData, "alternaterecallfloor"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -304,7 +323,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetAlternateRecallFloor(floortemp);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "acpfloor")
+	//ACPFloor parameter
+	if (StartsWithNoCase(LineData, "acpfloor"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -315,7 +335,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetACPFloor(floortemp);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "motorposition")
+	//MotorPosition parameter
+	if (StartsWithNoCase(LineData, "motorposition"))
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params != 3)
@@ -331,56 +352,70 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorPosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "queueresets")
+	//QueueResets parameter
+	if (StartsWithNoCase(LineData, "queueresets"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->QueueResets = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "limitqueue")
+	//LimitQueue parameter
+	if (StartsWithNoCase(LineData, "limitqueue"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->LimitQueue = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 3) == "acp")
+	//ACP parameter
+	if (StartsWithNoCase(LineData, "acp"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->ACP = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 6) == "uppeak")
+	//UpPeak parameter
+	if (StartsWithNoCase(LineData, "uppeak"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->UpPeak = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "downpeak")
+	//DownPeak parameter
+	if (StartsWithNoCase(LineData, "downpeak"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->DownPeak = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 17) == "inspectionservice")
+	//InspectionService parameter
+	if (StartsWithNoCase(LineData, "inspectionservice"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->InspectionService = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "fireservice1")
+	//FireService1 parameter
+	if (StartsWithNoCase(LineData, "fireservice1"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->FireServicePhase1 = ToInt(value);
+
+		int value2;
+		std::string str = Calc(value);
+		if (!IsNumeric(str, value2))
+			return ScriptError("Invalid value");
+
+		elev->FireServicePhase1 = value2;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 7) == "parking")
+	//Parking parameter
+	if (StartsWithNoCase(LineData, "parking"))
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params != 2)
@@ -397,7 +432,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ParkingDelay = ToFloat(tempdata[1]);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 13) == "levelingspeed")
+	//LevelingSpeed parameter
+	if (StartsWithNoCase(LineData, "levelingspeed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -408,7 +444,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->LevelingSpeed = leveling;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "levelingoffset")
+	//LevelingOffset parameter
+	if (StartsWithNoCase(LineData, "levelingoffset"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -419,7 +456,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->LevelingOffset = leveling;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "levelingopen")
+	//LevelingOpen parameter
+	if (StartsWithNoCase(LineData, "levelingopen"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -430,7 +468,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->LevelingOpen = leveling;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "notifyearly")
+	//NotifyEarly parameter
+	if (StartsWithNoCase(LineData, "notifyearly"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -441,7 +480,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->NotifyEarly = notify;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "departuredelay")
+	//DepartureDelay parameter
+	if (StartsWithNoCase(LineData, "departuredelay"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -452,7 +492,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->DepartureDelay = delay;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "arrivaldelay")
+	//ArrivalDelay parameter
+	if (StartsWithNoCase(LineData, "arrivaldelay"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -463,7 +504,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ArrivalDelay = delay;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 15) == "inspectionspeed")
+	//InspectionSpeed parameter
+	if (StartsWithNoCase(LineData, "inspectionspeed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -472,7 +514,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "autodoors")
+	//AutoDoors parameter
+	if (StartsWithNoCase(LineData, "autodoors"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -480,7 +523,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->AutoDoors = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "openonstart")
+	//OpenOnStart parameter
+	if (StartsWithNoCase(LineData, "openonstart"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -488,7 +532,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->OpenOnStart = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 10) == "interlocks")
+	//Interlocks parameter
+	if (StartsWithNoCase(LineData, "interlocks"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -496,7 +541,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->Interlocks = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 9) == "floorhold")
+	//FloorHold parameter
+	if (StartsWithNoCase(LineData, "floorhold"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -504,7 +550,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->FloorHold = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 23) == "motoremergencystopsound")
+	//MotorEmergencyStopSound parameter
+	if (StartsWithNoCase(LineData, "motoremergencystopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -515,7 +562,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->MotorEmergencyStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 18) == "emergencystopspeed")
+	//EmergencyStopSpeed parameter
+	if (StartsWithNoCase(LineData, "emergencystopspeed"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -524,14 +572,16 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 14) == "chimeonarrival")
+	//ChimeOnArrival parameter
+	if (StartsWithNoCase(LineData, "chimeonarrival"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
 		elev->ChimeOnArrival = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 6) == "reopen")
+	//ReOpen parameter
+	if (StartsWithNoCase(LineData, "reopen"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -539,7 +589,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->ReOpen = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 18) == "hoistwayaccesshold")
+	//HoistwayAccessHold parameter
+	if (StartsWithNoCase(LineData, "hoistwayaccesshold"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -547,7 +598,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->HoistwayAccessHold = ToBool(value);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "runstate")
+	//RunState parameter
+	if (StartsWithNoCase(LineData, "runstate"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -555,7 +607,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->SetRunState(ToBool(value));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 12) == "ropeposition")
+	//RopePosition parameter
+	if (StartsWithNoCase(LineData, "ropeposition"))
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params != 3)
@@ -571,7 +624,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->RopePosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 11) == "ropetexture")
+	//RopeTexture parameter
+	if (StartsWithNoCase(LineData, "ropetexture"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -579,7 +633,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->RopeTexture = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 23) == "counterweightstartsound")
+	//CounterweightStartSound parameter
+	if (StartsWithNoCase(LineData, "counterweightstartsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -590,7 +645,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->CounterweightStartSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 22) == "counterweightmovesound")
+	//CounterweightMoveSound parameter
+	if (StartsWithNoCase(LineData, "counterweightmovesound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -601,7 +657,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->CounterweightMoveSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 22) == "counterweightstopsound")
+	//CounterweightStopSound parameter
+	if (StartsWithNoCase(LineData, "counterweightstopsound"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -612,16 +669,17 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->CounterweightStopSound = value;
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 3) == "id ")
+	//ID parameter
+	if (StartsWithNoCase(LineData, "id "))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-		elev->ID = value;
+		elev->ID = Calc(value);
 		return sNextLine;
 	}
 
 	//CreateElevator command
-	if (linecheck.substr(0, 14) == "createelevator")
+	if (StartsWithNoCase(LineData, "createelevator"))
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -644,7 +702,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 
 	//CreateCounterweight command
-	if (linecheck.substr(0, 19) == "createcounterweight")
+	if (StartsWithNoCase(LineData, "createcounterweight"))
 	{
 		//get data
 		int params = SplitData(LineData, 20);
@@ -665,7 +723,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 
 	//AddRails command
-	if (linecheck.substr(0, 8) == "addrails")
+	if (StartsWithNoCase(LineData, "addrails"))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -692,7 +750,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		return result;
 
 	//handle end of elevator section
-	if (linecheck == "<endelevator>" && config->RangeL == config->RangeH)
+	if (StartsWithNoCase(LineData, "<endelevator>") && config->RangeL == config->RangeH)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
@@ -701,7 +759,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	}
 
 	//handle elevator range
-	if (config->RangeL != config->RangeH && linecheck.substr(0, 12) == "<endelevator")
+	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endelevator"))
 	{
 		if (config->Current < config->RangeH)
 		{

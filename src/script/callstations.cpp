@@ -69,7 +69,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		ReplaceAll(LineData, "%callstation%", ToString(config->Current));
 
 		//IF/While statement stub (continue to global commands for processing)
-		if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+		if (StartsWithNoCase(LineData, "if") || StartsWithNoCase(LineData, "while"))
 			return sContinue;
 
 		//process math functions
@@ -82,18 +82,13 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//get text after equal sign
-	bool equals = true;
-	if ((int)LineData.find("=", 0) == -1)
-		equals = false;
-	std::string value = GetAfterEquals(LineData);
-
-	//create a lowercase string of the line
-	std::string linecheck = SetCaseCopy(LineData, false);
+	bool equals;
+	std::string value = GetAfterEquals(LineData, equals);
 
 	//parameters
 
 	//Name parameter
-	if (linecheck.substr(0, 4) == "name")
+	if (StartsWithNoCase(LineData, "name"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -101,7 +96,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 	//Controller parameter
-	if (linecheck.substr(0, 10) == "controller")
+	if (StartsWithNoCase(LineData, "controller"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -113,10 +108,10 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 	//InvalidInput parameter
-	if (linecheck.substr(0, 12) == "invalidinput")
+	if (StartsWithNoCase(LineData, "invalidinput"))
 	{
 		//copy string listing of elevators into array
-		int params = SplitAfterEquals(LineData, false);
+		int params = SplitAfterEquals(LineData);
 		if (params < 1)
 			return ScriptError("Syntax Error");
 
@@ -130,7 +125,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 	//TimerDelay parameter
-	if (linecheck.substr(0, 10) == "timerdelay")
+	if (StartsWithNoCase(LineData, "timerdelay"))
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
@@ -142,8 +137,10 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//commands
+
 	//CreatePanel command
-	if (linecheck.substr(0, 11) == "createpanel")
+	if (StartsWithNoCase(LineData, "createpanel"))
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -164,10 +161,8 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//commands
-
 	//AddControl command
-	if (linecheck.substr(0, 11) == "addcontrol ")
+	if (StartsWithNoCase(LineData, "addcontrol "))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -227,7 +222,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//SetPosition command
-	if (linecheck.substr(0, 12) == "setposition ")
+	if (StartsWithNoCase(LineData, "setposition "))
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -247,7 +242,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//AddDisplay command
-	if (linecheck.substr(0, 12) == "addindicator")
+	if (StartsWithNoCase(LineData, "addindicator"))
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -267,7 +262,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//handle end of call station section
-	if (linecheck == "<endcallstation>" && config->RangeL == config->RangeH)
+	if (StartsWithNoCase(LineData, "<endcallstation>") && config->RangeL == config->RangeH)
 	{
 		//return to floor section
 		config->SectionNum = 2;
@@ -283,7 +278,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	}
 
 	//handle call station range
-	if (config->RangeL != config->RangeH && linecheck.substr(0, 15) == "<endcallstation")
+	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endcallstation"))
 	{
 		if (config->Current < config->RangeH)
 		{

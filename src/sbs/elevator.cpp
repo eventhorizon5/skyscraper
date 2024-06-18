@@ -504,43 +504,32 @@ bool Elevator::AddRails(const std::string &main_texture, const std::string &edge
 	Vector3 offset;
 	offset = GetPosition() - GetShaft()->GetPosition();
 
-	int MotorRoom = sbs->GetFloorNumber(MotorPosition.y);
+	MeshObject *mesh = GetShaft()->GetLevel(GetShaft()->startfloor)->GetMeshObject();
+	Real height = MotorPosition.y - sbs->GetFloor(GetShaft()->startfloor)->Altitude;
 
-	for (int i = GetShaft()->startfloor; i <= MotorRoom; i++)
+	if (orientation == false)
 	{
-		Real height = sbs->GetFloor(i)->FullHeight();
+		//left side
+		sbs->CreateWallBox2(mesh, "Rails L1", edge_texture, -rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+		sbs->CreateWallBox2(mesh, "Rails L2", main_texture, -rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+		sbs->CreateWallBox2(mesh, "Rails L3", main_texture, -rail_distance + x + offset.x - (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
 
-		if (i == MotorRoom)
-			height = MotorPosition.y - sbs->GetFloor(i)->Altitude;
+		//right side
+		sbs->CreateWallBox2(mesh, "Rails R1", edge_texture, rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+		sbs->CreateWallBox2(mesh, "Rails R2", main_texture, rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+		sbs->CreateWallBox2(mesh, "Rails R3", main_texture, rail_distance + x + offset.x + (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
+	}
+	else
+	{
+		//front side
+		sbs->CreateWallBox2(mesh, "Rails F1", edge_texture, x + offset.x, -rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+		sbs->CreateWallBox2(mesh, "Rails F2", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+		sbs->CreateWallBox2(mesh, "Rails F3", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
 
-		MeshObject *mesh = 0;
-		if (GetShaft()->GetLevel(i))
-			mesh = GetShaft()->GetLevel(i)->GetMeshObject();
-
-		if (orientation == false)
-		{
-			//left side
-			sbs->CreateWallBox2(mesh, "Rails L1", edge_texture, -rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
-			sbs->CreateWallBox2(mesh, "Rails L2", main_texture, -rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
-			sbs->CreateWallBox2(mesh, "Rails L3", main_texture, -rail_distance + x + offset.x - (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
-
-			//right side
-			sbs->CreateWallBox2(mesh, "Rails R1", edge_texture, rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
-			sbs->CreateWallBox2(mesh, "Rails R2", main_texture, rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
-			sbs->CreateWallBox2(mesh, "Rails R3", main_texture, rail_distance + x + offset.x + (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
-		}
-		else
-		{
-			//front side
-			sbs->CreateWallBox2(mesh, "Rails F1", edge_texture, x + offset.x, -rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
-			sbs->CreateWallBox2(mesh, "Rails F2", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
-			sbs->CreateWallBox2(mesh, "Rails F3", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
-
-			//back side
-			sbs->CreateWallBox2(mesh, "Rails B1", edge_texture, x + offset.x, rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
-			sbs->CreateWallBox2(mesh, "Rails B2", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
-			sbs->CreateWallBox2(mesh, "Rails B3", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
-		}
+		//back side
+		sbs->CreateWallBox2(mesh, "Rails B1", edge_texture, x + offset.x, rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+		sbs->CreateWallBox2(mesh, "Rails B2", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+		sbs->CreateWallBox2(mesh, "Rails B3", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
 	}
 
 	return true;
@@ -4819,6 +4808,11 @@ bool Elevator::GetCallStatus(int floor, bool &up, bool &down)
 void Elevator::ThreadWait()
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+}
+
+int Elevator::GetMotorRoom()
+{
+	return sbs->GetFloorNumber(MotorPosition.y);
 }
 
 }

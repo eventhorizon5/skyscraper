@@ -239,6 +239,7 @@ public:
 	void AddController(int controller);
 	void RemoveController(int controller);
 	bool GetCallStatus(int floor, bool &up, bool &down);
+	int GetMotorRoom();
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
