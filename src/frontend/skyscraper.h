@@ -215,6 +215,8 @@ private:
 	int GetFreeInstanceNumber();
 	void ShowProgressDialog();
 	void ReInit();
+	bool PrepareStart(EngineContext *engine);
+	bool Prepare(EngineContext *engine);
 
 	Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;
