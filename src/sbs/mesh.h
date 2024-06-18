@@ -78,8 +78,18 @@ public:
 	bool IsPrepared();
 	void ResetPrepare();
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	bool ChangeTexture(const std::string &texture, bool matcheck = true, int submesh = 0);
+	bool ChangeTexture(const std::string &texture, bool matcheck = true);
 	Vector2 GetExtents(int coord, bool flip_z = false);
+	Real GetHeight();
+	Real HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance);
+	void CreateCollider();
+	void DeleteCollider();
+	Wall* FindPolygon(const std::string &name, int &index);
+	bool InBoundingBox(const Vector3 &pos, bool check_y);
+	DynamicMesh* GetDynamicMesh();
+	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
+	unsigned int GetVertexCount();
+	unsigned int GetTriangleCount(const std::string &material);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects

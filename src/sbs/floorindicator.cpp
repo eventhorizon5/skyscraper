@@ -88,6 +88,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
+	Wall *wall = FloorIndicatorMesh->CreateWallObject("Floor Indicator");
 	if (tmpdirection == "front" || tmpdirection == "back")
 	{
 		if (tmpdirection == "front")
@@ -95,16 +96,16 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
+		sbs->AddWallMain(wall, "Floor Indicator", texture, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
 	}
-	if (tmpdirection == "left" || tmpdirection == "right")
+	else if (tmpdirection == "left" || tmpdirection == "right")
 	{
 		if (tmpdirection == "left")
 			sbs->DrawWalls(true, false, false, false, false, false);
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
+		sbs->AddWallMain(wall, "Floor Indicator", texture, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
 

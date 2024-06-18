@@ -451,6 +451,9 @@ void DebugPanel::Loop()
 
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 
+	if (!floor)
+		return;
+
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
 	t_camerafloor->SetLabel(SBS::ToString(Simcore->camera->CurrentFloor) + wxT(" (") + Simcore->camera->CurrentFloorID + wxT(")"));

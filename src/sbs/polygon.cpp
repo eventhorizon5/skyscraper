@@ -27,26 +27,47 @@
 #include "triangle.h"
 #include "mesh.h"
 #include "polymesh.h"
+#include "texture.h"
 #include "polygon.h"
 
 namespace SBS {
 
 IMPLEMENT_ALLOCATOR(Polygon, 0, 0)
 
-Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
+Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
-	this->index_extents = index_extents;
 	t_matrix = tex_matrix;
 	t_vector = tex_vector;
 	this->material = material;
 	this->plane = plane;
+	this->geometry = geometry;
 	this->triangles = triangles;
 	SetName(name);
+
+	vertex_count = 0;
+	for (size_t i = 0; i < geometry.size(); i++)
+	{
+		vertex_count += geometry[i].size();
+	}
+
+	mesh->ResetPrepare();
+
+	sbs->PolygonCount++;
+
+	//register texture usage
+	if (material != "")
+		sbs->GetTextureManager()->IncrementTextureUsage(material);
 }
 
 Polygon::~Polygon()
 {
+	if (material != "" && sbs->FastDelete == false)
+		sbs->GetTextureManager()->DecrementTextureUsage(material);
+
+	mesh->ResetPrepare();
+
+	sbs->PolygonCount--;
 }
 
 void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)
@@ -56,121 +77,22 @@ void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)
 	tv = t_vector;
 }
 
-int Polygon::GetSubMesh()
-{
-	//return the submesh this polygon is in
-	return  mesh->GetPolyMesh()->FindMatchingSubMesh(material);
-}
-
-void Polygon::GetGeometry(PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
-{
-	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
-
-	//if firstonly is true, only return first result
-	//if convert is true, converts vertices from remote Ogre positions to local SBS positions
-	//if rescale is true (along with convert), rescales vertices with UnitScale multiplier
-	//if relative is true, vertices are relative of mesh center, otherwise they use absolute/global positioning
-	//if reverse is false, process extents table in ascending order, otherwise descending order
-
-	vertices.resize(index_extents.size());
-
-	Vector3 mesh_position;
-	if (convert == true)
-		mesh_position = mesh->GetPosition();
-	else
-		mesh_position = sbs->ToRemote(mesh->GetPosition());
-
-	int index = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
-
-	if (index == -1)
-		return;
-
-	PolyMesh::SubMesh &submesh = mesh->GetPolyMesh()->Submeshes[index];
-
-	for (size_t i = 0; i < index_extents.size(); i++)
-	{
-		int min = index_extents[i].min;
-		int max = index_extents[i].max;
-		int newsize = (int)vertices[i].size() + max - min + 1;
-		vertices[i].reserve(newsize);
-		if (reverse == false)
-		{
-			for (int j = min; j <= max; j++)
-			{
-				if (relative == true)
-				{
-					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
-					else
-						vertices[i].push_back(submesh.MeshGeometry[j].vertex);
-				}
-				else
-				{
-					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
-					else
-						vertices[i].push_back(submesh.MeshGeometry[j].vertex + mesh_position);
-				}
-			}
-		}
-		else
-		{
-			for (int j = max; j >= min; j--)
-			{
-				if (relative == true)
-				{
-					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex, rescale));
-					else
-						vertices[i].push_back(submesh.MeshGeometry[j].vertex);
-				}
-				else
-				{
-					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(submesh.MeshGeometry[j].vertex + mesh_position, rescale));
-					else
-						vertices[i].push_back(submesh.MeshGeometry[j].vertex + mesh_position);
-				}
-			}
-		}
-		if (firstonly == true)
-			return;
-	}
-}
-
 void Polygon::Move(const Vector3 &position, Real speed)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();
 
-	int submesh = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
-
-	if (submesh == -1)
-		return;
-
-	for (size_t i = 0; i < index_extents.size(); i++)
+	for (size_t i = 0; i < geometry.size(); i++)
 	{
-		int min = index_extents[i].min;
-		int max = index_extents[i].max;
-
-		for (int index = min; index <= max; index++)
+		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
-			PolyMesh::Geometry &data = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry[index];
+			Polygon::Geometry &data = geometry[i][j];
 			data.vertex += sbs->ToRemote(position * speed);
-
-			//update vertices in render buffer, if using dynamic buffers
-			if (dynamic == true)
-				mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
 		}
 	}
-}
 
-void Polygon::Delete()
-{
-	//delete polygon geometry
-
-	//delete triangles
-	std::vector<PolyMesh::Geometry> geometry;
-	mesh->GetPolyMesh()->ProcessSubMesh(geometry, triangles, material, false);
+	//update vertices in render buffer, if using dynamic buffers
+	if (dynamic == true)
+		mesh->MeshWrapper->UpdateVertices(mesh, material, this, true);
 }
 
 Plane Polygon::GetAbsolutePlane()
@@ -189,21 +111,17 @@ Vector2 Polygon::GetExtents(int coord)
 	if (coord < 1 || coord > 3)
 		return Vector2(0, 0);
 
-	PolygonSet poly;
-	GetGeometry(poly);
-
 	//get polygon extents
-	Vector2 extents = Vector2::ZERO;
-	bool firstrun = true;
-	for (size_t i = 0; i < poly.size(); i++)
+	PolyArray poly;
+	for (size_t i = 0; i < geometry.size(); i++)
 	{
-		Vector2 extents2 = sbs->GetExtents(poly[i], coord);
-		if (extents2.x < extents.x || firstrun == true)
-			extents.x = extents2.x;
-		if (extents2.y > extents.y || firstrun == true)
-			extents.y = extents2.y;
-		firstrun = false;
+		for (size_t j = 0; j < geometry[i].size(); j++)
+		{
+			poly.push_back(geometry[i][j].vertex);
+		}
 	}
+
+	Vector2 extents = sbs->GetExtents(poly, coord);
 
 	return extents;
 }
@@ -212,32 +130,79 @@ void Polygon::ChangeHeight(Real newheight)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();
 
-	Vector2 extents = GetExtents(2);
-
-	//modify polygon data
-	int submesh = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
-
-	if (submesh == -1)
-		return;
-
-	for (size_t i = 0; i < index_extents.size(); i++)
+	for (size_t i = 0; i < geometry.size(); i++)
 	{
-		unsigned int min = index_extents[i].min;
-		unsigned int max = index_extents[i].max;
-
-		for (unsigned int index = min; index <= max; index++)
+		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
-			PolyMesh::Geometry &data = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry[index];
-			if (data.vertex.y == sbs->ToRemote(extents.y))
-			{
-				data.vertex.y = sbs->ToRemote(extents.x + newheight);
-
-				//update vertices in render buffer, if using dynamic buffers
-				if (dynamic == true)
-					mesh->MeshWrapper->UpdateVertices(mesh, material, index, true);
-			}
+			Polygon::Geometry &data = geometry[i][j];
+			data.vertex.y = sbs->ToRemote(newheight);
 		}
 	}
+
+	//update vertices in render buffer, if using dynamic buffers
+	if (dynamic == true)
+		mesh->MeshWrapper->UpdateVertices(mesh, material, this, true);
+}
+
+bool Polygon::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	//replace material named oldtexture with newtexture
+
+	if (oldtexture == newtexture)
+		return false;
+
+	if (material == oldtexture)
+	{
+		bool result = mesh->GetDynamicMesh()->ChangeTexture(oldtexture, newtexture, mesh);
+
+		if (result == false)
+			return false;
+
+		material = newtexture;
+		sbs->GetTextureManager()->DecrementTextureUsage(oldtexture);
+		sbs->GetTextureManager()->IncrementTextureUsage(newtexture);
+		//mesh->ResetPrepare();
+		return true;
+	}
+	return false;
+}
+
+bool Polygon::ChangeTexture(const std::string &texture, bool matcheck)
+{
+	//changes a texture
+	//if matcheck is true, exit if old and new textures are the same
+
+	if (matcheck == true)
+	{
+		if (material == texture)
+			return false;
+	}
+
+	bool result = mesh->GetDynamicMesh()->ChangeTexture(material, texture, mesh);
+
+	if (result == false)
+		return false;
+
+	sbs->GetTextureManager()->DecrementTextureUsage(material);
+	material = texture;
+	sbs->GetTextureManager()->IncrementTextureUsage(texture);
+	//mesh->ResetPrepare();
+	return true;
+}
+
+Vector3 Polygon::GetVertex(int index)
+{
+	int offset = 0;
+	for (size_t i = 0; i < geometry.size(); i++)
+	{
+		for (size_t j = 0; j < geometry[i].size(); j++)
+		{
+			if (index == offset + j)
+				return geometry[i][j].vertex;
+		}
+		offset += geometry[i].size();
+	}
+	return Vector3::ZERO;
 }
 
 }

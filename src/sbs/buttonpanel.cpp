@@ -272,7 +272,8 @@ bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, R
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(this, mesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, autosize);
+	Wall *wall = mesh->CreateWallObject(name);
+	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, autosize);
 }
 
 void ButtonPanel::ChangeLight(int floor, bool value)

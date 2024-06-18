@@ -431,6 +431,7 @@
     <ClCompile Include="..\src\sbs\texture.cpp" />
     <ClCompile Include="..\src\sbs\timer.cpp" />
     <ClCompile Include="..\src\sbs\trigger.cpp" />
+    <ClCompile Include="..\src\sbs\utility.cpp" />
     <ClCompile Include="..\src\sbs\vehicle.cpp" />
     <ClCompile Include="..\src\sbs\wall.cpp" />
   </ItemGroup>

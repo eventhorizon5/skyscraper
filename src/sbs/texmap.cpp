@@ -440,7 +440,7 @@ bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3
 	 * true if it intersects and the intersection point in world coordinates.
 	 */
 
-	if (!IntersectSegmentPlane(start, end, isect, pr, normal))
+	/*if (!IntersectSegmentPlane(start, end, isect, pr, normal))
 		return false;
 
 	PolygonSet vertices;
@@ -450,7 +450,7 @@ bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3
 	{
 		if (IntersectRay(vertices[i], start, end))
 			return true;
-	}
+	}*/
 	return false;
 }
 

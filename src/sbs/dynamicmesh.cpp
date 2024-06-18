@@ -30,7 +30,9 @@
 #include "globals.h"
 #include "sbs.h"
 #include "mesh.h"
+#include "wall.h"
 #include "polymesh.h"
+#include "polygon.h"
 #include "triangle.h"
 #include "texture.h"
 #include "scenenode.h"
@@ -245,12 +247,18 @@ void DynamicMesh::Prepare(MeshObject *client)
 				if (i == limit)
 					break;
 
-				separate_total += clients[i]->GetPolyMesh()->GetSubmeshCount();
+				//separate_total += clients[i]->GetPolyMesh()->GetSubmeshCount();
+				separate_total += 1;
 			}
+
+			bool combined = false;
 
 			//if combined submesh/material count is less than three separate meshes
 			if (((total < separate_total || total <= 10) && auto_combine == true) || force_combine == true)
+			{
 				meshes_to_create = 1; //create a single combined mesh for all clients
+				combined = true;
+			}
 			else
 			{
 				meshes_to_create = (int)clients.size(); //create separate meshes for each client
@@ -258,8 +266,13 @@ void DynamicMesh::Prepare(MeshObject *client)
 			}
 
 			std::string status;
-			if (meshes_to_create == 1)
-				status = "using combined";
+			if (combined == true)
+			{
+				if (force_combine == false)
+					status = "using combined";
+				else
+					status = "using force combined";
+			}
 			else
 				status = "using separate";
 
@@ -387,24 +400,26 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 	//for each client
 	for (int i = start; i <= end; i++)
 	{
-		//for each client submesh entry
-		for (size_t j = 0; j < clients[i]->GetPolyMesh()->Submeshes.size(); j++)
+		for (size_t j = 0; j < clients[i]->Walls.size(); j++)
 		{
-			std::string material = clients[i]->GetPolyMesh()->Submeshes[j].Name;
-
-			//find material in current list
-			bool found = false;
-			for (size_t k = 0; k < materials.size(); k++)
+			for (size_t k = 0; k < clients[i]->Walls[j]->GetPolygonCount(); k++)
 			{
-				if (materials[k] == material)
-				{
-					found = true;
-					break;
-				}
-			}
+				std::string material = clients[i]->Walls[j]->GetPolygon(k)->material;
 
-			if (found == false)
-				materials.push_back(material);
+				//find material in current list
+				bool found = false;
+				for (size_t k = 0; k < materials.size(); k++)
+				{
+					if (materials[k] == material)
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (found == false)
+					materials.push_back(material);
+			}
 		}
 	}
 
@@ -439,13 +454,24 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 	{
 		if (material != "")
 		{
-			int index = clients[i]->GetPolyMesh()->FindMatchingSubMesh(material);
+			for (int j = 0; j < clients[i]->Walls.size(); j++)
+			{
+				for (int k = 0; k < clients[i]->Walls[j]->GetPolygonCount(); k++)
+				{
+					Polygon *poly = clients[i]->Walls[j]->GetPolygon(k);
 
-			if (index >= 0)
-				total += clients[i]->GetPolyMesh()->GetVertexCount(index);
+					if (poly->material == material)
+					{
+						for (int l = 0; l < poly->geometry.size(); l++)
+						{
+								total += poly->geometry[l].size();
+						}
+					}
+				}
+			}
 		}
 		else
-			total += clients[i]->GetPolyMesh()->GetVertexCount();
+			total += clients[i]->GetVertexCount();
 	}
 
 	return total;
@@ -469,33 +495,19 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 
 	for (int i = start; i <= end; i++)
 	{
-		int index = clients[i]->GetPolyMesh()->FindMatchingSubMesh(material);
-
-		if (index >= 0)
-		{
-			total += clients[i]->GetPolyMesh()->GetTriangleCount(index);
-			client_count += 1;
-		}
+		total += clients[i]->GetTriangleCount(material);
+		client_count += 1;
 	}
 
 	return total;
 }
 
-unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
+unsigned int DynamicMesh::GetIndexOffset(MeshObject *client)
 {
 	//get vertex index offset of specific client mesh
 	//if multiple geometry sets are combined together, each set has a starting index number
 
 	unsigned int index = 0;
-
-	if (submesh < 0 || submesh >= client->GetPolyMesh()->GetSubmeshCount())
-		return 0;
-
-	//get per-submesh index offset
-	for (int i = 0; i < submesh; i++)
-	{
-		index += client->GetPolyMesh()->GetVertexCount(i);
-	}
 
 	//return value if using separate meshes
 	if (meshes.size() > 1)
@@ -508,13 +520,13 @@ unsigned int DynamicMesh::GetIndexOffset(int submesh, MeshObject *client)
 			return index;
 
 		//if not found, increment by client's vertex count
-		index += clients[i]->GetPolyMesh()->GetVertexCount();
+		index += clients[i]->GetVertexCount();
 	}
 
 	return index;
 }
 
-void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material, unsigned int index, bool single)
+void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material, Polygon *polygon, bool single)
 {
 	int client_index = GetClientIndex(client);
 
@@ -522,9 +534,9 @@ void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material
 		return;
 
 	if (meshes.size() == 1)
-		meshes[0]->UpdateVertices(client_index, material, index, single);
+		meshes[0]->UpdateVertices(client_index, material, polygon, single);
 	else
-		meshes[client_index]->UpdateVertices(client_index, material, index, single);
+		meshes[client_index]->UpdateVertices(client_index, material, polygon, single);
 }
 
 void DynamicMesh::DetachClient(MeshObject *client)
@@ -770,10 +782,16 @@ void DynamicMesh::Mesh::DeleteSubMesh(int index)
 
 			for (int j = 0; j < Parent->GetClientCount(); j++)
 			{
-				if (Parent->GetClient(j)->GetPolyMesh()->FindMatchingSubMesh(Submeshes[i].material) >= 0)
+				for (int k = 0; k < Parent->GetClient(j)->Walls.size(); k++)
 				{
-					used = true;
-					break;
+					for (int l = 0; l < Parent->GetClient(j)->Walls[k]->GetPolygonCount(); l++)
+					{
+						if (Parent->GetClient(j)->Walls[k]->GetPolygon(l)->material == Submeshes[i].material)
+						{
+							used = true;
+							break;
+						}
+					}
 				}
 			}
 
@@ -896,35 +914,43 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			//get mesh's offset of associated scene node
 			Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
-			//fill array with mesh's geometry data, from each submesh
-			for (int index = 0; index < mesh->GetPolyMesh()->GetSubmeshCount(); index++)
+			//fill array with mesh's geometry data, from each wall
+			for (int index = 0; index < mesh->Walls.size(); index++)
 			{
-				for (size_t i = 0; i < mesh->GetPolyMesh()->GetVertexCount(index); i++)
+				for (size_t i = 0; i < mesh->Walls[index]->GetPolygonCount(); i++)
 				{
-					PolyMesh::Geometry &element = mesh->GetPolyMesh()->Submeshes[index].MeshGeometry[i];
+					Polygon *poly = mesh->Walls[index]->GetPolygon(i);
 
-					//make mesh's vertex relative to this scene node
-					Vector3 vertex;
-					if (client == -1)
+					for (size_t j = 0; j < poly->geometry.size(); j++)
 					{
-						Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-						vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
-					}
-					else
-						vertex = mesh->GetPolyMesh()->Submeshes[index].MeshGeometry[i].vertex;
+						for (size_t k = 0; k < poly->geometry[j].size(); k++)
+						{
+							Polygon::Geometry &element = poly->geometry[j][k];
 
-					//add elements to array
-					mVertexElements[loc] = (float)vertex.x;
-					mVertexElements[loc + 1] = (float)vertex.y;
-					mVertexElements[loc + 2] = (float)vertex.z;
-					mVertexElements[loc + 3] = (float)element.normal.x;
-					mVertexElements[loc + 4] = (float)element.normal.y;
-					mVertexElements[loc + 5] = (float)element.normal.z;
-					mVertexElements[loc + 6] = (float)element.texel.x;
-					mVertexElements[loc + 7] = (float)element.texel.y;
-					client_box.merge(vertex);
-					radius = std::max(radius, vertex.length());
-					loc += 8;
+							//make mesh's vertex relative to this scene node
+							Vector3 vertex;
+							if (client == -1)
+							{
+								Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+								vertex = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+							}
+							else
+								vertex = element.vertex;
+
+							//add elements to array
+							mVertexElements[loc] = (float)vertex.x;
+							mVertexElements[loc + 1] = (float)vertex.y;
+							mVertexElements[loc + 2] = (float)vertex.z;
+							mVertexElements[loc + 3] = (float)element.normal.x;
+							mVertexElements[loc + 4] = (float)element.normal.y;
+							mVertexElements[loc + 5] = (float)element.normal.z;
+							mVertexElements[loc + 6] = (float)element.texel.x;
+							mVertexElements[loc + 7] = (float)element.texel.y;
+							client_box.merge(vertex);
+							radius = std::max(radius, vertex.length());
+							loc += 8;
+						}
+					}
 				}
 			}
 
@@ -933,7 +959,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			entry.radius = radius;
 
 			//add client vertex count to list
-			entry.vertex_count = mesh->GetPolyMesh()->GetVertexCount();
+			entry.vertex_count = mesh->GetVertexCount();
 			vindex += entry.vertex_count;
 
 			//store client information
@@ -1011,25 +1037,35 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
-				int index = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
 
-				if (index >= 0)
+				int poly_index = 0;
+
+				for (size_t i = 0; i < mesh->Walls.size(); i++)
 				{
-					//get index offset of mesh
-					unsigned int offset = Parent->GetIndexOffset(index, mesh);
-
-					//add mesh's triangles to array and adjust for offset
-					for (size_t i = 0; i < mesh->GetPolyMesh()->GetTriangleCount(index); i++)
+					for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 					{
-						Triangle &tri = mesh->GetPolyMesh()->Submeshes[index].Triangles[i];
-						mIndices[loc] = tri.a + offset;
-						mIndices[loc + 1] = tri.b + offset;
-						mIndices[loc + 2] = tri.c + offset;
-						loc += 3;
-					}
+						Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+						if (poly->material == material)
+						{
+							//get index offset of mesh
+							unsigned int offset = Parent->GetIndexOffset(mesh);
 
-					//increment submesh's client reference count
-					submesh->clients += 1;
+							//add mesh's triangles to array and adjust for offset
+							for (size_t k = 0; k < poly->triangles.size(); k++)
+							{
+								Triangle &tri = poly->triangles[k];
+								mIndices[loc] = poly_index + tri.a + offset;
+								mIndices[loc + 1] = poly_index + tri.b + offset;
+								mIndices[loc + 2] = poly_index + tri.c + offset;
+								loc += 3;
+							}
+
+							//increment submesh's client reference count
+							submesh->clients += 1;
+						}
+
+						poly_index += poly->vertex_count;
+					}
 				}
 			}
 
@@ -1052,25 +1088,35 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			for (int num = start; num <= end; num++)
 			{
 				MeshObject *mesh = Parent->GetClient(num);
-				int index = mesh->GetPolyMesh()->FindMatchingSubMesh(material);
 
-				if (index >= 0)
+				int poly_index = 0;
+
+				for (size_t i = 0; i < mesh->Walls.size(); i++)
 				{
-					//get index offset of mesh
-					unsigned int offset = Parent->GetIndexOffset(index, mesh);
-
-					//add mesh's triangles to array and adjust for offset
-					for (size_t i = 0; i < mesh->GetPolyMesh()->GetTriangleCount(index); i++)
+					for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 					{
-						Triangle &tri = mesh->GetPolyMesh()->Submeshes[index].Triangles[i];
-						mIndices[loc] = tri.a + offset;
-						mIndices[loc + 1] = tri.b + offset;
-						mIndices[loc + 2] = tri.c + offset;
-						loc += 3;
-					}
+						Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+						if (poly->material == material)
+						{
+							//get index offset of mesh
+							unsigned int offset = Parent->GetIndexOffset(mesh);
 
-					//increment submesh's client reference count
-					submesh->clients += 1;
+							//add mesh's triangles to array and adjust for offset
+							for (size_t k = 0; k < poly->triangles.size(); k++)
+							{
+								Triangle &tri = poly->triangles[k];
+								mIndices[loc] = poly_index + tri.a + offset;
+								mIndices[loc + 1] = poly_index + tri.b + offset;
+								mIndices[loc + 2] = poly_index + tri.c + offset;
+								loc += 3;
+							}
+
+							//increment submesh's client reference count
+							submesh->clients += 1;
+						}
+
+						poly_index += poly->vertex_count;
+					}
 				}
 			}
 
@@ -1153,7 +1199,7 @@ bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 	return camera->isVisible(global_box);
 }
 
-void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, unsigned int index, bool single)
+void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, Polygon *polygon, bool single)
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
@@ -1177,19 +1223,15 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	if (combined == true)
 		loc = client_entries[client].vertex_offset;
 
-	//adjust if using a single vertex
-	if (single == true)
-		loc += index;
-
 	MeshObject *mesh = Parent->GetClient(client);
 
 	//get mesh's offset of associated scene node
 	Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
-	unsigned int vertex_count = mesh->GetPolyMesh()->GetVertexCount();
+	unsigned int vertex_count = mesh->GetVertexCount();
 
-	//exit if client mesh is empty, or if no submeshes have been defined
-	if (vertex_count == 0 || mesh->GetPolyMesh()->Submeshes.empty() == true)
+	//exit if client mesh is empty or if no walls have been defined
+	if (vertex_count == 0 || mesh->Walls.size() == 0)
 		return;
 
 	//set up vertex data arrays
@@ -1221,47 +1263,50 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	unsigned int pos = 0;
 	unsigned int add = 0;
 
-	for (size_t submesh = 0; submesh < mesh->GetPolyMesh()->Submeshes.size(); submesh++)
+	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
-		unsigned int start;
-		unsigned int end;
+		//skip empty walls
+		if (mesh->Walls[i]->GetPolygonCount() == 0)
+			continue;
 
-		if (single == true)
+		for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 		{
-			if (mesh->GetPolyMesh()->Submeshes[submesh].Name != material)
-				continue;
+			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
 
-			start = index;
-			end = index;
-		}
-		else
-		{
-			start = 0;
-			end = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry.size() - 1;
-		}
+			if (single == true)
+			{
+				//match material
+				if (poly->material != material)
+					continue;
 
-		std::vector<PolyMesh::Geometry> &geometry = mesh->GetPolyMesh()->Submeshes[submesh].MeshGeometry;
+				if (poly != polygon)
+					continue;
+			}
 
-		for (unsigned int i = start; i <= end; i++)
-		{
-			PolyMesh::Geometry &element = geometry[i];
+			for (size_t k = 0; k < poly->geometry.size(); k++)
+			{
+				for (size_t l = 0; l < poly->geometry[k].size(); l++)
+				{
+					Polygon::Geometry &element = poly->geometry[k][l];
 
-			//make mesh's vertex relative to this scene node
-			Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
-			Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
+					//make mesh's vertex relative to this scene node
+					Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
+					Vector3 vertex2 = (node->GetOrientation().Inverse() * raw_vertex) + offset; //remove node's rotation and add mesh offset
 
-			//add elements to array
-			mVertexElements[pos] = (float)vertex2.x;
-			mVertexElements[pos + 1] = (float)vertex2.y;
-			mVertexElements[pos + 2] = (float)vertex2.z;
-			mVertexElements[pos + 3] = (float)element.normal.x;
-			mVertexElements[pos + 4] = (float)element.normal.y;
-			mVertexElements[pos + 5] = (float)element.normal.z;
-			mVertexElements[pos + 6] = (float)element.texel.x;
-			mVertexElements[pos + 7] = (float)element.texel.y;
-			box.merge(vertex2);
-			pos += 8;
-			add += 1;
+					//add elements to array
+					mVertexElements[pos] = (float)vertex2.x;
+					mVertexElements[pos + 1] = (float)vertex2.y;
+					mVertexElements[pos + 2] = (float)vertex2.z;
+					mVertexElements[pos + 3] = (float)element.normal.x;
+					mVertexElements[pos + 4] = (float)element.normal.y;
+					mVertexElements[pos + 5] = (float)element.normal.z;
+					mVertexElements[pos + 6] = (float)element.texel.x;
+					mVertexElements[pos + 7] = (float)element.texel.y;
+					box.merge(vertex2);
+					pos += 8;
+					add += 1;
+				}
+			}
 		}
 	}
 

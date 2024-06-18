@@ -38,6 +38,7 @@
 #include "scenenode.h"
 #include "dynamicmesh.h"
 #include "polymesh.h"
+#include "polygon.h"
 #include "mesh.h"
 
 namespace SBS {
@@ -117,7 +118,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			Vector3* vertices;
 			long unsigned int* indices;
 			Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
-			polymesh->GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
+			GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
 			delete[] indices;
@@ -135,7 +136,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 MeshObject::~MeshObject()
 {
 	//delete physics/collider components
-	polymesh->DeleteCollider();
+	DeleteCollider();
 
 	//delete wall objects
 	DeleteWalls();
@@ -196,8 +197,7 @@ void MeshObject::Enabled(bool value)
 
 void MeshObject::EnableCollider(bool value)
 {
-	//enable or disable collision detection//#include "polygon.h"
-
+	//enable or disable collision detection
 
 	if (!mBody)
 		return;
@@ -264,10 +264,18 @@ void MeshObject::Prepare(bool force)
 	//set up bounding box
 	if (model_loaded == false)
 	{
-		for (size_t i = 0; i < polymesh->Submeshes.size(); i++)
+		for (size_t i = 0; i < Walls.size(); i++)
 		{
-			for (size_t j = 0; j < polymesh->Submeshes[i].MeshGeometry.size(); j++)
-				Bounds->merge(polymesh->Submeshes[i].MeshGeometry[j].vertex);
+			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
+			{
+				Polygon *poly = Walls[i]->polygons[j];
+
+				for (size_t k = 0; k < poly->geometry.size(); k++)
+				{
+					for (size_t l = 0; l < poly->geometry[k].size(); l++)
+						Bounds->merge(poly->geometry[k][l].vertex);
+				}
+			}
 		}
 	}
 
@@ -474,8 +482,8 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	if (MeshWrapper->IsVisible(this) == false)
 		return false;
 
-	if (polymesh->GetSubmeshCount() == 0)
-		return false;
+	//if (polymesh->GetSubmeshCount() == 0)
+		//return false;
 
 	if (Bounds->isNull() == true)
 		return false;
@@ -667,17 +675,463 @@ void MeshObject::ResetPrepare()
 
 bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	return polymesh->ReplaceTexture(oldtexture, newtexture);
+	//replace polygon materials named oldtexture with newtexture
+
+	//update associated polygons
+	bool found = false;
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		bool result = Walls[i]->ReplaceTexture(oldtexture, newtexture);
+		if (result == true)
+			found = true;
+	}
+	return found;
 }
 
-bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int submesh)
+bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck)
 {
-	return polymesh->ChangeTexture(texture, matcheck, submesh);
+	//changes a texture
+	//if matcheck is true, exit if old and new textures are the same
+
+	//update associated polygons
+	bool found = false;
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		bool result = Walls[i]->ChangeTexture(texture, matcheck);
+		if (result == true)
+			found = true;
+	}
+	return found;
+}
+
+Real MeshObject::GetHeight()
+{
+	//returns the height of the mesh
+
+	Real y = 0.0;
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		{
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			for (size_t k = 0; k < poly->geometry.size(); k++)
+			{
+				for (size_t l = 0; l < poly->geometry[k].size(); l++)
+				{
+					Real new_y = poly->geometry[k][l].vertex.y;
+					if (new_y > y)
+						y = new_y;
+				}
+			}
+		}
+	}
+
+	return sbs->ToLocal(y);
+}
+
+Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real max_distance)
+{
+	//cast a ray and return the collision distance to the mesh
+	//return -1 if no hit
+
+	//cast a ray from the camera position downwards
+	SBS_PROFILE("MeshObject::HitBeam");
+
+	Vector3 position = sbs->ToRemote(origin - GetPosition());
+	Ray ray (position, sbs->ToRemote(direction, false));
+
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		{
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			for (size_t k = 0; k < poly->triangles.size(); k++)
+			{
+				const Triangle &tri = poly->triangles[k];
+				Vector3 tri_a = poly->GetVertex(tri.a);
+				Vector3 tri_b = poly->GetVertex(tri.b);
+				Vector3 tri_c = poly->GetVertex(tri.c);
+
+				std::pair<bool, Real> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
+				if (result.first == true)
+				{
+					if (result.second <= sbs->ToRemote(max_distance))
+						return sbs->ToLocal(result.second);
+				}
+			}
+		}
+	}
+	return -1;
+}
+
+void MeshObject::CreateCollider()
+{
+	//set up triangle collider based on raw SBS mesh geometry
+
+	SBS_PROFILE("MeshObject::CreateCollider");
+
+	if (create_collider == false)
+		return;
+
+	//exit if collider already exists
+	if (mBody)
+		return;
+
+	if (!GetSceneNode())
+		return;
+
+	//exit if mesh is empty
+	if (Walls.size() == 0)
+		return;
+
+	unsigned int tricount = GetTriangleCount("");
+	unsigned int vcount = GetVertexCount();
+
+	try
+	{
+		//initialize collider shape
+		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vcount, tricount * 3);
+
+		Real scale = GetSceneNode()->GetScale();
+
+		//add vertices to shape
+
+		for (size_t i = 0; i < Walls.size(); i++)
+		{
+			for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
+			{
+				Polygon *poly = Walls[i]->GetPolygon(j);
+				PolyArray polyarray;
+
+				for (size_t k = 0; k < poly->geometry.size(); k++)
+				{
+					for (size_t l = 0; l < poly->geometry[k].size(); l++)
+						polyarray.push_back(poly->geometry[k][l].vertex);
+				}
+
+				for (size_t k = 0; k < poly->triangles.size(); k++)
+				{
+					const Triangle &tri = poly->triangles[k];
+
+					Vector3 a = polyarray[tri.a];
+					Vector3 b = polyarray[tri.b];
+					Vector3 c = polyarray[tri.c];
+
+					if (scale != 1.0)
+					{
+						a *= scale;
+						b *= scale;
+						c *= scale;
+					}
+
+					shape->AddTriangle(a, b, c);
+				}
+			}
+		}
+
+		//finalize shape
+		shape->Finish();
+
+		//create a collider scene node
+		if (!collider_node)
+			collider_node = GetSceneNode()->CreateChild(GetName() + " collider");
+
+		//physics is not supported on triangle meshes; use CreateBoxCollider instead
+		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
+		mShape = shape;
+
+		if (sbs->DeleteColliders == true)
+		{
+			bool revert = false;
+			if (remove_on_disable == false)
+			{
+				remove_on_disable = true;
+				revert = true;
+			}
+
+			Enabled(false);
+			Enabled(true);
+
+			if (revert == true)
+				remove_on_disable = false;
+		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
+	}
+}
+
+void MeshObject::DeleteCollider()
+{
+	//delete mesh collider
+
+	SBS_PROFILE("MeshObject::DeleteCollider");
+
+	//exit if collider doesn't exist
+	if (!mBody)
+		return;
+
+	//remove collider from world
+	mBody->removeFromWorld();
+
+	//delete collider object
+	delete mBody;
+	mBody = 0;
+	mShape = 0;
 }
 
 Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 {
-	return polymesh->GetExtents(coord, flip_z);
+	//returns the smallest and largest values from a specified coordinate type
+	//(x, y, or z) from the polygons of this mesh object.
+	//first parameter must be either 1 (for x), 2 (for y) or 3 (for z)
+
+	Real esmall = 0;
+	Real ebig = 0;
+	Real tempnum = 0;
+
+	//return 0,0 if coord value is out of range
+	if (coord < 1 || coord > 3)
+		return Vector2(0, 0);
+
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		{
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			for (size_t k = 0; k < poly->geometry.size(); k++)
+			{
+				for (size_t l = 0; l < poly->geometry[k].size(); l++)
+				{
+					Ogre::Vector3 vertex = poly->geometry[k][l].vertex;
+
+					if (coord == 1)
+						tempnum = poly->geometry[k][l].vertex.x;
+					if (coord == 2)
+						tempnum = poly->geometry[k][l].vertex.y;
+					if (coord == 3)
+					{
+						if (flip_z == false)
+							tempnum = poly->geometry[k][l].vertex.z;
+						else
+							tempnum = -poly->geometry[k][l].vertex.z;
+					}
+
+					if (j == 0)
+					{
+						esmall = tempnum;
+						ebig = tempnum;
+					}
+					else
+					{
+						if (tempnum < esmall)
+							esmall = tempnum;
+						if (tempnum > ebig)
+							ebig = tempnum;
+					}
+				}
+			}
+		}
+	}
+
+	return Vector2(esmall, ebig);
+}
+
+Wall* MeshObject::FindPolygon(const std::string &name, int &index)
+{
+	//finds a polygon by name in all associated wall objects
+	//returns associated wall object and polygon index
+
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		int polygon = Walls[i]->FindPolygon(name);
+		if (polygon > -1)
+		{
+			index = polygon;
+			return Walls[i];
+		}
+	}
+	index = -1;
+	return 0;
+}
+
+bool MeshObject::InBoundingBox(const Vector3 &pos, bool check_y)
+{
+	//determine if position 'pos' is inside the mesh's bounding box
+
+	Vector3 position = sbs->ToRemote(pos - GetPosition());
+
+	if (Bounds->isNull() == true)
+		return false;
+
+	Vector3 min = Bounds->getMinimum();
+	Vector3 max = Bounds->getMaximum();
+
+	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
+	{
+		if (check_y == false)
+			return true;
+		else
+		{
+			if (position.y >= min.y && position.y <= max.y)
+				return true;
+		}
+	}
+	return false;
+}
+
+DynamicMesh* MeshObject::GetDynamicMesh()
+{
+	return MeshWrapper;
+}
+
+void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
+{
+	//read hardware buffers from a loaded model mesh, and return geometry arrays
+
+	bool added_shared = false;
+	size_t current_offset = 0;
+	size_t shared_offset = 0;
+	size_t next_offset = 0;
+	size_t index_offset = 0;
+
+	vertex_count = index_count = 0;
+
+	// Calculate how many vertices and indices we're going to need
+	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); i++)
+	{
+		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
+
+		// We only need to add the shared vertices once
+		if (submesh->useSharedVertices)
+		{
+			if (!added_shared)
+			{
+				vertex_count += (int)mesh->sharedVertexData->vertexCount;
+				added_shared = true;
+			}
+		}
+		else
+		{
+			vertex_count += (int)submesh->vertexData->vertexCount;
+		}
+
+		// Add the indices
+		index_count += (int)submesh->indexData->indexCount;
+	}
+
+	//ensure minimum index count
+	if (index_count < 3)
+		return;
+
+	// Allocate space for the vertices and indices
+	vertices = new Vector3[vertex_count];
+	indices = new unsigned long[index_count];
+
+	added_shared = false;
+
+	// Run through the submeshes again, adding the data into the arrays
+	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); i++)
+	{
+		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
+		Ogre::VertexData* vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData : submesh->vertexData;
+
+		if ((!submesh->useSharedVertices) || (submesh->useSharedVertices && !added_shared))
+		{
+			if(submesh->useSharedVertices)
+			{
+				added_shared = true;
+				shared_offset = current_offset;
+			}
+
+			const Ogre::VertexElement* posElem =
+				vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);
+
+			Ogre::HardwareVertexBufferSharedPtr vbuf =
+				vertex_data->vertexBufferBinding->getBuffer(posElem->getSource());
+
+			unsigned char* vertex =
+				static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+
+			float* pReal;
+
+			for (size_t j = 0; j < vertex_data->vertexCount; j++, vertex += vbuf->getVertexSize())
+			{
+				posElem->baseVertexPointerToElement(vertex, &pReal);
+				Vector3 pt(pReal[0], pReal[1], pReal[2]);
+				//vertices[current_offset + j] = (orient * (pt * scale)) + position;
+				vertices[current_offset + j] = pt * sbs->ToRemote(GetSceneNode()->GetScale());
+				extents.merge(vertices[current_offset + j]);
+			}
+
+			vbuf->unlock();
+			next_offset += vertex_data->vertexCount;
+		}
+
+		Ogre::IndexData* index_data = submesh->indexData;
+		size_t numTris = index_data->indexCount / 3;
+		Ogre::HardwareIndexBufferSharedPtr ibuf = index_data->indexBuffer;
+
+		bool use32bitindexes = (ibuf->getType() == Ogre::HardwareIndexBuffer::IT_32BIT);
+
+		unsigned long* pLong = static_cast<unsigned long*>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+		unsigned short* pShort = reinterpret_cast<unsigned short*>(pLong);
+
+		size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset;
+
+		if (use32bitindexes)
+		{
+			for (size_t k = 0; k < numTris * 3; k++)
+			{
+				indices[index_offset++] = pLong[k] + static_cast<unsigned long>(offset);
+			}
+		}
+		else
+		{
+			for (size_t k = 0; k < numTris * 3; k++)
+			{
+				indices[index_offset++] = static_cast<unsigned long>(pShort[k]) + static_cast<unsigned long>(offset);
+			}
+		}
+
+		ibuf->unlock();
+		current_offset = next_offset;
+	}
+}
+
+unsigned int MeshObject::GetVertexCount()
+{
+	unsigned int total = 0;
+
+	for (int i = 0; i < Walls.size(); i++)
+	{
+		total += Walls[i]->GetVertexCount();
+	}
+
+	return total;
+}
+
+unsigned int MeshObject::GetTriangleCount(const std::string &material)
+{
+	unsigned int total = 0;
+
+	for (int i = 0; i < Walls.size(); i++)
+	{
+		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		{
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			if (poly->material == material || material == "")
+				total += poly->triangles.size();
+		}
+	}
+
+	return total;
 }
 
 }
