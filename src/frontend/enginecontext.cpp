@@ -44,6 +44,7 @@ EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::
 	loading = false;
 	running = false;
 	reloading = false;
+	starting = false;
 	Reload = false;
 	reload_state = new CameraState;
 	reload_state->floor = 0;
@@ -334,7 +335,7 @@ void EngineContext::UnloadSim()
 #endif
 }
 
-bool EngineContext::Start(Ogre::Camera *camera)
+bool EngineContext::CutEngines()
 {
 	if (!Simcore)
 		return false;
@@ -354,10 +355,23 @@ bool EngineContext::Start(Ogre::Camera *camera)
 			CutForEngine(children[i]);
 		}
 	}
+	return true;
+}
 
+bool EngineContext::Start(Ogre::Camera *camera)
+{
 	//start simulator
 	if (!Simcore->Start(camera))
 		return ReportError("Error starting simulator\n");
+
+	FinishStart();
+
+	return true;
+}
+
+void EngineContext::FinishStart()
+{
+	starting = false;
 
 	//set to saved position if reloading building
 	if (reloading == true)
@@ -369,7 +383,25 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	loading = false;
 	running = true;
 
-	return true;
+}
+
+bool EngineContext::IsStartingFinished()
+{
+	if (IsLoadingFinished() == false)
+		return false;
+
+	return !starting;
+}
+
+bool EngineContext::Prepare()
+{
+	//prepare 3D geometry for use
+
+	bool result = Simcore->Prepare();
+
+	if (result == true)
+		starting = false;
+	return result;
 }
 
 void EngineContext::Report(const std::string &message)

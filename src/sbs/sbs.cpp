@@ -171,6 +171,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	MovingWalkwayCount = 0;
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Headless = false;
+	prepare_stage = 0;
+	prepare_iterator = 0;
 
 	camera = 0;
 	Buildings = 0;
@@ -473,9 +475,6 @@ SBS::~SBS()
 bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
-
-	//prepare 3D geometry for use
-	Prepare();
 
 	//free text texture memory
 	texturemanager->FreeTextureBoxes();
@@ -2965,40 +2964,66 @@ int SBS::GetPolygonCount()
 	return PolygonCount;
 }
 
-void SBS::Prepare(bool report)
+bool SBS::Prepare(bool report)
 {
 	//prepare objects for run
 
 	//prepare mesh objects
-	if (report == true)
-		Report("Preparing meshes...");
-	for (size_t i = 0; i < meshes.size(); i++)
+	if (meshes.size() > 0 && prepare_stage == 0)
 	{
-		meshes[i]->Prepare();
+		if (prepare_iterator == 0 && report == true)
+			Report("Preparing meshes...");
+
+		meshes[prepare_iterator]->Prepare();
+		prepare_iterator++;
+		if (prepare_iterator == meshes.size())
+		{
+			prepare_stage = 1;
+			prepare_iterator = 0;
+		}
 	}
 
 	//process dynamic meshes
-	if (report == true)
-		Report("Processing geometry...");
-	for (size_t i = 0; i < dynamic_meshes.size(); i++)
+	if (dynamic_meshes.size() > 0 && prepare_stage == 1)
 	{
+		if (prepare_iterator == 0 && report == true)
+			Report("Processing geometry...");
 		if (sbs->Verbose)
-			Report("DynamicMesh " + ToString((int)i) + " of " + ToString((int)dynamic_meshes.size()));
-		dynamic_meshes[i]->Prepare();
+			Report("DynamicMesh " + ToString((int)prepare_iterator) + " of " + ToString((int)dynamic_meshes.size()));
+
+		dynamic_meshes[prepare_iterator]->Prepare();
+		prepare_iterator++;
+		if (prepare_iterator == dynamic_meshes.size())
+		{
+			prepare_stage = 2;
+			prepare_iterator = 0;
+		}
 	}
 
-	if (report == true)
-		Report("Creating colliders...");
-	for (size_t i = 0; i < meshes.size(); i++)
+	if (meshes.size() > 0 && prepare_stage == 2)
 	{
-		if (meshes[i]->tricollider == true)
-			meshes[i]->CreateCollider();
+		if (prepare_iterator == 0 && report == true)
+			Report("Creating colliders...");
+
+		if (meshes[prepare_iterator]->tricollider == true)
+			meshes[prepare_iterator]->CreateCollider();
 		else
-			meshes[i]->CreateBoxCollider();
+			meshes[prepare_iterator]->CreateBoxCollider();
+
+		prepare_iterator++;
+		if (prepare_iterator == meshes.size())
+		{
+			prepare_stage = 3;
+			prepare_iterator = 0;
+		}
 	}
 
-	if (report == true)
+	if (report == true && prepare_stage == 3)
+	{
 		Report("Finished prepare");
+		return true;
+	}
+	return false;
 }
 
 Light* SBS::AddLight(const std::string &name, int type)
