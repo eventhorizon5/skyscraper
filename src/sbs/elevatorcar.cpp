@@ -2865,21 +2865,23 @@ bool ElevatorCar::IsInCar(const Vector3 &position, bool camera)
 
 	checkfirstrun = false;
 
-	if (position.y >= (GetPosition().y - 0.1) && position.y < GetPosition().y + (Height * 2))
+	Real ypos = GetPosition().y;
+
+	if (position.y >= (ypos - 0.1) && position.y < ypos + (Height * 2))
 	{
 		if (Mesh->InBoundingBox(position, false) == true)
 		{
 			if (Mesh->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
 				if (camera == true)
-					CameraOffset = position.y - GetPosition().y;
+					CameraOffset = position.y - ypos;
 				result = true;
 			}
 		}
 		else if (camera == true)
 			CameraOffset = 0;
 
-		if (position.y < GetPosition().y + Height)
+		if (position.y < ypos + Height)
 		{
 			//cache values
 			lastcheckresult = result;
