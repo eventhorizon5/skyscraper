@@ -989,7 +989,10 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 		Submesh *submesh;
 		int client_count;
-		unsigned int triangle_count = Parent->GetTriangleCount(material, client_count, client);
+		unsigned int triangle_count = 0;
+
+		if (material != "")
+			triangle_count = Parent->GetTriangleCount(material, client_count, client);
 
 		//get submesh index
 		int match = FindMatchingSubMesh(material);
