@@ -59,7 +59,6 @@ Wall::~Wall()
 	}
 
 	sbs->WallCount--;
-	sbs->PolygonCount -= (int)polygons.size();
 
 	for (int i = 0; i < polygons.size(); i++)
 	{
