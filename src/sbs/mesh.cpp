@@ -264,6 +264,7 @@ void MeshObject::Prepare(bool force)
 	//set up bounding box
 	if (model_loaded == false)
 	{
+		Bounds->setNull();
 		for (size_t i = 0; i < Walls.size(); i++)
 		{
 			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
