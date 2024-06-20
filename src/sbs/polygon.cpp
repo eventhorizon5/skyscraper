@@ -128,12 +128,15 @@ void Polygon::ChangeHeight(Real newheight)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();
 
+	Vector2 extents = GetExtents(2);
+
 	for (size_t i = 0; i < geometry.size(); i++)
 	{
 		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
 			Polygon::Geometry &data = geometry[i][j];
-			data.vertex.y = sbs->ToRemote(newheight);
+			if (data.vertex.y == extents.y)
+				data.vertex.y = sbs->ToRemote(newheight);
 		}
 	}
 

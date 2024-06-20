@@ -59,13 +59,9 @@ Wall::~Wall()
 	}
 
 	sbs->WallCount--;
-	sbs->PolygonCount -= (int)polygons.size();
 
-	for (int i = 0; i < polygons.size(); i++)
-	{
-		delete polygons[i];
-	}
-	polygons.clear();
+	//delete polygons
+	DeletePolygons(!sbs->FastDelete);
 }
 
 Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize)
@@ -142,7 +138,10 @@ void Wall::DeletePolygons(bool recreate_collider)
 	//delete polygons
 
 	for (size_t i = polygons.size() - 1; i < polygons.size(); --i)
-		DeletePolygon((int)i, false);
+	{
+		delete polygons[i];
+	}
+	polygons.clear();
 
 	//recreate colliders
 	if (recreate_collider == true)
