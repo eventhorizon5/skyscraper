@@ -495,7 +495,7 @@ unsigned int DynamicMesh::GetTriangleCount(const std::string &material, int &cli
 
 	for (int i = start; i <= end; i++)
 	{
-		total += clients[i]->GetTriangleCount(material);
+		total += clients[i]->GetTriangleCount(material, false);
 		client_count += 1;
 	}
 
@@ -769,7 +769,7 @@ DynamicMesh::Mesh::Submesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &
 	return &Submeshes[index];
 }
 
-void DynamicMesh::Mesh::DeleteSubMesh(int index)
+void DynamicMesh::Mesh::DeleteSubMesh(int client, int index)
 {
 	//delete a submesh
 	//if no index is provided, delete any empty submeshes
@@ -780,13 +780,33 @@ void DynamicMesh::Mesh::DeleteSubMesh(int index)
 		{
 			bool used = false;
 
-			for (int j = 0; j < Parent->GetClientCount(); j++)
+			if (client == -1)
 			{
-				for (int k = 0; k < Parent->GetClient(j)->Walls.size(); k++)
+				for (int j = 0; j < Parent->GetClientCount(); j++)
 				{
-					for (int l = 0; l < Parent->GetClient(j)->Walls[k]->GetPolygonCount(); l++)
+					for (int k = 0; k < Parent->GetClient(j)->Walls.size(); k++)
 					{
-						if (Parent->GetClient(j)->Walls[k]->GetPolygon(l)->material == Submeshes[i].material)
+						for (int l = 0; l < Parent->GetClient(j)->Walls[k]->GetPolygonCount(); l++)
+						{
+							if (Parent->GetClient(j)->Walls[k]->GetPolygon(l)->material == Submeshes[i].material)
+							{
+								used = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				if (!Parent->GetClient(client))
+				return;
+
+				for (int k = 0; k < Parent->GetClient(client)->Walls.size(); k++)
+				{
+					for (int l = 0; l < Parent->GetClient(client)->Walls[k]->GetPolygonCount(); l++)
+					{
+						if (Parent->GetClient(client)->Walls[k]->GetPolygon(l)->material == Submeshes[i].material)
 						{
 							used = true;
 							break;
@@ -844,7 +864,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		//delete any existing submeshes
 		for (size_t i = 0; i < Submeshes.size(); i++)
 		{
-			DeleteSubMesh((int)i);
+			DeleteSubMesh(-1, (int)i);
 		}
 
 		return;
@@ -991,7 +1011,10 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 		Submesh *submesh;
 		int client_count;
-		unsigned int triangle_count = Parent->GetTriangleCount(material, client_count, client);
+		unsigned int triangle_count = 0;
+
+		if (material != "")
+			triangle_count = Parent->GetTriangleCount(material, client_count, client);
 
 		//get submesh index
 		int match = FindMatchingSubMesh(material);
@@ -1000,7 +1023,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		if (triangle_count == 0)
 		{
 			//delete submesh if needed
-			DeleteSubMesh();
+			DeleteSubMesh(client, -1);
 			continue;
 		}
 

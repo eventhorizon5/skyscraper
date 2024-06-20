@@ -264,6 +264,7 @@ void MeshObject::Prepare(bool force)
 	//set up bounding box
 	if (model_loaded == false)
 	{
+		Bounds->setNull();
 		for (size_t i = 0; i < Walls.size(); i++)
 		{
 			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
@@ -786,7 +787,7 @@ void MeshObject::CreateCollider()
 	if (Walls.size() == 0)
 		return;
 
-	unsigned int tricount = GetTriangleCount("");
+	unsigned int tricount = GetTriangleCount("", true);
 	unsigned int vcount = GetVertexCount();
 
 	try
@@ -1116,9 +1117,9 @@ unsigned int MeshObject::GetVertexCount()
 	return total;
 }
 
-unsigned int MeshObject::GetTriangleCount(const std::string &material)
+unsigned int MeshObject::GetTriangleCount(const std::string &material, bool total)
 {
-	unsigned int total = 0;
+	unsigned int tris = 0;
 
 	for (int i = 0; i < Walls.size(); i++)
 	{
@@ -1126,12 +1127,12 @@ unsigned int MeshObject::GetTriangleCount(const std::string &material)
 		{
 			Polygon *poly = Walls[i]->GetPolygon(j);
 
-			if (poly->material == material || material == "")
-				total += poly->triangles.size();
+			if (poly->material == material || (material == "" && total == true))
+				tris += poly->triangles.size();
 		}
 	}
 
-	return total;
+	return tris;
 }
 
 }

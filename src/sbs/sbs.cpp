@@ -2595,11 +2595,7 @@ bool SBS::DeleteObject(Object *object)
 	else if (type == "Stairwell")
 		deleted = true;
 	else if (type == "Wall")
-	{
-		Wall *obj = static_cast<Wall*>(object);
-		obj->DeletePolygons(true);
 		deleted = true;
-	}
 	else if (type == "Model")
 		deleted = true;
 	else if (type == "Control")

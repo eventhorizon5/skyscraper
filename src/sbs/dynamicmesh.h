@@ -77,7 +77,7 @@ private:
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
 		Submesh* CreateSubMesh(const std::string &material);
-		void DeleteSubMesh(int index = -1);
+		void DeleteSubMesh(int client, int index);
 		void Prepare(bool process_vertices = true, int client = -1);
 		void EnableDebugView(bool value);
 		bool IsVisible();
