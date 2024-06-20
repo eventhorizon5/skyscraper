@@ -60,11 +60,8 @@ Wall::~Wall()
 
 	sbs->WallCount--;
 
-	for (int i = 0; i < polygons.size(); i++)
-	{
-		delete polygons[i];
-	}
-	polygons.clear();
+	//delete polygons
+	DeletePolygons(!sbs->FastDelete);
 }
 
 Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize)
