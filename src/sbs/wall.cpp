@@ -130,7 +130,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
 	polygons.push_back(poly);
 
-	return polygons[0];
+	return poly;
 }
 
 void Wall::DeletePolygons(bool recreate_collider)

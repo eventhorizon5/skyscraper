@@ -798,7 +798,7 @@ void DynamicMesh::Mesh::DeleteSubMesh(int client, int index)
 			else
 			{
 				if (!Parent->GetClient(client))
-				return;
+					return;
 
 				for (int k = 0; k < Parent->GetClient(client)->Walls.size(); k++)
 				{
