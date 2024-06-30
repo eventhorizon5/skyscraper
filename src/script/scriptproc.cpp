@@ -1898,7 +1898,7 @@ int ScriptProcessor::ProcessForLoops()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		std::string it = LineData.substr(5, loc2 - 6);
+		std::string it = LineData.substr(5, loc2 - 5);
 		TrimString(it);
 
 		//check for existence of iterator variable
@@ -1926,7 +1926,7 @@ int ScriptProcessor::ProcessForLoops()
 		//set new iterator variable
 		VariableMap var;
 		var.name = it;
-		var.value = RangeL;
+		var.value = ToString(RangeL);
 		variables.push_back(var);
 
 		//set up for loop
