@@ -152,7 +152,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 			worker.clear();
 			Vector2 extentsx, extentsy, extentsz;
 			Ogre::AxisAlignedBox bounds (start, end);
-			Ogre::AxisAlignedBox polybounds = Ogre::AxisAlignedBox::BOX_NULL;
+			Ogre::AxisAlignedBox polybounds;
 			bool polycheck2 = false;
 
 			//copy source polygon vertices

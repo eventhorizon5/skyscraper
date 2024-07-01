@@ -118,7 +118,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			int vertex_count, index_count;
 			Vector3* vertices;
 			long unsigned int* indices;
-			Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
+			Ogre::AxisAlignedBox box;
 			GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
