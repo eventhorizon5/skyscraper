@@ -32,6 +32,13 @@ namespace SBS {
 Utility::Utility(Object *parent) : ObjectBase(parent)
 {
 	ResetDoorwayWalls();
+
+	temppoly.reserve(32);
+	temppoly2.reserve(32);
+	temppoly3.reserve(32);
+	temppoly4.reserve(32);
+	temppoly5.reserve(32);
+	worker.reserve(32);
 }
 
 Utility::~Utility()
@@ -100,12 +107,6 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 		std::swap(start.y, end.y);
 	if (start.z > end.z)
 		std::swap(start.z, end.z);
-
-	temppoly.reserve(32);
-	temppoly2.reserve(32);
-	temppoly3.reserve(32);
-	temppoly4.reserve(32);
-	temppoly5.reserve(32);
 
 	bool polycheck = false;
 
