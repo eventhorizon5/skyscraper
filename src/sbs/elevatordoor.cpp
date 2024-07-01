@@ -35,6 +35,7 @@
 #include "sound.h"
 #include "timer.h"
 #include "doorsystem.h"
+#include "utility.h"
 #include "elevatordoor.h"
 
 namespace SBS {
@@ -1013,7 +1014,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		base += floorobj->GetBase(true);
 
 		//cut shaft and floor walls
-		sbs->ResetDoorwayWalls();
+		sbs->GetUtility()->ResetDoorwayWalls();
 		if (DoorDirection == false)
 		{
 			if (shaft->GetLevel(floor))

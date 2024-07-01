@@ -108,6 +108,7 @@ namespace SBS {
 	class CallStation;
 	class Indicator;
 	class PolyMesh;
+	class Utility;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -298,15 +299,10 @@ public:
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
-	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
-	void Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	Vector3 GetPolygonDirection(PolyArray &polygon);
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
 	Real GetConfigFloat(const std::string &key, Real default_value);
-	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
-	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	bool InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test);
 	void AdvanceClock();
 	unsigned long GetCurrentTime();
@@ -316,7 +312,6 @@ public:
 	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void ShowColliders(bool value);
 	void CacheFilename(const std::string &filename, const std::string &result);
-	void ResetDoorwayWalls();
 	void SetLighting(Real red = 1.0, Real green = 1.0, Real blue = 1.0);
 	void ResetLighting();
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
@@ -341,11 +336,8 @@ public:
 	bool RotateObject(Object *object, Vector3 rotation, Real speed, bool relative, bool X, bool Y, bool Z);
 	void RegisterControl(Control *control);
 	void UnregisterControl(Control *control);
-	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
 	void ShowFloorList();
-	Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
 	void ShowSceneNodes(bool value);
-	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
 	void ShowBoundingBoxes(bool value);
 	void ListVisibleMeshes();
 	int GetEscalatorCount();
@@ -397,6 +389,7 @@ public:
 	CameraTexture* GetCameraTexture(int number);
 	std::string GetFilesystemPath(std::string filename);
 	void ProcessMesh(MeshObject *mesh);
+	Utility* GetUtility();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -462,10 +455,6 @@ private:
 	std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
 	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
 	void ProcessMeshImpl();
-
-	//doorway data
-	bool wall1a, wall1b, wall2a, wall2b;
-	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
 
 	//timer callback array
 	std::vector<TimerObject*> timercallbacks;
@@ -565,6 +554,8 @@ private:
 
 	int prepare_stage;
 	int prepare_iterator;
+
+	Utility *utility;
 };
 
 }

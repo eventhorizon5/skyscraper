@@ -68,6 +68,7 @@ public:
 	static const int sRecalc = 5;
 	static const int sSkipReset = 6;
 	static const int sExit = 7;
+	static const int sLoopFor = 8;
 
 	struct VariableMap
 	{
@@ -133,6 +134,7 @@ private:
 	int ProcessFloorObjects();
 	void Breakpoint();
 	void ProcessExtents();
+	int ProcessForLoops();
 
 	struct FunctionInfo
 	{
@@ -150,7 +152,17 @@ private:
 		int parent;
 	};
 
+	struct ForInfo
+	{
+		std::string iterator;
+		int line;
+		int i;
+		int start;
+		int end;
+	};
+
 	std::vector<IncludeInfo> includes; //stored include mappings
+	std::vector<ForInfo> ForLoops;
 };
 
 }

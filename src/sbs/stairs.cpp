@@ -35,6 +35,7 @@
 #include "light.h"
 #include "profiler.h"
 #include "cameratexture.h"
+#include "utility.h"
 #include "stairs.h"
 
 namespace SBS {
@@ -262,9 +263,9 @@ void Stairwell::CutFloors(bool relative, const Vector2 &start, const Vector2 &en
 		for (size_t i = 0; i < sbs->External->Walls.size(); i++)
 		{
 			if (relative == true)
-				sbs->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
+				sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
 			else
-				sbs->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
+				sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
 		}
 	}
 }
@@ -829,7 +830,7 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 	}
 
 	//cut area
-	sbs->ResetDoorwayWalls();
+	sbs->GetUtility()->ResetDoorwayWalls();
 	if (face_direction == "left" || face_direction == "right")
 	{
 		Cut(1, Vector3(x1 - 0.5, voffset, z1), Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
@@ -905,9 +906,9 @@ bool Stairwell::Level::Cut(bool relative, const Vector3 &start, const Vector3 &e
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(mesh->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->GetUtility()->Cut(mesh->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 		else
-			sbs->Cut(mesh->Walls[i], Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->GetUtility()->Cut(mesh->Walls[i], Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 
 	return true;

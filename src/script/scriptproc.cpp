@@ -190,6 +190,11 @@ checkfloors:
 		//process extent variables
 		ProcessExtents();
 
+		//process For loops
+		returncode = ProcessForLoops();
+		if (returncode != sContinue)
+			goto handlecodes;
+
 		//reset return code
 		returncode = sContinue;
 
@@ -255,6 +260,15 @@ handlecodes:
 			goto Nextline;
 		else if (returncode == sExit)
 			return true;
+		else if (returncode == sLoopFor)
+		{
+			if (ForLoops.size() > 0)
+			{
+				ForInfo &info = ForLoops.back();
+				line = info.line;
+			}
+			goto Nextline;
+		}
 
 		//reset temporary states
 		Simcore->GetTextureManager()->TextureOverride = false;
@@ -1860,6 +1874,120 @@ void ScriptProcessor::ProcessExtents()
 ScriptProcessor::ConfigHandler* ScriptProcessor::GetConfigHandler()
 {
 	return config;
+}
+
+int ScriptProcessor::ProcessForLoops()
+{
+	if (StartsWithNoCase(LineData, "<for "))
+	{
+		//process a For loop
+
+		std::string linecheck = SetCaseCopy(LineData, false);
+		int loc = linecheck.find("to", 0);
+		if (loc < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+
+		//get iterator
+		int loc2 = linecheck.find(" ", 5);
+		if (loc < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		std::string it = LineData.substr(5, loc2 - 5);
+		TrimString(it);
+
+		//check for existence of iterator variable
+		for (int i = 0; i < variables.size(); i++)
+		{
+			if (variables[i].name == it)
+			{
+				ScriptError("Iterator variable in use");
+				return sError;
+			}
+		}
+
+		//get low and high range markers
+		std::string str1 = LineData.substr(loc2, loc - (loc2 + 1));
+		std::string str2 = LineData.substr(loc + 2, LineData.length() - (loc + 2) - 1);
+		TrimString(str1);
+		TrimString(str2);
+		int RangeL, RangeH;
+		if (!IsNumeric(str1, RangeL) || !IsNumeric(str2, RangeH))
+		{
+			ScriptError("Invalid range");
+			return sError;
+		}
+
+		//set new iterator variable
+		VariableMap var;
+		var.name = it;
+		var.value = ToString(RangeL);
+		variables.push_back(var);
+
+		//set up for loop
+		ForInfo info;
+		info.iterator = it;
+		info.line = line;
+		info.i = RangeL;
+		info.start = RangeL;
+		info.end = RangeH;
+
+		ForLoops.push_back(info);
+
+		return sNextLine;
+	}
+	else if (StartsWithNoCase(LineData, "<endfor>"))
+	{
+		ForInfo &info = ForLoops.back();
+
+		bool end = false;
+		if (info.start < info.end)
+		{
+			info.i++;
+			if (info.i > info.end)
+				end = true;
+		}
+		else
+		{
+			info.i--;
+			if (info.i < info.end)
+				end = true;
+		}
+
+		for (int i = 0; i < variables.size(); i++)
+		{
+			if (variables[i].name == info.iterator)
+			{
+				if (end == false)
+				{
+					//put iterator into variable
+					variables[i].value = ToString(info.i);
+					break;
+				}
+				else
+				{
+					//remove iterator variable
+					variables.erase(variables.begin() + i);
+					break;
+				}
+			}
+		}
+
+		if (end == true)
+		{
+			//process end of For loop
+			ForLoops.pop_back();
+			return sNextLine;
+		}
+		else
+			return sLoopFor;
+	}
+
+	return sContinue;
 }
 
 }

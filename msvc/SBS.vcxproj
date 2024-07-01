@@ -480,6 +480,7 @@
     <ClInclude Include="..\src\sbs\timer.h" />
     <ClInclude Include="..\src\sbs\triangle.h" />
     <ClInclude Include="..\src\sbs\trigger.h" />
+    <ClInclude Include="..\src\sbs\utility.h" />
     <ClInclude Include="..\src\sbs\vehicle.h" />
     <ClInclude Include="..\src\sbs\wall.h" />
   </ItemGroup>
