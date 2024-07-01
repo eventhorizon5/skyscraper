@@ -55,8 +55,6 @@ public:
 
 	std::string material; //polygon material
 
-	PolygonSet cache; //vertex cache
-
 	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane);
 	~Polygon();
 	void GetTextureMapping(Matrix3 &t_matrix, Vector3 &t_vector);
@@ -70,9 +68,6 @@ public:
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true);
 	Vector3 GetVertex(int index);
-
-private:
-	void CacheVertices();
 };
 
 }
