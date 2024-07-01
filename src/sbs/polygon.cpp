@@ -217,12 +217,9 @@ void Polygon::CacheVertices()
 {
 	//copy vertices into a cached table
 
-	int size = geometry.size();
-	cache_size = size;
-
 	cache.clear();
-	cache.resize(size);
-	for (size_t i = 0; i < size; i++)
+	cache.resize(geometry.size());
+	for (size_t i = 0; i < geometry.size(); i++)
 	{
 		cache[i].reserve(geometry[i].size());
 		for (size_t j = 0; j < geometry[i].size(); j++)
