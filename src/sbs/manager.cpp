@@ -36,7 +36,12 @@
 
 namespace SBS {
 
-FloorManager::FloorManager(Object* parent) : Object(parent)
+Manager::Manager(Object* parent) : Object(parent)
+{
+	//manager constructor
+}
+
+FloorManager::FloorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
 	SetValues("FloorManager", "Floor Manager", true);
@@ -241,7 +246,7 @@ void FloorManager::Loop()
 	LoopChildren();
 }
 
-ElevatorManager::ElevatorManager(Object* parent) : Object(parent)
+ElevatorManager::ElevatorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
 	SetValues("ElevatorManager", "Elevator Manager", true);
@@ -376,7 +381,7 @@ void ElevatorManager::Loop()
 		LoopChildren();
 }
 
-ShaftManager::ShaftManager(Object* parent) : Object(parent)
+ShaftManager::ShaftManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
 	SetValues("ShaftManager", "Shaft Manager", true, false);
@@ -529,7 +534,7 @@ void ShaftManager::Loop()
 	LoopChildren();
 }
 
-StairwellManager::StairwellManager(Object* parent) : Object(parent)
+StairwellManager::StairwellManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
 	SetValues("StairwellManager", "Stairwell Manager", true, false);
@@ -681,7 +686,7 @@ void StairwellManager::Loop()
 	LoopChildren();
 }
 
-DoorManager::DoorManager(Object* parent) : Object(parent)
+DoorManager::DoorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
 	SetValues("DoorManager", "Door Manager", true);
@@ -776,7 +781,7 @@ void DoorManager::Loop()
 	LoopChildren();
 }
 
-RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Object(parent)
+RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
 	SetValues("RevolvingDoorManager", "Revolving Door Manager", true);
@@ -849,7 +854,7 @@ void RevolvingDoorManager::Loop()
 	LoopChildren();
 }
 
-VehicleManager::VehicleManager(Object* parent) : Object(parent)
+VehicleManager::VehicleManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
 	SetValues("VehicleManager", "Vehicle Manager", true);
@@ -968,7 +973,7 @@ void VehicleManager::Loop()
 	LoopChildren();
 }
 
-ControllerManager::ControllerManager(Object* parent) : Object(parent)
+ControllerManager::ControllerManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
 	SetValues("ControllerManager", "Controller Manager", true, false);

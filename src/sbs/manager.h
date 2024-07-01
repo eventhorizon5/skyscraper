@@ -26,10 +26,19 @@
 
 namespace SBS {
 
-class SBSIMPEXP FloorManager : public Object
+class SBSIMPEXP Manager : public Object
 {
 public:
-	FloorManager(Object* parent);
+	Manager(Object* parent);
+	virtual ~Manager() {};
+	virtual int GetCount() = 0;
+	virtual void Loop() = 0;
+};
+
+class SBSIMPEXP FloorManager : public Manager
+{
+public:
+	FloorManager(Object *parent);
 	~FloorManager();
 	Floor* Create(int number);
 	int GetCount(); //all floors including basements
@@ -63,7 +72,7 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP ElevatorManager : public Object
+class SBSIMPEXP ElevatorManager : public Manager
 {
 public:
 	ElevatorManager(Object* parent);
@@ -90,7 +99,7 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP ShaftManager : public Object
+class SBSIMPEXP ShaftManager : public Manager
 {
 public:
 	ShaftManager(Object* parent);
@@ -117,7 +126,7 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP StairwellManager : public Object
+class SBSIMPEXP StairwellManager : public Manager
 {
 public:
 	StairwellManager(Object* parent);
@@ -144,7 +153,7 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP DoorManager : public Object
+class SBSIMPEXP DoorManager : public Manager
 {
 public:
 	DoorManager(Object* parent);
@@ -162,7 +171,7 @@ private:
 	DynamicMesh *wrapper; //door dynamic mesh wrapper
 };
 
-class SBSIMPEXP RevolvingDoorManager : public Object
+class SBSIMPEXP RevolvingDoorManager : public Manager
 {
 public:
 	RevolvingDoorManager(Object* parent);
@@ -178,7 +187,7 @@ private:
 	DynamicMesh *wrapper; //door dynamic mesh wrapper
 };
 
-class SBSIMPEXP VehicleManager : public Object
+class SBSIMPEXP VehicleManager : public Manager
 {
 public:
 	VehicleManager(Object* parent);
@@ -204,7 +213,7 @@ private:
 	int get_number;
 };
 
-class SBSIMPEXP ControllerManager : public Object
+class SBSIMPEXP ControllerManager : public Manager
 {
 public:
 	ControllerManager(Object* parent);
