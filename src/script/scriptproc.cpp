@@ -1888,7 +1888,6 @@ int ScriptProcessor::ProcessForLoops()
 		{
 			ScriptError("Syntax error");
 			return sError;
-
 		}
 
 		//get iterator
@@ -1959,13 +1958,22 @@ int ScriptProcessor::ProcessForLoops()
 				end = true;
 		}
 
-		//put iterator into variable
 		for (int i = 0; i < variables.size(); i++)
 		{
 			if (variables[i].name == info.iterator)
 			{
-				variables[i].value = ToString(info.i);
-				break;
+				if (end == false)
+				{
+					//put iterator into variable
+					variables[i].value = ToString(info.i);
+					break;
+				}
+				else
+				{
+					//remove iterator variable
+					variables.erase(variables.begin() + i);
+					break;
+				}
 			}
 		}
 
