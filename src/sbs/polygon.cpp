@@ -57,6 +57,8 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 	//register texture usage
 	if (material != "")
 		sbs->GetTextureManager()->IncrementTextureUsage(material);
+
+	CacheVertices();
 }
 
 Polygon::~Polygon()
@@ -92,6 +94,8 @@ void Polygon::Move(const Vector3 &position, Real speed)
 	//update vertices in render buffer, if using dynamic buffers
 	if (dynamic == true)
 		mesh->MeshWrapper->UpdateVertices(mesh, material, this, true);
+
+	CacheVertices();
 }
 
 Plane Polygon::GetAbsolutePlane()
@@ -144,6 +148,8 @@ void Polygon::ChangeHeight(Real newheight)
 	//update vertices in render buffer, if using dynamic buffers
 	if (dynamic == true)
 		mesh->MeshWrapper->UpdateVertices(mesh, material, this, true);
+
+	CacheVertices();
 }
 
 bool Polygon::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
@@ -205,6 +211,21 @@ Vector3 Polygon::GetVertex(int index)
 		offset += geometry[i].size();
 	}
 	return Vector3::ZERO;
+}
+
+void Polygon::CacheVertices()
+{
+	//copy vertices into a cached table
+
+	cache.resize(geometry.size());
+	for (size_t i = 0; i < geometry.size(); i++)
+	{
+		cache[i].reserve(geometry[i].size());
+		for (size_t j = 0; j < geometry[i].size(); j++)
+		{
+			cache[i].push_back(sbs->ToLocal(geometry[i][j].vertex));
+		}
+	}
 }
 
 }

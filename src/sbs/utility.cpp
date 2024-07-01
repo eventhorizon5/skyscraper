@@ -155,10 +155,11 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 			Ogre::AxisAlignedBox polybounds = Ogre::AxisAlignedBox::BOX_NULL;
 			bool polycheck2 = false;
 
-			//copy source polygon vertices
-			for (size_t k = 0; k < polygon->geometry[j].size(); k++)
+			//copy source polygon vertices (from cached table)
+			temppoly.reserve(polygon->cache[j].size());
+			for (size_t k = 0; k < polygon->cache[j].size(); k++)
 			{
-				Ogre::Vector3 vertex = sbs->ToLocal(polygon->geometry[j][k].vertex);
+				Ogre::Vector3 vertex = polygon->cache[j][k];
 				temppoly.push_back(vertex);
 				polybounds.merge(vertex);
 			}
