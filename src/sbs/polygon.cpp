@@ -28,6 +28,7 @@
 #include "mesh.h"
 #include "polymesh.h"
 #include "texture.h"
+#include "utility.h"
 #include "polygon.h"
 
 namespace SBS {
@@ -119,7 +120,7 @@ Vector2 Polygon::GetExtents(int coord)
 		}
 	}
 
-	Vector2 extents = sbs->GetExtents(poly, coord);
+	Vector2 extents = sbs->GetUtility()->GetExtents(poly, coord);
 
 	return extents;
 }

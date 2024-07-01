@@ -33,6 +33,7 @@
 #include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "texture.h"
 
 namespace SBS {
@@ -1157,7 +1158,7 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Plane plane = sbs->ComputePlane(vertices);
+		Plane plane = sbs->GetUtility()->ComputePlane(vertices);
 		Vector3 normal = plane.normal;
 
 		direction = 0; //x; faces left/right
@@ -1223,8 +1224,8 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3
 
 		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
 		Vector2 a, b;
-		a = sbs->GetExtents(varray, 1);
-		b = sbs->GetExtents(varray, 2);
+		a = sbs->GetUtility()->GetExtents(varray, 1);
+		b = sbs->GetUtility()->GetExtents(varray, 2);
 
 		//set the result 2D coordinates
 		if (direction == 0)

@@ -27,6 +27,7 @@
 #include "wall.h"
 #include "texture.h"
 #include "profiler.h"
+#include "utility.h"
 #include "polymesh.h"
 
 namespace SBS {
@@ -200,7 +201,7 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 		for (size_t j = 0; j < converted_vertices[i].size(); j++)
 		{
 			//calculate normal
-			Vector3 normal = sbs->ComputePlane(converted_vertices[i], false).normal;
+			Vector3 normal = sbs->GetUtility()->ComputePlane(converted_vertices[i], false).normal;
 
 			geometry[i][j].vertex = converted_vertices[i][j];
 			geometry[i][j].normal = normal;

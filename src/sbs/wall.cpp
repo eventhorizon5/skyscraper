@@ -29,6 +29,7 @@
 #include "triangle.h"
 #include "texture.h"
 #include "profiler.h"
+#include "utility.h"
 #include "wall.h"
 
 namespace SBS {
@@ -101,7 +102,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 
 	//compute plane
-	Plane plane = sbs->ComputePlane(converted_vertices[0]);
+	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
 	polygons.push_back(poly);
@@ -125,7 +126,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 		return 0;
 
 	//compute plane
-	Plane plane = sbs->ComputePlane(converted_vertices[0]);
+	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
 	polygons.push_back(poly);
@@ -305,29 +306,29 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 		}
 
 		//if given altitude is outside of polygon's range, return 0
-		Vector2 yextents = sbs->GetExtents(poly, 2);
+		Vector2 yextents = sbs->GetUtility()->GetExtents(poly, 2);
 		Real tmpaltitude = altitude;
 		if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 			return Vector3(0, 0, 0);
 
 		//get upper
-		sbs->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
+		sbs->GetUtility()->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
 
 		//get lower part of upper
-		sbs->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
+		sbs->GetUtility()->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
 
 		Vector3 result;
 		if (get_max == false)
 		{
 			//get minimum extents
-			result.x = sbs->GetExtents(poly, 1).x;
-			result.z = sbs->GetExtents(poly, 3).x;
+			result.x = sbs->GetUtility()->GetExtents(poly, 1).x;
+			result.z = sbs->GetUtility()->GetExtents(poly, 3).x;
 		}
 		else
 		{
 			//get maximum extents
-			result.x = sbs->GetExtents(poly, 1).y;
-			result.z = sbs->GetExtents(poly, 3).y;
+			result.x = sbs->GetUtility()->GetExtents(poly, 1).y;
+			result.z = sbs->GetUtility()->GetExtents(poly, 3).y;
 		}
 		result.y = altitude;
 		return result; //only check the first polygon for now

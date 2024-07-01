@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Utility Functions
+	Scalable Building Simulator - Utility Object
 	The Skyscraper Project - Version 1.12 Alpha
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
@@ -25,10 +25,21 @@
 #include "sbs.h"
 #include "wall.h"
 #include "polygon.h"
+#include "utility.h"
 
 namespace SBS {
 
-Vector2 SBS::GetExtents(PolyArray &varray, int coord, bool flip_z)
+Utility::Utility(Object *parent) : ObjectBase(parent)
+{
+	ResetDoorwayWalls();
+}
+
+Utility::~Utility()
+{
+
+}
+
+Vector2 Utility::GetExtents(PolyArray &varray, int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from a vertex array (polygon).
@@ -75,7 +86,7 @@ Vector2 SBS::GetExtents(PolyArray &varray, int coord, bool flip_z)
 	return Vector2(esmall, ebig);
 }
 
-void SBS::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
@@ -89,8 +100,6 @@ void SBS::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutflo
 		std::swap(start.y, end.y);
 	if (start.z > end.z)
 		std::swap(start.z, end.z);
-
-	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 
 	temppoly.reserve(32);
 	temppoly2.reserve(32);
@@ -121,7 +130,7 @@ void SBS::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutflo
 		//get name
 		Polygon *polygon = wall->GetPolygon(i);
 
-		PolygonSet newpolys;
+		newpolys.clear();
 
 		//skip empty polygons
 		if (polygon->geometry.size() == 0)
@@ -148,7 +157,7 @@ void SBS::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutflo
 			//copy source polygon vertices
 			for (size_t k = 0; k < polygon->geometry[j].size(); k++)
 			{
-				Ogre::Vector3 vertex = ToLocal(polygon->geometry[j][k].vertex);
+				Ogre::Vector3 vertex = sbs->ToLocal(polygon->geometry[j][k].vertex);
 				temppoly.push_back(vertex);
 				polybounds.merge(vertex);
 			}
@@ -350,7 +359,7 @@ void SBS::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutflo
 				PolyArray poly;
 				for (size_t k = 0; k < polygon->geometry[j].size(); k++)
 				{
-					poly.push_back(ToLocal(polygon->geometry[j][k].vertex));
+					poly.push_back(sbs->ToLocal(polygon->geometry[j][k].vertex));
 				}
 				newpolys.push_back(poly);
 			}
@@ -387,7 +396,7 @@ void SBS::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutflo
 	}
 }
 
-void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon)
+void Utility::GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon)
 {
 	//calculate doorway extents, for use with AddDoorwayWalls function
 	//checknumber is 1 when checking shaft walls, and 2 when checking floor walls
@@ -430,7 +439,7 @@ void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygo
 	}
 }
 
-Vector3 SBS::GetPolygonDirection(PolyArray &polygon)
+Vector3 Utility::GetPolygonDirection(PolyArray &polygon)
 {
 	//returns the direction the polygon faces, in a 3D vector
 	//for example, <-1, 0, 0> means that the wall faces left.
@@ -438,9 +447,9 @@ Vector3 SBS::GetPolygonDirection(PolyArray &polygon)
 	//get largest normal
 
 	//convert to remote values for precision compatibility with Alpha 7 and earlier
-	PolyArray newpoly;
+	newpoly.clear();
 	for (size_t i = 0; i < polygon.size(); i++)
-		newpoly.push_back(ToRemote(polygon[i], true, false));
+		newpoly.push_back(sbs->ToRemote(polygon[i], true, false));
 
 	Vector3 normal = ComputePlane(newpoly, false).normal;
 
@@ -477,7 +486,7 @@ Vector3 SBS::GetPolygonDirection(PolyArray &polygon)
 	return Vector3(0, 0, 0);
 }
 
-Vector2 SBS::GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance)
+Vector2 Utility::GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance)
 {
 	//calculate 2D endpoint from given starting point, along with angle and distance (magnitude)
 	//angle is in degrees
@@ -491,7 +500,7 @@ Vector2 SBS::GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance)
 
 }
 
-Plane SBS::ComputePlane(PolyArray &vertices, bool flip_normal)
+Plane Utility::ComputePlane(PolyArray &vertices, bool flip_normal)
 {
 	//compute plane from a set of given vertices
 
@@ -503,6 +512,17 @@ Plane SBS::ComputePlane(PolyArray &vertices, bool flip_normal)
 		normal = ComputeNormal(vertices, det);
 	normal.normalise();
 	return Plane(normal, det);
+}
+
+void Utility::ResetDoorwayWalls()
+{
+	wall1a = false;
+	wall1b = false;
+	wall2a = false;
+	wall2b = false;
+	wall_extents_x = Vector2::ZERO;
+	wall_extents_y = Vector2::ZERO;
+	wall_extents_z = Vector2::ZERO;
 }
 
 }

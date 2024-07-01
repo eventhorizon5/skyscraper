@@ -24,6 +24,7 @@
 #include "sbs.h"
 #include "polygon.h"
 #include "texture.h"
+#include "utility.h"
 
 namespace SBS {
 
@@ -236,7 +237,7 @@ bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &
 	return true;
 }
 
-void SBS::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value)
+void Utility::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//axis is 0 for X, 1 for Y, 2 for Z
@@ -339,7 +340,7 @@ void SBS::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray 
 	}
 }
 
-Vector3 SBS::ComputeNormal(PolyArray &vertices, Real &D)
+Vector3 Utility::ComputeNormal(PolyArray &vertices, Real &D)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//calculate polygon normal

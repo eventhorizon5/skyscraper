@@ -58,6 +58,7 @@
 #include "gitrev.h"
 #include "buttonpanel.h"
 #include "polymesh.h"
+#include "utility.h"
 
 namespace SBS {
 
@@ -124,10 +125,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	DrawTopOld = false;
 	DrawBottomOld = false;
 	delta = 0.01;
-	wall1a = false;
-	wall1b = false;
-	wall2a = false;
-	wall2b = false;
 	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
 	remaining_delta = 0;
 	start_time = 0;
@@ -173,6 +170,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Headless = false;
 	prepare_stage = 0;
 	prepare_iterator = 0;
+
+	//create utility object
+	utility = new Utility(this);
 
 	camera = 0;
 	Buildings = 0;
@@ -457,6 +457,10 @@ SBS::~SBS()
 
 	ObjectArray.clear();
 	verify_results.clear();
+
+	if (utility)
+		delete utility;
+	utility = 0;
 
 	if (timer)
 		delete timer;
@@ -1325,7 +1329,7 @@ void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &va
 	//create 2 polygons (front and back) from the vertex array
 
 	//get polygon native direction
-	Vector3 direction = GetPolygonDirection(varray1);
+	Vector3 direction = utility->GetPolygonDirection(varray1);
 
 	//if the polygon is facing right, down or to the back, reverse faces
 	//to keep the vertices clockwise
@@ -1826,14 +1830,14 @@ Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const 
 	if (!mesh)
 		return 0;
 
-	if (wall1a == true && wall2a == true)
+	if (utility->wall1a == true && utility->wall2a == true)
 	{
 		Wall *wall = mesh->CreateWallObject(wallname);
 
 		//convert extents to relative positioning
-		Vector2 extents_x = wall_extents_x - wall->GetMesh()->GetPosition().x;
-		Vector2 extents_y = wall_extents_y - wall->GetMesh()->GetPosition().y;
-		Vector2 extents_z = wall_extents_z - wall->GetMesh()->GetPosition().z;
+		Vector2 extents_x = utility->wall_extents_x - wall->GetMesh()->GetPosition().x;
+		Vector2 extents_y = utility->wall_extents_y - wall->GetMesh()->GetPosition().y;
+		Vector2 extents_z = utility->wall_extents_z - wall->GetMesh()->GetPosition().z;
 
 		//true if doorway is facing forward/backward
 		//false if doorway is facing left/right
@@ -1855,23 +1859,12 @@ Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const 
 		AddFloorMain(wall, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
 		ResetWalls();
 
-		ResetDoorwayWalls();
+		utility->ResetDoorwayWalls();
 
 		return wall;
 	}
 
 	return 0;
-}
-
-void SBS::ResetDoorwayWalls()
-{
-	wall1a = false;
-	wall1b = false;
-	wall2a = false;
-	wall2b = false;
-	wall_extents_x = Vector2::ZERO;
-	wall_extents_y = Vector2::ZERO;
-	wall_extents_z = Vector2::ZERO;
 }
 
 Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th)
@@ -4246,6 +4239,11 @@ CameraTexture* SBS::GetCameraTexture(int number)
 	if (number < camtexarray.size())
 		return camtexarray[number];
 	return 0;
+}
+
+Utility* SBS::GetUtility()
+{
+	return utility;
 }
 
 }

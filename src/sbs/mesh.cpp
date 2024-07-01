@@ -39,6 +39,7 @@
 #include "dynamicmesh.h"
 #include "polymesh.h"
 #include "polygon.h"
+#include "utility.h"
 #include "mesh.h"
 
 namespace SBS {
@@ -522,7 +523,7 @@ void MeshObject::Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, 
 	//cut all walls in this mesh object
 
 	for (size_t i = 0; i < Walls.size(); i++)
-		sbs->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
+		sbs->GetUtility()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
 }
 
 void MeshObject::CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors)
