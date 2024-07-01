@@ -56,6 +56,7 @@ public:
 	std::string material; //polygon material
 
 	PolygonSet cache; //vertex cache
+	int cache_size;
 
 	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane);
 	~Polygon();

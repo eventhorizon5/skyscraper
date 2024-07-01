@@ -134,7 +134,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 		newpolys.clear();
 
 		//skip empty polygons
-		if (polygon->geometry.size() == 0)
+		if (polygon->cache_size == 0)
 			continue;
 
 		//cut all polygons within range
@@ -152,14 +152,14 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 			worker.clear();
 			Vector2 extentsx, extentsy, extentsz;
 			Ogre::AxisAlignedBox bounds (start, end);
-			Ogre::AxisAlignedBox polybounds = Ogre::AxisAlignedBox::BOX_NULL;
+			Ogre::AxisAlignedBox polybounds;
 			bool polycheck2 = false;
 
 			//copy source polygon vertices (from cached table)
 			temppoly.reserve(polygon->cache[j].size());
 			for (size_t k = 0; k < polygon->cache[j].size(); k++)
 			{
-				Ogre::Vector3 vertex = polygon->cache[j][k];
+				Ogre::Vector3 &vertex = polygon->cache[j][k];
 				temppoly.push_back(vertex);
 				polybounds.merge(vertex);
 			}
