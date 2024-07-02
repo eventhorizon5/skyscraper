@@ -37,10 +37,7 @@ public:
 	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
 	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
-
-	//doorway data
-	bool wall1a, wall1b, wall2a, wall2b;
-	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
+	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
 
 private:
 
@@ -49,6 +46,10 @@ private:
 	PolygonSet newpolys;
 
 	PolyArray newpoly;
+
+	//doorway data
+	bool wall1a, wall1b, wall2a, wall2b;
+	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
 };
 
 }

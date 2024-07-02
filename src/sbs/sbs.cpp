@@ -1823,50 +1823,6 @@ Real SBS::FeetToMeters(Real feet)
 	return feet / 3.2808399;
 }
 
-Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th)
-{
-	//add joining doorway polygons if needed
-
-	if (!mesh)
-		return 0;
-
-	if (utility->wall1a == true && utility->wall2a == true)
-	{
-		Wall *wall = mesh->CreateWallObject(wallname);
-
-		//convert extents to relative positioning
-		Vector2 extents_x = utility->wall_extents_x - wall->GetMesh()->GetPosition().x;
-		Vector2 extents_y = utility->wall_extents_y - wall->GetMesh()->GetPosition().y;
-		Vector2 extents_z = utility->wall_extents_z - wall->GetMesh()->GetPosition().z;
-
-		//true if doorway is facing forward/backward
-		//false if doorway is facing left/right
-		bool direction = std::abs(extents_x.x - extents_x.y) > std::abs(extents_z.x - extents_z.y);
-
-		DrawWalls(false, true, false, false, false, false);
-		if (direction == true)
-			AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-		else
-			AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-		ResetWalls();
-
-		DrawWalls(true, false, false, false, false, false);
-		if (direction == true)
-			AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-		else
-			AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-
-		AddFloorMain(wall, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
-		ResetWalls();
-
-		utility->ResetDoorwayWalls();
-
-		return wall;
-	}
-
-	return 0;
-}
-
 Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th)
 {
 	//Adds a wall with the specified dimensions, to the specified mesh object

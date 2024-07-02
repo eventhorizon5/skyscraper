@@ -526,4 +526,48 @@ void Utility::ResetDoorwayWalls()
 	wall_extents_z = Vector2::ZERO;
 }
 
+Wall* Utility::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th)
+{
+	//add joining doorway polygons if needed
+
+	if (!mesh)
+		return 0;
+
+	if (wall1a == true && wall2a == true)
+	{
+		Wall *wall = mesh->CreateWallObject(wallname);
+
+		//convert extents to relative positioning
+		Vector2 extents_x = wall_extents_x - wall->GetMesh()->GetPosition().x;
+		Vector2 extents_y = wall_extents_y - wall->GetMesh()->GetPosition().y;
+		Vector2 extents_z = wall_extents_z - wall->GetMesh()->GetPosition().z;
+
+		//true if doorway is facing forward/backward
+		//false if doorway is facing left/right
+		bool direction = std::abs(extents_x.x - extents_x.y) > std::abs(extents_z.x - extents_z.y);
+
+		sbs->DrawWalls(false, true, false, false, false, false);
+		if (direction == true)
+			sbs->AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+		else
+			sbs->AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+		sbs->ResetWalls();
+
+		sbs->DrawWalls(true, false, false, false, false, false);
+		if (direction == true)
+			sbs->AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+		else
+			sbs->AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+
+		sbs->AddFloorMain(wall, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
+		sbs->ResetWalls();
+
+		ResetDoorwayWalls();
+
+		return wall;
+	}
+
+	return 0;
+}
+
 }
