@@ -360,6 +360,9 @@ bool EngineContext::CutEngines()
 
 bool EngineContext::Start(Ogre::Camera *camera)
 {
+	if (!Simcore)
+		return false;
+
 	//start simulator
 	if (!Simcore->Start(camera))
 		return ReportError("Error starting simulator\n");
