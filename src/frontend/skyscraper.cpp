@@ -1734,14 +1734,14 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	return true;
 }
 
-bool Skyscraper::PrepareStart(EngineContext *engine)
+bool Skyscraper::Start(EngineContext *engine)
 {
+	//start simulator
+
 	if (!engine)
 		return false;
 
 	::SBS::SBS *Simcore = engine->GetSystem();
-
-	engine->starting = true;
 
 	if (engine == active_engine)
 	{
@@ -1769,20 +1769,7 @@ bool Skyscraper::PrepareStart(EngineContext *engine)
 		}
 	}
 
-	return true;
-}
-
-bool Skyscraper::Prepare(EngineContext *engine)
-{
-	if (!engine)
-		return false;
-
-	return engine->Prepare();
-}
-
-bool Skyscraper::Start(EngineContext *engine)
-{
-	//start simulator
+	//start simulation
 	if (!engine->Start(mCamera))
 		return false;
 
@@ -2449,18 +2436,8 @@ bool Skyscraper::RunEngines()
 				if (active_engine->IsLoadingFinished() == true && isloading == true)
 					continue;
 			}
-			PrepareStart(engines[i]);
-		}
-
-		//run sim engine Prepare after loading is finished
-		if (engines[i]->IsLoadingFinished() == true && engines[i]->IsStartingFinished() == false)
-		{
-			Prepare(engines[i]);
-		}
-
-		//start simulator
-		if (engines[i]->IsStartingFinished() == true)
 			Start(engines[i]);
+		}
 	}
 	return result;
 }

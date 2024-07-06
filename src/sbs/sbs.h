@@ -291,7 +291,7 @@ public:
 	int GetPolygonCount();
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
-	bool Prepare(bool report = true);
+	void Prepare(bool report = true);
 	Light* AddLight(const std::string &name, int type);
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
