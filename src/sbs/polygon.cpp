@@ -155,14 +155,18 @@ bool Polygon::ReplaceTexture(const std::string &oldtexture, const std::string &n
 
 	if (material == oldtexture)
 	{
-		bool result = mesh->GetDynamicMesh()->ChangeTexture(oldtexture, newtexture, mesh);
-
-		if (result == false)
-			return false;
-
-		material = newtexture;
+		std::string old = material;
 		sbs->GetTextureManager()->DecrementTextureUsage(oldtexture);
+		material = newtexture;
 		sbs->GetTextureManager()->IncrementTextureUsage(newtexture);
+
+		bool result = mesh->GetDynamicMesh()->ChangeTexture(oldtexture, newtexture, mesh);
+		if (result == false)
+		{
+			material = old; //revert name
+			return false;
+		}
+
 		//mesh->ResetPrepare();
 		return true;
 	}
@@ -180,14 +184,18 @@ bool Polygon::ChangeTexture(const std::string &texture, bool matcheck)
 			return false;
 	}
 
-	bool result = mesh->GetDynamicMesh()->ChangeTexture(material, texture, mesh);
-
-	if (result == false)
-		return false;
-
+	std::string old = material;
 	sbs->GetTextureManager()->DecrementTextureUsage(material);
 	material = texture;
 	sbs->GetTextureManager()->IncrementTextureUsage(texture);
+
+	bool result = mesh->GetDynamicMesh()->ChangeTexture(old, texture, mesh);
+	if (result == false)
+	{
+		material = old; //revert name
+		return false;
+	}
+
 	//mesh->ResetPrepare();
 	return true;
 }
