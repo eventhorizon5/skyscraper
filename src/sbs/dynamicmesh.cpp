@@ -702,7 +702,7 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	if (submesh == -1)
 		return false;
 
-	bool reprepare = false;
+	/*bool reprepare = false;
 
 	if (Submeshes[submesh].clients > 1)
 		reprepare = true; //re-prepare if breaking out of shared mesh
@@ -720,7 +720,7 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 		prepared = false;
 		Prepare(false);
 		return true;
-	}
+	}*/
 
 	//set material if valid
 	Submeshes[submesh].object->setMaterialName(ToString(sbs->InstanceNumber) + ":" + new_texture);
