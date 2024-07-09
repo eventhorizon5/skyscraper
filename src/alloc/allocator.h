@@ -1,5 +1,5 @@
-#ifndef _ALLOCATOR_H
-#define _ALLOCATOR_H
+#ifndef _ALLOC_ALLOCATOR_H
+#define _ALLOC_ALLOCATOR_H
 
 #ifdef _MSC_VER 
 #define _CRT_SECURE_NO_WARNINGS
