@@ -1,6 +1,9 @@
 /*
  * Code originally from here:
  * https://stackoverflow.com/questions/40514362/why-stdvector-does-not-have-a-release-method/59127415
+ *
+ * License: CC BY-SA 4.0
+ * https://creativecommons.org/licenses/by-sa/4.0/
  */
 
 #include "allocator.h"
