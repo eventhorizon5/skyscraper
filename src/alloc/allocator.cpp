@@ -1,6 +1,3 @@
-//Code originally from here:
-//https://stackoverflow.com/questions/40514362/why-stdvector-does-not-have-a-release-method/59127415#59127415
-
 #include <cassert>
 #include <cstring>
 #include <memory>
