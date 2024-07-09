@@ -1,9 +1,16 @@
+/*
+ * Code originally from here:
+ * https://stackoverflow.com/questions/40514362/why-stdvector-does-not-have-a-release-method/59127415
+ */
+
 #ifndef _ALLOC_ALLOCATOR_H
 #define _ALLOC_ALLOCATOR_H
 
-#ifdef _MSC_VER 
+#ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
+
+#include <iostream>
 
 // The requirements for the allocator where taken from Howard Hinnant tutorial:
 // https://howardhinnant.github.io/allocator_boilerplate.html

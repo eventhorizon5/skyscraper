@@ -1,12 +1,8 @@
-//Code originally from here:
-//https://stackoverflow.com/questions/40514362/why-stdvector-does-not-have-a-release-method/59127415#59127415
+/*
+ * Code originally from here:
+ * https://stackoverflow.com/questions/40514362/why-stdvector-does-not-have-a-release-method/59127415
+ */
 
-#include <cassert>
-#include <cstring>
-#include <memory>
-#include <stdexcept>
-#include <vector>
-#include <iostream>
 #include "allocator.h"
 
 namespace Alloc {
@@ -97,5 +93,9 @@ MyAllocation<T> MyAllocator<T>::release()
 
 	return std::move(m_allocator->Current);
 }
+
+// Instantiate the class for the supported template type parameters
+template class MyAllocator<int>;
+template class MyAllocator<long>;
 
 }
