@@ -26,6 +26,8 @@ template <typename T>
 [[nodiscard]] T* MyAllocator<T>::Allocator::allocate(std::size_t n)
 {
 	T *ret = new T[n];
+	total_bytes += n;
+
 	if (!(Current.Ptr == nullptr || CurrentDeallocated))
 	{
 		// Actually release the ownership of the Current unique pointer
@@ -49,6 +51,7 @@ void MyAllocator<T>::Allocator::deallocate(T* p, std::size_t n)
 	}
 
 	delete[] p;
+	total_bytes -= n;
 }
 
 template <typename T>
@@ -85,6 +88,7 @@ template <typename T>
 void MyAllocator<T>::deallocate(T* p, std::size_t n)
 {
 	std::cout << "deallocate(\"" << p << "\", " << n << ")" << std::endl;
+	std::cout << "total left: " << m_allocator->total_bytes << std::endl;
 	return m_allocator->deallocate(p, n);
 }
 

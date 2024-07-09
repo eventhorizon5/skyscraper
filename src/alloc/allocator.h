@@ -47,6 +47,8 @@ private:
 
         MyAllocation<T> Current;
         bool CurrentDeallocated = false;
+
+        int total_bytes = 0;
     };
 public:
     MyAllocator();
