@@ -68,6 +68,10 @@ file(GLOB SBS_FILES
 	src/sbs/*.cpp
 )
  
+file(GLOB ALLOC_FILES
+	src/alloc/*.cpp
+)
+
 file(GLOB OGREBULLET_COLL_FILES
 	ogrebullet/Collisions/src/*.cpp
 	ogrebullet/Collisions/src/Debug/*.cpp
@@ -92,6 +96,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/frontend
 	src/sbs
 	src/script
+	src/alloc
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
@@ -113,6 +118,9 @@ add_library(SBS SHARED ${SBS_FILES})
 #ScriptProc Library
 add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
 
+#Alloc Library
+add_library(Alloc SHARED ${ALLOC_FILES})
+
 #frontend executable
 add_executable(skyscraper ${FRONTEND_FILES})
 
@@ -125,7 +133,7 @@ target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
+target_link_libraries(SBS Alloc OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
 target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 
