@@ -13,6 +13,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#include <cassert>
+#include <cstring>
+#include <memory>
+#include <stdexcept>
 #include <iostream>
 
 // The requirements for the allocator where taken from Howard Hinnant tutorial:
