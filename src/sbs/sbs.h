@@ -124,7 +124,6 @@ extern bool SBSIMPEXP enable_advanced_profiling;
 //SBS class
 class SBSIMPEXP SBS : public Object
 {
-	friend class MeshObject;
 public:
 
 	Real delta;
