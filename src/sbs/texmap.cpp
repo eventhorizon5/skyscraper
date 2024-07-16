@@ -420,10 +420,10 @@ bool Polygon::IntersectRay(const Vector3 &start, const Vector3 &end)
 	for (int index = 0; index < geometry.size(); index++)
 	{
 		size_t i1 = geometry[index].size() - 1;
-		for (size_t i = 0; i < geometry[index].size(); i++)
+		for (size_t i = geometry[index].size() - 1; i == 0; i--)
 		{
-			Vector3 start2 = start - geometry[index][i1].vertex;
-			normal = start2.crossProduct(start - geometry[index][i].vertex);
+			Vector3 start2 = start - sbs->ToLocal(geometry[index][i1].vertex, false, true);
+			normal = start2.crossProduct(start - sbs->ToLocal(geometry[index][i].vertex, false, true));
 			if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
 				return false;
 			i1 = i;
