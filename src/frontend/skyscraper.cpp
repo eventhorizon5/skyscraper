@@ -1077,8 +1077,8 @@ bool Skyscraper::Loop()
 	if (active_engine->IsCameraActive() == false)
 		active_engine = FindActiveEngine();
 
-	//exit if active engine is loading
-	if (active_engine->IsLoading() == true)
+	//exit if any engine is loading, unless RenderOnStartup is true
+	if (IsEngineLoading() == true && RenderOnStartup == false)
 		return true;
 
 	//if in CheckScript mode, exit
