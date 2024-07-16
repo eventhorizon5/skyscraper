@@ -419,18 +419,23 @@ bool Polygon::IntersectRay(const Vector3 &start, const Vector3 &end)
 
 	for (int index = 0; index < geometry.size(); index++)
 	{
+		bool result = true;
+
 		size_t i1 = geometry[index].size() - 1;
 		for (size_t i = 0; i < geometry[index].size(); i++)
 		{
 			Vector3 start2 = start - geometry[index][i1].vertex;
 			normal = start2.crossProduct(start - geometry[index][i].vertex);
 			if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
-				return false;
+				result = false;
 			i1 = i;
 		}
+
+		if (result == true)
+			return result;
 	}
 
-	return true;
+	return false;
 }
 
 bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal)
