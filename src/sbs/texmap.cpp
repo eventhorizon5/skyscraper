@@ -444,10 +444,10 @@ bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3
 	 * true if it intersects and the intersection point in world coordinates.
 	 */
 
-	if (!IntersectSegmentPlane(start, end, isect, pr, normal))
+	if (!IntersectRay(start, end))
 		return false;
 
-	return IntersectRay(start, end);
+	return IntersectSegmentPlane(start, end, isect, pr, normal);
 }
 
 bool Polygon::IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal)
