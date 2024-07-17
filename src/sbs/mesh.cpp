@@ -800,6 +800,7 @@ void MeshObject::CreateCollider()
 
 		//add vertices to shape
 
+		int additions = 0;
 		for (size_t i = 0; i < Walls.size(); i++)
 		{
 			for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
@@ -829,9 +830,14 @@ void MeshObject::CreateCollider()
 					}
 
 					shape->AddTriangle(a, b, c);
+					additions++;
 				}
 			}
 		}
+
+		//exit if no geometry
+		if (additions == 0)
+			return;
 
 		//finalize shape
 		shape->Finish();
