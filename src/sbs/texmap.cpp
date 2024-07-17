@@ -475,7 +475,7 @@ bool Polygon::IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Ve
 
 	Plane plane = GetAbsolutePlane();
 
-	Real denom = plane.normal.x * (end.x) +
+	Real denom = plane.normal.x * (end.x - start.x) +
 			plane.normal.y * (end.y - start.y) +
 			plane.normal.z * (end.z - start.z);
 
