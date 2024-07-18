@@ -144,6 +144,7 @@ void Console::On_Close(wxCloseEvent& event)
 
 void Console::Write(const std::string &message)
 {
+	return;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//due to hangs, don't allow Windows to write to the console from multiple threads
 	if (mtx.try_lock() == false)
