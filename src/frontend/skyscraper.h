@@ -164,6 +164,7 @@ public:
 	MainScreen* GetWindow();
 	FMOD::System* GetSoundSystem();
 	VM* GetVM();
+	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 
 private:
 	//sound data
@@ -202,6 +203,7 @@ private:
 	void ShowProgressDialog();
 	void ReInit();
 	void ProcessLog();
+	void ProcessLoad();
 
 	Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;
@@ -241,12 +243,25 @@ private:
 	//VM instance
 	VM *vm;
 
-        struct log_queue_data
-        {
-                std::string text;
-                bool error;
-        };
-        std::vector<log_queue_data> log_queue;
+	struct log_queue_data
+	{
+		std::string text;
+		bool error;
+	};
+	std::vector<log_queue_data> log_queue;
+
+	//building load information
+	struct LoadInfo
+	{
+		std::string filename;
+		EngineContext *parent;
+		Vector3 position;
+		Real rotation;
+		Vector3 area_min;
+		Vector3 area_max;
+		bool need_process;
+	};
+	LoadInfo loadinfo;
 };
 
 DECLARE_APP(Skyscraper)

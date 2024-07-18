@@ -187,6 +187,7 @@ int main (int argc, char* argv[])
 namespace Skyscraper {
 
 std::mutex report_lock;
+std::mutex load_lock;
 
 bool Skyscraper::OnInit(void)
 {
@@ -249,6 +250,15 @@ bool Skyscraper::OnInit(void)
 
 	//create VM instance
 	vm = new VM(this);
+
+	//initialize loader info
+	loadinfo.filename == "";
+	loadinfo.need_process = false;
+	loadinfo.area_min = Vector3::ZERO;
+	loadinfo.area_max = Vector3::ZERO;
+	loadinfo.parent = 0;
+	loadinfo.position = Vector3::ZERO;
+	loadinfo.rotation = 0.0;
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -2537,6 +2547,34 @@ FMOD::System* Skyscraper::GetSoundSystem()
 VM* Skyscraper::GetVM()
 {
 	return vm;
+}
+
+void Skyscraper::ExtLoad(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+	//call a building load, from another thread
+
+	if (loadinfo.need_process == true)
+		return;
+
+	load_lock.lock();
+	loadinfo.filename = filename;
+	loadinfo.parent = parent;
+	loadinfo.position = position;
+	loadinfo.rotation = rotation;
+	loadinfo.area_min = area_min;
+	loadinfo.area_max = area_max;
+	load_lock.unlock();
+}
+
+void Skyscraper::ProcessLoad()
+{
+	load_lock.lock();
+	if (loadinfo.need_process == true)
+	{
+		Load(loadinfo.filename, loadinfo.parent, loadinfo.position, loadinfo.rotation, loadinfo.area_min, loadinfo.area_max);
+		loadinfo.need_process = false;
+	}
+	load_lock.unlock();
 }
 
 }
