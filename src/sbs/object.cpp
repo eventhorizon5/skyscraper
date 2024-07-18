@@ -26,6 +26,7 @@
 #include "sbs.h"
 #include "scenenode.h"
 #include "profiler.h"
+#include "utility.h"
 #include "object.h"
 
 namespace SBS {
@@ -77,15 +78,12 @@ void ObjectBase::SetName(const std::string &name)
 
 void ObjectBase::Report(const std::string &message)
 {
-	Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message);
-	sbs->LastNotification = message;
+	sbs->GetUtility()->Report(message);
 }
 
 bool ObjectBase::ReportError(const std::string &message)
 {
-	Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message, Ogre::LML_CRITICAL);
-	sbs->LastError = message;
-	return false;
+	return sbs->GetUtility()->ReportError(message);
 }
 
 Object::Object(Object *parent) : ObjectBase(parent)

@@ -29,6 +29,8 @@
 
 namespace SBS {
 
+std::mutex report_lock;
+
 Utility::Utility(Object *parent) : ObjectBase(parent)
 {
 	ResetDoorwayWalls();
@@ -568,6 +570,62 @@ Wall* Utility::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, co
 	}
 
 	return 0;
+}
+
+void Utility::Report(const std::string &message)
+{
+	report_lock.lock();
+
+	log_queue_data data;
+	data.text = message;
+	data.error = false;
+	log_queue.push_back(data);
+
+	sbs->LastNotification = message;
+
+	report_lock.unlock();
+}
+
+bool Utility::ReportError(const std::string &message)
+{
+	report_lock.lock();
+
+	log_queue_data data;
+	data.text = message;
+	data.error = true;
+	log_queue.push_back(data);
+
+	sbs->LastError = message;
+
+	report_lock.unlock();
+	return false;
+}
+
+void Utility::ProcessLog()
+{
+	report_lock.lock();
+
+	while (log_queue.size() > 0)
+	{
+		try
+		{
+			Ogre::LogMessageLevel level = Ogre::LML_NORMAL;
+			if (log_queue[0].error == true)
+				level = Ogre::LML_CRITICAL;
+
+			if (Ogre::LogManager::getSingletonPtr())
+				Ogre::LogManager::getSingleton().logMessage(log_queue[0].text, level);
+		}
+		catch (Ogre::Exception &e)
+		{
+
+		}
+
+		//erase queue entry
+		log_queue.erase(log_queue.begin());
+	}
+
+	report_lock.unlock();
 }
 
 }

@@ -201,6 +201,7 @@ private:
 	void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
 	void ShowProgressDialog();
 	void ReInit();
+	void ProcessLog();
 
 	Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;
@@ -239,6 +240,13 @@ private:
 
 	//VM instance
 	VM *vm;
+
+        struct log_queue_data
+        {
+                std::string text;
+                bool error;
+        };
+        std::vector<log_queue_data> log_queue;
 };
 
 DECLARE_APP(Skyscraper)
