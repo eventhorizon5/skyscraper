@@ -1025,13 +1025,6 @@ void Skyscraper::ProcessLog()
 		//erase queue entry
 		log_queue.erase(log_queue.begin());
 	}
-
-	//process logs for each engine context
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-			engines[i]->ProcessLog();
-	}
 }
 
 bool Skyscraper::ReportFatalError(const std::string &message)
@@ -1063,6 +1056,13 @@ bool Skyscraper::Loop()
 	ProfileManager::Increment_Frame_Counter();
 
 	ProcessLog();
+
+	//run thread 0 runloops for each engine context
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		if (engines[i])
+			engines[i]->Run0();
+	}
 
 	//main menu routine
 	if (StartupRunning == true)
