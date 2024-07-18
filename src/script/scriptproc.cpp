@@ -280,6 +280,7 @@ Nextline:
 			config->InWhile = false;
 		else
 			line++;
+	}
 
 		if (line == (int)BuildingData.size())
 		{
