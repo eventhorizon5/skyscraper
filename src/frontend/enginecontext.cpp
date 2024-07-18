@@ -157,8 +157,8 @@ void EngineContext::Run()
 
 				if (Simcore->RenderOnStartup == false)
 				{
-					ShutdownLoop = true;
-					return;
+					//ShutdownLoop = true;
+					//return;
 				}
 			}
 			else if (processor->IsFinished == true && result == true)
