@@ -252,7 +252,7 @@ bool Skyscraper::OnInit(void)
 	vm = new VM(this);
 
 	//initialize loader info
-	loadinfo.filename == "";
+	loadinfo.filename = "";
 	loadinfo.need_process = false;
 	loadinfo.area_min = Vector3::ZERO;
 	loadinfo.area_max = Vector3::ZERO;
@@ -1090,6 +1090,7 @@ bool Skyscraper::Loop()
 	ProfileManager::Increment_Frame_Counter();
 
 	ProcessLog();
+	ProcessLoad();
 
 	//run thread 0 runloops for each engine context
 	for (size_t i = 0; i < engines.size(); i++)
@@ -2563,18 +2564,19 @@ void Skyscraper::ExtLoad(const std::string &filename, EngineContext *parent, con
 	loadinfo.rotation = rotation;
 	loadinfo.area_min = area_min;
 	loadinfo.area_max = area_max;
+	loadinfo.need_process = true;
 	load_lock.unlock();
 }
 
 void Skyscraper::ProcessLoad()
 {
-	load_lock.lock();
 	if (loadinfo.need_process == true)
 	{
+		load_lock.lock();
 		Load(loadinfo.filename, loadinfo.parent, loadinfo.position, loadinfo.rotation, loadinfo.area_min, loadinfo.area_max);
 		loadinfo.need_process = false;
+		load_lock.unlock();
 	}
-	load_lock.unlock();
 }
 
 }
