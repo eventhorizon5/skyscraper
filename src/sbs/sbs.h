@@ -195,6 +195,9 @@ public:
 	bool RenderWait; //if true, pause the render to wait for updates
 	bool Waiting;
 
+	//ID of main thread
+        std::thread::id main_id;
+
 	//public functions
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~SBS();
@@ -544,9 +547,6 @@ private:
 
 	//camera texture references
 	std::vector<CameraTexture*> camtexarray;
-
-	//ID of main thread
-	std::thread::id main_id;
 
 	std::vector<MeshObject*> meshprocesses;
 
