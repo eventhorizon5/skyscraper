@@ -5,6 +5,9 @@
 bin/
 lib/
 
+#ignore vscode files
+.vscode/
+
 # CMake Cache
 **/CMakeCache.txt
 **/CMakeFiles
