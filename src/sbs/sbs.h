@@ -385,6 +385,7 @@ public:
 	CameraTexture* GetCameraTexture(int number);
 	std::string GetFilesystemPath(std::string filename);
 	Utility* GetUtility();
+	void Run0();
 
 	//Meshes
 	MeshObject* Buildings;

@@ -4177,4 +4177,12 @@ Utility* SBS::GetUtility()
 	return utility;
 }
 
+void SBS::Run0()
+{
+	//thread 0 runloop
+
+	if (utility)
+		utility->ProcessLog();
+}
+
 }

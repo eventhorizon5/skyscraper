@@ -215,7 +215,13 @@ void EngineContext::Run0()
 {
 	//thread 0 runloop
 
-	ProcessLog();
+	if (!Simcore)
+		return;
+
+	if (!Simcore->GetUtility())
+		return;
+
+	Simcore->GetUtility()->ProcessLog();
 }
 
 bool EngineContext::Load(std::string filename)
@@ -653,17 +659,6 @@ VM* EngineContext::GetVM()
 void EngineContext::ThreadWait()
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
-}
-
-void EngineContext::ProcessLog()
-{
-	if (!Simcore)
-		return;
-
-	if (!Simcore->GetUtility())
-		return;
-
-	Simcore->GetUtility()->ProcessLog();
 }
 
 }
