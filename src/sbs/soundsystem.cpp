@@ -66,7 +66,8 @@ void SoundSystem::Loop()
 		SetListenerPosition(sbs->camera->GetPosition());
 
 	//set direction of listener to camera's direction
-	Vector3 front, top;
+	Vector3 front = Vector3::ZERO;
+	Vector3 top = Vector3::ZERO;
 	sbs->camera->GetDirection(front, top, true);
 	SetListenerDirection(front, top);
 

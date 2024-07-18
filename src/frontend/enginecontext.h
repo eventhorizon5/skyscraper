@@ -31,7 +31,6 @@ public:
 
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
-	bool starting;
 
 	EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~EngineContext();
@@ -53,7 +52,6 @@ public:
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
 	bool IsLoadingFinished();
-	bool IsStartingFinished();
 	void UpdateProgress(int percent);
 	int GetProgress() { return progress; }
 	int GetNumber() { return instance; }
@@ -84,7 +82,6 @@ private:
 
 	void StartSim();
 	void UnloadSim();
-	void FinishStart();
 
 	Skyscraper* frontend; //frontend
 	ScriptProcessor* processor; //script processor

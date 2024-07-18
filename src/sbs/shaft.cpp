@@ -1140,7 +1140,7 @@ Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, con
 	}
 
 	//create doorway walls
-	sbs->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
+	sbs->GetUtility()->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
 
 	std::string num = ToString((int)DoorArray.size());
 	if (name == "")

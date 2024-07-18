@@ -124,7 +124,6 @@ extern bool SBSIMPEXP enable_advanced_profiling;
 //SBS class
 class SBSIMPEXP SBS : public Object
 {
-	friend class MeshObject;
 public:
 
 	Real delta;
@@ -245,7 +244,6 @@ public:
 	int GetDrawWallsCount();
 	Real MetersToFeet(Real meters); //converts meters to feet
 	Real FeetToMeters(Real feet); //converts feet to meters
-	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
 	Wall* AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th);
 	Wall* AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
 	Wall* AddGround(const std::string &name, const std::string &texture, Real x1, Real z1, Real x2, Real z2, Real altitude, int tile_x, int tile_z);
@@ -294,7 +292,7 @@ public:
 	int GetPolygonCount();
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
-	bool Prepare(bool report = true);
+	void Prepare(bool report = true);
 	Light* AddLight(const std::string &name, int type);
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);

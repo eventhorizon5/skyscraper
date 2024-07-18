@@ -382,7 +382,7 @@ Vector3 Utility::ComputeNormal(PolyArray &vertices, Real &D)
 	return norm;
 }
 
-bool Polygon::IntersectRay(PolyArray &vertices, const Vector3 &start, const Vector3 &end)
+bool Polygon::IntersectRay(const Vector3 &start, const Vector3 &end)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -417,14 +417,17 @@ bool Polygon::IntersectRay(PolyArray &vertices, const Vector3 &start, const Vect
 	Vector3 relend = end;
 	relend -= start;
 
-	size_t i1 = vertices.size() - 1;
-	for (size_t i = 0; i < vertices.size(); i++)
+	for (int index = 0; index < geometry.size(); index++)
 	{
-		Vector3 start2 = start - vertices[i1];
-		normal = start2.crossProduct(start - vertices[i]);
-		if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
-			return false;
-		i1 = i;
+		size_t i1 = geometry[index].size() - 1;
+		for (size_t i = 0; i < geometry[index].size(); i++)
+		{
+			Vector3 start2 = start - sbs->ToLocal(geometry[index][i1].vertex, false, true);
+			normal = start2.crossProduct(start - sbs->ToLocal(geometry[index][i].vertex, false, true));
+			if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
+				return false;
+			i1 = i;
+		}
 	}
 
 	return true;
@@ -441,18 +444,10 @@ bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3
 	 * true if it intersects and the intersection point in world coordinates.
 	 */
 
-	/*if (!IntersectSegmentPlane(start, end, isect, pr, normal))
+	if (!IntersectRay(start, end))
 		return false;
 
-	PolygonSet vertices;
-	GetGeometry(vertices, false, false, false, false, true);
-
-	for (size_t i = 0; i < vertices.size(); i++)
-	{
-		if (IntersectRay(vertices[i], start, end))
-			return true;
-	}*/
-	return false;
+	return IntersectSegmentPlane(start, end, isect, pr, normal);
 }
 
 bool Polygon::IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal)
@@ -480,7 +475,7 @@ bool Polygon::IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Ve
 
 	Plane plane = GetAbsolutePlane();
 
-	Real denom = plane.normal.x * (end.x) +
+	Real denom = plane.normal.x * (end.x - start.x) +
 			plane.normal.y * (end.y - start.y) +
 			plane.normal.z * (end.z - start.z);
 

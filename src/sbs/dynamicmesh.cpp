@@ -702,7 +702,7 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	if (submesh == -1)
 		return false;
 
-	bool reprepare = false;
+	/*bool reprepare = false;
 
 	if (Submeshes[submesh].clients > 1)
 		reprepare = true; //re-prepare if breaking out of shared mesh
@@ -720,7 +720,7 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 		prepared = false;
 		Prepare(false);
 		return true;
-	}
+	}*/
 
 	//set material if valid
 	Submeshes[submesh].object->setMaterialName(ToString(sbs->InstanceNumber) + ":" + new_texture);
@@ -921,7 +921,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		for (int num = start; num <= end; num++)
 		{
 			MeshObject *mesh = Parent->GetClient(num);
-			Ogre::AxisAlignedBox client_box = Ogre::AxisAlignedBox::BOX_NULL;
+			Ogre::AxisAlignedBox client_box;
 			Real radius = 0;
 
 			ClientEntry entry;
@@ -1278,7 +1278,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 		}
 	}
 
-	Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
+	Ogre::AxisAlignedBox box;
 
 	//fill array with vertex's data
 	unsigned int pos = 0;
@@ -1395,7 +1395,7 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 
 	if (Parent->GetMeshCount() == 1)
 	{
-		Ogre::AxisAlignedBox box = Ogre::AxisAlignedBox::BOX_NULL;
+		Ogre::AxisAlignedBox box;
 		Real radius = 0;
 
 		if (Parent->GetClientCount() != (int)client_entries.size())

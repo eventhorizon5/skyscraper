@@ -1038,7 +1038,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		if (DoorWalls == true)
 		{
 			sbs->GetTextureManager()->ResetTextureMapping(true);
-			sbs->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
+			sbs->GetUtility()->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
 			sbs->GetTextureManager()->ResetTextureMapping();
 		}
 	}

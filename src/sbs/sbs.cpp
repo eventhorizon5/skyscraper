@@ -486,6 +486,9 @@ bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
+	//prepare 3D geometry for use
+	Prepare();
+
 	//free text texture memory
 	texturemanager->FreeTextureBoxes();
 
@@ -1840,50 +1843,6 @@ Real SBS::FeetToMeters(Real feet)
 	return feet / 3.2808399;
 }
 
-Wall* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th)
-{
-	//add joining doorway polygons if needed
-
-	if (!mesh)
-		return 0;
-
-	if (utility->wall1a == true && utility->wall2a == true)
-	{
-		Wall *wall = mesh->CreateWallObject(wallname);
-
-		//convert extents to relative positioning
-		Vector2 extents_x = utility->wall_extents_x - wall->GetMesh()->GetPosition().x;
-		Vector2 extents_y = utility->wall_extents_y - wall->GetMesh()->GetPosition().y;
-		Vector2 extents_z = utility->wall_extents_z - wall->GetMesh()->GetPosition().z;
-
-		//true if doorway is facing forward/backward
-		//false if doorway is facing left/right
-		bool direction = std::abs(extents_x.x - extents_x.y) > std::abs(extents_z.x - extents_z.y);
-
-		DrawWalls(false, true, false, false, false, false);
-		if (direction == true)
-			AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-		else
-			AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-		ResetWalls();
-
-		DrawWalls(true, false, false, false, false, false);
-		if (direction == true)
-			AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-		else
-			AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-
-		AddFloorMain(wall, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
-		ResetWalls();
-
-		utility->ResetDoorwayWalls();
-
-		return wall;
-	}
-
-	return 0;
-}
-
 Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th)
 {
 	//Adds a wall with the specified dimensions, to the specified mesh object
@@ -2970,66 +2929,40 @@ int SBS::GetPolygonCount()
 	return PolygonCount;
 }
 
-bool SBS::Prepare(bool report)
+void SBS::Prepare(bool report)
 {
 	//prepare objects for run
 
 	//prepare mesh objects
-	if (meshes.size() > 0 && prepare_stage == 0)
+	if (report == true)
+		Report("Preparing meshes...");
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
-		if (prepare_iterator == 0 && report == true)
-			Report("Preparing meshes...");
-
-		meshes[prepare_iterator]->Prepare();
-		prepare_iterator++;
-		if (prepare_iterator == meshes.size())
-		{
-			prepare_stage = 1;
-			prepare_iterator = 0;
-		}
+		meshes[i]->Prepare();
 	}
 
 	//process dynamic meshes
-	if (dynamic_meshes.size() > 0 && prepare_stage == 1)
+	if (report == true)
+		Report("Processing geometry...");
+	for (size_t i = 0; i < dynamic_meshes.size(); i++)
 	{
-		if (prepare_iterator == 0 && report == true)
-			Report("Processing geometry...");
 		if (sbs->Verbose)
-			Report("DynamicMesh " + ToString((int)prepare_iterator) + " of " + ToString((int)dynamic_meshes.size()));
-
-		dynamic_meshes[prepare_iterator]->Prepare();
-		prepare_iterator++;
-		if (prepare_iterator == dynamic_meshes.size())
-		{
-			prepare_stage = 2;
-			prepare_iterator = 0;
-		}
+			Report("DynamicMesh " + ToString((int)i) + " of " + ToString((int)dynamic_meshes.size()));
+		dynamic_meshes[i]->Prepare();
 	}
 
-	if (meshes.size() > 0 && prepare_stage == 2)
+	if (report == true)
+		Report("Creating colliders...");
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
-		if (prepare_iterator == 0 && report == true)
-			Report("Creating colliders...");
-
-		if (meshes[prepare_iterator]->tricollider == true)
-			meshes[prepare_iterator]->CreateCollider();
+		if (meshes[i]->tricollider == true)
+			meshes[i]->CreateCollider();
 		else
-			meshes[prepare_iterator]->CreateBoxCollider();
-
-		prepare_iterator++;
-		if (prepare_iterator == meshes.size())
-		{
-			prepare_stage = 3;
-			prepare_iterator = 0;
-		}
+			meshes[i]->CreateBoxCollider();
 	}
 
-	if (report == true && prepare_stage == 3)
-	{
+	if (report == true)
 		Report("Finished prepare");
-		return true;
-	}
-	return false;
 }
 
 Light* SBS::AddLight(const std::string &name, int type)
