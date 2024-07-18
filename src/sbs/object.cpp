@@ -78,11 +78,15 @@ void ObjectBase::SetName(const std::string &name)
 
 void ObjectBase::Report(const std::string &message)
 {
+	if (!sbs->GetUtility())
+		return;
 	sbs->GetUtility()->Report(message);
 }
 
 bool ObjectBase::ReportError(const std::string &message)
 {
+	if (!sbs->GetUtility())
+		return false;
 	return sbs->GetUtility()->ReportError(message);
 }
 
