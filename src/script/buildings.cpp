@@ -146,7 +146,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			max.z = ToFloat(tempdata[10]);
 		}
 
-		bool result = engine->GetFrontend()->Load(tempdata[0], engine, position, rotation, min, max);
+		engine->GetFrontend()->ExtLoad(tempdata[0], engine, position, rotation, min, max);
 
 		return sNextLine;
 	}
