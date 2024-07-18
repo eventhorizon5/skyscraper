@@ -38,7 +38,7 @@ public:
 	SBS::SBS *GetSystem() { return Simcore; }
 	Skyscraper *GetFrontend() { return frontend; }
 	bool IsCameraActive();
-	bool Run();
+	void Run();
 	void Shutdown();
 	bool GetShutdownState() { return shutdown; }
 	bool Load(std::string filename);
@@ -79,6 +79,7 @@ private:
 
 	void StartSim();
 	void UnloadSim();
+	void ThreadWait();
 
 	Skyscraper* frontend; //frontend
 	ScriptProcessor* processor; //script processor

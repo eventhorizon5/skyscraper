@@ -125,71 +125,86 @@ void EngineContext::Shutdown()
 	shutdown = true;
 }
 
-bool EngineContext::Run()
+void EngineContext::Run()
 {
-	if (!Simcore)
-		return false;
-
-	//run script processor
-	if (processor)
+	while (true)
 	{
-		bool result = processor->Run();
+		if (!Simcore)
+			return;
 
-		if (loading == true)
+		//run script processor
+		if (processor)
 		{
-			if (result == false)
-			{
-				ReportError("Error processing building\n");
-				Shutdown();
-				frontend->CloseProgressDialog();
-				return false;
-			}
-			else if (processor->IsFinished == true)
-			{
-				//building has finished loading
-				finish_time = Simcore->GetCurrentTime();
-			}
+			bool result = processor->Run();
 
-			if (Simcore->RenderOnStartup == false)
-				return false;
+			if (loading == true)
+			{
+				if (result == false)
+				{
+					ReportError("Error processing building\n");
+					Shutdown();
+					frontend->CloseProgressDialog();
+					ShutdownLoop = true;
+					return;
+				}
+				else if (processor->IsFinished == true)
+				{
+					//building has finished loading
+					finish_time = Simcore->GetCurrentTime();
+				}
+
+				if (Simcore->RenderOnStartup == false)
+				{
+					ShutdownLoop = true;
+					return;
+				}
+			}
+			else if (processor->IsFinished == true && result == true)
+			{
+				Simcore->Prepare(false);
+				Simcore->DeleteColliders = false;
+				Simcore->Init(); //initialize any new objects
+			}
 		}
-		else if (processor->IsFinished == true && result == true)
+		else
 		{
-			Simcore->Prepare(false);
-			Simcore->DeleteColliders = false;
-			Simcore->Init(); //initialize any new objects
+			ShutdownLoop = true;
+			return;
 		}
+
+		//force window raise on startup, and report on missing files, if any
+		if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
+		{
+			frontend->RaiseWindow();
+			raised = true;
+
+			processor->ReportMissingFiles();
+		}
+
+		//process internal clock
+		Simcore->AdvanceClock();
+		if (running == true)
+			Simcore->CalculateFrameRate();
+
+		if (loading == false)
+		{
+			//run SBS main loop
+			Simcore->Loop();
+
+			//run functions if user enters or leaves this engine
+			if (inside == false && IsInside() == true)
+				OnEnter();
+			if (inside == true && IsInside() == false)
+				OnExit();
+		}
+
+		//prevent thread from taking up all of the CPU
+		ThreadWait();
+
+		//shutdown loop if requested
+		if (ShutdownLoop == true)
+			break;
 	}
-	else
-		return false;
-
-	//force window raise on startup, and report on missing files, if any
-	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
-	{
-		frontend->RaiseWindow();
-		raised = true;
-
-		processor->ReportMissingFiles();
-	}
-
-	//process internal clock
-	Simcore->AdvanceClock();
-	if (running == true)
-		Simcore->CalculateFrameRate();
-
-	if (loading == false)
-	{
-		//run SBS main loop
-		Simcore->Loop();
-
-		//run functions if user enters or leaves this engine
-		if (inside == false && IsInside() == true)
-			OnEnter();
-		if (inside == true && IsInside() == false)
-			OnExit();
-	}
-
-	return true;
 }
 
 bool EngineContext::Load(std::string filename)
@@ -617,6 +632,11 @@ bool EngineContext::IsParent(EngineContext *engine, bool recursive)
 		return GetParent()->IsParent(engine, recursive);
 
 	return false;
+}
+
+void EngineContext::ThreadWait()
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 }
