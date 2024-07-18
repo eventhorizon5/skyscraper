@@ -287,6 +287,12 @@ Nextline:
 		}
 	}
 
+		if (line == (int)BuildingData.size())
+		{
+			IsFinished = true;
+			show_percent = false;
+		}
+
 	return true;
 
 Error:
