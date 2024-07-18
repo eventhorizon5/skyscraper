@@ -141,9 +141,9 @@ void EngineContext::Run()
 			{
 				if (result == false)
 				{
-					ReportError("Error processing building\n");
+					//ReportError("Error processing building\n");
 					Shutdown();
-					frontend->CloseProgressDialog();
+					//frontend->CloseProgressDialog();
 					ShutdownLoop = true;
 					return;
 				}
@@ -175,10 +175,10 @@ void EngineContext::Run()
 		//force window raise on startup, and report on missing files, if any
 		if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 		{
-			frontend->RaiseWindow();
-			raised = true;
+			//frontend->RaiseWindow();
+			//raised = true;
 
-			processor->ReportMissingFiles();
+			//processor->ReportMissingFiles();
 		}
 
 		//process internal clock
