@@ -441,7 +441,7 @@ void EngineContext::UpdateProgress(int percent)
 	//update progress bar
 
 	progress = percent;
-	frontend->UpdateProgress();
+	//frontend->UpdateProgress();
 }
 
 CameraState EngineContext::GetCameraState()
