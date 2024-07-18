@@ -26,6 +26,7 @@
 #include "camera.h"
 #include "gui/debugpanel.h"
 #include "scriptproc.h"
+#include "utility.h"
 #include "enginecontext.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -127,6 +128,7 @@ void EngineContext::Shutdown()
 
 void EngineContext::Run()
 {
+	//thread runloop
 	while (true)
 	{
 		if (!Simcore)
@@ -205,6 +207,13 @@ void EngineContext::Run()
 		if (ShutdownLoop == true)
 			break;
 	}
+}
+
+void EngineContext::Run0()
+{
+	//thread 0 runloop
+
+	ProcessLog();
 }
 
 bool EngineContext::Load(std::string filename)
@@ -637,6 +646,17 @@ bool EngineContext::IsParent(EngineContext *engine, bool recursive)
 void EngineContext::ThreadWait()
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+}
+
+void EngineContext::ProcessLog()
+{
+	if (!Simcore)
+		return;
+
+	if (!Simcore->GetUtility())
+		return;
+
+	Simcore->GetUtility()->ProcessLog();
 }
 
 }

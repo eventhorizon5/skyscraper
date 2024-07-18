@@ -184,6 +184,8 @@ int main (int argc, char* argv[])
 
 namespace Skyscraper {
 
+std::mutex report_lock;
+
 bool Skyscraper::OnInit(void)
 {
 	version = "1.12";
@@ -979,29 +981,57 @@ bool Skyscraper::Initialize()
 
 void Skyscraper::Report(const std::string &message)
 {
-	try
-	{
-		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(message);
-	}
-	catch (Ogre::Exception &e)
-	{
-		ShowError("Error writing message to log\n" + e.getDescription());
-	}
+	report_lock.lock();
+
+	log_queue_data data;
+	data.text = message;
+	data.error = false;
+	log_queue.push_back(data);
+
+	report_lock.unlock();
 }
 
 bool Skyscraper::ReportError(const std::string &message)
 {
-	try
-	{
-		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
-	}
-	catch (Ogre::Exception &e)
-	{
-		ShowError("Error writing message to log\n" + e.getDescription());
-	}
+	report_lock.lock();
+
+	log_queue_data data;
+	data.text = message;
+	data.error = true;
+	log_queue.push_back(data);
+
+	report_lock.unlock();
 	return false;
+}
+
+void Skyscraper::ProcessLog()
+{
+	while (log_queue.size() > 0)
+	{
+		try
+		{
+			Ogre::LogMessageLevel level = Ogre::LML_NORMAL;
+			if (log_queue[0].error == true)
+				level = Ogre::LML_CRITICAL;
+
+			if (Ogre::LogManager::getSingletonPtr())
+				Ogre::LogManager::getSingleton().logMessage(log_queue[0].text, level);
+		}
+		catch (Ogre::Exception &e)
+		{
+			//ShowError("Error writing message to log\n" + e.getDescription());
+		}
+
+		//erase queue entry
+		log_queue.erase(log_queue.begin());
+	}
+
+	//process logs for each engine context
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		if (engines[i])
+			engines[i]->ProcessLog();
+	}
 }
 
 bool Skyscraper::ReportFatalError(const std::string &message)
@@ -1031,6 +1061,8 @@ bool Skyscraper::Loop()
 
 	ProfileManager::Reset();
 	ProfileManager::Increment_Frame_Counter();
+
+	ProcessLog();
 
 	//main menu routine
 	if (StartupRunning == true)

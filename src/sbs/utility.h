@@ -38,6 +38,16 @@ public:
 	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
+	void ProcessLog();
+
+	struct log_queue_data
+	{
+		std::string text;
+		bool error;
+	};
+	std::vector<log_queue_data> log_queue;
 
 private:
 

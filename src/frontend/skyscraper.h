@@ -215,6 +215,7 @@ private:
 	int GetFreeInstanceNumber();
 	void ShowProgressDialog();
 	void ReInit();
+	void ProcessLog();
 
 	Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;
@@ -252,6 +253,13 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
+
+	struct log_queue_data
+	{
+		std::string text;
+		bool error;
+	};
+	std::vector<log_queue_data> log_queue;
 };
 
 DECLARE_APP(Skyscraper)
