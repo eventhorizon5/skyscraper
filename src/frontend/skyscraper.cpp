@@ -2554,6 +2554,12 @@ void Skyscraper::ExtLoad(const std::string &filename, EngineContext *parent, con
 {
 	//call a building load, from another thread
 
+	while (loadinfo.need_process == true)
+	{
+		//have this thread sleep while waiting for an unlock
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+
 	load_lock.lock();
 	loadinfo.filename = filename;
 	loadinfo.parent = parent;
