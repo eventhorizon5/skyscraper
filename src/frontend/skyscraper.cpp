@@ -2889,9 +2889,6 @@ void Skyscraper::ExtLoad(const std::string &filename, EngineContext *parent, con
 {
 	//call a building load, from another thread
 
-	if (loadinfo.need_process == true)
-		return;
-
 	load_lock.lock();
 	loadinfo.filename = filename;
 	loadinfo.parent = parent;
