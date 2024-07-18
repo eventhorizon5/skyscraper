@@ -272,7 +272,7 @@ private:
 		Real rotation;
 		Vector3 area_min;
 		Vector3 area_max;
-		bool need_process;
+		std::atomic<bool> need_process;
 	};
 	LoadInfo loadinfo;
 
