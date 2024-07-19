@@ -450,9 +450,8 @@ void DebugPanel::Loop()
 		return;
 
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
-
-	if (!floor)
-		return;
+	if (floor)
+		t_floorname->SetLabel(floor->Name);
 
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
@@ -461,8 +460,6 @@ void DebugPanel::Loop()
 	t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
 	t_collision->SetLabel(Simcore->camera->LastHitMesh);
 	t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
-	if (floor)
-		t_floorname->SetLabel(floor->Name);
 
 	if (Simcore->GetElevatorCount() > 0)
 	{
