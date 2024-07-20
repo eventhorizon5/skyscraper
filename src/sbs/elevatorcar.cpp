@@ -1190,11 +1190,9 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 
 	if (parent->Interlocks == true)
 	{
+		//if elevator is moving and interlocks are enabled, stop elevator
 		if (parent->IsMoving == true && parent->OnFloor == false)
-			return ReportError("Cannot open doors while moving if interlocks are enabled");
-
-		if (parent->OnFloor == false || (whichdoors == 3 && floor != GetFloor()))
-			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
+			parent->Stop(false);
 	}
 
 	int start = number, end = number;
