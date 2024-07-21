@@ -68,6 +68,7 @@ public:
 	bool UseDirMessageSounds; //true if direction message sounds should be used
 	bool UseDoorMessageSounds; //true if door message sounds should be used
 	bool MessageOnMove; //true if directional messages should be played when the elevator starts moving, otherwise when the doors open
+	bool MessageOnStart; //this determines if the directional messages should be played at the start or end of the door open sequence
 	bool MusicOn; //music enabled status
 	bool MusicOnMove; //true if music should only play during move
 	bool MusicAlwaysOn; //true if music should always be played, and the on/off state should be volume-based

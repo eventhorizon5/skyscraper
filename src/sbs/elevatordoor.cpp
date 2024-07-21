@@ -643,6 +643,11 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			if (ShaftDoors[index])
 				ShaftDoors[index]->ResetFinished();
 		}
+
+		//play direction message sound
+		if (car->MessageOnMove == false && car->MessageOnStart == true)
+			car->PlayMessageSound(true);
+
 	}
 	else if (previous_open != open && manual == false && door_changed == false)
 	{
@@ -743,7 +748,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 
 		//play direction message sound
-		if (car->MessageOnMove == false)
+		if (car->MessageOnMove == false && car->MessageOnStart == false)
 			car->PlayMessageSound(true);
 
 		//play late arrival notification if specified

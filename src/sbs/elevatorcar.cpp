@@ -113,6 +113,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	LateDirection = 0;
 	last_music_direction = 0;
 	MessageOnMove = false;
+	MessageOnStart = false;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
