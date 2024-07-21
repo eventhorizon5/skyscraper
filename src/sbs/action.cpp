@@ -477,6 +477,17 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			else
 				return elevator->Down(false);
 		}
+		if (elevator->InspectionService == true)
+		{
+			if (command_name == "insupon")
+				return elevator->SetUpButton(true);
+			if (command_name == "insupoff")
+				return elevator->SetUpButton(false);
+			if (command_name == "insdownon")
+				return elevator->SetDownButton(true);
+			if (command_name == "insdownoff")
+				return elevator->SetDownButton(false);
+		}
 		if (command_name == "goon")
 			return elevator->SetGoButton(true);
 		if (command_name == "gooff")

@@ -341,8 +341,8 @@ DrawWalls = true, true, false, false, false, false
 	CreatePanel ElevPanel, 5, 3, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 12, 0, 0
 	AddControl 2, switch.wav, 1, 2, 1, 1, 0, 0, InsOff, InsOn, ButtonIS, ButtonIS_Lit
 	AddControl 2, switch.wav, 3, 2, 1, 1, 0, 0, GoOff, GoOn, ButtonGo, ButtonGo_Lit
-	AddControl 2, switch.wav, 2, 2, 1, 1, 0, 0, UpOff, UpOn, ButtonISUp, ButtonISUp_Lit
-	AddControl 2, switch.wav, 4, 2, 1, 1, 0, 0, DownOff, DownOn, ButtonISDown, ButtonISDown_Lit
+	AddControl 2, switch.wav, 2, 2, 1, 1, 0, 0, InsUpOff, InsUpOn, ButtonISUp, ButtonISUp_Lit
+	AddControl 2, switch.wav, 4, 2, 1, 1, 0, 0, InsDownOff, InsDownOn, ButtonISDown, ButtonISDown_Lit
 	
 	
     #Floor Indicator
