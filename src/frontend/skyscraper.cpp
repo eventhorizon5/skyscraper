@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Simulation Frontend
+	Skyscraper 2.1 - Simulation Frontend
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -186,7 +186,7 @@ namespace Skyscraper {
 
 bool Skyscraper::OnInit(void)
 {
-	version = "1.12";
+	version = "2.1";
 	version_rev = ToString(GIT_REV);
 	version_state = "Alpha";
 	version_frontend = version + ".0." + version_rev;

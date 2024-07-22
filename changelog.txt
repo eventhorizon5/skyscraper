@@ -1,4 +1,7 @@
-Version 1.12 (2.0 Alpha 12)
+Version 2.1
+-------------------------
+
+Version 2.0
 -------------------------
 -(xteal/NoNoTeal) added a configurable People parameter to the INI file
 -When AvailableForCall() does the final check on the queue direction, it should consider elevators on the same floor with queues empty to be available, maybe this situation should be moved into the IsIdle() function

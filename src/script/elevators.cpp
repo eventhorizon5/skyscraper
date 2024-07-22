@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Script Processor - Elevator Section
+	Skyscraper 2.1 - Script Processor - Elevator Section
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
