@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Parameter Viewer Dialog
+	Skyscraper 2.0 Alpha - Parameter Viewer Dialog
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

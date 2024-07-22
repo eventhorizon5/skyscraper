@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Main Screen
+	Skyscraper 2.0 Alpha - Main Screen
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
