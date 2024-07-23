@@ -15,14 +15,14 @@
 							<object class="sizeritem">
 								<object class="wxListBox" name="ID_EngineList" variable="EngineList" member="yes">
 									<default>-1</default>
-									<size>175,150</size>
+									<size>300,200</size>
 								</object>
-								<flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
@@ -121,7 +121,7 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -131,12 +131,12 @@
 												<object class="wxStaticLine" name="ID_STATICLINE2" variable="StaticLine2" member="yes">
 													<size>10,-1</size>
 												</object>
-												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxEXPAND</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -229,7 +229,7 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -239,7 +239,7 @@
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>

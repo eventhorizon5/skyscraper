@@ -84,7 +84,7 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer5 = new wxFlexGridSizer(0, 2, 0, 0);
 	BoxSizer8 = new wxBoxSizer(wxVERTICAL);
-	EngineList = new wxListBox(this, ID_EngineList, wxDefaultPosition, wxSize(175,150), 0, 0, 0, wxDefaultValidator, _T("ID_EngineList"));
+	EngineList = new wxListBox(this, ID_EngineList, wxDefaultPosition, wxSize(300,200), 0, 0, 0, wxDefaultValidator, _T("ID_EngineList"));
 	BoxSizer8->Add(EngineList, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer5->Add(BoxSizer8, 1, wxALL|wxEXPAND, 5);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -152,7 +152,6 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	BoxSizer9->Add(bOk, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer9, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
-	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
 
