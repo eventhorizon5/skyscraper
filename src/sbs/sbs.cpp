@@ -67,7 +67,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	sbs = this;
 	this->mSceneManager = mSceneManager;
 
-	version = "2.1.0." + ToString(GIT_REV);
+	version = "1.1.0." + ToString(GIT_REV);
 	version_state = "Alpha";
 
 	//root object needs to self-register
