@@ -417,12 +417,15 @@ bool Polygon::IntersectRay(const Vector3 &start, const Vector3 &end)
 	Vector3 relend = end;
 	relend -= start;
 
+	Vector3 pos = sbs->ToRemote(mesh->GetPosition(), true, false);
+
 	for (int index = 0; index < geometry.size(); index++)
 	{
 		size_t i1 = geometry[index].size() - 1;
 		for (size_t i = 0; i < geometry[index].size(); i++)
 		{
-			Vector3 vertex = sbs->ToLocal(geometry[index][i1].vertex, false, true);
+			Vector3 v = sbs->ToLocal(geometry[index][i1].vertex, false, true);
+			Vector3 vertex = pos + v;
 			Vector3 start2 = start - vertex;
 			normal = start2.crossProduct(start - vertex);
 			if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
