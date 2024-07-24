@@ -268,10 +268,15 @@ void MeshObject::Prepare(bool force)
 		Bounds->setNull();
 		for (size_t i = 0; i < Walls.size(); i++)
 		{
+			if (!Walls[i])
+				continue;
+
 			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
 			{
 				Polygon *poly = Walls[i]->polygons[j];
 
+				if (!poly)
+					continue;
 				for (size_t k = 0; k < poly->geometry.size(); k++)
 				{
 					for (size_t l = 0; l < poly->geometry[k].size(); l++)
@@ -389,8 +394,7 @@ void MeshObject::DeleteWalls()
 		if (wall)
 		{
 			wall->parent_deleting = true;
-			if (sbs->FastDelete == false)
-				wall->DeletePolygons();
+			wall->DeletePolygons(false);
 			delete wall;
 			Walls[i] = 0;
 		}
