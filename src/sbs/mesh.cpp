@@ -394,7 +394,8 @@ void MeshObject::DeleteWalls()
 		if (wall)
 		{
 			wall->parent_deleting = true;
-			wall->DeletePolygons(false);
+			if (sbs->FastDelete == false)
+				wall->DeletePolygons();
 			delete wall;
 			Walls[i] = 0;
 		}
