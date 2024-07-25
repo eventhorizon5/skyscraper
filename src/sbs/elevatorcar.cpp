@@ -2340,7 +2340,8 @@ std::string ElevatorCar::GetFloorDisplay()
 	if (!floor)
 		return value;
 
-	if (parent->UseFloorSkipText == true && IsServicedFloor(floornum) == false)
+	//only show floor skip text if the floor is not serviced by any car in this elevator
+	if (parent->UseFloorSkipText == true && IsServicedFloor(floornum) == false && parent->IsServicedFloor(floornum) == false)
 		value = parent->FloorSkipText;
 	else
 	{
