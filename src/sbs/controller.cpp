@@ -406,29 +406,34 @@ void DispatchController::ProcessRoutes()
 						bool busy = false;
 						closest = FindClosestElevator(busy, false, Routes[i].starting_floor, 0, Routes[i].direction);
 
-						//if a closer elevator has been found than the elevator actively serving the call,
-						//reprocess the call
-						if (Elevators[closest].number != Routes[i].assigned_elevator && busy == false)
+						if (closest >= 0)
 						{
-							//make sure elevator is idle before continuing
-							Elevator *newelevator = sbs->GetElevator(Elevators[closest].number);
-							if (newelevator->IsIdle() == true)
+							//if a closer elevator has been found than the elevator actively serving the call,
+							//reprocess the call
+							if (Elevators[closest].number != Routes[i].assigned_elevator && busy == false)
 							{
-								Elevator *elevator = sbs->GetElevator(Routes[i].assigned_elevator);
-								if (elevator)
-									elevator->CancelHallCall(Routes[i].starting_floor, Routes[i].direction);
+								//make sure elevator is idle before continuing
+								Elevator *newelevator = sbs->GetElevator(Elevators[closest].number);
+								if (newelevator->IsIdle() == true)
+								{
+									Elevator *elevator = sbs->GetElevator(Routes[i].assigned_elevator);
+									if (elevator)
+										elevator->CancelHallCall(Routes[i].starting_floor, Routes[i].direction);
 
-								Report("Switching to closer elevator " + ToString(newelevator->Number));
+									Report("Switching to closer elevator " + ToString(newelevator->Number));
 
-								//unassign elevator
-								Routes[i].assigned_elevator = 0;
+									//unassign elevator
+									Routes[i].assigned_elevator = 0;
 
-								//reset processed state
-								Routes[i].processed = false;
+									//reset processed state
+									Routes[i].processed = false;
+								}
 							}
+							else
+								continue;//skip route if elevator is still closest
 						}
 						else
-							continue; //skip route if elevator is still closest
+							continue; //skip if a closer elevator is not found
 					}
 					else
 						continue; //skip route if not checking
