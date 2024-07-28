@@ -400,8 +400,14 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 	{
 		for (size_t j = 0; j < clients[i]->Walls.size(); j++)
 		{
+			if (!clients[i]->Walls[j])
+				continue;
+
 			for (size_t k = 0; k < clients[i]->Walls[j]->GetPolygonCount(); k++)
 			{
+				if (!clients[i]->Walls[j]->GetPolygon(k))
+					continue;
+
 				std::string material = clients[i]->Walls[j]->GetPolygon(k)->material;
 
 				//find material in current list
@@ -454,9 +460,15 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 		{
 			for (int j = 0; j < clients[i]->Walls.size(); j++)
 			{
+				if (!clients[i]->Walls[j])
+					continue;
+
 				for (int k = 0; k < clients[i]->Walls[j]->GetPolygonCount(); k++)
 				{
 					Polygon *poly = clients[i]->Walls[j]->GetPolygon(k);
+
+					if (!poly)
+						continue;
 
 					if (poly->material == material)
 					{
@@ -784,9 +796,16 @@ void DynamicMesh::Mesh::DeleteSubMesh(int client, int index)
 				{
 					for (int k = 0; k < Parent->GetClient(j)->Walls.size(); k++)
 					{
+						if (!Parent->GetClient(j)->Walls[k])
+							continue;
+
 						for (int l = 0; l < Parent->GetClient(j)->Walls[k]->GetPolygonCount(); l++)
 						{
-							if (Parent->GetClient(j)->Walls[k]->GetPolygon(l)->material == Submeshes[i].material)
+							Polygon *poly = Parent->GetClient(j)->Walls[k]->GetPolygon(l);
+							if (!poly)
+								continue;
+
+							if (poly->material == Submeshes[i].material)
 							{
 								used = true;
 								break;
@@ -802,9 +821,16 @@ void DynamicMesh::Mesh::DeleteSubMesh(int client, int index)
 
 				for (int k = 0; k < Parent->GetClient(client)->Walls.size(); k++)
 				{
+					if (!Parent->GetClient(client)->Walls[k])
+						continue;
+
 					for (int l = 0; l < Parent->GetClient(client)->Walls[k]->GetPolygonCount(); l++)
 					{
-						if (Parent->GetClient(client)->Walls[k]->GetPolygon(l)->material == Submeshes[i].material)
+						Polygon *poly = Parent->GetClient(client)->Walls[k]->GetPolygon(l);
+						if (!poly)
+							continue;
+
+						if (poly->material == Submeshes[i].material)
 						{
 							used = true;
 							break;
@@ -935,9 +961,15 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			//fill array with mesh's geometry data, from each wall
 			for (int index = 0; index < mesh->Walls.size(); index++)
 			{
+				if (!mesh->Walls[index])
+					continue;
+
 				for (size_t i = 0; i < mesh->Walls[index]->GetPolygonCount(); i++)
 				{
 					Polygon *poly = mesh->Walls[index]->GetPolygon(i);
+
+					if (!poly)
+						continue;
 
 					for (size_t j = 0; j < poly->geometry.size(); j++)
 					{
@@ -1063,9 +1095,16 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 				for (size_t i = 0; i < mesh->Walls.size(); i++)
 				{
+					if (!mesh->Walls[i])
+						continue;
+
 					for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 					{
 						Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+
+						if (!poly)
+							continue;
+
 						if (poly->material == material)
 						{
 							//get index offset of mesh
@@ -1114,9 +1153,16 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 				for (size_t i = 0; i < mesh->Walls.size(); i++)
 				{
+					if (!mesh->Walls[i])
+						continue;
+
 					for (size_t j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 					{
 						Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+
+						if (!poly)
+							continue;
+
 						if (poly->material == material)
 						{
 							//get index offset of mesh
@@ -1286,6 +1332,9 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 
 	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
+		if (!mesh->Walls[i])
+			continue;
+
 		//skip empty walls
 		if (mesh->Walls[i]->GetPolygonCount() == 0)
 			continue;
