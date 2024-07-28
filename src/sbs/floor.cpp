@@ -555,6 +555,9 @@ void Floor::Cut(const Vector3 &start, const Vector3 &end, bool cutwalls, bool cu
 
 	for (size_t i = 0; i < Level->Walls.size(); i++)
 	{
+		if (!Level->Walls[i])
+			continue;
+
 		bool reset = true;
 		if (i > 0)
 			reset = false;
@@ -565,6 +568,9 @@ void Floor::Cut(const Vector3 &start, const Vector3 &end, bool cutwalls, bool cu
 	{
 		for (size_t i = 0; i < Interfloor->Walls.size(); i++)
 		{
+			if (!Interfloor->Walls[i])
+				continue;
+
 			sbs->GetUtility()->Cut(Interfloor->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, false);
 		}
 	}
@@ -604,7 +610,12 @@ void Floor::CutAll(const Vector3 &start, const Vector3 &end, bool cutwalls, bool
 	if (sbs->External)
 	{
 		for (size_t i = 0; i < sbs->External->Walls.size(); i++)
+		{
+			if (!sbs->External->Walls[i])
+				continue;
+
 			sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(start.x, Altitude + start.y, start.z), Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
+		}
 	}
 }
 
