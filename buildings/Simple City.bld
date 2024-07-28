@@ -1,0 +1,43 @@
+#This building demonstrates simulating a city, with existing
+#Skyscraper buildings, each running in a separate sim engine.
+
+<Buildings>
+    #load these buildings onto the map,
+    #and specify their positions and rotations
+
+    #add some Simple buildings, with modified boundaries
+    Load Simple.bld, 1000, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 900, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 800, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 700, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 600, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 500, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 400, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 300, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 200, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 100, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 0, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -100, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -200, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -300, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -400, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -500, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -600, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -700, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -800, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -900, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -1000, 0, 0, 180, -37.5, 0, -25, 37.5, 0, 25
+<EndBuildings>
+
+<Globals>
+    CameraPosition = 0, -50
+    CameraRotation = 0, 270, 0
+<EndGlobals>
+
+<Textures>
+    Load data/downtown.jpg, Downtown, 1, 1
+<EndTextures>
+
+# Ground
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+
