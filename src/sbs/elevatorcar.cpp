@@ -2642,7 +2642,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 				direction = parent->LastQueueDirection;
 		}
 		else
-			direction = parent->ActiveDirection;
+			direction = parent->LastChimeDirection;
 
 		if (direction == 1)
 		{
