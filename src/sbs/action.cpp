@@ -380,6 +380,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		//}
 		if (command_name == "cancel" && elevator->FireServicePhase2 == 1)
 			return elevator->CallCancel();
+		if (command_name == "cancel" && elevator->IndependentService == true)
+			return elevator->CallCancel();
 		if (command_name == "run")
 		{
 			elevator->SetRunState(true);
