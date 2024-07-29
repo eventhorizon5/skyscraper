@@ -1193,7 +1193,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 	{
 		//if elevator is moving and interlocks are enabled, stop elevator
 		if (parent->IsMoving == true && parent->OnFloor == false)
-			parent->Stop(false);
+			parent->Stop(true);
 	}
 
 	int start = number, end = number;
