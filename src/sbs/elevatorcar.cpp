@@ -114,6 +114,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	last_music_direction = 0;
 	MessageOnMove = false;
 	MessageOnStart = false;
+	MessageOnClose = false;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -2621,7 +2622,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 	if (parent->InServiceMode() == true)
 		return false;
 
-	if (parent->IsQueueActive() == false && type == true)
+	if (parent->IsQueueActive() == false && type == true && MessageOnClose == true)
 		return false;
 
 	std::string newsound;
