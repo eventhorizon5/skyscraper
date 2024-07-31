@@ -797,6 +797,15 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MessageOnStart = ToBool(value);
 		return sNextLine;
 	}
+	//MessageOnClose parameter
+	if (StartsWithNoCase(LineData, "messageonclose"))
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		car->MessageOnClose = ToBool(value);
+		return sNextLine;
+	}
 	//OpenMessage parameter
 	if (StartsWithNoCase(LineData, "openmessage"))
 	{
