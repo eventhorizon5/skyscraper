@@ -282,6 +282,9 @@ Nextline:
 
 		if (line == (int)BuildingData.size())
 		{
+			//free text texture memory
+			Simcore->GetTextureManager()->FreeTextureBoxes();
+
 			IsFinished = true;
 			show_percent = false;
 		}
