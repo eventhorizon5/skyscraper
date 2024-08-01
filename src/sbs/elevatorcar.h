@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Elevator Car Object
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -69,6 +69,7 @@ public:
 	bool UseDoorMessageSounds; //true if door message sounds should be used
 	bool MessageOnMove; //true if directional messages should be played when the elevator starts moving, otherwise when the doors open
 	bool MessageOnStart; //this determines if the directional messages should be played at the start or end of the door open sequence
+	bool MessageOnClose; //this determines if the directional messages should be played when the doors are closing
 	bool MusicOn; //music enabled status
 	bool MusicOnMove; //true if music should only play during move
 	bool MusicAlwaysOn; //true if music should always be played, and the on/off state should be volume-based

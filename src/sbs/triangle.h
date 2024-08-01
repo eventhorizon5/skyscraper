@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Triangle Type
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

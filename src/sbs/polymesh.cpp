@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - PolyMesh Geometry Processor
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -56,12 +56,19 @@ Wall* PolyMesh::FindWallIntersect(const Vector3 &start, const Vector3 &end, Vect
 
 	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
+		if (!mesh->Walls[i])
+			continue;
+
 		if (wall && mesh->Walls[i] != wall)
 			continue;
 
 		for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
 		{
-			if (mesh->Walls[i]->GetPolygon(j)->IntersectSegment(start, end, cur_isect, &pr, tmpnormal) == true)
+			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+			if (!poly)
+				continue;
+
+			if (poly->IntersectSegment(start, end, cur_isect, &pr, tmpnormal) == true)
 			{
 				if (pr < best_pr)
 				{

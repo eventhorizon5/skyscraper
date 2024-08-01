@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Action Interface Class
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -379,6 +379,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			}
 		//}
 		if (command_name == "cancel" && elevator->FireServicePhase2 == 1)
+			return elevator->CallCancel();
+		if (command_name == "cancel" && elevator->IndependentService == true)
 			return elevator->CallCancel();
 		if (command_name == "run")
 		{

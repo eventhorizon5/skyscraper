@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Script Processor - Elevator Car Section
+	Skyscraper 2.1 - Script Processor - Elevator Car Section
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -795,6 +795,15 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return ScriptError("Syntax error");
 
 		car->MessageOnStart = ToBool(value);
+		return sNextLine;
+	}
+	//MessageOnClose parameter
+	if (StartsWithNoCase(LineData, "messageonclose"))
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		car->MessageOnClose = ToBool(value);
 		return sNextLine;
 	}
 	//OpenMessage parameter

@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Wall Object
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -200,22 +200,6 @@ int Wall::FindPolygon(const std::string &name)
 	}
 	return -1;
 }
-
-/*void Wall::GetGeometry(int index, PolygonSet &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
-{
-	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
-
-	//if firstonly is true, only return first result
-	//if convert is true, converts vertices from remote Ogre positions to local SBS positions
-	//if rescale is true (along with convert), rescales vertices with UnitScale multiplier
-	//if relative is true, vertices are relative of mesh center, otherwise they use absolute/global positioning
-	//if reverse is false, process extents table in ascending order, otherwise descending order
-
-	if (index < 0 || index >= (int)polygons.size())
-		return;
-
-	polygons[index]->GetGeometry(vertices, firstonly, convert, rescale, relative, reverse);
-}*/
 
 bool Wall::IntersectsWall(Vector3 start, Vector3 end, Vector3 &isect, bool convert)
 {

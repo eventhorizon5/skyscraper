@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Load Building Dialog
+	Skyscraper 2.1 - Load Building Dialog
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

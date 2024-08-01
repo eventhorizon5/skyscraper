@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Elevator Object
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -727,8 +727,7 @@ bool Elevator::RouteExists(bool direction, int floor)
 
 bool Elevator::CallCancel()
 {
-	//cancels the last added route
-	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
+	//cancels all added routes
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -736,14 +735,12 @@ bool Elevator::CallCancel()
 	if (LastQueueFloor[1] == 0)
 	{
 		if (sbs->Verbose)
-			ReportError("CallCancel: route not valid");
+			ReportError("CallCancel: no valid routes");
 		return false;
 	}
 
-	Report("cancelled last call");
-	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
-	LastQueueFloor[0] = 0;
-	LastQueueFloor[1] = 0;
+	Report("cancelled all calls");
+        ResetQueue(true, true);
 	return true;
 }
 

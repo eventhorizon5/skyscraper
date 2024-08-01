@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Edit Elevator Form
+	Skyscraper 2.1 - Edit Elevator Form
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

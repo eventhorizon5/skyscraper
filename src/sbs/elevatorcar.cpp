@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Elevator Car Object
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -114,6 +114,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	last_music_direction = 0;
 	MessageOnMove = false;
 	MessageOnStart = false;
+	MessageOnClose = false;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -1193,7 +1194,7 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 	{
 		//if elevator is moving and interlocks are enabled, stop elevator
 		if (parent->IsMoving == true && parent->OnFloor == false)
-			parent->Stop(false);
+			parent->Stop(true);
 	}
 
 	int start = number, end = number;
@@ -2340,7 +2341,8 @@ std::string ElevatorCar::GetFloorDisplay()
 	if (!floor)
 		return value;
 
-	if (parent->UseFloorSkipText == true && IsServicedFloor(floornum) == false)
+	//only show floor skip text if the floor is not serviced by any car in this elevator
+	if (parent->UseFloorSkipText == true && IsServicedFloor(floornum) == false && parent->IsServicedFloor(floornum) == false)
 		value = parent->FloorSkipText;
 	else
 	{
@@ -2620,7 +2622,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 	if (parent->InServiceMode() == true)
 		return false;
 
-	if (parent->IsQueueActive() == false && type == true)
+	if (parent->IsQueueActive() == false && type == true && MessageOnClose == true)
 		return false;
 
 	std::string newsound;

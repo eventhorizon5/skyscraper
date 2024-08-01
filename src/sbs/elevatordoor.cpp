@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Elevator Door Object
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -645,8 +645,14 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 
 		//play direction message sound
-		if (car->MessageOnMove == false && car->MessageOnStart == true)
-			car->PlayMessageSound(true);
+		if (car->MessageOnMove == false)
+		{
+			if (car->MessageOnStart == true && open == true)
+				car->PlayMessageSound(true);
+
+			if (car->MessageOnClose == true && open == false)
+				car->PlayMessageSound(true);
+		}
 
 	}
 	else if (previous_open != open && manual == false && door_changed == false)

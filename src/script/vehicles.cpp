@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.12 Alpha - Script Processor - Vehicle Section
+	Skyscraper 2.1 - Script Processor - Vehicle Section
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/

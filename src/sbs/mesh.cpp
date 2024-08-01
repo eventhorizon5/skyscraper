@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Mesh Object
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -244,6 +244,9 @@ Wall* MeshObject::GetWallByName(std::string name)
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (!Walls[i])
+			continue;
+
 		if (name == SetCaseCopy(Walls[i]->GetName(), false) == true)
 			return Walls[i];
 	}
@@ -268,10 +271,15 @@ void MeshObject::Prepare(bool force)
 		Bounds->setNull();
 		for (size_t i = 0; i < Walls.size(); i++)
 		{
+			if (!Walls[i])
+				continue;
+
 			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
 			{
 				Polygon *poly = Walls[i]->polygons[j];
 
+				if (!poly)
+					continue;
 				for (size_t k = 0; k < poly->geometry.size(); k++)
 				{
 					for (size_t l = 0; l < poly->geometry[k].size(); l++)
@@ -523,7 +531,12 @@ void MeshObject::Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, 
 	//cut all walls in this mesh object
 
 	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		if (!Walls[i])
+			continue;
+
 		sbs->GetUtility()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
+	}
 }
 
 void MeshObject::CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors)
@@ -649,6 +662,9 @@ void MeshObject::ChangeHeight(Real newheight)
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (!Walls[i])
+			continue;
+
 		Walls[i]->ChangeHeight(newheight);
 	}
 }
@@ -683,6 +699,9 @@ bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string
 	bool found = false;
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (!Walls[i])
+			continue;
+
 		bool result = Walls[i]->ReplaceTexture(oldtexture, newtexture);
 		if (result == true)
 			found = true;
@@ -699,6 +718,9 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck)
 	bool found = false;
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (!Walls[i])
+			continue;
+
 		bool result = Walls[i]->ChangeTexture(texture, matcheck);
 		if (result == true)
 			found = true;
@@ -713,9 +735,15 @@ Real MeshObject::GetHeight()
 	Real y = 0.0;
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (!Walls[i])
+			continue;
+
 		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
 			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			if (!poly)
+				continue;
 
 			for (size_t k = 0; k < poly->geometry.size(); k++)
 			{
@@ -745,9 +773,15 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (!Walls[i])
+			continue;
+
 		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
 			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			if (!poly)
+				continue;
 
 			for (size_t k = 0; k < poly->triangles.size(); k++)
 			{
@@ -803,9 +837,16 @@ void MeshObject::CreateCollider()
 		int additions = 0;
 		for (size_t i = 0; i < Walls.size(); i++)
 		{
+			if (!Walls[i])
+				continue;
+
 			for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
 			{
 				Polygon *poly = Walls[i]->GetPolygon(j);
+
+				if (!poly)
+					continue;
+
 				PolyArray polyarray;
 
 				for (size_t k = 0; k < poly->geometry.size(); k++)
@@ -908,9 +949,15 @@ Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (!Walls[i])
+			continue;
+
 		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
 			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			if (!poly)
+				continue;
 
 			for (size_t k = 0; k < poly->geometry.size(); k++)
 			{
@@ -957,6 +1004,9 @@ Wall* MeshObject::FindPolygon(const std::string &name, int &index)
 
 	for (size_t i = 0; i < Walls.size(); i++)
 	{
+		if (!Walls[i])
+			continue;
+
 		int polygon = Walls[i]->FindPolygon(name);
 		if (polygon > -1)
 		{
@@ -1118,7 +1168,8 @@ unsigned int MeshObject::GetVertexCount()
 
 	for (int i = 0; i < Walls.size(); i++)
 	{
-		total += Walls[i]->GetVertexCount();
+		if (Walls[i])
+			total += Walls[i]->GetVertexCount();
 	}
 
 	return total;
@@ -1130,12 +1181,18 @@ unsigned int MeshObject::GetTriangleCount(const std::string &material, bool tota
 
 	for (int i = 0; i < Walls.size(); i++)
 	{
-		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		if (Walls[i])
 		{
-			Polygon *poly = Walls[i]->GetPolygon(j);
+			for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
+			{
+				Polygon *poly = Walls[i]->GetPolygon(j);
 
-			if (poly->material == material || (material == "" && total == true))
-				tris += poly->triangles.size();
+				if (poly)
+				{
+					if (poly->material == material || (material == "" && total == true))
+						tris += poly->triangles.size();
+				}
+			}
 		}
 	}
 

@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Stairwell Object
-	The Skyscraper Project - Version 1.12 Alpha
+	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -262,6 +262,9 @@ void Stairwell::CutFloors(bool relative, const Vector2 &start, const Vector2 &en
 	{
 		for (size_t i = 0; i < sbs->External->Walls.size(); i++)
 		{
+			if (!sbs->External->Walls[i])
+				continue;
+
 			if (relative == true)
 				sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
 			else
@@ -901,6 +904,9 @@ bool Stairwell::Level::Cut(bool relative, const Vector3 &start, const Vector3 &e
 
 	for (size_t i = 0; i < mesh->Walls.size(); i++)
 	{
+		if (!mesh->Walls[i])
+			continue;
+
 		bool reset = true;
 		if (i > 0)
 			reset = false;
