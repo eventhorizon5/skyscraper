@@ -645,11 +645,14 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 
 		//play direction message sound
-		if (car->MessageOnMove == false && car->MessageOnStart == true && open == true)
-			car->PlayMessageSound(true);
+		if (car->MessageOnMove == false)
+		{
+			if (car->MessageOnStart == true && open == true)
+				car->PlayMessageSound(true);
 
-		if (car->MessageOnMove == false && car->MessageOnClose == true && open == false)
-			car->PlayMessageSound(true);
+			if (car->MessageOnClose == true && open == false)
+				car->PlayMessageSound(true);
+		}
 
 	}
 	else if (previous_open != open && manual == false && door_changed == false)
