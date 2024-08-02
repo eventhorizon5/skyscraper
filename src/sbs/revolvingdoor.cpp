@@ -28,6 +28,7 @@
 #include "floor.h"
 #include "texture.h"
 #include "sound.h"
+#include "profiler.h"
 #include "revolvingdoor.h"
 
 namespace SBS {
@@ -177,6 +178,8 @@ void RevolvingDoor::Enabled(bool value)
 
 void RevolvingDoor::Loop()
 {
+	SBS_PROFILE("RevolvingDoor::Loop");
+
 	if (IsMoving == true)
 		MoveDoor();
 	else
@@ -185,6 +188,8 @@ void RevolvingDoor::Loop()
 
 void RevolvingDoor::MoveDoor()
 {
+	SBS_PROFILE("RevolvingDoor::MoveDoor");
+
 	//door movement callback function
 	if ((Clockwise == true && brake == false) || (Clockwise == false && brake == true))
 	{
