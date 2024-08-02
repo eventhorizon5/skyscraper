@@ -26,6 +26,7 @@
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
+#include "profiler.h"
 #include "route.h"
 
 namespace SBS {
@@ -45,6 +46,8 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 
 	//for pathfinding to work properly, express and service elevators
 	//need to have their Type parameter set properly.
+
+	SBS_PROFILE("SBS::GetRouteToFloor");
 
 	std::vector<ElevatorRoute*> result;
 
@@ -105,6 +108,8 @@ ElevatorRoute* SBS::GetDirectRoute(Floor *floor, int DestinationFloor, bool serv
 	if (!floor)
 		return 0;
 
+	SBS_PROFILE("SBS::GetDirectRoute");
+
 	ElevatorRoute *route;
 
 	if (service_access == true)
@@ -130,6 +135,8 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 	//get a route to a destination floor, via elevator serviced floors
 
 	//this function will find an indirect route to a floor, while prioritizing service and express elevators
+
+	SBS_PROFILE("SBS::GetIndirectRoute");
 
 	std::vector<ElevatorRoute*> result;
 

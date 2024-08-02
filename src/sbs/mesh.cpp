@@ -262,6 +262,8 @@ void MeshObject::Prepare(bool force)
 {
 	//prepare mesh object
 
+	SBS_PROFILE("MeshObject::Prepare");
+
 	if (prepared == true && force == false)
 		return;
 

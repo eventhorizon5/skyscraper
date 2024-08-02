@@ -27,6 +27,7 @@
 #include "elevatorcar.h"
 #include "floor.h"
 #include "callstation.h"
+#include "profiler.h"
 #include "controller.h"
 
 namespace SBS {
@@ -76,6 +77,8 @@ void DispatchController::CheckArrivals()
 	//check elevators to see if any have arrived
 	//for DD mode, dispatch to destination floor
 	//for standard mode, turn off call buttons and remove route
+
+	SBS_PROFILE("DispatchController::CheckArrivals");
 
 	for (int i = 0; i < Elevators.size(); i++)
 	{
@@ -185,6 +188,8 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 {
 	//request a destination dispatch route
 
+	SBS_PROFILE("DispatchController::RequestRoute");
+
 	if (DestinationDispatch == false)
 	{
 		if (station)
@@ -287,6 +292,8 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 {
 	//call an elevator (request a standard route)
 
+	SBS_PROFILE("DispatchController::CallElevator");
+
 	if (DestinationDispatch == true && Hybrid == false)
 	{
 		if (station)
@@ -371,6 +378,8 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 void DispatchController::ProcessRoutes()
 {
 	//process routes
+
+	SBS_PROFILE("DispatchController::ProcessRoutes");
 
 	for (int i = 0; i < Routes.size(); i++)
 	{
@@ -642,6 +651,8 @@ int DispatchController::FindClosestElevator(bool &busy, bool destination, int st
 	//finds closest elevator
 	//if destination is true, use Destination Dispatch mode, otherwise use Standard Mode
 
+	SBS_PROFILE("DispatchController::FindClosestElevator");
+
 	//initialize values
 	int closest = 0;
 	int closest_busy = -1;
@@ -803,6 +814,8 @@ bool DispatchController::ReportError(const std::string &message)
 void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 {
 	//notify controller about an elevator arrival
+
+	SBS_PROFILE("DispatchController::ElevatorArrived");
 
 	for (int i = 0; i < Elevators.size(); i++)
 	{

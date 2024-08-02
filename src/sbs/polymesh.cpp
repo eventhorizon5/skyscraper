@@ -48,6 +48,7 @@ Wall* PolyMesh::FindWallIntersect(const Vector3 &start, const Vector3 &end, Vect
 	//if wall_number is 0 or greater, this will only check that specified wall
 
 	SBS_PROFILE("PolyMesh::FindWallIntersect");
+
 	Real pr, best_pr = 2000000000.;
 	Real dist, best_dist = 2000000000.;
 	int best_i = -1;

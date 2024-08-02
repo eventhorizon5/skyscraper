@@ -38,6 +38,7 @@
 #include "light.h"
 #include "door.h"
 #include "revolvingdoor.h"
+#include "profiler.h"
 #include "action.h"
 
 namespace SBS {
@@ -225,6 +226,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//RevolvingDoor actions:
 	//On
 	//Off
+
+	SBS_PROFILE("Action::Run");
 
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
