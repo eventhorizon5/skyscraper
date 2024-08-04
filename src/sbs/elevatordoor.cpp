@@ -755,13 +755,13 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				car->Report("not resetting timer for door" + GetNumberText() + " due to blocked sensor");
 		}
 
-		//play direction message sound
-		if (car->MessageOnMove == false && car->MessageOnStart == false && car->MessageOnClose == false)
-			car->PlayMessageSound(true);
-
 		//play late arrival notification if specified
 		if (elev->NotifyLate == true)
 			car->NotifyArrival(car->GetFloor());
+
+		//play direction message sound
+		if (car->MessageOnMove == false && car->MessageOnStart == false && car->MessageOnClose == false)
+			car->PlayMessageSound(true);
 	}
 	else
 	{
