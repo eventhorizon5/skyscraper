@@ -2624,7 +2624,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 
 	if (parent->IsQueueActive() == false && type == true && MessageOnClose == true)
 		return false;
-	
+
 	std::string newsound;
 
 	if (type == true)
@@ -2637,12 +2637,15 @@ bool ElevatorCar::PlayMessageSound(bool type)
 
 		if (MessageOnMove == false)
 		{
-			if (parent->LastChimeDirection == 0 && type == true)
-				return false;
+			if (type == true)
+			{
+				if (parent->LastChimeDirection == 0)
+					return false;
 
-			if (parent->NotifyLate == false && type == true && parent->NotifyEarly == -1)
-				return false;
-			
+				if (parent->NotifyLate == false && parent->NotifyEarly == -1)
+					return false;
+			}
+
 			direction = parent->LastChimeDirection;
 
 			if (parent->LastChimeDirection == 0)
