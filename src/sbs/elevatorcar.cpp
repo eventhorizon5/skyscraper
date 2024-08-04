@@ -2637,6 +2637,15 @@ bool ElevatorCar::PlayMessageSound(bool type)
 
 		if (MessageOnMove == false)
 		{
+			if (type == true)
+			{
+				if (parent->LastChimeDirection == 0)
+					return false;
+
+				if (parent->NotifyLate == false && parent->NotifyEarly == -1)
+					return false;
+			}
+
 			direction = parent->LastChimeDirection;
 
 			if (parent->LastChimeDirection == 0)
