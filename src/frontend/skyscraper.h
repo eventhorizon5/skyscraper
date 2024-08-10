@@ -252,6 +252,9 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
+
+	//joystick support
+	int joy_minX, joy_minY, joy_maxX, joy_maxY;
 };
 
 DECLARE_APP(Skyscraper)
