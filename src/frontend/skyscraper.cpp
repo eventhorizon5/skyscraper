@@ -29,6 +29,7 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
+#include "wx/joystick.h"
 #endif
 #include <locale>
 #include <time.h>
@@ -242,6 +243,10 @@ bool Skyscraper::OnInit(void)
 	show_stats = -1;
 	macos_major = 0;
 	macos_minor = 0;
+	joy_minX = 0;
+	joy_maxX = 0;
+	joy_minY = 0;
+	joy_maxY = 0;
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -894,6 +899,22 @@ bool Skyscraper::Initialize()
 	{
 		mTrayMgr->hideCursor();
 	}
+
+	//set up joystick if available
+	wxJoystick joystick(wxJOYSTICK1);
+	if (!joystick.IsOk())
+		Report("No joystick detected");
+	else
+	{
+		Report("Joystick detected:");
+		Report("Name: " + joystick.GetProductName().ToStdString());
+		Report("");
+	}
+
+	joy_minX = joystick.GetXMin();
+	joy_maxX = joystick.GetXMax();
+	joy_minY = joystick.GetYMin();
+	joy_maxY = joystick.GetYMax();
 
 	//set platform name
 	std::string bits;

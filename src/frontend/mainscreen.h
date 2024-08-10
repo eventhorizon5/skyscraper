@@ -31,7 +31,7 @@ class MainScreen : public wxFrame
 {
 public:
 	MainScreen(Skyscraper *parent, int width, int height);
-	virtual ~MainScreen() {}
+	virtual ~MainScreen();
 	void OnIconize(wxIconizeEvent& event);
 	void OnSize(wxSizeEvent& event);
 	void OnClose(wxCloseEvent& event);
@@ -43,6 +43,7 @@ public:
 	void OnKeyUp(wxKeyEvent& event);
 	void OnMouseButton(wxMouseEvent& event);
 	void EnableFreelook(bool value);
+	void OnJoystickEvent(wxJoystickEvent& event);
 
 	bool Active;
 	bool InLoop;
@@ -70,6 +71,12 @@ private:
 	char key_pickup, key_load, key_enter;
 
 	bool freelook;
+
+	wxJoystick *joystick;
+	int joy_buttons;
+	wxPoint joy_point;
+	bool joy_validpoint;
+
 
 	DECLARE_EVENT_TABLE()
 };

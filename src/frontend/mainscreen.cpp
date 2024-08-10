@@ -23,6 +23,7 @@
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/joystick.h"
 #endif
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
@@ -49,6 +50,7 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
   EVT_ACTIVATE(MainScreen::OnActivate)
+  EVT_JOYSTICK_EVENTS(MainScreen::OnJoystickEvent)
 END_EVENT_TABLE()
 
 MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -63,6 +65,9 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+	joystick = new wxJoystick(wxJOYSTICK1);
+	joy_buttons = joystick->GetNumberButtons();
+	joy_validpoint = false;
 
 	//reset input states
 	boxes = false;
@@ -112,6 +117,12 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_MOUSEWHEEL, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+}
+
+MainScreen::~MainScreen()
+{
+	joystick->ReleaseCapture();
+	delete joystick;
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
@@ -830,6 +841,20 @@ void MainScreen::EnableFreelook(bool value)
 	else
 		wxSetCursor(wxNullCursor);
 #endif
+}
+
+void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
+{
+	if (!event.IsZMove())
+	{
+		joy_point = event.GetPosition();
+		joy_validpoint = true;
+
+		if (event.IsMove() && event.ButtonIsDown())
+			Refresh();
+
+		frontend->Report("Point: " + ToString(joy_point.x) + " - " + ToString(joy_point.y));
+	}
 }
 
 }
