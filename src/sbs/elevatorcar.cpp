@@ -3339,10 +3339,10 @@ void ElevatorCar::UpdateKeypadIndicator(const std::string& text, bool play_sound
 		indicator->Update(text, play_sound);
 }
 
-void ElevatorCar::CallRequested()
+void ElevatorCar::Requested()
 {
 	//report which elevator is assigned, on indicator
-	std::string message = "CallRequested";
+	std::string message = "Requested";
 
 	UpdateKeypadIndicator(message);
 }
@@ -3416,7 +3416,7 @@ void ElevatorCar::ProcessCache()
 	{
 		e->SelectFloor(e->GetRecallFloor());
 		InputCache = "";
-		CallRequested();
+		Requested();
 		return;
 	}
 
@@ -3440,7 +3440,7 @@ void ElevatorCar::ProcessCache()
 
 	int floor = 0;
 	GetFloorFromID(InputCache, floor);
-	CallRequested();
+	Requested();
 	e->SelectFloor(floor);
 
 	InputCache = "";

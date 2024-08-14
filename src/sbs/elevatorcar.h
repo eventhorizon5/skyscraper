@@ -302,7 +302,7 @@ private:
 	Indicator* indicator;
 	void KeypadError(bool type = 0);
 	bool GetFloorFromID(const std::string& floor, int& result);
-	void CallRequested();
+	void Requested();
 
 	class KeypadTimer; //internal timer class
 
