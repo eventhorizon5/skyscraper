@@ -906,8 +906,8 @@ bool Skyscraper::Initialize()
 		Report("No joystick detected");
 	else
 	{
-		Report("Joystick detected:");
-		Report("Name: " + joystick.GetProductName().ToStdString());
+		Report("");
+		Report("Joystick detected: " + joystick.GetProductName().ToStdString());
 		Report("");
 	}
 
