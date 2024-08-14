@@ -44,8 +44,26 @@
 #include "profiler.h"
 #include "cameratexture.h"
 #include "elevatorcar.h"
+#include "manager.h"
+#include "indicator.h"
+#include "timer.h"
+#include "controller.h"
+
+#include <time.h>
 
 namespace SBS {
+
+	class ElevatorCar::KeypadTimer : public TimerObject
+	{
+	public:
+		ElevatorCar* parent;
+		KeypadTimer(const std::string& name, ElevatorCar* parent) : TimerObject(parent, name)
+		{
+			this->parent = parent;
+		}
+		virtual void Notify();
+	};
+
 
 ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 {
@@ -115,6 +133,8 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MessageOnMove = false;
 	MessageOnStart = false;
 	MessageOnClose = false;
+	indicator = 0;
+	TimerDelay = 2;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -123,6 +143,8 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 
 	if (sbs->Verbose)
 		parent->Report("created car " + ToString(number));
+
+	keypad_timer = new KeypadTimer("Input Timeout Timer", this);
 }
 
 ElevatorCar::~ElevatorCar()
@@ -3299,6 +3321,181 @@ int ElevatorCar::RespondingToCall(int floor)
 	}
 
 	return 0;
+}
+
+Indicator* ElevatorCar::AddKeypadIndicator(const std::string& sound, const std::string& texture_prefix, const std::string& blank_texture, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration)
+{
+	if (indicator)
+		return 0;
+
+	indicator = new Indicator(this, sound, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset, timer_duration);
+
+	return indicator;
+}
+
+void ElevatorCar::UpdateKeypadIndicator(const std::string& text, bool play_sound)
+{
+	if (indicator)
+		indicator->Update(text, play_sound);
+}
+
+void ElevatorCar::CallRequested()
+{
+	//report which elevator is assigned, on indicator
+	std::string message = "CallRequested";
+
+	UpdateKeypadIndicator(message);
+}
+
+bool ElevatorCar::Input(const std::string& text)
+{
+	//input a keypad character
+
+	//only allow single characters
+	if (text.length() != 1)
+		return false;
+
+	//check lock state
+	//if (IsLocked() == true)
+		//return ReportError("Call station is locked");
+
+	//erase last character if specified
+	if (text == "<" && InputCache.size() >= 1)
+		InputCache.pop_back();
+
+	//add text to cache
+	InputCache += text;
+
+	//automatically error if multiple special characters were entered and/or combined with numbers
+	int StarCount = std::count(InputCache.begin(), InputCache.end(), '*');
+	int MinCount = std::count(InputCache.begin(), InputCache.end(), '-');
+	if ((StarCount > 1 || MinCount > 1) && InputCache.length() > 1)
+	{
+		keypad_timer->Stop();
+		InputCache = "";
+		KeypadError(1);
+		return true;
+
+		//update indicator display
+		UpdateKeypadIndicator(InputCache, false);
+
+		//start timeout timer
+		keypad_timer->Start(2000, true);
+
+		return true;
+	}
+
+
+	//update indicator display
+	UpdateKeypadIndicator(InputCache, false);
+
+	//verify that the floor entry is valid, error if not
+	int result = 0;
+	if (GetFloorFromID(InputCache, result) == false && InputCache != "*" && InputCache != "-")
+	{
+		keypad_timer->Stop();
+		InputCache = "";
+		KeypadError(1);
+		return true;
+	}
+
+	//start timeout timer
+	keypad_timer->Start(TimerDelay * 1000.0f, true);
+
+	return true;
+}
+
+void ElevatorCar::ProcessCache()
+{
+	//process and clear input cache
+
+	Elevator* e = GetElevator();
+
+	//select recall floor if "0"
+	if (InputCache == "0" || InputCache == "*")
+	{
+		e->SelectFloor(e->GetRecallFloor());
+		InputCache = "";
+		CallRequested();
+		return;
+	}
+
+	if (!IsNumeric(InputCache))
+	{
+		InputCache = "";
+		KeypadError();
+		return;
+	}
+
+	//don't allow input values in the InvalidInput list
+	for (int i = 0; i < (int)InvalidInput.size(); i++)
+	{
+		if (InputCache == InvalidInput[i])
+		{
+			InputCache = "";
+			KeypadError();
+			return;
+		}
+	}
+
+	int floor = 0;
+	GetFloorFromID(InputCache, floor);
+	CallRequested();
+	e->SelectFloor(floor);
+
+	InputCache = "";
+}
+
+bool ElevatorCar::GetFloorFromID(const std::string& floor, int& result)
+{
+	if (!IsNumeric(floor))
+		return false;
+
+	int rawfloor = ToInt(floor);
+
+	//convert back to string, to strip off any leading 0's
+	std::string converted = ToString(rawfloor);
+
+	Floor* floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
+	Floor* floorobj2 = sbs->GetFloorManager()->GetByID(converted);
+	Floor* floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
+
+	if (floorobj)
+	{
+		result = floorobj->Number; //get by number ID first
+		return true;
+	}
+	else if (floorobj2)
+	{
+		result = floorobj2->Number; //next try floor ID
+		return true;
+	}
+	else if (floorobj3)
+	{
+		result = rawfloor; //and last, get by raw floor number
+		return true;
+	}
+
+	return false;
+}
+
+void ElevatorCar::KeypadTimer::Notify()
+{
+	//input timeout timer
+
+	parent->ProcessCache();
+}
+
+void ElevatorCar::KeypadError(bool type)
+{
+	//if type is 0, standard error
+	//if type is 1, invalid floor
+
+	std::string message = "XX";
+	if (type == 1)
+		message = "??";
+
+	UpdateKeypadIndicator(message);
 }
 
 }

@@ -38,6 +38,7 @@
 #include "wall.h"
 #include "scriptproc.h"
 #include "section.h"
+#include "indicator.h"
 
 using namespace SBS;
 
@@ -910,6 +911,35 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicPosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
+	//InvalidInput parameter
+	if (StartsWithNoCase(LineData, "invalidinput"))
+	{
+		//copy string listing of elevators into array
+		int params = SplitAfterEquals(LineData);
+		if (params < 1)
+			return ScriptError("Syntax Error");
+
+		std::vector<std::string> inputs;
+
+		for (int line = 0; line < params; line++)
+			inputs.push_back(tempdata[line]);
+
+		car->InvalidInput = inputs;
+
+		return sNextLine;
+	}
+	//TimerDelay parameter
+	if (StartsWithNoCase(LineData, "timerdelay"))
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		std::string str = Calc(value);
+		float num = 0;
+		if (!IsNumeric(str, num))
+			return ScriptError("Invalid value");
+		car->TimerDelay = num;
+		return sNextLine;
+	}
 	//AutoEnable parameter
 	if (StartsWithNoCase(LineData, "autoenable"))
 	{
@@ -1634,6 +1664,26 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			StoreCommand(car->AddFloorIndicator("Button", "", tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		else if (compat == 2)
 			StoreCommand(car->AddFloorIndicator(tempdata[0], "", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
+		return sNextLine;
+	}
+
+	//AddDisplay command
+	if (StartsWithNoCase(LineData, "addkeypadindicator"))
+	{
+		//get data
+		int params = SplitData(LineData, 13);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i <= 9; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		StoreCommand(car->AddKeypadIndicator(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		return sNextLine;
 	}
 
