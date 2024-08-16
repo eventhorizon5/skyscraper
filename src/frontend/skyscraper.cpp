@@ -909,12 +909,12 @@ bool Skyscraper::Initialize()
 		Report("");
 		Report("Joystick detected: " + joystick.GetProductName().ToStdString());
 		Report("");
-	}
 
-	joy_minX = joystick.GetXMin();
-	joy_maxX = joystick.GetXMax();
-	joy_minY = joystick.GetYMin();
-	joy_maxY = joystick.GetYMax();
+		joy_minX = joystick.GetXMin();
+		joy_maxX = joystick.GetXMax();
+		joy_minY = joystick.GetYMin();
+		joy_maxY = joystick.GetYMax();
+	}
 
 	//set platform name
 	std::string bits;
