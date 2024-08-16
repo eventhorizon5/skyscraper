@@ -2359,6 +2359,66 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		}
 	}
 
+	//AddElevatorIDSigns command
+	if (StartsWithNoCase(LineData, "addelevatoridsigns"))
+	{
+		//get data
+		int params = SplitData(LineData, 18);
+
+		if (params < 7 || params > 9)
+			return ScriptError("Incorrect number of parameters");
+
+		int compat = 0;
+		if (params == 7)
+			compat = 1; //1.4 compatibility mode
+		if (params == 8)
+			compat = 2; //1.5 compatibility mode
+
+		//check numeric values
+		if (compat == 0)
+		{
+			for (int i = 0; i <= 8; i++)
+			{
+				if (i == 1)
+					i = 4;
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+		}
+		else if (compat == 1)
+		{
+			for (int i = 2; i <= 6; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+		}
+		else if (compat == 2)
+		{
+			for (int i = 3; i <= 7; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+		}
+
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
+
+		if (compat == 0)
+		{
+			bool result;
+			result = car->AddElevatorIDSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			if (result == false)
+				return ScriptError();
+		}
+		else if (compat == 1)
+			car->AddElevatorIDSigns(0, ToBool(tempdata[0]), "Button", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		else if (compat == 2)
+			car->AddElevatorIDSigns(0, ToBool(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+		return sNextLine;
+	}
+
 	return sContinue;
 }
 

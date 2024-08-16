@@ -3498,4 +3498,65 @@ void ElevatorCar::KeypadError(bool type)
 	UpdateKeypadIndicator(message);
 }
 
+bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
+{
+	//adds elevator ID signs at the specified position and direction for each serviced floor,
+	//depending on if the given door number services the floor or not (unless door_number is 0)
+
+	Elevator* e = GetElevator();
+
+	Real x, z;
+	if (relative == true)
+	{
+		x = GetPosition().x + CenterX;
+		z = GetPosition().z + CenterZ;
+	}
+	else
+	{
+		x = CenterX;
+		z = CenterZ;
+	}
+
+	//make sure specified door exists before continuing
+	if (door_number != 0)
+	{
+		if (DoorExists(door_number) == false)
+			return ReportError("AddElevatorIDSigns: door " + ToString(door_number) + " does not exist");
+	}
+
+	bool autosize_x, autosize_y;
+	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
+	sbs->GetTextureManager()->SetAutoSize(false, false);
+
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	{
+		bool door_result = false;
+		int floor = ServicedFloors[i];
+		Real base = GetDestinationOffset(floor);
+
+		if (door_number != 0)
+			door_result = ShaftDoorsExist(door_number, floor);
+
+		if ((door_number == 0 || door_result == true) && sbs->GetFloor(floor))
+		{
+			std::string texture = texture_prefix + e->ID;
+			std::string tmpdirection = direction;
+			SetCase(tmpdirection, false);
+
+			if (tmpdirection == "front" || tmpdirection == "left")
+				sbs->DrawWalls(true, false, false, false, false, false);
+			else
+				sbs->DrawWalls(false, true, false, false, false, false);
+
+			if (tmpdirection == "front" || tmpdirection == "back")
+				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
+			else
+				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
+			sbs->ResetWalls();
+		}
+	}
+	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
+	return true;
+}
+
 }
