@@ -90,6 +90,9 @@ public:
 	std::string Renderer;
 	std::string Architecture;
 
+	//joystick support
+	int joy_minX, joy_minY, joy_maxX, joy_maxY;
+
 	bool StartupRunning;
 	bool Pause; //pause simulator
 	bool DisableSound;
@@ -252,9 +255,6 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
-
-	//joystick support
-	int joy_minX, joy_minY, joy_maxX, joy_maxY;
 };
 
 DECLARE_APP(Skyscraper)

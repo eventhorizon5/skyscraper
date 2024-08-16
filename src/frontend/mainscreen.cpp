@@ -859,7 +859,50 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 		if (event.IsMove() && event.ButtonIsDown())
 			Refresh();
 
+		wxPoint pt(joy_point);
+
+		int xmin = frontend->joy_minX;
+		int xmax = frontend->joy_maxX;
+		int ymin = frontend->joy_minY;
+		int ymax = frontend->joy_maxY;
+
+		// Scale to canvas size
+		wxSize cs = ToDIP(GetClientSize());
+		pt.x = (long)(((double)pt.x / (double)xmax) * (cs.x - 1));
+		pt.y = (long)(((double)pt.y / (double)ymax) * (cs.y - 1));
+
 		frontend->Report("Point: " + ToString(joy_point.x) + " - " + ToString(joy_point.y));
+
+		EngineContext *engine = frontend->GetActiveEngine();
+
+		if (!engine)
+			return;
+
+		//get SBS instance
+		::SBS::SBS *Simcore = engine->GetSystem();
+
+		Camera *camera = Simcore->camera;
+
+		if (!camera)
+			return;
+
+		Real speed_normal = camera->cfg_speed;
+		Real speed_fast = camera->cfg_speedfast;
+		Real speed_slow = camera->cfg_speedslow;
+
+		Real step = 0, turn = 0;
+
+		if (joy_point.y < 0)
+			step += speed_normal;
+		if (joy_point.y > 0)
+			step -+ speed_normal;
+		if (joy_point.x > 0)
+			turn += speed_normal;
+		if (joy_point.x < 0)
+			turn -+ speed_normal;
+
+		camera->Step(step);
+		camera->Turn(turn);
 	}
 }
 
