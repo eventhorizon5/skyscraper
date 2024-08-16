@@ -866,11 +866,6 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 		int ymin = frontend->joy_minY;
 		int ymax = frontend->joy_maxY;
 
-		// Scale to canvas size
-		wxSize cs = ToDIP(GetClientSize());
-		pt.x = (long)(((double)pt.x / (double)xmax) * (cs.x - 1));
-		pt.y = (long)(((double)pt.y / (double)ymax) * (cs.y - 1));
-
 		frontend->Report("Point: " + ToString(joy_point.x) + " - " + ToString(joy_point.y));
 
 		EngineContext *engine = frontend->GetActiveEngine();
@@ -895,11 +890,11 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 		if (joy_point.y < 0)
 			step += speed_normal;
 		if (joy_point.y > 0)
-			step -+ speed_normal;
+			step -= speed_normal;
 		if (joy_point.x > 0)
 			turn += speed_normal;
 		if (joy_point.x < 0)
-			turn -+ speed_normal;
+			turn -= speed_normal;
 
 		camera->Step(step);
 		camera->Turn(turn);
