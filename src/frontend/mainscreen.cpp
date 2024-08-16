@@ -898,6 +898,9 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 
 		camera->Step(step);
 		camera->Turn(turn);
+
+		if (joystick->GetButtonState(0))
+			camera->ClickedObject(false, false, false, false, 0.0, true);
 	}
 }
 
