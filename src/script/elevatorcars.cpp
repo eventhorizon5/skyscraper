@@ -1671,7 +1671,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "addkeypadindicator"))
 	{
 		//get data
-		int params = SplitData(LineData, 13);
+		int params = SplitData(LineData, 19);
 
 		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
