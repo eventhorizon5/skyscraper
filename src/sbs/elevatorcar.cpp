@@ -3344,6 +3344,22 @@ void ElevatorCar::Requested()
 	//report which elevator is assigned, on indicator
 	std::string message = "Requested";
 
+		Elevator* e = GetElevator();
+
+	//show an error if a floor hasn't been selected due to different factors
+	if (e->InspectionService == true)
+		KeypadError();
+	else if (e->FireServicePhase1 == 1 && e->FireServicePhase2 == 0)
+		KeypadError();
+	else if (e->Running == false)
+		KeypadError();
+	else if (e->IndependentService == true && (AreDoorsOpen() == false || AreDoorsMoving() != 0))
+		KeypadError();
+	else if (e->FireServicePhase2 == 2)
+		KeypadError();
+	else if (e->LimitQueue == true && (e->QueuePositionDirection == 1 && e->UpQueue.size() > 0) || (e->QueuePositionDirection == -1 && e->DownQueue.size() > 0))
+		KeypadError();
+	else
 	UpdateKeypadIndicator(message);
 }
 
