@@ -67,7 +67,10 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 	joystick = new wxJoystick(wxJOYSTICK1);
 	if (joystick->IsOk())
+	{
 		joy_buttons = joystick->GetNumberButtons();
+		joystick->SetCapture(this, 10);
+	}
 	else
 		joy_buttons = -1;
 	joy_validpoint = false;
