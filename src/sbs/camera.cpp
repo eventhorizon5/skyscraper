@@ -565,8 +565,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	}
 	else
 	{
-		x = 0;
-		y = 0;
+		x = 0.5;
+		y = 0.5;
 	}
 
 	Ray ray = MainCamera->getCameraToViewportRay(x, y);
