@@ -851,61 +851,61 @@ void MainScreen::EnableFreelook(bool value)
 
 void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 {
-	if (!event.IsZMove())
+	if (event.IsZMove())
+		return;
+
+	joy_point = event.GetPosition();
+	joy_validpoint = true;
+
+	EngineContext *engine = frontend->GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = engine->GetSystem();
+
+	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return;
+
+	Real speed_normal = camera->cfg_speed;
+	Real speed_fast = camera->cfg_speedfast;
+	Real speed_slow = camera->cfg_speedslow;
+
+	Real step = 0, turn = 0, strafe = 0;
+
+	Real speed = speed_normal;
+	if (joystick->GetButtonState(1))
+		speed = speed_fast;
+
+	if (joy_point.y < 0)
+		step += speed;
+	if (joy_point.y > 0)
+		step -= speed;
+
+	if (joystick->GetButtonState(2))
 	{
-		joy_point = event.GetPosition();
-		joy_validpoint = true;
-
-		EngineContext *engine = frontend->GetActiveEngine();
-
-		if (!engine)
-			return;
-
-		//get SBS instance
-		::SBS::SBS *Simcore = engine->GetSystem();
-
-		Camera *camera = Simcore->camera;
-
-		if (!camera)
-			return;
-
-		Real speed_normal = camera->cfg_speed;
-		Real speed_fast = camera->cfg_speedfast;
-		Real speed_slow = camera->cfg_speedslow;
-
-		Real step = 0, turn = 0, strafe = 0;
-
-		Real speed = speed_normal;
-		if (joystick->GetButtonState(1))
-			speed = speed_fast;
-
-		if (joy_point.y < 0)
-			step += speed;
-		if (joy_point.y > 0)
-			step -= speed;
-
-		if (joystick->GetButtonState(2))
-		{
-			if (joy_point.x > 0)
-				strafe += speed;
-			if (joy_point.x < 0)
-				strafe -= speed;
-		}
-		else
-		{
-			if (joy_point.x > 0)
-				turn += speed;
-			if (joy_point.x < 0)
-				turn -= speed;
-		}
-
-		camera->Step(step);
-		camera->Turn(turn);
-		camera->Strafe(strafe);
-
-		if (joystick->GetButtonState(0))
-			camera->ClickedObject(false, false, false, false, 0.0, true);
+		if (joy_point.x > 0)
+			strafe += speed;
+		if (joy_point.x < 0)
+			strafe -= speed;
 	}
+	else
+	{
+		if (joy_point.x > 0)
+			turn += speed;
+		if (joy_point.x < 0)
+			turn -= speed;
+	}
+
+	camera->Step(step);
+	camera->Turn(turn);
+	camera->Strafe(strafe);
+
+	if (joystick->GetButtonState(0))
+		camera->ClickedObject(false, false, false, false, 0.0, true);
 }
 
 }
