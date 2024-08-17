@@ -70,6 +70,8 @@ private:
 	char key_binoculars, key_crouch, key_floatup, key_floatdown, key_noclip;
 	char key_pickup, key_load, key_enter;
 
+	int joy_click, joy_strafe, joy_fast;
+
 	bool freelook;
 
 	wxJoystick *joystick;
