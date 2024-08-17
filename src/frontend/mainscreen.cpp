@@ -856,11 +856,6 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 		joy_point = event.GetPosition();
 		joy_validpoint = true;
 
-		if (event.IsMove() && event.ButtonIsDown())
-			Refresh();
-
-		wxPoint pt(joy_point);
-
 		int xmin = frontend->joy_minX;
 		int xmax = frontend->joy_maxX;
 		int ymin = frontend->joy_minY;
@@ -883,19 +878,35 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 		Real speed_fast = camera->cfg_speedfast;
 		Real speed_slow = camera->cfg_speedslow;
 
-		Real step = 0, turn = 0;
+		Real step = 0, turn = 0, strafe = 0;
+
+		Real speed = speed_normal;
+		if (joystick->GetButtonState(1))
+			speed = speed_fast;
 
 		if (joy_point.y < 0)
-			step += speed_normal;
+			step += speed;
 		if (joy_point.y > 0)
-			step -= speed_normal;
-		if (joy_point.x > 0)
-			turn += speed_normal;
-		if (joy_point.x < 0)
-			turn -= speed_normal;
+			step -= speed;
+
+		if (joystick->GetButtonState(2))
+		{
+			if (joy_point.x > 0)
+				strafe += speed;
+			if (joy_point.x < 0)
+				strafe -= speed;
+		}
+		else
+		{
+			if (joy_point.x > 0)
+				turn += speed;
+			if (joy_point.x < 0)
+				turn -= speed;
+		}
 
 		camera->Step(step);
 		camera->Turn(turn);
+		camera->Strafe(strafe);
 
 		if (joystick->GetButtonState(0))
 			camera->ClickedObject(false, false, false, false, 0.0, true);
