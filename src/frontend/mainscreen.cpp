@@ -856,11 +856,6 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 		joy_point = event.GetPosition();
 		joy_validpoint = true;
 
-		int xmin = frontend->joy_minX;
-		int xmax = frontend->joy_maxX;
-		int ymin = frontend->joy_minY;
-		int ymax = frontend->joy_maxY;
-
 		EngineContext *engine = frontend->GetActiveEngine();
 
 		if (!engine)
