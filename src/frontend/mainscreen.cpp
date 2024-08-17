@@ -866,8 +866,6 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 		int ymin = frontend->joy_minY;
 		int ymax = frontend->joy_maxY;
 
-		frontend->Report("Point: " + ToString(joy_point.x) + " - " + ToString(joy_point.y));
-
 		EngineContext *engine = frontend->GetActiveEngine();
 
 		if (!engine)

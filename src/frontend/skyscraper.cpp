@@ -697,7 +697,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (...)
 	{
-                return ReportFatalError("Error initializing render window");
+		return ReportFatalError("Error initializing render window");
 	}
 
 	if (Headless == false)
