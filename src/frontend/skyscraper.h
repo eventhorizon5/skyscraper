@@ -90,9 +90,6 @@ public:
 	std::string Renderer;
 	std::string Architecture;
 
-	//joystick support
-	int joy_minX, joy_minY, joy_maxX, joy_maxY;
-
 	bool StartupRunning;
 	bool Pause; //pause simulator
 	bool DisableSound;
