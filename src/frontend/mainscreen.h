@@ -70,7 +70,7 @@ private:
 	char key_binoculars, key_crouch, key_floatup, key_floatdown, key_noclip;
 	char key_pickup, key_load, key_enter;
 
-	int joy_click, joy_strafe, joy_fast;
+	int joy_click, joy_strafe, joy_fast, joy_turn, joy_forward;
 
 	bool freelook;
 
