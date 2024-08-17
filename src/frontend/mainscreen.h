@@ -76,9 +76,6 @@ private:
 
 	wxJoystick *joystick;
 	int joy_buttons;
-	wxPoint joy_point;
-	bool joy_validpoint;
-
 
 	DECLARE_EVENT_TABLE()
 };
