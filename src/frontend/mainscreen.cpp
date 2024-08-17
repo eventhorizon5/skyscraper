@@ -73,7 +73,6 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	}
 	else
 		joy_buttons = -1;
-	joy_validpoint = false;
 
 	//reset input states
 	boxes = false;
@@ -859,9 +858,6 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 {
 	if (event.IsZMove())
 		return;
-
-	joy_point = event.GetPosition();
-	joy_validpoint = true;
 
 	EngineContext *engine = frontend->GetActiveEngine();
 
