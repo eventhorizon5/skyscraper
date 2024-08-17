@@ -109,6 +109,10 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	key_load = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Load", ";")[0];
 	key_enter = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Enter", "E")[0];
 
+	joy_click = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Click", 0);
+	joy_fast = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Fast", 1);
+	joy_strafe = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Strafe", 2);
+
 	//create panel, rendering is done on this, along with keyboard and mouse events
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
 	panel->Connect(wxID_ANY, wxEVT_KEY_DOWN, wxKeyEventHandler(MainScreen::OnKeyDown), NULL, this);
@@ -877,7 +881,8 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 	Real step = 0, turn = 0, strafe = 0;
 
 	Real speed = speed_normal;
-	if (joystick->GetButtonState(1))
+
+	if (joystick->GetButtonState(joy_fast))
 		speed = speed_fast;
 
 	if (joy_point.y < 0)
@@ -885,7 +890,7 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 	if (joy_point.y > 0)
 		step -= speed;
 
-	if (joystick->GetButtonState(2))
+	if (joystick->GetButtonState(joy_strafe))
 	{
 		if (joy_point.x > 0)
 			strafe += speed;
@@ -904,7 +909,7 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 	camera->Turn(turn);
 	camera->Strafe(strafe);
 
-	if (joystick->GetButtonState(0))
+	if (joystick->GetButtonState(joy_click))
 		camera->ClickedObject(false, false, false, false, 0.0, true);
 }
 
