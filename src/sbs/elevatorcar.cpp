@@ -152,6 +152,11 @@ ElevatorCar::~ElevatorCar()
 	if (sbs->Verbose)
 		parent->Report("deleting objects");
 
+	//delete indicator
+	if (indicator)
+		delete indicator;
+	indicator = 0;
+
 	//delete controls
 	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
