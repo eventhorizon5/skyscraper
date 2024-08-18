@@ -36,7 +36,7 @@
 		#define __VISUALC__ _MSC_VER
 	#endif
 	#if defined(__VISUALC__) || defined(__GNUC__)
-		#if defined(SBS_DLL || SBS_EXPORTS)
+		#if defined(SBS_DLL) || (SBS_EXPORTS)
 			#define SBSIMPEXP __declspec(dllexport)
 			#define SBSIMPEXP_DATA(type) __declspec(dllexport) type
 		#else
