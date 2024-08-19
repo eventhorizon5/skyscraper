@@ -3362,13 +3362,10 @@ void ElevatorCar::Requested(int floor)
 		KeypadError();
 	else if (e->FireServicePhase2 == 2)
 		KeypadError();
-	else if (e->LimitQueue == true)
-	{
-		if ((e->QueuePositionDirection == 1 && floor < GetFloor()) || (e->QueuePositionDirection == -1 && floor > GetFloor()))
-			KeypadError();
-		else if (e->IsMoving == true && floor == GetFloor())
-			KeypadError();
-	}
+	else if (e->LimitQueue == true && ((e->QueuePositionDirection == 1 && floor < GetFloor()) || (e->QueuePositionDirection == -1 && floor > GetFloor())))
+		KeypadError();
+	else if (e->LimitQueue == true && e->IsMoving == true && floor == GetFloor())
+		KeypadError();
 	else
 		UpdateKeypadIndicator(message);
 }
