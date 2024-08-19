@@ -129,12 +129,10 @@ if (NOT WIN32)
 else ()
 	add_executable(skyscraper ${FRONTEND_FILES} ${SCRIPTPROC_FILES})
 
-	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS)
-	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS)
-	target_compile_options(SBS PRIVATE -DSBS_DLL)
-
-	set_property(TARGET skyscraper PROPERTY
-	MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Debug>:Debug>")
+	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
+	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
+	target_compile_options(SBS PRIVATE -DSBS_DLL "/MD")
+	target_compile_options(skyscraper PRIVATE "/MD")
 endif ()
 
 target_precompile_headers(OgreBulletCol PRIVATE ogrebullet/Collisions/include/OgreBulletCollisionsPreRequisites.h)
