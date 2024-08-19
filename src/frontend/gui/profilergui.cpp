@@ -62,12 +62,11 @@ Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSiz
 	chkCapture = new wxCheckBox(this, ID_chkCapture, _("Capture"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkCapture"));
 	chkCapture->SetValue(true);
 	BoxSizer2->Add(chkCapture, 1, wxALIGN_TOP, 5);
-	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
-	txtMain = new wxTextCtrl(this, ID_txtMain, wxEmptyString, wxDefaultPosition, wxSize(640,480), wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL, wxDefaultValidator, _T("ID_txtMain"));
+	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	txtMain = new wxTextCtrl(this, ID_txtMain, wxEmptyString, wxDefaultPosition, wxSize(800,600), wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL, wxDefaultValidator, _T("ID_txtMain"));
 	FlexGridSizer1->Add(txtMain, 1, wxALL|wxEXPAND, 5);
-	BoxSizer1->Add(FlexGridSizer1, 1, wxALIGN_TOP, 5);
+	BoxSizer1->Add(FlexGridSizer1, 1, wxEXPAND, 5);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
 	//*)

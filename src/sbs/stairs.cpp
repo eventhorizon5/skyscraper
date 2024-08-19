@@ -493,8 +493,6 @@ void Stairwell::Loop()
 {
 	//stairwell runloop
 
-	SBS_PROFILE("Stairwell::Loop");
-
 	LoopChildren();
 }
 
@@ -1101,8 +1099,6 @@ int Stairwell::Level::GetFloor()
 void Stairwell::Level::Loop()
 {
 	//level runloop
-
-	SBS_PROFILE("Stairwell::Level::Loop");
 
 	LoopChildren();
 }

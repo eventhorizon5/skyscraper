@@ -2,15 +2,16 @@ cmake_minimum_required(VERSION 3.2)
  
 project(Skyscraper)
  
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-  set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
-endif ()
+set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
 if(NOT APPLE)
 	if(UNIX)
 		set(FRONTENDGLINC "-lGL")
 	endif()
+	#if (MSVC)
+		#add_link_options("/SUBSYSTEM:WINDOWS")
+	#endif()
 endif()
  
 set(CMAKE_CXX_STANDARD 17)
@@ -26,6 +27,13 @@ if (UNIX AND NOT APPLE)
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+endif ()
+
+if (WIN32)
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+	set(CMAKE_CXX_FLAGS "-D_OGREBULLET_DYNAMIC /MP ${CMAKE_CXX_FLAGS}")
 endif ()
 
 find_package(OGRE REQUIRED)
@@ -87,7 +95,7 @@ file (GLOB OGREBULLET_DYN_FILES
 
 include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
-        ${OGRE_RTShaderSystem_INCLUDE_DIRS}
+	${OGRE_RTShaderSystem_INCLUDE_DIRS}
 	${OGRE_Bites_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
 	${GTK3_INCLUDE_DIRS}
@@ -116,28 +124,45 @@ add_library(OgreBulletDyn SHARED ${OGREBULLET_DYN_FILES})
 add_library(SBS SHARED ${SBS_FILES})
 
 #ScriptProc Library
-add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
+if (NOT WIN32)
+	add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
+endif ()
 
 #Alloc Library
 add_library(Alloc SHARED ${ALLOC_FILES})
 
 #frontend executable
-add_executable(skyscraper ${FRONTEND_FILES})
+if (NOT WIN32)
+	add_executable(skyscraper ${FRONTEND_FILES})
+else ()
+	add_executable(skyscraper ${FRONTEND_FILES} ${SCRIPTPROC_FILES})
+
+	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS)
+	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS)
+	target_compile_options(SBS PRIVATE -DSBS_DLL)
+endif ()
 
 target_precompile_headers(OgreBulletCol PRIVATE ogrebullet/Collisions/include/OgreBulletCollisionsPreRequisites.h)
 target_precompile_headers(OgreBulletDyn PRIVATE ogrebullet/Dynamics/include/OgreBulletDynamicsPreRequisites.h)
 target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
-target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+
+if (NOT WIN32)
+	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+endif ()
+
 target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
  
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
-target_link_libraries(SBS Alloc OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
-target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-
-target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+if (NOT WIN32)
+	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
+	target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+else ()
+	target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+endif ()
  
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES
@@ -157,12 +182,17 @@ if (APPLE)
 	set(CMAKE_SHARED_LINKER_FLAGS "-undefined dynamic_lookup")
 endif ()
 
+if (NOT WIN32)
 ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 		POST_BUILD
 		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.sh)
+else ()
+ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
+		POST_BUILD
+		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.cmd)
+endif ()
 
 if (UNIX AND NOT APPLE)
 	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tools/scripts/skyscraper
 	     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif()
-

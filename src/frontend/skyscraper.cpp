@@ -29,6 +29,7 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
+#include "wx/joystick.h"
 #endif
 #include <locale>
 #include <time.h>
@@ -239,6 +240,7 @@ bool Skyscraper::OnInit(void)
 	background_node = 0;
 	configfile = 0;
 	keyconfigfile = 0;
+	joyconfigfile = 0;
 	parser = 0;
 	sky_error = 0;
 	mTrayMgr = 0;
@@ -277,6 +279,8 @@ bool Skyscraper::OnInit(void)
 		wxCopyFile("skyscraper.ini", data_path + wxT("skyscraper.ini"));
 	if (!wxFileExists(data_path + wxT("keyboard.ini")))
 		wxCopyFile("keyboard.ini", data_path + wxT("keyboard.ini"));
+	if (!wxFileExists(data_path + wxT("joystick.ini")))
+		wxCopyFile("joystick.ini", data_path + wxT("joystick.ini"));
 
 #elif defined (__WXGTK__)
 	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory
@@ -380,6 +384,8 @@ bool Skyscraper::OnInit(void)
 		configfile->load(data_path + "skyscraper.ini");
 		keyconfigfile = new Ogre::ConfigFile();
 		keyconfigfile->load(data_path + "keyboard.ini");
+		joyconfigfile = new Ogre::ConfigFile();
+		joyconfigfile->load(data_path + "joystick.ini");
 		Ogre::ConfigFile *plugins = new Ogre::ConfigFile();
 		plugins->load("plugins.cfg");
 		delete plugins;
@@ -498,6 +504,10 @@ int Skyscraper::OnExit()
 	if (keyconfigfile)
 		delete keyconfigfile;
 	keyconfigfile = 0;
+
+	if (joyconfigfile)
+		delete joyconfigfile;
+	joyconfigfile = 0;
 
 	if (parser)
 		delete parser;
@@ -704,7 +714,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (...)
 	{
-                return ReportFatalError("Error initializing render window");
+		return ReportFatalError("Error initializing render window");
 	}
 
 	if (Headless == false)
@@ -905,6 +915,17 @@ bool Skyscraper::Initialize()
 	if (mTrayMgr)
 	{
 		mTrayMgr->hideCursor();
+	}
+
+	//set up joystick if available
+	wxJoystick joystick(wxJOYSTICK1);
+	if (!joystick.IsOk())
+		Report("No joystick detected");
+	else
+	{
+		Report("");
+		Report("Joystick detected: " + joystick.GetProductName().ToStdString());
+		Report("");
 	}
 
 	//set platform name
@@ -2021,6 +2042,12 @@ Real Skyscraper::GetConfigFloat(const std::string &key, Real default_value)
 std::string Skyscraper::GetKeyConfigString(const std::string &key, const std::string &default_value)
 {
 	return keyconfigfile->getSetting(key, "", default_value);
+}
+
+int Skyscraper::GetJoystickConfigInt(const std::string &key, int default_value)
+{
+	std::string result = joyconfigfile->getSetting(key, "", ToString(default_value));
+	return ToInt(result);
 }
 
 bool Skyscraper::InitSky(EngineContext *engine)

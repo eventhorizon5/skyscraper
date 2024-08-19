@@ -32,6 +32,7 @@
 #include "texture.h"
 #include "control.h"
 #include "callstation.h"
+#include "profiler.h"
 #include "elevator.h"
 
 namespace SBS {
@@ -451,6 +452,8 @@ void CallStation::ReportElevator(Elevator *elevator)
 bool CallStation::Call(bool direction)
 {
 	//call elevator in the specified direction
+
+	SBS_PROFILE("CallStation::Call");
 
 	//check lock state
 	if (IsLocked() == true)

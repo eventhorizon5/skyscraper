@@ -137,6 +137,7 @@ public:
 	bool GetConfigBool(const std::string &key, bool default_value);
 	Real GetConfigFloat(const std::string &key, Real default_value);
 	std::string GetKeyConfigString(const std::string &key, const std::string &default_value);
+	int GetJoystickConfigInt(const std::string &key, int default_value);
 	bool InitSky(EngineContext *engine);
 	void ShowConsole(bool send_button = true);
 	void CreateProgressDialog(const std::string &message);
@@ -221,6 +222,7 @@ private:
 
 	Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;
+	Ogre::ConfigFile *joyconfigfile;
 	Caelum::CaelumSystem *mCaelumSystem;
 	Ogre::LogManager* logger;
 	bool showconsole;

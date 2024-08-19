@@ -44,8 +44,26 @@
 #include "profiler.h"
 #include "cameratexture.h"
 #include "elevatorcar.h"
+#include "manager.h"
+#include "indicator.h"
+#include "timer.h"
+#include "controller.h"
+
+#include <time.h>
 
 namespace SBS {
+
+	class ElevatorCar::KeypadTimer : public TimerObject
+	{
+	public:
+		ElevatorCar* parent;
+		KeypadTimer(const std::string& name, ElevatorCar* parent) : TimerObject(parent, name)
+		{
+			this->parent = parent;
+		}
+		virtual void Notify();
+	};
+
 
 ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 {
@@ -115,6 +133,8 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MessageOnMove = false;
 	MessageOnStart = false;
 	MessageOnClose = false;
+	indicator = 0;
+	TimerDelay = 2;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -123,12 +143,19 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 
 	if (sbs->Verbose)
 		parent->Report("created car " + ToString(number));
+
+	keypad_timer = new KeypadTimer("Input Timeout Timer", this);
 }
 
 ElevatorCar::~ElevatorCar()
 {
 	if (sbs->Verbose)
 		parent->Report("deleting objects");
+
+	//delete indicator
+	if (indicator)
+		delete indicator;
+	indicator = 0;
 
 	//delete controls
 	for (size_t i = 0; i < ControlArray.size(); i++)
@@ -2637,6 +2664,15 @@ bool ElevatorCar::PlayMessageSound(bool type)
 
 		if (MessageOnMove == false)
 		{
+			if (type == true)
+			{
+				if (parent->LastChimeDirection == 0)
+					return false;
+
+				if (parent->NotifyLate == false && parent->NotifyEarly == -1)
+					return false;
+			}
+
 			direction = parent->LastChimeDirection;
 
 			if (parent->LastChimeDirection == 0)
@@ -3290,6 +3326,258 @@ int ElevatorCar::RespondingToCall(int floor)
 	}
 
 	return 0;
+}
+
+Indicator* ElevatorCar::AddKeypadIndicator(const std::string& sound, const std::string& texture_prefix, const std::string& blank_texture, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration)
+{
+	if (indicator)
+		return 0;
+
+	indicator = new Indicator(this, sound, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset, timer_duration);
+
+	return indicator;
+}
+
+void ElevatorCar::UpdateKeypadIndicator(const std::string& text, bool play_sound)
+{
+	if (indicator)
+		indicator->Update(text, play_sound);
+}
+
+void ElevatorCar::Requested(int floor)
+{
+	//report which elevator is assigned, on indicator
+	std::string message = "Requested";
+
+	Elevator* e = GetElevator();
+
+	//show an error if a floor hasn't been selected due to different factors
+	if (e->InspectionService == true)
+		KeypadError();
+	else if (e->FireServicePhase1 == 1 && e->FireServicePhase2 == 0)
+		KeypadError();
+	else if (e->Running == false)
+		KeypadError();
+	else if (e->IndependentService == true && (AreDoorsOpen() == false || AreDoorsMoving() != 0))
+		KeypadError();
+	else if (e->FireServicePhase2 == 2)
+		KeypadError();
+	else if (e->LimitQueue == true && ((e->QueuePositionDirection == 1 && floor < GetFloor()) || (e->QueuePositionDirection == -1 && floor > GetFloor())))
+		KeypadError();
+	else
+		UpdateKeypadIndicator(message);
+}
+
+bool ElevatorCar::Input(const std::string& text)
+{
+	//input a keypad character
+
+	//only allow single characters
+	if (text.length() != 1)
+		return false;
+
+	//check lock state
+	//if (IsLocked() == true)
+		//return ReportError("Call station is locked");
+
+	//erase last character if specified
+	if (text == "<" && InputCache.size() >= 1)
+		InputCache.pop_back();
+
+	//add text to cache
+	InputCache += text;
+
+	//automatically error if multiple special characters were entered and/or combined with numbers
+	int StarCount = std::count(InputCache.begin(), InputCache.end(), '*');
+	int MinCount = std::count(InputCache.begin(), InputCache.end(), '-');
+	if ((StarCount > 1 || MinCount > 1) && InputCache.length() > 1)
+	{
+		keypad_timer->Stop();
+		InputCache = "";
+		KeypadError(1);
+		return true;
+
+		//update indicator display
+		UpdateKeypadIndicator(InputCache, false);
+
+		//start timeout timer
+		keypad_timer->Start(2000, true);
+
+		return true;
+	}
+
+
+	//update indicator display
+	UpdateKeypadIndicator(InputCache, false);
+
+	//verify that the floor entry is valid, error if not
+	int result = 0;
+	if (GetFloorFromID(InputCache, result) == false && InputCache != "*" && InputCache != "-")
+	{
+		keypad_timer->Stop();
+		InputCache = "";
+		KeypadError(1);
+		return true;
+	}
+
+	//start timeout timer
+	keypad_timer->Start(TimerDelay * 1000.0f, true);
+
+	return true;
+}
+
+void ElevatorCar::ProcessCache()
+{
+	//process and clear input cache
+
+	Elevator* e = GetElevator();
+
+	//select recall floor if "0"
+	if (InputCache == "0" || InputCache == "*")
+	{
+		e->SelectFloor(e->GetRecallFloor());
+		InputCache = "";
+		Requested(e->GetRecallFloor());
+		return;
+	}
+
+	if (!IsNumeric(InputCache))
+	{
+		InputCache = "";
+		KeypadError();
+		return;
+	}
+
+	//don't allow input values in the InvalidInput list
+	for (int i = 0; i < (int)InvalidInput.size(); i++)
+	{
+		if (InputCache == InvalidInput[i])
+		{
+			InputCache = "";
+			KeypadError();
+			return;
+		}
+	}
+
+	int floor = 0;
+	GetFloorFromID(InputCache, floor);
+	Requested(floor);
+	e->SelectFloor(floor);
+
+	InputCache = "";
+}
+
+bool ElevatorCar::GetFloorFromID(const std::string& floor, int& result)
+{
+	if (!IsNumeric(floor))
+		return false;
+
+	int rawfloor = ToInt(floor);
+
+	//convert back to string, to strip off any leading 0's
+	std::string converted = ToString(rawfloor);
+
+	Floor* floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
+	Floor* floorobj2 = sbs->GetFloorManager()->GetByID(converted);
+	Floor* floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
+
+	if (floorobj)
+	{
+		result = floorobj->Number; //get by number ID first
+		return true;
+	}
+	else if (floorobj2)
+	{
+		result = floorobj2->Number; //next try floor ID
+		return true;
+	}
+	else if (floorobj3)
+	{
+		result = rawfloor; //and last, get by raw floor number
+		return true;
+	}
+
+	return false;
+}
+
+void ElevatorCar::KeypadTimer::Notify()
+{
+	//input timeout timer
+
+	parent->ProcessCache();
+}
+
+void ElevatorCar::KeypadError(bool type)
+{
+	//if type is 0, standard error
+	//if type is 1, invalid floor
+
+	std::string message = "XX";
+	if (type == 1)
+		message = "??";
+
+	UpdateKeypadIndicator(message);
+}
+
+bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
+{
+	//adds elevator ID signs at the specified position and direction for each serviced floor,
+	//depending on if the given door number services the floor or not (unless door_number is 0)
+
+	Elevator* e = GetElevator();
+
+	Real x, z;
+	if (relative == true)
+	{
+		x = GetPosition().x + CenterX;
+		z = GetPosition().z + CenterZ;
+	}
+	else
+	{
+		x = CenterX;
+		z = CenterZ;
+	}
+
+	//make sure specified door exists before continuing
+	if (door_number != 0)
+	{
+		if (DoorExists(door_number) == false)
+			return ReportError("AddElevatorIDSigns: door " + ToString(door_number) + " does not exist");
+	}
+
+	bool autosize_x, autosize_y;
+	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
+	sbs->GetTextureManager()->SetAutoSize(false, false);
+
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	{
+		bool door_result = false;
+		int floor = ServicedFloors[i];
+		Real base = GetDestinationOffset(floor);
+
+		if (door_number != 0)
+			door_result = ShaftDoorsExist(door_number, floor);
+
+		if ((door_number == 0 || door_result == true) && sbs->GetFloor(floor))
+		{
+			std::string texture = texture_prefix + e->ID;
+			std::string tmpdirection = direction;
+			SetCase(tmpdirection, false);
+
+			if (tmpdirection == "front" || tmpdirection == "left")
+				sbs->DrawWalls(true, false, false, false, false, false);
+			else
+				sbs->DrawWalls(false, true, false, false, false, false);
+
+			if (tmpdirection == "front" || tmpdirection == "back")
+				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
+			else
+				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
+			sbs->ResetWalls();
+		}
+	}
+	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
+	return true;
 }
 
 }

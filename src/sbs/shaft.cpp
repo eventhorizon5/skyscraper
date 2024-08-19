@@ -646,8 +646,6 @@ void Shaft::Loop()
 {
 	//shaft runloop
 
-	SBS_PROFILE("Shaft::Loop");
-
 	LoopChildren();
 }
 
@@ -1094,8 +1092,6 @@ int Shaft::Level::GetFloor()
 void Shaft::Level::Loop()
 {
 	//level runloop
-
-	SBS_PROFILE("Stairwell::Level::Loop");
 
 	LoopChildren();
 }

@@ -32,6 +32,7 @@
 #include "dynamicmesh.h"
 #include "vehicle.h"
 #include "controller.h"
+#include "profiler.h"
 #include "manager.h"
 
 namespace SBS {
@@ -243,6 +244,8 @@ void FloorManager::EnableAll(bool value)
 
 void FloorManager::Loop()
 {
+	SBS_PROFILE("FloorManager::Loop");
+
 	LoopChildren();
 }
 
@@ -377,6 +380,8 @@ void ElevatorManager::EnableAll(bool value)
 
 void ElevatorManager::Loop()
 {
+	SBS_PROFILE("ElevatorManager::Loop");
+
 	if (sbs->ProcessElevators == true)
 		LoopChildren();
 }
@@ -531,6 +536,8 @@ void ShaftManager::EnableAll(bool value)
 
 void ShaftManager::Loop()
 {
+	SBS_PROFILE("ShaftManager::Loop");
+
 	LoopChildren();
 }
 
@@ -683,6 +690,8 @@ void StairwellManager::EnableAll(bool value)
 
 void StairwellManager::Loop()
 {
+	SBS_PROFILE("StairwellManager::Loop");
+
 	LoopChildren();
 }
 
@@ -778,6 +787,8 @@ Door* DoorManager::GetIndex(int index)
 
 void DoorManager::Loop()
 {
+	SBS_PROFILE("DoorManager::Loop");
+
 	LoopChildren();
 }
 
@@ -851,6 +862,8 @@ RevolvingDoor* RevolvingDoorManager::GetIndex(int index)
 
 void RevolvingDoorManager::Loop()
 {
+	SBS_PROFILE("RevolvingDoorManager::Loop");
+
 	LoopChildren();
 }
 
@@ -970,6 +983,8 @@ void VehicleManager::Remove(Vehicle *vehicle)
 
 void VehicleManager::Loop()
 {
+	SBS_PROFILE("VehicleManager::Loop");
+
 	LoopChildren();
 }
 
@@ -1096,6 +1111,8 @@ void ControllerManager::Remove(DispatchController *controller)
 
 void ControllerManager::Loop()
 {
+	SBS_PROFILE("ControllerManager::Loop");
+
 	LoopChildren();
 }
 

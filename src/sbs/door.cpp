@@ -33,6 +33,7 @@
 #include "sound.h"
 #include "timer.h"
 #include "doorsystem.h"
+#include "profiler.h"
 #include "door.h"
 
 namespace SBS {
@@ -196,6 +197,8 @@ void Door::Enabled(bool value)
 
 void Door::Loop()
 {
+	SBS_PROFILE("Door::Loop");
+
 	if (IsMoving == true)
 		MoveDoor();
 	else

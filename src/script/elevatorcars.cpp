@@ -38,6 +38,7 @@
 #include "wall.h"
 #include "scriptproc.h"
 #include "section.h"
+#include "indicator.h"
 
 using namespace SBS;
 
@@ -910,6 +911,35 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		car->MusicPosition = Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
+	//InvalidInput parameter
+	if (StartsWithNoCase(LineData, "invalidinput"))
+	{
+		//copy string listing of elevators into array
+		int params = SplitAfterEquals(LineData);
+		if (params < 1)
+			return ScriptError("Syntax Error");
+
+		std::vector<std::string> inputs;
+
+		for (int line = 0; line < params; line++)
+			inputs.push_back(tempdata[line]);
+
+		car->InvalidInput = inputs;
+
+		return sNextLine;
+	}
+	//TimerDelay parameter
+	if (StartsWithNoCase(LineData, "timerdelay"))
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+		std::string str = Calc(value);
+		float num = 0;
+		if (!IsNumeric(str, num))
+			return ScriptError("Invalid value");
+		car->TimerDelay = num;
+		return sNextLine;
+	}
 	//AutoEnable parameter
 	if (StartsWithNoCase(LineData, "autoenable"))
 	{
@@ -1637,6 +1667,26 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//AddDisplay command
+	if (StartsWithNoCase(LineData, "addkeypadindicator"))
+	{
+		//get data
+		int params = SplitData(LineData, 19);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i <= 9; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		StoreCommand(car->AddKeypadIndicator(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+		return sNextLine;
+	}
+
 	//AddDirectionalIndicators command
 	if (StartsWithNoCase(LineData, "adddirectionalindicators"))
 	{
@@ -2307,6 +2357,31 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			engine->Report("Finished cars");
 			return sNextLine;
 		}
+	}
+
+	//AddElevatorIDSigns command
+	if (StartsWithNoCase(LineData, "addelevatoridsigns"))
+	{
+		//get data
+		int params = SplitData(LineData, 19);
+
+		if (params != 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 8; i++)
+		{
+			if (i == 1)
+				i = 4;
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		bool result = car->AddElevatorIDSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+
+		if (result == false)
+			return ScriptError();
+		return sNextLine;
 	}
 
 	return sContinue;

@@ -3518,7 +3518,7 @@ int Elevator::AvailableForCall(bool destination, int floor, int direction, bool 
 	if (car)
 	{
 		//if direction doesn't go beyond elevator's range
-		if ((direction == 1 && floor <= car->GetTopFloor()) || (direction == -1 && floor >= car->GetBottomFloor()))
+		if ((direction == 1 && floor < car->GetTopFloor()) || (direction == -1 && floor > car->GetBottomFloor()))
 		{
 			//if elevator is running
 			if (IsRunning() == true)

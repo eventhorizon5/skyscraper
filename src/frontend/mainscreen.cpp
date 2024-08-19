@@ -23,6 +23,7 @@
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/joystick.h"
 #endif
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
@@ -49,6 +50,7 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
   EVT_ACTIVATE(MainScreen::OnActivate)
+  EVT_JOYSTICK_EVENTS(MainScreen::OnJoystickEvent)
 END_EVENT_TABLE()
 
 MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -63,6 +65,14 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+	joystick = new wxJoystick(wxJOYSTICK1);
+	if (joystick->IsOk())
+	{
+		joy_buttons = joystick->GetNumberButtons();
+		joystick->SetCapture(this, 10);
+	}
+	else
+		joy_buttons = -1;
 
 	//reset input states
 	boxes = false;
@@ -98,6 +108,12 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	key_load = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Load", ";")[0];
 	key_enter = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Enter", "E")[0];
 
+	joy_click = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Click", 0);
+	joy_fast = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Fast", 1);
+	joy_strafe = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Strafe", 2);
+	joy_turn = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Turn", 0);
+	joy_forward = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Forward", 1);
+
 	//create panel, rendering is done on this, along with keyboard and mouse events
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
 	panel->Connect(wxID_ANY, wxEVT_KEY_DOWN, wxKeyEventHandler(MainScreen::OnKeyDown), NULL, this);
@@ -112,6 +128,12 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_MOUSEWHEEL, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+}
+
+MainScreen::~MainScreen()
+{
+	joystick->ReleaseCapture();
+	delete joystick;
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
@@ -830,6 +852,71 @@ void MainScreen::EnableFreelook(bool value)
 	else
 		wxSetCursor(wxNullCursor);
 #endif
+}
+
+void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
+{
+	if (event.IsZMove())
+		return;
+
+	EngineContext *engine = frontend->GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = engine->GetSystem();
+
+	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return;
+
+	Real speed_normal = camera->cfg_speed;
+	Real speed_fast = camera->cfg_speedfast;
+	Real speed_slow = camera->cfg_speedslow;
+
+	Real step = 0, turn = 0, strafe = 0;
+
+	Real speed = speed_normal;
+
+	int MinX = joystick->GetXMin();
+	int MaxX = joystick->GetXMax();
+	int MinY = joystick->GetYMin();
+	int MaxY = joystick->GetYMax();
+
+	int CenterX = (MaxX + MinX) / 2;
+	int CenterY = (MaxY + MinY) / 2;
+
+	if (joystick->GetButtonState(joy_fast))
+		speed = speed_fast;
+
+	if (joystick->GetPosition(joy_forward) < CenterY)
+		step += speed;
+	if (joystick->GetPosition(joy_forward) > CenterY)
+		step -= speed;
+
+	if (joystick->GetButtonState(joy_strafe))
+	{
+		if (joystick->GetPosition(joy_turn) > CenterX)
+			strafe += speed;
+		if (joystick->GetPosition(joy_turn) < CenterX)
+			strafe -= speed;
+	}
+	else
+	{
+		if (joystick->GetPosition(joy_turn) > CenterX)
+			turn += speed;
+		if (joystick->GetPosition(joy_turn) < CenterX)
+			turn -= speed;
+	}
+
+	camera->Step(step);
+	camera->Turn(turn);
+	camera->Strafe(strafe);
+
+	if (joystick->GetButtonState(joy_click))
+		camera->ClickedObject(false, false, false, false, 0.0, true);
 }
 
 }

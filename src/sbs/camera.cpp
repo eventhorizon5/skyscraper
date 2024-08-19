@@ -539,7 +539,7 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale)
+void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
 {
 	//get mesh object that the user clicked on, and perform related work
 
@@ -557,8 +557,18 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	if (width == 0 || height == 0)
 		return;
 
-	Real x = (float)mouse_x / (float)width * scale;
-	Real y = (float)mouse_y / (float)height * scale;
+	Real x, y;
+	if (center_only == false)
+	{
+		x = (float)mouse_x / (float)width * scale;
+		y = (float)mouse_y / (float)height * scale;
+	}
+	else
+	{
+		x = 0.5;
+		y = 0.5;
+	}
+
 	Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values

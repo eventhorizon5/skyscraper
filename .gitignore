@@ -8,6 +8,9 @@ lib/
 #ignore vscode files
 .vscode/
 
+#ignore eclipse files
+.settings/
+
 # CMake Cache
 **/CMakeCache.txt
 **/CMakeFiles

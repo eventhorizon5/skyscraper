@@ -38,6 +38,7 @@
 #include "light.h"
 #include "door.h"
 #include "revolvingdoor.h"
+#include "profiler.h"
 #include "action.h"
 
 namespace SBS {
@@ -179,6 +180,19 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//AccessDown
 	//AccessUp
 	//AccessOff
+	//Input1
+	//Input2
+	//Input3
+	//Input4
+	//Input5
+	//Input6
+	//Input7
+	//Input8
+	//Input9
+	//Input0
+	//InputMinus
+	//InputStar
+	//InputBackspace
 
 	//CallStation actions:
 	//Off
@@ -225,6 +239,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//RevolvingDoor actions:
 	//On
 	//Off
+
+	SBS_PROFILE("Action::Run");
 
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	ElevatorCar *car = dynamic_cast<ElevatorCar*>(parent);
@@ -652,6 +668,33 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			}
 			return false;
 		}
+
+		if (command_name == "input1")
+			return car->Input("1");
+		if (command_name == "input2")
+			return car->Input("2");
+		if (command_name == "input3")
+			return car->Input("3");
+		if (command_name == "input4")
+			return car->Input("4");
+		if (command_name == "input5")
+			return car->Input("5");
+		if (command_name == "input6")
+			return car->Input("6");
+		if (command_name == "input7")
+			return car->Input("7");
+		if (command_name == "input8")
+			return car->Input("8");
+		if (command_name == "input9")
+			return car->Input("9");
+		if (command_name == "input0")
+			return car->Input("0");
+		if (command_name == "inputminus")
+			return car->Input("-");
+		if (command_name == "inputstar")
+			return car->Input("*");
+		if (command_name == "inputbackspace")
+			return car->Input("<");
 	}
 
 	//if parent is a call station, get parent floor object
