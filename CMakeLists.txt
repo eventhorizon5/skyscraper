@@ -33,7 +33,7 @@ if (WIN32)
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-	set(CMAKE_CXX_FLAGS "-D_OGREBULLET_DYNAMIC /MP /MD ${CMAKE_CXX_FLAGS}")
+	set(CMAKE_CXX_FLAGS "-D_OGREBULLET_DYNAMIC /MP ${CMAKE_CXX_FLAGS}")
 endif ()
 
 find_package(OGRE REQUIRED)
@@ -140,6 +140,9 @@ else ()
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS)
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS)
 	target_compile_options(SBS PRIVATE -DSBS_DLL)
+
+	set_property(TARGET skyscraper PROPERTY
+	MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Debug>:Debug>")
 endif ()
 
 target_precompile_headers(OgreBulletCol PRIVATE ogrebullet/Collisions/include/OgreBulletCollisionsPreRequisites.h)
