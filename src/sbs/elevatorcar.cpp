@@ -3344,7 +3344,7 @@ void ElevatorCar::UpdateKeypadIndicator(const std::string& text, bool play_sound
 		indicator->Update(text, play_sound);
 }
 
-void ElevatorCar::Requested()
+void ElevatorCar::Requested(int floor)
 {
 	//report which elevator is assigned, on indicator
 	std::string message = "Requested";
@@ -3362,7 +3362,7 @@ void ElevatorCar::Requested()
 		KeypadError();
 	else if (e->FireServicePhase2 == 2)
 		KeypadError();
-	else if ((e->LimitQueue == true && (e->QueuePositionDirection == 1 && e->UpQueue.size() > 0)) || (e->QueuePositionDirection == -1 && e->DownQueue.size() > 0))
+	else if (e->LimitQueue == true && ((e->QueuePositionDirection == 1 && floor < GetFloor()) || (e->QueuePositionDirection == -1 && floor > GetFloor())))
 		KeypadError();
 	else
 		UpdateKeypadIndicator(message);
@@ -3437,7 +3437,7 @@ void ElevatorCar::ProcessCache()
 	{
 		e->SelectFloor(e->GetRecallFloor());
 		InputCache = "";
-		Requested();
+		Requested(e->GetRecallFloor());
 		return;
 	}
 
@@ -3461,7 +3461,7 @@ void ElevatorCar::ProcessCache()
 
 	int floor = 0;
 	GetFloorFromID(InputCache, floor);
-	Requested();
+	Requested(floor);
 	e->SelectFloor(floor);
 
 	InputCache = "";
