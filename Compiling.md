@@ -317,3 +317,5 @@ Download the package https://download.skyscrapersim.net/dev/other_apps/skyscrape
 Step 7 - build and run
 ------------
 Run Visual Studio and open the Skyscraper.sln project in Skyscraper's folder, and it'll start up in Debug mode.  Keep it this way for debugging, or choose RelWithDebInfo for faster release builds.  You can also change the renderer settings on startup by deleting the ogre.cfg file and running again.
+
+If Skyscraper crashes when starting, make sure you install the Visual C++ runtime here: https://aka.ms/vs/17/release/vc_redist.x64.exe
