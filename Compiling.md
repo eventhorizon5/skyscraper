@@ -280,48 +280,39 @@ Go to https://fmod.com and sign up for an account.
 
 Log in, click Download, and download and install the "FMOD Engine" for Windows.
 
-Step 4 - set up environment variables
------------
-Skyscraper's build system requires you to set up environment variables that point to the individual dependencies.
-
-Search for "environment variables" in the Windows search box, and click on "Edit the system environment variables".
-
-Here's the variables that need to be set up:
-
-BULLET_HOME_64 points to C:\bullet-svn
-
-CAELUM_HOME_64 points to C:\caelum-win64
-
-FMOD_HOME points to C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows
-
-OGRE_HOME_64 points to C:\ogre-14.1.2\SDK
-
-WXWIN_64 points to C:\wxWidgets-3.2.4
-
-Step 5 - download and install Git
+Step 4 - download and install Git
 -----------
 Get a Git client, such as the one from https://gitforwindows.org/
 
-In a terminal or Powershell, go to the folder where you'd like to store Skyscraper, then download the Skyscraper source repository:
+In a terminal or Powershell, go to the folder where you'd like to store Skyscraper (I put it in C:\Skyscraper), then download the Skyscraper source repository:
 
     git clone https://github.com/eventhorizon5/skyscraper.git skyscraper
     cd skyscraper
 
-Make sure you run the gitrev script before a build, otherwise the build will fail.  I did this by typing:
-
-    cmd
-    gitrev.cmd
-
 Download the file at https://www.skyscrapersim.net/downloads/dev/other_apps/plugins-windows.cfg and place it into your new Skyscraper folder, rename it to plugins.cfg.
 
-Once that's done go into Visual Studio, and load the project file (Skyscraper.sln) which is in the "msvc" folder.
+Step 5 - install and run cmake
+-----------
+Go to https://cmake.org/download/ to download cmake
 
-Debug builds might have issues, so do a release build.
+Run CMake on Skyscraper's folder, using C:\Skyscraper for both the source and binary folders (click Configure).
+
+It'll have errors, to fix them, do this:
+    -OGRE_DIR needs to be set to c:/ogre-14.2.6/SDK/CMake
+    -click Configure again
+    -uncheck the wxWidgets_USE_REL_AND_DBG
+    -click Configure again
+    -BULLET_INCLUDE_DIR needs to be c:/bullet/include
+    -click Configure again
+    -check Advanced, and then you need to resolve the Bullet libraries (CMake can't find them), so for all the BULLET_LIBRARY statements, point them to the related libraries in c:/bullet/lib.  Ignore the DEBUG paths.
+    -click Configure again
+    -then configure Caelum by pointing Caelum_INCLUDE_DIR to c:/caelum-win64/main/include and Caelum_LIBRARY to c:/caelum-win64/lib/RelWithDebInfo/Caelum.lib
+    -finally click Configure and then Generate
 
 Step 6 - copy over the DLLs into Skyscraper's folder so it'll run
 ------------
-Download the latest build of Skyscraper from https://www.skyscrapersim.net and copy all of the "dll" and "pdb" files from that package into the folder you created that contains the Skyscraper source code.  This will allow Skyscraper to run in release mode.
+Download the package https://download.skyscrapersim.net/dev/other_apps/skyscraper_dlls.zip and extract it into c:\skyscraper
 
 Step 7 - build and run
 ------------
-Try having Visual Studio build from source, and then see if Skyscraper will run for you.  You can change the renderer settings on startup by deleting the ogre.cfg file and running again.
+Run Visual Studio and open the Skyscraper.sln project in Skyscraper's folder, and it'll start up in Debug mode.  Keep it this way for debugging, or choose RelWithDebInfo for faster release builds.  You can also change the renderer settings on startup by deleting the ogre.cfg file and running again.
