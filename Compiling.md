@@ -298,6 +298,7 @@ Go to https://cmake.org/download/ to download cmake
 Run CMake on Skyscraper's folder, using C:\Skyscraper for both the source and binary folders (click Configure).
 
 It'll have errors, to fix them, do this:
+
     -OGRE_DIR needs to be set to c:/ogre-14.2.6/SDK/CMake
     -click Configure again
     -uncheck the wxWidgets_USE_REL_AND_DBG
