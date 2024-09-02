@@ -11,4 +11,6 @@ script = ExtResource("1_mbbqq")
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("2_igeja")]
 
+[node name="Skyscraper" type="Skyscraper" parent="."]
+
 [connection signal="pose_recentered" from="." to="CharacterBody3D" method="recenter"]
