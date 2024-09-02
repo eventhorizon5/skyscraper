@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Simulation Frontend
+	Skyscraper 3.0 - Simulator Frontend
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -24,32 +24,10 @@
 #define SKYSCRAPER_H
 
 #include <wx/app.h>
-#include <OgrePrerequisites.h>
-#include <OgreCommon.h>
-#include <Ogre.h>
-#include <OgreLog.h>
-#include <OgreTrays.h>
 
 //wxWidgets definitions
 class wxCmdLineParser;
 class wxProgressDialog;
-
-namespace Ogre {
-	class SceneNode;
-	class Rectangle2D;
-	class ConfigFile;
-	class OverlaySystem;
-}
-
-namespace FMOD {
-	class System;
-	class Sound;
-	class Channel;
-}
-
-namespace Caelum {
-	class CaelumSystem;
-}
 
 namespace SBS {
 	class SBS;
@@ -59,26 +37,26 @@ int main (int argc, char* argv[]);
 
 namespace Skyscraper {
 
-class DebugPanel;
+//class DebugPanel;
 class MainScreen;
 class EngineContext;
 class Console;
 class LoadDialog;
 class ScriptProcessor;
 
-class Skyscraper : public wxApp, public Ogre::LogListener
+class Skyscraper : public wxApp
 {
 	friend class MainScreen;
 
 public:
 
 	//OGRE engine data
-	Ogre::Root* mRoot;
+	/*Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
 	Ogre::Viewport* mViewport;
 	Ogre::SceneManager* mSceneMgr;
 	Ogre::Camera* mCamera;
-	Ogre::OverlaySystem* mOverlaySystem;
+	Ogre::OverlaySystem* mOverlaySystem;*/
 
 	std::string version;
 	std::string version_rev;
@@ -104,7 +82,7 @@ public:
 	bool ShowMenu; //show main menu
 	bool CheckScript;
 	bool Headless;
-	bool RTSS;
+	//bool RTSS;
 	int macos_major; //macos major version
 	int macos_minor; //macos minor version
 
@@ -113,9 +91,6 @@ public:
 	virtual int OnExit(void);
 	bool DrawBackground();
 
-	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
-	void destroyRenderWindow();
-	const std::string getOgreHandle() const;
 	bool Render();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
@@ -144,7 +119,7 @@ public:
 	void CloseProgressDialog();
 	void UpdateProgress();
 	void SetFullScreen(bool enabled);
-	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
+	//inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
 	void SetLocation(Real latitude, Real longitude);
 	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
@@ -167,7 +142,7 @@ public:
 	EngineContext* GetFirstValidEngine();
 	void EnableSky(bool value);
 	void UpdateSky();
-	void UnregisterDebugPanel() { dpanel = 0; }
+	//void UnregisterDebugPanel() { dpanel = 0; }
 	virtual void MacOpenFile(const wxString &filename);
 	void UnloadSky();
 	void CreateSky(EngineContext* engine);
@@ -177,9 +152,9 @@ public:
 
 private:
 	//sound data
-	FMOD::System *soundsys;
-	FMOD::Sound *sound;
-	FMOD::Channel *channel;
+	//FMOD::System *soundsys;
+	//FMOD::Sound *sound;
+	//FMOD::Channel *channel;
 
 	//button locations
 	struct buttondata
@@ -201,14 +176,14 @@ private:
 	buttondata *buttons;
 	int buttoncount;
 
-	Ogre::Rectangle2D* background_rect;
-	Ogre::SceneNode* background_node;
+	//Ogre::Rectangle2D* background_rect;
+	//Ogre::SceneNode* background_node;
 	std::string background_image;
 	bool DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
 	void Click(int index);
 	void UnloadSim();
 	void DeleteButtons();
-	void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
+	//void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
 	bool RunEngines();
 	void SwitchEngines();
 	void HandleEngineShutdown();
@@ -217,19 +192,19 @@ private:
 	void ShowProgressDialog();
 	void ReInit();
 
-	Ogre::ConfigFile *configfile;
+	/*Ogre::ConfigFile *configfile;
 	Ogre::ConfigFile *keyconfigfile;
 	Ogre::ConfigFile *joyconfigfile;
 	Caelum::CaelumSystem *mCaelumSystem;
-	Ogre::LogManager* logger;
+	Ogre::LogManager* logger;*/
 	bool showconsole;
 	wxProgressDialog *progdialog;
 	wxCmdLineParser *parser;
-	OgreBites::TrayManager* mTrayMgr;
-	int show_stats;
+	//OgreBites::TrayManager* mTrayMgr;
+	//int show_stats;
 
 	//control panel
-	DebugPanel *dpanel;
+	//DebugPanel *dpanel;
 
 	//main window
 	MainScreen *window;

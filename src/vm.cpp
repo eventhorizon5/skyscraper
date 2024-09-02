@@ -25,20 +25,20 @@
 
 using namespace godot;
 
-void Skyscraper::_bind_methods()
+void VM::_bind_methods()
 {
 }
 
-Skyscraper::Skyscraper()
+VM::VM()
 {
 	time_passed = 0.0;
 }
 
-Skyscraper::~Skyscraper()
+VM::~VM()
 {
 }
 
-void Skyscraper::_process(double delta)
+void VM::_process(double delta)
 {
 	time_passed += delta;
 }

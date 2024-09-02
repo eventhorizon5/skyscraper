@@ -25,11 +25,6 @@
 #include "wx/wx.h"
 #include "wx/joystick.h"
 #endif
-#include <OgreRoot.h>
-#include <OgreRenderWindow.h>
-#include <OgreViewport.h>
-#include <OgreCamera.h>
-#include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -155,15 +150,15 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 	if (frontend->mRenderWindow)
 	{
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-		Real scale = this->GetContentScaleFactor();
-		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
-#else
+//#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+		//Real scale = this->GetContentScaleFactor();
+		//frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
+//#else
 		frontend->mRenderWindow->windowMovedOrResized();
-#endif
+//#endif
 	}
-	if (frontend->mCamera)
-		frontend->mCamera->setAspectRatio(Real(frontend->mViewport->getActualWidth()) / Real(frontend->mViewport->getActualHeight()));
+	//if (frontend->mCamera)
+		//frontend->mCamera->setAspectRatio(Real(frontend->mViewport->getActualWidth()) / Real(frontend->mViewport->getActualHeight()));
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
@@ -198,16 +193,16 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 			if (this->HasFocus() && !panel->HasFocus())
 				panel->SetFocus();
 
-			try {
+			//try {
 				bool result = frontend->Loop(); //run simulator loop
 				if (!result)
 					frontend->Quit();
-			}
-			catch (Ogre::Exception &e)
+			//}
+			/*catch (Ogre::Exception &e)
 			{
 				frontend->ReportFatalError("Unhandled OGRE exception:\n\n" + e.getFullDescription() + "\n\nSkyscraper will now exit.  Please report this as a bug.");
 				frontend->Quit();
-			}
+			}*/
 
 			HandleMouseMovement();
 			event.RequestMore(); //request more idles

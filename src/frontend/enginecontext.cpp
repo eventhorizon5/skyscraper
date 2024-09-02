@@ -36,7 +36,7 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->frontend = frontend;
 	finish_time = 0;
@@ -50,8 +50,8 @@ EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::
 	reload_state->collisions = false;
 	reload_state->gravity = false;
 	reload_state->freelook = false;
-	this->mSceneManager = mSceneManager;
-	this->fmodsystem = fmodsystem;
+	//this->mSceneManager = mSceneManager;
+	//this->fmodsystem = fmodsystem;
 	this->position = position;
 	this->area_min = area_min;
 	this->area_max = area_max;
@@ -270,15 +270,15 @@ void EngineContext::StartSim()
 	Vector3 offset;
 	if (parent)
 		offset = parent->GetSystem()->GetPosition();
-	else
-		offset = Vector3::ZERO;
+	//else
+		//offset = Vector3::ZERO;
 
-	if (position != Vector3::ZERO)
-		Moved = true;
+	//if (position != Vector3::ZERO)
+		//Moved = true;
 
 	//Create simulator object
 	if (!Simcore)
-		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position + offset, rotation, area_min, area_max);
+		Simcore = new ::SBS::SBS(instance, position + offset, rotation, area_min, area_max);
 
 	//load script processor
 	if (!processor)
@@ -330,11 +330,11 @@ void EngineContext::UnloadSim()
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	//release free memory to OS on Linux
-	malloc_trim(0);
+	//malloc_trim(0);
 #endif
 }
 
-bool EngineContext::Start(Ogre::Camera *camera)
+bool EngineContext::Start()
 {
 	if (!Simcore)
 		return false;
@@ -356,7 +356,7 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	}
 
 	//start simulator
-	if (!Simcore->Start(camera))
+	if (!Simcore->Start(/*camera*/))
 		return ReportError("Error starting simulator\n");
 
 	//set to saved position if reloading building
@@ -449,7 +449,7 @@ void EngineContext::DetachCamera(bool reset_building)
 		Simcore->ResetState();
 }
 
-void EngineContext::AttachCamera(Ogre::Camera *camera, bool init_state)
+void EngineContext::AttachCamera(/*Ogre::Camera* camera,*/ bool init_state)
 {
 	//attach the camera to this engine
 
@@ -520,8 +520,8 @@ void EngineContext::CutForEngine(EngineContext *engine)
 	//get new engine's boundaries
 	newsimcore->GetBounds(min, max);
 
-	if (min == Vector3::ZERO && max == Vector3::ZERO)
-		return;
+	//if (min == Vector3::ZERO && max == Vector3::ZERO)
+		//return;
 
 	//get global positions of engine's boundaries, in 4 points representing a rectangle
 	a = newsimcore->ToGlobal(Vector3(min.x, min.y, min.z));

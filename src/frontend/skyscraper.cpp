@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Simulation Frontend
+	Skyscraper 3.0 - Simulator Frontend
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -34,26 +34,16 @@
 #include <locale>
 #include <time.h>
 #include <thread>
-#include <OgreRoot.h>
-#include <OgreRenderWindow.h>
-#include <OgreConfigFile.h>
-#include <OgreFontManager.h>
-#include <OgreRectangle2D.h>
-#include <OgreRTShaderSystem.h>
-#include <OgreBitesConfigDialog.h>
-#include <OgreSGTechniqueResolverListener.h>
-#include <fmod.hpp>
-#include "Caelum.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
-#include "gui/debugpanel.h"
+//#include "gui/debugpanel.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
-#include "gui/console.h"
+//#include "gui/console.h"
 #include "mainscreen.h"
-#include "gui/loaddialog.h"
+//#include "gui/loaddialog.h"
 #include "profiler.h"
 #include "gitrev.h"
 
@@ -71,16 +61,6 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include <sys/utsname.h>
 #include "malloc.h"
-#endif
-
-#include <OgreOverlaySystem.h>
-
-#if defined(__WXGTK__)
-   // NOTE: Find the GTK install config with `pkg-config --cflags gtk+-2.0`
-   #include "gtk/gtk.h"
-   #include "gdk/gdk.h"
-   #include "gdk/gdkx.h"
-   #include "GL/glx.h"
 #endif
 
 using namespace SBS;
@@ -172,11 +152,6 @@ int main (int argc, char* argv[])
 #endif
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	//force X11 if on Wayland
-	setenv("GDK_BACKEND", "x11", false);
-#endif
-
 	//main wxWidgets entry point
 	wxEntry(argc, argv);
 
@@ -187,7 +162,7 @@ namespace Skyscraper {
 
 bool Skyscraper::OnInit(void)
 {
-	version = "2.1";
+	version = "3.0";
 	version_rev = ToString(GIT_REV);
 	version_state = "Alpha";
 	version_frontend = version + ".0." + version_rev;
@@ -208,10 +183,10 @@ bool Skyscraper::OnInit(void)
 	buttons = 0;
 	buttoncount = 0;
 	logger = 0;
-	console = 0;
-	soundsys = 0;
-	progdialog = 0;
-	dpanel = 0;
+	//console = 0;
+	//soundsys = 0;
+	//progdialog = 0;
+	//dpanel = 0;
 	window = 0;
 	console = 0;
 	new_location = false;
@@ -333,18 +308,14 @@ bool Skyscraper::OnInit(void)
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
 	//set up unhandled exception handler (crash report system)
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+/*#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #if OGRE_CPU != OGRE_CPU_ARM
 	UnhandledExceptionSetRoot(this);
 #endif
-#endif
+#endif*/
 
 	//set locale to default for conversion functions
-#ifdef OGRE_DEFAULT_LOCALE
-	setlocale(LC_ALL, OGRE_DEFAULT_LOCALE);
-#else
 	setlocale(LC_ALL, "C");
-#endif
 
 	//show version number and exit if specified
 	if (parser->Found(wxT("version")) == true)
@@ -366,7 +337,7 @@ bool Skyscraper::OnInit(void)
 		Headless = true;
 
 	//load config file
-	try
+/*	try
 	{
 		configfile = new Ogre::ConfigFile();
 		configfile->load(data_path + "skyscraper.ini");
@@ -384,7 +355,7 @@ bool Skyscraper::OnInit(void)
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error loading configuration files\nDetails: " + e.getDescription());
-	}
+*/	}
 
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
 
@@ -405,7 +376,7 @@ bool Skyscraper::OnInit(void)
 		window->CenterOnScreen();
 	//}
 
-	//start and initialize OGRE
+	//start and initialize
 	if (!Initialize())
 		return ReportError("Error initializing frontend");
 
@@ -455,37 +426,37 @@ int Skyscraper::OnExit()
 	//cleanup
 	Report("Cleaning up...");
 
-	if (loaddialog)
+	/*if (loaddialog)
 		loaddialog->Destroy();
 	loaddialog = 0;
 
 	if (progdialog)
 		progdialog->Destroy();
-	progdialog = 0;
+	progdialog = 0;*/
 
 	UnloadSim();
 
 	//delete Caelum
-	if (mCaelumSystem)
-		delete mCaelumSystem;
+	//if (mCaelumSystem)
+		//delete mCaelumSystem;
 
 	//cleanup sound
-	StopSound();
+	/*StopSound();
 	if (soundsys)
-		soundsys->release();
+		soundsys->release();*/
 
 	//delete console window
-	if (console)
+	/*if (console)
 		console->Destroy();
-	console = 0;
+	console = 0;*/
 
-	CloseProgressDialog();
+	//CloseProgressDialog();
 
 	if (window)
 		window->Destroy();
 	window = 0;
 
-	if (configfile)
+	/*if (configfile)
 		delete configfile;
 	configfile = 0;
 
@@ -499,26 +470,18 @@ int Skyscraper::OnExit()
 
 	if (parser)
 		delete parser;
-	parser = 0;
+	parser = 0;*/
 
-	delete mOverlaySystem;
-
-	Ogre::ResourceGroupManager::getSingleton().shutdownAll();
-
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
-	mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
-	//delete mRoot;
-#endif
-	delete logger;
+	//delete logger;
 	return wxApp::OnExit();
 }
 
 void Skyscraper::UnloadSim()
 {
 	//delete control panel object
-	if(dpanel)
+	/*if(dpanel)
 		delete dpanel;
-	dpanel = 0;
+	dpanel = 0;*/
 
 	//unload sky system
 	UnloadSky();
@@ -531,25 +494,25 @@ void Skyscraper::UnloadSim()
 	//do a full clear of Ogre objects
 
 	//remove all meshes
-	Ogre::MeshManager::getSingleton().removeAll();
+	//Ogre::MeshManager::getSingleton().removeAll();
 
 	//remove all materials
-	if (RTSS)
-		Ogre::RTShader::ShaderGenerator::getSingleton().removeAllShaderBasedTechniques();
-	Ogre::MaterialManager::getSingleton().removeAll();
-	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
+	//if (RTSS)
+		//Ogre::RTShader::ShaderGenerator::getSingleton().removeAllShaderBasedTechniques();
+	//Ogre::MaterialManager::getSingleton().removeAll();
+	//Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
 
 	//remove all fonts
-	Ogre::FontManager::getSingleton().removeAll();
+	//Ogre::FontManager::getSingleton().removeAll();
 
 	//remove all textures
-	Ogre::TextureManager::getSingleton().removeAll();
+	//Ogre::TextureManager::getSingleton().removeAll();
 
 	//clear scene manager
-	mSceneMgr->clearScene();
+	//mSceneMgr->clearScene();
 
 	//free unused hardware buffers
-	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
+	//Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
 	ReInit();
 
@@ -568,19 +531,19 @@ bool Skyscraper::Render()
 		return true;
 
 	// Render to the frame buffer
-	try
+	/*try
 	{
-		mRoot->renderOneFrame();
+		//mRoot->renderOneFrame();
 	}
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error in render operation\nDetails: " + e.getDescription());
-	}
+	}*/
 
 	//update frame statistics
-	Ogre::FrameEvent a;
+	/*Ogre::FrameEvent a;
 	if (mTrayMgr)
-		mTrayMgr->frameRendered(a);
+		mTrayMgr->frameRendered(a);*/
 
 	return true;
 }
@@ -588,16 +551,19 @@ bool Skyscraper::Render()
 bool Skyscraper::Initialize()
 {
 	//initialize OGRE
-	try
+	/*try
 	{
 		mRoot = Ogre::Root::getSingletonPtr();
 	}
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error during initial OGRE check\nDetails: " + e.getDescription());
-	}
+	}*/
 
-	if(!mRoot)
+	//report on system startup
+	Report("Skyscraper version " + version_frontend + " starting...\n");
+
+	/*if(!mRoot)
 	{
 		try
 		{
@@ -624,10 +590,10 @@ bool Skyscraper::Initialize()
 		{
 			return ReportFatalError("Error initializing OGRE");
 		}
-	}
+	}*/
 
 	//set up overlay system
-	try
+	/*try
 	{
 		Report("");
 		Report("Loading Overlay System...");
@@ -636,10 +602,10 @@ bool Skyscraper::Initialize()
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription());
-	}
+	}*/
 
 	//configure render system
-	try
+	/*try
 	{
 		if(!mRoot->getRenderSystem())
 		{
@@ -654,9 +620,9 @@ bool Skyscraper::Initialize()
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription());
-	}
+	}*/
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+/*#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//set rendersystem options
 	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
 	if (rendersystem)
@@ -680,10 +646,10 @@ bool Skyscraper::Initialize()
 			}
 		}
 	}
-#endif
+#endif*/
 
 	//initialize render window
-	try
+	/*try
 	{
 		Report("");
 		Report("Initializing OGRE...");
@@ -703,9 +669,9 @@ bool Skyscraper::Initialize()
 	catch (...)
 	{
 		return ReportFatalError("Error initializing render window");
-	}
+	}*/
 
-	if (Headless == false)
+	/*if (Headless == false)
 	{
 		//get renderer info
 		Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
@@ -713,10 +679,10 @@ bool Skyscraper::Initialize()
 		//shorten name
 		int loc = Renderer.find("Rendering Subsystem");
 		Renderer = Renderer.substr(0, loc - 1);
-	}
+	}*/
 
 	//load resource configuration
-	Ogre::ConfigFile cf;
+	/*Ogre::ConfigFile cf;
 	try
 	{
 		Report("");
@@ -757,10 +723,10 @@ bool Skyscraper::Initialize()
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error initializing resources\nDetails: " + e.getDescription());
-	}
+	}*/
 
 	//create scene manager
-	try
+	/*try
 	{
 		mSceneMgr = mRoot->createSceneManager();
 	}
@@ -769,10 +735,10 @@ bool Skyscraper::Initialize()
 		return ReportFatalError("Error creating scene manager\nDetails: " + e.getDescription());
 	}
 
-	mSceneMgr->addRenderQueueListener(mOverlaySystem);
+	mSceneMgr->addRenderQueueListener(mOverlaySystem);*/
 
 	//enable shadows
-	if (GetConfigBool("Skyscraper.Frontend.Shadows", false) == true)
+	/*if (GetConfigBool("Skyscraper.Frontend.Shadows", false) == true)
 	{
 		try
 		{
@@ -783,9 +749,9 @@ bool Skyscraper::Initialize()
 		{
 			ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription());
 		}
-	}
+	}*/
 
-	std::string renderer = mRoot->getRenderSystem()->getName();
+	/*std::string renderer = mRoot->getRenderSystem()->getName();
 
 	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem" && renderer != "Metal Rendering Subsystem")
 		RTSS = true;
@@ -819,11 +785,11 @@ bool Skyscraper::Initialize()
 		{
 			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
 		}
-	}
+	}*/
 
 	//set up default material shader scheme
-	if (RTSS == true)
-		mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	//if (RTSS == true)
+		//mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 
 	//setup texture filtering
 	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
@@ -835,7 +801,7 @@ bool Skyscraper::Initialize()
 	if (filtermode < 3)
 		maxanisotropy = 1;
 
-	Ogre::TextureFilterOptions filter;
+	/*Ogre::TextureFilterOptions filter;
 	if (filtermode == 0)
 		filter = Ogre::TFO_NONE;
 	else if (filtermode == 1)
@@ -843,16 +809,16 @@ bool Skyscraper::Initialize()
 	else if (filtermode == 2)
 		filter = Ogre::TFO_TRILINEAR;
 	else if (filtermode == 3)
-		filter = Ogre::TFO_ANISOTROPIC;
+		filter = Ogre::TFO_ANISOTROPIC;*/
 
-	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
-	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
+	//Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
+	//Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
 	//initialize FMOD (sound)
 	DisableSound = GetConfigBool("Skyscraper.Frontend.DisableSound", false);
 	if (DisableSound == false)
 	{
-		Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2024\n");
+		/*Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2024\n");
 
 		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)
@@ -886,12 +852,12 @@ bool Skyscraper::Initialize()
 
 				Report("Sound initialized: FMOD Engine version " + s_version);
 			}
-		}
+		}*/
 	}
 	else
 		Report("Sound Disabled");
 
-	try
+	/*try
 	{
 		mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindow);
 	}
@@ -903,7 +869,7 @@ bool Skyscraper::Initialize()
 	if (mTrayMgr)
 	{
 		mTrayMgr->hideCursor();
-	}
+	}*/
 
 	//set up joystick if available
 	wxJoystick joystick(wxJOYSTICK1);
@@ -919,7 +885,7 @@ bool Skyscraper::Initialize()
 	//set platform name
 	std::string bits;
 
-#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+/*#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
 	bits = "32-bit";
 #endif
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
@@ -986,7 +952,7 @@ bool Skyscraper::Initialize()
 	struct utsname osInfo{};
 	uname(&osInfo);
 	Report("Running on Linux " + std::string(osInfo.release));
-#endif
+#endif*/
 
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
@@ -1000,7 +966,7 @@ bool Skyscraper::Initialize()
 
 void Skyscraper::Report(const std::string &message)
 {
-	try
+	/*try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
 			Ogre::LogManager::getSingleton().logMessage(message);
@@ -1008,12 +974,12 @@ void Skyscraper::Report(const std::string &message)
 	catch (Ogre::Exception &e)
 	{
 		ShowError("Error writing message to log\n" + e.getDescription());
-	}
+	}*/
 }
 
 bool Skyscraper::ReportError(const std::string &message)
 {
-	try
+	/*try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
 			Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
@@ -1021,7 +987,7 @@ bool Skyscraper::ReportError(const std::string &message)
 	catch (Ogre::Exception &e)
 	{
 		ShowError("Error writing message to log\n" + e.getDescription());
-	}
+	}*/
 	return false;
 }
 
@@ -1072,8 +1038,8 @@ bool Skyscraper::Loop()
 	}
 
 	//show progress dialog if needed
-	if (show_progress == true)
-		ShowProgressDialog();
+	//if (show_progress == true)
+		//ShowProgressDialog();
 
 	//run sim engine instances
 	bool result = RunEngines();
@@ -1110,7 +1076,7 @@ bool Skyscraper::Loop()
 	}
 
 	//update Caelum
-	UpdateSky();
+	//UpdateSky();
 
 	//render graphics
 	result = Render();
@@ -1231,7 +1197,9 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	//values are -1 for the top left, 1 for the top right, -1 for the top, and 1 for the bottom
 	//center is at 0, 0
 
-	Real w, h;
+	return;
+
+	/*Real w, h;
 	int w_orig = 0, h_orig = 0, w2 = 0, h2 = 0;
 	bool background = false;
 
@@ -1458,7 +1426,7 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 			background_node = node;
 			background_rect = rect;
 		}
-	}
+	}*/
 	return true;
 }
 
@@ -1551,7 +1519,7 @@ void Skyscraper::Click(int index)
 
 void Skyscraper::DeleteButtons()
 {
-	if (buttoncount > 0)
+/*	if (buttoncount > 0)
 	{
 		for (int i = 0; i < buttoncount; i++)
 		{
@@ -1581,14 +1549,14 @@ void Skyscraper::DeleteButtons()
 	if (background_rect)
 		delete background_rect;
 	background_rect = 0;
-	background_image = "";
+	background_image = "";*/
 }
 
 void Skyscraper::StartSound()
 {
 	//load and start background music
 
-	if (DisableSound == true)
+/*	if (DisableSound == true)
 		return;
 
 	if (GetConfigBool("Skyscraper.Frontend.IntroMusic", true) == false)
@@ -1630,17 +1598,17 @@ void Skyscraper::StartSound()
 
 	channel->setLoopCount(-1);
 	channel->setVolume(1.0);
-	channel->setPaused(false);
+	channel->setPaused(false);*/
 }
 
 void Skyscraper::StopSound()
 {
 	//stop and unload sound
-	if (channel)
+/*	if (channel)
 		channel->stop();
 	if (sound)
 		sound->release();
-	sound = 0;
+	sound = 0;*/
 }
 
 std::string Skyscraper::SelectBuilding()
@@ -1716,15 +1684,15 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	if (GetEngineCount() == 0)
 	{
 		//set sky name
-		SkyName = GetConfigString("Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
+		//SkyName = GetConfigString("Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
 
 		//clear scene
-		mSceneMgr->clearScene();
+		//mSceneMgr->clearScene();
 	}
 
 	//clear screen
-	if (Headless == false)
-		mRenderWindow->update();
+	//if (Headless == false)
+		//mRenderWindow->update();
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
@@ -1767,7 +1735,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (engine == active_engine)
 	{
 		//the sky needs to be created before Prepare() is called
-		CreateSky(engine);
+		//CreateSky(engine);
 
 		//switch to fullscreen mode if specified
 		bool fullscreen = GetConfigBool("Skyscraper.Frontend.FullScreen", false);
@@ -1795,8 +1763,8 @@ bool Skyscraper::Start(EngineContext *engine)
 		return false;
 
 	//close progress dialog if no engines are loading
-	if (IsEngineLoading() == false)
-		CloseProgressDialog();
+	//if (IsEngineLoading() == false)
+		//CloseProgressDialog();
 
 	//load control panel
 	if (engine == active_engine)
@@ -1809,10 +1777,10 @@ bool Skyscraper::Start(EngineContext *engine)
 
 		if (panel == true)
 		{
-			if (!dpanel)
-				dpanel = new DebugPanel(this, NULL, -1);
-			dpanel->Show(true);
-			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
+			//if (!dpanel)
+				//dpanel = new DebugPanel(this, NULL, -1);
+			//dpanel->Show(true);
+			//dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
 		}
 	}
 
@@ -1822,7 +1790,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (GetConfigBool("Skyscraper.SBS.Lighting", false) == true)
 	{
 		Real value = GetConfigFloat("Skyscraper.SBS.AmbientLight", 0.5);
-		mSceneMgr->setAmbientLight(Ogre::ColourValue(value, value, value));
+		//mSceneMgr->setAmbientLight(Ogre::ColourValue(value, value, value));
 	}
 
 	//show frame stats
@@ -1831,8 +1799,8 @@ bool Skyscraper::Start(EngineContext *engine)
 	//run simulation
 	Report("Running simulation...");
 	StopSound();
-	if (console)
-		console->bSend->Enable(true);
+	//if (console)
+		//console->bSend->Enable(true);
 	return true;
 }
 
@@ -1879,139 +1847,57 @@ void Skyscraper::UnloadToMenu()
 void Skyscraper::Quit()
 {
 	//exit app
-	if(dpanel)
-		dpanel->EnableTimer(false);
+	//if(dpanel)
+		//dpanel->EnableTimer(false);
 
 	wxGetApp().Exit();
 }
 
-Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
-{
-	std::string name = windowName;
-
-	int width, height;
-	window->GetClientSize(&width, &height);
-
-	Ogre::NameValuePairList params;
-	if (miscParams)
-		params = *miscParams;
-
-	bool vsync = GetConfigBool("Skyscraper.Frontend.Vsync", true);
-	if (vsync == true)
-		params["vsync"] = "true";
-	else
-		params["vsync"] = "false";
-	params["vsyncInterval"] = "1";
-	params["externalWindowHandle"] = getOgreHandle();
-
-#if defined(__WXMAC__)
-	params["macAPI"] = "cocoa";
-	params["macAPICocoaUseNSView"] = "true";
-#endif
-
-	//create the render window
-	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-	mRenderWindow->setActive(true);
-	mRenderWindow->windowMovedOrResized();
-
-	return mRenderWindow;
-}
-
-void Skyscraper::destroyRenderWindow()
-{
-	if (mRenderWindow)
-	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
-
-	mRenderWindow->destroy();
-	mRenderWindow = 0;
-}
-
-const std::string Skyscraper::getOgreHandle() const
-{
-#if defined(__WXMSW__)
-	// Handle for Windows systems
-	return Ogre::StringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
-#elif defined(__WXGTK__)
-	// Handle for GTK-based systems
-
-	// wxWidgets uses several internal GtkWidgets, the GetHandle method
-	// returns a different one than this, but wxWidgets's GLCanvas uses this
-	// one to interact with GLX, so we do the same.
-	// NOTE: this method relies on implementation details in wxGTK and could
-	//      change without any notification from the developers.
-	GtkWidget* privHandle = window->m_wxwindow;
-
-	// prevents flickering
-	//gtk_widget_set_double_buffered(privHandle, false);
-
-	gtk_widget_realize(privHandle);
-
-	// grab the window object
-	GdkWindow* gdkWin = gtk_widget_get_window((GtkWidget*)window->GetHandle());
-	Display* display = GDK_WINDOW_XDISPLAY(gdkWin);
-	Window wid = GDK_WINDOW_XID(gdkWin);
-
-	// screen (returns "display.screen")
-	std::string screenStr = DisplayString(display);
-	screenStr = screenStr.substr(screenStr.find(".") + 1, screenStr.size());
-
-	std::stringstream handleStream;
-	handleStream << (unsigned long)display << ':' << screenStr << ':' << wid;
-
-	// retrieve XVisualInfo
-	// NOTE: '-lGL' linker flag must be specified.
-	int attrlist[] = { GLX_RGBA, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, None };
-	XVisualInfo* vi = glXChooseVisual(display, DefaultScreen(display), attrlist);
-	handleStream << ':' << (unsigned long)vi;
-
-	return std::string(handleStream.str());
-
-#elif defined(__WXMAC__)
-	return Ogre::StringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
-#else
-	#error Not supported on this platform!
-#endif
-}
-
 int Skyscraper::GetConfigInt(const std::string &key, int default_value)
 {
-	std::string result = configfile->getSetting(key, "", ToString(default_value));
-	return ToInt(result);
+	//std::string result = configfile->getSetting(key, "", ToString(default_value));
+	//return ToInt(result);
+	return 0;
 }
 
 std::string Skyscraper::GetConfigString(const std::string &key, const std::string &default_value)
 {
-	return configfile->getSetting(key, "", default_value);
+	//return configfile->getSetting(key, "", default_value);
+	return "";
 }
 
 bool Skyscraper::GetConfigBool(const std::string &key, bool default_value)
 {
-	std::string result = configfile->getSetting(key, "", BoolToString(default_value));
-	return ToBool(result);
+	//std::string result = configfile->getSetting(key, "", BoolToString(default_value));
+	//return ToBool(result);
+	return true;
 }
 
 Real Skyscraper::GetConfigFloat(const std::string &key, Real default_value)
 {
-	std::string result = configfile->getSetting(key, "", ToString(default_value));
-	return ToFloat(result);
+	//std::string result = configfile->getSetting(key, "", ToString(default_value));
+	//return ToFloat(result);
+	return 0.0;
 }
 
 std::string Skyscraper::GetKeyConfigString(const std::string &key, const std::string &default_value)
 {
-	return keyconfigfile->getSetting(key, "", default_value);
+	//return keyconfigfile->getSetting(key, "", default_value);
+	return "";
 }
 
 int Skyscraper::GetJoystickConfigInt(const std::string &key, int default_value)
 {
-	std::string result = joyconfigfile->getSetting(key, "", ToString(default_value));
-	return ToInt(result);
+	//std::string result = joyconfigfile->getSetting(key, "", ToString(default_value));
+	//return ToInt(result);
+	return 0;
 }
 
 bool Skyscraper::InitSky(EngineContext *engine)
 {
 	//initialize sky
 
-	if (!engine)
+	/*if (!engine)
 		return false;
 
 	if (Headless == true)
@@ -2140,24 +2026,24 @@ bool Skyscraper::InitSky(EngineContext *engine)
 		mCaelumSystem->setJulianDay(datetime);
 		new_time = false;
 	}
-
+*/
 	return true;
 }
 
 void Skyscraper::UpdateSky()
 {
 	//update sky
-	SBS_PROFILE_MAIN("Sky");
+	/*SBS_PROFILE_MAIN("Sky");
 
 	if (mCaelumSystem)
 	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
 		mCaelumSystem->setTimeScale(SkyMult);
 		mCaelumSystem->updateSubcomponents(Real(active_engine->GetSystem()->GetElapsedTime()) / 1000);
-	}
+	}*/
 }
 
-void Skyscraper::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)
+/*void Skyscraper::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)
 {
 	//callback function that receives OGRE log messages
 	if (console)
@@ -2165,22 +2051,22 @@ void Skyscraper::messageLogged(const std::string &message, Ogre::LogMessageLevel
 		console->Write(message);
 		console->Update();
 	}
-}
+}*/
 
 void Skyscraper::ShowConsole(bool send_button)
 {
-	if (!console)
+	/*if (!console)
 		console = new Console(this, NULL, -1);
 	console->Show();
 	console->Raise();
 	console->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ConsoleX", 10), GetConfigInt("Skyscraper.Frontend.ConsoleY", 25)));
-	console->bSend->Enable(send_button);
+	console->bSend->Enable(send_button);*/
 }
 
 void Skyscraper::CreateProgressDialog(const std::string &message)
 {
 	//don't create progress dialog if concurrent loading is enabled, and one engine is already running
-	if (GetEngineCount() > 1 && ConcurrentLoads == true)
+	/*if (GetEngineCount() > 1 && ConcurrentLoads == true)
 	{
 		if (GetFirstValidEngine()->IsRunning() == true)
 			return;
@@ -2198,36 +2084,36 @@ void Skyscraper::CreateProgressDialog(const std::string &message)
 		msg += "\n";
 		msg += message;
 		progdialog->Update(progdialog->GetValue(), msg);
-	}
+	}*/
 
 	//stop control panel timer
-	if (dpanel)
-		dpanel->EnableTimer(false);
+	//if (dpanel)
+		//dpanel->EnableTimer(false);
 }
 
 void Skyscraper::CloseProgressDialog()
 {
 	//close progress dialog
-	if (progdialog)
+	/*if (progdialog)
 		progdialog->Destroy();
-	progdialog = 0;
+	progdialog = 0;*/
 
 	//start control panel timer
-	if (dpanel)
-		dpanel->EnableTimer(true);
+	//if (dpanel)
+		//dpanel->EnableTimer(true);
 }
 
 void Skyscraper::ShowProgressDialog()
 {
-	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, window);
+	/*if (!progdialog)
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, window);*/
 
 	show_progress = false;
 }
 
 void Skyscraper::UpdateProgress()
 {
-	if (!progdialog)
+	/*if (!progdialog)
 		return;
 
 	int total_percent = GetEngineCount() * 100;
@@ -2240,7 +2126,7 @@ void Skyscraper::UpdateProgress()
 	}
 
 	int final = ((Real)current_percent / (Real)total_percent) * 100;
-	progdialog->Update(final);
+	progdialog->Update(final);*/
 }
 
 void Skyscraper::SetFullScreen(bool enabled)
@@ -2272,7 +2158,7 @@ void Skyscraper::SetDateTimeNow()
 	//set date and time to current time in UTC
 
 	//get current time
-	time_t now = time(0);
+	/*time_t now = time(0);
 
 	//convert time to GMT
 	tm* gmtm = gmtime(&now);
@@ -2281,16 +2167,16 @@ void Skyscraper::SetDateTimeNow()
 
 	//convert time to Julian and set it
 	double julian = Caelum::Astronomy::getJulianDayFromGregorianDateTime(gmtm->tm_year + 1900, gmtm->tm_mon + 1, gmtm->tm_mday, gmtm->tm_hour, gmtm->tm_min, gmtm->tm_sec);
-	SetDateTime(julian);
+	SetDateTime(julian);*/
 }
 
 void Skyscraper::SetDateTime(double julian_date_time)
 {
-	datetime = julian_date_time;
+	/*datetime = julian_date_time;
 	new_time = true;
 
 	if (mCaelumSystem)
-		mCaelumSystem->setJulianDay(datetime);
+		mCaelumSystem->setJulianDay(datetime);*/
 }
 
 EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -2700,7 +2586,7 @@ void Skyscraper::EnableSky(bool value)
 	//enable or disable sky system
 
 	//enable/disable old skybox system in engine 0
-	if (GetEngine(0))
+	/*if (GetEngine(0))
 		GetEngine(0)->GetSystem()->EnableSkybox(value);
 
 	//enable/disable Caelum sky system
@@ -2708,7 +2594,7 @@ void Skyscraper::EnableSky(bool value)
 	{
 		mCaelumSystem->getCaelumGroundNode()->setVisible(value);
 		mCaelumSystem->getCaelumCameraNode()->setVisible(value);
-	}
+	}*/
 }
 
 void Skyscraper::MacOpenFile(const wxString &filename)
@@ -2731,7 +2617,7 @@ void Skyscraper::UnloadSky()
 {
 	//unload Caelum sky system
 
-	new_time = false;
+	/*new_time = false;
 
 	if (mCaelumSystem)
 	{
@@ -2743,7 +2629,7 @@ void Skyscraper::UnloadSky()
 		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
 		Caelum::CaelumPlugin::getSingleton().shutdown();
 		delete ptr;
-	}
+	}*/
 }
 
 void Skyscraper::CreateSky(EngineContext *engine)
@@ -2751,7 +2637,7 @@ void Skyscraper::CreateSky(EngineContext *engine)
 	//create sky system
 
 	//load Caelum plugin
-	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+	/*if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
 	{
 		try
 		{
@@ -2764,7 +2650,7 @@ void Skyscraper::CreateSky(EngineContext *engine)
 				ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
 			return;
 		}
-	}
+	}*/
 
 	/*(if (sky_error == true)
 	{
@@ -2772,18 +2658,18 @@ void Skyscraper::CreateSky(EngineContext *engine)
 		return;
 	}*/
 
-	bool sky_result = true;
+	/*bool sky_result = true;
 	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
 		sky_result = InitSky(engine);
 
 	//create old sky if Caelum is turned off, or failed to initialize
 	if (sky_result == false)
-		engine->GetSystem()->CreateSky();
+		engine->GetSystem()->CreateSky();*/
 }
 
 void Skyscraper::ToggleStats()
 {
-	show_stats++;
+	/*show_stats++;
 
 	if (show_stats == 0)
 	{
@@ -2796,7 +2682,7 @@ void Skyscraper::ToggleStats()
 	{
 		mTrayMgr->hideFrameStats();
 		show_stats = -1;
-	}
+	}*/
 }
 
 void Skyscraper::EnableStats(bool value)
@@ -2821,7 +2707,7 @@ void Skyscraper::ReInit()
 	mTrayMgr = 0;
 
 	//reinit overlay system
-	try
+	/*try
 	{
 		mSceneMgr->removeRenderQueueListener(mOverlaySystem);
 		delete mOverlaySystem;
@@ -2831,10 +2717,10 @@ void Skyscraper::ReInit()
 	catch (Ogre::Exception &e)
 	{
 		ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription());
-	}
+	}*/
 
 	//initialize system resources
-	try
+	/*try
 	{
 		Ogre::ResourceGroupManager::getSingleton().clearResourceGroup("Materials");
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
@@ -2844,10 +2730,10 @@ void Skyscraper::ReInit()
 	catch (Ogre::Exception &e)
 	{
 		ReportFatalError("Error initializing resources\nDetails:" + e.getDescription());
-	}
+	}*/
 
 	//reinit tray manager
-	try
+	/*try
 	{
 		mTrayMgr = new OgreBites::TrayManager("Tray", mRenderWindow);
 	}
@@ -2859,7 +2745,7 @@ void Skyscraper::ReInit()
 	if (mTrayMgr)
 	{
 		mTrayMgr->hideCursor();
-	}
+	}*/
 
 	show_stats = -1;
 }

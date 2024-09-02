@@ -27,8 +27,8 @@
 
 namespace godot {
 
-class Skyscraper : public Node3D {
-	GDCLASS(Skyscraper, Node3D)
+class VM : public Node3D {
+	GDCLASS(VM, Node3D)
 
 private:
 	double time_passed;
@@ -37,8 +37,8 @@ protected:
 	static void _bind_methods();
 
 public:
-	Skyscraper();
-	~Skyscraper();
+	VM();
+	~VM();
 
 	void _process(double delta) override;
 };

@@ -174,7 +174,7 @@ SkyControl::SkyControl(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	Connect(ID_bSetMultiplier,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetMultiplier_Click);
 	//*)
 	panel = parent;
-	system = 0;
+	//system = 0;
 	OnInit();
 }
 
@@ -187,19 +187,19 @@ SkyControl::~SkyControl()
 
 void SkyControl::OnInit()
 {
-	system = panel->GetRoot()->GetCaelumSystem();
+	/*system = panel->GetRoot()->GetCaelumSystem();
 
 	if (!system)
 		return;
 
 	tLatitude->SetValue(TruncateNumber(Degree(system->getObserverLatitude()).valueDegrees(), 4));
 	tLongitude->SetValue(TruncateNumber(Degree(system->getObserverLongitude()).valueDegrees(), 4));
-	tMultiplier->SetValue(TruncateNumber(system->getTimeScale(), 4));
+	tMultiplier->SetValue(TruncateNumber(system->getTimeScale(), 4));*/
 }
 
 void SkyControl::Loop()
 {
-	if (system != panel->GetRoot()->GetCaelumSystem())
+	/*if (system != panel->GetRoot()->GetCaelumSystem())
 		OnInit();
 
 	if (!system)
@@ -219,24 +219,24 @@ void SkyControl::Loop()
 		tHour->SetValue(SBS::ToString(hour));
 		tMinute->SetValue(SBS::ToString(minute));
 		tSecond->SetValue(SBS::ToString(second));
-	}
+	}*/
 }
 
 void SkyControl::On_bSetLatitude_Click(wxCommandEvent& event)
 {
-	if (system)
-		system->setObserverLatitude(Degree(atof(tLatitude->GetValue())));
+	//if (system)
+		//system->setObserverLatitude(Degree(atof(tLatitude->GetValue())));
 }
 
 void SkyControl::On_bSetLongitude_Click(wxCommandEvent& event)
 {
-	if (system)
-		system->setObserverLongitude(Degree(atof(tLongitude->GetValue())));
+	//if (system)
+		//system->setObserverLongitude(Degree(atof(tLongitude->GetValue())));
 }
 
 void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
 {
-	if (!system)
+	/*if (!system)
 		return;
 
 	static wxString prev_julian;
@@ -289,17 +289,17 @@ void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
 		tHour->SetEditable(true);
 		tMinute->SetEditable(true);
 		tSecond->SetEditable(true);
-	}
+	}*/
 }
 
 void SkyControl::On_bSetMultiplier_Click(wxCommandEvent& event)
 {
-	panel->GetRoot()->SkyMult = atof(tMultiplier->GetValue());
+	//panel->GetRoot()->SkyMult = atof(tMultiplier->GetValue());
 }
 
 void SkyControl::On_bGetSystemTime_Click(wxCommandEvent& event)
 {
-	panel->GetRoot()->SetDateTimeNow();
+	//panel->GetRoot()->SetDateTimeNow();
 }
 
 }

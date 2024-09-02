@@ -28,7 +28,7 @@
 #include <vector>
 //#include <OgreVector2.h>
 //#include <OgreVector3.h>
-#include <Ogre.h>
+//#include <Ogre.h>
 
 //DLL Exporting
 #ifdef _WIN32
@@ -54,15 +54,15 @@
 	#define SBSIMPEXP_DATA(type)
 #endif
 
-typedef Ogre::Real Real;
-typedef Ogre::Vector3 Vector3;
+typedef double Real;
+/*typedef Ogre::Vector3 Vector3;
 typedef Ogre::Vector2 Vector2;
 typedef Ogre::Quaternion Quaternion;
 typedef Ogre::Degree Degree;
 typedef Ogre::Radian Radian;
 typedef Ogre::Ray Ray;
 typedef Ogre::Matrix3 Matrix3;
-typedef Ogre::Plane Plane;
+typedef Ogre::Plane Plane;*/
 
 namespace SBS {
 

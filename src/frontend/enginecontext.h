@@ -32,7 +32,7 @@ public:
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
 
-	EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(EngineContext *parent, Skyscraper *frontend, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
@@ -47,7 +47,7 @@ public:
 	bool IsReloading() { return reloading; }
 	void DoReload();
 	std::string GetFilename();
-	bool Start(Ogre::Camera *camera);
+	bool Start();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
@@ -60,7 +60,7 @@ public:
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
-	void AttachCamera(Ogre::Camera *camera, bool init_state = true);
+	void AttachCamera(/*Ogre::Camera* camera,*/ bool init_state = true);
 	void RefreshCamera();
 	void ResetCamera();
 	void RevertMovement();
@@ -98,8 +98,8 @@ private:
 	//override information
 	SBS::CameraState *reload_state;
 
-	Ogre::SceneManager* mSceneManager;
-	FMOD::System *fmodsystem;
+	//Ogre::SceneManager* mSceneManager;
+	//FMOD::System *fmodsystem;
 	Vector3 position;
 	Vector3 area_min;
 	Vector3 area_max;

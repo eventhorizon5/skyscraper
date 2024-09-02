@@ -1,6 +1,6 @@
 #include "register_types.h"
 
-#include "skyscraper.h"
+#include "vm.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -13,7 +13,7 @@ void initialize_skyscraper_module(ModuleInitializationLevel p_level) {
 		return;
 	}
 
-	GDREGISTER_CLASS(Skyscraper);
+	GDREGISTER_CLASS(VM);
 }
 
 void uninitialize_skyscraper_module(ModuleInitializationLevel p_level) {

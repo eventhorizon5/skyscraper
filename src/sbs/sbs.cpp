@@ -21,15 +21,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreRoot.h>
-#include <OgreSceneManager.h>
-#include <OgreFileSystem.h>
-#include <OgreConfigFile.h>
-#include <OgreTimer.h>
-#include "OgreStringVector.h"
-#include <fmod.hpp>
-#include <OgreBulletDynamicsRigidBody.h>
-#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
 #include "manager.h"
@@ -62,7 +53,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
+SBS::SBS(int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -78,11 +69,11 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	//set up SBS object
 	SetValues("SBS", "SBS", true);
 
-	mRoot = Ogre::Root::getSingletonPtr();
+	//mRoot = Ogre::Root::getSingletonPtr();
 
 	//load config file
-	configfile = new Ogre::ConfigFile();
-	configfile->load("skyscraper.ini");
+	//configfile = new Ogre::ConfigFile();
+	//configfile->load("skyscraper.ini");
 
 	//initialize variables
 	BuildingName = "";
@@ -210,9 +201,9 @@ void SBS::Initialize()
 	texturemanager = new TextureManager(this);
 
 	//set up physics
-	Ogre::AxisAlignedBox box (Vector3::ZERO, Vector3::ZERO);
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Vector3::ZERO, true);
-	mWorld->setAllowedCcdPenetration(0);
+	//Ogre::AxisAlignedBox box (Vector3::ZERO, Vector3::ZERO);
+	//mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Vector3::ZERO, true);
+	//mWorld->setAllowedCcdPenetration(0);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);
@@ -464,9 +455,9 @@ SBS::~SBS()
 		delete timer;
 	timer = 0;
 
-	if (configfile)
-		delete configfile;
-	configfile = 0;
+	//if (configfile)
+		//delete configfile;
+	//configfile = 0;
 
 	Report("Exiting");
 
@@ -551,7 +542,7 @@ void SBS::Loop()
 	camera->MoveCharacter();
 
 	//update physics
-	if (camera->EnableBullet == true)
+	/*if (camera->EnableBullet == true)
 	{
 		if (enable_advanced_profiling == false)
 			ProfileManager::Start_Profile("Collisions/Physics");
@@ -559,7 +550,7 @@ void SBS::Loop()
 			ProfileManager::Start_Profile("Bullet");
 		mWorld->stepSimulation(elapsed, 0);
 		ProfileManager::Stop_Profile();
-	}
+	}*/
 
 	//sync camera to physics
 	camera->Sync();

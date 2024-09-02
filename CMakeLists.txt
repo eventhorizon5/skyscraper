@@ -2,17 +2,17 @@ cmake_minimum_required(VERSION 3.2)
  
 project(Skyscraper)
  
-set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
+#set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
-if(NOT APPLE)
-	if(UNIX)
-		set(FRONTENDGLINC "-lGL")
-	endif()
-	#if (MSVC)
-		#add_link_options("/SUBSYSTEM:WINDOWS")
-	#endif()
-endif()
+#if(NOT APPLE)
+#	if(UNIX)
+#		set(FRONTENDGLINC "-lGL")
+#	endif()
+#	#if (MSVC)
+#		#add_link_options("/SUBSYSTEM:WINDOWS")
+#	#endif()
+#endif()
  
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -36,100 +36,73 @@ if (WIN32)
 	set(CMAKE_CXX_FLAGS "-D_OGREBULLET_DYNAMIC /MP ${CMAKE_CXX_FLAGS}")
 endif ()
 
-find_package(OGRE REQUIRED)
+#find_package(OGRE REQUIRED)
  
-if(NOT OGRE_FOUND)
-  message(SEND_ERROR "Failed to find OGRE.")
-endif()
+#if(NOT OGRE_FOUND)
+  #message(SEND_ERROR "Failed to find OGRE.")
+#endif()
  
-set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES} ${OGRE_Bites_LIBRARIES})
+#set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES} ${OGRE_Bites_LIBRARIES})
 
 #find wxWidgets
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 
 #find FMOD
-find_package(FMOD REQUIRED)
+#find_package(FMOD REQUIRED)
 
 #find GTK
-if(NOT APPLE)
-	if(UNIX)
-		find_package(GTK3 3.0 REQUIRED gtk)
-	endif ()
-endif()
+#if(NOT APPLE)
+#	if(UNIX)
+#		find_package(GTK3 3.0 REQUIRED gtk)
+#	endif ()
+#endif()
 
 #find BULLET
-find_package(Bullet REQUIRED)
+#find_package(Bullet REQUIRED)
 
 #find Caelum
-find_package(Caelum REQUIRED)
+#find_package(Caelum REQUIRED)
 
 file(GLOB FRONTEND_FILES
-	src/frontend/*.cpp
-	src/frontend/gui/*.cpp
+	src/frontend/skyscraper.cpp
+	src/frontend/mainscreen.cpp
+	src/frontend/enginecontext.cpp
+	src/*.cpp
+	#src/frontend/gui/*.cpp
 )
  
-file(GLOB SCRIPTPROC_FILES
-	src/script/*.cpp
-)
+#file(GLOB SCRIPTPROC_FILES
+#	src/script/*.cpp
+#)
 
 file(GLOB SBS_FILES
-	src/sbs/*.cpp
+	src/sbs/sbs.cpp
+#	src/sbs/*.cpp
 )
  
-file(GLOB ALLOC_FILES
-	src/alloc/*.cpp
-)
+#file(GLOB ALLOC_FILES
+#	src/alloc/*.cpp
+#)
 
-file(GLOB OGREBULLET_COLL_FILES
-	ogrebullet/Collisions/src/*.cpp
-	ogrebullet/Collisions/src/Debug/*.cpp
-	ogrebullet/Collisions/src/Shapes/*.cpp
-	ogrebullet/Collisions/src/Utils/*.cpp
-)
-
-file (GLOB OGREBULLET_DYN_FILES
-	ogrebullet/Dynamics/src/*.cpp
-	ogrebullet/Dynamics/src/Constraints/*.cpp
-	ogrebullet/Dynamics/src/Prefab/*.cpp
-)
-
-include_directories( ${OGRE_INCLUDE_DIRS}
-	${OGRE_Overlay_INCLUDE_DIRS}
-	${OGRE_RTShaderSystem_INCLUDE_DIRS}
-	${OGRE_Bites_INCLUDE_DIRS}
-	${FMOD_INCLUDE_DIR}
-	${GTK3_INCLUDE_DIRS}
-	${BULLET_INCLUDE_DIRS}
-	${Caelum_INCLUDE_DIRS}
+include_directories(
 	src/frontend
 	src/sbs
 	src/script
 	src/alloc
-	ogrebullet/Collisions/include
-	ogrebullet/Collisions/include/Debug
-	ogrebullet/Collisions/include/Shapes
-	ogrebullet/Collisions/include/Utils
-	ogrebullet/Dynamics/include
-	ogrebullet/Dynamics/include/Constraints
-	ogrebullet/Dynamics/include/Prefab
 )
  
 include(${wxWidgets_USE_FILE})
-
-#ogrebullet libraries
-add_library(OgreBulletCol SHARED ${OGREBULLET_COLL_FILES})
-add_library(OgreBulletDyn SHARED ${OGREBULLET_DYN_FILES})
 
 #SBS library
 add_library(SBS SHARED ${SBS_FILES})
 
 #ScriptProc Library
-if (NOT WIN32)
-	add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
-endif ()
+#if (NOT WIN32)
+#	add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
+#endif ()
 
 #Alloc Library
-add_library(Alloc SHARED ${ALLOC_FILES})
+#add_library(Alloc SHARED ${ALLOC_FILES})
 
 #frontend executable
 if (NOT WIN32)
@@ -137,33 +110,30 @@ if (NOT WIN32)
 else ()
 	add_executable(skyscraper ${FRONTEND_FILES} ${SCRIPTPROC_FILES})
 
-	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
-	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
+#	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
+#	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(SBS PRIVATE -DSBS_DLL "/MD")
 	target_compile_options(skyscraper PRIVATE "/MD")
 endif ()
 
-target_precompile_headers(OgreBulletCol PRIVATE ogrebullet/Collisions/include/OgreBulletCollisionsPreRequisites.h)
-target_precompile_headers(OgreBulletDyn PRIVATE ogrebullet/Dynamics/include/OgreBulletDynamicsPreRequisites.h)
+#target_precompile_headers(OgreBulletCol PRIVATE ogrebullet/Collisions/include/OgreBulletCollisionsPreRequisites.h)
+#target_precompile_headers(OgreBulletDyn PRIVATE ogrebullet/Dynamics/include/OgreBulletDynamicsPreRequisites.h)
 target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
 
-if (NOT WIN32)
-	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
-endif ()
+#if (NOT WIN32)
+#	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+#endif ()
 
 target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
  
-target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
-target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
+#target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
-
-if (NOT WIN32)
-	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
-else ()
-	target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
-endif ()
+#if (NOT WIN32)
+#	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
+#	target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+#else ()
+	target_link_libraries(skyscraper SBS ${wxWidgets_LIBRARIES})
+#endif ()
  
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES
@@ -183,15 +153,15 @@ if (APPLE)
 	set(CMAKE_SHARED_LINKER_FLAGS "-undefined dynamic_lookup")
 endif ()
 
-if (NOT WIN32)
-ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
-		POST_BUILD
-		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.sh)
-else ()
-ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
-		POST_BUILD
-		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.cmd)
-endif ()
+#if (NOT WIN32)
+#ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
+#		POST_BUILD
+#		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.sh)
+#else ()
+#ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
+#		POST_BUILD
+#		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.cmd)
+#endif ()
 
 if (UNIX AND NOT APPLE)
 	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tools/scripts/skyscraper
