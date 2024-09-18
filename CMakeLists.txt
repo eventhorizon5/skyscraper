@@ -71,9 +71,9 @@ file(GLOB FRONTEND_FILES
 	#src/frontend/gui/*.cpp
 )
  
-#file(GLOB SCRIPTPROC_FILES
-#	src/script/*.cpp
-#)
+file(GLOB SCRIPTPROC_FILES
+	src/script/*.cpp
+)
 
 file(GLOB SBS_FILES
 	src/sbs/sbs.cpp
@@ -84,12 +84,12 @@ file(GLOB SBS_FILES
 #	src/alloc/*.cpp
 #)
 
-file(GLOB GODOT_CPP_FILES
-	godot-cpp/src/*.cpp
-	godot-cpp/src/classes/*.cpp
-	godot-cpp/src/core/*.cpp
-	godot-cpp/src/variant/*.cpp
-)
+#file(GLOB GODOT_CPP_FILES
+#	godot-cpp/src/*.cpp
+#	godot-cpp/src/classes/*.cpp
+#	godot-cpp/src/core/*.cpp
+#	godot-cpp/src/variant/*.cpp
+#)
 
 include_directories(
 	src/frontend
@@ -98,6 +98,7 @@ include_directories(
 	src/alloc
 	godot-cpp/include
 	godot-cpp/gdextension
+	godot-cpp/gen/include
 )
  
 include(${wxWidgets_USE_FILE})
@@ -106,15 +107,15 @@ include(${wxWidgets_USE_FILE})
 add_library(SBS SHARED ${SBS_FILES})
 
 #ScriptProc Library
-#if (NOT WIN32)
-#	add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
-#endif ()
+if (NOT WIN32)
+	add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
+endif ()
 
 #Alloc Library
 #add_library(Alloc SHARED ${ALLOC_FILES})
 
 #Godot-cpp library
-add_library(godot-cpp STATIC ${GODOT_CPP_FILES})
+#add_library(godot-cpp STATIC ${GODOT_CPP_FILES})
 
 #frontend executable
 if (NOT WIN32)
@@ -132,20 +133,20 @@ endif ()
 #target_precompile_headers(OgreBulletDyn PRIVATE ogrebullet/Dynamics/include/OgreBulletDynamicsPreRequisites.h)
 target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
 
-#if (NOT WIN32)
-#	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
-#endif ()
+if (NOT WIN32)
+	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+endif ()
 
 target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
  
 #target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
-#if (NOT WIN32)
-#	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-#	target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
-#else ()
-	target_link_libraries(skyscraper SBS ${wxWidgets_LIBRARIES})
-#endif ()
+if (NOT WIN32)
+	target_link_libraries(ScriptProc SBS ${GODOT_CPP_LIBRARIES} ${wxWidgets_LIBRARIES})
+	target_link_libraries(skyscraper ScriptProc SBS ${GODOT_CPP_LIBRARIES} ${wxWidgets_LIBRARIES})
+else ()
+	target_link_libraries(skyscraper SBS ${GODOT_CPP_LIBRARIES} ${wxWidgets_LIBRARIES})
+endif ()
  
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES

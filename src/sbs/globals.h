@@ -53,14 +53,14 @@
 #endif
 
 typedef double Real;
-/*typedef Ogre::Vector3 Vector3;
-typedef Ogre::Vector2 Vector2;
-typedef Ogre::Quaternion Quaternion;
-typedef Ogre::Degree Degree;
-typedef Ogre::Radian Radian;
-typedef Ogre::Ray Ray;
-typedef Ogre::Matrix3 Matrix3;
-typedef Ogre::Plane Plane;*/
+typedef godot::Vector3 Vector3;
+typedef godot::Vector2 Vector2;
+typedef godot::Quaternion Quaternion;
+//typedef Ogre::Degree Degree;
+//typedef Ogre::Radian Radian;
+//typedef Ogre::Ray Ray;
+//typedef Ogre::Matrix3 Matrix3;
+//typedef Ogre::Plane Plane;
 
 namespace SBS {
 

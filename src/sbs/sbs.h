@@ -26,15 +26,13 @@
 
 #include <deque>
 #include <queue>
-#include "OgrePrerequisites.h"
-#include "OgreSharedPtr.h"
 
 //fix naming collision on Windows
 #undef GetObject
 #undef GetCurrentTime
 
 //external class declarations
-namespace OgreBulletDynamics {
+/*namespace OgreBulletDynamics {
 	class DynamicsWorld;
 	class RigidBody;
 	class CharacterController;
@@ -54,7 +52,7 @@ namespace Ogre {
 namespace FMOD {
 	class System;
 	class Channel;
-}
+}*/
 
 namespace SBS {
 	//forward declarations
