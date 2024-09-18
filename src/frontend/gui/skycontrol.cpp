@@ -26,7 +26,7 @@
 //*)
 #include <wx/object.h>
 
-#include "Caelum.h"
+//#include "Caelum.h"
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"

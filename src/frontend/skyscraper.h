@@ -142,7 +142,7 @@ public:
 	EngineContext* GetFirstValidEngine();
 	void EnableSky(bool value);
 	void UpdateSky();
-	//void UnregisterDebugPanel() { dpanel = 0; }
+	void UnregisterDebugPanel() { dpanel = 0; }
 	virtual void MacOpenFile(const wxString &filename);
 	void UnloadSky();
 	void CreateSky(EngineContext* engine);

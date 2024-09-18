@@ -271,7 +271,7 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 			return;
 
 		//get raw texture
-		Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name, "General");
+		/*Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name, "General");
 		if (tex)
 		{
 			tWidth->SetValue(SBS::ToString((int)tex->getWidth()));
@@ -283,7 +283,7 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 				tAlpha->SetValue("true");
 			else
 				tAlpha->SetValue("false");
-		}
+		}*/
 	}
 }
 
@@ -324,9 +324,9 @@ void TextureManager::On_bExport_Click(wxCommandEvent& event)
 			return;
 
 		//get raw texture
-		Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name, "General");
+		/*Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name, "General");
 		if (tex)
-			Simcore->GetTextureManager()->SaveTexture(tex, "texture.png");
+			Simcore->GetTextureManager()->SaveTexture(tex, "texture.png");*/
 	}
 }
 
@@ -335,14 +335,14 @@ std::string TextureManager::GetTextureName(const std::string &material)
 	if (material != "")
 	{
 		//get material
-		Ogre::MaterialPtr mat = Simcore->GetTextureManager()->GetMaterialByName(material);
+		/*Ogre::MaterialPtr mat = Simcore->GetTextureManager()->GetMaterialByName(material);
 
 		Ogre::TextureUnitState *state = 0;
 		std::string name;
 		if (mat)
 			state = mat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
 		if (state)
-			return state->getTextureName();
+			return state->getTextureName();*/
 	}
 
 	return "";
