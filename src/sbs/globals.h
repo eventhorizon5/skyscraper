@@ -26,9 +26,7 @@
 
 #include <string>
 #include <vector>
-//#include <OgreVector2.h>
-//#include <OgreVector3.h>
-//#include <Ogre.h>
+#include <godot_cpp/core/class_db.hpp>
 
 //DLL Exporting
 #ifdef _WIN32

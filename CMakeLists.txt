@@ -84,11 +84,20 @@ file(GLOB SBS_FILES
 #	src/alloc/*.cpp
 #)
 
+file(GLOB GODOT_CPP_FILES
+	godot-cpp/src/*.cpp
+	godot-cpp/src/classes/*.cpp
+	godot-cpp/src/core/*.cpp
+	godot-cpp/src/variant/*.cpp
+)
+
 include_directories(
 	src/frontend
 	src/sbs
 	src/script
 	src/alloc
+	godot-cpp/include
+	godot-cpp/gdextension
 )
  
 include(${wxWidgets_USE_FILE})
@@ -103,6 +112,9 @@ add_library(SBS SHARED ${SBS_FILES})
 
 #Alloc Library
 #add_library(Alloc SHARED ${ALLOC_FILES})
+
+#Godot-cpp library
+add_library(godot-cpp STATIC ${GODOT_CPP_FILES})
 
 #frontend executable
 if (NOT WIN32)
