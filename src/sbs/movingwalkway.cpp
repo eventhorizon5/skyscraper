@@ -56,8 +56,8 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, R
 	SetRun(run);
 	Speed = speed;
 	sbs->IncrementMovingWalkwayCount();
-	start = Vector3::ZERO;
-	end = Vector3::ZERO;
+	start = Vector3(0, 0, 0);
+	end = Vector3(0, 0, 0);
 
 	//create sound object
 	sound = new Sound(this, name, true);
@@ -137,7 +137,7 @@ void MovingWalkway::SetRun(int value)
 	{
 		for (size_t i = 0; i < Steps.size(); i++)
 		{
-			Steps[i]->vector = Vector3::ZERO;
+			Steps[i]->vector = Vector3(0, 0, 0);
 			Steps[i]->speed = 0;
 		}
 	}
@@ -231,7 +231,7 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 			sbs->AddFloorMain(wall, base, texture, 0, -(width / 2), -treadsize, width / 2, 0, 0, 0, false, false, tw, th, true);
 			Steps[i - 1]->Move(Vector3(0, 0, pos));
 		}
-		Steps[i - 1]->vector = Vector3::ZERO;
+		Steps[i - 1]->vector = Vector3(0, 0, 0);
 		Steps[1 - 1]->speed = 0;
 
 		if (i == 1)
@@ -336,7 +336,7 @@ void MovingWalkway::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, 
 			Run = 0;
 			for (size_t i = 0; i < Steps.size(); i++)
 			{
-				Steps[i]->vector = Vector3::ZERO;
+				Steps[i]->vector = Vector3(0, 0, 0);
 				Steps[i]->speed = 0;
 			}
 		}

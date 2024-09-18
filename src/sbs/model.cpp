@@ -41,7 +41,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 
 	//set up SBS object
 	SetValues("Model", name, false);
-	Offset = Vector3::ZERO;
+	Offset = Vector3(0, 0, 0);
 	is_key = false;
 	KeyID = 0;
 	global = IsGlobal();

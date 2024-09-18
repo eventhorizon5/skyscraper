@@ -124,10 +124,10 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			}
 		}
 
-		Vector3 position (Vector3::ZERO);
+		Vector3 position (Vector3(0, 0, 0));
 		Real rotation = 0.0;
-		Vector3 min (Vector3::ZERO);
-		Vector3 max (Vector3::ZERO);
+		Vector3 min (Vector3(0, 0, 0));
+		Vector3 max (Vector3(0, 0, 0));
 
 		if (params > 1)
 		{

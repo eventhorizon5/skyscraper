@@ -271,9 +271,9 @@ void EngineContext::StartSim()
 	if (parent)
 		offset = parent->GetSystem()->GetPosition();
 	//else
-		//offset = Vector3::ZERO;
+		//offset = Vector3(0, 0, 0);
 
-	//if (position != Vector3::ZERO)
+	//if (position != Vector3(0, 0, 0))
 		//Moved = true;
 
 	//Create simulator object
@@ -520,7 +520,7 @@ void EngineContext::CutForEngine(EngineContext *engine)
 	//get new engine's boundaries
 	newsimcore->GetBounds(min, max);
 
-	//if (min == Vector3::ZERO && max == Vector3::ZERO)
+	//if (min == Vector3(0, 0, 0) && max == Vector3(0, 0, 0))
 		//return;
 
 	//get global positions of engine's boundaries, in 4 points representing a rectangle

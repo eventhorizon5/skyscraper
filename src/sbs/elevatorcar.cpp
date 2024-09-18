@@ -87,7 +87,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	DirMessageSound = false;
 	DoorMessageSound = false;
 	Fan = true;
-	MusicPosition = Vector3::ZERO;
+	MusicPosition = Vector3(0, 0, 0);
 	Height = 0;
 	HeightSet = false;
 	lastdoor_result = 0;
@@ -120,7 +120,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	FirstRun = true;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = Vector3::ZERO;
+	lastposition = Vector3(0, 0, 0);
 	lastfloor = 0;
 	lastfloorset = false;
 	StartingFloor = 0;

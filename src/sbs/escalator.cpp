@@ -57,8 +57,8 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 	SetRun(run);
 	Speed = speed;
 	sbs->IncrementEscalatorCount();
-	start = Vector3::ZERO;
-	end = Vector3::ZERO;
+	start = Vector3(0, 0, 0);
+	end = Vector3(0, 0, 0);
 	buffer_zone_steps = 2;
 
 	//create sound object
@@ -139,7 +139,7 @@ void Escalator::SetRun(int value)
 	{
 		for (size_t i = 0; i < Steps.size(); i++)
 		{
-			Steps[i]->vector = Vector3::ZERO;
+			Steps[i]->vector = Vector3(0, 0, 0);
 			Steps[i]->speed = 0;
 		}
 	}
@@ -227,7 +227,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 				Steps[i - 1]->Move(Vector3(pos, risersize * (i - (((buffer_zone_steps * 2) + 1) - (num_steps - i))), 0));
 			else
 				Steps[i - 1]->Move(Vector3(pos, risersize * (i - (buffer_zone_steps * 2)), 0));
-			Steps[i - 1]->vector = Vector3::ZERO;
+			Steps[i - 1]->vector = Vector3(0, 0, 0);
 			Steps[1 - 1]->speed = 0;
 
 			if (i == 1)
@@ -251,7 +251,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 				Steps[i - 1]->Move(Vector3(pos, risersize * (i - (((buffer_zone_steps * 2) + 1) - (num_steps - i))), 0));
 			else
 				Steps[i - 1]->Move(Vector3(pos, risersize * (i - (buffer_zone_steps * 2)), 0));
-			Steps[i - 1]->vector = Vector3::ZERO;
+			Steps[i - 1]->vector = Vector3(0, 0, 0);
 			Steps[1 - 1]->speed = 0;
 
 			if (i == 1)
@@ -275,7 +275,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 				Steps[i - 1]->Move(Vector3(0, risersize * (i - (((buffer_zone_steps * 2) + 1) - (num_steps - i))), pos));
 			else
 				Steps[i - 1]->Move(Vector3(0, risersize * (i - (buffer_zone_steps * 2)), pos));
-			Steps[i - 1]->vector = Vector3::ZERO;
+			Steps[i - 1]->vector = Vector3(0, 0, 0);
 			Steps[1 - 1]->speed = 0;
 
 			if (i == 1)
@@ -299,7 +299,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 				Steps[i - 1]->Move(Vector3(0, risersize * (i - (((buffer_zone_steps * 2) + 1) - (num_steps - i))), pos));
 			else
 				Steps[i - 1]->Move(Vector3(0, risersize * (i - (buffer_zone_steps * 2)), pos));
-			Steps[i - 1]->vector = Vector3::ZERO;
+			Steps[i - 1]->vector = Vector3(0, 0, 0);
 			Steps[1 - 1]->speed = 0;
 
 			if (i == 1)
@@ -420,7 +420,7 @@ void Escalator::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool
 			Run = 0;
 			for (size_t i = 0; i < Steps.size(); i++)
 			{
-				Steps[i]->vector = Vector3::ZERO;
+				Steps[i]->vector = Vector3(0, 0, 0);
 				Steps[i]->speed = 0;
 			}
 		}

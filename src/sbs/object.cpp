@@ -324,7 +324,7 @@ Vector3 Object::GetPosition(bool relative)
 	//if relative is true, position is relative of parent object
 
 	if (!node)
-		return Vector3::ZERO;
+		return Vector3(0, 0, 0);
 
 	return node->GetPosition(relative);
 }
@@ -369,7 +369,7 @@ Vector3 Object::GetRotation()
 	//get rotation of object
 
 	if (!node)
-		return Vector3::ZERO;
+		return Vector3(0, 0, 0);
 
 	return node->GetRotation();
 }

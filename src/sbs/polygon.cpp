@@ -212,7 +212,7 @@ Vector3 Polygon::GetVertex(int index)
 		}
 		offset += geometry[i].size();
 	}
-	return Vector3::ZERO;
+	return Vector3(0, 0, 0);
 }
 
 }

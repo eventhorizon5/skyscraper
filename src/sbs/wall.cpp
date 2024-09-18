@@ -267,7 +267,7 @@ Vector3 Wall::GetPoint(const Vector3 &start, const Vector3 &end)
 
 	Vector3 isect;
 	Real distance = 2000000000.;
-	Vector3 normal = Vector3::ZERO;
+	Vector3 normal = Vector3(0, 0, 0);
 
 	Wall *result = meshwrapper->GetPolyMesh()->FindWallIntersect(sbs->ToRemote(start), sbs->ToRemote(end), isect, distance, normal, this);
 

@@ -98,11 +98,11 @@ Camera::Camera(Object *parent) : Object(parent)
 	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0);
 	object_number = 0;
 	object_line = 0;
-	HitPosition = Vector3::ZERO;
+	HitPosition = Vector3(0, 0, 0);
 	RotationStopped = false;
 	MovementStopped = false;
-	accum_movement = Vector3::ZERO;
-	prev_accum_movement = Vector3::ZERO;
+	accum_movement = Vector3(0, 0, 0);
+	prev_accum_movement = Vector3(0, 0, 0);
 	collision_reset = false;
 	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
 	use_startdirection = false;
@@ -110,7 +110,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	RestrictRotation = sbs->GetConfigBool("Skyscraper.SBS.Camera.RestrictRotation", true);
 	AttachedModel = 0;
 	prev_orientation = Quaternion::ZERO;
-	prev_position = Vector3::ZERO;
+	prev_position = Vector3(0, 0, 0);
 	MainCamera = 0;
 	Gravity = 0;
 	GravityStatus = false;
@@ -245,7 +245,7 @@ Vector3 Camera::GetPosition(bool relative)
 	//returns the camera's current position
 	//"relative" value is ignored for camera object
 
-	Vector3 cameraposition = Vector3::ZERO;
+	Vector3 cameraposition = Vector3(0, 0, 0);
 
 	if (MainCamera)
 		cameraposition = sbs->ToLocal(MainCamera->getPosition());
@@ -314,12 +314,12 @@ bool Camera::Move(Vector3 vector, Real speed, bool flip)
 	if (!MainCamera)
 		return false;
 
-	if (MovementStopped == true && vector == Vector3::ZERO)
+	if (MovementStopped == true && vector == Vector3(0, 0, 0))
 		return false;
 
 	MovementStopped = false;
 
-	if (vector == Vector3::ZERO)
+	if (vector == Vector3(0, 0, 0))
 		MovementStopped = true;
 
 	if (flip == true)
@@ -350,7 +350,7 @@ bool Camera::MovePosition(Vector3 vector, Real speed)
 	if (!MainCamera)
 		return false;
 
-	if (vector == Vector3::ZERO)
+	if (vector == Vector3(0, 0, 0))
 		return false;
 
 	SetPosition(GetPosition() + (vector * speed));
@@ -375,12 +375,12 @@ void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 	if (!MainCamera)
 		return;
 
-	if (RotationStopped == true && rotation == Vector3::ZERO)
+	if (RotationStopped == true && rotation == Vector3(0, 0, 0))
 		return;
 
 	RotationStopped = false;
 
-	if (rotation == Vector3::ZERO)
+	if (rotation == Vector3(0, 0, 0))
 		RotationStopped = true;
 
 	//convert rotation values to degrees
@@ -1099,7 +1099,7 @@ void Camera::MoveCharacter()
 	else
 		MainCamera->move(accum_movement);
 	prev_accum_movement = accum_movement;
-	accum_movement = Vector3::ZERO;
+	accum_movement = Vector3(0, 0, 0);
 }
 
 void Camera::ResetCollisions()

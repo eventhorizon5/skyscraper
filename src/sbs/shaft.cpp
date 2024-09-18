@@ -73,7 +73,7 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	EnableCheck = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = Vector3::ZERO;
+	lastposition = Vector3(0, 0, 0);
 	InElevator = false;
 	ShowFloorsFull_Enabled = false;
 

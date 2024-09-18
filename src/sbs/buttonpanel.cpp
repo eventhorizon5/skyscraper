@@ -171,7 +171,7 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 {
 	//create an elevator control (button, switch, knob)
 
-	Vector3 position = Vector3::ZERO;
+	Vector3 position = Vector3(0, 0, 0);
 
 	//set to default if value is 0
 	if (bwidth == 0)

@@ -59,7 +59,7 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 	lastfloorset = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
-	lastposition = Vector3::ZERO;
+	lastposition = Vector3(0, 0, 0);
 	ShowFloors = false;
 	ShowFullStairs = 0;
 

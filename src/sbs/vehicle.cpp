@@ -69,11 +69,11 @@ Vehicle::Vehicle(Object *parent, const int number) : Object(parent)
 	mSteering = 0;
 	mSteeringLeft = false;
 	mSteeringRight = false;
-	ChassisShift = Vector3::ZERO;
+	ChassisShift = Vector3(0, 0, 0);
 	ChassisScale = 1;
 	WheelScale = 1;
 	vehicle = 0;
-	CameraPoint = Vector3::ZERO;
+	CameraPoint = Vector3(0, 0, 0);
 	camera_attached = false;
 	Created = false;
 

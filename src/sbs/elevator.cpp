@@ -127,7 +127,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	RecallUnavailable = false;
 	ManualGo = false;
 	Created = false;
-	MotorPosition = Vector3::ZERO;
+	MotorPosition = Vector3(0, 0, 0);
 	QueueResets = sbs->GetConfigBool("Skyscraper.SBS.Elevator.QueueResets", false);
 	FirstRun = true;
 	ParkingFloor = 0;
@@ -152,7 +152,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WaitForTimer = false;
 	SoundsQueued = false;
 	HeightSet = false;
-	elevposition = Vector3::ZERO;
+	elevposition = Vector3(0, 0, 0);
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
@@ -182,7 +182,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	HoistwayAccess = 0;
 	HoistwayAccessFloor = 0;
 	HoistwayAccessHold = sbs->GetConfigBool("Skyscraper.SBS.Elevator.HoistwayAccessHold", true);
-	RopePosition = Vector3::ZERO;
+	RopePosition = Vector3(0, 0, 0);
 	CounterweightStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightStartSound", "");
 	CounterweightMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightMoveSound", "");
 	CounterweightStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CounterweightStopSound", "");
@@ -355,7 +355,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 		return ReportError("Shaft " + ToString(AssignedShaft) + " doesn't exist");
 
 	//set starting position
-	Vector3 position = Vector3::ZERO;
+	Vector3 position = Vector3(0, 0, 0);
 
 	if (relative == false)
 	{

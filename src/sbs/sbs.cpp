@@ -201,14 +201,14 @@ void SBS::Initialize()
 	texturemanager = new TextureManager(this);
 
 	//set up physics
-	//Ogre::AxisAlignedBox box (Vector3::ZERO, Vector3::ZERO);
-	//mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Vector3::ZERO, true);
+	//Ogre::AxisAlignedBox box (Vector3(0, 0, 0), Vector3(0, 0, 0));
+	//mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Vector3(0, 0, 0), true);
 	//mWorld->setAllowedCcdPenetration(0);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);
 	mWorld->setDebugDrawer(debugDrawer);
-	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Vector3::ZERO);
+	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Vector3(0, 0, 0));
 	node->attachObject(static_cast<Ogre::SimpleRenderable*> (debugDrawer));
 	*/
 
@@ -3707,7 +3707,7 @@ void SBS::DecrementMovingWalkwayCount()
 	//get wall object, if any
 	Vector3 isect;
 	Real distance = 2000000000.;
-	Vector3 normal = Vector3::ZERO;
+	Vector3 normal = Vector3(0, 0, 0);
 	wall = mesh->GetPolyMesh()->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;

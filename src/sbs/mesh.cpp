@@ -520,7 +520,7 @@ Vector3 MeshObject::GetOffset()
 	Bounds->scale(GetSceneNode()->GetRawSceneNode()->getScale());
 
 	if (Bounds->isNull() == true)
-		return Vector3::ZERO;
+		return Vector3(0, 0, 0);
 
 	Vector3 vec = Bounds->getCenter();
 	Vector3 min = Bounds->getMinimum();

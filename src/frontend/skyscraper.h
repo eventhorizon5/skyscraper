@@ -102,7 +102,7 @@ public:
 	void StartSound();
 	void StopSound();
 	std::string SelectBuilding();
-	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3(0, 0, 0), Real rotation = 0.0, const Vector3 &area_min = Vector3(0, 0, 0), const Vector3 &area_max = Vector3(0, 0, 0));
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void UnloadToMenu();
@@ -125,7 +125,7 @@ public:
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
-	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3(0, 0, 0), Real rotation = 0.0, const Vector3 &area_min = Vector3(0, 0, 0), const Vector3 &area_max = Vector3(0, 0, 0));
 	bool DeleteEngine(EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount();
@@ -170,8 +170,8 @@ private:
 		Real offset_y;
 		bool drawn_selected, drawn_pressed;
 		int active_button;
-		Ogre::SceneNode* node;
-		Ogre::Rectangle2D* rect;
+		//Ogre::SceneNode* node;
+		//Ogre::Rectangle2D* rect;
 	};
 	buttondata *buttons;
 	int buttoncount;

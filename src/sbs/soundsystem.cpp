@@ -37,11 +37,11 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 
 	soundsys = fmodsystem;
 
-	listener_position = Vector3::ZERO;
-	listener_velocity = Vector3::ZERO;
-	listener_forward = Vector3::ZERO;
-	listener_up = Vector3::ZERO;
-	Position = Vector3::ZERO;
+	listener_position = Vector3(0, 0, 0);
+	listener_velocity = Vector3(0, 0, 0);
+	listener_forward = Vector3(0, 0, 0);
+	listener_up = Vector3(0, 0, 0);
+	Position = Vector3(0, 0, 0);
 
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
@@ -66,8 +66,8 @@ void SoundSystem::Loop()
 		SetListenerPosition(sbs->camera->GetPosition());
 
 	//set direction of listener to camera's direction
-	Vector3 front = Vector3::ZERO;
-	Vector3 top = Vector3::ZERO;
+	Vector3 front = Vector3(0, 0, 0);
+	Vector3 top = Vector3(0, 0, 0);
 	sbs->camera->GetDirection(front, top, true);
 	SetListenerDirection(front, top);
 

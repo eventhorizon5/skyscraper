@@ -33,7 +33,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 {
 	SetName(name);
 	node = 0;
-	Rotation = Vector3::ZERO;
+	Rotation = Vector3(0, 0, 0);
 
 	if (!sbs->mSceneManager || !parent)
 		return;
@@ -131,7 +131,7 @@ Vector3 SceneNode::GetPosition(bool relative)
 	//if relative is true, position is relative of parent scene node
 
 	if (!node)
-		return Vector3::ZERO;
+		return Vector3(0, 0, 0);
 
 	if (relative == false)
 	{

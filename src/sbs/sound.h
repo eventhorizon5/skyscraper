@@ -64,14 +64,14 @@ public:
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
 	void Unload();
-	FMOD::Channel* GetChannel();
+	//FMOD::Channel* GetChannel();
 
 private:
 
 	bool IsValid();
 
 	//sound channel
-	FMOD::Channel *channel;
+	//FMOD::Channel *channel;
 
 	//associated sound data
 	SoundData *sound;

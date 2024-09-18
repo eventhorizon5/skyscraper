@@ -44,9 +44,9 @@ private:
 
 	float FOV;
 
-	Ogre::Camera *camera;
+	//Ogre::Camera *camera;
 	std::string texturename;
-	Ogre::RenderTexture *renderTexture;
+	//Ogre::RenderTexture *renderTexture;
 };
 
 }

@@ -50,7 +50,7 @@ public:
 	void DetachObject(Ogre::MovableObject *object);
 	Real GetScale();
 	void SetScale(Real scale);
-	SceneNode* CreateChild(std::string name, const Vector3 &offset = Vector3::ZERO);
+	SceneNode* CreateChild(std::string name, const Vector3 &offset = Vector3(0, 0, 0));
 	std::string GetFullName();
 	bool IsRoot();
 	void Pitch(Real &degree);

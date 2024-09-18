@@ -24,10 +24,10 @@
 #include <wx/msgdlg.h>
 #include "globals.h"
 #include "sbs.h"
-#include <OgreFileSystem.h>
+/*#include <OgreFileSystem.h>
 #include <OgreArchive.h>
 #include <OgreArchiveManager.h>
-#include <OgreException.h>
+#include <OgreException.h>*/
 #include <stdlib.h>
 #include <cmath>
 #include "skyscraper.h"
@@ -300,7 +300,7 @@ Error:
 bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int insert_line)
 {
 	//loads a building data file into the runtime buffer
-	int location = insert_line;
+	/*int location = insert_line;
 	std::string Filename = Simcore->VerifyFile(filename);
 
 	//if insert location is greater than array size, return with error
@@ -440,7 +440,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 		info.end_line = end;
 		info.parent = parent;
 		includes.push_back(info);
-	}
+	}*/
 
 	return true;
 }

@@ -32,7 +32,7 @@ public:
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
 
-	EngineContext(EngineContext *parent, Skyscraper *frontend, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(EngineContext *parent, Skyscraper *frontend, const Vector3 &position = Vector3(0, 0, 0), Real rotation = 0.0, const Vector3 &area_min = Vector3(0, 0, 0), const Vector3 &area_max = Vector3(0, 0, 0));
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }

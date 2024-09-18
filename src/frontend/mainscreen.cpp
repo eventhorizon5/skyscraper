@@ -798,7 +798,7 @@ void MainScreen::HandleMouseMovement()
 			strafe_right = 0;
 			strafe_left = 0;
 			if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
-				camera->FreelookMove(Vector3::ZERO);
+				camera->FreelookMove(Vector3(0, 0, 0));
 			ProcessMovement(engine, false, false, true);
 		}
 		freelook = false;
