@@ -94,7 +94,7 @@ std::string expandTilde(const char* str) {
         globfree(&globbuf);
         return result;
     } else {
-        throw "Unable to expand tilde";
+		//throw "Unable to expand tilde";
     }
 }
 
@@ -105,7 +105,7 @@ std::string settingsPath() {
     if ((state = sysdir_get_next_search_path_enumeration(state, path))) {
         return expandTilde(path);
     } else {
-        throw "Failed to get settings folder";
+        //throw "Failed to get settings folder";
     }
 }
 

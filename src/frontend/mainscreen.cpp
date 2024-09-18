@@ -284,8 +284,8 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 	if (event.AltDown())
 	{
 		//crash test
-		if (event.ControlDown() && key == (wxKeyCode)'C')
-			throw;
+		//if (event.ControlDown() && key == (wxKeyCode)'C')
+			//throw;
 
 		if (key == WXK_F4)
 			Close();
