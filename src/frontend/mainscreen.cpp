@@ -148,15 +148,15 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 	if (panel)
 		panel->SetSize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
 
-	if (frontend->mRenderWindow)
-	{
+	//if (frontend->mRenderWindow)
+	//{
 //#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 		//Real scale = this->GetContentScaleFactor();
 		//frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
 //#else
-		frontend->mRenderWindow->windowMovedOrResized();
+		//frontend->mRenderWindow->windowMovedOrResized();
 //#endif
-	}
+	//}
 	//if (frontend->mCamera)
 		//frontend->mCamera->setAspectRatio(Real(frontend->mViewport->getActualWidth()) / Real(frontend->mViewport->getActualHeight()));
 }
@@ -270,14 +270,14 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 	if (key == WXK_F2)
 	{
-		Real fps = Simcore->FPS;
+		/*Real fps = Simcore->FPS;
 		Ogre::RenderSystem *rendersystem = frontend->mRoot->getRenderSystem();
 
 		int batches = (int)rendersystem->_getBatchCount();
 		int triangles = (int)rendersystem->_getFaceCount();
 		int vertices = (int)rendersystem->_getVertexCount();
 
-		frontend->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Triangles: " + ToString(triangles) + " - Vertices: " + ToString(vertices));
+		frontend->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Triangles: " + ToString(triangles) + " - Vertices: " + ToString(vertices));*/
 	}
 
 	//alt modifier
@@ -362,8 +362,8 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 		if (key == WXK_F11)
 		{
-			std::string prefix = frontend->GetDataPath();
-			frontend->mRenderWindow->writeContentsToTimestampedFile(prefix + "screenshots/skyscraper-", ".jpg");
+			//std::string prefix = frontend->GetDataPath();
+			//frontend->mRenderWindow->writeContentsToTimestampedFile(prefix + "screenshots/skyscraper-", ".jpg");
 		}
 
 		if (key == WXK_F12 && !frontend->dpanel)

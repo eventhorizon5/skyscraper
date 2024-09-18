@@ -37,13 +37,13 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
-//#include "gui/debugpanel.h"
+#include "gui/debugpanel.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
-//#include "gui/console.h"
+#include "gui/console.h"
 #include "mainscreen.h"
-//#include "gui/loaddialog.h"
+#include "gui/loaddialog.h"
 #include "profiler.h"
 #include "gitrev.h"
 
@@ -54,14 +54,14 @@
 #include <sys/sysctl.h>
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#include <windows.h>
-#endif
+//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+//#include <windows.h>
+//#endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+//#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include <sys/utsname.h>
-#include "malloc.h"
-#endif
+//#include "malloc.h"
+//#endif
 
 using namespace SBS;
 
@@ -170,19 +170,19 @@ bool Skyscraper::OnInit(void)
 	Pause = false;
 	FullScreen = false;
 	Shutdown = false;
-	mOverlaySystem = 0;
+	/*mOverlaySystem = 0;
 	mRoot = 0;
 	mRenderWindow = 0;
 	mViewport = 0;
 	mSceneMgr = 0;
 	mCamera = 0;
 	sound = 0;
-	channel = 0;
+	channel = 0;*/
 	SkyMult = 0;
-	mCaelumSystem = 0;
+	//mCaelumSystem = 0;
 	buttons = 0;
 	buttoncount = 0;
-	logger = 0;
+	//logger = 0;
 	//console = 0;
 	//soundsys = 0;
 	//progdialog = 0;
@@ -207,16 +207,16 @@ bool Skyscraper::OnInit(void)
 	CheckScript = false;
 	ShowMenu = false;
 	Headless = false;
-	RTSS = false;
-	background_rect = 0;
-	background_node = 0;
-	configfile = 0;
-	keyconfigfile = 0;
-	joyconfigfile = 0;
+	//RTSS = false;
+	//background_rect = 0;
+	//background_node = 0;
+	//configfile = 0;
+	//keyconfigfile = 0;
+	//joyconfigfile = 0;
 	parser = 0;
 	sky_error = 0;
-	mTrayMgr = 0;
-	show_stats = -1;
+	//mTrayMgr = 0;
+	//show_stats = -1;
 	macos_major = 0;
 	macos_minor = 0;
 
@@ -355,7 +355,7 @@ bool Skyscraper::OnInit(void)
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error loading configuration files\nDetails: " + e.getDescription());
-*/	}
+	}*/
 
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
 
@@ -516,10 +516,10 @@ void Skyscraper::UnloadSim()
 
 	ReInit();
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+//#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	//release free memory to OS on Linux
-	malloc_trim(0);
-#endif
+	//malloc_trim(0);
+//#endif
 
 }
 
@@ -1112,11 +1112,11 @@ bool Skyscraper::DrawBackground()
 
 		for (int i = 0; i < buttoncount; i++)
 		{
-			buttons[i].node = 0;
+			//buttons[i].node = 0;
 			buttons[i].drawn_selected = false;
 			buttons[i].drawn_pressed = false;
 			buttons[i].active_button = 0;
-			buttons[i].rect = 0;
+			//buttons[i].rect = 0;
 		}
 	}
 
@@ -1197,7 +1197,7 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	//values are -1 for the top left, 1 for the top right, -1 for the top, and 1 for the bottom
 	//center is at 0, 0
 
-	return;
+	return true;
 
 	/*Real w, h;
 	int w_orig = 0, h_orig = 0, w2 = 0, h2 = 0;
@@ -1759,8 +1759,8 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	//start simulation
-	if (!engine->Start(mCamera))
-		return false;
+	//if (!engine->Start(mCamera))
+		//return false;
 
 	//close progress dialog if no engines are loading
 	//if (IsEngineLoading() == false)
@@ -2181,7 +2181,7 @@ void Skyscraper::SetDateTime(double julian_date_time)
 
 EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(parent, this, mSceneMgr, soundsys, position, rotation, area_min, area_max);
+	EngineContext* engine = new EngineContext(parent, this, position, rotation, area_min, area_max);
 	return engine;
 }
 
@@ -2291,7 +2291,7 @@ void Skyscraper::SetActiveEngine(int number, bool switch_engines)
 
 	//switch context to new engine instance
 	active_engine = engine;
-	active_engine->AttachCamera(mCamera, !switch_engines);
+	active_engine->AttachCamera(/*mCamera, */!switch_engines);
 
 	//apply camera state to new engine
 	if (switch_engines == true && state_set == true)
@@ -2472,8 +2472,8 @@ void Skyscraper::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 
-	if (Headless == false)
-		mViewport->_updateDimensions();
+	//if (Headless == false)
+		//mViewport->_updateDimensions();
 }
 
 void Skyscraper::SwitchEngines()
@@ -2689,12 +2689,12 @@ void Skyscraper::EnableStats(bool value)
 {
 	if (value == true)
 	{
-		show_stats = -1;
+		//show_stats = -1;
 		ToggleStats();
 	}
 	else
 	{
-		show_stats = 1;
+		//show_stats = 1;
 		ToggleStats();
 	}
 }
@@ -2703,8 +2703,8 @@ void Skyscraper::ReInit()
 {
 	EnableStats(false);
 
-	delete mTrayMgr;
-	mTrayMgr = 0;
+	//delete mTrayMgr;
+	//mTrayMgr = 0;
 
 	//reinit overlay system
 	/*try
@@ -2747,7 +2747,7 @@ void Skyscraper::ReInit()
 		mTrayMgr->hideCursor();
 	}*/
 
-	show_stats = -1;
+	//show_stats = -1;
 }
 
 std::string Skyscraper::GetDataPath()

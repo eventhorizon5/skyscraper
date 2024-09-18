@@ -37,7 +37,7 @@ int main (int argc, char* argv[]);
 
 namespace Skyscraper {
 
-//class DebugPanel;
+class DebugPanel;
 class MainScreen;
 class EngineContext;
 class Console;
@@ -204,7 +204,7 @@ private:
 	//int show_stats;
 
 	//control panel
-	//DebugPanel *dpanel;
+	DebugPanel *dpanel;
 
 	//main window
 	MainScreen *window;

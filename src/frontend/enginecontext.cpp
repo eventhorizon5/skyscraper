@@ -28,9 +28,9 @@
 #include "scriptproc.h"
 #include "enginecontext.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+/*#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include "malloc.h"
-#endif
+#endif*/
 
 using namespace SBS;
 
@@ -301,11 +301,11 @@ void EngineContext::StartSim()
 		frontend->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
 		wxYield(); //this allows the banner to be printed before the sleep() call
 		frontend->Pause = false;
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-		Sleep(2000);
-#else
+//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+		//Sleep(2000);
+//#else
 		sleep(2);
-#endif
+//#endif
 	}
 }
 
@@ -453,7 +453,7 @@ void EngineContext::AttachCamera(/*Ogre::Camera* camera,*/ bool init_state)
 {
 	//attach the camera to this engine
 
-	Simcore->AttachCamera(camera, init_state);
+	//Simcore->AttachCamera(camera, init_state);
 
 	//reset camera position if camera is outside of the engine's area when attaching
 	if (IsInside() == false)
