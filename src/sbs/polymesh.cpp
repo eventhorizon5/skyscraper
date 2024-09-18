@@ -75,12 +75,12 @@ Wall* PolyMesh::FindWallIntersect(const Vector3 &start, const Vector3 &end, Vect
 				{
 					//currently test against previous camera intersection test to fix some weird issues
 					Vector3 orig_start = sbs->ToRemote(sbs->camera->HitPosition);
-					dist = orig_start.distance(cur_isect);
+					dist = orig_start.distance_to(cur_isect);
 
 					if (dist < best_dist)
 					{
 						//calculate distance to intersection
-						distance = start.distance(cur_isect);
+						distance = start.distance_to(cur_isect);
 
 						best_dist = dist;
 						best_pr = pr;
@@ -268,7 +268,7 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 		{
 			for (size_t j = 0; j < vertices[i].size(); j++)
 			{
-				texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
+				texel_temp = tex_matrix.xform(vertices[i][j] - tex_vector);
 				texels[index].x = texel_temp.x;
 				texels[index].y = texel_temp.y;
 				index++;

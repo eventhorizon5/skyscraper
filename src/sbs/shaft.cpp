@@ -64,8 +64,8 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 	IsEnabled = true;
 	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 	bottom = sbs->GetFloor(startfloor)->Altitude;
-	cutstart = Vector2::ZERO;
-	cutend = Vector2::ZERO;
+	cutstart = Vector2(0, 0);
+	cutend = Vector2(0, 0);
 	ShowFloors = 0;
 	ShowOutside = false;
 	ShowInterfloors = false;
@@ -175,7 +175,7 @@ bool Shaft::IsInside(const Vector3 &position)
 	//SBS_PROFILE("Shaft::IsInShaft");
 
 	//if last position is the same as new, return previous result
-	if (position.positionEquals(lastposition) == true && checkfirstrun == false)
+	if (position == lastposition && checkfirstrun == false)
 		return lastcheckresult;
 
 	checkfirstrun = false;
@@ -183,7 +183,7 @@ bool Shaft::IsInside(const Vector3 &position)
 	if (position.y > bottom && position.y < top && Levels.size() > 0)
 	{
 		//first determine if camera has X and Z values within the first shaft floor's bounding box
-		if (Levels[0]->GetMeshObject()->InBoundingBox(position, false) == true)
+		/*if (Levels[0]->GetMeshObject()->InBoundingBox(position, false) == true)
 		{
 			//do a hit beam test from the position to the bottom of the shaft, to see if it hits a shaft floor
 			bool result = (Levels[0]->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
@@ -193,7 +193,7 @@ bool Shaft::IsInside(const Vector3 &position)
 			lastposition = position;
 
 			return result;
-		}
+		}*/
 	}
 
 	//cache values

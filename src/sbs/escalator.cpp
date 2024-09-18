@@ -315,7 +315,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 
 void Escalator::MoveSteps()
 {
-	if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
+	if (GetPosition().distance_to(sbs->camera->GetPosition()) > 100)
 		return;
 
 	for (size_t i = 0; i < Steps.size(); i++)

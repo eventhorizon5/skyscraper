@@ -21,7 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "OgreAxisAlignedBox.h"
+//#include "OgreAxisAlignedBox.h"
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
@@ -51,7 +51,7 @@ Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const 
 		area_min.y = -999999.0;
 		area_max.y = 999999.0;
 	}
-	area_box = new Ogre::AxisAlignedBox(area_min, area_max);
+	//area_box = new Ogre::AxisAlignedBox(area_min, area_max);
 	is_inside = false;
 	sound = 0;
 
@@ -74,9 +74,9 @@ Trigger::~Trigger()
 	}
 	sound = 0;
 
-	if (area_box)
-		delete area_box;
-	area_box = 0;
+	//if (area_box)
+		//delete area_box;
+	//area_box = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
@@ -338,10 +338,11 @@ bool Trigger::IsInside(const Vector3 &position)
 {
 	//return true if the given absolute position is inside the trigger area
 
-	return area_box->contains(position - GetPosition());
+	//return area_box->contains(position - GetPosition());
+	return false;
 }
 
-Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
+/*Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 {
 	//get bounds information for this trigger
 
@@ -355,7 +356,7 @@ Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 	}
 
 	return Ogre::AxisAlignedBox(min, max);
-}
+}*/
 
 bool Trigger::IsOutside(Vector3 v1, Vector3 v2)
 {
@@ -363,7 +364,7 @@ bool Trigger::IsOutside(Vector3 v1, Vector3 v2)
 
 	v1 -= GetPosition();
 	v2 -= GetPosition();
-	Vector3 min = area_box->getMinimum();
+	/*Vector3 min = area_box->getMinimum();
 	Vector3 max = area_box->getMaximum();
 
 	if ((v1.x < min.x && v2.x < min.x) ||
@@ -372,18 +373,20 @@ bool Trigger::IsOutside(Vector3 v1, Vector3 v2)
 		(v1.x > max.x && v2.x > max.x) ||
 		(v1.y > max.y && v2.y > max.y) ||
 		(v1.z > max.z && v2.z > max.z))
-		return true;
+		return true;*/
 	return false;
 }
 
 Vector3 Trigger::GetMin()
 {
-	return area_box->getMinimum();
+	//return area_box->getMinimum();
+	return Vector3(0, 0, 0);
 }
 
 Vector3 Trigger::GetMax()
 {
-	return area_box->getMaximum();
+	//return area_box->getMaximum();
+	return Vector3(0, 0, 0);
 }
 
 }

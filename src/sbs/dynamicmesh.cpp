@@ -21,12 +21,12 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreSceneManager.h>
+/*#include <OgreSceneManager.h>
 #include <OgreSubMesh.h>
 #include <OgreMeshManager.h>
 #include <OgreMesh.h>
 #include <OgreEntity.h>
-#include <OgreCamera.h>
+#include <OgreCamera.h>*/
 #include "globals.h"
 #include "sbs.h"
 #include "mesh.h"
@@ -83,11 +83,11 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	Mesh* mesh = new Mesh(this, "", node, render_distance, filename, path);
 
 	//if load failed
-	if (!mesh->MeshWrapper)
-	{
-		delete mesh;
-		return false;
-	}
+	//if (!mesh->MeshWrapper)
+	//{
+		//delete mesh;
+		//return false;
+	//}
 
 	meshes.push_back(mesh);
 	file_model = true;
@@ -582,7 +582,7 @@ std::string DynamicMesh::GetMeshName(int mesh_index)
 	return meshes[mesh_index]->name;
 }
 
-Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
+/*Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
 {
 	if (meshes.empty() == true)
 		return Ogre::AxisAlignedBox::BOX_NULL;
@@ -597,7 +597,7 @@ Ogre::AxisAlignedBox DynamicMesh::GetBounds(MeshObject *client)
 			return meshes[index]->MeshWrapper->getBounds();
 	}
 	return Ogre::AxisAlignedBox::BOX_NULL;
-}
+}*/
 
 void DynamicMesh::EnableShadows(bool value)
 {
@@ -614,11 +614,11 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	this->node = node;
 	enabled = false;
 	prepared = false;
-	Movable = 0;
+	//Movable = 0;
 	auto_shadows = true;
 	parent_deleting = false;
 
-	if (filename == "")
+	/*if (filename == "")
 	{
 		this->name = name;
 
@@ -647,14 +647,14 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	Enabled(true);
 
 	//set maximum render distance
-	Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
+	Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));*/
 }
 
 DynamicMesh::Mesh::~Mesh()
 {
 	Detach();
 
-	for (size_t i = 0; i < client_entries.size(); i++)
+	/*for (size_t i = 0; i < client_entries.size(); i++)
 	{
 		delete client_entries[i].bounds;
 	}
@@ -672,7 +672,7 @@ DynamicMesh::Mesh::~Mesh()
 	{
 		sbs->ReportError("Error unloading mesh: " + e.getDescription());
 	}
-	MeshWrapper = 0;
+	MeshWrapper = 0;*/
 }
 
 void DynamicMesh::Mesh::Enabled(bool value)
@@ -682,13 +682,13 @@ void DynamicMesh::Mesh::Enabled(bool value)
 	if (enabled == value || !node)
 		return;
 
-	if (value == false)
+	/*if (value == false)
 		node->DetachObject(Movable);
 	else
 		node->AttachObject(Movable);
 
 	if (auto_shadows == true)
-		Movable->setCastShadows(value);
+		Movable->setCastShadows(value);*/
 
 	enabled = value;
 }
@@ -704,7 +704,7 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	SBS_PROFILE("DynamicMesh::Mesh::ChangeTexture");
 
 	//get new material
-	Ogre::MaterialPtr newmat = sbs->GetTextureManager()->GetMaterialByName(new_texture, "General");
+	/*Ogre::MaterialPtr newmat = sbs->GetTextureManager()->GetMaterialByName(new_texture, "General");
 
 	if (!newmat.get())
 		return sbs->ReportError("ChangeTexture: Invalid texture '" + new_texture + "'");
@@ -714,31 +714,31 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 	if (submesh == -1)
 		return false;
 
-	/*bool reprepare = false;
+	bool reprepare = false;
 
-	if (Submeshes[submesh].clients > 1)
-		reprepare = true; //re-prepare if breaking out of shared mesh
-	else
-	{
-		int existing = FindMatchingSubMesh(new_texture);
+	//if (Submeshes[submesh].clients > 1)
+		//reprepare = true; //re-prepare if breaking out of shared mesh
+	//else
+	//{
+		//int existing = FindMatchingSubMesh(new_texture);
 
-		if (existing > -1)
-			reprepare = true; //re-prepare if integrating into an existing shared mesh
-	}
+		//if (existing > -1)
+			//reprepare = true; //re-prepare if integrating into an existing shared mesh
+	//}
 
-	if (reprepare == true)
-	{
+	//if (reprepare == true)
+	//{
 		//re-prepare mesh
-		prepared = false;
-		Prepare(false);
-		return true;
-	}*/
+		//prepared = false;
+		//Prepare(false);
+		//return true;
+	//}
 
 	//set material if valid
 	Submeshes[submesh].object->setMaterialName(ToString(sbs->InstanceNumber) + ":" + new_texture);
 
 	//apply changes (refresh mesh state)
-	MeshWrapper->_dirtyState();
+	MeshWrapper->_dirtyState();*/
 
 	return true;
 }
@@ -752,8 +752,8 @@ int DynamicMesh::Mesh::FindMatchingSubMesh(const std::string &material)
 
 	for (size_t i = 0; i < Submeshes.size(); i++)
 	{
-		if (Submeshes[i].object->getMaterialName() == full_name)
-			return (int)i;
+		//if (Submeshes[i].object->getMaterialName() == full_name)
+			//return (int)i;
 	}
 	return -1;
 }
@@ -766,7 +766,7 @@ DynamicMesh::Mesh::Submesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &
 	int index = (int)Submeshes.size();
 
 	//create and add submesh
-	Submesh submesh;
+	/*Submesh submesh;
 	submesh.object = MeshWrapper->createSubMesh(node->GetFullName() + ":" + ToString(GetSubMeshCount()));
 	submesh.object->useSharedVertices = true;
 	submesh.clients = 0;
@@ -776,7 +776,8 @@ DynamicMesh::Mesh::Submesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &
 	submesh.material = material;
 
 	Submeshes.push_back(submesh);
-	return &Submeshes[index];
+	return &Submeshes[index];*/
+	return 0;
 }
 
 void DynamicMesh::Mesh::DeleteSubMesh(int client, int index)
@@ -841,16 +842,16 @@ void DynamicMesh::Mesh::DeleteSubMesh(int client, int index)
 
 			if (used == false)
 			{
-				MeshWrapper->destroySubMesh((unsigned short)i);
-				Submeshes.erase(Submeshes.begin() + i);
-				i--;
+				//MeshWrapper->destroySubMesh((unsigned short)i);
+				//Submeshes.erase(Submeshes.begin() + i);
+				//i--;
 			}
 		}
 	}
 	else if (index >= 0 && index < (int)Submeshes.size())
 	{
-		MeshWrapper->destroySubMesh(index);
-		Submeshes.erase(Submeshes.begin() + index);
+		//MeshWrapper->destroySubMesh(index);
+		//Submeshes.erase(Submeshes.begin() + index);
 	}
 }
 
@@ -867,7 +868,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 	SBS_PROFILE("DynamicMesh::Mesh::Prepare");
 
-	if (prepared == true || !node)
+	/*if (prepared == true || !node)
 		return;
 
 	if (sbs->Headless == true)
@@ -1224,23 +1225,24 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			Enabled(true);
 		}
 	}
-
+*/
 	prepared = true;
 }
 
 void DynamicMesh::Mesh::EnableDebugView(bool value)
 {
 	//enable or disable debug view of mesh
-	Movable->setDebugDisplayEnabled(value);
+	//Movable->setDebugDisplayEnabled(value);
 }
 
 bool DynamicMesh::Mesh::IsVisible()
 {
 	//returns true if this mesh is currently visible (enabled, and within the rendering distance)
-	return Movable->isVisible();
+	//return Movable->isVisible();
+	return false;
 }
 
-bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
+/*bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 {
 	//returns if this mesh is visible in the provided camera's view frustum or not
 
@@ -1264,13 +1266,13 @@ bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
 	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
 
 	return camera->isVisible(global_box);
-}
+}*/
 
 void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, Polygon *polygon, bool single)
 {
 	//update/write all vertices (or a single vertex) to the render buffer, if a dynamic mesh
 
-	SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
+	/*SBS_PROFILE("DynamicMesh::Mesh::UpdateVertices");
 
 	if (Parent->UseDynamicBuffers() == false || !node)
 		return;
@@ -1393,53 +1395,40 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = data->vertexBufferBinding->getBuffer(0);
 	size_t vsize = data->vertexDeclaration->getVertexSize(0);
 
-	/*
-	//lock vertex buffer for writing
-	float *vdata = static_cast<float*>(vbuffer->lock(vsize * loc, vsize * add, Ogre::HardwareBuffer::HBL_NORMAL));
-
-	//write elements
-	for (int i = 0; i < add; i++)
-	{
-		vdata[i] = mVertexElements[i];
-	}
-
-	//unlock vertex buffer
-	vbuffer->unlock();
-	*/
-
 	//write data to buffer
 	vbuffer->writeData(vsize * loc, vsize * add, mVertexElements, false);
 
 	delete [] mVertexElements;
 
 	//update mesh bounding box
-	UpdateBoundingBox();
+	UpdateBoundingBox();*/
 }
 
 void DynamicMesh::Mesh::Detach()
 {
 	//detach entity and scene node from this mesh object
 
-	if (Movable)
+/*	if (Movable)
 	{
 		if (parent_deleting == false)
 			node->DetachObject(Movable);
 		sbs->mSceneManager->destroyEntity(Movable);
 	}
-	Movable = 0;
+	Movable = 0;*/
 	node = 0;
 }
 
 int DynamicMesh::Mesh::GetSubMeshCount()
 {
-	return MeshWrapper->getNumSubMeshes();
+	//return MeshWrapper->getNumSubMeshes();
+	return 0;
 }
 
 void DynamicMesh::Mesh::UpdateBoundingBox()
 {
 	//set mesh's bounding box
 
-	if (client_entries.empty() == true)
+	/*if (client_entries.empty() == true)
 		return;
 
 	if (Parent->GetMeshCount() == 1)
@@ -1463,7 +1452,7 @@ void DynamicMesh::Mesh::UpdateBoundingBox()
 	{
 		MeshWrapper->_setBounds(*client_entries[0].bounds);
 		MeshWrapper->_setBoundingSphereRadius(client_entries[0].radius);
-	}
+	}*/
 }
 
 void DynamicMesh::Mesh::EnableShadows(bool value)
@@ -1471,7 +1460,7 @@ void DynamicMesh::Mesh::EnableShadows(bool value)
 	//enable shadows, overriding automatic setting
 
 	auto_shadows = false;
-	Movable->setCastShadows(value);
+	//Movable->setCastShadows(value);
 }
 
 }

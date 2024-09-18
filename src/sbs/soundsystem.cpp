@@ -21,7 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <fmod.hpp>
+//#include <fmod.hpp>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -31,11 +31,11 @@
 
 namespace SBS {
 
-SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(parent)
+SoundSystem::SoundSystem(Object *parent/*, FMOD::System *fmodsystem*/) : Object(parent)
 {
 	SetValues("SoundSystem", "Sound System", true, false);
 
-	soundsys = fmodsystem;
+	//soundsys = fmodsystem;
 
 	listener_position = Vector3(0, 0, 0);
 	listener_velocity = Vector3(0, 0, 0);
@@ -44,7 +44,7 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 	Position = Vector3(0, 0, 0);
 
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
-	soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
+	//soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
 }
 
 SoundSystem::~SoundSystem()
@@ -72,7 +72,7 @@ void SoundSystem::Loop()
 	SetListenerDirection(front, top);
 
 	//update FMOD
-	soundsys->update();
+	//soundsys->update();
 
 	ProfileManager::Stop_Profile();
 }
@@ -104,7 +104,7 @@ void SoundSystem::SetListenerPosition(const Vector3 &position)
 	listener_position.z = (float)global_position.z;
 
 	//copy data structures
-	FMOD_VECTOR pos;
+	/*FMOD_VECTOR pos;
 	pos.x = listener_position.x;
 	pos.y = listener_position.y;
 	pos.z = listener_position.z;
@@ -119,10 +119,10 @@ void SoundSystem::SetListenerPosition(const Vector3 &position)
 	FMOD_VECTOR up;
 	up.x = listener_up.x;
 	up.y = listener_up.y;
-	up.z = listener_up.z;
+	up.z = listener_up.z;*/
 
 	//set attributes
-	soundsys->set3DListenerAttributes(0, &pos, &vel, &forward, &up);
+	//soundsys->set3DListenerAttributes(0, &pos, &vel, &forward, &up);
 }
 
 void SoundSystem::SetListenerDirection(const Vector3 &front, const Vector3 &top)
@@ -137,7 +137,7 @@ void SoundSystem::SetListenerDirection(const Vector3 &front, const Vector3 &top)
 	listener_up.z = (float)top.z;
 
 	//copy data structures
-	FMOD_VECTOR pos;
+	/*FMOD_VECTOR pos;
 	pos.x = listener_position.x;
 	pos.y = listener_position.y;
 	pos.z = listener_position.z;
@@ -152,10 +152,10 @@ void SoundSystem::SetListenerDirection(const Vector3 &front, const Vector3 &top)
 	FMOD_VECTOR up;
 	up.x = listener_up.x;
 	up.y = listener_up.y;
-	up.z = listener_up.z;
+	up.z = listener_up.z;*/
 
 	//set attributes
-	soundsys->set3DListenerAttributes(0, &pos, &vel, &forward, &up);
+	//soundsys->set3DListenerAttributes(0, &pos, &vel, &forward, &up);
 }
 
 void SoundSystem::Cleanup(int index)
@@ -194,7 +194,7 @@ unsigned int SoundSystem::GetLength(SoundData *data)
 		return 0;
 
 	unsigned int length;
-	data->sound->getLength(&length, FMOD_TIMEUNIT_MS);
+	//data->sound->getLength(&length, FMOD_TIMEUNIT_MS);
 	return length;
 }
 
@@ -222,18 +222,18 @@ SoundData* SoundSystem::Load(const std::string &filename)
 	std::string full_filename = sbs->GetFilesystemPath(processed);
 
 #if (FMOD_VERSION >> 16 == 4)
-	FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &data->sound);
+	//FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &data->sound);
 	//FMOD_RESULT result = soundsys->createStream(full_filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &data.sound); //streamed version
 #else
-	FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_LOOP_NORMAL), 0, &data->sound);
+	//FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_LOOP_NORMAL), 0, &data->sound);
 	//FMOD_RESULT result = soundsys->createStream(full_filename.c_str(), (FMOD_MODE)(FMOD_3D), 0, &data.sound); //streamed version
 #endif
 
-	if (result != FMOD_OK)
-	{
-		ReportError("Can't load file '" + filename + "'");
-		return 0;
-	}
+	//if (result != FMOD_OK)
+	//{
+		//ReportError("Can't load file '" + filename + "'");
+		//return 0;
+	//}
 
 	//add sound element to array
 	sounds.push_back(data);
@@ -256,7 +256,7 @@ bool SoundSystem::IsLoaded(std::string filename)
 	return false;
 }
 
-FMOD::Channel* SoundSystem::Prepare(SoundData *data)
+/*FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 {
 	//prepare a sound for play - this allocates a channel
 
@@ -276,7 +276,7 @@ FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 	data->AddChannel(channel);
 
 	return channel;
-}
+}*/
 
 SoundData* SoundSystem::GetSoundData(std::string filename)
 {
@@ -316,8 +316,9 @@ int SoundSystem::GetPlayingCount()
 	//get number of playing channels
 
 	int num;
-	soundsys->getChannelsPlaying(&num);
-	return num;
+	//soundsys->getChannelsPlaying(&num);
+	//return num;
+	return 0;
 }
 
 int SoundSystem::GetSoundCount()
@@ -331,7 +332,7 @@ void SoundSystem::ShowLoadedSounds()
 	Object::Report("Filename\t----\tSound Objects\t----\tChannels");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
-		Object::Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
+		//Object::Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
 	}
 	Object::Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
 }
@@ -342,7 +343,7 @@ void SoundSystem::ShowPlayingSounds()
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		bool first = true;
-		for (int j = 0; j < sounds[i]->GetHandleCount(); j++)
+		/*for (int j = 0; j < sounds[i]->GetHandleCount(); j++)
 		{
 			if (sounds[i]->handles[j]->IsPlaying() == true)
 			{
@@ -352,21 +353,21 @@ void SoundSystem::ShowPlayingSounds()
 				Sound *sound = sounds[i]->handles[j];
 				Object::Report("\t" + sound->GetName() + "\t----\tParent: " + sound->GetParent()->GetName());
 			}
-		}
+		}*/
 	}
 	Object::Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
 }
 
 SoundData::SoundData()
 {
-	sound = 0;
+	//sound = 0;
 }
 
 SoundData::~SoundData()
 {
-	if (sound)
-		sound->release();
-	sound = 0;
+	//if (sound)
+		//sound->release();
+	//sound = 0;
 }
 
 void SoundData::AddHandle(Sound *handle)
@@ -395,14 +396,14 @@ void SoundData::RemoveHandle(Sound *handle)
 	{
 		if (handles[i] == handle)
 		{
-			handles.erase(handles.begin() + i);
-			RemoveChannel(handle->GetChannel());
+			//handles.erase(handles.begin() + i);
+			//RemoveChannel(handle->GetChannel());
 			return;
 		}
 	}
 }
 
-void SoundData::AddChannel(FMOD::Channel *channel)
+/*void SoundData::AddChannel(FMOD::Channel *channel)
 {
 	//add a sound channel
 
@@ -415,9 +416,9 @@ void SoundData::AddChannel(FMOD::Channel *channel)
 			return;
 	}
 	channels.push_back(channel);
-}
+}*/
 
-void SoundData::RemoveChannel(FMOD::Channel *channel)
+/*void SoundData::RemoveChannel(FMOD::Channel *channel)
 {
 	//remove a sound channel
 
@@ -432,6 +433,6 @@ void SoundData::RemoveChannel(FMOD::Channel *channel)
 			return;
 		}
 	}
-}
+}*/
 
 }

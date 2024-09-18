@@ -32,7 +32,7 @@ public:
 
 	SceneNode(Object *parent, std::string name);
 	~SceneNode();
-	Ogre::SceneNode* GetRawSceneNode() { return node; }
+	//Ogre::SceneNode* GetRawSceneNode() { return node; }
 	void AddChild(SceneNode *scenenode);
 	void RemoveChild(SceneNode *scenenode);
 	void ShowBoundingBox(bool value);
@@ -46,8 +46,8 @@ public:
 	void SetOrientation(const Quaternion &q, bool relative = false);
 	void Move(const Vector3 &vector, Real speed = 1.0);
 	void DetachAllObjects();
-	void AttachObject(Ogre::MovableObject *object);
-	void DetachObject(Ogre::MovableObject *object);
+	//void AttachObject(Ogre::MovableObject *object);
+	//void DetachObject(Ogre::MovableObject *object);
 	Real GetScale();
 	void SetScale(Real scale);
 	SceneNode* CreateChild(std::string name, const Vector3 &offset = Vector3(0, 0, 0));
@@ -63,7 +63,7 @@ public:
 
 private:
 
-	Ogre::SceneNode *node; //node in scene graph
+	//Ogre::SceneNode *node; //node in scene graph
 	Vector3 Rotation; //rotation vector
 };
 

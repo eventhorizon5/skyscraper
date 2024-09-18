@@ -21,8 +21,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreSceneManager.h>
-#include <OgreSceneNode.h>
+//#include <OgreSceneManager.h>
+//#include <OgreSceneNode.h>
 #include "globals.h"
 #include "sbs.h"
 #include "scenenode.h"
@@ -32,16 +32,16 @@ namespace SBS {
 SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 {
 	SetName(name);
-	node = 0;
+	//node = 0;
 	Rotation = Vector3(0, 0, 0);
 
-	if (!sbs->mSceneManager || !parent)
-		return;
+	//if (!sbs->mSceneManager || !parent)
+		//return;
 
 	//set up scene node
 	std::string node_name = GetNameBase() + name;
 
-	try
+	/*try
 	{
 		node = sbs->mSceneManager->createSceneNode(node_name);
 	}
@@ -53,63 +53,63 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 
 	//attach scene node to root, if no parent exists (for engine root object)
 	if (!parent->GetParent() && !parent->GetSceneNode())
-		sbs->mSceneManager->getRootSceneNode()->addChild(node);
+		sbs->mSceneManager->getRootSceneNode()->addChild(node);*/
 }
 
 SceneNode::~SceneNode()
 {
-	if (node)
-		sbs->mSceneManager->destroySceneNode(node);
+	//if (node)
+		//sbs->mSceneManager->destroySceneNode(node);
 }
 
 void SceneNode::DetachAllObjects()
 {
 	//detach all movable objects from this scene node
 
-	if (node)
-		node->detachAllObjects();
+	//if (node)
+		//node->detachAllObjects();
 }
 
 void SceneNode::AddChild(SceneNode *scenenode)
 {
 	//add a child scene node
 
-	if (node && scenenode && scenenode->GetRawSceneNode())
-		node->addChild(scenenode->GetRawSceneNode());
+	//if (node && scenenode && scenenode->GetRawSceneNode())
+		//node->addChild(scenenode->GetRawSceneNode());
 }
 
 void SceneNode::RemoveChild(SceneNode *scenenode)
 {
 	//remove a child scene node
 
-	if (node && scenenode)
+	/*if (node && scenenode)
 	{
 		Ogre::SceneNode *rawnode = scenenode->GetRawSceneNode();
 		if (rawnode)
 			node->removeChild(rawnode);
-	}
+	}*/
 }
 
 void SceneNode::ShowBoundingBox(bool value)
 {
 	//show scene node's 3D bounding box
 
-	if (node)
-		node->showBoundingBox(value);
+	//if (node)
+		//node->showBoundingBox(value);
 }
 
 void SceneNode::SetPosition(const Vector3 &position)
 {
 	//set position of scene node
 
-	if (!node)
+	/*if (!node)
 		return;
 
 	if (IsRoot() == false)
 		node->_setDerivedPosition(sbs->ToRemote(sbs->ToGlobal(position)));
 	else
 		node->_setDerivedPosition(sbs->ToRemote(position));
-	Update();
+	Update();*/
 }
 
 void SceneNode::SetPositionRelative(const Vector3 &position)
@@ -117,12 +117,12 @@ void SceneNode::SetPositionRelative(const Vector3 &position)
 	//set position of scene node
 	//position is relative of parent scene node
 
-	if (!node)
+	/*if (!node)
 		return;
 
 	Vector3 pos = sbs->ToRemote(position);
 	node->setPosition(pos);
-	Update();
+	Update();*/
 }
 
 Vector3 SceneNode::GetPosition(bool relative)
@@ -130,7 +130,7 @@ Vector3 SceneNode::GetPosition(bool relative)
 	//get position of scene node
 	//if relative is true, position is relative of parent scene node
 
-	if (!node)
+	/*if (!node)
 		return Vector3(0, 0, 0);
 
 	if (relative == false)
@@ -142,7 +142,8 @@ Vector3 SceneNode::GetPosition(bool relative)
 			return pos;
 	}
 
-	return sbs->ToLocal(node->getPosition());
+	return sbs->ToLocal(node->getPosition());*/
+	return Vector3(0, 0, 0);
 }
 
 void SceneNode::SetRotation(const Vector3 &rotation)
@@ -150,7 +151,7 @@ void SceneNode::SetRotation(const Vector3 &rotation)
 	//set rotation of scene node in degrees
 	//this sets the rotation of all three vectors
 
-	if (!node)
+	/*if (!node)
 		return;
 
 	Rotation = rotation;
@@ -173,7 +174,7 @@ void SceneNode::SetRotation(const Vector3 &rotation)
 	Quaternion z(Degree(Rotation.z), Vector3::UNIT_Z);
 	Quaternion rot = x * y * z;
 
-	SetOrientation(rot, true);
+	SetOrientation(rot, true);*/
 }
 
 Vector3 SceneNode::GetRotation()
@@ -190,15 +191,15 @@ void SceneNode::Update()
 	//this mainly needs to be called on child scenenodes of a parent that has moved/rotated,
 	//to recalculate offsets
 
-	if (node)
-		node->needUpdate();
+	//if (node)
+		//node->needUpdate();
 }
 
 Quaternion SceneNode::GetOrientation(bool relative)
 {
 	//return raw orientation
 
-	if (node)
+	/*if (node)
 	{
 		if (relative == false)
 		{
@@ -211,14 +212,15 @@ Quaternion SceneNode::GetOrientation(bool relative)
 			return node->getOrientation();
 	}
 
-	return Quaternion::ZERO;
+	return Quaternion::ZERO;*/
+	return Quaternion(0, 0, 0, 0);
 }
 
 void SceneNode::SetOrientation(const Quaternion &q, bool relative)
 {
 	//set raw orientation
 
-	if (!node)
+	/*if (!node)
 		return;
 
 	if (relative == false)
@@ -229,7 +231,7 @@ void SceneNode::SetOrientation(const Quaternion &q, bool relative)
 			node->_setDerivedOrientation(q);
 	}
 	else
-		node->setOrientation(q);
+		node->setOrientation(q);*/
 
 	Update();
 }
@@ -238,16 +240,16 @@ void SceneNode::Move(const Vector3 &vector, Real speed)
 {
 	//move this scene node
 
-	if (!node)
+	/*if (!node)
 		return;
 
 	Vector3 v = vector * speed;
 	node->translate(sbs->ToRemote(v));
 
-	Update();
+	Update();*/
 }
 
-void SceneNode::AttachObject(Ogre::MovableObject *object)
+/*void SceneNode::AttachObject(Ogre::MovableObject *object)
 {
 	//attach a movable object to this node
 
@@ -262,9 +264,9 @@ void SceneNode::AttachObject(Ogre::MovableObject *object)
 			ReportError("Error attaching object:\n" + e.getDescription());
 		}
 	}
-}
+}*/
 
-void SceneNode::DetachObject(Ogre::MovableObject *object)
+/*void SceneNode::DetachObject(Ogre::MovableObject *object)
 {
 	//detach a movable object from this node
 
@@ -280,14 +282,14 @@ void SceneNode::DetachObject(Ogre::MovableObject *object)
 				ReportError("Error detaching object:\n" + e.getDescription());
 		}
 	}
-}
+}*/
 
 Real SceneNode::GetScale()
 {
 	//get scaling factor
 
-	if (node)
-		return node->getScale().x;
+	//if (node)
+		//return node->getScale().x;
 	return 0.0;
 }
 
@@ -295,21 +297,21 @@ void SceneNode::SetScale(Real scale)
 {
 	//set scaling factor
 
-	if (!node)
+	//if (!node)
 		return;
 
-	node->setScale(Vector3(scale, scale, scale));
+	//node->setScale(Vector3(scale, scale, scale));
 }
 
 SceneNode* SceneNode::CreateChild(std::string name, const Vector3 &offset)
 {
 	//create a raw child scenenode, at the specified offset
 
-	if (!node || !GetParent())
+	//if (!node || !GetParent())
 		return 0;
 
 	SceneNode *scenenode = new SceneNode(GetParent(), name);
-	node->addChild(scenenode->GetRawSceneNode());
+	//node->addChild(scenenode->GetRawSceneNode());
 	scenenode->Move(offset);
 
 	return scenenode;
@@ -319,10 +321,10 @@ std::string SceneNode::GetFullName()
 {
 	//get full name of a scene node, which includes object ID information
 
-	if (!node)
+	//if (!node)
 		return "";
 
-	return node->getName();
+	//return node->getName();
 }
 
 bool SceneNode::IsRoot()
@@ -334,44 +336,46 @@ void SceneNode::Pitch(Real &degree)
 {
 	//rotate on X axis
 
-	node->pitch(Degree(degree));
+	//node->pitch(Degree(degree));
 }
 
 void SceneNode::Yaw(Real &degree)
 {
 	//rotate on Y axis
 
-	node->yaw(Degree(-degree));
+	//node->yaw(Degree(-degree));
 }
 
 void SceneNode::Roll(Real &degree)
 {
 	//rotate on Z axis
 
-	node->roll(Degree(degree));
+	//node->roll(Degree(degree));
 }
 
 Vector3 SceneNode::GetDerivedPosition()
 {
 	//gets the position of the node as derived from all parents
-	return sbs->ToLocal(node->_getDerivedPosition());
+	//return sbs->ToLocal(node->_getDerivedPosition());
+	return Vector3(0, 0, 0);
 }
 
 Quaternion SceneNode::GetDerivedOrientation()
 {
 	//gets the orientation of the node as derived from all parents
 
-	return node->_getDerivedOrientation();
+	//return node->_getDerivedOrientation();
+	return Quaternion(0, 0, 0, 0);
 }
 
 void SceneNode::SetDirection(const Vector3 &direction)
 {
-	node->setDirection(sbs->ToRemote(direction));
+	//node->setDirection(sbs->ToRemote(direction));
 }
 
 void SceneNode::LookAt(const Vector3 &point)
 {
-	node->lookAt(sbs->ToRemote(point), Ogre::Node::TS_PARENT);
+	//node->lookAt(sbs->ToRemote(point), Ogre::Node::TS_PARENT);
 }
 
 }

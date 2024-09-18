@@ -21,8 +21,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreSceneManager.h>
-#include <OgreLight.h>
+//#include <OgreSceneManager.h>
+//#include <OgreLight.h>
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
@@ -48,7 +48,7 @@ Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 
 	Type = type;
 
-	try
+	/*try
 	{
 		light = sbs->mSceneManager->createLight(GetSceneNode()->GetFullName());
 		GetSceneNode()->AttachObject(light);
@@ -65,7 +65,7 @@ Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating light:\n" + e.getDescription());
-	}
+	}*/
 
 	std::string type_name = "point";
 	if (type == 1)
@@ -79,9 +79,9 @@ Light::Light(Object *parent, const std::string &name, int type) : Object(parent)
 
 Light::~Light()
 {
-	if (light)
-		GetSceneNode()->DetachObject(light);
-	sbs->mSceneManager->destroyLight(GetSceneNode()->GetFullName());
+	//if (light)
+		//GetSceneNode()->DetachObject(light);
+	//sbs->mSceneManager->destroyLight(GetSceneNode()->GetFullName());
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
@@ -104,23 +104,23 @@ Light::~Light()
 void Light::SetColor(Real color_r, Real color_g, Real color_b)
 {
 	//set color of light
-	light->setDiffuseColour(color_r, color_g, color_b);
+	//light->setDiffuseColour(color_r, color_g, color_b);
 }
 
 void Light::SetSpecularColor(Real color_r, Real color_g, Real color_b)
 {
-	light->setSpecularColour(color_r, color_g, color_b);
+	//light->setSpecularColour(color_r, color_g, color_b);
 }
 
 void Light::SetAttenuation(Real att_range, Real att_constant, Real att_linear, Real att_quadratic)
 {
-	light->setAttenuation(sbs->ToRemote(att_range), att_constant, att_linear, att_quadratic);
+	//light->setAttenuation(sbs->ToRemote(att_range), att_constant, att_linear, att_quadratic);
 }
 
 void Light::SetSpotlightRange(Real spot_inner_angle, Real spot_outer_angle, Real spot_falloff)
 {
-	if (Type == 2)
-		light->setSpotlightRange(Degree(spot_inner_angle), Degree(spot_outer_angle), spot_falloff);
+	//if (Type == 2)
+		//light->setSpotlightRange(Degree(spot_inner_angle), Degree(spot_outer_angle), spot_falloff);
 }
 
 void Light::SetDirection(const Vector3 &direction)
@@ -130,17 +130,18 @@ void Light::SetDirection(const Vector3 &direction)
 
 void Light::SetRenderingDistance(Real distance)
 {
-	light->setRenderingDistance(sbs->ToRemote(distance));
+	//light->setRenderingDistance(sbs->ToRemote(distance));
 }
 
 void Light::Enabled(bool value)
 {
-	light->setVisible(value);
+	//light->setVisible(value);
 }
 
 bool Light::IsEnabled()
 {
-	return light->getVisible();
+	//return light->getVisible();
+	return false;
 }
 
 }

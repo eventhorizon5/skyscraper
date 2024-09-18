@@ -309,7 +309,7 @@ void SoundManager::Loop()
 
 	tPlayPosition->SetValue(TruncateNumber(handle->GetPlayPosition(), 2));
 
-	lblStats->SetLabelText("Channels: " + SBS::ToString(sound->GetChannelCount()) + " - Playing Sounds: " + SBS::ToString(Simcore->GetSoundSystem()->GetPlayingCount()));
+	//lblStats->SetLabelText("Channels: " + SBS::ToString(sound->GetChannelCount()) + " - Playing Sounds: " + SBS::ToString(Simcore->GetSoundSystem()->GetPlayingCount()));
 }
 
 void SoundManager::On_bOK_Click(wxCommandEvent& event)

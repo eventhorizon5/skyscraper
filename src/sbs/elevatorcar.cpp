@@ -2897,7 +2897,7 @@ bool ElevatorCar::IsInCar(const Vector3 &position, bool camera)
 		return false;
 
 	//if last position is the same as new, return previous result
-	if (position.positionEquals(lastposition) == true && checkfirstrun == false)
+	if (position == lastposition && checkfirstrun == false)
 		return lastcheckresult;
 
 	checkfirstrun = false;
@@ -2908,12 +2908,12 @@ bool ElevatorCar::IsInCar(const Vector3 &position, bool camera)
 	{
 		if (Mesh->InBoundingBox(position, false) == true)
 		{
-			if (Mesh->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
+			/*if (Mesh->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
 				if (camera == true)
 					CameraOffset = position.y - ypos;
 				result = true;
-			}
+			}*/
 		}
 		else if (camera == true)
 			CameraOffset = 0;

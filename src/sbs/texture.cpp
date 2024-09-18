@@ -21,7 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreRoot.h>
+/*#include <OgreRoot.h>
 #include <OgreImage.h>
 #include <OgreTextureManager.h>
 #include <OgreTechnique.h>
@@ -30,7 +30,7 @@
 #include <OgreFontManager.h>
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreResourceGroupManager.h>
-#include <OgreRTShaderSystem.h>
+#include <OgreRTShaderSystem.h>*/
 #include "globals.h"
 #include "sbs.h"
 #include "utility.h"
@@ -70,8 +70,8 @@ TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 	{
 		MapIndex[i] = 0;
 		OldMapIndex[i] = 0;
-		OldMapUV[i].zero();
-		MapUV[i].zero();
+		OldMapUV[i] = Vector2(0, 0);
+		MapUV[i] = Vector2(0, 0);
 	}
 	DefaultMapper = sbs->GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	texturecount = 0;
@@ -1844,12 +1844,12 @@ void TextureManager::DecrementTextureUsage(const std::string &name)
 	return mTex;
 }*/
 
-bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
+/*bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
 {
 	//justify is left 'l' by default - set to 'r' or 'c' for right or center
 	//vert_justify is top 't' by default - set to 'c' or 'b' for center or bottom
 
-	/*if (sbs->Headless == true)
+	if (sbs->Headless == true)
 		return true;
 
 	using namespace Ogre;
@@ -2094,18 +2094,18 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	stop:
 	delete[] GlyphTexCoords;
 
-	destBuffer->unlock();*/
+	destBuffer->unlock();
 	return true;
-}
+}*/
 
-void TextureManager::SaveTexture(Ogre::TexturePtr texture, const std::string & filename)
+/*void TextureManager::SaveTexture(Ogre::TexturePtr texture, const std::string & filename)
 {
 	//save a raw texture to a file
 
 	Ogre::Image image;
 	texture->convertToImage(image, true);
 	image.save(filename);
-}
+}*/
 
 void TextureManager::IncrementTextureCount()
 {

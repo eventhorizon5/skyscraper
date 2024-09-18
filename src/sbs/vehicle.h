@@ -24,12 +24,12 @@
 #ifndef _SBS_VEHICLE_H
 #define _SBS_VEHICLE_H
 
-namespace OgreBulletDynamics {
+/*namespace OgreBulletDynamics {
 	class WheeledRigidBody;
 	class VehicleTuning;
 	class VehicleRayCaster;
 	class RaycastVehicle;
-}
+}*/
 
 namespace SBS {
 
@@ -76,10 +76,10 @@ public:
 
 private:
 
-	OgreBulletDynamics::WheeledRigidBody *mCarChassis;
-	OgreBulletDynamics::VehicleTuning *mTuning;
-	OgreBulletDynamics::VehicleRayCaster *mVehicleRayCaster;
-	OgreBulletDynamics::RaycastVehicle *mVehicle;
+	//OgreBulletDynamics::WheeledRigidBody *mCarChassis;
+	//OgreBulletDynamics::VehicleTuning *mTuning;
+	//OgreBulletDynamics::VehicleRayCaster *mVehicleRayCaster;
+	//OgreBulletDynamics::RaycastVehicle *mVehicle;
 
 	Object *vehicle;
 	MeshObject *mChassis;

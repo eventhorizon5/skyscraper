@@ -21,14 +21,14 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreCamera.h>
+/*#include <OgreCamera.h>
 #include <OgreSceneManager.h>
 #include <OgreTextureManager.h>
 #include <OgreTechnique.h>
 #include <OgreMaterialManager.h>
 #include <OgreRenderTexture.h>
 #include <OgreViewport.h>
-#include <OgreHardwarePixelBuffer.h>
+#include <OgreHardwarePixelBuffer.h>*/
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
@@ -46,7 +46,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	//set up SBS object
 	SetValues("CameraTexture", name, false);
 
-	FOV = fov;
+	/*FOV = fov;
 	camera = 0;
 	renderTexture = 0;
 
@@ -113,17 +113,16 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating camera texture:\n" + e.getDescription());
-	}
+	}*/
 }
 
 CameraTexture::~CameraTexture()
 {
-	renderTexture->removeAllViewports();
-	if (camera)
+	/*if (camera)
 	{
 		GetSceneNode()->DetachObject(camera);
 		sbs->mSceneManager->destroyCamera(camera);
-	}
+	}*/
 
 	sbs->GetTextureManager()->UnloadMaterial(texturename, "General");
 	sbs->GetTextureManager()->UnloadTexture(texturename, "General");
@@ -137,29 +136,31 @@ CameraTexture::~CameraTexture()
 
 void CameraTexture::Enabled(bool value)
 {
-	renderTexture->setActive(value);
+	//renderTexture->setActive(value);
 }
 
 bool CameraTexture::IsEnabled()
 {
-	return renderTexture->isActive();
+	//return renderTexture->isActive();
+	return false;
 }
 
 void CameraTexture::SetFOVAngle(Real angle)
 {
 	//set camera FOV angle
 
-	if (angle > 0 && angle < 179.63)
+	/*if (angle > 0 && angle < 179.63)
 	{
 		Real ratio = (float)camera->getAspectRatio();
 		if (ratio > 0)
 			camera->setFOVy(Degree(angle / ratio));
-	}
+	}*/
 }
 
 Real CameraTexture::GetFOVAngle()
 {
-	return (float)(camera->getFOVy().valueDegrees() * camera->getAspectRatio());
+	//return (float)(camera->getFOVy().valueDegrees() * camera->getAspectRatio());
+	return 0.0;
 }
 
 void CameraTexture::SetToDefaultFOV()

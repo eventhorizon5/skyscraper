@@ -28,8 +28,10 @@
 #include <errno.h>
 #include <limits.h>
 #include <math.h>
-#include <OgreString.h>
-#include <OgreStringConverter.h>
+#include <string>
+#include <sstream>
+//#include <OgreString.h>
+//#include <OgreStringConverter.h>
 #include "globals.h"
 
 namespace SBS {
@@ -188,13 +190,13 @@ int FindWithCase(const std::string &string, bool uppercase, const std::string &k
 void TrimString(std::string &string)
 {
 	//trim whitespace from string
-	Ogre::StringUtil::trim(string, true, true);
+	//Ogre::StringUtil::trim(string, true, true);
 }
 
 std::string TrimStringCopy(std::string string)
 {
 	//trim whitespace from string
-	Ogre::StringUtil::trim(string, true, true);
+	//Ogre::StringUtil::trim(string, true, true);
 	return string;
 }
 

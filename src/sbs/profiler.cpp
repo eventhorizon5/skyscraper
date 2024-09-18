@@ -1,14 +1,15 @@
-#include <OgreBulletDynamicsWorld.h>
-#include <OgrePlatform.h>
+//#include <OgreBulletDynamicsWorld.h>
+//#include <OgrePlatform.h>
+#include <stdio.h>
 #include "globals.h"
 #include "sbs.h"
 #include "profiler.h"
 
-static oClock gProfileClock;
+//static oClock gProfileClock;
 
-#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
+//#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
 	#define _snprintf snprintf
-#endif
+//#endif
 
 namespace SBS {
 
@@ -29,7 +30,7 @@ bool SBSIMPEXP enable_advanced_profiling;
 
 inline void Profile_Get_Ticks(unsigned long int * ticks)
 {
-	*ticks = gProfileClock.getTimeMicroseconds();
+	//*ticks = gProfileClock.getTimeMicroseconds();
 }
 
 inline float Profile_Get_Tick_Rate(void)
@@ -265,7 +266,7 @@ void	ProfileManager::Reset( void )
 	if (enable_profiling == false)
 		return;
 
-	gProfileClock.reset();
+	//gProfileClock.reset();
 	Root.Reset();
 	Root.Call();
 	FrameCounter = 0;
@@ -327,10 +328,10 @@ void ProfileManager::dumpRecursive(std::string &output, ProfileIterator* profile
 		numChildren++;
 		float current_total_time = profileIterator->Get_Current_Total_Time();
 		accumulated_time += current_total_time;
-		float fraction = parent_time > SIMD_EPSILON ? (current_total_time / parent_time) * 100 : 0.f;
+		//float fraction = parent_time > SIMD_EPSILON ? (current_total_time / parent_time) * 100 : 0.f;
 		for (int j = 0; j < spacing; j++)
 			output.append(".");
-		_snprintf(buffer, 1000, "%d -- %s (%.2f %%) :: %.3f ms / frame (%d calls)\n", i, profileIterator->Get_Current_Name(), fraction,(current_total_time / (double)frames_since_reset), profileIterator->Get_Current_Total_Calls());
+		//_snprintf(buffer, 1000, "%d -- %s (%.2f %%) :: %.3f ms / frame (%d calls)\n", i, profileIterator->Get_Current_Name(), fraction,(current_total_time / (double)frames_since_reset), profileIterator->Get_Current_Total_Calls());
 		output.append(buffer);
 		totalTime += current_total_time;
 		//recurse into children
@@ -342,8 +343,8 @@ void ProfileManager::dumpRecursive(std::string &output, ProfileIterator* profile
 	}
 	for (int i = 0; i < spacing; i++)
 		output.append(".");
-	_snprintf(buffer, 1000, "%s (%.3f %%) :: %.3f ms\n", "Unaccounted:", parent_time > SIMD_EPSILON ? ((parent_time - accumulated_time) / parent_time) * 100 : 0.f, parent_time - accumulated_time);
-	output.append(buffer);
+	//_snprintf(buffer, 1000, "%s (%.3f %%) :: %.3f ms\n", "Unaccounted:", parent_time > SIMD_EPSILON ? ((parent_time - accumulated_time) / parent_time) * 100 : 0.f, parent_time - accumulated_time);
+	//output.append(buffer);
 
 	for (int i = 0; i < numChildren; i++)
 	{

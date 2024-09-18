@@ -21,7 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreLogManager.h>
+//#include <OgreLogManager.h>
 #include "globals.h"
 #include "sbs.h"
 #include "scenenode.h"
@@ -77,13 +77,13 @@ void ObjectBase::SetName(const std::string &name)
 
 void ObjectBase::Report(const std::string &message)
 {
-	Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message);
+	//Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message);
 	sbs->LastNotification = message;
 }
 
 bool ObjectBase::ReportError(const std::string &message)
 {
-	Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message, Ogre::LML_CRITICAL);
+	//Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message, Ogre::LML_CRITICAL);
 	sbs->LastError = message;
 	return false;
 }
@@ -377,7 +377,8 @@ Vector3 Object::GetRotation()
 Quaternion Object::GetOrientation(bool relative)
 {
 	if (!node)
-		return Quaternion::ZERO;
+		//return Quaternion::ZERO;
+		return Quaternion(0, 0, 0, 0);
 
 	return node->GetOrientation(relative);
 }

@@ -154,19 +154,19 @@ bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &
 	 * Use 'v1' and 'len1' for the u-axis and 'v2' and 'len2' for the v-axis.
 	 */
 
-	Real d = v_orig.squaredDistance(v1);
+	Real d = v_orig.dot(v1);
 	//get inverse square of d
 	Real invl1 = 1 / sqrt(d);
 
-	d = v_orig.squaredDistance(v2);
+	d = v_orig.dot(v2);
 	//get inverse square of d
 	Real invl2 = (d) ? 1 / sqrt(d) : 0;
 
 	Vector3 v_u = (v1 - v_orig) * len1 * invl1;
 	Vector3 v_v = (v2 - v_orig) * len2 * invl2;
-	Vector3 v_w = v_u.crossProduct(v_v);
+	Vector3 v_w = v_u.cross(v_v);
 
-	m[0][0] = v_u.x;
+	/*m[0][0] = v_u.x;
 	m[0][1] = v_v.x;
 	m[0][2] = v_w.x;
 	m[1][0] = v_u.y;
@@ -174,11 +174,11 @@ bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &
 	m[1][2] = v_w.y;
 	m[2][0] = v_u.z;
 	m[2][1] = v_v.z;
-	m[2][2] = v_w.z;
+	m[2][2] = v_w.z;*/
 
 	v = v_orig;
 
-	Real det = m.Determinant();
+	Real det = 0;//m.Determinant();
 	/*if (std::abs(det) < SMALL_EPSILON)
 	{
 		//m = m.IDENTITY;
@@ -232,7 +232,7 @@ bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &
 			m[2][2] = 1 / v_w.z;
 	}
 	else*/
-		m = m.Inverse(1e-10f); //standard inversion
+		//m = m.inverse(1e-10f); //standard inversion
 
 	return true;
 }
@@ -427,7 +427,7 @@ bool Polygon::IntersectRay(const Vector3 &start, const Vector3 &end)
 			Vector3 v = sbs->ToLocal(geometry[index][i1].vertex, false, true);
 			Vector3 vertex = pos + v;
 			Vector3 start2 = start - vertex;
-			normal = start2.crossProduct(start - vertex);
+			normal = start2.cross(start - vertex);
 			if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
 				return false;
 			i1 = i;

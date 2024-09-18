@@ -97,7 +97,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
-	if (cutwalls == false && cutfloors == false)
+	/*if (cutwalls == false && cutfloors == false)
 		return;
 
 	//swap values if the first is greater than the second
@@ -164,11 +164,11 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 			}
 
 			//skip if the polygon is completely inside the bounding box
-			/*if (bounds.contains(polybounds) == true)
-			{
-				polycheck = true;
-				continue;
-			}*/
+			//if (bounds.contains(polybounds) == true)
+			//{
+				//polycheck = true;
+				//continue;
+			//}
 
 			//make sure the polygon intersects bounds (is not outside the cut area)
 			if (bounds.intersects(polybounds) == true)
@@ -394,7 +394,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 			polycount--;
 			polycheck = false;
 		}
-	}
+	}*/
 }
 
 void Utility::GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon)
@@ -421,7 +421,7 @@ void Utility::GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &po
 				extent = GetExtents(polygon, 3).x + mesh_position.z;
 				if (wall2b == false || (wall2b == true && std::abs(extent - mesh_position.z) > std::abs(wall_extents_z.x - mesh_position.z)))
 					wall_extents_z.x = extent;
-				wall_extents_y = GetExtents(polygon, 2) + mesh_position.y;
+				//wall_extents_y = GetExtents(polygon, 2) + mesh_position.y;
 			}
 			else
 			{
@@ -511,7 +511,7 @@ Plane Utility::ComputePlane(PolyArray &vertices, bool flip_normal)
 		normal = -ComputeNormal(vertices, det);
 	else
 		normal = ComputeNormal(vertices, det);
-	normal.normalise();
+	//normal.normalise();
 	return Plane(normal, det);
 }
 
@@ -521,9 +521,9 @@ void Utility::ResetDoorwayWalls()
 	wall1b = false;
 	wall2a = false;
 	wall2b = false;
-	wall_extents_x = Vector2::ZERO;
-	wall_extents_y = Vector2::ZERO;
-	wall_extents_z = Vector2::ZERO;
+	wall_extents_x = Vector2(0, 0);
+	wall_extents_y = Vector2(0, 0);
+	wall_extents_z = Vector2(0, 0);
 }
 
 Wall* Utility::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th)
@@ -538,9 +538,9 @@ Wall* Utility::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, co
 		Wall *wall = mesh->CreateWallObject(wallname);
 
 		//convert extents to relative positioning
-		Vector2 extents_x = wall_extents_x - wall->GetMesh()->GetPosition().x;
-		Vector2 extents_y = wall_extents_y - wall->GetMesh()->GetPosition().y;
-		Vector2 extents_z = wall_extents_z - wall->GetMesh()->GetPosition().z;
+		Vector2 extents_x;// = wall_extents_x - wall->GetMesh()->GetPosition().x;
+		Vector2 extents_y;// = wall_extents_y - wall->GetMesh()->GetPosition().y;
+		Vector2 extents_z;// = wall_extents_z - wall->GetMesh()->GetPosition().z;
 
 		//true if doorway is facing forward/backward
 		//false if doorway is facing left/right

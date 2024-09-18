@@ -51,8 +51,8 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 	StairsNum = number;
 	this->startfloor = startfloor;
 	this->endfloor = endfloor;
-	cutstart = Vector2::ZERO;
-	cutend = Vector2::ZERO;
+	cutstart = Vector2(0, 0);
+	cutend = Vector2(0, 0);
 	Inside = false;
 	IsEnabled = true;
 	lastfloor = 0;
@@ -163,7 +163,7 @@ bool Stairwell::IsInside(const Vector3 &position)
 	//SBS_PROFILE("Stairwell::IsInStairwell");
 
 	//if last position is the same as new, return previous result
-	if (position.positionEquals(lastposition) == true && checkfirstrun == false)
+	if (position == lastposition && checkfirstrun == false)
 		return lastcheckresult;
 
 	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
@@ -188,7 +188,7 @@ bool Stairwell::IsInside(const Vector3 &position)
 	if (!floorptr)
 		return false;
 
-	if (position.y > bottom && position.y < top)
+	/*if (position.y > bottom && position.y < top)
 	{
 		//check for hit with current floor
 		Real distance = floorptr->FullHeight();
@@ -209,7 +209,7 @@ bool Stairwell::IsInside(const Vector3 &position)
 			distance = position.y - sbs->GetFloor(startfloor)->Altitude;
 			hit = GetLevel(startfloor)->GetMeshObject()->HitBeam(position, Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
-	}
+	}*/
 	floorptr = 0;
 
 	//cache values

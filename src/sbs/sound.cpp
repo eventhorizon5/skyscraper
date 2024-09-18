@@ -183,8 +183,8 @@ void Sound::SetLoopState(bool value)
 		if (value == true)
 			channel->setLoopCount(-1);
 		else
-			channel->setLoopCount(0);*/
-	}
+			channel->setLoopCount(0);
+	}*/
 }
 
 bool Sound::GetLoopState()
@@ -226,8 +226,8 @@ bool Sound::IsPlaying()
 	if (!IsValid())
 		return false;
 
-	if (!channel)
-		return false;
+	//if (!channel)
+		//return false;
 
 	//channel->isPlaying(&result);
 	if (result == true && IsPaused() == false)

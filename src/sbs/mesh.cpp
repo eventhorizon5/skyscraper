@@ -21,14 +21,14 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreMesh.h>
+/*#include <OgreMesh.h>
 #include <OgreResourceGroupManager.h>
 #include <OgreMaterialManager.h>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreMath.h>
 #include <OgreAxisAlignedBox.h>
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
-#include <Shapes/OgreBulletCollisionsBoxShape.h>
+#include <Shapes/OgreBulletCollisionsBoxShape.h>*/
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -54,8 +54,8 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 
 	//initialize mesh object
 	enabled = true;
-	mBody = 0;
-	mShape = 0;
+	//mBody = 0;
+	//mShape = 0;
 	prepared = false;
 	is_physical = enable_physics;
 	this->restitution = restitution;
@@ -67,7 +67,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	remove_on_disable = true;
 	wrapper_selfcreate = false;
 	model_loaded = false;
-	Bounds = new Ogre::AxisAlignedBox();
+	//Bounds = new Ogre::AxisAlignedBox();
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -75,7 +75,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	else
 		tricollider = true;
 
-	Ogre::MeshPtr collidermesh;
+	//Ogre::MeshPtr collidermesh;
 
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
@@ -94,9 +94,9 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	//load mesh from a file if specified
 	if (filename != "")
 	{
-		bool result = LoadFromFile(filename, collidermesh);
+		//bool result = LoadFromFile(filename, collidermesh);
 
-		if (result == false)
+		//if (result == false)
 			return;
 	}
 
@@ -110,7 +110,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	sbs->AddMeshHandle(this);
 
 	//set up collider for model (if mesh loaded from a filename)
-	if (filename != "" && create_collider == true)
+	/*if (filename != "" && create_collider == true)
 	{
 		if (collidermesh.get())
 		{
@@ -131,7 +131,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			GetBounds();
 			CreateBoxCollider();
 		}
-	}
+	}*/
 }
 
 MeshObject::~MeshObject()
@@ -159,16 +159,16 @@ MeshObject::~MeshObject()
 		delete MeshWrapper;
 	MeshWrapper = 0;
 
-	if (Bounds)
+	/*if (Bounds)
 		delete Bounds;
-	Bounds = 0;
+	Bounds = 0;*/
 
 	delete polymesh;
 }
 
 void MeshObject::GetBounds()
 {
-	*Bounds = MeshWrapper->GetBounds(this);
+	//*Bounds = MeshWrapper->GetBounds(this);
 }
 
 void MeshObject::Enabled(bool value)
@@ -200,10 +200,10 @@ void MeshObject::EnableCollider(bool value)
 {
 	//enable or disable collision detection
 
-	if (!mBody)
+	//if (!mBody)
 		return;
 
-	SBS_PROFILE("MeshObject::EnableCollider");
+	/*SBS_PROFILE("MeshObject::EnableCollider");
 
 	if (remove_on_disable == false && sbs->camera->IsActive() == true)
 	{
@@ -222,7 +222,7 @@ void MeshObject::EnableCollider(bool value)
 		else
 			mBody->addToWorld();
 	}
-	sbs->camera->ResetCollisions();
+	sbs->camera->ResetCollisions();*/
 }
 
 Wall* MeshObject::CreateWallObject(const std::string &name)
@@ -268,7 +268,7 @@ void MeshObject::Prepare(bool force)
 		return;
 
 	//set up bounding box
-	if (model_loaded == false)
+	/*if (model_loaded == false)
 	{
 		Bounds->setNull();
 		for (size_t i = 0; i < Walls.size(); i++)
@@ -289,7 +289,7 @@ void MeshObject::Prepare(bool force)
 				}
 			}
 		}
-	}
+	}*/
 
 	//update dynamic mesh
 	MeshWrapper->NeedsUpdate(this);
@@ -311,10 +311,10 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Vector3* &vertices, 
 		return;
 
 	//exit of collider already exists
-	if (mBody)
+	//if (mBody)
 		return;
 
-	if (!GetSceneNode())
+	/*if (!GetSceneNode())
 		return;
 
 	try
@@ -343,7 +343,7 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Vector3* &vertices, 
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating model collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 void MeshObject::CreateBoxCollider()
@@ -354,7 +354,7 @@ void MeshObject::CreateBoxCollider()
 		return;
 
 	//exit of collider already exists
-	if (mBody)
+	/*if (mBody)
 		return;
 
 	if (!GetSceneNode())
@@ -386,7 +386,7 @@ void MeshObject::CreateBoxCollider()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating box collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 void MeshObject::DeleteWalls()
@@ -459,8 +459,8 @@ void MeshObject::OnMove(bool parent)
 	if (collider_node)
 		collider_node->Update();
 
-	if (mBody)
-		mBody->updateTransform(true, false, false);
+	//if (mBody)
+		//mBody->updateTransform(true, false, false);
 
 	if (UsingDynamicBuffers() == true)
 		MeshWrapper->UpdateVertices(this);
@@ -471,19 +471,19 @@ void MeshObject::OnRotate(bool parent)
 	if (collider_node)
 		collider_node->Update();
 
-	if (mBody)
+	/*if (mBody)
 	{
 		if (parent == true)
 			OnMove(parent); //update position if parent object has been rotated
 
 		mBody->updateTransform(false, true, false);
-	}
+	}*/
 
 	if (UsingDynamicBuffers() == true)
 		MeshWrapper->UpdateVertices(this);
 }
 
-bool MeshObject::IsVisible(Ogre::Camera *camera)
+/*bool MeshObject::IsVisible(Ogre::Camera *camera)
 {
 	//returns if this mesh object is visible in the provided camera's view frustum or not
 
@@ -506,7 +506,7 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
 
 	return camera->isVisible(global_box);
-}
+}*/
 
 bool MeshObject::IsPhysical()
 {
@@ -517,7 +517,7 @@ Vector3 MeshObject::GetOffset()
 {
 	//for models, return bounding box offset value, used to center the mesh
 
-	Bounds->scale(GetSceneNode()->GetRawSceneNode()->getScale());
+	/*Bounds->scale(GetSceneNode()->GetRawSceneNode()->getScale());
 
 	if (Bounds->isNull() == true)
 		return Vector3(0, 0, 0);
@@ -525,7 +525,8 @@ Vector3 MeshObject::GetOffset()
 	Vector3 vec = Bounds->getCenter();
 	Vector3 min = Bounds->getMinimum();
 	Vector3 offset (vec.x, -Bounds->getMinimum().y, -vec.z);
-	return sbs->ToLocal(offset);
+	return sbs->ToLocal(offset);*/
+	return Vector3(0, 0, 0);
 }
 
 void MeshObject::Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
@@ -560,7 +561,7 @@ void MeshObject::CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, boo
 	Cut(back_min, back_max, cutwalls, cutfloors);
 }
 
-bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh)
+/*bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh)
 {
 	//load mesh object from a file
 
@@ -649,7 +650,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 
 	model_loaded = true;
 	return true;
-}
+}*/
 
 bool MeshObject::UsingDynamicBuffers()
 {
@@ -771,9 +772,9 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 	SBS_PROFILE("MeshObject::HitBeam");
 
 	Vector3 position = sbs->ToRemote(origin - GetPosition());
-	Ray ray (position, sbs->ToRemote(direction, false));
+	//Ray ray (position, sbs->ToRemote(direction, false));
 
-	for (size_t i = 0; i < Walls.size(); i++)
+	/*for (size_t i = 0; i < Walls.size(); i++)
 	{
 		if (!Walls[i])
 			continue;
@@ -800,7 +801,7 @@ Real MeshObject::HitBeam(const Vector3 &origin, const Vector3 &direction, Real m
 				}
 			}
 		}
-	}
+	}*/
 	return -1;
 }
 
@@ -814,7 +815,7 @@ void MeshObject::CreateCollider()
 		return;
 
 	//exit if collider already exists
-	if (mBody)
+	//if (mBody)
 		return;
 
 	if (!GetSceneNode())
@@ -827,7 +828,7 @@ void MeshObject::CreateCollider()
 	unsigned int tricount = GetTriangleCount("", true);
 	unsigned int vcount = GetVertexCount();
 
-	try
+	/*try
 	{
 		//initialize collider shape
 		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vcount, tricount * 3);
@@ -913,7 +914,7 @@ void MeshObject::CreateCollider()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
-	}
+	}*/
 }
 
 void MeshObject::DeleteCollider()
@@ -923,7 +924,7 @@ void MeshObject::DeleteCollider()
 	SBS_PROFILE("MeshObject::DeleteCollider");
 
 	//exit if collider doesn't exist
-	if (!mBody)
+	/*if (!mBody)
 		return;
 
 	//remove collider from world
@@ -932,7 +933,7 @@ void MeshObject::DeleteCollider()
 	//delete collider object
 	delete mBody;
 	mBody = 0;
-	mShape = 0;
+	mShape = 0;*/
 }
 
 Vector2 MeshObject::GetExtents(int coord, bool flip_z)
@@ -946,7 +947,7 @@ Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	Real tempnum = 0;
 
 	//return 0,0 if coord value is out of range
-	if (coord < 1 || coord > 3)
+	/*if (coord < 1 || coord > 3)
 		return Vector2(0, 0);
 
 	for (size_t i = 0; i < Walls.size(); i++)
@@ -994,7 +995,7 @@ Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 				}
 			}
 		}
-	}
+	}*/
 
 	return Vector2(esmall, ebig);
 }
@@ -1026,7 +1027,7 @@ bool MeshObject::InBoundingBox(const Vector3 &pos, bool check_y)
 
 	Vector3 position = sbs->ToRemote(pos - GetPosition());
 
-	if (Bounds->isNull() == true)
+	/*if (Bounds->isNull() == true)
 		return false;
 
 	Vector3 min = Bounds->getMinimum();
@@ -1041,7 +1042,7 @@ bool MeshObject::InBoundingBox(const Vector3 &pos, bool check_y)
 			if (position.y >= min.y && position.y <= max.y)
 				return true;
 		}
-	}
+	}*/
 	return false;
 }
 
@@ -1050,7 +1051,7 @@ DynamicMesh* MeshObject::GetDynamicMesh()
 	return MeshWrapper;
 }
 
-void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
+/*void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
 {
 	//read hardware buffers from a loaded model mesh, and return geometry arrays
 
@@ -1162,7 +1163,7 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 		ibuf->unlock();
 		current_offset = next_offset;
 	}
-}
+}*/
 
 unsigned int MeshObject::GetVertexCount()
 {
