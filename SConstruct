@@ -17,7 +17,7 @@ env.Append(CPPPATH=["src/"])
 env.Append(CXXFLAGS=["-Isrc/sbs", "-Isrc/script", "-Isrc/frontend"])
 sources = Glob("src/*.cpp")
 frontend = Glob("src/frontend/*.cpp")
-scriptproc = Glob("src/scriptproc/*.cpp")
+scriptproc = Glob("src/script/*.cpp")
 sbs = Glob("src/sbs/*.cpp")
 
 env.ParseConfig('/opt/wx/bin/wx-config --cxxflags --libs')
