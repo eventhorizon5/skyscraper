@@ -24,6 +24,8 @@
 #define VM_H
 
 #include <godot_cpp/classes/node3d.hpp>
+#include "globals.h"
+#include "skyscraper.h"
 
 namespace godot {
 
@@ -32,6 +34,7 @@ class VM : public Node3D {
 
 private:
 	double time_passed;
+	::Skyscraper::Skyscraper *frontend;
 
 protected:
 	static void _bind_methods();

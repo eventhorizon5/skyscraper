@@ -21,7 +21,6 @@
 */
 
 #include "vm.h"
-#include <godot_cpp/core/class_db.hpp>
 
 using namespace godot;
 
@@ -32,10 +31,14 @@ void VM::_bind_methods()
 VM::VM()
 {
 	time_passed = 0.0;
+
+	frontend = new Skyscraper::Skyscraper();
+	frontend->OnInit();
 }
 
 VM::~VM()
 {
+	delete frontend;
 }
 
 void VM::_process(double delta)

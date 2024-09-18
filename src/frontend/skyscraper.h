@@ -86,6 +86,8 @@ public:
 	int macos_major; //macos major version
 	int macos_minor; //macos minor version
 
+	Skyscraper();
+	~Skyscraper();
 	bool Loop();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);

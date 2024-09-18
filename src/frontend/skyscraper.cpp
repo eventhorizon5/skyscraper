@@ -160,6 +160,16 @@ int main (int argc, char* argv[])
 
 namespace Skyscraper {
 
+Skyscraper::Skyscraper()
+{
+
+}
+
+Skyscraper::~Skyscraper()
+{
+
+}
+
 bool Skyscraper::OnInit(void)
 {
 	version = "3.0";
