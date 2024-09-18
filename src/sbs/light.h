@@ -46,7 +46,7 @@ public:
 
 private:
 
-	Ogre::Light* light;
+	//Ogre::Light* light;
 };
 
 }

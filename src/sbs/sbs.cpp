@@ -56,7 +56,7 @@ namespace SBS {
 SBS::SBS(int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
-	this->mSceneManager = mSceneManager;
+	//this->mSceneManager = mSceneManager;
 
 	version = "1.1.0." + ToString(GIT_REV);
 	version_state = "Alpha";
@@ -137,7 +137,7 @@ SBS::SBS(int instance_number, const Vector3 &position, Real rotation, const Vect
 	current_virtual_time = 0;
 	elapsed_time = 0;
 	average_time = 0;
-	timer = new Ogre::Timer();
+	//timer = new Ogre::Timer();
 	AmbientR = 1;
 	AmbientG = 1;
 	AmbientB = 1;
@@ -167,7 +167,7 @@ SBS::SBS(int instance_number, const Vector3 &position, Real rotation, const Vect
 	Buildings = 0;
 	External = 0;
 	Landscape = 0;
-	mWorld = 0;
+	//mWorld = 0;
 	soundsystem = 0;
 	area_trigger = 0;
 	texturemanager = 0;
@@ -191,8 +191,8 @@ SBS::SBS(int instance_number, const Vector3 &position, Real rotation, const Vect
 	SetBounds(area_min, area_max);
 
 	//create sound system object if sound is enabled
-	if (fmodsystem)
-		soundsystem = new SoundSystem(this, fmodsystem);
+	//if (fmodsystem)
+		//soundsystem = new SoundSystem(this, fmodsystem);
 }
 
 void SBS::Initialize()
@@ -436,13 +436,13 @@ SBS::~SBS()
 	area_trigger = 0;
 
 	//delete physics objects
-	if (mWorld)
+	/*if (mWorld)
 	{
 		//delete mWorld->getDebugDrawer();
 		//mWorld->setDebugDrawer(0);
 		delete mWorld;
 	}
-	mWorld = 0;
+	mWorld = 0;*/
 
 	ObjectArray.clear();
 	verify_results.clear();
@@ -451,9 +451,9 @@ SBS::~SBS()
 		delete utility;
 	utility = 0;
 
-	if (timer)
+	/*if (timer)
 		delete timer;
-	timer = 0;
+	timer = 0;*/
 
 	//if (configfile)
 		//delete configfile;
@@ -465,7 +465,7 @@ SBS::~SBS()
 	sbs = 0;
 }
 
-bool SBS::Start(Ogre::Camera *camera)
+bool SBS::Start(/*Ogre::Camera *camera*/)
 {
 	//Post-init startup code goes here, before the runloop
 
@@ -1441,12 +1441,12 @@ void SBS::CreateSky()
 
 	//load textures
 	SetLighting();
-	texturemanager->LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
+	/*texturemanager->LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
 	texturemanager->LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
 	texturemanager->LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
 	texturemanager->LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
 	texturemanager->LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);*/
 	ResetLighting();
 
 	SkyBox = new MeshObject(this, "SkyBox");
@@ -2098,14 +2098,14 @@ bool SBS::Mount(const std::string &filename, const std::string &path)
 	std::string file = VerifyFile(newfile);
 
 	Report("Mounting " + file + " as path " + path);
-	try
+	/*try
 	{
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(file, "Zip", path, true);
 	}
 	catch (Ogre::Exception &e)
 	{
 		return ReportError("Error mounting file " + file + "\n" + e.getDescription());
-	}
+	}*/
 	return true;
 }
 
@@ -2755,7 +2755,7 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 	//returns the original string if not found
 	//"result" will return if the file exists or not, but only accurately if skip_cache is true
 
-	TrimString(filename);
+/*	TrimString(filename);
 	ReplaceAll(filename, "\\", "/");
 	result = false;
 
@@ -2835,7 +2835,7 @@ std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 	}
 
 	//if no match is found, cache original name and exit
-	CacheFilename(filename, filename);
+	CacheFilename(filename, filename);*/
 	return filename;
 }
 
@@ -2844,7 +2844,7 @@ std::string SBS::GetFilesystemPath(std::string filename)
 	//returns the filesystem path for the specified file
 	//the filename needs to be processed by VerifyFile first
 
-	TrimString(filename);
+/*	TrimString(filename);
 	ReplaceAll(filename, "\\", "/");
 
 	//get filesystem archive
@@ -2874,7 +2874,7 @@ std::string SBS::GetFilesystemPath(std::string filename)
 				return std::string(path + filename);
 			}
 		}
-	}
+	}*/
 
 	return "";
 }
@@ -2910,7 +2910,7 @@ void SBS::Prepare(bool report)
 		Report("Preparing meshes...");
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
-		meshes[i]->Prepare();
+		//meshes[i]->Prepare();
 	}
 
 	//process dynamic meshes
@@ -2920,17 +2920,17 @@ void SBS::Prepare(bool report)
 	{
 		if (sbs->Verbose)
 			Report("DynamicMesh " + ToString((int)i) + " of " + ToString((int)dynamic_meshes.size()));
-		dynamic_meshes[i]->Prepare();
+		//dynamic_meshes[i]->Prepare();
 	}
 
 	if (report == true)
 		Report("Creating colliders...");
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
-		if (meshes[i]->tricollider == true)
-			meshes[i]->CreateCollider();
-		else
-			meshes[i]->CreateBoxCollider();
+		//if (meshes[i]->tricollider == true)
+			//meshes[i]->CreateCollider();
+		//else
+			//meshes[i]->CreateBoxCollider();
 	}
 
 	if (report == true)
@@ -3005,25 +3005,29 @@ void SBS::AddModel(Model *model)
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
 {
-	std::string result = configfile->getSetting(key, "", ToString(default_value));
-	return ToInt(result);
+	//std::string result = configfile->getSetting(key, "", ToString(default_value));
+	//return ToInt(result);
+	return 0;
 }
 
 std::string SBS::GetConfigString(const std::string &key, const std::string &default_value)
 {
-	return configfile->getSetting(key, "", default_value);
+	//return configfile->getSetting(key, "", default_value);
+	return "";
 }
 
 bool SBS::GetConfigBool(const std::string &key, bool default_value)
 {
-	std::string result = configfile->getSetting(key, "", ToString(default_value));
-	return ToBool(result);
+	//std::string result = configfile->getSetting(key, "", ToString(default_value));
+	//return ToBool(result);
+	return false;
 }
 
 Real SBS::GetConfigFloat(const std::string &key, Real default_value)
 {
-	std::string result = configfile->getSetting(key, "", ToString(default_value));
-	return ToFloat(result);
+	//std::string result = configfile->getSetting(key, "", ToString(default_value));
+	//return ToFloat(result);
+	return 0.0;
 }
 
 bool SBS::InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test)
@@ -3058,7 +3062,8 @@ void SBS::AdvanceClock()
 unsigned long SBS::GetCurrentTime()
 {
 	//get current time
-	return timer->getMilliseconds();
+	//return timer->getMilliseconds();
+	return 0;
 }
 
 unsigned long SBS::GetRunTime()
@@ -3111,7 +3116,7 @@ std::string SBS::GetMountPath(std::string filename, std::string &newfilename)
 	//get mountpoint (resource group) path of given file
 	//if not found, return "General"
 
-	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
+	/*Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
 	ReplaceAll(filename, "\\", "/");
 	newfilename = filename;
 
@@ -3122,13 +3127,13 @@ std::string SBS::GetMountPath(std::string filename, std::string &newfilename)
 			newfilename = filename.substr(list[i].size() + 1);
 			return list[i];
 		}
-	}
+	}*/
 	return "General";
 }
 
 void SBS::ShowColliders(bool value)
 {
-	try
+	/*try
 	{
 		if (mWorld)
 			mWorld->setShowDebugShapes(value);
@@ -3137,7 +3142,7 @@ void SBS::ShowColliders(bool value)
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error enabling/disabling collider shapes\n" + e.getDescription());
-	}
+	}*/
 }
 
 void SBS::CacheFilename(const std::string &filename, const std::string &result)
@@ -3591,21 +3596,21 @@ void SBS::ShowSceneNodes(bool value)
 {
 	//show all scene nodes for debugging
 
-	mSceneManager->setDisplaySceneNodes(value);
+	//mSceneManager->setDisplaySceneNodes(value);
 }
 
 void SBS::ShowBoundingBoxes(bool value)
 {
 	//show all mesh bounding boxes for debugging
 
-	mSceneManager->showBoundingBoxes(value);
+	//mSceneManager->showBoundingBoxes(value);
 }
 
 void SBS::ListVisibleMeshes()
 {
 	//list all meshes visible by the main camera
 
-	Report("\n--- Visible Dynamic Meshes ---");
+	/*Report("\n--- Visible Dynamic Meshes ---");
 	Report("Name\t-\tSubmeshes\n");
 	int count = 0;
 	int submeshes = 0;
@@ -3625,7 +3630,7 @@ void SBS::ListVisibleMeshes()
 		}
 	}
 	Report("Total: " + ToString(count) + " meshes, " + ToString(total) + " submeshes");
-	Report("");
+	Report("");*/
 }
 
 int SBS::GetEscalatorCount()
@@ -3660,7 +3665,7 @@ void SBS::DecrementMovingWalkwayCount()
 	MovingWalkwayCount--;
 }
 
-bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
+/*bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
@@ -3706,7 +3711,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	wall = mesh->GetPolyMesh()->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
-}
+}*/
 
 void SBS::EnableRandomActivity(bool value)
 {
@@ -3849,10 +3854,10 @@ void SBS::RemovePerson(Person *person)
 	}
 }
 
-bool SBS::AttachCamera(Ogre::Camera *camera, bool init_state)
+bool SBS::AttachCamera(/*Ogre::Camera *camera, */bool init_state)
 {
-	if (camera)
-		return this->camera->Attach(camera, init_state);
+	//if (camera)
+		//return this->camera->Attach(camera, init_state);
 	return false;
 }
 
@@ -3922,8 +3927,8 @@ bool SBS::GetBounds(Vector3 &min, Vector3 &max)
 		return true;
 	}
 
-	min = Vector3::ZERO;
-	max = Vector3::ZERO;
+	min.zero();
+	max.zero();
 	return false;
 }
 
@@ -3978,7 +3983,7 @@ void SBS::SetBounds(const Vector3 &area_min, const Vector3 &area_max)
 	if (InstanceNumber == 0)
 		return;
 
-	if (area_min != Vector3::ZERO && area_max != Vector3::ZERO && !area_trigger)
+	if (area_min != Vector3(0, 0, 0) && area_max != Vector3(0, 0, 0) && !area_trigger)
 	{
 		std::vector<std::string> names;
 		names.push_back("Off");
@@ -4010,14 +4015,14 @@ Vector3 SBS::ToGlobal(const Vector3 &position)
 {
 	//convert an engine-relative position to a global (scene) position
 
-	return (GetOrientation().Inverse() * position) + GetPosition();
+	return (GetOrientation().inverse().xform(position)) + GetPosition();
 }
 
 Vector3 SBS::FromGlobal(const Vector3 &position)
 {
 	//convert a global (scene) position to an engine-relative position
 
-	return (GetOrientation() * (position - GetPosition()));
+	return (GetOrientation().xform((position - GetPosition())));
 }
 
 Quaternion SBS::ToGlobal(const Quaternion &orientation)
@@ -4031,7 +4036,7 @@ Quaternion SBS::FromGlobal(const Quaternion &orientation)
 {
 	//convert a global (scene) orientation (rotation) to an engine-relative orientation
 
-	return (GetOrientation().Inverse() * orientation);
+	return (GetOrientation().inverse() * orientation);
 }
 
 Model* SBS::GetModel(std::string name)

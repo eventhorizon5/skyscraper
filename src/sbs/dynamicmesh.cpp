@@ -190,7 +190,7 @@ bool DynamicMesh::IsVisible(MeshObject *client)
 	return false;
 }
 
-bool DynamicMesh::IsVisible(Ogre::Camera *camera, MeshObject *client)
+/*(bool DynamicMesh::IsVisible(Ogre::Camera *camera, MeshObject *client)
 {
 	if (meshes.empty() == true)
 		return false;
@@ -205,9 +205,9 @@ bool DynamicMesh::IsVisible(Ogre::Camera *camera, MeshObject *client)
 			return IsVisible(camera, index);
 	}
 	return false;
-}
+}*/
 
-bool DynamicMesh::IsVisible(Ogre::Camera *camera, int mesh_index)
+/*bool DynamicMesh::IsVisible(Ogre::Camera *camera, int mesh_index)
 {
 	if (meshes.empty() == true)
 		return false;
@@ -216,7 +216,7 @@ bool DynamicMesh::IsVisible(Ogre::Camera *camera, int mesh_index)
 		return false;
 
 	return meshes[mesh_index]->IsVisible(camera);
-}
+}*/
 
 void DynamicMesh::Prepare(MeshObject *client)
 {

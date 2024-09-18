@@ -24,9 +24,9 @@
 #ifndef _SBS_TEXTURE_H
 #define _SBS_TEXTURE_H
 
-#include <OgreOverlayPrerequisites.h>
-#include <OgreColourValue.h>
-#include <OgreFont.h>
+//#include <OgreOverlayPrerequisites.h>
+//#include <OgreColourValue.h>
+//#include <OgreFont.h>
 
 namespace SBS {
 
@@ -41,9 +41,9 @@ public:
 
 	TextureManager(Object *parent);
 	~TextureManager();
-	bool LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
-	bool LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
-	bool LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	//bool LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	//bool LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	//bool LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	bool LoadMaterial(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false);
 	bool UnloadTexture(const std::string &name, const std::string &group);
 	bool UnloadMaterial(const std::string &name, const std::string &group);
@@ -74,8 +74,8 @@ public:
 	void SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool FlipZ, bool rotate);
 	void GetPlanarMapping(bool &flat, bool &FlipX, bool &FlipY, bool &FlipZ, bool &rotate);
 	Vector2 CalculateSizing(const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, int direction, Real tw, Real th);
-	Ogre::TexturePtr loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, Real threshold = 0.003);
-	void SaveTexture(Ogre::TexturePtr texture, const std::string &filename);
+	//Ogre::TexturePtr loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, Real threshold = 0.003);
+	//void SaveTexture(Ogre::TexturePtr texture, const std::string &filename);
 	std::string ListTextures(bool show_filename = false);
 	void IncrementTextureCount();
 	void DecrementTextureCount();
@@ -83,15 +83,15 @@ public:
 	void DecrementMaterialCount();
 	void RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode);
 	bool UnregisterTextureInfo(std::string name, std::string material_name = "");
-	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
-	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = "General");
-	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
-	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
-	std::string GetTextureName(Ogre::MaterialPtr mMat);
-	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = "General");
+	//Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
+	//Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = "General");
+	//Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
+	//Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
+	//std::string GetTextureName(Ogre::MaterialPtr mMat);
+	//Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = "General");
 	std::string GetTextureMaterial(const std::string &name, bool &result, bool report = true, const std::string &polygon_name = "");
-	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination);
-	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
+	//void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination);
+	//void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
 	void FreeTextureBoxes();
 	void SetPlanarRotate(bool value);
 	bool GetPlanarRotate();
@@ -148,13 +148,13 @@ private:
 	int DefaultMapper; //default texture mapper
 
 	void BackupMapping();
-	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
-	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	//bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
+	//Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	void UnloadMaterials();
 	bool ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2);
 
 	std::vector<TextureInfo> textureinfo;
-	std::vector<Ogre::TexturePtr> manual_textures;
+	//std::vector<Ogre::TexturePtr> manual_textures;
 
 	//textures/materials count
 	int texturecount;
@@ -162,8 +162,8 @@ private:
 
 	struct TexturePixelBox
 	{
-		Ogre::FontPtr font;
-		Ogre::PixelBox *box;
+		//Ogre::FontPtr font;
+		//Ogre::PixelBox *box;
 		unsigned char *buffer;
 	};
 	std::vector<TexturePixelBox> textureboxes;

@@ -51,7 +51,7 @@ public:
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	bool IsEnabled() { return is_enabled; }
-	Ogre::AxisAlignedBox GetBounds(bool relative = false);
+	//Ogre::AxisAlignedBox GetBounds(bool relative = false);
 	Vector3 GetMin();
 	Vector3 GetMax();
 	bool IsOutside(Vector3 v1, Vector3 v2);
@@ -59,7 +59,7 @@ public:
 	virtual void OnExit() {}
 
 private:
-	Ogre::AxisAlignedBox *area_box;
+	//Ogre::AxisAlignedBox *area_box;
 	int current_position; //current trigger position
 	bool is_inside;
 	bool is_enabled;

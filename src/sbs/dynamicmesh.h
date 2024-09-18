@@ -38,8 +38,8 @@ public:
 	bool ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
 	void EnableDebugView(bool value, MeshObject *client = 0);
 	bool IsVisible(MeshObject *client = 0);
-	bool IsVisible(Ogre::Camera *camera, MeshObject *client = 0);
-	bool IsVisible(Ogre::Camera *camera, int mesh_index);
+	//bool IsVisible(Ogre::Camera *camera, MeshObject *client = 0);
+	//bool IsVisible(Ogre::Camera *camera, int mesh_index);
 	void Prepare(MeshObject *client = 0);
 	bool LoadFromFile(const std::string &filename, const std::string &path);
 	void AddClient(MeshObject *mesh);
@@ -59,7 +59,7 @@ public:
 	int GetMeshCount() { return (int)meshes.size(); }
 	int GetSubMeshCount(int mesh_index);
 	std::string GetMeshName(int mesh_index);
-	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
+	//Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
 	void EnableShadows(bool value);
 
 private:
@@ -79,7 +79,7 @@ private:
 		void Prepare(bool process_vertices = true, int client = -1);
 		void EnableDebugView(bool value);
 		bool IsVisible();
-		bool IsVisible(Ogre::Camera *camera);
+		//bool IsVisible(Ogre::Camera *camera);
 		int GetSubMeshCount();
 		void UpdateVertices(int client, const std::string &material, Polygon *polygon = 0, bool single = false);
 		void Detach();
@@ -90,22 +90,22 @@ private:
 		{
 			unsigned int vertex_offset;
 			unsigned int vertex_count;
-			Ogre::AxisAlignedBox* bounds;
+			//Ogre::AxisAlignedBox* bounds;
 			Real radius;
 		};
 
 		struct Submesh
 		{
-			Ogre::SubMesh* object;
+			//Ogre::SubMesh* object;
 			int clients;
 			std::string material;
 		};
 
 		std::string name;
-		Ogre::MeshPtr MeshWrapper; //mesh
+		//Ogre::MeshPtr MeshWrapper; //mesh
 		std::vector<Submesh> Submeshes; //submeshes (per-material mesh)
 		std::vector<ClientEntry> client_entries; //per-client information
-		Ogre::Entity *Movable;
+		//Ogre::Entity *Movable;
 		SceneNode *node;
 		DynamicMesh *Parent;
 		::SBS::SBS *sbs;

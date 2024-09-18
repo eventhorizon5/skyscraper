@@ -56,11 +56,11 @@ typedef double Real;
 typedef godot::Vector3 Vector3;
 typedef godot::Vector2 Vector2;
 typedef godot::Quaternion Quaternion;
+typedef godot::Transform3D Matrix3;
+typedef godot::Plane Plane;
 //typedef Ogre::Degree Degree;
 //typedef Ogre::Radian Radian;
 //typedef Ogre::Ray Ray;
-//typedef Ogre::Matrix3 Matrix3;
-//typedef Ogre::Plane Plane;
 
 namespace SBS {
 

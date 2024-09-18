@@ -127,8 +127,8 @@ public:
 	Real delta;
 
 	//OGRE objects
-	Ogre::Root* mRoot;
-	Ogre::SceneManager* mSceneManager;
+	//Ogre::Root* mRoot;
+	//Ogre::SceneManager* mSceneManager;
 
 	//SBS version
 	std::string version;
@@ -143,8 +143,8 @@ public:
 	std::string BuildingVersion;
 
 	//physics objects
-	OgreBulletDynamics::DynamicsWorld *mWorld;
-	OgreBulletCollisions::DebugDrawer *debugDrawer;
+	//OgreBulletDynamics::DynamicsWorld *mWorld;
+	//OgreBulletCollisions::DebugDrawer *debugDrawer;
 
 	//Internal data
 	bool IsRunning; //is sim engine running?
@@ -192,10 +192,10 @@ public:
 	bool Headless; //true if running in headless mode
 
 	//public functions
-	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	SBS(int instance_number, const Vector3 &position = Vector3(0, 0, 0), Real rotation = 0.0f, const Vector3 &area_min = Vector3(0, 0, 0), const Vector3 &area_max = Vector3(0, 0, 0));
 	~SBS();
 	void Initialize();
-	bool Start(Ogre::Camera *camera = 0);
+	bool Start(/*Ogre::Camera *camera = 0*/);
 	void CreateSky();
 	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
 	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false);
@@ -340,7 +340,7 @@ public:
 	int GetMovingWalkwayCount();
 	void IncrementMovingWalkwayCount();
 	void DecrementMovingWalkwayCount();
-	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
+	//bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem();
 	bool IsObjectValid(Object* object, std::string type = "");
@@ -348,7 +348,7 @@ public:
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	Person* CreatePerson(std::string name = "", int floor = 0, bool service_access = false);
 	void RemovePerson(Person *person);
-	bool AttachCamera(Ogre::Camera *camera, bool init_state = true);
+	bool AttachCamera(/*Ogre::Camera *camera, */bool init_state = true);
 	bool DetachCamera();
 	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
 	int GetPersonCount();
@@ -506,10 +506,10 @@ private:
 	unsigned long elapsed_time;
 	unsigned long average_time;
 	std::deque<unsigned long> frame_times;
-	Ogre::Timer *timer;
+	//Ogre::Timer *timer;
 
 	//config file
-	Ogre::ConfigFile *configfile;
+	//Ogre::ConfigFile *configfile;
 
 	struct VerifyResult
 	{
@@ -531,7 +531,7 @@ private:
 	std::vector<Control*> control_index;
 
 	//file listing cache
-	Ogre::StringVectorPtr filesystem_listing;
+	//Ogre::StringVectorPtr filesystem_listing;
 
 	//sim engine area trigger
 	Trigger *area_trigger;

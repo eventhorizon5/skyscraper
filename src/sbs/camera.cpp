@@ -1297,7 +1297,7 @@ void Camera::Refresh()
 		mCharacter->resetLastCollision();
 }
 
-bool Camera::Attach(Ogre::Camera *camera, bool init_state)
+bool Camera::Attach(/*Ogre::Camera *camera, */bool init_state)
 {
 	if (camera->isAttached() == true)
 		return false;

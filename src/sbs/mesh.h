@@ -65,7 +65,7 @@ public:
 	Vector3 GetWallExtents(const std::string &name, Real altitude, bool get_max);
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
-	bool IsVisible(Ogre::Camera *camera);
+	//bool IsVisible(Ogre::Camera *camera);
 	bool IsPhysical();
 	Vector3 GetOffset();
 	void Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
@@ -87,7 +87,7 @@ public:
 	Wall* FindPolygon(const std::string &name, int &index);
 	bool InBoundingBox(const Vector3 &pos, bool check_y);
 	DynamicMesh* GetDynamicMesh();
-	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
+	//void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
 	unsigned int GetVertexCount();
 	unsigned int GetTriangleCount(const std::string &material, bool total);
 
@@ -95,10 +95,10 @@ public:
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
 
 	SceneNode *collider_node; //collider scenenode for box collider offsets
-	Ogre::AxisAlignedBox *Bounds; //mesh bounds
+	//Ogre::AxisAlignedBox *Bounds; //mesh bounds
 
-	OgreBulletDynamics::RigidBody* mBody;
-	OgreBulletCollisions::CollisionShape* mShape;
+	//OgreBulletDynamics::RigidBody* mBody;
+	//OgreBulletCollisions::CollisionShape* mShape;
 
 	std::string Filename; //filename, if a loaded model
 	bool model_loaded; //true if a model was loaded successfully
@@ -109,7 +109,7 @@ private:
 	Real restitution, friction, mass;
 	bool prepared;
 	bool wrapper_selfcreate;
-	bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
+	//bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
 
 	PolyMesh *polymesh;
 };

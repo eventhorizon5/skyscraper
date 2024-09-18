@@ -167,9 +167,9 @@ public:
 	bool IsModelAttached();
 	void ResetState();
 	void ResetView();
-	bool IsActive() { return (MainCamera != 0); }
+	bool IsActive() { return /*(MainCamera != 0);*/ true; }
 	void Refresh();
-	bool Attach(Ogre::Camera *camera, bool init_state = true);
+	bool Attach(/*Ogre::Camera *camera, */bool init_state = true);
 	bool Detach();
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
@@ -186,7 +186,7 @@ public:
 	void AttachToVehicle(bool value);
 
 private:
-	Ogre::Camera* MainCamera; //main first-person view camera
+	//Ogre::Camera* MainCamera; //main first-person view camera
 	Vector3 StartDirection; //direction camera faces on start
 	Vector3 StartRotation; //camera's startup rotation
 	std::string meshname; //last clicked mesh name
@@ -217,8 +217,8 @@ private:
 	Model*	AttachedModel;
 
 	//collision/physics
-	OgreBulletDynamics::CharacterController* mCharacter;
-	OgreBulletCollisions::CollisionShape* mShape;
+	//OgreBulletDynamics::CharacterController* mCharacter;
+	//OgreBulletCollisions::CollisionShape* mShape;
 
 	//used for restoring values when exiting vehicle
 	Quaternion old_camera_orientation;

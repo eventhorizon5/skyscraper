@@ -70,8 +70,8 @@ TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 	{
 		MapIndex[i] = 0;
 		OldMapIndex[i] = 0;
-		OldMapUV[i] = Vector2::ZERO;
-		MapUV[i] = Vector2::ZERO;
+		OldMapUV[i].zero();
+		MapUV[i].zero();
 	}
 	DefaultMapper = sbs->GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	texturecount = 0;
@@ -93,9 +93,9 @@ TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 	//load default textures
 	Report("Loading default textures...");
 	sbs->SetLighting();
-	LoadTexture("data/default.png", "Default", 1, 1);
-	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
-	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
+	//LoadTexture("data/default.png", "Default", 1, 1);
+	//LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	//LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	sbs->ResetLighting();
 	Report("Done");
 }
@@ -110,17 +110,17 @@ TextureManager::~TextureManager()
 		FreeTextureBoxes();
 
 	//remove manually-created textures
-	for (size_t i = 0; i < manual_textures.size(); i++)
+	/*for (size_t i = 0; i < manual_textures.size(); i++)
 	{
 		if (manual_textures[i])
 		{
 			Ogre::TextureManager::getSingleton().remove(manual_textures[i]->getHandle());
 		}
 	}
-	manual_textures.clear();
+	manual_textures.clear();*/
 }
 
-bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+/*bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	if (sbs->Headless == true)
 		return true;
@@ -155,9 +155,9 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
-}
+}*/
 
-bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+/*bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	if (sbs->Headless == true)
 		return true;
@@ -219,9 +219,9 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 		Report("Loaded animated texture " + matname);
 
 	return true;
-}
+}*/
 
-bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+/*bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	if (sbs->Headless == true)
 		return true;
@@ -281,11 +281,11 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 		Report("Loaded alpha blended texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
-}
+}*/
 
 bool TextureManager::LoadMaterial(const std::string &materialname, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode)
 {
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	//set verbosity level
@@ -304,7 +304,7 @@ bool TextureManager::LoadMaterial(const std::string &materialname, const std::st
 	RegisterTextureInfo(name, materialname, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		Report("Loaded material " + matname);
+		Report("Loaded material " + matname);*/
 
 	return true;
 }
@@ -352,13 +352,13 @@ bool TextureManager::UnloadTexture(const std::string &name, const std::string &g
 {
 	//unloads a texture
 
-	Ogre::ResourcePtr wrapper = GetTextureByName(name, group);
+	/*Ogre::ResourcePtr wrapper = GetTextureByName(name, group);
 	if (!wrapper)
 		return false;
 	Ogre::TextureManager::getSingleton().remove(wrapper);
 	DecrementTextureCount();
 
-	Report("Unloaded texture " + name);
+	Report("Unloaded texture " + name);*/
 
 	return true;
 }
@@ -367,13 +367,13 @@ bool TextureManager::UnloadMaterial(const std::string &name, const std::string &
 {
 	//unloads a material
 
-	Ogre::ResourcePtr wrapper = GetMaterialByName(name, group);
+	/*Ogre::ResourcePtr wrapper = GetMaterialByName(name, group);
 	if (!wrapper)
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(wrapper);
 	DecrementMaterialCount();
 
-	Report("Unloaded material " + name);
+	Report("Unloaded material " + name);*/
 
 	return true;
 }
@@ -382,7 +382,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 {
 	//loads only a portion of the specified texture
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	Ogre::ColourValue alpha_color = Ogre::ColourValue::Black;
@@ -449,7 +449,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 		Report("Loaded cropped texture '" + filename2 + "' as '" + name + "', size " + ToString((int)new_texture->getSize()));
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);*/
 
 	return true;
 }
@@ -458,7 +458,7 @@ bool TextureManager::RotateTexture(const std::string &name, Real angle)
 {
 	//set a fixed rotation value for a texture
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	bool result;
@@ -481,7 +481,7 @@ bool TextureManager::RotateTexture(const std::string &name, Real angle)
 	if (state)
 		state->setTextureRotate(Degree(-angle));
 	else
-		return false;
+		return false;*/
 
 	return true;
 }
@@ -490,7 +490,7 @@ bool TextureManager::RotateAnimTexture(const std::string &name, Real speed)
 {
 	//set a rotation animation for a texture - speed is in revolutions per second
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	bool result;
@@ -513,7 +513,7 @@ bool TextureManager::RotateAnimTexture(const std::string &name, Real speed)
 	if (state)
 		state->setRotateAnimation(speed);
 	else
-		return false;
+		return false;*/
 
 	return true;
 }
@@ -522,7 +522,7 @@ bool TextureManager::ScrollTexture(const std::string &name, Real x_offset, Real 
 {
 	//set a fixed scroll amount for a texture
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	bool result;
@@ -545,7 +545,7 @@ bool TextureManager::ScrollTexture(const std::string &name, Real x_offset, Real 
 	if (state)
 		state->setTextureScroll(-x_offset, y_offset); //invert x value
 	else
-		return false;
+		return false;*/
 
 	return true;
 }
@@ -554,7 +554,7 @@ bool TextureManager::ScrollAnimTexture(const std::string &name, Real x_speed, Re
 {
 	//set a scroll animation for a texture - speed is in revolutions per second
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	bool result;
@@ -577,7 +577,7 @@ bool TextureManager::ScrollAnimTexture(const std::string &name, Real x_speed, Re
 	if (state)
 		state->setScrollAnimation(x_speed, -y_speed);
 	else
-		return false;
+		return false;*/
 
 	return true;
 }
@@ -586,7 +586,7 @@ bool TextureManager::ScaleTexture(const std::string &name, Real x_scale, Real y_
 {
 	//set a fixed scale amount for a texture
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	bool result;
@@ -609,7 +609,7 @@ bool TextureManager::ScaleTexture(const std::string &name, Real x_scale, Real y_
 	if (state)
 		state->setTextureScale(x_scale, y_scale);
 	else
-		return false;
+		return false;*/
 
 	return true;
 }
@@ -618,7 +618,7 @@ bool TextureManager::TransformTexture(const std::string &name, const std::string
 {
 	//set a transformation type for a texture
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	bool result;
@@ -678,7 +678,7 @@ bool TextureManager::TransformTexture(const std::string &name, const std::string
 		state->setTransformAnimation(type, wavetype, base, frequency, phase, amplitude);
 	}
 	else
-		return false;
+		return false;*/
 
 	return true;
 }
@@ -693,7 +693,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	std::string hAlign = h_align;
@@ -838,7 +838,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	if (sbs->Verbose)
 		Report("AddTextToTexture: created texture '" + Name + "'");
 
-	sbs->CacheFilename(Name, Name);
+	sbs->CacheFilename(Name, Name);*/
 	return true;
 }
 
@@ -847,7 +847,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	std::string Name = name;
@@ -932,7 +932,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 		Report("AddTextureOverlay: created texture '" + Name + "'");
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);*/
 
 	return true;
 }
@@ -945,7 +945,7 @@ std::string TextureManager::GetTextureMaterial(const std::string &name, bool &re
 	//use material_name value instead of name, if loaded as a material script instead of a direct texture
 	//if report is true and texture is not found, issue warning
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return "";
 
 	std::string matname = name;
@@ -990,7 +990,8 @@ std::string TextureManager::GetTextureMaterial(const std::string &name, bool &re
 		result = true;
 
 	prev_material = matname;
-	return matname;
+	return matname;*/
+	return "";
 }
 
 void TextureManager::ProcessTextureFlip(Real tw, Real th)
@@ -1133,8 +1134,8 @@ Vector2 TextureManager::CalculateSizing(const std::string &texture, const Vector
 	bool force_enable = false, force_mode = false;
 	GetTextureForce(texture, force_enable, force_mode);
 
-	Real width = v1.distance(v2);
-	Real height = v2.distance(v3);
+	Real width = v1.distance_to(v2);
+	Real height = v2.distance_to(v3);
 
 	tw2 = AutoSize(0, width, true, tw, force_enable, force_mode);
 	th2 = AutoSize(0, height, false, th, force_enable, force_mode);
@@ -1727,7 +1728,7 @@ void TextureManager::DecrementTextureUsage(const std::string &name)
  @return
      Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename)
  */
-Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, Real threshold)
+/*Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, Real threshold)
 {
 	using namespace Ogre;
 	using std::fabs;
@@ -1841,14 +1842,14 @@ Ogre::TexturePtr TextureManager::loadChromaKeyedTexture(const std::string& filen
 	Ogre::TexturePtr mTex = Ogre::TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
 	IncrementTextureCount();
 	return mTex;
-}
+}*/
 
 bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
 {
 	//justify is left 'l' by default - set to 'r' or 'c' for right or center
 	//vert_justify is top 't' by default - set to 'c' or 'b' for center or bottom
 
-	if (sbs->Headless == true)
+	/*if (sbs->Headless == true)
 		return true;
 
 	using namespace Ogre;
@@ -1976,11 +1977,11 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 			default:
 			{
 				//wrapping
-				/*if ((cursorX + GlyphTexCoords[strindex].getWidth() > lineend) && !carriagereturn)
-				{
-					cursorY += charheight;
-					carriagereturn = true;
-				}*/
+				//if ((cursorX + GlyphTexCoords[strindex].getWidth() > lineend) && !carriagereturn)
+				//{
+					//cursorY += charheight;
+					//carriagereturn = true;
+				//}
 
 				//justify
 				if (carriagereturn)
@@ -2093,7 +2094,7 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 	stop:
 	delete[] GlyphTexCoords;
 
-	destBuffer->unlock();
+	destBuffer->unlock();*/
 	return true;
 }
 
@@ -2126,7 +2127,7 @@ void TextureManager::DecrementMaterialCount()
 	materialcount--;
 }
 
-Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color, Ogre::ColourValue alpha_color)
+/*Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//set verbosity level
 	Ogre::TextureManager::getSingleton().setVerbose(sbs->Verbose);
@@ -2204,9 +2205,9 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 	}
 
 	return mTex;
-}
+}*/
 
-Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const std::string &path)
+/*Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const std::string &path)
 {
 	//unload material if already loaded
 	if (UnloadMaterial(name, path) == true)
@@ -2233,13 +2234,13 @@ Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const 
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	return mMat;
-}
+}*/
 
 void TextureManager::EnableLighting(const std::string &material_name, bool value)
 {
 	//enable or disable lighting on a material
 
-	Ogre::MaterialPtr mat = GetMaterialByName(material_name);
+	/*Ogre::MaterialPtr mat = GetMaterialByName(material_name);
 
 	if (mat)
 	{
@@ -2249,10 +2250,10 @@ void TextureManager::EnableLighting(const std::string &material_name, bool value
 			mat->setLightingEnabled(value);
 			mat->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
 		}
-	}
+	}*/
 }
 
-Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, const std::string &group)
+/*Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, const std::string &group)
 {
 	Ogre::MaterialPtr ptr;
 
@@ -2261,9 +2262,9 @@ Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, con
 
 	ptr = Ogre::MaterialManager::getSingleton().getByName(ToString(sbs->InstanceNumber) + ":" + name, group);
 	return ptr;
-}
+}*/
 
-Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)
+/*Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)
 {
 	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texture_name);
 
@@ -2277,15 +2278,15 @@ Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr 
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 	return state;
-}
+}*/
 
-Ogre::TextureUnitState* TextureManager::GetTextureUnitState(Ogre::MaterialPtr mMat)
+/*Ogre::TextureUnitState* TextureManager::GetTextureUnitState(Ogre::MaterialPtr mMat)
 {
 	//get first texture unit state
 	return mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-}
+}*/
 
-std::string TextureManager::GetTextureName(Ogre::MaterialPtr mMat)
+/*std::string TextureManager::GetTextureName(Ogre::MaterialPtr mMat)
 {
 	std::string texname = "";
 
@@ -2294,9 +2295,9 @@ std::string TextureManager::GetTextureName(Ogre::MaterialPtr mMat)
 		texname = state->getTextureName();
 
 	return texname;
-}
+}*/
 
-Ogre::TexturePtr TextureManager::GetTextureByName(const std::string &name, const std::string &group)
+/*Ogre::TexturePtr TextureManager::GetTextureByName(const std::string &name, const std::string &group)
 {
 	Ogre::TexturePtr ptr;
 
@@ -2305,7 +2306,7 @@ Ogre::TexturePtr TextureManager::GetTextureByName(const std::string &name, const
 
 	ptr = Ogre::TextureManager::getSingleton().getByName(name, group);
 	return ptr;
-}
+}*/
 
 void TextureManager::UnloadMaterials()
 {
@@ -2313,11 +2314,11 @@ void TextureManager::UnloadMaterials()
 
 	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
-		Ogre::MaterialManager::getSingleton().remove(ToString(sbs->InstanceNumber) + ":" + textureinfo[i].name);
+		//Ogre::MaterialManager::getSingleton().remove(ToString(sbs->InstanceNumber) + ":" + textureinfo[i].name);
 	}
 }
 
-void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination)
+/*void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination)
 {
 	//copy a source texture onto a destination texture using the full sizes
 
@@ -2328,9 +2329,9 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 	Ogre::Box dstbox (0, 0, 0, destination->getWidth(), destination->getHeight(), destination->getDepth());
 
 	CopyTexture(source, destination, srcbox, dstbox);
-}
+}*/
 
-void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox)
+/*void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox)
 {
 	//copy a source texture onto a destination texture using specified sizes
 
@@ -2374,18 +2375,18 @@ void TextureManager::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr desti
 		ReportError("Error copying texture\n" + e.getDescription());
 		return;
 	}
-}
+}*/
 
 void TextureManager::FreeTextureBoxes()
 {
-	for (size_t i = 0; i < textureboxes.size(); i++)
+	/*for (size_t i = 0; i < textureboxes.size(); i++)
 	{
 		free(textureboxes[i].buffer);
 
 		if (textureboxes[i].box)
 			delete textureboxes[i].box;
 	}
-	textureboxes.clear();
+	textureboxes.clear();*/
 }
 
 void TextureManager::SetPlanarRotate(bool value)
@@ -2402,9 +2403,9 @@ void TextureManager::EnableShadows(const std::string &material_name, bool value)
 {
 	//enable shadows
 
-	Ogre::MaterialPtr mMat = GetMaterialByName(material_name);
+	/*Ogre::MaterialPtr mMat = GetMaterialByName(material_name);
 	if (mMat)
-		mMat->setReceiveShadows(value);
+		mMat->setReceiveShadows(value);*/
 }
 
 }
