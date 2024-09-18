@@ -14,21 +14,25 @@ env = SConscript("godot-cpp/SConstruct")
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 env.Append(CPPPATH=["src/"])
-env.Append(CXXFLAGS=["-Isrc/sbs"])
+env.Append(CXXFLAGS=["-Isrc/sbs", "-Isrc/script", "-Isrc/frontend"])
 sources = Glob("src/*.cpp")
 frontend = Glob("src/frontend/*.cpp")
+scriptproc = Glob("src/scriptproc/*.cpp")
+sbs = Glob("src/sbs/*.cpp")
+
+env.ParseConfig('/opt/wx/bin/wx-config --cxxflags --libs')
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
         "demo/bin/libskyscraper.{}.{}.framework/libskyscraper.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
-        source=sources + frontend,
+        source=sources + frontend + scriptproc + sbs,
     )
 else:
     library = env.SharedLibrary(
         "demo/bin/libskyscraper{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
-        source=sources + frontend,
+        source=sources + frontend + scriptproc + sbs,
     )
 
 Default(library)

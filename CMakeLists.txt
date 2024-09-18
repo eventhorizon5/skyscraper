@@ -64,11 +64,9 @@ find_package(wxWidgets COMPONENTS core base REQUIRED)
 #find_package(Caelum REQUIRED)
 
 file(GLOB FRONTEND_FILES
-	src/frontend/skyscraper.cpp
-	src/frontend/mainscreen.cpp
-	src/frontend/enginecontext.cpp
+	src/frontend/*.cpp
 	src/*.cpp
-	#src/frontend/gui/*.cpp
+	src/frontend/gui/*.cpp
 )
  
 file(GLOB SCRIPTPROC_FILES
@@ -76,8 +74,7 @@ file(GLOB SCRIPTPROC_FILES
 )
 
 file(GLOB SBS_FILES
-	src/sbs/sbs.cpp
-#	src/sbs/*.cpp
+	src/sbs/*.cpp
 )
  
 #file(GLOB ALLOC_FILES
