@@ -173,7 +173,7 @@ void MainScreen::OnClose(wxCloseEvent& event)
 		}
 	}
 
-	wxGetApp().Exit();
+	//wxGetApp().Exit();
 }
 
 void MainScreen::ShowWindow()

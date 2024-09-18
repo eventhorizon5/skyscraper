@@ -47,12 +47,12 @@
 #include "profiler.h"
 #include "gitrev.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+//#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #include <sysdir.h>  // for sysdir_start_search_path_enumeration
 #include <glob.h>    // for glob needed to expand ~ to user dir
 #include <stdio.h>
 #include <sys/sysctl.h>
-#endif
+//#endif
 
 //#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 //#include <windows.h>
@@ -67,15 +67,15 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-IMPLEMENT_APP_NO_MAIN(Skyscraper)
+//IMPLEMENT_APP_NO_MAIN(Skyscraper)
 
 }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#if OGRE_CPU != OGRE_CPU_ARM
-#include "uexception.h"
-#endif
-#endif
+//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+//#if OGRE_CPU != OGRE_CPU_ARM
+//#include "uexception.h"
+//#endif
+//#endif
 
 #ifndef SW_SHOWNORMAL
 	#define SW_SHOWNORMAL 1
@@ -145,15 +145,15 @@ int get_macos_version(uint32_t &major, uint32_t &minor, bool &osx)
 int main (int argc, char* argv[])
 {
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#if OGRE_CPU != OGRE_CPU_ARM
+//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+//#if OGRE_CPU != OGRE_CPU_ARM
 	//initialize top-level exception handler
-	Skyscraper::InitUnhandledExceptionFilter();
-#endif
-#endif
+	//Skyscraper::InitUnhandledExceptionFilter();
+//#endif
+//#endif
 
 	//main wxWidgets entry point
-	wxEntry(argc, argv);
+	//wxEntry(argc, argv);
 
 	return 0;
 }
@@ -301,7 +301,8 @@ bool Skyscraper::OnInit(void)
 	};
 
 	//set up command line parser
-	parser = new wxCmdLineParser(cmdLineDesc, argc, argv);
+	//parser = new wxCmdLineParser(cmdLineDesc, argc, argv);
+	parser = new wxCmdLineParser(cmdLineDesc);
 
 	//process command line options
 	switch (parser->Parse())
@@ -483,7 +484,7 @@ int Skyscraper::OnExit()
 	parser = 0;*/
 
 	//delete logger;
-	return wxApp::OnExit();
+	//return wxApp::OnExit();
 }
 
 void Skyscraper::UnloadSim()
@@ -1857,10 +1858,10 @@ void Skyscraper::UnloadToMenu()
 void Skyscraper::Quit()
 {
 	//exit app
-	//if(dpanel)
-		//dpanel->EnableTimer(false);
+	if(dpanel)
+		dpanel->EnableTimer(false);
 
-	wxGetApp().Exit();
+	//wxGetApp().Exit();
 }
 
 int Skyscraper::GetConfigInt(const std::string &key, int default_value)

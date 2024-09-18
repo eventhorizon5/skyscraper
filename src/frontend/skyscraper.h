@@ -44,7 +44,7 @@ class Console;
 class LoadDialog;
 class ScriptProcessor;
 
-class Skyscraper : public wxApp
+class Skyscraper// : public wxApp
 {
 	friend class MainScreen;
 
@@ -233,7 +233,7 @@ private:
 	std::vector<EngineContext*> engines;
 };
 
-DECLARE_APP(Skyscraper)
+//DECLARE_APP(Skyscraper)
 
 }
 
