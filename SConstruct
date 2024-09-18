@@ -17,6 +17,7 @@ env.Append(CPPPATH=["src/"])
 env.Append(CXXFLAGS=["-Isrc/sbs", "-Isrc/script", "-Isrc/frontend"])
 sources = Glob("src/*.cpp")
 frontend = Glob("src/frontend/*.cpp")
+gui = Glob("src/frontend/gui/*.cpp")
 scriptproc = Glob("src/script/*.cpp")
 sbs = Glob("src/sbs/*.cpp")
 
@@ -27,12 +28,12 @@ if env["platform"] == "macos":
         "demo/bin/libskyscraper.{}.{}.framework/libskyscraper.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
-        source=sources + frontend + scriptproc + sbs,
+        source=sources + frontend + scriptproc + sbs + gui,
     )
 else:
     library = env.SharedLibrary(
         "demo/bin/libskyscraper{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
-        source=sources + frontend + scriptproc + sbs,
+        source=sources + frontend + scriptproc + sbs + gui,
     )
 
 Default(library)
