@@ -422,4 +422,11 @@ Skyscraper* VM::GetFrontend()
 	return frontend;
 }
 
+void VM::CheckCamera()
+{
+	if (active_engine->IsCameraActive() == false)
+		active_engine = FindActiveEngine();
+
+}
+
 }

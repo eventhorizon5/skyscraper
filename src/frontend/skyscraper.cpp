@@ -1098,8 +1098,7 @@ bool Skyscraper::Loop()
 		return true;
 
 	//make sure active engine is the one the camera is active in
-	if (vm->active_engine->IsCameraActive() == false)
-		vm->active_engine = vm->FindActiveEngine();
+	vm->CheckCamera();
 
 	//exit if any engine is loading, unless RenderOnStartup is true
 	if (vm->IsEngineLoading() == true && RenderOnStartup == false)
