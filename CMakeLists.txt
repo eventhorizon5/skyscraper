@@ -66,11 +66,18 @@ find_package(Caelum REQUIRED)
 #find OpenXR
 find_package(OpenXR)
 
-file(GLOB FRONTEND_FILES
-	src/frontend/*.cpp
-	src/frontend/gui/*.cpp
-	src/openxr/src/*.cpp
-)
+if(WIN32)
+	file(GLOB FRONTEND_FILES
+		src/frontend/*.cpp
+		src/frontend/gui/*.cpp
+		src/openxr/src/*.cpp
+	)
+else()
+	file(GLOB FRONTEND_FILES
+                src/frontend/*.cpp
+                src/frontend/gui/*.cpp
+        )
+endif()
  
 file(GLOB SCRIPTPROC_FILES
 	src/script/*.cpp
