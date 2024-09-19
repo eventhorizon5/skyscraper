@@ -63,6 +63,9 @@ find_package(Bullet REQUIRED)
 #find Caelum
 find_package(Caelum REQUIRED)
 
+#find OpenXR
+find_package(OpenXR)
+
 file(GLOB FRONTEND_FILES
 	src/frontend/*.cpp
 	src/frontend/gui/*.cpp
