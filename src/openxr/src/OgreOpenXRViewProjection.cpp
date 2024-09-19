@@ -3,7 +3,6 @@
 #include "OgreOpenXRState.h"
 #include "XrError.h"
 
-// holy shit, piiiiiissss
 #undef near
 #undef far
 
