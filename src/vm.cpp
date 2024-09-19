@@ -38,10 +38,12 @@ VM::VM()
 
 VM::~VM()
 {
+	frontend->OnExit();
 	delete frontend;
 }
 
 void VM::_process(double delta)
 {
 	time_passed += delta;
+	frontend->Loop();
 }

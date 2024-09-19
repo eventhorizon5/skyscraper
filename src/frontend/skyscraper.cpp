@@ -413,6 +413,7 @@ bool Skyscraper::OnInit(void)
 	if (Headless == true)
 		ShowMenu = false;
 
+	filename = "Simple.bld";
 	if (filename != "")
 		return Load(filename);
 
