@@ -132,7 +132,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 
 	if (!mTex)
 		return false;
-	std::string texturename = mTex->getName();
+	std::string texturename = sbs->GetUtility()->GetTextureName(mTex);
 
 	//create a new material
 	std::string matname = TrimStringCopy(name);

@@ -4185,6 +4185,7 @@ void SBS::Run0()
 	{
 		utility->ProcessLog();
 		utility->DoRemoveTexture();
+		utility->DoGetTextureName();
 	}
 }
 
