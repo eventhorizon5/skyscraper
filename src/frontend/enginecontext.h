@@ -32,7 +32,7 @@ public:
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
 
-	EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
@@ -74,6 +74,7 @@ public:
 	void Move(Vector3 &position, bool move_children = false);
 	EngineContext* GetParent() { return parent; }
 	bool IsParent(EngineContext *engine, bool recursive = false);
+	VM* GetVM();
 
 private:
 
@@ -107,6 +108,9 @@ private:
 
 	//child engines
 	std::vector<EngineContext*> children;
+
+	//VM instance
+	VM *vm;
 };
 
 }

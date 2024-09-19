@@ -29,6 +29,7 @@
 #include "camera.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
+#include "vm.h"
 #include "enginecontext.h"
 #include "moveobject.h"
 #include "loaddialog.h"
@@ -194,18 +195,18 @@ void EngineManager::OnInit()
 
 void EngineManager::Loop()
 {
-	int count = panel->GetRoot()->GetEngineCount();
+	int count = panel->GetRoot()->GetVM()->GetEngineCount();
 	if (count != lastcount)
 	{
 		int selection = EngineList->GetSelection();
-		int size = panel->GetRoot()->GetEngineListSize();
+		int size = panel->GetRoot()->GetVM()->GetEngineListSize();
 
 		lastcount = count;
 		EngineList->Clear();
 
 		for (int i = 0; i < size; i++)
 		{
-			EngineContext *engine = panel->GetRoot()->GetEngine(i);
+			EngineContext *engine = panel->GetRoot()->GetVM()->GetEngine(i);
 			std::string filename = "Empty";
 
 			if (engine)
@@ -228,7 +229,7 @@ void EngineManager::Loop()
 		return;
 
 	int selection = EngineList->GetSelection();
-	engine = panel->GetRoot()->GetEngine(selection);
+	engine = panel->GetRoot()->GetVM()->GetEngine(selection);
 
 	if (engine)
 	{
@@ -280,7 +281,7 @@ void EngineManager::On_bSetActive_Click(wxCommandEvent& event)
 	int selection = EngineList->GetSelection();
 
 	if (selection >= 0)
-		panel->GetRoot()->SetActiveEngine(selection);
+		panel->GetRoot()->GetVM()->SetActiveEngine(selection);
 }
 
 void EngineManager::On_bLoad_Click(wxCommandEvent& event)
@@ -298,7 +299,7 @@ void EngineManager::On_bReload_Click(wxCommandEvent& event)
 
 	if (selection >= 0)
 	{
-		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
+		EngineContext *engine = panel->GetRoot()->GetVM()->GetEngine(selection);
 
 		if (engine)
 			engine->Reload = true;
@@ -311,7 +312,7 @@ void EngineManager::On_bShutdown_Click(wxCommandEvent& event)
 
 	if (selection >= 0)
 	{
-		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
+		EngineContext *engine = panel->GetRoot()->GetVM()->GetEngine(selection);
 
 		if (engine)
 			engine->Shutdown();
@@ -339,7 +340,7 @@ void EngineManager::On_bMove_Click(wxCommandEvent& event)
 
 	if (selection >= 0)
 	{
-		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
+		EngineContext *engine = panel->GetRoot()->GetVM()->GetEngine(selection);
 
 		if (engine)
 		{
