@@ -44,10 +44,12 @@ public:
 	bool ReportError(const std::string &message);
 	void ProcessLog();
 	void RemoveTexture(Ogre::ResourceHandle handle);
+	std::string GetTextureName(Ogre::TexturePtr texture);
 
 private:
 
 	void DoRemoveTexture();
+	void DoGetTextureName();
 
 	//Cut function work polygons
 	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
@@ -69,6 +71,12 @@ private:
 	//texture to remove
 	Ogre::ResourceHandle remove_texture;
 	bool remove_texture_valid;
+
+	//texture name
+	std::string texture_name;
+	Ogre::TexturePtr texture;
+	bool texture_name_valid;
+	bool texture_valid;
 };
 
 }

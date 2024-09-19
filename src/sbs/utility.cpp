@@ -53,6 +53,8 @@ Utility::Utility(Object *parent) : ObjectBase(parent)
 	worker.reserve(32);
 
 	remove_texture_valid = false;
+	texture_name_valid = false;
+	texture_valid = false;
 }
 
 Utility::~Utility()
@@ -645,8 +647,9 @@ void Utility::RemoveTexture(Ogre::ResourceHandle handle)
 	remove_texture = handle;
 	remove_texture_valid = true;
 
-	//have this thread sleep while waiting for processing
-	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	//have this thread sleep while waiting for texture processing
+	while (remove_texture_valid == true)
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 
 void Utility::DoRemoveTexture()
@@ -656,6 +659,39 @@ void Utility::DoRemoveTexture()
 
 	Ogre::TextureManager::getSingleton().remove(remove_texture);
 	remove_texture_valid = false;
+}
+
+std::string Utility::GetTextureName(Ogre::TexturePtr texture)
+{
+	if (texture_valid == true)
+	{
+		//have thread sleep while waiting for texture to free
+		while (texture_valid == true)
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+
+	this->texture = texture;
+	texture_valid = true;
+
+	if (texture_name_valid == false)
+	{
+		//have thread sleep while waiting for texture name to return
+		while (texture_name_valid == false)
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+
+	texture_name_valid = false;
+	return texture_name;
+}
+
+void Utility::DoGetTextureName()
+{
+	if (texture_name_valid == false && texture_valid == true)
+	{
+		texture_name = texture->getName();
+		texture_valid = false;
+		texture_name_valid = true;
+	}
 }
 
 }
