@@ -4182,7 +4182,10 @@ void SBS::Run0()
 	//thread 0 runloop
 
 	if (utility)
+	{
 		utility->ProcessLog();
+		utility->DoRemoveTexture();
+	}
 }
 
 }
