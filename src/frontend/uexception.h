@@ -128,7 +128,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 		twindow->tMain->WriteText(wxString("Frontend version: " + skyscraper->version_frontend + "\n"));
 
 		//print out simulator state
-		EngineContext *context = skyscraper->GetActiveEngine();
+		EngineContext *context = skyscraper->GetVM()->GetActiveEngine();
 		if (context)
 		{
 			//print out engine state

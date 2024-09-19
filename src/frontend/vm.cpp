@@ -20,13 +20,14 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <wx/panel.h>
 #include "globals.h"
+#include "vm.h"
 #include "skyscraper.h"
 #include "mainscreen.h"
 #include "sbs.h"
 #include "camera.h"
 #include "enginecontext.h"
-#include "vm.h"
 
 using namespace SBS;
 
