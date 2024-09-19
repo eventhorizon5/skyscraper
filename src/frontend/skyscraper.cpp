@@ -375,16 +375,16 @@ bool Skyscraper::OnInit(void)
 		showconsole = false;
 
 	//create console window
-	if (showconsole == true)
-		ShowConsole(false);
+	//if (showconsole == true)
+		//ShowConsole(false);
 
 	//Create main window and set size from INI file defaults
 	//if (Headless == false)
 	//{
-		window = new MainScreen(this, GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
-		//AllowResize(false);
-		window->ShowWindow();
-		window->CenterOnScreen();
+		//window = new MainScreen(this, GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
+		////AllowResize(false);
+		//window->ShowWindow();
+		//window->CenterOnScreen();
 	//}
 
 	//start and initialize
@@ -987,6 +987,7 @@ void Skyscraper::Report(const std::string &message)
 	{
 		ShowError("Error writing message to log\n" + e.getDescription());
 	}*/
+	std::cout << message + "\n";
 }
 
 bool Skyscraper::ReportError(const std::string &message)
@@ -1000,6 +1001,7 @@ bool Skyscraper::ReportError(const std::string &message)
 	{
 		ShowError("Error writing message to log\n" + e.getDescription());
 	}*/
+	std::cout << message + "\n";
 	return false;
 }
 
@@ -1013,15 +1015,15 @@ bool Skyscraper::ReportFatalError(const std::string &message)
 void Skyscraper::ShowError(const std::string &message)
 {
 	//show error dialog
-	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_ERROR);
-	dialog.ShowModal();
+	//wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_ERROR);
+	//dialog.ShowModal();
 }
 
 void Skyscraper::ShowMessage(const std::string &message)
 {
 	//show message dialog
-	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_INFORMATION);
-	dialog.ShowModal();
+	//wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_INFORMATION);
+	//dialog.ShowModal();
 }
 
 bool Skyscraper::Loop()
@@ -1756,17 +1758,17 @@ bool Skyscraper::Start(EngineContext *engine)
 		if (parser->Found(wxT("fullscreen")) == true)
 			fullscreen = true;
 
-		if (fullscreen == true)
-			SetFullScreen(true);
+		//if (fullscreen == true)
+			//SetFullScreen(true);
 
 		//resize main window
 		if (FullScreen == false)
 		{
 #if !defined(__WXMAC__)
-			window->SetBackgroundColour(*wxBLACK);
+			//window->SetBackgroundColour(*wxBLACK);
 #endif
-			window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 1024), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 768));
-			window->Center();
+			//window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 1024), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 768));
+			//window->Center();
 		}
 	}
 
@@ -1844,10 +1846,10 @@ void Skyscraper::UnloadToMenu()
 	CloseProgressDialog();
 
 	//return to main menu
-	SetFullScreen(false);
-	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.Menu.Width", 800), GetConfigInt("Skyscraper.Frontend.Menu.Height", 600));
-	window->Center();
-	window->SetCursor(wxNullCursor);
+	//SetFullScreen(false);
+	//window->SetClientSize(GetConfigInt("Skyscraper.Frontend.Menu.Width", 800), GetConfigInt("Skyscraper.Frontend.Menu.Height", 600));
+	//window->Center();
+	//window->SetCursor(wxNullCursor);
 
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
