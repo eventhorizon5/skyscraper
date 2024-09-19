@@ -160,9 +160,9 @@ int main (int argc, char* argv[])
 
 namespace Skyscraper {
 
-Skyscraper::Skyscraper()
+Skyscraper::Skyscraper(VM *vm)
 {
-
+	this->vm = vm;
 }
 
 Skyscraper::~Skyscraper()

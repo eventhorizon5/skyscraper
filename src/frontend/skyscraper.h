@@ -24,6 +24,7 @@
 #define SKYSCRAPER_H
 
 #include <wx/app.h>
+#include "vm.h"
 
 //wxWidgets definitions
 class wxCmdLineParser;
@@ -43,6 +44,7 @@ class EngineContext;
 class Console;
 class LoadDialog;
 class ScriptProcessor;
+class VM;
 
 class Skyscraper// : public wxApp
 {
@@ -86,7 +88,7 @@ public:
 	int macos_major; //macos major version
 	int macos_minor; //macos minor version
 
-	Skyscraper();
+	Skyscraper(VM *vm);
 	~Skyscraper();
 	bool Loop();
 	virtual bool OnInit(void);
@@ -231,6 +233,8 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
+
+	VM *vm;
 };
 
 //DECLARE_APP(Skyscraper)

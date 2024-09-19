@@ -32,7 +32,7 @@ VM::VM()
 {
 	time_passed = 0.0;
 
-	frontend = new ::Skyscraper::Skyscraper();
+	frontend = new ::Skyscraper::Skyscraper(this);
 	frontend->OnInit();
 }
 

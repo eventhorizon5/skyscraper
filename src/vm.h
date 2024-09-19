@@ -29,6 +29,8 @@
 
 namespace Skyscraper {
 
+class Skyscraper;
+
 class VM : public godot::Node3D {
 	GDCLASS(VM, godot::Node3D)
 
