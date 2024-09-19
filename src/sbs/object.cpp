@@ -78,12 +78,14 @@ void ObjectBase::SetName(const std::string &name)
 void ObjectBase::Report(const std::string &message)
 {
 	//Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message);
+	std::cout << sbs->InstancePrompt + message + "\n";
 	sbs->LastNotification = message;
 }
 
 bool ObjectBase::ReportError(const std::string &message)
 {
 	//Ogre::LogManager::getSingleton().logMessage(sbs->InstancePrompt + message, Ogre::LML_CRITICAL);
+	std::cout << sbs->InstancePrompt + message + "\n";
 	sbs->LastError = message;
 	return false;
 }

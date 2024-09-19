@@ -32,7 +32,9 @@ func _ready():
 	else:
 		# We couldn't start OpenXR.
 		print("OpenXR not instantiated!")
-		get_tree().quit()
+		#get_tree().quit()
+		var vp : Viewport = get_viewport()
+		vp.use_xr = false
 
 
 # Handle OpenXR session ready
