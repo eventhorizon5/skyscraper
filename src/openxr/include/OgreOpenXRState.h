@@ -3,11 +3,11 @@
 #include <vector>
 #include <string>
 
-#include "OgreD3D11Prerequisites.h"
+#include "RenderSystems/Direct3D11/OgreD3D11Prerequisites.h"
 
 #include "OgreOpenXRConfig.h"
 
-#include "OgreD3D11Device.h"
+#include "RenderSystems/Direct3D11/OgreD3D11Device.h"
 
 #include <openxr/openxr.h>
 #include "XrHandle.h"
