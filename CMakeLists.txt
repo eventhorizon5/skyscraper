@@ -66,6 +66,7 @@ find_package(Caelum REQUIRED)
 file(GLOB FRONTEND_FILES
 	src/frontend/*.cpp
 	src/frontend/gui/*.cpp
+	src/openxr/src/*.cpp
 )
  
 file(GLOB SCRIPTPROC_FILES
@@ -100,6 +101,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/frontend
 	src/sbs
 	src/script
+	src/openxr/include
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
