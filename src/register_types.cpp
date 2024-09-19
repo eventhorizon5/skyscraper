@@ -33,7 +33,7 @@ void initialize_skyscraper_module(ModuleInitializationLevel p_level) {
 		return;
 	}
 
-	GDREGISTER_CLASS(VM);
+	GDREGISTER_CLASS(Skyscraper::VM);
 }
 
 void uninitialize_skyscraper_module(ModuleInitializationLevel p_level) {

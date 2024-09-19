@@ -22,7 +22,7 @@
 
 #include "vm.h"
 
-using namespace godot;
+using namespace Skyscraper;
 
 void VM::_bind_methods()
 {
@@ -32,7 +32,7 @@ VM::VM()
 {
 	time_passed = 0.0;
 
-	frontend = new Skyscraper::Skyscraper();
+	frontend = new ::Skyscraper::Skyscraper();
 	frontend->OnInit();
 }
 

@@ -170,7 +170,7 @@ Skyscraper::~Skyscraper()
 
 }
 
-bool Skyscraper::OnInit(void)
+bool Skyscraper::OnInit()
 {
 	version = "3.0";
 	version_rev = ToString(GIT_REV);

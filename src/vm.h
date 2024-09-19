@@ -27,10 +27,10 @@
 #include "globals.h"
 #include "skyscraper.h"
 
-namespace godot {
+namespace Skyscraper {
 
-class VM : public Node3D {
-	GDCLASS(VM, Node3D)
+class VM : public godot::Node3D {
+	GDCLASS(VM, godot::Node3D)
 
 private:
 	double time_passed;
