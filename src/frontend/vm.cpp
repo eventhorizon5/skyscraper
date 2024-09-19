@@ -395,7 +395,7 @@ int VM::GetFreeInstanceNumber()
 
 int VM::RegisterEngine(EngineContext *engine)
 {
-	//register an engine with the frontend, returning the assigned instance number
+	//register an engine, returning the assigned instance number
 
 	int number = GetFreeInstanceNumber();
 
