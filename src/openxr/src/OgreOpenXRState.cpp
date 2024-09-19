@@ -6,7 +6,7 @@
 #include <chrono>
 #include <thread>
 
-#include "XrMath.h"
+#include "XrUtility/XrMath.h"
 
 namespace Ogre {
 

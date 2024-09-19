@@ -1,9 +1,8 @@
 #include "OgreOpenXRViewProjection.h"
 
 #include "OgreOpenXRState.h"
-#include "XrError.h"
+#include "XrUtility/XrError.h"
 
-// holy shit, piiiiiissss
 #undef near
 #undef far
 
