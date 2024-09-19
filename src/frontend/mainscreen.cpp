@@ -150,7 +150,7 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 	//if (frontend->mRenderWindow)
 	//{
-//#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+//#ifdef __linux__
 		//Real scale = this->GetContentScaleFactor();
 		//frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
 //#else
@@ -248,7 +248,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 	int key = event.GetKeyCode();
 
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
+#ifdef __APPLE__
 	//don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
 	if (wxGetKeyState((wxKeyCode)key) == false)
 		return;
@@ -713,7 +713,7 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 		//apply content scaling factor, fixes issues for example on Retina displays
 		Real scale = frontend->window->GetContentScaleFactor();
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#ifdef __APPLE__
 		//set scale to 1.0 on MacOS versions earlier than 10.15
 		if (frontend->macos_major == 10 && frontend->macos_minor < 15)
 			scale = 1.0;

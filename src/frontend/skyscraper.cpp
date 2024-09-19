@@ -47,21 +47,21 @@
 #include "profiler.h"
 #include "gitrev.h"
 
-//#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#ifdef __APPLE__
 #include <sysdir.h>  // for sysdir_start_search_path_enumeration
 #include <glob.h>    // for glob needed to expand ~ to user dir
 #include <stdio.h>
 #include <sys/sysctl.h>
-//#endif
+#endif
 
-//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-//#include <windows.h>
-//#endif
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
-//#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef __linux__
 #include <sys/utsname.h>
-//#include "malloc.h"
-//#endif
+#include "malloc.h"
+#endif
 
 using namespace SBS;
 
@@ -71,17 +71,17 @@ namespace Skyscraper {
 
 }
 
-//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef _WIN32
 //#if OGRE_CPU != OGRE_CPU_ARM
 //#include "uexception.h"
 //#endif
-//#endif
+#endif
 
 #ifndef SW_SHOWNORMAL
 	#define SW_SHOWNORMAL 1
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#ifdef __APPLE__
 
 //code to get Application Support folder on Mac
 
@@ -145,12 +145,12 @@ int get_macos_version(uint32_t &major, uint32_t &minor, bool &osx)
 int main (int argc, char* argv[])
 {
 
-//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef _WIN32
 //#if OGRE_CPU != OGRE_CPU_ARM
 	//initialize top-level exception handler
 	//Skyscraper::InitUnhandledExceptionFilter();
 //#endif
-//#endif
+#endif
 
 	//main wxWidgets entry point
 	//wxEntry(argc, argv);
@@ -319,10 +319,10 @@ bool Skyscraper::OnInit()
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
 	//set up unhandled exception handler (crash report system)
-/*#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#if OGRE_CPU != OGRE_CPU_ARM
-	UnhandledExceptionSetRoot(this);
-#endif
+#ifdef _WIN32
+//#if OGRE_CPU != OGRE_CPU_ARM
+	//UnhandledExceptionSetRoot(this);
+//#endif
 #endif*/
 
 	//set locale to default for conversion functions
@@ -491,9 +491,9 @@ int Skyscraper::OnExit()
 void Skyscraper::UnloadSim()
 {
 	//delete control panel object
-	/*if(dpanel)
+	if(dpanel)
 		delete dpanel;
-	dpanel = 0;*/
+	dpanel = 0;
 
 	//unload sky system
 	UnloadSky();
@@ -528,10 +528,10 @@ void Skyscraper::UnloadSim()
 
 	ReInit();
 
-//#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef __linux__
 	//release free memory to OS on Linux
-	//malloc_trim(0);
-//#endif
+	malloc_trim(0);
+#endif
 
 }
 
@@ -634,7 +634,7 @@ bool Skyscraper::Initialize()
 		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription());
 	}*/
 
-/*#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+/*#ifdef _WIN32
 	//set rendersystem options
 	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
 	if (rendersystem)
@@ -914,17 +914,19 @@ bool Skyscraper::Initialize()
 	Architecture = "MIPS";
 #elif OGRE_CPU == OGRE_CPU_UNKNOWN
 	Architecture = "Unknown";
-#endif
+#endif*/
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef _WIN32
 	Platform = "Windows " + Architecture + " " + bits;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#endif
+#ifdef __linux__
 	Platform = "Linux " + Architecture + " " + bits;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#endif
+#ifdef __APPLE__
 	Platform = "MacOS " + Architecture + " " + bits;
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#ifdef __APPLE__
 	//report MacOS version if applicable
 	uint32_t major = 0, minor = 0;
 	bool osx = true;
@@ -944,7 +946,7 @@ bool Skyscraper::Initialize()
 	}
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef _WIN32
 	//get Windows version
 
 	NTSTATUS(WINAPI* RtlGetVersion)(LPOSVERSIONINFOEXW);
@@ -960,11 +962,11 @@ bool Skyscraper::Initialize()
 	}
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef __linux__
 	struct utsname osInfo{};
 	uname(&osInfo);
 	Report("Running on Linux " + std::string(osInfo.release));
-#endif*/
+#endif
 
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
@@ -1358,7 +1360,7 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 		//apply content scaling factor, fixes issues for example on Retina displays
 		Real scale = window->GetContentScaleFactor();
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#ifdef __APPLE__
 		//set scale to 1.0 on MacOS versions earlier than 10.15
 		if (macos_major == 10 && macos_minor < 15)
 			scale = 1.0;
@@ -1970,7 +1972,7 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	}
 	catch (Ogre::Exception &e)
 	{
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE //ignore Caelum errors on Mac, due to a Cg error (Cg is not available on ARM CPUs, and is not bundled with the Mac version)
+#ifdef __APPLE__ //ignore Caelum errors on Mac, due to a Cg error (Cg is not available on ARM CPUs, and is not bundled with the Mac version)
 		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
 #endif
 		sky_error = true;

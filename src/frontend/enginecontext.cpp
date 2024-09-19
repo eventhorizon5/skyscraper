@@ -28,9 +28,9 @@
 #include "scriptproc.h"
 #include "enginecontext.h"
 
-/*#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef __linux__
 #include "malloc.h"
-#endif*/
+#endif
 
 using namespace SBS;
 
@@ -301,11 +301,11 @@ void EngineContext::StartSim()
 		frontend->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
 		wxYield(); //this allows the banner to be printed before the sleep() call
 		frontend->Pause = false;
-//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-		//Sleep(2000);
-//#else
+#ifdef _WIN32
+		Sleep(2000);
+#else
 		sleep(2);
-//#endif
+#endif
 	}
 }
 
@@ -328,9 +328,9 @@ void EngineContext::UnloadSim()
 	raised = false;
 	Moved = false;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef __linux__
 	//release free memory to OS on Linux
-	//malloc_trim(0);
+	malloc_trim(0);
 #endif
 }
 

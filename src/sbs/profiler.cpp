@@ -7,9 +7,9 @@
 
 //static oClock gProfileClock;
 
-//#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
+#ifndef _WIN32
 	#define _snprintf snprintf
-//#endif
+#endif
 
 namespace SBS {
 
