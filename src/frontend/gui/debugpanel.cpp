@@ -34,6 +34,7 @@
 #include "skyscraper.h"
 #include "debugpanel.h"
 #include "scriptproc.h"
+#include "vm.h"
 #include "enginecontext.h"
 #include "console.h"
 #include "meshcontrol.h"
@@ -400,7 +401,7 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 
 void DebugPanel::OnInit()
 {
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	Simcore = skyscraper->GetVM()->GetActiveEngine()->GetSystem();
 
 	if (!Simcore)
 		return;
@@ -441,9 +442,9 @@ void DebugPanel::Loop()
 			Enable(true);
 	}
 
-	if (skyscraper->GetActiveEngine())
+	if (skyscraper->GetVM()->GetActiveEngine())
 	{
-		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		if (Simcore != skyscraper->GetVM()->GetActiveEngine()->GetSystem())
 			OnInit(); //reinitialize if active engine has changed
 	}
 	else
