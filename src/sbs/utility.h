@@ -25,6 +25,8 @@ namespace SBS {
 
 class SBSIMPEXP Utility : public ObjectBase
 {
+	friend class SBS;
+
 public:
 	Utility(Object *parent);
 	~Utility();
@@ -41,15 +43,11 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void ProcessLog();
-
-	struct log_queue_data
-	{
-		std::string text;
-		bool error;
-	};
-	std::vector<log_queue_data> log_queue;
+	void RemoveTexture(Ogre::ResourceHandle handle);
 
 private:
+
+	void DoRemoveTexture();
 
 	//Cut function work polygons
 	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
@@ -60,6 +58,17 @@ private:
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
 	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
+
+	struct log_queue_data
+	{
+		std::string text;
+		bool error;
+	};
+	std::vector<log_queue_data> log_queue;
+
+	//texture to remove
+	Ogre::ResourceHandle remove_texture;
+	bool remove_texture_valid;
 };
 
 }

@@ -21,6 +21,16 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreRoot.h>
+#include <OgreImage.h>
+#include <OgreTextureManager.h>
+#include <OgreTechnique.h>
+#include <OgreMaterialManager.h>
+#include <OgreFont.h>
+#include <OgreFontManager.h>
+#include <OgreHardwarePixelBuffer.h>
+#include <OgreResourceGroupManager.h>
+#include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
 #include "wall.h"
@@ -41,6 +51,8 @@ Utility::Utility(Object *parent) : ObjectBase(parent)
 	temppoly4.reserve(32);
 	temppoly5.reserve(32);
 	worker.reserve(32);
+
+	remove_texture_valid = false;
 }
 
 Utility::~Utility()
@@ -626,6 +638,24 @@ void Utility::ProcessLog()
 	}
 
 	report_lock.unlock();
+}
+
+void Utility::RemoveTexture(Ogre::ResourceHandle handle)
+{
+	remove_texture = handle;
+	remove_texture_valid = true;
+
+	//have this thread sleep while waiting for processing
+	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+}
+
+void Utility::DoRemoveTexture()
+{
+	if (remove_texture_valid == false)
+		return;
+
+	Ogre::TextureManager::getSingleton().remove(remove_texture);
+	remove_texture_valid = false;
 }
 
 }

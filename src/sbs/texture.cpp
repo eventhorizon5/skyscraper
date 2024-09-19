@@ -113,9 +113,7 @@ TextureManager::~TextureManager()
 	for (size_t i = 0; i < manual_textures.size(); i++)
 	{
 		if (manual_textures[i])
-		{
-			Ogre::TextureManager::getSingleton().remove(manual_textures[i]->getHandle());
-		}
+			sbs->GetUtility()->RemoveTexture(manual_textures[i]->getHandle());
 	}
 	manual_textures.clear();
 }
