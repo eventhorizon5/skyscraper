@@ -1,8 +1,8 @@
 #include "OgreOpenXRInstance.h"
 
 #include <vector>
-#include "XrError.h"
-#include "XrDispatchTable.h"
+#include "XrUtility/XrError.h"
+#include "XrUtility/XrDispatchTable.h"
 
 Ogre::OpenXRInstance::OpenXRInstance()
 {

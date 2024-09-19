@@ -2,8 +2,8 @@
 
 #include <openxr/openxr.h>
 #include <utility>
-#include "XrHandle.h"
-#include "XrMath.h"
+#include "XrUtility/XrHandle.h"
+#include "XrUtility/XrMath.h"
 #include <vector>
 
 namespace Ogre {

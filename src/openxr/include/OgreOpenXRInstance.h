@@ -4,7 +4,7 @@
 #include <openxr/openxr.h>
 #include <d3d11.h>
 #include <utility>
-#include "XrHandle.h"
+#include "XrUtility/XrHandle.h"
 
 #include <string>
 
