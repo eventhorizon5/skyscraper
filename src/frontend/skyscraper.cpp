@@ -323,7 +323,7 @@ bool Skyscraper::OnInit()
 //#if OGRE_CPU != OGRE_CPU_ARM
 	//UnhandledExceptionSetRoot(this);
 //#endif
-#endif*/
+#endif
 
 	//set locale to default for conversion functions
 	setlocale(LC_ALL, "C");
