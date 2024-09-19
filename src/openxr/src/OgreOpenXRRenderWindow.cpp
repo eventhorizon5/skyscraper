@@ -1,9 +1,9 @@
 #include "OgreOpenXRRenderWindow.h"
 #include "OgreRoot.h"
 
-#include "OgreD3D11RenderWindow.h"
-#include "OgreD3D11RenderSystem.h"
-#include "OgreD3D11Device.h"
+#include "RenderSystems/Direct3D11/OgreD3D11RenderWindow.h"
+#include "RenderSystems/Direct3D11/OgreD3D11RenderSystem.h"
+#include "RenderSystems/Direct3D11/OgreD3D11Device.h"
 
 #include "OgreOpenXRState.h"
 #include "OgreOpenXRViewProjection.h"

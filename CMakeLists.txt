@@ -111,7 +111,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/script
 	src/alloc
 	src/openxr/include
-	src/openxr/XrUtility
+	src/openxr
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
