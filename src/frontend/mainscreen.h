@@ -25,6 +25,8 @@
 
 #include <wx/frame.h>
 
+class wxJoystick;
+
 namespace Skyscraper {
 
 class MainScreen : public wxFrame

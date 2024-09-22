@@ -49,6 +49,7 @@
 #include "camera.h"
 #include "gui/debugpanel.h"
 #include "skyscraper.h"
+#include "vm.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
 #include "gui/console.h"
@@ -222,7 +223,6 @@ bool Skyscraper::OnInit(void)
 	latitude = 0.0;
 	longitude = 0.0;
 	datetime = 0.0;
-	active_engine = 0;
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
 	CutLandscape = true;
@@ -256,6 +256,9 @@ bool Skyscraper::OnInit(void)
 	loadinfo.parent = 0;
 	loadinfo.position = Vector3::ZERO;
 	loadinfo.rotation = 0.0;
+
+	//create VM instance
+	vm = new VM(this);
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -538,7 +541,7 @@ void Skyscraper::UnloadSim()
 	if (console)
 		console->bSend->Enable(false);
 
-	DeleteEngines();
+	vm->DeleteEngines();
 
 	//do a full clear of Ogre objects
 
@@ -1089,12 +1092,8 @@ bool Skyscraper::Loop()
 	ProcessLog();
 	ProcessLoad();
 
-	//run thread 0 runloops for each engine context
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-			engines[i]->Run0();
-	}
+	//run all Run0 runloops
+	vm->Run0();
 
 	//main menu routine
 	if (StartupRunning == true)
@@ -1119,10 +1118,10 @@ bool Skyscraper::Loop()
 		ShowProgressDialog();
 
 	//run sim engine instances
-	bool result = RunEngines();
+	bool result = vm->Run();
 
 	//delete an engine if requested
-	HandleEngineShutdown();
+	vm->HandleEngineShutdown();
 
 	//exit if full shutdown request received
 	if (Shutdown == true)
@@ -1131,18 +1130,17 @@ bool Skyscraper::Loop()
 		UnloadToMenu();
 	}
 
-	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
+	if (result == false && (ConcurrentLoads == false || vm->GetEngineCount() == 1))
 		return true;
 
-	if (!active_engine)
+	if (!vm->GetActiveEngine())
 		return true;
 
 	//make sure active engine is the one the camera is active in
-	if (active_engine->IsCameraActive() == false)
-		active_engine = FindActiveEngine();
+	vm->CheckCamera();
 
 	//exit if any engine is loading, unless RenderOnStartup is true
-	if (IsEngineLoading() == true && RenderOnStartup == false)
+	if (vm->IsEngineLoading() == true && RenderOnStartup == false)
 		return true;
 
 	//if in CheckScript mode, exit
@@ -1161,10 +1159,10 @@ bool Skyscraper::Loop()
 		return false;
 
 	//handle a building reload
-	HandleReload();
+	vm->HandleReload();
 
 	//handle behavior when a user exits an engine area
-	SwitchEngines();
+	vm->SwitchEngines();
 
 	//ProfileManager::dumpAll();
 
@@ -1756,7 +1754,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	if (filename == "")
 		return false;
 
-	if (GetEngineCount() == 0)
+	if (vm->GetEngineCount() == 0)
 	{
 		//set sky name
 		SkyName = GetConfigString("Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
@@ -1770,24 +1768,24 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 		mRenderWindow->update();
 
 	//set parent to master engine, if not set
-	if (parent == 0 && GetEngineCount() >= 1)
-		parent = GetFirstValidEngine();
+	if (parent == 0 && vm->GetEngineCount() >= 1)
+		parent = vm->GetFirstValidEngine();
 
 	//Create simulator instance
-	EngineContext* engine = CreateEngine(parent, position, rotation, area_min, area_max);
+	EngineContext* engine = vm->CreateEngine(parent, position, rotation, area_min, area_max);
 
-	if (!active_engine)
-		active_engine = engine;
+	if (!vm->GetActiveEngine())
+		vm->active_engine = engine;
 
 	//have instance load building
 	bool result = engine->Load(filename);
 
 	if (result == false)
 	{
-		if (GetEngineCount() == 1)
+		if (vm->GetEngineCount() == 1)
 			UnloadToMenu();
 		else
-			DeleteEngine(engine);
+			vm->DeleteEngine(engine);
 		return false;
 	}
 
@@ -1807,7 +1805,7 @@ bool Skyscraper::Start(EngineContext *engine)
 
 	::SBS::SBS *Simcore = engine->GetSystem();
 
-	if (engine == active_engine)
+	if (engine == vm->GetActiveEngine())
 	{
 		//the sky needs to be created before Prepare() is called
 		CreateSky(engine);
@@ -1838,11 +1836,11 @@ bool Skyscraper::Start(EngineContext *engine)
 		return false;
 
 	//close progress dialog if no engines are loading
-	if (IsEngineLoading() == false)
+	if (vm->IsEngineLoading() == false)
 		CloseProgressDialog();
 
 	//load control panel
-	if (engine == active_engine)
+	if (engine == vm->GetActiveEngine())
 	{
 		bool panel = GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true);
 
@@ -2196,7 +2194,7 @@ void Skyscraper::UpdateSky()
 	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
 		mCaelumSystem->setTimeScale(SkyMult);
-		mCaelumSystem->updateSubcomponents(Real(active_engine->GetSystem()->GetElapsedTime()) / 1000);
+		mCaelumSystem->updateSubcomponents(Real(vm->GetActiveEngine()->GetSystem()->GetElapsedTime()) / 1000);
 	}
 }
 
@@ -2223,9 +2221,9 @@ void Skyscraper::ShowConsole(bool send_button)
 void Skyscraper::CreateProgressDialog(const std::string &message)
 {
 	//don't create progress dialog if concurrent loading is enabled, and one engine is already running
-	if (GetEngineCount() > 1 && ConcurrentLoads == true)
+	if (vm->GetEngineCount() > 1 && ConcurrentLoads == true)
 	{
-		if (GetFirstValidEngine()->IsRunning() == true)
+		if (vm->GetFirstValidEngine()->IsRunning() == true)
 			return;
 	}
 
@@ -2273,13 +2271,13 @@ void Skyscraper::UpdateProgress()
 	if (!progdialog)
 		return;
 
-	int total_percent = GetEngineCount() * 100;
+	int total_percent = vm->GetEngineCount() * 100;
 	int current_percent = 0;
 
-	for (size_t i = 0; i < engines.size(); i++)
+	for (size_t i = 0; i < vm->GetEngineCount(); i++)
 	{
-		if (engines[i])
-			current_percent += engines[i]->GetProgress();
+		if (vm->GetEngine(i))
+			current_percent += vm->GetEngine(i)->GetProgress();
 	}
 
 	int final = ((Real)current_percent / (Real)total_percent) * 100;
@@ -2336,280 +2334,6 @@ void Skyscraper::SetDateTime(double julian_date_time)
 		mCaelumSystem->setJulianDay(datetime);
 }
 
-EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
-{
-	EngineContext* engine = new EngineContext(parent, this, mSceneMgr, soundsys, position, rotation, area_min, area_max);
-	return engine;
-}
-
-bool Skyscraper::DeleteEngine(EngineContext *engine)
-{
-	//delete a specified sim engine instance
-
-	if (!engine)
-		return false;
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i] == engine)
-		{
-			engines[i] = 0;
-			delete engine;
-
-			int count = GetEngineCount();
-
-			if (active_engine == engine)
-			{
-				active_engine = 0;
-				if (count > 0)
-				{
-					int number = GetFirstValidEngine()->GetNumber();
-					SetActiveEngine(number);
-				}
-			}
-			else if (active_engine)
-				active_engine->RefreshCamera();
-
-			//exit to main menu if all engines have been deleted
-			if (count == 0)
-				Shutdown = true;
-
-			return true;
-		}
-	}
-	return false;
-}
-
-void Skyscraper::DeleteEngines()
-{
-	//delete all sim emgine instances
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-			delete engines[i];
-	}
-	engines.clear();
-	active_engine = 0;
-}
-
-EngineContext* Skyscraper::FindActiveEngine()
-{
-	//find engine instance with an active camera
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-		{
-			if (engines[i]->IsCameraActive() == true)
-				return engines[i];
-		}
-	}
-	return active_engine;
-}
-
-void Skyscraper::SetActiveEngine(int number, bool switch_engines)
-{
-	//set an engine instance to be active
-
-	EngineContext *engine = GetEngine(number);
-
-	if (!engine)
-		return;
-
-	if (active_engine == engine)
-		return;
-
-	//don't switch if the camera's already active in the specified engine
-	if (engine->IsCameraActive() == true)
-		return;
-
-	//don't switch to engine if it's loading
-	if (engine->IsLoading() == true)
-		return;
-
-	CameraState state;
-	bool state_set = false;
-
-	if (active_engine)
-	{
-		//get previous engine's camera state
-		if (switch_engines == true)
-		{
-			state = active_engine->GetCameraState();
-			state_set = true;
-		}
-
-		//detach camera from current engine
-		active_engine->DetachCamera(switch_engines);
-	}
-
-	Report("Setting engine " + ToString(number) + " as active");
-
-	//switch context to new engine instance
-	active_engine = engine;
-	active_engine->AttachCamera(mCamera, !switch_engines);
-
-	//apply camera state to new engine
-	if (switch_engines == true && state_set == true)
-		active_engine->SetCameraState(state, false);
-
-	//update mouse cursor for freelook mode
-	window->EnableFreelook(active_engine->GetSystem()->camera->Freelook);
-}
-
-bool Skyscraper::RunEngines()
-{
-	bool result = true;
-	bool isloading = IsEngineLoading();
-
-	if (ConcurrentLoads == true && isloading == true)
-		RefreshViewport();
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (!engines[i])
-			continue;
-
-		//process engine run loops, and also prevent other instances from running if
-		//one or more engines are loading
-		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
-		{
-			bool run = true;
-			if (i > 0 && ConcurrentLoads == false)
-			{
-				//if concurrent loads is off, skip running if previous engine is not finished loading
-				if (engines[i - 1])
-				{
-					if (engines[i - 1]->IsLoading() == true && engines[i - 1]->IsLoadingFinished() == false)
-						run = false;
-				}
-			}
-
-			if (engines[i]->IsLoadingFinished() == false && run == true)
-			{
-				//if (engines[i]->Run() == false)
-					//result = false;
-			}
-		}
-
-		//start engine if loading is finished
-		if (engines[i]->IsLoadingFinished() == true)
-		{
-			if (active_engine)
-			{
-				//exit if active engine is still loading
-				if (active_engine->IsLoading() == true && active_engine->IsLoadingFinished() == false)
-					continue;
-
-				//exit if active engine is finished, but other buildings are still loading
-				if (active_engine->IsLoadingFinished() == true && isloading == true)
-					continue;
-			}
-			Start(engines[i]);
-		}
-	}
-	return result;
-}
-
-bool Skyscraper::IsEngineLoading()
-{
-	//return true if an engine is loading
-
-	bool result = false;
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-		{
-			if (engines[i]->IsLoading() == true && engines[i]->IsLoadingFinished() == false)
-				result = true;
-		}
-	}
-	return result;
-}
-
-void Skyscraper::HandleEngineShutdown()
-{
-	bool deleted = false;
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-		{
-			if (engines[i]->GetShutdownState() == true)
-			{
-				if (DeleteEngine(engines[i]) == true)
-				{
-					RefreshViewport();
-					i--;
-					deleted = true;
-				}
-			}
-		}
-	}
-
-	//clean up empty engine slots at the end of the list
-	if (deleted == true)
-	{
-		for (size_t i = engines.size() - 1; i < engines.size(); --i)
-		{
-			if (!engines[i])
-				engines.erase(engines.begin() + i);
-			else
-				break;
-		}
-	}
-}
-
-void Skyscraper::HandleReload()
-{
-	//reload building if requested
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-		{
-			if (engines[i]->Reload == true)
-			{
-				//unload sky system if primary engine
-				if (i == 0)
-					UnloadSky();
-
-				Pause = false;
-				engines[i]->DoReload(); //handle engine reload
-
-				//create sky system if primary engine
-				if (i == 0)
-					CreateSky(engines[i]);
-			}
-		}
-	}
-}
-
-EngineContext* Skyscraper::GetEngine(int number)
-{
-	//get an engine by instance number
-
-	if (number < 0 || number >= (int)engines.size())
-		return 0;
-
-	return engines[number];
-}
-
-int Skyscraper::GetEngineCount()
-{
-	//get number of valid engines
-
-	int count = 0;
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-			count++;
-	}
-	return count;
-}
-
 void Skyscraper::RaiseWindow()
 {
 	window->Raise();
@@ -2633,118 +2357,13 @@ void Skyscraper::RefreshViewport()
 		mViewport->_updateDimensions();
 }
 
-void Skyscraper::SwitchEngines()
-{
-	//if user is no longer inside the active engine, find a new engine to attach to
-
-	if (!active_engine)
-		return;
-
-	if (active_engine->IsInside() == true)
-		return;
-
-	EngineContext *parent = active_engine->GetParent();
-
-	//if active engine has a parent, switch to the parent if possible
-	if (parent)
-	{
-		if (parent->IsInside() == true && parent->IsCameraActive() == false)
-		{
-			SetActiveEngine(parent->GetNumber(), true);
-			return;
-		}
-	}
-
-	//otherwise search for a valid engine to attach to
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i] != active_engine && engines[i])
-		{
-			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
-			{
-				SetActiveEngine((int)i, true);
-				return;
-			}
-		}
-	}
-
-	//if user has stepped outside of all sim engines, revert the movement
-	//to place them back into the active engine
-	active_engine->RevertMovement();
-}
-
-bool Skyscraper::IsValidEngine(EngineContext *engine)
-{
-	if (!engine)
-		return false;
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i] == engine)
-			return true;
-	}
-	return false;
-}
-
-bool Skyscraper::IsValidSystem(::SBS::SBS *sbs)
-{
-	if (!sbs)
-		return false;
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-		{
-			if (engines[i]->GetSystem() == sbs)
-				return true;
-		}
-	}
-	return false;
-}
-
-int Skyscraper::GetFreeInstanceNumber()
-{
-	//get an available engine instance number
-
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (!engines[i])
-			return (int)i;
-	}
-	return (int)engines.size();
-}
-
-int Skyscraper::RegisterEngine(EngineContext *engine)
-{
-	//register an engine with the frontend, returning the assigned instance number
-
-	int number = GetFreeInstanceNumber();
-
-	if (number < (int)engines.size())
-		engines[number] = engine;
-	else
-		engines.push_back(engine);
-
-	return number;
-}
-
-EngineContext* Skyscraper::GetFirstValidEngine()
-{
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-			return engines[i];
-	}
-	return 0;
-}
-
 void Skyscraper::EnableSky(bool value)
 {
 	//enable or disable sky system
 
 	//enable/disable old skybox system in engine 0
-	if (GetEngine(0))
-		GetEngine(0)->GetSystem()->EnableSkybox(value);
+	if (vm->GetEngine(0))
+		vm->GetEngine(0)->GetSystem()->EnableSkybox(value);
 
 	//enable/disable Caelum sky system
 	if (mCaelumSystem)
@@ -2758,7 +2377,7 @@ void Skyscraper::MacOpenFile(const wxString &filename)
 {
 	//support launching app with a building file, on Mac
 
-	if (IsEngineLoading() == true)
+	if (vm->IsEngineLoading() == true)
 		return;
 
 	if (StartupRunning == true)
@@ -2942,6 +2561,21 @@ void Skyscraper::ProcessLoad()
 		loadinfo.need_process = false;
 		load_lock.unlock();
 	}
+}
+
+MainScreen* Skyscraper::GetWindow()
+{
+	return window;
+}
+
+FMOD::System* Skyscraper::GetSoundSystem()
+{
+	return soundsys;
+}
+
+VM* Skyscraper::GetVM()
+{
+	return vm;
 }
 
 }

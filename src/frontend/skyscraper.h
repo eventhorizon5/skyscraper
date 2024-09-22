@@ -65,6 +65,7 @@ class EngineContext;
 class Console;
 class LoadDialog;
 class ScriptProcessor;
+class VM;
 
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
@@ -148,23 +149,9 @@ public:
 	void SetLocation(Real latitude, Real longitude);
 	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
-	EngineContext* GetActiveEngine() { return active_engine; }
-	EngineContext* GetEngine(int number);
-	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	bool DeleteEngine(EngineContext *engine);
-	void DeleteEngines();
-	int GetEngineCount();
-	int GetEngineListSize() { return (int)engines.size(); }
-	EngineContext* FindActiveEngine();
-	void SetActiveEngine(int number, bool switch_engines = false);
-	bool IsEngineLoading();
 	void RaiseWindow();
 	void RefreshConsole();
 	void RefreshViewport();
-	bool IsValidEngine(EngineContext *engine);
-	bool IsValidSystem(::SBS::SBS *sbs);
-	int RegisterEngine(EngineContext *engine);
-	EngineContext* GetFirstValidEngine();
 	void EnableSky(bool value);
 	void UpdateSky();
 	void UnregisterDebugPanel() { dpanel = 0; }
@@ -175,6 +162,9 @@ public:
 	void EnableStats(bool value);
 	std::string GetDataPath();
 	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	MainScreen* GetWindow();
+	FMOD::System* GetSoundSystem();
+	VM* GetVM();
 
 private:
 	//sound data
@@ -210,11 +200,6 @@ private:
 	void UnloadSim();
 	void DeleteButtons();
 	void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
-	bool RunEngines();
-	void SwitchEngines();
-	void HandleEngineShutdown();
-	void HandleReload();
-	int GetFreeInstanceNumber();
 	void ShowProgressDialog();
 	void ReInit();
 	void ProcessLog();
@@ -255,9 +240,6 @@ private:
 	//additional path for user data
 	std::string data_path;
 
-	EngineContext *active_engine;
-	std::vector<EngineContext*> engines;
-
 	struct log_queue_data
 	{
 		std::string text;
@@ -278,6 +260,8 @@ private:
 	};
 	LoadInfo loadinfo;
 
+	//VM instance
+	VM *vm;
 };
 
 DECLARE_APP(Skyscraper)

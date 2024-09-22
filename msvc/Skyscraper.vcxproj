@@ -507,6 +507,7 @@
     <ClCompile Include="..\src\frontend\mainscreen.cpp" />
     <ClCompile Include="..\src\frontend\skyscraper.cpp" />
     <ClCompile Include="..\src\frontend\stackwalker.cpp" />
+    <ClCompile Include="..\src\frontend\vm.cpp" />
     <ClCompile Include="..\src\frontend\gui\actionviewer.cpp" />
     <ClCompile Include="..\src\frontend\gui\cameracontrol.cpp" />
     <ClCompile Include="..\src\frontend\gui\camtex.cpp" />
@@ -547,6 +548,7 @@
     <ClInclude Include="..\src\frontend\skyscraper.h" />
     <ClInclude Include="..\src\frontend\stackwalker.h" />
     <ClInclude Include="..\src\frontend\uexception.h" />
+    <ClInclude Include="..\src\frontend\vm.h" />
     <ClInclude Include="..\src\frontend\gui\actionviewer.h" />
     <ClInclude Include="..\src\frontend\gui\cameracontrol.h" />
     <ClInclude Include="..\src\frontend\gui\camtex.h" />

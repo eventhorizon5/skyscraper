@@ -26,6 +26,7 @@
 #include "skyscraper.h"
 #include "debugpanel.h"
 #include "scriptproc.h"
+#include "vm.h"
 #include "enginecontext.h"
 #include "console.h"
 
@@ -111,13 +112,13 @@ Console::~Console()
 
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	Simcore = skyscraper->GetVM()->GetActiveEngine()->GetSystem();
 
 	if (!Simcore)
 		return;
 
 	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = skyscraper->GetActiveEngine()->GetScriptProcessor();
+	ScriptProcessor *processor = skyscraper->GetVM()->GetActiveEngine()->GetScriptProcessor();
 
 	if (!processor)
 		return;

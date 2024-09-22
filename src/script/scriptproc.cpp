@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <cmath>
 #include "skyscraper.h"
+#include "vm.h"
 #include "enginecontext.h"
 #include "texture.h"
 #include "floor.h"
@@ -505,7 +506,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		error += "\nFunction call line: " + ToString(FunctionLine) + "\nLine Text: " + LineData;
 	}
 
-	if (engine->GetFrontend()->GetEngineCount() > 1)
+	if (engine->GetVM()->GetEngineCount() > 1)
 		error += "\nEngine context: " + ToString(engine->GetNumber());
 
 	engine->ReportError(error);

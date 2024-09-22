@@ -22,6 +22,7 @@
 
 #include "globals.h"
 #include "skyscraper.h"
+#include "vm.h"
 #include "sbs.h"
 #include "camera.h"
 #include "gui/debugpanel.h"
@@ -37,9 +38,10 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : ex{}
+EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : ex{}
 {
-	this->frontend = frontend;
+	this->vm = vm;
+	this->frontend = vm->GetFrontend();
 	finish_time = 0;
 	shutdown = false;
 	loading = false;
@@ -66,7 +68,7 @@ EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::
 	Moved = false;
 
 	//register this engine, and get it's instance number
-	instance = frontend->RegisterEngine(this);
+	instance = vm->RegisterEngine(this);
 
 	Report("\nStarting instance " + ToString(instance) + "...");
 
@@ -84,7 +86,7 @@ EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::
 
 EngineContext::~EngineContext()
 {
-	if (frontend->IsValidEngine(parent) == true)
+	if (vm->IsValidEngine(parent) == true)
 		parent->RemoveChild(this);
 
 	if (children.empty() == false)
@@ -380,7 +382,7 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	Simcore->CutOutsideBoundaries(frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
 
 	//if this has a parent engine, cut the parent for this new engine
-	if (frontend->IsValidEngine(parent) == true)
+	if (vm->IsValidEngine(parent) == true)
 		parent->CutForEngine(this);
 
 	//if this has child engines, and has reloaded, cut for the child engines
@@ -459,11 +461,11 @@ bool EngineContext::IsInside()
 	if (!Simcore)
 		return false;
 
-	if (!frontend->GetActiveEngine())
+	if (!vm->GetActiveEngine())
 		return Simcore->IsInside();
 
 	//make sure the global camera's position is actually inside this engine
-	return IsInside(frontend->GetActiveEngine()->GetCameraPosition());
+	return IsInside(vm->GetActiveEngine()->GetCameraPosition());
 }
 
 bool EngineContext::IsInside(const Vector3 &position)
@@ -527,15 +529,15 @@ void EngineContext::OnEnter()
 
 	inside = true;
 
-	if (frontend->GetActiveEngine())
+	if (vm->GetActiveEngine())
 	{
 		//if this engine is an ancestor of the active engine, don't switch to this engine
-		if (frontend->GetActiveEngine()->IsParent(this) == true)
+		if (vm->GetActiveEngine()->IsParent(this) == true)
 			return;
 	}
 
 	//make this engine active
-	frontend->SetActiveEngine(instance, true);
+	vm->SetActiveEngine(instance, true);
 }
 
 void EngineContext::OnExit()
@@ -589,7 +591,7 @@ void EngineContext::CutForEngine(EngineContext *engine)
 		Simcore->Prepare();
 
 	//if this has a valid parent, have parent cut for the specified engine
-	if (frontend->IsValidEngine(parent) == true)
+	if (vm->IsValidEngine(parent) == true)
 		parent->CutForEngine(engine);
 }
 
@@ -652,6 +654,11 @@ bool EngineContext::IsParent(EngineContext *engine, bool recursive)
 void EngineContext::ThreadWait()
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+}
+
+VM* EngineContext::GetVM()
+{
+	return vm;
 }
 
 }
