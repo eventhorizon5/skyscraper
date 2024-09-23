@@ -1092,12 +1092,8 @@ bool Skyscraper::Loop()
 	ProcessLog();
 	ProcessLoad();
 
-	//run thread 0 runloops for each engine context
-	for (size_t i = 0; i < engines.size(); i++)
-	{
-		if (engines[i])
-			engines[i]->Run0();
-	}
+	//run thread 0 runloop
+	vm->Run0();
 
 	//main menu routine
 	if (StartupRunning == true)

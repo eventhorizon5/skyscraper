@@ -57,6 +57,7 @@ public:
 	void HandleReload();
 	Skyscraper* GetFrontend();
 	bool Run();
+	void Run0();
 	void SwitchEngines();
 	void CheckCamera();
 
