@@ -1117,7 +1117,7 @@ bool Skyscraper::Loop()
 	if (show_progress == true)
 		ShowProgressDialog();
 
-	//run sim engine instances
+	//run nanokernel and engine contexts
 	bool result = vm->Run();
 
 	//delete an engine if requested
