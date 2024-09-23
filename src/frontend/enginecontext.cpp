@@ -218,10 +218,7 @@ void EngineContext::Run0()
 	if (!Simcore)
 		return;
 
-	if (!Simcore->GetUtility())
-		return;
-
-	Simcore->GetUtility()->ProcessLog();
+	Simcore->Run0();
 }
 
 bool EngineContext::Load(std::string filename)
