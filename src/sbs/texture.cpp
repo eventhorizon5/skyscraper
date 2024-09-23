@@ -93,9 +93,9 @@ TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 	//load default textures
 	Report("Loading default textures...");
 	sbs->SetLighting();
-	LoadTexture("data/default.png", "Default", 1, 1);
-	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
-	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
+	//LoadTexture("data/default.png", "Default", 1, 1);
+	//LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	//LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	sbs->ResetLighting();
 	Report("Done");
 }
