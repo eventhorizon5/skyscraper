@@ -109,6 +109,10 @@ private:
 	//child engines
 	std::vector<EngineContext*> children;
 
+	//threading
+	std::thread ex;
+	bool ShutdownLoop;
+
 	//VM instance
 	VM *vm;
 };

@@ -37,7 +37,7 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : ex {}
 {
 	this->vm = vm;
 	this->frontend = vm->GetFrontend();
@@ -78,6 +78,9 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 		parent->AddChild(this);
 
 	StartSim();
+
+	//enable runloop thread
+	ex = std::thread{&EngineContext::Run, this};
 }
 
 EngineContext::~EngineContext()
@@ -92,6 +95,10 @@ EngineContext::~EngineContext()
 			children[i]->RemoveParent();
 		}
 	}
+
+	//shutdown runloop thread
+	ShutdownLoop = true;
+	ex.join();
 
 	UnloadSim();
 

@@ -191,8 +191,8 @@ bool VM::Run()
 
 			if (engines[i]->IsLoadingFinished() == false && run == true)
 			{
-				if (engines[i]->Run() == false)
-					result = false;
+				//if (engines[i]->Run() == false)
+					//result = false;
 			}
 		}
 
