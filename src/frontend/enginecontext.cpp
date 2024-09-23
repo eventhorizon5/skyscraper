@@ -145,7 +145,7 @@ void EngineContext::Run()
 			{
 				if (result == false)
 				{
-					//ReportError("Error processing building\n");
+					ReportError("Error processing building\n");
 					Shutdown();
 					//frontend->CloseProgressDialog();
 					ShutdownLoop = true;
@@ -162,12 +162,14 @@ void EngineContext::Run()
 					//ShutdownLoop = true;
 					//return;
 				}
-			}
-			else if (processor->IsFinished == true && result == true)
-			{
-				Simcore->Prepare(false);
-				Simcore->DeleteColliders = false;
-				Simcore->Init(); //initialize any new objects
+
+				if (processor->IsFinished == true && result == true)
+				{
+					loading = false;
+					Simcore->Prepare(false);
+					Simcore->DeleteColliders = false;
+					Simcore->Init(); //initialize any new objects
+				}
 			}
 		}
 		else
@@ -463,6 +465,9 @@ bool EngineContext::IsInside()
 
 	if (!vm->GetActiveEngine())
 		return Simcore->IsInside();
+
+	if (!Simcore->camera)
+		return false;
 
 	//make sure the global camera's position is actually inside this engine
 	return IsInside(vm->GetActiveEngine()->GetCameraPosition());

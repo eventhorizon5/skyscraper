@@ -530,6 +530,10 @@ void SBS::Loop()
 	//Main simulator loop
 	SBS_PROFILE("SBS::Loop");
 
+	//make sure camera object is bound
+	if (!camera)
+		return;
+
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
 
