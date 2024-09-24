@@ -3,16 +3,16 @@
 #include <vector>
 #include <string>
 
-#include "OgreD3D11Prerequisites.h"
+#include "RenderSystems/Direct3D11/OgreD3D11Prerequisites.h"
 
 #include "OgreOpenXRConfig.h"
 
-#include "OgreD3D11Device.h"
+#include "RenderSystems/Direct3D11/OgreD3D11Device.h"
 
 #include <openxr/openxr.h>
-#include "XrHandle.h"
-#include "XrError.h"
-#include "XrDispatchTable.h"
+#include "XrUtility/XrHandle.h"
+#include "XrUtility/XrError.h"
+#include "XrUtility/XrDispatchTable.h"
 #include <winrt/base.h>
 #include <memory>
 #include "OgreOpenXRInstance.h"
