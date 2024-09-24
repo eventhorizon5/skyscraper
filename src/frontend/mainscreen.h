@@ -68,7 +68,7 @@ private:
 	bool look_up, look_down;
 	bool step_forward, step_backward;
 
-	char key_right, key_left, key_up, key_down, key_lookup, key_lookdown;
+	char key_right, key_left, key_up, key_down, key_straferight, key_strafeleft, key_lookup, key_lookdown;
 	char key_binoculars, key_crouch, key_floatup, key_floatdown, key_noclip;
 	char key_pickup, key_load, key_enter;
 

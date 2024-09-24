@@ -98,6 +98,8 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	key_left = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Left", "A")[0];
 	key_up = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Up", "W")[0];
 	key_down = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Down", "S")[0];
+	key_strafeleft = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.StrafeLeft", "Q")[0];
+	key_straferight = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.StrafeRight", "E")[0];
 	key_lookup = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.LookUp", "P")[0];
 	key_lookdown = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.LookDown", "L")[0];
 	key_binoculars = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Binoculars", "B")[0];
@@ -548,6 +550,12 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 
 			if (key == WXK_LEFT || key == (wxKeyCode)key_left)
 				turn_left = down;
+
+			if (key == (wxKeyCode)key_straferight)
+				strafe_right = down;
+
+			if (key == (wxKeyCode)key_strafeleft)
+				strafe_left = down;
 		}
 		else
 		{
