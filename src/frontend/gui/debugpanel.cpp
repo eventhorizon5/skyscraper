@@ -388,6 +388,7 @@ void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
 
 	mc->CenterOnScreen();
 	mc->Show();
+	mc->Raise();
 }
 
 void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
@@ -397,6 +398,7 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 
 	ee->CenterOnScreen();
 	ee->Show();
+	ee->Raise();
 }
 
 void DebugPanel::OnInit()
@@ -582,6 +584,7 @@ void DebugPanel::On_bCameraControl_Click(wxCommandEvent& event)
 
 	cc->CenterOnScreen();
 	cc->Show();
+	cc->Raise();
 }
 
 void DebugPanel::On_bControlReference_Click(wxCommandEvent& event)
@@ -591,6 +594,7 @@ void DebugPanel::On_bControlReference_Click(wxCommandEvent& event)
 
 	kd->CenterOnScreen();
 	kd->Show();
+	kd->Raise();
 }
 
 void DebugPanel::On_bStats_Click(wxCommandEvent& event)
@@ -600,6 +604,7 @@ void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 
 	stats->CenterOnScreen();
 	stats->Show();
+	stats->Raise();
 }
 
 void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
@@ -620,6 +625,7 @@ void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 
 	objectinfo->CenterOnScreen();
 	objectinfo->Show();
+	objectinfo->Raise();
 }
 
 void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
@@ -635,6 +641,7 @@ void DebugPanel::On_bProfiler_Click(wxCommandEvent& event)
 
 	profiler->CenterOnScreen();
 	profiler->Show();
+	profiler->Raise();
 }
 
 void DebugPanel::On_bActionViewer_Click(wxCommandEvent& event)
@@ -644,6 +651,7 @@ void DebugPanel::On_bActionViewer_Click(wxCommandEvent& event)
 
 	actionviewer->CenterOnScreen();
 	actionviewer->Show();
+	actionviewer->Raise();
 }
 
 void DebugPanel::On_bKeys_Click(wxCommandEvent& event)
@@ -659,6 +667,7 @@ void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 
 	tmanager->CenterOnScreen();
 	tmanager->Show();
+	tmanager->Raise();
 }
 
 void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
@@ -679,6 +688,7 @@ void DebugPanel::On_bSkyControl_Click(wxCommandEvent& event)
 
 	skycontrol->CenterOnScreen();
 	skycontrol->Show();
+	skycontrol->Raise();
 }
 
 void DebugPanel::On_bEngineManager_Click(wxCommandEvent& event)
@@ -688,6 +698,7 @@ void DebugPanel::On_bEngineManager_Click(wxCommandEvent& event)
 
 	emanager->CenterOnScreen();
 	emanager->Show();
+	emanager->Raise();
 }
 
 void DebugPanel::On_bPeopleManager_Click(wxCommandEvent& event)
@@ -697,6 +708,7 @@ void DebugPanel::On_bPeopleManager_Click(wxCommandEvent& event)
 
 	pmanager->CenterOnScreen();
 	pmanager->Show();
+	pmanager->Raise();
 }
 
 void DebugPanel::EnableTimer(bool value)
@@ -767,6 +779,7 @@ void DebugPanel::On_bCameraTexture_Click(wxCommandEvent& event)
 
 	camtex->CenterOnScreen();
 	camtex->Show();
+	camtex->Raise();
 }
 
 void DebugPanel::On_bSoundManager_Click(wxCommandEvent& event)
@@ -776,6 +789,7 @@ void DebugPanel::On_bSoundManager_Click(wxCommandEvent& event)
 
 	smanager->CenterOnScreen();
 	smanager->Show();
+	smanager->Raise();
 }
 
 }
