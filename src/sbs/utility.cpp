@@ -617,7 +617,8 @@ bool Utility::ReportError(const std::string &message)
 
 void Utility::ProcessLog()
 {
-	report_lock.lock();
+	//only allow one thread at a time to run ProcessLog()
+	std::lock_guard<std::mutex> guard(report_lock);
 
 	while (log_queue.size() > 0)
 	{
@@ -638,8 +639,6 @@ void Utility::ProcessLog()
 		//erase queue entry
 		log_queue.erase(log_queue.begin());
 	}
-
-	report_lock.unlock();
 }
 
 void Utility::RemoveTexture(Ogre::ResourceHandle handle)
