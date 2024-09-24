@@ -70,7 +70,6 @@ if(WIN32)
 	file(GLOB FRONTEND_FILES
 		src/frontend/*.cpp
 		src/frontend/gui/*.cpp
-		src/openxr/src/*.cpp
 	)
 else()
 	file(GLOB FRONTEND_FILES
@@ -87,6 +86,10 @@ file(GLOB SBS_FILES
 	src/sbs/*.cpp
 )
  
+file(GLOB OPENXR_FILES
+	src/openxr/src/*.cpp
+)
+
 file(GLOB OGREBULLET_COLL_FILES
 	ogrebullet/Collisions/src/*.cpp
 	ogrebullet/Collisions/src/Debug/*.cpp
@@ -137,6 +140,9 @@ if (NOT WIN32)
 	add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
 endif ()
 
+#OpenXR Library
+add_library(OpenXR SHARED ${OPENXR_FILES})
+
 #frontend executable
 if (NOT WIN32)
 	add_executable(skyscraper ${FRONTEND_FILES})
@@ -145,6 +151,7 @@ else ()
 
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
+	target_compile_options(OpenXR PRIVATE "/MD")
 	target_compile_options(SBS PRIVATE -DSBS_DLL "/MD")
 	target_compile_options(skyscraper PRIVATE "/MD")
 endif ()
@@ -162,13 +169,14 @@ target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
+target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY})
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
 if (NOT WIN32)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
 else ()
-	target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${OPENXR_loader_LIBRARY} ${FRONTENDGLINC})
+	target_link_libraries(skyscraper SBS OpenXR ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${OPENXR_loader_LIBRARY} ${FRONTENDGLINC})
 endif ()
  
 if (APPLE)
