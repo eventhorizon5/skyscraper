@@ -183,12 +183,14 @@ void Camera::SetPosition(const Vector3 &position)
 	if (Cameras.empty())
 		return;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	if (EnableBullet == true)
+		GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[0]->getPosition()));
+	else
 	{
-		if (EnableBullet == true)
-			GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[i]->getPosition()));
-		else
+		for (int i = 0; i < Cameras.size(); i++)
+		{
 			Cameras[i]->setPosition(sbs->ToRemote(position));
+		}
 	}
 
 	OnMove(false);
