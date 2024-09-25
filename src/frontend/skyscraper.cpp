@@ -816,7 +816,9 @@ bool Skyscraper::Initialize()
 		try
 		{
 			//define camera configuration
-			int cameras = 2;
+			int cameras = 1; //use one camera for standard mode
+			if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+				cameras = 2; //use two cameras for VR mode
 
 			for (int i = 0; i < cameras; i++)
 			{
