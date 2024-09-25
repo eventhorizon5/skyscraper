@@ -1925,13 +1925,10 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 
 	//create the render window
-	//mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false);
-	mRenderWindow2 = CreateOpenXRRenderWindow(mRoot->getRenderSystem(), "SkyscraperVR");
+	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	mRenderWindow->create(name, width, height, false, &params);
 	mRenderWindow->setActive(true);
-	//mRenderWindow2->setActive(true);
 	mRenderWindow->windowMovedOrResized();
-	mRenderWindow2->windowMovedOrResized();
 
 	return mRenderWindow;
 }
@@ -1940,13 +1937,9 @@ void Skyscraper::destroyRenderWindow()
 {
 	if (mRenderWindow)
 	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
-	if (mRenderWindow2)
-		Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow2);
 
 	mRenderWindow->destroy();
-	mRenderWindow2->destroy();
 	mRenderWindow = 0;
-	mRenderWindow2 = 0;
 }
 
 const std::string Skyscraper::getOgreHandle() const
