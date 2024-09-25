@@ -77,11 +77,9 @@ public:
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
 	Ogre::RenderWindow* mRenderWindow2;
-	Ogre::Viewport* mViewport;
-	Ogre::Viewport* mViewport2;
+	std::vector<Ogre::Viewport*> mViewports;
 	Ogre::SceneManager* mSceneMgr;
-	Ogre::Camera* mCamera;
-	Ogre::Camera* mCamera2;
+	std::vector<Ogre::Camera*> mCameras;
 	Ogre::OverlaySystem* mOverlaySystem;
 
 	std::string version;
