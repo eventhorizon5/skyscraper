@@ -76,9 +76,9 @@ public:
 	//OGRE engine data
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
-	Ogre::Viewport* mViewport;
+	std::vector<Ogre::Viewport*> mViewports;
 	Ogre::SceneManager* mSceneMgr;
-	Ogre::Camera* mCamera;
+	std::vector<Ogre::Camera*> mCameras;
 	Ogre::OverlaySystem* mOverlaySystem;
 
 	std::string version;
