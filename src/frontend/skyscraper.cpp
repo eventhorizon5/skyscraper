@@ -819,10 +819,7 @@ bool Skyscraper::Initialize()
 			for (int i = 0; i < cameras; i++)
 			{
 				mCameras.push_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-				Real left = 0;
-				if (i == 1)
-					left = 0.5;
-				mViewports.push_back(mRenderWindow->addViewport(mCameras[i], i, left, 0, 0.5, 1));
+				mViewports.push_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
 				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 			}
 		}
