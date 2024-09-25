@@ -43,7 +43,9 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <fmod.hpp>
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "OgreOpenXRRenderWindow.h"
+#endif
 #include "Caelum.h"
 #include "globals.h"
 #include "sbs.h"
@@ -1922,6 +1924,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 
 	//create the render window
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
 	{
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
@@ -1929,6 +1932,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 		mRenderWindow->create(name, width, height, false, &params);
 	}
 	else
+#endif
 		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 
 	mRenderWindow->setActive(true);
