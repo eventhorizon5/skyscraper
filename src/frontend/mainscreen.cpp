@@ -165,8 +165,10 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 		frontend->mRenderWindow->windowMovedOrResized();
 #endif
 	}
-	//if (frontend->mCamera)
-		//frontend->mCamera->setAspectRatio(Real(frontend->mViewport->getActualWidth()) / Real(frontend->mViewport->getActualHeight()));
+	for (int i = 0; i < frontend->mCameras.size(); i++)
+	{
+		frontend->mCameras[i]->setAspectRatio(Real(frontend->mViewports[i]->getActualWidth()) / Real(frontend->mViewports[i]->getActualHeight()));
+	}
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
