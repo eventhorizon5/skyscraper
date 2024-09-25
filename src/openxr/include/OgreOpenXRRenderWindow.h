@@ -4,5 +4,5 @@
 #include "OgreRenderSystem.h"
 #include "OgreOpenXRConfig.h"
 
-_OgreOpenXRExport Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys, const char* appName);
+_OgreOpenXRExport Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys);
 

@@ -695,7 +695,7 @@ bool Skyscraper::Initialize()
 		{
 			Report("");
 			Report("Creating render window...");
-			mRenderWindow = CreateRenderWindow();
+			mRenderWindow = CreateRenderWindow(0, "SkyscraperVR");
 		}
 	}
 	catch (Ogre::Exception &e)
@@ -1925,7 +1925,8 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 
 	//create the render window
-	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
 	mRenderWindow->create(name, width, height, false, &params);
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();
