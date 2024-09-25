@@ -228,7 +228,7 @@ namespace Ogre {
       }
       mEyeCameras[k]->setCustomViewMatrix(true, viewMatrix);
       mEyeCameras[k]->setCustomProjectionMatrix(true, eyeProjectionMatrix);
-      mEyeCameras[k]->setFarClipDistance(3000);
+      //mEyeCameras[k]->setFarClipDistance(3000);
       mEyeCameras[k]->setAspectRatio(Ogre::Real(imageRect.extent.height / imageRect.extent.width));
     }
   }
