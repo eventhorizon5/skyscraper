@@ -119,9 +119,6 @@ namespace Ogre {
     mActive = false;
     mSizing = false;
     mHidden = false;
-
-    mXrState->Initialize(appName);
-    mXrState->InitializeSystem();
   }
 
   OpenXRRenderWindow::~OpenXRRenderWindow() {
@@ -136,6 +133,8 @@ namespace Ogre {
     bool fullScreen, const NameValuePairList* miscParams)
   {
     D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+    mXrState->Initialize(name);
+    mXrState->InitializeSystem();
     mXrState->initializeSession(mDevice);
 
     mViewProjections->Initialize(mXrState.get());
