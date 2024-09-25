@@ -27,7 +27,7 @@ void Ogre::OpenXRInstance::Initialize(const std::string& applicationName)
   createInfo.applicationInfo.applicationVersion = 1;
   createInfo.applicationInfo.engineName[0] = 0;
   createInfo.applicationInfo.engineVersion = 1;
-  createInfo.applicationInfo.apiVersion = XR_CURRENT_API_VERSION;
+  createInfo.applicationInfo.apiVersion = XR_API_VERSION_1_0;
 
   strcpy_s(createInfo.applicationInfo.applicationName, applicationName.c_str());
 
