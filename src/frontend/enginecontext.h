@@ -60,7 +60,7 @@ public:
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
-	void AttachCamera(std::vector<Ogre::Camera*> cameras, bool init_state = true);
+	void AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state = true);
 	void RefreshCamera();
 	void ResetCamera();
 	void RevertMovement();
