@@ -820,12 +820,14 @@ bool Skyscraper::Initialize()
 			//mViewport = mRenderWindow->addViewport(mCamera);
 			//mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 
-			Ogre::Camera* mCamera = mSceneMgr->createCamera("leftEye");
-			Ogre::Camera* mCamera2 = mSceneMgr->createCamera("rightEye");
+			mCamera = mSceneMgr->createCamera("leftEye");
+			mCamera2 = mSceneMgr->createCamera("rightEye");
 
 			mViewport = mRenderWindow->addViewport(mCamera, 1, 0, 0, 1, 1);
 			mViewport2 = mRenderWindow->addViewport(mCamera2, 0, 0, 0, 1, 1);
 
+			mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
+			mCamera2->setAspectRatio(Real(mViewport2->getActualWidth()) / Real(mViewport2->getActualHeight()));
 		}
 		catch (Ogre::Exception &e)
 		{
