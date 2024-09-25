@@ -29,7 +29,7 @@ namespace Ogre {
     * the D3D11 device, but we don't request it directly so that the D3D11RenderSystem
     * doesn't need to be linked to the consuming project.
     */
-    OpenXRRenderWindow(RenderSystem* rsys, const char* appName);
+    OpenXRRenderWindow(RenderSystem* rsys);
     ~OpenXRRenderWindow();
 
     /**
@@ -107,7 +107,7 @@ namespace {
 }
 
 namespace Ogre {
-  OpenXRRenderWindow::OpenXRRenderWindow(RenderSystem* rsys, const char* appName) :
+  OpenXRRenderWindow::OpenXRRenderWindow(RenderSystem* rsys) :
     D3D11RenderWindowBase(static_cast<D3D11RenderSystem*>(rsys)->_getDevice()),
     mXrState(new OpenXRState),
     mViewProjections(new OpenXRViewProjection),
@@ -397,9 +397,9 @@ namespace Ogre {
   }
 }
 
-Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys, const char* appName)
+Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys)
 {
-  Ogre::OpenXRRenderWindow* xrRenderWindow = new Ogre::OpenXRRenderWindow(rsys, appName);
+  Ogre::OpenXRRenderWindow* xrRenderWindow = new Ogre::OpenXRRenderWindow(rsys);
   rsys->attachRenderTarget(*xrRenderWindow);
   return xrRenderWindow;
 }
