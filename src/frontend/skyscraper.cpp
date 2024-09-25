@@ -815,9 +815,16 @@ bool Skyscraper::Initialize()
 	{
 		try
 		{
-			mCamera = mSceneMgr->createCamera("Main Camera");
+			//mCamera = mSceneMgr->createCamera("Main Camera");
 			//mViewport = mRenderWindow->addViewport(mCamera);
 			//mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
+
+			Ogre::Camera* mCamera = mSceneMgr->createCamera("leftEye");
+			Ogre::Camera* mCamera2 = mSceneMgr->createCamera("rightEye");
+
+			mViewport = mRenderWindow->addViewport(mCamera, 1, 0, 0, 1, 1);
+			mViewport2 = mRenderWindow->addViewport(mCamera2, 0, 0, 0, 1, 1);
+
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -826,8 +833,11 @@ bool Skyscraper::Initialize()
 	}
 
 	//set up default material shader scheme
-	//if (RTSS == true)
-		//mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	if (RTSS == true)
+	{
+		mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		mViewport2->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	}
 
 	//setup texture filtering
 	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
@@ -1765,12 +1775,6 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (!engine)
 		return false;
 
-	Ogre::Camera* leftEye = mSceneMgr->createCamera("leftEye");
-	Ogre::Camera* rightEye = mSceneMgr->createCamera("rightEye");
-
-	mRenderWindow->addViewport(leftEye, 1, 0, 0, 1, 1);
-	mRenderWindow->addViewport(rightEye, 0, 0, 0, 1, 1);
-
 	::SBS::SBS *Simcore = engine->GetSystem();
 
 	if (engine == vm->GetActiveEngine())
@@ -2100,7 +2104,7 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	//attach caelum to running viewport
 	try
 	{
-		//mCaelumSystem->attachViewport(mViewport);
+		mCaelumSystem->attachViewport(mViewport);
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
 		if (GetConfigBool("Skyscraper.Frontend.Caelum.EnableFog", true) == false)
@@ -2322,8 +2326,8 @@ void Skyscraper::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 
-	//if (Headless == false)
-		//mViewport->_updateDimensions();
+	if (Headless == false)
+		mViewport->_updateDimensions();
 }
 
 void Skyscraper::EnableSky(bool value)
