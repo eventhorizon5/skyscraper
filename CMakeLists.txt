@@ -159,7 +159,7 @@ else ()
 
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
-	target_compile_options(OpenXR PRIVATE "/MD")
+	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
 	target_compile_options(SBS PRIVATE -DSBS_DLL "/MD")
 	target_compile_options(skyscraper PRIVATE "/MD")
 endif ()
