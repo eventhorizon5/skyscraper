@@ -149,7 +149,9 @@ endif ()
 add_library(Alloc SHARED ${ALLOC_FILES})
 
 #OpenXR Library
-add_library(OpenXR SHARED ${OPENXR_FILES})
+if (WIN32)
+	add_library(OpenXR SHARED ${OPENXR_FILES})
+endif ()
 
 #frontend executable
 if (NOT WIN32)
@@ -177,7 +179,10 @@ target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
-target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY})
+if (WIN32)
+	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY})
+endif ()
+
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
 if (NOT WIN32)
