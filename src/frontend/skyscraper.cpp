@@ -200,10 +200,7 @@ bool Skyscraper::OnInit(void)
 	mOverlaySystem = 0;
 	mRoot = 0;
 	mRenderWindow = 0;
-	mViewport = 0;
-	mViewport2 = 0;
 	mSceneMgr = 0;
-	mCamera = 0;
 	sound = 0;
 	channel = 0;
 	SkyMult = 0;
@@ -820,14 +817,17 @@ bool Skyscraper::Initialize()
 			//mViewport = mRenderWindow->addViewport(mCamera);
 			//mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 
-			mCamera = mSceneMgr->createCamera("leftEye");
-			mCamera2 = mSceneMgr->createCamera("rightEye");
+			int cameras = 2;
 
-			mViewport = mRenderWindow->addViewport(mCamera, 1, 0, 0, 0.5, 1);
-			mViewport2 = mRenderWindow->addViewport(mCamera2, 0, 0.5, 0, 0.5, 1);
-
-			mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
-			mCamera2->setAspectRatio(Real(mViewport2->getActualWidth()) / Real(mViewport2->getActualHeight()));
+			for (int i = 0; i < cameras; i++)
+			{
+				mCameras.push_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
+				Real left = 0;
+				if (i == 1)
+					left = 0.5;
+				mViewports.push_back(mRenderWindow->addViewport(mCameras[i], i, left, 0, 0.5, 1));
+				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			}
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -838,8 +838,10 @@ bool Skyscraper::Initialize()
 	//set up default material shader scheme
 	if (RTSS == true)
 	{
-		mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
-		mViewport2->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		for (int i = 0; i < mViewports.size(); i++)
+		{
+			mViewports[i]->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		}
 	}
 
 	//setup texture filtering
@@ -1807,7 +1809,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	//start simulation
-	if (!engine->Start(mCamera))
+	if (!engine->Start(mCameras))
 		return false;
 
 	//close progress dialog if no engines are loading
@@ -2114,8 +2116,10 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	//attach caelum to running viewport
 	try
 	{
-		mCaelumSystem->attachViewport(mViewport);
-		mCaelumSystem->attachViewport(mViewport2);
+		for (int i = 0; i < mViewports.size(); i++)
+		{
+			mCaelumSystem->attachViewport(mViewports[i]);
+		}
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
 		if (GetConfigBool("Skyscraper.Frontend.Caelum.EnableFog", true) == false)
@@ -2176,7 +2180,10 @@ void Skyscraper::UpdateSky()
 
 	if (mCaelumSystem)
 	{
-		mCaelumSystem->notifyCameraChanged(mCamera);
+		for (int i = 0; i < mCameras.size(); i++)
+		{
+			mCaelumSystem->notifyCameraChanged(mCameras[i]);
+		}
 		mCaelumSystem->setTimeScale(SkyMult);
 		mCaelumSystem->updateSubcomponents(Real(vm->GetActiveEngine()->GetSystem()->GetElapsedTime()) / 1000);
 	}
@@ -2339,8 +2346,10 @@ void Skyscraper::RefreshViewport()
 
 	if (Headless == false)
 	{
-		mViewport->_updateDimensions();
-		mViewport2->_updateDimensions();
+		for (int i = 0; i < mViewports.size(); i++)
+		{
+			mViewports[i]->_updateDimensions();
+		}
 	}
 }
 

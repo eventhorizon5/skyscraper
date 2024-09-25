@@ -111,7 +111,6 @@ Camera::Camera(Object *parent) : Object(parent)
 	AttachedModel = 0;
 	prev_orientation = Quaternion::ZERO;
 	prev_position = Vector3::ZERO;
-	MainCamera = 0;
 	Gravity = 0;
 	GravityStatus = false;
 	FirstAttach = false;
@@ -181,13 +180,16 @@ void Camera::SetPosition(const Vector3 &position)
 {
 	//sets the camera to an absolute position in 3D space
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
-	if (EnableBullet == true)
-		GetSceneNode()->SetPosition(position - sbs->ToLocal(MainCamera->getPosition()));
-	else
-		MainCamera->setPosition(sbs->ToRemote(position));
+	for (int i = 0; i < Cameras.size(); i++)
+	{
+		if (EnableBullet == true)
+			GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[i]->getPosition()));
+		else
+			Cameras[i]->setPosition(sbs->ToRemote(position));
+	}
 
 	OnMove(false);
 }
@@ -196,7 +198,7 @@ void Camera::SetDirection(const Vector3 &direction)
 {
 	//sets the camera's direction to an absolute position
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	//MainCamera->lookAt(sbs->ToRemote(direction));
@@ -206,7 +208,7 @@ void Camera::SetRotation(const Vector3 &rotation)
 {
 	//sets the camera's rotation in degrees
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	//keep rotation within 360 degree boundaries
@@ -232,7 +234,10 @@ void Camera::SetRotation(const Vector3 &rotation)
 	Quaternion camrot = x * z;
 	Quaternion bodyrot = y;
 	Rotation = vector;
-	MainCamera->setOrientation(camrot);
+	for (int i = 0; i < Cameras.size(); i++)
+	{
+		Cameras[i]->setOrientation(camrot);
+	}
 
 	if (EnableBullet == true)
 		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
@@ -247,8 +252,8 @@ Vector3 Camera::GetPosition(bool relative)
 
 	Vector3 cameraposition = Vector3::ZERO;
 
-	if (MainCamera)
-		cameraposition = sbs->ToLocal(MainCamera->getPosition());
+	if (!Cameras.empty())
+		cameraposition = sbs->ToLocal(Cameras[0]->getPosition());
 
 	return GetSceneNode()->GetPosition() + cameraposition;
 }
@@ -257,14 +262,14 @@ void Camera::GetDirection(Vector3 &front, Vector3 &top, bool global)
 {
 	//returns the camera's current direction in front and top vectors
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	Quaternion dir;
 	if (global == false)
-		dir = sbs->FromGlobal(MainCamera->getDerivedOrientation());
+		dir = sbs->FromGlobal(Cameras[0]->getDerivedOrientation());
 	else
-		dir = MainCamera->getDerivedOrientation();
+		dir = Cameras[0]->getDerivedOrientation();
 
 	front = dir.zAxis();
 	front.x = -front.x; //convert to left-hand coordinate system
@@ -286,7 +291,7 @@ void Camera::UpdateCameraFloor()
 {
 	SBS_PROFILE("Camera::UpdateCameraFloor");
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	int newlastfloor;
@@ -311,7 +316,7 @@ bool Camera::Move(Vector3 vector, Real speed, bool flip)
 {
 	//moves the camera in a relative amount specified by a vector
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return false;
 
 	if (MovementStopped == true && vector == Vector3::ZERO)
@@ -330,7 +335,7 @@ bool Camera::Move(Vector3 vector, Real speed, bool flip)
 	if (EnableBullet == true)
 		orientation = GetSceneNode()->GetRawSceneNode()->_getDerivedOrientation();
 	else
-		orientation = MainCamera->getOrientation();
+		orientation = Cameras[0]->getOrientation();
 
 	//flip X axis
 	vector *= Vector3(-1, 1, 1);
@@ -347,7 +352,7 @@ bool Camera::MovePosition(Vector3 vector, Real speed)
 {
 	//moves the camera in a relative amount, using SetPosition, instead of character movement
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return false;
 
 	if (vector == Vector3::ZERO)
@@ -361,7 +366,7 @@ void Camera::Rotate(const Vector3 &rotation, Real speed)
 {
 	//rotates the camera in a relative amount in world space
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	Vector3 rot = GetRotation() + (rotation * speed);
@@ -372,7 +377,7 @@ void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 {
 	//rotates the camera in a relative amount in local camera space
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (RotationStopped == true && rotation == Vector3::ZERO)
@@ -406,18 +411,21 @@ void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 	if (Rotation.z < 0)
 		Rotation.z += 360;
 
-	Quaternion rot(Degree(Rotation.y), Vector3::NEGATIVE_UNIT_Y);
-	if (EnableBullet == true)
+	for (int i = 0; i < Cameras.size(); i++)
 	{
-		//rotate character collider
-		mCharacter->setOrientation(sbs->ToGlobal(rot));
+		Quaternion rot(Degree(Rotation.y), Vector3::NEGATIVE_UNIT_Y);
+		if (EnableBullet == true)
+		{
+			//rotate character collider
+			mCharacter->setOrientation(sbs->ToGlobal(rot));
 
-		//rotate camera
-		MainCamera->pitch(Degree(xdeg));
-		MainCamera->roll(Degree(zdeg));
+			//rotate camera
+			Cameras[i]->pitch(Degree(xdeg));
+			Cameras[i]->roll(Degree(zdeg));
+		}
+		else
+			Cameras[i]->setOrientation(rot);
 	}
-	else
-		MainCamera->setOrientation(rot);
 
 	OnRotate(false);
 }
@@ -472,7 +480,7 @@ void Camera::CheckElevator()
 
 	SBS_PROFILE("Camera::CheckElevator");
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	for (int i = 1; i <= sbs->GetElevatorCount(); i++)
@@ -496,7 +504,7 @@ void Camera::CheckShaft()
 {
 	//check to see if user (camera) is in a shaft
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (sbs->AutoShafts == false)
@@ -519,7 +527,7 @@ void Camera::CheckStairwell()
 {
 	//check to see if user (camera) is in a stairwell
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (sbs->AutoStairs == false)
@@ -543,7 +551,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 {
 	//get mesh object that the user clicked on, and perform related work
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	SBS_PROFILE("Camera::ClickedObject");
@@ -551,8 +559,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	Vector3 pos = GetPosition();
 
 	//cast a ray from the camera in the direction of the clicked position
-	int width = MainCamera->getViewport()->getActualWidth();
-	int height = MainCamera->getViewport()->getActualHeight();
+	int width = Cameras[0]->getViewport()->getActualWidth();
+	int height = Cameras[0]->getViewport()->getActualHeight();
 
 	if (width == 0 || height == 0)
 		return;
@@ -569,7 +577,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 		y = 0.5;
 	}
 
-	Ray ray = MainCamera->getCameraToViewportRay(x, y);
+	Ray ray = Cameras[0]->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
 	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
@@ -739,7 +747,7 @@ void Camera::Loop()
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	//get delta value
@@ -836,7 +844,7 @@ void Camera::Float(Real speed)
 
 void Camera::Jump()
 {
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	//velocity.y = cfg_jumpspeed;
@@ -916,7 +924,7 @@ void Camera::SetGravity(Real gravity, bool save_value, bool camera_only)
 	if (save_value == true)
 		Gravity = gravity;
 
-	if (EnableBullet == true && MainCamera)
+	if (EnableBullet == true && !Cameras.empty())
 	{
 		if (camera_only == false)
 			sbs->mWorld->setGravity(Vector3(0, sbs->ToRemote(-gravity), 0));
@@ -931,7 +939,7 @@ Real Camera::GetGravity()
 
 void Camera::EnableGravity(bool value)
 {
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (value == true)
@@ -956,23 +964,28 @@ void Camera::SetFOVAngle(Real angle)
 {
 	//set camera FOV angle
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (angle > 0 && angle < 179.63)
 	{
-		Real ratio = (float)MainCamera->getAspectRatio();
+		Real ratio = (float)Cameras[0]->getAspectRatio();
 		if (ratio > 0)
-			MainCamera->setFOVy(Degree(angle / ratio));
+		{
+			for (int i = 0; i < Cameras.size(); i++)
+			{
+				Cameras[i]->setFOVy(Degree(angle / ratio));
+			}
+		}
 	}
 }
 
 Real Camera::GetFOVAngle()
 {
-	if (!MainCamera)
+	if (Cameras.empty())
 		return 0.0;
 
-	return (float)(MainCamera->getFOVy().valueDegrees() * MainCamera->getAspectRatio());
+	return (float)(Cameras[0]->getFOVy().valueDegrees() * Cameras[0]->getAspectRatio());
 }
 
 void Camera::SetToDefaultFOV()
@@ -995,20 +1008,23 @@ void Camera::SetViewMode(int mode)
 	//1 - wireframe mode
 	//2 - point mode
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
-	if (mode == 0)
-		MainCamera->setPolygonMode(Ogre::PM_SOLID);
-	if (mode == 1)
-		MainCamera->setPolygonMode(Ogre::PM_WIREFRAME);
-	if (mode == 2)
-		MainCamera->setPolygonMode(Ogre::PM_POINTS);
+	for (int i = 0; i < Cameras.size(); i++)
+	{
+		if (mode == 0)
+			Cameras[i]->setPolygonMode(Ogre::PM_SOLID);
+		if (mode == 1)
+			Cameras[i]->setPolygonMode(Ogre::PM_WIREFRAME);
+		if (mode == 2)
+			Cameras[i]->setPolygonMode(Ogre::PM_POINTS);
+	}
 }
 
 void Camera::EnableCollisions(bool value)
 {
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (value == Collisions)
@@ -1026,7 +1042,7 @@ bool Camera::CollisionsEnabled()
 
 bool Camera::IsOnGround()
 {
-	if (!MainCamera)
+	if (Cameras.empty())
 		return false;
 
 	if (EnableBullet == true)
@@ -1039,7 +1055,7 @@ void Camera::Sync()
 {
 	//sync scene node with bullet object
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (EnableBullet == true)
@@ -1068,10 +1084,13 @@ void Camera::SetMaxRenderDistance(Real value)
 {
 	//set distance of camera's far clipping plane - set to 0 for infinite
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
-	MainCamera->setFarClipDistance(sbs->ToRemote(value));
+	for (int i = 0; i < Cameras.size(); i++)
+	{
+		Cameras[i]->setFarClipDistance(sbs->ToRemote(value));
+	}
 	FarClip = value;
 }
 
@@ -1082,7 +1101,7 @@ Real Camera::GetMaxRenderDistance()
 
 void Camera::ShowDebugShape(bool value)
 {
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (EnableBullet == true)
@@ -1091,13 +1110,18 @@ void Camera::ShowDebugShape(bool value)
 
 void Camera::MoveCharacter()
 {
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (EnableBullet == true)
 		mCharacter->setWalkDirection(accum_movement, 1);
 	else
-		MainCamera->move(accum_movement);
+	{
+		for (int i = 0; i < Cameras.size(); i++)
+		{
+			Cameras[i]->move(accum_movement);
+		}
+	}
 	prev_accum_movement = accum_movement;
 	accum_movement = Vector3::ZERO;
 }
@@ -1112,7 +1136,7 @@ void Camera::GotoFloor(int floor, bool disable_current)
 {
 	//have camera warp to specified floor
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (sbs->IsValidFloor(floor) == true)
@@ -1140,7 +1164,7 @@ void Camera::Binoculars(bool value)
 {
 	//enable or disable binoculars mode
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (value == true)
@@ -1153,18 +1177,18 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 {
 	//returns if a mesh object is visible in the camera's view frustum or not
 
-	if (!mesh || !MainCamera)
+	if (!mesh || Cameras.empty())
 		return false;
 
-	return mesh->IsVisible(MainCamera);
+	return mesh->IsVisible(Cameras[0]);
 }
 
 bool Camera::IsDynamicMeshVisible(DynamicMesh *mesh, int mesh_index)
 {
-	if (!mesh || !MainCamera)
+	if (!mesh || Cameras.empty())
 		return false;
 
-	return mesh->IsVisible(MainCamera, mesh_index);
+	return mesh->IsVisible(Cameras[0], mesh_index);
 }
 
 void Camera::AttachModel(Model *model)
@@ -1250,7 +1274,7 @@ void Camera::ResetState()
 {
 	//reset camera position and state
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	Floor *floor = sbs->GetFloor(CurrentFloor);
@@ -1283,7 +1307,7 @@ void Camera::ResetView()
 {
 	//reset rotation/direction and FOV of camera
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	SetToStartDirection();
@@ -1297,15 +1321,22 @@ void Camera::Refresh()
 		mCharacter->resetLastCollision();
 }
 
-bool Camera::Attach(Ogre::Camera *camera, bool init_state)
+bool Camera::Attach(std::vector<Ogre::Camera*>& cameras, bool init_state)
 {
-	if (camera->isAttached() == true)
+	if (cameras.empty())
 		return false;
 
-	MainCamera = camera;
-	MainCamera->setNearClipDistance(0.1);
-	MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5) / 2), 0);
-	GetSceneNode()->AttachObject(MainCamera);
+	if (cameras[0]->isAttached() == true)
+		return false;
+
+	Cameras = cameras;
+
+	for (int i = 0; i < Cameras.size(); i++)
+	{
+		Cameras[i]->setNearClipDistance(0.1);
+		Cameras[i]->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5) / 2), 0);
+		GetSceneNode()->AttachObject(Cameras[i]);
+	}
 
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
@@ -1342,14 +1373,16 @@ bool Camera::Attach(Ogre::Camera *camera, bool init_state)
 
 bool Camera::Detach()
 {
-	if (!MainCamera)
+	if (Cameras.empty())
 		return false;
 
-	if (MainCamera->isAttached() == false)
+	if (Cameras[0]->isAttached() == false)
 		return false;
 
-	GetSceneNode()->DetachObject(MainCamera);
-	MainCamera = 0;
+	for (int i = 0; i < Cameras.size(); i++)
+	{
+		GetSceneNode()->DetachObject(Cameras[i]);
+	}
 
 	return true;
 }
@@ -1468,15 +1501,17 @@ void Camera::SetOrientation(const Quaternion &orientation)
 {
 	//set orientation of main camera object, not collider
 
-	if (MainCamera)
-		MainCamera->setOrientation(orientation);
+	for (int i = 0; i < Cameras.size(); i++)
+	{
+		Cameras[i]->setOrientation(orientation);
+	}
 }
 
 void Camera::AttachToVehicle(bool value)
 {
 	//attach/detach camera from a vehicle
 
-	if (!MainCamera)
+	if (Cameras.empty())
 		return;
 
 	if (vehicle && value == false)
@@ -1489,7 +1524,10 @@ void Camera::AttachToVehicle(bool value)
 		vehicle->AttachCamera(false);
 		vehicle = 0;
 		EnableCollisions(true);
-		MainCamera->setOrientation(old_camera_orientation);
+		for (int i = 0; i < Cameras.size(); i++)
+		{
+			Cameras[i]->setOrientation(old_camera_orientation);
+		}
 		if (EnableBullet == true)
 			mCharacter->setOrientation(old_character_orientation);
 	}
@@ -1531,7 +1569,7 @@ void Camera::AttachToVehicle(bool value)
 				Freelook = true;
 				inside_vehicle = true;
 				EnableCollisions(false);
-				old_camera_orientation = MainCamera->getOrientation();
+				old_camera_orientation = Cameras[0]->getOrientation();
 				if (EnableBullet == true)
 					old_character_orientation = mCharacter->getWorldOrientation();
 				vehicle->AttachCamera(true);

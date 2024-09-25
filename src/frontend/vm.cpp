@@ -151,7 +151,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 
 	//switch context to new engine instance
 	active_engine = engine;
-	active_engine->AttachCamera(frontend->mCamera, !switch_engines);
+	active_engine->AttachCamera(frontend->mCameras, !switch_engines);
 
 	//apply camera state to new engine
 	if (switch_engines == true && state_set == true)
