@@ -451,7 +451,7 @@ void EngineContext::DetachCamera(bool reset_building)
 		Simcore->ResetState();
 }
 
-void EngineContext::AttachCamera(std::vector<Ogre::Camera*> cameras, bool init_state)
+void EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 {
 	//attach the camera to this engine
 
