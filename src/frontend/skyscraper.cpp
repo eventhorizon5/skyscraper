@@ -816,8 +816,8 @@ bool Skyscraper::Initialize()
 		try
 		{
 			mCamera = mSceneMgr->createCamera("Main Camera");
-			mViewport = mRenderWindow->addViewport(mCamera);
-			mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
+			//mViewport = mRenderWindow->addViewport(mCamera);
+			//mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -826,8 +826,8 @@ bool Skyscraper::Initialize()
 	}
 
 	//set up default material shader scheme
-	if (RTSS == true)
-		mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	//if (RTSS == true)
+		//mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 
 	//setup texture filtering
 	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
@@ -2100,7 +2100,7 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	//attach caelum to running viewport
 	try
 	{
-		mCaelumSystem->attachViewport(mViewport);
+		//mCaelumSystem->attachViewport(mViewport);
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
 		if (GetConfigBool("Skyscraper.Frontend.Caelum.EnableFog", true) == false)
@@ -2322,8 +2322,8 @@ void Skyscraper::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 
-	if (Headless == false)
-		mViewport->_updateDimensions();
+	//if (Headless == false)
+		//mViewport->_updateDimensions();
 }
 
 void Skyscraper::EnableSky(bool value)

@@ -126,8 +126,8 @@ namespace Ogre {
 
   OpenXRRenderWindow::~OpenXRRenderWindow() {
 
-    //D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-    //rsys->fireDeviceEvent(&mDevice, "RenderWindowDestroyed", this);
+    D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+    rsys->fireDeviceEvent(&mDevice, "RenderWindowDestroyed", this);
 
     mActive = false;
     mClosed = true;
@@ -135,7 +135,7 @@ namespace Ogre {
   void OpenXRRenderWindow::create(const String& name, unsigned int width, unsigned int height,
     bool fullScreen, const NameValuePairList* miscParams)
   {
-    //D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+    D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
     mXrState->initializeSession(mDevice);
 
     mViewProjections->Initialize(mXrState.get());
