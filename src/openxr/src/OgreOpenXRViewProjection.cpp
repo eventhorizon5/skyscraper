@@ -7,7 +7,7 @@
 */
 
 /*
-    Own work produced by Glastonbridge Software Limited. This code is provided under the MIT license.
+    Original work produced by Glastonbridge Software Limited. This code is provided under the MIT license.
     https://github.com/glastonbridge/OgreOpenXRRenderWindow
 */
 
