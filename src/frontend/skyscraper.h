@@ -76,6 +76,7 @@ public:
 	//OGRE engine data
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
+	Ogre::RenderWindow* mRenderWindow2;
 	Ogre::Viewport* mViewport;
 	Ogre::Viewport* mViewport2;
 	Ogre::SceneManager* mSceneMgr;

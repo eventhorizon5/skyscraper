@@ -201,6 +201,7 @@ bool Skyscraper::OnInit(void)
 	mRoot = 0;
 	mRenderWindow = 0;
 	mViewport = 0;
+	mViewport2 = 0;
 	mSceneMgr = 0;
 	mCamera = 0;
 	sound = 0;
@@ -1923,11 +1924,11 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 
 	//create the render window
-	//Ogre::RenderWindow* mRenderWindow2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	//mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false);
-	Ogre::RenderWindow* mRenderWindow2 = CreateOpenXRRenderWindow(mRoot->getRenderSystem(), "SkyscraperVR");
+	mRenderWindow2 = CreateOpenXRRenderWindow(mRoot->getRenderSystem(), "SkyscraperVR");
 	mRenderWindow->setActive(true);
-	mRenderWindow2->setActive(true);
+	//mRenderWindow2->setActive(true);
 	mRenderWindow->windowMovedOrResized();
 	mRenderWindow2->windowMovedOrResized();
 
@@ -1938,9 +1939,13 @@ void Skyscraper::destroyRenderWindow()
 {
 	if (mRenderWindow)
 	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
+	if (mRenderWindow2)
+		Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow2);
 
 	mRenderWindow->destroy();
+	mRenderWindow2->destroy();
 	mRenderWindow = 0;
+	mRenderWindow2 = 0;
 }
 
 const std::string Skyscraper::getOgreHandle() const
@@ -2108,6 +2113,7 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	try
 	{
 		mCaelumSystem->attachViewport(mViewport);
+		mCaelumSystem->attachViewport(mViewport2);
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
 		if (GetConfigBool("Skyscraper.Frontend.Caelum.EnableFog", true) == false)
@@ -2330,7 +2336,10 @@ void Skyscraper::RefreshViewport()
 	//refresh viewport to prevent rendering issues
 
 	if (Headless == false)
+	{
 		mViewport->_updateDimensions();
+		mViewport2->_updateDimensions();
+	}
 }
 
 void Skyscraper::EnableSky(bool value)
