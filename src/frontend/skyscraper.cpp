@@ -1922,9 +1922,15 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 
 	//create the render window
-	Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-	mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
-	mRenderWindow->create(name, width, height, false, &params);
+	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	{
+		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+		mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
+		mRenderWindow->create(name, width, height, false, &params);
+	}
+	else
+		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();
 
