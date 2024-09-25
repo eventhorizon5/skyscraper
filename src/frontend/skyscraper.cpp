@@ -43,6 +43,7 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <fmod.hpp>
+#include "OgreOpenXRRenderWindow.h"
 #include "Caelum.h"
 #include "globals.h"
 #include "sbs.h"
@@ -1763,6 +1764,14 @@ bool Skyscraper::Start(EngineContext *engine)
 
 	if (!engine)
 		return false;
+
+	Ogre::RenderWindow *xrRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem(), "VR Crafting");
+
+	Ogre::Camera* leftEye = mSceneMgr->createCamera("leftEye");
+	Ogre::Camera* rightEye = mSceneMgr->createCamera("rightEye");
+
+	xrRenderWindow->addViewport(leftEye, 1, 0, 0, 1, 1);
+	xrRenderWindow->addViewport(rightEye, 0, 0, 0, 1, 1);
 
 	::SBS::SBS *Simcore = engine->GetSystem();
 
