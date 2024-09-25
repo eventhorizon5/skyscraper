@@ -1,5 +1,5 @@
 /*
-    Skyscraper 2.0 - OpenXR Instance
+    Skyscraper 2.1 - OpenXR Instance
     Portions Copyright (C)2024 Ryan Thoryk
     https://www.skyscrapersim.net
     https://sourceforge.net/projects/skyscraper/

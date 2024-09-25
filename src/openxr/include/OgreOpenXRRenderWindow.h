@@ -1,5 +1,5 @@
 /*
-    Skyscraper 2.0 - OpenXR Render Window
+    Skyscraper 2.1 - OpenXR Render Window
     Portions Copyright (C)2024 Ryan Thoryk
     https://www.skyscrapersim.net
     https://sourceforge.net/projects/skyscraper/
