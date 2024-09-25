@@ -77,8 +77,10 @@ public:
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
 	Ogre::Viewport* mViewport;
+	Ogre::Viewport* mViewport2;
 	Ogre::SceneManager* mSceneMgr;
 	Ogre::Camera* mCamera;
+	Ogre::Camera* mCamera2;
 	Ogre::OverlaySystem* mOverlaySystem;
 
 	std::string version;
