@@ -1,3 +1,15 @@
+/*
+    Skyscraper 2.1 - OpenXR Swapchain
+    Portions Copyright (C)2024 Ryan Thoryk
+    https://www.skyscrapersim.net
+    https://sourceforge.net/projects/skyscraper/
+    Contact - ryan@skyscrapersim.net
+*/
+
+/*
+    Own work produced by Glastonbridge Software Limited. This code is provided under the MIT license.
+    https://github.com/glastonbridge/OgreOpenXRRenderWindow
+*/
 
 #include <d3d11.h>
 #include "OgreOpenXRSwapchain.h"
