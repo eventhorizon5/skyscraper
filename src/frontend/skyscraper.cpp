@@ -1765,13 +1765,11 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (!engine)
 		return false;
 
-	Ogre::RenderWindow *xrRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem(), "VR Crafting");
-
 	Ogre::Camera* leftEye = mSceneMgr->createCamera("leftEye");
 	Ogre::Camera* rightEye = mSceneMgr->createCamera("rightEye");
 
-	xrRenderWindow->addViewport(leftEye, 1, 0, 0, 1, 1);
-	xrRenderWindow->addViewport(rightEye, 0, 0, 0, 1, 1);
+	mRenderWindow->addViewport(leftEye, 1, 0, 0, 1, 1);
+	mRenderWindow->addViewport(rightEye, 0, 0, 0, 1, 1);
 
 	::SBS::SBS *Simcore = engine->GetSystem();
 
@@ -1922,6 +1920,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 
 	//create the render window
 	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	Ogre::RenderWindow* xrRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem(), "SkyscraperVR");
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();
 
