@@ -32,8 +32,7 @@ namespace SBS {
 
 GeometryController::GeometryController(Object *parent) : Object(parent)
 {
-	Ogre::MeshPtr mesh = Procedural::SphereGenerator().setRadius(2.f).setUTile(5.).setVTile(5.).realizeMesh("sphereMesh");
-
+	Ogre::MeshPtr mesh = CreateSphere(2.0, 5.0, 5.0, 16, 16, "sphereMesh");
 	this->mesh = new MeshObject(this, "sphereMesh", 0, "", "sphereMesh");
 	this->mesh->SetMaterial("Default");
 }
@@ -41,6 +40,11 @@ GeometryController::GeometryController(Object *parent) : Object(parent)
 GeometryController::~GeometryController()
 {
 
+}
+
+Ogre::MeshPtr GeometryController::CreateSphere(Real radius, Real utile, Real vtile, unsigned int rings, unsigned int segments, const std::string& name)
+{
+	return Procedural::SphereGenerator().setRadius(2.f).setUTile(5.).setVTile(5.).setNumRings(rings).setNumSegments(segments).realizeMesh("sphereMesh");
 }
 
 }
