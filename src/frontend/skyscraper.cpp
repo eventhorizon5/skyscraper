@@ -1147,7 +1147,8 @@ bool Skyscraper::Loop()
 				{
 					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
 					Ogre::Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition();
-					Ogre::Vector3 combined = Simcore->ToRemote(cameranode_pos - Simcore->ToLocal(camera->getDerivedPosition()));
+					Ogre::Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
+					Ogre::Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
 
 					positions.push_back(combined);
 					orientations.push_back(camera->getDerivedOrientation());
