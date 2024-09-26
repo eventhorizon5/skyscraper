@@ -43,6 +43,9 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <fmod.hpp>
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#include "OgreOpenXRRenderWindow.h"
+#endif
 #include "Caelum.h"
 #include "globals.h"
 #include "sbs.h"
@@ -202,9 +205,7 @@ bool Skyscraper::OnInit(void)
 	mOverlaySystem = 0;
 	mRoot = 0;
 	mRenderWindow = 0;
-	mViewport = 0;
 	mSceneMgr = 0;
-	mCamera = 0;
 	sound = 0;
 	channel = 0;
 	SkyMult = 0;
@@ -708,7 +709,7 @@ bool Skyscraper::Initialize()
 		{
 			Report("");
 			Report("Creating render window...");
-			mRenderWindow = CreateRenderWindow();
+			mRenderWindow = CreateRenderWindow(0, "SkyscraperVR");
 		}
 	}
 	catch (Ogre::Exception &e)
@@ -826,9 +827,17 @@ bool Skyscraper::Initialize()
 	{
 		try
 		{
-			mCamera = mSceneMgr->createCamera("Main Camera");
-			mViewport = mRenderWindow->addViewport(mCamera);
-			mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
+			//define camera configuration
+			int cameras = 1; //use one camera for standard mode
+			if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+				cameras = 2; //use two cameras for VR mode
+
+			for (int i = 0; i < cameras; i++)
+			{
+				mCameras.push_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
+				mViewports.push_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			}
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -838,7 +847,12 @@ bool Skyscraper::Initialize()
 
 	//set up default material shader scheme
 	if (RTSS == true)
-		mViewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+	{
+		for (int i = 0; i < mViewports.size(); i++)
+		{
+			mViewports[i]->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		}
+	}
 
 	//setup texture filtering
 	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
@@ -1832,7 +1846,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	//start simulation
-	if (!engine->Start(mCamera))
+	if (!engine->Start(mCameras))
 		return false;
 
 	//close progress dialog if no engines are loading
@@ -1951,7 +1965,17 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 
 	//create the render window
-	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	{
+		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+		mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
+		mRenderWindow->create(name, width, height, false, &params);
+	}
+	else
+#endif
+		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();
 
@@ -2131,7 +2155,10 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	//attach caelum to running viewport
 	try
 	{
-		mCaelumSystem->attachViewport(mViewport);
+		for (int i = 0; i < mViewports.size(); i++)
+		{
+			mCaelumSystem->attachViewport(mViewports[i]);
+		}
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
 		if (GetConfigBool("Skyscraper.Frontend.Caelum.EnableFog", true) == false)
@@ -2192,7 +2219,10 @@ void Skyscraper::UpdateSky()
 
 	if (mCaelumSystem)
 	{
-		mCaelumSystem->notifyCameraChanged(mCamera);
+		for (int i = 0; i < mCameras.size(); i++)
+		{
+			mCaelumSystem->notifyCameraChanged(mCameras[i]);
+		}
 		mCaelumSystem->setTimeScale(SkyMult);
 		mCaelumSystem->updateSubcomponents(Real(vm->GetActiveEngine()->GetSystem()->GetElapsedTime()) / 1000);
 	}
@@ -2354,7 +2384,12 @@ void Skyscraper::RefreshViewport()
 	//refresh viewport to prevent rendering issues
 
 	if (Headless == false)
-		mViewport->_updateDimensions();
+	{
+		for (int i = 0; i < mViewports.size(); i++)
+		{
+			mViewports[i]->_updateDimensions();
+		}
+	}
 }
 
 void Skyscraper::EnableSky(bool value)

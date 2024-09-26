@@ -474,7 +474,7 @@ SBS::~SBS()
 	sbs = 0;
 }
 
-bool SBS::Start(Ogre::Camera *camera)
+bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 {
 	//Post-init startup code goes here, before the runloop
 
@@ -501,7 +501,7 @@ bool SBS::Start(Ogre::Camera *camera)
 	}
 
 	//attach camera object
-	AttachCamera(camera);
+	AttachCamera(cameras);
 
 	//enable random activity if specified
 	if (RandomActivity == true)
@@ -3858,10 +3858,10 @@ void SBS::RemovePerson(Person *person)
 	}
 }
 
-bool SBS::AttachCamera(Ogre::Camera *camera, bool init_state)
+bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 {
-	if (camera)
-		return this->camera->Attach(camera, init_state);
+	if (cameras.size() > 0)
+		return this->camera->Attach(cameras, init_state);
 	return false;
 }
 

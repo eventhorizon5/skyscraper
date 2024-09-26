@@ -197,7 +197,7 @@ public:
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~SBS();
 	void Initialize();
-	bool Start(Ogre::Camera *camera = 0);
+	bool Start(std::vector<Ogre::Camera*> &cameras);
 	void CreateSky();
 	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
 	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false);
@@ -350,7 +350,7 @@ public:
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	Person* CreatePerson(std::string name = "", int floor = 0, bool service_access = false);
 	void RemovePerson(Person *person);
-	bool AttachCamera(Ogre::Camera *camera, bool init_state = true);
+	bool AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state = true);
 	bool DetachCamera();
 	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
 	int GetPersonCount();

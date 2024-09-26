@@ -63,10 +63,20 @@ find_package(Bullet REQUIRED)
 #find Caelum
 find_package(Caelum REQUIRED)
 
-file(GLOB FRONTEND_FILES
-	src/frontend/*.cpp
-	src/frontend/gui/*.cpp
-)
+#find OpenXR
+find_package(OpenXR)
+
+if(WIN32)
+	file(GLOB FRONTEND_FILES
+		src/frontend/*.cpp
+		src/frontend/gui/*.cpp
+	)
+else()
+	file(GLOB FRONTEND_FILES
+                src/frontend/*.cpp
+                src/frontend/gui/*.cpp
+        )
+endif()
  
 file(GLOB SCRIPTPROC_FILES
 	src/script/*.cpp
@@ -78,6 +88,10 @@ file(GLOB SBS_FILES
  
 file(GLOB ALLOC_FILES
 	src/alloc/*.cpp
+)
+
+file(GLOB OPENXR_FILES
+	src/openxr/src/*.cpp
 )
 
 file(GLOB OGREBULLET_COLL_FILES
@@ -101,10 +115,13 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
+	${OpenXR_INCLUDE_DIR}
 	src/frontend
 	src/sbs
 	src/script
 	src/alloc
+	src/openxr/include
+	src/openxr
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
@@ -131,6 +148,11 @@ endif ()
 #Alloc Library
 add_library(Alloc SHARED ${ALLOC_FILES})
 
+#OpenXR Library
+if (WIN32)
+	add_library(OpenXR SHARED ${OPENXR_FILES})
+endif ()
+
 #frontend executable
 if (NOT WIN32)
 	add_executable(skyscraper ${FRONTEND_FILES})
@@ -139,6 +161,7 @@ else ()
 
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
+	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
 	target_compile_options(SBS PRIVATE -DSBS_DLL "/MD")
 	target_compile_options(skyscraper PRIVATE "/MD")
 endif ()
@@ -156,13 +179,18 @@ target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
+if (WIN32)
+	set (OGRE_D3D11_LIB "C:/ogre-14.2.6/lib/RelWithDebInfo/RenderSystem_Direct3D11.lib")
+	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY} ${OGRE_D3D11_LIB})
+endif ()
+
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
 
 if (NOT WIN32)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
 else ()
-	target_link_libraries(skyscraper SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+	target_link_libraries(skyscraper SBS OpenXR ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${OPENXR_loader_LIBRARY} ${FRONTENDGLINC})
 endif ()
  
 if (APPLE)

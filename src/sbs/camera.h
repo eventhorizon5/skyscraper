@@ -167,9 +167,9 @@ public:
 	bool IsModelAttached();
 	void ResetState();
 	void ResetView();
-	bool IsActive() { return (MainCamera != 0); }
+	bool IsActive() { return (!Cameras.empty()); }
 	void Refresh();
-	bool Attach(Ogre::Camera *camera, bool init_state = true);
+	bool Attach(std::vector<Ogre::Camera*> &cameras, bool init_state = true);
 	bool Detach();
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
@@ -186,7 +186,7 @@ public:
 	void AttachToVehicle(bool value);
 
 private:
-	Ogre::Camera* MainCamera; //main first-person view camera
+	std::vector<Ogre::Camera*> Cameras; //camera instances
 	Vector3 StartDirection; //direction camera faces on start
 	Vector3 StartRotation; //camera's startup rotation
 	std::string meshname; //last clicked mesh name

@@ -47,7 +47,7 @@ public:
 	bool IsReloading() { return reloading; }
 	void DoReload();
 	std::string GetFilename();
-	bool Start(Ogre::Camera *camera);
+	bool Start(std::vector<Ogre::Camera*> &cameras);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
@@ -60,7 +60,7 @@ public:
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
-	void AttachCamera(Ogre::Camera *camera, bool init_state = true);
+	void AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state = true);
 	void RefreshCamera();
 	void ResetCamera();
 	void RevertMovement();
