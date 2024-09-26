@@ -662,9 +662,7 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 bool MeshObject::LoadFromMesh(const std::string& meshname)
 {
 	//load mesh
-	bool status = MeshWrapper->LoadFromMesh(meshname);
-	if (status == false)
-		return false;
+	return MeshWrapper->LoadFromMesh(meshname);
 }
 
 bool MeshObject::UsingDynamicBuffers()
