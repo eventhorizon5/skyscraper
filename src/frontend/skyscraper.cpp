@@ -432,7 +432,7 @@ bool Skyscraper::OnInit(void)
 	if (parser->Found(wxT("no-menu")) == true)
 		ShowMenu = false;
 
-	if (Headless == true)
+	if (Headless == true || GetConfigBool("Skyscraper.Frontend.VR", false) == true)
 		ShowMenu = false;
 
 	if (filename != "")
