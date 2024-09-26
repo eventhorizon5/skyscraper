@@ -50,6 +50,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
+#include "scenenode.h"
 #include "gui/debugpanel.h"
 #include "skyscraper.h"
 #include "vm.h"
@@ -1128,6 +1129,22 @@ bool Skyscraper::Loop()
 
 	//update Caelum
 	UpdateSky();
+
+	//update OpenXR camera transformations
+	{
+		EngineContext* engine = vm->GetActiveEngine();
+
+		if (engine)
+		{
+			::SBS::SBS* Simcore = engine->GetSystem();
+
+			if (Simcore->camera)
+			{
+				Ogre::Camera* camera = Simcore->camera->GetOgreCamera();
+				SetOpenXRParameters(Simcore->camera->GetSceneNode()->GetRawSceneNode()->_getDerivedPosition(), camera->getDerivedOrientation());
+			}
+		}
+	}
 
 	//render graphics
 	result = Render();
