@@ -23,13 +23,16 @@
 
 namespace SBS {
 
-class SBSIMPEXP GeometryController : public ObjectBase
+class MeshObject;
+
+class SBSIMPEXP GeometryController : public Object
 {
 public:
 	GeometryController(Object *parent);
 	~GeometryController();
 
 private:
+	MeshObject* mesh;
 };
 
 }

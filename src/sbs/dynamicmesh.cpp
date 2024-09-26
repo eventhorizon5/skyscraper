@@ -94,6 +94,25 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	return true;
 }
 
+bool DynamicMesh::LoadFromMesh(const std::string& meshname)
+{
+	if (meshes.empty() == false)
+		return false;
+
+	Mesh* mesh = new Mesh(this, "", node, render_distance, "", meshname);
+
+	//if load failed
+	if (!mesh->MeshWrapper)
+	{
+		delete mesh;
+		return false;
+	}
+
+	meshes.push_back(mesh);
+	file_model = true;
+	return true;
+}
+
 void DynamicMesh::Enabled(bool value, MeshObject *client)
 {
 	if (client == 0 || meshes.size() == 1)
@@ -607,7 +626,7 @@ void DynamicMesh::EnableShadows(bool value)
 		meshes[i]->EnableShadows(value);
 }
 
-DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename, const std::string &path)
+DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename, const std::string &meshname, const std::string &path)
 {
 	Parent = parent;
 	sbs = Parent->GetRoot();
@@ -623,7 +642,10 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		this->name = name;
 
 		//create mesh
-		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		if (meshname == "")
+			MeshWrapper = Ogre::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		else
+			MeshWrapper = Ogre::MeshManager::getSingleton().getByName(meshname);
 	}
 	else
 	{

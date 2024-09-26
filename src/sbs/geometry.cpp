@@ -24,20 +24,20 @@
 #include <OgreProcedural/Procedural.h>
 #include "globals.h"
 #include "sbs.h"
+#include "texture.h"
+#include "mesh.h"
 #include "geometry.h"
 
 namespace SBS {
 
-GeometryController::GeometryController(Object *parent) : ObjectBase(parent)
+GeometryController::GeometryController(Object *parent) : Object(parent)
 {
 	Ogre::MeshPtr mesh = Procedural::SphereGenerator().setRadius(2.f).setUTile(5.).setVTile(5.).realizeMesh("sphereMesh");
 
-	Ogre::Entity* entity = sbs->mSceneManager->createEntity("sphereMesh");
-	Ogre::SceneNode* node = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode();
-	node->attachObject(entity);
-	node->setPosition(Ogre::Vector3(0, 0, 0));
-	entity->setMaterialName("sphereMesh");
-	entity->setCastShadows(false);
+	this->mesh = new MeshObject(this, "sphereMesh", 0, "", "sphereMesh");
+	/*Ogre::MaterialPtr mat = sbs->GetTextureManager()->GetMaterialByName("Default");
+	entity->setMaterial(mat);
+	entity->setCastShadows(false);*/
 }
 
 GeometryController::~GeometryController()

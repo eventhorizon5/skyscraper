@@ -48,7 +48,7 @@ public:
 	bool tricollider; //collider type; box if false, triangle if true
 	bool remove_on_disable; //if true (the default), remove the collider from world when disabling mesh
 
-	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0, bool create_collider = true, bool dynamic_buffers = false);
+	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", const std::string &meshname = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0, bool create_collider = true, bool dynamic_buffers = false);
 	virtual ~MeshObject();
 	void Enabled(bool value);
 	void EnableCollider(bool value);
@@ -90,6 +90,7 @@ public:
 	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
 	unsigned int GetVertexCount();
 	unsigned int GetTriangleCount(const std::string &material, bool total);
+	bool LoadFromMesh(const std::string& meshname);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
