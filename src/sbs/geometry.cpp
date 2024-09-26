@@ -42,9 +42,19 @@ GeometryController::~GeometryController()
 
 }
 
+Ogre::MeshPtr GeometryController::CreatePlane(unsigned int segments_x, unsigned int segments_y, Real size_x, Real size_y, Real utile, Real vtile, const std::string& name)
+{
+	return Procedural::PlaneGenerator().setNumSegX(segments_x).setNumSegY(segments_y).setSizeX(size_x).setSizeY(size_y).setUTile(utile).setVTile(vtile).realizeMesh("planeMesh");
+}
+
 Ogre::MeshPtr GeometryController::CreateSphere(Real radius, Real utile, Real vtile, unsigned int rings, unsigned int segments, const std::string& name)
 {
-	return Procedural::SphereGenerator().setRadius(2.f).setUTile(5.).setVTile(5.).setNumRings(rings).setNumSegments(segments).realizeMesh("sphereMesh");
+	return Procedural::SphereGenerator().setRadius(radius).setUTile(utile).setVTile(vtile).setNumRings(rings).setNumSegments(segments).realizeMesh("sphereMesh");
+}
+
+Ogre::MeshPtr GeometryController::CreateCylinder(Real height, Real radius, Real utile, Real vtile, unsigned int segments_base, unsigned int segments_height, bool capped, const std::string& name)
+{
+	return Procedural::CylinderGenerator().setHeight(height).setRadius(radius).setUTile(utile).setVTile(vtile).setNumSegBase(segments_base).setNumSegHeight(segments_height).setCapped(capped).realizeMesh("cylinderMesh");
 }
 
 }
