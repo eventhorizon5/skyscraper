@@ -59,6 +59,7 @@
 #include "buttonpanel.h"
 #include "polymesh.h"
 #include "utility.h"
+#include "geometry.h"
 
 namespace SBS {
 
@@ -509,6 +510,8 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 
 	//print a memory report
 	//MemoryReport();
+
+	GeometryController* geometry = new GeometryController(this);
 
 	IsRunning = true;
 
