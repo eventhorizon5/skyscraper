@@ -30,8 +30,8 @@
 #include <memory>
 #include <winrt/base.h>
 
-Ogre::Vector3 XRPosition;
-Ogre::Quaternion XROrientation;
+std::vector<Ogre::Vector3> XRPosition;
+std::vector<Ogre::Quaternion> XROrientation;
 
 namespace Ogre {
   class OpenXRState;
@@ -135,8 +135,12 @@ namespace Ogre {
     mActive = false;
     mSizing = false;
     mHidden = false;
-    XRPosition = Ogre::Vector3::ZERO;
-    XROrientation = Ogre::Quaternion::ZERO;
+    XRPosition.resize(2);
+    XROrientation.resize(2);
+    XRPosition[0] = Ogre::Vector3::ZERO;
+    XRPosition[1] = Ogre::Vector3::ZERO;
+    XROrientation[0] = Ogre::Quaternion::ZERO;
+    XROrientation[1] = Ogre::Quaternion::ZERO;
   }
 
   OpenXRRenderWindow::~OpenXRRenderWindow() {
@@ -245,7 +249,7 @@ namespace Ogre {
         }
       }
       //mEyeCameras[k]->setCustomViewMatrix(true, viewMatrix);
-      mEyeCameras[k]->setPosition(XRPosition + position);
+      mEyeCameras[k]->setPosition(XRPosition[k] + position);
       mEyeCameras[k]->setOrientation(orientation);
       mEyeCameras[k]->setCustomProjectionMatrix(true, eyeProjectionMatrix);
       //mEyeCameras[k]->setFarClipDistance(3000);
@@ -424,18 +428,8 @@ Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys)
   return xrRenderWindow;
 }
 
-void SetOpenXRParameters(const Ogre::Vector3& position, const Ogre::Quaternion& quaternion)
+void SetOpenXRParameters(int index, const Ogre::Vector3& position, const Ogre::Quaternion& orientation)
 {
-    XRPosition = position;
-    XROrientation = quaternion;
-}
-
-Ogre::Vector3 GetOpenXRPosition()
-{
-    return XRPosition;
-}
-
-Ogre::Quaternion GetOpenXROrientation()
-{
-    return XROrientation;
+    XRPosition[index] = position;
+    XROrientation[index] = orientation;
 }
