@@ -44,6 +44,9 @@ endif()
  
 set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES} ${OGRE_Bites_LIBRARIES})
 
+#find OgreProcedural
+find_package(OgreProcedural REQUIRED)
+
 #find wxWidgets
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 
@@ -112,6 +115,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
 	${OpenXR_INCLUDE_DIR}
+	${OgreProcedural_INCLUDE_DIR}
 	src/frontend
 	src/sbs
 	src/script
@@ -176,7 +180,7 @@ if (WIN32)
 	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY} ${OGRE_D3D11_LIB})
 endif ()
 
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
 
 if (NOT WIN32)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
