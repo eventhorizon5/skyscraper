@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.2)
  
 project(Skyscraper)
- 
+
+set(CMAKE_AUTORCC ON)
+
 set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
@@ -73,6 +75,7 @@ if(WIN32)
 	file(GLOB FRONTEND_FILES
 		src/frontend/*.cpp
 		src/frontend/gui/*.cpp
+		msvc/Skyscraper.rc
 	)
 else()
 	file(GLOB FRONTEND_FILES
@@ -87,6 +90,7 @@ file(GLOB SCRIPTPROC_FILES
 
 file(GLOB SBS_FILES
 	src/sbs/*.cpp
+	msvc/SBS.rc
 )
  
 file(GLOB OPENXR_FILES
