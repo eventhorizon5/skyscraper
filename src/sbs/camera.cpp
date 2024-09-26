@@ -1582,10 +1582,10 @@ void Camera::AttachToVehicle(bool value)
 	}
 }
 
-Ogre::Camera* Camera::GetOgreCamera()
+Ogre::Camera* Camera::GetOgreCamera(int index)
 {
 	if (!Cameras.empty())
-		return Cameras[0];
+		return Cameras[index];
 	return 0;
 }
 
