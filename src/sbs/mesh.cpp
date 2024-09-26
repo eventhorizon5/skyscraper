@@ -1217,4 +1217,11 @@ unsigned int MeshObject::GetTriangleCount(const std::string &material, bool tota
 	return tris;
 }
 
+void MeshObject::SetMaterial(const std::string& material)
+{
+	//set material of this mesh object
+
+	MeshWrapper->SetMaterial(material);
+}
+
 }

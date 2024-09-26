@@ -35,9 +35,7 @@ GeometryController::GeometryController(Object *parent) : Object(parent)
 	Ogre::MeshPtr mesh = Procedural::SphereGenerator().setRadius(2.f).setUTile(5.).setVTile(5.).realizeMesh("sphereMesh");
 
 	this->mesh = new MeshObject(this, "sphereMesh", 0, "", "sphereMesh");
-	/*Ogre::MaterialPtr mat = sbs->GetTextureManager()->GetMaterialByName("Default");
-	entity->setMaterial(mat);
-	entity->setCastShadows(false);*/
+	this->mesh->SetMaterial("Default");
 }
 
 GeometryController::~GeometryController()
