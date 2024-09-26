@@ -62,6 +62,7 @@ public:
 	std::string GetMeshName(int mesh_index);
 	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
 	void EnableShadows(bool value);
+	void SetMaterial(const std::string& material);
 
 private:
 
@@ -86,6 +87,7 @@ private:
 		void Detach();
 		void UpdateBoundingBox();
 		void EnableShadows(bool value);
+		void SetMaterial(const std::string& material);
 
 		struct ClientEntry
 		{

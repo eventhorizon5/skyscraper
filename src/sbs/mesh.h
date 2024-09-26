@@ -91,6 +91,7 @@ public:
 	unsigned int GetVertexCount();
 	unsigned int GetTriangleCount(const std::string &material, bool total);
 	bool LoadFromMesh(const std::string& meshname);
+	void SetMaterial(const std::string& material);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
