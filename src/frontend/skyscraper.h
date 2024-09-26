@@ -239,6 +239,8 @@ private:
 
 	//VM instance
 	VM *vm;
+
+	bool first_run;
 };
 
 DECLARE_APP(Skyscraper)
