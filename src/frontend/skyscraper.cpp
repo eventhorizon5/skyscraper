@@ -1132,6 +1132,7 @@ bool Skyscraper::Loop()
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//update OpenXR camera transformations
+	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
 	{
 		EngineContext* engine = vm->GetActiveEngine();
 
