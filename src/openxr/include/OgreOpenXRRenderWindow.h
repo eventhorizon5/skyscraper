@@ -13,8 +13,7 @@
 
 #pragma once
 
-#include "OgreVector3.h"
-#include "OgreQuaternion.h"
+#include "Ogre.h"
 #include "OgreRenderWindow.h"
 #include "OgreRenderSystem.h"
 #include "OgreOpenXRConfig.h"
