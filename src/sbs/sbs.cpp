@@ -511,7 +511,7 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	//print a memory report
 	//MemoryReport();
 
-	GeometryController* geometry = new GeometryController(this);
+	//GeometryController* geometry = new GeometryController(this);
 
 	IsRunning = true;
 
