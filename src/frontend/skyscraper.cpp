@@ -245,6 +245,7 @@ bool Skyscraper::OnInit(void)
 	show_stats = -1;
 	macos_major = 0;
 	macos_minor = 0;
+	first_run = true;
 
 	//create VM instance
 	vm = new VM(this);
@@ -1140,6 +1141,9 @@ bool Skyscraper::Loop()
 	vm->SwitchEngines();
 
 	//ProfileManager::dumpAll();
+
+	if (first_run == true)
+		first_run = false;
 
 	return true;
 }
