@@ -1129,6 +1129,7 @@ bool Skyscraper::Loop()
 	//update Caelum
 	UpdateSky();
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//update OpenXR camera transformations
 	{
 		EngineContext* engine = vm->GetActiveEngine();
@@ -1144,6 +1145,7 @@ bool Skyscraper::Loop()
 			}
 		}
 	}
+#endif
 
 	//render graphics
 	result = Render();
