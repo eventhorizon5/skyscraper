@@ -187,6 +187,7 @@ public:
 	void ResetNudgeTimer(bool start = true, int number = 0);
 	void ResetDoorState(int number = 0);
 	Model* GetModel(std::string name);
+	Primitive* GetPrimitive(std::string name);
 	void SetBeepSound(const std::string &filename);
 	void SetFloorSound(const std::string &prefix);
 	void SetMessageSound(bool type, bool direction, const std::string &filename);

@@ -1780,6 +1780,21 @@ Model* Floor::GetModel(std::string name)
 	return 0;
 }
 
+Primitive* Floor::GetPrimitive(std::string name)
+{
+	//get a primitive by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
+			return PrimArray[i];
+	}
+
+	return 0;
+}
+
 RevolvingDoor* Floor::AddRevolvingDoor(std::string name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external)
 {
 	//create an external (global) door if specified

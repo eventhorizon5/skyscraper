@@ -2748,14 +2748,22 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 11);
 
-		if (params != 5)
+		if (params != 8 || params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 2; i <= 4; i++)
+		for (int i = 1; i <= 8; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		if (params == 14)
+		{
+			for (int i = 11; i <= 13; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
 		}
 
 		std::string name = tempdata[0];
@@ -2790,22 +2798,31 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		//get light object
-		Light *light = 0;
+		//get prim object
+		Primitive *prim = 0;
 		if (floorobj)
-			light = floorobj->GetLight(tempdata[1]);
+			prim = floorobj->GetPrimitive(tempdata[1]);
 		if (elevatorcarobj)
-			light = elevatorcarobj->GetLight(tempdata[1]);
+			prim = elevatorcarobj->GetPrimitive(tempdata[1]);
 		if (shaftobj)
-			light = shaftobj->GetLight(tempdata[1]);
+			prim = shaftobj->GetPrimitive(tempdata[1]);
 		if (stairsobj)
-			light = stairsobj->GetLight(tempdata[1]);
+			prim = stairsobj->GetPrimitive(tempdata[1]);
 
-		if (!light)
-			return ScriptError("Invalid light " + tempdata[1] + " in " + name);
+		if (!prim)
+			return ScriptError("Invalid primitive " + tempdata[1] + " in " + name);
 
-		//modify light
-		light->SetColor(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
+		//modify prim
+		Ogre::Vector3 pos;
+		pos.x = ToFloat(tempdata[2]);
+		pos.y = ToFloat(tempdata[3]);
+		pos.z = ToFloat(tempdata[4]);
+		Ogre::Vector3 rot;
+		rot.x = ToFloat(tempdata[5]);
+		rot.y = ToFloat(tempdata[6]);
+		rot.z = ToFloat(tempdata[7]);
+
+		prim->Attach(tempdata[1], pos, rot, ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 
 		return sNextLine;
 	}

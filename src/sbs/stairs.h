@@ -93,6 +93,7 @@ public:
 		Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 		Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names);
 		Model* GetModel(std::string name);
+		Primitive* GetPrimitive(std::string name);
 		void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 		int GetFloor();
 		void Loop();
