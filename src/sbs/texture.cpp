@@ -2426,6 +2426,8 @@ void TextureManager::SetCulling(const std::string &material_name, int mode)
 		if (mode == 2)
 			mat->setCullingMode(Ogre::CullingMode::CULL_CLOCKWISE);
 	}
+	else
+		ReportError("SetCulling: Material " + material_name + " not found");
 }
 
 }

@@ -1521,13 +1521,8 @@ void DynamicMesh::Mesh::SetMaterial(const std::string& material, int culling)
 {
 	//set material of this mesh
 
-	Ogre::MaterialPtr mat;
-
-	if (culling == 1)
-		mat = sbs->GetTextureManager()->GetMaterialByName(material);
-	else
-		sbs->GetTextureManager()->SetCulling(material, culling);
-
+	Ogre::MaterialPtr mat = sbs->GetTextureManager()->GetMaterialByName(material);
+	sbs->GetTextureManager()->SetCulling(material, culling);
 	Movable->setMaterial(mat);
 }
 
