@@ -71,6 +71,7 @@ namespace SBS {
 	class VehicleManager;
 	class Polygon;
 	class Model;
+	class Primitive;
 	class Wall;
 	class Door;
 	class Floor;
