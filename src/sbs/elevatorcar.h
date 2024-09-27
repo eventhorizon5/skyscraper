@@ -162,6 +162,7 @@ public:
 	void RemoveSound(Sound *sound);
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
+	void RemovePrimitive(Primitive *prim);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	bool IsNudgeModeActive(int number = 0);
@@ -170,6 +171,8 @@ public:
 	Light* GetLight(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, Vector3 position, Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
+	Primitive* AddPrimitive(const std::string &name);
+	void AddPrimitive(Primitive *primitive);
 	void AddDisplayFloor(int floor);
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names);
@@ -263,6 +266,9 @@ private:
 
 	//Models
 	std::vector<Model*> ModelArray;
+
+	//Primitives
+	std::vector<Primitive*> PrimArray;
 
 	//Controls
 	std::vector<Control*> ControlArray;
