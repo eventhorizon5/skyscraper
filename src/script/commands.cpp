@@ -44,6 +44,7 @@
 #include "door.h"
 #include "manager.h"
 #include "utility.h"
+#include "geometry.h"
 #include "scriptproc.h"
 #include "section.h"
 
@@ -2910,8 +2911,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 10);
 
-		//if (params != 1)
-			//return ScriptError("Incorrect number of parameters");
+		if (params < 7 || params > 13)
+			return ScriptError("Incorrect number of parameters");
 
 		std::string name = tempdata[0];
 		TrimString(name);
@@ -2948,24 +2949,36 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		//get prim object
-		Primitive *prim = 0;
-		if (floorobj)
-			prim = floorobj->GetPrimitive(tempdata[1]);
-		if (elevatorcarobj)
-			prim = elevatorcarobj->GetPrimitive(tempdata[1]);
-		if (shaftobj)
-			prim = shaftobj->GetPrimitive(tempdata[1]);
-		if (stairsobj)
-			prim = stairsobj->GetPrimitive(tempdata[1]);
-		if (sbs)
-			prim = sbs->GetPrimitive(tempdata[1]);
+		GeometryController* geometry = Simcore->GetGeometry();
 
-		if (!prim)
-			return ScriptError("Invalid primitive " + tempdata[1] + " in " + name);
-
-		//prim->SetTexture(tempdata[1]);
-
+		std::string type = tempdata[1];
+		SetCase(type, false);
+		if (type == "plane")
+			geometry->CreatePlane(obj, tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+		else if (type == "sphere")
+			geometry->CreateSphere(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]));
+		else if (type == "cylinder")
+			geometry->CreateCylinder(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToBool(tempdata[9]));
+		else if (type == "torus")
+			geometry->CreateTorus(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		else if (type == "cone")
+			geometry->CreateCone(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]));
+		else if (type == "tube")
+			geometry->CreateTube(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]));
+		else if (type == "box")
+			geometry->CreateBox(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]));
+		else if (type == "capsule")
+			geometry->CreateCapsule(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToBool(tempdata[10]));
+		else if (type == "torusknot")
+			geometry->CreateTorusKnot(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]));
+		else if (type == "icosphere")
+			geometry->CreateIcoSphere(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToInt(tempdata[6]));
+		else if (type == "roundedbox")
+			geometry->CreateRoundedBox(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), ToInt(tempdata[11]), ToBool(tempdata[12]));
+		else if (type == "spring")
+			geometry->CreateSpring(obj, tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), ToBool(tempdata[11]));
+		else
+			return ScriptError("Invalid shape type");
 		return sNextLine;
 	}
 

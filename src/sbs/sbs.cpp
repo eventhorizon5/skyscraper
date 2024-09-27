@@ -174,6 +174,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	//create utility object
 	utility = new Utility(this);
 
+	//create geometry controller object
+	geometry = new GeometryController(this);
+
 	camera = 0;
 	Buildings = 0;
 	External = 0;
@@ -511,13 +514,6 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 
 	//print a memory report
 	//MemoryReport();
-
-	/*GeometryController* geometry = new GeometryController(this);
-	std::string name = "sphereMesh";
-	geometry->CreateSphere(GetFloor(0), 2.0, 5.0, 5.0, 16, 16, name);
-	Primitive* prim = GetFloor(0)->AddPrimitive(name);
-	prim->Attach(name, Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
-	prim->SetTexture("Default");*/
 
 	IsRunning = true;
 
@@ -4236,6 +4232,11 @@ CameraTexture* SBS::GetCameraTexture(int number)
 Utility* SBS::GetUtility()
 {
 	return utility;
+}
+
+GeometryController* SBS::GetGeometry()
+{
+	return geometry;
 }
 
 }
