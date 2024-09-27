@@ -1215,16 +1215,11 @@ unsigned int MeshObject::GetTriangleCount(const std::string &material, bool tota
 	return tris;
 }
 
-void MeshObject::SetMaterial(const std::string& material, int culling)
+void MeshObject::SetMaterial(const std::string& material)
 {
 	//set material of this mesh object
 
-	//culling determines the face that should be visible:
-	//0 for both sides
-	//1 for anticlockwise (SBS default)
-	//2 for clockwise (Ogre default)
-
-	MeshWrapper->SetMaterial(material, culling);
+	MeshWrapper->SetMaterial(material);
 }
 
 }
