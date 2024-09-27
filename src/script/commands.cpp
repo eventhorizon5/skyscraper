@@ -2954,7 +2954,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		std::string type = tempdata[2];
 		SetCase(type, false);
 		if (type == "plane")
-			geometry->CreatePlane(obj, tempdata[1], ToInt(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			geometry->CreatePlane(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 		else if (type == "sphere")
 			geometry->CreateSphere(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]));
 		else if (type == "cylinder")
