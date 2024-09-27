@@ -372,6 +372,7 @@ public:
 	Quaternion ToGlobal(const Quaternion &orientation);
 	Quaternion FromGlobal(const Quaternion &orientation);
 	Model* GetModel(std::string name);
+	Primitive* GetPrimitive(std::string name);
 	FloorManager* GetFloorManager();
 	ElevatorManager* GetElevatorManager();
 	ShaftManager* GetShaftManager();

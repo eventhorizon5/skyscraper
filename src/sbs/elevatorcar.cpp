@@ -2576,6 +2576,21 @@ Model* ElevatorCar::GetModel(std::string name)
 	return 0;
 }
 
+Primitive* ElevatorCar::GetPrimitive(std::string name)
+{
+	//get a primitive by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
+			return PrimArray[i];
+	}
+
+	return 0;
+}
+
 void ElevatorCar::SetBeepSound(const std::string &filename)
 {
 	//set sound used for floor beeps

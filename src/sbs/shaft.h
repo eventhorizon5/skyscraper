@@ -110,6 +110,7 @@ public:
 		Door* GetDoor(const std::string &name);
 		void RemoveDoor(Door *door);
 		Model* GetModel(std::string name);
+		Primitive* GetPrimitive(std::string name);
 		int GetFloor();
 		void Loop();
 		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);

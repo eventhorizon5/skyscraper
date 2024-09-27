@@ -1117,6 +1117,21 @@ Model* Shaft::Level::GetModel(std::string name)
 	return 0;
 }
 
+Primitive* Shaft::Level::GetPrimitive(std::string name)
+{
+	//get a primitive by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
+			return PrimArray[i];
+	}
+
+	return 0;
+}
+
 void Shaft::Level::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
 	mesh->ReplaceTexture(oldtexture, newtexture);
