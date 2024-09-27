@@ -2977,6 +2977,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			geometry->CreateRoundedBox(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), ToInt(tempdata[11]), ToBool(tempdata[12]));
 		else if (type == "spring")
 			geometry->CreateSpring(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), ToBool(tempdata[11]));
+		else if (type == "prism")
+			geometry->CreatePrism(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToBool(tempdata[7]));
 		else
 			return ScriptError("Invalid shape type");
 		return sNextLine;
