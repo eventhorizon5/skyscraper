@@ -465,6 +465,10 @@ SBS::~SBS()
 		delete utility;
 	utility = 0;
 
+	if (geometry)
+		delete geometry;
+	geometry = 0;
+
 	if (timer)
 		delete timer;
 	timer = 0;
