@@ -2428,21 +2428,4 @@ void TextureManager::SetCulling(const std::string &material_name, int mode)
 	}
 }
 
-Ogre::MaterialPtr TextureManager::CopyMaterial(const std::string &material_name, const std::string &name)
-{
-	//take the input material, create a new material with the same texture,
-	//and return the new material
-	//name specifies the name of the new material
-
-	//get original material
-	Ogre::MaterialPtr mat = GetMaterialByName(material_name);
-
-	//create a new material
-	Ogre::MaterialPtr mat2 = CreateMaterial(name, "General");
-
-	BindTextureToMaterial(mat2, material_name, true);
-
-	return mat2;
-}
-
 }

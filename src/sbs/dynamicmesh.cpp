@@ -1526,11 +1526,7 @@ void DynamicMesh::Mesh::SetMaterial(const std::string& material, int culling)
 	if (culling == 1)
 		mat = sbs->GetTextureManager()->GetMaterialByName(material);
 	else
-	{
-		std::string newmat = material + "1";
-		mat = sbs->GetTextureManager()->CopyMaterial(material, newmat);
-		sbs->GetTextureManager()->SetCulling(newmat, culling);
-	}
+		sbs->GetTextureManager()->SetCulling(material, culling);
 
 	Movable->setMaterial(mat);
 }

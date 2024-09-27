@@ -494,6 +494,27 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//SetCulling command
+	if (StartsWithNoCase(LineData, "setculling"))
+	{
+		//get data
+		int params = SplitData(LineData, 11, false);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		if (!IsNumeric(tempdata[1]))
+			return ScriptError("Invalid value: " + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		texturemanager->SetCulling(tempdata[0], ToInt(tempdata[1]));
+		return sNextLine;
+	}
+
 	//handle end of textures section
 	if (StartsWithNoCase(LineData, "<endtextures>"))
 	{
