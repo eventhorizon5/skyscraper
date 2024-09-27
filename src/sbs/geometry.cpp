@@ -32,6 +32,9 @@ namespace SBS {
 
 GeometryController::GeometryController(Object *parent) : Object(parent)
 {
+	//set up SBS object
+	SetValues("GeometryController", "Geometry Controller", false);
+
 	Ogre::MeshPtr mesh = CreateSphere(2.0, 5.0, 5.0, 16, 16, "sphereMesh");
 	this->mesh = new MeshObject(this, "sphereMesh", 0, "", "sphereMesh");
 	this->mesh->SetMaterial("Default");
