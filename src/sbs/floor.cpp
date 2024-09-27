@@ -1481,6 +1481,7 @@ Primitive* Floor::AddPrimitive(const std::string &name)
 	//add a prim
 	Primitive* prim = new Primitive(this, name);
 	PrimArray.push_back(prim);
+	prim->Move(Vector3(0, GetBase(true), 0));
 	return prim;
 }
 
