@@ -44,7 +44,7 @@ public:
 	Ogre::MeshPtr CreateSpring(Real radius_circle, Real radius_helix, Real height, Real round, Real utile, Real vtile, unsigned int segments_circle, unsigned int segments_path, bool capped, const std::string& name);
 
 private:
-	MeshObject* mesh;
+
 };
 
 }

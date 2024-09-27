@@ -34,17 +34,11 @@ GeometryController::GeometryController(Object *parent) : Object(parent)
 {
 	//set up SBS object
 	SetValues("GeometryController", "Geometry Controller", true, false);
-
-	Ogre::MeshPtr mesh = CreateSphere(2.0, 5.0, 5.0, 16, 16, "sphereMesh");
-	this->mesh = new MeshObject(this, "sphereMesh", 0, "", "sphereMesh");
-	this->mesh->SetMaterial("Default");
 }
 
 GeometryController::~GeometryController()
 {
-	if (mesh)
-		delete mesh;
-	mesh = 0;
+
 }
 
 Ogre::MeshPtr GeometryController::CreatePlane(unsigned int segments_x, unsigned int segments_y, Real size_x, Real size_y, Real utile, Real vtile, const std::string& name)
