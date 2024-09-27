@@ -118,9 +118,9 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	sbs->AddMeshHandle(this);
 
 	//set up collider for model (if mesh loaded from a filename)
-	if (filename != "" && create_collider == true)
+	if ((filename != "" || meshname != "") && create_collider == true)
 	{
-		if (collidermesh.get())
+		if (collidermesh.get() && filename != "")
 		{
 			//create collider based on provided mesh collider
 			int vertex_count, index_count;
