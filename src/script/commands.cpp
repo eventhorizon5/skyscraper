@@ -2754,11 +2754,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 11);
 
-		if (params != 8 || params != 14)
+		if (params != 8 && params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 1; i <= 8; i++)
+		for (int i = 2; i <= 7; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -2846,7 +2846,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 12);
 
-		if (params != 1)
+		if (params != 3)
 			return ScriptError("Incorrect number of parameters");
 
 		std::string name = tempdata[0];
@@ -2900,7 +2900,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!prim)
 			return ScriptError("Invalid primitive " + tempdata[1] + " in " + name);
 
-		prim->SetTexture(tempdata[1]);
+		prim->SetTexture(tempdata[2]);
 
 		return sNextLine;
 	}
