@@ -437,8 +437,8 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 
 	//create counterweight and rope meshes
 	WeightMesh = new MeshObject(this, GetName() + " Counterweight");
-	WeightRopeMesh = new MeshObject(this, GetName() + " Counterweight Rope", 0, "", 0, 0, 1, false, 0, 0, 0, false, false);
-	RopeMesh = new MeshObject(this, GetName() + " Rope", 0, "", 0, 0, 1, false, 0, 0, 0, false, false);
+	WeightRopeMesh = new MeshObject(this, GetName() + " Counterweight Rope", 0, "", "", 0, 1, false, 0, 0, 0, false, false);
+	RopeMesh = new MeshObject(this, GetName() + " Rope", 0, "", "", 0, 1, false, 0, 0, 0, false, false);
 
 	//save and change autosizing
 	bool autosize_x, autosize_y;
