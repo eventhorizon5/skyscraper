@@ -91,17 +91,17 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	//add this mesh object as a client to the dynamic mesh wrapper
 	MeshWrapper->AddClient(this);
 
-	//load mesh from a file if specified
 	if (filename != "")
 	{
+		//load mesh from a file if specified
 		bool result = LoadFromFile(filename, collidermesh);
 
 		if (result == false)
 			return;
 	}
-
-	if (meshname != "")
+	else if (meshname != "")
 	{
+		//load mesh from a preexisting name if specified
 		bool result = LoadFromMesh(meshname);
 
 		if (result == false)
