@@ -515,8 +515,9 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	/*GeometryController* geometry = new GeometryController(this);
 	std::string name = "sphereMesh";
 	Ogre::MeshPtr mesh = geometry->CreateSphere(2.0, 5.0, 5.0, 16, 16, name);
-	MeshObject* sbsmesh = new MeshObject(this, name, 0, "", mesh);
-	sbsmesh->SetMaterial("Default");*/
+	Primitive *prim = GetFloor(0)->AddPrimitive(name);
+	prim->Attach(mesh, name, Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
+	prim->SetTexture("Default");*/
 
 	IsRunning = true;
 
