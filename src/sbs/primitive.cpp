@@ -37,7 +37,7 @@ namespace SBS {
 
 Primitive::Primitive(Object *parent, const std::string &name) : Object(parent)
 {
-	//loads a 3D model into the simulation
+	//loads a 3D primitive into the simulation
 
 	//set up SBS object
 	SetValues("Primitive", name, false);
@@ -113,13 +113,13 @@ void Primitive::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
-	SBS_PROFILE("Model::Loop");
+	SBS_PROFILE("Primitive::Loop");
 
 	Floor *floor = GetParent()->ConvertTo<Floor>();
 	Elevator *elevator = GetParent()->ConvertTo<Elevator>();
 	::SBS::SBS *root = GetParent()->ConvertTo<SBS>();
 
-	//if model is a child of a floor or a global object, and is in an elevator, switch parent to elevator
+	//if primitive is a child of a floor or a global object, and is in an elevator, switch parent to elevator
 	if (floor || root)
 	{
 		for (int i = 1; i <= sbs->GetElevatorCount(); i++)
@@ -140,7 +140,7 @@ void Primitive::Loop()
 		}
 	}
 
-	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor (or make it global)
+	//if primitive is a child of an elevator, and is moved outside to a floor, switch parent to floor (or make it global)
 	else if (elevator)
 	{
 		if (elevator->IsInElevator(GetPosition()) == 0)
@@ -171,19 +171,19 @@ void Primitive::Loop()
 
 void Primitive::PickUp()
 {
-	//pick up model (make model a child of the camera object)
+	//pick up primitive (make prim a child of the camera object)
 
 	if (IsPickedUp() == true)
 		return;
 
-	//pick-up model (make model a child of the camera)
+	//pick-up prim (make primitive a child of the camera)
 	RemoveFromParent();
 	ChangeParent(sbs->camera);
 }
 
 void Primitive::Drop()
 {
-	//drop model (make model a child of the proper non-camera object)
+	//drop prim (make primitive a child of the proper non-camera object)
 
 	if (IsPickedUp() == false)
 		return;
