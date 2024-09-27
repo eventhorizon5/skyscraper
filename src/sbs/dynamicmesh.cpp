@@ -654,7 +654,11 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 			MeshWrapper = Ogre::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		else
 		{
-			MeshWrapper = Ogre::MeshManager::getSingleton().getByName(node->GetNameBase() + meshname);
+			//get true parent SBS object
+			Object *object = parent->GetParent()->GetParent()->GetParent();
+
+			//get loaded mesh
+			MeshWrapper = Ogre::MeshManager::getSingleton().getByName(object->GetNameBase() + meshname);
 
 			if (!MeshWrapper)
 			{
