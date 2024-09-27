@@ -281,6 +281,7 @@ public:
 	void RemoveSound(Sound *sound);
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
+	void RemovePrimitive(Primitive *prim);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	void RemoveController(DispatchController *controller);
@@ -296,6 +297,8 @@ public:
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	void AddModel(Model *model);
+	Primitive* AddPrimitive(const std::string &name);
+	void AddPrimitive(Primitive *primitive);
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
@@ -487,6 +490,9 @@ private:
 
 	//global models
 	std::vector<Model*> ModelArray;
+
+	//global primitives
+	std::vector<Primitive*> PrimArray;
 
 	//global controls
 	std::vector<Control*> ControlArray;
