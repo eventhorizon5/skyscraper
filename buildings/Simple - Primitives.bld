@@ -491,9 +491,15 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
 #create a prim
 <Floor 0>
-    AddPrim Floor 0, Sphere1
+    CreatePrim Floor 0, Sphere1
     PrimShape Floor 0, Sphere, Sphere1, 2.0, 5.0, 5.0, 16, 16
-    PrimAttach Floor 0, Sphere1, 0, 0, 0, 0, 0, 0
+    PrimAttach Floor 0, Sphere1, 0, 0, -50, 0, 0, 0
     PrimTexture Floor 0, Sphere1, Default
+
+    CreatePrim Floor 0, Sphere1
+    PrimShape Floor 0, Sphere, Sphere1, 2.0, 5.0, 5.0, 16, 16
+    PrimAttach Floor 0, Sphere1, 0, 0, -50, 0, 0, 0
+    PrimTexture Floor 0, Sphere1, Default
+
 <EndFloor>
 

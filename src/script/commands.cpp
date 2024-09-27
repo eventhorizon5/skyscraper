@@ -2687,11 +2687,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//AddPrim command
-	if (StartsWithNoCase(LineData, "addprim "))
+	//CreatePrim command
+	if (StartsWithNoCase(LineData, "createprim "))
 	{
 		//get data
-		int params = SplitData(LineData, 8);
+		int params = SplitData(LineData, 11);
 
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
