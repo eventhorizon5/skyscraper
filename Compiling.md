@@ -308,6 +308,8 @@ It'll have errors, to fix them, do this:
     -check Advanced, and then you need to resolve the Bullet libraries (CMake can't find them), so for all the BULLET_LIBRARY statements, point them to the related libraries in c:/bullet/lib.  Ignore the DEBUG paths.
     -click Configure again
     -then configure Caelum by pointing Caelum_INCLUDE_DIR to c:/caelum-win64/main/include and Caelum_LIBRARY to c:/caelum-win64/lib/RelWithDebInfo/Caelum.lib
+    -for OpenXR, set OPENXR_DIR to C:/openxr and OPENXR_loader_LIBRARY to C:/OpenXR/x64/lib/openxr_loader.lib
+    -click Configure again
     -finally click Configure and then Generate
 
 Step 6 - copy over the DLLs into Skyscraper's folder so it'll run

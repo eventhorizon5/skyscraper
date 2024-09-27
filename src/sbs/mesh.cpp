@@ -44,7 +44,7 @@
 
 namespace SBS {
 
-MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
+MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, const std::string &meshname, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Mesh", name, true);
@@ -91,10 +91,18 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	//add this mesh object as a client to the dynamic mesh wrapper
 	MeshWrapper->AddClient(this);
 
-	//load mesh from a file if specified
 	if (filename != "")
 	{
+		//load mesh from a file if specified
 		bool result = LoadFromFile(filename, collidermesh);
+
+		if (result == false)
+			return;
+	}
+	else if (meshname != "")
+	{
+		//load mesh from a preexisting name if specified
+		bool result = LoadFromMesh(meshname);
 
 		if (result == false)
 			return;
@@ -110,9 +118,9 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	sbs->AddMeshHandle(this);
 
 	//set up collider for model (if mesh loaded from a filename)
-	if (filename != "" && create_collider == true)
+	if ((filename != "" || meshname != "") && create_collider == true)
 	{
-		if (collidermesh.get())
+		if (collidermesh.get() && filename != "")
 		{
 			//create collider based on provided mesh collider
 			int vertex_count, index_count;
@@ -649,6 +657,12 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 
 	model_loaded = true;
 	return true;
+}
+
+bool MeshObject::LoadFromMesh(const std::string &meshname)
+{
+	//load mesh
+	return MeshWrapper->LoadFromMesh(meshname);
 }
 
 bool MeshObject::UsingDynamicBuffers()
@@ -1199,6 +1213,13 @@ unsigned int MeshObject::GetTriangleCount(const std::string &material, bool tota
 	}
 
 	return tris;
+}
+
+void MeshObject::SetMaterial(const std::string& material)
+{
+	//set material of this mesh object
+
+	MeshWrapper->SetMaterial(material);
 }
 
 }

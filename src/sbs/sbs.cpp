@@ -50,6 +50,7 @@
 #include "soundsystem.h"
 #include "sound.h"
 #include "model.h"
+#include "primitive.h"
 #include "timer.h"
 #include "profiler.h"
 #include "controller.h"
@@ -59,6 +60,7 @@
 #include "buttonpanel.h"
 #include "polymesh.h"
 #include "utility.h"
+#include "geometry.h"
 
 namespace SBS {
 
@@ -171,6 +173,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 
 	//create utility object
 	utility = new Utility(this);
+
+	//create geometry controller object
+	geometry = new GeometryController(this);
 
 	camera = 0;
 	Buildings = 0;
@@ -459,6 +464,10 @@ SBS::~SBS()
 	if (utility)
 		delete utility;
 	utility = 0;
+
+	if (geometry)
+		delete geometry;
+	geometry = 0;
 
 	if (timer)
 		delete timer;
@@ -2716,6 +2725,19 @@ void SBS::RemoveModel(Model *model)
 	}
 }
 
+void SBS::RemovePrimitive(Primitive *prim)
+{
+	//remove a prim reference (does not delete the object itself)
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i] == prim)
+		{
+			PrimArray.erase(PrimArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void SBS::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -3010,6 +3032,30 @@ void SBS::AddModel(Model *model)
 	}
 
 	ModelArray.push_back(model);
+}
+
+Primitive* SBS::AddPrimitive(const std::string &name)
+{
+	//add a prim
+	Primitive* prim = new Primitive(this, name);
+	PrimArray.push_back(prim);
+	return prim;
+}
+
+void SBS::AddPrimitive(Primitive *primitive)
+{
+	//add a model reference
+
+	if (!primitive)
+		return;
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i] == primitive)
+			return;
+	}
+
+	PrimArray.push_back(primitive);
 }
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
@@ -4058,6 +4104,21 @@ Model* SBS::GetModel(std::string name)
 	return 0;
 }
 
+Primitive* SBS::GetPrimitive(std::string name)
+{
+	//get a primitive by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
+			return PrimArray[i];
+	}
+
+	return 0;
+}
+
 void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//register a dynamic mesh with the system
@@ -4187,6 +4248,11 @@ void SBS::Run0()
 		utility->DoRemoveTexture();
 		utility->DoGetTextureName();
 	}
+}
+
+GeometryController* SBS::GetGeometry()
+{
+	return geometry;
 }
 
 }

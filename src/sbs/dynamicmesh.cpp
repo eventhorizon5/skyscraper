@@ -80,7 +80,26 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 	if (meshes.empty() == false)
 		return false;
 
-	Mesh* mesh = new Mesh(this, "", node, render_distance, filename, path);
+	Mesh* mesh = new Mesh(this, "", node, render_distance, filename, "", path);
+
+	//if load failed
+	if (!mesh->MeshWrapper)
+	{
+		delete mesh;
+		return false;
+	}
+
+	meshes.push_back(mesh);
+	file_model = true;
+	return true;
+}
+
+bool DynamicMesh::LoadFromMesh(const std::string &meshname)
+{
+	if (meshes.empty() == false)
+		return false;
+
+	Mesh* mesh = new Mesh(this, "", node, render_distance, "", meshname);
 
 	//if load failed
 	if (!mesh->MeshWrapper)
@@ -607,7 +626,15 @@ void DynamicMesh::EnableShadows(bool value)
 		meshes[i]->EnableShadows(value);
 }
 
-DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename, const std::string &path)
+void DynamicMesh::SetMaterial(const std::string& material)
+{
+	//set material on all meshes
+
+	for (int i = 0; i < meshes.size(); i++)
+		meshes[i]->SetMaterial(material);
+}
+
+DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename, const std::string &meshname, const std::string &path)
 {
 	Parent = parent;
 	sbs = Parent->GetRoot();
@@ -623,7 +650,23 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		this->name = name;
 
 		//create mesh
-		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		if (meshname == "")
+			MeshWrapper = Ogre::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		else
+		{
+			//get true parent SBS object
+			Object *object = parent->GetParent()->GetParent()->GetParent();
+
+			//get loaded mesh
+			MeshWrapper = Ogre::MeshManager::getSingleton().getByName(object->GetNameBase() + meshname);
+
+			if (!MeshWrapper)
+			{
+				sbs->ReportError("Error loading mesh " + meshname + "\n");
+				return;
+			}
+
+		}
 	}
 	else
 	{
@@ -1472,6 +1515,14 @@ void DynamicMesh::Mesh::EnableShadows(bool value)
 
 	auto_shadows = false;
 	Movable->setCastShadows(value);
+}
+
+void DynamicMesh::Mesh::SetMaterial(const std::string& material)
+{
+	//set material of this mesh
+
+	Ogre::MaterialPtr mat = sbs->GetTextureManager()->GetMaterialByName(material);
+	Movable->setMaterial(mat);
 }
 
 }

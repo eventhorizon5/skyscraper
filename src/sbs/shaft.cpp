@@ -32,6 +32,7 @@
 #include "sound.h"
 #include "door.h"
 #include "model.h"
+#include "primitive.h"
 #include "light.h"
 #include "camera.h"
 #include "control.h"
@@ -955,6 +956,19 @@ void Shaft::Level::RemoveModel(Model *model)
 	}
 }
 
+void Shaft::Level::RemovePrimitive(Primitive *prim)
+{
+	//remove a prim reference (does not delete the object itself)
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i] == prim)
+		{
+			PrimArray.erase(PrimArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void Shaft::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -1037,6 +1051,30 @@ void Shaft::Level::AddModel(Model *model)
 	ModelArray.push_back(model);
 }
 
+Primitive* Shaft::Level::AddPrimitive(const std::string &name)
+{
+	//add a prim
+	Primitive* prim = new Primitive(this, name);
+	PrimArray.push_back(prim);
+	return prim;
+}
+
+void Shaft::Level::AddPrimitive(Primitive *primitive)
+{
+	//add a model reference
+
+	if (!primitive)
+		return;
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i] == primitive)
+			return;
+	}
+
+	PrimArray.push_back(primitive);
+}
+
 Control* Shaft::Level::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
@@ -1074,6 +1112,21 @@ Model* Shaft::Level::GetModel(std::string name)
 	{
 		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
 			return ModelArray[i];
+	}
+
+	return 0;
+}
+
+Primitive* Shaft::Level::GetPrimitive(std::string name)
+{
+	//get a primitive by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
+			return PrimArray[i];
 	}
 
 	return 0;

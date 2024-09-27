@@ -25,6 +25,7 @@
 #include "sbs.h"
 #include "mesh.h"
 #include "polymesh.h"
+#include "primitive.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatordoor.h"
@@ -2209,6 +2210,19 @@ void ElevatorCar::RemoveModel(Model *model)
 	}
 }
 
+void ElevatorCar::RemovePrimitive(Primitive *prim)
+{
+	//remove a prim reference (does not delete the object itself)
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i] == prim)
+		{
+			PrimArray.erase(PrimArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void ElevatorCar::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -2349,6 +2363,30 @@ void ElevatorCar::AddModel(Model *model)
 	}
 
 	ModelArray.push_back(model);
+}
+
+Primitive* ElevatorCar::AddPrimitive(const std::string &name)
+{
+	//add a prim
+	Primitive* prim = new Primitive(this, name);
+	PrimArray.push_back(prim);
+	return prim;
+}
+
+void ElevatorCar::AddPrimitive(Primitive *primitive)
+{
+	//add a model reference
+
+	if (!primitive)
+		return;
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i] == primitive)
+			return;
+	}
+
+	PrimArray.push_back(primitive);
 }
 
 void ElevatorCar::AddDisplayFloor(int floor)
@@ -2533,6 +2571,21 @@ Model* ElevatorCar::GetModel(std::string name)
 	{
 		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
 			return ModelArray[i];
+	}
+
+	return 0;
+}
+
+Primitive* ElevatorCar::GetPrimitive(std::string name)
+{
+	//get a primitive by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
+			return PrimArray[i];
 	}
 
 	return 0;

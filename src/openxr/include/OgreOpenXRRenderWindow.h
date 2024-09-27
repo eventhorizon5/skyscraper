@@ -13,9 +13,10 @@
 
 #pragma once
 
+#include "Ogre.h"
 #include "OgreRenderWindow.h"
 #include "OgreRenderSystem.h"
 #include "OgreOpenXRConfig.h"
 
 _OgreOpenXRExport Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys);
-
+_OgreOpenXRExport void SetOpenXRParameters(int index, const Ogre::Vector3& position, const Ogre::Quaternion& orientation);

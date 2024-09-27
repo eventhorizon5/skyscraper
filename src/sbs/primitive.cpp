@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Model Object
+	Scalable Building Simulator - Primitive Object
 	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
@@ -31,46 +31,23 @@
 #include "stairs.h"
 #include "camera.h"
 #include "profiler.h"
-#include "model.h"
+#include "primitive.h"
 
 namespace SBS {
 
-Model::Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass) : Object(parent)
+Primitive::Primitive(Object *parent, const std::string &name) : Object(parent)
 {
 	//loads a 3D model into the simulation
 
 	//set up SBS object
-	SetValues("Model", name, false);
+	SetValues("Primitive", name, false);
 	Offset = Vector3::ZERO;
 	is_key = false;
 	KeyID = 0;
 	global = IsGlobal();
-	this->center = center;
-
-	if (filename == "")
-		custom = true;
-	else
-		custom = false;
-
-	load_error = false;
-	mesh = new MeshObject(this, name, 0, filename, "", max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
-	if (mesh->model_loaded == false && filename != "")
-	{
-		load_error = true;
-		return;
-	}
-
-	Enabled(true);
-
-	//move to position and specified offset
-	Move(position);
-	SetRotation(rotation);
-
-	if (filename != "")
-		Init(false);
 }
 
-Model::~Model()
+Primitive::~Primitive()
 {
 	if (mesh)
 	{
@@ -84,71 +61,55 @@ Model::~Model()
 		RemoveFromParent();
 }
 
-void Model::Enabled(bool value)
+void Primitive::Enabled(bool value)
 {
 	mesh->Enabled(value);
 	EnableLoop(value);
 }
 
-bool Model::IsEnabled()
+bool Primitive::IsEnabled()
 {
 	return mesh->IsEnabled();
 }
 
-bool Model::IsKey()
-{
-	return is_key;
-}
-
-int Model::GetKeyID()
-{
-	return KeyID;
-}
-
-void Model::SetKey(int keyid)
-{
-	is_key = true;
-	KeyID = keyid;
-}
-
-bool Model::IsPhysical()
+bool Primitive::IsPhysical()
 {
 	return mesh->IsPhysical();
 }
 
-void Model::RemoveFromParent()
+void Primitive::RemoveFromParent()
 {
 	std::string type = GetParent()->GetType();
 
 	if (type == "ElevatorCar")
-		static_cast<ElevatorCar*>(GetParent())->RemoveModel(this);
+		static_cast<ElevatorCar*>(GetParent())->RemovePrimitive(this);
 	else if (type == "Floor")
-		static_cast<Floor*>(GetParent())->RemoveModel(this);
+		static_cast<Floor*>(GetParent())->RemovePrimitive(this);
 	else if (type == "Shaft Level")
-		static_cast<Shaft::Level*>(GetParent())->RemoveModel(this);
+		static_cast<Shaft::Level*>(GetParent())->RemovePrimitive(this);
 	else if (type == "Stairwell Level")
-		static_cast<Stairwell::Level*>(GetParent())->RemoveModel(this);
+		static_cast<Stairwell::Level*>(GetParent())->RemovePrimitive(this);
 	else if (type == "SBS")
-		sbs->RemoveModel(this);
+		sbs->RemovePrimitive(this);
 }
 
-void Model::AddToParent()
+void Primitive::AddToParent()
 {
 	std::string type = GetParent()->GetType();
 
 	if (type == "ElevatorCar")
-		static_cast<ElevatorCar*>(GetParent())->AddModel(this);
+		static_cast<ElevatorCar*>(GetParent())->AddPrimitive(this);
 	else if (type == "Floor")
-		static_cast<Floor*>(GetParent())->AddModel(this);
+		static_cast<Floor*>(GetParent())->AddPrimitive(this);
 	else if (type == "Shaft Level")
-		static_cast<Shaft::Level*>(GetParent())->AddModel(this);
+		static_cast<Shaft::Level*>(GetParent())->AddPrimitive(this);
 	else if (type == "Stairwell Level")
-		static_cast<Stairwell::Level*>(GetParent())->AddModel(this);
+		static_cast<Stairwell::Level*>(GetParent())->AddPrimitive(this);
 	else if (type == "SBS")
-		sbs->AddModel(this);
+		sbs->RemovePrimitive(this);
 }
 
-void Model::Loop()
+void Primitive::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
@@ -208,7 +169,7 @@ void Model::Loop()
 	}
 }
 
-void Model::PickUp()
+void Primitive::PickUp()
 {
 	//pick up model (make model a child of the camera object)
 
@@ -220,7 +181,7 @@ void Model::PickUp()
 	ChangeParent(sbs->camera);
 }
 
-void Model::Drop()
+void Primitive::Drop()
 {
 	//drop model (make model a child of the proper non-camera object)
 
@@ -261,34 +222,41 @@ void Model::Drop()
 	AddToParent();
 }
 
-bool Model::IsPickedUp()
+bool Primitive::IsPickedUp()
 {
 	return (GetParent() == sbs->camera);
 }
 
-void Model::OnInit()
-{
-	if (center == true)
-	{
-		Offset = mesh->GetOffset();
-
-		//move mesh object to specified offset
-		mesh->Move(Offset);
-	}
-}
-
-void Model::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
+void Primitive::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	if (right == false)
 	{
-		//if model is a key, add key to keyring and delete model
-		if (IsKey() == true)
-		{
-			sbs->AddKey(GetKeyID(), GetName());
-			SelfDestruct(); //self-destruct this model
-			return;
-		}
+		//do something here
 	}
+}
+
+bool Primitive::Attach(const std::string &meshname, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass)
+{
+	if (meshname == "")
+		return false;
+
+	mesh = new MeshObject(this, GetName(), 0, "", meshname, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+
+	Enabled(true);
+
+	//move to position and specified offset
+	Move(position);
+	SetRotation(rotation);
+	Init(false);
+
+	return true;
+}
+
+void Primitive::SetTexture(const std::string &texture)
+{
+	//set texture to be used by this prim
+
+	mesh->SetMaterial(texture);
 }
 
 }

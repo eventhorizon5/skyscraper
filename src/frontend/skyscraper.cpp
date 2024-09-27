@@ -50,6 +50,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
+#include "scenenode.h"
 #include "gui/debugpanel.h"
 #include "skyscraper.h"
 #include "vm.h"
@@ -248,6 +249,7 @@ bool Skyscraper::OnInit(void)
 	show_stats = -1;
 	macos_major = 0;
 	macos_minor = 0;
+	first_run = true;
 
 	//create VM instance
 	vm = new VM(this);
@@ -444,7 +446,7 @@ bool Skyscraper::OnInit(void)
 	if (parser->Found(wxT("no-menu")) == true)
 		ShowMenu = false;
 
-	if (Headless == true)
+	if (Headless == true || GetConfigBool("Skyscraper.Frontend.VR", false) == true)
 		ShowMenu = false;
 
 	if (filename != "")
@@ -1167,6 +1169,35 @@ bool Skyscraper::Loop()
 	//update Caelum
 	UpdateSky();
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	//update OpenXR camera transformations
+	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	{
+		EngineContext* engine = vm->GetActiveEngine();
+
+		if (engine)
+		{
+			::SBS::SBS* Simcore = engine->GetSystem();
+
+			if (Simcore->camera)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
+					Ogre::Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition();
+					//if (first_run == true)
+						//camera->setPosition(Simcore->ToRemote(Simcore->camera->GetSceneNode()->GetPosition()));
+
+					Ogre::Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
+					Ogre::Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
+
+					SetOpenXRParameters(i, combined, camera->getDerivedOrientation());
+				}
+			}
+		}
+	}
+#endif
+
 	//render graphics
 	result = Render();
 	if (!result)
@@ -1179,6 +1210,9 @@ bool Skyscraper::Loop()
 	vm->SwitchEngines();
 
 	//ProfileManager::dumpAll();
+
+	if (first_run == true)
+		first_run = false;
 
 	return true;
 }

@@ -92,6 +92,7 @@ public:
 		bool IsEnabled();
 		void RemoveLight(Light *light);
 		void RemoveModel(Model *model);
+		void RemovePrimitive(Primitive *prim);
 		void RemoveControl(Control *control);
 		void RemoveTrigger(Trigger *trigger);
 		MeshObject* GetMeshObject();
@@ -99,6 +100,8 @@ public:
 		Light* GetLight(const std::string &name);
 		Model* AddModel(const std::string &name, const std::string &filename, bool center, Vector3 position, Vector3 rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 		void AddModel(Model *model);
+		Primitive* AddPrimitive(const std::string &name);
+		void AddPrimitive(Primitive *primitive);
 		Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 		Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names);
 		void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
@@ -107,6 +110,7 @@ public:
 		Door* GetDoor(const std::string &name);
 		void RemoveDoor(Door *door);
 		Model* GetModel(std::string name);
+		Primitive* GetPrimitive(std::string name);
 		int GetFloor();
 		void Loop();
 		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
@@ -124,6 +128,9 @@ public:
 
 		//Models
 		std::vector<Model*> ModelArray;
+
+		//Primitives
+		std::vector<Primitive*> PrimArray;
 
 		//Controls
 		std::vector<Control*> ControlArray;

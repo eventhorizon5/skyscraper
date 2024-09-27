@@ -262,6 +262,8 @@ private:
 		std::atomic<bool> need_process;
 	};
 	LoadInfo loadinfo;
+
+	bool first_run;
 };
 
 DECLARE_APP(Skyscraper)

@@ -42,6 +42,7 @@ public:
 	bool IsVisible(Ogre::Camera *camera, int mesh_index);
 	void Prepare(MeshObject *client = 0);
 	bool LoadFromFile(const std::string &filename, const std::string &path);
+	bool LoadFromMesh(const std::string &meshname);
 	void AddClient(MeshObject *mesh);
 	void RemoveClient(MeshObject *mesh);
 	MeshObject* GetClient(int number);
@@ -61,6 +62,7 @@ public:
 	std::string GetMeshName(int mesh_index);
 	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
 	void EnableShadows(bool value);
+	void SetMaterial(const std::string& material);
 
 private:
 
@@ -69,7 +71,7 @@ private:
 	{
 		struct Submesh;
 
-		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename = "", const std::string &path = "");
+		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename = "", const std::string &meshname = "", const std::string & path = "");
 		~Mesh();
 		void Enabled(bool value);
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
@@ -85,6 +87,7 @@ private:
 		void Detach();
 		void UpdateBoundingBox();
 		void EnableShadows(bool value);
+		void SetMaterial(const std::string& material);
 
 		struct ClientEntry
 		{
