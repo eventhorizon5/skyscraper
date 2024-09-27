@@ -626,12 +626,12 @@ void DynamicMesh::EnableShadows(bool value)
 		meshes[i]->EnableShadows(value);
 }
 
-void DynamicMesh::SetMaterial(const std::string& material, int culling)
+void DynamicMesh::SetMaterial(const std::string& material)
 {
 	//set material on all meshes
 
 	for (int i = 0; i < meshes.size(); i++)
-		meshes[i]->SetMaterial(material, culling);
+		meshes[i]->SetMaterial(material);
 }
 
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename, const std::string &meshname, const std::string &path)
@@ -1517,12 +1517,11 @@ void DynamicMesh::Mesh::EnableShadows(bool value)
 	Movable->setCastShadows(value);
 }
 
-void DynamicMesh::Mesh::SetMaterial(const std::string& material, int culling)
+void DynamicMesh::Mesh::SetMaterial(const std::string& material)
 {
 	//set material of this mesh
 
 	Ogre::MaterialPtr mat = sbs->GetTextureManager()->GetMaterialByName(material);
-	sbs->GetTextureManager()->SetCulling(material, culling);
 	Movable->setMaterial(mat);
 }
 
