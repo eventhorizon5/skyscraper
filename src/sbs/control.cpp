@@ -62,7 +62,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	TrimString(Direction);
 
 	//create object mesh
-	ControlMesh = new MeshObject(this, name2, 0, "", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(this, name2, 0, "", 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set selection position to starting value
 	SetSelectPosition(selection_position);

@@ -59,7 +59,7 @@ Indicator::Indicator(Object *parent, const std::string &sound, const std::string
 	//std::string name = "Display Panel " + ToString(elevator);
 	//SetName(name);
 
-	Mesh = new MeshObject(this, "Display Panel", 0, "", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	Mesh = new MeshObject(this, "Display Panel", 0, "", 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);

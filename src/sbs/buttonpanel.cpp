@@ -62,7 +62,7 @@ ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, 
 	//create mesh
 	std::string name = "Button Panel " + ToString(index);
 	SetName(name);
-	mesh = new MeshObject(this, name, 0, "", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	mesh = new MeshObject(this, name, 0, "", 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//create panel back
 	if (texture != "")
