@@ -256,7 +256,7 @@ void Primitive::SetTexture(const std::string &texture)
 {
 	//set texture to be used by this prim
 
-	mesh->SetMaterial(texture);
+	mesh->SetMaterial(texture, 2);
 }
 
 }
