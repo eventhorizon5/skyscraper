@@ -41,7 +41,7 @@ GeometryController::~GeometryController()
 
 }
 
-Ogre::MeshPtr GeometryController::CreatePlane(Object* parent, const std::string& name, unsigned int segments_x, unsigned int segments_y, Real size_x, Real size_y, Real utile, Real vtile)
+Ogre::MeshPtr GeometryController::CreatePlane(Object* parent, const std::string& name, Real size_x, Real size_y, unsigned int segments_x, unsigned int segments_y, Real utile, Real vtile)
 {
 	return Procedural::PlaneGenerator().setScale(1.0 / sbs->UnitScale).setNumSegX(segments_x).setNumSegY(segments_y).setSizeX(size_x).setSizeY(size_y).setUTile(utile).setVTile(vtile).realizeMesh(parent->GetNameBase() + name);
 }
