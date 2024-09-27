@@ -493,32 +493,32 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 <Floor 0>
     CreatePrim Floor 0, Shape1
     PrimShape Floor 0, Shape1, Sphere, 2.0, 5.0, 5.0, 16, 16
-    PrimAttach Floor 0, Shape1, 0, 0, -5, 0, 0, 0
+    PrimAttach Floor 0, Shape1, 0, 5, -5, 0, 0, 0
     PrimTexture Floor 0, Shape1, Default
 
     CreatePrim Floor 0, Shape2
     PrimShape Floor 0, Shape2, Cylinder, 2, 2, 5.0, 5.0, 16, 16, true
-    PrimAttach Floor 0, Shape2, -5, 0, -5, 0, 0, 0
+    PrimAttach Floor 0, Shape2, -10, 5, -5, 0, 0, 0
     PrimTexture Floor 0, Shape2, Default
 
     CreatePrim Floor 0, Shape3
     PrimShape Floor 0, Shape3, Cone, 2, 2, 5.0, 5.0, 16, 16
-    PrimAttach Floor 0, Shape3, 5, 0, -5, 0, 0, 0
+    PrimAttach Floor 0, Shape3, 10, 5, -5, 0, 0, 0
     PrimTexture Floor 0, Shape3, Default
 <EndFloor>
 
 CreatePrim SBS, Shape1
 PrimShape SBS, Shape1, Sphere, 2.0, 5.0, 5.0, 16, 16
-PrimAttach SBS, Shape1, 0, 0, -50, 0, 0, 0
+PrimAttach SBS, Shape1, 0, 5, -50, 0, 0, 0
 PrimTexture SBS, Shape1, Default
 
 CreatePrim SBS, Shape2
 PrimShape SBS, Shape2, Cylinder, 2, 2, 5.0, 5.0, 16, 16, true
-PrimAttach SBS, Shape2, -10, 0, -50, 0, 0, 0
+PrimAttach SBS, Shape2, -10, 5, -50, 0, 0, 0
 PrimTexture SBS, Shape2, Default
 
 CreatePrim SBS, Shape3
 PrimShape SBS, Shape3, Cone, 2, 2, 5.0, 5.0, 16, 16
-PrimAttach SBS, Shape3, 10, 0, -50, 0, 0, 0
+PrimAttach SBS, Shape3, 10, 5, -50, 0, 0, 0
 PrimTexture SBS, Shape3, Default
 
