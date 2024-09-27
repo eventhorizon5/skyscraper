@@ -653,7 +653,16 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		if (meshname == "")
 			MeshWrapper = Ogre::MeshManager::getSingleton().createManual(node->GetNameBase() + name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		else
+		{
 			MeshWrapper = Ogre::MeshManager::getSingleton().getByName(node->GetNameBase() + meshname);
+
+			if (!MeshWrapper)
+			{
+				sbs->ReportError("Error loading mesh " + meshname + "\n");
+				return;
+			}
+
+		}
 	}
 	else
 	{
