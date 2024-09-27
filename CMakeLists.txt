@@ -229,6 +229,20 @@ ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.cmd)
 endif ()
 
+if (APPLE)
+ADD_CUSTOM_COMMAND(TARGET SBS
+		POST_BUILD
+		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
+
+ADD_CUSTOM_COMMAND(TARGET ScriptProc
+                POST_BUILD
+                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libScriptProc.dylib)
+
+ADD_CUSTOM_COMMAND(TARGET skyscraper
+		POST_BUILD
+		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
+endif ()
+
 if (UNIX AND NOT APPLE)
 	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tools/scripts/skyscraper
 	     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
