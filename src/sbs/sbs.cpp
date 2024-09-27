@@ -511,11 +511,11 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	//print a memory report
 	//MemoryReport();
 
-	GeometryController* geometry = new GeometryController(this);
+	/*GeometryController* geometry = new GeometryController(this);
 	std::string name = "sphereMesh";
 	Ogre::MeshPtr mesh = geometry->CreateSphere(2.0, 5.0, 5.0, 16, 16, name);
-	MeshObject* sbsmesh = new MeshObject(this, name, 0, "", name);
-	sbsmesh->SetMaterial("Default");
+	MeshObject* sbsmesh = new MeshObject(this, name, 0, "", mesh);
+	sbsmesh->SetMaterial("Default");*/
 
 	IsRunning = true;
 

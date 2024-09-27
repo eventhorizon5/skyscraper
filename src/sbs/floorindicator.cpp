@@ -66,7 +66,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	std::string name = "Floor Indicator " + ToString(elevator);
 	SetName(name);
 
-	FloorIndicatorMesh = new MeshObject(this, name, 0, "", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	FloorIndicatorMesh = new MeshObject(this, name, 0, "", 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//exit if elevator is invalid
 	if (!sbs->GetElevator(elev))

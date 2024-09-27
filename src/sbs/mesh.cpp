@@ -44,7 +44,7 @@
 
 namespace SBS {
 
-MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, const std::string &meshname, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
+MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, Ogre::MeshPtr mesh, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Mesh", name, true);
@@ -100,9 +100,9 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 			return;
 	}
 
-	if (meshname != "")
+	if (mesh)
 	{
-		bool result = LoadFromMesh(meshname);
+		bool result = LoadFromMesh(mesh);
 
 		if (result == false)
 			return;
@@ -659,10 +659,10 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 	return true;
 }
 
-bool MeshObject::LoadFromMesh(const std::string& meshname)
+bool MeshObject::LoadFromMesh(Ogre::MeshPtr mesh)
 {
 	//load mesh
-	return MeshWrapper->LoadFromMesh(meshname);
+	return MeshWrapper->LoadFromMesh(mesh);
 }
 
 bool MeshObject::UsingDynamicBuffers()
