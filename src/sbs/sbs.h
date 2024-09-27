@@ -110,6 +110,7 @@ namespace SBS {
 	class Indicator;
 	class PolyMesh;
 	class Utility;
+	class GeometryController;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -390,6 +391,7 @@ public:
 	CameraTexture* GetCameraTexture(int number);
 	std::string GetFilesystemPath(std::string filename);
 	Utility* GetUtility();
+	GeometryController* GetGeometry();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -552,7 +554,11 @@ private:
 	int prepare_stage;
 	int prepare_iterator;
 
+	//utility object
 	Utility *utility;
+
+	//geometry controller
+	GeometryController* geometry;
 };
 
 }

@@ -30,18 +30,18 @@ class SBSIMPEXP GeometryController : public Object
 public:
 	GeometryController(Object *parent);
 	~GeometryController();
-	Ogre::MeshPtr CreatePlane(Object* parent, unsigned int segments_x, unsigned int segments_y, Real size_x, Real size_y, Real utile, Real vtile, const std::string& name);
-	Ogre::MeshPtr CreateSphere(Object* parent, Real radius, Real utile, Real vtile, unsigned int rings, unsigned int segments, const std::string& name);
-	Ogre::MeshPtr CreateCylinder(Object* parent, Real radius, Real height, Real utile, Real vtile, unsigned int segments_base, unsigned int segments_height, bool capped, const std::string& name);
-	Ogre::MeshPtr CreateTorus(Object* parent, Real radius, Real section_radius, Real utile, Real vtile, const std::string& name);
-	Ogre::MeshPtr CreateCone(Object* parent, Real radius, Real height, Real utile, Real vtile, unsigned int segments_base, unsigned int segments_height, const std::string& name);
-	Ogre::MeshPtr CreateTube(Object* parent, Real inner_radius, Real outer_radius, Real height, Real utile, Real vtile, unsigned int segments_base, unsigned int segments_height, const std::string& name);
-	Ogre::MeshPtr CreateBox(Object* parent, Real size_x, Real size_y, Real size_z, Real utile, Real vtile, unsigned int segments_x, unsigned int segments_y, unsigned int segments_z, const std::string& name);
-	Ogre::MeshPtr CreateCapsule(Object* parent, Real radius, Real height, unsigned int rings, Real utile, Real vtile, unsigned int segments, unsigned int segments_height, bool capped, const std::string& name);
-	Ogre::MeshPtr CreateTorusKnot(Object* parent, Real radius, Real section_radius, Real utile, Real vtile, unsigned int segments_circle, unsigned int seg_section, int p, int q, const std::string& name);
-	Ogre::MeshPtr CreateIcoSphere(Object* parent, Real radius, Real utile, Real vtile, unsigned int iterations, const std::string& name);
-	Ogre::MeshPtr CreateRoundedBox(Object* parent, Real size_x, Real size_y, Real size_z, Real chamfer_size, Real utile, Real vtile, unsigned int segments_x, unsigned int segments_y, unsigned int segments_z, bool capped, const std::string& name);
-	Ogre::MeshPtr CreateSpring(Object* parent, Real radius_circle, Real radius_helix, Real height, Real round, Real utile, Real vtile, unsigned int segments_circle, unsigned int segments_path, bool capped, const std::string& name);
+	Ogre::MeshPtr CreatePlane(Object* parent, const std::string& name, unsigned int segments_x, unsigned int segments_y, Real size_x, Real size_y, Real utile, Real vtile);
+	Ogre::MeshPtr CreateSphere(Object* parent, const std::string& name, Real radius, Real utile, Real vtile, unsigned int rings, unsigned int segments);
+	Ogre::MeshPtr CreateCylinder(Object* parent, const std::string& name, Real radius, Real height, Real utile, Real vtile, unsigned int segments_base, unsigned int segments_height, bool capped);
+	Ogre::MeshPtr CreateTorus(Object* parent, const std::string& name, Real radius, Real section_radius, Real utile, Real vtile);
+	Ogre::MeshPtr CreateCone(Object* parent, const std::string& name, Real radius, Real height, Real utile, Real vtile, unsigned int segments_base, unsigned int segments_height);
+	Ogre::MeshPtr CreateTube(Object* parent, const std::string& name, Real inner_radius, Real outer_radius, Real height, Real utile, Real vtile, unsigned int segments_base, unsigned int segments_height);
+	Ogre::MeshPtr CreateBox(Object* parent, const std::string& name, Real size_x, Real size_y, Real size_z, Real utile, Real vtile, unsigned int segments_x, unsigned int segments_y, unsigned int segments_z);
+	Ogre::MeshPtr CreateCapsule(Object* parent, const std::string& name, Real radius, Real height, unsigned int rings, Real utile, Real vtile, unsigned int segments, unsigned int segments_height, bool capped);
+	Ogre::MeshPtr CreateTorusKnot(Object* parent, const std::string& name, Real radius, Real section_radius, Real utile, Real vtile, unsigned int segments_circle, unsigned int seg_section, int p, int q);
+	Ogre::MeshPtr CreateIcoSphere(Object* parent, const std::string& name, Real radius, Real utile, Real vtile, unsigned int iterations);
+	Ogre::MeshPtr CreateRoundedBox(Object* parent, const std::string& name, Real size_x, Real size_y, Real size_z, Real chamfer_size, Real utile, Real vtile, unsigned int segments_x, unsigned int segments_y, unsigned int segments_z, bool capped);
+	Ogre::MeshPtr CreateSpring(Object* parent, const std::string& name, Real radius_circle, Real radius_helix, Real height, Real round, Real utile, Real vtile, unsigned int segments_circle, unsigned int segments_path, bool capped);
 
 private:
 
