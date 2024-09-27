@@ -108,6 +108,7 @@ public:
 	void RegisterLoop(Object *object);
 	void UnregisterLoop(Object *object);
 	virtual void Enabled(bool value) {}
+	std::string GetNameBase();
 
 	template <typename T> bool IsType()
 	{

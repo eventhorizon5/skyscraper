@@ -596,4 +596,13 @@ bool Object::SelfDestruct()
 	return sbs->DeleteObject(this);
 }
 
+std::string Object::GetNameBase()
+{
+	//get base name of the scene node, which includes the instance and object ID
+
+	std::string number = ToString(GetNumber());
+
+	return ToString(sbs->InstanceNumber) + ":(" + number + ")";
+}
+
 }
