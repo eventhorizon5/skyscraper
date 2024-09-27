@@ -50,6 +50,7 @@
 #include "soundsystem.h"
 #include "sound.h"
 #include "model.h"
+#include "primitive.h"
 #include "timer.h"
 #include "profiler.h"
 #include "controller.h"
@@ -2723,6 +2724,19 @@ void SBS::RemoveModel(Model *model)
 	}
 }
 
+void SBS::RemovePrimitive(Primitive *prim)
+{
+	//remove a prim reference (does not delete the object itself)
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i] == prim)
+		{
+			PrimArray.erase(PrimArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void SBS::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -3017,6 +3031,30 @@ void SBS::AddModel(Model *model)
 	}
 
 	ModelArray.push_back(model);
+}
+
+Primitive* SBS::AddPrimitive(const std::string &name)
+{
+	//add a prim
+	Primitive* prim = new Primitive(this, name);
+	PrimArray.push_back(prim);
+	return prim;
+}
+
+void SBS::AddPrimitive(Primitive *primitive)
+{
+	//add a model reference
+
+	if (!primitive)
+		return;
+
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i] == primitive)
+			return;
+	}
+
+	PrimArray.push_back(primitive);
 }
 
 int SBS::GetConfigInt(const std::string &key, int default_value)

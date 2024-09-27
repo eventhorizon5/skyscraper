@@ -2212,7 +2212,7 @@ void ElevatorCar::RemoveModel(Model *model)
 
 void ElevatorCar::RemovePrimitive(Primitive *prim)
 {
-	//remove a model reference (does not delete the object itself)
+	//remove a prim reference (does not delete the object itself)
 	for (size_t i = 0; i < PrimArray.size(); i++)
 	{
 		if (PrimArray[i] == prim)
