@@ -2407,4 +2407,42 @@ void TextureManager::EnableShadows(const std::string &material_name, bool value)
 		mMat->setReceiveShadows(value);
 }
 
+void TextureManager::SetCulling(const std::string &material_name, int mode)
+{
+	//sets culling mode on a material
+	//if mode is 0, do not cull (both sides visible)
+	//if mode is 1, cull anticlockwise (SBS default)
+	//if mode is 2, cull clockwise (Ogre default)
+
+	//get original material
+	Ogre::MaterialPtr mat = GetMaterialByName(material_name);
+
+	if (mat)
+	{
+		if (mode == 0)
+			mat->setCullingMode(Ogre::CullingMode::CULL_NONE);
+		if (mode == 1)
+			mat->setCullingMode(Ogre::CullingMode::CULL_ANTICLOCKWISE);
+		if (mode == 2)
+			mat->setCullingMode(Ogre::CullingMode::CULL_CLOCKWISE);
+	}
+}
+
+Ogre::MaterialPtr TextureManager::CopyMaterial(const std::string &material_name, const std::string &name)
+{
+	//take the input material, create a new material with the same texture,
+	//and return the new material
+	//name specifies the name of the new material
+
+	//get original material
+	Ogre::MaterialPtr mat = GetMaterialByName(material_name);
+
+	//create a new material
+	Ogre::MaterialPtr mat2 = CreateMaterial(name, "General");
+
+	BindTextureToMaterial(mat2, material_name, true);
+
+	return mat2;
+}
+
 }
