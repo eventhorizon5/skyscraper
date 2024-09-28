@@ -1386,6 +1386,8 @@ bool Camera::Detach()
 		GetSceneNode()->DetachObject(Cameras[i]);
 	}
 
+	Cameras.clear();
+
 	return true;
 }
 
