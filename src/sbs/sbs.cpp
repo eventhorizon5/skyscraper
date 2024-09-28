@@ -304,6 +304,17 @@ SBS::~SBS()
 		ModelArray[i] = 0;
 	}
 
+	//delete primitives
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i])
+		{
+			PrimArray[i]->parent_deleting = true;
+			delete PrimArray[i];
+		}
+		PrimArray[i] = 0;
+	}
+
 	//delete lights
 	for (size_t i = 0; i < lights.size(); i++)
 	{
