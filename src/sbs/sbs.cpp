@@ -4100,6 +4100,21 @@ Quaternion SBS::FromGlobal(const Quaternion &orientation)
 	return (GetOrientation().Inverse() * orientation);
 }
 
+Light* SBS::GetLight(std::string name)
+{
+	//get a light by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (SetCaseCopy(lights[i]->GetName(), false) == name)
+			return lights[i];
+	}
+
+	return 0;
+}
+
 Model* SBS::GetModel(std::string name)
 {
 	//get a model by name
