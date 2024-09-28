@@ -372,6 +372,7 @@ public:
 	Vector3 FromGlobal(const Vector3 &position);
 	Quaternion ToGlobal(const Quaternion &orientation);
 	Quaternion FromGlobal(const Quaternion &orientation);
+	Light* GetLight(std::string name);
 	Model* GetModel(std::string name);
 	Primitive* GetPrimitive(std::string name);
 	FloorManager* GetFloorManager();
