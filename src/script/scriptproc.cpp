@@ -1007,6 +1007,8 @@ bool ScriptProcessor::FunctionProc()
 
 void ScriptProcessor::ProcessMain()
 {
+	//process main runloop
+
 	for (int i = 0; i < functions.size(); i++)
 	{
 		if (functions[i].name == "main")
@@ -2030,6 +2032,20 @@ int ScriptProcessor::ProcessForLoops()
 	}
 
 	return sContinue;
+}
+
+bool ScriptProcessor::HasMain()
+{
+	//return true if this building has a main function
+
+	for (int i = 0; i < functions.size(); i++)
+	{
+		if (functions[i].name == "main")
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 }

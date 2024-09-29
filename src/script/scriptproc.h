@@ -56,6 +56,7 @@ public:
 	EngineContext* GetEngine();
 	ElevatorCarSection* GetElevatorCarSection();
 	ConfigHandler* GetConfigHandler();
+	bool HasMain();
 
 	bool IsFinished;
 
