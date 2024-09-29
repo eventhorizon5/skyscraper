@@ -3444,14 +3444,15 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		//get SBS object
-		Object* object = Simcore->GetObjectOfParent(tempdata[0], tempdata[1], "Mesh");
+		Object* object = Simcore->GetObjectOfParent(tempdata[0], tempdata[1], "Mesh", false);
 		if (!object)
 			return ScriptError("Object not found: parent " + tempdata[0] + ", name " + tempdata[1]);
 
 		::SBS::MeshObject* mesh = static_cast<::SBS::MeshObject*>(object);
 
 		//enable physics on a matching object
-		mesh->EnablePhysics(ToBool(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+		if (mesh)
+			mesh->EnablePhysics(ToBool(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 
 		return sNextLine;
 	}
