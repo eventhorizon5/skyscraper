@@ -59,6 +59,7 @@ public:
 	bool Run();
 	void SwitchEngines();
 	void CheckCamera();
+	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 
 private:
 

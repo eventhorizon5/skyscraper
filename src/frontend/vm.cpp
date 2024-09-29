@@ -430,4 +430,11 @@ void VM::CheckCamera()
 
 }
 
+bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
+{
+	//start a sim engine
+
+	return engine->Start(cameras);
+}
+
 }
