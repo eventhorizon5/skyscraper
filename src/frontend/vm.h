@@ -30,6 +30,7 @@ namespace Skyscraper {
 
 class Skyscraper;
 class EngineContext;
+class ScriptProcessor;
 
 class VM
 {
@@ -60,6 +61,8 @@ public:
 	void SwitchEngines();
 	void CheckCamera();
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
+	::SBS::SBS* GetActiveSystem();
+	ScriptProcessor* GetActiveScriptProcessor();
 
 private:
 

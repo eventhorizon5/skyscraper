@@ -403,7 +403,7 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 
 void DebugPanel::OnInit()
 {
-	Simcore = skyscraper->GetVM()->GetActiveEngine()->GetSystem();
+	Simcore = skyscraper->GetVM()->GetActiveSystem();
 
 	if (!Simcore)
 		return;
@@ -446,7 +446,7 @@ void DebugPanel::Loop()
 
 	if (skyscraper->GetVM()->GetActiveEngine())
 	{
-		if (Simcore != skyscraper->GetVM()->GetActiveEngine()->GetSystem())
+		if (Simcore != skyscraper->GetVM()->GetActiveSystem())
 			OnInit(); //reinitialize if active engine has changed
 	}
 	else
