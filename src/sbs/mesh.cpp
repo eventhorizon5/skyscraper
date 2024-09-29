@@ -44,7 +44,7 @@
 
 namespace SBS {
 
-MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, const std::string &meshname, Real max_render_distance, Real scale_multiplier, bool enable_physics, Real restitution, Real friction, Real mass, bool create_collider, bool dynamic_buffers) : Object(parent)
+MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper, const std::string &filename, const std::string &meshname, Real max_render_distance, Real scale_multiplier, bool create_collider, bool dynamic_buffers) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Mesh", name, true);
@@ -57,25 +57,25 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	mBody = 0;
 	mShape = 0;
 	prepared = false;
-	is_physical = enable_physics;
-	this->restitution = restitution;
-	this->friction = friction;
-	this->mass = mass;
+	is_physical = false;
+	this->restitution = 0;
+	this->friction = 0;
+	this->mass = 0;
 	this->create_collider = create_collider;
 	collider_node = 0;
 	Filename = filename;
+	Meshname = meshname;
 	remove_on_disable = true;
 	wrapper_selfcreate = false;
 	model_loaded = false;
 	Bounds = new Ogre::AxisAlignedBox();
+	collidermesh = 0;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
 		tricollider = false;
 	else
 		tricollider = true;
-
-	Ogre::MeshPtr collidermesh;
 
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
@@ -116,30 +116,6 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 		GetSceneNode()->SetScale(sbs->ToRemote(scale_multiplier));
 
 	sbs->AddMeshHandle(this);
-
-	//set up collider for model (if mesh loaded from a filename)
-	if ((filename != "" || meshname != "") && create_collider == true)
-	{
-		if (collidermesh.get() && filename != "")
-		{
-			//create collider based on provided mesh collider
-			int vertex_count, index_count;
-			Vector3* vertices;
-			long unsigned int* indices;
-			Ogre::AxisAlignedBox box;
-			GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
-			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
-			delete[] vertices;
-			delete[] indices;
-			Ogre::MeshManager::getSingleton().remove(collidermesh->getHandle());
-		}
-		else
-		{
-			//create generic box collider if separate mesh collider isn't available
-			GetBounds();
-			CreateBoxCollider();
-		}
-	}
 }
 
 MeshObject::~MeshObject()
@@ -1220,6 +1196,41 @@ void MeshObject::SetMaterial(const std::string& material)
 	//set material of this mesh object
 
 	MeshWrapper->SetMaterial(material);
+}
+
+void MeshObject::EnablePhysics(bool value, Real restitution, Real friction, Real mass)
+{
+	//Enables or disables physics on the mesh, the physics properties
+	//and collider will be set up on the object later during the SBS::Prepare() stage
+
+	is_physical = value;
+	this->restitution = restitution;
+	this->friction = friction;
+	this->mass = mass;
+
+	//set up collider for model (if mesh loaded from a filename)
+	if ((Filename != "" || Meshname != "") && create_collider == true)
+	{
+		if (collidermesh.get() && Filename != "")
+		{
+			//create collider based on provided mesh collider
+			int vertex_count, index_count;
+			Vector3* vertices;
+			long unsigned int* indices;
+			Ogre::AxisAlignedBox box;
+			GetMeshInformation(collidermesh.get(), vertex_count, vertices, index_count, indices, box);
+			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
+			delete[] vertices;
+			delete[] indices;
+			Ogre::MeshManager::getSingleton().remove(collidermesh->getHandle());
+		}
+		else
+		{
+			//create generic box collider if separate mesh collider isn't available
+			GetBounds();
+			CreateBoxCollider();
+		}
+	}
 }
 
 }

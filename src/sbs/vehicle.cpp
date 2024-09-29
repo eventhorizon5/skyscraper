@@ -164,7 +164,7 @@ bool Vehicle::CreateChassis(Real restitution, Real friction, Real mass, Real lin
 	vehicle = new Object(this);
 	vehicle->SetValues("SceneNode", "Vehicle Chassis", true, true);
 
-	mChassis = new MeshObject(vehicle, GetName() + " Chassis", 0, ChassisMesh, "", ChassisScale, false, 0, 0, 0, false);
+	mChassis = new MeshObject(vehicle, GetName() + " Chassis", 0, ChassisMesh, "", ChassisScale, false);
 	mChassis->SetPosition(ChassisShift);
 
 	//initialize collider shape
@@ -215,7 +215,7 @@ bool Vehicle::AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radi
 		mWheelsSteerable.push_back(WheelCount);
 	WheelCount++;
 
-	MeshObject *mesh = new MeshObject(this, GetName() + " Wheel " + ToString(WheelCount), 0, WheelMesh, "", WheelScale, false, 0, 0, 0, false);
+	MeshObject *mesh = new MeshObject(this, GetName() + " Wheel " + ToString(WheelCount), 0, WheelMesh, "", WheelScale, false);
 	mWheels.push_back(mesh);
 
 	mVehicle->addWheel(

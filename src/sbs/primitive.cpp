@@ -240,7 +240,8 @@ bool Primitive::Attach(const std::string &meshname, const Vector3 &position, con
 	if (meshname == "")
 		return false;
 
-	mesh = new MeshObject(this, GetName(), 0, "", meshname, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	mesh = new MeshObject(this, GetName(), 0, "", meshname, max_render_distance, scale_multiplier);
+	mesh->EnablePhysics(enable_physics, restitution, friction, mass);
 
 	Enabled(true);
 
