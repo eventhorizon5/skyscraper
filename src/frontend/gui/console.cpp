@@ -112,13 +112,13 @@ Console::~Console()
 
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
-	Simcore = skyscraper->GetVM()->GetActiveEngine()->GetSystem();
+	Simcore = skyscraper->GetVM()->GetActiveSystem();
 
 	if (!Simcore)
 		return;
 
 	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = skyscraper->GetVM()->GetActiveEngine()->GetScriptProcessor();
+	ScriptProcessor *processor = skyscraper->GetVM()->GetActiveScriptProcessor();
 
 	if (!processor)
 		return;

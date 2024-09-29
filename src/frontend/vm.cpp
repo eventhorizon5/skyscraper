@@ -437,4 +437,18 @@ bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
 	return engine->Start(cameras);
 }
 
+::SBS::SBS* VM::GetActiveSystem()
+{
+	if (active_engine)
+		return active_engine->GetSystem();
+	return 0;
+}
+
+ScriptProcessor* VM::GetActiveScriptProcessor()
+{
+	if (active_engine)
+		return active_engine->GetScriptProcessor();
+	return 0;
+}
+
 }
