@@ -118,6 +118,7 @@ void ScriptProcessor::Reset()
 	functions.clear();
 	includes.clear();
 	variables.clear();
+	in_main = false;
 
 	//reset configuration
 	config->Reset();
@@ -175,12 +176,15 @@ bool ScriptProcessor::Run()
 			goto Nextline;
 
 		//expand runloop variables
-		ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
-		int hour, minute, second;
-		engine->GetFrontend()->GetTime(hour, minute, second);
-		ReplaceAll(LineData, "%hour%", ToString(hour));
-		ReplaceAll(LineData, "%minute%", ToString(minute));
-		ReplaceAll(LineData, "%second%", ToString(second));
+		if (in_main == true)
+		{
+			ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
+			int hour, minute, second;
+			engine->GetFrontend()->GetTime(hour, minute, second);
+			ReplaceAll(LineData, "%hour%", ToString(hour));
+			ReplaceAll(LineData, "%minute%", ToString(minute));
+			ReplaceAll(LineData, "%second%", ToString(second));
+		}
 
 		//process function parameters
 		ProcessFunctionParameters();
@@ -1003,17 +1007,18 @@ bool ScriptProcessor::FunctionProc()
 
 void ScriptProcessor::ProcessMain()
 {
-	//store info
-	InFunction += 1;
-
-	FunctionData data;
-	data.CallLine = -1;
-	data.Name = "main";
-
 	for (int i = 0; i < functions.size(); i++)
 	{
 		if (functions[i].name == "main")
 		{
+			//store info
+			InFunction += 1;
+
+			FunctionData data;
+			data.CallLine = -1;
+			data.Name = "main";
+
+			in_main = true;
 			line = functions[i].line + 1;
 			FunctionStack.push_back(data);
 		}
@@ -1382,6 +1387,9 @@ int ScriptProcessor::ProcessSections()
 		//end function and return to original line
 		line = FunctionStack[InFunction - 1].CallLine - 1;
 		ReplaceLineData = FunctionStack[InFunction - 1].LineData;
+		FunctionData &data = FunctionStack[InFunction - 1];
+		if (data.Name == "main")
+			in_main = false;
 		FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
 		InFunction -= 1;
 		ReplaceLine = true;

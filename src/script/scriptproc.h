@@ -119,6 +119,7 @@ private:
 	bool CalcError;
 	bool show_percent;
 	int progress_marker;
+	bool in_main;
 
 	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();
