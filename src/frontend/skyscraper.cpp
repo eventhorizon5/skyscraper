@@ -1811,7 +1811,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	//start simulation
-	if (!engine->Start(mCameras))
+	if (!vm->StartEngine(engine, mCameras))
 		return false;
 
 	//close progress dialog if no engines are loading
