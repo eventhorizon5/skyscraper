@@ -145,6 +145,9 @@ bool ScriptProcessor::Run()
 	int returncode = sContinue;
 	IsFinished = false;
 
+	if (engine->IsRunning() == true)
+		ProcessRunLoop();
+
 	if (line < (int)BuildingData.size())
 	{
 		LineData = BuildingData[line];
@@ -988,6 +991,25 @@ bool ScriptProcessor::FunctionProc()
 		}
 	}
 	return false;
+}
+
+void ScriptProcessor::ProcessRunLoop()
+{
+	//store info
+	InFunction += 1;
+
+	FunctionData data;
+	data.CallLine = -1;
+	data.Name = "runloop";
+
+	for (int i = 0; i < functions.size(); i++)
+	{
+		if (functions[i].name == "runloop")
+		{
+			line = functions[i].line + 1;
+			FunctionStack.push_back(data);
+		}
+	}
 }
 
 void ScriptProcessor::CheckFile(const std::string &filename)

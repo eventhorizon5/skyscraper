@@ -135,6 +135,7 @@ private:
 	void Breakpoint();
 	void ProcessExtents();
 	int ProcessForLoops();
+	void ProcessRunLoop();
 
 	struct FunctionInfo
 	{
