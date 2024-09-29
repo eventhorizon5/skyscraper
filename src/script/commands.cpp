@@ -3427,6 +3427,35 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//EnablePhysics command
+	if (StartsWithNoCase(LineData, "enablephysics"))
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 6)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 5; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//get SBS object
+		Object* object = Simcore->GetObjectOfParent(tempdata[0], tempdata[1], "Mesh");
+		if (!object)
+			return ScriptError("Object not found: parent " + tempdata[0] + ", name " + tempdata[1]);
+
+		SBS::MeshObject* mesh = static_cast<SBS::MeshObject*>(object);
+
+		//enable physics on a matching object
+		mesh->EnablePhysics(ToBool(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+
+		return sNextLine;
+	}
+
 	return sContinue;
 }
 
