@@ -146,7 +146,7 @@ bool ScriptProcessor::Run()
 	IsFinished = false;
 
 	if (engine->IsRunning() == true)
-		ProcessRunLoop();
+		ProcessMain();
 
 	if (line < (int)BuildingData.size())
 	{
@@ -993,18 +993,18 @@ bool ScriptProcessor::FunctionProc()
 	return false;
 }
 
-void ScriptProcessor::ProcessRunLoop()
+void ScriptProcessor::ProcessMain()
 {
 	//store info
 	InFunction += 1;
 
 	FunctionData data;
 	data.CallLine = -1;
-	data.Name = "runloop";
+	data.Name = "main";
 
 	for (int i = 0; i < functions.size(); i++)
 	{
-		if (functions[i].name == "runloop")
+		if (functions[i].name == "main")
 		{
 			line = functions[i].line + 1;
 			FunctionStack.push_back(data);
