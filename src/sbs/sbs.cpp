@@ -3469,6 +3469,9 @@ Object* SBS::GetObjectOfParent(std::string parent_name, std::string name, const 
 
 		if (object)
 		{
+			if (object->GetType() != type)
+				continue;
+
 			Object* parent = ObjectArray[i]->GetParent();
 
 			if (parent)
@@ -3480,14 +3483,15 @@ Object* SBS::GetObjectOfParent(std::string parent_name, std::string name, const 
 
 				if (namecheck == parent_name) //check object for match if parent matches
 				{
-					std::string tmpname = ObjectArray[i]->GetName();
+					std::string tmpname = object->GetName();
 					ReplaceAll(tmpname, " ", "");
 					if (case_sensitive == false)
 						SetCase(tmpname, false);
 
+					printf("name: %s\n", tmpname.c_str());
 					//get by object name
-					if (tmpname == name && ObjectArray[i]->GetType() == type)
-						return ObjectArray[i];
+					if (tmpname == name)
+						return object;
 				}
 			}
 		}
