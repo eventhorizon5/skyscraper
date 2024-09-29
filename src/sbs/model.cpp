@@ -61,7 +61,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 		return;
 	}
 
-	mesh->EnablePhysics(enable_physics, restitution, friction, mass);
+	mesh->EnablePhysics(enable_physics, restitution, friction, mass); //this also creates a collider
 	Enabled(true);
 
 	//move to position and specified offset

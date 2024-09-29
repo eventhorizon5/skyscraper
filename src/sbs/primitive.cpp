@@ -241,7 +241,7 @@ bool Primitive::Attach(const std::string &meshname, const Vector3 &position, con
 		return false;
 
 	mesh = new MeshObject(this, GetName(), 0, "", meshname, max_render_distance, scale_multiplier);
-	mesh->EnablePhysics(enable_physics, restitution, friction, mass);
+	mesh->EnablePhysics(enable_physics, restitution, friction, mass); //this also creates a collider
 
 	Enabled(true);
 
