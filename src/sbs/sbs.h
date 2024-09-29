@@ -268,6 +268,7 @@ public:
 	int GetObjectCount();
 	Object* GetObject(int number);
 	Object* GetObject(std::string name, bool case_sensitive = true);
+	Object* GetObjectOfParent(std::string parent_name, std::string name, const std::string &type, bool case_sensitive = true);
 	std::vector<Object*> GetObjectRange(const std::string &expression);
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);

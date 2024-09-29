@@ -2969,7 +2969,7 @@ void SBS::Prepare(bool report)
 		Report("Creating colliders...");
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
-		if (meshes[i]->tricollider == true)
+		if (meshes[i]->tricollider == true && meshes[i]->IsPhysical() == false)
 			meshes[i]->CreateCollider();
 		else
 			meshes[i]->CreateBoxCollider();
@@ -3442,6 +3442,51 @@ Object* SBS::GetObject(std::string name, bool case_sensitive)
 
 					//get by "grandparentname:parentname:objectname"
 					if (name == grandparent_name + ":" + parent_name + ":" + tmpname)
+						return ObjectArray[i];
+				}
+			}
+		}
+	}
+
+	return 0;
+}
+
+Object* SBS::GetObjectOfParent(std::string parent_name, std::string name, const std::string &type, bool case_sensitive)
+{
+	//get object by name
+
+	ReplaceAll(name, " ", "");
+	ReplaceAll(parent_name, " ", "");
+	if (case_sensitive == false)
+	{
+		SetCase(name, false);
+		SetCase(parent_name, false);
+	}
+
+	for (size_t i = 0; i < ObjectArray.size(); i++)
+	{
+		Object *object = ObjectArray[i];
+
+		if (object)
+		{
+			Object* parent = ObjectArray[i]->GetParent();
+
+			if (parent)
+			{
+				std::string namecheck = parent->GetName();
+				ReplaceAll(namecheck, " ", "");
+				if (case_sensitive == false)
+					SetCase(namecheck, false);
+
+				if (namecheck == parent_name) //check object for match if parent matches
+				{
+					std::string tmpname = ObjectArray[i]->GetName();
+					ReplaceAll(tmpname, " ", "");
+					if (case_sensitive == false)
+						SetCase(tmpname, false);
+
+					//get by object name
+					if (tmpname == name && ObjectArray[i]->GetType() == type)
 						return ObjectArray[i];
 				}
 			}
