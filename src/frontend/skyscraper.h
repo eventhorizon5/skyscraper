@@ -149,7 +149,7 @@ public:
 	void SetLocation(Real latitude, Real longitude);
 	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
-	void GetTime(int &hour, int &minute);
+	void GetTime(int &hour, int &minute, int &second);
 	void RaiseWindow();
 	void RefreshConsole();
 	void RefreshViewport();

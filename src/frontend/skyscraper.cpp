@@ -2359,14 +2359,19 @@ void Skyscraper::SetDateTime(double julian_date_time)
 		mCaelumSystem->setJulianDay(datetime);
 }
 
-void Skyscraper::GetTime(int &hour, int &minute)
+void Skyscraper::GetTime(int &hour, int &minute, int &second)
 {
+	hour = -1;
+	minute = -1;
+	second = -1.0;
+
 	if (!mCaelumSystem)
 		return;
 
-	Caelum::LongReal julian = mCaelumSystem->getJulianDay(), second;
+	Caelum::LongReal julian = mCaelumSystem->getJulianDay(), sec;
 	int year, month, day;
-	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, second);
+	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, sec);
+	second = (int)sec;
 }
 
 void Skyscraper::RaiseWindow()

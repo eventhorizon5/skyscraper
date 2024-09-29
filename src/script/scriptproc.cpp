@@ -176,10 +176,11 @@ bool ScriptProcessor::Run()
 
 		//expand runloop variables
 		ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
-		int hour, minute;
-		engine->GetFrontend()->GetTime(hour, minute);
+		int hour, minute, second;
+		engine->GetFrontend()->GetTime(hour, minute, second);
 		ReplaceAll(LineData, "%hour%", ToString(hour));
 		ReplaceAll(LineData, "%minute%", ToString(minute));
+		ReplaceAll(LineData, "%second%", ToString(second));
 
 		//process function parameters
 		ProcessFunctionParameters();
