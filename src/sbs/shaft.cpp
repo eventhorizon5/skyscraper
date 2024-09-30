@@ -871,6 +871,13 @@ void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 				ModelArray[i]->Enabled(value);
 		}
 
+		//primitives
+		for (size_t i = 0; i < PrimArray.size(); i++)
+		{
+			if (PrimArray[i])
+				PrimArray[i]->Enabled(value);
+		}
+
 		//lights
 		for (size_t i = 0; i < lights.size(); i++)
 		{

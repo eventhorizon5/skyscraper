@@ -455,6 +455,13 @@ void Floor::Enabled(bool value)
 			ModelArray[i]->Enabled(value);
 	}
 
+	//primitives
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i])
+			PrimArray[i]->Enabled(value);
+	}
+
 	//call stations
 	for (size_t i = 0; i < CallStationArray.size(); i++)
 	{
