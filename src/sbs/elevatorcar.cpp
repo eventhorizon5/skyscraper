@@ -1013,6 +1013,13 @@ void ElevatorCar::EnableObjects(bool value)
 	for (size_t i = 0; i < PanelArray.size(); i++)
 		PanelArray[i]->Enabled(value);
 
+	//primitives
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i])
+			PrimArray[i]->Enabled(value);
+	}
+
 	//sounds
 	for (size_t i = 0; i < sounds.size(); i++)
 	{

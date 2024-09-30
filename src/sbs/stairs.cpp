@@ -801,6 +801,13 @@ void Stairwell::Level::Enabled(bool value)
 				ModelArray[i]->Enabled(value);
 		}
 
+		//primitives
+		for (size_t i = 0; i < PrimArray.size(); i++)
+		{
+			if (PrimArray[i])
+				PrimArray[i]->Enabled(value);
+		}
+
 		//lights
 		for (size_t i = 0; i < lights.size(); i++)
 		{
