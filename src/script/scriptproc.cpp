@@ -963,6 +963,9 @@ bool ScriptProcessor::FunctionProc()
 	//process functions
 	for (size_t i = 0; i < functions.size(); i++)
 	{
+		if (functions[i].name == "runloop")
+			continue;
+
 		int location = LineData.find(functions[i].name + "(");
 		if (location >= 0)
 		{
@@ -1395,11 +1398,14 @@ int ScriptProcessor::ProcessSections()
 		line = FunctionStack[InFunction - 1].CallLine - 1;
 		ReplaceLineData = FunctionStack[InFunction - 1].LineData;
 		FunctionData &data = FunctionStack[InFunction - 1];
+
+		if (in_runloop == false)
+			ReplaceLine = true;
+
 		if (data.Name == "runloop")
 			in_runloop = false;
 		FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
 		InFunction -= 1;
-		ReplaceLine = true;
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<floors"))
