@@ -129,7 +129,7 @@ bool EngineContext::Run()
 	//run script processor
 	if (processor)
 	{
-		bool in_main = InMain();
+		bool in_main = InRunloop();
 		bool result = processor->Run();
 
 		if (loading == true)
@@ -152,7 +152,7 @@ bool EngineContext::Run()
 		}
 		else if (processor->IsFinished == true && result == true)
 		{
-			if (InMain() == false)
+			if (InRunloop() == false)
 			{
 				Simcore->Prepare(false);
 				Simcore->DeleteColliders = false;
@@ -633,10 +633,10 @@ VM* EngineContext::GetVM()
 	return vm;
 }
 
-bool EngineContext::InMain()
+bool EngineContext::InRunloop()
 {
 	if (processor)
-		return processor->InMain();
+		return processor->InRunloop();
 	return false;
 }
 

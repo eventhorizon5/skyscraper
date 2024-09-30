@@ -76,7 +76,7 @@ public:
 	EngineContext* GetParent() { return parent; }
 	bool IsParent(EngineContext *engine, bool recursive = false);
 	VM* GetVM();
-	bool InMain();
+	bool InRunloop();
 
 private:
 
