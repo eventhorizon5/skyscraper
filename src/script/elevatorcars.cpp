@@ -2322,6 +2322,31 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//AddElevatorIDSigns command
+	if (StartsWithNoCase(LineData, "addelevatoridsigns"))
+	{
+		//get data
+		int params = SplitData(LineData, 19);
+
+		if (params != 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 8; i++)
+		{
+			if (i == 1)
+				i = 4;
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		bool result = car->AddElevatorIDSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+
+		if (result == false)
+			return ScriptError();
+		return sNextLine;
+	}
+
 	//handle end of car section
 	if (StartsWithNoCase(LineData, "<endcar>") == true && config->RangeL == config->RangeH)
 	{
@@ -2357,31 +2382,6 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			engine->Report("Finished cars");
 			return sNextLine;
 		}
-	}
-
-	//AddElevatorIDSigns command
-	if (StartsWithNoCase(LineData, "addelevatoridsigns"))
-	{
-		//get data
-		int params = SplitData(LineData, 19);
-
-		if (params != 9)
-			return ScriptError("Incorrect number of parameters");
-
-		//check numeric values
-		for (int i = 0; i <= 8; i++)
-		{
-			if (i == 1)
-				i = 4;
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
-		}
-
-		bool result = car->AddElevatorIDSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
-
-		if (result == false)
-			return ScriptError();
-		return sNextLine;
 	}
 
 	return sContinue;
