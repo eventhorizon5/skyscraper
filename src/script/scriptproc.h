@@ -57,6 +57,7 @@ public:
 	ElevatorCarSection* GetElevatorCarSection();
 	ConfigHandler* GetConfigHandler();
 	bool HasMain();
+	bool InMain() {return in_main;}
 
 	bool IsFinished;
 
