@@ -65,6 +65,7 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	progress = 0;
 	inside = false;
 	Moved = false;
+	started = false;
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
@@ -268,6 +269,10 @@ std::string EngineContext::GetFilename()
 
 void EngineContext::StartSim()
 {
+	//exit if already started
+	if (started == true)
+		return;
+
 	//get offset of parent engine
 	Vector3 offset;
 	if (parent)
@@ -329,6 +334,7 @@ void EngineContext::UnloadSim()
 	running = false;
 	raised = false;
 	Moved = false;
+	started = true;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	//release free memory to OS on Linux
