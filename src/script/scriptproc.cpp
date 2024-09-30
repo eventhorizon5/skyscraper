@@ -118,7 +118,7 @@ void ScriptProcessor::Reset()
 	functions.clear();
 	includes.clear();
 	variables.clear();
-	in_main = false;
+	in_runloop = false;
 
 	//reset configuration
 	config->Reset();
@@ -147,7 +147,7 @@ bool ScriptProcessor::Run()
 	IsFinished = false;
 
 	if (engine->IsRunning() == true)
-		ProcessMain();
+		ProcessRunloop();
 
 	if (line < (int)BuildingData.size())
 	{
@@ -176,7 +176,7 @@ bool ScriptProcessor::Run()
 			goto Nextline;
 
 		//expand runloop variables
-		if (in_main == true)
+		if (in_runloop == true)
 		{
 			ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
 			int hour, minute, second;
@@ -1005,27 +1005,27 @@ bool ScriptProcessor::FunctionProc()
 	return false;
 }
 
-void ScriptProcessor::ProcessMain()
+void ScriptProcessor::ProcessRunloop()
 {
-	//process main runloop
+	//process runloop
 
 	//exit if already in a runloop
-	if (in_main == true)
+	if (in_runloop == true)
 		return;
 
 	//add function to function stack, to run
 	for (int i = 0; i < functions.size(); i++)
 	{
-		if (functions[i].name == "main")
+		if (functions[i].name == "runloop")
 		{
 			//store info
 			InFunction += 1;
 
 			FunctionData data;
 			data.CallLine = -1;
-			data.Name = "main";
+			data.Name = "runloop";
 
-			in_main = true;
+			in_runloop = true;
 			line = functions[i].line + 1;
 			FunctionStack.push_back(data);
 		}
@@ -1395,8 +1395,8 @@ int ScriptProcessor::ProcessSections()
 		line = FunctionStack[InFunction - 1].CallLine - 1;
 		ReplaceLineData = FunctionStack[InFunction - 1].LineData;
 		FunctionData &data = FunctionStack[InFunction - 1];
-		if (data.Name == "main")
-			in_main = false;
+		if (data.Name == "runloop")
+			in_runloop = false;
 		FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
 		InFunction -= 1;
 		ReplaceLine = true;
@@ -2039,13 +2039,13 @@ int ScriptProcessor::ProcessForLoops()
 	return sContinue;
 }
 
-bool ScriptProcessor::HasMain()
+bool ScriptProcessor::HasRunloop()
 {
-	//return true if this building has a main function
+	//return true if this building has a runloop function
 
 	for (int i = 0; i < functions.size(); i++)
 	{
-		if (functions[i].name == "main")
+		if (functions[i].name == "runloop")
 		{
 			return true;
 		}
