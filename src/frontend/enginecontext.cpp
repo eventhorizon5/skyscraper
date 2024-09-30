@@ -129,6 +129,7 @@ bool EngineContext::Run()
 	//run script processor
 	if (processor)
 	{
+		bool in_main = InMain();
 		bool result = processor->Run();
 
 		if (loading == true)
@@ -149,7 +150,7 @@ bool EngineContext::Run()
 			if (Simcore->RenderOnStartup == false)
 				return false;
 		}
-		else if (processor->IsFinished == true && result == true)
+		else if (processor->IsFinished == true && result == true && in_main == false)
 		{
 			Simcore->Prepare(false);
 			Simcore->DeleteColliders = false;
