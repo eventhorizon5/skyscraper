@@ -2333,7 +2333,8 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		config->RangeH = config->RangeHOld;
 		config->RangeStart = config->RangeStartOld;
 
-		engine->Report("Finished car");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished car");
 		return sNextLine;
 	}
 
@@ -2354,7 +2355,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			config->RangeH = config->RangeHOld;
 			config->RangeStart = config->RangeStartOld;
 			config->Current = config->CurrentOld;
-			engine->Report("Finished cars");
+
+			if (parent->InRunloop() == false)
+				engine->Report("Finished cars");
 			return sNextLine;
 		}
 	}

@@ -2373,7 +2373,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished floor");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished floor");
 		return sNextLine;
 	}
 
@@ -2398,7 +2399,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				config->Context = "None";
 				config->RangeL = 0;
 				config->RangeH = 0;
-				engine->Report("Finished floors");
+				if (parent->InRunloop() == false)
+					engine->Report("Finished floors");
 				return sNextLine;
 			}
 		}
@@ -2416,7 +2418,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				config->Context = "None";
 				config->RangeL = 0;
 				config->RangeH = 0;
-				engine->Report("Finished floors");
+				if (parent->InRunloop() == false)
+					engine->Report("Finished floors");
 				return sNextLine;
 			}
 		}

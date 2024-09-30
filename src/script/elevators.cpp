@@ -754,7 +754,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished elevator");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished elevator");
 		return sNextLine;
 	}
 
@@ -773,7 +774,8 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 			config->Context = "None";
 			config->RangeL = 0;
 			config->RangeH = 0;
-			engine->Report("Finished elevators");
+			if (parent->InRunloop() == false)
+				engine->Report("Finished elevators");
 			return sNextLine;
 		}
 	}

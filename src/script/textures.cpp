@@ -521,7 +521,8 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		Simcore->GetTextureManager()->FreeTextureImages();
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished textures");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished textures");
 		return sNextLine;
 	}
 

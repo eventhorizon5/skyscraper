@@ -325,7 +325,8 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished vehicle");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished vehicle");
 		return sNextLine;
 	}
 
@@ -344,7 +345,8 @@ int ScriptProcessor::VehicleSection::Run(std::string &LineData)
 			config->Context = "None";
 			config->RangeL = 0;
 			config->RangeH = 0;
-			engine->Report("Finished vehicles");
+			if (parent->InRunloop() == false)
+				engine->Report("Finished vehicles");
 			return sNextLine;
 		}
 	}

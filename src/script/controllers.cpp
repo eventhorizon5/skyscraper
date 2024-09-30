@@ -160,7 +160,8 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished controller");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished controller");
 		return sNextLine;
 	}
 
@@ -179,7 +180,8 @@ int ScriptProcessor::ControllerSection::Run(std::string &LineData)
 			config->Context = "None";
 			config->RangeL = 0;
 			config->RangeH = 0;
-			engine->Report("Finished controllers");
+			if (parent->InRunloop() == false)
+				engine->Report("Finished controllers");
 			return sNextLine;
 		}
 	}
