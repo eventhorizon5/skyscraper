@@ -150,11 +150,18 @@ bool EngineContext::Run()
 			if (Simcore->RenderOnStartup == false)
 				return false;
 		}
-		else if (processor->IsFinished == true && result == true && in_main == false)
+		else if (processor->IsFinished == true && result == true)
 		{
-			Simcore->Prepare(false);
-			Simcore->DeleteColliders = false;
-			Simcore->Init(); //initialize any new objects
+			if (InMain() == false)
+			{
+				Simcore->Prepare(false);
+				Simcore->DeleteColliders = false;
+				Simcore->Init(); //initialize any new objects
+			}
+			else
+			{
+				loading = false;
+			}
 		}
 	}
 	else

@@ -1009,6 +1009,9 @@ void ScriptProcessor::ProcessMain()
 {
 	//process main runloop
 
+	if (in_main == true)
+		return;
+
 	for (int i = 0; i < functions.size(); i++)
 	{
 		if (functions[i].name == "main")
