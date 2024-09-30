@@ -1522,7 +1522,15 @@ void DynamicMesh::Mesh::SetMaterial(const std::string& material)
 	//set material of this mesh
 
 	Ogre::MaterialPtr mat = sbs->GetTextureManager()->GetMaterialByName(material);
-	Movable->setMaterial(mat);
+
+	if (mat)
+		Movable->setMaterial(mat);
+	else
+	{
+		//set to default material if the specified one is not found
+		mat = sbs->GetTextureManager()->GetMaterialByName("Default");
+		Movable->setMaterial(mat);
+	}
 }
 
 }
