@@ -342,7 +342,7 @@ void EngineContext::UnloadSim()
 	running = false;
 	raised = false;
 	Moved = false;
-	started = true;
+	started = false;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	//release free memory to OS on Linux
