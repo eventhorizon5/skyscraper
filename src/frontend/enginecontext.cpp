@@ -625,4 +625,11 @@ VM* EngineContext::GetVM()
 	return vm;
 }
 
+bool EngineContext::InMain()
+{
+	if (processor)
+		return processor->InMain();
+	return false;
+}
+
 }
