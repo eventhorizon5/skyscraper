@@ -45,6 +45,7 @@ Primitive::Primitive(Object *parent, const std::string &name) : Object(parent)
 	is_key = false;
 	KeyID = 0;
 	global = IsGlobal();
+	always_visible = false;
 }
 
 Primitive::~Primitive()
@@ -63,6 +64,9 @@ Primitive::~Primitive()
 
 void Primitive::Enabled(bool value)
 {
+	if (always_visible == true)
+		value = true;
+
 	mesh->Enabled(value);
 	EnableLoop(value);
 }
