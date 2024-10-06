@@ -2602,6 +2602,8 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "DispatchController")
 		deleted = true;
+	else if (type == "Primitive")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
