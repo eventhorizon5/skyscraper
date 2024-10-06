@@ -393,6 +393,7 @@ DrawWalls = true, true, false, false, false, false
     PrimShape Elevator 1, Hydraulic, Cylinder, 0.5, 2, 1, 1, 16, 16, false
     PrimAttach Elevator 1, Hydraulic, 0, 0, 0, 0, 0, 0
     PrimTexture Elevator 1, Hydraulic, Default2
+    PrimVisible Elevator 1, Hydraulic, true
 
 <EndElevator>
 
