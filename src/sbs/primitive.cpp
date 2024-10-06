@@ -46,6 +46,7 @@ Primitive::Primitive(Object *parent, const std::string &name) : Object(parent)
 	KeyID = 0;
 	global = IsGlobal();
 	always_visible = false;
+	mesh = 0;
 }
 
 Primitive::~Primitive()
