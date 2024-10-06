@@ -3019,7 +3019,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//PrimTexture command
+	//PrimVisible command
 	if (StartsWithNoCase(LineData, "primvisible"))
 	{
 		//get data
