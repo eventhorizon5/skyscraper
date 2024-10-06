@@ -81,6 +81,8 @@
     Load data/ropes.png, Ropes, 1, 1
     Load data/metal080.jpg, Rails, 1, 1
     Load data/metal1.jpg, RailsEdge, 1, 1
+    Load data/metal080.jpg, Hydraulic, 0.25, 0.25
+    SetCulling Hydraulic, 0
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -91,10 +93,6 @@
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     AddTextRange 1, 10, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 10, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
-
-    #load a second copy of the Default texture, with modified culling
-    Load data/default.png, Default2, 1, 1
-    SetCulling Default2, 0
 <EndTextures>
 
 #Next you'll need to create the ground. The following code is the default ground code.
@@ -392,7 +390,7 @@ DrawWalls = true, true, false, false, false, false
     CreatePrim Elevator 1, Hydraulic
     PrimShape Elevator 1, Hydraulic, Cylinder, 0.5, 120, 1, 1, 16, 16, false
     PrimAttach Elevator 1, Hydraulic, 0, -120, 0, 0, 0, 0
-    PrimTexture Elevator 1, Hydraulic, Default2
+    PrimTexture Elevator 1, Hydraulic, Hydraulic
     PrimVisible Elevator 1, Hydraulic, true
 
 <EndElevator>
