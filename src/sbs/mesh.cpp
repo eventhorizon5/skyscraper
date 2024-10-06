@@ -1233,4 +1233,11 @@ void MeshObject::EnablePhysics(bool value, Real restitution, Real friction, Real
 	}
 }
 
+size_t MeshObject::GetSize()
+{
+	//return size in bytes of this mesh object
+
+	return MeshWrapper->GetSize(this);
+}
+
 }
