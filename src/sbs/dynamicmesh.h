@@ -63,7 +63,6 @@ public:
 	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
 	void EnableShadows(bool value);
 	void SetMaterial(const std::string& material);
-	size_t GetSize(MeshObject* client);
 
 private:
 
@@ -89,7 +88,6 @@ private:
 		void UpdateBoundingBox();
 		void EnableShadows(bool value);
 		void SetMaterial(const std::string& material);
-		size_t GetSize();
 
 		struct ClientEntry
 		{
@@ -118,7 +116,6 @@ private:
 		bool prepared;
 		bool auto_shadows;
 		bool parent_deleting;
-		size_t size;
 	};
 
 	std::vector<Mesh*> meshes;
