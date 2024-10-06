@@ -93,6 +93,7 @@ public:
 	bool LoadFromMesh(const std::string &meshname);
 	void SetMaterial(const std::string& material);
 	void EnablePhysics(bool value, Real restitution = 0, Real friction = 0, Real mass = 0);
+	size_t GetSize();
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
