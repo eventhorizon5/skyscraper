@@ -2722,67 +2722,6 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//CreatePrim command
-	if (StartsWithNoCase(LineData, "createprim "))
-	{
-		//get data
-		int params = SplitData(LineData, 11);
-
-		if (params != 2)
-			return ScriptError("Incorrect number of parameters");
-
-		std::string name = tempdata[0];
-		TrimString(name);
-		Object *obj = Simcore->GetObject(name);
-
-		if (!obj)
-			return ScriptError("Invalid object " + name);
-
-		Floor *floorobj = 0;
-		Elevator *elevatorobj = 0;
-		ElevatorCar *elevatorcarobj = 0;
-		Shaft::Level *shaftobj = 0;
-		Stairwell::Level *stairsobj = 0;
-		::SBS::SBS *sbs = 0;
-
-		//get parent object of light
-		if (obj->GetType() == "Floor")
-			floorobj = static_cast<Floor*>(obj);
-		if (obj->GetType() == "Elevator")
-			elevatorobj = static_cast<Elevator*>(obj);
-		if (obj->GetType() == "ElevatorCar")
-			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft Level")
-			shaftobj = static_cast<Shaft::Level*>(obj);
-		if (obj->GetType() == "Stairwell Level")
-			stairsobj = static_cast<Stairwell::Level*>(obj);
-		if (obj->GetType() == "SBS")
-			sbs = static_cast<::SBS::SBS*>(obj);
-
-		if (elevatorobj)
-			elevatorcarobj = elevatorobj->GetCar(0);
-
-		//stop here if in Check mode
-		if (config->CheckScript == true)
-			return sNextLine;
-
-		//create prim
-		if (floorobj)
-			StoreCommand(floorobj->AddPrimitive(tempdata[1]));
-		else if (elevatorcarobj)
-			StoreCommand(elevatorcarobj->AddPrimitive(tempdata[1]));
-		else if (shaftobj)
-			StoreCommand(shaftobj->AddPrimitive(tempdata[1]));
-		else if (stairsobj)
-			StoreCommand(stairsobj->AddPrimitive(tempdata[1]));
-		else if (sbs)
-			StoreCommand(sbs->AddPrimitive(tempdata[1]));
-		else
-			return ScriptError("Invalid object " + name);
-
-		return sNextLine;
-	}
-
 	//PrimAttach command
 	if (StartsWithNoCase(LineData, "primattach"))
 	{
@@ -2940,11 +2879,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//PrimShape command
-	if (StartsWithNoCase(LineData, "primshape"))
+	//CreatePrim/PrimShape command
+	if (StartsWithNoCase(LineData, "primshape") || StartsWithNoCase(LineData, "createprim"))
 	{
 		//get data
-		int params = SplitData(LineData, 10);
+		int params = SplitData(LineData, 11);
 
 		if (params < 7 || params > 13)
 			return ScriptError("Incorrect number of parameters");
@@ -2956,16 +2895,51 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!obj)
 			return ScriptError("Invalid object " + name);
 
-		//get parent object
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
 		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
 		{
-			Elevator *elevatorobj = static_cast<Elevator*>(obj);
-			obj = elevatorobj->GetCar(0);
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
 		}
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)
 			return sNextLine;
+
+		//create prim
+		if (floorobj)
+			StoreCommand(floorobj->AddPrimitive(tempdata[1]));
+		else if (elevatorcarobj)
+			StoreCommand(elevatorcarobj->AddPrimitive(tempdata[1]));
+		else if (shaftobj)
+			StoreCommand(shaftobj->AddPrimitive(tempdata[1]));
+		else if (stairsobj)
+			StoreCommand(stairsobj->AddPrimitive(tempdata[1]));
+		else if (sbs)
+			StoreCommand(sbs->AddPrimitive(tempdata[1]));
+		else
+			return ScriptError("Invalid object " + name);
 
 		GeometryController* geometry = Simcore->GetGeometry();
 
