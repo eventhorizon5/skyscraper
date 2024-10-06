@@ -531,7 +531,7 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 		EnableRandomActivity(true);
 
 	//print a memory report
-	//MemoryReport();
+	MemoryReport();
 
 	IsRunning = true;
 
@@ -4321,6 +4321,22 @@ Utility* SBS::GetUtility()
 GeometryController* SBS::GetGeometry()
 {
 	return geometry;
+}
+
+void SBS::MemoryReport()
+{
+	//print a memory report
+	Report("");
+	Report("--- Memory Report ---");
+
+	//mesh memory
+	{
+		size_t total = 0;
+		for (int i = 0; i < meshes.size(); i++)
+			total += meshes[i]->GetSize();
+		Report("Meshes: " + ToString(total / 1024) + " kb");
+	}
+	Report("");
 }
 
 }
