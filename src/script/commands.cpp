@@ -2989,31 +2989,83 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		std::string type = tempdata[2];
 		SetCase(type, false);
 		if (type == "plane")
+		{
+			if (params != 9)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreatePlane(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+		}
 		else if (type == "sphere")
+		{
+			if (params != 8)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateSphere(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]));
+		}
 		else if (type == "cylinder")
+		{
+			if (params != 10)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateCylinder(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToBool(tempdata[9]));
+		}
 		else if (type == "torus")
+		{
+			if (params != 7)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateTorus(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		}
 		else if (type == "cone")
+		{
+			if (params != 9)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateCone(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]));
+		}
 		else if (type == "tube")
+		{
+			if (params != 10)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateTube(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]));
+		}
 		else if (type == "box")
+		{
+			if (params != 11)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateBox(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]));
+		}
 		else if (type == "capsule")
+		{
+			if (params != 11)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateCapsule(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToBool(tempdata[10]));
+		}
 		else if (type == "torusknot")
+		{
+			if (params != 11)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateTorusKnot(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]));
+		}
 		else if (type == "icosphere")
+		{
+			if (params != 7)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateIcoSphere(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToInt(tempdata[6]));
+		}
 		else if (type == "roundedbox")
+		{
+			if (params != 13)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateRoundedBox(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), ToInt(tempdata[11]), ToBool(tempdata[12]));
+		}
 		else if (type == "spring")
+		{
+			if (params != 12)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreateSpring(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), ToBool(tempdata[11]));
+		}
 		else if (type == "prism")
+		{
+			if (params != 8)
+				return ScriptError("Incorrect number of parameters");
 			geometry->CreatePrism(obj, tempdata[1], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToBool(tempdata[7]));
+		}
 		else
 			return ScriptError("Invalid shape type");
 		return sNextLine;
