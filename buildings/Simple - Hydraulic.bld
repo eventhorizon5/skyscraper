@@ -267,6 +267,10 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0 - 9
     AssignedShaft = 1
     LevelingOpen = 0.2
+    MotorStartSound = motor_start_hydraulic.wav
+    MotorRunSound = motor_running_hydraulic.wav
+    MotorStopSound = motor_stop_hydraulic.wav
+    MotorPosition = 0, -5, 0
     
     #then create the elevator at position (0, 5.706) on the first floor (0)
     CreateElevator false, 0, 5.706, 0
