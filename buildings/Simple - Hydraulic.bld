@@ -81,7 +81,7 @@
     Load data/ropes.png, Ropes, 1, 1
     Load data/metal080.jpg, Rails, 1, 1
     Load data/metal1.jpg, RailsEdge, 1, 1
-    Load data/metal080.jpg, Hydraulic, 0.25, 0.25
+    Load data/metal080.jpg, Hydraulic, 1, 1
     SetCulling Hydraulic, 0
 
     Load data/black.jpg, Black, 1, 1
@@ -388,7 +388,7 @@ DrawWalls = true, true, false, false, false, false
 
     #hydraulic
     CreatePrim Elevator 1, Hydraulic
-    PrimShape Elevator 1, Hydraulic, Cylinder, 0.5, 120, 1, 1, 16, 16, false
+    PrimShape Elevator 1, Hydraulic, Cylinder, 0.5, 120, 1, 10, 16, 16, false
     PrimAttach Elevator 1, Hydraulic, 0, -120, 0, 0, 0, 0
     PrimTexture Elevator 1, Hydraulic, Hydraulic
     PrimVisible Elevator 1, Hydraulic, true
