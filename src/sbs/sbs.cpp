@@ -177,6 +177,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	//create geometry controller object
 	geometry = new GeometryController(this);
 
+	//set padding factor for meshes
+	Ogre::MeshManager::getSingleton().setBoundsPaddingFactor(0.0);
+
 	camera = 0;
 	Buildings = 0;
 	External = 0;
