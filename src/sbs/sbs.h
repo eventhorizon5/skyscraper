@@ -394,6 +394,7 @@ public:
 	std::string GetFilesystemPath(std::string filename);
 	Utility* GetUtility();
 	GeometryController* GetGeometry();
+	void MemoryReport();
 
 	//Meshes
 	MeshObject* Buildings;
