@@ -2956,29 +2956,12 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!obj)
 			return ScriptError("Invalid object " + name);
 
-		Floor *floorobj = 0;
-		Elevator *elevatorobj = 0;
-		ElevatorCar *elevatorcarobj = 0;
-		Shaft::Level *shaftobj = 0;
-		Stairwell::Level *stairsobj = 0;
-		::SBS::SBS *sbs = 0;
-
 		//get parent object
-		if (obj->GetType() == "Floor")
-			floorobj = static_cast<Floor*>(obj);
 		if (obj->GetType() == "Elevator")
-			elevatorobj = static_cast<Elevator*>(obj);
-		if (obj->GetType() == "ElevatorCar")
-			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft Level")
-			shaftobj = static_cast<Shaft::Level*>(obj);
-		if (obj->GetType() == "Stairwell Level")
-			stairsobj = static_cast<Stairwell::Level*>(obj);
-		if (obj->GetType() == "SBS")
-			sbs = static_cast<::SBS::SBS*>(obj);
-
-		if (elevatorobj)
-			elevatorcarobj = elevatorobj->GetCar(0);
+		{
+			Elevator *elevatorobj = static_cast<Elevator*>(obj);
+			obj = elevatorobj->GetCar(0);
+		}
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)
