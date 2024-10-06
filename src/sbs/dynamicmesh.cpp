@@ -634,24 +634,6 @@ void DynamicMesh::SetMaterial(const std::string& material)
 		meshes[i]->SetMaterial(material);
 }
 
-size_t DynamicMesh::GetSize(MeshObject* client)
-{
-	//return size in bytes of this dynamic mesh
-
-	if (meshes.empty() == true)
-		return 0;
-
-	if (client == 0 || meshes.size() == 1)
-		return meshes[0]->GetSize();
-	else if (meshes.size() > 1)
-	{
-		int index = GetClientIndex(client);
-
-		if (index >= 0)
-			return meshes[index]->GetSize();
-	}
-}
-
 DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename, const std::string &meshname, const std::string &path)
 {
 	Parent = parent;
@@ -662,7 +644,6 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	Movable = 0;
 	auto_shadows = true;
 	parent_deleting = false;
-	size = 0;
 
 	if (filename == "")
 	{
@@ -1550,15 +1531,6 @@ void DynamicMesh::Mesh::SetMaterial(const std::string& material)
 		mat = sbs->GetTextureManager()->GetMaterialByName("Default");
 		Movable->setMaterial(mat);
 	}
-}
-
-size_t DynamicMesh::Mesh::GetSize()
-{
-	//get size in bytes of the mesh
-
-	//if (size == 0)
-		//size = MeshWrapper->getSize();
-	return size;
 }
 
 }

@@ -118,6 +118,7 @@ private:
 
 	PolyMesh *polymesh;
 	Ogre::MeshPtr collidermesh;
+	size_t size;
 };
 
 }

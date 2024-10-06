@@ -70,6 +70,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	model_loaded = false;
 	Bounds = new Ogre::AxisAlignedBox();
 	collidermesh = 0;
+	size = 0;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -1237,7 +1238,26 @@ size_t MeshObject::GetSize()
 {
 	//return size in bytes of this mesh object
 
-	return MeshWrapper->GetSize(this);
+	if (size > 0)
+		return size;
+
+	for (size_t i = 0; i < Walls.size(); i++)
+	{
+		if (!Walls[i])
+			continue;
+
+		for (size_t j = 0; j < Walls[i]->GetPolygonCount(); j++)
+		{
+			Polygon *poly = Walls[i]->GetPolygon(j);
+
+			if (!poly)
+				continue;
+
+			size += poly->size;
+		}
+	}
+
+	return size;
 }
 
 }
