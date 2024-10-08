@@ -63,6 +63,8 @@ public:
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
+	void ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only);
+	void UnclickedObject();
 
 private:
 
