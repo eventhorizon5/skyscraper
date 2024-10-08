@@ -549,23 +549,25 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
+bool Camera::ClickedObject(Ogre::Camera *camera, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
 {
 	//get mesh object that the user clicked on, and perform related work
 
-	if (Cameras.empty())
-		return;
+	if (!camera)
+		return false;
+
+	bool result = false;
 
 	SBS_PROFILE("Camera::ClickedObject");
 
 	Vector3 pos = GetPosition();
 
 	//cast a ray from the camera in the direction of the clicked position
-	int width = Cameras[0]->getViewport()->getActualWidth();
-	int height = Cameras[0]->getViewport()->getActualHeight();
+	int width = camera->getViewport()->getActualWidth();
+	int height = camera->getViewport()->getActualHeight();
 
 	if (width == 0 || height == 0)
-		return;
+		return result;
 
 	Real x, y;
 	if (center_only == false)
@@ -579,7 +581,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 		y = 0.5;
 	}
 
-	Ray ray = Cameras[0]->getCameraToViewportRay(x, y);
+	Ray ray = camera->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
 	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
@@ -591,8 +593,9 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
 
 	if (hit == false)
-		return;
+		return result;
 
+	result = true;
 	meshname = mesh->GetName();
 	wallname = "";
 	Object *obj = mesh;
@@ -614,13 +617,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	if (wall)
 		Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
 
+
 	//object checks and actions
 
 	//get original object (parent object of clicked mesh)
 	Object *mesh_parent = GetMeshParent(obj);
 
 	if (!mesh_parent)
-		return;
+		return result;
 
 	if (mesh_parent->GetType() == "ButtonPanel")
 	{
@@ -647,17 +651,18 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 			if (type == "Floor" || type == "ElevatorCar" || type == "Shaft" || type == "Stairwell" || type == "SBS")
 			{
 				sbs->DeleteObject(obj);
-				return;
+				return result;
 			}
 		}
 
 		//for standard objects, delete the mesh parent object
 		sbs->DeleteObject(mesh_parent);
-		return;
+		return result;
 	}
 
 	//call object's OnClick function
 	mesh_parent->OnClick(pos, shift, ctrl, alt, right);
+	return result;
 }
 
 void Camera::UnclickedObject()
