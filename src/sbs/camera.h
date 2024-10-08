@@ -184,7 +184,7 @@ public:
 	void Crouch(bool value);
 	void SetOrientation(const Quaternion &orientation);
 	void AttachToVehicle(bool value);
-	Ogre::Camera* GetOgreCamera(int index);
+	Ogre::Camera* GetOgreCamera(int index = 0);
 
 private:
 	std::vector<Ogre::Camera*> Cameras; //camera instances

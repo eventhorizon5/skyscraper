@@ -451,4 +451,45 @@ ScriptProcessor* VM::GetActiveScriptProcessor()
 	return 0;
 }
 
+void VM::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
+{
+	//click on an object
+
+	EngineContext *engine = frontend->GetVM()->GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS camera
+	Camera *camera = engine->GetSystem()->camera;
+
+	if (!camera)
+		return;
+
+	if (left == true)
+		camera->MouseLeftDown = true;
+	else
+		camera->MouseRightDown = true;
+
+	camera->ClickedObject(camera->GetOgreCamera(), shift, ctrl, alt, right, scale, center_only);
+}
+
+void VM::UnclickedObject()
+{
+	EngineContext *engine = frontend->GetVM()->GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS camera
+	Camera *camera = engine->GetSystem()->camera;
+
+	if (!camera)
+		return;
+
+	camera->UnclickedObject();
+	camera->MouseLeftDown = false;
+	camera->MouseRightDown = false;
+}
+
 }

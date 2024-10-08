@@ -684,17 +684,6 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 {
 	//this function is run when a mouse button is pressed
 
-	EngineContext *engine = frontend->GetVM()->GetActiveEngine();
-
-	if (!engine)
-		return;
-
-	//get SBS camera
-	Camera *camera = engine->GetSystem()->camera;
-
-	if (!camera)
-		return;
-
 	//enter or exit freelook mode using mouse scroll wheel
 	if (event.GetWheelRotation() > 0)
 	{
@@ -715,17 +704,10 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 
 	if (left == false && right == false && left_dclick == false && right_dclick == false)
 	{
-		camera->UnclickedObject();
-		camera->MouseLeftDown = false;
-		camera->MouseRightDown = false;
+		frontend->GetVM()->UnclickedObject();
 	}
 	else
 	{
-		if (left == true)
-			camera->MouseLeftDown = true;
-		else
-			camera->MouseRightDown = true;
-
 		//apply content scaling factor, fixes issues for example on Retina displays
 		Real scale = frontend->window->GetContentScaleFactor();
 
@@ -735,7 +717,7 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 			scale = 1.0;
 #endif
 
-		camera->ClickedObject(camera->GetOgreCamera(0), wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick), scale);
+		frontend->GetVM()->ClickedObject(left, wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick), scale, false);
 	}
 }
 
@@ -927,7 +909,7 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 	camera->Strafe(strafe);
 
 	if (joystick->GetButtonState(joy_click))
-		camera->ClickedObject(camera->GetOgreCamera(0), false, false, false, false, 0.0, true);
+		engine->GetVM()->ClickedObject(true, false, false, false, false, 0.0, true);
 }
 
 }
