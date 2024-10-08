@@ -560,7 +560,15 @@ bool Camera::ClickedObject(Ogre::Camera *camera, bool shift, bool ctrl, bool alt
 
 	SBS_PROFILE("Camera::ClickedObject");
 
-	Vector3 pos = GetPosition();
+	Vector3 pos = sbs->ToLocal(camera->getPosition());
+
+	if (sbs->Verbose)
+	{
+		if (camera != Cameras[0])
+		{
+			Report("Clicked from (" + ToString(pos.x) + ", " + ToString(pos.y) + ", " + ToString(pos.z) + ")");
+		}
+	}
 
 	//cast a ray from the camera in the direction of the clicked position
 	int width = camera->getViewport()->getActualWidth();
