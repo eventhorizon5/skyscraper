@@ -561,10 +561,10 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 		}
 		else
 		{
-			if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
+			if (key == WXK_RIGHT || key == (wxKeyCode)key_right || key == (wxKeyCode)key_straferight)
 				strafe_right = down;
 
-			if (key == WXK_LEFT || key == (wxKeyCode)key_left)
+			if (key == WXK_LEFT || key == (wxKeyCode)key_left || key == (wxKeyCode)key_strafeleft)
 				strafe_left = down;
 		}
 
