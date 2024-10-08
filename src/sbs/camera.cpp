@@ -564,7 +564,7 @@ bool Camera::ClickedObject(Ogre::Camera *camera, bool shift, bool ctrl, bool alt
 
 	if (sbs->Verbose)
 	{
-		if (camera != Cameras[0])
+		if (Cameras.size() == 0)
 		{
 			Report("Clicked from (" + ToString(pos.x) + ", " + ToString(pos.y) + ", " + ToString(pos.z) + ")");
 		}
