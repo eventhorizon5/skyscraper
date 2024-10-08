@@ -549,7 +549,7 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-bool Camera::ClickedObject(Ogre::Camera *camera, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
+bool Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
 {
 	//get mesh object that the user clicked on, and perform related work
 
@@ -560,7 +560,7 @@ bool Camera::ClickedObject(Ogre::Camera *camera, bool shift, bool ctrl, bool alt
 
 	SBS_PROFILE("Camera::ClickedObject");
 
-	Vector3 pos = sbs->ToLocal(camera->getPosition());
+	Vector3 pos = sbs->ToGlobal(camera->GetPosition());
 
 	if (sbs->Verbose)
 	{
@@ -570,9 +570,12 @@ bool Camera::ClickedObject(Ogre::Camera *camera, bool shift, bool ctrl, bool alt
 		}
 	}
 
+	if (!camera->GetOgreCamera())
+		return false;
+
 	//cast a ray from the camera in the direction of the clicked position
-	int width = camera->getViewport()->getActualWidth();
-	int height = camera->getViewport()->getActualHeight();
+	int width = camera->GetOgreCamera()->getViewport()->getActualWidth();
+	int height = camera->GetOgreCamera()->getViewport()->getActualHeight();
 
 	if (width == 0 || height == 0)
 		return result;
@@ -589,7 +592,7 @@ bool Camera::ClickedObject(Ogre::Camera *camera, bool shift, bool ctrl, bool alt
 		y = 0.5;
 	}
 
-	Ray ray = camera->getCameraToViewportRay(x, y);
+	Ray ray = camera->GetOgreCamera()->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
 	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));

@@ -466,14 +466,12 @@ void VM::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, R
 	if (!camera)
 		return;
 
-	Ogre::Camera *ogrecam = camera->GetOgreCamera();
-
 	if (left == true)
 		camera->MouseLeftDown = true;
 	else
 		camera->MouseRightDown = true;
 
-	bool result = camera->ClickedObject(ogrecam, shift, ctrl, alt, right, scale, center_only);
+	bool result = camera->ClickedObject(camera, shift, ctrl, alt, right, scale, center_only);
 	if (result == false)
 	{
 		for (int i = 0; i < frontend->GetVM()->GetEngineCount(); i++)
@@ -481,10 +479,10 @@ void VM::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, R
 			EngineContext *engine = frontend->GetVM()->GetEngine(i);
 			if (engine)
 			{
-				Camera *camera = engine->GetSystem()->camera;
-				if (camera && frontend->GetVM()->GetActiveEngine() != engine)
+				Camera *camera2 = engine->GetSystem()->camera;
+				if (camera2 && frontend->GetVM()->GetActiveEngine() != engine)
 				{
-					result = camera->ClickedObject(ogrecam, shift, ctrl, alt, right, scale, center_only);
+					result = camera2->ClickedObject(camera, shift, ctrl, alt, right, scale, center_only);
 				}
 			}
 			if (result == true)
