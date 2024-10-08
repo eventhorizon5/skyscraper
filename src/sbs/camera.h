@@ -120,7 +120,7 @@ public:
 	void CheckElevator();
 	void CheckShaft();
 	void CheckStairwell();
-	void ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only = false);
+	bool ClickedObject(Ogre::Camera *camera, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only = false);
 	void UnclickedObject();
 	Object* GetMeshParent(Object *object);
 	std::string GetClickedMeshName();

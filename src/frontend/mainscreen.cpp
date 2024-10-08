@@ -735,7 +735,7 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 			scale = 1.0;
 #endif
 
-		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick), scale);
+		camera->ClickedObject(camera->GetOgreCamera(0), wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), (right || right_dclick), scale);
 	}
 }
 
@@ -927,7 +927,7 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 	camera->Strafe(strafe);
 
 	if (joystick->GetButtonState(joy_click))
-		camera->ClickedObject(false, false, false, false, 0.0, true);
+		camera->ClickedObject(camera->GetOgreCamera(0), false, false, false, false, 0.0, true);
 }
 
 }
