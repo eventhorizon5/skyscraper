@@ -59,6 +59,7 @@ const long DebugPanel::ID_STATICTEXT1 = wxNewId();
 const long DebugPanel::ID_STATICTEXT12 = wxNewId();
 const long DebugPanel::ID_STATICTEXT2 = wxNewId();
 const long DebugPanel::ID_STATICTEXT8 = wxNewId();
+const long DebugPanel::ID_STATICTEXT13 = wxNewId();
 const long DebugPanel::ID_STATICTEXT3 = wxNewId();
 const long DebugPanel::ID_STATICTEXT4 = wxNewId();
 const long DebugPanel::ID_STATICTEXT5 = wxNewId();
@@ -69,6 +70,7 @@ const long DebugPanel::ID_t_camerafloor = wxNewId();
 const long DebugPanel::ID_t_floorname = wxNewId();
 const long DebugPanel::ID_t_camerap = wxNewId();
 const long DebugPanel::ID_t_rotation = wxNewId();
+const long DebugPanel::ID_t_global = wxNewId();
 const long DebugPanel::ID_t_elevnumber = wxNewId();
 const long DebugPanel::ID_t_elevfloor = wxNewId();
 const long DebugPanel::ID_t_object = wxNewId();
@@ -134,6 +136,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer6->Add(StaticText2, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText7 = new wxStaticText(Panel1, ID_STATICTEXT8, _("Camera Rotation:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
 	BoxSizer6->Add(StaticText7, 1, wxBOTTOM|wxALIGN_RIGHT, 5);
+	StaticText12 = new wxStaticText(Panel1, ID_STATICTEXT13, _("Global Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT13"));
+	BoxSizer6->Add(StaticText12, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText3 = new wxStaticText(Panel1, ID_STATICTEXT3, _("Elevator Number:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	BoxSizer6->Add(StaticText3, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText4 = new wxStaticText(Panel1, ID_STATICTEXT4, _("Elevator Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
@@ -156,6 +160,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer7->Add(t_camerap, 0, wxBOTTOM|wxALIGN_LEFT, 5);
 	t_rotation = new wxStaticText(Panel1, ID_t_rotation, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_rotation"));
 	BoxSizer7->Add(t_rotation, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	t_global = new wxStaticText(Panel1, ID_t_global, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_global"));
+	BoxSizer7->Add(t_global, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	t_elevnumber = new wxStaticText(Panel1, ID_t_elevnumber, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_elevnumber"));
 	BoxSizer7->Add(t_elevnumber, 0, wxBOTTOM|wxALIGN_LEFT, 5);
 	t_elevfloor = new wxStaticText(Panel1, ID_t_elevfloor, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_elevfloor"));
@@ -456,8 +462,11 @@ void DebugPanel::Loop()
 	if (floor)
 		t_floorname->SetLabel(floor->Name);
 
+	Vector3 globalpos = Simcore->ToGlobal(Simcore->camera->GetPosition());
+
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
+	t_global->SetLabel(TruncateNumber(globalpos.x, 2) + wxT(", ") + TruncateNumber(globalpos.y, 2) + wxT(", ") + TruncateNumber(globalpos.z, 2));
 	t_camerafloor->SetLabel(SBS::ToString(Simcore->camera->CurrentFloor) + wxT(" (") + Simcore->camera->CurrentFloorID + wxT(")"));
 	t_object->SetLabel(Simcore->camera->GetClickedMeshName());
 	t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
