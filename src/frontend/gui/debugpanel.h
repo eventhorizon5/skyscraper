@@ -73,6 +73,7 @@ class DebugPanel: public wxFrame
 		static const long ID_STATICTEXT12;
 		static const long ID_STATICTEXT2;
 		static const long ID_STATICTEXT8;
+		static const long ID_STATICTEXT13;
 		static const long ID_STATICTEXT3;
 		static const long ID_STATICTEXT4;
 		static const long ID_STATICTEXT5;
@@ -83,6 +84,7 @@ class DebugPanel: public wxFrame
 		static const long ID_t_floorname;
 		static const long ID_t_camerap;
 		static const long ID_t_rotation;
+		static const long ID_t_global;
 		static const long ID_t_elevnumber;
 		static const long ID_t_elevfloor;
 		static const long ID_t_object;
@@ -205,6 +207,7 @@ class DebugPanel: public wxFrame
 		wxPanel* Panel1;
 		wxStaticText* StaticText10;
 		wxStaticText* StaticText11;
+		wxStaticText* StaticText12;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText3;
@@ -222,6 +225,7 @@ class DebugPanel: public wxFrame
 		wxStaticText* t_elevnumber;
 		wxStaticText* t_floorname;
 		wxStaticText* t_framerate;
+		wxStaticText* t_global;
 		wxStaticText* t_object;
 		wxStaticText* t_rotation;
 		//*)

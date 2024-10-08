@@ -49,6 +49,14 @@
 													<option>1</option>
 												</object>
 												<object class="sizeritem">
+													<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText12" member="yes">
+														<label>Global Position:</label>
+													</object>
+													<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+													<border>5</border>
+													<option>1</option>
+												</object>
+												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
 														<label>Elevator Number:</label>
 													</object>
@@ -135,6 +143,16 @@
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
 													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
+													<border>5</border>
+													<option>1</option>
+												</object>
+												<object class="sizeritem">
+													<object class="wxStaticText" name="ID_t_global" variable="t_global" member="yes">
+														<label></label>
+														<size>150,-1</size>
+														<style>wxST_NO_AUTORESIZE</style>
+													</object>
+													<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
