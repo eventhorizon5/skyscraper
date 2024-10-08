@@ -477,17 +477,12 @@ void VM::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, R
 		for (int i = 0; i < frontend->GetVM()->GetEngineCount(); i++)
 		{
 			EngineContext *engine = frontend->GetVM()->GetEngine(i);
-			if (engine)
+			if (engine && frontend->GetVM()->GetActiveEngine() != engine)
 			{
-				Camera *camera = engine->GetSystem()->camera;
-
-				if (camera)
-				{
-					result = camera->ClickedObject(camera->GetOgreCamera(), shift, ctrl, alt, right, scale, center_only);
-				}
-				if (result == true)
-					return;
+				result = camera->ClickedObject(camera->GetOgreCamera(), shift, ctrl, alt, right, scale, center_only);
 			}
+			if (result == true)
+				return;
 		}
 	}
 }
