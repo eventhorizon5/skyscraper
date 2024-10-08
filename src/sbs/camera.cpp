@@ -560,7 +560,7 @@ bool Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 
 	SBS_PROFILE("Camera::ClickedObject");
 
-	Vector3 pos = sbs->ToGlobal(camera->GetPosition());
+	Vector3 pos = camera->GetPosition();
 
 	if (sbs->Verbose)
 	{
