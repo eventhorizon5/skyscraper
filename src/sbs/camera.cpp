@@ -560,16 +560,6 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 
 	SBS_PROFILE("Camera::ClickedObject");
 
-	Vector3 pos = camera->GetSceneNode()->GetDerivedPosition() - sbs->GetPosition();
-
-	if (sbs->Verbose && hit_only == false)
-	{
-		if (Cameras.size() == 0)
-		{
-			Report("Clicked from (" + ToString(pos.x) + ", " + ToString(pos.y) + ", " + ToString(pos.z) + ")");
-		}
-	}
-
 	if (!camera->GetOgreCamera())
 		return false;
 
@@ -601,10 +591,20 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 	MeshObject* mesh = 0;
 	Wall* wall = 0;
 
+	Vector3 pos = ray.getOrigin();
+
+	if (sbs->Verbose && hit_only == false)
+	{
+		if (Cameras.size() == 0)
+		{
+			Report("Clicked from (" + ToString(pos.x) + ", " + ToString(pos.y) + ", " + ToString(pos.z) + ")");
+		}
+	}
+
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
 
 	if (hit == true)
-		result = pos.distance(HitPosition);
+		result = pos.distance(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(HitPosition - sbs->GetPosition()))));
 
 	if (hit == false || hit_only == true)
 		return result;
