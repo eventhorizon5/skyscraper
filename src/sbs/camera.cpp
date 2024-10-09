@@ -604,13 +604,15 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 	}
 
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
-	Vector3 hit_pos = sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(HitPosition - root->GetPosition())));
+	//Vector3 pos2 = sbs->ToLocal(HitPosition);
+	//Vector3 pos3 = sbs->FromGlobal(pos2);
+	Vector3 hit_pos = HitPosition - sbs->GetPosition();
 
 	if (hit == true)
 	{
 		result = pos.distance(hit_pos);
 		if (sbs->Verbose && hit_only == false)
-			Report("Hit at (" + ToString(hit_pos.x) + ", " + ToString(hit_pos.y) + ", " + ToString(hit_pos.z) + ")");
+			Report("Hit at (" + ToString(hit_pos.x) + ", " + ToString(hit_pos.y) + ", " + ToString(hit_pos.z)+ ")");
 	}
 
 	if (hit == false || hit_only == true)
