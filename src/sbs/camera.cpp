@@ -597,16 +597,21 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 
 	if (sbs->Verbose && hit_only == false)
 	{
-		//if (Cameras.size() == 0)
-		//{
+		if (Cameras.size() == 0)
+		{
 			Report("Clicked from (" + ToString(pos.x) + ", " + ToString(pos.y) + ", " + ToString(pos.z) + ")");
-		//}
+		}
 	}
 
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
+	Vector3 hit_pos = sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(HitPosition - root->GetPosition())));
 
 	if (hit == true)
-		result = pos.distance(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(HitPosition - root->GetPosition()))));
+	{
+		result = pos.distance(hit_pos);
+		if (sbs->Verbose && hit_only == false)
+			Report("Hit at (" + ToString(hit_pos.x) + ", " + ToString(hit_pos.y) + ", " + ToString(hit_pos.z) + ")");
+	}
 
 	if (hit == false || hit_only == true)
 		return result;
