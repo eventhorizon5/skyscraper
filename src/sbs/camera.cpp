@@ -560,9 +560,9 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 
 	SBS_PROFILE("Camera::ClickedObject");
 
-	Vector3 pos = camera->GetPosition();
+	Vector3 pos = camera->GetSceneNode()->GetDerivedPosition() - sbs->GetPosition();
 
-	if (sbs->Verbose)
+	if (sbs->Verbose && hit_only == false)
 	{
 		if (Cameras.size() == 0)
 		{
