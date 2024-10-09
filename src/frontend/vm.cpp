@@ -455,7 +455,7 @@ void VM::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, R
 {
 	//click on an object
 
-	EngineContext *engine = frontend->GetVM()->GetActiveEngine();
+	EngineContext *engine = GetActiveEngine();
 
 	if (!engine)
 		return;
@@ -471,29 +471,36 @@ void VM::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, R
 	else
 		camera->MouseRightDown = true;
 
-	bool result = camera->ClickedObject(camera, shift, ctrl, alt, right, scale, center_only);
-	if (result == false)
+	Real result = -1;
+	Real nearest = 1000;
+	Camera *nearest_cam = 0;
+
+	for (int i = 0; i < GetEngineCount(); i++)
 	{
-		for (int i = 0; i < frontend->GetVM()->GetEngineCount(); i++)
+		//go through each engine and try a mouse click, find which hit is nearest
+		EngineContext *engine = GetEngine(i);
+		if (engine)
 		{
-			EngineContext *engine = frontend->GetVM()->GetEngine(i);
-			if (engine)
+			Camera *camera2 = engine->GetSystem()->camera;
+			if (camera2)
+				result = camera2->ClickedObject(camera, shift, ctrl, alt, right, scale, center_only, true);
+
+			if (result < nearest && result >= 0)
 			{
-				Camera *camera2 = engine->GetSystem()->camera;
-				if (camera2 && frontend->GetVM()->GetActiveEngine() != engine)
-				{
-					result = camera2->ClickedObject(camera, shift, ctrl, alt, right, scale, center_only);
-				}
+				nearest = result;
+				nearest_cam = camera2;
 			}
-			if (result == true)
-				return;
 		}
 	}
+
+	//perform a mouseclick on the nearest result
+	if (nearest_cam)
+		nearest_cam->ClickedObject(camera, shift, ctrl, alt, right, scale, center_only);
 }
 
 void VM::UnclickedObject()
 {
-	EngineContext *engine = frontend->GetVM()->GetActiveEngine();
+	EngineContext *engine = GetActiveEngine();
 
 	if (!engine)
 		return;

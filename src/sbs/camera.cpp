@@ -549,14 +549,14 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-bool Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
+Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only, bool hit_only)
 {
 	//get mesh object that the user clicked on, and perform related work
 
 	if (!camera)
 		return false;
 
-	bool result = false;
+	Real result = -1;
 
 	SBS_PROFILE("Camera::ClickedObject");
 
@@ -603,10 +603,12 @@ bool Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
 
-	if (hit == false)
+	if (hit == true)
+		result = pos.distance(HitPosition);
+
+	if (hit == false || hit_only == true)
 		return result;
 
-	result = true;
 	meshname = mesh->GetName();
 	wallname = "";
 	Object *obj = mesh;
