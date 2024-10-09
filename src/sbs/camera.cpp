@@ -582,6 +582,8 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 		y = 0.5;
 	}
 
+	::SBS::SBS *root = camera->GetRoot();
+
 	Ray ray = camera->GetOgreCamera()->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
@@ -591,20 +593,20 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 	MeshObject* mesh = 0;
 	Wall* wall = 0;
 
-	Vector3 pos = ray.getOrigin();
+	Vector3 pos = sbs->ToLocal(ray.getOrigin());
 
 	if (sbs->Verbose && hit_only == false)
 	{
-		if (Cameras.size() == 0)
-		{
+		//if (Cameras.size() == 0)
+		//{
 			Report("Clicked from (" + ToString(pos.x) + ", " + ToString(pos.y) + ", " + ToString(pos.z) + ")");
-		}
+		//}
 	}
 
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
 
 	if (hit == true)
-		result = pos.distance(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(HitPosition - sbs->GetPosition()))));
+		result = pos.distance(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(HitPosition - root->GetPosition()))));
 
 	if (hit == false || hit_only == true)
 		return result;
