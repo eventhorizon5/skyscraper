@@ -1149,7 +1149,7 @@ bool Skyscraper::Loop()
 					Ogre::Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
 					Ogre::Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
 
-					SetOpenXRParameters(i, combined, camera->getDerivedOrientation());
+					SetOpenXRParameters(i, cameranode_pos, camera->getDerivedOrientation());
 				}
 			}
 		}
