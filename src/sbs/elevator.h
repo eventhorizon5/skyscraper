@@ -124,6 +124,7 @@ public:
 	std::string CounterweightStopSound; //counterweight stopping sound
 	bool Counterweight; //if true, elevator has a counterweight
 	bool Error; //true if an error occurred during movement processing
+	RandomGen *rnd_time;
 
 	//functions
 	Elevator(Object *parent, int number);
@@ -240,6 +241,8 @@ public:
 	void RemoveController(int controller);
 	bool GetCallStatus(int floor, bool &up, bool &down);
 	int GetMotorRoom();
+	void EnableMalfunctions(bool value);
+	void Malfunction();
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
@@ -288,6 +291,11 @@ private:
 	//arrival and departure delay timers
 	Timer *arrival_delay;
 	Timer *departure_delay;
+
+	//random malfunctions timer
+	Timer *malfunction_timer;
+	int RandomProbability; //probability ratio of random activity, starting with 1 - higher is less frequent
+	Real RandomFrequency; //speed in seconds to make each random action
 
 	//Internal elevator simulation data
 	std::vector<ElevatorCar*> Cars; //car objects
