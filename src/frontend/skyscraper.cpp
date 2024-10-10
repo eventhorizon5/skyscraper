@@ -1130,34 +1130,8 @@ bool Skyscraper::Loop()
 	//update Caelum
 	UpdateSky();
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	//update OpenXR camera transformations
-	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
-	{
-		EngineContext* engine = vm->GetActiveEngine();
-
-		if (engine)
-		{
-			::SBS::SBS* Simcore = engine->GetSystem();
-
-			if (Simcore->camera)
-			{
-				for (int i = 0; i < 2; i++)
-				{
-					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
-					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition();
-					//if (first_run == true)
-						//camera->setPosition(Simcore->ToRemote(Simcore->camera->GetSceneNode()->GetPosition()));
-
-					//Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
-					//Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
-
-					SetOpenXRParameters(i, cameranode_pos, camera->getDerivedOrientation());
-				}
-			}
-		}
-	}
-#endif
+	//update OpenXR
+	UpdateOpenXR();
 
 	//render graphics
 	result = Render();
@@ -2589,6 +2563,32 @@ FMOD::System* Skyscraper::GetSoundSystem()
 VM* Skyscraper::GetVM()
 {
 	return vm;
+}
+
+void Skyscraper::UpdateOpenXR()
+{
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	//update OpenXR camera transformations
+	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	{
+		EngineContext* engine = vm->GetActiveEngine();
+
+		if (engine)
+		{
+			::SBS::SBS* Simcore = engine->GetSystem();
+
+			if (Simcore->camera)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
+					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition();
+					SetOpenXRParameters(i, cameranode_pos, camera->getDerivedOrientation());
+				}
+			}
+		}
+	}
+#endif
 }
 
 }

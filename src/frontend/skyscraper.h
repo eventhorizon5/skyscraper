@@ -165,6 +165,7 @@ public:
 	MainScreen* GetWindow();
 	FMOD::System* GetSoundSystem();
 	VM* GetVM();
+	void UpdateOpenXR();
 
 private:
 	//sound data
