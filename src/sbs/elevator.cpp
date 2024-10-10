@@ -4845,6 +4845,7 @@ void Elevator::Malfunction()
 
 	Stop(true);
 	SetRunState(false);
+	ResetQueue(true, true);
 
 	for (int i = 0; i < Cars.size(); i++)
 	{
