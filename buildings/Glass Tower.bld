@@ -399,7 +399,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     Type = Ballroom
     Height = 12
     InterfloorHeight = 0
-    Group = 135, 136
+    Group = 134, 135
 <EndFloor>
 
 <Floor 135>
@@ -408,7 +408,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     Type = Service
     Height = 9.5
     InterfloorHeight = 2.5
-    Group = 135, 136
+    Group = 134, 135
 <EndFloor>
 
 <Floor 136>
