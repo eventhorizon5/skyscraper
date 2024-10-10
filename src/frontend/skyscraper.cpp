@@ -2583,7 +2583,11 @@ void Skyscraper::UpdateOpenXR()
 				{
 					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
 					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition();
-					SetOpenXRParameters(i, cameranode_pos, camera->getDerivedOrientation());
+
+					//Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
+					//Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
+
+					SetOpenXRParameters(i, Simcore->ToRemote(cameranode_pos), camera->getDerivedOrientation());
 				}
 			}
 		}
