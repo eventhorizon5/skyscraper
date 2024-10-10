@@ -1145,12 +1145,12 @@ bool Skyscraper::Loop()
 				for (int i = 0; i < 2; i++)
 				{
 					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
-					Ogre::Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition();
+					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition();
 					//if (first_run == true)
 						//camera->setPosition(Simcore->ToRemote(Simcore->camera->GetSceneNode()->GetPosition()));
 
-					Ogre::Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
-					Ogre::Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
+					Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
+					Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
 
 					SetOpenXRParameters(i, combined, camera->getDerivedOrientation());
 				}
