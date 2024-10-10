@@ -85,6 +85,7 @@ const long DebugPanel::ID_chkProcessElevators = wxNewId();
 const long DebugPanel::ID_chkAutoShafts = wxNewId();
 const long DebugPanel::ID_chkAutoStairs = wxNewId();
 const long DebugPanel::ID_chkRandom = wxNewId();
+const long DebugPanel::ID_chkMalfunctions = wxNewId();
 const long DebugPanel::ID_CHECKBOX1 = wxNewId();
 const long DebugPanel::ID_bFloorList = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
@@ -202,6 +203,9 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	chkRandom = new wxCheckBox(Panel1, ID_chkRandom, _("Random Activity"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRandom"));
 	chkRandom->SetValue(false);
 	BoxSizer5->Add(chkRandom, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	chkMalfunctions = new wxCheckBox(Panel1, ID_chkMalfunctions, _("Malfunctions"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkMalfunctions"));
+	chkMalfunctions->SetValue(false);
+	BoxSizer5->Add(chkMalfunctions, 1, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkVerbose = new wxCheckBox(Panel1, ID_CHECKBOX1, _("Verbose Mode"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
 	chkVerbose->SetValue(false);
 	BoxSizer5->Add(chkVerbose, 1, wxBOTTOM|wxALIGN_LEFT, 5);
@@ -261,6 +265,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Click);
 	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
 	Connect(ID_chkRandom,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkRandom_Click);
+	Connect(ID_chkMalfunctions,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkMalfunctions_Click);
 	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
 	Connect(ID_bFloorList,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorList_Click);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
@@ -423,6 +428,7 @@ void DebugPanel::OnInit()
 	chkAutoStairs->SetValue(Simcore->AutoStairs);
 	chkVerbose->SetValue(Simcore->Verbose);
 	chkRandom->SetValue(Simcore->RandomActivity);
+	chkMalfunctions->SetValue(Simcore->Malfunctions);
 
 	if (!timer)
 		timer = new Timer(this, Simcore);
@@ -799,6 +805,12 @@ void DebugPanel::On_bSoundManager_Click(wxCommandEvent& event)
 	smanager->CenterOnScreen();
 	smanager->Show();
 	smanager->Raise();
+}
+
+void DebugPanel::On_chkMalfunctions_Click(wxCommandEvent& event)
+{
+	if (Simcore)
+		Simcore->EnableMalfunctions(chkMalfunctions->GetValue());
 }
 
 }

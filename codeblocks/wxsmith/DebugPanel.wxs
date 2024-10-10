@@ -293,6 +293,15 @@
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
+											<object class="wxCheckBox" name="ID_chkMalfunctions" variable="chkMalfunctions" member="yes">
+												<label>Malfunctions</label>
+												<handler function="On_chkMalfunctions_Click" entry="EVT_CHECKBOX" />
+											</object>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
 											<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVerbose" member="yes">
 												<label>Verbose Mode</label>
 												<handler function="On_chkVerbose_Click" entry="EVT_CHECKBOX" />

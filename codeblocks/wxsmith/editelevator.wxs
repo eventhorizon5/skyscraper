@@ -1364,6 +1364,34 @@
 												<border>5</border>
 												<option>1</option>
 											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT91" variable="StaticText91" member="yes">
+													<label>Fan:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtFan" variable="txtFan" member="yes">
+													<size>75,-1</size>
+													<tooltip>Interlocks</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bFan" variable="bFan" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bFan_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
 										</object>
 										<flag>wxLEFT|wxALIGN_TOP</flag>
 										<border>5</border>
