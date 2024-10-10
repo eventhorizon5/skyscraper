@@ -35,6 +35,7 @@
 #include "profiler.h"
 #include "texture.h"
 #include "controller.h"
+#include "random.h"
 #include "elevator.h"
 
 #include <time.h>
@@ -46,7 +47,7 @@ class Elevator::Timer : public TimerObject
 {
 public:
 	Elevator *elevator;
-	int type; //0 = parking timer, 1 = arrival/departure
+	int type; //0 = parking timer, 1 = arrival/departure, 2 = random malfunctions
 	Timer(const std::string &name, Elevator *parent, int Type) : TimerObject(parent, name)
 	{
 		elevator = parent;
@@ -192,11 +193,17 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WeightRopeMesh = 0;
 	RopeMesh = 0;
 	Error = false;
+	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Elevator.RandomProbability", 20);
+	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.RandomFrequency", 5);
+
+	//initialize random number generators
+	rnd_time = new RandomGen((unsigned int)(time(0) + GetNumber()));
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
 	arrival_delay = new Timer("Arrival Delay Timer", this, 1);
 	departure_delay = new Timer("Departure Delay Timer", this, 1);
+	malfunction_timer = new Timer("Malfunction Timer", this, 2);
 
 	//create object meshes
 	std::string name = "Elevator " + ToString(Number);
@@ -273,6 +280,18 @@ Elevator::~Elevator()
 		delete departure_delay;
 	}
 	departure_delay = 0;
+
+	if (malfunction_timer)
+	{
+		malfunction_timer->parent_deleting = true;
+		delete malfunction_timer;
+	}
+	malfunction_timer = 0;
+
+	//delete random number generator
+	if (rnd_time)
+		delete rnd_time;
+	rnd_time = 0;
 
 	//delete cars
 	if (sbs->Verbose)
@@ -3284,6 +3303,13 @@ void Elevator::Timer::Notify()
 		//arrival and departure timers
 		elevator->WaitForTimer = false;
 	}
+	else if (type == 2)
+	{
+		//malfunction timer
+		int result = (int)elevator->rnd_time->Get(elevator->RandomProbability - 1);
+		if (result == 0)
+			elevator->Malfunction();
+	}
 }
 
 bool Elevator::IsQueued(int floor, int queue)
@@ -4790,6 +4816,41 @@ bool Elevator::GetCallStatus(int floor, bool &up, bool &down)
 int Elevator::GetMotorRoom()
 {
 	return sbs->GetFloorNumber(MotorPosition.y);
+}
+
+void Elevator::EnableMalfunctions(bool value)
+{
+	//enable random malfunctions on this elevator
+
+	if (!malfunction_timer)
+		return;
+
+	if (value == true)
+	{
+		Report("Enabling malfunctions");
+		malfunction_timer->Start(int(RandomFrequency) * 1000, false);
+	}
+	else
+	{
+		Report("Disabling malfunctions");
+		malfunction_timer->Stop();
+	}
+}
+
+void Elevator::Malfunction()
+{
+	//elevator malfunction
+	Stop(true);
+	SetRunState(false);
+
+	for (int i = 0; i < Cars.size(); i++)
+	{
+		if (Cars[i])
+		{
+			//turn off car fans
+			Cars[i]->Fan = false;
+		}
+	}
 }
 
 }

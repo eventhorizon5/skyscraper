@@ -192,6 +192,7 @@ public:
 	unsigned int SmoothFrames;
 	bool RenderOnStartup; //render objects on startup
 	bool RandomActivity; //random activity is enabled
+	bool Malfunctions; //elevator malfunctions are enabled
 	int InstanceNumber; //SBS engine instance number
 	bool Headless; //true if running in headless mode
 
@@ -350,6 +351,7 @@ public:
 	void DecrementMovingWalkwayCount();
 	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
+	void EnableMalfunctions(bool value);
 	SoundSystem* GetSoundSystem();
 	bool IsObjectValid(Object* object, std::string type = "");
 	bool IsActionValid(Action* action);

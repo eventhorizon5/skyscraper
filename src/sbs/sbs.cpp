@@ -169,6 +169,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	EscalatorCount = 0;
 	MovingWalkwayCount = 0;
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
+	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
 	Headless = false;
 
 	//create utility object
@@ -529,6 +530,10 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	//enable random activity if specified
 	if (RandomActivity == true)
 		EnableRandomActivity(true);
+
+	//enable malfunctions if specified
+	if (Malfunctions == true)
+		EnableMalfunctions(true);
 
 	//print a memory report
 	MemoryReport();
@@ -3865,6 +3870,22 @@ void SBS::EnableRandomActivity(bool value)
 	}
 
 	RandomActivity = value;
+}
+
+void SBS::EnableMalfunctions(bool value)
+{
+	//enable malfunctions
+
+	for (int i = 0; i < elevator_manager->GetCount(); i++)
+	{
+		Elevator *elevator = elevator_manager->Get(i);
+		if (elevator)
+		{
+			elevator->EnableMalfunctions(value);
+		}
+	}
+
+	Malfunctions = value;
 }
 
 bool SBS::IsObjectValid(Object *object, std::string type)
