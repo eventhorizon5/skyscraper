@@ -582,8 +582,6 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 		y = 0.5;
 	}
 
-	::SBS::SBS *root = camera->GetRoot();
-
 	Ray ray = camera->GetOgreCamera()->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
@@ -604,8 +602,6 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 	}
 
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
-	//Vector3 pos2 = sbs->ToLocal(HitPosition);
-	//Vector3 pos3 = sbs->FromGlobal(pos2);
 	Vector3 hit_pos = HitPosition - sbs->GetPosition();
 
 	if (hit == true)
