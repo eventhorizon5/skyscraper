@@ -4840,6 +4840,9 @@ void Elevator::EnableMalfunctions(bool value)
 void Elevator::Malfunction()
 {
 	//elevator malfunction
+
+	Report("Malfunction");
+
 	Stop(true);
 	SetRunState(false);
 
