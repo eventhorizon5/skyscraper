@@ -1149,10 +1149,10 @@ bool Skyscraper::Loop()
 					//if (first_run == true)
 						//camera->setPosition(Simcore->ToRemote(Simcore->camera->GetSceneNode()->GetPosition()));
 
-					Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
-					Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
+					//Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
+					//Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
 
-					SetOpenXRParameters(i, combined, camera->getDerivedOrientation());
+					SetOpenXRParameters(i, cameranode_pos, camera->getDerivedOrientation());
 				}
 			}
 		}
