@@ -124,7 +124,6 @@ public:
 	std::string CounterweightStopSound; //counterweight stopping sound
 	bool Counterweight; //if true, elevator has a counterweight
 	bool Error; //true if an error occurred during movement processing
-	RandomGen *rnd_time;
 
 	//functions
 	Elevator(Object *parent, int number);
@@ -322,6 +321,7 @@ private:
 	int HoistwayAccess; //INS mode Hoistway Access; -1 for Down, 0 for Off, 1 for Up
 	int HoistwayAccessFloor; //floor used for Hoistway Access
 	std::vector<int> Controllers; //dispatch controllers this elevator is assigned to
+	RandomGen *rnd_time, *rnd_type;
 
 	//functions
 	void MoveElevatorToFloor();

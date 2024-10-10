@@ -198,6 +198,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 
 	//initialize random number generators
 	rnd_time = new RandomGen((unsigned int)(time(0) + GetNumber()));
+	rnd_type = new RandomGen((unsigned int)(time(0) + GetNumber() + 1));
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -288,10 +289,14 @@ Elevator::~Elevator()
 	}
 	malfunction_timer = 0;
 
-	//delete random number generator
+	//delete random number generators
 	if (rnd_time)
 		delete rnd_time;
 	rnd_time = 0;
+
+	if (rnd_type)
+		delete rnd_type;
+	rnd_type = 0;
 
 	//delete cars
 	if (sbs->Verbose)
@@ -4843,17 +4848,32 @@ void Elevator::Malfunction()
 
 	Report("Malfunction");
 
-	Stop(true);
-	SetRunState(false);
-	ResetQueue(true, true);
-
-	for (int i = 0; i < Cars.size(); i++)
+	int type = (int)rnd_type->Get(2);
+	if (type == 0)
 	{
-		if (Cars[i])
+		//full malfunction
+		Stop(true);
+		SetRunState(false);
+		ResetQueue(true, true);
+
+		for (int i = 0; i < Cars.size(); i++)
 		{
-			//turn off car fans
-			Cars[i]->Fan = false;
+			if (Cars[i])
+			{
+				//turn off car fans
+				Cars[i]->Fan = false;
+			}
 		}
+	}
+	else if (type == 1)
+	{
+		//partial malfunction (stop)
+		Stop(true);
+	}
+	else if (type == 2)
+	{
+		//partial malfunction (reset queues)
+		ResetQueue(true, true);
 	}
 }
 
