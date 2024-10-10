@@ -573,8 +573,8 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 	Real x, y;
 	if (center_only == false)
 	{
-		x = (float)mouse_x / (float)width * scale;
-		y = (float)mouse_y / (float)height * scale;
+		x = (float)camera->mouse_x / (float)width * scale;
+		y = (float)camera->mouse_y / (float)height * scale;
 	}
 	else
 	{
