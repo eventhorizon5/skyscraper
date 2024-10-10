@@ -180,6 +180,9 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT85;
 		static const long ID_txtInterlocks;
 		static const long ID_bInterlocks;
+		static const long ID_STATICTEXT91;
+		static const long ID_txtFan;
+		static const long ID_bFan;
 		static const long ID_STATICTEXT14;
 		static const long ID_txtFloor;
 		static const long ID_STATICTEXT15;
@@ -390,6 +393,7 @@ class editelevator: public wxDialog
 		void On_bSetDownSpeed_Click(wxCommandEvent& event);
 		void On_bNotifyLate_Click(wxCommandEvent& event);
 		void On_bSetID_Click(wxCommandEvent& event);
+		void On_bFan_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -411,6 +415,7 @@ class editelevator: public wxDialog
 		wxButton* bDumpQueues;
 		wxButton* bEnqueueDown;
 		wxButton* bEnqueueUp;
+		wxButton* bFan;
 		wxButton* bGo;
 		wxButton* bHoldDoors;
 		wxButton* bInterlocks;
@@ -570,6 +575,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText89;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText90;
+		wxStaticText* StaticText91;
 		wxStaticText* StaticText9;
 		wxStaticText* tCar;
 		wxStaticText* tDoor;
@@ -605,6 +611,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtElevStart;
 		wxTextCtrl* txtEnabled;
 		wxTextCtrl* txtErrorOffset;
+		wxTextCtrl* txtFan;
 		wxTextCtrl* txtFloor;
 		wxTextCtrl* txtFloorBeeps;
 		wxTextCtrl* txtFloorSounds;

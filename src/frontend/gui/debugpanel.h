@@ -99,6 +99,7 @@ class DebugPanel: public wxFrame
 		static const long ID_chkAutoShafts;
 		static const long ID_chkAutoStairs;
 		static const long ID_chkRandom;
+		static const long ID_chkMalfunctions;
 		static const long ID_CHECKBOX1;
 		static const long ID_bFloorList;
 		static const long ID_bMeshControl;
@@ -168,6 +169,7 @@ class DebugPanel: public wxFrame
 		void On_bCameraTexture_Click(wxCommandEvent& event);
 		void On_bLightControl_Click(wxCommandEvent& event);
 		void On_bSoundManager_Click(wxCommandEvent& event);
+		void On_chkMalfunctions_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -201,6 +203,7 @@ class DebugPanel: public wxFrame
 		wxCheckBox* chkCollisionDetection;
 		wxCheckBox* chkFrameLimiter;
 		wxCheckBox* chkGravity;
+		wxCheckBox* chkMalfunctions;
 		wxCheckBox* chkProcessElevators;
 		wxCheckBox* chkRandom;
 		wxCheckBox* chkVerbose;

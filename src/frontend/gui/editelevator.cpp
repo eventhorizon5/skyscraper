@@ -176,6 +176,9 @@ const long editelevator::ID_txtOpenOnStart = wxNewId();
 const long editelevator::ID_STATICTEXT85 = wxNewId();
 const long editelevator::ID_txtInterlocks = wxNewId();
 const long editelevator::ID_bInterlocks = wxNewId();
+const long editelevator::ID_STATICTEXT91 = wxNewId();
+const long editelevator::ID_txtFan = wxNewId();
+const long editelevator::ID_bFan = wxNewId();
 const long editelevator::ID_STATICTEXT14 = wxNewId();
 const long editelevator::ID_txtFloor = wxNewId();
 const long editelevator::ID_STATICTEXT15 = wxNewId();
@@ -696,6 +699,13 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	FlexGridSizer9->Add(txtInterlocks, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bInterlocks = new wxButton(this, ID_bInterlocks, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bInterlocks"));
 	FlexGridSizer9->Add(bInterlocks, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText91 = new wxStaticText(this, ID_STATICTEXT91, _("Fan:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT91"));
+	FlexGridSizer9->Add(StaticText91, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtFan = new wxTextCtrl(this, ID_txtFan, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtFan"));
+	txtFan->SetToolTip(_("Interlocks"));
+	FlexGridSizer9->Add(txtFan, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bFan = new wxButton(this, ID_bFan, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFan"));
+	FlexGridSizer9->Add(bFan, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(FlexGridSizer9, 0, wxLEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer2->Add(BoxSizer11, 1, wxALL|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP, 5);
@@ -1049,7 +1059,6 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	BoxSizer3->Add(BoxSizer7, 1, wxBOTTOM|wxRIGHT|wxALIGN_TOP, 5);
 	BoxSizer1->Add(BoxSizer3, 0, wxALL|wxEXPAND, 0);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
 
@@ -1106,6 +1115,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bSetReOpen,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetReOpen_Click);
 	Connect(ID_bSetAutoDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAutoDoors_Click);
 	Connect(ID_bInterlocks,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bInterlocks_Click);
+	Connect(ID_bFan,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bFan_Click);
 	Connect(ID_bResetQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bResetQueues_Click);
 	Connect(ID_bSetUpSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetUpSpeed_Click);
 	Connect(ID_bSetDownSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDownSpeed_Click);
@@ -1407,6 +1417,7 @@ void editelevator::Loop()
 	txtManualMove->SetValue(ToString(elevator->ManualMove));
 	txtMusicPosition->SetValue(TruncateNumber(car->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.z, 2));
 	txtNotifyLate->SetValue(BoolToString(elevator->NotifyLate));
+	txtFan->SetValue(BoolToString(car->Fan));
 
 	//changeable values
 	if (chkVisible->GetValue() != elevator->IsEnabled)
@@ -1890,6 +1901,12 @@ void editelevator::On_bSetID_Click(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->ID = txtID->GetValue();
+}
+
+void editelevator::On_bFan_Click(wxCommandEvent& event)
+{
+	if (car)
+		car->Fan = !car->Fan;
 }
 
 }
