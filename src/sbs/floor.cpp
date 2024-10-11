@@ -1588,7 +1588,11 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 	//if display_header is true, show header/key along with listing
 
 	if (display_header == true)
-		Object::Report("\n--- Floor Information ---\n");
+	{
+		Object::Report("");
+		Object::Report("--- Floor Information ---");
+		Object::Report("");
+	}
 
 	if (detailed == true)
 	{
