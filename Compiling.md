@@ -301,6 +301,8 @@ It'll have errors, to fix them, do this:
 
     -OGRE_DIR needs to be set to c:/ogre-14.2.6/SDK/CMake
     -click Configure again
+    -set the ogreprocedural include directory to c:/ogre-procedural/include
+    -click Configure again
     -uncheck the wxWidgets_USE_REL_AND_DBG
     -click Configure again
     -BULLET_INCLUDE_DIR needs to be c:/bullet/include
