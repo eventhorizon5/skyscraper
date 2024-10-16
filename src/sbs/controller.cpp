@@ -439,7 +439,7 @@ void DispatchController::ProcessRoutes()
 								}
 							}
 							else
-								continue;//skip route if elevator is still closest
+								continue; //skip route if elevator is still closest
 						}
 						else
 							continue; //skip if a closer elevator is not found
