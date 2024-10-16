@@ -167,7 +167,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
-	EscalatorCount = 0;
 	MovingWalkwayCount = 0;
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
@@ -3756,18 +3755,8 @@ void SBS::ListVisibleMeshes()
 
 int SBS::GetEscalatorCount()
 {
-	//return total number of allocated sounds
-	return EscalatorCount;
-}
-
-void SBS::IncrementEscalatorCount()
-{
-	EscalatorCount++;
-}
-
-void SBS::DecrementEscalatorCount()
-{
-	EscalatorCount--;
+	//return total number of escalators
+	return EscalatorArray.size();
 }
 
 int SBS::GetMovingWalkwayCount()
@@ -4388,6 +4377,13 @@ void SBS::UnregisterEscalator(Escalator *escalator)
 			return;
 		}
 	}
+}
+
+Escalator* SBS::GetEscalator(int index)
+{
+	if (index >= 0 && index < EscalatorArray.size() - 1)
+		return EscalatorArray[index];
+	return 0;
 }
 
 }

@@ -70,10 +70,12 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 	is_enabled = true;
 	SetRun(run);
 	Speed = speed;
-	sbs->IncrementEscalatorCount();
 	start = Vector3::ZERO;
 	end = Vector3::ZERO;
 	buffer_zone_steps = 2;
+
+	//register with engine
+	sbs->RegisterEscalator(this);
 
 	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Escalator.RandomProbability", 20);
 	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Escalator.RandomFrequency", 5);
@@ -98,9 +100,6 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 
 	//create malfunction timer
 	malfunction_timer = new Timer("Malfunction Timer", this);
-
-	//register with engine
-	sbs->RegisterEscalator(this);
 
 	//create steps
 	CreateSteps(riser_texture, tread_texture, direction, width, risersize, treadsize, tw, th);
@@ -145,7 +144,6 @@ Escalator::~Escalator()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->DecrementEscalatorCount();
 		sbs->UnregisterEscalator(this);
 
 		//unregister from parent

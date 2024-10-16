@@ -1,9 +1,37 @@
-#include "escalatorcontrol.h"
+/*
+	Skyscraper 2.1 - Escalator Control
+	Copyright (C)2004-2024 Ryan Thoryk
+	https://www.skyscrapersim.net
+	https://sourceforge.net/projects/skyscraper/
+	Contact - ryan@skyscrapersim.net
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
 //(*InternalHeaders(EscalatorControl)
 #include <wx/intl.h>
 #include <wx/string.h>
 //*)
+#include "globals.h"
+#include "sbs.h"
+#include "skyscraper.h"
+#include "debugpanel.h"
+#include "escalator.h"
+#include "escalatorcontrol.h"
+
+namespace Skyscraper {
 
 //(*IdInit(EscalatorControl)
 const long EscalatorControl::ID_LISTBOX1 = wxNewId();
@@ -11,7 +39,8 @@ const long EscalatorControl::ID_STATICTEXT1 = wxNewId();
 const long EscalatorControl::ID_txtName = wxNewId();
 const long EscalatorControl::ID_STATICTEXT2 = wxNewId();
 const long EscalatorControl::ID_txtParent = wxNewId();
-const long EscalatorControl::ID_chkRun = wxNewId();
+const long EscalatorControl::ID_txtRun = wxNewId();
+const long EscalatorControl::ID_SLIDER1 = wxNewId();
 const long EscalatorControl::ID_bOK = wxNewId();
 //*)
 
@@ -20,7 +49,7 @@ BEGIN_EVENT_TABLE(EscalatorControl,wxDialog)
     //*)
 END_EVENT_TABLE()
 
-EscalatorControl::EscalatorControl(wxWindow* parent,wxWindowID id)
+EscalatorControl::EscalatorControl(DebugPanel* parent, wxWindowID id)
 {
     //(*Initialize(EscalatorControl)
     wxBoxSizer* BoxSizer1;
@@ -46,10 +75,11 @@ EscalatorControl::EscalatorControl(wxWindow* parent,wxWindowID id)
     txtParent = new wxTextCtrl(this, ID_txtParent, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtParent"));
     FlexGridSizer3->Add(txtParent, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer4->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    FlexGridSizer5 = new wxFlexGridSizer(0, 3, 0, 0);
-    chkRun = new wxCheckBox(this, ID_chkRun, _("Run"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRun"));
-    chkRun->SetValue(false);
-    FlexGridSizer5->Add(chkRun, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer5 = new wxFlexGridSizer(0, 1, 0, 0);
+    txtRun = new wxStaticText(this, ID_txtRun, _("Run"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_txtRun"));
+    FlexGridSizer5->Add(txtRun, 1, wxALL|wxEXPAND, 5);
+    Slider1 = new wxSlider(this, ID_SLIDER1, 0, -1, 1, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_SLIDER1"));
+    FlexGridSizer5->Add(Slider1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer4->Add(FlexGridSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
     FlexGridSizer4->Add(BoxSizer1, 1, wxALL|wxEXPAND, 5);
@@ -60,9 +90,13 @@ EscalatorControl::EscalatorControl(wxWindow* parent,wxWindowID id)
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
 
-    Connect(ID_chkRun,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EscalatorControl::On_chkRun_Click);
     Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EscalatorControl::On_bOK_Click);
     //*)
+
+	lastcount = 0;
+	Simcore = 0;
+	panel = parent;
+	escalator = 0;
 }
 
 EscalatorControl::~EscalatorControl()
@@ -71,12 +105,83 @@ EscalatorControl::~EscalatorControl()
     //*)
 }
 
-
-void EscalatorControl::On_chkRun_Click(wxCommandEvent& event)
-{
-}
-
-
 void EscalatorControl::On_bOK_Click(wxCommandEvent& event)
 {
+	this->Close();
+}
+
+void EscalatorControl::Loop()
+{
+	if (Simcore != panel->GetSystem())
+	{
+		//if active engine has changed, refresh values
+		Simcore = panel->GetSystem();
+	}
+
+	if (!Simcore)
+		return;
+
+	BuildList();
+
+	int selection = ListBox1->GetSelection();
+
+	if (selection >= 0)
+	{
+		SBS::Escalator *newescalator = Simcore->GetEscalator(selection);
+
+		//if a new camera has been selected, update values
+		if (newescalator && escalator != newescalator)
+		{
+			escalator = Simcore->GetEscalator(selection);
+			txtName->SetValue(escalator->GetName());
+			txtParent->SetValue(escalator->GetParent()->GetName());
+			Slider1->SetValue(escalator->GetRun());
+		}
+	}
+	else
+		escalator = 0;
+
+	if (!escalator)
+		return;
+}
+
+void EscalatorControl::BuildList(bool restore_selection)
+{
+	int count = Simcore->GetCameraTextureCount();
+
+	if (count != lastcount)
+	{
+		lastcount = count;
+		int old_selection = ListBox1->GetSelection();
+		ListBox1->Clear();
+
+		for (int i = 0; i < count; i++)
+		{
+			::SBS::Escalator *esc = Simcore->GetEscalator(i);
+			ListBox1->Append(SBS::ToString(i + 1) + wxT(": ") + esc->GetName() + wxT(" (") + esc->GetParent()->GetName() + wxT(")"));
+		}
+
+		if (count > 0)
+		{
+			if (restore_selection == false)
+				ListBox1->SetSelection(0);
+			else
+				ListBox1->SetSelection(old_selection);
+		}
+		else
+		{
+			//clear values
+			txtName->SetValue(wxT(""));
+			txtParent->SetValue(wxT(""));
+			Slider1->SetValue(0);
+		}
+	}
+}
+
+void EscalatorControl::On_Slider1_OnUpdate(wxCommandEvent& event)
+{
+	if (escalator)
+		escalator->SetRun(Slider1->GetValue());
+}
+
 }

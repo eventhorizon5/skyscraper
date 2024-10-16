@@ -100,7 +100,7 @@ MovingWalkway::~MovingWalkway()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->DecrementEscalatorCount();
+		sbs->DecrementMovingWalkwayCount();
 
 		//unregister from parent
 		if (parent_deleting == false)
