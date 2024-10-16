@@ -42,6 +42,8 @@ public:
 	void ResetState();
 	void SetRun(int value);
 	int GetRun() { return Run; }
+	void EnableMalfunctions(bool value);
+	void Malfunction();
 
 private:
 	Sound *sound; //sound object
@@ -54,6 +56,13 @@ private:
 	int buffer_zone_steps;
 
 	std::vector<Step*> Steps;
+
+	//random malfunctions timer
+	class Timer;
+	Timer *malfunction_timer;
+	int RandomProbability; //probability ratio of random activity, starting with 1 - higher is less frequent
+	Real RandomFrequency; //speed in seconds to make each random action
+	RandomGen *rnd_time, *rnd_type;
 
 	void CreateSteps(const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real width, Real risersize, Real treadsize, Real tw, Real th);
 	void MoveSteps();

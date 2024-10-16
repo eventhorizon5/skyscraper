@@ -31,9 +31,23 @@
 #include "profiler.h"
 #include "dynamicmesh.h"
 #include "step.h"
+#include "timer.h"
+#include "random.h"
 #include "escalator.h"
 
 namespace SBS {
+
+//escalator malfunction timer
+class Escalator::Timer : public TimerObject
+{
+public:
+	Escalator *escalator;
+	Timer(const std::string &name, Escalator *parent) : TimerObject(parent, name)
+	{
+		escalator = parent;
+	}
+	virtual void Notify();
+};
 
 Escalator::Escalator(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th) : Object(parent)
 {
@@ -61,6 +75,13 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 	end = Vector3::ZERO;
 	buffer_zone_steps = 2;
 
+	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Escalator.RandomProbability", 20);
+	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Escalator.RandomFrequency", 5);
+
+	//initialize random number generators
+	rnd_time = new RandomGen((unsigned int)(time(0) + GetNumber()));
+	rnd_type = new RandomGen((unsigned int)(time(0) + GetNumber() + 1));
+
 	//create sound object
 	sound = new Sound(this, name, true);
 	sound->Load(sound_file);
@@ -75,6 +96,9 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 		Steps.push_back(mesh);
 	}
 
+	//create malfunction timer
+	malfunction_timer = new Timer("Malfunction Timer", this);
+
 	//create steps
 	CreateSteps(riser_texture, tread_texture, direction, width, risersize, treadsize, tw, th);
 }
@@ -87,6 +111,22 @@ Escalator::~Escalator()
 		delete sound;
 	}
 	sound = 0;
+
+	if (malfunction_timer)
+	{
+		malfunction_timer->parent_deleting = true;
+		delete malfunction_timer;
+	}
+	malfunction_timer = 0;
+
+	//delete random number generators
+	if (rnd_time)
+		delete rnd_time;
+	rnd_time = 0;
+
+	if (rnd_type)
+		delete rnd_type;
+	rnd_type = 0;
 
 	//remove step meshes
 	for (size_t i = 0; i < Steps.size(); i++)
@@ -439,6 +479,58 @@ void Escalator::ResetState()
 	for (size_t i = 0; i < Steps.size(); i++)
 	{
 		Steps[i]->SetPosition(Steps[i]->start);
+	}
+}
+
+void Escalator::Timer::Notify()
+{
+	if (escalator->GetRun() == 0)
+		return;
+
+	SBS_PROFILE("Escalator::Timer::Notify");
+
+	int result = (int)escalator->rnd_time->Get(escalator->RandomProbability - 1);
+	if (result == 0)
+		escalator->Malfunction();
+}
+
+void Escalator::EnableMalfunctions(bool value)
+{
+	//enable random malfunctions on this escalator
+
+	if (!malfunction_timer)
+		return;
+
+	if (value == true)
+	{
+		Report("Enabling malfunctions");
+		malfunction_timer->Start(int(RandomFrequency) * 1000, false);
+	}
+	else
+	{
+		Report("Disabling malfunctions");
+		malfunction_timer->Stop();
+	}
+}
+
+void Escalator::Malfunction()
+{
+	//elevator malfunction
+
+	Report("Malfunction");
+
+	int type = (int)rnd_type->Get(1);
+	if (type == 0)
+	{
+		//stop escalator
+		SetRun(0);
+	}
+	if (type == 1)
+	{
+		if (GetRun() == -1)
+			SetRun(1);
+		else
+			SetRun(-1);
 	}
 }
 
