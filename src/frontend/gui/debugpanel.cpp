@@ -51,6 +51,7 @@
 #include "camtex.h"
 #include "soundmanager.h"
 #include "texturemanager.h"
+#include "escalatorcontrol.h"
 
 namespace Skyscraper {
 
@@ -96,6 +97,7 @@ const long DebugPanel::ID_bStats = wxNewId();
 const long DebugPanel::ID_bEngineManager = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
 const long DebugPanel::ID_bCameraTexture = wxNewId();
+const long DebugPanel::ID_bEscalator = wxNewId();
 const long DebugPanel::ID_bObjectInfo = wxNewId();
 const long DebugPanel::ID_bActionViewer = wxNewId();
 const long DebugPanel::ID_bPeopleManager = wxNewId();
@@ -231,6 +233,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer9->Add(bConsole, 1, wxEXPAND, 5);
 	bCameraTexture = new wxButton(Panel1, ID_bCameraTexture, _("CameraTexture Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraTexture"));
 	BoxSizer9->Add(bCameraTexture, 1, wxEXPAND, 5);
+	bEscalator = new wxButton(Panel1, ID_bEscalator, _("Escalator Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEscalator"));
+	BoxSizer9->Add(bEscalator, 1, wxEXPAND, 5);
 	BoxSizer8->Add(BoxSizer9, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
 	bObjectInfo = new wxButton(Panel1, ID_bObjectInfo, _("Object Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bObjectInfo"));
@@ -251,6 +255,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND, 5);
 	bSoundManager = new wxButton(Panel1, ID_bSoundManager, _("Sound Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSoundManager"));
 	BoxSizer10->Add(bSoundManager, 1, wxEXPAND, 5);
+	BoxSizer10->Add(0,0,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -276,6 +281,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_bEngineManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEngineManager_Click);
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
 	Connect(ID_bCameraTexture,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraTexture_Click);
+	Connect(ID_bEscalator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEscalator_Click);
 	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
 	Connect(ID_bActionViewer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
 	Connect(ID_bPeopleManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bPeopleManager_Click);
@@ -303,6 +309,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	timer = 0;
 	smanager = 0;
 	tmanager = 0;
+	esc = 0;
 
 	OnInit();
 }
@@ -360,6 +367,9 @@ DebugPanel::~DebugPanel()
 	if (tmanager)
 		tmanager->Destroy();
 	tmanager = 0;
+	if (esc)
+		esc->Destroy();
+	esc = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -570,6 +580,12 @@ void DebugPanel::Loop()
 	{
 		if (tmanager->IsShown() == true)
 			tmanager->Loop();
+	}
+
+	if (esc)
+	{
+		if (esc->IsShown() == true)
+			esc->Loop();
 	}
 }
 
@@ -811,6 +827,16 @@ void DebugPanel::On_chkMalfunctions_Click(wxCommandEvent& event)
 {
 	if (Simcore)
 		Simcore->EnableMalfunctions(chkMalfunctions->GetValue());
+}
+
+void DebugPanel::On_bEscalator_Click(wxCommandEvent& event)
+{
+	if (!esc)
+		esc = new EscalatorControl(this, -1);
+
+	esc->CenterOnScreen();
+	esc->Show();
+	esc->Raise();
 }
 
 }

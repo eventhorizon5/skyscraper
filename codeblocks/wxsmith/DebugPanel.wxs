@@ -399,6 +399,15 @@
 											<border>5</border>
 											<option>1</option>
 										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bEscalator" variable="bEscalator" member="yes">
+												<label>Escalator Control</label>
+												<handler function="On_bEscalator_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
 									</object>
 									<flag>wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>
@@ -485,6 +494,11 @@
 												<handler function="On_bSoundManager_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="spacer">
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>

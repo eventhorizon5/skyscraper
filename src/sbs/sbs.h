@@ -344,8 +344,6 @@ public:
 	void ShowBoundingBoxes(bool value);
 	void ListVisibleMeshes();
 	int GetEscalatorCount();
-	void IncrementEscalatorCount();
-	void DecrementEscalatorCount();
 	int GetMovingWalkwayCount();
 	void IncrementMovingWalkwayCount();
 	void DecrementMovingWalkwayCount();
@@ -399,6 +397,7 @@ public:
 	void MemoryReport();
 	void RegisterEscalator(Escalator *escalator);
 	void UnregisterEscalator(Escalator *escalator);
+	Escalator* GetEscalator(int index);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -517,8 +516,6 @@ private:
 	std::vector<Person*> PersonArray;
 
 	int ObjectCount; //number of simulator objects
-
-	int EscalatorCount; //number of escalators
 
 	int MovingWalkwayCount; //number of moving walkways
 

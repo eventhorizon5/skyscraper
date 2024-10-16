@@ -59,6 +59,7 @@ class MoveObject;
 class CameraTextureControl;
 class SoundManager;
 class TextureManager;
+class EscalatorControl;
 
 class DebugPanel: public wxFrame
 {
@@ -110,6 +111,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bEngineManager;
 		static const long ID_bConsole;
 		static const long ID_bCameraTexture;
+		static const long ID_bEscalator;
 		static const long ID_bObjectInfo;
 		static const long ID_bActionViewer;
 		static const long ID_bPeopleManager;
@@ -170,6 +172,7 @@ class DebugPanel: public wxFrame
 		void On_bLightControl_Click(wxCommandEvent& event);
 		void On_bSoundManager_Click(wxCommandEvent& event);
 		void On_chkMalfunctions_Click(wxCommandEvent& event);
+		void On_bEscalator_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -187,6 +190,7 @@ class DebugPanel: public wxFrame
 		wxButton* bControlReference;
 		wxButton* bEditElevator;
 		wxButton* bEngineManager;
+		wxButton* bEscalator;
 		wxButton* bFloorInfo;
 		wxButton* bFloorList;
 		wxButton* bKeys;
@@ -249,6 +253,7 @@ class DebugPanel: public wxFrame
 		CameraTextureControl *camtex;
 		SoundManager *smanager;
 		TextureManager *tmanager;
+		EscalatorControl *esc;
 
 		DECLARE_EVENT_TABLE()
 };
