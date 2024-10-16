@@ -61,6 +61,7 @@
 #include "polymesh.h"
 #include "utility.h"
 #include "geometry.h"
+#include "escalator.h"
 
 namespace SBS {
 
@@ -3885,6 +3886,15 @@ void SBS::EnableMalfunctions(bool value)
 		}
 	}
 
+	for (int i = 0; i < EscalatorArray.size(); i++)
+	{
+		Escalator *escalator = EscalatorArray[i];
+		if (escalator)
+		{
+			escalator->EnableMalfunctions(value);
+		}
+	}
+
 	Malfunctions = value;
 }
 
@@ -4358,6 +4368,26 @@ void SBS::MemoryReport()
 		Report("Meshes: " + ToString(total / 1024) + " kb");
 	}
 	Report("");
+}
+
+void SBS::RegisterEscalator(Escalator *escalator)
+{
+	//add escalator to index
+	EscalatorArray.push_back(escalator);
+}
+
+void SBS::UnregisterEscalator(Escalator *escalator)
+{
+	//remove escalator from index
+
+	for (size_t i = 0; i < EscalatorArray.size(); i++)
+	{
+		if (EscalatorArray[i] == escalator)
+		{
+			EscalatorArray.erase(EscalatorArray.begin() + i);
+			return;
+		}
+	}
 }
 
 }

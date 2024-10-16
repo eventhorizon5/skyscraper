@@ -397,6 +397,8 @@ public:
 	Utility* GetUtility();
 	GeometryController* GetGeometry();
 	void MemoryReport();
+	void RegisterEscalator(Escalator *escalator);
+	void UnregisterEscalator(Escalator *escalator);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -454,6 +456,9 @@ private:
 
 	//action array
 	std::vector<Action*> ActionArray;
+
+	//escalators
+	std::vector<Escalator*> EscalatorArray;
 
 	//private functions
 	void PrintBanner();
