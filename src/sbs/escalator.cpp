@@ -99,6 +99,9 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 	//create malfunction timer
 	malfunction_timer = new Timer("Malfunction Timer", this);
 
+	//register with engine
+	sbs->RegisterEscalator(this);
+
 	//create steps
 	CreateSteps(riser_texture, tread_texture, direction, width, risersize, treadsize, tw, th);
 }
@@ -143,6 +146,7 @@ Escalator::~Escalator()
 	if (sbs->FastDelete == false)
 	{
 		sbs->DecrementEscalatorCount();
+		sbs->UnregisterEscalator(this);
 
 		//unregister from parent
 		if (parent_deleting == false)
