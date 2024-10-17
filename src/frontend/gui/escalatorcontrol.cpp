@@ -147,7 +147,7 @@ void EscalatorControl::Loop()
 
 void EscalatorControl::BuildList(bool restore_selection)
 {
-	int count = Simcore->GetCameraTextureCount();
+	int count = Simcore->GetEscalatorCount();
 
 	if (count != lastcount)
 	{
@@ -158,7 +158,8 @@ void EscalatorControl::BuildList(bool restore_selection)
 		for (int i = 0; i < count; i++)
 		{
 			::SBS::Escalator *esc = Simcore->GetEscalator(i);
-			ListBox1->Append(SBS::ToString(i + 1) + wxT(": ") + esc->GetName() + wxT(" (") + esc->GetParent()->GetName() + wxT(")"));
+			if (esc)
+				ListBox1->Append(SBS::ToString(i + 1) + wxT(": ") + esc->GetName() + wxT(" (") + esc->GetParent()->GetName() + wxT(")"));
 		}
 
 		if (count > 0)
