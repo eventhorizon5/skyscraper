@@ -90,6 +90,7 @@ EscalatorControl::EscalatorControl(DebugPanel* parent, wxWindowID id)
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
 
+    Connect(ID_SLIDER1,wxEVT_SLIDER,(wxObjectEventFunction)&EscalatorControl::On_Slider1_Scroll);
     Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EscalatorControl::On_bOK_Click);
     //*)
 
