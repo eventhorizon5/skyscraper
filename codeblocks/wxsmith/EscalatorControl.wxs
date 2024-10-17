@@ -9,7 +9,7 @@
 					<object class="sizeritem">
 						<object class="wxListBox" name="ID_LISTBOX1" variable="ListBox1" member="yes">
 							<default>-1</default>
-							<size>150,300</size>
+							<size>200,300</size>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>

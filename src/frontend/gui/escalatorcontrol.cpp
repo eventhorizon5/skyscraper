@@ -62,7 +62,7 @@ EscalatorControl::EscalatorControl(DebugPanel* parent, wxWindowID id)
     Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
     FlexGridSizer1 = new wxFlexGridSizer(0, 3, 0, 0);
     FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
-    ListBox1 = new wxListBox(this, ID_LISTBOX1, wxDefaultPosition, wxSize(150,300), 0, 0, 0, wxDefaultValidator, _T("ID_LISTBOX1"));
+    ListBox1 = new wxListBox(this, ID_LISTBOX1, wxDefaultPosition, wxSize(200,300), 0, 0, 0, wxDefaultValidator, _T("ID_LISTBOX1"));
     FlexGridSizer2->Add(ListBox1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
     FlexGridSizer3 = new wxFlexGridSizer(0, 2, 0, 0);
