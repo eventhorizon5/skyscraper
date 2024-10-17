@@ -73,9 +73,10 @@ class EscalatorControl: public wxDialog
         //(*Handlers(EscalatorControl)
         void On_chkRun_Click(wxCommandEvent& event);
         void On_bOK_Click(wxCommandEvent& event);
-        void On_Slider1_OnUpdate(wxCommandEvent& event);
+        void On_Slider1_Scroll(wxCommandEvent& event);
         //*)
         void BuildList(bool restore_selection = false);
+        void UpdateRunState();
 
 		SBS::SBS *Simcore;
 		DebugPanel *panel;

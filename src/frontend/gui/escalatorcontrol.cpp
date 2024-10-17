@@ -129,13 +129,14 @@ void EscalatorControl::Loop()
 	{
 		SBS::Escalator *newescalator = Simcore->GetEscalator(selection);
 
-		//if a new camera has been selected, update values
+		//if a new escalator has been selected, update values
 		if (newescalator && escalator != newescalator)
 		{
 			escalator = Simcore->GetEscalator(selection);
 			txtName->SetValue(escalator->GetName());
 			txtParent->SetValue(escalator->GetParent()->GetName());
 			Slider1->SetValue(escalator->GetRun());
+			UpdateRunState();
 		}
 	}
 	else
@@ -179,10 +180,26 @@ void EscalatorControl::BuildList(bool restore_selection)
 	}
 }
 
-void EscalatorControl::On_Slider1_OnUpdate(wxCommandEvent& event)
+void EscalatorControl::On_Slider1_Scroll(wxCommandEvent& event)
 {
 	if (escalator)
 		escalator->SetRun(Slider1->GetValue());
+
+	UpdateRunState();
+}
+void EscalatorControl::UpdateRunState()
+{
+	if (!escalator)
+		return;
+
+	int run = escalator->GetRun();
+
+	if (run == -1)
+		txtRun->SetLabel("Run: reverse");
+	else if (run == 0)
+		txtRun->SetLabel("Run: stopped");
+	else if (run == 1)
+		txtRun->SetLabel("Run: forward");
 }
 
 }
