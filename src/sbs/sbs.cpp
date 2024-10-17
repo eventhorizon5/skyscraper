@@ -4381,7 +4381,7 @@ void SBS::UnregisterEscalator(Escalator *escalator)
 
 Escalator* SBS::GetEscalator(int index)
 {
-	if (index >= 0 && index < EscalatorArray.size() - 1)
+	if (index >= 0 && index < EscalatorArray.size())
 		return EscalatorArray[index];
 	return 0;
 }
