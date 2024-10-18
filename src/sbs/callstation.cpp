@@ -335,7 +335,7 @@ void CallStation::ProcessCache()
 	}
 
 	//don't allow input values in the InvalidInput list
-	for (int i = 0; i < (int)InvalidInput.size(); i++)
+	for (size_t i = 0; i < InvalidInput.size(); i++)
 	{
 		if (InputCache == InvalidInput[i])
 		{

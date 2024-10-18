@@ -979,7 +979,7 @@ void ElevatorCar::EnableObjects(bool value)
 	}
 
 	//floor indicators
-	/*for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	/*for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
@@ -2111,7 +2111,7 @@ Door* ElevatorCar::GetStdDoor(int number)
 
 Door* ElevatorCar::GetDoor(const std::string &name)
 {
-	for (int i = 0; i < StdDoorArray.size(); i++)
+	for (size_t i = 0; i < StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i]->GetName() == name)
 			return StdDoorArray[i];
@@ -2346,7 +2346,7 @@ Light* ElevatorCar::AddLight(const std::string &name, int type)
 
 Light* ElevatorCar::GetLight(const std::string &name)
 {
-	for (int i = 0; i < lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i]->GetName() == name)
 			return lights[i];
@@ -3522,7 +3522,7 @@ void ElevatorCar::ProcessCache()
 	}
 
 	//don't allow input values in the InvalidInput list
-	for (int i = 0; i < (int)InvalidInput.size(); i++)
+	for (size_t i = 0; i < InvalidInput.size(); i++)
 	{
 		if (InputCache == InvalidInput[i])
 		{

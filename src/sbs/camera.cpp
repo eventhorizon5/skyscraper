@@ -187,7 +187,7 @@ void Camera::SetPosition(const Vector3 &position)
 		GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[0]->getPosition()));
 	else
 	{
-		for (int i = 0; i < Cameras.size(); i++)
+		for (size_t i = 0; i < Cameras.size(); i++)
 		{
 			Cameras[i]->setPosition(sbs->ToRemote(position));
 		}
@@ -236,7 +236,7 @@ void Camera::SetRotation(const Vector3 &rotation)
 	Quaternion camrot = x * z;
 	Quaternion bodyrot = y;
 	Rotation = vector;
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Cameras[i]->setOrientation(camrot);
 	}
@@ -413,7 +413,7 @@ void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 	if (Rotation.z < 0)
 		Rotation.z += 360;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Quaternion rot(Degree(Rotation.y), Vector3::NEGATIVE_UNIT_Y);
 		if (EnableBullet == true)
@@ -997,7 +997,7 @@ void Camera::SetFOVAngle(Real angle)
 		Real ratio = (float)Cameras[0]->getAspectRatio();
 		if (ratio > 0)
 		{
-			for (int i = 0; i < Cameras.size(); i++)
+			for (size_t i = 0; i < Cameras.size(); i++)
 			{
 				Cameras[i]->setFOVy(Degree(angle / ratio));
 			}
@@ -1036,7 +1036,7 @@ void Camera::SetViewMode(int mode)
 	if (Cameras.empty())
 		return;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		if (mode == 0)
 			Cameras[i]->setPolygonMode(Ogre::PM_SOLID);
@@ -1112,7 +1112,7 @@ void Camera::SetMaxRenderDistance(Real value)
 	if (Cameras.empty())
 		return;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Cameras[i]->setFarClipDistance(sbs->ToRemote(value));
 	}
@@ -1142,7 +1142,7 @@ void Camera::MoveCharacter()
 		mCharacter->setWalkDirection(accum_movement, 1);
 	else
 	{
-		for (int i = 0; i < Cameras.size(); i++)
+		for (size_t i = 0; i < Cameras.size(); i++)
 		{
 			Cameras[i]->move(accum_movement);
 		}
@@ -1356,7 +1356,7 @@ bool Camera::Attach(std::vector<Ogre::Camera*>& cameras, bool init_state)
 
 	Cameras = cameras;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Cameras[i]->setNearClipDistance(0.1);
 		Cameras[i]->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5) / 2), 0);
@@ -1404,7 +1404,7 @@ bool Camera::Detach()
 	if (Cameras[0]->isAttached() == false)
 		return false;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		GetSceneNode()->DetachObject(Cameras[i]);
 	}
@@ -1528,7 +1528,7 @@ void Camera::SetOrientation(const Quaternion &orientation)
 {
 	//set orientation of main camera object, not collider
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Cameras[i]->setOrientation(orientation);
 	}
@@ -1551,7 +1551,7 @@ void Camera::AttachToVehicle(bool value)
 		vehicle->AttachCamera(false);
 		vehicle = 0;
 		EnableCollisions(true);
-		for (int i = 0; i < Cameras.size(); i++)
+		for (size_t i = 0; i < Cameras.size(); i++)
 		{
 			Cameras[i]->setOrientation(old_camera_orientation);
 		}
