@@ -64,6 +64,8 @@ typedef Ogre::Ray Ray;
 typedef Ogre::Matrix3 Matrix3;
 typedef Ogre::Plane Plane;
 
+typedef unsigned int uint;
+
 namespace SBS {
 
 const Real pi = 3.14159265;
