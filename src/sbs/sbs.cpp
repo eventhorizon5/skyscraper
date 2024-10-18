@@ -3875,7 +3875,7 @@ void SBS::EnableMalfunctions(bool value)
 		}
 	}
 
-	for (int i = 0; i < EscalatorArray.size(); i++)
+	for (size_t i = 0; i < EscalatorArray.size(); i++)
 	{
 		Escalator *escalator = EscalatorArray[i];
 		if (escalator)
@@ -4352,7 +4352,7 @@ void SBS::MemoryReport()
 	//mesh memory
 	{
 		size_t total = 0;
-		for (int i = 0; i < meshes.size(); i++)
+		for (size_t i = 0; i < meshes.size(); i++)
 			total += meshes[i]->GetSize();
 		Report("Meshes: " + ToString(total / 1024) + " kb");
 	}

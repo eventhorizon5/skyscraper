@@ -1159,7 +1159,7 @@ unsigned int MeshObject::GetVertexCount()
 {
 	unsigned int total = 0;
 
-	for (int i = 0; i < Walls.size(); i++)
+	for (size_t i = 0; i < Walls.size(); i++)
 	{
 		if (Walls[i])
 			total += Walls[i]->GetVertexCount();
@@ -1172,7 +1172,7 @@ unsigned int MeshObject::GetTriangleCount(const std::string &material, bool tota
 {
 	unsigned int tris = 0;
 
-	for (int i = 0; i < Walls.size(); i++)
+	for (size_t i = 0; i < Walls.size(); i++)
 	{
 		if (Walls[i])
 		{

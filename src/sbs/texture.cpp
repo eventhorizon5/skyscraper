@@ -1684,7 +1684,7 @@ bool TextureManager::SetTextureInfo(int index, TextureManager::TextureInfo &info
 
 void TextureManager::IncrementTextureUsage(const std::string &name)
 {
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == name)
 		{
@@ -1696,7 +1696,7 @@ void TextureManager::IncrementTextureUsage(const std::string &name)
 
 void TextureManager::DecrementTextureUsage(const std::string &name)
 {
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == name)
 		{

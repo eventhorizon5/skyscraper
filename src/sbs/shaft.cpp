@@ -106,7 +106,7 @@ Shaft::~Shaft()
 	//destructor
 
 	//delete levels
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 	{
 		if (Levels[i])
 			delete Levels[i];
@@ -133,7 +133,7 @@ Shaft::~Shaft()
 
 Shaft::Level* Shaft::GetLevel(int floor)
 {
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 	{
 		if (Levels[i]->GetFloor() == floor)
 			return Levels[i];
@@ -483,7 +483,7 @@ bool Shaft::ReportError(const std::string &message)
 
 void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
@@ -892,7 +892,7 @@ void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 				Elevator *elevator = sbs->GetElevator(parent->elevators[i]);
 				if (elevator)
 				{
-					for (int j = 1; j <= elevator->GetCarCount(); j++)
+					for (size_t j = 1; j <= elevator->GetCarCount(); j++)
 					{
 						ElevatorCar *car = elevator->GetCar(j);
 
@@ -1031,7 +1031,7 @@ Light* Shaft::Level::AddLight(const std::string &name, int type)
 
 Light* Shaft::Level::GetLight(const std::string &name)
 {
-	for (int i = 0; i < lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i]->GetName() == name)
 			return lights[i];
@@ -1243,7 +1243,7 @@ Door* Shaft::Level::CreateDoor(std::string name, const std::string &open_sound, 
 
 Door* Shaft::Level::GetDoor(const std::string &name)
 {
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i]->GetName() == name)
 			return DoorArray[i];
