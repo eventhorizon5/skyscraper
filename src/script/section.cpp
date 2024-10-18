@@ -147,7 +147,7 @@ std::string ScriptProcessor::Section::GetBeforeEquals(const std::string &string,
 	//if a space is missing, find start of numeric characters
 	if (loc == -1)
 	{
-		for (int i = 0; i < str.size(); i++)
+		for (int i = 0; i < (int)str.size(); i++)
 		{
 			if (IsNumeric(str[i]))
 			{

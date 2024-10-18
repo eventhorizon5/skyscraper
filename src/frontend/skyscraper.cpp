@@ -838,7 +838,7 @@ bool Skyscraper::Initialize()
 	//set up default material shader scheme
 	if (RTSS == true)
 	{
-		for (int i = 0; i < mViewports.size(); i++)
+		for (size_t i = 0; i < mViewports.size(); i++)
 		{
 			mViewports[i]->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 		}
@@ -1691,10 +1691,10 @@ std::string Skyscraper::SelectBuilding()
 		filelist2[i] = filelist2[i].substr(0, filelist2[i].length() - 4);
 	}
 
-	for (int i = 0; i < filelist2.size(); i++)
+	for (size_t i = 0; i < filelist2.size(); i++)
 	{
 		bool found = false;
-		for (int j = 0; j < filelist.size(); j++)
+		for (size_t j = 0; j < filelist.size(); j++)
 		{
 			if (filelist[j] == filelist2[i])
 			{
@@ -2124,7 +2124,7 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	//attach caelum to running viewport
 	try
 	{
-		for (int i = 0; i < mViewports.size(); i++)
+		for (size_t i = 0; i < mViewports.size(); i++)
 		{
 			mCaelumSystem->attachViewport(mViewports[i]);
 		}
@@ -2188,7 +2188,7 @@ void Skyscraper::UpdateSky()
 
 	if (mCaelumSystem)
 	{
-		for (int i = 0; i < mCameras.size(); i++)
+		for (size_t i = 0; i < mCameras.size(); i++)
 		{
 			mCaelumSystem->notifyCameraChanged(mCameras[i]);
 		}
@@ -2369,7 +2369,7 @@ void Skyscraper::RefreshViewport()
 
 	if (Headless == false)
 	{
-		for (int i = 0; i < mViewports.size(); i++)
+		for (size_t i = 0; i < mViewports.size(); i++)
 		{
 			mViewports[i]->_updateDimensions();
 		}
