@@ -369,7 +369,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	if (AssignedShaft <= 0)
 		return ReportError("Not assigned to a shaft");
 
-	for (int i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		if (Controllers[i] < 0)
 			return ReportError("Invalid value for Controller");
@@ -396,7 +396,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	GetShaft()->AddElevator(Number);
 
 	//add elevator to associated dispatch controllers
-	for (int i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < (size_t)Controllers.size(); i++)
 	{
 		if (sbs->GetController(Controllers[i]))
 			sbs->GetController(Controllers[i])->AddElevator(Number);
@@ -1316,7 +1316,7 @@ void Elevator::MoveElevatorToFloor()
 		Notified = false;
 
 		//reset arrival status on controllers
-		for (int i = 0; i < (int)Controllers.size(); i++)
+		for (size_t i = 0; i < Controllers.size(); i++)
 		{
 			if (sbs->GetController(Controllers[i]))
 				sbs->GetController(Controllers[i])->ResetArrival(Number);
@@ -2058,7 +2058,7 @@ void Elevator::FinishMove()
 					int floor = GetFloorForCar(i, GotoFloor);
 
 					//notify dispatch controllers of arrival
-					for (int i = 0; i < (int)Controllers.size(); i++)
+					for (size_t i = 0; i < Controllers.size(); i++)
 					{
 						if (sbs->GetController(Controllers[i]))
 							sbs->GetController(Controllers[i])->ElevatorArrived(Number, floor, GetArrivalDirection(floor));
@@ -4186,7 +4186,7 @@ std::vector<Floor*> Elevator::GetLobbies()
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		for (int j = 0; j < Cars[i]->GetServicedFloorCount(); j++)
+		for (size_t j = 0; j < Cars[i]->GetServicedFloorCount(); j++)
 		{
 			int num = Cars[i]->GetServicedFloor(j);
 
@@ -4738,7 +4738,7 @@ void Elevator::SameFloorArrival(int floor, int direction)
 		return;
 	}
 
-	for (int i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		DispatchController *controller = sbs->GetController(Controllers[i]);
 
@@ -4779,7 +4779,7 @@ void Elevator::AddController(int controller)
 		return;
 
 	//exit if already in table
-	for (size_t i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		if (Controllers[i] == controller)
 			return;
@@ -4792,7 +4792,7 @@ void Elevator::RemoveController(int controller)
 {
 	//remove a controller from this elevator
 
-	for (size_t i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		if (Controllers[i] == controller)
 		{
@@ -4806,7 +4806,7 @@ bool Elevator::GetCallStatus(int floor, bool &up, bool &down)
 {
 	//returns call status for the specified floor
 
-	for (int i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		bool result = false;
 		if (sbs->GetController(Controllers[i]))
@@ -4848,7 +4848,7 @@ void Elevator::Malfunction()
 
 	Report("Malfunction");
 
-	int type = (int)rnd_type->Get(2);
+	size_t type = rnd_type->Get(2);
 	if (type == 0)
 	{
 		//full malfunction
@@ -4856,7 +4856,7 @@ void Elevator::Malfunction()
 		SetRunState(false);
 		ResetQueue(true, true);
 
-		for (int i = 0; i < Cars.size(); i++)
+		for (size_t i = 0; i < Cars.size(); i++)
 		{
 			if (Cars[i])
 			{
