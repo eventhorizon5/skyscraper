@@ -961,7 +961,7 @@ CallStation* Floor::GetCallStationForElevator(int elevator)
 
 CallStation* Floor::GetCallStation(int number)
 {
-	for (int i = 0; i < (int)CallStationArray.size(); i++)
+	for (size_t i = 0; i < CallStationArray.size(); i++)
 	{
 		if (CallStationArray[i])
 		{
@@ -1264,7 +1264,7 @@ Door* Floor::GetDoor(int number)
 
 Door* Floor::GetDoor(const std::string &name)
 {
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i]->GetName() == name)
 			return DoorArray[i];
@@ -1457,7 +1457,7 @@ Light* Floor::AddLight(const std::string &name, int type)
 
 Light* Floor::GetLight(const std::string &name)
 {
-	for (int i = 0; i < lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i]->GetName() == name)
 			return lights[i];

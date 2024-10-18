@@ -184,7 +184,7 @@ Floor* FloorManager::GetIndex(int index)
 
 Floor* FloorManager::GetByID(const std::string &id)
 {
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object)
 		{
@@ -197,7 +197,7 @@ Floor* FloorManager::GetByID(const std::string &id)
 
 Floor* FloorManager::GetByNumberID(const std::string &id)
 {
-	for (int i = 0; i < (int)Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object)
 		{
@@ -749,7 +749,7 @@ Door* DoorManager::CreateDoor(std::string name, const std::string &open_sound, c
 
 Door* DoorManager::GetDoor(const std::string &name)
 {
-	for (int i = 0; i < Array.size(); i++)
+	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i]->GetName() == name)
 			return Array[i];

@@ -87,7 +87,7 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 Stairwell::~Stairwell()
 {
 	//delete levels
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 	{
 		if (Levels[i])
 			delete Levels[i];
@@ -110,7 +110,7 @@ Stairwell::~Stairwell()
 
 Stairwell::Level* Stairwell::GetLevel(int floor)
 {
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 	{
 		if (Levels[i]->GetFloor() == floor)
 			return Levels[i];
@@ -349,7 +349,7 @@ bool Stairwell::ReportError(const std::string &message)
 
 void Stairwell::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
@@ -893,7 +893,7 @@ Door* Stairwell::Level::CreateDoor(std::string name, const std::string &open_sou
 
 Door* Stairwell::Level::GetDoor(const std::string &name)
 {
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i]->GetName() == name)
 			return DoorArray[i];
@@ -1031,7 +1031,7 @@ Light* Stairwell::Level::AddLight(const std::string &name, int type)
 
 Light* Stairwell::Level::GetLight(const std::string &name)
 {
-	for (int i = 0; i < lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i]->GetName() == name)
 			return lights[i];
