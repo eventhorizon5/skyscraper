@@ -1139,7 +1139,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string buffer;
 		SplitString(tempdata, LineData.substr(loc1 + 1, loc2 - loc1 - 1), ',');
-		for (int i = 0; i < (int)tempdata.size(); i++)
+		for (size_t i = 0; i < tempdata.size(); i++)
 		{
 			buffer = Calc(tempdata[i]);
 			tempdata[i] = buffer;
@@ -1182,7 +1182,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::string buffer;
 		SplitString(tempdata, LineData.substr(loc1 + 1, loc2 - loc1 - 1), ',');
-		for (int i = 0; i < (int)tempdata.size(); i++)
+		for (size_t i = 0; i < tempdata.size(); i++)
 		{
 			buffer = Calc(tempdata[i]);
 			tempdata[i] = buffer;

@@ -738,7 +738,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			controller = Simcore->NewController(Simcore->GetControllerCount() + 1);
 			controller->DestinationDispatch = false;
 			controller->Name = "Dispatch Controller " + ToString(Simcore->GetControllerCount());
-			for (int i = 0; i < (int)callbutton_elevators.size(); i++)
+			for (size_t i = 0; i < callbutton_elevators.size(); i++)
 				controller->AddElevator(callbutton_elevators[i]);
 		}
 
@@ -1572,11 +1572,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		//check numeric values
-		for (int i = 1; i <= 1; i++)
-		{
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
-		}
+		if (!IsNumeric(tempdata[1]))
+			return ScriptError("Invalid value: " + tempdata[1]);
 
 		int elevator, carnum;
 		if (!GetElevatorCar(tempdata[0], floor->Number, elevator, carnum))
