@@ -434,7 +434,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	bChime = new wxButton(this, ID_bChime, _("Chime"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bChime"));
 	BoxSizer8->Add(bChime, 1, wxEXPAND, 5);
 	bSelectCurrent = new wxButton(this, ID_bSelectCurrent, _("Select Current Elevator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSelectCurrent"));
-	BoxSizer8->Add(bSelectCurrent, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer8->Add(bSelectCurrent, 1, wxEXPAND, 5);
 	StaticBoxSizer1->Add(BoxSizer8, 1, wxALL|wxALIGN_TOP, 0);
 	BoxSizer9 = new wxBoxSizer(wxVERTICAL);
 	bEnqueueUp = new wxButton(this, ID_bEnqueueUp, _("Enqueue Up"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEnqueueUp"));
