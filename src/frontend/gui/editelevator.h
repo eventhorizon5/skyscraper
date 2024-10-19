@@ -79,6 +79,7 @@ class editelevator: public wxDialog
 		static const long ID_bOpenShaftDoor;
 		static const long ID_bStop;
 		static const long ID_bChime;
+		static const long ID_bSelectCurrent;
 		static const long ID_bEnqueueUp;
 		static const long ID_bEnqueueDown;
 		static const long ID_bClose;
@@ -394,6 +395,7 @@ class editelevator: public wxDialog
 		void On_bNotifyLate_Click(wxCommandEvent& event);
 		void On_bSetID_Click(wxCommandEvent& event);
 		void On_bFan_Click(wxCommandEvent& event);
+		void On_bSelectCurrent_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -427,6 +429,7 @@ class editelevator: public wxDialog
 		wxButton* bOpenShaftDoor;
 		wxButton* bRefresh;
 		wxButton* bResetQueues;
+		wxButton* bSelectCurrent;
 		wxButton* bSetACPFloor;
 		wxButton* bSetAccelJerk;
 		wxButton* bSetAcceleration;

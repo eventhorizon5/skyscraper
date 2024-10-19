@@ -75,6 +75,7 @@ const long editelevator::ID_bOpenManual = wxNewId();
 const long editelevator::ID_bOpenShaftDoor = wxNewId();
 const long editelevator::ID_bStop = wxNewId();
 const long editelevator::ID_bChime = wxNewId();
+const long editelevator::ID_bSelectCurrent = wxNewId();
 const long editelevator::ID_bEnqueueUp = wxNewId();
 const long editelevator::ID_bEnqueueDown = wxNewId();
 const long editelevator::ID_bClose = wxNewId();
@@ -432,6 +433,8 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	BoxSizer8->Add(bStop, 0, wxEXPAND, 0);
 	bChime = new wxButton(this, ID_bChime, _("Chime"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bChime"));
 	BoxSizer8->Add(bChime, 1, wxEXPAND, 5);
+	bSelectCurrent = new wxButton(this, ID_bSelectCurrent, _("Select Current Elevator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSelectCurrent"));
+	BoxSizer8->Add(bSelectCurrent, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(BoxSizer8, 1, wxALL|wxALIGN_TOP, 0);
 	BoxSizer9 = new wxBoxSizer(wxVERTICAL);
 	bEnqueueUp = new wxButton(this, ID_bEnqueueUp, _("Enqueue Up"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEnqueueUp"));
@@ -448,6 +451,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	BoxSizer9->Add(bHoldDoors, 0, wxEXPAND, 0);
 	bStopDoors = new wxButton(this, ID_bStopDoors, _("Stop Doors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStopDoors"));
 	BoxSizer9->Add(bStopDoors, 1, wxEXPAND, 5);
+	BoxSizer9->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(BoxSizer9, 1, wxALL|wxALIGN_TOP, 0);
 	BoxSizer2->Add(StaticBoxSizer1, 1, wxRIGHT|wxALIGN_TOP, 5);
 	BoxSizer1->Add(BoxSizer2, 0, wxEXPAND, 0);
@@ -1088,6 +1092,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bOpenShaftDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bOpenShaftDoor_Click);
 	Connect(ID_bStop,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bStop_Click);
 	Connect(ID_bChime,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bChime_Click);
+	Connect(ID_bSelectCurrent,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSelectCurrent_Click);
 	Connect(ID_bEnqueueUp,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bEnqueueUp_Click);
 	Connect(ID_bEnqueueDown,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bEnqueueDown_Click);
 	Connect(ID_bClose,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bClose_Click);
@@ -1907,6 +1912,19 @@ void editelevator::On_bFan_Click(wxCommandEvent& event)
 {
 	if (car)
 		car->Fan = !car->Fan;
+}
+
+void editelevator::On_bSelectCurrent_Click(wxCommandEvent& event)
+{
+	if (!Simcore)
+		return;
+
+	if (Simcore->InElevator == true && Simcore->camera)
+	{
+		sNumber->SetThumbPosition(Simcore->ElevatorNumber - 1);
+		//sCar->SetThumbPosition(Simcore->CarNumber);
+		//sFloor->SetThumbPosition(Simcore->camera->CurrentFloor);
+	}
 }
 
 }
