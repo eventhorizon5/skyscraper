@@ -111,7 +111,7 @@ void Primitive::AddToParent()
 	else if (type == "Stairwell Level")
 		static_cast<Stairwell::Level*>(GetParent())->AddPrimitive(this);
 	else if (type == "SBS")
-		sbs->RemovePrimitive(this);
+		sbs->AddPrimitive(this);
 }
 
 void Primitive::Loop()
