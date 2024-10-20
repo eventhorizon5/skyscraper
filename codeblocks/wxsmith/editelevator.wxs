@@ -1389,7 +1389,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtFan" variable="txtFan" member="yes">
 													<size>75,-1</size>
-													<tooltip>Interlocks</tooltip>
+													<tooltip>Fan</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1427,7 +1427,7 @@
 													<tooltip>ChimeOnArrival</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
-												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -1437,12 +1437,40 @@
 													<style>wxBU_EXACTFIT</style>
 													<handler function="On_bSetChimeOnArrival_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT93" variable="StaticText93" member="yes">
+													<label>MAlwaysOn:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtMusicAlwaysOn" variable="txtMusicAlwaysOn" member="yes">
+													<size>75,-1</size>
+													<tooltip>MusicAlwaysOn</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bMusicAlwaysOn" variable="bMusicAlwaysOn" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bMusicAlwaysOn_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxALIGN_TOP</flag>
+										<flag>wxLEFT|wxALIGN_TOP</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>

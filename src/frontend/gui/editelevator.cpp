@@ -183,6 +183,9 @@ const long editelevator::ID_bFan = wxNewId();
 const long editelevator::ID_STATICTEXT92 = wxNewId();
 const long editelevator::ID_txtChimeOnArrival = wxNewId();
 const long editelevator::ID_bSetChimeOnArrival = wxNewId();
+const long editelevator::ID_STATICTEXT93 = wxNewId();
+const long editelevator::ID_txtMusicAlwaysOn = wxNewId();
+const long editelevator::ID_bMusicAlwaysOn = wxNewId();
 const long editelevator::ID_STATICTEXT14 = wxNewId();
 const long editelevator::ID_txtFloor = wxNewId();
 const long editelevator::ID_STATICTEXT15 = wxNewId();
@@ -710,7 +713,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	StaticText91 = new wxStaticText(this, ID_STATICTEXT91, _("Fan:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT91"));
 	FlexGridSizer9->Add(StaticText91, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtFan = new wxTextCtrl(this, ID_txtFan, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtFan"));
-	txtFan->SetToolTip(_("Interlocks"));
+	txtFan->SetToolTip(_("Fan"));
 	FlexGridSizer9->Add(txtFan, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFan = new wxButton(this, ID_bFan, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFan"));
 	FlexGridSizer9->Add(bFan, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -720,10 +723,17 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	FlexGridSizer12->Add(StaticText92, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtChimeOnArrival = new wxTextCtrl(this, ID_txtChimeOnArrival, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtChimeOnArrival"));
 	txtChimeOnArrival->SetToolTip(_("ChimeOnArrival"));
-	FlexGridSizer12->Add(txtChimeOnArrival, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer12->Add(txtChimeOnArrival, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetChimeOnArrival = new wxButton(this, ID_bSetChimeOnArrival, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetChimeOnArrival"));
-	FlexGridSizer12->Add(bSetChimeOnArrival, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer11->Add(FlexGridSizer12, 1, wxALL|wxALIGN_TOP, 5);
+	FlexGridSizer12->Add(bSetChimeOnArrival, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText93 = new wxStaticText(this, ID_STATICTEXT93, _("MAlwaysOn:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT93"));
+	FlexGridSizer12->Add(StaticText93, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtMusicAlwaysOn = new wxTextCtrl(this, ID_txtMusicAlwaysOn, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMusicAlwaysOn"));
+	txtMusicAlwaysOn->SetToolTip(_("MusicAlwaysOn"));
+	FlexGridSizer12->Add(txtMusicAlwaysOn, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bMusicAlwaysOn = new wxButton(this, ID_bMusicAlwaysOn, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bMusicAlwaysOn"));
+	FlexGridSizer12->Add(bMusicAlwaysOn, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer11->Add(FlexGridSizer12, 1, wxLEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer2->Add(BoxSizer11, 1, wxALL|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
@@ -1135,6 +1145,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bInterlocks,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bInterlocks_Click);
 	Connect(ID_bFan,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bFan_Click);
 	Connect(ID_bSetChimeOnArrival,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetChimeOnArrival_Click);
+	Connect(ID_bMusicAlwaysOn,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bMusicAlwaysOn_Click);
 	Connect(ID_bResetQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bResetQueues_Click);
 	Connect(ID_bSetUpSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetUpSpeed_Click);
 	Connect(ID_bSetDownSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDownSpeed_Click);
@@ -1438,6 +1449,7 @@ void editelevator::Loop()
 	txtNotifyLate->SetValue(BoolToString(elevator->NotifyLate));
 	txtFan->SetValue(BoolToString(car->Fan));
 	txtChimeOnArrival->SetValue(BoolToString(elevator->ChimeOnArrival));
+	txtMusicAlwaysOn->SetValue(BoolToString(car->MusicAlwaysOn));
 
 	//changeable values
 	if (chkVisible->GetValue() != elevator->IsEnabled)
@@ -1946,6 +1958,12 @@ void editelevator::On_bSetChimeOnArrival_Click(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->ChimeOnArrival = !elevator->ChimeOnArrival;
+}
+
+void editelevator::On_bMusicAlwaysOn_Click(wxCommandEvent& event)
+{
+	if (car)
+		car->MusicAlwaysOn = !car->MusicAlwaysOn;
 }
 
 }

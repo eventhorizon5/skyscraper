@@ -187,6 +187,9 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT92;
 		static const long ID_txtChimeOnArrival;
 		static const long ID_bSetChimeOnArrival;
+		static const long ID_STATICTEXT93;
+		static const long ID_txtMusicAlwaysOn;
+		static const long ID_bMusicAlwaysOn;
 		static const long ID_STATICTEXT14;
 		static const long ID_txtFloor;
 		static const long ID_STATICTEXT15;
@@ -400,6 +403,7 @@ class editelevator: public wxDialog
 		void On_bFan_Click(wxCommandEvent& event);
 		void On_bSelectCurrent_Click(wxCommandEvent& event);
 		void On_bSetChimeOnArrival_Click(wxCommandEvent& event);
+		void On_bMusicAlwaysOn_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -426,6 +430,7 @@ class editelevator: public wxDialog
 		wxButton* bHoldDoors;
 		wxButton* bInterlocks;
 		wxButton* bLevelingOpen;
+		wxButton* bMusicAlwaysOn;
 		wxButton* bNotifyEarly;
 		wxButton* bNotifyLate;
 		wxButton* bOpen;
@@ -585,6 +590,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText90;
 		wxStaticText* StaticText91;
 		wxStaticText* StaticText92;
+		wxStaticText* StaticText93;
 		wxStaticText* StaticText9;
 		wxStaticText* tCar;
 		wxStaticText* tDoor;
@@ -644,6 +650,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtMessageSounds;
 		wxTextCtrl* txtMotor;
 		wxTextCtrl* txtMoveElevator;
+		wxTextCtrl* txtMusicAlwaysOn;
 		wxTextCtrl* txtMusicOn;
 		wxTextCtrl* txtMusicOnMove;
 		wxTextCtrl* txtMusicPosition;
