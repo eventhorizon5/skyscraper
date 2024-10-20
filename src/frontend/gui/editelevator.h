@@ -713,6 +713,7 @@ class editelevator: public wxDialog
 		SBS::Elevator *elevator;
 		SBS::ElevatorCar *car;
 		SBS::ElevatorDoor *door;
+		bool set_current_floor;
 
 		DECLARE_EVENT_TABLE()
 };
