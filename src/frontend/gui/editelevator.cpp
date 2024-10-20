@@ -180,6 +180,9 @@ const long editelevator::ID_bInterlocks = wxNewId();
 const long editelevator::ID_STATICTEXT91 = wxNewId();
 const long editelevator::ID_txtFan = wxNewId();
 const long editelevator::ID_bFan = wxNewId();
+const long editelevator::ID_STATICTEXT92 = wxNewId();
+const long editelevator::ID_txtChimeOnArrival = wxNewId();
+const long editelevator::ID_bSetChimeOnArrival = wxNewId();
 const long editelevator::ID_STATICTEXT14 = wxNewId();
 const long editelevator::ID_txtFloor = wxNewId();
 const long editelevator::ID_STATICTEXT15 = wxNewId();
@@ -322,6 +325,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	wxBoxSizer* BoxSizer7;
 	wxFlexGridSizer* FlexGridSizer10;
 	wxFlexGridSizer* FlexGridSizer11;
+	wxFlexGridSizer* FlexGridSizer12;
 	wxFlexGridSizer* FlexGridSizer4;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxFlexGridSizer* FlexGridSizer8;
@@ -711,6 +715,15 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	bFan = new wxButton(this, ID_bFan, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFan"));
 	FlexGridSizer9->Add(bFan, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(FlexGridSizer9, 0, wxLEFT|wxALIGN_TOP, 5);
+	FlexGridSizer12 = new wxFlexGridSizer(0, 3, 0, 0);
+	StaticText92 = new wxStaticText(this, ID_STATICTEXT92, _("ChimeArrival:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT92"));
+	FlexGridSizer12->Add(StaticText92, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtChimeOnArrival = new wxTextCtrl(this, ID_txtChimeOnArrival, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtChimeOnArrival"));
+	txtChimeOnArrival->SetToolTip(_("ChimeOnArrival"));
+	FlexGridSizer12->Add(txtChimeOnArrival, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetChimeOnArrival = new wxButton(this, ID_bSetChimeOnArrival, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetChimeOnArrival"));
+	FlexGridSizer12->Add(bSetChimeOnArrival, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer11->Add(FlexGridSizer12, 1, wxALL|wxALIGN_TOP, 5);
 	StaticBoxSizer2->Add(BoxSizer11, 1, wxALL|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
@@ -1121,6 +1134,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bSetAutoDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAutoDoors_Click);
 	Connect(ID_bInterlocks,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bInterlocks_Click);
 	Connect(ID_bFan,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bFan_Click);
+	Connect(ID_bSetChimeOnArrival,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetChimeOnArrival_Click);
 	Connect(ID_bResetQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bResetQueues_Click);
 	Connect(ID_bSetUpSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetUpSpeed_Click);
 	Connect(ID_bSetDownSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDownSpeed_Click);
@@ -1423,6 +1437,7 @@ void editelevator::Loop()
 	txtMusicPosition->SetValue(TruncateNumber(car->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.z, 2));
 	txtNotifyLate->SetValue(BoolToString(elevator->NotifyLate));
 	txtFan->SetValue(BoolToString(car->Fan));
+	txtChimeOnArrival->SetValue(BoolToString(elevator->ChimeOnArrival));
 
 	//changeable values
 	if (chkVisible->GetValue() != elevator->IsEnabled)
@@ -1925,6 +1940,12 @@ void editelevator::On_bSelectCurrent_Click(wxCommandEvent& event)
 		sCar->SetThumbPosition(Simcore->CarNumber - 1);
 		//sFloor->SetThumbPosition(Simcore->camera->CurrentFloor);
 	}
+}
+
+void editelevator::On_bSetChimeOnArrival_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->ChimeOnArrival = !elevator->ChimeOnArrival;
 }
 
 }
