@@ -83,6 +83,7 @@ const long editelevator::ID_bCloseManual = wxNewId();
 const long editelevator::ID_bCloseShaftDoor = wxNewId();
 const long editelevator::ID_bHoldDoors = wxNewId();
 const long editelevator::ID_bStopDoors = wxNewId();
+const long editelevator::ID_bMalfunction = wxNewId();
 const long editelevator::ID_STATICTEXT3 = wxNewId();
 const long editelevator::ID_txtNumber = wxNewId();
 const long editelevator::ID_STATICTEXT5 = wxNewId();
@@ -458,7 +459,8 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	BoxSizer9->Add(bHoldDoors, 0, wxEXPAND, 0);
 	bStopDoors = new wxButton(this, ID_bStopDoors, _("Stop Doors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStopDoors"));
 	BoxSizer9->Add(bStopDoors, 1, wxEXPAND, 5);
-	BoxSizer9->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bMalfunction = new wxButton(this, ID_bMalfunction, _("Malfunction"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMalfunction"));
+	BoxSizer9->Add(bMalfunction, 1, wxEXPAND, 5);
 	StaticBoxSizer1->Add(BoxSizer9, 1, wxALL|wxALIGN_TOP, 0);
 	BoxSizer2->Add(StaticBoxSizer1, 1, wxRIGHT|wxALIGN_TOP, 5);
 	BoxSizer1->Add(BoxSizer2, 0, wxEXPAND, 0);
@@ -1123,6 +1125,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bCloseShaftDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bCloseShaftDoor_Click);
 	Connect(ID_bHoldDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bHoldDoors_Click);
 	Connect(ID_bStopDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bStopDoors_Click);
+	Connect(ID_bMalfunction,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bMalfunction_Click);
 	Connect(ID_bSetName,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetName_Click);
 	Connect(ID_bSetID,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetID_Click);
 	Connect(ID_bSetType,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetType_Click);
@@ -1971,6 +1974,12 @@ void editelevator::On_bMusicAlwaysOn_Click(wxCommandEvent& event)
 {
 	if (car)
 		car->MusicAlwaysOn = !car->MusicAlwaysOn;
+}
+
+void editelevator::On_bMalfunction_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->Malfunction();
 }
 
 }
