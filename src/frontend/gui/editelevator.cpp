@@ -1960,6 +1960,7 @@ void editelevator::On_bSelectCurrent_Click(wxCommandEvent& event)
 	{
 		sNumber->SetThumbPosition(Simcore->ElevatorNumber - 1);
 		sCar->SetThumbPosition(Simcore->CarNumber - 1);
+		sFloor->SetThumbPosition(car->GetServicedFloorIndex(Simcore->camera->CurrentFloor));
 		set_current_floor = true;
 	}
 }
