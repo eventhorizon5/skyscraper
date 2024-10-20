@@ -103,6 +103,7 @@ public:
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
 	void RemovePrimitive(Primitive *prim);
+	void RemoveCustomObject(CustomObject *object);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	void RemoveCameraTexture(CameraTexture *cameratexture);
@@ -114,6 +115,8 @@ public:
 	void AddModel(Model *model);
 	Primitive* AddPrimitive(const std::string &name);
 	void AddPrimitive(Primitive *primitive);
+	CustomObject* AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1);
+	void AddCustomObject(CustomObject *object);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names);
@@ -130,6 +133,7 @@ public:
 	std::vector<int> GetDirectFloors(bool include_service);
 	Model* GetModel(std::string name);
 	Primitive* GetPrimitive(std::string name);
+	CustomObject* GetCustomObject(std::string name);
 	RevolvingDoor* AddRevolvingDoor(std::string name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, bool external);
 	void RemoveRevolvingDoor(RevolvingDoor *door);
 	RevolvingDoor* GetRevolvingDoor(int number);
@@ -156,6 +160,9 @@ private:
 
 	//Primitives
 	std::vector<Primitive*> PrimArray;
+
+	//custom objects
+	std::vector<CustomObject*> CustomObjectArray;
 
 	//Controls
 	std::vector<Control*> ControlArray;

@@ -33,6 +33,7 @@
 #include "door.h"
 #include "model.h"
 #include "primitive.h"
+#include "custom.h"
 #include "light.h"
 #include "camera.h"
 #include "route.h"
@@ -175,6 +176,17 @@ Floor::~Floor()
 			delete PrimArray[i];
 		}
 		PrimArray[i] = 0;
+	}
+
+	//delete custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+		{
+			CustomObjectArray[i]->parent_deleting = true;
+			delete CustomObjectArray[i];
+		}
+		CustomObjectArray[i] = 0;
 	}
 
 	//delete lights
@@ -460,6 +472,13 @@ void Floor::Enabled(bool value)
 	{
 		if (PrimArray[i])
 			PrimArray[i]->Enabled(value);
+	}
+
+	//custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+			CustomObjectArray[i]->Enabled(value);
 	}
 
 	//call stations
@@ -1380,6 +1399,19 @@ void Floor::RemovePrimitive(Primitive *prim)
 	}
 }
 
+void Floor::RemoveCustomObject(CustomObject *object)
+{
+	//remove a custom object reference (does not delete the object itself)
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+		{
+			CustomObjectArray.erase(CustomObjectArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void Floor::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -1517,6 +1549,30 @@ void Floor::AddPrimitive(Primitive *primitive)
 	}
 
 	PrimArray.push_back(primitive);
+}
+
+CustomObject* Floor::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
+{
+	//add a custom object
+	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
+	CustomObjectArray.push_back(object);
+	return object;
+}
+
+void Floor::AddCustomObject(CustomObject *object)
+{
+	//add a custom object reference
+
+	if (!object)
+		return;
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+			return;
+	}
+
+	CustomObjectArray.push_back(object);
 }
 
 void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
@@ -1813,6 +1869,21 @@ Primitive* Floor::GetPrimitive(std::string name)
 	{
 		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
 			return PrimArray[i];
+	}
+
+	return 0;
+}
+
+CustomObject* Floor::GetCustomObject(std::string name)
+{
+	//get a custom object by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (SetCaseCopy(CustomObjectArray[i]->GetName(), false) == name)
+			return CustomObjectArray[i];
 	}
 
 	return 0;

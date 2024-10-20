@@ -26,6 +26,7 @@
 #include "mesh.h"
 #include "polymesh.h"
 #include "primitive.h"
+#include "custom.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatordoor.h"
@@ -200,6 +201,17 @@ ElevatorCar::~ElevatorCar()
 			delete PrimArray[i];
 		}
 		PrimArray[i] = 0;
+	}
+
+	//delete custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+		{
+			CustomObjectArray[i]->parent_deleting = true;
+			delete CustomObjectArray[i];
+		}
+		CustomObjectArray[i] = 0;
 	}
 
 	//delete lights
@@ -1030,6 +1042,13 @@ void ElevatorCar::EnableObjects(bool value)
 	{
 		if (PrimArray[i])
 			PrimArray[i]->Enabled(value);
+	}
+
+	//custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+			CustomObjectArray[i]->Enabled(value);
 	}
 
 	//sounds
@@ -2253,6 +2272,19 @@ void ElevatorCar::RemovePrimitive(Primitive *prim)
 	}
 }
 
+void ElevatorCar::RemoveCustomObject(CustomObject *object)
+{
+	//remove a custom object reference (does not delete the object itself)
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+		{
+			CustomObjectArray.erase(CustomObjectArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void ElevatorCar::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -2417,6 +2449,30 @@ void ElevatorCar::AddPrimitive(Primitive *primitive)
 	}
 
 	PrimArray.push_back(primitive);
+}
+
+CustomObject* ElevatorCar::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
+{
+	//add a custom object
+	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
+	CustomObjectArray.push_back(object);
+	return object;
+}
+
+void ElevatorCar::AddCustomObject(CustomObject *object)
+{
+	//add a custom object reference
+
+	if (!object)
+		return;
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+			return;
+	}
+
+	CustomObjectArray.push_back(object);
 }
 
 void ElevatorCar::AddDisplayFloor(int floor)
@@ -2616,6 +2672,21 @@ Primitive* ElevatorCar::GetPrimitive(std::string name)
 	{
 		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
 			return PrimArray[i];
+	}
+
+	return 0;
+}
+
+CustomObject* ElevatorCar::GetCustomObject(std::string name)
+{
+	//get a custom object by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (SetCaseCopy(CustomObjectArray[i]->GetName(), false) == name)
+			return CustomObjectArray[i];
 	}
 
 	return 0;

@@ -253,6 +253,7 @@ bool Primitive::Attach(const std::string &meshname, const Vector3 &position, con
 	//move to position and specified offset
 	Move(position);
 	SetRotation(rotation);
+
 	Init(false);
 
 	return true;
