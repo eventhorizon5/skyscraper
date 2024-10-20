@@ -51,6 +51,7 @@
 #include "sound.h"
 #include "model.h"
 #include "primitive.h"
+#include "custom.h"
 #include "timer.h"
 #include "profiler.h"
 #include "controller.h"
@@ -317,6 +318,17 @@ SBS::~SBS()
 			delete PrimArray[i];
 		}
 		PrimArray[i] = 0;
+	}
+
+	//delete custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+		{
+			CustomObjectArray[i]->parent_deleting = true;
+			delete CustomObjectArray[i];
+		}
+		CustomObjectArray[i] = 0;
 	}
 
 	//delete lights
@@ -2759,6 +2771,19 @@ void SBS::RemovePrimitive(Primitive *prim)
 	}
 }
 
+void SBS::RemoveCustomObject(CustomObject *object)
+{
+	//remove a custom object reference (does not delete the object itself)
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+		{
+			CustomObjectArray.erase(CustomObjectArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void SBS::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -3065,7 +3090,7 @@ Primitive* SBS::AddPrimitive(const std::string &name)
 
 void SBS::AddPrimitive(Primitive *primitive)
 {
-	//add a model reference
+	//add a primitive reference
 
 	if (!primitive)
 		return;
@@ -3077,6 +3102,30 @@ void SBS::AddPrimitive(Primitive *primitive)
 	}
 
 	PrimArray.push_back(primitive);
+}
+
+CustomObject* SBS::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
+{
+	//add a custom object
+	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
+	CustomObjectArray.push_back(object);
+	return object;
+}
+
+void SBS::AddCustomObject(CustomObject *object)
+{
+	//add a custom object reference
+
+	if (!object)
+		return;
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+			return;
+	}
+
+	CustomObjectArray.push_back(object);
 }
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
@@ -4214,6 +4263,21 @@ Primitive* SBS::GetPrimitive(std::string name)
 	{
 		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
 			return PrimArray[i];
+	}
+
+	return 0;
+}
+
+CustomObject* SBS::GetCustomObject(std::string name)
+{
+	//get a custom object by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (SetCaseCopy(CustomObjectArray[i]->GetName(), false) == name)
+			return CustomObjectArray[i];
 	}
 
 	return 0;

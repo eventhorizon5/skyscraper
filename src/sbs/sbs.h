@@ -111,6 +111,7 @@ namespace SBS {
 	class PolyMesh;
 	class Utility;
 	class GeometryController;
+	class CustomObject;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -285,6 +286,7 @@ public:
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
 	void RemovePrimitive(Primitive *prim);
+	void RemoveCustomObject(CustomObject *object);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	void RemoveController(DispatchController *controller);
@@ -302,6 +304,8 @@ public:
 	void AddModel(Model *model);
 	Primitive* AddPrimitive(const std::string &name);
 	void AddPrimitive(Primitive *primitive);
+	CustomObject* AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1);
+	void AddCustomObject(CustomObject *object);
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
@@ -376,6 +380,7 @@ public:
 	Light* GetLight(std::string name);
 	Model* GetModel(std::string name);
 	Primitive* GetPrimitive(std::string name);
+	CustomObject* GetCustomObject(std::string name);
 	FloorManager* GetFloorManager();
 	ElevatorManager* GetElevatorManager();
 	ShaftManager* GetShaftManager();
@@ -514,6 +519,9 @@ private:
 
 	//person objects
 	std::vector<Person*> PersonArray;
+
+	//custom objects
+	std::vector<CustomObject*> CustomObjectArray;
 
 	int ObjectCount; //number of simulator objects
 

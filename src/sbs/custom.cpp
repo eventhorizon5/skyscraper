@@ -91,7 +91,7 @@ void CustomObject::RemoveFromParent()
 {
 	std::string type = GetParent()->GetType();
 
-	/*if (type == "ElevatorCar")
+	if (type == "ElevatorCar")
 		static_cast<ElevatorCar*>(GetParent())->RemoveCustomObject(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->RemoveCustomObject(this);
@@ -100,14 +100,14 @@ void CustomObject::RemoveFromParent()
 	else if (type == "Stairwell Level")
 		static_cast<Stairwell::Level*>(GetParent())->RemoveCustomObject(this);
 	else if (type == "SBS")
-		sbs->RemoveCustomObject(this);*/
+		sbs->RemoveCustomObject(this);
 }
 
 void CustomObject::AddToParent()
 {
 	std::string type = GetParent()->GetType();
 
-	/*if (type == "ElevatorCar")
+	if (type == "ElevatorCar")
 		static_cast<ElevatorCar*>(GetParent())->AddCustomObject(this);
 	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->AddCustomObject(this);
@@ -116,7 +116,7 @@ void CustomObject::AddToParent()
 	else if (type == "Stairwell Level")
 		static_cast<Stairwell::Level*>(GetParent())->AddCustomObject(this);
 	else if (type == "SBS")
-		sbs->AddCustomObject(this);*/
+		sbs->AddCustomObject(this);
 }
 
 void CustomObject::Loop()
