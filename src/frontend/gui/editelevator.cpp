@@ -1288,6 +1288,7 @@ void editelevator::OnInit()
 	last_elevator_count = 0;
 	last_car_count = 0;
 	last_door_count = 0;
+	set_current_floor = false;
 
 	if (Simcore->GetElevatorCount() > 0)
 	{
@@ -1344,6 +1345,12 @@ void editelevator::Loop()
 
 		//set floor range slider
 		sFloor->SetScrollbar(0, 1, car->GetServicedFloorCount(), 1);
+
+		if (set_current_floor == true)
+		{
+			sFloor->SetThumbPosition(car->GetServicedFloorIndex(Simcore->camera->CurrentFloor));
+			set_current_floor = false;
+		}
 
 		//set car range slider
 		sCar->SetScrollbar(0, 1, car_count, 1);
@@ -1950,7 +1957,7 @@ void editelevator::On_bSelectCurrent_Click(wxCommandEvent& event)
 	{
 		sNumber->SetThumbPosition(Simcore->ElevatorNumber - 1);
 		sCar->SetThumbPosition(Simcore->CarNumber - 1);
-		sFloor->SetThumbPosition(car->GetServicedFloorIndex(Simcore->camera->CurrentFloor));
+		set_current_floor = true;
 	}
 }
 
