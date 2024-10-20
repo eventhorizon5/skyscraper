@@ -102,12 +102,12 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		std::vector<std::string> filenames;
 		if (force == true)
 		{
-			for (int i = 0; i < params - 6; i++)
+			for (int i = 0; i < params - 5; i++)
 				filenames.push_back(tempdata[i]);
 		}
 		else
 		{
-			for (int i = 0; i < params - 5; i++)
+			for (int i = 0; i < params - 4; i++)
 				filenames.push_back(tempdata[i]);
 		}
 
