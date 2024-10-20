@@ -184,6 +184,9 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT91;
 		static const long ID_txtFan;
 		static const long ID_bFan;
+		static const long ID_STATICTEXT92;
+		static const long ID_txtChimeOnArrival;
+		static const long ID_bSetChimeOnArrival;
 		static const long ID_STATICTEXT14;
 		static const long ID_txtFloor;
 		static const long ID_STATICTEXT15;
@@ -396,6 +399,7 @@ class editelevator: public wxDialog
 		void On_bSetID_Click(wxCommandEvent& event);
 		void On_bFan_Click(wxCommandEvent& event);
 		void On_bSelectCurrent_Click(wxCommandEvent& event);
+		void On_bSetChimeOnArrival_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -436,6 +440,7 @@ class editelevator: public wxDialog
 		wxButton* bSetArrivalDelay;
 		wxButton* bSetAutoDoors;
 		wxButton* bSetAutoEnable;
+		wxButton* bSetChimeOnArrival;
 		wxButton* bSetDecelJerk;
 		wxButton* bSetDeceleration;
 		wxButton* bSetDepartureDelay;
@@ -579,6 +584,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText90;
 		wxStaticText* StaticText91;
+		wxStaticText* StaticText92;
 		wxStaticText* StaticText9;
 		wxStaticText* tCar;
 		wxStaticText* tDoor;
@@ -596,6 +602,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtAutoEnable;
 		wxTextCtrl* txtBrakes;
 		wxTextCtrl* txtCameraOffset;
+		wxTextCtrl* txtChimeOnArrival;
 		wxTextCtrl* txtDecelJerk;
 		wxTextCtrl* txtDeceleration;
 		wxTextCtrl* txtDepartureDelay;
