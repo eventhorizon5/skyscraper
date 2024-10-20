@@ -87,6 +87,7 @@ class editelevator: public wxDialog
 		static const long ID_bCloseShaftDoor;
 		static const long ID_bHoldDoors;
 		static const long ID_bStopDoors;
+		static const long ID_bMalfunction;
 		static const long ID_STATICTEXT3;
 		static const long ID_txtNumber;
 		static const long ID_STATICTEXT5;
@@ -404,6 +405,7 @@ class editelevator: public wxDialog
 		void On_bSelectCurrent_Click(wxCommandEvent& event);
 		void On_bSetChimeOnArrival_Click(wxCommandEvent& event);
 		void On_bMusicAlwaysOn_Click(wxCommandEvent& event);
+		void On_bMalfunction_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -430,6 +432,7 @@ class editelevator: public wxDialog
 		wxButton* bHoldDoors;
 		wxButton* bInterlocks;
 		wxButton* bLevelingOpen;
+		wxButton* bMalfunction;
 		wxButton* bMusicAlwaysOn;
 		wxButton* bNotifyEarly;
 		wxButton* bNotifyLate;
