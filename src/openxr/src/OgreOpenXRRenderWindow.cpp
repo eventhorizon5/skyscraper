@@ -249,7 +249,8 @@ namespace Ogre {
         }
       }
       //mEyeCameras[k]->setCustomViewMatrix(true, viewMatrix);
-      mEyeCameras[k]->setPosition(XRPosition[k] + position);
+      //mEyeCameras[k]->setPosition(XRPosition[k] + position);
+      mEyeCameras[k]->setPosition(position);
       mEyeCameras[k]->setOrientation(orientation);
       mEyeCameras[k]->setCustomProjectionMatrix(true, eyeProjectionMatrix);
       //mEyeCameras[k]->setFarClipDistance(3000);
