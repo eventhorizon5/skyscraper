@@ -3210,7 +3210,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		//get prim object
+		//get custom object
 		CustomObject *object = 0;
 		if (floorobj)
 			object = floorobj->GetCustomObject(tempdata[1]);
@@ -3285,7 +3285,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		//get prim object
+		//get custom object
 		CustomObject *object = 0;
 		if (floorobj)
 			object = floorobj->GetCustomObject(tempdata[1]);
@@ -3310,10 +3310,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//CustomWall command
-	if (StartsWithNoCase(LineData, "customwall"))
+	if (StartsWithNoCase(LineData, "customwall "))
 	{
 		//get data
-		int params = SplitData(LineData, 10);
+		int params = SplitData(LineData, 11);
 
 		if (params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -3360,7 +3360,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		//get prim object
+		//get custom object
 		CustomObject *object = 0;
 		if (floorobj)
 			object = floorobj->GetCustomObject(tempdata[1]);
@@ -3435,7 +3435,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		//get prim object
+		//get custom object
 		CustomObject *object = 0;
 		if (floorobj)
 			object = floorobj->GetCustomObject(tempdata[1]);
@@ -3452,6 +3452,150 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
 		StoreCommand(Simcore->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), false));
+
+		return sNextLine;
+	}
+
+	//CustomWallBox command
+	if (StartsWithNoCase(LineData, "customwallbox "))
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 17)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i <= 10; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get custom object
+		CustomObject *object = 0;
+		if (floorobj)
+			object = floorobj->GetCustomObject(tempdata[1]);
+		if (elevatorcarobj)
+			object = elevatorcarobj->GetCustomObject(tempdata[1]);
+		if (shaftobj)
+			object = shaftobj->GetCustomObject(tempdata[1]);
+		if (stairsobj)
+			object = stairsobj->GetCustomObject(tempdata[1]);
+		if (sbs)
+			object = sbs->GetCustomObject(tempdata[1]);
+
+		if (!object)
+			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
+
+		StoreCommand(Simcore->CreateWallBox(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
+
+		return sNextLine;
+	}
+
+	//CustomWallBox2 command
+	if (StartsWithNoCase(LineData, "customwallbox2"))
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 17)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i <= 11; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get prim object
+		CustomObject *object = 0;
+		if (floorobj)
+			object = floorobj->GetCustomObject(tempdata[1]);
+		if (elevatorcarobj)
+			object = elevatorcarobj->GetCustomObject(tempdata[1]);
+		if (shaftobj)
+			object = shaftobj->GetCustomObject(tempdata[1]);
+		if (stairsobj)
+			object = stairsobj->GetCustomObject(tempdata[1]);
+		if (sbs)
+			object = sbs->GetCustomObject(tempdata[1]);
+
+		if (!object)
+			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
+
+		StoreCommand(Simcore->CreateWallBox2(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
 
 		return sNextLine;
 	}
