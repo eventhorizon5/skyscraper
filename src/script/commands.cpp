@@ -3391,7 +3391,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 4; i <= 15; i++)
+		for (int i = 4; i <= 14; i++)
 		{
 			if (i == 11)
 				i = 13;
@@ -3451,7 +3451,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15])));
+		StoreCommand(Simcore->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), false));
 
 		return sNextLine;
 	}
