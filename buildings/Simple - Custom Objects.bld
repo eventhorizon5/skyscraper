@@ -500,11 +500,16 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
     CreateCustom Floor 0, Object1, 5, 5, -3, 0, 0, 0, 100, 1
     CustomWall Floor 0, Object1, MyWall, Default, 0, 0, -2, 0, 2, 2, 2, 0, 0, 1, 1
+    CustomFloor Floor 0, Object1, MyFloor, Default, 0, -2, -2, 2, 2, 0, 0, false, false, 1, 1
     FinishCustom Floor 0, Object1
 
-    CreateCustom Floor 0, Object2, -5, 5, -3, 0, 0, 0, 100, 1
-    CustomFloor Floor 0, Object2, MyFloor, Default, 0, -2, -2, 2, 2, 0, 0, false, false, 1, 1
+    CreateCustom Floor 0, Object2, 0, 0, -3, 0, 0, 0, 100, 1
+    CustomWallBox Floor 0, Object2, MyBox, Default, -2, -2, 2, 2, 4, 0, 1, 1, false, false, false, false, true
     FinishCustom Floor 0, Object2
+
+    CreateCustom Floor 0, Object3, -5, 0, -3, 0, 0, 0, 100, 1
+    CustomWallBox2 Floor 0, Object3, MyBox, Default, 0, 0, 4, 4, 4, 0, 1, 1, false, false, false, false, true
+    FinishCustom Floor 0, Object3
 
 <EndFloor>
 
