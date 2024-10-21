@@ -3237,7 +3237,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 12);
 
-		if (params != 3 || params != 5)
+		if (params != 2 && params != 5)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -3301,7 +3301,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		if (params == 3)
+		if (params == 2)
 			object->Finish();
 		else
 			object->Finish(true, ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
@@ -3376,7 +3376,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(sbs->AddWall(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
+		StoreCommand(Simcore->AddWall(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -3451,7 +3451,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(sbs->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15])));
+		StoreCommand(Simcore->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15])));
 
 		return sNextLine;
 	}
