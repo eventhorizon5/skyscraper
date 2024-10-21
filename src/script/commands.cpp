@@ -3381,6 +3381,81 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//CustomFloor command
+	if (StartsWithNoCase(LineData, "customfloor"))
+	{
+		//get data
+		int params = SplitData(LineData, 11);
+
+		if (params != 15)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i <= 15; i++)
+		{
+			if (i == 11)
+				i = 13;
+
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::string name = tempdata[0];
+		TrimString(name);
+		Object *obj = Simcore->GetObject(name);
+
+		if (!obj)
+			return ScriptError("Invalid object " + name);
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		if (elevatorobj)
+			elevatorcarobj = elevatorobj->GetCar(0);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//get prim object
+		CustomObject *object = 0;
+		if (floorobj)
+			object = floorobj->GetCustomObject(tempdata[1]);
+		if (elevatorcarobj)
+			object = elevatorcarobj->GetCustomObject(tempdata[1]);
+		if (shaftobj)
+			object = shaftobj->GetCustomObject(tempdata[1]);
+		if (stairsobj)
+			object = stairsobj->GetCustomObject(tempdata[1]);
+		if (sbs)
+			object = sbs->GetCustomObject(tempdata[1]);
+
+		if (!object)
+			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
+
+		StoreCommand(sbs->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15])));
+
+		return sNextLine;
+	}
+
 	//Rotate command
 	/*if (StartsWithNoCase(LineData, "rotate "))
 	{
