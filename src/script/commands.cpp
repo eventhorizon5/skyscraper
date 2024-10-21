@@ -3094,8 +3094,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//CreateCustom command
-	if (StartsWithNoCase(LineData, "createcustom"))
+	//CreateObject command
+	if (StartsWithNoCase(LineData, "createobject"))
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -3166,8 +3166,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//CustomVisible command
-	if (StartsWithNoCase(LineData, "customvisible"))
+	//ObjectVisible command
+	if (StartsWithNoCase(LineData, "objectvisible"))
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -3231,8 +3231,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//FinishCustom command
-	if (StartsWithNoCase(LineData, "finishcustom"))
+	//FinishObject command
+	if (StartsWithNoCase(LineData, "finishobject"))
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -3309,8 +3309,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//CustomWall command
-	if (StartsWithNoCase(LineData, "customwall "))
+	//ObjectWall command
+	if (StartsWithNoCase(LineData, "objectwall "))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -3381,8 +3381,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//CustomFloor command
-	if (StartsWithNoCase(LineData, "customfloor"))
+	//ObjectFloor command
+	if (StartsWithNoCase(LineData, "objectfloor"))
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -3456,8 +3456,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//CustomWallBox command
-	if (StartsWithNoCase(LineData, "customwallbox "))
+	//ObjectWallBox command
+	if (StartsWithNoCase(LineData, "objectwallbox "))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -3529,7 +3529,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//CustomWallBox2 command
-	if (StartsWithNoCase(LineData, "customwallbox2"))
+	if (StartsWithNoCase(LineData, "objectwallbox2"))
 	{
 		//get data
 		int params = SplitData(LineData, 14);
