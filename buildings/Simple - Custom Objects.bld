@@ -504,7 +504,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     FinishObject Floor 0, Object1
 
     CreateObject Floor 0, Object2, 0, 0, -3, 0, 0, 0, 100, 1
-    ObjectWallBox Floor 0, Object2, MyBox, Default, -2, -2, 2, 2, 4, 0, 1, 1, false, false, false, false, true
+    ObjectWallBox Floor 0, Object2, MyBox, Default, -2, 2, -2, 2, 4, 0, 1, 1, false, false, false, false, true
     FinishObject Floor 0, Object2
 
     CreateObject Floor 0, Object3, -5, 0, -3, 0, 0, 0, 100, 1
