@@ -3915,7 +3915,7 @@ void SBS::EnableMalfunctions(bool value)
 {
 	//enable malfunctions
 
-	for (int i = 0; i < elevator_manager->GetCount(); i++)
+	for (int i = 1; i <= elevator_manager->GetCount(); i++)
 	{
 		Elevator *elevator = elevator_manager->Get(i);
 		if (elevator)
