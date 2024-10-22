@@ -186,7 +186,6 @@ void CustomObject::PickUp()
 	if (IsPickedUp() == true)
 		return;
 
-	//pick-up prim (make primitive a child of the camera)
 	RemoveFromParent();
 	ChangeParent(sbs->camera);
 }
