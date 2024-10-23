@@ -302,6 +302,15 @@
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
+											<object class="wxCheckBox" name="ID_chkPower" variable="chkPower" member="yes">
+												<label>Building Power</label>
+												<handler function="On_chkPower_Click" entry="EVT_CHECKBOX" />
+											</object>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
 											<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVerbose" member="yes">
 												<label>Verbose Mode</label>
 												<handler function="On_chkVerbose_Click" entry="EVT_CHECKBOX" />
