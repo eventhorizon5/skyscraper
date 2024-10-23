@@ -163,6 +163,13 @@ void MovingWalkway::Loop()
 
 	SBS_PROFILE("MovingWalkway::Loop");
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+	{
+		sound->Stop();
+		return;
+	}
+
 	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
@@ -328,6 +335,10 @@ void MovingWalkway::MoveSteps()
 void MovingWalkway::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	//cycle run stages if shift-click is performed
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	if (shift == true)
 	{

@@ -207,6 +207,13 @@ void Escalator::Loop()
 
 	SBS_PROFILE("Escalator::Loop");
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+	{
+		sound->Stop();
+		return;
+	}
+
 	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
@@ -455,6 +462,10 @@ void Escalator::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool
 {
 	//cycle run stages if shift-click is performed
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	if (shift == true)
 	{
 		if (Run == 1)
@@ -491,6 +502,10 @@ void Escalator::Timer::Notify()
 
 	SBS_PROFILE("Escalator::Timer::Notify");
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	int result = (int)escalator->rnd_time->Get(escalator->RandomProbability - 1);
 	if (result == 0)
 		escalator->Malfunction();
@@ -501,6 +516,10 @@ void Escalator::EnableMalfunctions(bool value)
 	//enable random malfunctions on this escalator
 
 	if (!malfunction_timer)
+		return;
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
 		return;
 
 	if (value == true)
@@ -520,6 +539,10 @@ void Escalator::Malfunction()
 	//elevator malfunction
 
 	Report("Malfunction");
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	int type = (int)rnd_type->Get(1);
 	if (type == 0)
