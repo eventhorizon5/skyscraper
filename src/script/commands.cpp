@@ -3601,7 +3601,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//Rotate command
-	/*if (StartsWithNoCase(LineData, "rotate "))
+	if (StartsWithNoCase(LineData, "rotate "))
 	{
 		//get data
 		int params = SplitData(LineData, 7);
@@ -3700,7 +3700,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetPosition command
-	if (StartsWithNoCase(LineData, "setposition " && config->SectionNum != 9)
+	if (StartsWithNoCase(LineData, "setposition ") && config->SectionNum != 9)
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -3763,7 +3763,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetPositionRelative command
-	if (linecheck.substr(0, 19) == "setpositionrelative"))
+	if (linecheck.substr(0, 19) == "setpositionrelative")
 	{
 		//get data
 		int params = SplitData(LineData, 20);
@@ -3793,7 +3793,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		obj->SetPositionRelative(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 
 		return sNextLine;
-	}*/
+	}
 
 	//CreateWallObject command
 	if (StartsWithNoCase(LineData, "createwallobject"))
