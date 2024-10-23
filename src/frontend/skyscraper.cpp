@@ -43,6 +43,7 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <fmod.hpp>
+#include <fmod_errors.h>
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "OgreOpenXRRenderWindow.h"
 #endif
@@ -876,7 +877,8 @@ bool Skyscraper::Initialize()
 		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)
 		{
-			ReportFatalError("Error initializing sound - reason " + ToString(result));
+			std::string fmod_result = FMOD_ErrorString(result);
+			ReportFatalError("Error initializing sound:\n" + fmod_result);
 			DisableSound = true;
 		}
 		else
@@ -885,7 +887,8 @@ bool Skyscraper::Initialize()
 			result = soundsys->init(100, FMOD_INIT_NORMAL, &name);
 			if (result != FMOD_OK)
 			{
-				ReportFatalError("Error initializing sound  - reason " + ToString(result));
+				std::string fmod_result = FMOD_ErrorString(result);
+				ReportFatalError("Error initializing sound:\n" + fmod_result);
 				DisableSound = true;
 			}
 			else
@@ -1636,7 +1639,7 @@ void Skyscraper::StartSound()
 #endif
 	if (result != FMOD_OK)
 	{
-		ReportError("Can't load file '" + filename_full + "'");
+		ReportError("Can't load file '" + filename_full + "':\n" + FMOD_ErrorString(result));
 		return;
 	}
 
