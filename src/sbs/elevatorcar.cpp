@@ -739,6 +739,14 @@ void ElevatorCar::Loop()
 
 	SBS_PROFILE("ElevatorCar::Loop");
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+	{
+		idlesound->Stop();
+		musicsound->Stop();
+		return;
+	}
+
 	ControlPressActive = false;
 
 	//perform first-run tasks
