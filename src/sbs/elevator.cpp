@@ -772,6 +772,9 @@ bool Elevator::Stop(bool emergency)
 {
 	//Tells elevator to stop moving, no matter where it is
 
+	if (EmergencyStop > 0)
+		return false;
+
 	if (emergency == true)
 	{
 		//exit if in inspection mode
@@ -1136,6 +1139,12 @@ void Elevator::Loop()
 
 	if (Created == false)
 		return;
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+	{
+		Stop(true);
+	}
 
 	//make sure height value is set
 	if (HeightSet == false)
