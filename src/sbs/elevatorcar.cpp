@@ -744,7 +744,6 @@ void ElevatorCar::Loop()
 	{
 		idlesound->Stop();
 		musicsound->Stop();
-		return;
 	}
 
 	ControlPressActive = false;
@@ -759,7 +758,7 @@ void ElevatorCar::Loop()
 	}
 
 	//play car idle sound if in elevator, or if doors open
-	if (IdleSound != "")
+	if (IdleSound != "" && sbs->GetPower() == true)
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
@@ -793,7 +792,7 @@ void ElevatorCar::Loop()
 	}
 
 	//music processing
-	if (MusicUp != "" || MusicDown != "")
+	if ((MusicUp != "" || MusicDown != "") && sbs->GetPower() == true)
 	{
 		if (MusicAlwaysOn == false) //standard mode
 		{
