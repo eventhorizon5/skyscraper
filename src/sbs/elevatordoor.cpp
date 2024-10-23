@@ -670,6 +670,15 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		playsounds = true;
 	}
 
+	//reset values if power is off
+	if (sbs->GetPower() == false && manual == false)
+	{
+		OpenDoor = 0;
+		WhichDoors = 0;
+		door_changed = false;
+		doors_stopped = false;
+	}
+
 	//play door sounds
 	if (playsounds == true)
 	{
