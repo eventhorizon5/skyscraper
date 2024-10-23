@@ -153,7 +153,7 @@ bool ScriptProcessor::Run()
 	if (processed_runloop == true)
 		processed_runloop = false;
 
-	if (line < (int)BuildingData.size())
+	if (line < (int)BuildingData.size() && line >= 0)
 	{
 		LineData = BuildingData[line];
 		TrimString(LineData);
@@ -1029,7 +1029,7 @@ void ScriptProcessor::ProcessRunloop()
 			InFunction += 1;
 
 			FunctionData data;
-			data.CallLine = -1;
+			data.CallLine = BuildingData.size();
 			data.Name = "runloop";
 
 			in_runloop = true;
