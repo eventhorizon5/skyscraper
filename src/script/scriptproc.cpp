@@ -119,6 +119,7 @@ void ScriptProcessor::Reset()
 	includes.clear();
 	variables.clear();
 	in_runloop = false;
+	processed_runloop = false;
 
 	//reset configuration
 	config->Reset();
@@ -146,8 +147,11 @@ bool ScriptProcessor::Run()
 	int returncode = sContinue;
 	IsFinished = false;
 
-	if (engine->IsRunning() == true)
+	if (engine->IsRunning() == true && processed_runloop == false)
 		ProcessRunloop();
+
+	if (processed_runloop == false)
+		processed_runloop = true;
 
 	if (line < (int)BuildingData.size())
 	{
@@ -1403,7 +1407,10 @@ int ScriptProcessor::ProcessSections()
 			ReplaceLine = true;
 
 		if (data.Name == "runloop")
+		{
 			in_runloop = false;
+			processed_runloop = true;
+		}
 		FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
 		InFunction -= 1;
 		return sNextLine;
