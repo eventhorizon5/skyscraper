@@ -517,7 +517,7 @@ void DirectionalIndicator::Off()
 {
 	//turn off indicator
 
-	SetLights(false, false);
+	SetLights(2, 2);
 }
 
 void DirectionalIndicator::Loop()
