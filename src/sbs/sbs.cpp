@@ -172,6 +172,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
 	Headless = false;
+	power_state = true;
 
 	//create utility object
 	utility = new Utility(this);
@@ -4562,6 +4563,20 @@ Escalator* SBS::GetEscalator(int index)
 	if (index >= 0 && index < EscalatorArray.size())
 		return EscalatorArray[index];
 	return 0;
+}
+
+void SBS::SetPower(bool value)
+{
+	//set building power state
+
+	power_state = value;
+}
+
+bool SBS::GetPower()
+{
+	//return building power state
+
+	return power_state;
 }
 
 }

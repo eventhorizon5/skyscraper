@@ -403,6 +403,8 @@ public:
 	void RegisterEscalator(Escalator *escalator);
 	void UnregisterEscalator(Escalator *escalator);
 	Escalator* GetEscalator(int index);
+	void SetPower(bool value);
+	bool GetPower();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -574,6 +576,9 @@ private:
 
 	//geometry controller
 	GeometryController* geometry;
+
+	//building power state
+	bool power_state;
 };
 
 }

@@ -87,6 +87,7 @@ const long DebugPanel::ID_chkAutoShafts = wxNewId();
 const long DebugPanel::ID_chkAutoStairs = wxNewId();
 const long DebugPanel::ID_chkRandom = wxNewId();
 const long DebugPanel::ID_chkMalfunctions = wxNewId();
+const long DebugPanel::ID_chkPower = wxNewId();
 const long DebugPanel::ID_CHECKBOX1 = wxNewId();
 const long DebugPanel::ID_bFloorList = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
@@ -208,6 +209,9 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	chkMalfunctions = new wxCheckBox(Panel1, ID_chkMalfunctions, _("Malfunctions"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkMalfunctions"));
 	chkMalfunctions->SetValue(false);
 	BoxSizer5->Add(chkMalfunctions, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	chkPower = new wxCheckBox(Panel1, ID_chkPower, _("Building Power"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkPower"));
+	chkPower->SetValue(false);
+	BoxSizer5->Add(chkPower, 1, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkVerbose = new wxCheckBox(Panel1, ID_CHECKBOX1, _("Verbose Mode"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
 	chkVerbose->SetValue(false);
 	BoxSizer5->Add(chkVerbose, 1, wxBOTTOM|wxALIGN_LEFT, 5);
@@ -255,7 +259,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND, 5);
 	bSoundManager = new wxButton(Panel1, ID_bSoundManager, _("Sound Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSoundManager"));
 	BoxSizer10->Add(bSoundManager, 1, wxEXPAND, 5);
-	BoxSizer10->Add(0,0,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -271,6 +275,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
 	Connect(ID_chkRandom,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkRandom_Click);
 	Connect(ID_chkMalfunctions,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkMalfunctions_Click);
+	Connect(ID_chkPower,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkPower_Click);
 	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
 	Connect(ID_bFloorList,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorList_Click);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
@@ -439,6 +444,7 @@ void DebugPanel::OnInit()
 	chkVerbose->SetValue(Simcore->Verbose);
 	chkRandom->SetValue(Simcore->RandomActivity);
 	chkMalfunctions->SetValue(Simcore->Malfunctions);
+	chkPower->SetValue(Simcore->GetPower());
 
 	if (!timer)
 		timer = new Timer(this, Simcore);
@@ -837,6 +843,12 @@ void DebugPanel::On_bEscalator_Click(wxCommandEvent& event)
 	esc->CenterOnScreen();
 	esc->Show();
 	esc->Raise();
+}
+
+void DebugPanel::On_chkPower_Click(wxCommandEvent& event)
+{
+	if (Simcore)
+		Simcore->SetPower(chkPower->GetValue());
 }
 
 }
