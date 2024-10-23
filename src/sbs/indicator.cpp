@@ -98,6 +98,8 @@ Indicator::Indicator(Object *parent, const std::string &sound, const std::string
 
 	//create timer
 	timer = new Timer("Dispatch Timer", this);
+
+	EnableLoop(true);
 }
 
 Indicator::~Indicator()
@@ -213,6 +215,12 @@ bool Indicator::PlaySound()
 	sound->SetLoopState(false);
 	sound->Play();
 	return true;
+}
+
+void Indicator::Loop()
+{
+	if (sbs->GetPower() == false)
+		Off();
 }
 
 }

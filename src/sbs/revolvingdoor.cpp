@@ -145,6 +145,9 @@ RevolvingDoor::~RevolvingDoor()
 
 void RevolvingDoor::OnHit()
 {
+	if (sbs->GetPower() == false)
+		return;
+
 	if (sbs->Verbose)
 		Report("Moving");
 
@@ -179,6 +182,9 @@ void RevolvingDoor::Enabled(bool value)
 void RevolvingDoor::Loop()
 {
 	SBS_PROFILE("RevolvingDoor::Loop");
+
+	if (sbs->GetPower() == false)
+		return;
 
 	if (IsMoving == true)
 		MoveDoor();
@@ -240,6 +246,9 @@ bool RevolvingDoor::ReportError(const std::string &message)
 void RevolvingDoor::Run(bool value)
 {
 	//start or stop the revolving door
+
+	if (sbs->GetPower() == false)
+		return;
 
 	run = value;
 
