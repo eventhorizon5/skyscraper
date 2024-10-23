@@ -3468,6 +3468,120 @@ Object* SBS::GetObject(std::string name, bool case_sensitive)
 
 	ReplaceAll(name, " ", "");
 
+	//use hints to quickly find a reference
+	{
+		//floors
+		bool found = false;
+		std::string tmpname = "Floor";
+		if (case_sensitive == false)
+		{
+			SetCase(name, false);
+			SetCase(tmpname, false);
+
+			if (name.find("floor", 0) == 0)
+				found = true;
+		}
+		else
+		{
+			if (name.find("Floor", 0) == 0)
+				found = true;
+		}
+
+		if (found == true && name.find(":", 0) == std::string::npos)
+		{
+			std::string number = name.substr(5);
+			if (IsNumeric(number))
+			{
+				int floor = ToInt(number);
+				return sbs->GetFloor(floor);
+			}
+		}
+	}
+	{
+		//elevators
+		bool found = false;
+		std::string tmpname = "Elevator";
+		if (case_sensitive == false)
+		{
+			SetCase(name, false);
+			SetCase(tmpname, false);
+
+			if (name.find("elevator", 0) == 0)
+				found = true;
+		}
+		else
+		{
+			if (name.find("Elevator", 0) == 0)
+				found = true;
+		}
+
+		if (found == true && name.find(":", 0) == std::string::npos)
+		{
+			std::string number = name.substr(8);
+			if (IsNumeric(number))
+			{
+				int elevator = ToInt(number);
+				return sbs->GetElevator(elevator);
+			}
+		}
+	}
+	{
+		//shafts
+		bool found = false;
+		std::string tmpname = "Shaft";
+		if (case_sensitive == false)
+		{
+			SetCase(name, false);
+			SetCase(tmpname, false);
+
+			if (name.find("shaft", 0) == 0)
+				found = true;
+		}
+		else
+		{
+			if (name.find("Shaft", 0) == 0)
+				found = true;
+		}
+
+		if (found == true && name.find(":", 0) == std::string::npos)
+		{
+			std::string number = name.substr(5);
+			if (IsNumeric(number))
+			{
+				int shaft = ToInt(number);
+				return sbs->GetShaft(shaft);
+			}
+		}
+	}
+	{
+		//shafts
+		bool found = false;
+		std::string tmpname = "Stairwell";
+		if (case_sensitive == false)
+		{
+			SetCase(name, false);
+			SetCase(tmpname, false);
+
+			if (name.find("stairwell", 0) == 0)
+				found = true;
+		}
+		else
+		{
+			if (name.find("Stairwell", 0) == 0)
+				found = true;
+		}
+
+		if (found == true && name.find(":", 0) == std::string::npos)
+		{
+			std::string number = name.substr(9);
+			if (IsNumeric(number))
+			{
+				int stair = ToInt(number);
+				return sbs->GetStairwell(stair);
+			}
+		}
+	}
+
 	for (size_t i = 0; i < ObjectArray.size(); i++)
 	{
 		if (ObjectArray[i])
