@@ -513,3 +513,8 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
 <EndFloor>
 
+<Function runloop>
+    Rotate Floor0:Object1, 0, 1, 0, 1
+    Move Floor0:Object2, 1, 0, 0, 0.01
+<EndFunction>
+
