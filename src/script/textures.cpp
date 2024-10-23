@@ -72,7 +72,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 12, false);
 
-		if (params < 7)
+		if (params < 6)
 			return ScriptError("Incorrect number of parameters");
 
 		bool force;
