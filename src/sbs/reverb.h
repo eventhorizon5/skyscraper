@@ -50,7 +50,6 @@ private:
 	SoundSystem *soundsys;
 
 	FMOD::Reverb3D *reverb;
-	Vector3 position;
 	float MinDistance;
 	float MaxDistance;
 };
