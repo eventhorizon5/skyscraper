@@ -53,8 +53,8 @@ SoundSystem::~SoundSystem()
 	for (size_t i = 0; i < sounds.size(); i++)
 		delete sounds[i];
 
-	for (size_t i = 0; i < reverbs.size(); i++)
-		delete reverbs[i].object;
+	//for (size_t i = 0; i < reverbs.size(); i++)
+		//delete reverbs[i].object;
 }
 
 void SoundSystem::Loop()
@@ -453,10 +453,11 @@ void SoundSystem::AddReverb(std::string type, const Vector3 &pos, Real min_dista
 	{
 		std::string fmod_result = FMOD_ErrorString(result);
 		ReportError("Can't set reverb attributes:\n" + fmod_result);
-		delete reverb.object;
+		//delete reverb.object;
 		return;
 	}
 
+	Report("Reverb created at " + ToString(global_pos.x) + ", " + ToString(global_pos.y) + ", " + ToString(global_pos.z) + " with type: " + type);
 	reverbs.push_back(reverb);
 }
 
