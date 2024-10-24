@@ -2438,10 +2438,7 @@ size_t TextureManager::GetMemoryUsage()
 	{
 		Ogre::TexturePtr tex = GetTextureByName(textureinfo[i].filename, "General");
 		if (tex)
-		{
-			size_t size = tex->getNumFaces() * Ogre::PixelUtil::getMemorySize(tex->getWidth(), tex->getHeight(), tex->getDepth(), tex->getFormat());
-			result += size;
-		}
+			result += tex->getSize();
 	}
 
 	return result;
