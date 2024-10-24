@@ -26,6 +26,7 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevatorcar.h"
+#include "reverb.h"
 #include "soundsystem.h"
 #include "sound.h"
 
@@ -109,6 +110,16 @@ void Sound::OnMove(bool parent)
 	Velocity.z = vel.z;
 	if (channel)
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
+
+	//adjust reverb wet level based on distance to listener
+	/*Vector3 reverbPos;
+	bool result = GetNearestReverbPosition(reverbPos);
+	if (result == true)
+	{
+		Vector3 listener = system->GetListenerPosition();
+		float distanceSquaredToListener = pow(listener.x - reverbPos.x, 2) + pow(listener.y - reverbPos.y, 2) + pow(listener.z - reverbPos.z, 2);
+		channel->setReverbProperties(0, distanceSquaredToListener);
+	}*/
 }
 
 void Sound::OnRotate(bool parent)
@@ -506,6 +517,62 @@ void Sound::Unload()
 FMOD::Channel* Sound::GetChannel()
 {
 	return channel;
+}
+
+bool Sound::GetNearestReverbPosition(Vector3 &position)
+{
+	std::string type = GetParent()->GetType();
+	position = Vector3::ZERO;
+	bool result = false;
+
+	if (type == "ElevatorCar")
+	{
+		ElevatorCar *car = static_cast<ElevatorCar*>(GetParent());
+		if (car->GetReverb())
+		{
+			position = car->GetReverb()->GetPosition();
+			result = true;
+		}
+	}
+	else if (type == "Floor")
+	{
+		Floor *floor = static_cast<Floor*>(GetParent());
+		Real nearest = 99999999;
+		for (int i = 0; i < floor->GetReverbCount(); i++)
+		{
+			Reverb *reverb = floor->GetReverb(i);
+			if (!reverb)
+				continue;
+
+			Real distance = reverb->GetPosition().distance(position);
+			if (distance < nearest)
+			{
+				nearest = distance;
+				position = reverb->GetPosition();
+				result = true;
+			}
+		}
+	}
+	else if (type == "SBS")
+	{
+		Real nearest = 99999999;
+		for (int i = 0; i < sbs->GetReverbCount(); i++)
+		{
+			Reverb *reverb = sbs->GetReverb(i);
+			if (!reverb)
+				continue;
+
+			Real distance = reverb->GetPosition().distance(position);
+			if (distance < nearest)
+			{
+				nearest = distance;
+				position = reverb->GetPosition();
+				result = true;
+			}
+		}
+	}
+
+	return result;
 }
 
 }

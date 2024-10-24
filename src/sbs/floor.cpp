@@ -2004,5 +2004,16 @@ void Floor::RemoveReverb(Reverb *reverb)
 	}
 }
 
+int Floor::GetReverbCount()
+{
+	return (int)reverbs.size();
+}
+
+Reverb* Floor::GetReverb(int index)
+{
+	if (index >= 0 && index < (int)reverbs.size())
+		return reverbs[index];
+	return 0;
+}
 
 }

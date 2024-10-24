@@ -41,6 +41,7 @@ public:
 	~SoundSystem();
 	void SetListenerPosition(const Vector3 &position);
 	void SetListenerDirection(const Vector3 &front, const Vector3 &top);
+	Vector3 GetListenerPosition() { return listener_position; }
 	void Loop();
 	void Cleanup(int index = -1);
 	unsigned int GetLength(SoundData *data);
@@ -62,7 +63,7 @@ private:
 	//FMOD system
 	FMOD::System *soundsys;
 
-	//listener sound objects
+	//listener sound data
 	Vector3 listener_position;
 	Vector3 listener_velocity;
 	Vector3 listener_forward;
