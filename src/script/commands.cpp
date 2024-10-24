@@ -3600,6 +3600,54 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//AddReverb command
+	if (StartsWithNoCase(LineData, "addreverb"))
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 6)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 5; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		Simcore->GetSoundSystem()->AddReverb(tempdata[0], Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+		return sNextLine;
+	}
+
+	//RemoveReverb command
+	if (StartsWithNoCase(LineData, "removereverb"))
+	{
+		//get data
+		int params = SplitData(LineData, 12);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 2; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		Simcore->GetSoundSystem()->RemoveReverb(Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])));
+		return sNextLine;
+	}
+
 	//Rotate command
 	if (StartsWithNoCase(LineData, "rotate "))
 	{
