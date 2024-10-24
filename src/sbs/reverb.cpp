@@ -60,9 +60,7 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 	//set reverb type
 	FMOD_REVERB_PROPERTIES prop;
 
-	if (type == "off")
-		prop = FMOD_PRESET_OFF;
-	else if (type == "generic")
+	if (type == "generic")
 		prop = FMOD_PRESET_GENERIC;
 	else if (type == "paddedcell")
 		prop = FMOD_PRESET_PADDEDCELL;
@@ -84,7 +82,7 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 		prop = FMOD_PRESET_ARENA;
 	else if (type == "hangar")
 		prop = FMOD_PRESET_HANGAR;
-	else if (type == "carpettedhallway")
+	else if (type == "carpetedhallway")
 		prop = FMOD_PRESET_CARPETTEDHALLWAY;
 	else if (type == "hallway")
 		prop = FMOD_PRESET_HALLWAY;
