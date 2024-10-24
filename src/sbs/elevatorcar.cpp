@@ -3845,7 +3845,7 @@ Reverb* ElevatorCar::GetReverb()
 	return reverb;
 }
 
-void ElevatorCar::RemoveReverb(Reverb *reverb)
+void ElevatorCar::RemoveReverb()
 {
 	//remove the reverb
 	//this does not delete the object
