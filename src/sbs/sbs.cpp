@@ -2326,7 +2326,7 @@ Reverb* SBS::GetReverb(const std::string &name)
 	return 0;
 }
 
-int SBS::GetReverbCount()
+int SBS::GetTotalReverbCount()
 {
 	//return total number of allocated reverbs
 	return reverbcount;
@@ -4658,6 +4658,18 @@ bool SBS::GetPower()
 	//return building power state
 
 	return power_state;
+}
+
+int SBS::GetReverbCount()
+{
+	return (int)reverbs.size();
+}
+
+Reverb* SBS::GetReverb(int index)
+{
+	if (index >= 0 && index < (int)reverbs.size())
+		return reverbs[index];
+	return 0;
 }
 
 }

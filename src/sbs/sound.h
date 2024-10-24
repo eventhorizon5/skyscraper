@@ -65,6 +65,7 @@ public:
 	void OnRotate(bool parent);
 	void Unload();
 	FMOD::Channel* GetChannel();
+	bool GetNearestReverbPosition(Vector3 &position);
 
 private:
 

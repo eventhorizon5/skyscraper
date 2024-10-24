@@ -263,7 +263,7 @@ public:
 	void IncrementSoundCount();
 	void DecrementSoundCount();
 	Reverb* AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance);
-	int GetReverbCount();
+	int GetTotalReverbCount();
 	void IncrementReverbCount();
 	void DecrementReverbCount();
 	Real ToLocal(Real remote_value);
@@ -412,6 +412,8 @@ public:
 	Escalator* GetEscalator(int index);
 	void SetPower(bool value);
 	bool GetPower();
+	Reverb* GetReverb(int index);
+	int GetReverbCount();
 
 	//Meshes
 	MeshObject* Buildings;
