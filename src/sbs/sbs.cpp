@@ -4533,7 +4533,7 @@ void SBS::MemoryReport()
 		size_t total = 0;
 		for (size_t i = 0; i < meshes.size(); i++)
 			total += meshes[i]->GetSize();
-		//Report("Textures: " + ToString(texturemanager->GetMemoryUsage() / 1024) + " kb");
+		Report("Textures: " + ToString(texturemanager->GetMemoryUsage() / 1024) + " kb");
 		Report("Meshes: " + ToString(total / 1024) + " kb");
 	}
 	Report("");
