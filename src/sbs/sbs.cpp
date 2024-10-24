@@ -4306,6 +4306,9 @@ void SBS::ResetState()
 	stairwell_manager->EnableAll(false);
 	elevator_manager->EnableAll(false);
 
+	//turn off reverbs
+	//soundsystem->EnableAllReverbs(false);
+
 	//reset camera state
 	camera->ResetState();
 }

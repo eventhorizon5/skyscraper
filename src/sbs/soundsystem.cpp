@@ -463,14 +463,40 @@ void SoundSystem::AddReverb(std::string type, const Vector3 &pos, Real min_dista
 
 void SoundSystem::RemoveReverb(const Vector3 &pos)
 {
+	//remove a reverb object
+
 	for (size_t i = 0; i < reverbs.size(); i++)
 	{
 		if (reverbs[i].position == pos)
 		{
-			delete reverbs[i].object;
+			//delete reverbs[i].object;
 			reverbs.erase(reverbs.begin() + i);
 			return;
 		}
+	}
+}
+
+void SoundSystem::EnableReverb(const Vector3 &pos, bool value)
+{
+	//enable or disable a reverb object
+
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i].position == pos)
+		{
+			reverbs[i].object->setActive(value);
+			return;
+		}
+	}
+}
+
+void SoundSystem::EnableAllReverbs(bool value)
+{
+	//enable or disable all reverb objects
+
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		reverbs[i].object->setActive(value);
 	}
 }
 
