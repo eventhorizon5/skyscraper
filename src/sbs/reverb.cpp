@@ -41,6 +41,7 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 	soundsys = sbs->GetSoundSystem();
 	MaxDistance = max_distance;
 	MinDistance = min_distance;
+	reverb = 0;
 
 	//convert type to lowercase
 	SetCase(type, false);
@@ -126,11 +127,14 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 		return;
 	}
 
+	sbs->IncrementReverbCount();
 	Report("Reverb created at " + ToString(global_pos.x) + ", " + ToString(global_pos.y) + ", " + ToString(global_pos.z) + " with type: " + type);
 }
 
 Reverb::~Reverb()
 {
+	sbs->DecrementReverbCount();
+
 	if (soundsys)
 	{
 		if (sbs->FastDelete == false)
@@ -157,6 +161,9 @@ Reverb::~Reverb()
 
 void Reverb::OnMove(bool parent)
 {
+	if (!reverb)
+		return;
+
 	Vector3 global_position = sbs->ToGlobal(GetPosition());
 
 	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
@@ -194,7 +201,8 @@ bool Reverb::ReportError(const std::string &message)
 
 void Reverb::Enable(bool value)
 {
-	reverb->setActive(value);
+	if (reverb)
+		reverb->setActive(value);
 }
 
 }
