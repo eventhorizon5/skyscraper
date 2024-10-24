@@ -53,6 +53,7 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 	{
 		std::string fmod_result = FMOD_ErrorString(result);
 		ReportError("Can't create reverb:\n" + fmod_result);
+		reverb = 0;
 		return;
 	}
 
@@ -111,19 +112,20 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 	reverb->setProperties(&prop);
 
 	//set reverb position
-	FMOD_VECTOR pos;
+	FMOD_VECTOR fmod_pos;
 	Vector3 global_pos = sbs->ToGlobal(position);
-	pos.x = global_pos.x;
-	pos.y = global_pos.y;
-	pos.z = global_pos.z;
-	this->position = global_pos;
+	fmod_pos.x = global_pos.x;
+	fmod_pos.y = global_pos.y;
+	fmod_pos.z = global_pos.z;
+	Move(position);
 
-	FMOD_RESULT result2 = reverb->set3DAttributes(&pos, min_distance, max_distance);
-	if (result != FMOD_OK)
+	FMOD_RESULT result2 = reverb->set3DAttributes(&fmod_pos, min_distance, max_distance);
+	if (result2 != FMOD_OK)
 	{
 		std::string fmod_result = FMOD_ErrorString(result);
 		ReportError("Can't set reverb attributes:\n" + fmod_result);
 		//delete reverb;
+		reverb = 0;
 		return;
 	}
 
@@ -167,8 +169,6 @@ void Reverb::OnMove(bool parent)
 	Vector3 global_position = sbs->ToGlobal(GetPosition());
 
 	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
-
-	position = GetPosition();
 
 	//note - do not use ToRemote for positioning
 	FMOD_RESULT result = reverb->set3DAttributes(&pos, MinDistance, MaxDistance);
