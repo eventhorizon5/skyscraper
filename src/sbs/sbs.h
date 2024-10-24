@@ -111,6 +111,7 @@ namespace SBS {
 	class PolyMesh;
 	class Utility;
 	class GeometryController;
+	class CustomObject;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -192,6 +193,7 @@ public:
 	unsigned int SmoothFrames;
 	bool RenderOnStartup; //render objects on startup
 	bool RandomActivity; //random activity is enabled
+	bool Malfunctions; //elevator malfunctions are enabled
 	int InstanceNumber; //SBS engine instance number
 	bool Headless; //true if running in headless mode
 
@@ -268,6 +270,7 @@ public:
 	int GetObjectCount();
 	Object* GetObject(int number);
 	Object* GetObject(std::string name, bool case_sensitive = true);
+	Object* GetObjectOfParent(std::string parent_name, std::string name, const std::string &type, bool case_sensitive = true);
 	std::vector<Object*> GetObjectRange(const std::string &expression);
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);
@@ -283,6 +286,7 @@ public:
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
 	void RemovePrimitive(Primitive *prim);
+	void RemoveCustomObject(CustomObject *object);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	void RemoveController(DispatchController *controller);
@@ -300,6 +304,8 @@ public:
 	void AddModel(Model *model);
 	Primitive* AddPrimitive(const std::string &name);
 	void AddPrimitive(Primitive *primitive);
+	CustomObject* AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1);
+	void AddCustomObject(CustomObject *object);
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
@@ -342,13 +348,12 @@ public:
 	void ShowBoundingBoxes(bool value);
 	void ListVisibleMeshes();
 	int GetEscalatorCount();
-	void IncrementEscalatorCount();
-	void DecrementEscalatorCount();
 	int GetMovingWalkwayCount();
 	void IncrementMovingWalkwayCount();
 	void DecrementMovingWalkwayCount();
 	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
+	void EnableMalfunctions(bool value);
 	SoundSystem* GetSoundSystem();
 	bool IsObjectValid(Object* object, std::string type = "");
 	bool IsActionValid(Action* action);
@@ -372,8 +377,10 @@ public:
 	Vector3 FromGlobal(const Vector3 &position);
 	Quaternion ToGlobal(const Quaternion &orientation);
 	Quaternion FromGlobal(const Quaternion &orientation);
+	Light* GetLight(std::string name);
 	Model* GetModel(std::string name);
 	Primitive* GetPrimitive(std::string name);
+	CustomObject* GetCustomObject(std::string name);
 	FloorManager* GetFloorManager();
 	ElevatorManager* GetElevatorManager();
 	ShaftManager* GetShaftManager();
@@ -393,6 +400,12 @@ public:
 	Utility* GetUtility();
 	void Run0();
 	GeometryController* GetGeometry();
+	void MemoryReport();
+	void RegisterEscalator(Escalator *escalator);
+	void UnregisterEscalator(Escalator *escalator);
+	Escalator* GetEscalator(int index);
+	void SetPower(bool value);
+	bool GetPower();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -451,6 +464,9 @@ private:
 	//action array
 	std::vector<Action*> ActionArray;
 
+	//escalators
+	std::vector<Escalator*> EscalatorArray;
+
 	//private functions
 	void PrintBanner();
 	void CheckAutoAreas();
@@ -507,9 +523,10 @@ private:
 	//person objects
 	std::vector<Person*> PersonArray;
 
-	int ObjectCount; //number of simulator objects
+	//custom objects
+	std::vector<CustomObject*> CustomObjectArray;
 
-	int EscalatorCount; //number of escalators
+	int ObjectCount; //number of simulator objects
 
 	int MovingWalkwayCount; //number of moving walkways
 
@@ -560,6 +577,9 @@ private:
 
 	//geometry controller
 	GeometryController* geometry;
+
+	//building power state
+	bool power_state;
 };
 
 }

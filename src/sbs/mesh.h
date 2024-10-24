@@ -48,7 +48,7 @@ public:
 	bool tricollider; //collider type; box if false, triangle if true
 	bool remove_on_disable; //if true (the default), remove the collider from world when disabling mesh
 
-	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", const std::string &meshname = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0, bool create_collider = true, bool dynamic_buffers = false);
+	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", const std::string &meshname = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool create_collider = true, bool dynamic_buffers = false);
 	virtual ~MeshObject();
 	void Enabled(bool value);
 	void EnableCollider(bool value);
@@ -92,6 +92,8 @@ public:
 	unsigned int GetTriangleCount(const std::string &material, bool total);
 	bool LoadFromMesh(const std::string &meshname);
 	void SetMaterial(const std::string& material);
+	void EnablePhysics(bool value, Real restitution = 0, Real friction = 0, Real mass = 0);
+	size_t GetSize();
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
@@ -103,6 +105,7 @@ public:
 	OgreBulletCollisions::CollisionShape* mShape;
 
 	std::string Filename; //filename, if a loaded model
+	std::string Meshname; //name of loaded Ogre mesh (used for primitives)
 	bool model_loaded; //true if a model was loaded successfully
 
 private:
@@ -114,6 +117,8 @@ private:
 	bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
 
 	PolyMesh *polymesh;
+	Ogre::MeshPtr collidermesh;
+	size_t size;
 };
 
 }

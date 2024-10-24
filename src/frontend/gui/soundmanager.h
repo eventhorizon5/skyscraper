@@ -44,6 +44,7 @@ class SoundManager: public wxDialog
 		//(*Declarations(SoundManager)
 		wxButton* bCleanup;
 		wxButton* bListPlaying;
+		wxButton* bMove;
 		wxButton* bOK;
 		wxButton* bPlay;
 		wxButton* bReset;
@@ -99,6 +100,7 @@ class SoundManager: public wxDialog
 		static const long ID_tPlaying;
 		static const long ID_STATICTEXT7;
 		static const long ID_tPosition;
+		static const long ID_bMove;
 		static const long ID_STATICTEXT8;
 		static const long ID_tVolume;
 		static const long ID_bSetVolume;
@@ -136,6 +138,7 @@ class SoundManager: public wxDialog
 		void On_bReset_Click(wxCommandEvent& event);
 		void On_bUnload_Click(wxCommandEvent& event);
 		void On_bCleanup_Click(wxCommandEvent& event);
+		void On_bMove_Click(wxCommandEvent& event);
 		//*)
 		void BuildSoundList();
 		void BuildHandleList();
@@ -148,6 +151,7 @@ class SoundManager: public wxDialog
 		int lasthandlecount;
 		Real volume;
 		Real speed;
+		MoveObject *moveobject;
 
 		DECLARE_EVENT_TABLE()
 };

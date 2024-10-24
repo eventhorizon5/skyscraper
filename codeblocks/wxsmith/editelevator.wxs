@@ -392,6 +392,15 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSelectCurrent" variable="bSelectCurrent" member="yes">
+											<label>Select Current Elevator</label>
+											<handler function="On_bSelectCurrent_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_TOP</flag>
 								<option>1</option>
@@ -447,6 +456,15 @@
 										<object class="wxButton" name="ID_bStopDoors" variable="bStopDoors" member="yes">
 											<label>Stop Doors</label>
 											<handler function="On_bStopDoors_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bMalfunction" variable="bMalfunction" member="yes">
+											<label>Malfunction</label>
+											<handler function="On_bMalfunction_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
@@ -790,29 +808,6 @@
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
-												<object class="wxStaticText" name="ID_STATICTEXT52" variable="StaticText52" member="yes">
-													<label>Alarm On:</label>
-												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
-												<object class="wxTextCtrl" name="ID_txtAlarm" variable="txtAlarm" member="yes">
-													<size>75,-1</size>
-													<tooltip>Alarm On</tooltip>
-													<style>wxTE_READONLY</style>
-												</object>
-												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="spacer">
-												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT28" variable="StaticText28" member="yes">
 													<label>WaitDoors:</label>
 												</object>
@@ -1090,62 +1085,6 @@
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
-												<object class="wxStaticText" name="ID_STATICTEXT58" variable="StaticText58" member="yes">
-													<label>MusicOn:</label>
-												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
-												<object class="wxTextCtrl" name="ID_txtMusicOn" variable="txtMusicOn" member="yes">
-													<size>75,-1</size>
-													<tooltip>Music On</tooltip>
-													<style>wxTE_READONLY</style>
-												</object>
-												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
-												<object class="wxButton" name="ID_bSetMusicOn" variable="bSetMusicOn" member="yes">
-													<label>Set</label>
-													<style>wxBU_EXACTFIT</style>
-													<handler function="On_bSetMusicOn_Click" entry="EVT_BUTTON" />
-												</object>
-												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
-												<object class="wxStaticText" name="ID_STATICTEXT77" variable="StaticText77" member="yes">
-													<label>MusicMove:</label>
-												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
-												<object class="wxTextCtrl" name="ID_txtMusicOnMove" variable="txtMusicOnMove" member="yes">
-													<size>75,-1</size>
-													<tooltip>MusicOnMove</tooltip>
-													<style>wxTE_READONLY</style>
-												</object>
-												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
-												<object class="wxButton" name="ID_bSetMusicOnMove" variable="bSetMusicOnMove" member="yes">
-													<label>Set</label>
-													<style>wxBU_EXACTFIT</style>
-													<handler function="On_bSetMusicOnMove_Click" entry="EVT_BUTTON" />
-												</object>
-												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT78" variable="StaticText78" member="yes">
 													<label>FlrSounds:</label>
 												</object>
@@ -1364,9 +1303,180 @@
 												<border>5</border>
 												<option>1</option>
 											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT91" variable="StaticText91" member="yes">
+													<label>Fan:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtFan" variable="txtFan" member="yes">
+													<size>75,-1</size>
+													<tooltip>Fan</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bFan" variable="bFan" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bFan_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
 										</object>
 										<flag>wxLEFT|wxALIGN_TOP</flag>
 										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer12" member="no">
+											<cols>3</cols>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT52" variable="StaticText52" member="yes">
+													<label>Alarm On:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtAlarm" variable="txtAlarm" member="yes">
+													<size>75,-1</size>
+													<tooltip>Alarm On</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT58" variable="StaticText58" member="yes">
+													<label>MusicOn:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtMusicOn" variable="txtMusicOn" member="yes">
+													<size>75,-1</size>
+													<tooltip>Music On</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetMusicOn" variable="bSetMusicOn" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetMusicOn_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT77" variable="StaticText77" member="yes">
+													<label>MusicMove:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtMusicOnMove" variable="txtMusicOnMove" member="yes">
+													<size>75,-1</size>
+													<tooltip>MusicOnMove</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetMusicOnMove" variable="bSetMusicOnMove" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetMusicOnMove_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT93" variable="StaticText93" member="yes">
+													<label>MAlwaysOn:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtMusicAlwaysOn" variable="txtMusicAlwaysOn" member="yes">
+													<size>75,-1</size>
+													<tooltip>MusicAlwaysOn</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bMusicAlwaysOn" variable="bMusicAlwaysOn" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bMusicAlwaysOn_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT92" variable="StaticText92" member="yes">
+													<label>ChimeArrival:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtChimeOnArrival" variable="txtChimeOnArrival" member="yes">
+													<size>75,-1</size>
+													<tooltip>ChimeOnArrival</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetChimeOnArrival" variable="bSetChimeOnArrival" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetChimeOnArrival_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxLEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
 									</object>
 								</object>
 								<flag>wxALL|wxALIGN_TOP</flag>

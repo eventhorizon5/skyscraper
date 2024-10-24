@@ -738,7 +738,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			controller = Simcore->NewController(Simcore->GetControllerCount() + 1);
 			controller->DestinationDispatch = false;
 			controller->Name = "Dispatch Controller " + ToString(Simcore->GetControllerCount());
-			for (int i = 0; i < (int)callbutton_elevators.size(); i++)
+			for (size_t i = 0; i < callbutton_elevators.size(); i++)
 				controller->AddElevator(callbutton_elevators[i]);
 		}
 
@@ -1572,11 +1572,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		}
 
 		//check numeric values
-		for (int i = 1; i <= 1; i++)
-		{
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
-		}
+		if (!IsNumeric(tempdata[1]))
+			return ScriptError("Invalid value: " + tempdata[1]);
 
 		int elevator, carnum;
 		if (!GetElevatorCar(tempdata[0], floor->Number, elevator, carnum))
@@ -2373,7 +2370,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished floor");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished floor");
 		return sNextLine;
 	}
 
@@ -2398,7 +2396,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				config->Context = "None";
 				config->RangeL = 0;
 				config->RangeH = 0;
-				engine->Report("Finished floors");
+				if (parent->InRunloop() == false)
+					engine->Report("Finished floors");
 				return sNextLine;
 			}
 		}
@@ -2416,7 +2415,8 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				config->Context = "None";
 				config->RangeL = 0;
 				config->RangeH = 0;
-				engine->Report("Finished floors");
+				if (parent->InRunloop() == false)
+					engine->Report("Finished floors");
 				return sNextLine;
 			}
 		}

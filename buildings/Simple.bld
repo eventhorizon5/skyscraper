@@ -489,3 +489,8 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, 1, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
+#define a runloop function, to run code after the sim engine has started
+<Function runloop>
+
+<EndFunction>
+

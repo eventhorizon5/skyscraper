@@ -103,6 +103,8 @@ public:
 	bool SetTextureInfo(int index, TextureInfo &info);
 	void IncrementTextureUsage(const std::string &name);
 	void DecrementTextureUsage(const std::string &name);
+	void SetCulling(const std::string &material_name, int mode = 1);
+	Ogre::MaterialPtr SetCulling(const std::string &material_name, const std::string &name, int mode);
 
 	//override textures
 	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;

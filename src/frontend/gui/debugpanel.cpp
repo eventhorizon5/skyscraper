@@ -51,6 +51,7 @@
 #include "camtex.h"
 #include "soundmanager.h"
 #include "texturemanager.h"
+#include "escalatorcontrol.h"
 
 namespace Skyscraper {
 
@@ -59,6 +60,7 @@ const long DebugPanel::ID_STATICTEXT1 = wxNewId();
 const long DebugPanel::ID_STATICTEXT12 = wxNewId();
 const long DebugPanel::ID_STATICTEXT2 = wxNewId();
 const long DebugPanel::ID_STATICTEXT8 = wxNewId();
+const long DebugPanel::ID_STATICTEXT13 = wxNewId();
 const long DebugPanel::ID_STATICTEXT3 = wxNewId();
 const long DebugPanel::ID_STATICTEXT4 = wxNewId();
 const long DebugPanel::ID_STATICTEXT5 = wxNewId();
@@ -69,6 +71,7 @@ const long DebugPanel::ID_t_camerafloor = wxNewId();
 const long DebugPanel::ID_t_floorname = wxNewId();
 const long DebugPanel::ID_t_camerap = wxNewId();
 const long DebugPanel::ID_t_rotation = wxNewId();
+const long DebugPanel::ID_t_global = wxNewId();
 const long DebugPanel::ID_t_elevnumber = wxNewId();
 const long DebugPanel::ID_t_elevfloor = wxNewId();
 const long DebugPanel::ID_t_object = wxNewId();
@@ -83,6 +86,8 @@ const long DebugPanel::ID_chkProcessElevators = wxNewId();
 const long DebugPanel::ID_chkAutoShafts = wxNewId();
 const long DebugPanel::ID_chkAutoStairs = wxNewId();
 const long DebugPanel::ID_chkRandom = wxNewId();
+const long DebugPanel::ID_chkMalfunctions = wxNewId();
+const long DebugPanel::ID_chkPower = wxNewId();
 const long DebugPanel::ID_CHECKBOX1 = wxNewId();
 const long DebugPanel::ID_bFloorList = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
@@ -93,6 +98,7 @@ const long DebugPanel::ID_bStats = wxNewId();
 const long DebugPanel::ID_bEngineManager = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
 const long DebugPanel::ID_bCameraTexture = wxNewId();
+const long DebugPanel::ID_bEscalator = wxNewId();
 const long DebugPanel::ID_bObjectInfo = wxNewId();
 const long DebugPanel::ID_bActionViewer = wxNewId();
 const long DebugPanel::ID_bPeopleManager = wxNewId();
@@ -134,6 +140,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer6->Add(StaticText2, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText7 = new wxStaticText(Panel1, ID_STATICTEXT8, _("Camera Rotation:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
 	BoxSizer6->Add(StaticText7, 1, wxBOTTOM|wxALIGN_RIGHT, 5);
+	StaticText12 = new wxStaticText(Panel1, ID_STATICTEXT13, _("Global Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT13"));
+	BoxSizer6->Add(StaticText12, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText3 = new wxStaticText(Panel1, ID_STATICTEXT3, _("Elevator Number:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	BoxSizer6->Add(StaticText3, 0, wxBOTTOM|wxALIGN_RIGHT, 5);
 	StaticText4 = new wxStaticText(Panel1, ID_STATICTEXT4, _("Elevator Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
@@ -156,6 +164,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer7->Add(t_camerap, 0, wxBOTTOM|wxALIGN_LEFT, 5);
 	t_rotation = new wxStaticText(Panel1, ID_t_rotation, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_rotation"));
 	BoxSizer7->Add(t_rotation, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	t_global = new wxStaticText(Panel1, ID_t_global, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_global"));
+	BoxSizer7->Add(t_global, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	t_elevnumber = new wxStaticText(Panel1, ID_t_elevnumber, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_elevnumber"));
 	BoxSizer7->Add(t_elevnumber, 0, wxBOTTOM|wxALIGN_LEFT, 5);
 	t_elevfloor = new wxStaticText(Panel1, ID_t_elevfloor, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_elevfloor"));
@@ -196,6 +206,12 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	chkRandom = new wxCheckBox(Panel1, ID_chkRandom, _("Random Activity"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRandom"));
 	chkRandom->SetValue(false);
 	BoxSizer5->Add(chkRandom, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	chkMalfunctions = new wxCheckBox(Panel1, ID_chkMalfunctions, _("Malfunctions"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkMalfunctions"));
+	chkMalfunctions->SetValue(false);
+	BoxSizer5->Add(chkMalfunctions, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	chkPower = new wxCheckBox(Panel1, ID_chkPower, _("Building Power"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkPower"));
+	chkPower->SetValue(false);
+	BoxSizer5->Add(chkPower, 1, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkVerbose = new wxCheckBox(Panel1, ID_CHECKBOX1, _("Verbose Mode"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
 	chkVerbose->SetValue(false);
 	BoxSizer5->Add(chkVerbose, 1, wxBOTTOM|wxALIGN_LEFT, 5);
@@ -221,6 +237,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer9->Add(bConsole, 1, wxEXPAND, 5);
 	bCameraTexture = new wxButton(Panel1, ID_bCameraTexture, _("CameraTexture Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraTexture"));
 	BoxSizer9->Add(bCameraTexture, 1, wxEXPAND, 5);
+	bEscalator = new wxButton(Panel1, ID_bEscalator, _("Escalator Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEscalator"));
+	BoxSizer9->Add(bEscalator, 1, wxEXPAND, 5);
 	BoxSizer8->Add(BoxSizer9, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
 	bObjectInfo = new wxButton(Panel1, ID_bObjectInfo, _("Object Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bObjectInfo"));
@@ -241,6 +259,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND, 5);
 	bSoundManager = new wxButton(Panel1, ID_bSoundManager, _("Sound Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSoundManager"));
 	BoxSizer10->Add(bSoundManager, 1, wxEXPAND, 5);
+	BoxSizer10->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -255,6 +274,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Click);
 	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
 	Connect(ID_chkRandom,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkRandom_Click);
+	Connect(ID_chkMalfunctions,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkMalfunctions_Click);
+	Connect(ID_chkPower,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkPower_Click);
 	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
 	Connect(ID_bFloorList,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorList_Click);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
@@ -265,6 +286,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_bEngineManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEngineManager_Click);
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
 	Connect(ID_bCameraTexture,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraTexture_Click);
+	Connect(ID_bEscalator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEscalator_Click);
 	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
 	Connect(ID_bActionViewer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
 	Connect(ID_bPeopleManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bPeopleManager_Click);
@@ -292,6 +314,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	timer = 0;
 	smanager = 0;
 	tmanager = 0;
+	esc = 0;
 
 	OnInit();
 }
@@ -349,6 +372,9 @@ DebugPanel::~DebugPanel()
 	if (tmanager)
 		tmanager->Destroy();
 	tmanager = 0;
+	if (esc)
+		esc->Destroy();
+	esc = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -403,7 +429,7 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 
 void DebugPanel::OnInit()
 {
-	Simcore = skyscraper->GetVM()->GetActiveEngine()->GetSystem();
+	Simcore = skyscraper->GetVM()->GetActiveSystem();
 
 	if (!Simcore)
 		return;
@@ -417,6 +443,8 @@ void DebugPanel::OnInit()
 	chkAutoStairs->SetValue(Simcore->AutoStairs);
 	chkVerbose->SetValue(Simcore->Verbose);
 	chkRandom->SetValue(Simcore->RandomActivity);
+	chkMalfunctions->SetValue(Simcore->Malfunctions);
+	chkPower->SetValue(Simcore->GetPower());
 
 	if (!timer)
 		timer = new Timer(this, Simcore);
@@ -446,7 +474,7 @@ void DebugPanel::Loop()
 
 	if (skyscraper->GetVM()->GetActiveEngine())
 	{
-		if (Simcore != skyscraper->GetVM()->GetActiveEngine()->GetSystem())
+		if (Simcore != skyscraper->GetVM()->GetActiveSystem())
 			OnInit(); //reinitialize if active engine has changed
 	}
 	else
@@ -456,8 +484,11 @@ void DebugPanel::Loop()
 	if (floor)
 		t_floorname->SetLabel(floor->Name);
 
+	Vector3 globalpos = Simcore->ToGlobal(Simcore->camera->GetPosition());
+
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
+	t_global->SetLabel(TruncateNumber(globalpos.x, 2) + wxT(", ") + TruncateNumber(globalpos.y, 2) + wxT(", ") + TruncateNumber(globalpos.z, 2));
 	t_camerafloor->SetLabel(SBS::ToString(Simcore->camera->CurrentFloor) + wxT(" (") + Simcore->camera->CurrentFloorID + wxT(")"));
 	t_object->SetLabel(Simcore->camera->GetClickedMeshName());
 	t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
@@ -555,6 +586,12 @@ void DebugPanel::Loop()
 	{
 		if (tmanager->IsShown() == true)
 			tmanager->Loop();
+	}
+
+	if (esc)
+	{
+		if (esc->IsShown() == true)
+			esc->Loop();
 	}
 }
 
@@ -790,6 +827,28 @@ void DebugPanel::On_bSoundManager_Click(wxCommandEvent& event)
 	smanager->CenterOnScreen();
 	smanager->Show();
 	smanager->Raise();
+}
+
+void DebugPanel::On_chkMalfunctions_Click(wxCommandEvent& event)
+{
+	if (Simcore)
+		Simcore->EnableMalfunctions(chkMalfunctions->GetValue());
+}
+
+void DebugPanel::On_bEscalator_Click(wxCommandEvent& event)
+{
+	if (!esc)
+		esc = new EscalatorControl(this, -1);
+
+	esc->CenterOnScreen();
+	esc->Show();
+	esc->Raise();
+}
+
+void DebugPanel::On_chkPower_Click(wxCommandEvent& event)
+{
+	if (Simcore)
+		Simcore->SetPower(chkPower->GetValue());
 }
 
 }

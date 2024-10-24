@@ -309,6 +309,17 @@ std::string ToString(double number)
 	return buffer;
 }
 
+std::string ToString(size_t number)
+{
+	char buffer[50];
+#if defined(__VISUALC__)
+	_snprintf_s(buffer, sizeof(buffer), 13, "%lu", number);
+#else
+	snprintf(buffer, sizeof(buffer), "%lu", number);
+#endif
+	return buffer;
+}
+
 float Log2(float number)
 {
 	return logf(number) / logf(2.0f);

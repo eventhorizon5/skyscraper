@@ -477,7 +477,7 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 	{
 		if (material != "")
 		{
-			for (int j = 0; j < clients[i]->Walls.size(); j++)
+			for (size_t j = 0; j < clients[i]->Walls.size(); j++)
 			{
 				if (!clients[i]->Walls[j])
 					continue;
@@ -491,7 +491,7 @@ unsigned int DynamicMesh::GetVertexCount(const std::string &material, int client
 
 					if (poly->material == material)
 					{
-						for (int l = 0; l < poly->geometry.size(); l++)
+						for (size_t l = 0; l < poly->geometry.size(); l++)
 						{
 								total += poly->geometry[l].size();
 						}
@@ -622,7 +622,7 @@ void DynamicMesh::EnableShadows(bool value)
 {
 	//enable shadows
 
-	for (int i = 0; i < meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 		meshes[i]->EnableShadows(value);
 }
 
@@ -630,7 +630,7 @@ void DynamicMesh::SetMaterial(const std::string& material)
 {
 	//set material on all meshes
 
-	for (int i = 0; i < meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 		meshes[i]->SetMaterial(material);
 }
 
@@ -837,7 +837,7 @@ void DynamicMesh::Mesh::DeleteSubMesh(int client, int index)
 			{
 				for (int j = 0; j < Parent->GetClientCount(); j++)
 				{
-					for (int k = 0; k < Parent->GetClient(j)->Walls.size(); k++)
+					for (size_t k = 0; k < Parent->GetClient(j)->Walls.size(); k++)
 					{
 						if (!Parent->GetClient(j)->Walls[k])
 							continue;
@@ -862,7 +862,7 @@ void DynamicMesh::Mesh::DeleteSubMesh(int client, int index)
 				if (!Parent->GetClient(client))
 					return;
 
-				for (int k = 0; k < Parent->GetClient(client)->Walls.size(); k++)
+				for (size_t k = 0; k < Parent->GetClient(client)->Walls.size(); k++)
 				{
 					if (!Parent->GetClient(client)->Walls[k])
 						continue;
@@ -1002,7 +1002,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			Vector3 offset = sbs->ToRemote(mesh->GetPosition() - node->GetPosition());
 
 			//fill array with mesh's geometry data, from each wall
-			for (int index = 0; index < mesh->Walls.size(); index++)
+			for (size_t index = 0; index < mesh->Walls.size(); index++)
 			{
 				if (!mesh->Walls[index])
 					continue;
@@ -1522,7 +1522,15 @@ void DynamicMesh::Mesh::SetMaterial(const std::string& material)
 	//set material of this mesh
 
 	Ogre::MaterialPtr mat = sbs->GetTextureManager()->GetMaterialByName(material);
-	Movable->setMaterial(mat);
+
+	if (mat)
+		Movable->setMaterial(mat);
+	else
+	{
+		//set to default material if the specified one is not found
+		mat = sbs->GetTextureManager()->GetMaterialByName("Default");
+		Movable->setMaterial(mat);
+	}
 }
 
 }

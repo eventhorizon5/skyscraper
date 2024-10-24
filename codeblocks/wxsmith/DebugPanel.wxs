@@ -49,6 +49,14 @@
 													<option>1</option>
 												</object>
 												<object class="sizeritem">
+													<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText12" member="yes">
+														<label>Global Position:</label>
+													</object>
+													<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+													<border>5</border>
+													<option>1</option>
+												</object>
+												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
 														<label>Elevator Number:</label>
 													</object>
@@ -135,6 +143,16 @@
 														<style>wxST_NO_AUTORESIZE</style>
 													</object>
 													<flag>wxBOTTOM|wxALIGN_LEFT</flag>
+													<border>5</border>
+													<option>1</option>
+												</object>
+												<object class="sizeritem">
+													<object class="wxStaticText" name="ID_t_global" variable="t_global" member="yes">
+														<label></label>
+														<size>150,-1</size>
+														<style>wxST_NO_AUTORESIZE</style>
+													</object>
+													<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 													<border>5</border>
 													<option>1</option>
 												</object>
@@ -275,6 +293,24 @@
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
+											<object class="wxCheckBox" name="ID_chkMalfunctions" variable="chkMalfunctions" member="yes">
+												<label>Malfunctions</label>
+												<handler function="On_chkMalfunctions_Click" entry="EVT_CHECKBOX" />
+											</object>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxCheckBox" name="ID_chkPower" variable="chkPower" member="yes">
+												<label>Building Power</label>
+												<handler function="On_chkPower_Click" entry="EVT_CHECKBOX" />
+											</object>
+											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
 											<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVerbose" member="yes">
 												<label>Verbose Mode</label>
 												<handler function="On_chkVerbose_Click" entry="EVT_CHECKBOX" />
@@ -372,6 +408,15 @@
 											<border>5</border>
 											<option>1</option>
 										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bEscalator" variable="bEscalator" member="yes">
+												<label>Escalator Control</label>
+												<handler function="On_bEscalator_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
 									</object>
 									<flag>wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>
@@ -458,6 +503,11 @@
 												<handler function="On_bSoundManager_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="spacer">
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>

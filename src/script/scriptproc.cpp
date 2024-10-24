@@ -118,6 +118,8 @@ void ScriptProcessor::Reset()
 	functions.clear();
 	includes.clear();
 	variables.clear();
+	in_runloop = false;
+	processed_runloop = false;
 
 	//reset configuration
 	config->Reset();
@@ -145,7 +147,13 @@ bool ScriptProcessor::Run()
 	int returncode = sContinue;
 	IsFinished = false;
 
-	if (line < (int)BuildingData.size())
+	if (engine->IsRunning() == true && processed_runloop == false)
+		ProcessRunloop();
+
+	if (processed_runloop == true)
+		processed_runloop = false;
+
+	if (line < (int)BuildingData.size() && line >= 0)
 	{
 		LineData = BuildingData[line];
 		TrimString(LineData);
@@ -170,6 +178,17 @@ bool ScriptProcessor::Run()
 		//skip blank lines
 		if (LineData == "")
 			goto Nextline;
+
+		//expand runloop variables
+		if (in_runloop == true)
+		{
+			ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
+			int hour, minute, second;
+			engine->GetFrontend()->GetTime(hour, minute, second);
+			ReplaceAll(LineData, "%hour%", ToString(hour));
+			ReplaceAll(LineData, "%minute%", ToString(minute));
+			ReplaceAll(LineData, "%second%", ToString(second));
+		}
 
 		//process function parameters
 		ProcessFunctionParameters();
@@ -954,6 +973,9 @@ bool ScriptProcessor::FunctionProc()
 	//process functions
 	for (size_t i = 0; i < functions.size(); i++)
 	{
+		if (functions[i].name == "runloop")
+			continue;
+
 		int location = LineData.find(functions[i].name + "(");
 		if (location >= 0)
 		{
@@ -994,6 +1016,33 @@ bool ScriptProcessor::FunctionProc()
 		}
 	}
 	return false;
+}
+
+void ScriptProcessor::ProcessRunloop()
+{
+	//process runloop
+
+	//exit if already in a runloop
+	if (in_runloop == true)
+		return;
+
+	//add function to function stack, to run
+	for (int i = 0; i < functions.size(); i++)
+	{
+		if (functions[i].name == "runloop")
+		{
+			//store info
+			InFunction += 1;
+
+			FunctionData data;
+			data.CallLine = BuildingData.size();
+			data.Name = "runloop";
+
+			in_runloop = true;
+			line = functions[i].line + 1;
+			FunctionStack.push_back(data);
+		}
+	}
 }
 
 void ScriptProcessor::CheckFile(const std::string &filename)
@@ -1358,9 +1407,18 @@ int ScriptProcessor::ProcessSections()
 		//end function and return to original line
 		line = FunctionStack[InFunction - 1].CallLine - 1;
 		ReplaceLineData = FunctionStack[InFunction - 1].LineData;
+		FunctionData &data = FunctionStack[InFunction - 1];
+
+		if (in_runloop == false)
+			ReplaceLine = true;
+
+		if (data.Name == "runloop")
+		{
+			in_runloop = false;
+			processed_runloop = true;
+		}
 		FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
 		InFunction -= 1;
-		ReplaceLine = true;
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<floors"))
@@ -1392,7 +1450,8 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Floor range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing floors " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing floors " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<floor "))
@@ -1413,7 +1472,8 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->Context = "Floor " + ToString(config->Current);
-		engine->Report("Processing floor " + ToString(config->Current) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing floor " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<elevators"))
@@ -1443,7 +1503,8 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Elevator range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing elevators " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing elevators " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<elevator "))
@@ -1469,7 +1530,8 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->Context = "Elevator " + ToString(config->Current);
-		engine->Report("Processing elevator " + ToString(config->Current) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing elevator " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<buildings>"))
@@ -1485,7 +1547,8 @@ int ScriptProcessor::ProcessSections()
 		}
 		config->SectionNum = 3;
 		config->Context = "Buildings";
-		engine->Report("Loading other buildings...");
+		if (InRunloop() == false)
+			engine->Report("Loading other buildings...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<cars") && config->SectionNum == 4)
@@ -1526,7 +1589,8 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Elevator " + ToString(config->CurrentOld) + " Car range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing elevator " + ToString(config->CurrentOld) + " cars " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing elevator " + ToString(config->CurrentOld) + " cars " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<car ") && config->SectionNum == 4)
@@ -1558,7 +1622,8 @@ int ScriptProcessor::ProcessSections()
 		}
 
 		config->Context = "Elevator " + ToString(config->CurrentOld) + " Car " + ToString(config->Current);
-		engine->Report("Processing elevator " + ToString(config->CurrentOld) + " car " + ToString(config->Current) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing elevator " + ToString(config->CurrentOld) + " car " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<vehicles"))
@@ -1588,7 +1653,8 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Vehicle range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing vehicles " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing vehicles " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<vehicle "))
@@ -1644,7 +1710,8 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Controller range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		engine->Report("Processing controllers " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing controllers " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<controller "))
@@ -1670,7 +1737,8 @@ int ScriptProcessor::ProcessSections()
 			return sError;
 		}
 		config->Context = "Controller " + ToString(config->Current);
-		engine->Report("Processing controller " + ToString(config->Current) + "...");
+		if (InRunloop() == false)
+			engine->Report("Processing controller " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<callstations") && config->SectionNum == 2)
@@ -1711,7 +1779,7 @@ int ScriptProcessor::ProcessSections()
 		config->Context = "Floor " + ToString(config->CurrentOld) + " Call Station range " + ToString(config->RangeL) + " to " + ToString(config->RangeH);
 		config->Current = config->RangeL;
 		config->RangeStart = line;
-		if (Simcore->Verbose)
+		if (Simcore->Verbose && InRunloop() == false)
 			engine->Report("Processing floor " + ToString(config->CurrentOld) + " call stations " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
@@ -1744,7 +1812,7 @@ int ScriptProcessor::ProcessSections()
 		}
 
 		config->Context = "Floor " + ToString(config->CurrentOld) + " Call Station " + ToString(config->Current);
-		if (Simcore->Verbose)
+		if (Simcore->Verbose && InRunloop() == false)
 			engine->Report("Processing floor " + ToString(config->CurrentOld) + " call station " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
@@ -1998,6 +2066,20 @@ int ScriptProcessor::ProcessForLoops()
 	}
 
 	return sContinue;
+}
+
+bool ScriptProcessor::HasRunloop()
+{
+	//return true if this building has a runloop function
+
+	for (int i = 0; i < functions.size(); i++)
+	{
+		if (functions[i].name == "runloop")
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 }

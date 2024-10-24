@@ -149,6 +149,7 @@ public:
 	void SetLocation(Real latitude, Real longitude);
 	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
+	void GetTime(int &hour, int &minute, int &second);
 	void RaiseWindow();
 	void RefreshConsole();
 	void RefreshViewport();
@@ -165,6 +166,7 @@ public:
 	FMOD::System* GetSoundSystem();
 	VM* GetVM();
 	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	void UpdateOpenXR();
 
 private:
 	//sound data

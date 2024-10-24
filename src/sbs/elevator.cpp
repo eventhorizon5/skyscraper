@@ -35,6 +35,7 @@
 #include "profiler.h"
 #include "texture.h"
 #include "controller.h"
+#include "random.h"
 #include "elevator.h"
 
 #include <time.h>
@@ -46,7 +47,7 @@ class Elevator::Timer : public TimerObject
 {
 public:
 	Elevator *elevator;
-	int type; //0 = parking timer, 1 = arrival/departure
+	int type; //0 = parking timer, 1 = arrival/departure, 2 = random malfunctions
 	Timer(const std::string &name, Elevator *parent, int Type) : TimerObject(parent, name)
 	{
 		elevator = parent;
@@ -192,11 +193,18 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WeightRopeMesh = 0;
 	RopeMesh = 0;
 	Error = false;
+	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Elevator.RandomProbability", 20);
+	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.RandomFrequency", 5);
+
+	//initialize random number generators
+	rnd_time = new RandomGen((unsigned int)(time(0) + GetNumber()));
+	rnd_type = new RandomGen((unsigned int)(time(0) + GetNumber() + 1));
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
 	arrival_delay = new Timer("Arrival Delay Timer", this, 1);
 	departure_delay = new Timer("Departure Delay Timer", this, 1);
+	malfunction_timer = new Timer("Malfunction Timer", this, 2);
 
 	//create object meshes
 	std::string name = "Elevator " + ToString(Number);
@@ -274,6 +282,22 @@ Elevator::~Elevator()
 	}
 	departure_delay = 0;
 
+	if (malfunction_timer)
+	{
+		malfunction_timer->parent_deleting = true;
+		delete malfunction_timer;
+	}
+	malfunction_timer = 0;
+
+	//delete random number generators
+	if (rnd_time)
+		delete rnd_time;
+	rnd_time = 0;
+
+	if (rnd_type)
+		delete rnd_type;
+	rnd_type = 0;
+
 	//delete cars
 	if (sbs->Verbose)
 		Report("deleting cars");
@@ -345,7 +369,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	if (AssignedShaft <= 0)
 		return ReportError("Not assigned to a shaft");
 
-	for (int i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		if (Controllers[i] < 0)
 			return ReportError("Invalid value for Controller");
@@ -372,7 +396,7 @@ bool Elevator::CreateElevator(bool relative, Real x, Real z, int floor)
 	GetShaft()->AddElevator(Number);
 
 	//add elevator to associated dispatch controllers
-	for (int i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < (size_t)Controllers.size(); i++)
 	{
 		if (sbs->GetController(Controllers[i]))
 			sbs->GetController(Controllers[i])->AddElevator(Number);
@@ -437,8 +461,8 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 
 	//create counterweight and rope meshes
 	WeightMesh = new MeshObject(this, GetName() + " Counterweight");
-	WeightRopeMesh = new MeshObject(this, GetName() + " Counterweight Rope", 0, "", "", 0, 1, false, 0, 0, 0, false, false);
-	RopeMesh = new MeshObject(this, GetName() + " Rope", 0, "", "", 0, 1, false, 0, 0, 0, false, false);
+	WeightRopeMesh = new MeshObject(this, GetName() + " Counterweight Rope", 0, "", "", 0, 1, false, false);
+	RopeMesh = new MeshObject(this, GetName() + " Rope", 0, "", "", 0, 1, false, false);
 
 	//save and change autosizing
 	bool autosize_x, autosize_y;
@@ -534,6 +558,10 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
 	//call type is 0 for a car call, 1 for a hall call, 2 for a system call
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -653,6 +681,10 @@ bool Elevator::DeleteRoute(int floor, int direction)
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Running == false)
 		return ReportError("Elevator not running");
 
@@ -705,6 +737,10 @@ bool Elevator::RouteExists(bool direction, int floor)
 {
 	//return true if a floor route exists in the specified directional queue
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (direction == true)
 	{
 		for (size_t i = 0; i < UpQueue.size(); i++)
@@ -729,6 +765,10 @@ bool Elevator::CallCancel()
 {
 	//cancels all added routes
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Running == false)
 		return ReportError("Elevator not running");
 
@@ -747,6 +787,9 @@ bool Elevator::CallCancel()
 bool Elevator::Stop(bool emergency)
 {
 	//Tells elevator to stop moving, no matter where it is
+
+	if (EmergencyStop > 0)
+		return false;
 
 	if (emergency == true)
 	{
@@ -786,6 +829,10 @@ void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
 	SBS_PROFILE("Elevator::ProcessCallQueue");
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	//exit if elevator is not running
 	if (Running == false)
@@ -1113,6 +1160,12 @@ void Elevator::Loop()
 	if (Created == false)
 		return;
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+	{
+		Stop(true);
+	}
+
 	//make sure height value is set
 	if (HeightSet == false)
 	{
@@ -1292,7 +1345,7 @@ void Elevator::MoveElevatorToFloor()
 		Notified = false;
 
 		//reset arrival status on controllers
-		for (int i = 0; i < (int)Controllers.size(); i++)
+		for (size_t i = 0; i < Controllers.size(); i++)
 		{
 			if (sbs->GetController(Controllers[i]))
 				sbs->GetController(Controllers[i])->ResetArrival(Number);
@@ -2034,7 +2087,7 @@ void Elevator::FinishMove()
 					int floor = GetFloorForCar(i, GotoFloor);
 
 					//notify dispatch controllers of arrival
-					for (int i = 0; i < (int)Controllers.size(); i++)
+					for (size_t i = 0; i < Controllers.size(); i++)
 					{
 						if (sbs->GetController(Controllers[i]))
 							sbs->GetController(Controllers[i])->ElevatorArrived(Number, floor, GetArrivalDirection(floor));
@@ -2315,6 +2368,10 @@ bool Elevator::Go(int floor, bool hold)
 {
 	//go to specified floor, bypassing the queuing system
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Running == false)
 		return ReportError("Elevator not running");
 
@@ -2372,6 +2429,10 @@ void Elevator::GoToRecallFloor()
 	//for fire service modes; tells the elevator to go to the recall floor (or the alternate recall floor
 	//if the other is not available)
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	if (Running == false)
 	{
 		ReportError("Elevator not running");
@@ -2425,6 +2486,10 @@ bool Elevator::EnableACP(bool value)
 {
 	//enable Anti-Crime Protection (ACP) mode
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Running == false)
 		return ReportError("Elevator not running");
 
@@ -2465,6 +2530,10 @@ bool Elevator::EnableACP(bool value)
 bool Elevator::EnableUpPeak(bool value)
 {
 	//enable Up-Peak mode
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -2524,6 +2593,10 @@ bool Elevator::EnableDownPeak(bool value)
 {
 	//enable Down-Peak mode
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Running == false)
 		return ReportError("Elevator not running");
 
@@ -2582,6 +2655,10 @@ bool Elevator::EnableIndependentService(bool value, int car_number)
 {
 	//enable Independent Service (ISC) mode
 	//car_number is the car number to use for independent service; only used when enabling the mode
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -2647,6 +2724,10 @@ bool Elevator::EnableIndependentService(bool value, int car_number)
 bool Elevator::EnableInspectionService(bool value)
 {
 	//enable Inspection Service (INS) mode
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	//exit if no change
 	if (InspectionService == value)
@@ -2726,6 +2807,10 @@ bool Elevator::EnableFireService1(int value)
 	//enable Fire Service Phase 1 mode
 	//valid values are 0 (off), 1 (on) or 2 (bypass)
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Running == false)
 		return ReportError("Elevator not running");
 
@@ -2802,6 +2887,10 @@ bool Elevator::EnableFireService2(int value, int car_number, bool force)
 	//enable Fire Service Phase 2 mode
 	//valid values are 0 (off), 1 (on) or 2 (hold)
 	//if force is true, does not require doors to be opened to change value
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -2906,6 +2995,10 @@ bool Elevator::SetRecallFloor(int floor)
 {
 	//set elevator's fire recall floor
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (GetCar(1)->IsServicedFloor(floor) == false)
 		return ReportError("Invalid recall floor");
 
@@ -2920,6 +3013,10 @@ bool Elevator::SetAlternateRecallFloor(int floor)
 {
 	//set elevator's alternate fire recall floor
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (GetCar(1)->IsServicedFloor(floor) == false)
 		return ReportError("Invalid alternate recall floor");
 
@@ -2933,6 +3030,10 @@ bool Elevator::SetAlternateRecallFloor(int floor)
 bool Elevator::SetACPFloor(int floor)
 {
 	//set elevator's ACP floor
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	ElevatorCar *car = GetCarForFloor(floor);
 	if (!car)
@@ -2950,6 +3051,10 @@ bool Elevator::SetACPFloor(int floor)
 bool Elevator::MoveUp()
 {
 	//manual up movement for inspection service mode
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -2985,6 +3090,10 @@ bool Elevator::MoveDown()
 {
 	//manual down movement for inspection service mode
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Running == false)
 		return ReportError("Elevator not running");
 
@@ -3018,6 +3127,10 @@ bool Elevator::MoveDown()
 bool Elevator::SetGoButton(bool value)
 {
 	//sets the value of the Go button (for Inspection Service mode)
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -3058,6 +3171,10 @@ bool Elevator::SetUpButton(bool value)
 {
 	//sets the value of the Up button (for Inspection Service mode)
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Running == false)
 		return ReportError("Elevator not running");
 
@@ -3091,6 +3208,10 @@ bool Elevator::SetUpButton(bool value)
 bool Elevator::SetDownButton(bool value)
 {
 	//sets the value of the Go button (for Inspection Service mode)
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 		return ReportError("Elevator not running");
@@ -3151,6 +3272,11 @@ void Elevator::UpdateDirectionalIndicators()
 bool Elevator::IsIdle()
 {
 	//return true if elevator is idle (not moving, doors are closed (unless in a peak mode) and not moving)
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (MoveElevator == false && (AreDoorsOpen() == false || UpPeak == true || DownPeak == true) && AreDoorsMoving() == 0 && Running == true)
 		return true;
 	else
@@ -3184,6 +3310,10 @@ void Elevator::ResetQueue(bool up, bool down, bool stop_if_empty)
 
 void Elevator::DeleteActiveRoute()
 {
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	if (Running == false)
 	{
 		ReportError("Elevator not running");
@@ -3248,6 +3378,12 @@ bool Elevator::ReportError(const std::string &message)
 
 void Elevator::Timer::Notify()
 {
+	//elevator timer loop
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	if (elevator->IsRunning() == false)
 		return;
 
@@ -3284,6 +3420,13 @@ void Elevator::Timer::Notify()
 		//arrival and departure timers
 		elevator->WaitForTimer = false;
 	}
+	else if (type == 2)
+	{
+		//malfunction timer
+		int result = (int)elevator->rnd_time->Get(elevator->RandomProbability - 1);
+		if (result == 0)
+			elevator->Malfunction();
+	}
 }
 
 bool Elevator::IsQueued(int floor, int queue)
@@ -3316,6 +3459,10 @@ void Elevator::NotifyArrival(bool early)
 {
 	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
 	//for all cars
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	for (int i = 1; i <= GetCarCount(); i++)
 	{
@@ -3512,6 +3659,10 @@ int Elevator::AvailableForCall(bool destination, int floor, int direction, bool 
 
 	SBS_PROFILE("Elevator::AvailableForCall");
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return 2;
+
 	ElevatorCar *car = GetCarForFloor(floor, report_on_failure);
 
 	//if floor is a serviced floor (valid car found)
@@ -3643,6 +3794,10 @@ bool Elevator::SelectFloor(int floor)
 {
 	//select a floor (in-elevator floor selections)
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	//exit if in inspection mode or in fire service mode or is not running
 	if (InspectionService == true)
 		return ReportError("Cannot select floor while in inspection mode");
@@ -3746,6 +3901,10 @@ bool Elevator::ReturnToNearestFloor()
 {
 	//return and relevel to nearest floor
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (IsIdle() == true && InServiceMode() == false)
 	{
 		int floor = GetCar(1)->GetNearestServicedFloor();
@@ -3764,6 +3923,10 @@ bool Elevator::ReturnToNearestFloor()
 bool Elevator::ReturnToBottomFloor()
 {
 	//return and relevel to bottom floor
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (IsIdle() == true && InServiceMode() == false)
 	{
@@ -3789,6 +3952,10 @@ bool Elevator::Up()
 	//move elevator up (manual)
 	//this function also stops the up movement when button is depressed
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (ManualMove == 0)
 	{
 		ManualMoveHold = true;
@@ -3807,6 +3974,10 @@ bool Elevator::Down()
 	//move elevator down (manual)
 	//this function also stops the down movement when button is depressed
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (ManualMove == 0)
 	{
 		ManualMoveHold = true;
@@ -3823,6 +3994,10 @@ bool Elevator::Down()
 bool Elevator::Up(bool value)
 {
 	//move elevator up (manual)
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 	{
@@ -3855,6 +4030,10 @@ bool Elevator::Up(bool value)
 bool Elevator::Down(bool value)
 {
 	//move elevator down (manual)
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (Running == false)
 	{
@@ -4155,7 +4334,7 @@ std::vector<Floor*> Elevator::GetLobbies()
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		for (int j = 0; j < Cars[i]->GetServicedFloorCount(); j++)
+		for (size_t j = 0; j < Cars[i]->GetServicedFloorCount(); j++)
 		{
 			int num = Cars[i]->GetServicedFloor(j);
 
@@ -4185,6 +4364,10 @@ bool Elevator::IsStopped()
 void Elevator::CancelHallCall(int floor, int direction)
 {
 	//delete a route if the route is a hall call response, and no floor button has been pressed
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
@@ -4426,6 +4609,10 @@ void Elevator::OpenDoors()
 {
 	//open all doors
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
 		Cars[i]->OpenDoors();
@@ -4435,6 +4622,10 @@ void Elevator::OpenDoors()
 void Elevator::CloseDoors()
 {
 	//close all doors
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
@@ -4518,6 +4709,11 @@ void Elevator::ResetNudgeTimers(bool start)
 void Elevator::HoldDoors()
 {
 	//hold all doors
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
 		Cars[i]->HoldDoors();
@@ -4537,6 +4733,10 @@ void Elevator::DirectionalIndicatorsOff()
 void Elevator::EnableNudgeMode(bool value)
 {
 	//enable nudge mode on all cars
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
@@ -4707,7 +4907,7 @@ void Elevator::SameFloorArrival(int floor, int direction)
 		return;
 	}
 
-	for (int i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		DispatchController *controller = sbs->GetController(Controllers[i]);
 
@@ -4748,7 +4948,7 @@ void Elevator::AddController(int controller)
 		return;
 
 	//exit if already in table
-	for (size_t i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		if (Controllers[i] == controller)
 			return;
@@ -4761,7 +4961,7 @@ void Elevator::RemoveController(int controller)
 {
 	//remove a controller from this elevator
 
-	for (size_t i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		if (Controllers[i] == controller)
 		{
@@ -4775,7 +4975,7 @@ bool Elevator::GetCallStatus(int floor, bool &up, bool &down)
 {
 	//returns call status for the specified floor
 
-	for (int i = 0; i < (int)Controllers.size(); i++)
+	for (size_t i = 0; i < Controllers.size(); i++)
 	{
 		bool result = false;
 		if (sbs->GetController(Controllers[i]))
@@ -4790,6 +4990,64 @@ bool Elevator::GetCallStatus(int floor, bool &up, bool &down)
 int Elevator::GetMotorRoom()
 {
 	return sbs->GetFloorNumber(MotorPosition.y);
+}
+
+void Elevator::EnableMalfunctions(bool value)
+{
+	//enable random malfunctions on this elevator
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
+	if (!malfunction_timer)
+		return;
+
+	if (value == true)
+	{
+		Report("Enabling malfunctions");
+		malfunction_timer->Start(int(RandomFrequency) * 1000, false);
+	}
+	else
+	{
+		Report("Disabling malfunctions");
+		malfunction_timer->Stop();
+	}
+}
+
+void Elevator::Malfunction()
+{
+	//elevator malfunction
+
+	Report("Malfunction");
+
+	size_t type = rnd_type->Get(2);
+	if (type == 0)
+	{
+		//full malfunction
+		Stop(true);
+		SetRunState(false);
+		ResetQueue(true, true);
+
+		for (size_t i = 0; i < Cars.size(); i++)
+		{
+			if (Cars[i])
+			{
+				//turn off car fans
+				Cars[i]->Fan = false;
+			}
+		}
+	}
+	else if (type == 1)
+	{
+		//partial malfunction (stop)
+		Stop(true);
+	}
+	else if (type == 2)
+	{
+		//partial malfunction (reset queues)
+		ResetQueue(true, true);
+	}
 }
 
 }

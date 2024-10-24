@@ -314,6 +314,9 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
+	if (sbs->GetPower() == false && manual == false)
+		return;
+
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
@@ -429,6 +432,9 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//1 = both shaft and elevator doors
 	//2 = only elevator doors
 	//3 = only shaft doors
+
+	if (sbs->GetPower() == false && manual == false)
+		return;
 
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
@@ -662,6 +668,15 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		//if a different direction was specified during movement
 		door_changed = true;
 		playsounds = true;
+	}
+
+	//reset values if power is off
+	if (sbs->GetPower() == false && manual == false)
+	{
+		OpenDoor = 0;
+		WhichDoors = 0;
+		door_changed = false;
+		doors_stopped = false;
 	}
 
 	//play door sounds
@@ -1362,6 +1377,9 @@ bool ElevatorDoor::AreShaftDoorsClosed(bool skip_current_floor)
 
 void ElevatorDoor::Timer::Notify()
 {
+	if (sbs->GetPower() == false)
+		return;
+
 	if (type == 0)
 	{
 		//door autoclose timer
@@ -1379,6 +1397,9 @@ void ElevatorDoor::Timer::Notify()
 
 void ElevatorDoor::Chime(int floor, bool direction)
 {
+	if (sbs->GetPower() == false)
+		return;
+
 	//play chime sound on specified floor
 	if (direction == false && chimesound_loaded != -1)
 	{
@@ -1397,6 +1418,9 @@ void ElevatorDoor::Chime(int floor, bool direction)
 
 void ElevatorDoor::EarlyChime(int floor, bool direction)
 {
+	if (sbs->GetPower() == false)
+		return;
+
 	//play chime sound on specified floor
 	if (direction == false && earlychimesound_loaded != -1)
 	{
@@ -1465,6 +1489,9 @@ void ElevatorDoor::Loop()
 {
 	//main loop
 	SBS_PROFILE("ElevatorDoor::Loop");
+
+	if (sbs->GetPower() == false)
+		nudgesound->Stop();
 
 	if (OpenDoor == 1)
 		MoveDoors(true, false);
@@ -1583,6 +1610,9 @@ void ElevatorDoor::Hold(bool sensor)
 	//hold door (basically turn off timer)
 	//disable nudge mode timer if specified
 
+	if (sbs->GetPower() == false)
+		return;
+
 	//exit if timer is already stopped
 	if (timer->IsRunning() == false)
 		return;
@@ -1605,6 +1635,9 @@ void ElevatorDoor::Hold(bool sensor)
 void ElevatorDoor::EnableNudgeMode(bool value)
 {
 	//enable or disable nudge mode
+
+	if (sbs->GetPower() == false)
+		return;
 
 	if (value == true && AllowNudgeMode() == true)
 	{
@@ -1636,6 +1669,9 @@ bool ElevatorDoor::GetNudgeStatus()
 
 void ElevatorDoor::CheckSensor()
 {
+	if (sbs->GetPower() == false)
+		return;
+
 	if (GetSensorStatus(false) == true && sensor && (AreDoorsOpen() == true || AreDoorsMoving() == true) && elev->PeakWaiting() == false)
 		sensor->Loop();
 }
@@ -1693,6 +1729,9 @@ void ElevatorDoor::EnableSensor(bool value, bool persistent)
 
 	//set persistent to false if sensor should be temporarily activated/deactivated only
 	//and persistent state left untouched
+
+	if (sbs->GetPower() == false)
+		return;
 
 	if (value == sensor_enabled)
 		return;
@@ -1764,6 +1803,9 @@ bool ElevatorDoor::GetHoldStatus()
 
 void ElevatorDoor::ResetNudgeTimer(bool start)
 {
+	if (sbs->GetPower() == false)
+		return;
+
 	if (AreDoorsOpen() == false || doors_stopped == true)
 	{
 		//switch off nudge mode timer if on

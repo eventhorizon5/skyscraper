@@ -56,6 +56,8 @@ public:
 	EngineContext* GetEngine();
 	ElevatorCarSection* GetElevatorCarSection();
 	ConfigHandler* GetConfigHandler();
+	bool HasRunloop();
+	bool InRunloop() {return in_runloop;}
 
 	bool IsFinished;
 
@@ -119,6 +121,8 @@ private:
 	bool CalcError;
 	bool show_percent;
 	int progress_marker;
+	bool in_runloop;
+	bool processed_runloop;
 
 	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();
@@ -135,6 +139,7 @@ private:
 	void Breakpoint();
 	void ProcessExtents();
 	int ProcessForLoops();
+	void ProcessRunloop();
 
 	struct FunctionInfo
 	{

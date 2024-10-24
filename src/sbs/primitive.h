@@ -29,6 +29,9 @@ namespace SBS {
 class SBSIMPEXP Primitive: public Object
 {
 public:
+
+	bool always_visible;
+
 	//functions
 	Primitive(Object *parent, const std::string &name);
 	~Primitive();

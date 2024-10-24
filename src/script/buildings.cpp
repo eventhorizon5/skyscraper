@@ -156,7 +156,8 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	{
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished loading other buildings");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished loading other buildings");
 		return sNextLine;
 	}
 

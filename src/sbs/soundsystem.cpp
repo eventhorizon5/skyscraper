@@ -22,6 +22,7 @@
 */
 
 #include <fmod.hpp>
+#include <fmod_errors.h>
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -231,7 +232,8 @@ SoundData* SoundSystem::Load(const std::string &filename)
 
 	if (result != FMOD_OK)
 	{
-		ReportError("Can't load file '" + filename + "'");
+		std::string fmod_result = FMOD_ErrorString(result);
+		ReportError("Can't load file '" + filename + "':\n" + fmod_result);
 		return 0;
 	}
 

@@ -65,6 +65,10 @@ void DispatchController::Loop()
 {
 	//this function runs for every registered dispatch controller via timer callback
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	//process pending requests
 	ProcessRoutes();
 
@@ -80,7 +84,7 @@ void DispatchController::CheckArrivals()
 
 	SBS_PROFILE("DispatchController::CheckArrivals");
 
-	for (int i = 0; i < Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		Elevator *elev = sbs->GetElevator(Elevators[i].number);
 
@@ -88,7 +92,7 @@ void DispatchController::CheckArrivals()
 		if (Elevators[i].arrived == true)
 		{
 			//step through requests table and find a request that matches the arrived elevator
-			for (int j = 0; j < Routes.size(); j++)
+			for (size_t j = 0; j < Routes.size(); j++)
 			{
 				//get request's direction of travel
 				int direction_dd = 0;
@@ -125,7 +129,7 @@ void DispatchController::CheckArrivals()
 							bool result = false;
 
 							//dispatch elevator to destination floor for each registered assignment
-							for (int k = 0; k < Elevators[i].assigned_destination.size(); k++)
+							for (size_t k = 0; k < Elevators[i].assigned_destination.size(); k++)
 							{
 								if (Routes[j].destination_floor == Elevators[i].assigned_destination[k])
 								{
@@ -173,7 +177,11 @@ void DispatchController::RemoveRoute(Route &route)
 {
 	//remove a destination dispatch route
 
-	for (int i = 0; i < Routes.size(); i++)
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
+	for (size_t i = 0; i < Routes.size(); i++)
 	{
 		if (Routes[i].starting_floor == route.starting_floor && Routes[i].destination_floor == route.destination_floor)
 		{
@@ -189,6 +197,10 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	//request a destination dispatch route
 
 	SBS_PROFILE("DispatchController::RequestRoute");
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (DestinationDispatch == false)
 	{
@@ -249,7 +261,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	}
 
 	//use existing entry if found
-	for (int i = 0; i < Routes.size(); i++)
+	for (size_t i = 0; i < Routes.size(); i++)
 	{
 		if (Routes[i].starting_floor == starting_floor && Routes[i].destination_floor == destination_floor && Routes[i].requests < MaxPassengers)
 		{
@@ -293,6 +305,10 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	//call an elevator (request a standard route)
 
 	SBS_PROFILE("DispatchController::CallElevator");
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (DestinationDispatch == true && Hybrid == false)
 	{
@@ -343,7 +359,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 		dir = -1;
 
 	//use existing entry if found
-	for (int i = 0; i < Routes.size(); i++)
+	for (size_t i = 0; i < Routes.size(); i++)
 	{
 		if (Routes[i].starting_floor == floor && Routes[i].direction == dir)
 		{
@@ -381,7 +397,7 @@ void DispatchController::ProcessRoutes()
 
 	SBS_PROFILE("DispatchController::ProcessRoutes");
 
-	for (int i = 0; i < Routes.size(); i++)
+	for (size_t i = 0; i < Routes.size(); i++)
 	{
 		if (Routes[i].processed == true)
 		{
@@ -439,7 +455,7 @@ void DispatchController::ProcessRoutes()
 								}
 							}
 							else
-								continue;//skip route if elevator is still closest
+								continue; //skip route if elevator is still closest
 						}
 						else
 							continue; //skip if a closer elevator is not found
@@ -493,7 +509,7 @@ void DispatchController::ProcessRoutes()
 			else
 			{
 				//update elevator's call information
-				for (int j = 0; j < Elevators.size(); j++)
+				for (size_t j = 0; j < Elevators.size(); j++)
 				{
 					if (Elevators[j].number == Routes[i].assigned_elevator)
 					{
@@ -540,7 +556,7 @@ void DispatchController::ProcessRoutes()
 		//update elevator's call information
 		if (Routes[i].destination == true)
 		{
-			for (int j = 0; j < Elevators.size(); j++)
+			for (size_t j = 0; j < Elevators.size(); j++)
 			{
 				if (Elevators[j].number == elevator->Number)
 				{
@@ -573,6 +589,10 @@ void DispatchController::ProcessRoutes()
 bool DispatchController::AddElevator(int elevator)
 {
 	//add an elevator to this controller
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (!sbs->GetElevator(elevator))
 		return false;
@@ -610,6 +630,10 @@ bool DispatchController::RemoveElevator(int elevator)
 {
 	//remove an elevator from this controller
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == elevator)
@@ -634,6 +658,10 @@ bool DispatchController::ServicesElevator(int elevator)
 {
 	//return true if this controller services the specified elevator
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == elevator)
@@ -652,6 +680,10 @@ int DispatchController::FindClosestElevator(bool &busy, bool destination, int st
 	//if destination is true, use Destination Dispatch mode, otherwise use Standard Mode
 
 	SBS_PROFILE("DispatchController::FindClosestElevator");
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return -1;
 
 	//initialize values
 	int closest = 0;
@@ -817,7 +849,11 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 
 	SBS_PROFILE("DispatchController::ElevatorArrived");
 
-	for (int i = 0; i < Elevators.size(); i++)
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		//exit if elevator already arrived
 		if (Elevators[i].number == number && Elevators[i].arrived == true)
@@ -832,7 +868,7 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 			Report("Elevator " + ToString(number) + " arrived at floor " + ToString(floor) + " (" + floorobj->ID + ")");
 
 			//only set values if arriving at starting floor
-			for (int j = 0; j < (int)Elevators[i].calls.size(); j++)
+			for (size_t j = 0; j < (int)Elevators[i].calls.size(); j++)
 			{
 				if (Elevators[i].calls[j].floor == floor && Elevators[i].calls[j].direction == direction)
 				{
@@ -847,7 +883,7 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 			if (Elevators[i].assigned == true)
 			{
 				//unassign route from elevator in destination dispatch mode
-				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+				for (size_t j = 0; j < Elevators[i].assigned_destination.size(); j++)
 				{
 					if (Elevators[i].assigned_destination[j] == floor)
 					{
@@ -857,7 +893,7 @@ void DispatchController::ElevatorArrived(int number, int floor, bool direction)
 				}
 
 				//unassign route from elevator in standard mode
-				for (int j = 0; j < Elevators[i].assigned_directions.size(); j++)
+				for (size_t j = 0; j < Elevators[i].assigned_directions.size(); j++)
 				{
 					int direction2 = -1;
 					if (direction == true)
@@ -883,6 +919,10 @@ void DispatchController::DispatchElevator(bool destination, int number, int dest
 {
 	//dispatch an elevator to the given destination floor
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	Elevator *elevator = sbs->GetElevator(number);
 	Floor *floor = sbs->GetFloor(destination_floor);
 
@@ -905,14 +945,18 @@ bool DispatchController::IsElevatorAssigned(int number, int destination_floor, i
 {
 	//return true if the specified elevator is assigned to the specified destination floor or direction
 
-	for (int i = 0; i < Elevators.size(); i++)
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == number)
 		{
 			if (direction == 0)
 			{
 				//destination dispatch mode
-				for (int j = 0; j < Elevators[i].assigned_destination.size(); j++)
+				for (size_t j = 0; j < Elevators[i].assigned_destination.size(); j++)
 				{
 					if (Elevators[i].assigned_destination[j] == destination_floor && Elevators[i].assigned == true)
 						return true;
@@ -921,7 +965,7 @@ bool DispatchController::IsElevatorAssigned(int number, int destination_floor, i
 			else
 			{
 				//standard mode
-				for (int j = 0; j < Elevators[i].assigned_directions.size(); j++)
+				for (size_t j = 0; j < Elevators[i].assigned_directions.size(); j++)
 				{
 					if (Elevators[i].assigned_directions[j] == direction && Elevators[i].assigned == true)
 						return true;
@@ -938,7 +982,11 @@ bool DispatchController::IsElevatorAssignedToOther(int number, int destination_f
 	//return true if the specified elevator is assigned to a destination floor or direction other than
 	//the specified one, while also taking the serviced floor range into account if more than one elevator is assigned
 
-	for (int i = 0; i < Elevators.size(); i++)
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == number)
 		{
@@ -974,7 +1022,11 @@ void DispatchController::AssignElevator(int number, int destination_floor, int d
 {
 	//assign an elevator to the specified destination floor
 
-	for (int i = 0; i < Elevators.size(); i++)
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == number)
 		{
@@ -988,7 +1040,7 @@ void DispatchController::AssignElevator(int number, int destination_floor, int d
 			else //standard mode
 			{
 				//exit if elevator has already been assigned to the direction
-				for (int j = 0; j < Elevators[i].assigned_directions.size(); j++)
+				for (size_t j = 0; j < Elevators[i].assigned_directions.size(); j++)
 				{
 					if (Elevators[i].assigned_directions[j] == direction)
 					{
@@ -1008,8 +1060,12 @@ void DispatchController::RegisterCallStation(CallStation *station)
 {
 	//register the specified call station
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	//exit if already registered
-	for (int i = 0; i < CallStations.size(); i++)
+	for (size_t i = 0; i < CallStations.size(); i++)
 	{
 		if (CallStations[i] == station)
 			return;
@@ -1021,6 +1077,10 @@ void DispatchController::RegisterCallStation(CallStation *station)
 void DispatchController::UnregisterCallStation(CallStation *station)
 {
 	//unregister the specified call station
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	for (size_t i = 0; i < CallStations.size(); i++)
 	{
@@ -1053,7 +1113,11 @@ int DispatchController::GetElevatorArrived(int starting_floor, int destination_f
 	//return the number of the elevator that has arrived, for the specified route
 	//return 0 if no elevator has arrived yet
 
-	for (int i = 0; i < Elevators.size(); i++)
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return 0;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].arrived == true)
 		{
@@ -1069,7 +1133,11 @@ int DispatchController::GetElevatorArrivedStandard(int floor, bool direction)
 	//return the number of the elevator that has arrived, for the specified direction
 	//return 0 if no elevator has arrived yet
 
-	for (int i = 0; i < Elevators.size(); i++)
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return 0;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].arrived == true)
 		{
@@ -1130,6 +1198,10 @@ bool DispatchController::FireService(int value)
 {
 	//enables fire service phase 1 on all elevators associated with this controller
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	bool status = false, status2 = false;
 
 	for (size_t i = 0; i < Elevators.size(); i++)
@@ -1147,6 +1219,10 @@ bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
 {
 	//return true if the specified elevator is at the maximum requests level for the specified destination floor
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (DestinationDispatch == false)
 		return false;
 
@@ -1155,7 +1231,7 @@ bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
 
 	//get elevator index
 	int index = -1;
-	for (int i = 0; i < Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == elevator)
 		{
@@ -1165,9 +1241,9 @@ bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
 	}
 
 	//return true if an elevator's assigned DD route has requests at the MaxPassengers value
-	for (int i = 0; i < Routes.size(); i++)
+	for (size_t i = 0; i < Routes.size(); i++)
 	{
-		for (int j = 0; j < Elevators[index].assigned_destination.size(); j++)
+		for (size_t j = 0; j < Elevators[index].assigned_destination.size(); j++)
 		{
 			if (Elevators[index].assigned_destination[j] == destination_floor && Elevators[index].assigned == true)
 			{
@@ -1183,7 +1259,12 @@ bool DispatchController::AtMaxRequests(int elevator, int destination_floor)
 void DispatchController::ResetArrival(int number)
 {
 	//reset arrival status
-	for (int i = 0; i < Elevators.size(); i++)
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == number)
 		{
@@ -1212,6 +1293,10 @@ int DispatchController::GetRecallFloor()
 bool DispatchController::ElevatorUnavailable(int elevator)
 {
 	//returns true if an elevator has become unavailable during dispatch
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	Elevator *elev = sbs->GetElevator(elevator);
 
@@ -1265,10 +1350,14 @@ bool DispatchController::SameElevators(const std::vector<int> &elevators)
 {
 	//return true if the list of elevators matches this controller's elevators
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (Elevators.size() != elevators.size())
 		return false;
 
-	for (int i = 0; i < (int)Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number != elevators[i])
 			return false;
@@ -1281,15 +1370,19 @@ bool DispatchController::GetCallStatus(int elevator, int floor, bool &up, bool &
 	//returns call status for the specified elevator and floor
 	//returns true if a matching call was found
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	up = false;
 	down = false;
 	bool result = false;
 
-	for (int i = 0; i < Elevators.size(); i++)
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i].number == elevator)
 		{
-			for (int j = 0; j < (int)Elevators[i].calls.size(); j++)
+			for (size_t j = 0; j < Elevators[i].calls.size(); j++)
 			{
 				if (Elevators[i].calls[j].floor == floor)
 				{
@@ -1312,7 +1405,11 @@ bool DispatchController::ServesFloor(int floor)
 {
 	//return true if an associated elevator serves the specified floor
 
-	for (int i = 0; i < Elevators.size(); i++)
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
+	for (size_t i = 0; i < Elevators.size(); i++)
 	{
 		Elevator *elev = sbs->GetElevator(Elevators[i].number);
 		if (elev)

@@ -108,6 +108,8 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	sbs->ResetWalls();
 
 	flash_timer = new Timer("Flash Timer", this);
+
+	EnableLoop(true);
 }
 
 FloorIndicator::~FloorIndicator()
@@ -205,6 +207,19 @@ void FloorIndicator::Timer::Notify()
 		on = false;
 	}
 
+}
+
+void FloorIndicator::Off()
+{
+	//turn off indicator
+
+	Update(true);
+}
+
+void FloorIndicator::Loop()
+{
+	if (sbs->GetPower() == false)
+		Off();
 }
 
 }

@@ -99,6 +99,7 @@ public:
 	int GetFloorIndex(int floor);
 	int GetServicedFloorCount();
 	int GetServicedFloor(int index);
+	int GetServicedFloorIndex(int floor);
 	bool CheckServicedFloors();
 	void Alarm();
 	void OpenHatch();
@@ -163,6 +164,7 @@ public:
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
 	void RemovePrimitive(Primitive *prim);
+	void RemoveCustomObject(CustomObject *object);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	bool IsNudgeModeActive(int number = 0);
@@ -173,6 +175,8 @@ public:
 	void AddModel(Model *model);
 	Primitive* AddPrimitive(const std::string &name);
 	void AddPrimitive(Primitive *primitive);
+	CustomObject* AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1);
+	void AddCustomObject(CustomObject *object);
 	void AddDisplayFloor(int floor);
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names);
@@ -188,6 +192,7 @@ public:
 	void ResetDoorState(int number = 0);
 	Model* GetModel(std::string name);
 	Primitive* GetPrimitive(std::string name);
+	CustomObject* GetCustomObject(std::string name);
 	void SetBeepSound(const std::string &filename);
 	void SetFloorSound(const std::string &prefix);
 	void SetMessageSound(bool type, bool direction, const std::string &filename);
@@ -270,6 +275,9 @@ private:
 
 	//Primitives
 	std::vector<Primitive*> PrimArray;
+
+	//custom objects
+	std::vector<CustomObject*> CustomObjectArray;
 
 	//Controls
 	std::vector<Control*> ControlArray;

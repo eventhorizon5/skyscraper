@@ -284,7 +284,7 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
 		PolyArray poly, tmp1, tmp2;
-		for (int j = 0; j < polygons[i]->geometry[0].size(); j++)
+		for (size_t j = 0; j < polygons[i]->geometry[0].size(); j++)
 		{
 			poly.push_back(sbs->ToLocal(polygons[i]->geometry[0][j].vertex));
 		}

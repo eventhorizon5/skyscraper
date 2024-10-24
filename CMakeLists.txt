@@ -188,7 +188,7 @@ target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
 if (WIN32)
-	set (OGRE_D3D11_LIB "C:/ogre-14.2.6/lib/RelWithDebInfo/RenderSystem_Direct3D11.lib")
+	set (OGRE_D3D11_LIB ${OGRE_DIR}/../../lib/RelWithDebInfo/RenderSystem_Direct3D11.lib)
 	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY} ${OGRE_D3D11_LIB})
 endif ()
 
@@ -227,6 +227,20 @@ else ()
 ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 		POST_BUILD
 		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.cmd)
+endif ()
+
+if (APPLE)
+ADD_CUSTOM_COMMAND(TARGET SBS
+		POST_BUILD
+		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
+
+ADD_CUSTOM_COMMAND(TARGET ScriptProc
+                POST_BUILD
+                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libScriptProc.dylib)
+
+ADD_CUSTOM_COMMAND(TARGET skyscraper
+		POST_BUILD
+		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
 endif ()
 
 if (UNIX AND NOT APPLE)

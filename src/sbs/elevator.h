@@ -240,6 +240,8 @@ public:
 	void RemoveController(int controller);
 	bool GetCallStatus(int floor, bool &up, bool &down);
 	int GetMotorRoom();
+	void EnableMalfunctions(bool value);
+	void Malfunction();
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
@@ -289,6 +291,11 @@ private:
 	Timer *arrival_delay;
 	Timer *departure_delay;
 
+	//random malfunctions timer
+	Timer *malfunction_timer;
+	int RandomProbability; //probability ratio of random activity, starting with 1 - higher is less frequent
+	Real RandomFrequency; //speed in seconds to make each random action
+
 	//Internal elevator simulation data
 	std::vector<ElevatorCar*> Cars; //car objects
 	std::vector<QueueEntry> UpQueue; //up call queue
@@ -314,6 +321,7 @@ private:
 	int HoistwayAccess; //INS mode Hoistway Access; -1 for Down, 0 for Off, 1 for Up
 	int HoistwayAccessFloor; //floor used for Hoistway Access
 	std::vector<int> Controllers; //dispatch controllers this elevator is assigned to
+	RandomGen *rnd_time, *rnd_type;
 
 	//functions
 	void MoveElevatorToFloor();

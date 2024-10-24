@@ -30,6 +30,8 @@
 		<Unit filename="../src/frontend/enginemanager.h" />
 		<Unit filename="../src/frontend/fileio.cpp" />
 		<Unit filename="../src/frontend/fileio.h" />
+		<Unit filename="../src/frontend/gui/escalatorcontrol.cpp" />
+		<Unit filename="../src/frontend/gui/escalatorcontrol.h" />
 		<Unit filename="../src/frontend/gui/texturemanager.cpp" />
 		<Unit filename="../src/frontend/gui/texturemanager.h" />
 		<Unit filename="../src/frontend/keydialog.cpp" />
@@ -123,6 +125,7 @@
 		<Unit filename="../src/sbs/wall.h" />
 		<Unit filename="wxsmith/CameraTextureControl.wxs" />
 		<Unit filename="wxsmith/EngineManager.wxs" />
+		<Unit filename="wxsmith/EscalatorControl.wxs" />
 		<Unit filename="wxsmith/PeopleManager.wxs" />
 		<Unit filename="wxsmith/SkyControl.wxs" />
 		<Unit filename="wxsmith/SoundManager.wxs" />
@@ -152,6 +155,7 @@
 					<wxDialog wxs="wxsmith/CameraTextureControl.wxs" src="../src/frontend/gui/camtex.cpp" hdr="../src/frontend/gui/camtex.h" fwddecl="0" i18n="1" name="CameraTextureControl" language="CPP" />
 					<wxDialog wxs="wxsmith/SoundManager.wxs" src="../src/frontend/gui/soundmanager.cpp" hdr="../src/frontend/gui/soundmanager.h" fwddecl="0" i18n="1" name="SoundManager" language="CPP" />
 					<wxDialog wxs="wxsmith/TextureManager.wxs" src="../src/frontend/gui/texturemanager.cpp" hdr="../src/frontend/gui/texturemanager.h" fwddecl="0" i18n="1" name="TextureManager" language="CPP" />
+					<wxDialog wxs="wxsmith/EscalatorControl.wxs" src="../src/frontend/gui/escalatorcontrol.cpp" hdr="../src/frontend/gui/escalatorcontrol.h" fwddecl="0" i18n="1" name="EscalatorControl" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

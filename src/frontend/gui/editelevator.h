@@ -79,6 +79,7 @@ class editelevator: public wxDialog
 		static const long ID_bOpenShaftDoor;
 		static const long ID_bStop;
 		static const long ID_bChime;
+		static const long ID_bSelectCurrent;
 		static const long ID_bEnqueueUp;
 		static const long ID_bEnqueueDown;
 		static const long ID_bClose;
@@ -86,6 +87,7 @@ class editelevator: public wxDialog
 		static const long ID_bCloseShaftDoor;
 		static const long ID_bHoldDoors;
 		static const long ID_bStopDoors;
+		static const long ID_bMalfunction;
 		static const long ID_STATICTEXT3;
 		static const long ID_txtNumber;
 		static const long ID_STATICTEXT5;
@@ -122,8 +124,6 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT44;
 		static const long ID_txtSkipFloorText;
 		static const long ID_bSetSkipFloorText;
-		static const long ID_STATICTEXT52;
-		static const long ID_txtAlarm;
 		static const long ID_STATICTEXT28;
 		static const long ID_txtWaitForDoors;
 		static const long ID_STATICTEXT67;
@@ -151,12 +151,6 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT88;
 		static const long ID_txtLevelingOpen;
 		static const long ID_bLevelingOpen;
-		static const long ID_STATICTEXT58;
-		static const long ID_txtMusicOn;
-		static const long ID_bSetMusicOn;
-		static const long ID_STATICTEXT77;
-		static const long ID_txtMusicOnMove;
-		static const long ID_bSetMusicOnMove;
 		static const long ID_STATICTEXT78;
 		static const long ID_txtFloorSounds;
 		static const long ID_bSetFloorSounds;
@@ -180,6 +174,23 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT85;
 		static const long ID_txtInterlocks;
 		static const long ID_bInterlocks;
+		static const long ID_STATICTEXT91;
+		static const long ID_txtFan;
+		static const long ID_bFan;
+		static const long ID_STATICTEXT52;
+		static const long ID_txtAlarm;
+		static const long ID_STATICTEXT58;
+		static const long ID_txtMusicOn;
+		static const long ID_bSetMusicOn;
+		static const long ID_STATICTEXT77;
+		static const long ID_txtMusicOnMove;
+		static const long ID_bSetMusicOnMove;
+		static const long ID_STATICTEXT93;
+		static const long ID_txtMusicAlwaysOn;
+		static const long ID_bMusicAlwaysOn;
+		static const long ID_STATICTEXT92;
+		static const long ID_txtChimeOnArrival;
+		static const long ID_bSetChimeOnArrival;
 		static const long ID_STATICTEXT14;
 		static const long ID_txtFloor;
 		static const long ID_STATICTEXT15;
@@ -390,6 +401,11 @@ class editelevator: public wxDialog
 		void On_bSetDownSpeed_Click(wxCommandEvent& event);
 		void On_bNotifyLate_Click(wxCommandEvent& event);
 		void On_bSetID_Click(wxCommandEvent& event);
+		void On_bFan_Click(wxCommandEvent& event);
+		void On_bSelectCurrent_Click(wxCommandEvent& event);
+		void On_bSetChimeOnArrival_Click(wxCommandEvent& event);
+		void On_bMusicAlwaysOn_Click(wxCommandEvent& event);
+		void On_bMalfunction_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -411,10 +427,13 @@ class editelevator: public wxDialog
 		wxButton* bDumpQueues;
 		wxButton* bEnqueueDown;
 		wxButton* bEnqueueUp;
+		wxButton* bFan;
 		wxButton* bGo;
 		wxButton* bHoldDoors;
 		wxButton* bInterlocks;
 		wxButton* bLevelingOpen;
+		wxButton* bMalfunction;
+		wxButton* bMusicAlwaysOn;
 		wxButton* bNotifyEarly;
 		wxButton* bNotifyLate;
 		wxButton* bOpen;
@@ -422,12 +441,14 @@ class editelevator: public wxDialog
 		wxButton* bOpenShaftDoor;
 		wxButton* bRefresh;
 		wxButton* bResetQueues;
+		wxButton* bSelectCurrent;
 		wxButton* bSetACPFloor;
 		wxButton* bSetAccelJerk;
 		wxButton* bSetAcceleration;
 		wxButton* bSetArrivalDelay;
 		wxButton* bSetAutoDoors;
 		wxButton* bSetAutoEnable;
+		wxButton* bSetChimeOnArrival;
 		wxButton* bSetDecelJerk;
 		wxButton* bSetDeceleration;
 		wxButton* bSetDepartureDelay;
@@ -570,6 +591,9 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText89;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText90;
+		wxStaticText* StaticText91;
+		wxStaticText* StaticText92;
+		wxStaticText* StaticText93;
 		wxStaticText* StaticText9;
 		wxStaticText* tCar;
 		wxStaticText* tDoor;
@@ -587,6 +611,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtAutoEnable;
 		wxTextCtrl* txtBrakes;
 		wxTextCtrl* txtCameraOffset;
+		wxTextCtrl* txtChimeOnArrival;
 		wxTextCtrl* txtDecelJerk;
 		wxTextCtrl* txtDeceleration;
 		wxTextCtrl* txtDepartureDelay;
@@ -605,6 +630,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtElevStart;
 		wxTextCtrl* txtEnabled;
 		wxTextCtrl* txtErrorOffset;
+		wxTextCtrl* txtFan;
 		wxTextCtrl* txtFloor;
 		wxTextCtrl* txtFloorBeeps;
 		wxTextCtrl* txtFloorSounds;
@@ -627,6 +653,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtMessageSounds;
 		wxTextCtrl* txtMotor;
 		wxTextCtrl* txtMoveElevator;
+		wxTextCtrl* txtMusicAlwaysOn;
 		wxTextCtrl* txtMusicOn;
 		wxTextCtrl* txtMusicOnMove;
 		wxTextCtrl* txtMusicPosition;
@@ -689,6 +716,7 @@ class editelevator: public wxDialog
 		SBS::Elevator *elevator;
 		SBS::ElevatorCar *car;
 		SBS::ElevatorDoor *door;
+		bool set_current_floor;
 
 		DECLARE_EVENT_TABLE()
 };

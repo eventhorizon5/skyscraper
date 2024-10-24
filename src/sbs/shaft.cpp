@@ -33,6 +33,7 @@
 #include "door.h"
 #include "model.h"
 #include "primitive.h"
+#include "custom.h"
 #include "light.h"
 #include "camera.h"
 #include "control.h"
@@ -106,7 +107,7 @@ Shaft::~Shaft()
 	//destructor
 
 	//delete levels
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 	{
 		if (Levels[i])
 			delete Levels[i];
@@ -133,7 +134,7 @@ Shaft::~Shaft()
 
 Shaft::Level* Shaft::GetLevel(int floor)
 {
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 	{
 		if (Levels[i]->GetFloor() == floor)
 			return Levels[i];
@@ -483,7 +484,7 @@ bool Shaft::ReportError(const std::string &message)
 
 void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	for (int i = 0; i < Levels.size(); i++)
+	for (size_t i = 0; i < Levels.size(); i++)
 		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
@@ -725,6 +726,28 @@ Shaft::Level::~Level()
 		ModelArray[i] = 0;
 	}
 
+	//delete primitives
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i])
+		{
+			PrimArray[i]->parent_deleting = true;
+			delete PrimArray[i];
+		}
+		PrimArray[i] = 0;
+	}
+
+	//delete custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+		{
+			CustomObjectArray[i]->parent_deleting = true;
+			delete CustomObjectArray[i];
+		}
+		CustomObjectArray[i] = 0;
+	}
+
 	//delete lights
 	for (size_t i = 0; i < lights.size(); i++)
 	{
@@ -860,6 +883,20 @@ void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 				ModelArray[i]->Enabled(value);
 		}
 
+		//primitives
+		for (size_t i = 0; i < PrimArray.size(); i++)
+		{
+			if (PrimArray[i])
+				PrimArray[i]->Enabled(value);
+		}
+
+		//custom objects
+		for (size_t i = 0; i < CustomObjectArray.size(); i++)
+		{
+			if (CustomObjectArray[i])
+				CustomObjectArray[i]->Enabled(value);
+		}
+
 		//lights
 		for (size_t i = 0; i < lights.size(); i++)
 		{
@@ -874,7 +911,7 @@ void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 				Elevator *elevator = sbs->GetElevator(parent->elevators[i]);
 				if (elevator)
 				{
-					for (int j = 1; j <= elevator->GetCarCount(); j++)
+					for (size_t j = 1; j <= elevator->GetCarCount(); j++)
 					{
 						ElevatorCar *car = elevator->GetCar(j);
 
@@ -969,6 +1006,19 @@ void Shaft::Level::RemovePrimitive(Primitive *prim)
 	}
 }
 
+void Shaft::Level::RemoveCustomObject(CustomObject *object)
+{
+	//remove a custom object reference (does not delete the object itself)
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+		{
+			CustomObjectArray.erase(CustomObjectArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void Shaft::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -1013,7 +1063,7 @@ Light* Shaft::Level::AddLight(const std::string &name, int type)
 
 Light* Shaft::Level::GetLight(const std::string &name)
 {
-	for (int i = 0; i < lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i]->GetName() == name)
 			return lights[i];
@@ -1075,6 +1125,30 @@ void Shaft::Level::AddPrimitive(Primitive *primitive)
 	PrimArray.push_back(primitive);
 }
 
+CustomObject* Shaft::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
+{
+	//add a custom object
+	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
+	CustomObjectArray.push_back(object);
+	return object;
+}
+
+void Shaft::Level::AddCustomObject(CustomObject *object)
+{
+	//add a custom object reference
+
+	if (!object)
+		return;
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+			return;
+	}
+
+	CustomObjectArray.push_back(object);
+}
+
 Control* Shaft::Level::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
@@ -1127,6 +1201,21 @@ Primitive* Shaft::Level::GetPrimitive(std::string name)
 	{
 		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
 			return PrimArray[i];
+	}
+
+	return 0;
+}
+
+CustomObject* Shaft::Level::GetCustomObject(std::string name)
+{
+	//get a custom object by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (SetCaseCopy(CustomObjectArray[i]->GetName(), false) == name)
+			return CustomObjectArray[i];
 	}
 
 	return 0;
@@ -1225,7 +1314,7 @@ Door* Shaft::Level::CreateDoor(std::string name, const std::string &open_sound, 
 
 Door* Shaft::Level::GetDoor(const std::string &name)
 {
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i]->GetName() == name)
 			return DoorArray[i];

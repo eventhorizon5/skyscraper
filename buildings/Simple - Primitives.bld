@@ -91,6 +91,10 @@
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     AddTextRange 1, 10, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 10, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+
+    #load a second copy of the Default texture, with modified culling
+    Load data/default.png, Default2, 1, 1
+    SetCulling Default2, 0
 <EndTextures>
 
 #Next you'll need to create the ground. The following code is the default ground code.
@@ -491,34 +495,33 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
 #create a prim
 <Floor 0>
-    CreatePrim Floor 0, Shape1
-    PrimShape Floor 0, Shape1, Sphere, 2.0, 5.0, 5.0, 16, 16
+
+    #create basic indoor prims
+
+    CreatePrim Floor 0, Shape1, Sphere, 2.0, 5.0, 5.0, 16, 16
     PrimAttach Floor 0, Shape1, 0, 5, -5, 0, 0, 0
-    PrimTexture Floor 0, Shape1, Default
+    PrimTexture Floor 0, Shape1, Default2
 
-    CreatePrim Floor 0, Shape2
-    PrimShape Floor 0, Shape2, Cylinder, 2, 2, 5.0, 5.0, 16, 16, true
+    CreatePrim Floor 0, Shape2, Cylinder, 2, 2, 5.0, 5.0, 16, 16, true
     PrimAttach Floor 0, Shape2, -10, 5, -5, 0, 0, 0
-    PrimTexture Floor 0, Shape2, Default
+    PrimTexture Floor 0, Shape2, Default2
 
-    CreatePrim Floor 0, Shape3
-    PrimShape Floor 0, Shape3, Cone, 2, 2, 5.0, 5.0, 16, 16
+    CreatePrim Floor 0, Shape3, Cone, 2, 2, 5.0, 5.0, 16, 16
     PrimAttach Floor 0, Shape3, 10, 5, -5, 0, 0, 0
-    PrimTexture Floor 0, Shape3, Default
+    PrimTexture Floor 0, Shape3, Default2
 <EndFloor>
 
-CreatePrim SBS, Shape1
-PrimShape SBS, Shape1, Sphere, 2.0, 5.0, 5.0, 16, 16
-PrimAttach SBS, Shape1, 0, 5, -50, 0, 0, 0
-PrimTexture SBS, Shape1, Default
+#create prims outside, with physics enabled
 
-CreatePrim SBS, Shape2
-PrimShape SBS, Shape2, Cylinder, 2, 2, 5.0, 5.0, 16, 16, true
-PrimAttach SBS, Shape2, -10, 5, -50, 0, 0, 0
-PrimTexture SBS, Shape2, Default
+CreatePrim SBS, Shape1, Sphere, 2.0, 5.0, 5.0, 16, 16
+PrimAttach SBS, Shape1, 0, 5, -50, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
+PrimTexture SBS, Shape1, Default2
 
-CreatePrim SBS, Shape3
-PrimShape SBS, Shape3, Cone, 2, 2, 5.0, 5.0, 16, 16
-PrimAttach SBS, Shape3, 10, 5, -50, 0, 0, 0
-PrimTexture SBS, Shape3, Default
+CreatePrim SBS, Shape2, Cylinder, 2, 2, 5.0, 5.0, 16, 16, true
+PrimAttach SBS, Shape2, -10, 5, -50, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
+PrimTexture SBS, Shape2, Default2
+
+CreatePrim SBS, Shape3, Cone, 2, 2, 5.0, 5.0, 16, 16
+PrimAttach SBS, Shape3, 10, 5, -50, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
+PrimTexture SBS, Shape3, Default2
 

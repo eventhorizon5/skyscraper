@@ -72,7 +72,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 12, false);
 
-		if (params < 7)
+		if (params < 6)
 			return ScriptError("Incorrect number of parameters");
 
 		bool force;
@@ -102,12 +102,12 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		std::vector<std::string> filenames;
 		if (force == true)
 		{
-			for (int i = 0; i < params - 6; i++)
+			for (int i = 0; i < params - 5; i++)
 				filenames.push_back(tempdata[i]);
 		}
 		else
 		{
-			for (int i = 0; i < params - 5; i++)
+			for (int i = 0; i < params - 4; i++)
 				filenames.push_back(tempdata[i]);
 		}
 
@@ -494,13 +494,35 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//SetCulling command
+	if (StartsWithNoCase(LineData, "setculling"))
+	{
+		//get data
+		int params = SplitData(LineData, 11, false);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		if (!IsNumeric(tempdata[1]))
+			return ScriptError("Invalid value: " + tempdata[1]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		texturemanager->SetCulling(tempdata[0], ToInt(tempdata[1]));
+		return sNextLine;
+	}
+
 	//handle end of textures section
 	if (StartsWithNoCase(LineData, "<endtextures>"))
 	{
 		Simcore->GetTextureManager()->FreeTextureImages();
 		config->SectionNum = 0;
 		config->Context = "None";
-		engine->Report("Finished textures");
+		if (parent->InRunloop() == false)
+			engine->Report("Finished textures");
 		return sNextLine;
 	}
 

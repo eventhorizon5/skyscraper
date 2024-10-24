@@ -42,6 +42,7 @@ public:
 	Ogre::MeshPtr CreateIcoSphere(Object* parent, const std::string& name, Real radius, Real utile, Real vtile, unsigned int iterations);
 	Ogre::MeshPtr CreateRoundedBox(Object* parent, const std::string& name, Real size_x, Real size_y, Real size_z, Real chamfer_size, Real utile, Real vtile, unsigned int segments_x, unsigned int segments_y, unsigned int segments_z, bool capped);
 	Ogre::MeshPtr CreateSpring(Object* parent, const std::string& name, Real radius_circle, Real radius_helix, Real height, Real round, Real utile, Real vtile, unsigned int segments_circle, unsigned int segments_path, bool capped);
+	Ogre::MeshPtr CreatePrism(Object* parent, const std::string& name, Real radius, Real height, unsigned int sides, unsigned int segments_height, bool capped);
 
 private:
 

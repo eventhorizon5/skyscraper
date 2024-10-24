@@ -64,6 +64,8 @@ typedef Ogre::Ray Ray;
 typedef Ogre::Matrix3 Matrix3;
 typedef Ogre::Plane Plane;
 
+typedef unsigned int uint;
+
 namespace SBS {
 
 const Real pi = 3.14159265;
@@ -93,6 +95,7 @@ SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const std::stri
 SBSIMPEXP std::string ToString(int number);
 SBSIMPEXP std::string ToString(float number);
 SBSIMPEXP std::string ToString(double number);
+SBSIMPEXP std::string ToString(size_t number);
 SBSIMPEXP float Log2(float number);
 SBSIMPEXP double Log2(double number);
 SBSIMPEXP float Round(float number, int decimal_places = 0);

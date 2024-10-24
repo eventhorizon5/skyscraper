@@ -320,6 +320,8 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 		sbs->ResetWalls();
 	}
 	sbs->GetTextureManager()->ResetTextureMapping();
+
+	EnableLoop(true);
 }
 
 DirectionalIndicator::~DirectionalIndicator()
@@ -509,6 +511,19 @@ void DirectionalIndicator::Timer::Notify()
 	//turn off all lights
 	indicator->UpLight(false);
 	indicator->DownLight(false);
+}
+
+void DirectionalIndicator::Off()
+{
+	//turn off indicator
+
+	SetLights(2, 2);
+}
+
+void DirectionalIndicator::Loop()
+{
+	if (sbs->GetPower() == false)
+		Off();
 }
 
 }

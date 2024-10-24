@@ -26,6 +26,7 @@
 #include "mesh.h"
 #include "polymesh.h"
 #include "primitive.h"
+#include "custom.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatordoor.h"
@@ -189,6 +190,28 @@ ElevatorCar::~ElevatorCar()
 			delete ModelArray[i];
 		}
 		ModelArray[i] = 0;
+	}
+
+	//delete primitives
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i])
+		{
+			PrimArray[i]->parent_deleting = true;
+			delete PrimArray[i];
+		}
+		PrimArray[i] = 0;
+	}
+
+	//delete custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+		{
+			CustomObjectArray[i]->parent_deleting = true;
+			delete CustomObjectArray[i];
+		}
+		CustomObjectArray[i] = 0;
 	}
 
 	//delete lights
@@ -499,6 +522,10 @@ void ElevatorCar::DumpServicedFloors()
 {
 	//dump serviced floors list
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	if (parent->GetCarCount() == 1)
 		Object::Report("\n--- Elevator " + ToString(parent->Number) + "'s Serviced Floors ---\n");
 	else
@@ -511,6 +538,10 @@ void ElevatorCar::DumpServicedFloors()
 
 bool ElevatorCar::AddServicedFloor(int number)
 {
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (sbs->Verbose)
 		Report("adding serviced floor " + ToString(number));
 
@@ -550,6 +581,10 @@ bool ElevatorCar::AddServicedFloor(int number)
 
 void ElevatorCar::RemoveServicedFloor(int number)
 {
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	if (sbs->Verbose)
 		Report("removing serviced floor " + ToString(number));
 
@@ -613,6 +648,18 @@ int ElevatorCar::GetServicedFloor(int index)
 	return 0;
 }
 
+int ElevatorCar::GetServicedFloorIndex(int floor)
+{
+	//get the index of the specified serviced floor
+
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (ServicedFloors[i] == floor)
+			return i;
+	}
+	return -1;
+}
+
 bool ElevatorCar::CheckServicedFloors()
 {
 	//ensure serviced floors are valid for the shaft
@@ -632,6 +679,10 @@ bool ElevatorCar::CheckServicedFloors()
 void ElevatorCar::Alarm()
 {
 	//elevator alarm code
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	if (AlarmActive == false)
 	{
@@ -688,6 +739,13 @@ void ElevatorCar::Loop()
 
 	SBS_PROFILE("ElevatorCar::Loop");
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+	{
+		idlesound->Stop();
+		musicsound->Stop();
+	}
+
 	ControlPressActive = false;
 
 	//perform first-run tasks
@@ -700,7 +758,7 @@ void ElevatorCar::Loop()
 	}
 
 	//play car idle sound if in elevator, or if doors open
-	if (IdleSound != "")
+	if (IdleSound != "" && sbs->GetPower() == true)
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
@@ -734,7 +792,7 @@ void ElevatorCar::Loop()
 	}
 
 	//music processing
-	if (MusicUp != "" || MusicDown != "")
+	if ((MusicUp != "" || MusicDown != "") && sbs->GetPower() == true)
 	{
 		if (MusicAlwaysOn == false) //standard mode
 		{
@@ -968,7 +1026,7 @@ void ElevatorCar::EnableObjects(bool value)
 	}
 
 	//floor indicators
-	/*for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	/*for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
@@ -1001,6 +1059,20 @@ void ElevatorCar::EnableObjects(bool value)
 	//panels
 	for (size_t i = 0; i < PanelArray.size(); i++)
 		PanelArray[i]->Enabled(value);
+
+	//primitives
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i])
+			PrimArray[i]->Enabled(value);
+	}
+
+	//custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+			CustomObjectArray[i]->Enabled(value);
+	}
 
 	//sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -1214,6 +1286,10 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 	//2 = only elevator doors
 	//3 = only shaft doors
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false && manual == false)
+		return false;
+
 	//require open button to be held for fire service phase 2 if not on recall floor
 	if (FirePhase2Active() == 1 && parent->OnRecallFloor() == false && manual == false)
 		hold = true;
@@ -1347,6 +1423,10 @@ void ElevatorCar::CloseDoors(int number, int whichdoors, int floor, bool manual,
 	//1 = both shaft and elevator doors
 	//2 = only elevator doors
 	//3 = only shaft doors
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false && manual == false)
+		return;
 
 	//turn on hold option for certain modes
 	if ((IndependentServiceActive() == true || FirePhase2Active() == 1) && manual == false)
@@ -1606,6 +1686,10 @@ void ElevatorCar::Chime(int number, int floor, bool direction, bool early)
 
 	SBS_PROFILE("Elevator::Chime");
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	int start = number, end = number;
 	if (number == 0)
 	{
@@ -1634,6 +1718,10 @@ void ElevatorCar::Chime(int number, int floor, bool direction, bool early)
 void ElevatorCar::ResetDoors(int number, bool sensor)
 {
 	//reset elevator door timer
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	int start = number, end = number;
 	if (number == 0)
@@ -2093,7 +2181,7 @@ Door* ElevatorCar::GetStdDoor(int number)
 
 Door* ElevatorCar::GetDoor(const std::string &name)
 {
-	for (int i = 0; i < StdDoorArray.size(); i++)
+	for (size_t i = 0; i < StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i]->GetName() == name)
 			return StdDoorArray[i];
@@ -2223,6 +2311,19 @@ void ElevatorCar::RemovePrimitive(Primitive *prim)
 	}
 }
 
+void ElevatorCar::RemoveCustomObject(CustomObject *object)
+{
+	//remove a custom object reference (does not delete the object itself)
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+		{
+			CustomObjectArray.erase(CustomObjectArray.begin() + i);
+			return;
+		}
+	}
+}
+
 void ElevatorCar::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
@@ -2278,6 +2379,10 @@ void ElevatorCar::EnableNudgeMode(bool value, int number)
 {
 	//enables nudge mode on all doors or the specified door
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	int start = number, end = number;
 	if (number == 0)
 	{
@@ -2328,7 +2433,7 @@ Light* ElevatorCar::AddLight(const std::string &name, int type)
 
 Light* ElevatorCar::GetLight(const std::string &name)
 {
-	for (int i = 0; i < lights.size(); i++)
+	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i]->GetName() == name)
 			return lights[i];
@@ -2389,6 +2494,30 @@ void ElevatorCar::AddPrimitive(Primitive *primitive)
 	PrimArray.push_back(primitive);
 }
 
+CustomObject* ElevatorCar::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
+{
+	//add a custom object
+	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
+	CustomObjectArray.push_back(object);
+	return object;
+}
+
+void ElevatorCar::AddCustomObject(CustomObject *object)
+{
+	//add a custom object reference
+
+	if (!object)
+		return;
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+			return;
+	}
+
+	CustomObjectArray.push_back(object);
+}
+
 void ElevatorCar::AddDisplayFloor(int floor)
 {
 	//add a floor to the display floors list
@@ -2398,6 +2527,10 @@ void ElevatorCar::AddDisplayFloor(int floor)
 std::string ElevatorCar::GetFloorDisplay()
 {
 	//returns the current floor's indicator display string
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return "";
 
 	std::string value;
 	int floornum = GetFloor();
@@ -2500,6 +2633,10 @@ void ElevatorCar::EnableSensor(bool value, int number)
 {
 	//enables door sensor on all doors or the specified door
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	int start = number, end = number;
 	if (number == 0)
 	{
@@ -2545,6 +2682,10 @@ void ElevatorCar::ResetDoorState(int number)
 {
 	//reset elevator internal door state, in case of door malfunction
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	int start = number, end = number;
 	if (number == 0)
 	{
@@ -2586,6 +2727,21 @@ Primitive* ElevatorCar::GetPrimitive(std::string name)
 	{
 		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
 			return PrimArray[i];
+	}
+
+	return 0;
+}
+
+CustomObject* ElevatorCar::GetCustomObject(std::string name)
+{
+	//get a custom object by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (SetCaseCopy(CustomObjectArray[i]->GetName(), false) == name)
+			return CustomObjectArray[i];
 	}
 
 	return 0;
@@ -2658,6 +2814,10 @@ bool ElevatorCar::PlayFloorBeep()
 {
 	//play floor beep sound
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (parent->InServiceMode() == true || BeepSound == "" || UseFloorBeeps == false)
 		return false;
 
@@ -2679,6 +2839,10 @@ bool ElevatorCar::PlayFloorSound()
 {
 	//play floor sound
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	if (parent->InServiceMode() == true || FloorSound == "" || UseFloorSounds == false || parent->SkipFloorSound == true)
 		return false;
 
@@ -2698,6 +2862,10 @@ bool ElevatorCar::PlayMessageSound(bool type)
 	//play message sound
 	//if type is true, play directional up/down sounds, otherwise play door open/close sounds
 	//if direction is true, play up sound; otherwise play down sound
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
 
 	if (parent->InServiceMode() == true)
 		return false;
@@ -3079,6 +3247,10 @@ int ElevatorCar::GetNearestServicedFloor()
 {
 	//return number of closest serviced floor
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return 0;
+
 	if (IsServicedFloor(GetFloor()) == true)
 		return GetFloor();
 
@@ -3222,6 +3394,10 @@ void ElevatorCar::NotifyArrival(int floor, bool early, int direction)
 {
 	//notify on car arrival (play chime and turn on related directional indicator lantern)
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	//do not notify if in a service mode
 	if (parent->InServiceMode() == true)
 		return;
@@ -3335,6 +3511,11 @@ void ElevatorCar::SetControls(const std::string &action_name)
 void ElevatorCar::FlashIndicators(bool value)
 {
 	//flash all floor indicators if supported
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
+
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 		FloorIndicatorArray[i]->Flash(value);
 }
@@ -3427,6 +3608,10 @@ bool ElevatorCar::Input(const std::string& text)
 {
 	//input a keypad character
 
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
 	//only allow single characters
 	if (text.length() != 1)
 		return false;
@@ -3504,7 +3689,7 @@ void ElevatorCar::ProcessCache()
 	}
 
 	//don't allow input values in the InvalidInput list
-	for (int i = 0; i < (int)InvalidInput.size(); i++)
+	for (size_t i = 0; i < InvalidInput.size(); i++)
 	{
 		if (InputCache == InvalidInput[i])
 		{

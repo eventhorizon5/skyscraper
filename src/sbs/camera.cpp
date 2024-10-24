@@ -187,7 +187,7 @@ void Camera::SetPosition(const Vector3 &position)
 		GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[0]->getPosition()));
 	else
 	{
-		for (int i = 0; i < Cameras.size(); i++)
+		for (size_t i = 0; i < Cameras.size(); i++)
 		{
 			Cameras[i]->setPosition(sbs->ToRemote(position));
 		}
@@ -236,7 +236,7 @@ void Camera::SetRotation(const Vector3 &rotation)
 	Quaternion camrot = x * z;
 	Quaternion bodyrot = y;
 	Rotation = vector;
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Cameras[i]->setOrientation(camrot);
 	}
@@ -413,7 +413,7 @@ void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 	if (Rotation.z < 0)
 		Rotation.z += 360;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Quaternion rot(Degree(Rotation.y), Vector3::NEGATIVE_UNIT_Y);
 		if (EnableBullet == true)
@@ -549,29 +549,32 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
+Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only, bool hit_only)
 {
 	//get mesh object that the user clicked on, and perform related work
 
-	if (Cameras.empty())
-		return;
+	if (!camera)
+		return false;
+
+	Real result = -1;
 
 	SBS_PROFILE("Camera::ClickedObject");
 
-	Vector3 pos = GetPosition();
+	if (!camera->GetOgreCamera())
+		return false;
 
 	//cast a ray from the camera in the direction of the clicked position
-	int width = Cameras[0]->getViewport()->getActualWidth();
-	int height = Cameras[0]->getViewport()->getActualHeight();
+	int width = camera->GetOgreCamera()->getViewport()->getActualWidth();
+	int height = camera->GetOgreCamera()->getViewport()->getActualHeight();
 
 	if (width == 0 || height == 0)
-		return;
+		return result;
 
 	Real x, y;
 	if (center_only == false)
 	{
-		x = (float)mouse_x / (float)width * scale;
-		y = (float)mouse_y / (float)height * scale;
+		x = (float)camera->mouse_x / (float)width * scale;
+		y = (float)camera->mouse_y / (float)height * scale;
 	}
 	else
 	{
@@ -579,7 +582,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 		y = 0.5;
 	}
 
-	Ray ray = Cameras[0]->getCameraToViewportRay(x, y);
+	Ray ray = camera->GetOgreCamera()->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
 	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
@@ -588,10 +591,28 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	MeshObject* mesh = 0;
 	Wall* wall = 0;
 
-	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
+	Vector3 pos = sbs->ToLocal(ray.getOrigin());
 
-	if (hit == false)
-		return;
+	if (sbs->Verbose && hit_only == false)
+	{
+		if (Cameras.size() == 0)
+		{
+			Report("Clicked from (" + ToString(pos.x) + ", " + ToString(pos.y) + ", " + ToString(pos.z) + ")");
+		}
+	}
+
+	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
+	Vector3 hit_pos = HitPosition - sbs->GetPosition();
+
+	if (hit == true)
+	{
+		result = pos.distance(hit_pos);
+		if (sbs->Verbose && hit_only == false)
+			Report("Hit at (" + ToString(hit_pos.x) + ", " + ToString(hit_pos.y) + ", " + ToString(hit_pos.z)+ ")");
+	}
+
+	if (hit == false || hit_only == true)
+		return result;
 
 	meshname = mesh->GetName();
 	wallname = "";
@@ -614,13 +635,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 	if (wall)
 		Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
 
+
 	//object checks and actions
 
 	//get original object (parent object of clicked mesh)
 	Object *mesh_parent = GetMeshParent(obj);
 
 	if (!mesh_parent)
-		return;
+		return result;
 
 	if (mesh_parent->GetType() == "ButtonPanel")
 	{
@@ -647,17 +669,18 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real sca
 			if (type == "Floor" || type == "ElevatorCar" || type == "Shaft" || type == "Stairwell" || type == "SBS")
 			{
 				sbs->DeleteObject(obj);
-				return;
+				return result;
 			}
 		}
 
 		//for standard objects, delete the mesh parent object
 		sbs->DeleteObject(mesh_parent);
-		return;
+		return result;
 	}
 
 	//call object's OnClick function
 	mesh_parent->OnClick(pos, shift, ctrl, alt, right);
+	return result;
 }
 
 void Camera::UnclickedObject()
@@ -974,7 +997,7 @@ void Camera::SetFOVAngle(Real angle)
 		Real ratio = (float)Cameras[0]->getAspectRatio();
 		if (ratio > 0)
 		{
-			for (int i = 0; i < Cameras.size(); i++)
+			for (size_t i = 0; i < Cameras.size(); i++)
 			{
 				Cameras[i]->setFOVy(Degree(angle / ratio));
 			}
@@ -1013,7 +1036,7 @@ void Camera::SetViewMode(int mode)
 	if (Cameras.empty())
 		return;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		if (mode == 0)
 			Cameras[i]->setPolygonMode(Ogre::PM_SOLID);
@@ -1089,7 +1112,7 @@ void Camera::SetMaxRenderDistance(Real value)
 	if (Cameras.empty())
 		return;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Cameras[i]->setFarClipDistance(sbs->ToRemote(value));
 	}
@@ -1119,7 +1142,7 @@ void Camera::MoveCharacter()
 		mCharacter->setWalkDirection(accum_movement, 1);
 	else
 	{
-		for (int i = 0; i < Cameras.size(); i++)
+		for (size_t i = 0; i < Cameras.size(); i++)
 		{
 			Cameras[i]->move(accum_movement);
 		}
@@ -1333,7 +1356,7 @@ bool Camera::Attach(std::vector<Ogre::Camera*>& cameras, bool init_state)
 
 	Cameras = cameras;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Cameras[i]->setNearClipDistance(0.1);
 		Cameras[i]->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5) / 2), 0);
@@ -1381,10 +1404,12 @@ bool Camera::Detach()
 	if (Cameras[0]->isAttached() == false)
 		return false;
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		GetSceneNode()->DetachObject(Cameras[i]);
 	}
+
+	Cameras.clear();
 
 	return true;
 }
@@ -1503,7 +1528,7 @@ void Camera::SetOrientation(const Quaternion &orientation)
 {
 	//set orientation of main camera object, not collider
 
-	for (int i = 0; i < Cameras.size(); i++)
+	for (size_t i = 0; i < Cameras.size(); i++)
 	{
 		Cameras[i]->setOrientation(orientation);
 	}
@@ -1526,7 +1551,7 @@ void Camera::AttachToVehicle(bool value)
 		vehicle->AttachCamera(false);
 		vehicle = 0;
 		EnableCollisions(true);
-		for (int i = 0; i < Cameras.size(); i++)
+		for (size_t i = 0; i < Cameras.size(); i++)
 		{
 			Cameras[i]->setOrientation(old_camera_orientation);
 		}

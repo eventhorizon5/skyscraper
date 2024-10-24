@@ -101,5 +101,9 @@ Ogre::MeshPtr GeometryController::CreateSpring(Object* parent, const std::string
 	return Procedural::SpringGenerator().setScale(1.0 / sbs->UnitScale).setHeight(height).setNumRound(round).setRadiusCircle(radius_circle).setRadiusHelix(radius_helix).setNumSegCircle(segments_circle).setNumSegPath(segments_path).setUTile(utile).setVTile(vtile).realizeMesh(parent->GetNameBase() + name);
 }
 
+Ogre::MeshPtr GeometryController::CreatePrism(Object* parent, const std::string& name, Real radius, Real height, unsigned int sides, unsigned int segments_height, bool capped)
+{
+	return Procedural::PrismGenerator().setScale(1.0 / sbs->UnitScale).setRadius(radius).setHeight(height).setNumSides(sides).setNumSegHeight(segments_height).setCapped(capped).realizeMesh(parent->GetNameBase() + name);
+}
 
 }

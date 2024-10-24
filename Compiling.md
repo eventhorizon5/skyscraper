@@ -92,7 +92,20 @@ So pull the source from Git, and build:
     cd
 
 
-Step 5 - (optionally) build wxWidgets
+Step 5 - build and install OgreProcedural
+-----------
+Pull the source from Git, and build:
+
+    git clone https://github.com/eventhorizon5/ogre-procedural.git ogre-procedural
+    cd ogre-procedural
+    cmake . -DCMAKE_BUILD_TYPE=Release
+    make -j4
+    sudo make install
+    make clean
+    cd
+
+
+Step 6 - (optionally) build wxWidgets
 -----------
 
     wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.4/wxWidgets-3.2.4.tar.bz2
@@ -103,7 +116,7 @@ Step 5 - (optionally) build wxWidgets
     make install
 
 
-Step 6 - build Skyscraper (this also builds the built-in OgreBullet libraries)
+Step 7 - build Skyscraper (this also builds the built-in OgreBullet libraries)
 -----------
 First grab the source via git, and build.
 
@@ -210,7 +223,19 @@ Open the .dmg file, then run:
     sudo cp -a lib/* /usr/local/lib/
     cd
 
-Step 4 - build and install Caelum (sky system)
+Step 4 - build and install OgreProcedural
+-----------
+Pull the source from Git, and build:
+
+    git clone https://github.com/eventhorizon5/ogre-procedural.git ogre-procedural
+    cd ogre-procedural
+    cmake . -DCMAKE_BUILD_TYPE=Release
+    make -j4
+    sudo make install
+    make clean
+    cd
+
+Step 5 - build and install Caelum (sky system)
 -----------
 This one you can pull from Git, and I have custom-modified source code.
 So pull the source from Git, and build:
@@ -223,7 +248,7 @@ So pull the source from Git, and build:
     cd
 (you may want to use sudo vim to edit /lib/OGRE to /lib/macosx/release)
 
-Step 5 - build wxWidgets
+Step 6 - build wxWidgets
 -----------
 
     wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.1/wxWidgets-3.2.1.tar.bz2
@@ -232,7 +257,7 @@ Step 5 - build wxWidgets
     make
     sudo make install
 
-Step 6 - build Skyscraper (this also builds the built-in OgreBullet libraries)
+Step 7 - build Skyscraper (this also builds the built-in OgreBullet libraries)
 -----------
 First grab the source via git, and build, pointing it to the wxWidgets you just built.
 
@@ -300,6 +325,8 @@ Run CMake on Skyscraper's folder, using C:\Skyscraper for both the source and bi
 It'll have errors, to fix them, do this:
 
     -OGRE_DIR needs to be set to c:/ogre-14.2.6/SDK/CMake
+    -click Configure again
+    -set the ogreprocedural include directory to c:/ogre-procedural/SDK/include
     -click Configure again
     -uncheck the wxWidgets_USE_REL_AND_DBG
     -click Configure again

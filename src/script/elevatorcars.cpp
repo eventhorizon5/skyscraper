@@ -2322,43 +2322,6 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	//handle end of car section
-	if (StartsWithNoCase(LineData, "<endcar>") == true && config->RangeL == config->RangeH)
-	{
-		//return to elevator section
-		config->SectionNum = 4;
-		config->Context = config->ContextOld;
-		config->Current = config->CurrentOld;
-		config->RangeL = config->RangeLOld;
-		config->RangeH = config->RangeHOld;
-		config->RangeStart = config->RangeStartOld;
-
-		engine->Report("Finished car");
-		return sNextLine;
-	}
-
-	//handle car range
-	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endcar"))
-	{
-		if (config->Current < config->RangeH)
-		{
-			config->Current++;
-			parent->line = config->RangeStart;  //loop back
-			return sNextLine;
-		}
-		else
-		{
-			config->SectionNum = 4; //break out of loop
-			config->Context = config->ContextOld;
-			config->RangeL = config->RangeLOld;
-			config->RangeH = config->RangeHOld;
-			config->RangeStart = config->RangeStartOld;
-			config->Current = config->CurrentOld;
-			engine->Report("Finished cars");
-			return sNextLine;
-		}
-	}
-
 	//AddElevatorIDSigns command
 	if (StartsWithNoCase(LineData, "addelevatoridsigns"))
 	{
@@ -2382,6 +2345,46 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		if (result == false)
 			return ScriptError();
 		return sNextLine;
+	}
+
+	//handle end of car section
+	if (StartsWithNoCase(LineData, "<endcar>") == true && config->RangeL == config->RangeH)
+	{
+		//return to elevator section
+		config->SectionNum = 4;
+		config->Context = config->ContextOld;
+		config->Current = config->CurrentOld;
+		config->RangeL = config->RangeLOld;
+		config->RangeH = config->RangeHOld;
+		config->RangeStart = config->RangeStartOld;
+
+		if (parent->InRunloop() == false)
+			engine->Report("Finished car");
+		return sNextLine;
+	}
+
+	//handle car range
+	if (config->RangeL != config->RangeH && StartsWithNoCase(LineData, "<endcar"))
+	{
+		if (config->Current < config->RangeH)
+		{
+			config->Current++;
+			parent->line = config->RangeStart;  //loop back
+			return sNextLine;
+		}
+		else
+		{
+			config->SectionNum = 4; //break out of loop
+			config->Context = config->ContextOld;
+			config->RangeL = config->RangeLOld;
+			config->RangeH = config->RangeHOld;
+			config->RangeStart = config->RangeStartOld;
+			config->Current = config->CurrentOld;
+
+			if (parent->InRunloop() == false)
+				engine->Report("Finished cars");
+			return sNextLine;
+		}
 	}
 
 	return sContinue;

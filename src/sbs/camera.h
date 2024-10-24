@@ -120,7 +120,7 @@ public:
 	void CheckElevator();
 	void CheckShaft();
 	void CheckStairwell();
-	void ClickedObject(bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only = false);
+	Real ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only = false, bool hit_only = false);
 	void UnclickedObject();
 	Object* GetMeshParent(Object *object);
 	std::string GetClickedMeshName();
@@ -184,7 +184,7 @@ public:
 	void Crouch(bool value);
 	void SetOrientation(const Quaternion &orientation);
 	void AttachToVehicle(bool value);
-	Ogre::Camera* GetOgreCamera(int index);
+	Ogre::Camera* GetOgreCamera(int index = 0);
 
 private:
 	std::vector<Ogre::Camera*> Cameras; //camera instances

@@ -29,8 +29,11 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
+#include "enginecontext.h"
+#include "vm.h"
 #include "soundsystem.h"
 #include "sound.h"
+#include "moveobject.h"
 #include "soundmanager.h"
 
 namespace Skyscraper {
@@ -51,6 +54,7 @@ const long SoundManager::ID_STATICTEXT6 = wxNewId();
 const long SoundManager::ID_tPlaying = wxNewId();
 const long SoundManager::ID_STATICTEXT7 = wxNewId();
 const long SoundManager::ID_tPosition = wxNewId();
+const long SoundManager::ID_bMove = wxNewId();
 const long SoundManager::ID_STATICTEXT8 = wxNewId();
 const long SoundManager::ID_tVolume = wxNewId();
 const long SoundManager::ID_bSetVolume = wxNewId();
@@ -140,7 +144,8 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	FlexGridSizer4->Add(StaticText7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tPosition = new wxTextCtrl(this, ID_tPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPosition"));
 	FlexGridSizer4->Add(tPosition, 1, wxEXPAND, 5);
-	FlexGridSizer4->Add(-1,-1,1, wxALL|wxEXPAND, 5);
+	bMove = new wxButton(this, ID_bMove, _("Move"), wxDefaultPosition, wxSize(50,-1), 0, wxDefaultValidator, _T("ID_bMove"));
+	FlexGridSizer4->Add(bMove, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText8 = new wxStaticText(this, ID_STATICTEXT8, _("Volume:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
 	FlexGridSizer4->Add(StaticText8, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tVolume = new wxTextCtrl(this, ID_tVolume, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tVolume"));
@@ -198,6 +203,7 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
 
+	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bMove_Click);
 	Connect(ID_bSetVolume,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bSetVolume_Click);
 	Connect(ID_bSetLoop,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bSetLoop_Click);
 	Connect(ID_bSetPause,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bSetPause_Click);
@@ -218,12 +224,17 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	lasthandlecount = 0;
 	volume = 0;
 	speed = 0;
+	moveobject = 0;
 }
 
 SoundManager::~SoundManager()
 {
 	//(*Destroy(SoundManager)
 	//*)
+
+	if (moveobject)
+		moveobject->Destroy();
+	moveobject = 0;
 }
 
 void SoundManager::Loop()
@@ -310,6 +321,9 @@ void SoundManager::Loop()
 	tPlayPosition->SetValue(TruncateNumber(handle->GetPlayPosition(), 2));
 
 	lblStats->SetLabelText("Channels: " + SBS::ToString(sound->GetChannelCount()) + " - Playing Sounds: " + SBS::ToString(Simcore->GetSoundSystem()->GetPlayingCount()));
+
+	if (moveobject)
+		moveobject->Loop();
 }
 
 void SoundManager::On_bOK_Click(wxCommandEvent& event)
@@ -464,6 +478,19 @@ void SoundManager::On_bCleanup_Click(wxCommandEvent& event)
 {
 	if (Simcore)
 		Simcore->GetSoundSystem()->Cleanup();
+}
+
+void SoundManager::On_bMove_Click(wxCommandEvent& event)
+{
+	if (handle)
+	{
+		if (moveobject)
+			delete moveobject;
+		moveobject = 0;
+
+		moveobject = new MoveObject(panel, this, -1, panel->GetRoot()->GetVM()->GetActiveEngine(), handle->GetNumber());
+		moveobject->Show();
+	}
 }
 
 }

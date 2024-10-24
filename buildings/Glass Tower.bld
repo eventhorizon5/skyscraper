@@ -399,7 +399,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     Type = Ballroom
     Height = 12
     InterfloorHeight = 0
-    Group = 135, 136
+    Group = 134, 135
 <EndFloor>
 
 <Floor 135>
@@ -408,7 +408,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     Type = Service
     Height = 9.5
     InterfloorHeight = 2.5
-    Group = 135, 136
+    Group = 134, 135
 <EndFloor>
 
 <Floor 136>
@@ -2640,4 +2640,20 @@ AddCustomFloor landscape, Main, Brick, 239.985, -215.976, 232.692, -257.338, -41
 AddCustomFloor landscape, Mid, Brick, -68.6592, -204.202, -121.796, -505.553, -163.157, -498.259, -110.021, -196.908, 0, 0, 0
 
 Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
+
+<Floor 0>
+    #ambient external sounds
+    AddSound outside, ambient_outside.ogg, -200, 30, -200, true, 0.5, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound outside, ambient_outside.ogg, 200, 30, -200, true, 0.5, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound outside, ambient_outside.ogg, -200, 30, 200, true, 0.5, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound outside, ambient_outside.ogg, 200, 30, 200, true, 0.5, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+<EndFloor>
+
+<Floor 137>
+    #ambient roof sounds
+    AddSound roof, ambient_roof.ogg, -200, 0, -200, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound roof, ambient_roof.ogg, 200, 0, -200, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound roof, ambient_roof.ogg, -200, 0, 200, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound roof, ambient_roof.ogg, 200, 0, 200, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+<EndFloor>
 

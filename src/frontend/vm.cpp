@@ -440,4 +440,90 @@ void VM::Run0()
 	}
 }
 
+bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
+{
+	//start a sim engine
+
+	return engine->Start(cameras);
+}
+
+::SBS::SBS* VM::GetActiveSystem()
+{
+	if (active_engine)
+		return active_engine->GetSystem();
+	return 0;
+}
+
+ScriptProcessor* VM::GetActiveScriptProcessor()
+{
+	if (active_engine)
+		return active_engine->GetScriptProcessor();
+	return 0;
+}
+
+void VM::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only)
+{
+	//click on an object
+
+	EngineContext *engine = GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS camera
+	Camera *camera = engine->GetSystem()->camera;
+
+	if (!camera)
+		return;
+
+	if (left == true)
+		camera->MouseLeftDown = true;
+	else
+		camera->MouseRightDown = true;
+
+	Real result = -1;
+	Real nearest = 1000;
+	Camera *nearest_cam = 0;
+
+	for (int i = 0; i < GetEngineCount(); i++)
+	{
+		//go through each engine and try a mouse click, find which hit is nearest
+		EngineContext *engine = GetEngine(i);
+		if (engine)
+		{
+			Camera *camera2 = engine->GetSystem()->camera;
+			if (camera2)
+				result = camera2->ClickedObject(camera, shift, ctrl, alt, right, scale, center_only, true);
+
+			if (result < nearest && result >= 0)
+			{
+				nearest = result;
+				nearest_cam = camera2;
+			}
+		}
+	}
+
+	//perform a mouseclick on the nearest result
+	if (nearest_cam)
+		nearest_cam->ClickedObject(camera, shift, ctrl, alt, right, scale, center_only);
+}
+
+void VM::UnclickedObject()
+{
+	EngineContext *engine = GetActiveEngine();
+
+	if (!engine)
+		return;
+
+	//get SBS camera
+	Camera *camera = engine->GetSystem()->camera;
+
+	if (!camera)
+		return;
+
+	camera->UnclickedObject();
+	camera->MouseLeftDown = false;
+	camera->MouseRightDown = false;
+}
+
 }

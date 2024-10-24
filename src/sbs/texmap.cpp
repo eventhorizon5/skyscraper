@@ -419,7 +419,7 @@ bool Polygon::IntersectRay(const Vector3 &start, const Vector3 &end)
 
 	Vector3 pos = sbs->ToRemote(mesh->GetPosition(), true, false);
 
-	for (int index = 0; index < geometry.size(); index++)
+	for (size_t index = 0; index < geometry.size(); index++)
 	{
 		size_t i1 = geometry[index].size() - 1;
 		for (size_t i = 0; i < geometry[index].size(); i++)

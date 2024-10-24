@@ -51,6 +51,7 @@
 #include "sound.h"
 #include "model.h"
 #include "primitive.h"
+#include "custom.h"
 #include "timer.h"
 #include "profiler.h"
 #include "controller.h"
@@ -61,6 +62,7 @@
 #include "polymesh.h"
 #include "utility.h"
 #include "geometry.h"
+#include "escalator.h"
 
 namespace SBS {
 
@@ -166,16 +168,20 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
-	EscalatorCount = 0;
 	MovingWalkwayCount = 0;
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
+	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
 	Headless = false;
+	power_state = true;
 
 	//create utility object
 	utility = new Utility(this);
 
 	//create geometry controller object
 	geometry = new GeometryController(this);
+
+	//set padding factor for meshes
+	Ogre::MeshManager::getSingleton().setBoundsPaddingFactor(0.0);
 
 	camera = 0;
 	Buildings = 0;
@@ -302,6 +308,28 @@ SBS::~SBS()
 			delete ModelArray[i];
 		}
 		ModelArray[i] = 0;
+	}
+
+	//delete primitives
+	for (size_t i = 0; i < PrimArray.size(); i++)
+	{
+		if (PrimArray[i])
+		{
+			PrimArray[i]->parent_deleting = true;
+			delete PrimArray[i];
+		}
+		PrimArray[i] = 0;
+	}
+
+	//delete custom objects
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i])
+		{
+			CustomObjectArray[i]->parent_deleting = true;
+			delete CustomObjectArray[i];
+		}
+		CustomObjectArray[i] = 0;
 	}
 
 	//delete lights
@@ -516,8 +544,12 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	if (RandomActivity == true)
 		EnableRandomActivity(true);
 
+	//enable malfunctions if specified
+	if (Malfunctions == true)
+		EnableMalfunctions(true);
+
 	//print a memory report
-	//MemoryReport();
+	MemoryReport();
 
 	IsRunning = true;
 
@@ -2591,6 +2623,8 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "DispatchController")
 		deleted = true;
+	else if (type == "Primitive")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
@@ -2733,6 +2767,19 @@ void SBS::RemovePrimitive(Primitive *prim)
 		if (PrimArray[i] == prim)
 		{
 			PrimArray.erase(PrimArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveCustomObject(CustomObject *object)
+{
+	//remove a custom object reference (does not delete the object itself)
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+		{
+			CustomObjectArray.erase(CustomObjectArray.begin() + i);
 			return;
 		}
 	}
@@ -2958,7 +3005,7 @@ void SBS::Prepare(bool report)
 		Report("Creating colliders...");
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
-		if (meshes[i]->tricollider == true)
+		if (meshes[i]->tricollider == true && meshes[i]->IsPhysical() == false)
 			meshes[i]->CreateCollider();
 		else
 			meshes[i]->CreateBoxCollider();
@@ -3044,7 +3091,7 @@ Primitive* SBS::AddPrimitive(const std::string &name)
 
 void SBS::AddPrimitive(Primitive *primitive)
 {
-	//add a model reference
+	//add a primitive reference
 
 	if (!primitive)
 		return;
@@ -3056,6 +3103,30 @@ void SBS::AddPrimitive(Primitive *primitive)
 	}
 
 	PrimArray.push_back(primitive);
+}
+
+CustomObject* SBS::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
+{
+	//add a custom object
+	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
+	CustomObjectArray.push_back(object);
+	return object;
+}
+
+void SBS::AddCustomObject(CustomObject *object)
+{
+	//add a custom object reference
+
+	if (!object)
+		return;
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (CustomObjectArray[i] == object)
+			return;
+	}
+
+	CustomObjectArray.push_back(object);
 }
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
@@ -3398,6 +3469,120 @@ Object* SBS::GetObject(std::string name, bool case_sensitive)
 
 	ReplaceAll(name, " ", "");
 
+	//use hints to quickly find a reference
+	{
+		//floors
+		bool found = false;
+		std::string tmpname = "Floor";
+		if (case_sensitive == false)
+		{
+			SetCase(name, false);
+			SetCase(tmpname, false);
+
+			if (name.find("floor", 0) == 0)
+				found = true;
+		}
+		else
+		{
+			if (name.find("Floor", 0) == 0)
+				found = true;
+		}
+
+		if (found == true && name.find(":", 0) == std::string::npos)
+		{
+			std::string number = name.substr(5);
+			if (IsNumeric(number))
+			{
+				int floor = ToInt(number);
+				return sbs->GetFloor(floor);
+			}
+		}
+	}
+	{
+		//elevators
+		bool found = false;
+		std::string tmpname = "Elevator";
+		if (case_sensitive == false)
+		{
+			SetCase(name, false);
+			SetCase(tmpname, false);
+
+			if (name.find("elevator", 0) == 0)
+				found = true;
+		}
+		else
+		{
+			if (name.find("Elevator", 0) == 0)
+				found = true;
+		}
+
+		if (found == true && name.find(":", 0) == std::string::npos)
+		{
+			std::string number = name.substr(8);
+			if (IsNumeric(number))
+			{
+				int elevator = ToInt(number);
+				return sbs->GetElevator(elevator);
+			}
+		}
+	}
+	{
+		//shafts
+		bool found = false;
+		std::string tmpname = "Shaft";
+		if (case_sensitive == false)
+		{
+			SetCase(name, false);
+			SetCase(tmpname, false);
+
+			if (name.find("shaft", 0) == 0)
+				found = true;
+		}
+		else
+		{
+			if (name.find("Shaft", 0) == 0)
+				found = true;
+		}
+
+		if (found == true && name.find(":", 0) == std::string::npos)
+		{
+			std::string number = name.substr(5);
+			if (IsNumeric(number))
+			{
+				int shaft = ToInt(number);
+				return sbs->GetShaft(shaft);
+			}
+		}
+	}
+	{
+		//shafts
+		bool found = false;
+		std::string tmpname = "Stairwell";
+		if (case_sensitive == false)
+		{
+			SetCase(name, false);
+			SetCase(tmpname, false);
+
+			if (name.find("stairwell", 0) == 0)
+				found = true;
+		}
+		else
+		{
+			if (name.find("Stairwell", 0) == 0)
+				found = true;
+		}
+
+		if (found == true && name.find(":", 0) == std::string::npos)
+		{
+			std::string number = name.substr(9);
+			if (IsNumeric(number))
+			{
+				int stair = ToInt(number);
+				return sbs->GetStairwell(stair);
+			}
+		}
+	}
+
 	for (size_t i = 0; i < ObjectArray.size(); i++)
 	{
 		if (ObjectArray[i])
@@ -3432,6 +3617,55 @@ Object* SBS::GetObject(std::string name, bool case_sensitive)
 					//get by "grandparentname:parentname:objectname"
 					if (name == grandparent_name + ":" + parent_name + ":" + tmpname)
 						return ObjectArray[i];
+				}
+			}
+		}
+	}
+
+	return 0;
+}
+
+Object* SBS::GetObjectOfParent(std::string parent_name, std::string name, const std::string &type, bool case_sensitive)
+{
+	//get object by name
+
+	ReplaceAll(name, " ", "");
+	ReplaceAll(parent_name, " ", "");
+	if (case_sensitive == false)
+	{
+		SetCase(name, false);
+		SetCase(parent_name, false);
+	}
+
+	for (size_t i = 0; i < ObjectArray.size(); i++)
+	{
+		Object *object = ObjectArray[i];
+
+		if (object)
+		{
+			if (object->GetType() != type)
+				continue;
+
+			Object* parent = ObjectArray[i]->GetParent();
+
+			if (parent)
+			{
+				std::string namecheck = parent->GetName();
+				ReplaceAll(namecheck, " ", "");
+				if (case_sensitive == false)
+					SetCase(namecheck, false);
+
+				if (namecheck == parent_name) //check object for match if parent matches
+				{
+					std::string tmpname = object->GetName();
+					ReplaceAll(tmpname, " ", "");
+					if (case_sensitive == false)
+						SetCase(tmpname, false);
+
+					printf("name: %s\n", tmpname.c_str());
+					//get by object name
+					if (tmpname == name)
+						return object;
 				}
 			}
 		}
@@ -3685,18 +3919,8 @@ void SBS::ListVisibleMeshes()
 
 int SBS::GetEscalatorCount()
 {
-	//return total number of allocated sounds
-	return EscalatorCount;
-}
-
-void SBS::IncrementEscalatorCount()
-{
-	EscalatorCount++;
-}
-
-void SBS::DecrementEscalatorCount()
-{
-	EscalatorCount--;
+	//return total number of escalators
+	return EscalatorArray.size();
 }
 
 int SBS::GetMovingWalkwayCount()
@@ -3800,6 +4024,31 @@ void SBS::EnableRandomActivity(bool value)
 	}
 
 	RandomActivity = value;
+}
+
+void SBS::EnableMalfunctions(bool value)
+{
+	//enable malfunctions
+
+	for (int i = 1; i <= elevator_manager->GetCount(); i++)
+	{
+		Elevator *elevator = elevator_manager->Get(i);
+		if (elevator)
+		{
+			elevator->EnableMalfunctions(value);
+		}
+	}
+
+	for (size_t i = 0; i < EscalatorArray.size(); i++)
+	{
+		Escalator *escalator = EscalatorArray[i];
+		if (escalator)
+		{
+			escalator->EnableMalfunctions(value);
+		}
+	}
+
+	Malfunctions = value;
 }
 
 bool SBS::IsObjectValid(Object *object, std::string type)
@@ -4089,6 +4338,21 @@ Quaternion SBS::FromGlobal(const Quaternion &orientation)
 	return (GetOrientation().Inverse() * orientation);
 }
 
+Light* SBS::GetLight(std::string name)
+{
+	//get a light by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		if (SetCaseCopy(lights[i]->GetName(), false) == name)
+			return lights[i];
+	}
+
+	return 0;
+}
+
 Model* SBS::GetModel(std::string name)
 {
 	//get a model by name
@@ -4114,6 +4378,21 @@ Primitive* SBS::GetPrimitive(std::string name)
 	{
 		if (SetCaseCopy(PrimArray[i]->GetName(), false) == name)
 			return PrimArray[i];
+	}
+
+	return 0;
+}
+
+CustomObject* SBS::GetCustomObject(std::string name)
+{
+	//get a custom object by name
+
+	SetCase(name, false);
+
+	for (size_t i = 0; i < CustomObjectArray.size(); i++)
+	{
+		if (SetCaseCopy(CustomObjectArray[i]->GetName(), false) == name)
+			return CustomObjectArray[i];
 	}
 
 	return 0;
@@ -4253,6 +4532,63 @@ void SBS::Run0()
 GeometryController* SBS::GetGeometry()
 {
 	return geometry;
+}
+
+void SBS::MemoryReport()
+{
+	//print a memory report
+	Report("");
+	Report("--- Memory Report ---");
+
+	//mesh memory
+	{
+		size_t total = 0;
+		for (size_t i = 0; i < meshes.size(); i++)
+			total += meshes[i]->GetSize();
+		Report("Meshes: " + ToString(total / 1024) + " kb");
+	}
+	Report("");
+}
+
+void SBS::RegisterEscalator(Escalator *escalator)
+{
+	//add escalator to index
+	EscalatorArray.push_back(escalator);
+}
+
+void SBS::UnregisterEscalator(Escalator *escalator)
+{
+	//remove escalator from index
+
+	for (size_t i = 0; i < EscalatorArray.size(); i++)
+	{
+		if (EscalatorArray[i] == escalator)
+		{
+			EscalatorArray.erase(EscalatorArray.begin() + i);
+			return;
+		}
+	}
+}
+
+Escalator* SBS::GetEscalator(int index)
+{
+	if (index >= 0 && index < EscalatorArray.size())
+		return EscalatorArray[index];
+	return 0;
+}
+
+void SBS::SetPower(bool value)
+{
+	//set building power state
+
+	power_state = value;
+}
+
+bool SBS::GetPower()
+{
+	//return building power state
+
+	return power_state;
 }
 
 }

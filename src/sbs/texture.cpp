@@ -1682,7 +1682,7 @@ bool TextureManager::SetTextureInfo(int index, TextureManager::TextureInfo &info
 
 void TextureManager::IncrementTextureUsage(const std::string &name)
 {
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == name)
 		{
@@ -1694,7 +1694,7 @@ void TextureManager::IncrementTextureUsage(const std::string &name)
 
 void TextureManager::DecrementTextureUsage(const std::string &name)
 {
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == name)
 		{
@@ -2403,6 +2403,29 @@ void TextureManager::EnableShadows(const std::string &material_name, bool value)
 	Ogre::MaterialPtr mMat = GetMaterialByName(material_name);
 	if (mMat)
 		mMat->setReceiveShadows(value);
+}
+
+void TextureManager::SetCulling(const std::string &material_name, int mode)
+{
+	//sets culling mode on a material
+	//if mode is 0, do not cull (both sides visible)
+	//if mode is 1, cull anticlockwise (SBS default)
+	//if mode is 2, cull clockwise (Ogre default)
+
+	//get original material
+	Ogre::MaterialPtr mat = GetMaterialByName(material_name);
+
+	if (mat)
+	{
+		if (mode == 0)
+			mat->setCullingMode(Ogre::CullingMode::CULL_NONE);
+		if (mode == 1)
+			mat->setCullingMode(Ogre::CullingMode::CULL_ANTICLOCKWISE);
+		if (mode == 2)
+			mat->setCullingMode(Ogre::CullingMode::CULL_CLOCKWISE);
+	}
+	else
+		ReportError("SetCulling: Material " + material_name + " not found");
 }
 
 }

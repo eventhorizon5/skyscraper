@@ -100,7 +100,7 @@ MovingWalkway::~MovingWalkway()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->DecrementEscalatorCount();
+		sbs->DecrementMovingWalkwayCount();
 
 		//unregister from parent
 		if (parent_deleting == false)
@@ -162,6 +162,13 @@ void MovingWalkway::Loop()
 	//run loop
 
 	SBS_PROFILE("MovingWalkway::Loop");
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+	{
+		sound->Stop();
+		return;
+	}
 
 	if (!IsEnabled() || Run == 0)
 	{
@@ -328,6 +335,10 @@ void MovingWalkway::MoveSteps()
 void MovingWalkway::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)
 {
 	//cycle run stages if shift-click is performed
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return;
 
 	if (shift == true)
 	{

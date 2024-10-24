@@ -43,6 +43,7 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <fmod.hpp>
+#include <fmod_errors.h>
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "OgreOpenXRRenderWindow.h"
 #endif
@@ -850,7 +851,7 @@ bool Skyscraper::Initialize()
 	//set up default material shader scheme
 	if (RTSS == true)
 	{
-		for (int i = 0; i < mViewports.size(); i++)
+		for (size_t i = 0; i < mViewports.size(); i++)
 		{
 			mViewports[i]->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 		}
@@ -888,7 +889,8 @@ bool Skyscraper::Initialize()
 		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)
 		{
-			ReportFatalError("Error initializing sound - reason " + ToString(result));
+			std::string fmod_result = FMOD_ErrorString(result);
+			ReportFatalError("Error initializing sound:\n" + fmod_result);
 			DisableSound = true;
 		}
 		else
@@ -897,7 +899,8 @@ bool Skyscraper::Initialize()
 			result = soundsys->init(100, FMOD_INIT_NORMAL, &name);
 			if (result != FMOD_OK)
 			{
-				ReportFatalError("Error initializing sound  - reason " + ToString(result));
+				std::string fmod_result = FMOD_ErrorString(result);
+				ReportFatalError("Error initializing sound:\n" + fmod_result);
 				DisableSound = true;
 			}
 			else
@@ -1169,34 +1172,8 @@ bool Skyscraper::Loop()
 	//update Caelum
 	UpdateSky();
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	//update OpenXR camera transformations
-	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
-	{
-		EngineContext* engine = vm->GetActiveEngine();
-
-		if (engine)
-		{
-			::SBS::SBS* Simcore = engine->GetSystem();
-
-			if (Simcore->camera)
-			{
-				for (int i = 0; i < 2; i++)
-				{
-					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
-					Ogre::Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition();
-					//if (first_run == true)
-						//camera->setPosition(Simcore->ToRemote(Simcore->camera->GetSceneNode()->GetPosition()));
-
-					Ogre::Vector3 derived = Simcore->ToLocal(camera->getDerivedPosition());
-					Ogre::Vector3 combined = Simcore->ToRemote(cameranode_pos - derived);
-
-					SetOpenXRParameters(i, combined, camera->getDerivedOrientation());
-				}
-			}
-		}
-	}
-#endif
+	//update OpenXR
+	UpdateOpenXR();
 
 	//render graphics
 	result = Render();
@@ -1701,7 +1678,7 @@ void Skyscraper::StartSound()
 #endif
 	if (result != FMOD_OK)
 	{
-		ReportError("Can't load file '" + filename_full + "'");
+		ReportError("Can't load file '" + filename_full + "':\n" + FMOD_ErrorString(result));
 		return;
 	}
 
@@ -1756,10 +1733,10 @@ std::string Skyscraper::SelectBuilding()
 		filelist2[i] = filelist2[i].substr(0, filelist2[i].length() - 4);
 	}
 
-	for (int i = 0; i < filelist2.size(); i++)
+	for (size_t i = 0; i < filelist2.size(); i++)
 	{
 		bool found = false;
-		for (int j = 0; j < filelist.size(); j++)
+		for (size_t j = 0; j < filelist.size(); j++)
 		{
 			if (filelist[j] == filelist2[i])
 			{
@@ -1880,7 +1857,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	//start simulation
-	if (!engine->Start(mCameras))
+	if (!vm->StartEngine(engine, mCameras))
 		return false;
 
 	//close progress dialog if no engines are loading
@@ -2189,7 +2166,7 @@ bool Skyscraper::InitSky(EngineContext *engine)
 	//attach caelum to running viewport
 	try
 	{
-		for (int i = 0; i < mViewports.size(); i++)
+		for (size_t i = 0; i < mViewports.size(); i++)
 		{
 			mCaelumSystem->attachViewport(mViewports[i]);
 		}
@@ -2253,7 +2230,7 @@ void Skyscraper::UpdateSky()
 
 	if (mCaelumSystem)
 	{
-		for (int i = 0; i < mCameras.size(); i++)
+		for (size_t i = 0; i < mCameras.size(); i++)
 		{
 			mCaelumSystem->notifyCameraChanged(mCameras[i]);
 		}
@@ -2398,6 +2375,21 @@ void Skyscraper::SetDateTime(double julian_date_time)
 		mCaelumSystem->setJulianDay(datetime);
 }
 
+void Skyscraper::GetTime(int &hour, int &minute, int &second)
+{
+	hour = -1;
+	minute = -1;
+	second = -1.0;
+
+	if (!mCaelumSystem)
+		return;
+
+	Caelum::LongReal julian = mCaelumSystem->getJulianDay(), sec;
+	int year, month, day;
+	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, sec);
+	second = (int)sec;
+}
+
 void Skyscraper::RaiseWindow()
 {
 	window->Raise();
@@ -2419,7 +2411,7 @@ void Skyscraper::RefreshViewport()
 
 	if (Headless == false)
 	{
-		for (int i = 0; i < mViewports.size(); i++)
+		for (size_t i = 0; i < mViewports.size(); i++)
 		{
 			mViewports[i]->_updateDimensions();
 		}
@@ -2645,6 +2637,32 @@ void Skyscraper::ProcessLoad()
 		loadinfo.need_process = false;
 		load_lock.unlock();
 	}
+}
+
+void Skyscraper::UpdateOpenXR()
+{
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	//update OpenXR camera transformations
+	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	{
+		EngineContext* engine = vm->GetActiveEngine();
+
+		if (engine)
+		{
+			::SBS::SBS* Simcore = engine->GetSystem();
+
+			if (Simcore->camera)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
+					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition() - Simcore->camera->GetPosition();
+					SetOpenXRParameters(i, Simcore->ToRemote(cameranode_pos), camera->getDerivedOrientation());
+				}
+			}
+		}
+	}
+#endif
 }
 
 }

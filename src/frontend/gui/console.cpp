@@ -71,7 +71,7 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	FlexGridSizer3 = new wxFlexGridSizer(2, 1, 0, 0);
 	FlexGridSizer3->AddGrowableCol(0);
 	FlexGridSizer3->AddGrowableRow(0);
-	tConsole = new wxTextCtrl(Panel1, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL, wxDefaultValidator, _T("ID_tConsole"));
+	tConsole = new wxTextCtrl(Panel1, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY|wxTE_DONTWRAP|wxVSCROLL|wxHSCROLL, wxDefaultValidator, _T("ID_tConsole"));
 	FlexGridSizer3->Add(tConsole, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(1, 2, 0, 0);
 	FlexGridSizer2->AddGrowableCol(0);
@@ -89,11 +89,8 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	FlexGridSizer2->Add(BoxSizer1, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer3->Add(FlexGridSizer2, 1, wxEXPAND, 5);
 	Panel1->SetSizer(FlexGridSizer3);
-	FlexGridSizer3->Fit(Panel1);
-	FlexGridSizer3->SetSizeHints(Panel1);
 	FlexGridSizer1->Add(Panel1, 1, wxEXPAND, 5);
 	SetSizer(FlexGridSizer1);
-	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 
 	Connect(ID_bSend,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bSend_Click);
@@ -112,13 +109,13 @@ Console::~Console()
 
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
-	Simcore = skyscraper->GetVM()->GetActiveEngine()->GetSystem();
+	Simcore = skyscraper->GetVM()->GetActiveSystem();
 
 	if (!Simcore)
 		return;
 
 	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = skyscraper->GetVM()->GetActiveEngine()->GetScriptProcessor();
+	ScriptProcessor *processor = skyscraper->GetVM()->GetActiveScriptProcessor();
 
 	if (!processor)
 		return;
