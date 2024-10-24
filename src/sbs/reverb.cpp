@@ -150,7 +150,7 @@ Reverb::~Reverb()
 			std::string type = GetParent()->GetType();
 
 			if (type == "ElevatorCar")
-				static_cast<ElevatorCar*>(GetParent())->RemoveReverb(this);
+				static_cast<ElevatorCar*>(GetParent())->RemoveReverb();
 			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveReverb(this);
 			else if (type == "SBS")

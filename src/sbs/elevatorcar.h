@@ -162,7 +162,7 @@ public:
 	void RemoveFloorIndicator(FloorIndicator *indicator);
 	void RemoveDoor(Door *door);
 	void RemoveSound(Sound *sound);
-	void RemoveReverb(Reverb *reverb);
+	void RemoveReverb();
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
 	void RemovePrimitive(Primitive *prim);
