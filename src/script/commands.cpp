@@ -3601,7 +3601,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//AddReverb command
-	if (StartsWithNoCase(LineData, "addreverb"))
+	/*if (StartsWithNoCase(LineData, "addreverb"))
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -3646,7 +3646,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		Simcore->GetSoundSystem()->RemoveReverb(Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])));
 		return sNextLine;
-	}
+	}*/
 
 	//Rotate command
 	if (StartsWithNoCase(LineData, "rotate "))
