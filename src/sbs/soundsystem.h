@@ -28,6 +28,7 @@ namespace FMOD {
 	class Sound;
 	class Channel;
 	class System;
+	class Reverb3D;
 }
 
 namespace SBS {
@@ -54,6 +55,8 @@ public:
 	int GetSoundCount();
 	void ShowLoadedSounds();
 	void ShowPlayingSounds();
+	void AddReverb(std::string type, const Vector3 &pos, Real min_distance, Real max_distance);
+	void RemoveReverb(const Vector3 &pos);
 
 private:
 
@@ -70,6 +73,14 @@ private:
 	std::vector<SoundData*> sounds;
 
 	Vector3 Position;
+
+	//reverbs
+	struct Reverb
+	{
+		FMOD::Reverb3D* object;
+		Vector3 position;
+	};
+	std::vector<Reverb> reverbs;
 };
 
 struct SBSIMPEXP SoundData
