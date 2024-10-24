@@ -112,6 +112,7 @@ namespace SBS {
 	class Utility;
 	class GeometryController;
 	class CustomObject;
+	class Reverb;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
