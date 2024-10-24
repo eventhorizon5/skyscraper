@@ -2436,9 +2436,12 @@ size_t TextureManager::GetMemoryUsage()
 
 	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
-		Ogre::ResourcePtr wrapper = GetTextureByName(textureinfo[i].filename, "General");
-		if (wrapper)
-			result += wrapper->getSize();
+		Ogre::TexturePtr tex = GetTextureByName(textureinfo[i].filename, "General");
+		if (tex)
+		{
+			size_t size = tex->getNumFaces() * Ogre::PixelUtil::getMemorySize(tex->getWidth(), tex->getHeight(), tex->getDepth(), tex->getFormat());
+			result += size;
+		}
 	}
 
 	return result;
