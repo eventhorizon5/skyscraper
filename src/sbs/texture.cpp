@@ -147,7 +147,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode, mTex->getSize(), mMat->getSize());
 
 	if (sbs->Verbose)
 		Report("Loaded texture '" + filename2 + "' as '" + matname + "', size " + ToString((int)mTex->getSize()));
@@ -175,6 +175,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 
 	bool has_alpha = false;
 
+	size_t size = 0;
 	for (size_t i = 0; i < filenames2.size(); i++)
 	{
 		bool has_alpha2 = false;
@@ -188,6 +189,8 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 
 		if (has_alpha2 == true)
 			has_alpha = true;
+
+		size += mTex->getSize();
 
 		if (sbs->Verbose)
 			Report("Loaded texture " + filenames2[i] + ", size " + ToString((int)mTex->getSize()));
@@ -213,7 +216,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 		return false;
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode, size, mMat->getSize());
 
 	if (sbs->Verbose)
 		Report("Loaded animated texture " + matname);
@@ -275,7 +278,7 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	}
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode, mTex->getSize(), mMat->getSize());
 
 	if (sbs->Verbose)
 		Report("Loaded alpha blended texture '" + filename2 + "' as '" + matname + "'");
@@ -301,7 +304,7 @@ bool TextureManager::LoadMaterial(const std::string &materialname, const std::st
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//add texture multipliers
-	RegisterTextureInfo(name, materialname, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, materialname, "", widthmult, heightmult, enable_force, force_mode, 0, mMat->getSize());
 
 	if (sbs->Verbose)
 		Report("Loaded material " + matname);
@@ -309,7 +312,7 @@ bool TextureManager::LoadMaterial(const std::string &materialname, const std::st
 	return true;
 }
 
-void TextureManager::RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode)
+void TextureManager::RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode, size_t tex_size, size_t mat_size)
 {
 	//register texture for multipliers information
 	//see TextureInfo structure for more information
@@ -328,6 +331,8 @@ void TextureManager::RegisterTextureInfo(const std::string &name, const std::str
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
 	info.dependencies = 0;
+	info.tex_size = tex_size;
+	info.mat_size = mat_size;
 
 	textureinfo.push_back(info);
 }
@@ -449,7 +454,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 		Report("Loaded cropped texture '" + filename2 + "' as '" + name + "', size " + ToString((int)new_texture->getSize()));
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode, mTex->getSize(), mMat->getSize());
 
 	return true;
 }
@@ -833,7 +838,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode, texture->getSize(), mMat->getSize());
 
 	if (sbs->Verbose)
 		Report("AddTextToTexture: created texture '" + Name + "'");
@@ -932,7 +937,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 		Report("AddTextureOverlay: created texture '" + Name + "'");
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode, new_texture->getSize(), mMat->getSize());
 
 	return true;
 }
@@ -2436,9 +2441,7 @@ size_t TextureManager::GetMemoryUsage()
 
 	for (size_t i = 0; i < textureinfo.size(); i++)
 	{
-		Ogre::TexturePtr tex = GetTextureByName(textureinfo[i].filename, "General");
-		if (tex)
-			result += tex->getSize();
+		result += textureinfo[i].tex_size + textureinfo[i].mat_size;
 	}
 
 	return result;

@@ -100,7 +100,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 		material->setLightingEnabled(false);
 
 		//add texture multipliers
-		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
+		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false, texture->getSize(), material->getSize());
 
 		//register with system
 		sbs->RegisterCameraTexture(this);
