@@ -554,6 +554,13 @@ void Floor::Enabled(bool value)
 		}
 	}
 
+	//reverbs
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i])
+			reverbs[i]->Enabled(value);
+	}
+
 	//lights
 	for (size_t i = 0; i < lights.size(); i++)
 	{

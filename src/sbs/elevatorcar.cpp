@@ -1094,6 +1094,10 @@ void ElevatorCar::EnableObjects(bool value)
 			}
 		}
 	}
+
+	//reverb
+	if (reverb)
+		reverb->Enabled(value);
 }
 
 void ElevatorCar::UpdateFloorIndicators()
