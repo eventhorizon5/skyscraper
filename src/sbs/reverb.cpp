@@ -128,7 +128,7 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 	}
 
 	sbs->IncrementReverbCount();
-	Report("Reverb created at " + ToString(global_pos.x) + ", " + ToString(global_pos.y) + ", " + ToString(global_pos.z) + " with type: " + type);
+	Report("Reverb '" + name + "' created with type: " + type);
 }
 
 Reverb::~Reverb()
