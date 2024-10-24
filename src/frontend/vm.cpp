@@ -33,6 +33,8 @@ using namespace SBS;
 
 namespace Skyscraper {
 
+//Virtual Manager system
+
 VM::VM(Skyscraper *frontend)
 {
 	this->frontend = frontend;

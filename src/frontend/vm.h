@@ -32,6 +32,7 @@ class Skyscraper;
 class EngineContext;
 class ScriptProcessor;
 
+//Virtual Manager system
 class VM
 {
 	friend class Skyscraper;
