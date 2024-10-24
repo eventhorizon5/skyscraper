@@ -63,6 +63,7 @@
 #include "utility.h"
 #include "geometry.h"
 #include "escalator.h"
+#include "reverb.h"
 
 namespace SBS {
 
@@ -136,6 +137,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	InShaft = false;
 	DeleteColliders = false;
 	soundcount = 0;
+	reverbcount = 0;
 	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
@@ -2288,6 +2290,49 @@ void SBS::IncrementSoundCount()
 void SBS::DecrementSoundCount()
 {
 	soundcount--;
+}
+
+Reverb* SBS::AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance)
+{
+	//create a reverb object
+	Reverb *reverb = new Reverb(this, name, type, position, min_distance, max_distance, false);
+	reverbs.push_back(reverb);
+	return reverb;
+}
+
+Reverb* SBS::GetReverb(const std::string &name)
+{
+	//get reverb by name
+
+	std::string findname = name;
+	SetCase(findname, false);
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i])
+		{
+			std::string name2 = reverbs[i]->GetName();
+			SetCase(name2, false);
+			if (findname == name2)
+				return reverbs[i];
+		}
+	}
+	return 0;
+}
+
+int SBS::GetReverbCount()
+{
+	//return total number of allocated sounds
+	return reverbcount;
+}
+
+void SBS::IncrementReverbCount()
+{
+	reverbcount++;
+}
+
+void SBS::DecrementReverbCount()
+{
+	reverbcount--;
 }
 
 Real SBS::ToLocal(Real remote_value)
