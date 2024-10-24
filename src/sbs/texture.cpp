@@ -2254,7 +2254,7 @@ void TextureManager::EnableLighting(const std::string &material_name, bool value
 
 Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, const std::string &group)
 {
-	Ogre::MaterialPtr ptr;
+	Ogre::MaterialPtr ptr = 0;
 
 	if (Ogre::ResourceGroupManager::getSingleton().resourceGroupExists(group) == false)
 		return ptr;
@@ -2298,7 +2298,7 @@ std::string TextureManager::GetTextureName(Ogre::MaterialPtr mMat)
 
 Ogre::TexturePtr TextureManager::GetTextureByName(const std::string &name, const std::string &group)
 {
-	Ogre::TexturePtr ptr;
+	Ogre::TexturePtr ptr = 0;
 
 	if (Ogre::ResourceGroupManager::getSingleton().resourceGroupExists(group) == false)
 		return ptr;
@@ -2428,6 +2428,20 @@ void TextureManager::SetCulling(const std::string &material_name, int mode)
 	}
 	else
 		ReportError("SetCulling: Material " + material_name + " not found");
+}
+
+size_t TextureManager::GetMemoryUsage()
+{
+	size_t result = 0;
+
+	for (size_t i = 0; i < textureinfo.size(); i++)
+	{
+		Ogre::ResourcePtr wrapper = GetTextureByName(textureinfo[i].filename, "General");
+		if (wrapper)
+			result += wrapper->getSize();
+	}
+
+	return result;
 }
 
 }

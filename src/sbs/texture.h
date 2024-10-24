@@ -105,6 +105,7 @@ public:
 	void DecrementTextureUsage(const std::string &name);
 	void SetCulling(const std::string &material_name, int mode = 1);
 	Ogre::MaterialPtr SetCulling(const std::string &material_name, const std::string &name, int mode);
+	size_t GetMemoryUsage();
 
 	//override textures
 	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
