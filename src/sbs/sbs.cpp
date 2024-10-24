@@ -2321,7 +2321,7 @@ Reverb* SBS::GetReverb(const std::string &name)
 
 int SBS::GetReverbCount()
 {
-	//return total number of allocated sounds
+	//return total number of allocated reverbs
 	return reverbcount;
 }
 
@@ -2773,6 +2773,21 @@ void SBS::RemoveSound(Sound *sound)
 		if (sounds[i] == sound)
 		{
 			sounds.erase(sounds.begin() + i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveReverb(Reverb *reverb)
+{
+	//remove a reverb from the array
+	//this does not delete the object
+
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i] == reverb)
+		{
+			reverbs.erase(reverbs.begin() + i);
 			return;
 		}
 	}

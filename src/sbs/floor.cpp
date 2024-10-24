@@ -50,6 +50,7 @@
 #include "movingwalkway.h"
 #include "controller.h"
 #include "utility.h"
+#include "reverb.h"
 #include "floor.h"
 
 namespace SBS {
@@ -268,6 +269,17 @@ Floor::~Floor()
 			delete sounds[i];
 		}
 		sounds[i] = 0;
+	}
+
+	//delete reverbs
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i])
+		{
+			reverbs[i]->parent_deleting = true;
+			delete reverbs[i];
+		}
+		reverbs[i] = 0;
 	}
 
 	//delete meshes
@@ -1942,5 +1954,48 @@ int Floor::GetCallStationCount()
 {
 	return (int)CallStationArray.size();
 }
+
+Reverb* Floor::AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance)
+{
+	//create a reverb object
+	Reverb *reverb = new Reverb(this, name, type, position, min_distance, max_distance, false);
+	reverbs.push_back(reverb);
+	return reverb;
+}
+
+Reverb* Floor::GetReverb(const std::string &name)
+{
+	//get reverb by name
+
+	std::string findname = name;
+	SetCase(findname, false);
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i])
+		{
+			std::string name2 = reverbs[i]->GetName();
+			SetCase(name2, false);
+			if (findname == name2)
+				return reverbs[i];
+		}
+	}
+	return 0;
+}
+
+void Floor::RemoveReverb(Reverb *reverb)
+{
+	//remove a reverb from the array
+	//this does not delete the object
+
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i] == reverb)
+		{
+			reverbs.erase(reverbs.begin() + i);
+			return;
+		}
+	}
+}
+
 
 }
