@@ -57,6 +57,8 @@ public:
 	void ShowPlayingSounds();
 	void AddReverb(std::string type, const Vector3 &pos, Real min_distance, Real max_distance);
 	void RemoveReverb(const Vector3 &pos);
+	void EnableReverb(const Vector3 &pos, bool value);
+	void EnableAllReverbs(bool value);
 
 private:
 
