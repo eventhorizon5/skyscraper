@@ -1871,6 +1871,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	//AddReverb command
 	if (StartsWithNoCase(LineData, "addreverb"))
 	{
+		if (car->GetReverb())
+			return ScriptError("Cannot create more than one reverb in an elevator car");
+
 		//get data
 		int params = SplitData(LineData, 9);
 
