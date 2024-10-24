@@ -3832,6 +3832,9 @@ bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::
 
 Reverb* ElevatorCar::AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance)
 {
+	if (reverb)
+		return 0;
+
 	//create a reverb object
 	reverb = new Reverb(this, name, type, position, min_distance, max_distance, false);
 	return reverb;
