@@ -548,6 +548,9 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	if (Malfunctions == true)
 		EnableMalfunctions(true);
 
+	//enable all reverbs
+	soundsystem->EnableAllReverbs(true);
+
 	//print a memory report
 	MemoryReport();
 
@@ -4307,7 +4310,7 @@ void SBS::ResetState()
 	elevator_manager->EnableAll(false);
 
 	//turn off reverbs
-	//soundsystem->EnableAllReverbs(false);
+	soundsystem->EnableAllReverbs(false);
 
 	//reset camera state
 	camera->ResetState();
