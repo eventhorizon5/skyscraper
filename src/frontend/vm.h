@@ -55,12 +55,8 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
-	void HandleEngineShutdown();
-	void HandleReload();
 	Skyscraper* GetFrontend();
 	void Run();
-	void SwitchEngines();
-	void CheckCamera();
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
@@ -77,6 +73,10 @@ private:
 
 	bool RunEngines();
 	void UpdateOpenXR();
+	void CheckCamera();
+	void HandleEngineShutdown();
+	void HandleReload();
+	void SwitchEngines();
 
 	Skyscraper *frontend;
 	EngineContext *active_engine;
