@@ -96,14 +96,10 @@ public:
 	bool DisableSound;
 	bool IntroMusic;
 	bool FullScreen;
-	bool Shutdown;
 	int SkyMult; //sky time multiplier
-	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
-	bool RenderOnStartup; //override SBS engine setting with same name
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 	bool Verbose;
 	bool ShowMenu; //show main menu
-	bool CheckScript;
 	bool Headless;
 	bool RTSS;
 	int macos_major; //macos major version
@@ -165,7 +161,6 @@ public:
 	MainScreen* GetWindow();
 	FMOD::System* GetSoundSystem();
 	VM* GetVM();
-	void UpdateOpenXR();
 
 private:
 	//sound data
