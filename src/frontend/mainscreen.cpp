@@ -268,7 +268,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 	{
 		int result = wxMessageBox(wxT("Exit and return to the main menu?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
 		if (result == wxYES)
-			frontend->Shutdown = true;
+			frontend->GetVM()->Shutdown = true;
 		return;
 	}
 

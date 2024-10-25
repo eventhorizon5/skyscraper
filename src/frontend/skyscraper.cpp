@@ -200,7 +200,6 @@ bool Skyscraper::OnInit(void)
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
-	Shutdown = false;
 	mOverlaySystem = 0;
 	mRoot = 0;
 	mRenderWindow = 0;
@@ -223,8 +222,6 @@ bool Skyscraper::OnInit(void)
 	latitude = 0.0;
 	longitude = 0.0;
 	datetime = 0.0;
-	ConcurrentLoads = false;
-	RenderOnStartup = false;
 	CutLandscape = true;
 	CutBuildings = true;
 	CutExternal = false;
@@ -232,7 +229,6 @@ bool Skyscraper::OnInit(void)
 	loaddialog = 0;
 	Verbose = false;
 	show_progress = false;
-	CheckScript = false;
 	ShowMenu = false;
 	Headless = false;
 	RTSS = false;
@@ -366,7 +362,7 @@ bool Skyscraper::OnInit(void)
 
 	//set CheckScript mode if specified
 	if (parser->Found(wxT("check-script")) == true)
-		CheckScript = true;
+		vm->CheckScript = true;
 
 	//set headless mode if specified
 	if (parser->Found(wxT("headless")) == true)
@@ -1098,55 +1094,11 @@ bool Skyscraper::Loop()
 	if (show_progress == true)
 		ShowProgressDialog();
 
-	//run sim engine instances
-	bool result = vm->Run();
-
-	//delete an engine if requested
-	vm->HandleEngineShutdown();
-
-	//exit if full shutdown request received
-	if (Shutdown == true)
-	{
-		Shutdown = false;
-		UnloadToMenu();
-	}
-
-	if (result == false && (ConcurrentLoads == false || vm->GetEngineCount() == 1))
-		return true;
-
-	if (!vm->GetActiveEngine())
-		return true;
-
-	//make sure active engine is the one the camera is active in
-	vm->CheckCamera();
-
-	//exit if any engine is loading, unless RenderOnStartup is true
-	if (vm->IsEngineLoading() == true && RenderOnStartup == false)
-		return true;
-
-	//if in CheckScript mode, exit
-	if (CheckScript == true)
-	{
-		UnloadToMenu();
-		return true;
-	}
-
 	//update Caelum
 	UpdateSky();
 
-	//update OpenXR
-	UpdateOpenXR();
-
-	//render graphics
-	result = Render();
-	if (!result)
-		return false;
-
-	//handle a building reload
-	vm->HandleReload();
-
-	//handle behavior when a user exits an engine area
-	vm->SwitchEngines();
+	//run sim engine instances
+	vm->Run();
 
 	//ProfileManager::dumpAll();
 
@@ -1754,33 +1706,9 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	if (Headless == false)
 		mRenderWindow->update();
 
-	//set parent to master engine, if not set
-	if (parent == 0 && vm->GetEngineCount() >= 1)
-		parent = vm->GetFirstValidEngine();
+	bool result = vm->Load(filename, parent, position, rotation, area_min, area_max);
 
-	//Create simulator instance
-	EngineContext* engine = vm->CreateEngine(parent, position, rotation, area_min, area_max);
-
-	if (!vm->GetActiveEngine())
-		vm->active_engine = engine;
-
-	//have instance load building
-	bool result = engine->Load(filename);
-
-	if (result == false)
-	{
-		if (vm->GetEngineCount() == 1)
-			UnloadToMenu();
-		else
-			vm->DeleteEngine(engine);
-		return false;
-	}
-
-	//override SBS startup render option, if specified
-	if (RenderOnStartup == true)
-		engine->GetSystem()->RenderOnStartup = true;
-
-	return true;
+	return result;
 }
 
 bool Skyscraper::Start(EngineContext *engine)
@@ -1897,8 +1825,8 @@ void Skyscraper::UnloadToMenu()
 	window->Center();
 	window->SetCursor(wxNullCursor);
 
-	ConcurrentLoads = false;
-	RenderOnStartup = false;
+	vm->ConcurrentLoads = false;
+	vm->RenderOnStartup = false;
 
 	StartSound();
 	StartupRunning = true;
@@ -2224,7 +2152,7 @@ void Skyscraper::ShowConsole(bool send_button)
 void Skyscraper::CreateProgressDialog(const std::string &message)
 {
 	//don't create progress dialog if concurrent loading is enabled, and one engine is already running
-	if (vm->GetEngineCount() > 1 && ConcurrentLoads == true)
+	if (vm->GetEngineCount() > 1 && vm->ConcurrentLoads == true)
 	{
 		if (vm->GetFirstValidEngine()->IsRunning() == true)
 			return;
@@ -2567,32 +2495,6 @@ FMOD::System* Skyscraper::GetSoundSystem()
 VM* Skyscraper::GetVM()
 {
 	return vm;
-}
-
-void Skyscraper::UpdateOpenXR()
-{
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	//update OpenXR camera transformations
-	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
-	{
-		EngineContext* engine = vm->GetActiveEngine();
-
-		if (engine)
-		{
-			::SBS::SBS* Simcore = engine->GetSystem();
-
-			if (Simcore->camera)
-			{
-				for (int i = 0; i < 2; i++)
-				{
-					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
-					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition() - Simcore->camera->GetPosition();
-					SetOpenXRParameters(i, Simcore->ToRemote(cameranode_pos), camera->getDerivedOrientation());
-				}
-			}
-		}
-	}
-#endif
 }
 
 }

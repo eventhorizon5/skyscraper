@@ -58,7 +58,7 @@ public:
 	void HandleEngineShutdown();
 	void HandleReload();
 	Skyscraper* GetFrontend();
-	bool Run();
+	void Run();
 	void SwitchEngines();
 	void CheckCamera();
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
@@ -66,8 +66,17 @@ public:
 	ScriptProcessor* GetActiveScriptProcessor();
 	void ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only);
 	void UnclickedObject();
+	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+
+	bool Shutdown;
+	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
+	bool RenderOnStartup; //override SBS engine setting with same name
+	bool CheckScript; //if set to true, checks building scripts instead of fully loading them
 
 private:
+
+	bool RunEngines();
+	void UpdateOpenXR();
 
 	Skyscraper *frontend;
 	EngineContext *active_engine;

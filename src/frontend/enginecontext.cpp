@@ -234,7 +234,7 @@ bool EngineContext::Load(std::string filename)
 	frontend->CreateProgressDialog(filename);
 
 	//override SBS startup render option, if specified
-	if (frontend->RenderOnStartup == true)
+	if (vm->RenderOnStartup == true)
 		Simcore->RenderOnStartup = true;
 
 	return true;

@@ -39,6 +39,10 @@ VM::VM(Skyscraper *frontend)
 {
 	this->frontend = frontend;
 	active_engine = 0;
+	Shutdown = false;
+	ConcurrentLoads = false;
+	RenderOnStartup = false;
+	CheckScript = false;
 }
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -77,7 +81,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 
 			//exit to main menu if all engines have been deleted
 			if (count == 0)
-				frontend->Shutdown = true;
+				Shutdown = true;
 
 			return true;
 		}
@@ -163,12 +167,12 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 	frontend->GetWindow()->EnableFreelook(active_engine->GetSystem()->camera->Freelook);
 }
 
-bool VM::Run()
+bool VM::RunEngines()
 {
 	bool result = true;
 	bool isloading = IsEngineLoading();
 
-	if (frontend->ConcurrentLoads == true && isloading == true)
+	if (ConcurrentLoads == true && isloading == true)
 		frontend->RefreshViewport();
 
 	for (size_t i = 0; i < engines.size(); i++)
@@ -178,10 +182,10 @@ bool VM::Run()
 
 		//process engine run loops, and also prevent other instances from running if
 		//one or more engines are loading
-		if (frontend->ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
+		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
 		{
 			bool run = true;
-			if (i > 0 && frontend->ConcurrentLoads == false)
+			if (i > 0 && ConcurrentLoads == false)
 			{
 				//if concurrent loads is off, skip running if previous engine is not finished loading
 				if (engines[i - 1])
@@ -518,6 +522,117 @@ void VM::UnclickedObject()
 	camera->UnclickedObject();
 	camera->MouseLeftDown = false;
 	camera->MouseRightDown = false;
+}
+
+void VM::Run()
+{
+	//run system
+
+	//run sim engines
+	bool result = RunEngines();
+
+	//delete an engine if requested
+	HandleEngineShutdown();
+
+	//exit if full shutdown request received
+	if (Shutdown == true)
+	{
+		Shutdown = false;
+		frontend->UnloadToMenu();
+	}
+
+	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
+		return;
+
+	if (!GetActiveEngine())
+		return;
+
+	//make sure active engine is the one the camera is active in
+	CheckCamera();
+
+	//exit if any engine is loading, unless RenderOnStartup is true
+	if (IsEngineLoading() == true && RenderOnStartup == false)
+		return;
+
+	//if in CheckScript mode, exit
+	if (CheckScript == true)
+	{
+		frontend->UnloadToMenu();
+		return;
+	}
+
+	//update OpenXR
+	UpdateOpenXR();
+
+	//render graphics
+	result = frontend->Render();
+	if (!result)
+		return;
+
+	//handle a building reload
+	HandleReload();
+
+	//handle behavior when a user exits an engine area
+	SwitchEngines();
+}
+
+void VM::UpdateOpenXR()
+{
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	//update OpenXR camera transformations
+	if (frontend->GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	{
+		EngineContext* engine = GetActiveEngine();
+
+		if (engine)
+		{
+			::SBS::SBS* Simcore = engine->GetSystem();
+
+			if (Simcore->camera)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
+					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition() - Simcore->camera->GetPosition();
+					SetOpenXRParameters(i, Simcore->ToRemote(cameranode_pos), camera->getDerivedOrientation());
+				}
+			}
+		}
+	}
+#endif
+}
+
+bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+	//load simulator and data file
+
+	//set parent to master engine, if not set
+	if (parent == 0 && GetEngineCount() >= 1)
+		parent = GetFirstValidEngine();
+
+	//Create simulator instance
+	EngineContext* engine = CreateEngine(parent, position, rotation, area_min, area_max);
+
+	if (!GetActiveEngine())
+		active_engine = engine;
+
+	//have instance load building
+	bool result = engine->Load(filename);
+
+	if (result == false)
+	{
+		if (GetEngineCount() == 1)
+			frontend->UnloadToMenu();
+		else
+			DeleteEngine(engine);
+		return false;
+	}
+
+	//override SBS startup render option, if specified
+	if (RenderOnStartup == true)
+		engine->GetSystem()->RenderOnStartup = true;
+
+	return true;
 }
 
 }
