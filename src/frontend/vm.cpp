@@ -235,6 +235,8 @@ bool VM::IsEngineLoading()
 
 void VM::HandleEngineShutdown()
 {
+	//shutdown an engine if requested
+
 	bool deleted = false;
 
 	for (size_t i = 0; i < engines.size(); i++)
