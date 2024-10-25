@@ -158,6 +158,8 @@ Reverb::~Reverb()
 
 void Reverb::OnMove(bool parent)
 {
+	//reposition FMOD reverb on object move
+
 	if (!reverb)
 		return;
 

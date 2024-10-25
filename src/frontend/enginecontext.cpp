@@ -95,6 +95,7 @@ EngineContext::~EngineContext()
 		}
 	}
 
+	//unload simulator
 	UnloadSim();
 
 	if (reload_state)
