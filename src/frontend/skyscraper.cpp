@@ -1094,9 +1094,6 @@ bool Skyscraper::Loop()
 	if (show_progress == true)
 		ShowProgressDialog();
 
-	//update Caelum
-	UpdateSky();
-
 	//run sim engine instances
 	vm->Run();
 

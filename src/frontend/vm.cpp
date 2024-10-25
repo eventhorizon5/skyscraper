@@ -577,6 +577,9 @@ void VM::Run()
 		return;
 	}
 
+	//update Caelum
+	frontend->UpdateSky();
+
 	//update OpenXR
 	UpdateOpenXR();
 
