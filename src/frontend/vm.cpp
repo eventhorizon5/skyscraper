@@ -25,10 +25,10 @@
 #include "OgreOpenXRRenderWindow.h"
 #endif
 #include "globals.h"
+#include "sbs.h"
 #include "vm.h"
 #include "skyscraper.h"
 #include "mainscreen.h"
-#include "sbs.h"
 #include "camera.h"
 #include "scenenode.h"
 #include "enginecontext.h"

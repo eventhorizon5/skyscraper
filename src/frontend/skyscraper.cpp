@@ -51,7 +51,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
-#include "scenenode.h"
 #include "gui/debugpanel.h"
 #include "skyscraper.h"
 #include "vm.h"

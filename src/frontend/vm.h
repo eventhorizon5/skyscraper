@@ -24,7 +24,6 @@
 #define VM_H
 
 #include <vector>
-#include "sbs.h"
 
 namespace Skyscraper {
 
