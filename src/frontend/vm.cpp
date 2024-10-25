@@ -21,12 +21,16 @@
 */
 
 #include <wx/panel.h>
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#include "OgreOpenXRRenderWindow.h"
+#endif
 #include "globals.h"
 #include "vm.h"
 #include "skyscraper.h"
 #include "mainscreen.h"
 #include "sbs.h"
 #include "camera.h"
+#include "scenenode.h"
 #include "enginecontext.h"
 
 using namespace SBS;
