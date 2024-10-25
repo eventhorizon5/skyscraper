@@ -533,6 +533,7 @@ void Skyscraper::UnloadSim()
 	if (console)
 		console->bSend->Enable(false);
 
+	//delete all sim engines
 	vm->DeleteEngines();
 
 	//do a full clear of Ogre objects

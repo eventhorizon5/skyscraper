@@ -20,6 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <fmod.hpp>
 #include "globals.h"
 #include "skyscraper.h"
 #include "vm.h"
@@ -332,6 +333,10 @@ void EngineContext::UnloadSim()
 		Report("\nSBS instance " + ToString(instance) + " unloaded");
 	}
 	Simcore = 0;
+
+	//reset fmod reverb
+	FMOD_REVERB_PROPERTIES prop = FMOD_PRESET_GENERIC;
+	fmodsystem->setReverbProperties(0, &prop);
 
 	//unload script processor
 	if (processor)
