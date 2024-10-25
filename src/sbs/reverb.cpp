@@ -122,7 +122,7 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 	{
 		std::string fmod_result = FMOD_ErrorString(result);
 		ReportError("Can't set reverb attributes:\n" + fmod_result);
-		//reverb->setProperties(0);
+		reverb->release();
 		reverb = 0;
 		return;
 	}
@@ -135,8 +135,9 @@ Reverb::~Reverb()
 {
 	sbs->DecrementReverbCount();
 
-	//delete reverb instance
-	//reverb->setProperties(0);
+	//release reverb instance
+	if (reverb)
+		reverb->release();
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
