@@ -77,6 +77,8 @@ private:
 	void HandleEngineShutdown();
 	void HandleReload();
 	void SwitchEngines();
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 	Skyscraper *frontend;
 	EngineContext *active_engine;

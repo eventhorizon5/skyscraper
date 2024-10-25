@@ -47,6 +47,8 @@ VM::VM(Skyscraper *frontend)
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
 	CheckScript = false;
+
+	Report("Started");
 }
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -68,6 +70,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 		{
 			engines[i] = 0;
 			delete engine;
+			Report("Engine instance " + ToString(i) + " deleted");
 
 			int count = GetEngineCount();
 
@@ -97,6 +100,7 @@ void VM::DeleteEngines()
 {
 	//delete all sim emgine instances
 
+	Report("Deleting all engines...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
@@ -157,7 +161,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		active_engine->DetachCamera(switch_engines);
 	}
 
-	frontend->Report("Setting engine " + ToString(number) + " as active");
+	Report("Setting engine " + ToString(number) + " as active");
 
 	//switch context to new engine instance
 	active_engine = engine;
@@ -253,6 +257,8 @@ void VM::HandleEngineShutdown()
 		{
 			if (engines[i]->GetShutdownState() == true)
 			{
+				Report("Shutdown requested for engine instance " + ToString(i));
+
 				if (DeleteEngine(engines[i]) == true)
 				{
 					frontend->RefreshViewport();
@@ -291,6 +297,8 @@ void VM::HandleReload()
 					frontend->UnloadSky();
 
 				frontend->Pause = false;
+				Report("Reloading engine instance " + ToString(i));
+
 				engines[i]->DoReload(); //handle engine reload
 
 				//create sky system if primary engine
@@ -348,6 +356,7 @@ void VM::SwitchEngines()
 	}
 
 	//otherwise search for a valid engine to attach to
+	Report("Searing for engine to attach to...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] != active_engine && engines[i])
@@ -446,6 +455,7 @@ bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
 {
 	//start a sim engine
 
+	Report("Initiating engine start");
 	return engine->Start(cameras);
 }
 
@@ -542,6 +552,7 @@ void VM::Run()
 	if (Shutdown == true)
 	{
 		Shutdown = false;
+		Report("Unloading due to shutdown request");
 		frontend->UnloadToMenu();
 	}
 
@@ -561,6 +572,7 @@ void VM::Run()
 	//if in CheckScript mode, exit
 	if (CheckScript == true)
 	{
+		Report("Unloading to menu...");
 		frontend->UnloadToMenu();
 		return;
 	}
@@ -610,6 +622,8 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 {
 	//load simulator and data file
 
+	Report("Loading engine for building file '" + filename + "'...");
+
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
 		parent = GetFirstValidEngine();
@@ -637,6 +651,16 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 		engine->GetSystem()->RenderOnStartup = true;
 
 	return true;
+}
+
+void VM::Report(const std::string &message)
+{
+	frontend->Report("VM: " + message);
+}
+
+bool VM::ReportError(const std::string &message)
+{
+	return frontend->ReportError("VM: " + message);
 }
 
 }
