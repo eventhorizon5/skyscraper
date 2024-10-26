@@ -63,6 +63,7 @@
 #include "utility.h"
 #include "geometry.h"
 #include "escalator.h"
+#include "reverb.h"
 
 namespace SBS {
 
@@ -136,6 +137,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	InShaft = false;
 	DeleteColliders = false;
 	soundcount = 0;
+	reverbcount = 0;
 	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
@@ -547,6 +549,13 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	//enable malfunctions if specified
 	if (Malfunctions == true)
 		EnableMalfunctions(true);
+
+	//turn on reverbs
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i])
+			reverbs[i]->Enabled(true);
+	}
 
 	//print a memory report
 	MemoryReport();
@@ -2290,6 +2299,49 @@ void SBS::DecrementSoundCount()
 	soundcount--;
 }
 
+Reverb* SBS::AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance)
+{
+	//create a reverb object
+	Reverb *reverb = new Reverb(this, name, type, position, min_distance, max_distance, false);
+	reverbs.push_back(reverb);
+	return reverb;
+}
+
+Reverb* SBS::GetReverb(const std::string &name)
+{
+	//get reverb by name
+
+	std::string findname = name;
+	SetCase(findname, false);
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i])
+		{
+			std::string name2 = reverbs[i]->GetName();
+			SetCase(name2, false);
+			if (findname == name2)
+				return reverbs[i];
+		}
+	}
+	return 0;
+}
+
+int SBS::GetTotalReverbCount()
+{
+	//return total number of allocated reverbs
+	return reverbcount;
+}
+
+void SBS::IncrementReverbCount()
+{
+	reverbcount++;
+}
+
+void SBS::DecrementReverbCount()
+{
+	reverbcount--;
+}
+
 Real SBS::ToLocal(Real remote_value)
 {
 	//convert remote (OGRE) vertex positions to local (SBS) positions
@@ -2625,6 +2677,10 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "Primitive")
 		deleted = true;
+	else if (type == "CustomObject")
+		deleted = true;
+	else if (type == "Reverb")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
@@ -2728,6 +2784,21 @@ void SBS::RemoveSound(Sound *sound)
 		if (sounds[i] == sound)
 		{
 			sounds.erase(sounds.begin() + i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveReverb(Reverb *reverb)
+{
+	//remove a reverb from the array
+	//this does not delete the object
+
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i] == reverb)
+		{
+			reverbs.erase(reverbs.begin() + i);
 			return;
 		}
 	}
@@ -4306,6 +4377,13 @@ void SBS::ResetState()
 	stairwell_manager->EnableAll(false);
 	elevator_manager->EnableAll(false);
 
+	//turn off reverbs
+	for (size_t i = 0; i < reverbs.size(); i++)
+	{
+		if (reverbs[i])
+			reverbs[i]->Enabled(false);
+	}
+
 	//reset camera state
 	camera->ResetState();
 }
@@ -4540,13 +4618,16 @@ void SBS::MemoryReport()
 	Report("");
 	Report("--- Memory Report ---");
 
+	size_t total = 0;
+	for (size_t i = 0; i < meshes.size(); i++)
+		total += meshes[i]->GetSize();
+
+	//texture memory
+	Report("Textures: " + ToString(texturemanager->GetMemoryUsage() / 1024) + " kb");
+
 	//mesh memory
-	{
-		size_t total = 0;
-		for (size_t i = 0; i < meshes.size(); i++)
-			total += meshes[i]->GetSize();
-		Report("Meshes: " + ToString(total / 1024) + " kb");
-	}
+	Report("Meshes: " + ToString(total / 1024) + " kb");
+
 	Report("");
 }
 
@@ -4589,6 +4670,18 @@ bool SBS::GetPower()
 	//return building power state
 
 	return power_state;
+}
+
+int SBS::GetReverbCount()
+{
+	return (int)reverbs.size();
+}
+
+Reverb* SBS::GetReverb(int index)
+{
+	if (index >= 0 && index < (int)reverbs.size())
+		return reverbs[index];
+	return 0;
 }
 
 }

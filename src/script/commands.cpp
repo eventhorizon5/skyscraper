@@ -30,6 +30,7 @@
 #include "mesh.h"
 #include "soundsystem.h"
 #include "sound.h"
+#include "reverb.h"
 #include "wall.h"
 #include "trigger.h"
 #include "control.h"
@@ -1405,6 +1406,30 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			else
 				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
 		}
+		return sNextLine;
+	}
+
+	//AddReverb command
+	if (StartsWithNoCase(LineData, "addreverb"))
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 7)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 6; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		StoreCommand(Simcore->AddReverb(tempdata[0], tempdata[1], Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6])));
 		return sNextLine;
 	}
 

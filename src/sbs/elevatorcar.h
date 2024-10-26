@@ -143,6 +143,7 @@ public:
 	bool DoorExists(int number);
 	bool ShaftDoorsExist(int number, int floor);
 	Sound* AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, Vector3 direction = Vector3(0, 0, 0));
+	Reverb* AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance);
 	DoorWrapper* AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	DoorWrapper* AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	void AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
@@ -161,6 +162,7 @@ public:
 	void RemoveFloorIndicator(FloorIndicator *indicator);
 	void RemoveDoor(Door *door);
 	void RemoveSound(Sound *sound);
+	void RemoveReverb();
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
 	void RemovePrimitive(Primitive *prim);
@@ -182,6 +184,7 @@ public:
 	Trigger* AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	std::vector<Sound*> GetSound(const std::string &name);
+	Reverb* GetReverb();
 	void ResetLights();
 	void ChangeLight(int floor, bool value);
 	void EnableSensor(bool value, int number = 0);
@@ -251,6 +254,7 @@ private:
 	std::vector<Sound*> sounds; //generic sounds
 	Sound *announcesnd;
 	Sound *musicsound;
+	Reverb *reverb; //reverb object
 
 	//interior directional indicators
 	std::vector<DirectionalIndicator*> DirIndicatorArray;

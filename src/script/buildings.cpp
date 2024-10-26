@@ -23,6 +23,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
+#include "vm.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
 #include "section.h"
@@ -64,7 +65,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		if (equals == false)
 			return ScriptError("Syntax error");
 
-		engine->GetFrontend()->ConcurrentLoads = ToBool(value);
+		engine->GetVM()->ConcurrentLoads = ToBool(value);
 		return sNextLine;
 	}
 	//CutLandscape parameter

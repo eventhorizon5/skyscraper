@@ -52,6 +52,9 @@ SoundSystem::~SoundSystem()
 {
 	for (size_t i = 0; i < sounds.size(); i++)
 		delete sounds[i];
+
+	//for (size_t i = 0; i < reverbs.size(); i++)
+		//delete reverbs[i].object;
 }
 
 void SoundSystem::Loop()
@@ -357,6 +360,11 @@ void SoundSystem::ShowPlayingSounds()
 		}
 	}
 	Object::Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
+}
+
+FMOD::System* SoundSystem::GetFmodSystem()
+{
+	return soundsys;
 }
 
 SoundData::SoundData()

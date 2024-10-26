@@ -20,6 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <fmod.hpp>
 #include "globals.h"
 #include "skyscraper.h"
 #include "vm.h"
@@ -102,6 +103,7 @@ EngineContext::~EngineContext()
 	ShutdownLoop = true;
 	ex.join();
 
+	//unload simulator
 	UnloadSim();
 
 	if (reload_state)
@@ -258,7 +260,7 @@ bool EngineContext::Load(std::string filename)
 	frontend->CreateProgressDialog(filename);
 
 	//override SBS startup render option, if specified
-	if (frontend->RenderOnStartup == true)
+	if (vm->RenderOnStartup == true)
 		Simcore->RenderOnStartup = true;
 
 	return true;
@@ -358,6 +360,10 @@ void EngineContext::UnloadSim()
 		Report("\nSBS instance " + ToString(instance) + " unloaded");
 	}
 	Simcore = 0;
+
+	//reset fmod reverb
+	FMOD_REVERB_PROPERTIES prop = FMOD_PRESET_GENERIC;
+	fmodsystem->setReverbProperties(0, &prop);
 
 	//unload script processor
 	if (processor)

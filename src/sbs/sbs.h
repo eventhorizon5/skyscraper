@@ -112,6 +112,7 @@ namespace SBS {
 	class Utility;
 	class GeometryController;
 	class CustomObject;
+	class Reverb;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -261,6 +262,10 @@ public:
 	int GetSoundCount();
 	void IncrementSoundCount();
 	void DecrementSoundCount();
+	Reverb* AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance);
+	int GetTotalReverbCount();
+	void IncrementReverbCount();
+	void DecrementReverbCount();
 	Real ToLocal(Real remote_value);
 	Vector2 ToLocal(const Vector2& remote_value);
 	Vector3 ToLocal(const Vector3& remote_value, bool rescale = true, bool flip_z = true);
@@ -283,6 +288,7 @@ public:
 	void RemoveShaft(Shaft *shaft);
 	void RemoveStairwell(Stairwell *stairs);
 	void RemoveSound(Sound *sound);
+	void RemoveReverb(Reverb *reverb);
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
 	void RemovePrimitive(Primitive *prim);
@@ -336,6 +342,7 @@ public:
 	bool RunAction(const std::string &name);
 	bool RunAction(int index);
 	std::vector<Sound*> GetSound(const std::string &name);
+	Reverb* GetReverb(const std::string &name);
 	void AddKey(int keyid, const std::string &name);
 	bool CheckKey(int keyid);
 	void ListKeys();
@@ -406,6 +413,8 @@ public:
 	Escalator* GetEscalator(int index);
 	void SetPower(bool value);
 	bool GetPower();
+	Reverb* GetReverb(int index);
+	int GetReverbCount();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -495,6 +504,10 @@ private:
 	//generic sound objects
 	std::vector<Sound*> sounds;
 	int soundcount;
+
+	//reverb objects
+	std::vector<Reverb*> reverbs;
+	int reverbcount;
 
 	//texture manager
 	TextureManager *texturemanager;

@@ -96,14 +96,10 @@ public:
 	bool DisableSound;
 	bool IntroMusic;
 	bool FullScreen;
-	bool Shutdown;
 	int SkyMult; //sky time multiplier
-	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
-	bool RenderOnStartup; //override SBS engine setting with same name
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 	bool Verbose;
 	bool ShowMenu; //show main menu
-	bool CheckScript;
 	bool Headless;
 	bool RTSS;
 	int macos_major; //macos major version
@@ -166,7 +162,6 @@ public:
 	FMOD::System* GetSoundSystem();
 	VM* GetVM();
 	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	void UpdateOpenXR();
 
 private:
 	//sound data
@@ -191,9 +186,7 @@ private:
 		Ogre::SceneNode* node;
 		Ogre::Rectangle2D* rect;
 	};
-	buttondata *buttons;
-	int buttoncount;
-
+	buttondata *buttons; int buttoncount;
 	Ogre::Rectangle2D* background_rect;
 	Ogre::SceneNode* background_node;
 	std::string background_image;

@@ -28,6 +28,7 @@ namespace FMOD {
 	class Sound;
 	class Channel;
 	class System;
+	class Reverb3D;
 }
 
 namespace SBS {
@@ -40,6 +41,7 @@ public:
 	~SoundSystem();
 	void SetListenerPosition(const Vector3 &position);
 	void SetListenerDirection(const Vector3 &front, const Vector3 &top);
+	Vector3 GetListenerPosition() { return listener_position; }
 	void Loop();
 	void Cleanup(int index = -1);
 	unsigned int GetLength(SoundData *data);
@@ -54,13 +56,14 @@ public:
 	int GetSoundCount();
 	void ShowLoadedSounds();
 	void ShowPlayingSounds();
+	FMOD::System* GetFmodSystem();
 
 private:
 
 	//FMOD system
 	FMOD::System *soundsys;
 
-	//listener sound objects
+	//listener sound data
 	Vector3 listener_position;
 	Vector3 listener_velocity;
 	Vector3 listener_forward;
@@ -70,6 +73,14 @@ private:
 	std::vector<SoundData*> sounds;
 
 	Vector3 Position;
+
+	//reverbs
+	struct Reverb
+	{
+		FMOD::Reverb3D* object;
+		Vector3 position;
+	};
+	std::vector<Reverb> reverbs;
 };
 
 struct SBSIMPEXP SoundData

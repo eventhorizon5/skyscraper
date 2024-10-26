@@ -91,6 +91,7 @@ public:
 	CallStation* GetCallStation(int number);
 	void AddFillerWalls(const std::string &texture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, bool direction, Real tw, Real th, bool isexternal);
 	Sound* AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, Vector3 direction = Vector3(0, 0, 0));
+	Reverb* AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	Real GetBase(bool relative = false);
@@ -100,6 +101,7 @@ public:
 	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
 	void RemoveDoor(Door *door);
 	void RemoveSound(Sound *sound);
+	void RemoveReverb(Reverb *reverb);
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);
 	void RemovePrimitive(Primitive *prim);
@@ -124,6 +126,7 @@ public:
 	Escalator* AddEscalator(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real risersize, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	MovingWalkway* AddMovingWalkway(const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	std::vector<Sound*> GetSound(const std::string &name);
+	Reverb* GetReverb(const std::string &name);
 	void SetAltitude(Real altitude);
 	void ShowInfo(bool detailed = true, bool display_header = true);
 	void GetElevatorList(std::vector<int> &listing, bool get_locals = true, bool get_express = true, bool get_service = true);
@@ -139,10 +142,15 @@ public:
 	RevolvingDoor* GetRevolvingDoor(int number);
 	CameraTexture* GetCameraTexture(int number);
 	int GetCallStationCount();
+	int GetReverbCount();
+	Reverb* GetReverb(int index);
 
 private:
 	//sound objects
 	std::vector<Sound*> sounds;
+
+	//reverb objects
+	std::vector<Reverb*> reverbs;
 
 	//doors
 	std::vector<Door*> DoorArray; //pointer array to door objects

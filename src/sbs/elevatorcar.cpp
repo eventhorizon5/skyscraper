@@ -50,6 +50,7 @@
 #include "indicator.h"
 #include "timer.h"
 #include "controller.h"
+#include "reverb.h"
 
 #include <time.h>
 
@@ -137,6 +138,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MessageOnClose = false;
 	indicator = 0;
 	TimerDelay = 2;
+	reverb = 0;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
 	SetName(name);
@@ -358,6 +360,10 @@ ElevatorCar::~ElevatorCar()
 		}
 		sounds[i] = 0;
 	}
+
+	if (reverb)
+		delete reverb;
+	reverb = 0;
 
 	//delete mesh object
 	if (Mesh)
@@ -1088,6 +1094,10 @@ void ElevatorCar::EnableObjects(bool value)
 			}
 		}
 	}
+
+	//reverb
+	if (reverb)
+		reverb->Enabled(value);
 }
 
 void ElevatorCar::UpdateFloorIndicators()
@@ -3819,5 +3829,29 @@ bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::
 	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
 	return true;
 }
+
+Reverb* ElevatorCar::AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance)
+{
+	if (reverb)
+		return 0;
+
+	//create a reverb object
+	reverb = new Reverb(this, name, type, position, min_distance, max_distance, false);
+	return reverb;
+}
+
+Reverb* ElevatorCar::GetReverb()
+{
+	return reverb;
+}
+
+void ElevatorCar::RemoveReverb()
+{
+	//remove the reverb
+	//this does not delete the object
+
+	reverb = 0;
+}
+
 
 }

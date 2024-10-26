@@ -81,7 +81,7 @@ public:
 	void DecrementTextureCount();
 	void IncrementMaterialCount();
 	void DecrementMaterialCount();
-	void RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode);
+	void RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode, size_t tex_size, size_t mat_size);
 	bool UnregisterTextureInfo(std::string name, std::string material_name = "");
 	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
 	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = "General");
@@ -105,6 +105,7 @@ public:
 	void DecrementTextureUsage(const std::string &name);
 	void SetCulling(const std::string &material_name, int mode = 1);
 	Ogre::MaterialPtr SetCulling(const std::string &material_name, const std::string &name, int mode);
+	size_t GetMemoryUsage();
 
 	//override textures
 	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
@@ -125,6 +126,8 @@ public:
 		bool enable_force; //enable forcing of tile or stretch mode?
 		bool force_mode; //false to disable autosizing, true to enable autosizing
 		int dependencies; //number of submeshes depending on this texture
+		size_t tex_size; //size of texture resource in bytes
+		size_t mat_size; //size of material resource in bytes
 	};
 
 private:
