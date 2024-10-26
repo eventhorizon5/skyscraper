@@ -55,10 +55,8 @@ public:
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
 	Skyscraper* GetFrontend();
-	bool Run();
+	void Run();
 	void Run0();
-	void SwitchEngines();
-	void CheckCamera();
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
