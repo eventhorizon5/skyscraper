@@ -24,6 +24,7 @@
 #define MAINSCREEN_H
 
 #include <wx/frame.h>
+#include <wx/panel.h>
 
 class wxJoystick;
 

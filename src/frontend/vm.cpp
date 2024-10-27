@@ -31,6 +31,9 @@
 #include <OgreOverlaySystem.h>
 #include <fmod.hpp>
 #include <fmod_errors.h>
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#include "malloc.h"
+#endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "OgreOpenXRRenderWindow.h"
 #endif
@@ -1429,7 +1432,7 @@ bool VM::InitSky(EngineContext *engine)
 	catch (Ogre::Exception &e)
 	{
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE //ignore Caelum errors on Mac, due to a Cg error (Cg is not available on ARM CPUs, and is not bundled with the Mac version)
-		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
+		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription(), "VM>");
 #endif
 		sky_error = true;
 	}
