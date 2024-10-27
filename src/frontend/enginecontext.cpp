@@ -341,9 +341,9 @@ void EngineContext::StartSim()
 	//Pause for 2 seconds, if first instance
 	if (instance == 0)
 	{
-		frontend->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
+		vm->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
 		wxYield(); //this allows the banner to be printed before the sleep() call
-		frontend->Pause = false;
+		vm->Pause = false;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);
 #else
@@ -388,7 +388,7 @@ bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
 		return false;
 
 	//cut outside sim boundaries if specified
-	Simcore->CutOutsideBoundaries(frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
+	Simcore->CutOutsideBoundaries(vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 
 	//if this has a parent engine, cut the parent for this new engine
 	if (vm->IsValidEngine(parent) == true)
@@ -422,12 +422,12 @@ bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
 
 void EngineContext::Report(const std::string &message)
 {
-	frontend->Report(InstancePrompt + message);
+	vm->Report(message, InstancePrompt);
 }
 
 bool EngineContext::ReportError(const std::string &message)
 {
-	return frontend->ReportError(InstancePrompt + message);
+	return vm->ReportError(message, InstancePrompt);
 }
 
 bool EngineContext::ReportFatalError(const std::string &message)
@@ -593,7 +593,7 @@ void EngineContext::CutForEngine(EngineContext *engine)
 
 	//cut for new bounds
 	Simcore->DeleteColliders = true;
-	Simcore->CutInsideBoundaries(newmin, newmax, frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
+	Simcore->CutInsideBoundaries(newmin, newmax, vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 	Simcore->DeleteColliders = false;
 
 	if (IsRunning() == true)
@@ -675,6 +675,13 @@ bool EngineContext::InRunloop()
 	if (processor)
 		return processor->InRunloop();
 	return false;
+}
+
+bool EngineContext::IsRoot()
+{
+	//returns true if this engine is the root/primary engine (0)
+
+	return (!GetParent());
 }
 
 }

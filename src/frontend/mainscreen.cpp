@@ -94,28 +94,28 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 
 	freelook = false;
 
-	key_right = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Right", "D")[0];
-	key_left = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Left", "A")[0];
-	key_up = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Up", "W")[0];
-	key_down = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Down", "S")[0];
-	key_strafeleft = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.StrafeLeft", "Q")[0];
-	key_straferight = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.StrafeRight", "E")[0];
-	key_lookup = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.LookUp", "P")[0];
-	key_lookdown = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.LookDown", "L")[0];
-	key_binoculars = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Binoculars", "B")[0];
-	key_crouch = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Crouch", "X")[0];
-	key_floatup = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.FloatUp", "O")[0];
-	key_floatdown = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.FloatDown", "K")[0];
-	key_noclip = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.NoClip", "V")[0];
-	key_pickup = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.PickUp", "C")[0];
-	key_load = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Load", ";")[0];
-	key_enter = frontend->GetKeyConfigString("Skyscraper.Frontend.Keyboard.Enter", "E")[0];
+	key_right = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Right", "D")[0];
+	key_left = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Left", "A")[0];
+	key_up = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Up", "W")[0];
+	key_down = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Down", "S")[0];
+	key_strafeleft = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.StrafeLeft", "Q")[0];
+	key_straferight = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.StrafeRight", "E")[0];
+	key_lookup = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.LookUp", "P")[0];
+	key_lookdown = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.LookDown", "L")[0];
+	key_binoculars = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Binoculars", "B")[0];
+	key_crouch = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Crouch", "X")[0];
+	key_floatup = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.FloatUp", "O")[0];
+	key_floatdown = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.FloatDown", "K")[0];
+	key_noclip = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.NoClip", "V")[0];
+	key_pickup = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.PickUp", "C")[0];
+	key_load = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Load", ";")[0];
+	key_enter = frontend->GetVM()->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Enter", "E")[0];
 
-	joy_click = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Click", 0);
-	joy_fast = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Fast", 1);
-	joy_strafe = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Strafe", 2);
-	joy_turn = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Turn", 0);
-	joy_forward = frontend->GetJoystickConfigInt("Skyscraper.Frontend.Joystick.Forward", 1);
+	joy_click = frontend->GetVM()->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Click", 0);
+	joy_fast = frontend->GetVM()->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Fast", 1);
+	joy_strafe = frontend->GetVM()->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Strafe", 2);
+	joy_turn = frontend->GetVM()->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Turn", 0);
+	joy_forward = frontend->GetVM()->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Forward", 1);
 
 	//create panel, rendering is done on this, along with keyboard and mouse events
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
@@ -143,12 +143,12 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 {
 	//pause simulator while minimized
 
-	frontend->Pause = event.IsIconized();
+	frontend->GetVM()->Pause = event.IsIconized();
 
-	if (frontend->Pause == true)
-		frontend->Report("Pausing simulator...");
+	if (frontend->GetVM()->Pause == true)
+		frontend->GetVM()->Report("Pausing simulator...", "");
 	else
-		frontend->Report("Resuming simulator...");
+		frontend->GetVM()->Report("Resuming simulator...", "");
 }
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
@@ -156,18 +156,18 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 	if (panel)
 		panel->SetSize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
 
-	if (frontend->mRenderWindow)
+	if (frontend->GetVM()->GetRenderWindow())
 	{
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 		Real scale = this->GetContentScaleFactor();
-		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
+		frontend->GetVM()->GetRenderWindow()->resize(this->GetClientSize().GetWidth() * scale, this->GetClientSize().GetHeight() * scale);
 #else
-		frontend->mRenderWindow->windowMovedOrResized();
+		frontend->GetVM()->GetRenderWindow()->windowMovedOrResized();
 #endif
 	}
-	for (size_t i = 0; i < frontend->mCameras.size(); i++)
+	for (size_t i = 0; i < frontend->GetVM()->mCameras.size(); i++)
 	{
-		frontend->mCameras[i]->setAspectRatio(Real(frontend->mViewports[i]->getActualWidth()) / Real(frontend->mViewports[i]->getActualHeight()));
+		frontend->GetVM()->mCameras[i]->setAspectRatio(Real(frontend->GetVM()->mViewports[i]->getActualWidth()) / Real(frontend->GetVM()->mViewports[i]->getActualHeight()));
 	}
 }
 
@@ -198,7 +198,7 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 	{
 		InLoop = true;
 
-		if (frontend->Pause == false)
+		if (frontend->GetVM()->Pause == false)
 		{
 			if (this->HasFocus() && !panel->HasFocus())
 				panel->SetFocus();
@@ -210,7 +210,7 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 			}
 			catch (Ogre::Exception &e)
 			{
-				frontend->ReportFatalError("Unhandled OGRE exception:\n\n" + e.getFullDescription() + "\n\nSkyscraper will now exit.  Please report this as a bug.");
+				frontend->GetVM()->ReportFatalError("Unhandled OGRE exception:\n\n" + e.getFullDescription() + "\n\nSkyscraper will now exit.  Please report this as a bug.", "");
 				frontend->Quit();
 			}
 
@@ -226,8 +226,8 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 {
 	wxPaintDC dc(this);
 
-	//if (frontend->mRenderWindow)
-		//frontend->mRenderWindow->update(true);
+	//if (frontend->GetVM()->GetRenderWindow())
+		//frontend->GetVM()->GetRenderWindow()->update(true);
 }
 
 void MainScreen::OnActivate(wxActivateEvent &event)
@@ -281,13 +281,13 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 	if (key == WXK_F2)
 	{
 		Real fps = Simcore->FPS;
-		Ogre::RenderSystem *rendersystem = frontend->mRoot->getRenderSystem();
+		Ogre::RenderSystem *rendersystem = frontend->GetVM()->mRoot->getRenderSystem();
 
 		int batches = (int)rendersystem->_getBatchCount();
 		int triangles = (int)rendersystem->_getFaceCount();
 		int vertices = (int)rendersystem->_getVertexCount();
 
-		frontend->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Triangles: " + ToString(triangles) + " - Vertices: " + ToString(vertices));
+		frontend->GetVM()->Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Triangles: " + ToString(triangles) + " - Vertices: " + ToString(vertices), "");
 	}
 
 	//alt modifier
@@ -316,9 +316,9 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			camera->EnableCollisions(!status);
 
 			if (status == false)
-				frontend->Report("Gravity and collision detection on");
+				frontend->GetVM()->Report("Gravity and collision detection on", "");
 			else
-				frontend->Report("Gravity and collision detection off");
+				frontend->GetVM()->Report("Gravity and collision detection off", "");
 		}
 
 		if (event.ControlDown() == true && key == (wxKeyCode)'R')
@@ -353,7 +353,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			//toggle wireframe mode
 			if (wireframe == 0)
 			{
-				frontend->EnableSky(false);
+				frontend->GetVM()->EnableSky(false);
 				camera->SetViewMode(1);
 				wireframe = 1;
 			}
@@ -364,7 +364,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			}
 			else if (wireframe == 2)
 			{
-				frontend->EnableSky(true);
+				frontend->GetVM()->EnableSky(true);
 				camera->SetViewMode(0);
 				wireframe = 0;
 			}
@@ -373,7 +373,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_F11)
 		{
 			std::string prefix = frontend->GetDataPath();
-			frontend->mRenderWindow->writeContentsToTimestampedFile(prefix + "screenshots/skyscraper-", ".jpg");
+			frontend->GetVM()->GetRenderWindow()->writeContentsToTimestampedFile(prefix + "screenshots/skyscraper-", ".jpg");
 		}
 
 		if (key == WXK_F12 && !frontend->dpanel)
@@ -381,7 +381,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			//show control panel if closed
 			frontend->dpanel = new DebugPanel(frontend, NULL, -1);
 			frontend->dpanel->Show(true);
-			frontend->dpanel->SetPosition(wxPoint(frontend->GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), frontend->GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
+			frontend->dpanel->SetPosition(wxPoint(frontend->GetVM()->GetConfigInt(frontend->configfile, "Skyscraper.Frontend.ControlPanelX", 10), frontend->GetVM()->GetConfigInt(frontend->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
 		}
 
 		if (key == WXK_F5)
@@ -406,7 +406,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_F9)
 		{
 			//toggle statistics bar
-			frontend->ToggleStats();
+			frontend->GetVM()->ToggleStats();
 		}
 
 		if (key == WXK_NUMPAD_SUBTRACT || key == (wxKeyCode)'[')

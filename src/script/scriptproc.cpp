@@ -150,7 +150,8 @@ bool ScriptProcessor::Run()
 	if (engine->IsRunning() == true && processed_runloop == false)
 		ProcessRunloop();
 
-	if (processed_runloop == true)
+	//wait until end of script before processing runloop again
+	if (processed_runloop == true && line == (int)BuildingData.size() - 1)
 		processed_runloop = false;
 
 	if (line < (int)BuildingData.size() && line >= 0)
@@ -184,7 +185,7 @@ bool ScriptProcessor::Run()
 		{
 			ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
 			int hour, minute, second;
-			engine->GetFrontend()->GetTime(hour, minute, second);
+			engine->GetVM()->GetTime(hour, minute, second);
 			ReplaceAll(LineData, "%hour%", ToString(hour));
 			ReplaceAll(LineData, "%minute%", ToString(minute));
 			ReplaceAll(LineData, "%second%", ToString(second));

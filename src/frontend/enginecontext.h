@@ -78,6 +78,7 @@ public:
 	VM* GetVM();
 	void Run0();
 	bool InRunloop();
+	bool IsRoot();
 
 private:
 

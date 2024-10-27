@@ -28,6 +28,7 @@
 #include "sbs.h"
 #include "texture.h"
 #include "skyscraper.h"
+#include "vm.h"
 #include "debugpanel.h"
 #include "stats.h"
 
@@ -254,7 +255,7 @@ void Stats::OnInit()
 	tFrontendVersion->SetValue(panel->GetRoot()->version_frontend);
 	tSBSVersion->SetValue(Simcore->version);
 	tPlatform->SetValue(panel->GetRoot()->Platform);
-	tRenderer->SetValue(panel->GetRoot()->Renderer);
+	tRenderer->SetValue(panel->GetRoot()->GetVM()->Renderer);
 
 	tName->SetValue(Simcore->BuildingName);
 	tDesigner->SetValue(Simcore->BuildingDesigner);

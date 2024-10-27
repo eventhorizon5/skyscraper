@@ -202,11 +202,11 @@ LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wx
 	panel = root;
 
 	//set cut options
-	::Skyscraper::Skyscraper *frontend = panel->GetRoot();
-	chkCutLandscape->SetValue(frontend->CutLandscape);
-	chkCutBuildings->SetValue(frontend->CutBuildings);
-	chkCutExternal->SetValue(frontend->CutExternal);
-	chkCutFloors->SetValue(frontend->CutFloors);
+	VM *vm = panel->GetRoot()->GetVM();
+	chkCutLandscape->SetValue(vm->CutLandscape);
+	chkCutBuildings->SetValue(vm->CutBuildings);
+	chkCutExternal->SetValue(vm->CutExternal);
+	chkCutFloors->SetValue(vm->CutFloors);
 }
 
 LoadDialog::~LoadDialog()
@@ -265,15 +265,15 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	std::string filename;
 	filename = tFilename->GetValue();
 
-	::Skyscraper::Skyscraper *frontend = panel->GetRoot();
+	VM *vm = panel->GetRoot()->GetVM();
 
 	//set cut options
-	frontend->CutLandscape = chkCutLandscape->GetValue();
-	frontend->CutBuildings = chkCutBuildings->GetValue();
-	frontend->CutExternal = chkCutExternal->GetValue();
-	frontend->CutFloors = chkCutFloors->GetValue();
+	vm->CutLandscape = chkCutLandscape->GetValue();
+	vm->CutBuildings = chkCutBuildings->GetValue();
+	vm->CutExternal = chkCutExternal->GetValue();
+	vm->CutFloors = chkCutFloors->GetValue();
 
-	frontend->Load(filename, frontend->GetVM()->GetActiveEngine(), position, rotation, min, max);
+	vm->Load(filename, vm->GetActiveEngine(), position, rotation, min, max);
 
 	this->Close();
 }

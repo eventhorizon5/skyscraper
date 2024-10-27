@@ -24,11 +24,6 @@
 #define SKYSCRAPER_H
 
 #include <wx/app.h>
-#include <OgrePrerequisites.h>
-#include <OgreCommon.h>
-#include <Ogre.h>
-#include <OgreLog.h>
-#include <OgreTrays.h>
 
 //wxWidgets definitions
 class wxCmdLineParser;
@@ -70,16 +65,9 @@ class VM;
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
 	friend class MainScreen;
+	friend class VM;
 
 public:
-
-	//OGRE engine data
-	Ogre::Root* mRoot;
-	Ogre::RenderWindow* mRenderWindow;
-	std::vector<Ogre::Viewport*> mViewports;
-	Ogre::SceneManager* mSceneMgr;
-	std::vector<Ogre::Camera*> mCameras;
-	Ogre::OverlaySystem* mOverlaySystem;
 
 	std::string version;
 	std::string version_rev;
@@ -87,23 +75,20 @@ public:
 	std::string version_frontend;
 
 	std::string Platform;
-	std::string SkyName;
-	std::string Renderer;
 	std::string Architecture;
 
 	bool StartupRunning;
-	bool Pause; //pause simulator
-	bool DisableSound;
 	bool IntroMusic;
 	bool FullScreen;
-	int SkyMult; //sky time multiplier
-	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 	bool Verbose;
 	bool ShowMenu; //show main menu
 	bool Headless;
-	bool RTSS;
 	int macos_major; //macos major version
 	int macos_minor; //macos minor version
+
+	Ogre::ConfigFile *configfile;
+	Ogre::ConfigFile *keyconfigfile;
+	Ogre::ConfigFile *joyconfigfile;
 
 	bool Loop();
 	virtual bool OnInit(void);
@@ -113,61 +98,34 @@ public:
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
-	bool Render();
-	void Report(const std::string &message);
-	bool ReportError(const std::string &message);
-	bool ReportFatalError(const std::string &message);
 	void ShowError(const std::string &message);
 	void ShowMessage(const std::string &message);
-	bool Initialize();
 	bool GetMenuInput();
 	void StartSound();
-	void StopSound();
 	std::string SelectBuilding();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void UnloadToMenu();
 	void Quit();
-	int GetConfigInt(const std::string &key, int default_value);
-	std::string GetConfigString(const std::string &key, const std::string &default_value);
-	bool GetConfigBool(const std::string &key, bool default_value);
-	Real GetConfigFloat(const std::string &key, Real default_value);
 	std::string GetKeyConfigString(const std::string &key, const std::string &default_value);
 	int GetJoystickConfigInt(const std::string &key, int default_value);
-	bool InitSky(EngineContext *engine);
 	void ShowConsole(bool send_button = true);
 	void CreateProgressDialog(const std::string &message);
 	void CloseProgressDialog();
 	void UpdateProgress();
 	void SetFullScreen(bool enabled);
-	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
-	void SetLocation(Real latitude, Real longitude);
-	void SetDateTimeNow();
-	void SetDateTime(double julian_date_time);
-	void GetTime(int &hour, int &minute, int &second);
 	void RaiseWindow();
 	void RefreshConsole();
-	void RefreshViewport();
-	void EnableSky(bool value);
-	void UpdateSky();
 	void UnregisterDebugPanel() { dpanel = 0; }
 	virtual void MacOpenFile(const wxString &filename);
-	void UnloadSky();
-	void CreateSky(EngineContext* engine);
-	void ToggleStats();
-	void EnableStats(bool value);
 	std::string GetDataPath();
 	MainScreen* GetWindow();
-	FMOD::System* GetSoundSystem();
 	VM* GetVM();
 	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	void ShowPlatform();
 
 private:
-	//sound data
-	FMOD::System *soundsys;
-	FMOD::Sound *sound;
-	FMOD::Channel *channel;
 
 	//button locations
 	struct buttondata
@@ -196,20 +154,12 @@ private:
 	void DeleteButtons();
 	void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
 	void ShowProgressDialog();
-	void ReInit();
 	void ProcessLog();
 	void ProcessLoad();
 
-	Ogre::ConfigFile *configfile;
-	Ogre::ConfigFile *keyconfigfile;
-	Ogre::ConfigFile *joyconfigfile;
-	Caelum::CaelumSystem *mCaelumSystem;
-	Ogre::LogManager* logger;
 	bool showconsole;
 	wxProgressDialog *progdialog;
 	wxCmdLineParser *parser;
-	OgreBites::TrayManager* mTrayMgr;
-	int show_stats;
 
 	//control panel
 	DebugPanel *dpanel;
@@ -226,11 +176,6 @@ private:
 	//progress dialog initial data
 	bool show_progress;
 	std::string prog_text;
-
-	bool new_location, new_time;
-	Real latitude, longitude;
-	double datetime;
-	bool sky_error;
 
 	//additional path for user data
 	std::string data_path;
@@ -257,8 +202,6 @@ private:
 		std::atomic<bool> need_process;
 	};
 	LoadInfo loadinfo;
-
-	bool first_run;
 };
 
 DECLARE_APP(Skyscraper)
