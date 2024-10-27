@@ -1,7 +1,7 @@
 # City Simulation
 
 <Buildings>
-    ConcurrentLoads = true
+    ConcurrentLoads = false
     CutExternal = true
     CutFloors = true
     Load Observation Tower.bld, -440.5, 0, 0, 0
