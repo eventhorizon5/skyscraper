@@ -150,6 +150,7 @@ bool ScriptProcessor::Run()
 	if (engine->IsRunning() == true && processed_runloop == false)
 		ProcessRunloop();
 
+	//wait until end of script before processing runloop again
 	if (processed_runloop == true && line == (int)BuildingData.size() - 1)
 		processed_runloop = false;
 
