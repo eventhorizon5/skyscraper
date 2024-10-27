@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Startup Screen
+	Skyscraper 2.0 - Startup Screen
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
