@@ -723,10 +723,14 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 
 void VM::Report(const std::string &message, const std::string &source)
 {
+	std::string delim = " ";
+	if (source.size() > 0)
+		delim = ": ";
+
 	try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(source + ": " + message);
+			Ogre::LogManager::getSingleton().logMessage(source + delim + message);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -736,10 +740,14 @@ void VM::Report(const std::string &message, const std::string &source)
 
 bool VM::ReportError(const std::string &message, const std::string &source)
 {
+	std::string delim = " ";
+	if (source.size() > 0)
+		delim = ": ";
+
 	try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(source + ": " + message, Ogre::LML_CRITICAL);
+			Ogre::LogManager::getSingleton().logMessage(source + delim + message, Ogre::LML_CRITICAL);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -1085,7 +1093,8 @@ bool VM::Initialize(const std::string &data_path)
 	DisableSound = GetConfigBool(frontend->configfile, "Skyscraper.Frontend.DisableSound", false);
 	if (DisableSound == false)
 	{
-		Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2024\n", "VM");
+		Report("", "VM");
+		Report("FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2024\n", "VM");
 
 		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)
