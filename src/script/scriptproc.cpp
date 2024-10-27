@@ -184,7 +184,7 @@ bool ScriptProcessor::Run()
 		{
 			ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
 			int hour, minute, second;
-			engine->GetFrontend()->GetTime(hour, minute, second);
+			engine->GetVM()->GetTime(hour, minute, second);
 			ReplaceAll(LineData, "%hour%", ToString(hour));
 			ReplaceAll(LineData, "%minute%", ToString(minute));
 			ReplaceAll(LineData, "%second%", ToString(second));

@@ -24,6 +24,11 @@
 #define VM_H
 
 #include <vector>
+#include <OgrePrerequisites.h>
+#include <OgreCommon.h>
+#include <Ogre.h>
+#include <OgreLog.h>
+#include <OgreTrays.h>
 
 namespace Skyscraper {
 
@@ -34,11 +39,11 @@ class ScriptProcessor;
 //Virtual Manager system
 class VM
 {
-	friend class Skyscraper;
-
 public:
 	VM(Skyscraper *frontend);
 	~VM();
+	bool Initialize(const std::string &data_path);
+	bool Render();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -62,11 +67,51 @@ public:
 	void ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only);
 	void UnclickedObject();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	Ogre::ConfigFile* LoadConfiguration(const std::string &filename, bool delete_after_use = false);
+	int GetConfigInt(Ogre::ConfigFile *file, const std::string &key, int default_value);
+	std::string GetConfigString(Ogre::ConfigFile *file, const std::string &key, const std::string &default_value);
+	bool GetConfigBool(Ogre::ConfigFile *file, const std::string &key, bool default_value);
+	Real GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real default_value);
+	void Report(const std::string &message, const std::string &source);
+	bool ReportError(const std::string &message, const std::string &source);
+	bool ReportFatalError(const std::string &message, const std::string &source);
+	bool PlaySound(const std::string &filename);
+	void StopSound();
+	void ClearScene();
+	void CreateSky(EngineContext *engine);
+	void UnloadSky();
+	void ToggleStats();
+	void EnableStats(bool value);
+	FMOD::System* GetSoundSystem();
+	bool InitSky(EngineContext *engine);
+	void EnableSky(bool value);
+	void UpdateSky();
+	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
+	void SetLocation(Real latitude, Real longitude);
+	void SetDateTimeNow();
+	void SetDateTime(double julian_date_time);
+	void GetTime(int &hour, int &minute, int &second);
+	Ogre::RenderWindow* GetRenderWindow();
+	std::vector<Ogre::Viewport*> mViewports;
+	void Clear();
+	Ogre::SceneManager* GetSceneManager();
+	Ogre::RenderWindow* CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params);
+	void DestroyRenderWindow();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
 	bool RenderOnStartup; //override SBS engine setting with same name
 	bool CheckScript; //if set to true, checks building scripts instead of fully loading them
+	bool Pause; //pause simulator
+	int SkyMult; //sky time multiplier
+	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
+	bool RTSS;
+	std::string SkyName;
+	std::string Renderer;
+	bool DisableSound;
+	std::vector<Ogre::Camera*> mCameras;
+	Ogre::Root* mRoot;
+	Ogre::RenderWindow* mRenderWindow;
 
 private:
 
@@ -76,12 +121,32 @@ private:
 	void HandleEngineShutdown();
 	void HandleReload();
 	void SwitchEngines();
-	void Report(const std::string &message);
-	bool ReportError(const std::string &message);
+	void ReInit();
 
 	Skyscraper *frontend;
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
+
+	//OGRE engine data
+	Ogre::SceneManager* mSceneMgr;
+	Ogre::OverlaySystem* mOverlaySystem;
+
+	//sound data
+	FMOD::System *soundsys;
+	FMOD::Sound *sound;
+	FMOD::Channel *channel;
+
+	Caelum::CaelumSystem *mCaelumSystem;
+	Ogre::LogManager* logger;
+	OgreBites::TrayManager* mTrayMgr;
+	int show_stats;
+
+	bool new_location, new_time;
+	Real latitude, longitude;
+	double datetime;
+	bool sky_error;
+
+	bool first_run;
 };
 
 #endif

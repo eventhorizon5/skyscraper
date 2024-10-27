@@ -20,7 +20,21 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <wx/panel.h>
+#include <OgreRoot.h>
+#include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
+#include <OgreFontManager.h>
+#include <OgreRectangle2D.h>
+#include <OgreRTShaderSystem.h>
+#include <OgreBitesConfigDialog.h>
+#include <OgreSGTechniqueResolverListener.h>
+#include <OgreOverlaySystem.h>
+#include <fmod.hpp>
+#include <fmod_errors.h>
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#include "OgreOpenXRRenderWindow.h"
+#endif
+#include "Caelum.h"
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "OgreOpenXRRenderWindow.h"
 #endif
@@ -32,6 +46,7 @@
 #include "camera.h"
 #include "scenenode.h"
 #include "enginecontext.h"
+#include "profiler.h"
 
 using namespace SBS;
 
@@ -47,13 +62,59 @@ VM::VM(Skyscraper *frontend)
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
 	CheckScript = false;
+	Pause = false;
+	mOverlaySystem = 0;
+	mRoot = 0;
+	mRenderWindow = 0;
+	mSceneMgr = 0;
+	sound = 0;
+	channel = 0;
+	SkyMult = 0;
+	mCaelumSystem = 0;
+	logger = 0;
+	soundsys = 0;
+	new_location = false;
+	new_time = false;
+	latitude = 0.0;
+	longitude = 0.0;
+	datetime = 0.0;
+	CutLandscape = true;
+	CutBuildings = true;
+	CutExternal = false;
+	CutFloors = false;
+	RTSS = false;
+	sky_error = 0;
+	mTrayMgr = 0;
+	show_stats = -1;
+	first_run = true;
+	DisableSound = false;
 
-	Report("Started");
+	Report("Started", "VM");
+}
+
+VM::~VM()
+{
+	//delete Caelum
+	if (mCaelumSystem)
+		delete mCaelumSystem;
+
+	if (soundsys)
+		soundsys->release();
+
+	delete mOverlaySystem;
+
+	Ogre::ResourceGroupManager::getSingleton().shutdownAll();
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
+	mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
+	//delete mRoot;
+#endif
+	delete logger;
 }
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(parent, this, frontend->mSceneMgr, frontend->GetSoundSystem(), position, rotation, area_min, area_max);
+	EngineContext* engine = new EngineContext(parent, this, mSceneMgr, GetSoundSystem(), position, rotation, area_min, area_max);
 	return engine;
 }
 
@@ -70,7 +131,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 		{
 			engines[i] = 0;
 			delete engine;
-			Report("Engine instance " + ToString(i) + " deleted");
+			Report("Engine instance " + ToString(i) + " deleted", "VM");
 
 			int count = GetEngineCount();
 
@@ -100,7 +161,7 @@ void VM::DeleteEngines()
 {
 	//delete all sim emgine instances
 
-	Report("Deleting all engines...");
+	Report("Deleting all engines...", "VM");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
@@ -161,11 +222,11 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		active_engine->DetachCamera(switch_engines);
 	}
 
-	Report("Setting engine " + ToString(number) + " as active");
+	Report("Setting engine " + ToString(number) + " as active", "VM");
 
 	//switch context to new engine instance
 	active_engine = engine;
-	active_engine->AttachCamera(frontend->mCameras, !switch_engines);
+	active_engine->AttachCamera(mCameras, !switch_engines);
 
 	//apply camera state to new engine
 	if (switch_engines == true && state_set == true)
@@ -257,7 +318,7 @@ void VM::HandleEngineShutdown()
 		{
 			if (engines[i]->GetShutdownState() == true)
 			{
-				Report("Shutdown requested for engine instance " + ToString(i));
+				Report("Shutdown requested for engine instance " + ToString(i), "VM");
 
 				if (DeleteEngine(engines[i]) == true)
 				{
@@ -294,16 +355,16 @@ void VM::HandleReload()
 			{
 				//unload sky system if primary engine
 				if (i == 0)
-					frontend->UnloadSky();
+					UnloadSky();
 
-				frontend->Pause = false;
-				Report("Reloading engine instance " + ToString(i));
+				Pause = false;
+				Report("Reloading engine instance " + ToString(i), "VM");
 
 				engines[i]->DoReload(); //handle engine reload
 
 				//create sky system if primary engine
 				if (i == 0)
-					frontend->CreateSky(engines[i]);
+					CreateSky(engines[i]);
 			}
 		}
 	}
@@ -356,7 +417,7 @@ void VM::SwitchEngines()
 	}
 
 	//otherwise search for a valid engine to attach to
-	Report("Searing for engine to attach to...");
+	Report("Searing for engine to attach to...", "VM");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] != active_engine && engines[i])
@@ -455,7 +516,7 @@ bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
 {
 	//start a sim engine
 
-	Report("Initiating engine start");
+	Report("Initiating engine start", "VM");
 	return engine->Start(cameras);
 }
 
@@ -552,7 +613,7 @@ void VM::Run()
 	if (Shutdown == true)
 	{
 		Shutdown = false;
-		Report("Unloading due to shutdown request");
+		Report("Unloading due to shutdown request", "VM");
 		frontend->UnloadToMenu();
 	}
 
@@ -572,19 +633,19 @@ void VM::Run()
 	//if in CheckScript mode, exit
 	if (CheckScript == true)
 	{
-		Report("Unloading to menu...");
+		Report("Unloading to menu...", "VM");
 		frontend->UnloadToMenu();
 		return;
 	}
 
 	//update Caelum
-	frontend->UpdateSky();
+	UpdateSky();
 
 	//update OpenXR
 	UpdateOpenXR();
 
 	//render graphics
-	result = frontend->Render();
+	result = Render();
 	if (!result)
 		return;
 
@@ -593,6 +654,10 @@ void VM::Run()
 
 	//handle behavior when a user exits an engine area
 	SwitchEngines();
+
+	//update first run status
+	if (first_run == true)
+		first_run = false;
 }
 
 void VM::UpdateOpenXR()
@@ -625,7 +690,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 {
 	//load simulator and data file
 
-	Report("Loading engine for building file '" + filename + "'...");
+	Report("Loading engine for building file '" + filename + "'...", "VM");
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
@@ -656,14 +721,939 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	return true;
 }
 
-void VM::Report(const std::string &message)
+void VM::Report(const std::string &message, const std::string &source)
 {
-	frontend->Report("VM: " + message);
+	try
+	{
+		if (Ogre::LogManager::getSingletonPtr())
+			Ogre::LogManager::getSingleton().logMessage(source + ": " + message);
+	}
+	catch (Ogre::Exception &e)
+	{
+		frontend->ShowError("VM: Error writing message to log\n" + e.getDescription());
+	}
 }
 
-bool VM::ReportError(const std::string &message)
+bool VM::ReportError(const std::string &message, const std::string &source)
 {
-	return frontend->ReportError("VM: " + message);
+	try
+	{
+		if (Ogre::LogManager::getSingletonPtr())
+			Ogre::LogManager::getSingleton().logMessage(source + ": " + message, Ogre::LML_CRITICAL);
+	}
+	catch (Ogre::Exception &e)
+	{
+		frontend->ShowError("VM: Error writing message to log\n" + e.getDescription());
+	}
+	return false;
+}
+
+bool VM::ReportFatalError(const std::string &message, const std::string &source)
+{
+	ReportError(message, source);
+	frontend->ShowError(message);
+	return false;
+}
+
+Ogre::ConfigFile* VM::LoadConfiguration(const std::string &filename, bool delete_after_use)
+{
+	//load a config file
+	try
+	{
+		Ogre::ConfigFile* file = new Ogre::ConfigFile();
+		file->load(filename);
+		if (delete_after_use == true)
+		{
+			delete file;
+			file = 0;
+		}
+		return file;
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error loading configuration files\nDetails: " + e.getDescription(), "VM");
+		return 0;
+	}
+}
+
+int VM::GetConfigInt(Ogre::ConfigFile *file, const std::string &key, int default_value)
+{
+	std::string result = file->getSetting(key, "", ToString(default_value));
+	return ToInt(result);
+}
+
+std::string VM::GetConfigString(Ogre::ConfigFile *file, const std::string &key, const std::string &default_value)
+{
+	if (!file)
+		return "";
+	return file->getSetting(key, "", default_value);
+}
+
+bool VM::GetConfigBool(Ogre::ConfigFile *file, const std::string &key, bool default_value)
+{
+	if (!file)
+		return false;
+	std::string result = file->getSetting(key, "", BoolToString(default_value));
+	return ToBool(result);
+}
+
+Real VM::GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real default_value)
+{
+	if (!file)
+		return 0.0;
+	std::string result = file->getSetting(key, "", ToString(default_value));
+	return ToFloat(result);
+}
+
+bool VM::Initialize(const std::string &data_path)
+{
+	//initialize OGRE
+	try
+	{
+		mRoot = Ogre::Root::getSingletonPtr();
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error during initial OGRE check\nDetails: " + e.getDescription(), "VM");
+	}
+
+	if(!mRoot)
+	{
+		try
+		{
+			//set up custom logger
+			if (!logger)
+			{
+				logger = new Ogre::LogManager();
+				Ogre::Log *log = logger->createLog(data_path + "skyscraper.log", true, !frontend->showconsole, false);
+				log->addListener(frontend);
+			}
+
+			//report on system startup
+			Report("Skyscraper version " + frontend->version_frontend + " starting...\n", "VM");
+
+			//load OGRE
+			Report("Loading OGRE...", "VM");
+			mRoot = new Ogre::Root();
+		}
+		catch (Ogre::Exception &e)
+		{
+			return ReportFatalError("Error initializing OGRE\nDetails: " + e.getDescription(), "VM");
+		}
+		catch (...)
+		{
+			return ReportFatalError("Error initializing OGRE", "VM");
+		}
+	}
+
+	//set up overlay system
+	try
+	{
+		Report("", "VM");
+		Report("Loading Overlay System...", "VM");
+		mOverlaySystem = new Ogre::OverlaySystem();
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription(), "VM");
+	}
+
+	//configure render system
+	try
+	{
+		if(!mRoot->getRenderSystem())
+		{
+			//if no render systems are loaded, try to load previous config
+			if(!mRoot->restoreConfig())
+			{
+				//show dialog if load failed
+				mRoot->showConfigDialog(OgreBites::getNativeConfigDialog());
+			}
+		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription(), "VM");
+	}
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	//set rendersystem options
+	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
+	if (rendersystem)
+	{
+		Ogre::ConfigOptionMap CurrentRendererOptions = mRoot->getRenderSystem()->getConfigOptions();
+		Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
+
+		for (; configItr != CurrentRendererOptions.end(); configItr++)
+		{
+			if ((configItr)->first == "Floating-point mode")
+			{
+				//if using DirectX, prevent it from switching into single-point floating point mode
+				rendersystem->setConfigOption("Floating-point mode", "Consistent");
+				break;
+			}
+
+			if ((configItr)->first == "Auto hardware buffer management")
+			{
+				//fix black screen when resizing window using DirectX on Windows
+				rendersystem->setConfigOption("Auto hardware buffer management", "Yes");
+			}
+		}
+	}
+#endif
+
+	//initialize render window
+	try
+	{
+		Report("", "VM");
+		Report("Initializing OGRE...", "VM");
+		mRoot->initialise(false);
+
+		if (frontend->Headless == false)
+		{
+			Report("", "VM");
+			Report("Creating render window...", "VM");
+			mRenderWindow = frontend->CreateRenderWindow(0, "SkyscraperVR");
+		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error initializing render window\nDetails: " + e.getDescription(), "VM");
+	}
+	catch (...)
+	{
+		return ReportFatalError("Error initializing render window", "VM");
+	}
+
+	if (frontend->Headless == false)
+	{
+		//get renderer info
+		Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
+
+		//shorten name
+		int loc = Renderer.find("Rendering Subsystem");
+		Renderer = Renderer.substr(0, loc - 1);
+	}
+
+	//load resource configuration
+	Ogre::ConfigFile cf;
+	try
+	{
+		Report("", "VM");
+		Report("Loading resources...", "VM");
+		cf.load("resources.cfg");
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error loading resources.cfg\nDetails: " + e.getDescription(), "VM");
+	}
+
+	//add resource locations
+	try
+	{
+		std::string name, locationType;
+		Ogre::ConfigFile::SettingsBySection_ settingsBySection = cf.getSettingsBySection();
+		for (const auto& p : settingsBySection) {
+			for (const auto& r : p.second) {
+				locationType = r.first;
+				name = r.second;
+				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(name, locationType);
+			}
+		}
+
+		//add app's directory to resource manager
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("General");
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
+		if (data_path != "")
+			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(data_path, "FileSystem", "General", true);
+
+		//add materials group, and autoload
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/materials", "FileSystem", "Materials", true);
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
+
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("media/packs/SdkTrays.zip", "Zip", "Trays", true);
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error initializing resources\nDetails: " + e.getDescription(), "VM");
+	}
+
+	//create scene manager
+	try
+	{
+		mSceneMgr = mRoot->createSceneManager();
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error creating scene manager\nDetails: " + e.getDescription(), "VM");
+	}
+
+	mSceneMgr->addRenderQueueListener(mOverlaySystem);
+
+	//enable shadows
+	if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Shadows", false) == true)
+	{
+		try
+		{
+			Report("Enabling shadows", "VM");
+			mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+		}
+		catch (Ogre::Exception &e)
+		{
+			ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription(), "VM");
+		}
+	}
+
+	std::string renderer = mRoot->getRenderSystem()->getName();
+
+	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem" && renderer != "Metal Rendering Subsystem")
+		RTSS = true;
+
+	if (RTSS == true)
+	{
+		//Enable the RT Shader System
+		if (Ogre::RTShader::ShaderGenerator::initialize())
+		{
+			Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
+			shaderGenerator->addSceneManager(mSceneMgr);
+
+			// forward scheme not found events to the RTSS
+			OgreBites::SGTechniqueResolverListener* schemeNotFoundHandler = new OgreBites::SGTechniqueResolverListener(shaderGenerator);
+			Ogre::MaterialManager::getSingleton().addListener(schemeNotFoundHandler);
+
+			//uncomment this to dump RTSS shaders
+			//shaderGenerator->setShaderCachePath("shaders/");
+		}
+	}
+
+	if (frontend->Headless == false)
+	{
+		try
+		{
+			//define camera configuration
+			int cameras = 1; //use one camera for standard mode
+			if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.VR", false) == true)
+				cameras = 2; //use two cameras for VR mode
+
+			for (int i = 0; i < cameras; i++)
+			{
+				mCameras.push_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
+				mViewports.push_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			}
+		}
+		catch (Ogre::Exception &e)
+		{
+			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription(), "VM");
+		}
+	}
+
+	//set up default material shader scheme
+	if (RTSS == true)
+	{
+		for (size_t i = 0; i < mViewports.size(); i++)
+		{
+			mViewports[i]->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+		}
+	}
+
+	//setup texture filtering
+	int filtermode = GetConfigInt(frontend->configfile, "Skyscraper.Frontend.TextureFilter", 3);
+	int maxanisotropy = GetConfigInt(frontend->configfile, "Skyscraper.Frontend.MaxAnisotropy", 8);
+
+	if (filtermode < 0 || filtermode > 3)
+		filtermode = 3;
+
+	if (filtermode < 3)
+		maxanisotropy = 1;
+
+	Ogre::TextureFilterOptions filter;
+	if (filtermode == 0)
+		filter = Ogre::TFO_NONE;
+	else if (filtermode == 1)
+		filter = Ogre::TFO_BILINEAR;
+	else if (filtermode == 2)
+		filter = Ogre::TFO_TRILINEAR;
+	else if (filtermode == 3)
+		filter = Ogre::TFO_ANISOTROPIC;
+
+	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
+	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
+
+	//initialize FMOD (sound)
+	DisableSound = GetConfigBool(frontend->configfile, "Skyscraper.Frontend.DisableSound", false);
+	if (DisableSound == false)
+	{
+		Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2024\n", "VM");
+
+		FMOD_RESULT result = FMOD::System_Create(&soundsys);
+		if (result != FMOD_OK)
+		{
+			std::string fmod_result = FMOD_ErrorString(result);
+			ReportFatalError("Error initializing sound:\n" + fmod_result, "VM");
+			DisableSound = true;
+		}
+		else
+		{
+			char name [] = "Skyscraper"; //set name for PulseAudio on Linux
+			result = soundsys->init(100, FMOD_INIT_NORMAL, &name);
+			if (result != FMOD_OK)
+			{
+				std::string fmod_result = FMOD_ErrorString(result);
+				ReportFatalError("Error initializing sound:\n" + fmod_result, "VM");
+				DisableSound = true;
+			}
+			else
+			{
+				//get FMOD version information
+				unsigned int version;
+				soundsys->getVersion(&version);
+				int major = version >> 16;
+				int minor = (version >> 8) & 255;
+				int rev = version & 255;
+
+				std::string s_version;
+				char hexString[25];
+
+				snprintf(hexString, 25, "%x.%x.%x", major, minor, rev);
+				s_version = std::string(hexString);
+
+				Report("Sound initialized: FMOD Engine version " + s_version, "VM");
+			}
+		}
+	}
+	else
+		Report("Sound Disabled", "VM");
+
+	try
+	{
+		mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindow);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error starting tray manager:\nDetails: " + e.getDescription(), "VM");
+	}
+
+	if (mTrayMgr)
+	{
+		mTrayMgr->hideCursor();
+	}
+
+	//report hardware concurrency
+	int c = std::thread::hardware_concurrency();
+	Report("Reported hardware concurrency: " + ToString(c) + "\n", "VM");
+
+	Report("Initialization complete", "VM");
+	Report("", "VM");
+
+	return true;
+}
+
+bool VM::Render()
+{
+	SBS_PROFILE_MAIN("Render");
+
+	if (frontend->Headless == true)
+		return true;
+
+	// Render to the frame buffer
+	try
+	{
+		mRoot->renderOneFrame();
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error in render operation\nDetails: " + e.getDescription(), "VM");
+	}
+
+	//update frame statistics
+	Ogre::FrameEvent a;
+	if (mTrayMgr)
+		mTrayMgr->frameRendered(a);
+
+	return true;
+}
+
+bool VM::PlaySound(const std::string &filename)
+{
+	//load new sound
+#if (FMOD_VERSION >> 16 == 4)
+		FMOD_RESULT result = soundsys->createSound(filename.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
+#else
+		FMOD_RESULT result = soundsys->createSound(filename.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_LOOP_NORMAL), 0, &sound);
+#endif
+	if (result != FMOD_OK)
+	{
+		return ReportError("Can't load file '" + filename + "':\n" + FMOD_ErrorString(result), "VM");
+	}
+
+#if (FMOD_VERSION >> 16 == 4)
+	result = soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
+#else
+	result = soundsys->playSound(sound, 0, true, &channel);
+#endif
+
+	if (result != FMOD_OK)
+	{
+		return ReportError("Error playing " + filename, "VM");
+	}
+
+	channel->setLoopCount(-1);
+	channel->setVolume(1.0);
+	channel->setPaused(false);
+
+	return true;
+}
+
+void VM::StopSound()
+{
+	//stop and unload sound
+	if (channel)
+		channel->stop();
+	if (sound)
+		sound->release();
+	sound = 0;
+}
+
+void VM::ClearScene()
+{
+	//clear scene
+	mSceneMgr->clearScene();
+}
+
+void VM::UnloadSky()
+{
+	//unload Caelum sky system
+
+	new_time = false;
+
+	if (mCaelumSystem)
+	{
+		Caelum::CaelumPlugin* ptr = Caelum::CaelumPlugin::getSingletonPtr();
+		mCaelumSystem->clear();
+		mCaelumSystem->detachAllViewports();
+		delete mCaelumSystem;
+		mCaelumSystem = 0;
+		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
+		Caelum::CaelumPlugin::getSingleton().shutdown();
+		delete ptr;
+	}
+}
+
+void VM::CreateSky(EngineContext *engine)
+{
+	//create sky system
+
+	//load Caelum plugin
+	if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum", true) == true)
+	{
+		try
+		{
+			new Caelum::CaelumPlugin();
+			Caelum::CaelumPlugin::getSingleton().initialise();
+		}
+		catch (Ogre::Exception &e)
+		{
+			if (e.getDescription() != "!msSingleton failed. There can be only one singleton")
+				ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription(), "VM");
+			return;
+		}
+	}
+
+	/*(if (sky_error == true)
+	{
+		engine->GetSystem()->CreateSky();
+		return;
+	}*/
+
+	bool sky_result = true;
+	if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum", true) == true)
+		sky_result = InitSky(engine);
+
+	//create old sky if Caelum is turned off, or failed to initialize
+	if (sky_result == false)
+		engine->GetSystem()->CreateSky();
+}
+
+void VM::ToggleStats()
+{
+	show_stats++;
+
+	if (show_stats == 0)
+	{
+		mTrayMgr->showFrameStats(OgreBites::TrayLocation::TL_TOPRIGHT);
+		mTrayMgr->toggleAdvancedFrameStats();
+	}
+	else if (show_stats == 1)
+		mTrayMgr->toggleAdvancedFrameStats();
+	else if (show_stats == 2)
+	{
+		mTrayMgr->hideFrameStats();
+		show_stats = -1;
+	}
+}
+
+void VM::EnableStats(bool value)
+{
+	if (value == true)
+	{
+		show_stats = -1;
+		ToggleStats();
+	}
+	else
+	{
+		show_stats = 1;
+		ToggleStats();
+	}
+}
+
+void VM::ReInit()
+{
+	EnableStats(false);
+
+	delete mTrayMgr;
+	mTrayMgr = 0;
+
+	//reinit overlay system
+	try
+	{
+		mSceneMgr->removeRenderQueueListener(mOverlaySystem);
+		delete mOverlaySystem;
+		mOverlaySystem = new Ogre::OverlaySystem();
+		mSceneMgr->addRenderQueueListener(mOverlaySystem);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription(), "VM");
+	}
+
+	//initialize system resources
+	try
+	{
+		Ogre::ResourceGroupManager::getSingleton().clearResourceGroup("Materials");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
+		Ogre::ResourceGroupManager::getSingleton().clearResourceGroup("Trays");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error initializing resources\nDetails:" + e.getDescription(), "VM");
+	}
+
+	//reinit tray manager
+	try
+	{
+		mTrayMgr = new OgreBites::TrayManager("Tray", mRenderWindow);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error starting tray manager:\n" + e.getDescription(), "VM");
+	}
+
+	if (mTrayMgr)
+	{
+		mTrayMgr->hideCursor();
+	}
+
+	show_stats = -1;
+}
+
+FMOD::System* VM::GetSoundSystem()
+{
+	return soundsys;
+}
+
+bool VM::InitSky(EngineContext *engine)
+{
+	//initialize sky
+
+	if (!engine)
+		return false;
+
+	if (frontend->Headless == true)
+		return true;
+
+	if (Renderer == "Direct3D11")
+		return true;
+
+	//ensure graphics card and render system are capable of Caelum's shaders
+	if (Renderer == "Direct3D9")
+	{
+		//on DirectX, Caelum requires a card capable of 3.0 shader levels, which would be
+		//an ATI Radeon HD 2000, nVidia Geforce 6, Intel G965 or newer
+		//Intel cards: http://www.intel.com/support/graphics/sb/cs-014257.htm
+		Ogre::RenderSystemCapabilities::ShaderProfiles profiles = mRoot->getRenderSystem()->getCapabilities()->getSupportedShaderProfiles();
+
+		//for general sky, require both DirectX pixel and vertex shaders 2.0
+		if (profiles.find("ps_2_0") == profiles.end() ||
+			profiles.find("vs_2_0") == profiles.end())
+				return ReportFatalError("Error initializing Caelum: 2.0 shaders not supported", "VM");
+
+		//for clouds, require either DirectX pixel shaders 3.0 or nVidia fragment shaders 4.0
+		if (profiles.find("ps_3_0") == profiles.end() &&
+			profiles.find("fp40") == profiles.end())
+				return ReportFatalError("Error initializing Caelum: 3.0 fragment shaders not supported", "VM");
+
+		//for clouds, require either DirectX vetex shaders 3.0 or nVidia vertex shaders 4.0
+		if (profiles.find("vs_3_0") == profiles.end() &&
+			profiles.find("vp40") == profiles.end())
+				return ReportFatalError("Error initializing Caelum: 3.0 vertex shaders not supported", "VM");
+	}
+
+	if (Renderer == "OpenGL")
+	{
+		//on OpenGL, Caelum requires hardware support for shaders (OpenGL 2.0 or newer)
+		Ogre::RenderSystemCapabilities::ShaderProfiles profiles = mRoot->getRenderSystem()->getCapabilities()->getSupportedShaderProfiles();
+
+		//require OpenGL ARB fragment programs
+		if (profiles.find("arbfp1") == profiles.end())
+			return ReportFatalError("Error initializing Caelum: fragment programs not supported", "VM");
+
+		//require OpenGL ARB vertex programs
+		if (profiles.find("arbvp1") == profiles.end())
+			return ReportFatalError("Error initializing Caelum: vertex programs not supported", "VM");
+	}
+
+	//load Caelum resources
+	try
+	{
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/caelum", "FileSystem", "Caelum", false);
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Caelum");
+
+		if (!mCaelumSystem)
+			mCaelumSystem = new Caelum::CaelumSystem(mRoot, mSceneMgr, Caelum::CaelumSystem::CAELUM_COMPONENTS_NONE);
+		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, SkyName);
+	}
+	catch (Ogre::Exception &e)
+	{
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE //ignore Caelum errors on Mac, due to a Cg error (Cg is not available on ARM CPUs, and is not bundled with the Mac version)
+		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
+#endif
+		sky_error = true;
+	}
+	catch (...)
+	{
+		ReportFatalError("Error initializing Caelum", "VM");
+		sky_error = true;
+	}
+
+	if (!mCaelumSystem)
+	{
+		sky_error = true;
+		return false;
+	}
+
+	//attach caelum to running viewport
+	try
+	{
+		for (size_t i = 0; i < mViewports.size(); i++)
+		{
+			mCaelumSystem->attachViewport(mViewports[i]);
+		}
+		mCaelumSystem->setAutoNotifyCameraChanged(false);
+		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat(frontend->configfile, "Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
+		if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum.EnableFog", true) == false)
+			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
+		mCaelumSystem->setManageAmbientLight(GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum.ModifyAmbient", false));
+
+		//fix sky rotation
+		Quaternion rot(Degree(180.0), Vector3::UNIT_Y);
+		mCaelumSystem->getCaelumGroundNode()->setOrientation(rot);
+		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
+
+		//have sky use SBS scaling factor
+		Real scale = 1 / engine->GetSystem()->UnitScale;
+		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
+		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error setting Caelum parameters:\nDetails: " + e.getDescription(), "VM");
+		sky_error = true;
+	}
+	catch (...)
+	{
+		ReportFatalError("Error setting Caelum parameters", "VM");
+		sky_error = true;
+	}
+
+	//set sky time multiplier if not already set
+	if (SkyMult == 0)
+		SkyMult = mCaelumSystem->getTimeScale();
+
+	//set location if specified
+	if (new_location == true)
+	{
+		mCaelumSystem->setObserverLatitude(Degree(latitude));
+		mCaelumSystem->setObserverLongitude(Degree(longitude));
+		new_location = false;
+	}
+
+	//use system time if specified
+	if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum.UseSystemTime", false) == true && new_time == false)
+		SetDateTimeNow();
+
+	//set date/time if specified
+	if (new_time == true)
+	{
+		mCaelumSystem->setJulianDay(datetime);
+		new_time = false;
+	}
+
+	return true;
+}
+
+void VM::UpdateSky()
+{
+	//update sky
+	SBS_PROFILE_MAIN("Sky");
+
+	if (mCaelumSystem)
+	{
+		for (size_t i = 0; i < mCameras.size(); i++)
+		{
+			mCaelumSystem->notifyCameraChanged(mCameras[i]);
+		}
+		mCaelumSystem->setTimeScale(SkyMult);
+		mCaelumSystem->updateSubcomponents(Real(GetActiveEngine()->GetSystem()->GetElapsedTime()) / 1000);
+	}
+}
+
+void VM::SetLocation(Real latitude, Real longitude)
+{
+	this->latitude = latitude;
+	this->longitude = longitude;
+	new_location = true;
+}
+
+void VM::SetDateTimeNow()
+{
+	//set date and time to current time in UTC
+
+	//get current time
+	time_t now = time(0);
+
+	//convert time to GMT
+	tm* gmtm = gmtime(&now);
+	if (gmtm == NULL)
+		return;
+
+	//convert time to Julian and set it
+	double julian = Caelum::Astronomy::getJulianDayFromGregorianDateTime(gmtm->tm_year + 1900, gmtm->tm_mon + 1, gmtm->tm_mday, gmtm->tm_hour, gmtm->tm_min, gmtm->tm_sec);
+	SetDateTime(julian);
+}
+
+void VM::SetDateTime(double julian_date_time)
+{
+	datetime = julian_date_time;
+	new_time = true;
+
+	if (mCaelumSystem)
+		mCaelumSystem->setJulianDay(datetime);
+}
+
+void VM::GetTime(int &hour, int &minute, int &second)
+{
+	hour = -1;
+	minute = -1;
+	second = -1.0;
+
+	if (!mCaelumSystem)
+		return;
+
+	Caelum::LongReal julian = mCaelumSystem->getJulianDay(), sec;
+	int year, month, day;
+	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, sec);
+	second = (int)sec;
+}
+
+void VM::EnableSky(bool value)
+{
+	//enable or disable sky system
+
+	//enable/disable old skybox system in engine 0
+	if (GetEngine(0))
+		GetEngine(0)->GetSystem()->EnableSkybox(value);
+
+	//enable/disable Caelum sky system
+	if (mCaelumSystem)
+	{
+		mCaelumSystem->getCaelumGroundNode()->setVisible(value);
+		mCaelumSystem->getCaelumCameraNode()->setVisible(value);
+	}
+}
+
+Ogre::RenderWindow* VM::GetRenderWindow()
+{
+	return mRenderWindow;
+}
+
+void VM::Clear()
+{
+	//do a full clear of Ogre objects
+
+	//remove all meshes
+	Ogre::MeshManager::getSingleton().removeAll();
+
+	//remove all materials
+	if (RTSS)
+		Ogre::RTShader::ShaderGenerator::getSingleton().removeAllShaderBasedTechniques();
+	Ogre::MaterialManager::getSingleton().removeAll();
+	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
+
+	//remove all fonts
+	Ogre::FontManager::getSingleton().removeAll();
+
+	//remove all textures
+	Ogre::TextureManager::getSingleton().removeAll();
+
+	//clear scene manager
+	mSceneMgr->clearScene();
+
+	//free unused hardware buffers
+	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
+
+	ReInit();
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	//release free memory to OS on Linux
+	malloc_trim(0);
+#endif
+}
+
+Ogre::SceneManager* VM::GetSceneManager()
+{
+	return mSceneMgr;
+}
+
+Ogre::RenderWindow* VM::CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params)
+{
+	//create the render window
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	{
+		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+		mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
+		mRenderWindow->create(name, width, height, false, &params);
+	}
+	else
+#endif
+		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+
+	mRenderWindow->setActive(true);
+	mRenderWindow->windowMovedOrResized();
+
+	return mRenderWindow;
+}
+
+void VM::DestroyRenderWindow()
+{
+	if (mRenderWindow)
+	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
+
+	mRenderWindow->destroy();
+	mRenderWindow = 0;
 }
 
 }

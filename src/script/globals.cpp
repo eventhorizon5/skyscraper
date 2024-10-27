@@ -24,6 +24,7 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
+#include "vm.h"
 #include "camera.h"
 #include "scriptproc.h"
 #include "section.h"
@@ -87,7 +88,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "dynamicsky"))
 	{
 		if (engine->IsRoot() == true)
-			engine->GetFrontend()->SkyName = value;
+			engine->GetVM()->SkyName = value;
 		return sNextLine;
 	}
 	//Collisions parameter
@@ -183,7 +184,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 			return ScriptError("Invalid latitude");
 
 		if (engine->IsRoot() == true)
-			engine->GetFrontend()->SetLocation(latitude, longitude);
+			engine->GetVM()->SetLocation(latitude, longitude);
 		return sNextLine;
 	}
 	//DateTime parameter
@@ -192,14 +193,14 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (engine->IsRoot() == true)
 		{
 			if (value == "now")
-				engine->GetFrontend()->SetDateTimeNow();
+				engine->GetVM()->SetDateTimeNow();
 			else
 			{
 				double data;
 				if (!IsNumeric(value, data))
 					return ScriptError("Invalid Julian date/time");
 
-				engine->GetFrontend()->SetDateTime(data);
+				engine->GetVM()->SetDateTime(data);
 			}
 		}
 		return sNextLine;
@@ -213,7 +214,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 			return ScriptError("Invalid time scale value");
 
 		if (engine->IsRoot() == true)
-			engine->GetFrontend()->SkyMult = data;
+			engine->GetVM()->SkyMult = data;
 	}
 	//Position parameter
 	if (StartsWithNoCase(LineData, "position"))
