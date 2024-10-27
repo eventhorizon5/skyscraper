@@ -31,6 +31,9 @@
 #include <OgreOverlaySystem.h>
 #include <fmod.hpp>
 #include <fmod_errors.h>
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#include "malloc.h"
+#endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "OgreOpenXRRenderWindow.h"
 #endif
@@ -674,7 +677,7 @@ void VM::UpdateOpenXR()
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//update OpenXR camera transformations
-	if (frontend->GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		EngineContext* engine = GetActiveEngine();
 
@@ -1439,7 +1442,7 @@ bool VM::InitSky(EngineContext *engine)
 	catch (Ogre::Exception &e)
 	{
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE //ignore Caelum errors on Mac, due to a Cg error (Cg is not available on ARM CPUs, and is not bundled with the Mac version)
-		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
+		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription(), "VM>");
 #endif
 		sky_error = true;
 	}
@@ -1642,7 +1645,7 @@ Ogre::RenderWindow* VM::CreateRenderWindow(const std::string &name, int width, i
 {
 	//create the render window
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 		mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());

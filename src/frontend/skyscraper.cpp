@@ -30,7 +30,6 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/joystick.h"
-#include "wx/panel.h"
 #endif
 #include <locale>
 #include <time.h>
@@ -62,7 +61,6 @@
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include <sys/utsname.h>
-#include "malloc.h"
 #endif
 
 #if defined(__WXGTK__)
