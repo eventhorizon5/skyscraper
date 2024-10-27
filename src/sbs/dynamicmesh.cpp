@@ -391,7 +391,7 @@ void DynamicMesh::NeedsUpdate(MeshObject *client)
 	{
 		int index = GetClientIndex(client);
 
-		if (index >= 0)
+		if (index >= 0 && index < (int)meshes.size())
 		{
 			meshes[index]->prepared = false;
 			prepared = false;
