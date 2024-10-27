@@ -646,4 +646,11 @@ bool EngineContext::InRunloop()
 	return false;
 }
 
+bool EngineContext::IsRoot()
+{
+	//returns true if this engine is the root/primary engine (0)
+
+	return (!GetParent());
+}
+
 }
