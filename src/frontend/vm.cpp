@@ -1657,4 +1657,17 @@ void VM::DestroyRenderWindow()
 	mRenderWindow = 0;
 }
 
+void VM::RefreshViewport()
+{
+	//refresh viewport to prevent rendering issues
+
+	if (frontend->Headless == false)
+	{
+		for (size_t i = 0; i < mViewports.size(); i++)
+		{
+			mViewports[i]->_updateDimensions();
+		}
+	}
+}
+
 }
