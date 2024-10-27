@@ -59,50 +59,53 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 
 	//parameters
 
-	//ConcurrentLoads parameter
-	if (StartsWithNoCase(LineData, "concurrentloads"))
+	if (engine->IsRoot() == true) //only run these commands if the engine is root
 	{
-		if (equals == false)
-			return ScriptError("Syntax error");
+		//ConcurrentLoads parameter
+		if (StartsWithNoCase(LineData, "concurrentloads"))
+		{
+			if (equals == false)
+				return ScriptError("Syntax error");
 
-		engine->GetVM()->ConcurrentLoads = ToBool(value);
-		return sNextLine;
-	}
-	//CutLandscape parameter
-	if (StartsWithNoCase(LineData, "cutlandscape"))
-	{
-		if (equals == false)
-			return ScriptError("Syntax error");
+			engine->GetVM()->ConcurrentLoads = ToBool(value);
+			return sNextLine;
+		}
+		//CutLandscape parameter
+		if (StartsWithNoCase(LineData, "cutlandscape"))
+		{
+			if (equals == false)
+				return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutLandscape = ToBool(value);
-		return sNextLine;
-	}
-	//CutBuildings parameter
-	if (StartsWithNoCase(LineData, "cutbuildings"))
-	{
-		if (equals == false)
-			return ScriptError("Syntax error");
+			engine->GetFrontend()->CutLandscape = ToBool(value);
+			return sNextLine;
+		}
+		//CutBuildings parameter
+		if (StartsWithNoCase(LineData, "cutbuildings"))
+		{
+			if (equals == false)
+				return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutBuildings = ToBool(value);
-		return sNextLine;
-	}
-	//CutExternal parameter
-	if (StartsWithNoCase(LineData, "cutexternal"))
-	{
-		if (equals == false)
-			return ScriptError("Syntax error");
+			engine->GetFrontend()->CutBuildings = ToBool(value);
+			return sNextLine;
+		}
+		//CutExternal parameter
+		if (StartsWithNoCase(LineData, "cutexternal"))
+		{
+			if (equals == false)
+				return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutExternal = ToBool(value);
-		return sNextLine;
-	}
-	//CutFloors parameter
-	if (StartsWithNoCase(LineData, "cutfloors"))
-	{
-		if (equals == false)
-			return ScriptError("Syntax error");
+			engine->GetFrontend()->CutExternal = ToBool(value);
+			return sNextLine;
+		}
+		//CutFloors parameter
+		if (StartsWithNoCase(LineData, "cutfloors"))
+		{
+			if (equals == false)
+				return ScriptError("Syntax error");
 
-		engine->GetFrontend()->CutFloors = ToBool(value);
-		return sNextLine;
+			engine->GetFrontend()->CutFloors = ToBool(value);
+			return sNextLine;
+		}
 	}
 
 	//Load command

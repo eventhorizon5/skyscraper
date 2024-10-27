@@ -77,6 +77,7 @@ public:
 	bool IsParent(EngineContext *engine, bool recursive = false);
 	VM* GetVM();
 	bool InRunloop();
+	bool IsRoot();
 
 private:
 
