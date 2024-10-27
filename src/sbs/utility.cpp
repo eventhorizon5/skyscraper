@@ -643,53 +643,53 @@ void Utility::ProcessLog()
 
 void Utility::RemoveTexture(Ogre::ResourceHandle handle)
 {
-	remove_texture = handle;
-	remove_texture_valid = true;
+	texremove.remove_texture = handle;
+	texremove.remove_texture_valid = true;
 
 	//have this thread sleep while waiting for texture processing
-	while (remove_texture_valid == true)
+	while (texremove.remove_texture_valid == true)
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 
 void Utility::DoRemoveTexture()
 {
-	if (remove_texture_valid == false)
+	if (texremove.remove_texture_valid == false)
 		return;
 
-	Ogre::TextureManager::getSingleton().remove(remove_texture);
-	remove_texture_valid = false;
+	Ogre::TextureManager::getSingleton().remove(texremove.remove_texture);
+	texremove.remove_texture_valid = false;
 }
 
 std::string Utility::GetTextureName(Ogre::TexturePtr texture)
 {
-	if (texture_valid == true)
+	if (texname.texture_valid == true)
 	{
 		//have thread sleep while waiting for texture to free
-		while (texture_valid == true)
+		while (texname.texture_valid == true)
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
-	this->texture = texture;
-	texture_valid = true;
+	texname.texture = texture;
+	texname.texture_valid = true;
 
-	if (texture_name_valid == false)
+	if (texname.texture_name_valid == false)
 	{
 		//have thread sleep while waiting for texture name to return
-		while (texture_name_valid == false)
+		while (texname.texture_name_valid == false)
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
-	texture_name_valid = false;
-	return texture_name;
+	texname.texture_name_valid = false;
+	return texname.texture_name;
 }
 
 void Utility::DoGetTextureName()
 {
-	if (texture_name_valid == false && texture_valid == true)
+	if (texname.texture_name_valid == false && texname.texture_valid == true)
 	{
-		texture_name = texture->getName();
-		texture_valid = false;
-		texture_name_valid = true;
+		texname.texture_name = texname.texture->getName();
+		texname.texture_valid = false;
+		texname.texture_name_valid = true;
 	}
 }
 

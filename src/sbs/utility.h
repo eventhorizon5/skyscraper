@@ -69,14 +69,22 @@ private:
 	std::vector<log_queue_data> log_queue;
 
 	//texture to remove
-	Ogre::ResourceHandle remove_texture;
-	bool remove_texture_valid;
+	struct textureremove
+	{
+		Ogre::ResourceHandle remove_texture;
+		bool remove_texture_valid;
+	};
+	textureremove texremove;
 
 	//texture name
-	std::string texture_name;
-	Ogre::TexturePtr texture;
-	bool texture_name_valid;
-	bool texture_valid;
+	struct texturename
+	{
+		std::string texture_name;
+		Ogre::TexturePtr texture;
+		bool texture_name_valid;
+		bool texture_valid;
+	};
+	texturename texname;
 };
 
 }
