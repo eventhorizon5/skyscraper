@@ -242,7 +242,7 @@ bool VM::RunEngines()
 	bool isloading = IsEngineLoading();
 
 	if (ConcurrentLoads == true && isloading == true)
-		frontend->RefreshViewport();
+		RefreshViewport();
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
@@ -322,7 +322,7 @@ void VM::HandleEngineShutdown()
 
 				if (DeleteEngine(engines[i]) == true)
 				{
-					frontend->RefreshViewport();
+					RefreshViewport();
 					i--;
 					deleted = true;
 				}

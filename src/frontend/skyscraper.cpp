@@ -702,7 +702,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		}
 	}
 
-	RefreshViewport();
+	vm->RefreshViewport();
 
 	//set ambient light
 	if (vm->GetConfigBool(configfile, "Skyscraper.SBS.Lighting", false) == true)

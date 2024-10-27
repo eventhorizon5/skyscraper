@@ -117,7 +117,6 @@ public:
 	void SetFullScreen(bool enabled);
 	void RaiseWindow();
 	void RefreshConsole();
-	void RefreshViewport();
 	void UnregisterDebugPanel() { dpanel = 0; }
 	virtual void MacOpenFile(const wxString &filename);
 	std::string GetDataPath();
