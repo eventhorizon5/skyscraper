@@ -968,19 +968,6 @@ void Skyscraper::RefreshConsole()
 	}
 }
 
-void Skyscraper::RefreshViewport()
-{
-	//refresh viewport to prevent rendering issues
-
-	if (Headless == false)
-	{
-		for (size_t i = 0; i < vm->mViewports.size(); i++)
-		{
-			vm->mViewports[i]->_updateDimensions();
-		}
-	}
-}
-
 void Skyscraper::MacOpenFile(const wxString &filename)
 {
 	//support launching app with a building file, on Mac
