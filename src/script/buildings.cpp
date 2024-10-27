@@ -76,7 +76,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			if (equals == false)
 				return ScriptError("Syntax error");
 
-			engine->GetFrontend()->CutLandscape = ToBool(value);
+			engine->GetVM()->CutLandscape = ToBool(value);
 			return sNextLine;
 		}
 		//CutBuildings parameter
@@ -85,7 +85,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			if (equals == false)
 				return ScriptError("Syntax error");
 
-			engine->GetFrontend()->CutBuildings = ToBool(value);
+			engine->GetVM()->CutBuildings = ToBool(value);
 			return sNextLine;
 		}
 		//CutExternal parameter
@@ -94,7 +94,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			if (equals == false)
 				return ScriptError("Syntax error");
 
-			engine->GetFrontend()->CutExternal = ToBool(value);
+			engine->GetVM()->CutExternal = ToBool(value);
 			return sNextLine;
 		}
 		//CutFloors parameter
@@ -103,7 +103,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			if (equals == false)
 				return ScriptError("Syntax error");
 
-			engine->GetFrontend()->CutFloors = ToBool(value);
+			engine->GetVM()->CutFloors = ToBool(value);
 			return sNextLine;
 		}
 	}

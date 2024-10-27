@@ -461,7 +461,7 @@ void DebugPanel::OnInit()
 void DebugPanel::Loop()
 {
 	//disable debug panel and exit if paused
-	if (skyscraper->Pause == true)
+	if (skyscraper->GetVM()->Pause == true)
 	{
 		Enable(false);
 		return;

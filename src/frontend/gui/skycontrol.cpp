@@ -31,6 +31,7 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
+#include "vm.h"
 #include "skycontrol.h"
 
 namespace Skyscraper {
@@ -187,7 +188,7 @@ SkyControl::~SkyControl()
 
 void SkyControl::OnInit()
 {
-	system = panel->GetRoot()->GetCaelumSystem();
+	system = panel->GetRoot()->GetVM()->GetCaelumSystem();
 
 	if (!system)
 		return;
@@ -199,7 +200,7 @@ void SkyControl::OnInit()
 
 void SkyControl::Loop()
 {
-	if (system != panel->GetRoot()->GetCaelumSystem())
+	if (system != panel->GetRoot()->GetVM()->GetCaelumSystem())
 		OnInit();
 
 	if (!system)
@@ -294,12 +295,12 @@ void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
 
 void SkyControl::On_bSetMultiplier_Click(wxCommandEvent& event)
 {
-	panel->GetRoot()->SkyMult = atof(tMultiplier->GetValue());
+	panel->GetRoot()->GetVM()->SkyMult = atof(tMultiplier->GetValue());
 }
 
 void SkyControl::On_bGetSystemTime_Click(wxCommandEvent& event)
 {
-	panel->GetRoot()->SetDateTimeNow();
+	panel->GetRoot()->GetVM()->SetDateTimeNow();
 }
 
 }
