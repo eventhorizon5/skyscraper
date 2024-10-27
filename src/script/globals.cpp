@@ -212,7 +212,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(str, data))
 			return ScriptError("Invalid time scale value");
 
-		engine->GetFrontend()->SkyMult = data;
+		if (engine->IsRoot() == true)
+			engine->GetFrontend()->SkyMult = data;
 	}
 	//Position parameter
 	if (StartsWithNoCase(LineData, "position"))
