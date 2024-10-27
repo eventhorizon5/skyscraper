@@ -89,7 +89,7 @@ VM::VM(Skyscraper *frontend)
 	first_run = true;
 	DisableSound = false;
 
-	Report("Started", "VM");
+	Report("Started", "VM>");
 }
 
 VM::~VM()
@@ -131,7 +131,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 		{
 			engines[i] = 0;
 			delete engine;
-			Report("Engine instance " + ToString(i) + " deleted", "VM");
+			Report("Engine instance " + ToString(i) + " deleted", "VM>");
 
 			int count = GetEngineCount();
 
@@ -161,7 +161,7 @@ void VM::DeleteEngines()
 {
 	//delete all sim emgine instances
 
-	Report("Deleting all engines...", "VM");
+	Report("Deleting all engines...", "VM>");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
@@ -222,7 +222,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		active_engine->DetachCamera(switch_engines);
 	}
 
-	Report("Setting engine " + ToString(number) + " as active", "VM");
+	Report("Setting engine " + ToString(number) + " as active", "VM>");
 
 	//switch context to new engine instance
 	active_engine = engine;
@@ -318,7 +318,7 @@ void VM::HandleEngineShutdown()
 		{
 			if (engines[i]->GetShutdownState() == true)
 			{
-				Report("Shutdown requested for engine instance " + ToString(i), "VM");
+				Report("Shutdown requested for engine instance " + ToString(i), "VM>");
 
 				if (DeleteEngine(engines[i]) == true)
 				{
@@ -358,7 +358,7 @@ void VM::HandleReload()
 					UnloadSky();
 
 				Pause = false;
-				Report("Reloading engine instance " + ToString(i), "VM");
+				Report("Reloading engine instance " + ToString(i), "VM>");
 
 				engines[i]->DoReload(); //handle engine reload
 
@@ -417,7 +417,7 @@ void VM::SwitchEngines()
 	}
 
 	//otherwise search for a valid engine to attach to
-	Report("Searing for engine to attach to...", "VM");
+	Report("Searing for engine to attach to...", "VM>");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] != active_engine && engines[i])
@@ -516,7 +516,7 @@ bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
 {
 	//start a sim engine
 
-	Report("Initiating engine start", "VM");
+	Report("Initiating engine start", "VM>");
 	return engine->Start(cameras);
 }
 
@@ -613,7 +613,7 @@ void VM::Run()
 	if (Shutdown == true)
 	{
 		Shutdown = false;
-		Report("Unloading due to shutdown request", "VM");
+		Report("Unloading due to shutdown request", "VM>");
 		frontend->UnloadToMenu();
 	}
 
@@ -633,7 +633,7 @@ void VM::Run()
 	//if in CheckScript mode, exit
 	if (CheckScript == true)
 	{
-		Report("Unloading to menu...", "VM");
+		Report("Unloading to menu...", "VM>");
 		frontend->UnloadToMenu();
 		return;
 	}
@@ -690,7 +690,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 {
 	//load simulator and data file
 
-	Report("Loading engine for building file '" + filename + "'...", "VM");
+	Report("Loading engine for building file '" + filename + "'...", "VM>");
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
@@ -721,16 +721,12 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	return true;
 }
 
-void VM::Report(const std::string &message, const std::string &source)
+void VM::Report(const std::string &message, const std::string &prompt)
 {
-	std::string delim = " ";
-	if (source.size() > 0)
-		delim = ": ";
-
 	try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(source + delim + message);
+			Ogre::LogManager::getSingleton().logMessage(prompt + " " + message);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -738,16 +734,12 @@ void VM::Report(const std::string &message, const std::string &source)
 	}
 }
 
-bool VM::ReportError(const std::string &message, const std::string &source)
+bool VM::ReportError(const std::string &message, const std::string &prompt)
 {
-	std::string delim = " ";
-	if (source.size() > 0)
-		delim = ": ";
-
 	try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(source + delim + message, Ogre::LML_CRITICAL);
+			Ogre::LogManager::getSingleton().logMessage(prompt + " " + message, Ogre::LML_CRITICAL);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -756,9 +748,9 @@ bool VM::ReportError(const std::string &message, const std::string &source)
 	return false;
 }
 
-bool VM::ReportFatalError(const std::string &message, const std::string &source)
+bool VM::ReportFatalError(const std::string &message, const std::string &prompt)
 {
-	ReportError(message, source);
+	ReportError(message, prompt);
 	frontend->ShowError(message);
 	return false;
 }
@@ -779,7 +771,7 @@ Ogre::ConfigFile* VM::LoadConfiguration(const std::string &filename, bool delete
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error loading configuration files\nDetails: " + e.getDescription(), "VM");
+		ReportFatalError("Error loading configuration files\nDetails: " + e.getDescription(), "VM>");
 		return 0;
 	}
 }
@@ -822,7 +814,7 @@ bool VM::Initialize(const std::string &data_path)
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error during initial OGRE check\nDetails: " + e.getDescription(), "VM");
+		return ReportFatalError("Error during initial OGRE check\nDetails: " + e.getDescription(), "VM>");
 	}
 
 	if(!mRoot)
@@ -838,32 +830,32 @@ bool VM::Initialize(const std::string &data_path)
 			}
 
 			//report on system startup
-			Report("Skyscraper version " + frontend->version_frontend + " starting...\n", "VM");
+			Report("Skyscraper version " + frontend->version_frontend + " starting...\n", "VM>");
 
 			//load OGRE
-			Report("Loading OGRE...", "VM");
+			Report("Loading OGRE...", "VM>");
 			mRoot = new Ogre::Root();
 		}
 		catch (Ogre::Exception &e)
 		{
-			return ReportFatalError("Error initializing OGRE\nDetails: " + e.getDescription(), "VM");
+			return ReportFatalError("Error initializing OGRE\nDetails: " + e.getDescription(), "VM>");
 		}
 		catch (...)
 		{
-			return ReportFatalError("Error initializing OGRE", "VM");
+			return ReportFatalError("Error initializing OGRE", "VM>");
 		}
 	}
 
 	//set up overlay system
 	try
 	{
-		Report("", "VM");
-		Report("Loading Overlay System...", "VM");
+		Report("", "VM>");
+		Report("Loading Overlay System...", "VM>");
 		mOverlaySystem = new Ogre::OverlaySystem();
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription(), "VM");
+		return ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription(), "VM>");
 	}
 
 	//configure render system
@@ -881,7 +873,7 @@ bool VM::Initialize(const std::string &data_path)
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription(), "VM");
+		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription(), "VM>");
 	}
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -913,24 +905,24 @@ bool VM::Initialize(const std::string &data_path)
 	//initialize render window
 	try
 	{
-		Report("", "VM");
-		Report("Initializing OGRE...", "VM");
+		Report("", "VM>");
+		Report("Initializing OGRE...", "VM>");
 		mRoot->initialise(false);
 
 		if (frontend->Headless == false)
 		{
-			Report("", "VM");
-			Report("Creating render window...", "VM");
+			Report("", "VM>");
+			Report("Creating render window...", "VM>");
 			mRenderWindow = frontend->CreateRenderWindow(0, "SkyscraperVR");
 		}
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error initializing render window\nDetails: " + e.getDescription(), "VM");
+		return ReportFatalError("Error initializing render window\nDetails: " + e.getDescription(), "VM>");
 	}
 	catch (...)
 	{
-		return ReportFatalError("Error initializing render window", "VM");
+		return ReportFatalError("Error initializing render window", "VM>");
 	}
 
 	if (frontend->Headless == false)
@@ -947,13 +939,13 @@ bool VM::Initialize(const std::string &data_path)
 	Ogre::ConfigFile cf;
 	try
 	{
-		Report("", "VM");
-		Report("Loading resources...", "VM");
+		Report("", "VM>");
+		Report("Loading resources...", "VM>");
 		cf.load("resources.cfg");
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error loading resources.cfg\nDetails: " + e.getDescription(), "VM");
+		return ReportFatalError("Error loading resources.cfg\nDetails: " + e.getDescription(), "VM>");
 	}
 
 	//add resource locations
@@ -984,7 +976,7 @@ bool VM::Initialize(const std::string &data_path)
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error initializing resources\nDetails: " + e.getDescription(), "VM");
+		return ReportFatalError("Error initializing resources\nDetails: " + e.getDescription(), "VM>");
 	}
 
 	//create scene manager
@@ -994,7 +986,7 @@ bool VM::Initialize(const std::string &data_path)
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error creating scene manager\nDetails: " + e.getDescription(), "VM");
+		return ReportFatalError("Error creating scene manager\nDetails: " + e.getDescription(), "VM>");
 	}
 
 	mSceneMgr->addRenderQueueListener(mOverlaySystem);
@@ -1004,12 +996,12 @@ bool VM::Initialize(const std::string &data_path)
 	{
 		try
 		{
-			Report("Enabling shadows", "VM");
+			Report("Enabling shadows", "VM>");
 			mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription(), "VM");
+			ReportFatalError("Error setting shadow technique\nDetails: " + e.getDescription(), "VM>");
 		}
 	}
 
@@ -1053,7 +1045,7 @@ bool VM::Initialize(const std::string &data_path)
 		}
 		catch (Ogre::Exception &e)
 		{
-			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription(), "VM");
+			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription(), "VM>");
 		}
 	}
 
@@ -1093,14 +1085,14 @@ bool VM::Initialize(const std::string &data_path)
 	DisableSound = GetConfigBool(frontend->configfile, "Skyscraper.Frontend.DisableSound", false);
 	if (DisableSound == false)
 	{
-		Report("", "VM");
-		Report("FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2024\n", "VM");
+		Report("", "VM>");
+		Report("FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2024\n", "VM>");
 
 		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)
 		{
 			std::string fmod_result = FMOD_ErrorString(result);
-			ReportFatalError("Error initializing sound:\n" + fmod_result, "VM");
+			ReportFatalError("Error initializing sound:\n" + fmod_result, "VM>");
 			DisableSound = true;
 		}
 		else
@@ -1110,7 +1102,7 @@ bool VM::Initialize(const std::string &data_path)
 			if (result != FMOD_OK)
 			{
 				std::string fmod_result = FMOD_ErrorString(result);
-				ReportFatalError("Error initializing sound:\n" + fmod_result, "VM");
+				ReportFatalError("Error initializing sound:\n" + fmod_result, "VM>");
 				DisableSound = true;
 			}
 			else
@@ -1128,12 +1120,12 @@ bool VM::Initialize(const std::string &data_path)
 				snprintf(hexString, 25, "%x.%x.%x", major, minor, rev);
 				s_version = std::string(hexString);
 
-				Report("Sound initialized: FMOD Engine version " + s_version, "VM");
+				Report("Sound initialized: FMOD Engine version " + s_version, "VM>");
 			}
 		}
 	}
 	else
-		Report("Sound Disabled", "VM");
+		Report("Sound Disabled", "VM>");
 
 	try
 	{
@@ -1141,7 +1133,7 @@ bool VM::Initialize(const std::string &data_path)
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error starting tray manager:\nDetails: " + e.getDescription(), "VM");
+		ReportFatalError("Error starting tray manager:\nDetails: " + e.getDescription(), "VM>");
 	}
 
 	if (mTrayMgr)
@@ -1151,10 +1143,10 @@ bool VM::Initialize(const std::string &data_path)
 
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
-	Report("Reported hardware concurrency: " + ToString(c) + "\n", "VM");
+	Report("Reported hardware concurrency: " + ToString(c) + "\n", "VM>");
 
-	Report("Initialization complete", "VM");
-	Report("", "VM");
+	Report("Initialization complete", "VM>");
+	Report("", "VM>");
 
 	return true;
 }
@@ -1173,7 +1165,7 @@ bool VM::Render()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error in render operation\nDetails: " + e.getDescription(), "VM");
+		return ReportFatalError("Error in render operation\nDetails: " + e.getDescription(), "VM>");
 	}
 
 	//update frame statistics
@@ -1194,7 +1186,7 @@ bool VM::PlaySound(const std::string &filename)
 #endif
 	if (result != FMOD_OK)
 	{
-		return ReportError("Can't load file '" + filename + "':\n" + FMOD_ErrorString(result), "VM");
+		return ReportError("Can't load file '" + filename + "':\n" + FMOD_ErrorString(result), "VM>");
 	}
 
 #if (FMOD_VERSION >> 16 == 4)
@@ -1205,7 +1197,7 @@ bool VM::PlaySound(const std::string &filename)
 
 	if (result != FMOD_OK)
 	{
-		return ReportError("Error playing " + filename, "VM");
+		return ReportError("Error playing " + filename, "VM>");
 	}
 
 	channel->setLoopCount(-1);
@@ -1265,7 +1257,7 @@ void VM::CreateSky(EngineContext *engine)
 		catch (Ogre::Exception &e)
 		{
 			if (e.getDescription() != "!msSingleton failed. There can be only one singleton")
-				ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription(), "VM");
+				ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription(), "VM>");
 			return;
 		}
 	}
@@ -1334,7 +1326,7 @@ void VM::ReInit()
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription(), "VM");
+		ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription(), "VM>");
 	}
 
 	//initialize system resources
@@ -1347,7 +1339,7 @@ void VM::ReInit()
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error initializing resources\nDetails:" + e.getDescription(), "VM");
+		ReportFatalError("Error initializing resources\nDetails:" + e.getDescription(), "VM>");
 	}
 
 	//reinit tray manager
@@ -1357,7 +1349,7 @@ void VM::ReInit()
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error starting tray manager:\n" + e.getDescription(), "VM");
+		ReportFatalError("Error starting tray manager:\n" + e.getDescription(), "VM>");
 	}
 
 	if (mTrayMgr)
@@ -1397,17 +1389,17 @@ bool VM::InitSky(EngineContext *engine)
 		//for general sky, require both DirectX pixel and vertex shaders 2.0
 		if (profiles.find("ps_2_0") == profiles.end() ||
 			profiles.find("vs_2_0") == profiles.end())
-				return ReportFatalError("Error initializing Caelum: 2.0 shaders not supported", "VM");
+				return ReportFatalError("Error initializing Caelum: 2.0 shaders not supported", "VM>");
 
 		//for clouds, require either DirectX pixel shaders 3.0 or nVidia fragment shaders 4.0
 		if (profiles.find("ps_3_0") == profiles.end() &&
 			profiles.find("fp40") == profiles.end())
-				return ReportFatalError("Error initializing Caelum: 3.0 fragment shaders not supported", "VM");
+				return ReportFatalError("Error initializing Caelum: 3.0 fragment shaders not supported", "VM>");
 
 		//for clouds, require either DirectX vetex shaders 3.0 or nVidia vertex shaders 4.0
 		if (profiles.find("vs_3_0") == profiles.end() &&
 			profiles.find("vp40") == profiles.end())
-				return ReportFatalError("Error initializing Caelum: 3.0 vertex shaders not supported", "VM");
+				return ReportFatalError("Error initializing Caelum: 3.0 vertex shaders not supported", "VM>");
 	}
 
 	if (Renderer == "OpenGL")
@@ -1417,11 +1409,11 @@ bool VM::InitSky(EngineContext *engine)
 
 		//require OpenGL ARB fragment programs
 		if (profiles.find("arbfp1") == profiles.end())
-			return ReportFatalError("Error initializing Caelum: fragment programs not supported", "VM");
+			return ReportFatalError("Error initializing Caelum: fragment programs not supported", "VM>");
 
 		//require OpenGL ARB vertex programs
 		if (profiles.find("arbvp1") == profiles.end())
-			return ReportFatalError("Error initializing Caelum: vertex programs not supported", "VM");
+			return ReportFatalError("Error initializing Caelum: vertex programs not supported", "VM>");
 	}
 
 	//load Caelum resources
@@ -1443,7 +1435,7 @@ bool VM::InitSky(EngineContext *engine)
 	}
 	catch (...)
 	{
-		ReportFatalError("Error initializing Caelum", "VM");
+		ReportFatalError("Error initializing Caelum", "VM>");
 		sky_error = true;
 	}
 
@@ -1478,12 +1470,12 @@ bool VM::InitSky(EngineContext *engine)
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error setting Caelum parameters:\nDetails: " + e.getDescription(), "VM");
+		ReportFatalError("Error setting Caelum parameters:\nDetails: " + e.getDescription(), "VM>");
 		sky_error = true;
 	}
 	catch (...)
 	{
-		ReportFatalError("Error setting Caelum parameters", "VM");
+		ReportFatalError("Error setting Caelum parameters", "VM>");
 		sky_error = true;
 	}
 

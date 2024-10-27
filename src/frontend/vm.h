@@ -72,9 +72,9 @@ public:
 	std::string GetConfigString(Ogre::ConfigFile *file, const std::string &key, const std::string &default_value);
 	bool GetConfigBool(Ogre::ConfigFile *file, const std::string &key, bool default_value);
 	Real GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real default_value);
-	void Report(const std::string &message, const std::string &source);
-	bool ReportError(const std::string &message, const std::string &source);
-	bool ReportFatalError(const std::string &message, const std::string &source);
+	void Report(const std::string &message, const std::string &prompt);
+	bool ReportError(const std::string &message, const std::string &prompt);
+	bool ReportFatalError(const std::string &message, const std::string &prompt);
 	bool PlaySound(const std::string &filename);
 	void StopSound();
 	void ClearScene();
