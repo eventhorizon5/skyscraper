@@ -86,7 +86,8 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	//DynamicSky parameter
 	if (StartsWithNoCase(LineData, "dynamicsky"))
 	{
-		engine->GetFrontend()->SkyName = value;
+		if (engine->IsRoot() == true)
+			engine->GetFrontend()->SkyName = value;
 		return sNextLine;
 	}
 	//Collisions parameter
@@ -181,21 +182,25 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		if (!IsNumeric(str1, latitude) || !IsNumeric(str2, longitude))
 			return ScriptError("Invalid latitude");
 
-		engine->GetFrontend()->SetLocation(latitude, longitude);
+		if (engine->IsRoot() == true)
+			engine->GetFrontend()->SetLocation(latitude, longitude);
 		return sNextLine;
 	}
 	//DateTime parameter
 	if (StartsWithNoCase(LineData, "datetime"))
 	{
-		if (value == "now")
-			engine->GetFrontend()->SetDateTimeNow();
-		else
+		if (engine->IsRoot() == true)
 		{
-			double data;
-			if (!IsNumeric(value, data))
-				return ScriptError("Invalid Julian date/time");
+			if (value == "now")
+				engine->GetFrontend()->SetDateTimeNow();
+			else
+			{
+				double data;
+				if (!IsNumeric(value, data))
+					return ScriptError("Invalid Julian date/time");
 
-			engine->GetFrontend()->SetDateTime(data);
+				engine->GetFrontend()->SetDateTime(data);
+			}
 		}
 		return sNextLine;
 	}
