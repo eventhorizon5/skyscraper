@@ -667,7 +667,7 @@ void VM::UpdateOpenXR()
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//update OpenXR camera transformations
-	if (frontend->GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		EngineContext* engine = GetActiveEngine();
 
@@ -1635,7 +1635,7 @@ Ogre::RenderWindow* VM::CreateRenderWindow(const std::string &name, int width, i
 {
 	//create the render window
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	if (GetConfigBool("Skyscraper.Frontend.VR", false) == true)
+	if (GetConfigBool(frontend->configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 		mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
