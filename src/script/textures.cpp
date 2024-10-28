@@ -41,8 +41,6 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 {
 	//Process Textures
 
-	TextureManager *texturemanager = Simcore->GetTextureManager();
-
 	//Load command
 	if (StartsWithNoCase(LineData, "load "))
 	{
@@ -60,9 +58,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		}
 		parent->CheckFile(tempdata[0]);
 		if (params == 4)
-			texturemanager->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+			engine->GetTextureManager()->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		else
-			texturemanager->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
+			engine->GetTextureManager()->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
 		return sNextLine;
 	}
 
@@ -116,9 +114,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			parent->CheckFile(filenames[i]);
 
 		if (force == false)
-			texturemanager->LoadAnimatedTexture(filenames, tempdata[params - 4], ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
+			engine->GetTextureManager()->LoadAnimatedTexture(filenames, tempdata[params - 4], ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 		else
-			texturemanager->LoadAnimatedTexture(filenames, tempdata[params - 5], ToFloat(tempdata[params - 4]), ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), true, ToBool(tempdata[params - 1]));
+			engine->GetTextureManager()->LoadAnimatedTexture(filenames, tempdata[params - 5], ToFloat(tempdata[params - 4]), ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), true, ToBool(tempdata[params - 1]));
 		return sNextLine;
 	}
 
@@ -144,9 +142,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		parent->CheckFile(tempdata[2]);
 
 		if (params == 7)
-			texturemanager->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+			engine->GetTextureManager()->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		else
-			texturemanager->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), true, ToBool(tempdata[7]));
+			engine->GetTextureManager()->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), true, ToBool(tempdata[7]));
 		return sNextLine;
 	}
 
@@ -166,9 +164,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		if (params == 4)
-			texturemanager->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+			engine->GetTextureManager()->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		else
-			texturemanager->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
+			engine->GetTextureManager()->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
 		return sNextLine;
 	}
 
@@ -202,9 +200,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			ReplaceAll(name, "%number%", buffer);
 			parent->CheckFile(filename);
 			if (params == 6)
-				texturemanager->LoadTexture(filename, name, ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+				engine->GetTextureManager()->LoadTexture(filename, name, ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 			else
-				texturemanager->LoadTexture(filename, name, ToFloat(tempdata[4]), ToFloat(tempdata[5]), true, ToBool(tempdata[6]));
+				engine->GetTextureManager()->LoadTexture(filename, name, ToFloat(tempdata[4]), ToFloat(tempdata[5]), true, ToBool(tempdata[6]));
 		}
 		return sNextLine;
 	}
@@ -234,9 +232,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		filename.insert(0, "data/fonts/");
 		parent->CheckFile(filename);
 		if (params == 14)
-			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], filename, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]));
+			engine->GetTextureManager()->AddTextToTexture(tempdata[0], tempdata[1], filename, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]));
 		else
-			texturemanager->AddTextToTexture(tempdata[0], tempdata[1], filename, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]), true, ToBool(tempdata[14]));
+			engine->GetTextureManager()->AddTextToTexture(tempdata[0], tempdata[1], filename, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]), true, ToBool(tempdata[14]));
 		return sNextLine;
 	}
 
@@ -280,9 +278,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			filename.insert(0, "data/fonts/");
 			parent->CheckFile(filename);
 			if (params == 16)
-				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], filename, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]));
+				engine->GetTextureManager()->AddTextToTexture(tempdata[2], tempdata[3], filename, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]));
 			else
-				texturemanager->AddTextToTexture(tempdata[2], tempdata[3], filename, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, ToBool(tempdata[16]));
+				engine->GetTextureManager()->AddTextToTexture(tempdata[2], tempdata[3], filename, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, ToBool(tempdata[16]));
 		}
 		return sNextLine;
 	}
@@ -304,9 +302,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		}
 		parent->CheckFile(tempdata[0]);
 		if (params == 8)
-			texturemanager->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+			engine->GetTextureManager()->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		else
-			texturemanager->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]));
+			engine->GetTextureManager()->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]));
 		return sNextLine;
 	}
 
@@ -326,9 +324,9 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		if (params == 9)
-			texturemanager->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			engine->GetTextureManager()->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 		else
-			texturemanager->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true, ToBool(tempdata[9]));
+			engine->GetTextureManager()->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true, ToBool(tempdata[9]));
 		return sNextLine;
 	}
 
@@ -373,7 +371,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		texturemanager->RotateTexture(tempdata[0], ToFloat(tempdata[1]));
+		engine->GetTextureManager()->RotateTexture(tempdata[0], ToFloat(tempdata[1]));
 		return sNextLine;
 	}
 
@@ -394,7 +392,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		texturemanager->RotateAnimTexture(tempdata[0], ToFloat(tempdata[1]));
+		engine->GetTextureManager()->RotateAnimTexture(tempdata[0], ToFloat(tempdata[1]));
 		return sNextLine;
 	}
 
@@ -418,7 +416,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		texturemanager->ScrollTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		engine->GetTextureManager()->ScrollTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -442,7 +440,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		texturemanager->ScrollAnimTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		engine->GetTextureManager()->ScrollAnimTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -466,7 +464,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		texturemanager->ScaleTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		engine->GetTextureManager()->ScaleTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -490,7 +488,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		texturemanager->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		engine->GetTextureManager()->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
 	}
 
@@ -511,14 +509,14 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		texturemanager->SetCulling(tempdata[0], ToInt(tempdata[1]));
+		engine->GetTextureManager()->SetCulling(tempdata[0], ToInt(tempdata[1]));
 		return sNextLine;
 	}
 
 	//handle end of textures section
 	if (StartsWithNoCase(LineData, "<endtextures>"))
 	{
-		Simcore->GetTextureManager()->FreeTextureImages();
+		engine->GetTextureManager()->FreeTextureImages();
 		config->SectionNum = 0;
 		config->Context = "None";
 		if (parent->InRunloop() == false)

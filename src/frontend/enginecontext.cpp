@@ -329,6 +329,10 @@ void EngineContext::StartSim()
 	if (!processor)
 		processor = new ScriptProcessor(this);
 
+	//load texture manager
+	if (!texman)
+		texman = new TextureManager();
+
 	//refresh console to fix banner message on Linux
 	frontend->RefreshConsole();
 
@@ -371,6 +375,11 @@ void EngineContext::UnloadSim()
 	if (processor)
 		delete processor;
 	processor = 0;
+
+	//unload texture manager
+	if (texman)
+		delete texman;
+	texman = 0;
 
 	loading = false;
 	running = false;

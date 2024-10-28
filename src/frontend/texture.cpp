@@ -1,7 +1,6 @@
 /*
-	Scalable Building Simulator - Texture Manager
-	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2024 Ryan Thoryk
+	Skyscraper 2.1 - Texture Manager
+	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -33,14 +32,18 @@
 #include <OgreRTShaderSystem.h>
 #include "globals.h"
 #include "sbs.h"
+#include "enginecontext.h"
 #include "utility.h"
 #include "texture.h"
 
-namespace SBS {
+using namespace SBS;
 
-TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
+namespace Skyscraper {
+
+TextureManager::TextureManager(EngineContext *parent)
 {
-	SetName("Texture Manager");
+	//get singleton
+	sbs = parent->GetSystem();
 
 	AutoX = true;
 	AutoY = true;
@@ -91,13 +94,13 @@ TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 	ResetTextureMapping(true);
 
 	//load default textures
-	Report("Loading default textures...");
+	parent->Report("Loading default textures...");
 	sbs->SetLighting();
 	//LoadTexture("data/default.png", "Default", 1, 1);
 	//LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
 	//LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	sbs->ResetLighting();
-	Report("Done");
+	parent->Report("Done");
 }
 
 TextureManager::~TextureManager()
@@ -2443,6 +2446,16 @@ size_t TextureManager::GetMemoryUsage()
 	}
 
 	return result;
+}
+
+void TextureManager::Report(const std::string &message)
+{
+	parent->Report(message);
+}
+
+bool TextureManager::ReportError(const std::string &message)
+{
+	return parent->ReportError(message);
 }
 
 }
