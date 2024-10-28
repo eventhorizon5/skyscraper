@@ -372,7 +372,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		engine->GetTextureManager()->RotateTexture(tempdata[0], ToFloat(tempdata[1]));
+		Simcore->GetTextureManager()->RotateTexture(tempdata[0], ToFloat(tempdata[1]));
 		return sNextLine;
 	}
 
@@ -393,7 +393,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		engine->GetTextureManager()->RotateAnimTexture(tempdata[0], ToFloat(tempdata[1]));
+		Simcore->GetTextureManager()->RotateAnimTexture(tempdata[0], ToFloat(tempdata[1]));
 		return sNextLine;
 	}
 
@@ -417,7 +417,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		engine->GetTextureManager()->ScrollTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		Simcore->GetTextureManager()->ScrollTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -441,7 +441,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		engine->GetTextureManager()->ScrollAnimTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		Simcore->GetTextureManager()->ScrollAnimTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -465,7 +465,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		engine->GetTextureManager()->ScaleTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
+		Simcore->GetTextureManager()->ScaleTexture(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]));
 		return sNextLine;
 	}
 
@@ -489,7 +489,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		engine->GetTextureManager()->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		Simcore->GetTextureManager()->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
 	}
 
@@ -510,14 +510,14 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		engine->GetTextureManager()->SetCulling(tempdata[0], ToInt(tempdata[1]));
+		Simcore->GetTextureManager()->SetCulling(tempdata[0], ToInt(tempdata[1]));
 		return sNextLine;
 	}
 
 	//handle end of textures section
 	if (StartsWithNoCase(LineData, "<endtextures>"))
 	{
-		engine->GetTextureManager()->FreeTextureImages();
+		Simcore->GetTextureManager()->FreeTextureImages();
 		config->SectionNum = 0;
 		config->Context = "None";
 		if (parent->InRunloop() == false)

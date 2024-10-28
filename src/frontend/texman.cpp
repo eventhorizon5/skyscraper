@@ -34,8 +34,8 @@
 #include "sbs.h"
 #include "enginecontext.h"
 #include "utility.h"
-#include "texturemanager.h"
-#inlcude "texture.h"
+#include "texman.h"
+#include "texture.h"
 
 using namespace SBS;
 
@@ -46,60 +46,12 @@ TextureManager::TextureManager(EngineContext *parent)
 	//get singleton
 	sbs = parent->GetSystem();
 
-	AutoX = true;
-	AutoY = true;
-	MapIndex.resize(3);
-	MapUV.resize(3);
-	OldMapIndex.resize(3);
-	OldMapUV.resize(3);
-	MapVerts1.resize(3);
-	MapVerts2.resize(3);
-	MapVerts3.resize(3);
-	OldMapVerts1.resize(3);
-	OldMapVerts2.resize(3);
-	OldMapVerts3.resize(3);
-	MapMethod = 0;
-	OldMapMethod = 0;
-	RevX = false;
-	RevY = false;
-	RevZ = false;
-	OldRevX = false;
-	OldRevY = false;
-	OldRevZ = false;
-	PlanarFlat = false;
-	OldPlanarFlat = false;
-	PlanarRotate = false;
-	OldPlanarRotate = false;
-	for (int i = 0; i <= 2; i++)
-	{
-		MapIndex[i] = 0;
-		OldMapIndex[i] = 0;
-		OldMapUV[i] = Vector2::ZERO;
-		MapUV[i] = Vector2::ZERO;
-	}
-	DefaultMapper = sbs->GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
-	texturecount = 0;
-	materialcount = 0;
-	TextureOverride = false;
-	FlipTexture = false;
-	mainnegflip = 0;
-	mainposflip = 0;
-	sidenegflip = 0;
-	sideposflip = 0;
-	topflip = 0;
-	bottomflip = 0;
-	widthscale.resize(6);
-	heightscale.resize(6);
-
-	//set default texture map values
-	ResetTextureMapping(true);
-
 	//load default textures
 	parent->Report("Loading default textures...");
 	sbs->SetLighting();
-	//LoadTexture("data/default.png", "Default", 1, 1);
-	//LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
-	//LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
+	LoadTexture("data/default.png", "Default", 1, 1);
+	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	sbs->ResetLighting();
 	parent->Report("Done");
 }
@@ -108,18 +60,6 @@ TextureManager::~TextureManager()
 {
 	//delete materials
 	UnloadMaterials();
-	textureinfo.clear();
-
-	if (textureboxes.empty() == false)
-		FreeTextureBoxes();
-
-	//remove manually-created textures
-	for (size_t i = 0; i < manual_textures.size(); i++)
-	{
-		if (manual_textures[i])
-			Ogre::TextureManager::getSingleton().remove(manual_textures[i]->getHandle());
-	}
-	manual_textures.clear();
 }
 
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
@@ -2457,6 +2397,260 @@ void TextureManager::Report(const std::string &message)
 bool TextureManager::ReportError(const std::string &message)
 {
 	return parent->ReportError(message);
+}
+
+bool TextureManager::AddTextToTexture(const std::string &origname, const std::string &name, const std::string &font_filename, Real font_size, const std::string &text, int x1, int y1, int x2, int y2, const std::string &h_align, const std::string &v_align, int ColorR, int ColorG, int ColorB, bool enable_force, bool force_mode)
+{
+	//adds text to the named texture, in the given box coordinates and alignment
+
+	//h_align is either "left", "right" or "center" - default is center
+	//v_align is either "top", "bottom", or "center" - default is center
+
+	//if either x1 or y1 are -1, the value of 0 is used.
+	//If either x2 or y2 are -1, the width or height of the texture is used.
+
+	if (sbs->Headless == true)
+		return true;
+
+	std::string hAlign = h_align;
+	std::string vAlign = v_align;
+	std::string Name = TrimStringCopy(name);
+	std::string Origname = TrimStringCopy(origname);
+	std::string Text = TrimStringCopy(text);
+
+	std::string font_filename2 = sbs->VerifyFile(font_filename);
+
+	//load font
+	Ogre::FontPtr font;
+	std::string fontname = font_filename2 + ToString(font_size);
+	font = Ogre::FontManager::getSingleton().getByName(fontname, "General");
+
+	//load if font is not already loaded
+	if (!font)
+	{
+		try
+		{
+			font = Ogre::FontManager::getSingleton().create(fontname, "General");
+			//font->setType(Ogre::FontType::FT_TRUETYPE);
+			font->setSource(font_filename2);
+			font->setTrueTypeSize(font_size);
+			font->setTrueTypeResolution(96);
+			//font->setAntialiasColour(true);
+			font->addCodePointRange(Ogre::Font::CodePointRange(32, 126));
+			font->load();
+
+			//report font loaded and texture size
+			std::string texname = GetTextureName(font->getMaterial());
+			Ogre::TexturePtr fontTexture = GetTextureByName(texname);
+			if (fontTexture)
+				Report("Font " + font_filename2 + " loaded as size " + ToString(font_size) + ", with texture size " + ToString((int)fontTexture->getSize()));
+		}
+		catch (Ogre::Exception &e)
+		{
+			if (font)
+			{
+				//unload texture and font, if an error occurred
+				if (Ogre::TextureManager::getSingleton().getByName(fontname + "Texture"))
+					return ReportError("Error loading font " + fontname + "\n" + e.getDescription());
+
+				if (Ogre::FontManager::getSingleton().getByHandle(font->getHandle()))
+					return ReportError("Error loading font " + fontname + "\n" + e.getDescription());
+
+				Ogre::TextureManager::getSingleton().remove(fontname + "Texture");
+				Ogre::FontManager::getSingleton().remove(font->getHandle());
+			}
+			return ReportError("Error loading font " + fontname + "\n" + e.getDescription());
+		}
+	}
+
+	//get original texture
+	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
+	if (!ptr)
+		return ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
+
+	std::string texname = GetTextureName(ptr);
+	Ogre::TexturePtr background = GetTextureByName(texname);
+	if (!background)
+		return ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
+
+	bool has_alpha = background->hasAlpha();
+
+	//get texture tiling info
+	Real widthmult, heightmult;
+	GetTextureTiling(origname, widthmult, heightmult);
+
+	//get height and width of texture
+	int width = (int)background->getWidth();
+	int height = (int)background->getHeight();
+
+	//determine pixel format
+	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
+	if (has_alpha == true)
+		format = Ogre::PF_A8R8G8B8;
+
+	//create new empty texture
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	Ogre::TexturePtr texture;
+	try
+	{
+		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+		manual_textures.push_back(texture);
+		IncrementTextureCount();
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
+		return false;
+	}
+
+	//get new texture dimensions, if it was resized
+	width = (int)texture->getWidth();
+	height = (int)texture->getHeight();
+
+	//set default values if specified
+	if (x1 == -1)
+		x1 = 0;
+	if (y1 == -1)
+		y1 = 0;
+	if (x2 == -1)
+		x2 = width - 1;
+	if (y2 == -1)
+		y2 = height - 1;
+
+	//draw original image onto new texture
+	CopyTexture(background, texture);
+
+	TrimString(hAlign);
+	TrimString(vAlign);
+	char align = 'c';
+	if (hAlign == "left")
+		align = 'l';
+	if (hAlign == "right")
+		align = 'r';
+	char valign = 'c';
+	if (vAlign == "top")
+		valign = 't';
+	if (vAlign == "bottom")
+		valign = 'b';
+
+	//write text
+	Real red = (Real)ColorR / 255;
+	Real green = (Real)ColorG / 255;
+	Real blue = (Real)ColorB / 255;
+
+	bool result = WriteToTexture(Text, texture, x1, y1, x2, y2, font, Ogre::ColourValue((float)red, (float)green, (float)blue, 1.0), align, valign);
+	if (result == false)
+		return false;
+
+	//create a new material
+	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
+
+	//bind texture to material
+	BindTextureToMaterial(mMat, texturename, has_alpha);
+
+	//add texture multipliers
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode, texture->getSize(), mMat->getSize());
+
+	if (sbs->Verbose)
+		Report("AddTextToTexture: created texture '" + Name + "'");
+
+	sbs->CacheFilename(Name, Name);
+	return true;
+}
+
+bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const std::string &overlay_texture, const std::string &name, int x, int y, int width, int height, Real widthmult, Real heightmult, bool enable_force, bool force_mode)
+{
+	//draws the specified texture on top of another texture
+	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
+
+	if (sbs->Headless == true)
+		return true;
+
+	std::string Name = name;
+	std::string Origname = orig_texture;
+	std::string Overlay = overlay_texture;
+
+	//get original texture
+	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
+
+	if (!ptr)
+		return ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
+
+	std::string texname = GetTextureName(ptr);
+	Ogre::TexturePtr image1 = GetTextureByName(texname);
+
+	if (!image1)
+		return ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
+
+	bool has_alpha = image1->hasAlpha();
+
+	//get overlay texture
+	ptr = GetMaterialByName(Overlay);
+
+	if (!ptr)
+		return ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
+
+	texname = GetTextureName(ptr);
+	Ogre::TexturePtr image2 = GetTextureByName(texname);
+
+	if (!image2)
+		return ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
+
+	//set default values if specified
+	if (x == -1)
+		x = 0;
+	if (y == -1)
+		y = 0;
+	if (width < 1)
+		width = (int)image2->getWidth();
+	if (height < 1)
+		height = (int)image2->getHeight();
+
+	if (x > (int)image1->getWidth() || y > (int)image1->getHeight())
+		return ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
+	if (x + width > (int)image1->getWidth() || y + height > (int)image1->getHeight())
+		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
+
+	//determine pixel format
+	Ogre::PixelFormat format = Ogre::PF_X8R8G8B8;
+	if (has_alpha == true)
+		format = Ogre::PF_A8R8G8B8;
+
+	//create new empty texture
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	Ogre::TexturePtr new_texture;
+	try
+	{
+		new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
+		manual_textures.push_back(new_texture);
+		IncrementTextureCount();
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
+		return false;
+	}
+
+	//copy source and overlay images onto new image
+	Ogre::Box source (x, y, x + width, y + height);
+	Ogre::Box source_full (0, 0, image1->getWidth(), image1->getHeight());
+	Ogre::Box overlay (0, 0, image2->getWidth(), image2->getHeight());
+	CopyTexture(image1, new_texture, source_full, source_full);
+	CopyTexture(image2, new_texture, overlay, source);
+
+	//create a new material
+	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
+
+	//bind texture to material
+	BindTextureToMaterial(mMat, texturename, has_alpha);
+
+	if (sbs->Verbose)
+		Report("AddTextureOverlay: created texture '" + Name + "'");
+
+	//add texture multipliers
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode, new_texture->getSize(), mMat->getSize());
+
+	return true;
 }
 
 }
