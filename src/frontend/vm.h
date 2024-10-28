@@ -103,8 +103,7 @@ public:
 	Ogre::RenderWindow* CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params);
 	void DestroyRenderWindow();
 	void RefreshViewport();
-	void SwitchGraphicsContext();
-
+	
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
 	bool RenderOnStartup; //override SBS engine setting with same name
@@ -132,7 +131,6 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
-	Ogre::GLContext* GetGLContext();
 
 	Skyscraper *frontend;
 	EngineContext *active_engine;

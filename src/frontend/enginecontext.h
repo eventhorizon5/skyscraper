@@ -84,6 +84,7 @@ public:
 	void Run0();
 	bool InRunloop();
 	bool IsRoot();
+	bool texture_needs_update;
 
 private:
 
@@ -126,9 +127,6 @@ private:
 
 	//VM instance
 	VM *vm;
-
-	//GL graphics context
-	Ogre::GLContext *gl_context;
 };
 
 }

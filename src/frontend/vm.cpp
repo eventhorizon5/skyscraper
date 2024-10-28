@@ -1706,21 +1706,4 @@ void VM::RefreshViewport()
 	}
 }
 
-void VM::SwitchGraphicsContext()
-{
-	//switch OpenGL graphics context to the primary thread's context
-
-	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
-	Ogre::GLRenderSystem* system = (Ogre::GLRenderSystem*)rendersystem;
-	system->_switchContext(gl_context);
-}
-
-Ogre::GLContext* VM::GetGLContext()
-{
-	//get application OpenGL context
-	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
-	Ogre::GLRenderSystem* system = (Ogre::GLRenderSystem*)rendersystem;
-	return system->_getMainContext();
-}
-
 }

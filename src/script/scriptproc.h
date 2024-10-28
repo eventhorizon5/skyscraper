@@ -45,7 +45,7 @@ public:
 
 	ScriptProcessor(EngineContext *instance);
 	~ScriptProcessor();
-	bool Run();
+	bool Run(bool thread0);
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const std::string &text);
 	bool ReportMissingFiles();
