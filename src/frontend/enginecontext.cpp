@@ -334,15 +334,15 @@ void EngineContext::StartSim()
 
 	//load texture manager
 	if (!texman)
-		texman = new TextureManager();
+		texman = new TexMan(this);
 
 	//load default textures
 	//load default textures
 	Report("Loading default textures...");
 	Simcore->SetLighting();
-	LoadTexture("data/default.png", "Default", 1, 1);
-	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
-	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
+	texman->LoadTexture("data/default.png", "Default", 1, 1);
+	texman->LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	texman->LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	Simcore->ResetLighting();
 	Report("Done");
 
@@ -717,19 +717,19 @@ void EngineContext::CreateSky()
 	//create skybox
 
 	//only create skybox if first engine instance
-	if (Simcore->InstanceNumber > 0)
+	/*if (Simcore->InstanceNumber > 0)
 		return;
 
 	Simcore->Mount("sky-" + SkyName + ".zip", "sky");
 
 	//load textures
 	Simcore->SetLighting();
-	texturemanager->LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
+	texman->LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
+	texman->LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
+	texman->LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
+	texman->LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
+	texman->LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
+	texman->LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
 	Simcore->ResetLighting();
 
 	SkyBox = new MeshObject(this, "SkyBox");
@@ -783,7 +783,7 @@ void EngineContext::CreateSky()
 		Vector3(skysize, skysize, skysize),
 		Vector3(-skysize, skysize, skysize), -1, -1, false);
 
-	Simcore->GetTextureManager()->ResetTextureMapping();
+	Simcore->GetTextureManager()->ResetTextureMapping();*/
 }
 
 }

@@ -122,6 +122,7 @@ class TextureManager: public wxDialog
         std::string GetTextureName(const std::string &material);
 
         SBS::SBS *Simcore;
+        TexMan *texman;
 		DebugPanel *panel;
 		int lastcount;
 

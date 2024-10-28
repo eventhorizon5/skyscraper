@@ -106,7 +106,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 	}
 
-	TextureManager *texturemanager = engine->GetTextureManager();
+	TexMan *texturemanager = engine->GetTextureManager();
 	::SBS::TextureManager *texturemanager_sbs = Simcore->GetTextureManager();
 
 	//AddTriangleWall command

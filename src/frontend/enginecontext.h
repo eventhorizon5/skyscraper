@@ -40,7 +40,7 @@ public:
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
 	Skyscraper *GetFrontend() { return frontend; }
-	TextureManager *GetTextureManager() { return texman; }
+	TexMan *GetTextureManager() { return texman; }
 	bool IsCameraActive();
 	void Run();
 	void Shutdown();
@@ -94,7 +94,7 @@ private:
 
 	Skyscraper* frontend; //frontend
 	ScriptProcessor* processor; //script processor
-	TextureManager* texman; //texture manager
+	TexMan* texman; //texture manager
 	SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
 	EngineContext *parent; //parent engine

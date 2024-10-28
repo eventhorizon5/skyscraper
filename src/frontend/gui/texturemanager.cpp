@@ -30,6 +30,9 @@
 #include "texture.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
+#include "vm.h"
+#include "enginecontext.h"
+#include "texman.h"
 #include "texturemanager.h"
 
 namespace Skyscraper {
@@ -166,6 +169,7 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
 
     lastcount = 0;
     Simcore = 0;
+	texman = 0;
     panel = parent;
 }
 
@@ -181,6 +185,7 @@ void TextureManager::Loop()
 	{
 		//if active engine has changed, refresh values
 		Simcore = panel->GetSystem();
+		texman = panel->GetRoot()->GetVM()->GetActiveEngine()->GetTextureManager();
 		lastcount = 0;
 	}
 
@@ -222,7 +227,7 @@ void TextureManager::Loop()
 
 void TextureManager::On_bUnload_Click(wxCommandEvent& event)
 {
-	int selection = TextureList->GetSelection();
+	/*int selection = TextureList->GetSelection();
 	if (selection < 0)
 		return;
 
@@ -238,7 +243,7 @@ void TextureManager::On_bUnload_Click(wxCommandEvent& event)
 		bool result = Simcore->GetTextureManager()->UnloadMaterial(texture.name, "General");
 		if (result == true)
 			Simcore->GetTextureManager()->UnregisterTextureInfo(texture.name, texture.material_name);
-	}
+	}*/
 }
 
 void TextureManager::On_bOK_Click(wxCommandEvent& event)

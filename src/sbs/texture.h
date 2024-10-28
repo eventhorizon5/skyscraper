@@ -118,6 +118,16 @@ public:
 		size_t mat_size; //size of material resource in bytes
 	};
 
+	struct TexturePixelBox
+	{
+		Ogre::FontPtr font;
+		Ogre::PixelBox *box;
+		unsigned char *buffer;
+	};
+	std::vector<TexturePixelBox> textureboxes;
+	std::vector<Ogre::TexturePtr> manual_textures;
+	std::vector<TextureInfo> textureinfo;
+
 private:
 
 	//texture mapping
@@ -143,20 +153,9 @@ private:
 	void BackupMapping();
 	bool ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2);
 
-	std::vector<TextureInfo> textureinfo;
-	std::vector<Ogre::TexturePtr> manual_textures;
-
 	//textures/materials count
 	int texturecount;
 	int materialcount;
-
-	struct TexturePixelBox
-	{
-		Ogre::FontPtr font;
-		Ogre::PixelBox *box;
-		unsigned char *buffer;
-	};
-	std::vector<TexturePixelBox> textureboxes;
 
 	//function caching
 	std::string prev_material;
