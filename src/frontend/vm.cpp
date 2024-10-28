@@ -93,6 +93,7 @@ VM::VM(Skyscraper *frontend)
 	show_stats = -1;
 	first_run = true;
 	DisableSound = false;
+	newthread = false;
 
 	Report("Started");
 }
@@ -617,6 +618,12 @@ void VM::UnclickedObject()
 void VM::Run()
 {
 	//run system
+
+	if (newthread == true)
+	{
+		GetRenderSystem()->postExtraThreadsStarted();
+		newthread = false;
+	}
 
 	//run sim engines
 	bool result = RunEngines();

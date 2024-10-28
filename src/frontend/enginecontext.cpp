@@ -84,8 +84,6 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 
 	//enable runloop thread
 	ex = std::thread{&EngineContext::Run, this};
-	vm->GetRenderSystem()->registerThread();
-	vm->GetRenderSystem()->postExtraThreadsStarted();
 }
 
 EngineContext::~EngineContext()
@@ -140,6 +138,10 @@ void EngineContext::Shutdown()
 
 void EngineContext::Run()
 {
+	//register thread with Ogre
+	vm->GetRenderSystem()->registerThread();
+	vm->newthread = true;
+
 	//thread runloop
 	while (true)
 	{

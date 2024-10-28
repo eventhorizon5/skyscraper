@@ -119,6 +119,7 @@ public:
 	std::vector<Ogre::Camera*> mCameras;
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
+	bool newthread;
 
 private:
 
