@@ -51,10 +51,6 @@ Utility::Utility(Object *parent) : ObjectBase(parent)
 	temppoly4.reserve(32);
 	temppoly5.reserve(32);
 	worker.reserve(32);
-
-	remove_texture_valid = false;
-	texture_name_valid = false;
-	texture_valid = false;
 }
 
 Utility::~Utility()
@@ -638,58 +634,6 @@ void Utility::ProcessLog()
 
 		//erase queue entry
 		log_queue.erase(log_queue.begin());
-	}
-}
-
-void Utility::RemoveTexture(Ogre::ResourceHandle handle)
-{
-	texremove.remove_texture = handle;
-	texremove.remove_texture_valid = true;
-
-	//have this thread sleep while waiting for texture processing
-	while (texremove.remove_texture_valid == true)
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-}
-
-void Utility::DoRemoveTexture()
-{
-	if (texremove.remove_texture_valid == false)
-		return;
-
-	Ogre::TextureManager::getSingleton().remove(texremove.remove_texture);
-	texremove.remove_texture_valid = false;
-}
-
-std::string Utility::GetTextureName(Ogre::TexturePtr texture)
-{
-	if (texname.texture_valid == true)
-	{
-		//have thread sleep while waiting for texture to free
-		while (texname.texture_valid == true)
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
-
-	texname.texture = texture;
-	texname.texture_valid = true;
-
-	if (texname.texture_name_valid == false)
-	{
-		//have thread sleep while waiting for texture name to return
-		while (texname.texture_name_valid == false)
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
-
-	texname.texture_name_valid = false;
-	return texname.texture_name;
-}
-
-void Utility::DoGetTextureName()
-{
-	if (texname.texture_name_valid == false && texname.texture_valid == true)
-	{
-		texname.texture_name = texname.texture->getName();
-		texname.texture_valid = false;
-		texname.texture_name_valid = true;
 	}
 }
 

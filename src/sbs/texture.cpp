@@ -113,7 +113,7 @@ TextureManager::~TextureManager()
 	for (size_t i = 0; i < manual_textures.size(); i++)
 	{
 		if (manual_textures[i])
-			sbs->GetUtility()->RemoveTexture(manual_textures[i]->getHandle());
+			Ogre::TextureManager::getSingleton().remove(manual_textures[i]->getHandle());
 	}
 	manual_textures.clear();
 }
@@ -132,7 +132,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 
 	if (!mTex)
 		return false;
-	std::string texturename = sbs->GetUtility()->GetTextureName(mTex);
+	std::string texturename = mTex->getName();
 
 	//create a new material
 	std::string matname = TrimStringCopy(name);
