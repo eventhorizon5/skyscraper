@@ -25,6 +25,7 @@
 #include "skyscraper.h"
 #include "enginecontext.h"
 #include "texture.h"
+#include "texman.h"
 #include "scriptproc.h"
 #include "section.h"
 

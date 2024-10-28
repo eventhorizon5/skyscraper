@@ -34,7 +34,8 @@
 #include "sbs.h"
 #include "enginecontext.h"
 #include "utility.h"
-#include "texture.h"
+#include "texturemanager.h"
+#inlcude "texture.h"
 
 using namespace SBS;
 

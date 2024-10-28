@@ -26,6 +26,7 @@
 #include "vm.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
+#include "texture.h"
 #include "section.h"
 
 using namespace SBS;

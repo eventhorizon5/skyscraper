@@ -152,7 +152,7 @@ bool ScriptProcessor::Run(bool thread0)
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			
 			//resume thread
-			if (engine->texture_needs_update = false)
+			if (engine->texture_needs_update == false)
 				break;
 		}
 	}

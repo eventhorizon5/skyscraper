@@ -28,7 +28,6 @@
 #include <OgreRTShaderSystem.h>
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
-#include <RenderSystems/GL/OgreGLRenderSystem.h>
 #include <OgreOverlaySystem.h>
 #include <fmod.hpp>
 #include <fmod_errors.h>
@@ -94,7 +93,6 @@ VM::VM(Skyscraper *frontend)
 	show_stats = -1;
 	first_run = true;
 	DisableSound = false;
-	gl_context = GetGLContext(); //get primary thread's graphics context
 
 	Report("Started");
 }
@@ -1300,7 +1298,7 @@ void VM::CreateSky(EngineContext *engine)
 
 	/*(if (sky_error == true)
 	{
-		engine->GetSystem()->CreateSky();
+		engine->CreateSky();
 		return;
 	}*/
 
@@ -1310,7 +1308,7 @@ void VM::CreateSky(EngineContext *engine)
 
 	//create old sky if Caelum is turned off, or failed to initialize
 	if (sky_result == false)
-		engine->GetSystem()->CreateSky();
+		engine->CreateSky();
 }
 
 void VM::ToggleStats()

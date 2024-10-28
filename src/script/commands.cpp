@@ -27,6 +27,7 @@
 #include "floor.h"
 #include "camera.h"
 #include "texture.h"
+#include "texman.h"
 #include "mesh.h"
 #include "soundsystem.h"
 #include "sound.h"
@@ -105,7 +106,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 	}
 
-	TextureManager *texturemanager = Simcore->GetTextureManager();
+	TextureManager *texturemanager = engine->GetTextureManager();
+	::SBS::TextureManager *texturemanager_sbs = Simcore->GetTextureManager();
 
 	//AddTriangleWall command
 	if (StartsWithNoCase(LineData, "addtrianglewall"))
@@ -1036,7 +1038,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		texturemanager->SetTextureMapping(ToInt(tempdata[0]), Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])),
+		texturemanager_sbs->SetTextureMapping(ToInt(tempdata[0]), Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])),
 									ToInt(tempdata[3]), Vector2(ToFloat(tempdata[4]), ToFloat(tempdata[5])),
 									ToInt(tempdata[6]), Vector2(ToFloat(tempdata[7]), ToFloat(tempdata[8])));
 		return sNextLine;
@@ -1062,7 +1064,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		texturemanager->SetTextureMapping2(tempdata[0], tempdata[1], tempdata[2], Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])),
+		texturemanager_sbs->SetTextureMapping2(tempdata[0], tempdata[1], tempdata[2], Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])),
 									tempdata[5], tempdata[6], tempdata[7], Vector2(ToFloat(tempdata[8]), ToFloat(tempdata[9])),
 									tempdata[10], tempdata[11], tempdata[12], Vector2(ToFloat(tempdata[13]), ToFloat(tempdata[14])));
 		return sNextLine;
@@ -1079,7 +1081,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		bool equals;
 		std::string value = GetAfterEquals(LineData, equals);
 
-		texturemanager->ResetTextureMapping(ToBool(value));
+		texturemanager_sbs->ResetTextureMapping(ToBool(value));
 		return sNextLine;
 	}
 
@@ -1094,7 +1096,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (params == 4)
 		{
-			texturemanager->SetPlanarMapping(ToBool(tempdata[0]),
+			texturemanager_sbs->SetPlanarMapping(ToBool(tempdata[0]),
 					ToBool(tempdata[1]),
 					ToBool(tempdata[2]),
 					ToBool(tempdata[3]), false);
@@ -1103,7 +1105,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 		else
 		{
-			texturemanager->SetPlanarMapping(ToBool(tempdata[0]),
+			texturemanager_sbs->SetPlanarMapping(ToBool(tempdata[0]),
 					ToBool(tempdata[1]),
 					ToBool(tempdata[2]),
 					ToBool(tempdata[3]),
@@ -1259,7 +1261,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		texturemanager->SetAutoSize(ToBool(tempdata[0]),
+		texturemanager_sbs->SetAutoSize(ToBool(tempdata[0]),
 					ToBool(tempdata[1]));
 		return sNextLine;
 	}
@@ -1272,7 +1274,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
 
-		texturemanager->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
+		texturemanager_sbs->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
 		return sSkipReset;
 	}
 
@@ -1291,7 +1293,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		texturemanager->SetTextureFlip(ToInt(tempdata[0]), ToInt(tempdata[1]), ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]));
+		texturemanager_sbs->SetTextureFlip(ToInt(tempdata[0]), ToInt(tempdata[1]), ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]));
 		return sSkipReset;
 	}
 
@@ -3994,7 +3996,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	//ListTextures command
 	if (StartsWithNoCase(LineData, "listtextures"))
 	{
-		Simcore->Report(texturemanager->ListTextures(true));
+		Simcore->Report(texturemanager_sbs->ListTextures(true));
 		return sNextLine;
 	}
 

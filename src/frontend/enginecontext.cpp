@@ -21,7 +21,6 @@
 */
 
 #include <fmod.hpp>
-#include <RenderSystems/GL/OgreGLRenderSystem.h>
 #include "globals.h"
 #include "skyscraper.h"
 #include "vm.h"
@@ -337,6 +336,16 @@ void EngineContext::StartSim()
 	if (!texman)
 		texman = new TextureManager();
 
+	//load default textures
+	//load default textures
+	Report("Loading default textures...");
+	Simcore->SetLighting();
+	LoadTexture("data/default.png", "Default", 1, 1);
+	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
+	Simcore->ResetLighting();
+	Report("Done");
+
 	//refresh console to fix banner message on Linux
 	frontend->RefreshConsole();
 
@@ -379,6 +388,10 @@ void EngineContext::UnloadSim()
 	if (processor)
 		delete processor;
 	processor = 0;
+
+	//delete materials
+	if (texman)
+		texman->UnloadMaterials();
 
 	//unload texture manager
 	if (texman)
@@ -697,6 +710,80 @@ bool EngineContext::IsRoot()
 	//returns true if this engine is the root/primary engine (0)
 
 	return (!GetParent());
+}
+
+void EngineContext::CreateSky()
+{
+	//create skybox
+
+	//only create skybox if first engine instance
+	if (Simcore->InstanceNumber > 0)
+		return;
+
+	Simcore->Mount("sky-" + SkyName + ".zip", "sky");
+
+	//load textures
+	Simcore->SetLighting();
+	texturemanager->LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
+	texturemanager->LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
+	Simcore->ResetLighting();
+
+	SkyBox = new MeshObject(this, "SkyBox");
+	SkyBox->create_collider = false;
+
+	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
+	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
+	Simcore->GetTextureManager()->ResetTextureMapping(true);
+	Wall *wall = new Wall(SkyBox);
+
+	wall->AddQuad( //front
+		"SkyFront",
+		"SkyFront",
+		Vector3(-skysize, -skysize, -skysize),
+		Vector3(skysize, -skysize, -skysize),
+		Vector3(skysize, skysize, -skysize),
+		Vector3(-skysize, skysize, -skysize), 1, 1, false);
+	wall->AddQuad( //right
+		"SkyRight",
+		"SkyRight",
+		Vector3(skysize, -skysize, -skysize),
+		Vector3(skysize, -skysize, skysize),
+		Vector3(skysize, skysize, skysize),
+		Vector3(skysize, skysize, -skysize), 1, 1, false);
+	wall->AddQuad( //back
+		"SkyBack",
+		"SkyBack",
+		Vector3(skysize, -skysize, skysize),
+		Vector3(-skysize, -skysize, skysize),
+		Vector3(-skysize, skysize, skysize),
+		Vector3(skysize, skysize, skysize), 1, 1, false);
+	wall->AddQuad( //left
+		"SkyLeft",
+		"SkyLeft",
+		Vector3(-skysize, -skysize, skysize),
+		Vector3(-skysize, -skysize, -skysize),
+		Vector3(-skysize, skysize, -skysize),
+		Vector3(-skysize, skysize, skysize), 1, 1, false);
+	wall->AddQuad( //bottom
+		"SkyBottom",
+		"SkyBottom",
+		Vector3(-skysize, -skysize, skysize),
+		Vector3(skysize, -skysize, skysize),
+		Vector3(skysize, -skysize, -skysize),
+		Vector3(-skysize, -skysize, -skysize), 1, -1, false);
+	wall->AddQuad( //top
+		"SkyTop",
+		"SkyTop",
+		Vector3(-skysize, skysize, -skysize),
+		Vector3(skysize, skysize, -skysize),
+		Vector3(skysize, skysize, skysize),
+		Vector3(-skysize, skysize, skysize), -1, -1, false);
+
+	Simcore->GetTextureManager()->ResetTextureMapping();
 }
 
 }

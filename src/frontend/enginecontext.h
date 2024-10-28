@@ -23,9 +23,7 @@
 #ifndef ENGINECONTEXT_H
 #define ENGINECONTEXT_H
 
-namespace Ogre {
-	class GLContext;
-}
+#include "texman.h"
 
 namespace Skyscraper {
 
@@ -84,6 +82,8 @@ public:
 	void Run0();
 	bool InRunloop();
 	bool IsRoot();
+	void CreateSky();
+
 	bool texture_needs_update;
 
 private:

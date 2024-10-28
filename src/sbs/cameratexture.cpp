@@ -125,8 +125,8 @@ CameraTexture::~CameraTexture()
 		sbs->mSceneManager->destroyCamera(camera);
 	}
 
-	sbs->GetTextureManager()->UnloadMaterial(texturename, "General");
-	sbs->GetTextureManager()->UnloadTexture(texturename, "General");
+	//sbs->GetTextureManager()->UnloadMaterial(texturename, "General");
+	//sbs->GetTextureManager()->UnloadTexture(texturename, "General");
 
 	if (sbs->FastDelete == false)
 	{
