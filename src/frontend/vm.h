@@ -124,6 +124,9 @@ private:
 	void HandleReload();
 	void SwitchEngines();
 	void ReInit();
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
+	bool ReportFatalError(const std::string &message);
 
 	Skyscraper *frontend;
 	EngineContext *active_engine;
