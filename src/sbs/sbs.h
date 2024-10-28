@@ -66,7 +66,6 @@ namespace SBS {
 	class ShaftManager;
 	class StairwellManager;
 	class DoorManager;
-	class TextureManager;
 	class RevolvingDoorManager;
 	class VehicleManager;
 	class Polygon;
@@ -396,7 +395,6 @@ public:
 	ControllerManager* GetControllerManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
-	TextureManager* GetTextureManager();
 	RevolvingDoorManager* GetRevolvingDoorManager();
 	VehicleManager* GetVehicleManager();
 	void RegisterCameraTexture(CameraTexture *camtex);
@@ -508,9 +506,6 @@ private:
 	//reverb objects
 	std::vector<Reverb*> reverbs;
 	int reverbcount;
-
-	//texture manager
-	TextureManager *texturemanager;
 
 	//revolving door manager'
 	RevolvingDoorManager *revolvingdoor_manager;
