@@ -157,6 +157,10 @@ private:
 	void ProcessLog();
 	void ProcessLoad();
 
+	//texture functions
+	void TextureLoader();
+	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+
 	bool showconsole;
 	wxProgressDialog *progdialog;
 	wxCmdLineParser *parser;

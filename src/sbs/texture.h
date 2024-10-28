@@ -160,7 +160,6 @@ private:
 
 	void BackupMapping();
 	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
-	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	void UnloadMaterials();
 	bool ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2);
 
