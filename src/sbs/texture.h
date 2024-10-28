@@ -1,6 +1,7 @@
 /*
-	Skyscraper 2.1 - Texture Manager
-	Copyright (C)2003-2024 Ryan Thoryk
+	Scalable Building Simulator - Texture Manager
+	The Skyscraper Project - Version 2.1
+	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -20,18 +21,16 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef TEXTURE_H_EC
-#define TEXTURE_H_EC
+#ifndef _SBS_TEXTURE_H
+#define _SBS_TEXTURE_H
 
 #include <OgreOverlayPrerequisites.h>
 #include <OgreColourValue.h>
 #include <OgreFont.h>
 
-namespace Skyscraper {
+namespace SBS {
 
-class EngineContext;
-
-class TextureManager
+class SBSIMPEXP TextureManager : public ObjectBase
 {
 public:
 
@@ -40,7 +39,7 @@ public:
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	bool FlipTexture; //if enabled, flips textures according to parameters set in SetTextureFlip()
 
-	TextureManager(EngineContext *parent);
+	TextureManager(Object *parent);
 	~TextureManager();
 	bool LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	bool LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
@@ -71,7 +70,7 @@ public:
 	void FreeTextureImages();
 	int GetTextureCount();
 	int GetMaterialCount();
-	bool GetTextureMapping(::SBS::PolyArray &vertices, Vector3 &v1, Vector3 &v2, Vector3 &v3, int &direction);
+	bool GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3 &v2, Vector3 &v3, int &direction);
 	void SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool FlipZ, bool rotate);
 	void GetPlanarMapping(bool &flat, bool &FlipX, bool &FlipY, bool &FlipZ, bool &rotate);
 	Vector2 CalculateSizing(const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, int direction, Real tw, Real th);
@@ -96,7 +95,7 @@ public:
 	void FreeTextureBoxes();
 	void SetPlanarRotate(bool value);
 	bool GetPlanarRotate();
-	bool ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, ::SBS::PolyArray &vertices, const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, Real tw, Real th);
+	bool ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, PolyArray &vertices, const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, Real tw, Real th);
 	void EnableLighting(const std::string &material_name, bool value);
 	void EnableShadows(const std::string &material_name, bool value);
 	int GetTextureInfoCount();
@@ -158,8 +157,6 @@ private:
 	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	void UnloadMaterials();
 	bool ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2);
-	void Report(const std::string &message);
-	bool ReportError(const std::string &message);
 
 	std::vector<TextureInfo> textureinfo;
 	std::vector<Ogre::TexturePtr> manual_textures;
@@ -178,10 +175,6 @@ private:
 
 	//function caching
 	std::string prev_material;
-
-	//SBS singleton
-	::SBS::SBS* sbs;
-	EngineContext* parent;
 };
 
 }
