@@ -1175,6 +1175,8 @@ bool VM::Initialize(const std::string &data_path)
 		mTrayMgr->hideCursor();
 	}
 
+	GetRenderSystem()->postExtraThreadsStarted();
+
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
 	Report("Reported hardware concurrency: " + ToString(c) + "\n");
@@ -1702,6 +1704,13 @@ void VM::RefreshViewport()
 			mViewports[i]->_updateDimensions();
 		}
 	}
+}
+
+Ogre::RenderSystem* VM::GetRenderSystem()
+{
+	//get OGRE render system
+
+	return mRoot->getRenderSystem();
 }
 
 }

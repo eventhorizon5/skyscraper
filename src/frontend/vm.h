@@ -103,6 +103,7 @@ public:
 	Ogre::RenderWindow* CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params);
 	void DestroyRenderWindow();
 	void RefreshViewport();
+	Ogre::RenderSystem* GetRenderSystem();
 	
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering

@@ -84,6 +84,8 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 
 	//enable runloop thread
 	ex = std::thread{&EngineContext::Run, this};
+	vm->GetRenderSystem()->registerThread();
+	vm->GetRenderSystem()->postExtraThreadsStarted();
 }
 
 EngineContext::~EngineContext()
@@ -102,6 +104,8 @@ EngineContext::~EngineContext()
 	//shutdown runloop thread
 	ShutdownLoop = true;
 	ex.join();
+
+	vm->GetRenderSystem()->unregisterThread();
 
 	//unload simulator
 	UnloadSim();
@@ -201,11 +205,14 @@ void EngineContext::Run()
 			//run SBS main loop
 			Simcore->Loop();
 
-			//run functions if user enters or leaves this engine
-			if (inside == false && IsInside() == true)
-				OnEnter();
-			if (inside == true && IsInside() == false)
-				OnExit();
+			if (Simcore->camera)
+			{
+				//run functions if user enters or leaves this engine
+				if (inside == false && IsInside() == true)
+					OnEnter();
+				if (inside == true && IsInside() == false)
+					OnExit();
+			}
 		}
 
 		//prevent thread from taking up all of the CPU
