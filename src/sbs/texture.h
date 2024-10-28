@@ -27,14 +27,8 @@
 #include <OgreOverlayPrerequisites.h>
 #include <OgreColourValue.h>
 #include <OgreFont.h>
-#include <atomic>
 
 namespace SBS {
-
-std::atomic<std::string> message ("");
-std::atomic<bool> message_ready (false);
-std::atomic<bool> message_processed (false);
-std::atomic<bool> message_result (false);
 
 class SBSIMPEXP TextureManager : public ObjectBase
 {

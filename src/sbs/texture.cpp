@@ -31,16 +31,12 @@
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreResourceGroupManager.h>
 #include <OgreRTShaderSystem.h>
-#include <mutex>
-#include <thread>
 #include "globals.h"
 #include "sbs.h"
 #include "utility.h"
 #include "texture.h"
 
 namespace SBS {
-
-std::mutex mtx;
 
 TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
 {
@@ -130,31 +126,33 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//first verify the filename
 	std::string filename2 = sbs->VerifyFile(filename);
 
-	mtx.lock();
-	//note that this doesn't use the alphacolor parameters
-	message = "LoadTexture," + filename + "," + name + "," + ToString(widthmult) + "," + ToString(heightmult) + "," + ToString(enable_force) + "," + ToString(force_mode) + "," + ToString(mipmaps);
-	message_ready = true;
+	//load texture
+	bool has_alpha = false;
+	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	while (message_processed == false)
-	{
-		//have this thread sleep while waiting for message to be processed by frontend
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
+	if (!mTex)
+		return false;
+	std::string texturename = mTex->getName();
 
-	mtx.unlock();
+	//create a new material
+	std::string matname = TrimStringCopy(name);
+	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
+
+	if (mMat == 0)
+		return false;
+
+	//bind texture to material
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	//add texture multipliers
-	if (message_result == true)
-	{
-		RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode, mTex->getSize(), mMat->getSize());
+	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode, mTex->getSize(), mMat->getSize());
 
-		if (sbs->Verbose)
-			Report("Loaded texture '" + filename2 + "' as '" + matname + "', size " + ToString((int)mTex->getSize()));
-		else
-			Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
-	}
+	if (sbs->Verbose)
+		Report("Loaded texture '" + filename2 + "' as '" + matname + "', size " + ToString((int)mTex->getSize()));
+	else
+		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
 
-	return message_result;
+	return true;
 }
 
 bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
