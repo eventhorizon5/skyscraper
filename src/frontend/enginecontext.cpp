@@ -122,7 +122,10 @@ bool EngineContext::IsCameraActive()
 	if (!Simcore)
 		return false;
 
-	return Simcore->camera->IsActive();
+	if (Simcore->camera)
+		return Simcore->camera->IsActive();
+	else
+		return false;
 }
 
 void EngineContext::Shutdown()
@@ -153,7 +156,7 @@ void EngineContext::Run()
 					Shutdown();
 					//frontend->CloseProgressDialog();
 					ShutdownLoop = true;
-					return;
+					break;
 				}
 				else if (processor->IsFinished == true)
 				{
@@ -164,7 +167,7 @@ void EngineContext::Run()
 				if (Simcore->RenderOnStartup == false)
 				{
 					//ShutdownLoop = true;
-					//return;
+					//break;
 				}
 			}
 			else if (processor->IsFinished == true && result == true)
@@ -177,7 +180,7 @@ void EngineContext::Run()
 		else
 		{
 			ShutdownLoop = true;
-			return;
+			break;
 		}
 
 		//force window raise on startup, and report on missing files, if any
