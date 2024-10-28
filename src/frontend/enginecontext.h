@@ -84,8 +84,6 @@ public:
 	bool IsRoot();
 	void CreateSky();
 
-	bool texture_needs_update;
-
 private:
 
 	void StartSim();

@@ -68,7 +68,6 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	inside = false;
 	Moved = false;
 	started = false;
-	texture_needs_update = false;
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
@@ -146,7 +145,7 @@ void EngineContext::Run()
 		//run script processor
 		if (processor)
 		{
-			bool result = processor->Run(false);
+			bool result = processor->Run();
 
 			if (loading == true)
 			{
@@ -225,10 +224,6 @@ void EngineContext::Run0()
 	if (!Simcore)
 		return;
 	
-	//run script processor
-	if (processor && texture_needs_update == true)
-		processor->Run(true);
-
 	Simcore->Run0();
 }
 

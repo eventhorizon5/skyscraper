@@ -140,27 +140,14 @@ void ScriptProcessor::Reset()
 	callstation_section->Reset();
 }
 
-bool ScriptProcessor::Run(bool thread0)
+bool ScriptProcessor::Run()
 {
 	//building loader/script interpreter
-
-	//suspend thread until thread 0 is finished
-	if (thread0 == false && engine->texture_needs_update == true)
-	{
-		while (true)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-			
-			//resume thread
-			if (engine->texture_needs_update == false)
-				break;
-		}
-	}
 
 	int returncode = sContinue;
 	IsFinished = false;
 
-	if (engine->IsRunning() == true && processed_runloop == false && thread0 == false)
+	if (engine->IsRunning() == true && processed_runloop == false)
 		ProcessRunloop();
 
 	//wait until end of script before processing runloop again
@@ -1411,7 +1398,6 @@ int ScriptProcessor::ProcessSections()
 			ScriptError("Already within a section");
 			return sError;
 		}
-		engine->texture_needs_update = true;
 		config->SectionNum = 5;
 		config->Context = "Textures";
 		engine->Report("Processing textures...");
