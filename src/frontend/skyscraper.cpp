@@ -173,7 +173,6 @@ int main (int argc, char* argv[])
 
 namespace Skyscraper {
 
-std::mutex report_lock;
 std::mutex load_lock;
 
 bool Skyscraper::OnInit(void)

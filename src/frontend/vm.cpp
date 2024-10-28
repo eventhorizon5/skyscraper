@@ -57,6 +57,8 @@ namespace Skyscraper {
 
 //Virtual Manager system
 
+std::mutex report_lock;
+
 VM::VM(Skyscraper *frontend)
 {
 	this->frontend = frontend;
@@ -736,6 +738,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 
 void VM::Report(const std::string &message, const std::string &prompt)
 {
+	report_lock.lock();
 	try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
@@ -745,10 +748,12 @@ void VM::Report(const std::string &message, const std::string &prompt)
 	{
 		frontend->ShowError("VM: Error writing message to log\n" + e.getDescription());
 	}
+	report_lock.unlock();
 }
 
 bool VM::ReportError(const std::string &message, const std::string &prompt)
 {
+	report_lock.lock();
 	try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
@@ -758,6 +763,7 @@ bool VM::ReportError(const std::string &message, const std::string &prompt)
 	{
 		frontend->ShowError("VM: Error writing message to log\n" + e.getDescription());
 	}
+	report_lock.unlock();
 	return false;
 }
 
