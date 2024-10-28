@@ -31,7 +31,7 @@ using namespace SBS;
 namespace Skyscraper
 {
 
-void Skyscraper::TextureFunctions()
+void Skyscraper::TextureLoader()
 {
 	//load texture
 	bool has_alpha = false;
