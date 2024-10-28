@@ -147,11 +147,12 @@ void Console::Write(const std::string &message)
 	if (mtx.try_lock() == false)
 		return;
 #else
-	mtx.lock();
+	//mtx.lock();
 #endif
-	tConsole->AppendText(message + wxT("\n"));
-	tConsole->SetInsertionPointEnd();
-	mtx.unlock();
+	//tConsole->AppendText(message + wxT("\n"));
+	//tConsole->SetInsertionPointEnd();
+	//mtx.unlock();
+	printf("%s\n", message.c_str());
 }
 
 void Console::On_bClear_Click(wxCommandEvent& event)
