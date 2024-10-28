@@ -23,6 +23,10 @@
 #ifndef ENGINECONTEXT_H
 #define ENGINECONTEXT_H
 
+namespace Ogre {
+	class GLContext;
+}
+
 namespace Skyscraper {
 
 class EngineContext
@@ -120,6 +124,9 @@ private:
 
 	//VM instance
 	VM *vm;
+
+	//GL graphics context
+	Ogre::GLContext *gl_context;
 };
 
 }

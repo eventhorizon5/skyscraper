@@ -30,6 +30,10 @@
 #include <OgreLog.h>
 #include <OgreTrays.h>
 
+namespace Ogre {
+	class GLContext;
+}
+
 namespace Skyscraper {
 
 class Skyscraper;
@@ -99,6 +103,7 @@ public:
 	Ogre::RenderWindow* CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params);
 	void DestroyRenderWindow();
 	void RefreshViewport();
+	void SwitchGraphicsContext();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -127,6 +132,7 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
+	Ogre::GLContext* GetGLContext();
 
 	Skyscraper *frontend;
 	EngineContext *active_engine;
@@ -150,6 +156,9 @@ private:
 	Real latitude, longitude;
 	double datetime;
 	bool sky_error;
+
+	//GL graphics context
+	Ogre::GLContext* gl_context;
 
 	bool first_run;
 };

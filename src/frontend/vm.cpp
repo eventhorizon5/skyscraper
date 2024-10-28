@@ -28,6 +28,7 @@
 #include <OgreRTShaderSystem.h>
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
+#include <RenderSystems/GL/OgreGLRenderSystem.h>
 #include <OgreOverlaySystem.h>
 #include <fmod.hpp>
 #include <fmod_errors.h>
@@ -93,6 +94,7 @@ VM::VM(Skyscraper *frontend)
 	show_stats = -1;
 	first_run = true;
 	DisableSound = false;
+	gl_context = GetGLContext(); //get primary thread's graphics context
 
 	Report("Started");
 }
@@ -1702,6 +1704,23 @@ void VM::RefreshViewport()
 			mViewports[i]->_updateDimensions();
 		}
 	}
+}
+
+void VM::SwitchGraphicsContext()
+{
+	//switch OpenGL graphics context to the primary thread's context
+
+	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
+	Ogre::GLRenderSystem* system = (Ogre::GLRenderSystem*)rendersystem;
+	system->_switchContext(gl_context);
+}
+
+Ogre::GLContext* VM::GetGLContext()
+{
+	//get application OpenGL context
+	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
+	Ogre::GLRenderSystem* system = (Ogre::GLRenderSystem*)rendersystem;
+	return system->_getMainContext();
 }
 
 }

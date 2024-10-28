@@ -21,6 +21,7 @@
 */
 
 #include <fmod.hpp>
+#include <RenderSystems/GL/OgreGLRenderSystem.h>
 #include "globals.h"
 #include "skyscraper.h"
 #include "vm.h"
@@ -68,6 +69,7 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	inside = false;
 	Moved = false;
 	started = false;
+	vm->SwitchGraphicsContext();
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
