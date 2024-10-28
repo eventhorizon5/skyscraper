@@ -80,7 +80,6 @@ public:
 	void SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool FlipZ, bool rotate);
 	void GetPlanarMapping(bool &flat, bool &FlipX, bool &FlipY, bool &FlipZ, bool &rotate);
 	Vector2 CalculateSizing(const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, int direction, Real tw, Real th);
-	Ogre::TexturePtr loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, Real threshold = 0.003);
 	void SaveTexture(Ogre::TexturePtr texture, const std::string &filename);
 	std::string ListTextures(bool show_filename = false);
 	void IncrementTextureCount();
@@ -91,10 +90,7 @@ public:
 	bool UnregisterTextureInfo(std::string name, std::string material_name = "");
 	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
 	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = "General");
-	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
-	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
 	std::string GetTextureName(Ogre::MaterialPtr mMat);
-	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = "General");
 	std::string GetTextureMaterial(const std::string &name, bool &result, bool report = true, const std::string &polygon_name = "");
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination);
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);

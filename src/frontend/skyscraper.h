@@ -159,7 +159,11 @@ private:
 
 	//texture functions
 	void TextureLoader();
-	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	Ogre::TexturePtr LoadTexture(::SBS::SBS *Simcore, const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = "General");
+	Ogre::TexturePtr loadChromaKeyedTexture(::SBS::SBS *Simcore, const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, Real threshold = 0.003);
+	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
+	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
 
 	bool showconsole;
 	wxProgressDialog *progdialog;
