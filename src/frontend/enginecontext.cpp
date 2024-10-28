@@ -245,6 +245,9 @@ bool EngineContext::Load(std::string filename)
 	//initialize simulator
 	Simcore->Initialize();
 
+	//load default textures
+	texman->LoadDefault();
+
 	//load building data file
 	Report("\nLoading building data from " + filename + "...\n");
 	Simcore->BuildingFilename = filename;
@@ -335,16 +338,6 @@ void EngineContext::StartSim()
 	//load texture manager
 	if (!texman)
 		texman = new TexMan(this);
-
-	//load default textures
-	//load default textures
-	Report("Loading default textures...");
-	Simcore->SetLighting();
-	texman->LoadTexture("data/default.png", "Default", 1, 1);
-	texman->LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
-	texman->LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
-	Simcore->ResetLighting();
-	Report("Done");
 
 	//refresh console to fix banner message on Linux
 	frontend->RefreshConsole();

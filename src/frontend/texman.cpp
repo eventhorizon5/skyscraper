@@ -48,7 +48,17 @@ TexMan::TexMan(EngineContext *parent)
 {
 	//get singleton
 	sbs = parent->GetSystem();
+	this->parent = parent;
+}
 
+TexMan::~TexMan()
+{
+	//delete materials
+	UnloadMaterials();
+}
+
+void TexMan::LoadDefault()
+{
 	//load default textures
 	parent->Report("Loading default textures...");
 	sbs->SetLighting();
@@ -57,12 +67,6 @@ TexMan::TexMan(EngineContext *parent)
 	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	sbs->ResetLighting();
 	parent->Report("Done");
-}
-
-TexMan::~TexMan()
-{
-	//delete materials
-	UnloadMaterials();
 }
 
 bool TexMan::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
