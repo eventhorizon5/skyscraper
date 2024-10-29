@@ -60,6 +60,7 @@ class CameraTextureControl;
 class SoundManager;
 class TextureManager;
 class EscalatorControl;
+class WalkwayControl;
 
 class DebugPanel: public wxFrame
 {
@@ -122,6 +123,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bTextures;
 		static const long ID_bFloorInfo;
 		static const long ID_bSoundManager;
+		static const long ID_bMovingWalkway;
 		static const long ID_PANEL1;
 		//*)
 		void EnableTimer(bool value);
@@ -175,6 +177,7 @@ class DebugPanel: public wxFrame
 		void On_chkMalfunctions_Click(wxCommandEvent& event);
 		void On_bEscalator_Click(wxCommandEvent& event);
 		void On_chkPower_Click(wxCommandEvent& event);
+		void On_bMovingWalkway_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -197,6 +200,7 @@ class DebugPanel: public wxFrame
 		wxButton* bFloorList;
 		wxButton* bKeys;
 		wxButton* bMeshControl;
+		wxButton* bMovingWalkway;
 		wxButton* bObjectInfo;
 		wxButton* bPeopleManager;
 		wxButton* bProfiler;
@@ -257,6 +261,7 @@ class DebugPanel: public wxFrame
 		SoundManager *smanager;
 		TextureManager *tmanager;
 		EscalatorControl *esc;
+		WalkwayControl *walk;
 
 		DECLARE_EVENT_TABLE()
 };

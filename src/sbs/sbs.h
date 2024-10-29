@@ -356,8 +356,6 @@ public:
 	void ListVisibleMeshes();
 	int GetEscalatorCount();
 	int GetMovingWalkwayCount();
-	void IncrementMovingWalkwayCount();
-	void DecrementMovingWalkwayCount();
 	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	void EnableMalfunctions(bool value);
@@ -410,6 +408,9 @@ public:
 	void RegisterEscalator(Escalator *escalator);
 	void UnregisterEscalator(Escalator *escalator);
 	Escalator* GetEscalator(int index);
+	void RegisterMovingWalkway(MovingWalkway *walkway);
+	void UnregisterMovingWalkway(MovingWalkway *walkway);
+	MovingWalkway* GetMovingWalkway(int index);
 	void SetPower(bool value);
 	bool GetPower();
 	Reverb* GetReverb(int index);
@@ -475,6 +476,9 @@ private:
 	//escalators
 	std::vector<Escalator*> EscalatorArray;
 
+	//moving walkways
+	std::vector<MovingWalkway*> MovingWalkwayArray;
+
 	//private functions
 	void PrintBanner();
 	void CheckAutoAreas();
@@ -539,8 +543,6 @@ private:
 	std::vector<CustomObject*> CustomObjectArray;
 
 	int ObjectCount; //number of simulator objects
-
-	int MovingWalkwayCount; //number of moving walkways
 
 	//internal clock
 	unsigned long current_time;

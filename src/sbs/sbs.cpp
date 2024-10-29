@@ -170,7 +170,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
-	MovingWalkwayCount = 0;
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
 	Headless = false;
@@ -3991,23 +3990,13 @@ void SBS::ListVisibleMeshes()
 int SBS::GetEscalatorCount()
 {
 	//return total number of escalators
-	return EscalatorArray.size();
+	return (int)EscalatorArray.size();
 }
 
 int SBS::GetMovingWalkwayCount()
 {
 	//return total number of allocated sounds
-	return MovingWalkwayCount;
-}
-
-void SBS::IncrementMovingWalkwayCount()
-{
-	MovingWalkwayCount++;
-}
-
-void SBS::DecrementMovingWalkwayCount()
-{
-	MovingWalkwayCount--;
+	return (int)MovingWalkwayArray.size();
 }
 
 bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
@@ -4643,6 +4632,33 @@ Escalator* SBS::GetEscalator(int index)
 {
 	if (index >= 0 && index < EscalatorArray.size())
 		return EscalatorArray[index];
+	return 0;
+}
+
+void SBS::RegisterMovingWalkway(MovingWalkway *walkway)
+{
+	//add moving walkway to index
+	MovingWalkwayArray.push_back(walkway);
+}
+
+void SBS::UnregisterMovingWalkway(MovingWalkway *walkway)
+{
+	//remove moving walkway from index
+
+	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
+	{
+		if (MovingWalkwayArray[i] == walkway)
+		{
+			MovingWalkwayArray.erase(MovingWalkwayArray.begin() + i);
+			return;
+		}
+	}
+}
+
+MovingWalkway* SBS::GetMovingWalkway(int index)
+{
+	if (index >= 0 && index < MovingWalkwayArray.size())
+		return MovingWalkwayArray[index];
 	return 0;
 }
 

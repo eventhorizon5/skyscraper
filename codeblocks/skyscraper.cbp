@@ -34,6 +34,8 @@
 		<Unit filename="../src/frontend/gui/escalatorcontrol.h" />
 		<Unit filename="../src/frontend/gui/texturemanager.cpp" />
 		<Unit filename="../src/frontend/gui/texturemanager.h" />
+		<Unit filename="../src/frontend/gui/walkwaycontrol.cpp" />
+                <Unit filename="../src/frontend/gui/walkwaycontrol.h" />
 		<Unit filename="../src/frontend/keydialog.cpp" />
 		<Unit filename="../src/frontend/keydialog.h" />
 		<Unit filename="../src/frontend/meshcontrol.cpp" />
@@ -130,6 +132,7 @@
 		<Unit filename="wxsmith/SkyControl.wxs" />
 		<Unit filename="wxsmith/SoundManager.wxs" />
 		<Unit filename="wxsmith/TextureManager.wxs" />
+		<Unit filename="wxsmith/WalkwayControl.wxs" />
 		<Extensions>
 			<wxsmith version="1">
 				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
@@ -156,6 +159,7 @@
 					<wxDialog wxs="wxsmith/SoundManager.wxs" src="../src/frontend/gui/soundmanager.cpp" hdr="../src/frontend/gui/soundmanager.h" fwddecl="0" i18n="1" name="SoundManager" language="CPP" />
 					<wxDialog wxs="wxsmith/TextureManager.wxs" src="../src/frontend/gui/texturemanager.cpp" hdr="../src/frontend/gui/texturemanager.h" fwddecl="0" i18n="1" name="TextureManager" language="CPP" />
 					<wxDialog wxs="wxsmith/EscalatorControl.wxs" src="../src/frontend/gui/escalatorcontrol.cpp" hdr="../src/frontend/gui/escalatorcontrol.h" fwddecl="0" i18n="1" name="EscalatorControl" language="CPP" />
+					<wxDialog wxs="wxsmith/WalkwayControl.wxs" src="../src/frontend/gui/walkwaycontrol.cpp" hdr="../src/frontend/gui/walkwaycontrol.h" fwddecl="0" i18n="1" name="WalkwayControl" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>
