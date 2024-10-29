@@ -66,6 +66,7 @@ class Skyscraper : public wxApp, public Ogre::LogListener
 {
 	friend class MainScreen;
 	friend class VM;
+	friend class HAL;
 
 public:
 
