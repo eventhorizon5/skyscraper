@@ -191,10 +191,13 @@ void HAL::UpdateOpenXR()
 
 void HAL::Report(const std::string &message, const std::string &prompt)
 {
+	std::string delim = "";
+	if (prompt.size() > 0)
+		delim = " ";
 	try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(prompt + " " + message);
+			Ogre::LogManager::getSingleton().logMessage(prompt + delim + message);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -204,10 +207,13 @@ void HAL::Report(const std::string &message, const std::string &prompt)
 
 bool HAL::ReportError(const std::string &message, const std::string &prompt)
 {
+	std::string delim = "";
+	if (prompt.size() > 0)
+		delim = " ";
 	try
 	{
 		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(prompt + " " + message, Ogre::LML_CRITICAL);
+			Ogre::LogManager::getSingleton().logMessage(prompt + delim + message, Ogre::LML_CRITICAL);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -298,7 +304,7 @@ bool HAL::Initialize(const std::string &data_path)
 			}
 
 			//report on system startup
-			Report("Skyscraper version " + vm->GetFrontend()->version_frontend + " starting...\n");
+			Report("Skyscraper version " + vm->GetFrontend()->version_frontend + " starting...\n", "");
 
 			//load OGRE
 			Report("Loading OGRE...");
