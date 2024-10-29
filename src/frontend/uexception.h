@@ -10,6 +10,9 @@
 #include <windows.h>
 #include "stackwalker.h"
 #include "gui/textwindow.h"
+#include "skyscraper.h"
+#include "vm.h"
+#include "hal.h"
 
 namespace Skyscraper {
 
@@ -102,7 +105,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 
 	//stop simulator
 	if (skyscraper)
-		skyscraper->Pause = true;
+		skyscraper->GetVM()->Pause = true;
 
 	//print exception notice
 	CHAR lString[500];
@@ -124,7 +127,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 	{
 		twindow->tMain->WriteText(wxT("\nSimulator State Dump\n--------------------------\n"));
 		twindow->tMain->WriteText(wxString("Platform: " + skyscraper->Platform + "\n"));
-		twindow->tMain->WriteText(wxString("Renderer: " + skyscraper->Renderer + "\n"));
+		twindow->tMain->WriteText(wxString("Renderer: " + skyscraper->GetVM()->GetHAL()->Renderer + "\n"));
 		twindow->tMain->WriteText(wxString("Frontend version: " + skyscraper->version_frontend + "\n"));
 
 		//print out simulator state

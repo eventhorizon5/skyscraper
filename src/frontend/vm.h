@@ -90,6 +90,6 @@ private:
 	bool first_run;
 };
 
-#endif
-
 }
+
+#endif
