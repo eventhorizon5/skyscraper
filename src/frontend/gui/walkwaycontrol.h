@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Moving Walkway Control
+	Skyscraper 2.0 - Moving Walkway Control
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
