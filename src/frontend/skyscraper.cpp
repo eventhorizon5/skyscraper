@@ -354,9 +354,9 @@ bool Skyscraper::OnInit(void)
 		window->CenterOnScreen();
 	//}
 
-	//start and initialize VM
+	//start and initialize abstraction layer
 	if (!hal->Initialize(data_path))
-		return hal->ReportError("Error initializing VM", "");
+		return hal->ReportError("Error initializing HAL", "");
 
 	//set up joystick if available
 	wxJoystick joystick(wxJOYSTICK1);
