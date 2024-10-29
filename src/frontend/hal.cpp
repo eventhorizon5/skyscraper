@@ -169,7 +169,7 @@ void HAL::UpdateOpenXR()
 	//update OpenXR camera transformations
 	if (GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
-		EngineContext* engine = GetActiveEngine();
+		EngineContext* engine = vm->GetActiveEngine();
 
 		if (engine)
 		{
