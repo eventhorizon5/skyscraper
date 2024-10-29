@@ -867,17 +867,17 @@ void HAL::RefreshViewport()
 
 void HAL::Report(const std::string &message)
 {
-	Report(message, "HAL>");
+	Report(message, "hal:");
 }
 
 bool HAL::ReportError(const std::string &message)
 {
-	return ReportError(message, "HAL>");
+	return ReportError(message, "hal:");
 }
 
 bool HAL::ReportFatalError(const std::string &message)
 {
-	return ReportFatalError(message, "HAL>");
+	return ReportFatalError(message, "hal:");
 }
 
 }
