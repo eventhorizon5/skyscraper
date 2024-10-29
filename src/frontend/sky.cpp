@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.0 - Sky System
+	Skyscraper 2.1 - Sky System
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -34,7 +34,7 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-//Hardware Abstraction Layer
+//Sky System
 
 SkySystem::SkySystem(VM *vm)
 {
