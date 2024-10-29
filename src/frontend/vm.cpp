@@ -38,9 +38,8 @@ namespace Skyscraper {
 
 //Virtual Manager system
 
-VM::VM(Skyscraper *frontend)
+VM::VM()
 {
-	this->frontend = frontend;
 	active_engine = 0;
 	Shutdown = false;
 	ConcurrentLoads = false;
@@ -471,11 +470,6 @@ EngineContext* VM::GetFirstValidEngine()
 	return 0;
 }
 
-Skyscraper* VM::GetFrontend()
-{
-	return frontend;
-}
-
 void VM::CheckCamera()
 {
 	if (active_engine->IsCameraActive() == false)
@@ -505,9 +499,11 @@ ScriptProcessor* VM::GetActiveScriptProcessor()
 	return 0;
 }
 
-void VM::Run()
+int VM::Run()
 {
 	//run system
+
+	//return codes are 0 for failure, 1 for success, and 2 to unload
 
 	//run sim engines
 	bool result = RunEngines();
@@ -520,14 +516,14 @@ void VM::Run()
 	{
 		Shutdown = false;
 		Report("Unloading due to shutdown request");
-		frontend->UnloadToMenu();
+		return 2;
 	}
 
 	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
-		return;
+		return 0;
 
 	if (!GetActiveEngine())
-		return;
+		return 0;
 
 	//make sure active engine is the one the camera is active in
 	CheckCamera();
@@ -540,8 +536,7 @@ void VM::Run()
 	if (CheckScript == true)
 	{
 		Report("Unloading to menu...");
-		frontend->UnloadToMenu();
-		return;
+		return 2;
 	}
 
 	//update Caelum
@@ -553,7 +548,7 @@ void VM::Run()
 	//render graphics
 	result = hal->Render();
 	if (!result)
-		return;
+		return 0;
 
 	//handle a building reload
 	HandleReload();
@@ -587,9 +582,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 
 	if (result == false)
 	{
-		if (GetEngineCount() == 1)
-			frontend->UnloadToMenu();
-		else
+		if (GetEngineCount() > 1)
 			DeleteEngine(engine);
 		return false;
 	}

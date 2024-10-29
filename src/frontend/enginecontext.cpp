@@ -22,7 +22,6 @@
 
 #include <fmod.hpp>
 #include "globals.h"
-#include "skyscraper.h"
 #include "vm.h"
 #include "hal.h"
 #include "sbs.h"
@@ -42,7 +41,6 @@ namespace Skyscraper {
 EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->vm = vm;
-	this->frontend = vm->GetFrontend();
 	finish_time = 0;
 	shutdown = false;
 	loading = false;

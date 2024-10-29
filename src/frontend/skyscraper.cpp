@@ -197,9 +197,6 @@ bool Skyscraper::OnInit(void)
 	Headless = false;
 	background_rect = 0;
 	background_node = 0;
-	configfile = 0;
-	keyconfigfile = 0;
-	joyconfigfile = 0;
 	parser = 0;
 	macos_major = 0;
 	macos_minor = 0;
@@ -329,11 +326,7 @@ bool Skyscraper::OnInit(void)
 
 	//load config files
 	HAL *hal = vm->GetHAL();
-	configfile = hal->LoadConfiguration(data_path + "skyscraper.ini");
-	keyconfigfile = hal->LoadConfiguration(data_path + "keyboard.ini");
-	joyconfigfile = hal->LoadConfiguration(data_path + "joystick.ini");
-	hal->LoadConfiguration("plugins.cfg", true);
-	hal->LoadConfiguration("resources.cfg", true);
+	hal->LoadConfiguration();
 
 	showconsole = hal->GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
 
@@ -526,7 +519,10 @@ bool Skyscraper::Loop()
 		ShowProgressDialog();
 
 	//run sim engine instances
-	vm->Run();
+	bool status = vm->Run();
+
+	if (status == 2)
+		UnloadToMenu();
 
 	//ProfileManager::dumpAll();
 
@@ -641,6 +637,9 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 		vm->GetHAL()->GetRenderWindow()->update();
 
 	bool result = vm->Load(filename, parent, position, rotation, area_min, area_max);
+
+	if (result == false && vm->GetEngineCount() == 1)
+		UnloadToMenu();
 
 	return result;
 }

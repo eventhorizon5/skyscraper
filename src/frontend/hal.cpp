@@ -80,6 +80,9 @@ HAL::HAL(VM *vm)
 	show_stats = -1;
 	logger = 0;
 	DisableSound = false;
+	configfile = 0;
+	keyconfigfile = 0;
+	joyconfigfile = 0;
 }
 
 HAL::~HAL()
@@ -229,7 +232,7 @@ bool HAL::ReportFatalError(const std::string &message, const std::string &prompt
 	return false;
 }
 
-Ogre::ConfigFile* HAL::LoadConfiguration(const std::string &filename, bool delete_after_use)
+Ogre::ConfigFile* HAL::ConfigLoad(const std::string &filename, bool delete_after_use)
 {
 	//load a config file
 	try
@@ -883,6 +886,17 @@ bool HAL::ReportError(const std::string &message)
 bool HAL::ReportFatalError(const std::string &message)
 {
 	return ReportFatalError(message, "hal:");
+}
+
+void HAL::LoadConfiguration(const std::string data_path)
+{
+	//load configuration files
+
+	configfile = ConfigLoad(data_path + "skyscraper.ini");
+	keyconfigfile = ConfigLoad(data_path + "keyboard.ini");
+	joyconfigfile = ConfigLoad(data_path + "joystick.ini");
+	ConfigLoad("plugins.cfg", true);
+	ConfigLoad("resources.cfg", true);
 }
 
 }

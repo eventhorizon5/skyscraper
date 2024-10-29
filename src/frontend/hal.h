@@ -43,7 +43,6 @@ public:
 	bool Render();
 	void ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only);
 	void UnclickedObject();
-	Ogre::ConfigFile* LoadConfiguration(const std::string &filename, bool delete_after_use = false);
 	int GetConfigInt(Ogre::ConfigFile *file, const std::string &key, int default_value);
 	std::string GetConfigString(Ogre::ConfigFile *file, const std::string &key, const std::string &default_value);
 	bool GetConfigBool(Ogre::ConfigFile *file, const std::string &key, bool default_value);
@@ -65,6 +64,7 @@ public:
 	void Report(const std::string &message, const std::string &prompt);
 	bool ReportError(const std::string &message, const std::string &prompt);
 	bool ReportFatalError(const std::string &message, const std::string &prompt);
+	void LoadConfiguration(const std::string data_path);
 
 	bool RTSS;
 	std::string Renderer;
@@ -73,6 +73,11 @@ public:
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
 	std::vector<Ogre::Viewport*> mViewports;
+
+	//config files
+	Ogre::ConfigFile *configfile;
+	Ogre::ConfigFile *keyconfigfile;
+	Ogre::ConfigFile *joyconfigfile;
 
 private:
  
@@ -92,6 +97,7 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
+	Ogre::ConfigFile* ConfigLoad(const std::string &filename, bool delete_after_use = false);
 
     //stats
 	OgreBites::TrayManager* mTrayMgr;

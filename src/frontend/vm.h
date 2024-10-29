@@ -27,7 +27,6 @@
 
 namespace Skyscraper {
 
-class Skyscraper;
 class EngineContext;
 class ScriptProcessor;
 class HAL;
@@ -37,7 +36,7 @@ class SkySystem;
 class VM
 {
 public:
-	VM(Skyscraper *frontend);
+	VM();
 	~VM();
 	HAL* GetHAL();
 	SkySystem* GetSkySystem();
@@ -56,8 +55,7 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
-	Skyscraper* GetFrontend();
-	void Run();
+	int Run();
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
@@ -81,7 +79,6 @@ private:
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
 
-	Skyscraper *frontend;
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
 	HAL *hal; //hardware abstraction layer

@@ -46,7 +46,7 @@ ScriptProcessor::Section::Section(ScriptProcessor *parent)
 	engine = parent->GetEngine();
 	Simcore = engine->GetSystem();
 	VM *vm = engine->GetVM();
-	warn_deprecated = vm->GetHAL()->GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.WarnDeprecated", false);
+	warn_deprecated = vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.WarnDeprecated", false);
 	config = parent->GetConfigHandler();
 }
 
