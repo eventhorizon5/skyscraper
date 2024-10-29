@@ -506,8 +506,12 @@
 											<border>5</border>
 											<option>1</option>
 										</object>
-										<object class="spacer">
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bMovingWalkway" variable="bMovingWalkway" member="yes">
+												<label>Moving Walkway Control</label>
+												<handler function="On_bMovingWalkway_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>

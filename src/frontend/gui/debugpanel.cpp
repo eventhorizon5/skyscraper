@@ -52,6 +52,7 @@
 #include "soundmanager.h"
 #include "texturemanager.h"
 #include "escalatorcontrol.h"
+#include "walkwaycontrol.h"
 
 namespace Skyscraper {
 
@@ -108,6 +109,7 @@ const long DebugPanel::ID_bKeys = wxNewId();
 const long DebugPanel::ID_bTextures = wxNewId();
 const long DebugPanel::ID_bFloorInfo = wxNewId();
 const long DebugPanel::ID_bSoundManager = wxNewId();
+const long DebugPanel::ID_bMovingWalkway = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -259,7 +261,8 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND, 5);
 	bSoundManager = new wxButton(Panel1, ID_bSoundManager, _("Sound Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSoundManager"));
 	BoxSizer10->Add(bSoundManager, 1, wxEXPAND, 5);
-	BoxSizer10->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bMovingWalkway = new wxButton(Panel1, ID_bMovingWalkway, _("Moving Walkway Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMovingWalkway"));
+	BoxSizer10->Add(bMovingWalkway, 1, wxEXPAND, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -296,6 +299,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
 	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
 	Connect(ID_bSoundManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bSoundManager_Click);
+	Connect(ID_bMovingWalkway,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMovingWalkway_Click);
 	//*)
 	Simcore = 0;
 	skyscraper = root;
@@ -315,6 +319,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	smanager = 0;
 	tmanager = 0;
 	esc = 0;
+	walk = 0;
 
 	OnInit();
 }
@@ -375,6 +380,9 @@ DebugPanel::~DebugPanel()
 	if (esc)
 		esc->Destroy();
 	esc = 0;
+	if (walk)
+		walk->Destroy();
+	walk = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -592,6 +600,12 @@ void DebugPanel::Loop()
 	{
 		if (esc->IsShown() == true)
 			esc->Loop();
+	}
+
+	if (walk)
+	{
+		if (walk->IsShown() == true)
+			walk->Loop();
 	}
 }
 
@@ -849,6 +863,16 @@ void DebugPanel::On_chkPower_Click(wxCommandEvent& event)
 {
 	if (Simcore)
 		Simcore->SetPower(chkPower->GetValue());
+}
+
+void DebugPanel::On_bMovingWalkway_Click(wxCommandEvent& event)
+{
+	if (!walk)
+		walk = new WalkwayControl(this, -1);
+
+	walk->CenterOnScreen();
+	walk->Show();
+	walk->Raise();
 }
 
 }

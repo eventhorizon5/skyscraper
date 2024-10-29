@@ -55,9 +55,11 @@ MovingWalkway::MovingWalkway(Object *parent, const std::string &name, int run, R
 	is_enabled = true;
 	SetRun(run);
 	Speed = speed;
-	sbs->IncrementMovingWalkwayCount();
 	start = Vector3::ZERO;
 	end = Vector3::ZERO;
+
+	//register with engine
+	sbs->RegisterMovingWalkway(this);
 
 	//create sound object
 	sound = new Sound(this, name, true);
@@ -100,7 +102,7 @@ MovingWalkway::~MovingWalkway()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->DecrementMovingWalkwayCount();
+		sbs->UnregisterMovingWalkway(this);
 
 		//unregister from parent
 		if (parent_deleting == false)
