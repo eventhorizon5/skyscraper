@@ -24,7 +24,6 @@
 #define VM_H
 
 #include <vector>
-#include <Caelum.h>
 
 namespace Skyscraper {
 
@@ -32,6 +31,7 @@ class Skyscraper;
 class EngineContext;
 class ScriptProcessor;
 class HAL;
+class SkySystem;
 
 //Virtual Manager system
 class VM
@@ -40,6 +40,7 @@ public:
 	VM(Skyscraper *frontend);
 	~VM();
 	HAL* GetHAL();
+	SkySystem* GetSkySystem();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -61,25 +62,13 @@ public:
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	void CreateSky(EngineContext *engine);
-	void UnloadSky();
-	bool InitSky(EngineContext *engine);
-	void EnableSky(bool value);
-	void UpdateSky();
-	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
-	void SetLocation(Real latitude, Real longitude);
-	void SetDateTimeNow();
-	void SetDateTime(double julian_date_time);
-	void GetTime(int &hour, int &minute, int &second);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
 	bool RenderOnStartup; //override SBS engine setting with same name
 	bool CheckScript; //if set to true, checks building scripts instead of fully loading them
 	bool Pause; //pause simulator
-	int SkyMult; //sky time multiplier
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
-	std::string SkyName;
 
 private:
 
@@ -96,13 +85,7 @@ private:
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
 	HAL *hal; //hardware abstraction layer
-
-	Caelum::CaelumSystem *mCaelumSystem;
-
-	bool new_location, new_time;
-	Real latitude, longitude;
-	double datetime;
-	bool sky_error;
+	SkySystem *skysystem;
 
 	bool first_run;
 };

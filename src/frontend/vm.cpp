@@ -29,6 +29,7 @@
 #include "scenenode.h"
 #include "enginecontext.h"
 #include "hal.h"
+#include "sky.h"
 #include "profiler.h"
 
 using namespace SBS;
@@ -46,40 +47,40 @@ VM::VM(Skyscraper *frontend)
 	RenderOnStartup = false;
 	CheckScript = false;
 	Pause = false;
-	SkyMult = 0;
-	mCaelumSystem = 0;
-	new_location = false;
-	new_time = false;
-	latitude = 0.0;
-	longitude = 0.0;
-	datetime = 0.0;
 	CutLandscape = true;
 	CutBuildings = true;
 	CutExternal = false;
 	CutFloors = false;
-	sky_error = 0;
 	first_run = true;
 
 	//create HAL instance
 	hal = new HAL(this);
+
+	//create Sky System instance
+	skysystem = new SkySystem(this);
 
 	Report("Started");
 }
 
 VM::~VM()
 {
-	//delete Caelum
-	if (mCaelumSystem)
-		delete mCaelumSystem;
-
 	if (hal)
 		delete hal;
 	hal = 0;
+
+	if (skysystem)
+		delete skysystem;
+	skysystem = 0;
 }
 
 HAL* VM::GetHAL()
 {
 	return hal;
+}
+
+SkySystem* VM::GetSkySystem()
+{
+	return skysystem;
 }
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -325,7 +326,7 @@ void VM::HandleReload()
 			{
 				//unload sky system if primary engine
 				if (i == 0)
-					UnloadSky();
+					skysystem->UnloadSky();
 
 				Pause = false;
 				Report("Reloading engine instance " + ToString(i));
@@ -334,7 +335,7 @@ void VM::HandleReload()
 
 				//create sky system if primary engine
 				if (i == 0)
-					CreateSky(engines[i]);
+					skysystem->CreateSky(engines[i]);
 			}
 		}
 	}
@@ -544,7 +545,7 @@ void VM::Run()
 	}
 
 	//update Caelum
-	UpdateSky();
+	skysystem->UpdateSky();
 
 	//update OpenXR
 	hal->UpdateOpenXR();
@@ -613,280 +614,6 @@ bool VM::ReportError(const std::string &message)
 bool VM::ReportFatalError(const std::string &message)
 {
 	return hal->ReportFatalError(message, "vm:");
-}
-
-void VM::UnloadSky()
-{
-	//unload Caelum sky system
-
-	new_time = false;
-
-	if (mCaelumSystem)
-	{
-		Caelum::CaelumPlugin* ptr = Caelum::CaelumPlugin::getSingletonPtr();
-		mCaelumSystem->clear();
-		mCaelumSystem->detachAllViewports();
-		delete mCaelumSystem;
-		mCaelumSystem = 0;
-		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
-		Caelum::CaelumPlugin::getSingleton().shutdown();
-		delete ptr;
-	}
-}
-
-void VM::CreateSky(EngineContext *engine)
-{
-	//create sky system
-
-	//load Caelum plugin
-	if (hal->GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum", true) == true)
-	{
-		try
-		{
-			new Caelum::CaelumPlugin();
-			Caelum::CaelumPlugin::getSingleton().initialise();
-		}
-		catch (Ogre::Exception &e)
-		{
-			if (e.getDescription() != "!msSingleton failed. There can be only one singleton")
-				ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
-			return;
-		}
-	}
-
-	/*(if (sky_error == true)
-	{
-		engine->GetSystem()->CreateSky();
-		return;
-	}*/
-
-	bool sky_result = true;
-	if (hal->GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum", true) == true)
-		sky_result = InitSky(engine);
-
-	//create old sky if Caelum is turned off, or failed to initialize
-	if (sky_result == false)
-		engine->GetSystem()->CreateSky();
-}
-
-bool VM::InitSky(EngineContext *engine)
-{
-	//initialize sky
-
-	if (!engine)
-		return false;
-
-	if (frontend->Headless == true)
-		return true;
-
-	if (hal->Renderer == "Direct3D11")
-		return true;
-
-	//ensure graphics card and render system are capable of Caelum's shaders
-	if (hal->Renderer == "Direct3D9")
-	{
-		//on DirectX, Caelum requires a card capable of 3.0 shader levels, which would be
-		//an ATI Radeon HD 2000, nVidia Geforce 6, Intel G965 or newer
-		//Intel cards: http://www.intel.com/support/graphics/sb/cs-014257.htm
-		Ogre::RenderSystemCapabilities::ShaderProfiles profiles = hal->mRoot->getRenderSystem()->getCapabilities()->getSupportedShaderProfiles();
-
-		//for general sky, require both DirectX pixel and vertex shaders 2.0
-		if (profiles.find("ps_2_0") == profiles.end() ||
-			profiles.find("vs_2_0") == profiles.end())
-				return ReportFatalError("Error initializing Caelum: 2.0 shaders not supported");
-
-		//for clouds, require either DirectX pixel shaders 3.0 or nVidia fragment shaders 4.0
-		if (profiles.find("ps_3_0") == profiles.end() &&
-			profiles.find("fp40") == profiles.end())
-				return ReportFatalError("Error initializing Caelum: 3.0 fragment shaders not supported");
-
-		//for clouds, require either DirectX vetex shaders 3.0 or nVidia vertex shaders 4.0
-		if (profiles.find("vs_3_0") == profiles.end() &&
-			profiles.find("vp40") == profiles.end())
-				return ReportFatalError("Error initializing Caelum: 3.0 vertex shaders not supported");
-	}
-
-	if (hal->Renderer == "OpenGL")
-	{
-		//on OpenGL, Caelum requires hardware support for shaders (OpenGL 2.0 or newer)
-		Ogre::RenderSystemCapabilities::ShaderProfiles profiles = hal->mRoot->getRenderSystem()->getCapabilities()->getSupportedShaderProfiles();
-
-		//require OpenGL ARB fragment programs
-		if (profiles.find("arbfp1") == profiles.end())
-			return ReportFatalError("Error initializing Caelum: fragment programs not supported");
-
-		//require OpenGL ARB vertex programs
-		if (profiles.find("arbvp1") == profiles.end())
-			return ReportFatalError("Error initializing Caelum: vertex programs not supported");
-	}
-
-	//load Caelum resources
-	try
-	{
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/caelum", "FileSystem", "Caelum", false);
-		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Caelum");
-
-		if (!mCaelumSystem)
-			mCaelumSystem = new Caelum::CaelumSystem(hal->mRoot, hal->GetSceneManager(), Caelum::CaelumSystem::CAELUM_COMPONENTS_NONE);
-		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, SkyName);
-	}
-	catch (Ogre::Exception &e)
-	{
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE //ignore Caelum errors on Mac, due to a Cg error (Cg is not available on ARM CPUs, and is not bundled with the Mac version)
-		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
-#endif
-		sky_error = true;
-	}
-	catch (...)
-	{
-		ReportFatalError("Error initializing Caelum");
-		sky_error = true;
-	}
-
-	if (!mCaelumSystem)
-	{
-		sky_error = true;
-		return false;
-	}
-
-	//attach caelum to running viewport
-	try
-	{
-		for (size_t i = 0; i < hal->mViewports.size(); i++)
-		{
-			mCaelumSystem->attachViewport(hal->mViewports[i]);
-		}
-		mCaelumSystem->setAutoNotifyCameraChanged(false);
-		mCaelumSystem->setSceneFogDensityMultiplier(hal->GetConfigFloat(frontend->configfile, "Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
-		if (hal->GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum.EnableFog", true) == false)
-			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
-		mCaelumSystem->setManageAmbientLight(hal->GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum.ModifyAmbient", false));
-
-		//fix sky rotation
-		Quaternion rot(Degree(180.0), Vector3::UNIT_Y);
-		mCaelumSystem->getCaelumGroundNode()->setOrientation(rot);
-		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
-
-		//have sky use SBS scaling factor
-		Real scale = 1 / engine->GetSystem()->UnitScale;
-		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
-		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
-	}
-	catch (Ogre::Exception &e)
-	{
-		ReportFatalError("Error setting Caelum parameters:\nDetails: " + e.getDescription());
-		sky_error = true;
-	}
-	catch (...)
-	{
-		ReportFatalError("Error setting Caelum parameters");
-		sky_error = true;
-	}
-
-	//set sky time multiplier if not already set
-	if (SkyMult == 0)
-		SkyMult = mCaelumSystem->getTimeScale();
-
-	//set location if specified
-	if (new_location == true)
-	{
-		mCaelumSystem->setObserverLatitude(Degree(latitude));
-		mCaelumSystem->setObserverLongitude(Degree(longitude));
-		new_location = false;
-	}
-
-	//use system time if specified
-	if (hal->GetConfigBool(frontend->configfile, "Skyscraper.Frontend.Caelum.UseSystemTime", false) == true && new_time == false)
-		SetDateTimeNow();
-
-	//set date/time if specified
-	if (new_time == true)
-	{
-		mCaelumSystem->setJulianDay(datetime);
-		new_time = false;
-	}
-
-	return true;
-}
-
-void VM::UpdateSky()
-{
-	//update sky
-	SBS_PROFILE_MAIN("Sky");
-
-	if (mCaelumSystem)
-	{
-		for (size_t i = 0; i < hal->mCameras.size(); i++)
-		{
-			mCaelumSystem->notifyCameraChanged(hal->mCameras[i]);
-		}
-		mCaelumSystem->setTimeScale(SkyMult);
-		mCaelumSystem->updateSubcomponents(Real(GetActiveEngine()->GetSystem()->GetElapsedTime()) / 1000);
-	}
-}
-
-void VM::SetLocation(Real latitude, Real longitude)
-{
-	this->latitude = latitude;
-	this->longitude = longitude;
-	new_location = true;
-}
-
-void VM::SetDateTimeNow()
-{
-	//set date and time to current time in UTC
-
-	//get current time
-	time_t now = time(0);
-
-	//convert time to GMT
-	tm* gmtm = gmtime(&now);
-	if (gmtm == NULL)
-		return;
-
-	//convert time to Julian and set it
-	double julian = Caelum::Astronomy::getJulianDayFromGregorianDateTime(gmtm->tm_year + 1900, gmtm->tm_mon + 1, gmtm->tm_mday, gmtm->tm_hour, gmtm->tm_min, gmtm->tm_sec);
-	SetDateTime(julian);
-}
-
-void VM::SetDateTime(double julian_date_time)
-{
-	datetime = julian_date_time;
-	new_time = true;
-
-	if (mCaelumSystem)
-		mCaelumSystem->setJulianDay(datetime);
-}
-
-void VM::GetTime(int &hour, int &minute, int &second)
-{
-	hour = -1;
-	minute = -1;
-	second = -1.0;
-
-	if (!mCaelumSystem)
-		return;
-
-	Caelum::LongReal julian = mCaelumSystem->getJulianDay(), sec;
-	int year, month, day;
-	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, sec);
-	second = (int)sec;
-}
-
-void VM::EnableSky(bool value)
-{
-	//enable or disable sky system
-
-	//enable/disable old skybox system in engine 0
-	if (GetEngine(0))
-		GetEngine(0)->GetSystem()->EnableSkybox(value);
-
-	//enable/disable Caelum sky system
-	if (mCaelumSystem)
-	{
-		mCaelumSystem->getCaelumGroundNode()->setVisible(value);
-		mCaelumSystem->getCaelumCameraNode()->setVisible(value);
-	}
 }
 
 }

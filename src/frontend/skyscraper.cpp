@@ -41,6 +41,7 @@
 #include "skyscraper.h"
 #include "vm.h"
 #include "hal.h"
+#include "sky.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
 #include "gui/console.h"
@@ -468,7 +469,7 @@ void Skyscraper::UnloadSim()
 	dpanel = 0;
 
 	//unload sky system
-	vm->UnloadSky();
+	vm->GetSkySystem()->UnloadSky();
 
 	if (console)
 		console->bSend->Enable(false);
@@ -629,7 +630,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	if (vm->GetEngineCount() == 0)
 	{
 		//set sky name
-		vm->SkyName = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
+		vm->GetSkySystem()->SkyName = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
 
 		//clear scene
 		vm->GetHAL()->ClearScene();
@@ -656,7 +657,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (engine == vm->GetActiveEngine())
 	{
 		//the sky needs to be created before Prepare() is called
-		vm->CreateSky(engine);
+		vm->GetSkySystem()->CreateSky(engine);
 
 		//switch to fullscreen mode if specified
 		bool fullscreen = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.FullScreen", false);

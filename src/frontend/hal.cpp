@@ -31,8 +31,7 @@
 #include <OgreSGTechniqueResolverListener.h>
 #include <OgreOverlaySystem.h>
 
-//FMOD intefaces
-#include <fmod.hpp>
+//FMOD
 #include <fmod_errors.h>
 
 //OpenXR interfaces
