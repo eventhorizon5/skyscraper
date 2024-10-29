@@ -602,17 +602,17 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 
 void VM::Report(const std::string &message)
 {
-	hal->Report(message, "VM>");
+	hal->Report(message, "vm:");
 }
 
 bool VM::ReportError(const std::string &message)
 {
-	return hal->ReportError(message, "VM>");
+	return hal->ReportError(message, "vm:");
 }
 
 bool VM::ReportFatalError(const std::string &message)
 {
-	return hal->ReportFatalError(message, "VM>");
+	return hal->ReportFatalError(message, "vm:");
 }
 
 void VM::UnloadSky()
