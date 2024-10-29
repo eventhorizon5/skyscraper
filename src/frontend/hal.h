@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Hardware Abstraction Layer
+	Skyscraper 2.0 - Hardware Abstraction Layer
 	Copyright (C)2004-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
