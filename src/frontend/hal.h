@@ -28,6 +28,7 @@
 #include <Ogre.h>
 #include <OgreLog.h>
 #include <OgreTrays.h>
+#include <fmod.hpp>
 
 namespace Skyscraper {
 

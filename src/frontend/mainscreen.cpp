@@ -37,6 +37,7 @@
 #include "skyscraper.h"
 #include "vm.h"
 #include "hal.h"
+#include "sky.h"
 #include "enginecontext.h"
 #include "gui/loaddialog.h"
 #include "mainscreen.h"
@@ -361,7 +362,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			//toggle wireframe mode
 			if (wireframe == 0)
 			{
-				frontend->GetVM()->EnableSky(false);
+				frontend->GetVM()->GetSkySystem()->EnableSky(false);
 				camera->SetViewMode(1);
 				wireframe = 1;
 			}
@@ -372,7 +373,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			}
 			else if (wireframe == 2)
 			{
-				frontend->GetVM()->EnableSky(true);
+				frontend->GetVM()->GetSkySystem()->EnableSky(true);
 				camera->SetViewMode(0);
 				wireframe = 0;
 			}

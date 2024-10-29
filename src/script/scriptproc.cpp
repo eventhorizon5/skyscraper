@@ -32,6 +32,7 @@
 #include <cmath>
 #include "skyscraper.h"
 #include "vm.h"
+#include "sky.h"
 #include "enginecontext.h"
 #include "texture.h"
 #include "floor.h"
@@ -185,7 +186,7 @@ bool ScriptProcessor::Run()
 		{
 			ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
 			int hour, minute, second;
-			engine->GetVM()->GetTime(hour, minute, second);
+			engine->GetVM()->GetSkySystem()->GetTime(hour, minute, second);
 			ReplaceAll(LineData, "%hour%", ToString(hour));
 			ReplaceAll(LineData, "%minute%", ToString(minute));
 			ReplaceAll(LineData, "%second%", ToString(second));
