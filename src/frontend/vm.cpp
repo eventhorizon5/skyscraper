@@ -56,7 +56,7 @@ VM::VM(Skyscraper *frontend)
 	//create HAL instance
 	hal = new HAL(this);
 
-	//create Sky System instance
+	//create sky system instance
 	skysystem = new SkySystem(this);
 
 	Report("Started");
