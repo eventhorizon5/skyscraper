@@ -54,8 +54,6 @@ SkySystem::~SkySystem()
 	//delete Caelum
 	if (mCaelumSystem)
 		delete mCaelumSystem;
-
-
 }
 
 void SkySystem::UnloadSky()
