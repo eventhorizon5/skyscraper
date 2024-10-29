@@ -24,17 +24,14 @@
 #define VM_H
 
 #include <vector>
-#include <OgrePrerequisites.h>
-#include <OgreCommon.h>
-#include <Ogre.h>
-#include <OgreLog.h>
-#include <OgreTrays.h>
+#include <Caelum.h>
 
 namespace Skyscraper {
 
 class Skyscraper;
 class EngineContext;
 class ScriptProcessor;
+class HAL;
 
 //Virtual Manager system
 class VM
@@ -42,8 +39,7 @@ class VM
 public:
 	VM(Skyscraper *frontend);
 	~VM();
-	bool Initialize(const std::string &data_path);
-	bool Render();
+	HAL* GetHAL();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -64,25 +60,9 @@ public:
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
-	void ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only);
-	void UnclickedObject();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	Ogre::ConfigFile* LoadConfiguration(const std::string &filename, bool delete_after_use = false);
-	int GetConfigInt(Ogre::ConfigFile *file, const std::string &key, int default_value);
-	std::string GetConfigString(Ogre::ConfigFile *file, const std::string &key, const std::string &default_value);
-	bool GetConfigBool(Ogre::ConfigFile *file, const std::string &key, bool default_value);
-	Real GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real default_value);
-	void Report(const std::string &message, const std::string &prompt);
-	bool ReportError(const std::string &message, const std::string &prompt);
-	bool ReportFatalError(const std::string &message, const std::string &prompt);
-	bool PlaySound(const std::string &filename);
-	void StopSound();
-	void ClearScene();
 	void CreateSky(EngineContext *engine);
 	void UnloadSky();
-	void ToggleStats();
-	void EnableStats(bool value);
-	FMOD::System* GetSoundSystem();
 	bool InitSky(EngineContext *engine);
 	void EnableSky(bool value);
 	void UpdateSky();
@@ -91,13 +71,6 @@ public:
 	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
 	void GetTime(int &hour, int &minute, int &second);
-	Ogre::RenderWindow* GetRenderWindow();
-	std::vector<Ogre::Viewport*> mViewports;
-	void Clear();
-	Ogre::SceneManager* GetSceneManager();
-	Ogre::RenderWindow* CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params);
-	void DestroyRenderWindow();
-	void RefreshViewport();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -106,23 +79,15 @@ public:
 	bool Pause; //pause simulator
 	int SkyMult; //sky time multiplier
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
-	bool RTSS;
 	std::string SkyName;
-	std::string Renderer;
-	bool DisableSound;
-	std::vector<Ogre::Camera*> mCameras;
-	Ogre::Root* mRoot;
-	Ogre::RenderWindow* mRenderWindow;
 
 private:
 
 	bool RunEngines();
-	void UpdateOpenXR();
 	void CheckCamera();
 	void HandleEngineShutdown();
 	void HandleReload();
 	void SwitchEngines();
-	void ReInit();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
@@ -130,20 +95,9 @@ private:
 	Skyscraper *frontend;
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
-
-	//OGRE engine data
-	Ogre::SceneManager* mSceneMgr;
-	Ogre::OverlaySystem* mOverlaySystem;
-
-	//sound data
-	FMOD::System *soundsys;
-	FMOD::Sound *sound;
-	FMOD::Channel *channel;
+	HAL *hal; //hardware abstraction layer
 
 	Caelum::CaelumSystem *mCaelumSystem;
-	Ogre::LogManager* logger;
-	OgreBites::TrayManager* mTrayMgr;
-	int show_stats;
 
 	bool new_location, new_time;
 	Real latitude, longitude;

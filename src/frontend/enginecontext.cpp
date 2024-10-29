@@ -24,6 +24,7 @@
 #include "globals.h"
 #include "skyscraper.h"
 #include "vm.h"
+#include "hal.h"
 #include "sbs.h"
 #include "camera.h"
 #include "gui/debugpanel.h"
@@ -396,12 +397,12 @@ bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
 
 void EngineContext::Report(const std::string &message)
 {
-	vm->Report(message, InstancePrompt);
+	vm->GetHAL()->Report(message, InstancePrompt);
 }
 
 bool EngineContext::ReportError(const std::string &message)
 {
-	return vm->ReportError(message, InstancePrompt);
+	return vm->GetHAL()->ReportError(message, InstancePrompt);
 }
 
 bool EngineContext::ReportFatalError(const std::string &message)

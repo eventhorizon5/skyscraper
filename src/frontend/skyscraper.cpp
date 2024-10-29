@@ -40,6 +40,7 @@
 #include "gui/debugpanel.h"
 #include "skyscraper.h"
 #include "vm.h"
+#include "hal.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
 #include "gui/console.h"
@@ -326,13 +327,14 @@ bool Skyscraper::OnInit(void)
 		Headless = true;
 
 	//load config files
-	configfile = vm->LoadConfiguration(data_path + "skyscraper.ini");
-	keyconfigfile = vm->LoadConfiguration(data_path + "keyboard.ini");
-	joyconfigfile = vm->LoadConfiguration(data_path + "joystick.ini");
-	vm->LoadConfiguration("plugins.cfg", true);
-	vm->LoadConfiguration("resources.cfg", true);
+	HAL *hal = vm->GetHAL();
+	configfile = hal->LoadConfiguration(data_path + "skyscraper.ini");
+	keyconfigfile = hal->LoadConfiguration(data_path + "keyboard.ini");
+	joyconfigfile = hal->LoadConfiguration(data_path + "joystick.ini");
+	hal->LoadConfiguration("plugins.cfg", true);
+	hal->LoadConfiguration("resources.cfg", true);
 
-	showconsole = vm->GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
+	showconsole = hal->GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
 
 	//turn off console if specified on command line
 	if (parser->Found(wxT("no-console")) == true)
@@ -345,25 +347,25 @@ bool Skyscraper::OnInit(void)
 	//Create main window and set size from INI file defaults
 	//if (Headless == false)
 	//{
-		window = new MainScreen(this, vm->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Width", 640), vm->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Height", 480));
+		window = new MainScreen(this, hal->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Width", 640), hal->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Height", 480));
 		//AllowResize(false);
 		window->ShowWindow();
 		window->CenterOnScreen();
 	//}
 
 	//start and initialize VM
-	if (!vm->Initialize(data_path))
-		return vm->ReportError("Error initializing VM", "");
+	if (!hal->Initialize(data_path))
+		return hal->ReportError("Error initializing VM", "");
 
 	//set up joystick if available
 	wxJoystick joystick(wxJOYSTICK1);
 	if (!joystick.IsOk())
-		vm->Report("No joystick detected", "");
+		hal->Report("No joystick detected", "");
 	else
 	{
-		vm->Report("", "");
-		vm->Report("Joystick detected: " + joystick.GetProductName().ToStdString(), "");
-		vm->Report("", "");
+		hal->Report("", "");
+		hal->Report("Joystick detected: " + joystick.GetProductName().ToStdString(), "");
+		hal->Report("", "");
 	}
 
 	ShowPlatform();
@@ -379,15 +381,15 @@ bool Skyscraper::OnInit(void)
 		filename = file.GetFullName();
 	}
 	else
-		filename = vm->GetConfigString(configfile, "Skyscraper.Frontend.AutoLoad", "");
+		filename = hal->GetConfigString(configfile, "Skyscraper.Frontend.AutoLoad", "");
 
-	ShowMenu = vm->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Show", true);
+	ShowMenu = hal->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Show", true);
 
 	//turn off menu if specified on command line
 	if (parser->Found(wxT("no-menu")) == true)
 		ShowMenu = false;
 
-	if (Headless == true || vm->GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
+	if (Headless == true || hal->GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 		ShowMenu = false;
 
 	if (filename != "")
@@ -412,7 +414,7 @@ int Skyscraper::OnExit()
 	//clean up
 
 	//cleanup
-	vm->Report("Cleaning up...", "");
+	vm->GetHAL()->Report("Cleaning up...", "");
 
 	if (loaddialog)
 		loaddialog->Destroy();
@@ -425,7 +427,7 @@ int Skyscraper::OnExit()
 	UnloadSim();
 
 	//cleanup sound
-	vm->StopSound();
+	vm->GetHAL()->StopSound();
 
 	//delete console window
 	if (console)
@@ -473,7 +475,9 @@ void Skyscraper::UnloadSim()
 
 	//delete all sim engines
 	vm->DeleteEngines();
-	vm->Clear();
+
+	//clear scene
+	vm->GetHAL()->Clear();
 }
 
 void Skyscraper::ShowError(const std::string &message)
@@ -512,7 +516,8 @@ bool Skyscraper::Loop()
 		if (result == false)
 			return false;
 
-		return vm->Render();
+		//have HAL render frame
+		return vm->GetHAL()->Render();
 	}
 
 	//show progress dialog if needed
@@ -531,16 +536,16 @@ void Skyscraper::StartSound()
 {
 	//load and start background music
 
-	if (vm->DisableSound == true)
+	if (vm->GetHAL()->DisableSound == true)
 		return;
 
-	if (vm->GetConfigBool(configfile, "Skyscraper.Frontend.IntroMusic", true) == false)
+	if (vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.IntroMusic", true) == false)
 		return;
 
 	if (parser->Found(wxT("no-music")) == true)
 		return;
 
-	std::string filename = vm->GetConfigString(configfile, "Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
+	std::string filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
 	std::string filename_full = "data/" + filename;
 
 	//check for an intro sound file in the data path location instead
@@ -548,7 +553,7 @@ void Skyscraper::StartSound()
 		filename_full = data_path + filename_full;
 
 	//play music
-	vm->PlaySound(filename_full);
+	vm->GetHAL()->PlaySound(filename_full);
 }
 
 std::string Skyscraper::SelectBuilding()
@@ -624,15 +629,15 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	if (vm->GetEngineCount() == 0)
 	{
 		//set sky name
-		vm->SkyName = vm->GetConfigString(configfile, "Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
+		vm->SkyName = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
 
 		//clear scene
-		vm->ClearScene();
+		vm->GetHAL()->ClearScene();
 	}
 
 	//clear screen
 	if (Headless == false)
-		vm->GetRenderWindow()->update();
+		vm->GetHAL()->GetRenderWindow()->update();
 
 	bool result = vm->Load(filename, parent, position, rotation, area_min, area_max);
 
@@ -654,7 +659,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		vm->CreateSky(engine);
 
 		//switch to fullscreen mode if specified
-		bool fullscreen = vm->GetConfigBool(configfile, "Skyscraper.Frontend.FullScreen", false);
+		bool fullscreen = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.FullScreen", false);
 
 		//override fullscreen setting if specified on the command line
 		if (parser->Found(wxT("fullscreen")) == true)
@@ -669,13 +674,13 @@ bool Skyscraper::Start(EngineContext *engine)
 #if !defined(__WXMAC__)
 			window->SetBackgroundColour(*wxBLACK);
 #endif
-			window->SetClientSize(vm->GetConfigInt(configfile, "Skyscraper.Frontend.ScreenWidth", 1024), vm->GetConfigInt(configfile, "Skyscraper.Frontend.ScreenHeight", 768));
+			window->SetClientSize(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ScreenWidth", 1024), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ScreenHeight", 768));
 			window->Center();
 		}
 	}
 
 	//start simulation
-	if (!vm->StartEngine(engine, vm->mCameras))
+	if (!vm->StartEngine(engine, vm->GetHAL()->mCameras))
 		return false;
 
 	//close progress dialog if no engines are loading
@@ -685,7 +690,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	//load control panel
 	if (engine == vm->GetActiveEngine())
 	{
-		bool panel = vm->GetConfigBool(configfile, "Skyscraper.Frontend.ShowControlPanel", true);
+		bool panel = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.ShowControlPanel", true);
 
 		//override if disabled on the command line
 		if (parser->Found(wxT("no-panel")) == true)
@@ -696,25 +701,26 @@ bool Skyscraper::Start(EngineContext *engine)
 			if (!dpanel)
 				dpanel = new DebugPanel(this, NULL, -1);
 			dpanel->Show(true);
-			dpanel->SetPosition(wxPoint(vm->GetConfigInt(configfile, "Skyscraper.Frontend.ControlPanelX", 10), vm->GetConfigInt(configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
+			dpanel->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ControlPanelX", 10), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
 		}
 	}
 
-	vm->RefreshViewport();
+	HAL *hal = vm->GetHAL();
+	hal->RefreshViewport();
 
 	//set ambient light
-	if (vm->GetConfigBool(configfile, "Skyscraper.SBS.Lighting", false) == true)
+	if (hal->GetConfigBool(configfile, "Skyscraper.SBS.Lighting", false) == true)
 	{
-		Real value = vm->GetConfigFloat(configfile, "Skyscraper.SBS.AmbientLight", 0.5);
-		vm->GetSceneManager()->setAmbientLight(Ogre::ColourValue(value, value, value));
+		Real value = hal->GetConfigFloat(configfile, "Skyscraper.SBS.AmbientLight", 0.5);
+		hal->GetSceneManager()->setAmbientLight(Ogre::ColourValue(value, value, value));
 	}
 
 	//show frame stats
-	vm->EnableStats(vm->GetConfigBool(configfile, "Skyscraper.Frontend.Stats", true));
+	hal->EnableStats(hal->GetConfigBool(configfile, "Skyscraper.Frontend.Stats", true));
 
 	//run simulation
-	vm->Report("Running simulation...", "");
-	vm->StopSound();
+	hal->Report("Running simulation...", "");
+	hal->StopSound();
 	if (console)
 		console->bSend->Enable(true);
 	return true;
@@ -743,13 +749,13 @@ void Skyscraper::UnloadToMenu()
 	UnloadSim();
 
 	//cleanup sound
-	vm->StopSound();
+	vm->GetHAL()->StopSound();
 
 	CloseProgressDialog();
 
 	//return to main menu
 	SetFullScreen(false);
-	window->SetClientSize(vm->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Height", 600));
+	window->SetClientSize(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Height", 600));
 	window->Center();
 	window->SetCursor(wxNullCursor);
 
@@ -780,7 +786,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	if (miscParams)
 		params = *miscParams;
 
-	bool vsync = vm->GetConfigBool(configfile, "Skyscraper.Frontend.Vsync", true);
+	bool vsync = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.Vsync", true);
 	if (vsync == true)
 		params["vsync"] = "true";
 	else
@@ -793,12 +799,12 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	params["macAPICocoaUseNSView"] = "true";
 #endif
 
-	return vm->CreateRenderWindow(name, width, height, params);
+	return vm->GetHAL()->CreateRenderWindow(name, width, height, params);
 }
 
 void Skyscraper::destroyRenderWindow()
 {
-	vm->DestroyRenderWindow();
+	vm->GetHAL()->DestroyRenderWindow();
 }
 
 const std::string Skyscraper::getOgreHandle() const
@@ -864,7 +870,7 @@ void Skyscraper::ShowConsole(bool send_button)
 		console = new Console(this, NULL, -1);
 	console->Show();
 	console->Raise();
-	console->SetPosition(wxPoint(vm->GetConfigInt(configfile, "Skyscraper.Frontend.ConsoleX", 10), vm->GetConfigInt(configfile, "Skyscraper.Frontend.ConsoleY", 25)));
+	console->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ConsoleX", 10), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ConsoleY", 25)));
 	console->bSend->Enable(send_button);
 }
 
@@ -974,7 +980,7 @@ void Skyscraper::MacOpenFile(const wxString &filename)
 		return;
 
 	if (StartupRunning == true)
-		vm->StopSound();
+		vm->GetHAL()->StopSound();
 
 	//strip path from filename
 	wxFileName file (filename);
@@ -1037,13 +1043,13 @@ void Skyscraper::ShowPlatform()
 
 	if (osx == true)
 	{
-		vm->Report("Running on MacOS 10." + ToString((int)major) + "." + ToString((int)minor), "");
+		vm->GetHAL()->Report("Running on MacOS 10." + ToString((int)major) + "." + ToString((int)minor), "");
 		macos_major = 10;
 		macos_minor = (int)major;
 	}
 	else
 	{
-		vm->Report("Running on MacOS " + ToString((int)major) + "." + ToString((int)minor), "");
+		vm->GetHAL()->Report("Running on MacOS " + ToString((int)major) + "." + ToString((int)minor), "");
 		macos_major = (int)major;
 		macos_minor = (int)minor;
 	}
@@ -1061,14 +1067,14 @@ void Skyscraper::ShowPlatform()
 	{
 		osInfo.dwOSVersionInfoSize = sizeof(osInfo);
 		RtlGetVersion(&osInfo);
-		vm->Report("Running on Microsoft Windows " + ToString((int)osInfo.dwMajorVersion) + "." + ToString((int)osInfo.dwMinorVersion), "");
+		vm->GetHAL()->Report("Running on Microsoft Windows " + ToString((int)osInfo.dwMajorVersion) + "." + ToString((int)osInfo.dwMinorVersion), "");
 	}
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	struct utsname osInfo{};
 	uname(&osInfo);
-	vm->Report("Running on Linux " + std::string(osInfo.release), "");
+	vm->GetHAL()->Report("Running on Linux " + std::string(osInfo.release), "");
 #endif
 }
 
