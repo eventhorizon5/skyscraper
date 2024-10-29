@@ -87,10 +87,6 @@ public:
 	int macos_major; //macos major version
 	int macos_minor; //macos minor version
 
-	Ogre::ConfigFile *configfile;
-	Ogre::ConfigFile *keyconfigfile;
-	Ogre::ConfigFile *joyconfigfile;
-
 	bool Loop();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
