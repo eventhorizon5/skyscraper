@@ -161,7 +161,7 @@ std::string GUI::SelectBuilding(const std::string &data_path)
 void GUI::CreateDebugPanel()
 {
 	if (!dpanel)
-		dpanel = new DebugPanel(vm, NULL, -1);
+		dpanel = new DebugPanel(vm, vm->GetParent(), -1);
 	dpanel->Show(true);
 	HAL *hal = vm->GetHAL();
 	dpanel->SetPosition(wxPoint(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ControlPanelX", 10), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
@@ -182,7 +182,7 @@ void GUI::EnableTimer(bool value)
 void GUI::ShowConsole(bool send_button)
 {
 	if (!console)
-		console = new Console(vm, NULL, -1);
+		console = new Console(vm, vm->GetParent(), -1);
 	console->Show();
 	console->Raise();
 	HAL *hal = vm->GetHAL();
@@ -275,7 +275,7 @@ void GUI::ShowDebugPanel()
 		return;
 
 	//show control panel if closed
-	dpanel = new DebugPanel(vm, NULL, -1);
+	dpanel = new DebugPanel(vm, vm->GetParent(), -1);
 	dpanel->Show(true);
 	dpanel->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.ControlPanelX", 10), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
 }
