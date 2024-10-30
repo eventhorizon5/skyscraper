@@ -141,9 +141,6 @@ include_directories( ${OGRE_INCLUDE_DIRS}
  
 include(${wxWidgets_USE_FILE})
 
-#VM library
-add_library(VM SHARED ${VM_FILES})
-
 #ogrebullet libraries
 add_library(OgreBulletCol SHARED ${OGREBULLET_COLL_FILES})
 add_library(OgreBulletDyn SHARED ${OGREBULLET_DYN_FILES})
@@ -162,11 +159,12 @@ if (WIN32)
 endif ()
 
 #frontend executable
-if (NOT WIN32)
-	add_executable(skyscraper ${FRONTEND_FILES})
-else ()
-	add_executable(skyscraper ${FRONTEND_FILES} ${SCRIPTPROC_FILES})
+add_executable(skyscraper ${FRONTEND_FILES})
 
+if (NOT WIN32)
+	add_library(VM SHARED ${VM_FILES})
+else ()
+	add_library(VM SHARED ${VM_FILES} ${SCRIPTPROC_FILES})
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
@@ -186,7 +184,6 @@ endif ()
 
 target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
  
-target_link_libraries(VM SBS ${OGRE_LIBRARIES})
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
@@ -199,9 +196,11 @@ target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_L
 
 if (NOT WIN32)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+	target_link_libraries(VM SBS ${OGRE_LIBRARIES} ${Caelum_LIBRARIES})
+	target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 else ()
-	target_link_libraries(skyscraper VM SBS OpenXR ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${OPENXR_loader_LIBRARY} ${FRONTENDGLINC})
+	target_link_libraries(VM SBS OpenXR ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${OPENXR_loader_LIBRARY})
+	target_link_libraries(skyscraper VM SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
  
 if (APPLE)

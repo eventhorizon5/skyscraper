@@ -21,13 +21,14 @@
 */
 
 #include <fmod.hpp>
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#include <windows.h>
+#endif
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
 #include "hal.h"
-#include "gui.h"
 #include "camera.h"
-#include "gui/debugpanel.h"
 #include "scriptproc.h"
 #include "enginecontext.h"
 
@@ -316,7 +317,7 @@ void EngineContext::StartSim()
 	if (instance == 0)
 	{
 		vm->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
-		wxYield(); //this allows the banner to be printed before the sleep() call
+		//wxYield(); //this allows the banner to be printed before the sleep() call //FIXME
 		vm->Pause = false;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);

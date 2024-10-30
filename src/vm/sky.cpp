@@ -27,7 +27,6 @@
 #include "vm.h"
 #include "hal.h"
 #include "enginecontext.h"
-#include "skyscraper.h"
 #include "sky.h"
 
 using namespace SBS;
