@@ -544,7 +544,7 @@ int VM::Run()
 
 	//exit if any engine is loading, unless RenderOnStartup is true
 	if (IsEngineLoading() == true && RenderOnStartup == false)
-		return;
+		return 1;
 
 	//if in CheckScript mode, exit
 	if (CheckScript == true)

@@ -28,6 +28,7 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
+#include "wx/joystick.h"
 #endif
 #include <locale>
 #include <time.h>
@@ -183,6 +184,7 @@ bool Skyscraper::OnInit()
 	background_node = 0;
 	macos_major = 0;
 	macos_minor = 0;
+	mRenderWindow = 0;
 
 	//create VM instance
 	vm = new VM();
@@ -298,7 +300,7 @@ bool Skyscraper::OnInit()
 	//show version number and exit if specified
 	if (parser->Found(wxT("version")) == true)
 	{
-		printf("Skyscraper version %s\n", version_frontend.c_str());
+		printf("Skyscraper version %s\n", vm->version_frontend.c_str());
 		return false;
 	}
 
@@ -316,9 +318,9 @@ bool Skyscraper::OnInit()
 
 	//load config files
 	HAL *hal = vm->GetHAL();
-	hal->LoadConfiguration();
+	hal->LoadConfiguration(data_path);
 
-	showconsole = hal->GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
+	showconsole = hal->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.ShowConsole", true);
 
 	//turn off console if specified on command line
 	if (parser->Found(wxT("no-console")) == true)
@@ -326,12 +328,12 @@ bool Skyscraper::OnInit()
 
 	//create console window
 	if (showconsole == true)
-		ShowConsole(false);
+		vm->GetGUI()->ShowConsole(false);
 
 	//Create main window and set size from INI file defaults
 	//if (Headless == false)
 	//{
-		window = new MainScreen(this, hal->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Width", 640), hal->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Height", 480));
+		window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 640), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 480));
 		//AllowResize(false);
 		window->ShowWindow();
 		window->CenterOnScreen();
@@ -372,15 +374,15 @@ bool Skyscraper::OnInit()
 		filename = file.GetFullName();
 	}
 	else
-		filename = hal->GetConfigString(configfile, "Skyscraper.Frontend.AutoLoad", "");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.AutoLoad", "");
 
-	ShowMenu = hal->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Show", true);
+	ShowMenu = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Menu.Show", true);
 
 	//turn off menu if specified on command line
 	if (parser->Found(wxT("no-menu")) == true)
 		ShowMenu = false;
 
-	if (Headless == true || hal->GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
+	if (Headless == true || hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.VR", false) == true)
 		ShowMenu = false;
 
 	if (filename != "")
@@ -473,7 +475,7 @@ bool Skyscraper::Loop()
 	gui->ShowProgress();
 
 	//run sim engine instances
-	bool status = vm->Run();
+	int status = vm->Run();
 
 	if (status == 2)
 		UnloadToMenu();
@@ -572,7 +574,7 @@ bool Skyscraper::Start(EngineContext *engine)
 
 	//close progress dialog if no engines are loading
 	if (vm->IsEngineLoading() == false)
-		CloseProgressDialog();
+		vm->GetGUI()->CloseProgressDialog();
 
 	//load control panel
 	if (engine == vm->GetActiveEngine())
@@ -633,7 +635,7 @@ void Skyscraper::UnloadToMenu()
 	//cleanup sound
 	vm->GetHAL()->StopSound();
 
-	CloseProgressDialog();
+	vm->GetGUI()->CloseProgressDialog();
 
 	//return to main menu
 	SetFullScreen(false);
