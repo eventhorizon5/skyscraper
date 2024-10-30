@@ -905,7 +905,7 @@ bool HAL::ReportFatalError(const std::string &message)
 	return ReportFatalError(message, "hal:");
 }
 
-void HAL::LoadConfiguration(const std::string data_path)
+void HAL::LoadConfiguration(const std::string data_path, bool show_console)
 {
 	//load configuration files
 
@@ -914,6 +914,15 @@ void HAL::LoadConfiguration(const std::string data_path)
 	joyconfigfile = ConfigLoad(data_path + "joystick.ini");
 	ConfigLoad("plugins.cfg", true);
 	ConfigLoad("resources.cfg", true);
+
+	if (show_console == false)
+		return;
+
+	vm->showconsole = GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.ShowConsole", true);
+
+	//create console window
+	if (vm->showconsole == true)
+		vm->GetGUI()->ShowConsole(false);
 }
 
 void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)

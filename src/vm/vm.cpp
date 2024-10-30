@@ -42,6 +42,7 @@ namespace Skyscraper {
 
 VM::VM()
 {
+	parent = 0;
 	active_engine = 0;
 	Shutdown = false;
 	ConcurrentLoads = false;
@@ -54,6 +55,7 @@ VM::VM()
 	CutFloors = false;
 	first_run = true;
 	Verbose = false;
+	showconsole = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -79,6 +81,11 @@ VM::~VM()
 	if (skysystem)
 		delete skysystem;
 	skysystem = 0;
+}
+
+void VM::SetParent(wxWindow *parent)
+{
+	this->parent = parent;
 }
 
 HAL* VM::GetHAL()
@@ -753,6 +760,11 @@ void VM::ShowPlatform()
 	uname(&osInfo);
 	GetHAL()->Report("Running on Linux " + std::string(osInfo.release), "");
 #endif
+}
+
+wxWindow* VM::GetParent()
+{
+	return parent;
 }
 
 }
