@@ -80,7 +80,7 @@ void SkySystem::CreateSky(EngineContext *engine)
 	//create sky system
 
 	//load Caelum plugin
-	if (vm->GetHAL()->GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.Caelum", true) == true)
+	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum", true) == true)
 	{
 		try
 		{
@@ -102,7 +102,7 @@ void SkySystem::CreateSky(EngineContext *engine)
 	}*/
 
 	bool sky_result = true;
-	if (vm->GetHAL()->GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.Caelum", true) == true)
+	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum", true) == true)
 		sky_result = InitSky(engine);
 
 	//create old sky if Caelum is turned off, or failed to initialize
@@ -117,8 +117,8 @@ bool SkySystem::InitSky(EngineContext *engine)
 	if (!engine)
 		return false;
 
-	if (vm->GetFrontend()->Headless == true)
-		return true;
+	//if (vm->GetFrontend()->Headless == true)
+		//return true;
 
 	if (vm->GetHAL()->Renderer == "Direct3D11")
 		return true;
@@ -198,10 +198,10 @@ bool SkySystem::InitSky(EngineContext *engine)
 			mCaelumSystem->attachViewport(vm->GetHAL()->mViewports[i]);
 		}
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
-		mCaelumSystem->setSceneFogDensityMultiplier(vm->GetHAL()->GetConfigFloat(vm->GetFrontend()->configfile, "Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
-		if (vm->GetHAL()->GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.Caelum.EnableFog", true) == false)
+		mCaelumSystem->setSceneFogDensityMultiplier(vm->GetHAL()->GetConfigFloat(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum.FogMultiplier", 0.1) / 1000);
+		if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum.EnableFog", true) == false)
 			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
-		mCaelumSystem->setManageAmbientLight(vm->GetHAL()->GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.Caelum.ModifyAmbient", false));
+		mCaelumSystem->setManageAmbientLight(vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum.ModifyAmbient", false));
 
 		//fix sky rotation
 		Quaternion rot(Degree(180.0), Vector3::UNIT_Y);
@@ -237,7 +237,7 @@ bool SkySystem::InitSky(EngineContext *engine)
 	}
 
 	//use system time if specified
-	if (vm->GetHAL()->GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.Caelum.UseSystemTime", false) == true && new_time == false)
+	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum.UseSystemTime", false) == true && new_time == false)
 		SetDateTimeNow();
 
 	//set date/time if specified

@@ -34,7 +34,7 @@ namespace Skyscraper {
 
 class VM;
 
-class HAL
+class HAL : public Ogre::LogListener
 {
 public:
     HAL(VM *vm);
@@ -65,6 +65,7 @@ public:
 	bool ReportError(const std::string &message, const std::string &prompt);
 	bool ReportFatalError(const std::string &message, const std::string &prompt);
 	void LoadConfiguration(const std::string data_path);
+	bool LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow);
 
 	bool RTSS;
 	std::string Renderer;
@@ -98,6 +99,7 @@ private:
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
 	Ogre::ConfigFile* ConfigLoad(const std::string &filename, bool delete_after_use = false);
+	void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
 
     //stats
 	OgreBites::TrayManager* mTrayMgr;

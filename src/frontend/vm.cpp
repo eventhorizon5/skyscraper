@@ -30,6 +30,7 @@
 #include "enginecontext.h"
 #include "hal.h"
 #include "sky.h"
+#include "gui.h"
 #include "profiler.h"
 
 using namespace SBS;
@@ -51,12 +52,16 @@ VM::VM()
 	CutExternal = false;
 	CutFloors = false;
 	first_run = true;
+	Verbose = false;
 
 	//create HAL instance
 	hal = new HAL(this);
 
 	//create sky system instance
 	skysystem = new SkySystem(this);
+
+	//create new GUI system instance
+	gui = new GUI(this);
 
 	Report("Started");
 }
@@ -70,6 +75,10 @@ VM::~VM()
 	if (skysystem)
 		delete skysystem;
 	skysystem = 0;
+
+	if (gui)
+		delete gui;
+	gui = 0;
 }
 
 HAL* VM::GetHAL()
@@ -80,6 +89,11 @@ HAL* VM::GetHAL()
 SkySystem* VM::GetSkySystem()
 {
 	return skysystem;
+}
+
+GUI* VM::GetGUI()
+{
+	return gui;
 }
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -203,7 +217,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		active_engine->SetCameraState(state, false);
 
 	//update mouse cursor for freelook mode
-	frontend->GetWindow()->EnableFreelook(active_engine->GetSystem()->camera->Freelook);
+	//frontend->GetWindow()->EnableFreelook(active_engine->GetSystem()->camera->Freelook); //FIXME
 }
 
 bool VM::RunEngines()
@@ -565,7 +579,23 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 {
 	//load simulator and data file
 
+	//exit if no building specified
+	if (filename == "")
+		return false;
+
 	Report("Loading engine for building file '" + filename + "'...");
+
+	if (GetEngineCount() == 0)
+	{
+		//set sky name
+		skysystem->SkyName = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
+
+		//clear scene
+		hal->ClearScene();
+	}
+
+	//clear screen
+	hal->GetRenderWindow()->update();
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)

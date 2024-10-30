@@ -253,7 +253,7 @@ void Stats::OnInit()
 {
 	Simcore = panel->GetSystem();
 
-	tFrontendVersion->SetValue(panel->GetRoot()->version_frontend);
+	tFrontendVersion->SetValue(panel->GetRoot()->GetVM()->version_frontend);
 	tSBSVersion->SetValue(Simcore->version);
 	tPlatform->SetValue(panel->GetRoot()->Platform);
 	tRenderer->SetValue(panel->GetRoot()->GetVM()->GetHAL()->Renderer);

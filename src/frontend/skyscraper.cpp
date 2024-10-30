@@ -24,12 +24,10 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/dir.h"
-#include "wx/progdlg.h"
 #include "wx/cmdline.h"
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
-#include "wx/joystick.h"
 #endif
 #include <locale>
 #include <time.h>
@@ -37,16 +35,14 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
-#include "gui/debugpanel.h"
 #include "skyscraper.h"
 #include "vm.h"
+#include "gui.h"
 #include "hal.h"
 #include "sky.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
-#include "gui/console.h"
 #include "mainscreen.h"
-#include "gui/loaddialog.h"
 #include "profiler.h"
 #include "gitrev.h"
 
@@ -175,34 +171,28 @@ int main (int argc, char* argv[])
 
 namespace Skyscraper {
 
-bool Skyscraper::OnInit(void)
+bool Skyscraper::OnInit()
 {
-	version = "2.0";
-	version_rev = ToString(GIT_REV);
-	version_state = "Beta";
-	version_frontend = version + ".0." + version_rev;
 	StartupRunning = false;
 	FullScreen = false;
 	buttons = 0;
 	buttoncount = 0;
-	console = 0;
-	progdialog = 0;
-	dpanel = 0;
-	window = 0;
-	console = 0;
-	loaddialog = 0;
-	Verbose = false;
-	show_progress = false;
 	ShowMenu = false;
 	Headless = false;
 	background_rect = 0;
 	background_node = 0;
-	parser = 0;
 	macos_major = 0;
 	macos_minor = 0;
 
 	//create VM instance
-	vm = new VM(this);
+	vm = new VM();
+
+	vm->version = "2.1";
+	vm->version_rev = ToString(GIT_REV);
+	vm->version_state = "Alpha";
+	vm->version_frontend = vm->version + ".0." + vm->version_rev;
+
+	gui = vm->GetGUI();
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -314,7 +304,7 @@ bool Skyscraper::OnInit(void)
 
 	//set verbose mode if specified
 	if (parser->Found(wxT("verbose")) == true)
-		Verbose = true;
+		vm->Verbose = true;
 
 	//set CheckScript mode if specified
 	if (parser->Found(wxT("check-script")) == true)
@@ -350,6 +340,13 @@ bool Skyscraper::OnInit(void)
 	//start and initialize abstraction layer
 	if (!hal->Initialize(data_path))
 		return hal->ReportError("Error initializing HAL", "");
+
+	//if (vm->GetFrontend()->Headless == false)
+	//{
+		hal->Report("", "");
+		hal->Report("Creating render window...", "");
+		mRenderWindow = CreateRenderWindow(0, "SkyscraperVR");
+	//}
 
 	//set up joystick if available
 	wxJoystick joystick(wxJOYSTICK1);
@@ -410,82 +407,41 @@ int Skyscraper::OnExit()
 	//cleanup
 	vm->GetHAL()->Report("Cleaning up...", "");
 
-	if (loaddialog)
-		loaddialog->Destroy();
-	loaddialog = 0;
-
-	if (progdialog)
-		progdialog->Destroy();
-	progdialog = 0;
+	//shut down GUI
+	delete gui;
+	gui = 0;
 
 	UnloadSim();
 
 	//cleanup sound
 	vm->GetHAL()->StopSound();
 
-	//delete console window
-	if (console)
-		console->Destroy();
-	console = 0;
-
-	CloseProgressDialog();
-
 	if (window)
 		window->Destroy();
 	window = 0;
-
-	if (configfile)
-		delete configfile;
-	configfile = 0;
-
-	if (keyconfigfile)
-		delete keyconfigfile;
-	keyconfigfile = 0;
-
-	if (joyconfigfile)
-		delete joyconfigfile;
-	joyconfigfile = 0;
 
 	if (parser)
 		delete parser;
 	parser = 0;
 
+	delete gui;
 	delete vm;
 	return wxApp::OnExit();
 }
 
 void Skyscraper::UnloadSim()
 {
-	//delete control panel object
-	if(dpanel)
-		delete dpanel;
-	dpanel = 0;
+	//unload GUI
+	gui->Unload();
 
 	//unload sky system
 	vm->GetSkySystem()->UnloadSky();
-
-	if (console)
-		console->bSend->Enable(false);
 
 	//delete all sim engines
 	vm->DeleteEngines();
 
 	//clear scene
 	vm->GetHAL()->Clear();
-}
-
-void Skyscraper::ShowError(const std::string &message)
-{
-	//show error dialog
-	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_ERROR);
-	dialog.ShowModal();
-}
-
-void Skyscraper::ShowMessage(const std::string &message)
-{
-	//show message dialog
-	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_INFORMATION);
-	dialog.ShowModal();
 }
 
 bool Skyscraper::Loop()
@@ -514,9 +470,7 @@ bool Skyscraper::Loop()
 		return vm->GetHAL()->Render();
 	}
 
-	//show progress dialog if needed
-	if (show_progress == true)
-		ShowProgressDialog();
+	gui->ShowProgress();
 
 	//run sim engine instances
 	bool status = vm->Run();
@@ -536,13 +490,13 @@ void Skyscraper::StartSound()
 	if (vm->GetHAL()->DisableSound == true)
 		return;
 
-	if (vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.IntroMusic", true) == false)
+	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusic", true) == false)
 		return;
 
 	if (parser->Found(wxT("no-music")) == true)
 		return;
 
-	std::string filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
+	std::string filename = vm->GetHAL()->GetConfigString(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
 	std::string filename_full = "data/" + filename;
 
 	//check for an intro sound file in the data path location instead
@@ -555,58 +509,7 @@ void Skyscraper::StartSound()
 
 std::string Skyscraper::SelectBuilding()
 {
-	//choose a building from a script file
-
-	std::string filename = "";
-
-	//get listing of building files
-	wxArrayString filelist;
-	wxArrayString filelist2;
-	wxDir::GetAllFiles(_("buildings/"), &filelist, _("*.bld"), wxDIR_FILES);
-	wxDir::GetAllFiles(_(data_path + "buildings/"), &filelist2, _("*.bld"), wxDIR_FILES);
-
-	//strip directory name and extension from entries
-	for (size_t i = 0; i < filelist.size(); i++)
-	{
-		filelist[i] = filelist[i].substr(10);
-		filelist[i] = filelist[i].substr(0, filelist[i].length() - 4);
-	}
-	for (size_t i = 0; i < filelist2.size(); i++)
-	{
-		filelist2[i] = filelist2[i].substr(data_path.length() + 10);
-		filelist2[i] = filelist2[i].substr(0, filelist2[i].length() - 4);
-	}
-
-	for (size_t i = 0; i < filelist2.size(); i++)
-	{
-		bool found = false;
-		for (size_t j = 0; j < filelist.size(); j++)
-		{
-			if (filelist[j] == filelist2[i])
-			{
-				found = true;
-				break;
-			}
-		}
-		if (found == false)
-			filelist.Add(filelist2[i]);
-	}
-
-	//sort list
-	filelist.Sort();
-
-	//show selection dialog window
-	wxSingleChoiceDialog Selector (0, _("Select a Building"), _("Load Building"), filelist);
-	Selector.SetSize(wxSize(500, 400));
-	Selector.CenterOnScreen();
-
-	if (Selector.ShowModal() == wxID_OK)
-	{
-		filename = Selector.GetStringSelection();
-		filename += ".bld";
-	}
-
-	return filename;
+	return gui->SelectBuilding(data_path);
 }
 
 bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -618,23 +521,6 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 		DeleteButtons();
 		StartupRunning = false;
 	}
-
-	//exit if no building specified
-	if (filename == "")
-		return false;
-
-	if (vm->GetEngineCount() == 0)
-	{
-		//set sky name
-		vm->GetSkySystem()->SkyName = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
-
-		//clear scene
-		vm->GetHAL()->ClearScene();
-	}
-
-	//clear screen
-	if (Headless == false)
-		vm->GetHAL()->GetRenderWindow()->update();
 
 	bool result = vm->Load(filename, parent, position, rotation, area_min, area_max);
 
@@ -652,6 +538,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		return false;
 
 	::SBS::SBS *Simcore = engine->GetSystem();
+	HAL *hal = vm->GetHAL();
 
 	if (engine == vm->GetActiveEngine())
 	{
@@ -659,7 +546,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		vm->GetSkySystem()->CreateSky(engine);
 
 		//switch to fullscreen mode if specified
-		bool fullscreen = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.FullScreen", false);
+		bool fullscreen = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.FullScreen", false);
 
 		//override fullscreen setting if specified on the command line
 		if (parser->Found(wxT("fullscreen")) == true)
@@ -674,13 +561,13 @@ bool Skyscraper::Start(EngineContext *engine)
 #if !defined(__WXMAC__)
 			window->SetBackgroundColour(*wxBLACK);
 #endif
-			window->SetClientSize(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ScreenWidth", 1024), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ScreenHeight", 768));
+			window->SetClientSize(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenWidth", 1024), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenHeight", 768));
 			window->Center();
 		}
 	}
 
 	//start simulation
-	if (!vm->StartEngine(engine, vm->GetHAL()->mCameras))
+	if (!vm->StartEngine(engine, hal->mCameras))
 		return false;
 
 	//close progress dialog if no engines are loading
@@ -690,39 +577,34 @@ bool Skyscraper::Start(EngineContext *engine)
 	//load control panel
 	if (engine == vm->GetActiveEngine())
 	{
-		bool panel = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.ShowControlPanel", true);
+		bool panel = vm->GetHAL()->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowControlPanel", true);
 
 		//override if disabled on the command line
 		if (parser->Found(wxT("no-panel")) == true)
 			panel = false;
 
 		if (panel == true)
-		{
-			if (!dpanel)
-				dpanel = new DebugPanel(this, NULL, -1);
-			dpanel->Show(true);
-			dpanel->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ControlPanelX", 10), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
-		}
+			gui->CreateDebugPanel();
 	}
 
-	HAL *hal = vm->GetHAL();
 	hal->RefreshViewport();
 
 	//set ambient light
-	if (hal->GetConfigBool(configfile, "Skyscraper.SBS.Lighting", false) == true)
+	if (hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.Lighting", false) == true)
 	{
-		Real value = hal->GetConfigFloat(configfile, "Skyscraper.SBS.AmbientLight", 0.5);
+		Real value = hal->GetConfigFloat(hal->configfile, "Skyscraper.SBS.AmbientLight", 0.5);
 		hal->GetSceneManager()->setAmbientLight(Ogre::ColourValue(value, value, value));
 	}
 
 	//show frame stats
-	hal->EnableStats(hal->GetConfigBool(configfile, "Skyscraper.Frontend.Stats", true));
+	hal->EnableStats(hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Stats", true));
 
 	//run simulation
 	hal->Report("Running simulation...", "");
 	hal->StopSound();
-	if (console)
-		console->bSend->Enable(true);
+
+	gui->EnableConsole(true);
+
 	return true;
 }
 
@@ -755,7 +637,7 @@ void Skyscraper::UnloadToMenu()
 
 	//return to main menu
 	SetFullScreen(false);
-	window->SetClientSize(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Height", 600));
+	window->SetClientSize(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Height", 600));
 	window->Center();
 	window->SetCursor(wxNullCursor);
 
@@ -769,8 +651,8 @@ void Skyscraper::UnloadToMenu()
 void Skyscraper::Quit()
 {
 	//exit app
-	if(dpanel)
-		dpanel->EnableTimer(false);
+
+	gui->EnableTimer(false);
 
 	wxGetApp().Exit();
 }
@@ -786,7 +668,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	if (miscParams)
 		params = *miscParams;
 
-	bool vsync = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.Vsync", true);
+	bool vsync = vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Vsync", true);
 	if (vsync == true)
 		params["vsync"] = "true";
 	else
@@ -854,92 +736,6 @@ const std::string Skyscraper::getOgreHandle() const
 #endif
 }
 
-void Skyscraper::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)
-{
-	//callback function that receives OGRE log messages
-	if (console)
-	{
-		console->Write(message);
-		console->Update();
-	}
-}
-
-void Skyscraper::ShowConsole(bool send_button)
-{
-	if (!console)
-		console = new Console(this, NULL, -1);
-	console->Show();
-	console->Raise();
-	console->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ConsoleX", 10), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ConsoleY", 25)));
-	console->bSend->Enable(send_button);
-}
-
-void Skyscraper::CreateProgressDialog(const std::string &message)
-{
-	//don't create progress dialog if concurrent loading is enabled, and one engine is already running
-	if (vm->GetEngineCount() > 1 && vm->ConcurrentLoads == true)
-	{
-		if (vm->GetFirstValidEngine()->IsRunning() == true)
-			return;
-	}
-
-	if (!progdialog)
-	{
-		//show progress dialog in a queued fashion
-		show_progress = true;
-		prog_text = message;
-	}
-	else
-	{
-		wxString msg = progdialog->GetMessage();
-		msg += "\n";
-		msg += message;
-		progdialog->Update(progdialog->GetValue(), msg);
-	}
-
-	//stop control panel timer
-	if (dpanel)
-		dpanel->EnableTimer(false);
-}
-
-void Skyscraper::CloseProgressDialog()
-{
-	//close progress dialog
-	if (progdialog)
-		progdialog->Destroy();
-	progdialog = 0;
-
-	//start control panel timer
-	if (dpanel)
-		dpanel->EnableTimer(true);
-}
-
-void Skyscraper::ShowProgressDialog()
-{
-	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, window);
-
-	show_progress = false;
-}
-
-void Skyscraper::UpdateProgress()
-{
-	if (!progdialog)
-		return;
-
-	int total_percent = vm->GetEngineCount() * 100;
-	int current_percent = 0;
-
-	for (size_t i = 0; i < vm->GetEngineCount(); i++)
-	{
-		if (vm->GetEngine(i))
-			current_percent += vm->GetEngine(i)->GetProgress();
-	}
-
-	int final = ((Real)current_percent / (Real)total_percent) * 100;
-	progdialog->Update(final);
-}
-
 void Skyscraper::SetFullScreen(bool enabled)
 {
 	//enable/disable fullscreen
@@ -961,15 +757,6 @@ void Skyscraper::RaiseWindow()
 {
 	window->Raise();
 	window->SetFocus();
-}
-
-void Skyscraper::RefreshConsole()
-{
-	if (console)
-	{
-		console->Refresh();
-		console->Update();
-	}
 }
 
 void Skyscraper::MacOpenFile(const wxString &filename)

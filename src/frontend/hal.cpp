@@ -57,6 +57,7 @@
 #include "scenenode.h"
 #include "enginecontext.h"
 #include "hal.h"
+#include "gui.h"
 #include "profiler.h"
 
 using namespace SBS;
@@ -170,7 +171,7 @@ void HAL::UpdateOpenXR()
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//update OpenXR camera transformations
-	if (GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.VR", false) == true)
+	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		EngineContext* engine = vm->GetActiveEngine();
 
@@ -204,7 +205,7 @@ void HAL::Report(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
-		vm->GetFrontend()->ShowError("VM: Error writing message to log\n" + e.getDescription());
+		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
 	}
 }
 
@@ -220,7 +221,7 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
-		vm->GetFrontend()->ShowError("VM: Error writing message to log\n" + e.getDescription());
+		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
 	}
 	return false;
 }
@@ -228,7 +229,7 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 bool HAL::ReportFatalError(const std::string &message, const std::string &prompt)
 {
 	ReportError(message, prompt);
-	vm->GetFrontend()->ShowError(message);
+	vm->GetGUI()->ShowError(message);
 	return false;
 }
 
@@ -302,12 +303,13 @@ bool HAL::Initialize(const std::string &data_path)
 			if (!logger)
 			{
 				logger = new Ogre::LogManager();
-				Ogre::Log *log = logger->createLog(data_path + "skyscraper.log", true, !vm->GetFrontend()->showconsole, false);
-				log->addListener(vm->GetFrontend());
+				//Ogre::Log *log = logger->createLog(data_path + "skyscraper.log", true, !vm->GetGUI()->showconsole, false); //FIXME
+				Ogre::Log *log = logger->createLog(data_path + "skyscraper.log", true, false, false);
+				log->addListener(this);
 			}
 
 			//report on system startup
-			Report("Skyscraper version " + vm->GetFrontend()->version_frontend + " starting...\n", "");
+			Report("Skyscraper version " + vm->version_frontend + " starting...\n", "");
 
 			//load OGRE
 			Report("Loading OGRE...");
@@ -385,13 +387,6 @@ bool HAL::Initialize(const std::string &data_path)
 		Report("");
 		Report("Initializing OGRE...");
 		mRoot->initialise(false);
-
-		if (vm->GetFrontend()->Headless == false)
-		{
-			Report("");
-			Report("Creating render window...");
-			mRenderWindow = vm->GetFrontend()->CreateRenderWindow(0, "SkyscraperVR");
-		}
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -402,15 +397,22 @@ bool HAL::Initialize(const std::string &data_path)
 		return ReportFatalError("Error initializing render window");
 	}
 
-	if (vm->GetFrontend()->Headless == false)
-	{
+	return true;
+}
+
+bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow)
+{
+	mRenderWindow = renderwindow;
+
+	//if (vm->GetFrontend()->Headless == false)
+	//{
 		//get renderer info
 		Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
 
 		//shorten name
 		int loc = Renderer.find("Rendering Subsystem");
 		Renderer = Renderer.substr(0, loc - 1);
-	}
+	//}
 
 	//load resource configuration
 	Ogre::ConfigFile cf;
@@ -469,7 +471,7 @@ bool HAL::Initialize(const std::string &data_path)
 	mSceneMgr->addRenderQueueListener(mOverlaySystem);
 
 	//enable shadows
-	if (GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.Shadows", false) == true)
+	if (GetConfigBool(configfile, "Skyscraper.Frontend.Shadows", false) == true)
 	{
 		try
 		{
@@ -504,13 +506,13 @@ bool HAL::Initialize(const std::string &data_path)
 		}
 	}
 
-	if (vm->GetFrontend()->Headless == false)
-	{
+	//if (vm->GetFrontend()->Headless == false)
+	//{
 		try
 		{
 			//define camera configuration
 			int cameras = 1; //use one camera for standard mode
-			if (GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.VR", false) == true)
+			if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 				cameras = 2; //use two cameras for VR mode
 
 			for (int i = 0; i < cameras; i++)
@@ -524,7 +526,7 @@ bool HAL::Initialize(const std::string &data_path)
 		{
 			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
 		}
-	}
+	//}
 
 	//set up default material shader scheme
 	if (RTSS == true)
@@ -536,8 +538,8 @@ bool HAL::Initialize(const std::string &data_path)
 	}
 
 	//setup texture filtering
-	int filtermode = GetConfigInt(vm->GetFrontend()->configfile, "Skyscraper.Frontend.TextureFilter", 3);
-	int maxanisotropy = GetConfigInt(vm->GetFrontend()->configfile, "Skyscraper.Frontend.MaxAnisotropy", 8);
+	int filtermode = GetConfigInt(configfile, "Skyscraper.Frontend.TextureFilter", 3);
+	int maxanisotropy = GetConfigInt(configfile, "Skyscraper.Frontend.MaxAnisotropy", 8);
 
 	if (filtermode < 0 || filtermode > 3)
 		filtermode = 3;
@@ -559,7 +561,7 @@ bool HAL::Initialize(const std::string &data_path)
 	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
 	//initialize FMOD (sound)
-	DisableSound = GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.DisableSound", false);
+	DisableSound = GetConfigBool(configfile, "Skyscraper.Frontend.DisableSound", false);
 	if (DisableSound == false)
 	{
 		Report("");
@@ -632,8 +634,8 @@ bool HAL::Render()
 {
 	SBS_PROFILE_MAIN("Render");
 
-	if (vm->GetFrontend()->Headless == true)
-		return true;
+	//if (vm->GetFrontend()->Headless == true)
+		//return true;
 
 	// Render to the frame buffer
 	try
@@ -835,7 +837,7 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 {
 	//create the render window
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	if (GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.VR", false) == true)
+	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 		mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
@@ -864,13 +866,13 @@ void HAL::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 
-	if (vm->GetFrontend()->Headless == false)
-	{
+	//if (vm->GetFrontend()->Headless == false)
+	//{
 		for (size_t i = 0; i < mViewports.size(); i++)
 		{
 			mViewports[i]->_updateDimensions();
 		}
-	}
+	//}
 }
 
 void HAL::Report(const std::string &message)

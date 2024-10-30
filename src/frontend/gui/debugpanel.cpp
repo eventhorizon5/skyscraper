@@ -36,6 +36,7 @@
 #include "scriptproc.h"
 #include "vm.h"
 #include "enginecontext.h"
+#include "gui.h"
 #include "console.h"
 #include "meshcontrol.h"
 #include "editelevator.h"
@@ -326,7 +327,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 
 DebugPanel::~DebugPanel()
 {
-	skyscraper->UnregisterDebugPanel();
+	skyscraper->GetVM()->GetGUI()->UnregisterDebugPanel();
 
 	//delete timer;
 	if (timer)
@@ -660,7 +661,7 @@ void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
 {
-	skyscraper->ShowConsole();
+	skyscraper->GetVM()->GetGUI()->ShowConsole();
 }
 
 void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
