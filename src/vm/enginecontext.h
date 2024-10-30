@@ -25,6 +25,9 @@
 
 namespace Skyscraper {
 
+class VM;
+class ScriptProcessor;
+
 class EngineContext
 {
 public:

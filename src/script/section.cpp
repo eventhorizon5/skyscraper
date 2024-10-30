@@ -22,9 +22,8 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
 #include "vm.h"
+#include "enginecontext.h"
 #include "hal.h"
 #include "floor.h"
 #include "elevator.h"

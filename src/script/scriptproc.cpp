@@ -20,8 +20,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <wx/app.h>
-#include <wx/msgdlg.h>
 #include "globals.h"
 #include "sbs.h"
 #include <OgreFileSystem.h>
@@ -30,14 +28,12 @@
 #include <OgreException.h>
 #include <stdlib.h>
 #include <cmath>
-#include "skyscraper.h"
 #include "vm.h"
 #include "sky.h"
 #include "enginecontext.h"
 #include "texture.h"
 #include "floor.h"
 #include "random.h"
-#include "gui/textwindow.h"
 #include "scriptproc.h"
 #include "section.h"
 
@@ -527,11 +523,11 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	engine->ReportError(error);
 
 	//show error dialog
-	if (warning == false)
+	/*if (warning == false) //FIXME
 	{
 		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
 		dialog.ShowModal();
-	}
+	}*/
 	return sError;
 }
 
@@ -653,7 +649,8 @@ bool ScriptProcessor::ReportMissingFiles()
 	//report on missing files
 	//returns true if any files are missing
 
-	if (nonexistent_files.size() > 0)
+	//FIXME
+	/*if (nonexistent_files.size() > 0)
 	{
 		sort(nonexistent_files.begin(), nonexistent_files.end());
 		for (size_t i = 0; i < nonexistent_files.size(); i++)
@@ -679,7 +676,8 @@ bool ScriptProcessor::ReportMissingFiles()
 		return true;
 	}
 	else
-		return false;
+		return false;*/
+	return true;
 }
 
 std::string ScriptProcessor::Calc(const std::string &expression)
