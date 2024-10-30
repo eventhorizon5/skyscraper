@@ -55,6 +55,7 @@
 #include "scenenode.h"
 #include "enginecontext.h"
 #include "hal.h"
+#include "gui.h"
 #include "profiler.h"
 
 using namespace SBS;
@@ -214,7 +215,7 @@ void HAL::Report(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
-		//vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription()); //FIXME
+		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
 	}
 }
 
@@ -230,7 +231,7 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
-		//vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription()); //FIXME
+		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
 	}
 	return false;
 }
@@ -238,7 +239,7 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 bool HAL::ReportFatalError(const std::string &message, const std::string &prompt)
 {
 	ReportError(message, prompt);
-	//vm->GetGUI()->ShowError(message); //FIXME
+	vm->GetGUI()->ShowError(message);
 	return false;
 }
 
@@ -919,7 +920,7 @@ void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, b
 {
 	//callback function that receives OGRE log messages
 
-	//vm->GetGUI()->WriteToConsole(message); //FIXME
+	vm->GetGUI()->WriteToConsole(message);
 }
 
 }
