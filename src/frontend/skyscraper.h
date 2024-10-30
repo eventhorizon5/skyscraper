@@ -138,7 +138,6 @@ private:
 	void DeleteButtons();
 	void ShowProgressDialog();
 
-	bool showconsole;
 	wxCmdLineParser *parser;
 
 	Ogre::RenderWindow *mRenderWindow;

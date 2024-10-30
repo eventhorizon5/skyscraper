@@ -230,9 +230,8 @@ void GUI::CloseProgressDialog()
 
 void GUI::ShowProgressDialog()
 {
-	if (!progdialog) //FIXME
-		//progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, frontend->window);
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100);
+	if (!progdialog)
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent());
 
 	show_progress = false;
 }
@@ -266,8 +265,8 @@ void GUI::RefreshConsole()
 
 void GUI::RaiseWindow()
 {
-	//frontend->window->Raise(); //FIXME
-    //frontend->window->SetFocus();
+	vm->GetParent()->Raise();
+    vm->GetParent()->SetFocus();
 }
 
 void GUI::ShowDebugPanel()
@@ -289,8 +288,7 @@ void GUI::ShowControlReference()
 void GUI::ShowLoadDialog()
 {
 	if (!loaddialog)
-		//loaddialog = new LoadDialog(dpanel, this, -1); //FIXME
-		loaddialog = new LoadDialog(dpanel, NULL, -1);
+		loaddialog = new LoadDialog(dpanel, vm->GetParent(), -1);
 	loaddialog->CenterOnScreen();
 	loaddialog->Show();
 }

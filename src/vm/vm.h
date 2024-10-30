@@ -54,6 +54,8 @@ namespace SBS {
 	class SBS;
 }
 
+class wxWindow;
+
 namespace Skyscraper {
 
 class EngineContext;
@@ -68,6 +70,7 @@ class VMIMPEXP VM
 public:
 	VM();
 	~VM();
+	void SetParent(wxWindow *parent);
 	HAL* GetHAL();
 	SkySystem* GetSkySystem();
 	GUI* GetGUI();
@@ -92,6 +95,7 @@ public:
 	ScriptProcessor* GetActiveScriptProcessor();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void ShowPlatform();
+	wxWindow* GetParent();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -100,6 +104,7 @@ public:
 	bool Pause; //pause simulator
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 	bool Verbose; //verbose mode
+	bool showconsole;
 
 	std::string version;
 	std::string version_rev;
@@ -130,6 +135,8 @@ private:
 	HAL *hal; //hardware abstraction layer
 	SkySystem *skysystem;
 	GUI *gui; //GUI subsystem
+
+	wxWindow *parent;
 
 	bool first_run;
 };

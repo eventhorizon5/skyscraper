@@ -286,15 +286,14 @@ bool Skyscraper::OnInit()
 	if (parser->Found(wxT("headless")) == true)
 		Headless = true;
 
-	//load config files
-	HAL *hal = vm->GetHAL();
-	hal->LoadConfiguration(vm->data_path);
-
-	showconsole = hal->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.ShowConsole", true);
-
+	bool showconsole = true;
 	//turn off console if specified on command line
 	if (parser->Found(wxT("no-console")) == true)
 		showconsole = false;
+
+	//load config files
+	HAL *hal = vm->GetHAL();
+	hal->LoadConfiguration(vm->data_path, false);
 
 	//create console window
 	if (showconsole == true)
@@ -308,6 +307,8 @@ bool Skyscraper::OnInit()
 		window->ShowWindow();
 		window->CenterOnScreen();
 	//}
+
+	vm->SetParent(window);
 
 	//start and initialize abstraction layer
 	if (!hal->Initialize(vm->data_path))
