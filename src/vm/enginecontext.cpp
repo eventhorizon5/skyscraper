@@ -20,6 +20,10 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
 #include <fmod.hpp>
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include <windows.h>
@@ -28,6 +32,7 @@
 #include "sbs.h"
 #include "vm.h"
 #include "hal.h"
+#include "gui.h"
 #include "camera.h"
 #include "scriptproc.h"
 #include "enginecontext.h"
@@ -143,7 +148,7 @@ bool EngineContext::Run()
 			{
 				ReportError("Error processing building\n");
 				Shutdown();
-				//vm->GetGUI()->CloseProgressDialog(); //FIXME
+				vm->GetGUI()->CloseProgressDialog();
 				return false;
 			}
 			else if (processor->IsFinished == true)
@@ -175,7 +180,7 @@ bool EngineContext::Run()
 	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 	{
-		//vm->GetGUI()->RaiseWindow(); //FIXME
+		vm->GetGUI()->RaiseWindow();
 		raised = true;
 
 		processor->ReportMissingFiles();
@@ -234,7 +239,7 @@ bool EngineContext::Load(std::string filename)
 	}
 
 	//create progress dialog
-	//vm->GetGUI()->CreateProgressDialog(filename); //FIXME
+	vm->GetGUI()->CreateProgressDialog(filename);
 
 	//override SBS startup render option, if specified
 	if (vm->RenderOnStartup == true)
@@ -305,7 +310,7 @@ void EngineContext::StartSim()
 		processor = new ScriptProcessor(this);
 
 	//refresh console to fix banner message on Linux
-	//vm->GetGUI()->RefreshConsole(); //FIXME
+	vm->GetGUI()->RefreshConsole();
 
 	//override verbose mode if specified
 	if (vm->Verbose == true)
@@ -319,7 +324,7 @@ void EngineContext::StartSim()
 	if (instance == 0)
 	{
 		vm->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
-		//wxYield(); //this allows the banner to be printed before the sleep() call //FIXME
+		wxYield(); //this allows the banner to be printed before the sleep() call
 		vm->Pause = false;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);
@@ -410,7 +415,7 @@ bool EngineContext::ReportError(const std::string &message)
 bool EngineContext::ReportFatalError(const std::string &message)
 {
 	ReportError(message);
-	//vm->GetGUI()->ShowError(message); //FIXME
+	vm->GetGUI()->ShowError(message);
 	return false;
 }
 
@@ -427,7 +432,7 @@ void EngineContext::UpdateProgress(int percent)
 	//update progress bar
 
 	progress = percent;
-	//vm->GetGUI()->UpdateProgress(); //FIXME
+	vm->GetGUI()->UpdateProgress();
 }
 
 CameraState EngineContext::GetCameraState()
