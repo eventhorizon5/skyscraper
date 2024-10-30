@@ -23,6 +23,7 @@
 #ifndef GUI_H
 
 #include <string>
+#include "vm.h"
 
 //wxWidgets definitions
 class wxCmdLineParser;
@@ -38,7 +39,7 @@ class VM;
 class HAL;
 class DebugPanel;
 
-class GUI
+class VMIMPEXP GUI
 {
 public:
 	GUI(VM *parent);

@@ -41,7 +41,9 @@
 #include "malloc.h"
 #endif
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #include <unistd.h>
+#endif
 
 using namespace SBS;
 
