@@ -196,7 +196,8 @@ bool Skyscraper::OnInit()
 	vm->version_state = "Alpha";
 	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
-	gui = vm->GetGUI();
+	//create GUI instance
+	gui = new GUI(this);
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -330,7 +331,7 @@ bool Skyscraper::OnInit()
 
 	//create console window
 	if (showconsole == true)
-		vm->GetGUI()->ShowConsole(false);
+		gui->ShowConsole(false);
 
 	//Create main window and set size from INI file defaults
 	//if (Headless == false)
@@ -576,7 +577,7 @@ bool Skyscraper::Start(EngineContext *engine)
 
 	//close progress dialog if no engines are loading
 	if (vm->IsEngineLoading() == false)
-		vm->GetGUI()->CloseProgressDialog();
+		gui->CloseProgressDialog();
 
 	//load control panel
 	if (engine == vm->GetActiveEngine())
@@ -637,7 +638,7 @@ void Skyscraper::UnloadToMenu()
 	//cleanup sound
 	vm->GetHAL()->StopSound();
 
-	vm->GetGUI()->CloseProgressDialog();
+	gui->CloseProgressDialog();
 
 	//return to main menu
 	SetFullScreen(false);
@@ -792,6 +793,11 @@ MainScreen* Skyscraper::GetWindow()
 VM* Skyscraper::GetVM()
 {
 	return vm;
+}
+
+GUI* Skyscraper::GetGUI()
+{
+	return gui;
 }
 
 void Skyscraper::ShowPlatform()

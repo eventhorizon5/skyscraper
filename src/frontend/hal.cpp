@@ -217,7 +217,7 @@ void HAL::Report(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
-		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
+		//vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription()); //FIXME
 	}
 }
 
@@ -233,7 +233,7 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
-		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
+		//vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription()); //FIXME
 	}
 	return false;
 }
@@ -241,7 +241,7 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 bool HAL::ReportFatalError(const std::string &message, const std::string &prompt)
 {
 	ReportError(message, prompt);
-	vm->GetGUI()->ShowError(message);
+	//vm->GetGUI()->ShowError(message); //FIXME
 	return false;
 }
 
@@ -917,7 +917,7 @@ void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, b
 {
 	//callback function that receives OGRE log messages
 
-	vm->GetGUI()->WriteToConsole(message);
+	//vm->GetGUI()->WriteToConsole(message); //FIXME
 }
 
 }

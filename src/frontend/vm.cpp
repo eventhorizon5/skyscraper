@@ -60,9 +60,6 @@ VM::VM()
 	//create sky system instance
 	skysystem = new SkySystem(this);
 
-	//create new GUI system instance
-	gui = new GUI(this);
-
 	Report("Started");
 }
 
@@ -75,10 +72,6 @@ VM::~VM()
 	if (skysystem)
 		delete skysystem;
 	skysystem = 0;
-
-	if (gui)
-		delete gui;
-	gui = 0;
 }
 
 HAL* VM::GetHAL()
@@ -89,11 +82,6 @@ HAL* VM::GetHAL()
 SkySystem* VM::GetSkySystem()
 {
 	return skysystem;
-}
-
-GUI* VM::GetGUI()
-{
-	return gui;
 }
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)

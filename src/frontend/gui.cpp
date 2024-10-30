@@ -32,6 +32,11 @@
 #endif
 #include "globals.h"
 #include "sbs.h"
+#include "skyscraper.h"
+#include "mainscreen.h"
+#include "vm.h"
+#include "hal.h"
+#include "enginecontext.h"
 #include "gui/debugpanel.h"
 #include "gui/console.h"
 #include "gui/loaddialog.h"
@@ -39,9 +44,9 @@
 
 namespace Skyscraper {
 
-GUI::GUI(VM *parent)
+GUI::GUI(Skyscraper *parent)
 {
-	this->vm = parent;
+	this->frontend = parent;
 	console = 0;
 	progdialog = 0;
 	dpanel = 0;
@@ -159,9 +164,10 @@ std::string GUI::SelectBuilding(const std::string &data_path)
 void GUI::CreateDebugPanel()
 {
 	if (!dpanel)
-		dpanel = new DebugPanel(this, NULL, -1);
+		dpanel = new DebugPanel(frontend, NULL, -1);
 	dpanel->Show(true);
-	dpanel->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(vm->GetHal()->configfile, "Skyscraper.Frontend.ControlPanelX", 10), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
+	HAL *hal = frontend->GetVM()->GetHAL();
+	dpanel->SetPosition(wxPoint(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ControlPanelX", 10), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
 }
 
 void GUI::EnableConsole(bool value)
@@ -179,19 +185,20 @@ void GUI::EnableTimer(bool value)
 void GUI::ShowConsole(bool send_button)
 {
 	if (!console)
-		console = new Console(this, NULL, -1);
+		console = new Console(frontend, NULL, -1);
 	console->Show();
 	console->Raise();
-	console->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ConsoleX", 10), vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.ConsoleY", 25)));
+	HAL *hal = frontend->GetVM()->GetHAL();
+	console->SetPosition(wxPoint(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ConsoleX", 10), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ConsoleY", 25)));
 	console->bSend->Enable(send_button);
 }
 
 void GUI::CreateProgressDialog(const std::string &message)
 {
 	//don't create progress dialog if concurrent loading is enabled, and one engine is already running
-	if (vm->GetEngineCount() > 1 && vm->ConcurrentLoads == true)
+	if (frontend->GetVM()->GetEngineCount() > 1 && frontend->GetVM()->ConcurrentLoads == true)
 	{
-		if (vm->GetFirstValidEngine()->IsRunning() == true)
+		if (frontend->GetVM()->GetFirstValidEngine()->IsRunning() == true)
 			return;
 	}
 
@@ -227,7 +234,7 @@ void GUI::CloseProgressDialog()
 void GUI::ShowProgressDialog()
 {
 	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, window);
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, frontend->window);
 
 	show_progress = false;
 }
@@ -237,13 +244,13 @@ void GUI::UpdateProgress()
 	if (!progdialog)
 		return;
 
-	int total_percent = vm->GetEngineCount() * 100;
+	int total_percent = frontend->GetVM()->GetEngineCount() * 100;
 	int current_percent = 0;
 
-	for (size_t i = 0; i < vm->GetEngineCount(); i++)
+	for (size_t i = 0; i < frontend->GetVM()->GetEngineCount(); i++)
 	{
-		if (vm->GetEngine(i))
-			current_percent += vm->GetEngine(i)->GetProgress();
+		if (frontend->GetVM()->GetEngine(i))
+			current_percent += frontend->GetVM()->GetEngine(i)->GetProgress();
 	}
 
 	int final = ((Real)current_percent / (Real)total_percent) * 100;
@@ -261,31 +268,8 @@ void GUI::RefreshConsole()
 
 void GUI::RaiseWindow()
 {
-     window->Raise();
-    window->SetFocus();
-}
-
-void GUI::ShowError(const std::string &message)
-{
-    //show error dialog
-    wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_ERROR);
-    dialog.ShowModal();
-}
-
-void GUI::ShowMessage(const std::string &message)
-{
-    //show message dialog
-     wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_INFORMATION);
-	 dialog.ShowModal();
-}
-
-void GUI::RefreshConsole()
-{
-    if (console)
-    {
-        console->Refresh();
-        console->Update();
-	}
+	frontend->window->Raise();
+    frontend->window->SetFocus();
 }
 
 void GUI::ShowDebugPanel()
@@ -296,7 +280,7 @@ void GUI::ShowDebugPanel()
 	//show control panel if closed
 	dpanel = new DebugPanel(frontend, NULL, -1);
 	dpanel->Show(true);
-	dpanel->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.ControlPanelX", 10), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
+	dpanel->SetPosition(wxPoint(frontend->GetVM()->GetHAL()->GetConfigInt(frontend->GetVM()->GetHAL()->configfile, "Skyscraper.Frontend.ControlPanelX", 10), frontend->GetVM()->GetHAL()->GetConfigInt(frontend->GetVM()->GetHAL()->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
 }
 
 void GUI::ShowControlReference()
