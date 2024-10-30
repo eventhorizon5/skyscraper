@@ -25,6 +25,30 @@
 
 #include <vector>
 
+//DLL Exporting
+#ifdef _WIN32
+	#if defined(_MSC_VER)
+		#define __VISUALC__ _MSC_VER
+	#endif
+	#if defined(__VISUALC__) || defined(__GNUC__)
+		#if defined(VM_EXPORTS)
+			#define VMIMPEXP __declspec(dllexport)
+			#define VMIMPEXP_DATA(type) __declspec(dllexport) type
+		#else
+			#define VMIMPEXP __declspec(dllimport)
+			#define VMIMPEXP_DATA(type) __declspec(dllimport) type
+		#endif
+	#else
+		#define VMIMPEXP
+		#define VMIMPEXP_DATA(type) type
+	#endif
+#endif
+
+#ifndef VMIMPEXP
+	#define VMIMPEXP
+	#define VMIMPEXP_DATA(type)
+#endif
+
 namespace Skyscraper {
 
 class EngineContext;
@@ -34,7 +58,7 @@ class SkySystem;
 class GUI;
 
 //Virtual Manager system
-class VM
+class VMIMPEXP VM
 {
 public:
 	VM();
