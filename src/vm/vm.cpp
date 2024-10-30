@@ -26,6 +26,9 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include <windows.h>
 #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#include <sys/utsname.h>
+#endif
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
