@@ -74,18 +74,17 @@ find_package(OpenXR)
 if(WIN32)
 	file(GLOB FRONTEND_FILES
 		src/frontend/*.cpp
-		src/frontend/gui/*.cpp
 		msvc/Skyscraper.rc
 	)
 else()
 	file(GLOB FRONTEND_FILES
                 src/frontend/*.cpp
-                src/frontend/gui/*.cpp
         )
 endif()
  
 file(GLOB VM_FILES
 	src/vm/*.cpp
+	src/vm/gui/*.cpp
 )
 
 file(GLOB SCRIPTPROC_FILES
