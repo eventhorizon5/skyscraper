@@ -23,6 +23,8 @@
 #ifndef TEXTWINDOW_H
 #define TEXTWINDOW_H
 
+#include "vm.h"
+
 //(*Headers(TextWindow)
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -32,7 +34,7 @@
 
 namespace Skyscraper {
 
-class TextWindow: public wxDialog
+class VMIMPEXP TextWindow: public wxDialog
 {
 	public:
 

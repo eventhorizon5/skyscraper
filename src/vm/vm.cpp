@@ -23,6 +23,9 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #include <sys/sysctl.h>
 #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#include <windows.h>
+#endif
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
