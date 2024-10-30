@@ -149,6 +149,8 @@ private:
 	//additional path for user data
 	std::string data_path;
 
+	Ogre::RenderWindow *mRenderWindow;
+
 	//VM instance
 	VM *vm;
 

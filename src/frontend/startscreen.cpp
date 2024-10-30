@@ -435,16 +435,18 @@ void Skyscraper::Click(int index)
 	std::string number = ToString(index + 1);
 	std::string filename = "";
 
+	HAL *hal = vm->GetHAL();
+
 	if (index == 0)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
 	if (index == 1)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
 	if (index == 2)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
 	if (index == 3)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
 	if (index > 3)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button" + number + ".File", "");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button" + number + ".File", "");
 
 	if (filename == "")
 	{
