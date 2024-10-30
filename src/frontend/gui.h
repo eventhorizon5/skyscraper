@@ -1,0 +1,91 @@
+/*
+	Skyscraper 2.1 - GUI Manager
+	Copyright (C)2003-2024 Ryan Thoryk
+	https://www.skyscrapersim.net
+	https://sourceforge.net/projects/skyscraper/
+	Contact - ryan@skyscrapersim.net
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+#ifndef GUI_H
+
+#include <string>
+
+//wxWidgets definitions
+class wxCmdLineParser;
+class wxProgressDialog;
+
+namespace Skyscraper {
+
+class DebugPanel;
+class MainScreen;
+class EngineContext;
+class Console;
+class LoadDialog;
+class ScriptProcessor;
+class VM;
+class HAL;
+
+class GUI
+{
+public:
+	GUI(VM *parent);
+	~GUI();
+	void UnregisterDebugPanel() { dpanel = 0; }
+	void Unload();
+	void ShowProgress();
+	std::string SelectBuilding(const std::string &data_path);
+	void Resize();
+	void CreateDebugPanel();
+	void EnableConsole(bool value);
+	void RaiseWindow();
+	void EnableTimer(bool value);
+	void ShowConsole(bool send_button = true);
+	void CreateProgressDialog(const std::string &message);
+	void CloseProgressDialog();
+	void UpdateProgress();
+	void ShowError(const std::string &message);
+    void ShowMessage(const std::string &message);
+	void RefreshConsole();
+	void ShowDebugPanel();
+	void ShowControlReference();
+	void ShowLoadDialog();
+	void WriteToConsole(const std::string &message);
+
+private:
+
+	wxProgressDialog *progdialog;
+
+	//control panel
+	DebugPanel *dpanel;
+
+	//console window
+	Console *console;
+
+	//load dialog window
+	LoadDialog *loaddialog;
+
+	//progress dialog initial data
+	bool show_progress;
+	std::string prog_text;
+
+	VM *vm;
+};
+
+}
+
+#endif
+
