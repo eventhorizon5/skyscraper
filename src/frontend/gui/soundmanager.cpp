@@ -27,7 +27,6 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "enginecontext.h"
 #include "vm.h"
@@ -488,7 +487,7 @@ void SoundManager::On_bMove_Click(wxCommandEvent& event)
 			delete moveobject;
 		moveobject = 0;
 
-		moveobject = new MoveObject(panel, this, -1, panel->GetRoot()->GetVM()->GetActiveEngine(), handle->GetNumber());
+		moveobject = new MoveObject(panel, this, -1, panel->GetRoot()->GetActiveEngine(), handle->GetNumber());
 		moveobject->Show();
 	}
 }

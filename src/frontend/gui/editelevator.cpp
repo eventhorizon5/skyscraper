@@ -34,7 +34,6 @@
 #include "debugpanel.h"
 #include "callstation.h"
 #include "editelevator.h"
-#include "skyscraper.h"
 
 using namespace SBS;
 

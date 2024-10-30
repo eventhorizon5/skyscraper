@@ -25,7 +25,6 @@
 #include "profilergui.h"
 #include "profiler.h"
 #include "debugpanel.h"
-#include "skyscraper.h"
 
 //(*InternalHeaders(Profiler)
 #include <wx/intl.h>

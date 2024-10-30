@@ -24,7 +24,11 @@
 #define SKY_H
 
 #include <Caelum.h>
-#include "vm.h"\
+#include "vm.h"
+
+namespace Caelum {
+	class CaelumSystem;
+}
 
 namespace Skyscraper {
 

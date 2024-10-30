@@ -27,7 +27,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "cameracontrol.h"
 

@@ -30,7 +30,6 @@
 #include "sbs.h"
 #include "action.h"
 #include "debugpanel.h"
-#include "skyscraper.h"
 #include "actionviewer.h"
 
 using namespace SBS;

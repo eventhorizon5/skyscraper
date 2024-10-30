@@ -20,6 +20,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#include <sys/sysctl.h>
+#endif
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
@@ -28,6 +31,7 @@
 #include "enginecontext.h"
 #include "hal.h"
 #include "sky.h"
+#include "gui.h"
 #include "profiler.h"
 
 using namespace SBS;
@@ -51,11 +55,17 @@ VM::VM()
 	first_run = true;
 	Verbose = false;
 
+	macos_major = 0;
+	macos_minor = 0;
+
 	//create HAL instance
 	hal = new HAL(this);
 
 	//create sky system instance
 	skysystem = new SkySystem(this);
+
+	//create GUI instance
+	gui = new GUI(this);
 
 	Report("Started");
 }
@@ -79,6 +89,11 @@ HAL* VM::GetHAL()
 SkySystem* VM::GetSkySystem()
 {
 	return skysystem;
+}
+
+GUI* VM::GetGUI()
+{
+	return gui;
 }
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -628,6 +643,116 @@ bool VM::ReportError(const std::string &message)
 bool VM::ReportFatalError(const std::string &message)
 {
 	return hal->ReportFatalError(message, "vm:");
+}
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+
+// Code to get OS version on Mac
+int get_macos_version(uint32_t &major, uint32_t &minor, bool &osx)
+{
+	//returns the OS major and minor version
+	//if osx is true, os is 10.x.x releases, otherwise is 11.x or greater
+
+	char osversion[32];
+	size_t osversion_len = sizeof(osversion) - 1;
+	int osversion_name[] = { CTL_KERN, KERN_OSRELEASE };
+
+	if (sysctl(osversion_name, 2, osversion, &osversion_len, NULL, 0) == -1) {
+		printf("get_macos_version: sysctl() failed\n");
+		return 1;
+	}
+
+	if (sscanf(osversion, "%u.%u", &major, &minor) != 2) {
+		printf("get_macos_version: sscanf() failed\n");
+		return 1;
+	}
+
+	if (major >= 20) {
+		major -= 9;
+		osx = false; //macOS 11 and newer
+	} else {
+		major -= 4;
+		osx = true; //macOS 10.1.1 and newer
+	}
+
+	return 0;
+}
+
+#endif
+
+void VM::ShowPlatform()
+{
+	//set platform name
+	std::string bits;
+
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+	bits = "32-bit";
+#endif
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
+	bits = "64-bit";
+#endif
+
+#if OGRE_CPU == OGRE_CPU_X86
+	Architecture = "x86";
+#elif OGRE_CPU == OGRE_CPU_PPC
+	Architecture = "PPC";
+#elif OGRE_CPU == OGRE_CPU_ARM
+	Architecture = "ARM";
+#elif OGRE_CPU == OGRE_CPU_MIPS
+	Architecture = "MIPS";
+#elif OGRE_CPU == OGRE_CPU_UNKNOWN
+	Architecture = "Unknown";
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	Platform = "Windows " + Architecture + " " + bits;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	Platform = "Linux " + Architecture + " " + bits;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	Platform = "MacOS " + Architecture + " " + bits;
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	//report MacOS version if applicable
+	uint32_t major = 0, minor = 0;
+	bool osx = true;
+	get_macos_version(major, minor, osx);
+
+	if (osx == true)
+	{
+		GetHAL()->Report("Running on MacOS 10." + ToString((int)major) + "." + ToString((int)minor), "");
+		macos_major = 10;
+		macos_minor = (int)major;
+	}
+	else
+	{
+		GetHAL()->Report("Running on MacOS " + ToString((int)major) + "." + ToString((int)minor), "");
+		macos_major = (int)major;
+		macos_minor = (int)minor;
+	}
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	//get Windows version
+
+	NTSTATUS(WINAPI* RtlGetVersion)(LPOSVERSIONINFOEXW);
+	OSVERSIONINFOEXW osInfo;
+
+	*(FARPROC*)&RtlGetVersion = GetProcAddress(GetModuleHandleA("ntdll"), "RtlGetVersion");
+
+	if (NULL != RtlGetVersion)
+	{
+		osInfo.dwOSVersionInfoSize = sizeof(osInfo);
+		RtlGetVersion(&osInfo);
+		GetHAL()->Report("Running on Microsoft Windows " + ToString((int)osInfo.dwMajorVersion) + "." + ToString((int)osInfo.dwMinorVersion), "");
+	}
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	struct utsname osInfo{};
+	uname(&osInfo);
+	GetHAL()->Report("Running on Linux " + std::string(osInfo.release), "");
+#endif
 }
 
 }

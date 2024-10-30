@@ -26,7 +26,6 @@
 //*)
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "cameratexture.h"
 #include "camtex.h"

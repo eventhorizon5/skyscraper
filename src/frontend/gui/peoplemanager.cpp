@@ -27,7 +27,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "person.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "peoplemanager.h"
 

@@ -32,6 +32,7 @@
 #include <wx/textctrl.h>
 #include <wx/tglbtn.h>
 //*)
+#include "sky.h"
 
 namespace Skyscraper {
 

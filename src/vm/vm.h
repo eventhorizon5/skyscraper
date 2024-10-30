@@ -49,6 +49,11 @@
 	#define VMIMPEXP_DATA(type)
 #endif
 
+namespace SBS {
+
+	class SBS;
+}
+
 namespace Skyscraper {
 
 class EngineContext;
@@ -65,6 +70,7 @@ public:
 	~VM();
 	HAL* GetHAL();
 	SkySystem* GetSkySystem();
+	GUI* GetGUI();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -85,6 +91,7 @@ public:
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	void ShowPlatform();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -98,6 +105,14 @@ public:
 	std::string version_rev;
 	std::string version_state;
 	std::string version_frontend;
+
+	std::string Platform;
+	std::string Architecture;
+	int macos_major; //macos major version
+	int macos_minor; //macos minor version
+
+	//additional path for user data
+	std::string data_path;
 
 private:
 
@@ -114,6 +129,7 @@ private:
 	std::vector<EngineContext*> engines;
 	HAL *hal; //hardware abstraction layer
 	SkySystem *skysystem;
+	GUI *gui; //GUI subsystem
 
 	bool first_run;
 };
