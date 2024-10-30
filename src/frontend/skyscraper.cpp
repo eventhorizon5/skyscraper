@@ -116,37 +116,6 @@ std::string settingsPath() {
     }
 }
 
-// Code to get OS version on Mac
-int get_macos_version(uint32_t &major, uint32_t &minor, bool &osx)
-{
-	//returns the OS major and minor version
-	//if osx is true, os is 10.x.x releases, otherwise is 11.x or greater
-
-	char osversion[32];
-	size_t osversion_len = sizeof(osversion) - 1;
-	int osversion_name[] = { CTL_KERN, KERN_OSRELEASE };
-
-	if (sysctl(osversion_name, 2, osversion, &osversion_len, NULL, 0) == -1) {
-		printf("get_macos_version: sysctl() failed\n");
-		return 1;
-	}
-
-	if (sscanf(osversion, "%u.%u", &major, &minor) != 2) {
-		printf("get_macos_version: sscanf() failed\n");
-		return 1;
-	}
-
-	if (major >= 20) {
-		major -= 9;
-		osx = false; //macOS 11 and newer
-	} else {
-		major -= 4;
-		osx = true; //macOS 10.1.1 and newer
-	}
-
-	return 0;
-}
-
 #endif
 
 int main (int argc, char* argv[])
@@ -182,8 +151,6 @@ bool Skyscraper::OnInit()
 	Headless = false;
 	background_rect = 0;
 	background_node = 0;
-	macos_major = 0;
-	macos_minor = 0;
 	mRenderWindow = 0;
 	window = 0;
 	parser = 0;
@@ -197,32 +164,32 @@ bool Skyscraper::OnInit()
 	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
 	//create GUI instance
-	gui = new GUI(this);
+	gui = new GUI(vm);
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
 	wxString app_path = wxPathOnly(exefile); //strip off filename
 #if defined(__WXMAC__)
-	data_path = settingsPath() + "/Skyscraper/"; //Application Support folder
+	vm->data_path = settingsPath() + "/Skyscraper/"; //Application Support folder
 
-	if (!wxDirExists(data_path))
-		wxMkdir(data_path);
+	if (!wxDirExists(vm->data_path))
+		wxMkdir(vm->data_path);
 
-	if (!wxDirExists(data_path + wxT("buildings")))
-		wxMkdir(data_path + wxT("buildings"));
-	if (!wxDirExists(data_path + wxT("data")))
-		wxMkdir(data_path + wxT("data"));
-	if (!wxDirExists(data_path + wxT("screenshots")))
-		wxMkdir(data_path + wxT("screenshots"));
+	if (!wxDirExists(vm->data_path + wxT("buildings")))
+		wxMkdir(vm->data_path + wxT("buildings"));
+	if (!wxDirExists(vm->data_path + wxT("data")))
+		wxMkdir(vm->data_path + wxT("data"));
+	if (!wxDirExists(vm->data_path + wxT("screenshots")))
+		wxMkdir(vm->data_path + wxT("screenshots"));
 
 	wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
 
-	if (!wxFileExists(data_path + wxT("skyscraper.ini")))
-		wxCopyFile("skyscraper.ini", data_path + wxT("skyscraper.ini"));
-	if (!wxFileExists(data_path + wxT("keyboard.ini")))
-		wxCopyFile("keyboard.ini", data_path + wxT("keyboard.ini"));
-	if (!wxFileExists(data_path + wxT("joystick.ini")))
-		wxCopyFile("joystick.ini", data_path + wxT("joystick.ini"));
+	if (!wxFileExists(vm->data_path + wxT("skyscraper.ini")))
+		wxCopyFile("skyscraper.ini", vm->data_path + wxT("skyscraper.ini"));
+	if (!wxFileExists(vm->data_path + wxT("keyboard.ini")))
+		wxCopyFile("keyboard.ini", vm->data_path + wxT("keyboard.ini"));
+	if (!wxFileExists(vm->data_path + wxT("joystick.ini")))
+		wxCopyFile("joystick.ini", vm->data_path + wxT("joystick.ini"));
 
 #elif defined (__WXGTK__)
 	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory
@@ -321,7 +288,7 @@ bool Skyscraper::OnInit()
 
 	//load config files
 	HAL *hal = vm->GetHAL();
-	hal->LoadConfiguration(data_path);
+	hal->LoadConfiguration(vm->data_path);
 
 	showconsole = hal->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.ShowConsole", true);
 
@@ -343,7 +310,7 @@ bool Skyscraper::OnInit()
 	//}
 
 	//start and initialize abstraction layer
-	if (!hal->Initialize(data_path))
+	if (!hal->Initialize(vm->data_path))
 		return hal->ReportError("Error initializing HAL", "");
 
 	//if (vm->GetFrontend()->Headless == false)
@@ -354,7 +321,7 @@ bool Skyscraper::OnInit()
 	//}
 
 	//load system
-	if (!hal->LoadSystem(data_path, mRenderWindow))
+	if (!hal->LoadSystem(vm->data_path, mRenderWindow))
 		return hal->ReportError("Error loading system", "");
 
 	//set up joystick if available
@@ -368,7 +335,7 @@ bool Skyscraper::OnInit()
 		hal->Report("", "");
 	}
 
-	ShowPlatform();
+	vm->ShowPlatform();
 
 	//autoload a building file if specified
 	std::string filename;
@@ -510,8 +477,8 @@ void Skyscraper::StartSound()
 	std::string filename_full = "data/" + filename;
 
 	//check for an intro sound file in the data path location instead
-	if (wxFileExists(data_path + filename_full))
-		filename_full = data_path + filename_full;
+	if (wxFileExists(vm->data_path + filename_full))
+		filename_full = vm->data_path + filename_full;
 
 	//play music
 	vm->GetHAL()->PlaySound(filename_full);
@@ -519,7 +486,7 @@ void Skyscraper::StartSound()
 
 std::string Skyscraper::SelectBuilding()
 {
-	return gui->SelectBuilding(data_path);
+	return gui->SelectBuilding(vm->data_path);
 }
 
 bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -787,7 +754,7 @@ void Skyscraper::MacOpenFile(const wxString &filename)
 
 std::string Skyscraper::GetDataPath()
 {
-	return data_path;
+	return vm->data_path;
 }
 
 MainScreen* Skyscraper::GetWindow()
@@ -803,81 +770,6 @@ VM* Skyscraper::GetVM()
 GUI* Skyscraper::GetGUI()
 {
 	return gui;
-}
-
-void Skyscraper::ShowPlatform()
-{
-	//set platform name
-	std::string bits;
-
-#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-	bits = "32-bit";
-#endif
-#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
-	bits = "64-bit";
-#endif
-
-#if OGRE_CPU == OGRE_CPU_X86
-	Architecture = "x86";
-#elif OGRE_CPU == OGRE_CPU_PPC
-	Architecture = "PPC";
-#elif OGRE_CPU == OGRE_CPU_ARM
-	Architecture = "ARM";
-#elif OGRE_CPU == OGRE_CPU_MIPS
-	Architecture = "MIPS";
-#elif OGRE_CPU == OGRE_CPU_UNKNOWN
-	Architecture = "Unknown";
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Platform = "Windows " + Architecture + " " + bits;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	Platform = "Linux " + Architecture + " " + bits;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	Platform = "MacOS " + Architecture + " " + bits;
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	//report MacOS version if applicable
-	uint32_t major = 0, minor = 0;
-	bool osx = true;
-	get_macos_version(major, minor, osx);
-
-	if (osx == true)
-	{
-		vm->GetHAL()->Report("Running on MacOS 10." + ToString((int)major) + "." + ToString((int)minor), "");
-		macos_major = 10;
-		macos_minor = (int)major;
-	}
-	else
-	{
-		vm->GetHAL()->Report("Running on MacOS " + ToString((int)major) + "." + ToString((int)minor), "");
-		macos_major = (int)major;
-		macos_minor = (int)minor;
-	}
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	//get Windows version
-
-	NTSTATUS(WINAPI* RtlGetVersion)(LPOSVERSIONINFOEXW);
-	OSVERSIONINFOEXW osInfo;
-
-	*(FARPROC*)&RtlGetVersion = GetProcAddress(GetModuleHandleA("ntdll"), "RtlGetVersion");
-
-	if (NULL != RtlGetVersion)
-	{
-		osInfo.dwOSVersionInfoSize = sizeof(osInfo);
-		RtlGetVersion(&osInfo);
-		vm->GetHAL()->Report("Running on Microsoft Windows " + ToString((int)osInfo.dwMajorVersion) + "." + ToString((int)osInfo.dwMinorVersion), "");
-	}
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	struct utsname osInfo{};
-	uname(&osInfo);
-	vm->GetHAL()->Report("Running on Linux " + std::string(osInfo.release), "");
-#endif
 }
 
 }

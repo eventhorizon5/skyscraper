@@ -68,17 +68,12 @@ class Skyscraper : public wxApp
 
 public:
 
-	std::string Platform;
-	std::string Architecture;
-
 	bool StartupRunning;
 	bool IntroMusic;
 	bool FullScreen;
 	bool Verbose;
 	bool ShowMenu; //show main menu
 	bool Headless;
-	int macos_major; //macos major version
-	int macos_minor; //macos minor version
 
 	bool Loop();
 	virtual bool OnInit();
@@ -108,7 +103,6 @@ public:
 	MainScreen* GetWindow();
 	VM* GetVM();
 	GUI* GetGUI();
-	void ShowPlatform();
 
 	//main window
 	MainScreen *window;
@@ -146,9 +140,6 @@ private:
 
 	bool showconsole;
 	wxCmdLineParser *parser;
-
-	//additional path for user data
-	std::string data_path;
 
 	Ogre::RenderWindow *mRenderWindow;
 

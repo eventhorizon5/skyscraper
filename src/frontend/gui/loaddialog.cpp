@@ -26,8 +26,8 @@
 //*)
 
 #include "globals.h"
-#include "skyscraper.h"
 #include "vm.h"
+#include "gui.h"
 #include "debugpanel.h"
 #include "loaddialog.h"
 
@@ -202,7 +202,7 @@ LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wx
 	panel = root;
 
 	//set cut options
-	VM *vm = panel->GetRoot()->GetVM();
+	VM *vm = panel->GetRoot();
 	chkCutLandscape->SetValue(vm->CutLandscape);
 	chkCutBuildings->SetValue(vm->CutBuildings);
 	chkCutExternal->SetValue(vm->CutExternal);
@@ -215,10 +215,9 @@ LoadDialog::~LoadDialog()
 	//*)
 }
 
-
 void LoadDialog::On_bSelect_Click(wxCommandEvent& event)
 {
-	std::string filename = panel->GetRoot()->SelectBuilding();
+	std::string filename = panel->GetRoot()->GetGUI()->SelectBuilding(panel->GetRoot()->data_path);
 
 	tFilename->SetValue(filename);
 }
@@ -265,7 +264,7 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	std::string filename;
 	filename = tFilename->GetValue();
 
-	VM *vm = panel->GetRoot()->GetVM();
+	VM *vm = panel->GetRoot();
 
 	//set cut options
 	vm->CutLandscape = chkCutLandscape->GetValue();

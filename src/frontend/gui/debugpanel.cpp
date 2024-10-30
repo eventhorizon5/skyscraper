@@ -31,7 +31,6 @@
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "texture.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "scriptproc.h"
 #include "vm.h"
@@ -119,7 +118,7 @@ BEGIN_EVENT_TABLE(DebugPanel,wxFrame)
 	//*)
 END_EVENT_TABLE()
 
-DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
+DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(DebugPanel)
 	wxBoxSizer* BoxSizer10;
@@ -303,7 +302,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_bMovingWalkway,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMovingWalkway_Click);
 	//*)
 	Simcore = 0;
-	skyscraper = root;
+	vm = root;
 	mc = 0;
 	ee = 0;
 	cc = 0;
@@ -327,7 +326,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 
 DebugPanel::~DebugPanel()
 {
-	skyscraper->GetGUI()->UnregisterDebugPanel();
+	vm->GetGUI()->UnregisterDebugPanel();
 
 	//delete timer;
 	if (timer)
@@ -438,7 +437,7 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 
 void DebugPanel::OnInit()
 {
-	Simcore = skyscraper->GetVM()->GetActiveSystem();
+	Simcore = vm->GetActiveSystem();
 
 	if (!Simcore)
 		return;
@@ -470,7 +469,7 @@ void DebugPanel::OnInit()
 void DebugPanel::Loop()
 {
 	//disable debug panel and exit if paused
-	if (skyscraper->GetVM()->Pause == true)
+	if (vm->Pause == true)
 	{
 		Enable(false);
 		return;
@@ -481,9 +480,9 @@ void DebugPanel::Loop()
 			Enable(true);
 	}
 
-	if (skyscraper->GetVM()->GetActiveEngine())
+	if (vm->GetActiveEngine())
 	{
-		if (Simcore != skyscraper->GetVM()->GetActiveSystem())
+		if (Simcore != vm->GetActiveSystem())
 			OnInit(); //reinitialize if active engine has changed
 	}
 	else
@@ -661,7 +660,7 @@ void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
 {
-	skyscraper->GetGUI()->ShowConsole();
+	vm->GetGUI()->ShowConsole();
 }
 
 void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)

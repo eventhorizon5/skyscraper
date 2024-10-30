@@ -30,7 +30,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "vm.h"
 #include "enginecontext.h"
@@ -1860,7 +1859,7 @@ void ParameterViewer::On_bCancel_Click(wxCommandEvent& event)
 void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 {
 	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = panel->GetRoot()->GetVM()->GetActiveEngine()->GetScriptProcessor();
+	ScriptProcessor *processor = panel->GetRoot()->GetActiveEngine()->GetScriptProcessor();
 	processor->LoadFromText(std::string(command));
 	this->Close();
 }

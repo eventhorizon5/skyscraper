@@ -31,7 +31,6 @@
 #include "elevator.h"
 #include "shaft.h"
 #include "stairs.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "meshcontrol.h"
 

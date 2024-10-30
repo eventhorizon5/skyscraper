@@ -26,7 +26,6 @@
 //*)
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "movingwalkway.h"
 #include "walkwaycontrol.h"

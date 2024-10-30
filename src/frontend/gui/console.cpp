@@ -23,7 +23,6 @@
 #include <mutex>
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
 #include "debugpanel.h"
 #include "scriptproc.h"
 #include "vm.h"
@@ -53,7 +52,7 @@ END_EVENT_TABLE()
 
 std::mutex mtx;
 
-Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+Console::Console(VM *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(Console)
 	wxBoxSizer* BoxSizer1;
@@ -98,7 +97,7 @@ Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint&
 	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&Console::On_Close);
 	//*)
 	Simcore = 0;
-	skyscraper = root;
+	this->vm = root;
 }
 
 Console::~Console()
@@ -109,13 +108,13 @@ Console::~Console()
 
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
-	Simcore = skyscraper->GetVM()->GetActiveSystem();
+	Simcore = vm->GetActiveSystem();
 
 	if (!Simcore)
 		return;
 
 	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = skyscraper->GetVM()->GetActiveScriptProcessor();
+	ScriptProcessor *processor = vm->GetActiveScriptProcessor();
 
 	if (!processor)
 		return;

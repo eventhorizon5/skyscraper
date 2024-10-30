@@ -29,7 +29,6 @@
 #include "sbs.h"
 #include "texture.h"
 #include "debugpanel.h"
-#include "skyscraper.h"
 #include "texturemanager.h"
 
 namespace Skyscraper {

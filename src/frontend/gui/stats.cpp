@@ -27,7 +27,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
-#include "skyscraper.h"
 #include "vm.h"
 #include "hal.h"
 #include "debugpanel.h"
@@ -253,10 +252,10 @@ void Stats::OnInit()
 {
 	Simcore = panel->GetSystem();
 
-	tFrontendVersion->SetValue(panel->GetRoot()->GetVM()->version_frontend);
+	tFrontendVersion->SetValue(panel->GetRoot()->version_frontend);
 	tSBSVersion->SetValue(Simcore->version);
 	tPlatform->SetValue(panel->GetRoot()->Platform);
-	tRenderer->SetValue(panel->GetRoot()->GetVM()->GetHAL()->Renderer);
+	tRenderer->SetValue(panel->GetRoot()->GetHAL()->Renderer);
 
 	tName->SetValue(Simcore->BuildingName);
 	tDesigner->SetValue(Simcore->BuildingDesigner);

@@ -30,20 +30,18 @@ class wxProgressDialog;
 
 namespace Skyscraper {
 
-class Skyscraper;
-class DebugPanel;
-class MainScreen;
 class EngineContext;
 class Console;
 class LoadDialog;
 class ScriptProcessor;
 class VM;
 class HAL;
+class DebugPanel;
 
 class GUI
 {
 public:
-	GUI(Skyscraper *parent);
+	GUI(VM *parent);
 	~GUI();
 	void UnregisterDebugPanel() { dpanel = 0; }
 	void Unload();
@@ -84,7 +82,7 @@ private:
 	bool show_progress;
 	std::string prog_text;
 
-	Skyscraper *frontend;
+	VM *vm;
 };
 
 }

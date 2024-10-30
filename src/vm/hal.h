@@ -31,6 +31,19 @@
 #include <fmod.hpp>
 #include "vm.h"
 
+namespace Ogre {
+	class SceneNode;
+	class Rectangle2D;
+	class ConfigFile;
+	class OverlaySystem;
+}
+
+namespace FMOD {
+	class System;
+	class Sound;
+	class Channel;
+}
+
 namespace Skyscraper {
 
 class VMIMPEXP HAL : public Ogre::LogListener

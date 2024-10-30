@@ -43,7 +43,7 @@ namespace Skyscraper {
 
 class MeshControl;
 class editelevator;
-class Skyscraper;
+class VM;
 class CameraControl;
 class KeyDialog;
 class Stats;
@@ -67,7 +67,7 @@ class DebugPanel: public wxFrame
 	friend class Timer;
 	public:
 
-		DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id = -1);
+		DebugPanel(VM *root, wxWindow* parent,wxWindowID id = -1);
 		virtual ~DebugPanel();
 
 		//(*Identifiers(DebugPanel)
@@ -128,7 +128,7 @@ class DebugPanel: public wxFrame
 		//*)
 		void EnableTimer(bool value);
 		void Loop();
-		Skyscraper* GetRoot() { return skyscraper; }
+		VM* GetRoot() { return vm; }
 		SBS::SBS* GetSystem() { return Simcore; }
 		void ShowControlReference();
 		class Timer : public wxTimer
@@ -141,7 +141,7 @@ class DebugPanel: public wxFrame
 		};
 		Timer *timer;
 		SBS::SBS *Simcore;
-		Skyscraper* skyscraper;
+		VM* vm;
 
 	protected:
 
