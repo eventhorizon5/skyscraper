@@ -268,7 +268,7 @@ bool VM::RunEngines()
 				if (active_engine->IsLoadingFinished() == true && isloading == true)
 					continue;
 			}
-			frontend->Start(engines[i]);
+			//frontend->Start(engines[i]); //FIXME
 		}
 	}
 	return result;
@@ -573,6 +573,8 @@ int VM::Run()
 	//update first run status
 	if (first_run == true)
 		first_run = false;
+
+	return 1;
 }
 
 bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)

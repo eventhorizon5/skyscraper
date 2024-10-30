@@ -95,6 +95,18 @@ HAL::~HAL()
 
 	Ogre::ResourceGroupManager::getSingleton().shutdownAll();
 
+	if (configfile)
+		delete configfile;
+	configfile = 0;
+
+	if (keyconfigfile)
+		delete keyconfigfile;
+	keyconfigfile = 0;
+
+	if (joyconfigfile)
+		delete joyconfigfile;
+	joyconfigfile = 0;
+
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
 	mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
 	//delete mRoot;
@@ -899,6 +911,13 @@ void HAL::LoadConfiguration(const std::string data_path)
 	joyconfigfile = ConfigLoad(data_path + "joystick.ini");
 	ConfigLoad("plugins.cfg", true);
 	ConfigLoad("resources.cfg", true);
+}
+
+void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)
+{
+	//callback function that receives OGRE log messages
+
+	vm->GetGUI()->WriteToConsole(message);
 }
 
 }

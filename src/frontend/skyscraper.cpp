@@ -185,6 +185,8 @@ bool Skyscraper::OnInit()
 	macos_major = 0;
 	macos_minor = 0;
 	mRenderWindow = 0;
+	window = 0;
+	parser = 0;
 
 	//create VM instance
 	vm = new VM();
