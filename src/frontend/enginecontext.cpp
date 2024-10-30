@@ -22,9 +22,10 @@
 
 #include <fmod.hpp>
 #include "globals.h"
+#include "sbs.h"
 #include "vm.h"
 #include "hal.h"
-#include "sbs.h"
+#include "gui.h"
 #include "camera.h"
 #include "gui/debugpanel.h"
 #include "scriptproc.h"
@@ -139,7 +140,7 @@ bool EngineContext::Run()
 			{
 				ReportError("Error processing building\n");
 				Shutdown();
-				frontend->CloseProgressDialog();
+				vm->GetGUI()->CloseProgressDialog();
 				return false;
 			}
 			else if (processor->IsFinished == true)
@@ -171,7 +172,7 @@ bool EngineContext::Run()
 	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 	{
-		frontend->RaiseWindow();
+		vm->GetGUI()->RaiseWindow();
 		raised = true;
 
 		processor->ReportMissingFiles();
@@ -230,7 +231,7 @@ bool EngineContext::Load(std::string filename)
 	}
 
 	//create progress dialog
-	frontend->CreateProgressDialog(filename);
+	vm->GetGUI()->CreateProgressDialog(filename);
 
 	//override SBS startup render option, if specified
 	if (vm->RenderOnStartup == true)
@@ -301,15 +302,15 @@ void EngineContext::StartSim()
 		processor = new ScriptProcessor(this);
 
 	//refresh console to fix banner message on Linux
-	frontend->RefreshConsole();
+	vm->GetGUI()->RefreshConsole();
 
 	//override verbose mode if specified
-	if (frontend->Verbose == true)
+	if (vm->Verbose == true)
 		Simcore->Verbose = true;
 
 	//set headless mode
-	if (frontend->Headless == true)
-		Simcore->Headless = true;
+	//if (frontend->Headless == true)
+		//Simcore->Headless = true;
 
 	//Pause for 2 seconds, if first instance
 	if (instance == 0)
@@ -406,7 +407,7 @@ bool EngineContext::ReportError(const std::string &message)
 bool EngineContext::ReportFatalError(const std::string &message)
 {
 	ReportError(message);
-	frontend->ShowError(message);
+	vm->GetGUI()->ShowError(message);
 	return false;
 }
 
@@ -423,7 +424,7 @@ void EngineContext::UpdateProgress(int percent)
 	//update progress bar
 
 	progress = percent;
-	frontend->UpdateProgress();
+	vm->GetGUI()->UpdateProgress();
 }
 
 CameraState EngineContext::GetCameraState()

@@ -31,6 +31,7 @@ class EngineContext;
 class ScriptProcessor;
 class HAL;
 class SkySystem;
+class GUI;
 
 //Virtual Manager system
 class VM
@@ -40,6 +41,7 @@ public:
 	~VM();
 	HAL* GetHAL();
 	SkySystem* GetSkySystem();
+	GUI* GetGUI();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -67,6 +69,12 @@ public:
 	bool CheckScript; //if set to true, checks building scripts instead of fully loading them
 	bool Pause; //pause simulator
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
+	bool Verbose; //verbose mode
+
+	std::string version;
+	std::string version_rev;
+	std::string version_state;
+	std::string version_frontend;
 
 private:
 
@@ -83,6 +91,7 @@ private:
 	std::vector<EngineContext*> engines;
 	HAL *hal; //hardware abstraction layer
 	SkySystem *skysystem;
+	GUI *gui; //GUI system
 
 	bool first_run;
 };
