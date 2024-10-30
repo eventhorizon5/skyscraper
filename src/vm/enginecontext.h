@@ -23,12 +23,13 @@
 #ifndef ENGINECONTEXT_H
 #define ENGINECONTEXT_H
 
+#include "vm.h"
+
 namespace Skyscraper {
 
-class VM;
 class ScriptProcessor;
 
-class EngineContext
+class VMIMPEXP EngineContext
 {
 public:
 

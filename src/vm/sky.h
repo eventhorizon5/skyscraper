@@ -24,13 +24,13 @@
 #define SKY_H
 
 #include <Caelum.h>
+#include "vm.h"\
 
 namespace Skyscraper {
 
-class VM;
 class EngineContext;
 
-class SkySystem
+class VMIMPEXP SkySystem
 {
 public:
     SkySystem(VM *vm);

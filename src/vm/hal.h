@@ -29,12 +29,11 @@
 #include <OgreLog.h>
 #include <OgreTrays.h>
 #include <fmod.hpp>
+#include "vm.h"
 
 namespace Skyscraper {
 
-class VM;
-
-class HAL : public Ogre::LogListener
+class VMIMPEXP HAL : public Ogre::LogListener
 {
 public:
     HAL(VM *vm);
