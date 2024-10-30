@@ -293,7 +293,7 @@ bool Skyscraper::OnInit()
 
 	//load config files
 	HAL *hal = vm->GetHAL();
-	hal->LoadConfiguration(vm->data_path, false);
+	hal->LoadConfiguration(vm->data_path, showconsole);
 
 	//create console window
 	if (showconsole == true)
