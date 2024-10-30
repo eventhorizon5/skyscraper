@@ -48,7 +48,6 @@ GUI::GUI(VM *parent)
 	console = 0;
 	progdialog = 0;
 	dpanel = 0;
-	console = 0;
 	loaddialog = 0;
 	show_progress = false;
 }
