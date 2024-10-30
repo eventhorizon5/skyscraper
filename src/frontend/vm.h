@@ -56,7 +56,7 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
-	int Run();
+	int Run(EngineContext* &newengine);
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
@@ -77,7 +77,7 @@ public:
 
 private:
 
-	bool RunEngines();
+	bool RunEngines(EngineContext* &newengine);
 	void CheckCamera();
 	void HandleEngineShutdown();
 	void HandleReload();
