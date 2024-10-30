@@ -36,6 +36,8 @@
 #include "malloc.h"
 #endif
 
+#include <unistd.h>
+
 using namespace SBS;
 
 namespace Skyscraper {
