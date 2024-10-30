@@ -140,7 +140,7 @@ bool EngineContext::Run()
 			{
 				ReportError("Error processing building\n");
 				Shutdown();
-				vm->GetGUI()->CloseProgressDialog();
+				//vm->GetGUI()->CloseProgressDialog(); //FIXME
 				return false;
 			}
 			else if (processor->IsFinished == true)
@@ -172,7 +172,7 @@ bool EngineContext::Run()
 	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 	{
-		vm->GetGUI()->RaiseWindow();
+		//vm->GetGUI()->RaiseWindow(); //FIXME
 		raised = true;
 
 		processor->ReportMissingFiles();
@@ -231,7 +231,7 @@ bool EngineContext::Load(std::string filename)
 	}
 
 	//create progress dialog
-	vm->GetGUI()->CreateProgressDialog(filename);
+	//vm->GetGUI()->CreateProgressDialog(filename); //FIXME
 
 	//override SBS startup render option, if specified
 	if (vm->RenderOnStartup == true)
@@ -302,7 +302,7 @@ void EngineContext::StartSim()
 		processor = new ScriptProcessor(this);
 
 	//refresh console to fix banner message on Linux
-	vm->GetGUI()->RefreshConsole();
+	//vm->GetGUI()->RefreshConsole(); //FIXME
 
 	//override verbose mode if specified
 	if (vm->Verbose == true)
@@ -407,7 +407,7 @@ bool EngineContext::ReportError(const std::string &message)
 bool EngineContext::ReportFatalError(const std::string &message)
 {
 	ReportError(message);
-	vm->GetGUI()->ShowError(message);
+	//vm->GetGUI()->ShowError(message); //FIXME
 	return false;
 }
 
@@ -424,7 +424,7 @@ void EngineContext::UpdateProgress(int percent)
 	//update progress bar
 
 	progress = percent;
-	vm->GetGUI()->UpdateProgress();
+	//vm->GetGUI()->UpdateProgress(); //FIXME
 }
 
 CameraState EngineContext::GetCameraState()

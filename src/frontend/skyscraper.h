@@ -107,7 +107,11 @@ public:
 	std::string GetDataPath();
 	MainScreen* GetWindow();
 	VM* GetVM();
+	GUI* GetGUI();
 	void ShowPlatform();
+
+	//main window
+	MainScreen *window;
 
 private:
 
@@ -142,9 +146,6 @@ private:
 
 	bool showconsole;
 	wxCmdLineParser *parser;
-
-	//main window
-	MainScreen *window;
 
 	//additional path for user data
 	std::string data_path;

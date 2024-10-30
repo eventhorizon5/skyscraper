@@ -283,7 +283,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 	if (key == WXK_F1)
 	{
-		frontend->GetVM()->GetGUI()->ShowControlReference();
+		frontend->GetGUI()->ShowControlReference();
 	}
 
 	if (key == WXK_F2)
@@ -387,7 +387,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 		if (key == WXK_F12)
 		{
-			frontend->GetVM()->GetGUI()->ShowDebugPanel();
+			frontend->GetGUI()->ShowDebugPanel();
 		}
 
 		if (key == WXK_F5)
@@ -441,7 +441,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		//load a new additional building
 		if (key == (wxKeyCode)key_load)
 		{
-			frontend->GetVM()->GetGUI()->ShowLoadDialog();
+			frontend->GetGUI()->ShowLoadDialog();
 			return;
 		}
 

@@ -41,7 +41,6 @@ public:
 	~VM();
 	HAL* GetHAL();
 	SkySystem* GetSkySystem();
-	GUI* GetGUI();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -91,7 +90,6 @@ private:
 	std::vector<EngineContext*> engines;
 	HAL *hal; //hardware abstraction layer
 	SkySystem *skysystem;
-	GUI *gui; //GUI system
 
 	bool first_run;
 };

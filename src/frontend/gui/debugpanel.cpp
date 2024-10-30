@@ -327,7 +327,7 @@ DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 
 DebugPanel::~DebugPanel()
 {
-	skyscraper->GetVM()->GetGUI()->UnregisterDebugPanel();
+	skyscraper->GetGUI()->UnregisterDebugPanel();
 
 	//delete timer;
 	if (timer)
@@ -661,7 +661,7 @@ void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
 {
-	skyscraper->GetVM()->GetGUI()->ShowConsole();
+	skyscraper->GetGUI()->ShowConsole();
 }
 
 void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
