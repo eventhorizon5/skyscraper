@@ -208,8 +208,9 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 	//frontend->GetWindow()->EnableFreelook(active_engine->GetSystem()->camera->Freelook); //FIXME
 }
 
-bool VM::RunEngines()
+bool VM::RunEngines(EngineContext* &newengine)
 {
+	newengine = 0;
 	bool result = true;
 	bool isloading = IsEngineLoading();
 
@@ -256,7 +257,7 @@ bool VM::RunEngines()
 				if (active_engine->IsLoadingFinished() == true && isloading == true)
 					continue;
 			}
-			//frontend->Start(engines[i]); //FIXME
+			newengine = engines[i];
 		}
 	}
 	return result;
@@ -501,14 +502,17 @@ ScriptProcessor* VM::GetActiveScriptProcessor()
 	return 0;
 }
 
-int VM::Run()
+int VM::Run(EngineContext* &newengine)
 {
 	//run system
 
-	//return codes are 0 for failure, 1 for success, and 2 to unload
+	//return codes are 0 for failure, 1 for success, 2 to unload, and 3 to load a new building
 
 	//run sim engines
-	bool result = RunEngines();
+	bool result = RunEngines(newengine);
+
+	if (newengine)
+		return 3;
 
 	//delete an engine if requested
 	HandleEngineShutdown();
