@@ -353,6 +353,10 @@ bool Skyscraper::OnInit()
 		mRenderWindow = CreateRenderWindow(0, "SkyscraperVR");
 	//}
 
+	//load system
+	if (!hal->LoadSystem(data_path, mRenderWindow))
+		return hal->ReportError("Error loading system", "");
+
 	//set up joystick if available
 	wxJoystick joystick(wxJOYSTICK1);
 	if (!joystick.IsOk())
@@ -411,10 +415,6 @@ int Skyscraper::OnExit()
 
 	//cleanup
 	vm->GetHAL()->Report("Cleaning up...", "");
-
-	//shut down GUI
-	delete gui;
-	gui = 0;
 
 	UnloadSim();
 

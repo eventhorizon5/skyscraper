@@ -711,12 +711,16 @@ void HAL::StopSound()
 void HAL::ClearScene()
 {
 	//clear scene
-	mSceneMgr->clearScene();
+	if (mSceneMgr)
+		mSceneMgr->clearScene();
 }
 
 void HAL::ToggleStats()
 {
 	show_stats++;
+
+	if (!mTrayMgr)
+		return;
 
 	if (show_stats == 0)
 	{
@@ -827,7 +831,8 @@ void HAL::Clear()
 	Ogre::TextureManager::getSingleton().removeAll();
 
 	//clear scene manager
-	mSceneMgr->clearScene();
+	if (mSceneMgr)
+		mSceneMgr->clearScene();
 
 	//free unused hardware buffers
 	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
