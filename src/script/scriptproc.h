@@ -23,9 +23,11 @@
 #ifndef SCRIPTPROCESSOR_H
 #define SCRIPTPROCESSOR_H
 
+#include "vm.h"
+
 namespace Skyscraper {
 
-class ScriptProcessor
+class VMIMPEXP ScriptProcessor
 {
 public:
 
