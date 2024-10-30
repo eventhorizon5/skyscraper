@@ -231,8 +231,9 @@ void GUI::CloseProgressDialog()
 
 void GUI::ShowProgressDialog()
 {
-	//if (!progdialog) //FIXME
+	if (!progdialog) //FIXME
 		//progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, frontend->window);
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100);
 
 	show_progress = false;
 }
