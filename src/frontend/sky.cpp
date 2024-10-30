@@ -38,7 +38,7 @@ namespace Skyscraper {
 
 SkySystem::SkySystem(VM *vm)
 {
-    this->vm = vm;
+	this->vm = vm;
 	SkyMult = 0;
 	mCaelumSystem = 0;
 	new_location = false;
