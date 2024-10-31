@@ -108,8 +108,8 @@ HAL::~HAL()
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
 	//FIXME - shutdown has a thread hang
 	mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
-
-	//delete mRoot;
+#else
+	delete mRoot;
 #endif
 	delete logger;
 }
