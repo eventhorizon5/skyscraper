@@ -313,7 +313,7 @@ bool HAL::Initialize(const std::string &data_path)
 			if (!logger)
 			{
 				logger = new Ogre::LogManager();
-				Ogre::Log *log = logger->createLog(data_path + "skyscraper.log", true, vm->showconsole, false);
+				Ogre::Log *log = logger->createLog(data_path + "skyscraper.log", true, !vm->showconsole, false);
 				log->addListener(this);
 			}
 
