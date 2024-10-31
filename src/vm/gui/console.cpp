@@ -122,10 +122,7 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 	//load new commands into script interpreter, and run
 	processor->LoadFromText(std::string(tCommand->GetValue()));
 	if (chkEcho->GetValue() == true)
-	{
-		tConsole->AppendText(tCommand->GetValue() + wxT('\n'));
-		tConsole->SetInsertionPointEnd();
-	}
+		Write(tCommand->GetValue().ToStdString());
 	tCommand->Clear();
 }
 
