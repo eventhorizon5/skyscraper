@@ -109,7 +109,9 @@ HAL::~HAL()
 	log->removeListener(this);
 
 	//shutdown Ogre
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
 	delete mRoot;
+#endif
 
 	delete logger;
 }
