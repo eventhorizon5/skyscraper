@@ -4688,4 +4688,12 @@ Reverb* SBS::GetReverb(int index)
 	return 0;
 }
 
+void SBS::Run0()
+{
+	//thread 0 runloop
+
+	if (utility)
+		utility->ProcessLog();
+}
+
 }

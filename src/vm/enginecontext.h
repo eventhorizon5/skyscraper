@@ -42,7 +42,8 @@ public:
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
 	bool IsCameraActive();
-	bool Run();
+	void Run();
+	void Run0();
 	void Shutdown();
 	bool GetShutdownState() { return shutdown; }
 	bool Load(std::string filename);
@@ -86,6 +87,7 @@ private:
 
 	void StartSim();
 	void UnloadSim();
+	void ThreadWait();
 
 	ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
@@ -113,6 +115,10 @@ private:
 
 	//child engines
 	std::vector<EngineContext*> children;
+
+	//threading
+	std::thread ex;
+	bool ShutdownLoop;
 
 	//VM instance
 	VM *vm;

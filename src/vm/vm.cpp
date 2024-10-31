@@ -44,6 +44,8 @@ using namespace SBS;
 
 namespace Skyscraper {
 
+std::mutex load_lock;
+
 //Virtual Manager system
 
 VM::VM()
@@ -62,9 +64,19 @@ VM::VM()
 	first_run = true;
 	Verbose = false;
 	showconsole = false;
+	newthread = false;
 
 	macos_major = 0;
 	macos_minor = 0;
+
+	//initialize loader info
+	loadinfo.filename = "";
+	loadinfo.need_process = false;
+	loadinfo.area_min = Vector3::ZERO;
+	loadinfo.area_max = Vector3::ZERO;
+	loadinfo.parent = 0;
+	loadinfo.position = Vector3::ZERO;
+	loadinfo.rotation = 0.0;
 
 	//create HAL instance
 	hal = new HAL(this);
@@ -535,6 +547,18 @@ int VM::Run(EngineContext* &newengine)
 
 	//return codes are 0 for failure, 1 for success, 2 to unload, and 3 to load a new building
 
+	if (newthread == true)
+	{
+		GetRenderSystem()->postExtraThreadsStarted();
+		newthread = false;
+	}
+
+	ProcessLog();
+	ProcessLoad();
+
+	//run thread 0 runloop
+	vm->Run0();
+
 	//run sim engines
 	bool result = RunEngines(newengine);
 
@@ -773,6 +797,56 @@ void VM::ShowPlatform()
 wxWindow* VM::GetParent()
 {
 	return parent;
+}
+
+void VM::ProcessLog()
+{
+	while (log_queue.size() > 0)
+	{
+		Ogre::LogMessageLevel level = Ogre::LML_NORMAL;
+		if (log_Queue[0].error == true)
+			level = OGRE::LML_CRITICAL;
+
+		if (Ogre::LogManager::getSingletonPtr())
+			Ogre::LogManager::getSingleton().logMessage(log_queue[0].text, level);
+
+		//ShowError("Error writing message to log\n" + e.getDescription());
+
+		//erase queue entry
+		log_queue.erase(log_queue.begin());
+	}
+}
+
+void VM::ExtLoad(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+        //call a building load, from another thread
+
+        while (loadinfo.need_process == true)
+        {
+                //have this thread sleep while waiting for an unlock
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+
+        load_lock.lock();
+        loadinfo.filename = filename;
+        loadinfo.parent = parent;
+        loadinfo.position = position;
+        loadinfo.rotation = rotation;
+        loadinfo.area_min = area_min;
+        loadinfo.area_max = area_max;
+        loadinfo.need_process = true;
+        load_lock.unlock();
+}
+
+void VM::ProcessLoad()
+{
+        if (loadinfo.need_process == true)
+        {
+                load_lock.lock();
+                Load(loadinfo.filename, loadinfo.parent, loadinfo.position, loadinfo.rotation, loadinfo.area_min, loadinfo.area_max);
+                loadinfo.need_process = false;
+                load_lock.unlock();
+        }
 }
 
 }

@@ -89,13 +89,15 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
-	int Run(EngineContext* &newengine);
+	bool Run(EngineContext* &newengine);
+	void Run0();
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void ShowPlatform();
 	wxWindow* GetParent();
+	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -105,6 +107,7 @@ public:
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 	bool Verbose; //verbose mode
 	bool showconsole;
+	bool newthread;
 
 	std::string version;
 	std::string version_rev;
@@ -129,6 +132,8 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
+	void ProcessLog();
+	void ProcessLoad();
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
@@ -139,6 +144,26 @@ private:
 	wxWindow *parent;
 
 	bool first_run;
+
+	struct log_queue_data
+        {
+                std::string text;
+                bool error;
+        };
+        std::vector<log_queue_data> log_queue;
+
+        //building load information
+        struct LoadInfo
+        {
+                std::string filename;
+                EngineContext *parent;
+                Vector3 position;
+                Real rotation;
+                Vector3 area_min;
+                Vector3 area_max;
+                std::atomic<bool> need_process;
+        };
+        LoadInfo loadinfo;
 };
 
 }

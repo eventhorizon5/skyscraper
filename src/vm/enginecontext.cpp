@@ -90,6 +90,9 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 		parent->AddChild(this);
 
 	StartSim();
+
+	//enable runloop thread
+	ex = std::thread{&EngineContext::Run, this};
 }
 
 EngineContext::~EngineContext()
@@ -104,6 +107,12 @@ EngineContext::~EngineContext()
 			children[i]->RemoveParent();
 		}
 	}
+
+	//shutdown runloop thread
+	ShutdownLoop = true;
+	ex.join();
+
+	vm->GetRenderSystem()->unregisterThread();
 
 	//unload simulator
 	UnloadSim();
@@ -123,7 +132,10 @@ bool EngineContext::IsCameraActive()
 	if (!Simcore)
 		return false;
 
-	return Simcore->camera->IsActive();
+	if (Simcore->camera)
+		return Simcore->camera->IsActive();
+	else
+		return false;
 }
 
 void EngineContext::Shutdown()
@@ -133,10 +145,16 @@ void EngineContext::Shutdown()
 	shutdown = true;
 }
 
-bool EngineContext::Run()
+void EngineContext::Run()
 {
 	if (!Simcore)
 		return false;
+
+	//register thread with Ogre
+	vm->GetRenderSystem()->registerThread();
+	vm->newthread = true;
+
+	return true; //FIXME, needs thread implementation
 
 	//run script processor
 	if (processor)
@@ -663,4 +681,20 @@ bool EngineContext::IsRoot()
 	return (!GetParent());
 }
 
+void EngineContext::Run0()
+{
+	//thread 0 runloop
+
+	if (!Simcore)
+		return;
+
+	Simcore->Run0();
 }
+
+void EngineContext::ThreadWait()
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+}
+
+}
+

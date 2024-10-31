@@ -25,6 +25,8 @@ namespace SBS {
 
 class SBSIMPEXP Utility : public ObjectBase
 {
+	friend class SBS;
+
 public:
 	Utility(Object *parent);
 	~Utility();
@@ -38,6 +40,9 @@ public:
 	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
+	void ProcessLog();
 
 private:
 
@@ -50,6 +55,13 @@ private:
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
 	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
+
+	struct log_queue_data
+	{
+		std::string text;
+		bool error;
+	}
+	std::vector<log_queue_dat> log_queue;
 };
 
 }

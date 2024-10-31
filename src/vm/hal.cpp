@@ -631,6 +631,8 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		mTrayMgr->hideCursor();
 	}
 
+	mRenderSystem->postExtraThreadsStarted();
+
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
 	Report("Reported hardware concurrency: " + ToString(c) + "\n");
