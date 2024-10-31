@@ -831,4 +831,14 @@ void VM::ProcessLoad()
         }
 }
 
+void VM::Run0()
+{
+	//run thread 0 runloops for each engine context
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		if (engines[i])
+			engines[i]->Run0();
+	}
+}
+
 }
