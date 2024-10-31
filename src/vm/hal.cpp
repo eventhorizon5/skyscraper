@@ -108,8 +108,8 @@ HAL::~HAL()
 
 	log->removeListener(this);
 
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
-	mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	//mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
 #else
 	delete mRoot;
 #endif
