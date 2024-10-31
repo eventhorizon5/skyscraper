@@ -148,7 +148,7 @@ bool ScriptProcessor::Run()
 		ProcessRunloop();
 
 	//wait until end of script before processing runloop again
-	if (processed_runloop == true && line == (int)BuildingData.size() - 1)
+	if (processed_runloop == true)
 		processed_runloop = false;
 
 	if (line < (int)BuildingData.size() && line >= 0)
