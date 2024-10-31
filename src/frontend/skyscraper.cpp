@@ -291,10 +291,6 @@ bool Skyscraper::OnInit()
 	HAL *hal = vm->GetHAL();
 	hal->LoadConfiguration(vm->data_path, showconsole);
 
-	//create console window
-	if (showconsole == true)
-		gui->ShowConsole(false);
-
 	//Create main window and set size from INI file defaults
 	//if (Headless == false)
 	//{
