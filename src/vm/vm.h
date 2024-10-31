@@ -89,7 +89,7 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
-	bool Run(EngineContext* &newengine);
+	int Run(EngineContext* &newengine);
 	void Run0();
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
@@ -132,7 +132,6 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
-	void ProcessLog();
 	void ProcessLoad();
 
 	EngineContext *active_engine;
@@ -145,25 +144,18 @@ private:
 
 	bool first_run;
 
-	struct log_queue_data
-        {
-                std::string text;
-                bool error;
-        };
-        std::vector<log_queue_data> log_queue;
-
-        //building load information
-        struct LoadInfo
-        {
-                std::string filename;
-                EngineContext *parent;
-                Vector3 position;
-                Real rotation;
-                Vector3 area_min;
-                Vector3 area_max;
-                std::atomic<bool> need_process;
-        };
-        LoadInfo loadinfo;
+    //building load information
+    struct LoadInfo
+    {
+		std::string filename;
+		EngineContext *parent;
+		Vector3 position;
+		Real rotation;
+		Vector3 area_min;
+		Vector3 area_max;
+		std::atomic<bool> need_process;
+	};
+	LoadInfo loadinfo;
 };
 
 }

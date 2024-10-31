@@ -30,6 +30,7 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <OgreOverlaySystem.h>
+#include <OgreRenderSystem.h>
 
 //FMOD
 #include <fmod_errors.h>
@@ -631,7 +632,8 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		mTrayMgr->hideCursor();
 	}
 
-	mRenderSystem->postExtraThreadsStarted();
+	//notify on new thread
+	NotifyThreadStarted();
 
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
@@ -933,6 +935,46 @@ void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, b
 	//callback function that receives OGRE log messages
 
 	vm->GetGUI()->WriteToConsole(message);
+}
+
+void HAL::ProcessLog()
+{
+	while (log_queue.size() > 0)
+	{
+		Ogre::LogMessageLevel level = Ogre::LML_NORMAL;
+		if (log_queue[0].error == true)
+			level = Ogre::LML_CRITICAL;
+
+		try
+		{
+			if (Ogre::LogManager::getSingletonPtr())
+				Ogre::LogManager::getSingleton().logMessage(log_queue[0].text, level);
+		}
+		catch(const Ogre::Exception &e)
+		{
+			vm->GetGUI()->ShowError("Error writing message to log\n" + e.getDescription());
+		}
+
+		//erase queue entry
+		log_queue.erase(log_queue.begin());
+	}
+}
+
+void HAL::NotifyThreadStarted()
+{
+	//notify rendersystem on a new thread that needs a graphics context
+
+	mRoot->getRenderSystem()->postExtraThreadsStarted();
+}
+
+void HAL::RegisterThread()
+{
+	mRoot->getRenderSystem()->registerThread();
+}
+
+void HAL::UnregisterThread()
+{
+	mRoot->getRenderSystem()->unregisterThread();
 }
 
 }

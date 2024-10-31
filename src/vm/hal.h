@@ -78,6 +78,10 @@ public:
 	bool ReportFatalError(const std::string &message, const std::string &prompt);
 	void LoadConfiguration(const std::string data_path, bool show_console);
 	bool LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow);
+	void NotifyThreadStarted();
+	void RegisterThread();
+	void UnregisterThread();
+	void ProcessLog();
 
 	bool RTSS;
 	std::string Renderer;
@@ -113,6 +117,13 @@ private:
 	bool ReportFatalError(const std::string &message);
 	Ogre::ConfigFile* ConfigLoad(const std::string &filename, bool delete_after_use = false);
 	void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
+
+	struct log_queue_data
+    {
+		std::string text;
+		bool error;
+    };
+	std::vector<log_queue_data> log_queue;
 
     //stats
 	OgreBites::TrayManager* mTrayMgr;

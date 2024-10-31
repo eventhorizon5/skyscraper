@@ -149,7 +149,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			max.z = ToFloat(tempdata[10]);
 		}
 
-		bool result = engine->GetVM()->ExtLoad(tempdata[0], engine, position, rotation, min, max);
+		engine->GetVM()->ExtLoad(tempdata[0], engine, position, rotation, min, max);
 
 		return sNextLine;
 	}

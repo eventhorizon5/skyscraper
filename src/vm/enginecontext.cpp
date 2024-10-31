@@ -112,7 +112,7 @@ EngineContext::~EngineContext()
 	ShutdownLoop = true;
 	ex.join();
 
-	vm->GetRenderSystem()->unregisterThread();
+	vm->GetHAL()->UnregisterThread();
 
 	//unload simulator
 	UnloadSim();
@@ -148,16 +148,16 @@ void EngineContext::Shutdown()
 void EngineContext::Run()
 {
 	if (!Simcore)
-		return false;
+		return;
 
-	//register thread with Ogre
-	vm->GetRenderSystem()->registerThread();
+	//register thread with HAL
+	vm->GetHAL()->RegisterThread();
 	vm->newthread = true;
 
-	return true; //FIXME, needs thread implementation
+	return; //FIXME, needs thread implementation
 
 	//run script processor
-	if (processor)
+	/*if (processor)
 	{
 		bool in_main = InRunloop();
 		bool result = processor->Run();
@@ -223,7 +223,7 @@ void EngineContext::Run()
 			OnExit();
 	}
 
-	return true;
+	return true;*/
 }
 
 bool EngineContext::Load(std::string filename)

@@ -278,8 +278,8 @@ bool VM::RunEngines(EngineContext* &newengine)
 
 			if (engines[i]->IsLoadingFinished() == false && run == true)
 			{
-				if (engines[i]->Run() == false)
-					result = false;
+				//if (engines[i]->Run() == false) //FIXME
+					//result = false;
 			}
 		}
 
@@ -549,15 +549,15 @@ int VM::Run(EngineContext* &newengine)
 
 	if (newthread == true)
 	{
-		GetRenderSystem()->postExtraThreadsStarted();
+		hal->NotifyThreadStarted();
 		newthread = false;
 	}
 
-	ProcessLog();
+	hal->ProcessLog();
 	ProcessLoad();
 
 	//run thread 0 runloop
-	vm->Run0();
+	Run0();
 
 	//run sim engines
 	bool result = RunEngines(newengine);
@@ -797,24 +797,6 @@ void VM::ShowPlatform()
 wxWindow* VM::GetParent()
 {
 	return parent;
-}
-
-void VM::ProcessLog()
-{
-	while (log_queue.size() > 0)
-	{
-		Ogre::LogMessageLevel level = Ogre::LML_NORMAL;
-		if (log_Queue[0].error == true)
-			level = OGRE::LML_CRITICAL;
-
-		if (Ogre::LogManager::getSingletonPtr())
-			Ogre::LogManager::getSingleton().logMessage(log_queue[0].text, level);
-
-		//ShowError("Error writing message to log\n" + e.getDescription());
-
-		//erase queue entry
-		log_queue.erase(log_queue.begin());
-	}
 }
 
 void VM::ExtLoad(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)

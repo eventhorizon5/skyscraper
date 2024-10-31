@@ -60,8 +60,8 @@ private:
 	{
 		std::string text;
 		bool error;
-	}
-	std::vector<log_queue_dat> log_queue;
+	};
+	std::vector<log_queue_data> log_queue;
 };
 
 }
