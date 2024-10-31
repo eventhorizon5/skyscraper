@@ -108,11 +108,9 @@ HAL::~HAL()
 
 	log->removeListener(this);
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	//mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
-#else
+	//shutdown Ogre
 	delete mRoot;
-#endif
+
 	delete logger;
 }
 
