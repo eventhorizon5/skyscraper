@@ -137,6 +137,8 @@ private:
 	void UnloadSim();
 	void DeleteButtons();
 	void ShowProgressDialog();
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 	wxCmdLineParser *parser;
 
