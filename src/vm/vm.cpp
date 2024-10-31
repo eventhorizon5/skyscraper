@@ -80,13 +80,15 @@ VM::VM()
 
 VM::~VM()
 {
-	if (hal)
-		delete hal;
-	hal = 0;
+	Report("Shutting down...");
 
 	if (skysystem)
 		delete skysystem;
 	skysystem = 0;
+
+	if (hal)
+		delete hal;
+	hal = 0;
 }
 
 void VM::SetParent(wxWindow *parent)
