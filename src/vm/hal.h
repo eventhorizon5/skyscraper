@@ -100,6 +100,7 @@ private:
 
     //OGRE log manager
 	Ogre::LogManager* logger;
+	Ogre::Log* log;
 
 	//sound data
 	FMOD::System *soundsys;
