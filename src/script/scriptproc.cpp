@@ -22,6 +22,10 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
 #include <OgreFileSystem.h>
 #include <OgreArchive.h>
 #include <OgreArchiveManager.h>
@@ -523,11 +527,11 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	engine->ReportError(error);
 
 	//show error dialog
-	/*if (warning == false) //FIXME
+	if (warning == false)
 	{
 		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
 		dialog.ShowModal();
-	}*/
+	}
 	return sError;
 }
 
