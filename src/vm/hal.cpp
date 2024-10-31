@@ -78,7 +78,6 @@ HAL::HAL(VM *vm)
 	mTrayMgr = 0;
 	show_stats = -1;
 	logger = 0;
-	log = 0;
 	DisableSound = false;
 	configfile = 0;
 	keyconfigfile = 0;
@@ -106,15 +105,12 @@ HAL::~HAL()
 		delete joyconfigfile;
 	joyconfigfile = 0;
 
-	log->removeListener(this);
-
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
 	//FIXME - shutdown has a thread hang
 	mRoot->shutdown(); //shutdown root instead of delete, to fix a crash on certain systems
 #else
 	delete mRoot;
 #endif
-	delete log;
 	delete logger;
 }
 
@@ -319,7 +315,7 @@ bool HAL::Initialize(const std::string &data_path)
 			if (!logger)
 			{
 				logger = new Ogre::LogManager();
-				log = logger->createLog(data_path + "skyscraper.log", true, !vm->showconsole, false);
+				Ogre::Log *log = logger->createLog(data_path + "skyscraper.log", true, !vm->showconsole, false);
 				log->addListener(this);
 			}
 
