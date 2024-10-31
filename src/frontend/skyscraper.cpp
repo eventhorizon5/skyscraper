@@ -308,28 +308,28 @@ bool Skyscraper::OnInit()
 
 	//start and initialize abstraction layer
 	if (!hal->Initialize(vm->data_path))
-		return hal->ReportError("Error initializing HAL", "");
+		return ReportError("Error initializing HAL");
 
 	//if (vm->GetFrontend()->Headless == false)
 	//{
-		hal->Report("", "");
-		hal->Report("Creating render window...", "");
+		Report("");
+		Report("Creating render window...");
 		mRenderWindow = CreateRenderWindow(0, "SkyscraperVR");
 	//}
 
 	//load system
 	if (!hal->LoadSystem(vm->data_path, mRenderWindow))
-		return hal->ReportError("Error loading system", "");
+		return ReportError("Error loading system");
 
 	//set up joystick if available
 	wxJoystick joystick(wxJOYSTICK1);
 	if (!joystick.IsOk())
-		hal->Report("No joystick detected", "");
+		Report("No joystick detected");
 	else
 	{
-		hal->Report("", "");
-		hal->Report("Joystick detected: " + joystick.GetProductName().ToStdString(), "");
-		hal->Report("", "");
+		Report("");
+		Report("Joystick detected: " + joystick.GetProductName().ToStdString());
+		Report("");
 	}
 
 	vm->ShowPlatform();
@@ -378,7 +378,7 @@ int Skyscraper::OnExit()
 	//clean up
 
 	//cleanup
-	vm->GetHAL()->Report("Cleaning up...", "");
+	Report("Cleaning up...");
 
 	UnloadSim();
 
@@ -574,7 +574,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	hal->EnableStats(hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Stats", true));
 
 	//run simulation
-	hal->Report("Running simulation...", "");
+	Report("Running simulation...");
 	hal->StopSound();
 
 	gui->EnableConsole(true);
@@ -767,6 +767,16 @@ VM* Skyscraper::GetVM()
 GUI* Skyscraper::GetGUI()
 {
 	return gui;
+}
+
+void Skyscraper::Report(const std::string &message)
+{
+	vm->GetHAL()->Report(message, "");
+}
+
+bool Skyscraper::ReportError(const std::string &message)
+{
+	return vm->GetHAL()->ReportError(message, "");
 }
 
 }
