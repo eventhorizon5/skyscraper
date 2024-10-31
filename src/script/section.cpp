@@ -22,9 +22,8 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
-#include "enginecontext.h"
 #include "vm.h"
+#include "enginecontext.h"
 #include "hal.h"
 #include "floor.h"
 #include "elevator.h"
@@ -46,7 +45,7 @@ ScriptProcessor::Section::Section(ScriptProcessor *parent)
 	engine = parent->GetEngine();
 	Simcore = engine->GetSystem();
 	VM *vm = engine->GetVM();
-	warn_deprecated = vm->GetHAL()->GetConfigBool(vm->GetFrontend()->configfile, "Skyscraper.Frontend.WarnDeprecated", false);
+	warn_deprecated = vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.WarnDeprecated", false);
 	config = parent->GetConfigHandler();
 }
 

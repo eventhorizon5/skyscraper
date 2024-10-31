@@ -25,10 +25,6 @@
 
 #include <wx/app.h>
 
-//wxWidgets definitions
-class wxCmdLineParser;
-class wxProgressDialog;
-
 namespace Ogre {
 	class SceneNode;
 	class Rectangle2D;
@@ -61,8 +57,10 @@ class Console;
 class LoadDialog;
 class ScriptProcessor;
 class VM;
+class HAL;
+class GUI;
 
-class Skyscraper : public wxApp, public Ogre::LogListener
+class Skyscraper : public wxApp
 {
 	friend class MainScreen;
 	friend class VM;
@@ -70,30 +68,16 @@ class Skyscraper : public wxApp, public Ogre::LogListener
 
 public:
 
-	std::string version;
-	std::string version_rev;
-	std::string version_state;
-	std::string version_frontend;
-
-	std::string Platform;
-	std::string Architecture;
-
 	bool StartupRunning;
 	bool IntroMusic;
 	bool FullScreen;
 	bool Verbose;
 	bool ShowMenu; //show main menu
 	bool Headless;
-	int macos_major; //macos major version
-	int macos_minor; //macos minor version
-
-	Ogre::ConfigFile *configfile;
-	Ogre::ConfigFile *keyconfigfile;
-	Ogre::ConfigFile *joyconfigfile;
 
 	bool Loop();
-	virtual bool OnInit(void);
-	virtual int OnExit(void);
+	virtual bool OnInit();
+	virtual int OnExit();
 	bool DrawBackground();
 
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
@@ -111,19 +95,17 @@ public:
 	void Quit();
 	std::string GetKeyConfigString(const std::string &key, const std::string &default_value);
 	int GetJoystickConfigInt(const std::string &key, int default_value);
-	void ShowConsole(bool send_button = true);
-	void CreateProgressDialog(const std::string &message);
-	void CloseProgressDialog();
-	void UpdateProgress();
 	void SetFullScreen(bool enabled);
 	void RaiseWindow();
 	void RefreshConsole();
-	void UnregisterDebugPanel() { dpanel = 0; }
 	virtual void MacOpenFile(const wxString &filename);
 	std::string GetDataPath();
 	MainScreen* GetWindow();
 	VM* GetVM();
-	void ShowPlatform();
+	GUI* GetGUI();
+
+	//main window
+	MainScreen *window;
 
 private:
 
@@ -154,34 +136,19 @@ private:
 	void Click(int index);
 	void UnloadSim();
 	void DeleteButtons();
-	void messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage);
 	void ShowProgressDialog();
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
-	bool showconsole;
-	wxProgressDialog *progdialog;
 	wxCmdLineParser *parser;
 
-	//control panel
-	DebugPanel *dpanel;
-
-	//main window
-	MainScreen *window;
-
-	//console window
-	Console *console;
-
-	//load dialog window
-	LoadDialog *loaddialog;
-
-	//progress dialog initial data
-	bool show_progress;
-	std::string prog_text;
-
-	//additional path for user data
-	std::string data_path;
+	Ogre::RenderWindow *mRenderWindow;
 
 	//VM instance
 	VM *vm;
+
+	//GUI instance
+	GUI *gui;
 };
 
 DECLARE_APP(Skyscraper)

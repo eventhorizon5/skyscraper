@@ -22,7 +22,6 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "skyscraper.h"
 #include "vm.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
@@ -150,7 +149,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 			max.z = ToFloat(tempdata[10]);
 		}
 
-		bool result = engine->GetFrontend()->Load(tempdata[0], engine, position, rotation, min, max);
+		bool result = engine->GetVM()->Load(tempdata[0], engine, position, rotation, min, max);
 
 		return sNextLine;
 	}

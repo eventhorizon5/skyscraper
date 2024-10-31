@@ -74,16 +74,19 @@ find_package(OpenXR)
 if(WIN32)
 	file(GLOB FRONTEND_FILES
 		src/frontend/*.cpp
-		src/frontend/gui/*.cpp
 		msvc/Skyscraper.rc
 	)
 else()
 	file(GLOB FRONTEND_FILES
                 src/frontend/*.cpp
-                src/frontend/gui/*.cpp
         )
 endif()
  
+file(GLOB VM_FILES
+	src/vm/*.cpp
+	src/vm/gui/*.cpp
+)
+
 file(GLOB SCRIPTPROC_FILES
 	src/script/*.cpp
 )
@@ -125,6 +128,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${OpenXR_INCLUDE_DIR}
 	${OgreProcedural_INCLUDE_DIR}
 	src/frontend
+	src/vm
 	src/sbs
 	src/script
 	src/alloc
@@ -162,21 +166,24 @@ if (WIN32)
 endif ()
 
 #frontend executable
-if (NOT WIN32)
-	add_executable(skyscraper ${FRONTEND_FILES})
-else ()
-	add_executable(skyscraper ${FRONTEND_FILES} ${SCRIPTPROC_FILES})
+add_executable(skyscraper ${FRONTEND_FILES})
 
+if (NOT WIN32)
+	add_library(VM SHARED ${VM_FILES})
+else ()
+	add_library(VM SHARED ${VM_FILES} ${SCRIPTPROC_FILES})
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
 	target_compile_options(SBS PRIVATE -DSBS_DLL "/MD")
+	target_compile_options(VM PRIVATE -DVM_EXPORTS "/MD")
 	target_compile_options(skyscraper PRIVATE "/MD")
 endif ()
 
 target_precompile_headers(OgreBulletCol PRIVATE ogrebullet/Collisions/include/OgreBulletCollisionsPreRequisites.h)
 target_precompile_headers(OgreBulletDyn PRIVATE ogrebullet/Dynamics/include/OgreBulletDynamicsPreRequisites.h)
 target_precompile_headers(SBS PRIVATE src/sbs/globals.h)
+target_precompile_headers(VM PRIVATE src/sbs/globals.h)
 
 if (NOT WIN32)
 	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
@@ -196,9 +203,11 @@ target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_L
 
 if (NOT WIN32)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(skyscraper ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+	target_link_libraries(VM SBS ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 else ()
-	target_link_libraries(skyscraper SBS OpenXR ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${Caelum_LIBRARIES} ${OPENXR_loader_LIBRARY} ${FRONTENDGLINC})
+	target_link_libraries(VM SBS OpenXR ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
+	target_link_libraries(skyscraper VM SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
  
 if (APPLE)

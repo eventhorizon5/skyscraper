@@ -38,6 +38,7 @@
 #include "vm.h"
 #include "hal.h"
 #include "sky.h"
+#include "gui.h"
 #include "enginecontext.h"
 #include "gui/loaddialog.h"
 #include "mainscreen.h"
@@ -64,7 +65,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel = 0;
 	Center();
 	wxString title;
-	title = wxT("Skyscraper " + frontend->version + " " + frontend->version_state);
+	title = wxT("Skyscraper " + frontend->GetVM()->version + " " + frontend->GetVM()->version_state);
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
@@ -98,28 +99,28 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 
 	HAL *hal = frontend->GetVM()->GetHAL();
 
-	key_right = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Right", "D")[0];
-	key_left = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Left", "A")[0];
-	key_up = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Up", "W")[0];
-	key_down = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Down", "S")[0];
-	key_strafeleft = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.StrafeLeft", "Q")[0];
-	key_straferight = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.StrafeRight", "E")[0];
-	key_lookup = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.LookUp", "P")[0];
-	key_lookdown = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.LookDown", "L")[0];
-	key_binoculars = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Binoculars", "B")[0];
-	key_crouch = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Crouch", "X")[0];
-	key_floatup = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.FloatUp", "O")[0];
-	key_floatdown = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.FloatDown", "K")[0];
-	key_noclip = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.NoClip", "V")[0];
-	key_pickup = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.PickUp", "C")[0];
-	key_load = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Load", ";")[0];
-	key_enter = hal->GetConfigString(frontend->keyconfigfile, "Skyscraper.Frontend.Keyboard.Enter", "E")[0];
+	key_right = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Right", "D")[0];
+	key_left = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Left", "A")[0];
+	key_up = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Up", "W")[0];
+	key_down = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Down", "S")[0];
+	key_strafeleft = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.StrafeLeft", "Q")[0];
+	key_straferight = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.StrafeRight", "E")[0];
+	key_lookup = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.LookUp", "P")[0];
+	key_lookdown = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.LookDown", "L")[0];
+	key_binoculars = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Binoculars", "B")[0];
+	key_crouch = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Crouch", "X")[0];
+	key_floatup = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.FloatUp", "O")[0];
+	key_floatdown = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.FloatDown", "K")[0];
+	key_noclip = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.NoClip", "V")[0];
+	key_pickup = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.PickUp", "C")[0];
+	key_load = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Load", ";")[0];
+	key_enter = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Enter", "E")[0];
 
-	joy_click = hal->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Click", 0);
-	joy_fast = hal->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Fast", 1);
-	joy_strafe = hal->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Strafe", 2);
-	joy_turn = hal->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Turn", 0);
-	joy_forward = hal->GetConfigInt(frontend->joyconfigfile, "Skyscraper.Frontend.Joystick.Forward", 1);
+	joy_click = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Click", 0);
+	joy_fast = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Fast", 1);
+	joy_strafe = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Strafe", 2);
+	joy_turn = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Turn", 0);
+	joy_forward = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Forward", 1);
 
 	//create panel, rendering is done on this, along with keyboard and mouse events
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
@@ -282,8 +283,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 
 	if (key == WXK_F1)
 	{
-		if (frontend->dpanel)
-			frontend->dpanel->ShowControlReference();
+		frontend->GetGUI()->ShowControlReference();
 	}
 
 	if (key == WXK_F2)
@@ -385,12 +385,9 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			frontend->GetVM()->GetHAL()->GetRenderWindow()->writeContentsToTimestampedFile(prefix + "screenshots/skyscraper-", ".jpg");
 		}
 
-		if (key == WXK_F12 && !frontend->dpanel)
+		if (key == WXK_F12)
 		{
-			//show control panel if closed
-			frontend->dpanel = new DebugPanel(frontend, NULL, -1);
-			frontend->dpanel->Show(true);
-			frontend->dpanel->SetPosition(wxPoint(frontend->GetVM()->GetHAL()->GetConfigInt(frontend->configfile, "Skyscraper.Frontend.ControlPanelX", 10), frontend->GetVM()->GetHAL()->GetConfigInt(frontend->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
+			frontend->GetGUI()->ShowDebugPanel();
 		}
 
 		if (key == WXK_F5)
@@ -444,10 +441,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		//load a new additional building
 		if (key == (wxKeyCode)key_load)
 		{
-			if (!frontend->loaddialog)
-				frontend->loaddialog = new LoadDialog(frontend->dpanel, this, -1);
-			frontend->loaddialog->CenterOnScreen();
-			frontend->loaddialog->Show();
+			frontend->GetGUI()->ShowLoadDialog();
 			return;
 		}
 
@@ -724,7 +718,7 @@ void MainScreen::OnMouseButton(wxMouseEvent& event)
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 		//set scale to 1.0 on MacOS versions earlier than 10.15
-		if (frontend->macos_major == 10 && frontend->macos_minor < 15)
+		if (frontend->GetVM()->macos_major == 10 && frontend->GetVM()->macos_minor < 15)
 			scale = 1.0;
 #endif
 

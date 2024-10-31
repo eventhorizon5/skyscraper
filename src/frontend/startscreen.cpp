@@ -41,14 +41,16 @@ bool Skyscraper::DrawBackground()
 
 	bool result = false;
 
-	result = DrawImage("data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Image", "menu.png"), 0, -1, -1, false);
+	HAL *hal = vm->GetHAL();
+
+	result = DrawImage("data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Image", "menu.png"), 0, -1, -1, false);
 
 	if (result == false)
 		return false;
 
 	if (buttoncount == 0)
 	{
-		buttoncount = vm->GetHAL()->GetConfigInt(configfile, "Skyscraper.Frontend.Menu.Buttons", 5);
+		buttoncount = hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Buttons", 5);
 		buttons = new buttondata[buttoncount];
 
 		for (int i = 0; i < buttoncount; i++)
@@ -70,57 +72,57 @@ bool Skyscraper::DrawBackground()
 
 		if (i == 0)
 		{
-			b1 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button1.Image", "button_triton.png");
-			b2 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button1.Selected", "button_triton_selected.png");
-			b3 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button1.Pressed", "button_triton_pressed.png");
-			x = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button1.X", 0.0);
-			y = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button1.Y", -0.08);
-			center = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Button1.Center", true);
+			b1 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button1.Image", "button_triton.png");
+			b2 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button1.Selected", "button_triton_selected.png");
+			b3 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button1.Pressed", "button_triton_pressed.png");
+			x = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button1.X", 0.0);
+			y = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button1.Y", -0.08);
+			center = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Menu.Button1.Center", true);
 		}
 		if (i == 1)
 		{
-			b1 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button2.Image", "button_glasstower.png");
-			b2 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button2.Selected", "button_glasstower_selected.png");
-			b3 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button2.Pressed", "button_glasstower_pressed.png");
-			x = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button2.X", 0.0);
-			y = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button2.Y", 0.125);
-			center = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Button2.Center", true);
+			b1 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button2.Image", "button_glasstower.png");
+			b2 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button2.Selected", "button_glasstower_selected.png");
+			b3 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button2.Pressed", "button_glasstower_pressed.png");
+			x = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button2.X", 0.0);
+			y = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button2.Y", 0.125);
+			center = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Menu.Button2.Center", true);
 		}
 		if (i == 2)
 		{
-			b1 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button3.Image", "button_searstower.png");
-			b2 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button3.Selected", "button_searstower_selected.png");
-			b3 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button3.Pressed", "button_searstower_pressed.png");
-			x = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button3.X", 0.0);
-			y = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button3.Y", 0.333);
-			center = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Button3.Center", true);
+			b1 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button3.Image", "button_searstower.png");
+			b2 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button3.Selected", "button_searstower_selected.png");
+			b3 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button3.Pressed", "button_searstower_pressed.png");
+			x = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button3.X", 0.0);
+			y = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button3.Y", 0.333);
+			center = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Menu.Button3.Center", true);
 		}
 		if (i == 3)
 		{
-			b1 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button4.Image", "button_simple.png");
-			b2 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button4.Selected", "button_simple_selected.png");
-			b3 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button4.Pressed", "button_simple_pressed.png");
-			x = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button4.X", 0.0);
-			y = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button4.Y", 0.541);
-			center = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Button4.Center", true);
+			b1 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button4.Image", "button_simple.png");
+			b2 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button4.Selected", "button_simple_selected.png");
+			b3 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button4.Pressed", "button_simple_pressed.png");
+			x = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button4.X", 0.0);
+			y = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button4.Y", 0.541);
+			center = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Menu.Button4.Center", true);
 		}
 		if (i == 4)
 		{
-			b1 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button5.Image", "button_other.png");
-			b2 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button5.Selected", "button_other_selected.png");
-			b3 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button5.Pressed", "button_other_pressed.png");
-			x = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button5.X", 0.0);
-			y = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button5.Y", 0.75);
-			center = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Button5.Center", true);
+			b1 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button5.Image", "button_other.png");
+			b2 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button5.Selected", "button_other_selected.png");
+			b3 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button5.Pressed", "button_other_pressed.png");
+			x = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button5.X", 0.0);
+			y = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button5.Y", 0.75);
+			center = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Menu.Button5.Center", true);
 		}
 		if (i > 4)
 		{
-			b1 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Image", "");
-			b2 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Selected", "");
-			b3 = "data/" + vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Pressed", "");
-			x = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button" + number + ".X", 0.0);
-			y = vm->GetHAL()->GetConfigFloat(configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Y", 0.0);
-			center = vm->GetHAL()->GetConfigBool(configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Center", true);
+			b1 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Image", "");
+			b2 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Selected", "");
+			b3 = "data/" + hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Pressed", "");
+			x = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button" + number + ".X", 0.0);
+			y = hal->GetConfigFloat(hal->configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Y", 0.0);
+			center = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Menu.Button" + number + ".Center", true);
 		}
 
 		result = DrawImage(b1, &buttons[i], x, y, center, b2, b3);
@@ -285,7 +287,7 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 		//set scale to 1.0 on MacOS versions earlier than 10.15
-		if (macos_major == 10 && macos_minor < 15)
+		if (GetVM()->macos_major == 10 && GetVM()->macos_minor < 15)
 			scale = 1.0;
 #endif
 
@@ -433,16 +435,18 @@ void Skyscraper::Click(int index)
 	std::string number = ToString(index + 1);
 	std::string filename = "";
 
+	HAL *hal = vm->GetHAL();
+
 	if (index == 0)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
 	if (index == 1)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
 	if (index == 2)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
 	if (index == 3)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
 	if (index > 3)
-		filename = vm->GetHAL()->GetConfigString(configfile, "Skyscraper.Frontend.Menu.Button" + number + ".File", "");
+		filename = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Menu.Button" + number + ".File", "");
 
 	if (filename == "")
 	{
