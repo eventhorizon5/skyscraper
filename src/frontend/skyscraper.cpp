@@ -159,8 +159,7 @@ bool Skyscraper::OnInit()
 	vm->version_state = "Alpha";
 	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
-	//create GUI instance
-	gui = new GUI(vm);
+	gui = vm->GetGUI();
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -389,7 +388,6 @@ int Skyscraper::OnExit()
 		delete parser;
 	parser = 0;
 
-	delete gui;
 	delete vm;
 	return wxApp::OnExit();
 }

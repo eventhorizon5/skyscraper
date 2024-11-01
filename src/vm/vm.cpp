@@ -89,6 +89,10 @@ VM::~VM()
 	if (hal)
 		delete hal;
 	hal = 0;
+
+	if (gui)
+		delete gui;
+	gui = 0;
 }
 
 void VM::SetParent(wxWindow *parent)
