@@ -4216,7 +4216,7 @@ void SBS::RemovePerson(Person *person)
 bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 {
 	if (cameras.size() > 0)
-		return this->camera->Attach(cameras, init_state);
+		return camera->Attach(cameras, init_state);
 	return false;
 }
 
