@@ -66,6 +66,10 @@ public:
 	void ShowLoadDialog();
 	void WriteToConsole(const std::string &message);
 
+	//progress dialog initial data
+	bool show_progress;
+	std::string prog_text;
+
 private:
 
 	wxProgressDialog *progdialog;
@@ -78,10 +82,6 @@ private:
 
 	//load dialog window
 	LoadDialog *loaddialog;
-
-	//progress dialog initial data
-	bool show_progress;
-	std::string prog_text;
 
 	VM *vm;
 };
