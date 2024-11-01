@@ -96,7 +96,16 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	step_backward = false;
 
 	freelook = false;
+}
 
+MainScreen::~MainScreen()
+{
+	joystick->ReleaseCapture();
+	delete joystick;
+}
+
+void MainScreen::Initialize()
+{
 	HAL *hal = frontend->GetVM()->GetHAL();
 
 	key_right = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Right", "D")[0];
@@ -123,7 +132,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	joy_forward = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Forward", 1);
 
 	//create panel, rendering is done on this, along with keyboard and mouse events
-	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
+	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, GetSize(), wxNO_BORDER);
 	panel->Connect(wxID_ANY, wxEVT_KEY_DOWN, wxKeyEventHandler(MainScreen::OnKeyDown), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_KEY_UP, wxKeyEventHandler(MainScreen::OnKeyUp), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
@@ -136,12 +145,6 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_MOUSEWHEEL, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
-}
-
-MainScreen::~MainScreen()
-{
-	joystick->ReleaseCapture();
-	delete joystick;
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)

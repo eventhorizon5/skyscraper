@@ -47,6 +47,7 @@ public:
 	void OnMouseButton(wxMouseEvent& event);
 	void EnableFreelook(bool value);
 	void OnJoystickEvent(wxJoystickEvent& event);
+	void Initialize();
 
 	bool Active;
 	bool InLoop;
