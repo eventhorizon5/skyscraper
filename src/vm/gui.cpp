@@ -240,22 +240,13 @@ void GUI::ShowProgressDialog()
 	show_progress = false;
 }
 
-void GUI::UpdateProgress()
+void GUI::UpdateProgress(int percent)
 {
+	//update progress dialog with the specified percent
 	if (!progdialog)
 		return;
 
-	int total_percent = vm->GetEngineCount() * 100;
-	int current_percent = 0;
-
-	for (size_t i = 0; i < vm->GetEngineCount(); i++)
-	{
-		if (vm->GetEngine(i))
-			current_percent += vm->GetEngine(i)->GetProgress();
-	}
-
-	int final = ((Real)current_percent / (Real)total_percent) * 100;
-	progdialog->Update(final);
+	progdialog->Update(percent);
 }
 
 void GUI::RefreshConsole()
