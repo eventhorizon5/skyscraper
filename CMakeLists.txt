@@ -131,8 +131,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/vm
 	src/sbs
 	src/script
-	#src/gui
-	src
+	src/gui
 	src/alloc
 	src/openxr/include
 	src/openxr
