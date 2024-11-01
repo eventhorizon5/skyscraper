@@ -30,12 +30,12 @@
 		<Unit filename="../src/frontend/enginemanager.h" />
 		<Unit filename="../src/frontend/fileio.cpp" />
 		<Unit filename="../src/frontend/fileio.h" />
-		<Unit filename="../src/frontend/gui/escalatorcontrol.cpp" />
-		<Unit filename="../src/frontend/gui/escalatorcontrol.h" />
-		<Unit filename="../src/frontend/gui/texturemanager.cpp" />
-		<Unit filename="../src/frontend/gui/texturemanager.h" />
-		<Unit filename="../src/frontend/gui/walkwaycontrol.cpp" />
-                <Unit filename="../src/frontend/gui/walkwaycontrol.h" />
+		<Unit filename="../src/vm/gui/escalatorcontrol.cpp" />
+		<Unit filename="../src/vm/gui/escalatorcontrol.h" />
+		<Unit filename="../src/vm/gui/texturemanager.cpp" />
+		<Unit filename="../src/vm/gui/texturemanager.h" />
+		<Unit filename="../src/vm/gui/walkwaycontrol.cpp" />
+                <Unit filename="../src/vm/gui/walkwaycontrol.h" />
 		<Unit filename="../src/frontend/keydialog.cpp" />
 		<Unit filename="../src/frontend/keydialog.h" />
 		<Unit filename="../src/frontend/meshcontrol.cpp" />
@@ -137,29 +137,29 @@
 			<wxsmith version="1">
 				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
 				<resources>
-					<wxFrame wxs="wxsmith/DebugPanel.wxs" src="../src/frontend/gui/debugpanel.cpp" hdr="../src/frontend/gui/debugpanel.h" fwddecl="0" i18n="1" name="DebugPanel" language="CPP" />
-					<wxDialog wxs="wxsmith/CameraControl.wxs" src="../src/frontend/gui/cameracontrol.cpp" hdr="../src/frontend/gui/cameracontrol.h" fwddecl="0" i18n="1" name="CameraControl" language="CPP" />
-					<wxDialog wxs="wxsmith/editelevator.wxs" src="../src/frontend/gui/editelevator.cpp" hdr="../src/frontend/gui/editelevator.h" fwddecl="0" i18n="1" name="editelevator" language="CPP" />
-					<wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/frontend/gui/meshcontrol.cpp" hdr="../src/frontend/gui/meshcontrol.h" fwddecl="0" i18n="1" name="MeshControl" language="CPP" />
-					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="../src/frontend/gui/keydialog.cpp" hdr="../src/frontend/gui/keydialog.h" fwddecl="0" i18n="1" name="KeyDialog" language="CPP" />
-					<wxDialog wxs="wxsmith/Stats.wxs" src="../src/frontend/gui/stats.cpp" hdr="../src/frontend/gui/stats.h" fwddecl="0" i18n="1" name="Stats" language="CPP" />
-					<wxFrame wxs="wxsmith/Console.wxs" src="../src/frontend/gui/console.cpp" hdr="../src/frontend/gui/console.h" fwddecl="0" i18n="1" name="Console" language="CPP" />
-					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/frontend/gui/objectinfo.cpp" hdr="../src/frontend/gui/objectinfo.h" fwddecl="0" i18n="1" name="ObjectInfo" language="CPP" />
-					<wxDialog wxs="wxsmith/TextWindow.wxs" src="../src/frontend/gui/textwindow.cpp" hdr="../src/frontend/gui/textwindow.h" fwddecl="0" i18n="1" name="TextWindow" language="CPP" />
-					<wxDialog wxs="wxsmith/Profiler.wxs" src="../src/frontend/gui/profilergui.cpp" hdr="../src/frontend/gui/profilergui.h" fwddecl="0" i18n="1" name="Profiler" language="CPP" />
-					<wxDialog wxs="wxsmith/CreateObject.wxs" src="../src/frontend/gui/createobject.cpp" hdr="../src/frontend/gui/createobject.h" fwddecl="0" i18n="1" name="CreateObject" language="CPP" />
-					<wxDialog wxs="wxsmith/ParameterViewer.wxs" src="../src/frontend/gui/parameterviewer.cpp" hdr="../src/frontend/gui/parameterviewer.h" fwddecl="0" i18n="1" name="ParameterViewer" language="CPP" />
-					<wxDialog wxs="wxsmith/ActionViewer.wxs" src="../src/frontend/gui/actionviewer.cpp" hdr="../src/frontend/gui/actionviewer.h" fwddecl="0" i18n="1" name="ActionViewer" language="CPP" />
-					<wxDialog wxs="wxsmith/MoveObject.wxs" src="../src/frontend/gui/moveobject.cpp" hdr="../src/frontend/gui/moveobject.h" fwddecl="0" i18n="1" name="MoveObject" language="CPP" />
-					<wxDialog wxs="wxsmith/SkyControl.wxs" src="../src/frontend/gui/skycontrol.cpp" hdr="../src/frontend/gui/skycontrol.h" fwddecl="0" i18n="1" name="SkyControl" language="CPP" />
-					<wxDialog wxs="wxsmith/EngineManager.wxs" src="../src/frontend/gui/enginemanager.cpp" hdr="../src/frontend/gui/enginemanager.h" fwddecl="0" i18n="1" name="EngineManager" language="CPP" />
-					<wxDialog wxs="wxsmith/PeopleManager.wxs" src="../src/frontend/gui/peoplemanager.cpp" hdr="../src/frontend/gui/peoplemanager.h" fwddecl="0" i18n="1" name="PeopleManager" language="CPP" />
-					<wxDialog wxs="wxsmith/LoadDialog.wxs" src="../src/frontend/gui/loaddialog.cpp" hdr="../src/frontend/gui/loaddialog.h" fwddecl="0" i18n="1" name="LoadDialog" language="CPP" />
-					<wxDialog wxs="wxsmith/CameraTextureControl.wxs" src="../src/frontend/gui/camtex.cpp" hdr="../src/frontend/gui/camtex.h" fwddecl="0" i18n="1" name="CameraTextureControl" language="CPP" />
-					<wxDialog wxs="wxsmith/SoundManager.wxs" src="../src/frontend/gui/soundmanager.cpp" hdr="../src/frontend/gui/soundmanager.h" fwddecl="0" i18n="1" name="SoundManager" language="CPP" />
-					<wxDialog wxs="wxsmith/TextureManager.wxs" src="../src/frontend/gui/texturemanager.cpp" hdr="../src/frontend/gui/texturemanager.h" fwddecl="0" i18n="1" name="TextureManager" language="CPP" />
-					<wxDialog wxs="wxsmith/EscalatorControl.wxs" src="../src/frontend/gui/escalatorcontrol.cpp" hdr="../src/frontend/gui/escalatorcontrol.h" fwddecl="0" i18n="1" name="EscalatorControl" language="CPP" />
-					<wxDialog wxs="wxsmith/WalkwayControl.wxs" src="../src/frontend/gui/walkwaycontrol.cpp" hdr="../src/frontend/gui/walkwaycontrol.h" fwddecl="0" i18n="1" name="WalkwayControl" language="CPP" />
+					<wxFrame wxs="wxsmith/DebugPanel.wxs" src="../src/vm/gui/debugpanel.cpp" hdr="../src/vm/gui/debugpanel.h" fwddecl="0" i18n="1" name="DebugPanel" language="CPP" />
+					<wxDialog wxs="wxsmith/CameraControl.wxs" src="../src/vm/gui/cameracontrol.cpp" hdr="../src/vm/gui/cameracontrol.h" fwddecl="0" i18n="1" name="CameraControl" language="CPP" />
+					<wxDialog wxs="wxsmith/editelevator.wxs" src="../src/vm/gui/editelevator.cpp" hdr="../src/vm/gui/editelevator.h" fwddecl="0" i18n="1" name="editelevator" language="CPP" />
+					<wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/vm/gui/meshcontrol.cpp" hdr="../src/vm/gui/meshcontrol.h" fwddecl="0" i18n="1" name="MeshControl" language="CPP" />
+					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="../src/vm/gui/keydialog.cpp" hdr="../src/vm/gui/keydialog.h" fwddecl="0" i18n="1" name="KeyDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/Stats.wxs" src="../src/vm/gui/stats.cpp" hdr="../src/vm/gui/stats.h" fwddecl="0" i18n="1" name="Stats" language="CPP" />
+					<wxFrame wxs="wxsmith/Console.wxs" src="../src/vm/gui/console.cpp" hdr="../src/vm/gui/console.h" fwddecl="0" i18n="1" name="Console" language="CPP" />
+					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/vm/gui/objectinfo.cpp" hdr="../src/vm/gui/objectinfo.h" fwddecl="0" i18n="1" name="ObjectInfo" language="CPP" />
+					<wxDialog wxs="wxsmith/TextWindow.wxs" src="../src/vm/gui/textwindow.cpp" hdr="../src/vm/gui/textwindow.h" fwddecl="0" i18n="1" name="TextWindow" language="CPP" />
+					<wxDialog wxs="wxsmith/Profiler.wxs" src="../src/vm/gui/profilergui.cpp" hdr="../src/vm/gui/profilergui.h" fwddecl="0" i18n="1" name="Profiler" language="CPP" />
+					<wxDialog wxs="wxsmith/CreateObject.wxs" src="../src/vm/gui/createobject.cpp" hdr="../src/vm/gui/createobject.h" fwddecl="0" i18n="1" name="CreateObject" language="CPP" />
+					<wxDialog wxs="wxsmith/ParameterViewer.wxs" src="../src/vm/gui/parameterviewer.cpp" hdr="../src/vm/gui/parameterviewer.h" fwddecl="0" i18n="1" name="ParameterViewer" language="CPP" />
+					<wxDialog wxs="wxsmith/ActionViewer.wxs" src="../src/vm/gui/actionviewer.cpp" hdr="../src/vm/gui/actionviewer.h" fwddecl="0" i18n="1" name="ActionViewer" language="CPP" />
+					<wxDialog wxs="wxsmith/MoveObject.wxs" src="../src/vm/gui/moveobject.cpp" hdr="../src/vm/gui/moveobject.h" fwddecl="0" i18n="1" name="MoveObject" language="CPP" />
+					<wxDialog wxs="wxsmith/SkyControl.wxs" src="../src/vm/gui/skycontrol.cpp" hdr="../src/vm/gui/skycontrol.h" fwddecl="0" i18n="1" name="SkyControl" language="CPP" />
+					<wxDialog wxs="wxsmith/EngineManager.wxs" src="../src/vm/gui/enginemanager.cpp" hdr="../src/vm/gui/enginemanager.h" fwddecl="0" i18n="1" name="EngineManager" language="CPP" />
+					<wxDialog wxs="wxsmith/PeopleManager.wxs" src="../src/vm/gui/peoplemanager.cpp" hdr="../src/vm/gui/peoplemanager.h" fwddecl="0" i18n="1" name="PeopleManager" language="CPP" />
+					<wxDialog wxs="wxsmith/LoadDialog.wxs" src="../src/vm/gui/loaddialog.cpp" hdr="../src/vm/gui/loaddialog.h" fwddecl="0" i18n="1" name="LoadDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/CameraTextureControl.wxs" src="../src/vm/gui/camtex.cpp" hdr="../src/vm/gui/camtex.h" fwddecl="0" i18n="1" name="CameraTextureControl" language="CPP" />
+					<wxDialog wxs="wxsmith/SoundManager.wxs" src="../src/vm/gui/soundmanager.cpp" hdr="../src/vm/gui/soundmanager.h" fwddecl="0" i18n="1" name="SoundManager" language="CPP" />
+					<wxDialog wxs="wxsmith/TextureManager.wxs" src="../src/vm/gui/texturemanager.cpp" hdr="../src/vm/gui/texturemanager.h" fwddecl="0" i18n="1" name="TextureManager" language="CPP" />
+					<wxDialog wxs="wxsmith/EscalatorControl.wxs" src="../src/vm/gui/escalatorcontrol.cpp" hdr="../src/vm/gui/escalatorcontrol.h" fwddecl="0" i18n="1" name="EscalatorControl" language="CPP" />
+					<wxDialog wxs="wxsmith/WalkwayControl.wxs" src="../src/vm/gui/walkwaycontrol.cpp" hdr="../src/vm/gui/walkwaycontrol.h" fwddecl="0" i18n="1" name="WalkwayControl" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>
