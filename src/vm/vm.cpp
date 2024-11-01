@@ -535,6 +535,10 @@ int VM::Run(EngineContext* &newengine)
 
 	//return codes are 0 for failure, 1 for success, 2 to unload, and 3 to load a new building
 
+	//show progress dialog if needed
+	//if (gui->show_progress == true)
+		//gui->ShowProgressDialog();
+
 	//run sim engines
 	bool result = RunEngines(newengine);
 
