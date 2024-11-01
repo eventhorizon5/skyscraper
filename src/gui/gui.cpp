@@ -35,9 +35,9 @@
 #include "vm.h"
 #include "hal.h"
 #include "enginecontext.h"
-#include "gui/debugpanel.h"
-#include "gui/console.h"
-#include "gui/loaddialog.h"
+#include "debugpanel.h"
+#include "console.h"
+#include "loaddialog.h"
 #include "gui.h"
 
 namespace Skyscraper {
