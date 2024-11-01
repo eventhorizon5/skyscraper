@@ -74,6 +74,7 @@ find_package(OpenXR)
 if(WIN32)
 	file(GLOB FRONTEND_FILES
 		src/frontend/*.cpp
+		src/gui/*.cpp
 		msvc/Skyscraper.rc
 	)
 else()
@@ -84,7 +85,10 @@ endif()
  
 file(GLOB VM_FILES
 	src/vm/*.cpp
-	src/vm/gui/*.cpp
+)
+
+file(GLOB GUI_FILES
+	src/gui/*.cpp
 )
 
 file(GLOB SCRIPTPROC_FILES
@@ -127,6 +131,8 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/vm
 	src/sbs
 	src/script
+	src/gui
+	src/alloc
 	src/openxr/include
 	src/openxr
 	ogrebullet/Collisions/include
@@ -151,6 +157,14 @@ add_library(SBS SHARED ${SBS_FILES})
 if (NOT WIN32)
 	add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
 endif ()
+
+#GUI Library
+if (NOT WIN32)
+	add_library(GUI SHARED ${GUI_FILES})
+endif ()
+
+#Alloc Library
+add_library(Alloc SHARED ${ALLOC_FILES})
 
 #OpenXR Library
 if (WIN32)
@@ -179,6 +193,7 @@ target_precompile_headers(VM PRIVATE src/sbs/globals.h)
 
 if (NOT WIN32)
 	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+	target_precompile_headers(GUI PRIVATE src/sbs/globals.h)
 endif ()
 
 target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
@@ -196,6 +211,7 @@ target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_L
 if (NOT WIN32)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(VM SBS ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 else ()
 	target_link_libraries(VM SBS OpenXR ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
