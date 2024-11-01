@@ -48,6 +48,7 @@ namespace Skyscraper {
 
 VM::VM()
 {
+	//initialize values
 	parent = 0;
 	active_engine = 0;
 	Shutdown = false;
@@ -82,14 +83,17 @@ VM::~VM()
 {
 	Report("Shutting down...");
 
+	//delete sky system instance
 	if (skysystem)
 		delete skysystem;
 	skysystem = 0;
 
+	//delete HAL instance
 	if (hal)
 		delete hal;
 	hal = 0;
 
+	//delete GUI instance
 	if (gui)
 		delete gui;
 	gui = 0;
@@ -97,16 +101,22 @@ VM::~VM()
 
 void VM::SetParent(wxWindow *parent)
 {
+	//sets the parent WX window to be used by the system, mainly for the GUI
+
 	this->parent = parent;
 }
 
 HAL* VM::GetHAL()
 {
+	//returns HAL instance
+
 	return hal;
 }
 
 SkySystem* VM::GetSkySystem()
 {
+	//returns sky system instance
+
 	return skysystem;
 }
 
@@ -140,6 +150,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 
 			if (active_engine == engine)
 			{
+				//if deleting the active engine, switch to the first valid engine
 				active_engine = 0;
 				if (count > 0)
 				{
@@ -148,7 +159,10 @@ bool VM::DeleteEngine(EngineContext *engine)
 				}
 			}
 			else if (active_engine)
+			{
+				//if deleting another engine (not the active one), refresh the camera
 				active_engine->RefreshCamera();
+			}
 
 			//exit to main menu if all engines have been deleted
 			if (count == 0)
@@ -241,6 +255,9 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 
 bool VM::RunEngines(EngineContext* &newengine)
 {
+	//run sim engine instances, and returns the new engine created (if applicable)
+	//to be started by the frontend
+
 	newengine = 0;
 	bool result = true;
 	bool isloading = IsEngineLoading();
@@ -270,6 +287,7 @@ bool VM::RunEngines(EngineContext* &newengine)
 
 			if (engines[i]->IsLoadingFinished() == false && run == true)
 			{
+				//process engine runloop
 				if (engines[i]->Run() == false)
 					result = false;
 			}
@@ -320,6 +338,7 @@ void VM::HandleEngineShutdown()
 	{
 		if (engines[i])
 		{
+			//delete engine if it's shutdown state is true
 			if (engines[i]->GetShutdownState() == true)
 			{
 				Report("Shutdown requested for engine instance " + ToString(i));
@@ -405,6 +424,7 @@ void VM::SwitchEngines()
 	if (!active_engine)
 		return;
 
+	//exit if user is inside an engine
 	if (active_engine->IsInside() == true)
 		return;
 
@@ -441,6 +461,8 @@ void VM::SwitchEngines()
 
 bool VM::IsValidEngine(EngineContext *engine)
 {
+	//returns true if the specified engine is valid (currently running)
+
 	if (!engine)
 		return false;
 
@@ -454,6 +476,8 @@ bool VM::IsValidEngine(EngineContext *engine)
 
 bool VM::IsValidSystem(::SBS::SBS *sbs)
 {
+	//returns true if the specified SBS instance is valid (being used by an engine context)
+
 	if (!sbs)
 		return false;
 
@@ -496,6 +520,8 @@ int VM::RegisterEngine(EngineContext *engine)
 
 EngineContext* VM::GetFirstValidEngine()
 {
+	//returns the first valid (running) engine context
+
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
@@ -506,6 +532,9 @@ EngineContext* VM::GetFirstValidEngine()
 
 void VM::CheckCamera()
 {
+	//if the camera is not active in the active engine,
+	//switch the active engine to the next one that has an active camera
+
 	if (active_engine->IsCameraActive() == false)
 		active_engine = FindActiveEngine();
 
@@ -521,6 +550,8 @@ bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
 
 ::SBS::SBS* VM::GetActiveSystem()
 {
+	//returns the active engine's SBS instance
+
 	if (active_engine)
 		return active_engine->GetSystem();
 	return 0;
@@ -528,6 +559,8 @@ bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
 
 ScriptProcessor* VM::GetActiveScriptProcessor()
 {
+	//returns the active engine's script processor
+
 	if (active_engine)
 		return active_engine->GetScriptProcessor();
 	return 0;
@@ -559,9 +592,11 @@ int VM::Run(EngineContext* &newengine)
 		return 2;
 	}
 
+	//exit if an engine failed to run, if it's either the only engine or if ConcurrentLoads is on
 	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
 		return 0;
 
+	//don't continue if no available active engine
 	if (!GetActiveEngine())
 		return 0;
 
@@ -638,6 +673,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	//have instance load building
 	bool result = engine->Load(filename);
 
+	//delete engine if load failed, if more than one engine is running
 	if (result == false)
 	{
 		if (GetEngineCount() > 1)
@@ -779,6 +815,8 @@ void VM::ShowPlatform()
 
 wxWindow* VM::GetParent()
 {
+	//get parent WX window, this is assigned by the frontend
+
 	return parent;
 }
 
