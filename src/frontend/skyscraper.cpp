@@ -293,7 +293,7 @@ bool Skyscraper::OnInit()
 	//Create main window and set size from INI file defaults
 	//if (Headless == false)
 	//{
-		window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 640), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 480));
+		window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 800), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 600));
 		//AllowResize(false);
 		window->ShowWindow();
 		window->CenterOnScreen();
