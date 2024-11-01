@@ -820,4 +820,22 @@ wxWindow* VM::GetParent()
 	return parent;
 }
 
+void VM::UpdateProgress()
+{
+	//update progress based on total sim engine status
+
+	int total_percent = GetEngineCount() * 100;
+	int current_percent = 0;
+
+	for (size_t i = 0; i < GetEngineCount(); i++)
+	{
+		if (GetEngine(i))
+			current_percent += GetEngine(i)->GetProgress();
+	}
+
+	int final = ((Real)current_percent / (Real)total_percent) * 100;
+
+	gui->UpdateProgress(final);
+}
+
 }
