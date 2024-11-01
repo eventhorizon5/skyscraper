@@ -54,10 +54,14 @@ GUI::GUI(VM *parent)
 
 GUI::~GUI()
 {
+	Unload();
+
+	//delete building load dialog
 	if (loaddialog)
 		loaddialog->Destroy();
 	loaddialog = 0;
 
+	//delete progress dialog
 	if (progdialog)
 		progdialog->Destroy();
 	progdialog = 0;
