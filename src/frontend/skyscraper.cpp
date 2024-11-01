@@ -286,20 +286,25 @@ bool Skyscraper::OnInit()
 	if (parser->Found(wxT("no-console")) == true)
 		showconsole = false;
 
+	//Create main window and set size from INI file defaults
+	window = new MainScreen(this, 800, 600);
+
+	vm->SetParent(window);
+
 	//load config files
 	HAL *hal = vm->GetHAL();
 	hal->LoadConfiguration(vm->data_path, showconsole);
 
-	//Create main window and set size from INI file defaults
-	//if (Headless == false)
-	//{
-		window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 800), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 600));
-		//AllowResize(false);
-		window->ShowWindow();
-		window->CenterOnScreen();
-	//}
+	int width = hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 800);
+	int height = hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 600);
+	window->SetSize(0, 0, width, height);
+	//AllowResize(false);
+	window->ShowWindow();
+	window->CenterOnScreen();
 
-	vm->SetParent(window);
+	window->Initialize();
+
+	//resize main window
 
 	//start and initialize abstraction layer
 	if (!hal->Initialize(vm->data_path))
