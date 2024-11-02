@@ -462,7 +462,7 @@ void Sound::PlayQueued(const std::string &filename, bool stop, bool loop)
 	snd.filename = filename;
 	snd.loop = loop;
 	snd.played = false;
-	queue.push_back(snd);
+	queue.emplace_back(snd);
 
 	if (stop == true)
 		Stop();

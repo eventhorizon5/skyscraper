@@ -617,7 +617,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 			return ReportError("route to floor " + ToString(floor) + " (" + floorobj->ID + ") already exists");
 
 		//add floor to up queue
-		UpQueue.push_back(QueueEntry(floor, call_type, car->Number, 1));
+		UpQueue.emplace_back(QueueEntry(floor, call_type, car->Number, 1));
 		//sort queue
 		std::sort(UpQueue.begin(), UpQueue.end());
 		QueuePending = true;
@@ -639,7 +639,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 			return ReportError("route to floor " + ToString(floor) + " (" + floorobj->ID + ") already exists");
 
 		//add floor to down queue
-		DownQueue.push_back(QueueEntry(floor, call_type, car->Number, -1));
+		DownQueue.emplace_back(QueueEntry(floor, call_type, car->Number, -1));
 		//sort queue
 		std::sort(DownQueue.begin(), DownQueue.end());
 		QueuePending = true;
@@ -4343,13 +4343,13 @@ std::vector<Floor*> Elevator::GetLobbies()
 			{
 				std::string type = SetCaseCopy(floor->FloorType, false);
 				if (type == "lobby" || type == "skylobby")
-					list.push_back(floor);
+					list.emplace_back(floor);
 			}
 		}
 	}
 
 	if (list.size() == 0 && sbs->GetFloor(RecallFloor))
-		list.push_back(sbs->GetFloor(RecallFloor));
+		list.emplace_back(sbs->GetFloor(RecallFloor));
 
 	return list;
 }
@@ -4433,7 +4433,7 @@ ElevatorCar* Elevator::AddCar()
 
 	int number = (int)Cars.size() + 1;
 	ElevatorCar *car = new ElevatorCar(this, number);
-	Cars.push_back(car);
+	Cars.emplace_back(car);
 	return car;
 }
 
@@ -4954,7 +4954,7 @@ void Elevator::AddController(int controller)
 			return;
 	}
 
-	Controllers.push_back(controller);
+	Controllers.emplace_back(controller);
 }
 
 void Elevator::RemoveController(int controller)

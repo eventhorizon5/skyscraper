@@ -600,7 +600,7 @@ CallStation* Floor::AddCallStation(int number)
 	//create a new call station object
 
 	CallStation *station = new CallStation(this, Number, number);
-	CallStationArray.push_back(station);
+	CallStationArray.emplace_back(station);
 	return station;
 }
 
@@ -685,7 +685,7 @@ void Floor::AddGroupFloor(int number)
 	if (IsInGroup(number))
 		return;
 
-	Group.push_back(number);
+	Group.emplace_back(number);
 	std::sort(Group.begin(), Group.end());
 }
 
@@ -817,7 +817,7 @@ Door* Floor::AddDoor(std::string name, const std::string &open_sound, const std:
 
 	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, base + voffset, tw, th, side_tw, side_th);
-	DoorArray.push_back(door);
+	DoorArray.emplace_back(door);
 	return door;
 }
 
@@ -831,7 +831,7 @@ Door* Floor::CreateDoor(std::string name, const std::string &open_sound, const s
 		name = "Door " + ToString(number);
 
 	Door* door = new Door(this, DoorWrapper, name, open_sound, close_sound, rotate);
-	DoorArray.push_back(door);
+	DoorArray.emplace_back(door);
 	door->Move(0, GetBase(true), 0);
 	return door;
 }
@@ -908,7 +908,7 @@ FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, c
 	if (relative == false)
 	{
 		FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
-		FloorIndicatorArray.push_back(ind);
+		FloorIndicatorArray.emplace_back(ind);
 		return ind;
 	}
 	else
@@ -917,7 +917,7 @@ FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, c
 		if (elev)
 		{
 			FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, blank_texture, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
-			FloorIndicatorArray.push_back(ind);
+			FloorIndicatorArray.emplace_back(ind);
 			return ind;
 		}
 		else
@@ -976,7 +976,7 @@ std::vector<int> Floor::GetCallStations(int elevator)
 		if (CallStationArray[i])
 		{
 			if (CallStationArray[i]->ServicesElevator(elevator) == true)
-				stations.push_back((int)i);
+				stations.emplace_back((int)i);
 		}
 	}
 	return stations;
@@ -1086,7 +1086,7 @@ Sound* Floor::AddSound(const std::string &name, const std::string &filename, Vec
 	//create a looping sound object
 
 	Sound *sound = new Sound(this, name, false);
-	sounds.push_back(sound);
+	sounds.emplace_back(sound);
 
 	//set parameters and play sound
 	sound->Move(position.x, GetBase(true) + position.y, position.z);
@@ -1119,7 +1119,7 @@ std::vector<Sound*> Floor::GetSound(const std::string &name)
 			std::string name2 = sounds[i]->GetName();
 			SetCase(name2, false);
 			if (findname == name2)
-				soundlist.push_back(sounds[i]);
+				soundlist.emplace_back(sounds[i]);
 		}
 	}
 	return soundlist;
@@ -1189,7 +1189,7 @@ DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, int car, bool
 	}
 
 	DirectionalIndicator *indicator = new DirectionalIndicator(this, elevator, car, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, GetBase(true) + voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	DirIndicatorArray.push_back(indicator);
+	DirIndicatorArray.emplace_back(indicator);
 	return indicator;
 }
 
@@ -1502,7 +1502,7 @@ Light* Floor::AddLight(const std::string &name, int type)
 
 	Light* light = new Light(this, name, type);
 	light->Move(Vector3(0, GetBase(true), 0));
-	lights.push_back(light);
+	lights.emplace_back(light);
 	return light;
 }
 
@@ -1525,7 +1525,7 @@ Model* Floor::AddModel(const std::string &name, const std::string &filename, boo
 		delete model;
 		return 0;
 	}
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 	return model;
 }
 
@@ -1542,14 +1542,14 @@ void Floor::AddModel(Model *model)
 			return;
 	}
 
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 }
 
 Primitive* Floor::AddPrimitive(const std::string &name)
 {
 	//add a prim
 	Primitive* prim = new Primitive(this, name);
-	PrimArray.push_back(prim);
+	PrimArray.emplace_back(prim);
 	prim->Move(Vector3(0, GetBase(true), 0));
 	return prim;
 }
@@ -1567,14 +1567,14 @@ void Floor::AddPrimitive(Primitive *primitive)
 			return;
 	}
 
-	PrimArray.push_back(primitive);
+	PrimArray.emplace_back(primitive);
 }
 
 CustomObject* Floor::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
 {
 	//add a custom object
 	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 	return object;
 }
 
@@ -1591,7 +1591,7 @@ void Floor::AddCustomObject(CustomObject *object)
 			return;
 	}
 
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 }
 
 void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
@@ -1608,7 +1608,7 @@ Control* Floor::AddControl(const std::string &name, const std::string &sound, co
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, GetBase(true) + voffset, CenterZ);
-	ControlArray.push_back(control);
+	ControlArray.emplace_back(control);
 	return control;
 }
 
@@ -1616,7 +1616,7 @@ Trigger* Floor::AddTrigger(const std::string &name, const std::string &sound_fil
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
-	TriggerArray.push_back(trigger);
+	TriggerArray.emplace_back(trigger);
 	trigger->Move(0, GetBase(true), 0);
 	return trigger;
 }
@@ -1625,7 +1625,7 @@ CameraTexture* Floor::AddCameraTexture(const std::string &name, int quality, Rea
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, GetBase(true) + position, use_rotation, rotation);
-	CameraTextureArray.push_back(cameratexture);
+	CameraTextureArray.emplace_back(cameratexture);
 	return cameratexture;
 }
 
@@ -1633,7 +1633,7 @@ Escalator* Floor::AddEscalator(const std::string &name, int run, Real speed, con
 {
 	//add an escalator
 	Escalator* escalator = new Escalator(this, name, run, speed, sound_file, riser_texture, tread_texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
-	EscalatorArray.push_back(escalator);
+	EscalatorArray.emplace_back(escalator);
 	return escalator;
 }
 
@@ -1641,7 +1641,7 @@ MovingWalkway* Floor::AddMovingWalkway(const std::string &name, int run, Real sp
 {
 	//add an escalator
 	MovingWalkway* walkway = new MovingWalkway(this, name, run, speed, sound_file, texture, direction, CenterX, CenterZ, width, treadsize, num_steps, GetBase(true) + voffset, tw, th);
-	MovingWalkwayArray.push_back(walkway);
+	MovingWalkwayArray.emplace_back(walkway);
 	return walkway;
 }
 
@@ -1740,13 +1740,13 @@ void Floor::GetElevatorList(std::vector<int> &listing, bool get_locals, bool get
 			if (elev->IsServicedFloor(Number) == true)
 			{
 				if (get_locals == true && type == "local")
-					listing.push_back(elev->Number);
+					listing.emplace_back(elev->Number);
 
 				else if (get_express == true && type == "express")
-					listing.push_back(elev->Number);
+					listing.emplace_back(elev->Number);
 
 				else if (get_service == true && type == "service")
-					listing.push_back(elev->Number);
+					listing.emplace_back(elev->Number);
 			}
 		}
 	}
@@ -1762,7 +1762,7 @@ void Floor::GetStairwellList(std::vector<int> &listing)
 		if (stairs)
 		{
 			if (stairs->IsValidFloor(Number) == true)
-				listing.push_back(stairs->StairsNum);
+				listing.emplace_back(stairs->StairsNum);
 		}
 	}
 }
@@ -1777,7 +1777,7 @@ void Floor::GetShaftList(std::vector<int> &listing)
 		if (shaft)
 		{
 			if (shaft->IsValidFloor(Number) == true)
-				listing.push_back(shaft->ShaftNumber);
+				listing.emplace_back(shaft->ShaftNumber);
 		}
 	}
 }
@@ -1854,7 +1854,7 @@ std::vector<int> Floor::GetDirectFloors(bool include_service)
 					}
 
 					if (found == false)
-						result.push_back(floor);
+						result.emplace_back(floor);
 				}
 			}
 		}
@@ -1919,7 +1919,7 @@ RevolvingDoor* Floor::AddRevolvingDoor(std::string name, bool run, const std::st
 		name = "RevolvingDoor " + ToString(number);
 
 	RevolvingDoor* door = new RevolvingDoor(this, DoorWrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
-	RDoorArray.push_back(door);
+	RDoorArray.emplace_back(door);
 	return door;
 }
 
@@ -1966,7 +1966,7 @@ Reverb* Floor::AddReverb(const std::string &name, const std::string &type, const
 {
 	//create a reverb object
 	Reverb *reverb = new Reverb(this, name, type, position, min_distance, max_distance, false);
-	reverbs.push_back(reverb);
+	reverbs.emplace_back(reverb);
 	return reverb;
 }
 

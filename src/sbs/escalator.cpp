@@ -95,7 +95,7 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 	for (int i = 0; i < num_steps; i++)
 	{
 		Step *mesh = new Step(this, "Step " + ToString(i + 1), 0, 100);
-		Steps.push_back(mesh);
+		Steps.emplace_back(mesh);
 	}
 
 	//create malfunction timer

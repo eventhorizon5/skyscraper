@@ -189,7 +189,7 @@ int Object::GetNumber()
 void Object::AddChild(Object *object)
 {
 	//add a child object to the internal array
-	children.push_back(object);
+	children.emplace_back(object);
 
 	//add child's scene node
 	if (object->GetSceneNode())
@@ -550,7 +550,7 @@ void Object::RegisterLoop(Object *object)
 			return;
 	}
 
-	runloops.push_back(object);
+	runloops.emplace_back(object);
 }
 
 void Object::UnregisterLoop(Object *object)

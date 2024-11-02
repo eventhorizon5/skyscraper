@@ -279,7 +279,7 @@ std::string Control::GetPositionAction(int position)
 	if (ActionNames.empty() == false)
 		actionlist = sbs->GetAction(ActionNames[position - 1]);
 	else if (Actions.empty() == false)
-		actionlist.push_back(Actions[position - 1]);
+		actionlist.emplace_back(Actions[position - 1]);
 	else
 		return "";
 
@@ -365,7 +365,7 @@ bool Control::DoAction()
 	if (ActionNames.empty() == false)
 		actionlist = sbs->GetAction(ActionNames[current_position - 1]);
 	else if (Actions.empty() == false)
-		actionlist.push_back(Actions[current_position - 1]);
+		actionlist.emplace_back(Actions[current_position - 1]);
 	else
 		return ReportError("No available actions");
 

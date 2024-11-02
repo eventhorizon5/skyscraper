@@ -152,17 +152,17 @@ Control* ButtonPanel::AddButton(const std::string &sound, const std::string &tex
 	if (newtype == "stop")
 		newtype = "estop";
 
-	textures.push_back(texture);
-	textures.push_back(texture_lit);
+	textures.emplace_back(texture);
+	textures.emplace_back(texture_lit);
 	sbs->GetTextureManager()->EnableLighting(texture_lit, false);
 
 	if (IsNumeric(newtype) == true)
 	{
-		names.push_back("off");
-		names.push_back(newtype);
+		names.emplace_back("off");
+		names.emplace_back(newtype);
 	}
 	else
-		names.push_back(newtype);
+		names.emplace_back(newtype);
 
 	return AddControl(sound, row, column, width, height, hoffset, voffset, 1, names, textures);
 }
@@ -229,17 +229,17 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 	{
 		std::string newname = GetParent()->GetName() + ":" + action_names[i];
 		std::vector<Object*> parents;
-		parents.push_back(GetParent());
+		parents.emplace_back(GetParent());
 		if ((off_action == 0 && action_names[i] == "off") || action_names[i] != "off")
 		{
 			Action* action = sbs->AddAction(newname, parents, action_names[i]);
-			actions.push_back(action);
-			action_list.push_back(action);
+			actions.emplace_back(action);
+			action_list.emplace_back(action);
 			if (action_names[i] == "off")
 				off_action = action;
 		}
 		else
-			actions.push_back(off_action);
+			actions.emplace_back(off_action);
 	}
 
 	Control *control = controls[control_index] = new Control(this, name, false, sound, actionsnull, actions, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, false, selection_position);

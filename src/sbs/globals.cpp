@@ -256,14 +256,14 @@ void SplitString(std::vector<std::string> &dest_array, const std::string &origin
 	{
 		newstring = original.substr(startpos, endpos - startpos);
 		TrimString(newstring);
-		dest_array.push_back(newstring);
+		dest_array.emplace_back(newstring);
 	}
 
 	while (endpos != std::string::npos)
 	{
 		newstring = original.substr(startpos, endpos - startpos);
 		TrimString(newstring);
-		dest_array.push_back(newstring); //add to vector
+		dest_array.emplace_back(newstring); //add to vector
 		startpos = endpos + 1; //jump past separator
 		endpos = original.find_first_of(separator, startpos); //find next
 		if(endpos == std::string::npos)
@@ -271,7 +271,7 @@ void SplitString(std::vector<std::string> &dest_array, const std::string &origin
 			//last one, so no 2nd param required to go to end of string
 			newstring = original.substr(startpos);
 			TrimString(newstring);
-			dest_array.push_back(newstring);
+			dest_array.emplace_back(newstring);
 		}
 	}
 }

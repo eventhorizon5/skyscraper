@@ -675,11 +675,11 @@ bool CallStation::CreateCallButtons(const std::string &sound_file_up, const std:
 		int row = 1;
 		std::vector<std::string> names, textures;
 
-		textures.push_back(UpButtonTexture);
-		textures.push_back(UpButtonTexture_Lit);
+		textures.emplace_back(UpButtonTexture);
+		textures.emplace_back(UpButtonTexture_Lit);
 		sbs->GetTextureManager()->EnableLighting(UpButtonTexture_Lit, false);
-		names.push_back("off");
-		names.push_back("up");
+		names.emplace_back("off");
+		names.emplace_back("up");
 
 		panel->AddControl(sound_file_up, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}
@@ -691,11 +691,11 @@ bool CallStation::CreateCallButtons(const std::string &sound_file_up, const std:
 
 		std::vector<std::string> names, textures;
 
-		textures.push_back(DownButtonTexture);
-		textures.push_back(DownButtonTexture_Lit);
+		textures.emplace_back(DownButtonTexture);
+		textures.emplace_back(DownButtonTexture_Lit);
 		sbs->GetTextureManager()->EnableLighting(DownButtonTexture_Lit, false);
-		names.push_back("off");
-		names.push_back("down");
+		names.emplace_back("off");
+		names.emplace_back("down");
 
 		panel->AddControl(sound_file_down, row, 1, 1, 1, 0, 0, 1, names, textures);
 	}

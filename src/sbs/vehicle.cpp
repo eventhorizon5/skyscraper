@@ -210,13 +210,13 @@ bool Vehicle::AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radi
 		return ReportError("Chassis not created yet");
 
 	if (engine == true)
-		mWheelsEngine.push_back(WheelCount);
+		mWheelsEngine.emplace_back(WheelCount);
 	if (steerable == true)
-		mWheelsSteerable.push_back(WheelCount);
+		mWheelsSteerable.emplace_back(WheelCount);
 	WheelCount++;
 
 	MeshObject *mesh = new MeshObject(this, GetName() + " Wheel " + ToString(WheelCount), 0, WheelMesh, "", WheelScale, false);
-	mWheels.push_back(mesh);
+	mWheels.emplace_back(mesh);
 
 	mVehicle->addWheel(
 		mesh->GetSceneNode()->GetRawSceneNode(),

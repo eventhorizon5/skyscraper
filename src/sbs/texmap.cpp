@@ -297,11 +297,11 @@ void Utility::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyAr
 					sect = -(ptA.z - value) / v.z;
 				v *= sect;
 				v += ptA;
-				poly1.push_back(v);
-				poly2.push_back(v);
+				poly1.emplace_back(v);
+				poly2.emplace_back(v);
 			}
 
-			poly2.push_back(ptB);
+			poly2.emplace_back(ptB);
 		}
 		else if (sideB < 0)
 		{
@@ -323,16 +323,16 @@ void Utility::SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyAr
 					sect = -(ptA.z - value) / v.z;
 				v *= sect;
 				v += ptA;
-				poly1.push_back(v);
-				poly2.push_back(v);
+				poly1.emplace_back(v);
+				poly2.emplace_back(v);
 			}
 
-			poly1.push_back(ptB);
+			poly1.emplace_back(ptB);
 		}
 		else
 		{
-			poly1.push_back(ptB);
-			poly2.push_back(ptB);
+			poly1.emplace_back(ptB);
+			poly2.emplace_back(ptB);
 		}
 
 		ptA = ptB;

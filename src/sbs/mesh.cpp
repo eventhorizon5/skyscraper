@@ -217,7 +217,7 @@ Wall* MeshObject::CreateWallObject(const std::string &name)
 	Wall *wall = new Wall(this);
 	wall->SetParentArray(Walls);
 	wall->SetValues("Wall", name, false, false);
-	Walls.push_back(wall);
+	Walls.emplace_back(wall);
 	return wall;
 }
 
@@ -845,7 +845,7 @@ void MeshObject::CreateCollider()
 				for (size_t k = 0; k < poly->geometry.size(); k++)
 				{
 					for (size_t l = 0; l < poly->geometry[k].size(); l++)
-						polyarray.push_back(poly->geometry[k][l].vertex);
+						polyarray.emplace_back(poly->geometry[k][l].vertex);
 				}
 
 				for (size_t k = 0; k < poly->triangles.size(); k++)

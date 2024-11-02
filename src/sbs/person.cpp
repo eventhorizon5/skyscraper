@@ -165,7 +165,7 @@ void Person::GotoFloor(int floor)
 		route_entry.floor_selected = false;
 		route_entry.destination = false;
 		route_entry.in_elevator = false;
-		route.push_back(route_entry);
+		route.emplace_back(route_entry);
 	}
 }
 

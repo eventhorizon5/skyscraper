@@ -66,11 +66,11 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 
 		if (route)
 		{
-			result.push_back(route);
+			result.emplace_back(route);
 			return result;
 		}
 
-		checked_floors.push_back(StartingFloor);
+		checked_floors.emplace_back(StartingFloor);
 	}
 
 	//Indirect check
@@ -95,7 +95,7 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 			ElevatorRoute *endroute = GetDirectRoute(floor, DestinationFloor, service_access);
 
 			if (endroute)
-				route.push_back(endroute);
+				route.emplace_back(endroute);
 			return route;
 		}
 	}
@@ -179,14 +179,14 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 					{
 						for (int j = car->GetServicedFloorCount() - 1; j >= 0; j--)
 						{
-							floor_list.push_back(car->GetServicedFloor(j));
+							floor_list.emplace_back(car->GetServicedFloor(j));
 						}
 					}
 					else
 					{
 						for (int j = 0; j < car->GetServicedFloorCount(); j++)
 						{
-							floor_list.push_back(car->GetServicedFloor(j));
+							floor_list.emplace_back(car->GetServicedFloor(j));
 						}
 					}
 
@@ -203,11 +203,11 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 								if (result2.empty() == false)
 								{
 									ElevatorRoute *first = new ElevatorRoute(car, number);
-									result.push_back(first);
+									result.emplace_back(first);
 
 									for (size_t i = 0; i < result2.size(); i++)
 									{
-										result.push_back(result2[i]);
+										result.emplace_back(result2[i]);
 									}
 									return result;
 								}
@@ -234,12 +234,12 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 									if (result2)
 									{
 										ElevatorRoute *first = new ElevatorRoute(car, number);
-										result.push_back(first);
-										result.push_back(result2);
+										result.emplace_back(first);
+										result.emplace_back(result2);
 										return result;
 									}
 
-									checked_floors.push_back(number);
+									checked_floors.emplace_back(number);
 								}
 							}
 						}

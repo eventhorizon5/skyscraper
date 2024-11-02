@@ -435,7 +435,7 @@ bool ElevatorCar::CreateCar(int floor)
 	if (NumDoors > 0)
 	{
 		for (int i = 1; i <= NumDoors; i++)
-			DoorArray.push_back(new ElevatorDoor(i, this));
+			DoorArray.emplace_back(new ElevatorDoor(i, this));
 	}
 
 	//create sound objects
@@ -506,7 +506,7 @@ FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix
 	//Creates a floor indicator at the specified location
 
 	FloorIndicator* indicator = new FloorIndicator(this, parent->Number, Number, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
-	FloorIndicatorArray.push_back(indicator);
+	FloorIndicatorArray.emplace_back(indicator);
 	return indicator;
 }
 
@@ -520,7 +520,7 @@ ButtonPanel* ElevatorCar::CreateButtonPanel(const std::string &texture, int rows
 		Report("creating button panel " + ToString(index + 1));
 
 	ButtonPanel* panel = new ButtonPanel(this, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
-	PanelArray.push_back(panel);
+	PanelArray.emplace_back(panel);
 	return panel;
 }
 
@@ -566,7 +566,7 @@ bool ElevatorCar::AddServicedFloor(int number)
 		//only add floor if not serviced by another car
 		if (parent->IsServicedFloor(number) == false)
 		{
-			ServicedFloors.push_back(number);
+			ServicedFloors.emplace_back(number);
 			std::sort(ServicedFloors.begin(), ServicedFloors.end());
 
 			//add serviced floors to doors, if needed
@@ -1153,7 +1153,7 @@ DirectionalIndicator* ElevatorCar::AddDirectionalIndicator(bool active_direction
 		Report("adding interior directional indicator");
 
 	DirectionalIndicator *indicator = new DirectionalIndicator(this, parent->Number, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	DirIndicatorArray.push_back(indicator);
+	DirIndicatorArray.emplace_back(indicator);
 	return indicator;
 }
 
@@ -1960,7 +1960,7 @@ Sound* ElevatorCar::AddSound(const std::string &name, const std::string &filenam
 {
 	//create a sound object
 	Sound *sound = new Sound(this, name, false);
-	sounds.push_back(sound);
+	sounds.emplace_back(sound);
 
 	//set parameters and play sound
 	sound->Move(position);
@@ -2159,7 +2159,7 @@ Door* ElevatorCar::AddDoor(std::string name, const std::string &open_sound, cons
 
 	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
-	StdDoorArray.push_back(door);
+	StdDoorArray.emplace_back(door);
 	return door;
 }
 
@@ -2173,7 +2173,7 @@ Door* ElevatorCar::CreateDoor(std::string name, const std::string &open_sound, c
 		name = "Door " + number;
 
 	Door* door = new Door(this, 0, name, open_sound, close_sound, rotate);
-	StdDoorArray.push_back(door);
+	StdDoorArray.emplace_back(door);
 	return door;
 }
 
@@ -2436,7 +2436,7 @@ Light* ElevatorCar::AddLight(const std::string &name, int type)
 	//add a global light
 
 	Light* light = new Light(this, name, type);
-	lights.push_back(light);
+	lights.emplace_back(light);
 	light->Enabled(false);
 	return light;
 }
@@ -2460,7 +2460,7 @@ Model* ElevatorCar::AddModel(const std::string &name, const std::string &filenam
 		delete model;
 		return 0;
 	}
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 	return model;
 }
 
@@ -2477,14 +2477,14 @@ void ElevatorCar::AddModel(Model *model)
 			return;
 	}
 
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 }
 
 Primitive* ElevatorCar::AddPrimitive(const std::string &name)
 {
 	//add a prim
 	Primitive* prim = new Primitive(this, name);
-	PrimArray.push_back(prim);
+	PrimArray.emplace_back(prim);
 	return prim;
 }
 
@@ -2501,14 +2501,14 @@ void ElevatorCar::AddPrimitive(Primitive *primitive)
 			return;
 	}
 
-	PrimArray.push_back(primitive);
+	PrimArray.emplace_back(primitive);
 }
 
 CustomObject* ElevatorCar::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
 {
 	//add a custom object
 	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 	return object;
 }
 
@@ -2525,13 +2525,13 @@ void ElevatorCar::AddCustomObject(CustomObject *object)
 			return;
 	}
 
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 }
 
 void ElevatorCar::AddDisplayFloor(int floor)
 {
 	//add a floor to the display floors list
-	DisplayFloors.push_back(floor);
+	DisplayFloors.emplace_back(floor);
 }
 
 std::string ElevatorCar::GetFloorDisplay()
@@ -2577,7 +2577,7 @@ Control* ElevatorCar::AddControl(const std::string &name, const std::string &sou
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(Vector3(CenterX, voffset, CenterZ));
-	ControlArray.push_back(control);
+	ControlArray.emplace_back(control);
 	return control;
 }
 
@@ -2585,7 +2585,7 @@ Trigger* ElevatorCar::AddTrigger(const std::string &name, const std::string &sou
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
-	TriggerArray.push_back(trigger);
+	TriggerArray.emplace_back(trigger);
 	return trigger;
 }
 
@@ -2608,7 +2608,7 @@ std::vector<Sound*> ElevatorCar::GetSound(const std::string &name)
 			std::string name2 = sounds[i]->GetName();
 			SetCase(name2, false);
 			if (findname == name2)
-				soundlist.push_back(sounds[i]);
+				soundlist.emplace_back(sounds[i]);
 		}
 	}
 	return soundlist;
@@ -3534,7 +3534,7 @@ CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int qualit
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
-	CameraTextureArray.push_back(cameratexture);
+	CameraTextureArray.emplace_back(cameratexture);
 	return cameratexture;
 }
 

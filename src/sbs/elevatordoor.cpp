@@ -241,7 +241,7 @@ void ElevatorDoor::AddServicedFloor(int floor)
 	}
 
 	//insert at top
-	ShaftDoors.push_back(wrapper);
+	ShaftDoors.emplace_back(wrapper);
 		return;
 }
 
@@ -961,7 +961,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 	if (!wrapper)
 	{
 		if (ShaftDoor == true)
-			ManualFloors.push_back(floor);
+			ManualFloors.emplace_back(floor);
 		return 0;
 	}
 
@@ -1685,13 +1685,13 @@ void ElevatorDoor::CreateSensor(Vector3 &area_min, Vector3 &area_max)
 	std::string full_name2 = car->GetName() + ":" + action_name2;
 
 	std::vector<Object*> parents;
-	parents.push_back(car);
+	parents.emplace_back(car);
 	sensor_action = sbs->AddAction(full_name1, parents, action_name1);
 	reset_action = sbs->AddAction(full_name2, parents, action_name2);
 
 	std::vector<std::string> actions;
-	actions.push_back(full_name2);
-	actions.push_back(full_name1);
+	actions.emplace_back(full_name2);
+	actions.emplace_back(full_name1);
 
 	//create new trigger
 	sensor = new Trigger(this, "Sensor", true, SensorSound, area_min, area_max, actions);

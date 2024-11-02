@@ -90,7 +90,7 @@ Floor* FloorManager::Create(int number)
 	Map floor;
 	floor.number = number;
 	floor.object = new Floor(this, this, number);
-	Array.push_back(floor);
+	Array.emplace_back(floor);
 
 	if (number < 0)
 		sbs->Basements++;
@@ -283,7 +283,7 @@ Elevator* ElevatorManager::Create(int number)
 	Map elev;
 	elev.number = number;
 	elev.object = new Elevator(this, number);
-	Array.push_back(elev);
+	Array.emplace_back(elev);
 	return elev.object;
 }
 
@@ -447,7 +447,7 @@ Shaft* ShaftManager::Create(int number, Real CenterX, Real CenterZ, int _startfl
 	Map shaft;
 	shaft.number = number;
 	shaft.object = new Shaft(this, number, CenterX, CenterZ, _startfloor, _endfloor);
-	Array.push_back(shaft);
+	Array.emplace_back(shaft);
 	return shaft.object;
 }
 
@@ -601,7 +601,7 @@ Stairwell* StairwellManager::Create(int number, Real CenterX, Real CenterZ, int 
 	Map stairs;
 	stairs.number = number;
 	stairs.object = new Stairwell(this, number, CenterX, CenterZ, _startfloor, _endfloor);
-	Array.push_back(stairs);
+	Array.emplace_back(stairs);
 	return stairs.object;
 }
 
@@ -732,7 +732,7 @@ Door* DoorManager::AddDoor(std::string name, const std::string &open_sound, cons
 
 	Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
-	Array.push_back(door);
+	Array.emplace_back(door);
 	return door;
 }
 
@@ -743,7 +743,7 @@ Door* DoorManager::CreateDoor(std::string name, const std::string &open_sound, c
 		name = "Door " + ToString(number);
 
 	Door* door = new Door(this, wrapper, name, open_sound, close_sound, rotate);
-	Array.push_back(door);
+	Array.emplace_back(door);
 	return door;
 }
 
@@ -828,7 +828,7 @@ RevolvingDoor* RevolvingDoorManager::AddDoor(std::string name, bool run, const s
 		name = "RevolvingDoor " + ToString(number);
 
 	RevolvingDoor* door = new RevolvingDoor(this, wrapper, name, run, soundfile, texture, thickness, clockwise, segments, speed, rotation, CenterX, CenterZ, width, height, voffset, tw, th);
-	Array.push_back(door);
+	Array.emplace_back(door);
 	return door;
 }
 
@@ -901,7 +901,7 @@ Vehicle* VehicleManager::Create(int number)
 	Map v;
 	v.number = number;
 	v.object = new Vehicle(this, number);
-	Array.push_back(v);
+	Array.emplace_back(v);
 	return v.object;
 }
 
@@ -1029,7 +1029,7 @@ DispatchController* ControllerManager::Create(int number)
 	Map controller;
 	controller.number = number;
 	controller.object = new DispatchController(this, number);
-	Array.push_back(controller);
+	Array.emplace_back(controller);
 	return controller.object;
 }
 

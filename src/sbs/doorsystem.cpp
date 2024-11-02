@@ -641,7 +641,7 @@ DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::s
 	//initialize a door component
 
 	DoorComponent *door = new DoorComponent(doorname, this, direction, OpenClockwise, OpenSpeed, CloseSpeed, dynmesh);
-	doors.push_back(door);
+	doors.emplace_back(door);
 	return door;
 }
 

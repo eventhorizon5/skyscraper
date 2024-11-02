@@ -241,7 +241,7 @@ SoundData* SoundSystem::Load(const std::string &filename)
 	}
 
 	//add sound element to array
-	sounds.push_back(data);
+	sounds.emplace_back(data);
 
 	return data;
 }
@@ -391,7 +391,7 @@ void SoundData::AddHandle(Sound *handle)
 		if (handles[i] == handle)
 			return;
 	}
-	handles.push_back(handle);
+	handles.emplace_back(handle);
 }
 
 void SoundData::RemoveHandle(Sound *handle)
@@ -424,7 +424,7 @@ void SoundData::AddChannel(FMOD::Channel *channel)
 		if (channels[i] == channel)
 			return;
 	}
-	channels.push_back(channel);
+	channels.emplace_back(channel);
 }
 
 void SoundData::RemoveChannel(FMOD::Channel *channel)
