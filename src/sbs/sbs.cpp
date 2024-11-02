@@ -3732,7 +3732,6 @@ Object* SBS::GetObjectOfParent(std::string parent_name, std::string name, const 
 					if (case_sensitive == false)
 						SetCase(tmpname, false);
 
-					printf("name: %s\n", tmpname.c_str());
 					//get by object name
 					if (tmpname == name)
 						return object;
