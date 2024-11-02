@@ -253,12 +253,11 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 	//frontend->GetWindow()->EnableFreelook(active_engine->GetSystem()->camera->Freelook); //FIXME
 }
 
-bool VM::RunEngines(EngineContext* &newengine)
+bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 {
 	//run sim engine instances, and returns the new engine created (if applicable)
 	//to be started by the frontend
 
-	newengine = 0;
 	bool result = true;
 	bool isloading = IsEngineLoading();
 
@@ -306,7 +305,7 @@ bool VM::RunEngines(EngineContext* &newengine)
 				if (active_engine->IsLoadingFinished() == true && isloading == true)
 					continue;
 			}
-			newengine = engines[i];
+			newengines.push_back(engines[i]);
 		}
 	}
 	return result;
@@ -566,19 +565,19 @@ ScriptProcessor* VM::GetActiveScriptProcessor()
 	return 0;
 }
 
-int VM::Run(EngineContext* &newengine)
+int VM::Run(std::vector<EngineContext*> &newengines)
 {
 	//run system
 
-	//return codes are 0 for failure, 1 for success, 2 to unload, and 3 to load a new building
+	//return codes are 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
 
 	//show progress dialog if needed
 	//gui->ShowProgress();
 
 	//run sim engines
-	bool result = RunEngines(newengine);
+	bool result = RunEngines(newengines);
 
-	if (newengine)
+	if (newengines.size() > 0)
 		return 3;
 
 	//delete an engine if requested

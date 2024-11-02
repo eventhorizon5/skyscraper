@@ -436,12 +436,17 @@ bool Skyscraper::Loop()
 	gui->ShowProgress();
 
 	//run sim engine instances
-	EngineContext *newengine;
-	int status = vm->Run(newengine);
+	std::vector<EngineContext*> newengines;
+	int status = vm->Run(newengines);
 
 	//start a new engine if needed
-	if (newengine && status == 3)
-		Start(newengine);
+	if (status == 3)
+	{
+		for (size_t i = 0; i < newengines.size(); i++)
+		{
+			Start(newengines[i]);
+		}
+	}
 
 	if (status == 2)
 		UnloadToMenu();
