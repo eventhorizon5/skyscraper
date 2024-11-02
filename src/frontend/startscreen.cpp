@@ -303,7 +303,7 @@ bool StartScreen::DrawImage(const std::string &filename, buttondata *button, Rea
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 		//set scale to 1.0 on MacOS versions earlier than 10.15
-		if (GetVM()->macos_major == 10 && GetVM()->macos_minor < 15)
+		if (vm->macos_major == 10 && vm->macos_minor < 15)
 			scale = 1.0;
 #endif
 
