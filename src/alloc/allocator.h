@@ -63,8 +63,8 @@ public:
     VMAllocator(const VMAllocator<U> &rhs) noexcept;
     VMAllocator(const VMAllocator &rhs) noexcept;
 
-    unsigned int GetAllocations();
-    unsigned int GetDeallocations();
+    unsigned int GetAllocations() noexcept;
+    unsigned int GetDeallocations() noexcept;
 
     T* allocate(std::size_t n);
     void deallocate(T* p, std::size_t n);
