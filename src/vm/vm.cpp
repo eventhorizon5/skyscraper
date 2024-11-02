@@ -255,7 +255,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 
 bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 {
-	//run sim engine instances, and returns the new engine created (if applicable)
+	//run sim engine instances, and returns the new engine(s) created (if applicable)
 	//to be started by the frontend
 
 	bool result = true;
