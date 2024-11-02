@@ -25,18 +25,18 @@
 namespace Alloc {
 
 template <typename T>
-struct MyAllocation
+struct VMAllocation
 {
     size_t Size = 0;
     std::unique_ptr<T> Ptr;
 
-    MyAllocation();
-    MyAllocation(MyAllocation && other) noexcept;
+    VMAllocation();
+    VMAllocation(VMAllocation && other) noexcept;
 };
 
 // This allocator keep ownership of the last allocate(n)
 template <typename T>
-class MyAllocator
+class VMAllocator
 {
 public:
     using value_type = T;
@@ -49,22 +49,22 @@ private:
 
         void deallocate(T* p, std::size_t n);
 
-        MyAllocation<T> Current;
+        VMAllocation<T> Current;
         bool CurrentDeallocated = false;
 
         int total_bytes = 0;
     };
 public:
-    MyAllocator();
+    VMAllocator();
 
     template<class U>
-    MyAllocator(const MyAllocator<U> &rhs) noexcept;
-    MyAllocator(const MyAllocator &rhs) noexcept;
+    VMAllocator(const VMAllocator<U> &rhs) noexcept;
+    VMAllocator(const VMAllocator &rhs) noexcept;
 
 public:
     T* allocate(std::size_t n);
     void deallocate(T* p, std::size_t n);
-    MyAllocation<T> release();
+    VMAllocation<T> release();
 
 public:
     // This is the instance of the allocator that will be shared
@@ -73,11 +73,11 @@ public:
 
 // We assume allocators of different types are never compatible
 template <class T, class U>
-bool operator==(const MyAllocator<T>&, const MyAllocator<U>&) { return false; }
+bool operator==(const VMAllocator<T>&, const VMAllocator<U>&) { return false; }
 
 // We assume allocators of different types are never compatible
 template <class T, class U>
-bool operator!=(const MyAllocator<T>&, const MyAllocator<U>&) { return true; }
+bool operator!=(const VMAllocator<T>&, const VMAllocator<U>&) { return true; }
 
 }
 
