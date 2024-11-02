@@ -29,13 +29,29 @@
 #include "vm.h"
 #include "hal.h"
 #include "mainscreen.h"
+#include "startscreen.h"
 
 using namespace SBS;
 
 namespace Skyscraper
 {
 
-bool Skyscraper::DrawBackground()
+StartScreen::StartScreen(Skyscraper *frontend)
+{
+	this->frontend = frontend;
+	this->vm = frontend->GetVM();
+	buttons = 0;
+	buttoncount = 0;
+	background_rect = 0;
+	background_node = 0;
+}
+
+StartScreen::~StartScreen()
+{
+
+}
+
+bool StartScreen::DrawBackground()
 {
 	//draw menu background
 
@@ -134,7 +150,7 @@ bool Skyscraper::DrawBackground()
 	return true;
 }
 
-bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected, const std::string &filename_pressed)
+bool StartScreen::DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected, const std::string &filename_pressed)
 {
 	//X and Y represent the image's top-left location.
 	//values are -1 for the top left, 1 for the top right, -1 for the top, and 1 for the bottom
@@ -283,7 +299,7 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	if (material != "")
 	{
 		//apply content scaling factor, fixes issues for example on Retina displays
-		Real scale = window->GetContentScaleFactor();
+		Real scale = frontend->GetWindow()->GetContentScaleFactor();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 		//set scale to 1.0 on MacOS versions earlier than 10.15
@@ -371,13 +387,15 @@ bool Skyscraper::DrawImage(const std::string &filename, buttondata *button, Real
 	return true;
 }
 
-bool Skyscraper::GetMenuInput()
+bool StartScreen::GetMenuInput()
 {
 	//input handler for main menu
 
 	//exit if there aren't any buttons
 	if (!buttons || buttoncount == 0)
 		return false;
+
+	MainScreen *window = frontend->GetWindow();
 
 	//get mouse coordinates
 	int mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
@@ -428,7 +446,7 @@ bool Skyscraper::GetMenuInput()
 	return true;
 }
 
-void Skyscraper::Click(int index)
+void StartScreen::Click(int index)
 {
 	//user clicked a button
 
@@ -451,16 +469,16 @@ void Skyscraper::Click(int index)
 	if (filename == "")
 	{
 		//show file selection dialog
-		filename = SelectBuilding();
+		filename = frontend->SelectBuilding();
 	}
 
 	if (filename != "")
 	{
-		Load(filename);
+		frontend->Load(filename);
 	}
 }
 
-void Skyscraper::DeleteButtons()
+void StartScreen::DeleteButtons()
 {
 	if (buttoncount > 0)
 	{
