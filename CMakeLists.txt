@@ -169,9 +169,6 @@ if (NOT WIN32)
 	add_library(GUI SHARED ${GUI_FILES})
 endif ()
 
-#Alloc Library
-add_library(Alloc SHARED ${ALLOC_FILES})
-
 #OpenXR Library
 if (WIN32)
 	add_library(OpenXR SHARED ${OPENXR_FILES})
