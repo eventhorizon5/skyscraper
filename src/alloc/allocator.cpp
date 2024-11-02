@@ -8,7 +8,7 @@
 
 #include "allocator.h"
 
-namespace Alloc {
+namespace Skyscraper {
 
 template <typename T>
 VMAllocation<T>::VMAllocation()

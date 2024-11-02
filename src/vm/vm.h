@@ -24,6 +24,7 @@
 #define VM_H
 
 #include <vector>
+#include "allocator.h"
 
 //DLL Exporting
 #ifdef _WIN32
@@ -89,7 +90,7 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
-	int Run(std::vector<EngineContext*> &newengine);
+	int Run(std::vector<EngineContext*, VMAllocator<EngineContext*> > &newengine);
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
@@ -122,7 +123,7 @@ public:
 
 private:
 
-	bool RunEngines(std::vector<EngineContext*> &newengines);
+	bool RunEngines(std::vector<EngineContext*, VMAllocator<EngineContext*> > &newengines);
 	void CheckCamera();
 	void HandleEngineShutdown();
 	void HandleReload();
@@ -138,6 +139,7 @@ private:
 	GUI *gui; //GUI subsystem
 
 	wxWindow *parent;
+	VMAllocator<EngineContext*> *alloc;
 
 	bool first_run;
 };

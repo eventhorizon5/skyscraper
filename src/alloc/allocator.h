@@ -22,7 +22,7 @@
 // The requirements for the allocator where taken from Howard Hinnant tutorial:
 // https://howardhinnant.github.io/allocator_boilerplate.html
 
-namespace Alloc {
+namespace Skyscraper {
 
 template <typename T>
 struct VMAllocation

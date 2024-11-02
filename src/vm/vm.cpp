@@ -64,6 +64,8 @@ VM::VM()
 	Verbose = false;
 	showconsole = false;
 
+	alloc = new VMAllocator<EngineContext*>;
+
 	macos_major = 0;
 	macos_minor = 0;
 
@@ -97,6 +99,8 @@ VM::~VM()
 	if (gui)
 		delete gui;
 	gui = 0;
+
+	delete alloc;
 }
 
 void VM::SetParent(wxWindow *parent)
@@ -253,7 +257,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 	//frontend->GetWindow()->EnableFreelook(active_engine->GetSystem()->camera->Freelook); //FIXME
 }
 
-bool VM::RunEngines(std::vector<EngineContext*> &newengines)
+bool VM::RunEngines(std::vector<EngineContext*, VMAllocator<EngineContext*> > &newengines)
 {
 	//run sim engine instances, and returns the new engine(s) created (if applicable)
 	//to be started by the frontend
@@ -565,7 +569,7 @@ ScriptProcessor* VM::GetActiveScriptProcessor()
 	return 0;
 }
 
-int VM::Run(std::vector<EngineContext*> &newengines)
+int VM::Run(std::vector<EngineContext*, VMAllocator<EngineContext*> > &newengines)
 {
 	//run system
 
