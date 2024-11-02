@@ -154,9 +154,9 @@ bool Skyscraper::OnInit()
 	//create VM instance
 	vm = new VM();
 
-	vm->version = "2.1";
+	vm->version = "2.0";
 	vm->version_rev = ToString(GIT_REV);
-	vm->version_state = "Alpha";
+	vm->version_state = "Beta";
 	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
 	gui = vm->GetGUI();
