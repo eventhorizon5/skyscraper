@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.0 Alpha - Engine Context
+	Skyscraper 2.0 - Engine Context
 	Copyright (C)2003-2024 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
