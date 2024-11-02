@@ -305,7 +305,7 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 				if (active_engine->IsLoadingFinished() == true && isloading == true)
 					continue;
 			}
-			newengines.push_back(engines[i]);
+			newengines.emplace_back(engines[i]);
 		}
 	}
 	return result;
@@ -512,7 +512,7 @@ int VM::RegisterEngine(EngineContext *engine)
 	if (number < (int)engines.size())
 		engines[number] = engine;
 	else
-		engines.push_back(engine);
+		engines.emplace_back(engine);
 
 	return number;
 }
