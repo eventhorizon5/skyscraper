@@ -702,7 +702,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 					if (k < 1 || k > Simcore->GetElevatorCount())
 						return ScriptError("Invalid elevator number");
 
-					callbutton_elevators.push_back(k);
+					callbutton_elevators.emplace_back(k);
 				}
 			}
 			else
@@ -714,7 +714,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 				if (data < 1 || data > Simcore->GetElevatorCount())
 					return ScriptError("Invalid elevator number");
-				callbutton_elevators.push_back(data);
+				callbutton_elevators.emplace_back(data);
 			}
 		}
 
@@ -1874,9 +1874,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		for (int i = (end + 1); i < slength - (parameters / 2); i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 		for (int i = slength - (parameters / 2); i < slength; i++)
-			tex_array.push_back(tempdata[i]);
+			tex_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -1946,9 +1946,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		for (int i = (end + 1); i < slength - (parameters / 2); i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 		for (int i = slength - (parameters / 2); i < slength; i++)
-			tex_array.push_back(tempdata[i]);
+			tex_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -2031,9 +2031,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		for (int i = (end + 1); i < slength - (parameters / 2); i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 		for (int i = slength - (parameters / 2); i < slength; i++)
-			tex_array.push_back(tempdata[i]);
+			tex_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -2092,7 +2092,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//get number of action & texture parameters
 		for (int i = 8; i < params; i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -2129,7 +2129,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//get number of action & texture parameters
 		for (int i = 9; i < params; i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -2169,7 +2169,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		//get number of action & texture parameters
 		for (int i = 9; i < params; i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
