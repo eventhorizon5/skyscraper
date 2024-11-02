@@ -337,7 +337,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			VariableMap variable;
 			variable.name = str;
 			variable.value = value;
-			parent->variables.push_back(variable);
+			parent->variables.emplace_back(variable);
 			value = variable.value;
 		}
 		else
@@ -495,7 +495,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		PolyArray varray;
 		for (int i = start; i < params - 2; i += 3)
-			varray.push_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
+			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
 		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
@@ -538,7 +538,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		std::vector<Vector2> varray;
 		for (int i = 3; i < params - 3; i += 2)
-			varray.push_back(Vector2(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1])));
+			varray.emplace_back(Vector2(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1])));
 
 		StoreCommand(Simcore->AddCustomFloor(mesh, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
@@ -586,7 +586,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		PolyArray varray;
 		for (int i = 3; i < params - 2; i += 3)
-			varray.push_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
+			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
 		Simcore->AddPolygon(wall, tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 
@@ -1507,7 +1507,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
-			objects.push_back(Simcore);
+			objects.emplace_back(Simcore);
 		else
 			objects = Simcore->GetObjectRange(tempdata[1]);
 
@@ -1516,7 +1516,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		{
 			for (int i = 3; i < params; i++)
 			{
-				actparams.push_back(tempdata[i]);
+				actparams.emplace_back(tempdata[i]);
 			}
 		}
 
@@ -1545,7 +1545,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
-			objects.push_back(Simcore);
+			objects.emplace_back(Simcore);
 		else
 			objects = Simcore->GetObjectRange(tempdata[1]);
 
@@ -1569,7 +1569,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
-			objects.push_back(Simcore);
+			objects.emplace_back(Simcore);
 		else
 			objects = Simcore->GetObjectRange(tempdata[1]);
 
@@ -1622,9 +1622,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		for (int i = (end + 1); i < slength - (parameters / 2); i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 		for (int i = slength - (parameters / 2); i < slength; i++)
-			tex_array.push_back(tempdata[i]);
+			tex_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);
@@ -1670,7 +1670,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//get number of action & texture parameters
 		for (int i = 8; i < params; i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[1]);

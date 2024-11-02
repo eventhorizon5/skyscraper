@@ -409,13 +409,13 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 		if (insert == false)
 		{
 			//append data to building array
-			BuildingData.push_back(line);
-			BuildingDataOrig.push_back(line);
+			BuildingData.emplace_back(line);
+			BuildingDataOrig.emplace_back(line);
 		}
 		else
 		{
 			//otherwise add data to new array, and insert into buildings array later
-			insert_data.push_back(line);
+			insert_data.emplace_back(line);
 		}
 	}
 
@@ -461,7 +461,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 		info.start_line = line;
 		info.end_line = end;
 		info.parent = parent;
-		includes.push_back(info);
+		includes.emplace_back(info);
 	}
 
 	return true;
@@ -478,8 +478,8 @@ bool ScriptProcessor::LoadFromText(const std::string &text)
 	for (size_t i = 0; i < textarray.size(); i++)
 	{
 		//append data to building array
-		BuildingData.push_back(textarray[i]);
-		BuildingDataOrig.push_back(textarray[i]);
+		BuildingData.emplace_back(textarray[i]);
+		BuildingDataOrig.emplace_back(textarray[i]);
 	}
 	return true;
 }
@@ -1000,7 +1000,7 @@ bool ScriptProcessor::FunctionProc()
 			{
 				buffer = Calc(tempdata[j]);
 				TrimString(buffer);
-				data.Params.push_back(buffer);
+				data.Params.emplace_back(buffer);
 			}
 
 			//remove function statement
@@ -1009,7 +1009,7 @@ bool ScriptProcessor::FunctionProc()
 			//switch to function line
 			data.LineData = LineData;
 			line = functions[i].line;
-			FunctionStack.push_back(data);
+			FunctionStack.emplace_back(data);
 			return true;
 		}
 	}
@@ -1038,7 +1038,7 @@ void ScriptProcessor::ProcessRunloop()
 
 			in_runloop = true;
 			line = functions[i].line + 1;
-			FunctionStack.push_back(data);
+			FunctionStack.emplace_back(data);
 		}
 	}
 }
@@ -1085,7 +1085,7 @@ void ScriptProcessor::CheckFile(const std::string &filename)
 			}
 		}
 		if (exists == false)
-			nonexistent_files.push_back(file);
+			nonexistent_files.emplace_back(file);
 	}
 }
 
@@ -1371,7 +1371,7 @@ int ScriptProcessor::ProcessSections()
 			FunctionInfo info;
 			info.name = function;
 			info.line = line;
-			functions.push_back(info);
+			functions.emplace_back(info);
 		}
 
 		//skip to end of function
@@ -1992,7 +1992,7 @@ int ScriptProcessor::ProcessForLoops()
 		VariableMap var;
 		var.name = it;
 		var.value = ToString(RangeL);
-		variables.push_back(var);
+		variables.emplace_back(var);
 
 		//set up for loop
 		ForInfo info;
@@ -2002,7 +2002,7 @@ int ScriptProcessor::ProcessForLoops()
 		info.start = RangeL;
 		info.end = RangeH;
 
-		ForLoops.push_back(info);
+		ForLoops.emplace_back(info);
 
 		return sNextLine;
 	}
