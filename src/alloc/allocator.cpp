@@ -27,6 +27,7 @@ template <typename T>
 {
 	T *ret = new T[n];
 	total_bytes += n;
+	allocations += 1;
 
 	if (!(Current.Ptr == nullptr || CurrentDeallocated))
 	{
@@ -52,6 +53,7 @@ void VMAllocator<T>::Allocator::deallocate(T* p, std::size_t n)
 
 	delete[] p;
 	total_bytes -= n;
+	deallocations += 1;
 }
 
 template <typename T>
@@ -75,6 +77,18 @@ template <typename T>
 VMAllocator<T>::VMAllocator(const VMAllocator &rhs) noexcept : m_allocator(rhs.m_allocator)
 {
 	std::cout << "VMAllocator(const VMAllocator &rhs)" << std::endl;
+}
+
+template <typename T>
+unsigned int VMAllocator<T>::GetAllocations() noexcept
+{
+	return m_allocator->allocations;
+}
+
+template <typename T>
+unsigned int VMAllocator<T>::GetDeallocations() noexcept
+{
+	return m_allocator->deallocations;
 }
 
 template <typename T>

@@ -53,6 +53,8 @@ private:
         bool CurrentDeallocated = false;
 
         int total_bytes = 0;
+        unsigned int allocations = 0;
+        unsigned int deallocations = 0;
     };
 public:
     VMAllocator();
@@ -61,12 +63,13 @@ public:
     VMAllocator(const VMAllocator<U> &rhs) noexcept;
     VMAllocator(const VMAllocator &rhs) noexcept;
 
-public:
+    unsigned int GetAllocations();
+    unsigned int GetDeallocations();
+
     T* allocate(std::size_t n);
     void deallocate(T* p, std::size_t n);
     VMAllocation<T> release();
 
-public:
     // This is the instance of the allocator that will be shared
     std::shared_ptr<Allocator> m_allocator;
 };
