@@ -250,6 +250,12 @@ ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 endif ()
 
 if (APPLE)
+ADD_CUSTOM_COMMAND(TARGET VM
+                POST_BUILD
+                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
+ADD_CUSTOM_COMMAND(TARGET GUI
+                POST_BUILD
+                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
 ADD_CUSTOM_COMMAND(TARGET SBS
 		POST_BUILD
 		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
