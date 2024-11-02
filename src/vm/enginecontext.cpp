@@ -592,7 +592,7 @@ void EngineContext::CutForEngine(EngineContext *engine)
 void EngineContext::AddChild(EngineContext *engine)
 {
 	if (engine)
-		children.push_back(engine);
+		children.emplace_back(engine);
 }
 
 void EngineContext::RemoveChild(EngineContext *engine)
