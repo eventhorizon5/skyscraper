@@ -9,7 +9,7 @@
 
 #include <windows.h>
 #include "stackwalker.h"
-#include "gui/textwindow.h"
+#include "textwindow.h"
 #include "skyscraper.h"
 #include "vm.h"
 #include "hal.h"
