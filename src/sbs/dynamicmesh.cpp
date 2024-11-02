@@ -89,7 +89,7 @@ bool DynamicMesh::LoadFromFile(const std::string &filename, const std::string &p
 		return false;
 	}
 
-	meshes.push_back(mesh);
+	meshes.emplace_back(mesh);
 	file_model = true;
 	return true;
 }
@@ -108,7 +108,7 @@ bool DynamicMesh::LoadFromMesh(const std::string &meshname)
 		return false;
 	}
 
-	meshes.push_back(mesh);
+	meshes.emplace_back(mesh);
 	file_model = true;
 	return true;
 }
@@ -310,7 +310,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 			else
 				mesh = new Mesh(this, clients[i]->GetName(), clients[i]->GetSceneNode(), render_distance);
 
-			meshes.push_back(mesh);
+			meshes.emplace_back(mesh);
 		}
 	}
 
@@ -340,8 +340,8 @@ void DynamicMesh::AddClient(MeshObject *mesh)
 {
 	//add a client mesh object to this dynamic mesh
 
-	clients.push_back(mesh);
-	client_enable.push_back(true);
+	clients.emplace_back(mesh);
+	client_enable.emplace_back(true);
 }
 
 void DynamicMesh::RemoveClient(MeshObject *mesh)
@@ -441,7 +441,7 @@ int DynamicMesh::GetMaterials(std::vector<std::string> &materials, int client)
 				}
 
 				if (found == false)
-					materials.push_back(material);
+					materials.emplace_back(material);
 			}
 		}
 	}
@@ -818,7 +818,7 @@ DynamicMesh::Mesh::Submesh* DynamicMesh::Mesh::CreateSubMesh(const std::string &
 	submesh.object->setMaterialName(ToString(sbs->InstanceNumber) + ":" + material);
 	submesh.material = material;
 
-	Submeshes.push_back(submesh);
+	Submeshes.emplace_back(submesh);
 	return &Submeshes[index];
 }
 
@@ -1056,7 +1056,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			vindex += entry.vertex_count;
 
 			//store client information
-			client_entries.push_back(entry);
+			client_entries.emplace_back(entry);
 		}
 
 		//create vertex hardware buffer

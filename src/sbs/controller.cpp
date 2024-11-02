@@ -295,7 +295,7 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	route.direction = 0;
 	route.destination = true;
 	Report("Adding destination route " + ToString((int)Routes.size()) + " from floor " + ToString(starting_floor) + " to floor " + ToString(destination_floor));
-	Routes.push_back(route);
+	Routes.emplace_back(route);
 
 	return true;
 }
@@ -386,7 +386,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	route.direction = dir;
 	route.destination = false;
 	Report("Adding standard route " + ToString((int)Routes.size()) + " to floor " + ToString(floor));
-	Routes.push_back(route);
+	Routes.emplace_back(route);
 
 	return true;
 }
@@ -518,7 +518,7 @@ void DispatchController::ProcessRoutes()
 						call.direction = false;
 						if (Routes[i].direction == 1)
 							call.direction = true;
-						Elevators[j].calls.push_back(call);
+						Elevators[j].calls.emplace_back(call);
 						break;
 					}
 				}
@@ -566,7 +566,7 @@ void DispatchController::ProcessRoutes()
 					call.direction = false;
 					if (direction == 1)
 						call.direction = true;
-					Elevators[j].calls.push_back(call);
+					Elevators[j].calls.emplace_back(call);
 					break;
 				}
 			}
@@ -618,7 +618,7 @@ bool DispatchController::AddElevator(int elevator)
 	sbs->GetElevator(elevator)->AddController(Number);
 
 	Report ("Elevator " + ToString(elevator) + " added to dispatch controller " + ToString(Number));
-	Elevators.push_back(newelevator);
+	Elevators.emplace_back(newelevator);
 
 	//process floor range
 	GetFloorRange();
@@ -1035,7 +1035,7 @@ void DispatchController::AssignElevator(int number, int destination_floor, int d
 			if (direction == 0) //destination dispatch mode
 			{
 				//add floor to assignment list
-				Elevators[i].assigned_destination.push_back(destination_floor);
+				Elevators[i].assigned_destination.emplace_back(destination_floor);
 			}
 			else //standard mode
 			{
@@ -1050,7 +1050,7 @@ void DispatchController::AssignElevator(int number, int destination_floor, int d
 				}
 
 				//add direction to assignment list
-				Elevators[i].assigned_directions.push_back(direction);
+				Elevators[i].assigned_directions.emplace_back(direction);
 			}
 		}
 	}
@@ -1071,7 +1071,7 @@ void DispatchController::RegisterCallStation(CallStation *station)
 			return;
 	}
 
-	CallStations.push_back(station);
+	CallStations.emplace_back(station);
 }
 
 void DispatchController::UnregisterCallStation(CallStation *station)
@@ -1102,7 +1102,7 @@ std::vector<CallStation*> DispatchController::GetCallStations(int floor)
 	{
 		if (CallStations[i]->GetFloor() == floor)
 		{
-			stationlist.push_back(CallStations[i]);
+			stationlist.emplace_back(CallStations[i]);
 		}
 	}
 	return stationlist;

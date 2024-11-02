@@ -74,7 +74,7 @@ Stairwell::Stairwell(Object *parent, int number, Real CenterX, Real CenterZ, int
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
-		Levels.push_back(new Level(this, i));
+		Levels.emplace_back(new Level(this, i));
 	}
 
 	//create a dynamic mesh for doors
@@ -371,7 +371,7 @@ void Stairwell::AddShowFloor(int floor)
 	if (IsShowFloor(floor))
 		return;
 
-	ShowFloorsList.push_back(floor);
+	ShowFloorsList.emplace_back(floor);
 	std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
 }
 
@@ -890,7 +890,7 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 
 	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, voffset, tw, th, side_tw, side_th);
-	DoorArray.push_back(door);
+	DoorArray.emplace_back(door);
 
 	floorptr = 0;
 	return door;
@@ -906,7 +906,7 @@ Door* Stairwell::Level::CreateDoor(std::string name, const std::string &open_sou
 		name = "Door " + num;
 
 	Door* door = new Door(this, parent->DoorWrapper, name, open_sound, close_sound, rotate);
-	DoorArray.push_back(door);
+	DoorArray.emplace_back(door);
 	return door;
 }
 
@@ -1057,7 +1057,7 @@ Light* Stairwell::Level::AddLight(const std::string &name, int type)
 	//add a global light
 
 	Light* light = new Light(mesh, name, type);
-	lights.push_back(light);
+	lights.emplace_back(light);
 	return light;
 }
 
@@ -1088,7 +1088,7 @@ Model* Stairwell::Level::AddModel(const std::string &name, const std::string &fi
 		delete model;
 		return 0;
 	}
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 	return model;
 }
 
@@ -1105,14 +1105,14 @@ void Stairwell::Level::AddModel(Model *model)
 			return;
 	}
 
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 }
 
 Primitive* Stairwell::Level::AddPrimitive(const std::string &name)
 {
 	//add a prim
 	Primitive* prim = new Primitive(this, name);
-	PrimArray.push_back(prim);
+	PrimArray.emplace_back(prim);
 	return prim;
 }
 
@@ -1129,14 +1129,14 @@ void Stairwell::Level::AddPrimitive(Primitive *primitive)
 			return;
 	}
 
-	PrimArray.push_back(primitive);
+	PrimArray.emplace_back(primitive);
 }
 
 CustomObject* Stairwell::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
 {
 	//add a custom object
 	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 	return object;
 }
 
@@ -1153,7 +1153,7 @@ void Stairwell::Level::AddCustomObject(CustomObject *object)
 			return;
 	}
 
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 }
 
 
@@ -1164,7 +1164,7 @@ Control* Stairwell::Level::AddControl(const std::string &name, const std::string
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(mesh, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, voffset, CenterZ);
-	ControlArray.push_back(control);
+	ControlArray.emplace_back(control);
 	return control;
 }
 
@@ -1179,7 +1179,7 @@ Trigger* Stairwell::Level::AddTrigger(const std::string &name, const std::string
 		return 0;
 
 	Trigger* trigger = new Trigger(mesh, name, false, sound_file, area_min, area_max, action_names);
-	TriggerArray.push_back(trigger);
+	TriggerArray.emplace_back(trigger);
 	return trigger;*/
 	return 0;
 }
@@ -1250,7 +1250,7 @@ CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int q
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
-	CameraTextureArray.push_back(cameratexture);
+	CameraTextureArray.emplace_back(cameratexture);
 	return cameratexture;
 }
 

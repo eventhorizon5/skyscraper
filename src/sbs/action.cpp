@@ -1072,7 +1072,7 @@ bool Action::AddParent(Object *parent)
 			return false;
 	}
 
-	parent_objects.push_back(parent);
+	parent_objects.emplace_back(parent);
 	return true;
 }
 

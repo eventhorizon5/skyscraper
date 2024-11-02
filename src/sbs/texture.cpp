@@ -170,7 +170,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 	for (size_t i = 0; i < filenames.size(); i++)
 	{
 		TrimString(filenames[i]);
-		filenames2.push_back(sbs->VerifyFile(filenames[i]));
+		filenames2.emplace_back(sbs->VerifyFile(filenames[i]));
 	}
 
 	bool has_alpha = false;
@@ -334,7 +334,7 @@ void TextureManager::RegisterTextureInfo(const std::string &name, const std::str
 	info.tex_size = tex_size;
 	info.mat_size = mat_size;
 
-	textureinfo.push_back(info);
+	textureinfo.emplace_back(info);
 }
 
 bool TextureManager::UnregisterTextureInfo(std::string name, std::string material_name)
@@ -430,7 +430,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	try
 	{
 		new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
-		manual_textures.push_back(new_texture);
+		manual_textures.emplace_back(new_texture);
 		IncrementTextureCount();
 	}
 	catch (Ogre::Exception &e)
@@ -783,7 +783,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	try
 	{
 		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, format, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
-		manual_textures.push_back(texture);
+		manual_textures.emplace_back(texture);
 		IncrementTextureCount();
 	}
 	catch (Ogre::Exception &e)
@@ -911,7 +911,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	try
 	{
 		new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, format, Ogre::TU_DEFAULT);
-		manual_textures.push_back(new_texture);
+		manual_textures.emplace_back(new_texture);
 		IncrementTextureCount();
 	}
 	catch (Ogre::Exception &e)
@@ -1181,7 +1181,7 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3
 		varray.reserve(vertices.size());
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
-			varray.push_back(Vector3(vertices[i][selX], vertices[i][selY], 0));
+			varray.emplace_back(Vector3(vertices[i][selX], vertices[i][selY], 0));
 		}
 
 		//automatically flip texture based on largest normal (corrects some situations where the texture is incorrectly reversed)
