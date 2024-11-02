@@ -45,6 +45,7 @@
 #include "scriptproc.h"
 #include "mainscreen.h"
 #include "profiler.h"
+#include "startscreen.h"
 #include "gitrev.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
@@ -141,12 +142,8 @@ bool Skyscraper::OnInit()
 {
 	StartupRunning = false;
 	FullScreen = false;
-	buttons = 0;
-	buttoncount = 0;
 	ShowMenu = false;
 	Headless = false;
-	background_rect = 0;
-	background_node = 0;
 	mRenderWindow = 0;
 	window = 0;
 	parser = 0;
@@ -160,6 +157,7 @@ bool Skyscraper::OnInit()
 	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
 	gui = vm->GetGUI();
+	startscreen = new StartScreen(this);
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -388,6 +386,7 @@ int Skyscraper::OnExit()
 		delete parser;
 	parser = 0;
 
+	delete startscreen;
 	delete vm;
 	return wxApp::OnExit();
 }
@@ -419,12 +418,12 @@ bool Skyscraper::Loop()
 	{
 		bool result = false;
 
-		result = DrawBackground();
+		result = startscreen->DrawBackground();
 
 		if (result == false)
 			return false;
 
-		result = GetMenuInput();
+		result = startscreen->GetMenuInput();
 
 		if (result == false)
 			return false;
@@ -491,7 +490,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 
 	if (StartupRunning == true)
 	{
-		DeleteButtons();
+		startscreen->DeleteButtons();
 		StartupRunning = false;
 	}
 

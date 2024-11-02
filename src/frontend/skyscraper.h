@@ -59,6 +59,7 @@ class ScriptProcessor;
 class VM;
 class HAL;
 class GUI;
+class StartScreen;
 
 class Skyscraper : public wxApp
 {
@@ -78,14 +79,12 @@ public:
 	bool Loop();
 	virtual bool OnInit();
 	virtual int OnExit();
-	bool DrawBackground();
 
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
 	void ShowError(const std::string &message);
 	void ShowMessage(const std::string &message);
-	bool GetMenuInput();
 	void StartSound();
 	std::string SelectBuilding();
 	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -109,33 +108,7 @@ public:
 
 private:
 
-	//button locations
-	struct buttondata
-	{
-		Real x;
-		Real y;
-		Real size_x;
-		Real size_y;
-		std::string filename;
-		std::string filename_selected;
-		std::string filename_pressed;
-		Real offset_x;
-		Real offset_y;
-		bool drawn_selected, drawn_pressed;
-		int active_button;
-		Ogre::SceneNode* node;
-		Ogre::Rectangle2D* rect;
-	};
-	buttondata *buttons;
-	int buttoncount;
-
-	Ogre::Rectangle2D* background_rect;
-	Ogre::SceneNode* background_node;
-	std::string background_image;
-	bool DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
-	void Click(int index);
 	void UnloadSim();
-	void DeleteButtons();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 
@@ -148,6 +121,9 @@ private:
 
 	//GUI instance
 	GUI *gui;
+
+	//Start Screen instance
+	StartScreen *startscreen;
 };
 
 DECLARE_APP(Skyscraper)
