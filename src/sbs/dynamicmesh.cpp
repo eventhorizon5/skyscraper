@@ -913,9 +913,6 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	if (prepared == true || !node)
 		return;
 
-	if (sbs->Headless == true)
-		return;
-
 	unsigned int vertex_count = Parent->GetVertexCount("", client);
 
 	std::vector<std::string> materials;

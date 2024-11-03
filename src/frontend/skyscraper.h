@@ -74,7 +74,6 @@ public:
 	bool FullScreen;
 	bool Verbose;
 	bool ShowMenu; //show main menu
-	bool Headless;
 
 	bool Loop();
 	virtual bool OnInit();

@@ -172,7 +172,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
-	Headless = false;
 	power_state = true;
 
 	//create utility object
