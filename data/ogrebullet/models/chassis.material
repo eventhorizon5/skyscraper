@@ -112,7 +112,7 @@ material PAN
 			emissive 0.000000 0.000000 0.000000 1.000000
 			texture_unit
 			{
-				texture data/ogrebullet/textures/BUGSPIN.png
+				texture data/ogrebullet/textures/BugSPIN.png
 				tex_address_mode wrap
 				filtering trilinear
 			}
