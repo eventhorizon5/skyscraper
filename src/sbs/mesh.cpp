@@ -58,9 +58,9 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	mShape = 0;
 	prepared = false;
 	is_physical = false;
-	this->restitution = 0;
-	this->friction = 0;
-	this->mass = 0;
+	restitution = 0;
+	friction = 0;
+	mass = 0;
 	this->create_collider = create_collider;
 	collider_node = 0;
 	Filename = filename;
