@@ -151,8 +151,15 @@ void EngineContext::Run()
 		return;
 
 	//register thread with HAL
-	vm->GetHAL()->RegisterThread();
-	vm->newthread = true;
+	try
+	{
+		vm->GetHAL()->RegisterThread();
+		vm->newthread = true;
+	}
+	catch (Ogre::Exception& e)
+	{
+		ReportFatalError("Error registering thread - details:\n" + e.getDescription());
+	}
 
 	return; //FIXME, needs thread implementation
 

@@ -78,6 +78,7 @@ public:
 	bool ReportFatalError(const std::string &message, const std::string &prompt);
 	void LoadConfiguration(const std::string data_path, bool show_console);
 	bool LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow);
+	void NotifyBegin();
 	void NotifyThreadStarted();
 	void RegisterThread();
 	void UnregisterThread();

@@ -411,6 +411,8 @@ bool HAL::Initialize(const std::string &data_path)
 		return ReportFatalError("Error initializing render window");
 	}
 
+	NotifyBegin();
+
 	return true;
 }
 
@@ -633,9 +635,6 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	{
 		mTrayMgr->hideCursor();
 	}
-
-	//notify on new thread
-	NotifyThreadStarted();
 
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
@@ -960,6 +959,13 @@ void HAL::ProcessLog()
 		//erase queue entry
 		log_queue.erase(log_queue.begin());
 	}
+}
+
+void HAL::NotifyBegin()
+{
+	//notify rendersystem before other threads are started
+
+	mRoot->getRenderSystem()->preExtraThreadsStarted();
 }
 
 void HAL::NotifyThreadStarted()
