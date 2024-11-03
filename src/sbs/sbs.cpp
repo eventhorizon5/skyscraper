@@ -199,7 +199,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	PrintBanner();
 
 	//add instance number to reports
-	InstancePrompt = ToString(InstanceNumber) + "> ";
+	InstancePrompt = ToString(InstanceNumber) + ">";
 
 	//move to specified position
 	Move(position);
