@@ -118,7 +118,7 @@ Vector2 Polygon::GetExtents(int coord)
 	{
 		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
-			poly.push_back(geometry[i][j].vertex);
+			poly.emplace_back(geometry[i][j].vertex);
 		}
 	}
 

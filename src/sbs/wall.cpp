@@ -71,10 +71,10 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 
 	PolyArray vertices;
 	vertices.reserve(4);
-	vertices.push_back(v1);
-	vertices.push_back(v2);
-	vertices.push_back(v3);
-	vertices.push_back(v4);
+	vertices.emplace_back(v1);
+	vertices.emplace_back(v2);
+	vertices.emplace_back(v3);
+	vertices.emplace_back(v4);
 
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
@@ -105,7 +105,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
-	polygons.push_back(poly);
+	polygons.emplace_back(poly);
 	return poly;
 }
 
@@ -129,7 +129,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
-	polygons.push_back(poly);
+	polygons.emplace_back(poly);
 
 	return poly;
 }
@@ -286,7 +286,7 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 		PolyArray poly, tmp1, tmp2;
 		for (size_t j = 0; j < polygons[i]->geometry[0].size(); j++)
 		{
-			poly.push_back(sbs->ToLocal(polygons[i]->geometry[0][j].vertex));
+			poly.emplace_back(sbs->ToLocal(polygons[i]->geometry[0][j].vertex));
 		}
 
 		//if given altitude is outside of polygon's range, return 0

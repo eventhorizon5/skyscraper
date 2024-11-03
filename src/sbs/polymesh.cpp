@@ -119,7 +119,7 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &texture, P
 
 	converted_vertices[0].reserve(vertices.size());
 	for (size_t i = 0; i < vertices.size(); i++)
-		converted_vertices[0].push_back(sbs->ToRemote(vertices[i]));
+		converted_vertices[0].emplace_back(sbs->ToRemote(vertices[i]));
 
 	//texture mapping
 	Vector3 v1, v2, v3;
@@ -170,7 +170,7 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 		{
 			converted_vertices[i].reserve(vertices[i].size());
 			for (size_t j = 0; j < vertices[i].size(); j++)
-				converted_vertices[i].push_back(sbs->ToRemote(vertices[i][j]));
+				converted_vertices[i].emplace_back(sbs->ToRemote(vertices[i][j]));
 		}
 	}
 	else
@@ -189,7 +189,7 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 		//this method also somewhat works with non-planar polygons
 		trimesh[i].triangles.reserve(converted_vertices[i].size() - 2);
 		for (size_t j = 2; j < converted_vertices[i].size(); j++)
-			trimesh[i].triangles.push_back(Triangle(0, j - 1, j));
+			trimesh[i].triangles.emplace_back(Triangle(0, j - 1, j));
 	}
 
 	//initialize geometry arrays
@@ -233,7 +233,7 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 		{
 			Triangle tri = trimesh[i].triangles[j];
 			tri += location;
-			triangles.push_back(tri);
+			triangles.emplace_back(tri);
 		}
 		location += converted_vertices[i].size();
 	}

@@ -88,7 +88,7 @@ Shaft::Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfl
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
-		Levels.push_back(new Level(this, i));
+		Levels.emplace_back(new Level(this, i));
 	}
 
 	//create a dynamic mesh for doors
@@ -326,7 +326,7 @@ void Shaft::AddShowFloor(int floor)
 	if (IsShowFloor(floor))
 		return;
 
-	ShowFloorsList.push_back(floor);
+	ShowFloorsList.emplace_back(floor);
 	std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
 }
 
@@ -363,7 +363,7 @@ void Shaft::AddShowOutside(int floor)
 	if (IsShowOutside(floor))
 		return;
 
-	ShowOutsideList.push_back(floor);
+	ShowOutsideList.emplace_back(floor);
 	std::sort(ShowOutsideList.begin(), ShowOutsideList.end());
 }
 
@@ -400,7 +400,7 @@ void Shaft::AddShowInterfloor(int floor)
 	if (IsShowInterfloor(floor))
 		return;
 
-	ShowInterfloorsList.push_back(floor);
+	ShowInterfloorsList.emplace_back(floor);
 	std::sort(ShowInterfloorsList.begin(), ShowInterfloorsList.end());
 }
 
@@ -453,7 +453,7 @@ void Shaft::AddElevator(int number)
 			return;
 	}
 
-	elevators.push_back(number);
+	elevators.emplace_back(number);
 	std::sort(elevators.begin(), elevators.end());
 }
 
@@ -1057,7 +1057,7 @@ Light* Shaft::Level::AddLight(const std::string &name, int type)
 	//add a global light
 
 	Light* light = new Light(mesh, name, type);
-	lights.push_back(light);
+	lights.emplace_back(light);
 	return light;
 }
 
@@ -1081,7 +1081,7 @@ Model* Shaft::Level::AddModel(const std::string &name, const std::string &filena
 		delete model;
 		return 0;
 	}
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 	return model;
 }
 
@@ -1098,14 +1098,14 @@ void Shaft::Level::AddModel(Model *model)
 			return;
 	}
 
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 }
 
 Primitive* Shaft::Level::AddPrimitive(const std::string &name)
 {
 	//add a prim
 	Primitive* prim = new Primitive(this, name);
-	PrimArray.push_back(prim);
+	PrimArray.emplace_back(prim);
 	return prim;
 }
 
@@ -1122,14 +1122,14 @@ void Shaft::Level::AddPrimitive(Primitive *primitive)
 			return;
 	}
 
-	PrimArray.push_back(primitive);
+	PrimArray.emplace_back(primitive);
 }
 
 CustomObject* Shaft::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
 {
 	//add a custom object
 	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 	return object;
 }
 
@@ -1146,7 +1146,7 @@ void Shaft::Level::AddCustomObject(CustomObject *object)
 			return;
 	}
 
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 }
 
 Control* Shaft::Level::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
@@ -1156,7 +1156,7 @@ Control* Shaft::Level::AddControl(const std::string &name, const std::string &so
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(mesh, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, voffset, CenterZ);
-	ControlArray.push_back(control);
+	ControlArray.emplace_back(control);
 	return control;
 }
 
@@ -1171,7 +1171,7 @@ Trigger* Shaft::Level::AddTrigger(const std::string &name, const std::string &so
 		return 0;
 
 	Trigger* trigger = new Trigger(mesh, name, false, sound_file, area_min, area_max, action_names);
-	TriggerArray.push_back(trigger);
+	TriggerArray.emplace_back(trigger);
 	return trigger;*/
 	return 0;
 }
@@ -1292,7 +1292,7 @@ Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, con
 
 	Door* door = new Door(this, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
 	door->CreateDoor(open_state, texture, side_texture, thickness, face_direction, open_direction, open_speed, close_speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th, side_tw, side_th);
-	DoorArray.push_back(door);
+	DoorArray.emplace_back(door);
 
 	floorptr = 0;
 	return door;
@@ -1308,7 +1308,7 @@ Door* Shaft::Level::CreateDoor(std::string name, const std::string &open_sound, 
 		name = "Door " + num;
 
 	Door* door = new Door(this, parent->GetDoorWrapper(), name, open_sound, close_sound, rotate);
-	DoorArray.push_back(door);
+	DoorArray.emplace_back(door);
 	return door;
 }
 
@@ -1339,7 +1339,7 @@ CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quali
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, quality, fov, position, use_rotation, rotation);
-	CameraTextureArray.push_back(cameratexture);
+	CameraTextureArray.emplace_back(cameratexture);
 	return cameratexture;
 }
 

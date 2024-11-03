@@ -110,7 +110,9 @@ HAL::~HAL()
 	log->removeListener(this);
 
 	//shutdown Ogre
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
 	delete mRoot;
+#endif
 
 	delete logger;
 }
@@ -529,8 +531,8 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 
 			for (int i = 0; i < cameras; i++)
 			{
-				mCameras.push_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-				mViewports.push_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
+				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
 				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 			}
 		}

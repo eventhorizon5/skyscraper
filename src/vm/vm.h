@@ -89,8 +89,8 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
-	int Run(EngineContext* &newengine);
 	void Run0();
+	int Run(std::vector<EngineContext*> &newengine);
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
@@ -98,6 +98,7 @@ public:
 	void ShowPlatform();
 	wxWindow* GetParent();
 	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	void UpdateProgress();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -124,7 +125,7 @@ public:
 
 private:
 
-	bool RunEngines(EngineContext* &newengine);
+	bool RunEngines(std::vector<EngineContext*> &newengines);
 	void CheckCamera();
 	void HandleEngineShutdown();
 	void HandleReload();

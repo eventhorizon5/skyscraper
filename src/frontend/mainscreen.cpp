@@ -33,14 +33,14 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
-#include "gui/debugpanel.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 #include "vm.h"
 #include "hal.h"
 #include "sky.h"
 #include "gui.h"
 #include "enginecontext.h"
-#include "gui/loaddialog.h"
+#include "loaddialog.h"
 #include "mainscreen.h"
 
 using namespace SBS;

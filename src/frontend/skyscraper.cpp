@@ -45,6 +45,7 @@
 #include "scriptproc.h"
 #include "mainscreen.h"
 #include "profiler.h"
+#include "startscreen.h"
 #include "gitrev.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
@@ -141,12 +142,8 @@ bool Skyscraper::OnInit()
 {
 	StartupRunning = false;
 	FullScreen = false;
-	buttons = 0;
-	buttoncount = 0;
 	ShowMenu = false;
 	Headless = false;
-	background_rect = 0;
-	background_node = 0;
 	mRenderWindow = 0;
 	window = 0;
 	parser = 0;
@@ -159,8 +156,8 @@ bool Skyscraper::OnInit()
 	vm->version_state = "Alpha";
 	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
-	//create GUI instance
-	gui = new GUI(vm);
+	gui = vm->GetGUI();
+	startscreen = new StartScreen(this);
 
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -294,7 +291,7 @@ bool Skyscraper::OnInit()
 	//Create main window and set size from INI file defaults
 	//if (Headless == false)
 	//{
-		window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 640), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 480));
+		window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 800), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 600));
 		//AllowResize(false);
 		window->ShowWindow();
 		window->CenterOnScreen();
@@ -389,7 +386,7 @@ int Skyscraper::OnExit()
 		delete parser;
 	parser = 0;
 
-	delete gui;
+	delete startscreen;
 	delete vm;
 	return wxApp::OnExit();
 }
@@ -421,12 +418,12 @@ bool Skyscraper::Loop()
 	{
 		bool result = false;
 
-		result = DrawBackground();
+		result = startscreen->DrawBackground();
 
 		if (result == false)
 			return false;
 
-		result = GetMenuInput();
+		result = startscreen->GetMenuInput();
 
 		if (result == false)
 			return false;
@@ -438,12 +435,17 @@ bool Skyscraper::Loop()
 	gui->ShowProgress();
 
 	//run sim engine instances
-	EngineContext *newengine;
-	int status = vm->Run(newengine);
+	std::vector<EngineContext*> newengines;
+	int status = vm->Run(newengines);
 
 	//start a new engine if needed
-	if (newengine && status == 3)
-		Start(newengine);
+	if (status == 3)
+	{
+		for (size_t i = 0; i < newengines.size(); i++)
+		{
+			Start(newengines[i]);
+		}
+	}
 
 	if (status == 2)
 		UnloadToMenu();
@@ -488,7 +490,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 
 	if (StartupRunning == true)
 	{
-		DeleteButtons();
+		startscreen->DeleteButtons();
 		StartupRunning = false;
 	}
 

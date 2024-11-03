@@ -452,7 +452,8 @@ void EngineContext::UpdateProgress(int percent)
 	//update progress bar
 
 	progress = percent;
-	vm->GetGUI()->UpdateProgress();
+
+	vm->UpdateProgress();
 }
 
 CameraState EngineContext::GetCameraState()
@@ -609,7 +610,7 @@ void EngineContext::CutForEngine(EngineContext *engine)
 void EngineContext::AddChild(EngineContext *engine)
 {
 	if (engine)
-		children.push_back(engine);
+		children.emplace_back(engine);
 }
 
 void EngineContext::RemoveChild(EngineContext *engine)

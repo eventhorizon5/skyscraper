@@ -1374,7 +1374,7 @@ void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &va
 	//create a second array with reversed vertices
 	varray2.reserve(num);
 	for (size_t i = num - 1; i < num; --i)
-		varray2.push_back(varray1[i]);
+		varray2.emplace_back(varray1[i]);
 
 	//create 2 polygons (front and back) from the vertex array
 
@@ -1430,7 +1430,7 @@ Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::
 	varray3.reserve(varray.size());
 	for (size_t i = 0; i < varray.size(); i++)
 	{
-		varray3.push_back(Vector3(varray[i].x, altitude, varray[i].y));
+		varray3.emplace_back(Vector3(varray[i].x, altitude, varray[i].y));
 	}
 
 	//pass data on to AddCustomWall function
@@ -1444,9 +1444,9 @@ Wall* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std:
 
 	//set up temporary vertex array
 	varray.reserve(3);
-	varray.push_back(Vector3(x1, y1, z1));
-	varray.push_back(Vector3(x2, y2, z2));
-	varray.push_back(Vector3(x3, y3, z3));
+	varray.emplace_back(Vector3(x1, y1, z1));
+	varray.emplace_back(Vector3(x2, y2, z2));
+	varray.emplace_back(Vector3(x3, y3, z3));
 
 	//pass data on to AddCustomWall function
 	return AddCustomWall(mesh, name, texture, varray, tw, th);
@@ -2107,7 +2107,7 @@ bool SBS::RegisterTimerCallback(TimerObject *timer)
 	}
 
 	//if timer isn't already in the array, add it
-	timercallbacks.push_back(timer);
+	timercallbacks.emplace_back(timer);
 
 	return true;
 }
@@ -2176,7 +2176,7 @@ void SBS::AddFloorAutoArea(Vector3 start, Vector3 end)
 	newarea.end = end;
 	newarea.inside = false;
 	newarea.camerafloor = 0;
-	FloorAutoArea.push_back(newarea);
+	FloorAutoArea.emplace_back(newarea);
 }
 
 void SBS::CheckAutoAreas()
@@ -2243,7 +2243,7 @@ Sound* SBS::AddSound(const std::string &name, const std::string &filename, const
 {
 	//create a looping sound object
 	Sound *sound = new Sound(this, name, false);
-	sounds.push_back(sound);
+	sounds.emplace_back(sound);
 
 	//set parameters and play sound
 	sound->SetPosition(position);
@@ -2276,7 +2276,7 @@ std::vector<Sound*> SBS::GetSound(const std::string &name)
 			std::string name2 = sounds[i]->GetName();
 			SetCase(name2, false);
 			if (findname == name2)
-				soundlist.push_back(sounds[i]);
+				soundlist.emplace_back(sounds[i]);
 		}
 	}
 	return soundlist;
@@ -2302,7 +2302,7 @@ Reverb* SBS::AddReverb(const std::string &name, const std::string &type, const V
 {
 	//create a reverb object
 	Reverb *reverb = new Reverb(this, name, type, position, min_distance, max_distance, false);
-	reverbs.push_back(reverb);
+	reverbs.emplace_back(reverb);
 	return reverb;
 }
 
@@ -2439,7 +2439,7 @@ int SBS::RegisterObject(Object *object)
 {
 	//add object to global array
 	ObjectCount++;
-	ObjectArray.push_back(object);
+	ObjectArray.emplace_back(object);
 	return (int)ObjectArray.size() - 1;
 }
 
@@ -2455,7 +2455,7 @@ bool SBS::UnregisterObject(int number)
 			if (ObjectArray[number]->GetNumber() == number)
 			{
 				std::vector<Object*> objects;
-				objects.push_back(ObjectArray[number]);
+				objects.emplace_back(ObjectArray[number]);
 				RemoveActionParent(objects);
 				ObjectArray[number] = 0;
 				ObjectCount--;
@@ -3090,13 +3090,13 @@ Light* SBS::AddLight(const std::string &name, int type)
 	//add a global light
 
 	Light* light = new Light(this, name, type);
-	lights.push_back(light);
+	lights.emplace_back(light);
 	return light;
 }
 
 void SBS::AddMeshHandle(MeshObject* handle)
 {
-	meshes.push_back(handle);
+	meshes.emplace_back(handle);
 }
 
 void SBS::DeleteMeshHandle(MeshObject* handle)
@@ -3131,7 +3131,7 @@ Model* SBS::AddModel(const std::string &name, const std::string &filename, bool 
 		delete model;
 		return 0;
 	}
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 	return model;
 }
 
@@ -3148,14 +3148,14 @@ void SBS::AddModel(Model *model)
 			return;
 	}
 
-	ModelArray.push_back(model);
+	ModelArray.emplace_back(model);
 }
 
 Primitive* SBS::AddPrimitive(const std::string &name)
 {
 	//add a prim
 	Primitive* prim = new Primitive(this, name);
-	PrimArray.push_back(prim);
+	PrimArray.emplace_back(prim);
 	return prim;
 }
 
@@ -3172,14 +3172,14 @@ void SBS::AddPrimitive(Primitive *primitive)
 			return;
 	}
 
-	PrimArray.push_back(primitive);
+	PrimArray.emplace_back(primitive);
 }
 
 CustomObject* SBS::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
 {
 	//add a custom object
 	CustomObject* object = new CustomObject(this, name, position, rotation, max_render_distance, scale_multiplier);
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 	return object;
 }
 
@@ -3196,7 +3196,7 @@ void SBS::AddCustomObject(CustomObject *object)
 			return;
 	}
 
-	CustomObjectArray.push_back(object);
+	CustomObjectArray.emplace_back(object);
 }
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
@@ -3247,7 +3247,7 @@ void SBS::AdvanceClock()
 	else
 		elapsed_time = current_time - last;
 	current_virtual_time += elapsed_time;
-	frame_times.push_back(current_time);
+	frame_times.emplace_back(current_time);
 	CalculateAverageTime();
 }
 
@@ -3342,7 +3342,7 @@ void SBS::CacheFilename(const std::string &filename, const std::string &result)
 	VerifyResult verify;
 	verify.filename = filename;
 	verify.result = result;
-	verify_results.push_back(verify);
+	verify_results.emplace_back(verify);
 }
 
 void SBS::SetLighting(Real red, Real green, Real blue)
@@ -3368,7 +3368,7 @@ Control* SBS::AddControl(const std::string &name, const std::string &sound, cons
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->SetPosition(CenterX, voffset, CenterZ);
-	ControlArray.push_back(control);
+	ControlArray.emplace_back(control);
 	return control;
 }
 
@@ -3376,7 +3376,7 @@ Trigger* SBS::AddTrigger(const std::string &name, const std::string &sound_file,
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
-	TriggerArray.push_back(trigger);
+	TriggerArray.emplace_back(trigger);
 	return trigger;
 }
 
@@ -3385,7 +3385,7 @@ Action* SBS::AddAction(const std::string &name, std::vector<Object*> &action_par
 	//add a global action
 
 	Action *action = new Action(this, name, action_parents, command, parameters);
-	ActionArray.push_back(action);
+	ActionArray.emplace_back(action);
 	return action;
 }
 
@@ -3394,7 +3394,7 @@ Action* SBS::AddAction(const std::string &name, std::vector<Object*> &action_par
 	//add a global action
 
 	Action *action = new Action(this, name, action_parents, command);
-	ActionArray.push_back(action);
+	ActionArray.emplace_back(action);
 	return action;
 }
 
@@ -3416,7 +3416,7 @@ std::vector<Action*> SBS::GetAction(std::string name)
 		std::string actionname = ActionArray[i]->GetName();
 		ReplaceAll(actionname, " ", "");
 		if (actionname == name || actionname == name2)
-			actionlist.push_back(ActionArray[i]);
+			actionlist.emplace_back(ActionArray[i]);
 	}
 	return actionlist;
 }
@@ -3732,7 +3732,6 @@ Object* SBS::GetObjectOfParent(std::string parent_name, std::string name, const 
 					if (case_sensitive == false)
 						SetCase(tmpname, false);
 
-					printf("name: %s\n", tmpname.c_str());
 					//get by object name
 					if (tmpname == name)
 						return object;
@@ -3796,22 +3795,22 @@ std::vector<Object*> SBS::GetObjectRange(const std::string &expression)
 					if (type == "floor")
 					{
 						if (tmpname == "Floor " + number)
-							objects.push_back(ObjectArray[i]);
+							objects.emplace_back(ObjectArray[i]);
 					}
 					if (type == "elevator")
 					{
 						if (tmpname == "Elevator " + number)
-							objects.push_back(ObjectArray[i]);
+							objects.emplace_back(ObjectArray[i]);
 					}
 					if (type == "shaft")
 					{
 						if (tmpname == "Shaft " + number)
-							objects.push_back(ObjectArray[i]);
+							objects.emplace_back(ObjectArray[i]);
 					}
 					if (type == "stairwell")
 					{
 						if (tmpname == "Stairwell " + number)
-							objects.push_back(ObjectArray[i]);
+							objects.emplace_back(ObjectArray[i]);
 					}
 				}
 			}
@@ -3822,7 +3821,7 @@ std::vector<Object*> SBS::GetObjectRange(const std::string &expression)
 		//return single result
 		Object *obj = GetObject(expression);
 		if (obj)
-			objects.push_back(obj);
+			objects.emplace_back(obj);
 	}
 
 	return objects;
@@ -3873,7 +3872,7 @@ void SBS::AddKey(int keyid, const std::string &name)
 	Key key;
 	key.id = keyid;
 	key.name = name;
-	keys.push_back(key);
+	keys.emplace_back(key);
 
 	Report("Added key " + ToString(keyid) + " (" + name + ") to keyring");
 }
@@ -3907,7 +3906,7 @@ void SBS::ListKeys()
 void SBS::RegisterControl(Control *control)
 {
 	//add control to index
-	control_index.push_back(control);
+	control_index.emplace_back(control);
 }
 
 void SBS::UnregisterControl(Control *control)
@@ -4195,7 +4194,7 @@ Person* SBS::CreatePerson(std::string name, int floor, bool service_access)
 		name = "Person " + ToString(number);
 	}
 	Person *person = new Person(this, name, floor, service_access);
-	PersonArray.push_back(person);
+	PersonArray.emplace_back(person);
 	return person;
 }
 
@@ -4216,7 +4215,7 @@ void SBS::RemovePerson(Person *person)
 bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 {
 	if (cameras.size() > 0)
-		return this->camera->Attach(cameras, init_state);
+		return camera->Attach(cameras, init_state);
 	return false;
 }
 
@@ -4345,7 +4344,7 @@ void SBS::SetBounds(const Vector3 &area_min, const Vector3 &area_max)
 	if (area_min != Vector3::ZERO && area_max != Vector3::ZERO && !area_trigger)
 	{
 		std::vector<std::string> names;
-		names.push_back("Off");
+		names.emplace_back("Off");
 		area_trigger = new Trigger(this, "System Boundary", true, "", area_min, area_max, names);
 	}
 }
@@ -4469,7 +4468,7 @@ void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//register a dynamic mesh with the system
 
-	dynamic_meshes.push_back(dynmesh);
+	dynamic_meshes.emplace_back(dynmesh);
 }
 
 void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
@@ -4550,7 +4549,7 @@ void SBS::RegisterCameraTexture(CameraTexture *camtex)
 {
 	//register a camera texture
 
-	camtexarray.push_back(camtex);
+	camtexarray.emplace_back(camtex);
 }
 
 void SBS::UnregisterCameraTexture(CameraTexture *camtex)
@@ -4611,7 +4610,7 @@ void SBS::MemoryReport()
 void SBS::RegisterEscalator(Escalator *escalator)
 {
 	//add escalator to index
-	EscalatorArray.push_back(escalator);
+	EscalatorArray.emplace_back(escalator);
 }
 
 void SBS::UnregisterEscalator(Escalator *escalator)
@@ -4638,7 +4637,7 @@ Escalator* SBS::GetEscalator(int index)
 void SBS::RegisterMovingWalkway(MovingWalkway *walkway)
 {
 	//add moving walkway to index
-	MovingWalkwayArray.push_back(walkway);
+	MovingWalkwayArray.emplace_back(walkway);
 }
 
 void SBS::UnregisterMovingWalkway(MovingWalkway *walkway)

@@ -161,7 +161,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 			for (size_t k = 0; k < polygon->geometry[j].size(); k++)
 			{
 				Ogre::Vector3 vertex = sbs->ToLocal(polygon->geometry[j][k].vertex);
-				temppoly.push_back(vertex);
+				temppoly.emplace_back(vertex);
 				polybounds.merge(vertex);
 			}
 
@@ -323,7 +323,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 						if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
 							newpolys[newpolys.size() - 1].reserve(temppoly.size());
 						for (size_t k = 0; k < temppoly.size(); k++)
-							newpolys[newpolys.size() - 1].push_back(temppoly[k]);
+							newpolys[newpolys.size() - 1].emplace_back(temppoly[k]);
 					}
 					if (temppoly2.size() > 2)
 					{
@@ -331,7 +331,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 						if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
 							newpolys[newpolys.size() - 1].reserve(temppoly2.size());
 						for (size_t k = 0; k < temppoly2.size(); k++)
-							newpolys[newpolys.size() - 1].push_back(temppoly2[k]);
+							newpolys[newpolys.size() - 1].emplace_back(temppoly2[k]);
 					}
 					if (temppoly3.size() > 2)
 					{
@@ -339,7 +339,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 						if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
 							newpolys[newpolys.size() - 1].reserve(temppoly3.size());
 						for (size_t k = 0; k < temppoly3.size(); k++)
-							newpolys[newpolys.size() - 1].push_back(temppoly3[k]);
+							newpolys[newpolys.size() - 1].emplace_back(temppoly3[k]);
 					}
 					if (temppoly4.size() > 2)
 					{
@@ -347,7 +347,7 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 						if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
 							newpolys[newpolys.size() - 1].reserve(temppoly4.size());
 						for (size_t k = 0; k < temppoly4.size(); k++)
-							newpolys[newpolys.size() - 1].push_back(temppoly4[k]);
+							newpolys[newpolys.size() - 1].emplace_back(temppoly4[k]);
 					}
 
 					temppoly.clear();
@@ -362,9 +362,9 @@ void Utility::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cu
 				PolyArray poly;
 				for (size_t k = 0; k < polygon->geometry[j].size(); k++)
 				{
-					poly.push_back(sbs->ToLocal(polygon->geometry[j][k].vertex));
+					poly.emplace_back(sbs->ToLocal(polygon->geometry[j][k].vertex));
 				}
-				newpolys.push_back(poly);
+				newpolys.emplace_back(poly);
 			}
 		}
 
@@ -452,7 +452,7 @@ Vector3 Utility::GetPolygonDirection(PolyArray &polygon)
 	//convert to remote values for precision compatibility with Alpha 7 and earlier
 	newpoly.clear();
 	for (size_t i = 0; i < polygon.size(); i++)
-		newpoly.push_back(sbs->ToRemote(polygon[i], true, false));
+		newpoly.emplace_back(sbs->ToRemote(polygon[i], true, false));
 
 	Vector3 normal = ComputePlane(newpoly, false).normal;
 

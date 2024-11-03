@@ -117,7 +117,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		std::vector<std::string> inputs;
 
 		for (int line = 0; line < params; line++)
-			inputs.push_back(tempdata[line]);
+			inputs.emplace_back(tempdata[line]);
 
 		station->InvalidInput = inputs;
 
@@ -195,9 +195,9 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		for (int i = (end + 1); i < slength - (parameters / 2); i++)
-			action_array.push_back(tempdata[i]);
+			action_array.emplace_back(tempdata[i]);
 		for (int i = slength - (parameters / 2); i < slength; i++)
-			tex_array.push_back(tempdata[i]);
+			tex_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
 		parent->CheckFile("data/" + tempdata[0]);

@@ -11,22 +11,23 @@
 namespace Alloc {
 
 template <typename T>
-MyAllocation<T>::MyAllocation()
+VMAllocation<T>::VMAllocation()
 {
 
 }
 
 template <typename T>
-MyAllocation<T>::MyAllocation(MyAllocation && other) noexcept : Ptr(std::move(other.Ptr)), Size(other.Size)
+VMAllocation<T>::VMAllocation(VMAllocation && other) noexcept : Ptr(std::move(other.Ptr)), Size(other.Size)
 {
 	other.Size = 0;
 }
 
 template <typename T>
-[[nodiscard]] T* MyAllocator<T>::Allocator::allocate(std::size_t n)
+[[nodiscard]] T* VMAllocator<T>::Allocator::allocate(std::size_t n)
 {
 	T *ret = new T[n];
 	total_bytes += n;
+	allocations += 1;
 
 	if (!(Current.Ptr == nullptr || CurrentDeallocated))
 	{
@@ -41,7 +42,7 @@ template <typename T>
 }
 
 template <typename T>
-void MyAllocator<T>::Allocator::deallocate(T* p, std::size_t n)
+void VMAllocator<T>::Allocator::deallocate(T* p, std::size_t n)
 {
 	(void)n;
 	if (Current.Ptr.get() == p)
@@ -52,40 +53,53 @@ void MyAllocator<T>::Allocator::deallocate(T* p, std::size_t n)
 
 	delete[] p;
 	total_bytes -= n;
+	deallocations += 1;
 }
 
 template <typename T>
-MyAllocator<T>::MyAllocator() : m_allocator(std::make_shared<Allocator>())
+VMAllocator<T>::VMAllocator() : m_allocator(std::make_shared<Allocator>())
 {
-	std::cout << "MyAllocator()" << std::endl;
+	std::cout << "VMAllocator()" << std::endl;
 }
 
 template <typename T>
 template <class U>
-MyAllocator<T>::MyAllocator(const MyAllocator<U> &rhs) noexcept
+VMAllocator<T>::VMAllocator(const VMAllocator<U> &rhs) noexcept
 {
-	std::cout << "MyAllocator(const MyAllocator<U> &rhs)" << std::endl;
+	std::cout << "VMAllocator(const VMAllocator<U> &rhs)" << std::endl;
 	// Just assume it's a allocator of the same type. This is needed in
 	// MSVC STL library because of debug proxy allocators
 	// https://github.com/microsoft/STL/blob/master/stl/inc/vector
-	m_allocator = reinterpret_cast<const MyAllocator<T> &>(rhs).m_allocator;
+	m_allocator = reinterpret_cast<const VMAllocator<T> &>(rhs).m_allocator;
 }
 
 template <typename T>
-MyAllocator<T>::MyAllocator(const MyAllocator &rhs) noexcept : m_allocator(rhs.m_allocator)
+VMAllocator<T>::VMAllocator(const VMAllocator &rhs) noexcept : m_allocator(rhs.m_allocator)
 {
-	std::cout << "MyAllocator(const MyAllocator &rhs)" << std::endl;
+	std::cout << "VMAllocator(const VMAllocator &rhs)" << std::endl;
 }
 
 template <typename T>
-T* MyAllocator<T>::allocate(std::size_t n)
+unsigned int VMAllocator<T>::GetAllocations() noexcept
+{
+	return m_allocator->allocations;
+}
+
+template <typename T>
+unsigned int VMAllocator<T>::GetDeallocations() noexcept
+{
+	return m_allocator->deallocations;
+}
+
+template <typename T>
+T* VMAllocator<T>::allocate(std::size_t n)
 {
 	std::cout << "allocate(" << n << ")" << std::endl;
 	return m_allocator->allocate(n);
 }
 
 template <typename T>
-void MyAllocator<T>::deallocate(T* p, std::size_t n)
+void VMAllocator<T>::deallocate(T* p, std::size_t n)
 {
 	std::cout << "deallocate(\"" << p << "\", " << n << ")" << std::endl;
 	std::cout << "total left: " << m_allocator->total_bytes << std::endl;
@@ -93,7 +107,7 @@ void MyAllocator<T>::deallocate(T* p, std::size_t n)
 }
 
 template <typename T>
-MyAllocation<T> MyAllocator<T>::release()
+VMAllocation<T> VMAllocator<T>::release()
 {
 	if (!m_allocator->CurrentDeallocated)
 		throw std::runtime_error("Can't release the ownership if the current pointer has not been deallocated by the container");
@@ -102,7 +116,7 @@ MyAllocation<T> MyAllocator<T>::release()
 }
 
 // Instantiate the class for the supported template type parameters
-template class MyAllocator<int>;
-template class MyAllocator<long>;
+template class VMAllocator<int>;
+template class VMAllocator<long>;
 
 }

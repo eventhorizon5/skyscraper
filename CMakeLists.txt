@@ -82,9 +82,19 @@ else()
         )
 endif()
  
-file(GLOB VM_FILES
-	src/vm/*.cpp
-	src/vm/gui/*.cpp
+if(WIN32)
+	file(GLOB VM_FILES
+		src/vm/*.cpp
+		src/gui/*.cpp
+	)
+else()
+	file(GLOB VM_FILES
+		src/vm/*.cpp
+	)
+endif()
+
+file(GLOB GUI_FILES
+	src/gui/*.cpp
 )
 
 file(GLOB SCRIPTPROC_FILES
@@ -131,6 +141,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/vm
 	src/sbs
 	src/script
+	src/gui
 	src/alloc
 	src/openxr/include
 	src/openxr
@@ -155,6 +166,11 @@ add_library(SBS SHARED ${SBS_FILES})
 #ScriptProc Library
 if (NOT WIN32)
 	add_library(ScriptProc SHARED ${SCRIPTPROC_FILES})
+endif ()
+
+#GUI Library
+if (NOT WIN32)
+	add_library(GUI SHARED ${GUI_FILES})
 endif ()
 
 #Alloc Library
@@ -187,6 +203,7 @@ target_precompile_headers(VM PRIVATE src/sbs/globals.h)
 
 if (NOT WIN32)
 	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+	target_precompile_headers(GUI PRIVATE src/sbs/globals.h)
 endif ()
 
 target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
@@ -199,14 +216,15 @@ if (WIN32)
 	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY} ${OGRE_D3D11_LIB})
 endif ()
 
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
+target_link_libraries(SBS Alloc OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
 
 if (NOT WIN32)
-	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(VM SBS ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
-	target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
+	target_link_libraries(ScriptProc Alloc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
+	target_link_libraries(VM Alloc GUI SBS ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
+	target_link_libraries(skyscraper VM GUI ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 else ()
-	target_link_libraries(VM SBS OpenXR ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
+	target_link_libraries(VM Alloc SBS OpenXR ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
 	target_link_libraries(skyscraper VM SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
  
@@ -239,6 +257,12 @@ ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 endif ()
 
 if (APPLE)
+ADD_CUSTOM_COMMAND(TARGET VM
+                POST_BUILD
+                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
+ADD_CUSTOM_COMMAND(TARGET GUI
+                POST_BUILD
+                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
 ADD_CUSTOM_COMMAND(TARGET SBS
 		POST_BUILD
 		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
