@@ -549,9 +549,6 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 {
 	//load mesh object from a file
 
-	if (sbs->Headless == true)
-		return true;
-
 	std::string filename1 = "data/";
 	filename1.append(filename);
 	std::string filename2 = sbs->VerifyFile(filename1);

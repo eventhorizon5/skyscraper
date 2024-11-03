@@ -417,15 +417,12 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 {
 	mRenderWindow = renderwindow;
 
-	//if (vm->GetFrontend()->Headless == false)
-	//{
-		//get renderer info
-		Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
+	//get renderer info
+	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
 
-		//shorten name
-		int loc = Renderer.find("Rendering Subsystem");
-		Renderer = Renderer.substr(0, loc - 1);
-	//}
+	//shorten name
+	int loc = Renderer.find("Rendering Subsystem");
+	Renderer = Renderer.substr(0, loc - 1);
 
 	//load resource configuration
 	Ogre::ConfigFile cf;
@@ -519,27 +516,24 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		}
 	}
 
-	//if (vm->GetFrontend()->Headless == false)
-	//{
-		try
-		{
-			//define camera configuration
-			int cameras = 1; //use one camera for standard mode
-			if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
-				cameras = 2; //use two cameras for VR mode
+	try
+	{
+		//define camera configuration
+		int cameras = 1; //use one camera for standard mode
+		if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
+			cameras = 2; //use two cameras for VR mode
 
-			for (int i = 0; i < cameras; i++)
-			{
-				mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
-				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
-			}
-		}
-		catch (Ogre::Exception &e)
+		for (int i = 0; i < cameras; i++)
 		{
-			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
+			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
+			mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+			mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 		}
-	//}
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
+	}
 
 	//set up default material shader scheme
 	if (RTSS == true)
@@ -646,9 +640,6 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 bool HAL::Render()
 {
 	SBS_PROFILE_MAIN("Render");
-
-	//if (vm->GetFrontend()->Headless == true)
-		//return true;
 
 	// Render to the frame buffer
 	try
@@ -884,13 +875,10 @@ void HAL::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 
-	//if (vm->GetFrontend()->Headless == false)
-	//{
-		for (size_t i = 0; i < mViewports.size(); i++)
-		{
-			mViewports[i]->_updateDimensions();
-		}
-	//}
+	for (size_t i = 0; i < mViewports.size(); i++)
+	{
+		mViewports[i]->_updateDimensions();
+	}
 }
 
 void HAL::Report(const std::string &message)
