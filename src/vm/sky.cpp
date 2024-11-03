@@ -249,6 +249,7 @@ bool SkySystem::InitSky(EngineContext *engine)
 void SkySystem::UpdateSky()
 {
 	//update sky
+
 	SBS_PROFILE_MAIN("Sky");
 
 	if (mCaelumSystem)

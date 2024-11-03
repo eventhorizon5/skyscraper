@@ -299,6 +299,8 @@ Real HAL::GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real de
 
 bool HAL::Initialize(const std::string &data_path)
 {
+	//initialize HAL system
+
 	//initialize OGRE
 	try
 	{
@@ -415,6 +417,8 @@ bool HAL::Initialize(const std::string &data_path)
 
 bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow)
 {
+	//load HAL system resources
+
 	mRenderWindow = renderwindow;
 
 	//get renderer info
@@ -641,7 +645,7 @@ bool HAL::Render()
 {
 	SBS_PROFILE_MAIN("Render");
 
-	// Render to the frame buffer
+	//render to the frame buffer
 	try
 	{
 		mRoot->renderOneFrame();
@@ -709,6 +713,8 @@ void HAL::ClearScene()
 
 void HAL::ToggleStats()
 {
+	//toggle frame statistics
+
 	show_stats++;
 
 	if (!mTrayMgr)
@@ -730,6 +736,8 @@ void HAL::ToggleStats()
 
 void HAL::EnableStats(bool value)
 {
+	//turn on or off frame statistics
+
 	if (value == true)
 	{
 		show_stats = -1;
@@ -744,6 +752,8 @@ void HAL::EnableStats(bool value)
 
 void HAL::ReInit()
 {
+	//reinitialize HAL system
+
 	EnableStats(false);
 
 	delete mTrayMgr;
