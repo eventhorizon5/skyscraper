@@ -38,3 +38,29 @@
     CameraRotation = 0, 270, 0
 <EndGlobals>
 
+<Vehicle 1>
+    Name = Car
+
+    Set WheelWidth = 1.6
+    Set WheelRadius = 2.0
+    Set ConnectionHeight = 2.8
+    Set ChassisHalfWidth = 4
+    Set ChassisHalfLength = 8
+
+    ChassisShift = 0, %WheelRadius% * 2, 0
+    ChassisMesh = ogrebullet/models/chassis.mesh
+    WheelMesh = ogrebullet/models/wheel.mesh
+    ChassisScale = 4
+    WheelScale = 4
+
+    CreateChassis 0.6, 0.6, 800, 0.2, 0.2
+
+    AddWheel true, true, true, %WheelRadius%, %ChassisHalfWidth% - (0.3 * %WheelWidth%), %ConnectionHeight%, -%ChassisHalfLength% + %WheelRadius%
+    AddWheel true, true, true, %WheelRadius%, -%ChassisHalfWidth% + (0.3 * %WheelWidth%), %ConnectionHeight%, -%ChassisHalfLength% + %WheelRadius%
+    AddWheel false, false, false, %WheelRadius%, -%ChassisHalfWidth% + (0.3 * %WheelWidth%), %ConnectionHeight%, %ChassisHalfLength% - %WheelRadius%
+    AddWheel false, false, false, %WheelRadius%, %ChassisHalfWidth% - (0.3 * %WheelWidth%), %ConnectionHeight%, %ChassisHalfLength% - %WheelRadius%
+
+    CreateVehicle -100, 0, -100
+
+<EndVehicle>
+
