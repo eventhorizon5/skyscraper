@@ -84,7 +84,7 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	Report("\nStarting instance " + ToString(instance) + "...");
 
 	//add instance number to reports
-	InstancePrompt = ToString(instance) + "> ";
+	InstancePrompt = ToString(instance) + ">";
 
 	if (parent)
 		parent->AddChild(this);
