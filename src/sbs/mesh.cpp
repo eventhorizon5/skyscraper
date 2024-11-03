@@ -71,12 +71,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	Bounds = new Ogre::AxisAlignedBox();
 	collidermesh = 0;
 	size = 0;
-
-	//use box collider if physics should be enabled
-	if (is_physical == true)
-		tricollider = false;
-	else
-		tricollider = true;
+	tricollider = true;
 
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
@@ -1205,6 +1200,10 @@ void MeshObject::EnablePhysics(bool value, Real restitution, Real friction, Real
 	this->restitution = restitution;
 	this->friction = friction;
 	this->mass = mass;
+
+	//use box collider if physics should be enabled
+	if (is_physical == true)
+		tricollider = false;
 
 	//set up collider for model (if mesh loaded from a filename)
 	if ((Filename != "" || Meshname != "") && create_collider == true)
