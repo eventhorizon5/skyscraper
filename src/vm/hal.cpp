@@ -919,7 +919,7 @@ void HAL::LoadConfiguration(const std::string data_path, bool show_console)
 	if (show_console == false)
 		return;
 
-	vm->showconsole = GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.ShowConsole", true);
+	vm->showconsole = GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
 
 	//create console window
 	if (vm->showconsole == true)
