@@ -175,6 +175,9 @@ if (WIN32)
 endif ()
 
 #frontend executable
+if (WIN32)
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup")
+endif ()
 add_executable(skyscraper WIN32 ${FRONTEND_FILES})
 
 
