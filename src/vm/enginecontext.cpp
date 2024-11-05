@@ -77,6 +77,7 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	inside = false;
 	Moved = false;
 	started = false;
+	prepared = false;
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
@@ -146,6 +147,8 @@ bool EngineContext::Run()
 
 		if (loading == true)
 		{
+			prepared = false;
+
 			if (result == false)
 			{
 				ReportError("Error processing building\n");
@@ -164,11 +167,12 @@ bool EngineContext::Run()
 		}
 		else if (processor->IsFinished == true && result == true)
 		{
-			if (InRunloop() == false)
+			if (InRunloop() == false && prepared == false)
 			{
 				Simcore->Prepare(false);
 				Simcore->DeleteColliders = false;
 				Simcore->Init(); //initialize any new objects
+				prepared = true;
 			}
 			else
 			{
