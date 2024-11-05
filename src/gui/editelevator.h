@@ -26,6 +26,7 @@
 //(*Headers(editelevator)
 #include <wx/button.h>
 #include <wx/checkbox.h>
+#include <wx/checklst.h>
 #include <wx/dialog.h>
 #include <wx/radiobut.h>
 #include <wx/scrolbar.h>
@@ -191,6 +192,8 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT92;
 		static const long ID_txtChimeOnArrival;
 		static const long ID_bSetChimeOnArrival;
+		static const long ID_STATICTEXT94;
+		static const long ID_chkServicedFloors;
 		static const long ID_STATICTEXT14;
 		static const long ID_txtFloor;
 		static const long ID_STATICTEXT15;
@@ -406,6 +409,7 @@ class editelevator: public wxDialog
 		void On_bSetChimeOnArrival_Click(wxCommandEvent& event);
 		void On_bMusicAlwaysOn_Click(wxCommandEvent& event);
 		void On_bMalfunction_Click(wxCommandEvent& event);
+		void On_chkServicedFloors_Toggled(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -481,6 +485,7 @@ class editelevator: public wxDialog
 		wxButton* bStopDoors;
 		wxCheckBox* chkRun;
 		wxCheckBox* chkVisible;
+		wxCheckListBox* chkServicedFloors;
 		wxFlexGridSizer* FlexGridSizer1;
 		wxFlexGridSizer* FlexGridSizer2;
 		wxFlexGridSizer* FlexGridSizer3;
@@ -594,6 +599,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText91;
 		wxStaticText* StaticText92;
 		wxStaticText* StaticText93;
+		wxStaticText* StaticText94;
 		wxStaticText* StaticText9;
 		wxStaticText* tCar;
 		wxStaticText* tDoor;
