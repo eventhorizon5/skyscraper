@@ -1568,13 +1568,20 @@ void editelevator::SetMainValues()
 	txtArrivalDelay->SetValue(TruncateNumber(elevator->ArrivalDelay, 4));
 	txtInspectionSpeed->SetValue(TruncateNumber(elevator->InspectionSpeed, 4));
 
-	for (int i = 0; i < Simcore->GetFloorManager()->GetCount(); i++)
+	//populate serviced floors list
+	chkServicedFloors->Clear();
+	if (car)
 	{
-		Floor *floor = Simcore->GetFloorManager()->Get(i);
-		if (floor)
+		for (int i = 0; i < Simcore->GetFloorManager()->GetCount(); i++)
 		{
-			std::string number = ToString(floor->Number);
-			chkServicedFloors->Append(number + " (" + floor->ID + ")");
+			Floor *floor = Simcore->GetFloorManager()->Get(i);
+			if (floor)
+			{
+				std::string number = ToString(floor->Number);
+				int index = chkServicedFloors->Append(number + " (" + floor->ID + ")");
+				bool is_serviced = car->IsServicedFloor(floor->Number);
+				chkServicedFloors->Check(index, is_serviced);
+			}
 		}
 	}
 }
