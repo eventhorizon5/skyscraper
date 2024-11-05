@@ -1,7 +1,7 @@
 # Table of contents
 
 * [Compiling for Debian Linux](#skyscraper-source-build-instructions-for-debian-linux)
-* [Compiling for Apple Silicon](#skyscraper-source-build-for-apple-silicon)
+* [Compiling for macOS](#skyscraper-source-build-for-macos)
 * [Compiling for Windows](#skyscraper-source-build-for-windows-using-visual-studio-2022)
 
 # Skyscraper source build instructions for Debian Linux
@@ -157,7 +157,7 @@ This will build OgreBullet (the collisions and dynamics libraries), the Skyscrap
     make -j4
     ./skyscraper
 
-# Skyscraper source build for Apple Silicon
+# Skyscraper source build for macOS
 
 ## If you want to build for Intel(>2020) Macs
 -----------
@@ -235,7 +235,7 @@ Pull the source from Git, and build:
     make clean
     cd
 
-Step 5 - build and install Caelum (sky system)
+Step 5 - build and install Caelum (sky system, this only works on Intel Macs, so skip it for Apple Silicon Macs)
 -----------
 This one you can pull from Git, and I have custom-modified source code.
 So pull the source from Git, and build:
