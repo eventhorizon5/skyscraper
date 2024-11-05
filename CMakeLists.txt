@@ -182,7 +182,8 @@ if (WIN32)
 endif ()
 
 #frontend executable
-add_executable(skyscraper ${FRONTEND_FILES})
+add_executable(skyscraper WIN32 ${FRONTEND_FILES})
+
 
 if (NOT WIN32)
 	add_library(VM SHARED ${VM_FILES})
