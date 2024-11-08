@@ -225,13 +225,7 @@ void ElevatorDoor::AddServicedFloor(int floor)
 	{
 		if (ShaftDoors[i])
 		{
-			if (i == 0 && ShaftDoors[i]->floor > floor)
-			{
-				//insert at bottom
-				ShaftDoors.insert(ShaftDoors.begin(), wrapper);
-				return;
-			}
-			else if (ShaftDoors[i]->floor > floor && ShaftDoors[i - 1]->floor < floor)
+			if (ShaftDoors[i]->floor > floor)
 			{
 				//insert inside
 				ShaftDoors.insert(ShaftDoors.begin() + i, wrapper);
@@ -242,7 +236,6 @@ void ElevatorDoor::AddServicedFloor(int floor)
 
 	//insert at top
 	ShaftDoors.emplace_back(wrapper);
-		return;
 }
 
 void ElevatorDoor::RemoveServicedFloor(int floor)
