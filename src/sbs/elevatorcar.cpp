@@ -1934,7 +1934,7 @@ bool ElevatorCar::DoorExists(int number)
 	return false;
 }
 
-bool ElevatorCar::ShaftDoorsExist(int number, int floor)
+bool ElevatorCar::ShaftDoorsExist(int number, int floor, bool include_nonserviced)
 {
 	//return true if shaft doors exist on the specified floor
 
@@ -1949,7 +1949,7 @@ bool ElevatorCar::ShaftDoorsExist(int number, int floor)
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
 		{
-			if (door->ShaftDoorsExist(floor) == true)
+			if (door->ShaftDoorsExist(floor, include_nonserviced) == true)
 				return true;
 		}
 	}

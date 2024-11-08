@@ -1577,10 +1577,13 @@ void editelevator::SetMainValues()
 			Floor *floor = Simcore->GetFloorManager()->GetIndex(i);
 			if (floor)
 			{
-				std::string number = ToString(floor->Number);
-				int index = chkServicedFloors->Append(number + " (" + floor->ID + ")");
-				bool is_serviced = car->IsServicedFloor(floor->Number);
-				chkServicedFloors->Check(index, is_serviced);
+				if (car->ShaftDoorsExist(0, floor->Number, true))
+				{
+					std::string number = ToString(floor->Number);
+					int index = chkServicedFloors->Append(number + " (" + floor->ID + ")");
+					bool is_serviced = car->IsServicedFloor(floor->Number);
+					chkServicedFloors->Check(index, is_serviced);
+				}
 			}
 		}
 	}
