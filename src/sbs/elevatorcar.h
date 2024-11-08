@@ -141,7 +141,7 @@ public:
 	bool AreDoorsClosing(int number = 0, bool car_doors = true, bool shaft_doors = true);
 	void SetShaftDoors(int number, Real thickness, Real CenterX, Real CenterZ);
 	bool DoorExists(int number);
-	bool ShaftDoorsExist(int number, int floor);
+	bool ShaftDoorsExist(int number, int floor, bool include_nonserviced = false);
 	Sound* AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, Vector3 direction = Vector3(0, 0, 0));
 	Reverb* AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance);
 	DoorWrapper* AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);

@@ -1541,7 +1541,7 @@ void ElevatorDoor::MoveSound(const Vector3 &position, bool relative_x, bool rela
 	nudgesound->SetPosition(pos);
 }
 
-bool ElevatorDoor::ShaftDoorsExist(int floor)
+bool ElevatorDoor::ShaftDoorsExist(int floor, bool include_nonserviced)
 {
 	//return true if shaft doors have been created for this door on the specified floor
 
@@ -1549,10 +1549,23 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 
 	if (index != -1)
 	{
+		//if shaft doors exist on a serviced floor
 		if (ShaftDoors[index])
 		{
 			if (ShaftDoors[index]->doors.size() > 0)
 				return true;
+		}
+	}
+	else if (include_nonserviced == true)
+	{
+		//if shaft doors exist on a non-serviced floor
+		for (size_t i = 0; i < ShaftDoors.size(); i++)
+		{
+			if (ShaftDoors[i])
+			{
+				if (ShaftDoors[i]->floor == floor)
+					return true;
+			}
 		}
 	}
 	return false;
