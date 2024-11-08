@@ -1574,7 +1574,7 @@ void editelevator::SetMainValues()
 	{
 		for (int i = 0; i < Simcore->GetFloorManager()->GetCount(); i++)
 		{
-			Floor *floor = Simcore->GetFloorManager()->Get(i);
+			Floor *floor = Simcore->GetFloorManager()->GetIndex(i);
 			if (floor)
 			{
 				std::string number = ToString(floor->Number);
