@@ -2025,9 +2025,9 @@ void editelevator::On_chkServicedFloors_Toggled(wxCommandEvent& event)
 	std::string name = chkServicedFloors->GetString(index).ToStdString();
 
 	if (chkServicedFloors->IsChecked(index) == true)
-		car->AddServicedFloor(ToInt(name));
+		car->AddServicedFloor(ToInt(name), false);
 	else
-		car->RemoveServicedFloor(ToInt(name));
+		car->RemoveServicedFloor(ToInt(name), false);
 }
 
 }

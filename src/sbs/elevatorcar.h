@@ -93,8 +93,8 @@ public:
 	Indicator* AddKeypadIndicator(const std::string& sound, const std::string& texture_prefix, const std::string& blank_texture, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration);
 	ButtonPanel* CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real spacingX, Real spacingY, Real tw, Real th);
 	void DumpServicedFloors();
-	bool AddServicedFloor(int number);
-	void RemoveServicedFloor(int number);
+	bool AddServicedFloor(int number, bool create_shaft_door = true);
+	void RemoveServicedFloor(int number, bool remove_shaft_door = true);
 	bool IsServicedFloor(int floor, bool report = true);
 	int GetFloorIndex(int floor);
 	int GetServicedFloorCount();
