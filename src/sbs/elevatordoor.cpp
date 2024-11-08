@@ -248,22 +248,13 @@ void ElevatorDoor::RemoveServicedFloor(int floor)
 		{
 			if (ShaftDoors[i]->floor == floor)
 			{
+				//delete the matching element
 				delete ShaftDoors[i];
 				ShaftDoors.erase(ShaftDoors.begin() + i);
 				return;
 			}
-			if (ShaftDoors[i]->floor > floor && i > 0)
-			{
-				//erase previous element
-				ShaftDoors.erase(ShaftDoors.begin() + i - 1);
-				return;
-			}
 		}
 	}
-
-	//if not found, remove last element
-	if (!ShaftDoors.back())
-		ShaftDoors.pop_back();
 }
 
 void ElevatorDoor::OpenDoorsEmergency(int whichdoors, int floor)
