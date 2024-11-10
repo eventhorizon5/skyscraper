@@ -249,16 +249,6 @@
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
-											<object class="wxCheckBox" name="ID_chkFrameLimiter" variable="chkFrameLimiter" member="yes">
-												<label>Frame Limiter</label>
-												<enabled>0</enabled>
-												<hidden>1</hidden>
-												<handler function="On_chkFrameLimiter_Click" entry="EVT_CHECKBOX" />
-											</object>
-											<flag>wxBOTTOM|wxALIGN_LEFT</flag>
-											<border>5</border>
-										</object>
-										<object class="sizeritem">
 											<object class="wxCheckBox" name="ID_chkProcessElevators" variable="chkProcessElevators" member="yes">
 												<label>Process Elevators</label>
 												<handler function="On_chkProcessElevators_Click" entry="EVT_CHECKBOX" />

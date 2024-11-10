@@ -164,8 +164,6 @@ public:
 	int ElevatorNumber; //number of currently selected elevator
 	int CarNumber; //number of currently selected elevator car
 	bool ElevatorSync; //true if user should move with elevator
-	bool FrameLimiter; //frame limiter toggle
-	int FrameRate; //max frame rate
 	Real running_time; //time (in seconds) the simulator has been running
 	Real start_time; //time (in seconds) that the simulator mainloop started
 	bool IsBuildingsEnabled; //contains status of buildings object

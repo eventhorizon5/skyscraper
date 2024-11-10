@@ -108,8 +108,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	fps_frame_count = 0;
 	fps_tottime = 0;
 	FPS = 0;
-	FrameRate = 30;
-	FrameLimiter = false;
 	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
 	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
