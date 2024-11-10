@@ -654,18 +654,6 @@ int ElevatorCar::GetServicedFloor(int index)
 	return 0;
 }
 
-int ElevatorCar::GetServicedFloorIndex(int floor)
-{
-	//get the index of the specified serviced floor
-
-	for (size_t i = 0; i < ServicedFloors.size(); i++)
-	{
-		if (ServicedFloors[i] == floor)
-			return i;
-	}
-	return -1;
-}
-
 bool ElevatorCar::CheckServicedFloors()
 {
 	//ensure serviced floors are valid for the shaft
