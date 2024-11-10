@@ -108,8 +108,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	fps_frame_count = 0;
 	fps_tottime = 0;
 	FPS = 0;
-	FrameRate = 30;
-	FrameLimiter = false;
 	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
 	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
@@ -172,7 +170,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
-	Headless = false;
 	power_state = true;
 
 	//create utility object
@@ -200,7 +197,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	PrintBanner();
 
 	//add instance number to reports
-	InstancePrompt = ToString(InstanceNumber) + "> ";
+	InstancePrompt = ToString(InstanceNumber) + ">";
 
 	//move to specified position
 	Move(position);
@@ -3066,7 +3063,7 @@ void SBS::Prepare(bool report)
 		Report("Processing geometry...");
 	for (size_t i = 0; i < dynamic_meshes.size(); i++)
 	{
-		if (sbs->Verbose)
+		if (sbs->Verbose && report == true)
 			Report("DynamicMesh " + ToString((int)i) + " of " + ToString((int)dynamic_meshes.size()));
 		dynamic_meshes[i]->Prepare();
 	}

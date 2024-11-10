@@ -82,7 +82,7 @@ public:
 	void Enabled(bool value);
 	bool IsEnabled();
 	void SetShaftDoors(Real thickness, Real CenterX, Real CenterZ);
-	bool ShaftDoorsExist(int floor);
+	bool ShaftDoorsExist(int floor, bool include_nonserviced = false);
 	int GetWhichDoors();
 	DoorComponent* AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	DoorWrapper* AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);

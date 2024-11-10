@@ -117,7 +117,6 @@ std::string settingsPath() {
 
 int main (int argc, char* argv[])
 {
-
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #if OGRE_CPU != OGRE_CPU_ARM
 	//initialize top-level exception handler
@@ -143,7 +142,6 @@ bool Skyscraper::OnInit()
 	StartupRunning = false;
 	FullScreen = false;
 	ShowMenu = false;
-	Headless = false;
 	mRenderWindow = 0;
 	window = 0;
 	parser = 0;
@@ -214,9 +212,6 @@ bool Skyscraper::OnInit()
 		{ wxCMD_LINE_SWITCH, "p", "no-panel", "hide the control panel",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
-		{ wxCMD_LINE_SWITCH, "H", "headless", "run in headless mode",
-			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-
 		{ wxCMD_LINE_SWITCH, "v", "verbose", "enable verbose mode",
 			wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 
@@ -275,10 +270,6 @@ bool Skyscraper::OnInit()
 	if (parser->Found(wxT("check-script")) == true)
 		vm->CheckScript = true;
 
-	//set headless mode if specified
-	if (parser->Found(wxT("headless")) == true)
-		Headless = true;
-
 	bool showconsole = true;
 	//turn off console if specified on command line
 	if (parser->Found(wxT("no-console")) == true)
@@ -289,13 +280,10 @@ bool Skyscraper::OnInit()
 	hal->LoadConfiguration(vm->data_path, showconsole);
 
 	//Create main window and set size from INI file defaults
-	//if (Headless == false)
-	//{
-		window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 800), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 600));
-		//AllowResize(false);
-		window->ShowWindow();
-		window->CenterOnScreen();
-	//}
+	window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 800), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 600));
+	//AllowResize(false);
+	window->ShowWindow();
+	window->CenterOnScreen();
 
 	vm->SetParent(window);
 
@@ -303,12 +291,9 @@ bool Skyscraper::OnInit()
 	if (!hal->Initialize(vm->data_path))
 		return ReportError("Error initializing HAL");
 
-	//if (vm->GetFrontend()->Headless == false)
-	//{
-		Report("");
-		Report("Creating render window...");
-		mRenderWindow = CreateRenderWindow(0, "SkyscraperVR");
-	//}
+	Report("");
+	Report("Creating render window...");
+	mRenderWindow = CreateRenderWindow(0, "SkyscraperVR");
 
 	//load system
 	if (!hal->LoadSystem(vm->data_path, mRenderWindow))
@@ -346,7 +331,7 @@ bool Skyscraper::OnInit()
 	if (parser->Found(wxT("no-menu")) == true)
 		ShowMenu = false;
 
-	if (Headless == true || hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.VR", false) == true)
+	if (hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.VR", false) == true)
 		ShowMenu = false;
 
 	if (filename != "")
@@ -447,7 +432,7 @@ bool Skyscraper::Loop()
 		}
 	}
 
-	if (status == 2)
+	if (status == 2 ||  status == -1)
 		UnloadToMenu();
 
 	//ProfileManager::dumpAll();

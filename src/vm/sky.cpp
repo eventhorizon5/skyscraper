@@ -116,9 +116,6 @@ bool SkySystem::InitSky(EngineContext *engine)
 	if (!engine)
 		return false;
 
-	//if (vm->GetFrontend()->Headless == true)
-		//return true;
-
 	if (vm->GetHAL()->Renderer == "Direct3D11")
 		return true;
 
@@ -252,6 +249,7 @@ bool SkySystem::InitSky(EngineContext *engine)
 void SkySystem::UpdateSky()
 {
 	//update sky
+
 	SBS_PROFILE_MAIN("Sky");
 
 	if (mCaelumSystem)

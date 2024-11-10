@@ -33,6 +33,7 @@
 #include "elevatorcar.h"
 #include "debugpanel.h"
 #include "callstation.h"
+#include "manager.h"
 #include "editelevator.h"
 
 using namespace SBS;
@@ -186,6 +187,8 @@ const long editelevator::ID_bMusicAlwaysOn = wxNewId();
 const long editelevator::ID_STATICTEXT92 = wxNewId();
 const long editelevator::ID_txtChimeOnArrival = wxNewId();
 const long editelevator::ID_bSetChimeOnArrival = wxNewId();
+const long editelevator::ID_STATICTEXT94 = wxNewId();
+const long editelevator::ID_chkServicedFloors = wxNewId();
 const long editelevator::ID_STATICTEXT14 = wxNewId();
 const long editelevator::ID_txtFloor = wxNewId();
 const long editelevator::ID_STATICTEXT15 = wxNewId();
@@ -329,6 +332,9 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	wxFlexGridSizer* FlexGridSizer10;
 	wxFlexGridSizer* FlexGridSizer11;
 	wxFlexGridSizer* FlexGridSizer12;
+	wxFlexGridSizer* FlexGridSizer13;
+	wxFlexGridSizer* FlexGridSizer14;
+	wxFlexGridSizer* FlexGridSizer15;
 	wxFlexGridSizer* FlexGridSizer4;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxFlexGridSizer* FlexGridSizer8;
@@ -699,42 +705,52 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	bFan = new wxButton(this, ID_bFan, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFan"));
 	FlexGridSizer9->Add(bFan, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(FlexGridSizer9, 0, wxLEFT|wxALIGN_TOP, 5);
-	FlexGridSizer12 = new wxFlexGridSizer(0, 3, 0, 0);
+	FlexGridSizer13 = new wxFlexGridSizer(0, 1, 0, 0);
+	FlexGridSizer12 = new wxFlexGridSizer(0, 1, 0, 0);
+	FlexGridSizer15 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText52 = new wxStaticText(this, ID_STATICTEXT52, _("Alarm On:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT52"));
-	FlexGridSizer12->Add(StaticText52, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(StaticText52, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtAlarm = new wxTextCtrl(this, ID_txtAlarm, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtAlarm"));
 	txtAlarm->SetToolTip(_("Alarm On"));
-	FlexGridSizer12->Add(txtAlarm, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer12->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(txtAlarm, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText58 = new wxStaticText(this, ID_STATICTEXT58, _("MusicOn:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT58"));
-	FlexGridSizer12->Add(StaticText58, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(StaticText58, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtMusicOn = new wxTextCtrl(this, ID_txtMusicOn, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMusicOn"));
 	txtMusicOn->SetToolTip(_("Music On"));
-	FlexGridSizer12->Add(txtMusicOn, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(txtMusicOn, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetMusicOn = new wxButton(this, ID_bSetMusicOn, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetMusicOn"));
-	FlexGridSizer12->Add(bSetMusicOn, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(bSetMusicOn, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText77 = new wxStaticText(this, ID_STATICTEXT77, _("MusicMove:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT77"));
-	FlexGridSizer12->Add(StaticText77, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(StaticText77, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtMusicOnMove = new wxTextCtrl(this, ID_txtMusicOnMove, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMusicOnMove"));
 	txtMusicOnMove->SetToolTip(_("MusicOnMove"));
-	FlexGridSizer12->Add(txtMusicOnMove, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(txtMusicOnMove, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetMusicOnMove = new wxButton(this, ID_bSetMusicOnMove, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetMusicOnMove"));
-	FlexGridSizer12->Add(bSetMusicOnMove, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(bSetMusicOnMove, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText93 = new wxStaticText(this, ID_STATICTEXT93, _("MAlwaysOn:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT93"));
-	FlexGridSizer12->Add(StaticText93, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(StaticText93, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtMusicAlwaysOn = new wxTextCtrl(this, ID_txtMusicAlwaysOn, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMusicAlwaysOn"));
 	txtMusicAlwaysOn->SetToolTip(_("MusicAlwaysOn"));
-	FlexGridSizer12->Add(txtMusicAlwaysOn, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(txtMusicAlwaysOn, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bMusicAlwaysOn = new wxButton(this, ID_bMusicAlwaysOn, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bMusicAlwaysOn"));
-	FlexGridSizer12->Add(bMusicAlwaysOn, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(bMusicAlwaysOn, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText92 = new wxStaticText(this, ID_STATICTEXT92, _("ChimeArrival:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT92"));
-	FlexGridSizer12->Add(StaticText92, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(StaticText92, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtChimeOnArrival = new wxTextCtrl(this, ID_txtChimeOnArrival, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtChimeOnArrival"));
 	txtChimeOnArrival->SetToolTip(_("ChimeOnArrival"));
-	FlexGridSizer12->Add(txtChimeOnArrival, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer15->Add(txtChimeOnArrival, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetChimeOnArrival = new wxButton(this, ID_bSetChimeOnArrival, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetChimeOnArrival"));
-	FlexGridSizer12->Add(bSetChimeOnArrival, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer11->Add(FlexGridSizer12, 1, wxLEFT|wxALIGN_TOP, 5);
+	FlexGridSizer15->Add(bSetChimeOnArrival, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer12->Add(FlexGridSizer15, 1, wxALL|wxEXPAND, 5);
+	FlexGridSizer14 = new wxFlexGridSizer(0, 1, 0, 0);
+	StaticText94 = new wxStaticText(this, ID_STATICTEXT94, _("Serviced Floors:"), wxDefaultPosition, wxSize(184,19), wxALIGN_CENTRE, _T("ID_STATICTEXT94"));
+	FlexGridSizer14->Add(StaticText94, 1, wxALL, 5);
+	chkServicedFloors = new wxCheckListBox(this, ID_chkServicedFloors, wxDefaultPosition, wxSize(180,280), 0, 0, 0, wxDefaultValidator, _T("ID_chkServicedFloors"));
+	FlexGridSizer14->Add(chkServicedFloors, 1, wxALL|wxEXPAND, 5);
+	FlexGridSizer12->Add(FlexGridSizer14, 1, wxALL|wxEXPAND, 5);
+	FlexGridSizer13->Add(FlexGridSizer12, 1, wxEXPAND, 5);
+	BoxSizer11->Add(FlexGridSizer13, 1, wxLEFT|wxEXPAND, 5);
 	StaticBoxSizer2->Add(BoxSizer11, 1, wxALL|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
@@ -1148,6 +1164,7 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bSetMusicOnMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetMusicOnMove_Click);
 	Connect(ID_bMusicAlwaysOn,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bMusicAlwaysOn_Click);
 	Connect(ID_bSetChimeOnArrival,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetChimeOnArrival_Click);
+	Connect(ID_chkServicedFloors,wxEVT_COMMAND_CHECKLISTBOX_TOGGLED,(wxObjectEventFunction)&editelevator::On_chkServicedFloors_Toggled);
 	Connect(ID_bResetQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bResetQueues_Click);
 	Connect(ID_bSetUpSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetUpSpeed_Click);
 	Connect(ID_bSetDownSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDownSpeed_Click);
@@ -1550,6 +1567,26 @@ void editelevator::SetMainValues()
 	txtDepartureDelay->SetValue(TruncateNumber(elevator->DepartureDelay, 4));
 	txtArrivalDelay->SetValue(TruncateNumber(elevator->ArrivalDelay, 4));
 	txtInspectionSpeed->SetValue(TruncateNumber(elevator->InspectionSpeed, 4));
+
+	//populate serviced floors list
+	chkServicedFloors->Clear();
+	if (car)
+	{
+		for (int i = 0; i < Simcore->GetFloorManager()->GetCount(); i++)
+		{
+			Floor *floor = Simcore->GetFloorManager()->GetIndex(i);
+			if (floor)
+			{
+				if (car->ShaftDoorsExist(0, floor->Number, true))
+				{
+					std::string number = ToString(floor->Number);
+					int index = chkServicedFloors->Append(number + " (" + floor->ID + ")");
+					bool is_serviced = car->IsServicedFloor(floor->Number);
+					chkServicedFloors->Check(index, is_serviced);
+				}
+			}
+		}
+	}
 }
 
 void editelevator::On_chkVisible_Click(wxCommandEvent& event)
@@ -1980,6 +2017,20 @@ void editelevator::On_bMalfunction_Click(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->Malfunction();
+}
+
+void editelevator::On_chkServicedFloors_Toggled(wxCommandEvent& event)
+{
+	if (!car)
+		return;
+
+	int index = event.GetInt();
+	std::string name = chkServicedFloors->GetString(index).ToStdString();
+
+	if (chkServicedFloors->IsChecked(index) == true)
+		car->AddServicedFloor(ToInt(name), false);
+	else
+		car->RemoveServicedFloor(ToInt(name), false);
 }
 
 }

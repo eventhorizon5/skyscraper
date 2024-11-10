@@ -300,6 +300,8 @@ Real HAL::GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real de
 
 bool HAL::Initialize(const std::string &data_path)
 {
+	//initialize HAL system
+
 	//initialize OGRE
 	try
 	{
@@ -418,17 +420,16 @@ bool HAL::Initialize(const std::string &data_path)
 
 bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow)
 {
+	//load HAL system resources
+
 	mRenderWindow = renderwindow;
 
-	//if (vm->GetFrontend()->Headless == false)
-	//{
-		//get renderer info
-		Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
+	//get renderer info
+	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
 
-		//shorten name
-		int loc = Renderer.find("Rendering Subsystem");
-		Renderer = Renderer.substr(0, loc - 1);
-	//}
+	//shorten name
+	int loc = Renderer.find("Rendering Subsystem");
+	Renderer = Renderer.substr(0, loc - 1);
 
 	//load resource configuration
 	Ogre::ConfigFile cf;
@@ -522,27 +523,24 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		}
 	}
 
-	//if (vm->GetFrontend()->Headless == false)
-	//{
-		try
-		{
-			//define camera configuration
-			int cameras = 1; //use one camera for standard mode
-			if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
-				cameras = 2; //use two cameras for VR mode
+	try
+	{
+		//define camera configuration
+		int cameras = 1; //use one camera for standard mode
+		if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
+			cameras = 2; //use two cameras for VR mode
 
-			for (int i = 0; i < cameras; i++)
-			{
-				mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
-				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
-			}
-		}
-		catch (Ogre::Exception &e)
+		for (int i = 0; i < cameras; i++)
 		{
-			return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
+			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
+			mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+			mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 		}
-	//}
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
+	}
 
 	//set up default material shader scheme
 	if (RTSS == true)
@@ -650,10 +648,7 @@ bool HAL::Render()
 {
 	SBS_PROFILE_MAIN("Render");
 
-	//if (vm->GetFrontend()->Headless == true)
-		//return true;
-
-	// Render to the frame buffer
+	//render to the frame buffer
 	try
 	{
 		mRoot->renderOneFrame();
@@ -721,6 +716,8 @@ void HAL::ClearScene()
 
 void HAL::ToggleStats()
 {
+	//toggle frame statistics
+
 	show_stats++;
 
 	if (!mTrayMgr)
@@ -742,6 +739,8 @@ void HAL::ToggleStats()
 
 void HAL::EnableStats(bool value)
 {
+	//turn on or off frame statistics
+
 	if (value == true)
 	{
 		show_stats = -1;
@@ -756,6 +755,8 @@ void HAL::EnableStats(bool value)
 
 void HAL::ReInit()
 {
+	//reinitialize HAL system
+
 	EnableStats(false);
 
 	delete mTrayMgr;
@@ -887,13 +888,10 @@ void HAL::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 
-	//if (vm->GetFrontend()->Headless == false)
-	//{
-		for (size_t i = 0; i < mViewports.size(); i++)
-		{
-			mViewports[i]->_updateDimensions();
-		}
-	//}
+	for (size_t i = 0; i < mViewports.size(); i++)
+	{
+		mViewports[i]->_updateDimensions();
+	}
 }
 
 void HAL::Report(const std::string &message)
@@ -924,7 +922,7 @@ void HAL::LoadConfiguration(const std::string data_path, bool show_console)
 	if (show_console == false)
 		return;
 
-	vm->showconsole = GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.ShowConsole", true);
+	vm->showconsole = GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
 
 	//create console window
 	if (vm->showconsole == true)

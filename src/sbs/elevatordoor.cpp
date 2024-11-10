@@ -225,13 +225,7 @@ void ElevatorDoor::AddServicedFloor(int floor)
 	{
 		if (ShaftDoors[i])
 		{
-			if (i == 0 && ShaftDoors[i]->floor > floor)
-			{
-				//insert at bottom
-				ShaftDoors.insert(ShaftDoors.begin(), wrapper);
-				return;
-			}
-			else if (ShaftDoors[i]->floor > floor && ShaftDoors[i - 1]->floor < floor)
+			if (ShaftDoors[i]->floor > floor)
 			{
 				//insert inside
 				ShaftDoors.insert(ShaftDoors.begin() + i, wrapper);
@@ -242,7 +236,6 @@ void ElevatorDoor::AddServicedFloor(int floor)
 
 	//insert at top
 	ShaftDoors.emplace_back(wrapper);
-		return;
 }
 
 void ElevatorDoor::RemoveServicedFloor(int floor)
@@ -255,22 +248,13 @@ void ElevatorDoor::RemoveServicedFloor(int floor)
 		{
 			if (ShaftDoors[i]->floor == floor)
 			{
+				//delete the matching element
 				delete ShaftDoors[i];
 				ShaftDoors.erase(ShaftDoors.begin() + i);
 				return;
 			}
-			if (ShaftDoors[i]->floor > floor && i > 0)
-			{
-				//erase previous element
-				ShaftDoors.erase(ShaftDoors.begin() + i - 1);
-				return;
-			}
 		}
 	}
-
-	//if not found, remove last element
-	if (!ShaftDoors.back())
-		ShaftDoors.pop_back();
 }
 
 void ElevatorDoor::OpenDoorsEmergency(int whichdoors, int floor)
@@ -1557,7 +1541,7 @@ void ElevatorDoor::MoveSound(const Vector3 &position, bool relative_x, bool rela
 	nudgesound->SetPosition(pos);
 }
 
-bool ElevatorDoor::ShaftDoorsExist(int floor)
+bool ElevatorDoor::ShaftDoorsExist(int floor, bool include_nonserviced)
 {
 	//return true if shaft doors have been created for this door on the specified floor
 
@@ -1565,10 +1549,23 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 
 	if (index != -1)
 	{
+		//if shaft doors exist on a serviced floor
 		if (ShaftDoors[index])
 		{
 			if (ShaftDoors[index]->doors.size() > 0)
 				return true;
+		}
+	}
+	else if (include_nonserviced == true)
+	{
+		//if shaft doors exist on a non-serviced floor
+		for (size_t i = 0; i < ShaftDoors.size(); i++)
+		{
+			if (ShaftDoors[i])
+			{
+				if (ShaftDoors[i]->floor == floor)
+					return true;
+			}
 		}
 	}
 	return false;

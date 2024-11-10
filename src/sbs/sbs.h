@@ -164,8 +164,6 @@ public:
 	int ElevatorNumber; //number of currently selected elevator
 	int CarNumber; //number of currently selected elevator car
 	bool ElevatorSync; //true if user should move with elevator
-	bool FrameLimiter; //frame limiter toggle
-	int FrameRate; //max frame rate
 	Real running_time; //time (in seconds) the simulator has been running
 	Real start_time; //time (in seconds) that the simulator mainloop started
 	bool IsBuildingsEnabled; //contains status of buildings object
@@ -196,7 +194,6 @@ public:
 	bool RandomActivity; //random activity is enabled
 	bool Malfunctions; //elevator malfunctions are enabled
 	int InstanceNumber; //SBS engine instance number
-	bool Headless; //true if running in headless mode
 
 	//public functions
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);

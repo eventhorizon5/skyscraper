@@ -58,9 +58,9 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	mShape = 0;
 	prepared = false;
 	is_physical = false;
-	this->restitution = 0;
-	this->friction = 0;
-	this->mass = 0;
+	restitution = 0;
+	friction = 0;
+	mass = 0;
 	this->create_collider = create_collider;
 	collider_node = 0;
 	Filename = filename;
@@ -71,12 +71,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	Bounds = new Ogre::AxisAlignedBox();
 	collidermesh = 0;
 	size = 0;
-
-	//use box collider if physics should be enabled
-	if (is_physical == true)
-		tricollider = false;
-	else
-		tricollider = true;
+	tricollider = true;
 
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
@@ -95,7 +90,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	if (filename != "")
 	{
 		//load mesh from a file if specified
-		bool result = LoadFromFile(filename, collidermesh);
+		bool result = LoadFromFile(filename);
 
 		if (result == false)
 			return;
@@ -545,12 +540,9 @@ void MeshObject::CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, boo
 	Cut(back_min, back_max, cutwalls, cutfloors);
 }
 
-bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh)
+bool MeshObject::LoadFromFile(const std::string &filename)
 {
 	//load mesh object from a file
-
-	if (sbs->Headless == true)
-		return true;
 
 	std::string filename1 = "data/";
 	filename1.append(filename);
@@ -615,6 +607,20 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 	if (status == false)
 		return false;
 
+	model_loaded = true;
+	return true;
+}
+
+bool MeshObject::LoadColliderModel(Ogre::MeshPtr &collidermesh)
+{
+	if (Filename == "")
+		return false;
+
+	std::string filename1 = "data/";
+	filename1.append(Filename);
+	std::string filename2 = sbs->VerifyFile(filename1);
+	std::string path = sbs->GetMountPath(filename2, filename2);
+
 	//load collider model if physics is disabled
 	if (is_physical == false)
 	{
@@ -628,11 +634,9 @@ bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collid
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
+			return ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
 		}
 	}
-
-	model_loaded = true;
 	return true;
 }
 
@@ -1208,6 +1212,12 @@ void MeshObject::EnablePhysics(bool value, Real restitution, Real friction, Real
 	this->restitution = restitution;
 	this->friction = friction;
 	this->mass = mass;
+
+	//use box collider if physics should be enabled
+	if (is_physical == true)
+		tricollider = false;
+
+	LoadColliderModel(collidermesh);
 
 	//set up collider for model (if mesh loaded from a filename)
 	if ((Filename != "" || Meshname != "") && create_collider == true)

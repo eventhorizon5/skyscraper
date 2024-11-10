@@ -102,6 +102,7 @@ private:
 	int progress;
 	bool inside;
 	std::string InstancePrompt;
+	bool prepared;
 
 	//override information
 	SBS::CameraState *reload_state;

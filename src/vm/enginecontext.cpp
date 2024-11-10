@@ -77,6 +77,7 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	inside = false;
 	Moved = false;
 	started = false;
+	prepared = false;
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
@@ -84,7 +85,7 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	Report("\nStarting instance " + ToString(instance) + "...");
 
 	//add instance number to reports
-	InstancePrompt = ToString(instance) + "> ";
+	InstancePrompt = ToString(instance) + ">";
 
 	if (parent)
 		parent->AddChild(this);
@@ -171,6 +172,8 @@ void EngineContext::Run()
 
 		if (loading == true)
 		{
+			prepared = false;
+
 			if (result == false)
 			{
 				ReportError("Error processing building\n");
@@ -189,11 +192,12 @@ void EngineContext::Run()
 		}
 		else if (processor->IsFinished == true && result == true)
 		{
-			if (InRunloop() == false)
+			if (InRunloop() == false && prepared == false)
 			{
 				Simcore->Prepare(false);
 				Simcore->DeleteColliders = false;
 				Simcore->Init(); //initialize any new objects
+				prepared = true;
 			}
 			else
 			{
@@ -342,10 +346,6 @@ void EngineContext::StartSim()
 	//override verbose mode if specified
 	if (vm->Verbose == true)
 		Simcore->Verbose = true;
-
-	//set headless mode
-	//if (frontend->Headless == true)
-		//Simcore->Headless = true;
 
 	//Pause for 2 seconds, if first instance
 	if (instance == 0)
