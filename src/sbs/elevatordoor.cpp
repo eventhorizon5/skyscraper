@@ -593,7 +593,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		DoorIsRunning = true;
 		door_changed = false;
 
-		index = car->GetFloorIndex(ShaftDoorFloor);
+		index = GetIndex(ShaftDoorFloor);
 		int index2 = GetManualIndex(ShaftDoorFloor);
 
 		if (ShaftDoorsExist(ShaftDoorFloor) == false && index2 == -1)
@@ -1263,7 +1263,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 		return;
 
 	//exit if elevator doesn't service the requested floor
-	int index = car->GetFloorIndex(floor);
+	int index = GetIndex(floor);
 
 	if (index == -1)
 		return;
@@ -1321,7 +1321,7 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	//returns the internal door state
 	if (ShaftDoorsExist(floor))
 	{
-		int index = car->GetFloorIndex(floor);
+		int index = GetIndex(floor);
 
 		if (index > -1)
 		{
@@ -1508,7 +1508,7 @@ Real ElevatorDoor::GetShaftDoorAltitude(int floor)
 {
 	//returns altitude of the shaft door on the specified floor
 
-	int index = car->GetFloorIndex(floor);
+	int index = GetIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1545,7 +1545,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor, bool include_nonserviced)
 {
 	//return true if shaft doors have been created for this door on the specified floor
 
-	int index = car->GetFloorIndex(floor);
+	int index = GetIndex(floor);
 
 	if (index != -1)
 	{
@@ -1581,7 +1581,7 @@ DoorWrapper* ElevatorDoor::GetShaftDoorWrapper(int floor)
 {
 	//return shaft door wrapper object for the specified floor
 
-	int index = car->GetFloorIndex(floor);
+	int index = GetIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1897,6 +1897,16 @@ bool ElevatorDoor::GetDoorChanged()
 bool ElevatorDoor::GetPreviousOpen()
 {
 	return previous_open;
+}
+
+int ElevatorDoor::GetIndex(int floor)
+{
+	for (size_t i = 0; i < ShaftDoors.size(); i++)
+	{
+		if (ShaftDoors[i]->floor == floor)
+			return (int)i;
+	}
+	return -1;
 }
 
 }

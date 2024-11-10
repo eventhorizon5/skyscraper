@@ -128,6 +128,7 @@ private:
 	std::vector<int> ManualFloors; //list of floors that use manual shaft doors
 
 	void MoveDoors(bool open, bool manual);
+	int GetIndex(int floor);
 
 	class Timer; //internal timer class
 
