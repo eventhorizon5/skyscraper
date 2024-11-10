@@ -1903,8 +1903,11 @@ int ElevatorDoor::GetIndex(int floor)
 {
 	for (size_t i = 0; i < ShaftDoors.size(); i++)
 	{
-		if (ShaftDoors[i]->floor == floor)
-			return (int)i;
+		if (ShaftDoors[i])
+		{
+			if (ShaftDoors[i]->floor == floor)
+				return (int)i;
+		}
 	}
 	return -1;
 }
