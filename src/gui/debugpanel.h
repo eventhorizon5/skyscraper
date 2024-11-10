@@ -96,7 +96,6 @@ class DebugPanel: public wxFrame
 		static const long ID_STATICTEXT11;
 		static const long ID_chkCollisionDetection;
 		static const long ID_chkGravity;
-		static const long ID_chkFrameLimiter;
 		static const long ID_chkProcessElevators;
 		static const long ID_chkAutoShafts;
 		static const long ID_chkAutoStairs;
@@ -211,7 +210,6 @@ class DebugPanel: public wxFrame
 		wxCheckBox* chkAutoShafts;
 		wxCheckBox* chkAutoStairs;
 		wxCheckBox* chkCollisionDetection;
-		wxCheckBox* chkFrameLimiter;
 		wxCheckBox* chkGravity;
 		wxCheckBox* chkMalfunctions;
 		wxCheckBox* chkPower;

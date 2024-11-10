@@ -82,7 +82,6 @@ const long DebugPanel::ID_STATICTEXT7 = wxNewId();
 const long DebugPanel::ID_STATICTEXT11 = wxNewId();
 const long DebugPanel::ID_chkCollisionDetection = wxNewId();
 const long DebugPanel::ID_chkGravity = wxNewId();
-const long DebugPanel::ID_chkFrameLimiter = wxNewId();
 const long DebugPanel::ID_chkProcessElevators = wxNewId();
 const long DebugPanel::ID_chkAutoShafts = wxNewId();
 const long DebugPanel::ID_chkAutoStairs = wxNewId();
@@ -191,11 +190,6 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	chkGravity = new wxCheckBox(Panel1, ID_chkGravity, _("Gravity"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkGravity"));
 	chkGravity->SetValue(false);
 	BoxSizer5->Add(chkGravity, 1, wxBOTTOM|wxALIGN_LEFT, 5);
-	chkFrameLimiter = new wxCheckBox(Panel1, ID_chkFrameLimiter, _("Frame Limiter"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFrameLimiter"));
-	chkFrameLimiter->SetValue(false);
-	chkFrameLimiter->Disable();
-	chkFrameLimiter->Hide();
-	BoxSizer5->Add(chkFrameLimiter, 0, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkProcessElevators = new wxCheckBox(Panel1, ID_chkProcessElevators, _("Process Elevators"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkProcessElevators"));
 	chkProcessElevators->SetValue(false);
 	BoxSizer5->Add(chkProcessElevators, 0, wxBOTTOM|wxALIGN_LEFT, 5);
@@ -272,7 +266,6 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 
 	Connect(ID_chkCollisionDetection,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Click);
 	Connect(ID_chkGravity,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkGravity_Click);
-	Connect(ID_chkFrameLimiter,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameLimiter_Click);
 	Connect(ID_chkProcessElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkProcessElevators_Click);
 	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Click);
 	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
@@ -391,12 +384,6 @@ void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
 		Simcore->camera->EnableCollisions(chkCollisionDetection->GetValue());
 }
 
-void DebugPanel::On_chkFrameLimiter_Click(wxCommandEvent& event)
-{
-	if (Simcore)
-		Simcore->FrameLimiter = chkFrameLimiter->GetValue();
-}
-
 void DebugPanel::On_chkProcessElevators_Click(wxCommandEvent& event)
 {
 	if (Simcore)
@@ -445,7 +432,6 @@ void DebugPanel::OnInit()
 	//set check boxes
 	chkCollisionDetection->SetValue(Simcore->camera->CollisionsEnabled());
 	chkGravity->SetValue(Simcore->camera->GetGravityStatus());
-	chkFrameLimiter->SetValue(Simcore->FrameLimiter);
 	chkProcessElevators->SetValue(Simcore->ProcessElevators);
 	chkAutoShafts->SetValue(Simcore->AutoShafts);
 	chkAutoStairs->SetValue(Simcore->AutoStairs);
