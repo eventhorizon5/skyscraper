@@ -1447,6 +1447,7 @@ CameraState Camera::GetCameraState()
 	state.angle_velocity = angle_velocity;
 	state.accum_movement = accum_movement;
 	state.fov = GetFOVAngle();
+	state.speed = speed;
 	return state;
 }
 
@@ -1471,6 +1472,7 @@ void Camera::SetCameraState(const CameraState &state, bool set_floor)
 	angle_velocity = state.angle_velocity;
 	accum_movement = state.accum_movement;
 	SetFOVAngle(state.fov);
+	speed = state.speed;
 }
 
 void Camera::RevertMovement()

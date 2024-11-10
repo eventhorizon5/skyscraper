@@ -40,6 +40,7 @@ struct SBSIMPEXP CameraState
 	Vector3 angle_velocity;
 	Vector3 accum_movement;
 	Real fov;
+	Real speed;
 };
 
 class SBSIMPEXP Camera : public Object
