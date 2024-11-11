@@ -3598,6 +3598,8 @@ void ElevatorCar::Requested(int floor)
 		KeypadError();
 	else if (e->LimitQueue == true && e->IsMoving == true && floor == GetFloor())
 		KeypadError();
+	else if (GetFloorIndex(floor) == -1)
+		KeypadError();
 	else
 		UpdateKeypadIndicator(message);
 }
