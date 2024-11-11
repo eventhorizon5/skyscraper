@@ -232,13 +232,13 @@ bool DispatchController::RequestRoute(CallStation *station, int starting_floor, 
 	if (IsServicedFloor(starting_floor) == false)
 	{
 		if (station)
-			station->Error(1);
+			station->Error(0);
 		return ReportError("No elevators found for floor " + ToString(starting_floor));
 	}
 	if (IsServicedFloor(destination_floor) == false)
 	{
 		if (station)
-			station->Error(1);
+			station->Error(0);
 		return ReportError("No elevators found for floor " + ToString(destination_floor));
 	}
 
