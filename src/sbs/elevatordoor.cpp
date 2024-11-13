@@ -685,7 +685,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	if (elevdoors == true)
 		Doors->MoveDoors(open, manual);
 
-	if (shaftdoors == true)
+	if (shaftdoors == true && index >= 0)
 	{
 		if (ShaftDoors[index])
 			ShaftDoors[index]->MoveDoors(open, manual);
@@ -701,7 +701,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		if (Doors->IsFinished() == false)
 			return;
 	}
-	if (shaftdoors == true)
+	if (shaftdoors == true && index >= 0)
 	{
 		if (ShaftDoors[index])
 		{
