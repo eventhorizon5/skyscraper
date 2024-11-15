@@ -109,6 +109,9 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 
 	Real tempposition, temporigin;
 
+	if (!wrapper)
+		return;
+
 	if (wrapper->rotate == true)
 		return;
 
@@ -395,6 +398,9 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 
 void DoorComponent::RotateDoors(bool open)
 {
+	if (!wrapper)
+		return;
+
 	if (wrapper->rotate == false)
 		return;
 
@@ -438,6 +444,9 @@ void DoorComponent::RotateDoors(bool open)
 void DoorComponent::Move()
 {
 	//move elevator doors
+
+	if (!wrapper)
+		return;
 
 	bool DoorDirection = false;
 	Real speed = 0;
@@ -485,6 +494,9 @@ void DoorComponent::Move()
 void DoorComponent::Reset(bool open)
 {
 	//reset door state
+
+	if (!wrapper)
+		return;
 
 	if (wrapper->rotate == true)
 		return;
