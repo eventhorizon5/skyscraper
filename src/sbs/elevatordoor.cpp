@@ -536,8 +536,11 @@ void ElevatorDoor::StopDoors()
 			Doors->StopDoors();
 		if (WhichDoors == 1 || WhichDoors == 3)
 		{
-			if (ShaftDoors[index])
-				ShaftDoors[index]->StopDoors();
+			if (index >= 0)
+			{
+				if (ShaftDoors[index])
+					ShaftDoors[index]->StopDoors();
+			}
 		}
 
 		DoorIsRunning = false;
@@ -628,7 +631,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		if (elevdoors == true)
 			Doors->ResetFinished();
 
-		if (shaftdoors == true)
+		if (shaftdoors == true && index >= 0)
 		{
 			if (ShaftDoors[index])
 				ShaftDoors[index]->ResetFinished();
