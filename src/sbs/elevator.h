@@ -135,6 +135,7 @@ public:
 	bool DeleteRoute(int floor, int direction);
 	bool RouteExists(bool direction, int floor);
 	bool CallCancel();
+	bool CallCancelAll();
 	bool Stop(bool emergency = false);
 	void ProcessCallQueue();
 	void Loop();

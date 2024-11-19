@@ -763,6 +763,30 @@ bool Elevator::RouteExists(bool direction, int floor)
 
 bool Elevator::CallCancel()
 {
+	//cancel the last route
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
+	if (Running == false)
+		return ReportError("Elevator not running");
+
+	if (LastQueueFloor[1] == 0)
+	{
+		if (sbs->Verbose)
+			ReportError("CallCancel: no valid routes");
+		return false;
+	}
+
+	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
+	Report("cancelled last call");
+
+	return true;
+}
+
+bool Elevator::CallCancelAll()
+{
 	//cancels all added routes
 
 	//only run if power is enabled
@@ -780,7 +804,8 @@ bool Elevator::CallCancel()
 	}
 
 	Report("cancelled all calls");
-        ResetQueue(true, true);
+	ResetQueue(true, true);
+
 	return true;
 }
 
