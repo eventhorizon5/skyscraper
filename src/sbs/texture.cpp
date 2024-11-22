@@ -2228,13 +2228,13 @@ Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr 
 	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texture_name);
 
 	//enable alpha blending for related textures
-	//if (has_alpha == true)
+	if (has_alpha == true)
 	{
 		//mMat->setDepthWriteEnabled(false);
-		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
 
 		//enable hard alpha for alpha mask values 128 and above
-		//mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 	return state;
 }
