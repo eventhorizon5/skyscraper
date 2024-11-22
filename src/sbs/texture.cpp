@@ -141,7 +141,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 		return false;
 
 	//bind texture to material
-	BindTextureToMaterial(mMat, texturename, filename2);
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode, mTex->getSize(), mMat->getSize());
@@ -195,7 +195,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
 
 	//bind first texture to material
-	Ogre::TextureUnitState* state = BindTextureToMaterial(mMat, filenames2[0], filenames2[0]);
+	Ogre::TextureUnitState* state = BindTextureToMaterial(mMat, filenames2[0], has_alpha);
 
 	//apply animation texture list
 	if (state)
@@ -252,9 +252,9 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
 
 	//bind texture to material
-	BindTextureToMaterial(mMat, texturename, filename2);
-	Ogre::TextureUnitState* spec_state = BindTextureToMaterial(mMat, specular_texturename, "");
-	Ogre::TextureUnitState* blend_state = BindTextureToMaterial(mMat, blend_texturename, "");
+	BindTextureToMaterial(mMat, texturename, has_alpha);
+	Ogre::TextureUnitState* spec_state = BindTextureToMaterial(mMat, specular_texturename, false);
+	Ogre::TextureUnitState* blend_state = BindTextureToMaterial(mMat, blend_texturename, false);
 
 	if (spec_state)
 		spec_state->setColourOperation(Ogre::LBO_ALPHA_BLEND);
@@ -433,7 +433,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	Ogre::MaterialPtr mMat = CreateMaterial(name, "General");
 
 	//bind texture to material
-	BindTextureToMaterial(mMat, texturename, filename2);
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (sbs->Verbose)
 		Report("Loaded cropped texture '" + filename2 + "' as '" + name + "', size " + ToString((int)new_texture->getSize()));
@@ -799,7 +799,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
 
 	//bind texture to material
-	BindTextureToMaterial(mMat, texturename, "");
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode, texture->getSize(), mMat->getSize());
@@ -892,7 +892,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
 
 	//bind texture to material
-	BindTextureToMaterial(mMat, texturename, "");
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (sbs->Verbose)
 		Report("AddTextureOverlay: created texture '" + Name + "'");
@@ -2223,27 +2223,19 @@ Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, con
 	return ptr;
 }
 
-Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, const std::string &filename)
+Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)
 {
 	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texture_name);
 
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension;
-	if (filename.size() > 3)
-		extension = filename.substr(filename.size() - 3);
-	SetCase(extension, false);
-
-	if (extension == "gif")
+	//enable alpha blending for related textures
+	//if (has_alpha == true)
 	{
+		//mMat->setDepthWriteEnabled(false);
+		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
 		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+		//mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
-	else
-	{
-		//enable alpha blending for related textures
-		mMat->getTechnique(0)->getPass(0)->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-	}
-
 	return state;
 }
 

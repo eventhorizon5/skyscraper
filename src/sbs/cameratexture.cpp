@@ -96,7 +96,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 
 		//create a new material
 		Ogre::MaterialPtr material = sbs->GetTextureManager()->CreateMaterial(name, "General");
-		sbs->GetTextureManager()->BindTextureToMaterial(material, texturename, "");
+		sbs->GetTextureManager()->BindTextureToMaterial(material, texturename, false);
 		material->setLightingEnabled(false);
 
 		//add texture multipliers

@@ -85,7 +85,7 @@ public:
 	bool UnregisterTextureInfo(std::string name, std::string material_name = "");
 	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
 	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = "General");
-	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, const std::string &filename);
+	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
 	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
 	std::string GetTextureName(Ogre::MaterialPtr mMat);
 	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = "General");
