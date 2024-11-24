@@ -2821,7 +2821,7 @@ bool Elevator::EnableInspectionService(bool value)
 		if (IsMoving == true)
 			Stop();
 		else
-			ReturnToNearestFloor();
+			ReturnToNearestFloor(true);
 	}
 
 	return true;
@@ -3864,7 +3864,12 @@ bool Elevator::SelectFloor(int floor)
 	//elevator is on floor
 	if (car->GetFloor() == floor)
 	{
-		if (Direction == 0)
+		if (IsLeveled() == false)
+		{
+			//relevel elevator if needed
+			ReturnToNearestFloor(false);
+		}
+		else if (Direction == 0)
 		{
 			//stopped - play chime and reopen doors
 			if (ReOpen == true)
@@ -3922,7 +3927,7 @@ bool Elevator::Check(Vector3 position)
 	return false;
 }
 
-bool Elevator::ReturnToNearestFloor()
+bool Elevator::ReturnToNearestFloor(bool parking)
 {
 	//return and relevel to nearest floor
 
@@ -3934,7 +3939,8 @@ bool Elevator::ReturnToNearestFloor()
 	{
 		int floor = GetCar(1)->GetNearestServicedFloor();
 		Report("returning to nearest floor");
-		Parking = true; //enable parking mode to prevent arrival notification
+		if (parking == true)
+			Parking = true; //enable parking mode to prevent arrival notification
 
 		if (floor >= GetCar(1)->GetFloor())
 			AddRoute(floor, 1, 2);
