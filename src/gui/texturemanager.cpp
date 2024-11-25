@@ -228,7 +228,7 @@ void TextureManager::On_bUnload_Click(wxCommandEvent& event)
 	SBS::TextureManager::TextureInfo texture;
 	Simcore->GetTextureManager()->GetTextureInfo(selection, texture);
 
-	if (texture.name != "")
+	if (texture.name != "" && texture.name != "Default")
 	{
 		//don't unload texture if submeshes are using it
 		if (texture.dependencies > 0)
