@@ -65,6 +65,7 @@ public:
 	void ShowControlReference();
 	void ShowLoadDialog();
 	void WriteToConsole(const std::string &message);
+	bool ReportMissingFiles(std::vector<std::string> &missing_files);
 
 private:
 
