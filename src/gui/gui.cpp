@@ -306,8 +306,8 @@ bool GUI::ReportMissingFiles(std::vector<std::string> &missing_files)
 	if (missing_files.size() > 0)
 	{
 		sort(missing_files.begin(), missing_files.end());
-		//for (size_t i = 0; i < missing_files.size(); i++)
-			//vm->Report("Missing file: " + missing_files[i]);
+		for (size_t i = 0; i < missing_files.size(); i++)
+			vm->GetHAL()->Report("Missing file: " + missing_files[i], "gui:");
 
 		//create text window
 		TextWindow *twindow = new TextWindow(NULL, -1);
