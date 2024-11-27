@@ -38,6 +38,7 @@
 #include "debugpanel.h"
 #include "console.h"
 #include "loaddialog.h"
+#include "textwindow.h"
 #include "gui.h"
 
 namespace Skyscraper {
@@ -295,6 +296,41 @@ void GUI::WriteToConsole(const std::string &message)
 		console->Write(message);
 		console->Update();
 	}
+}
+
+bool GUI::ReportMissingFiles(std::vector<std::string> &missing_files)
+{
+	//report on missing files
+	//returns true if any files are missing
+
+	if (missing_files.size() > 0)
+	{
+		sort(missing_files.begin(), missing_files.end());
+		//for (size_t i = 0; i < missing_files.size(); i++)
+			//vm->Report("Missing file: " + missing_files[i]);
+
+		//create text window
+		TextWindow *twindow = new TextWindow(NULL, -1);
+		twindow->SetMinSize(wxSize(350, 250));
+		twindow->tMain->SetMinSize(wxSize(350, 250));
+		twindow->Fit();
+		twindow->Center();
+		twindow->SetTitle(wxT("Missing Files"));
+		twindow->Show(true);
+		wxString message;
+		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
+		for (size_t i = 0; i < missing_files.size(); i++)
+		{
+			message.Append(missing_files[i]);
+			message.Append(wxT("\n"));
+		}
+		twindow->tMain->WriteText(message);
+		twindow->tMain->SetInsertionPoint(0);
+		return true;
+	}
+	else
+		return false;
+	return true;
 }
 
 }

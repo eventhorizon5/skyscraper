@@ -837,4 +837,10 @@ void VM::UpdateProgress()
 	gui->UpdateProgress(final);
 }
 
+bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)
+{
+	//report missing files
+	return gui->ReportMissingFiles(missing_files);
+}
+
 }

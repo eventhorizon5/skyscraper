@@ -648,42 +648,6 @@ int ScriptProcessor::ScriptWarning(std::string message)
 	return ScriptError(message, true);
 }
 
-bool ScriptProcessor::ReportMissingFiles()
-{
-	//report on missing files
-	//returns true if any files are missing
-
-	//FIXME
-	/*if (nonexistent_files.size() > 0)
-	{
-		sort(nonexistent_files.begin(), nonexistent_files.end());
-		for (size_t i = 0; i < nonexistent_files.size(); i++)
-			Simcore->Report("Missing file: " + nonexistent_files[i]);
-
-		//create text window
-		TextWindow *twindow = new TextWindow(NULL, -1);
-		twindow->SetMinSize(wxSize(350, 250));
-		twindow->tMain->SetMinSize(wxSize(350, 250));
-		twindow->Fit();
-		twindow->Center();
-		twindow->SetTitle(wxT("Missing Files"));
-		twindow->Show(true);
-		wxString message;
-		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
-		for (size_t i = 0; i < nonexistent_files.size(); i++)
-		{
-			message.Append(nonexistent_files[i]);
-			message.Append(wxT("\n"));
-		}
-		twindow->tMain->WriteText(message);
-		twindow->tMain->SetInsertionPoint(0);
-		return true;
-	}
-	else
-		return false;*/
-	return true;
-}
-
 std::string ScriptProcessor::Calc(const std::string &expression)
 {
 	//performs a calculation operation on a string
