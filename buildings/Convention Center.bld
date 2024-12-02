@@ -1,0 +1,225 @@
+#Convention Center
+#Copyright (C)2024 Event Horizon
+#This program is free software; you can redistribute it and/or
+#modify it under the terms of the GNU General Public License
+#as published by the Free Software Foundation; either version 2
+#of the License, or (at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+<Include data/scripts/elevator_doors.txt>
+
+<Globals>
+    Name = Convention Center
+    Designer = Event Horizon
+    CameraFloor = 0
+    CameraPosition = 0, 90
+    CameraRotation = 0, 0, 0
+<EndGlobals>
+
+<Textures>
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/cinderblocks.jpg, MainWalls, 0.25, 0.25
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/misc/grid_win.png, GridWindow, 0.2, 0.2
+    Load data/marble27.jpg, Marble, 0.2, 0.2
+    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/cutston.jpg, InterExt, 0.269, 0.25
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/metal1.jpg, ElevExt, 1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors, 1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors2, -1, 1
+    Load data/panel-back2.jpg, ElevExtPanels, 1, 1
+    Load data/otis4_buttonpanel.jpg, ElevPanel, 1, 1
+    Load data/otis4_woodwalldouble.jpg, ElevWall, 1, 1
+    Load data/otis4_woodwallpanel.jpg, ElevPanelMain, 1, 1
+    Load data/otis4_downlightceiling.jpg, ElevCeiling, 1, 1
+    Load data/floor111.jpg, ElevFloor, 1, 1
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/servicedoor2.jpg, StairsDoor, 1, 1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
+    Load data/fire2keyoff.png, Fire2Off, 1, 1
+    Load data/fire2keyon.png, Fire2On, 1, 1
+    Load data/fire2keyhold.png, Fire2Hold, 1, 1
+    Load data/fire1keyoff.png, Fire1Off, 1, 1
+    Load data/fire1keyon.png, Fire1On, 1, 1
+    Load data/fire1keybypass.png, Fire1Bypass, 1, 1
+    Load data/runkey.png, RunKey, 1, 1
+    Load data/stopkey.png, StopKey, 1, 1
+    Load data/indservkeyon.png, IndOn, 1, 1
+    Load data/indservkeyoff.png, IndOff, 1, 1
+    Load data/bracing1.jpg, Vents, 1, 1
+    Load data/glasselevator1.gif, ElevWallGlass, 1, 1
+    Load data/glasselevator1.gif, Railing, 0.25, 1
+    Load data/windows11j-4_inside.gif, ShaftWall, 4, 4, false
+    Load data/windows11j-4_inside.gif, ShaftWallIn, 4, -4, false
+    Load data/bracing1.jpg, Bracing, 0.1, 0.1
+    Load data/square_offices.jpg, Office, 2, 1
+    Load data/windows11e_inside2.gif, WindowsInt, 1, 1
+    Load data/misc/carpet_diamonds.jpg, Carpet2, 0.5, 0.5
+    Load data/otis-touch.gif, Touch, 1, 1
+    Load data/otis-touchlit.gif, TouchLit, 1, 1
+    Load data/misc/gry_scrd_dk.jpg, GreyFloor, 0.2, 0.2
+    Load data/misc/gray_wall.jpg, GreyWall, 0.2, 0.2
+    Load data/misc/stucco.jpg, Stucco, 0.2, 0.2
+    Load data/misc/woodpaneling.jpg, WoodPaneling, 0.2, 0.2
+    Load data/misc/granite.jpg, Granite, 0.2, 0.2
+    Load data/misc/glass_block_blue.png, AtriumWindows, 0.25, 0.25
+    Load data/misc/glass_stained.png, StainedGlass, 0.15, 0.15
+
+    Load data/black.jpg, Black, 1, 1
+    Load data/black_lit.jpg, BlackLit, 1, 1
+    AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
+    AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
+    AddText Black, ButtonG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 9, Black, ButtonB%number%, nimbus_sans.ttf, 47, B%number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 9, BlackLit, ButtonLitB%number%, nimbus_sans.ttf, 47, B%number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 5, Black, ButtonU%number%, nimbus_sans.ttf, 47, U%number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 5, BlackLit, ButtonLitU%number%, nimbus_sans.ttf, 47, U%number%, -1, -1, -1, -1, center, center, 255, 255, 255
+<EndTextures>
+
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
+
+<Floor -1>
+    ID = LL
+    Name = Lower Level
+    Type = Basement
+    Height = 15
+    InterfloorHeight = 0
+
+    DrawWalls = true, true ,false, false, false, false
+    AddCustomFloor floor, Floor, Marble, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
+    AddCustomFloor floor, Floor, Marble, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
+    AddCustomFloor floor, Floor, Marble, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
+
+    AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWalls, 0, -80, -75, -80, 75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left2, MainWalls, 0, -80, 75, -50, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right, MainWalls, 0, 80, -75, 80, 75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right2, MainWalls, 0, 80, 75, 50, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWalls, 0, -50, 105, 50, 105, %height%, %height%, 0, 0, 0, 0, False
+
+    AddWall Front3, MainWalls, 0, -27, -75, -3, -57, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front4, MainWalls, 0, -3, -57, 3, -57, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front5, MainWalls, 0, 3, -57, 27, -75, %height%, %height%, 0, 0, 0, 0, False
+
+<EndFloor>
+
+<Floor 0>
+    ID = 1
+    Name = Ground
+    Type = Lobby
+    Height = 30
+    InterfloorHeight = 2.24
+    Altitude = -%interfloorheight%
+
+    DrawWalls = true, true, false, false, false, false
+    AddCustomFloor floor, Floor, Marble, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
+    AddCustomFloor floor, Floor, Marble, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
+    AddCustomFloor floor, Floor, Marble, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
+
+    AddCustomFloor floor, CeilingLeft, Marble, -80, 105, -27, 105, -27, -75, -80, -75, %height%, 1, 1
+    AddCustomFloor floor, CeilingRight, Marble, 27, 105, 80, 105, 80, -75, 27, -75, %height%, 1, 1
+
+    AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front3, StainedGlass, 0, -27, -75, -3, -57, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front4, StainedGlass, 0, -3, -57, 3, -57, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front5, StainedGlass, 0, 3, -57, 27, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWalls, 0, -80, -75, -80, 75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left2, MainWalls, 0, -80, 75, -50, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right, MainWalls, 0, 80, -75, 80, 75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right2, MainWalls, 0, 80, 75, 50, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWalls, 0, -50, 105, 50, 105, %height%, %height%, 0, 0, 0, 0, False
+
+    AddWall InnerLeft, MainWalls, 0, -27, 105, -27, -75, %height%, %height%, 0, 0, 0, 0, false
+    AddWall InnerRight, MainWalls, 0, 27, 105, 27, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Divider1, MainWalls, 0, 27, -5, 80, -5, %height%, %height%, 0, 0, 0, 0, false
+    AddWall Divider2, GridWindow, 0, -80, 45, -27, 45, %height%, %height%, 0, 0, 0, 0, false
+    AddWall Divider3, MainWalls, 0, 27, 45, 80, 45, %height%, %height%, 0, 0, 0, 0, false
+
+<EndFloor>
+
+<Floor 1>
+    ID = A
+    Name = Atrium
+    Type = Atrium
+    Height = 66
+    InterfloorHeight = 0
+
+    #Atrium
+    AddCustomWall Floor, AtriumLeft, AtriumWindows, false, -27, 0, 105, -3, %height%, 105, -3, %height%, -57, -27, 0, -75, 1, 1
+    AddCustomWall Floor, AtriumRight, AtriumWindows, false, 27, 0, 105, 3, %height%, 105, 3, %height%, -57, 27, 0, -75, 1, 1
+    AddCustomWall Floor, AtriumBack, AtriumWindows, false, -27, 0, 105, -3, %height%, 105, 3, %height%, 105, 27, 0, 105, 1, 1
+    AddWall Center, StainedGlass, 0, -3, -57, 3, -57, %height%, %height%, 0, 0, 0, 0, False
+    AddCustomWall Floor, FrontLeft, StainedGlass, false, -27, 0, -75, -3, %height%, -57, -3, 0, -57, 1, 1
+    AddCustomWall Floor, FrontRight, StainedGlass, false, 27, 0, -75, 3, %height%, -57, 3, 0, -57, 1, 1
+    AddFloor AtriumTop, AtriumWindows, 0, -3, -57, 3, 105, %height%, %height%, false, false, 1, 1, false
+
+    #left structure
+    AddCustomWall Floor, Left, AtriumWindows, false, -51, 27, -75, -80, 0, 51, -27, 0, 51, 1, 1
+    AddCustomWall Floor, Left2, AtriumWindows, false, -80, 0, -75, -80, 0, 51, -51, 27, -75, 1, 1
+    AddCustomWall Floor, Left3, AtriumWindows, false, -27, 0, -75, -27, 0, 51, -51, 27, -75, 1, 1
+    AddCustomWall Floor, Front, AtriumWindows, false, -80, 0, -75, -51, 27, -75, -27, 0, -75, 1, 1
+
+    #left rear room
+    AddWall RoomLeft, AtriumWindows, 0, -80, 50, -80, 105, 15, 15, 0, 0, 0, 0, False
+    AddCustomWall Floor, RoomBack, AtriumWindows, false, -80, 15, 105, -80, 0, 105, -27, 0, 105, -21.5, 15, 105, 1, 1
+    AddCustomWall Floor, RoomFront, AtriumWindows, false, -80, 15, 50, -21.5, 15, 50, -27, 0, 50, -80, 0, 50, 1, 1
+    AddFloor RoomFloor, Carpet2, 0, -80, 105, -27, 50, 0, 0, false, false, 1, 1, false
+
+    #left rear structure
+    AddCustomWall Floor, Back, AtriumWindows, false, -80, 15, 105, -51, %height%, 78, -21.5, 15, 105, 1, 1
+    AddCustomWall Floor, Left, AtriumWindows, false, -80, 15, 50, -80, 15, 105, -51, %height%, 78, 1, 1
+    AddCustomWall Floor, Front, AtriumWindows, false, -80, 15, 50, -21.5, 15, 50, -51, %height%, 78, 1, 1
+    AddCustomWall Floor, Right, AtriumWindows, false, -21.5, 15, 105, -51, %height%, 78, -21.5, 15, 50, 1, 1
+
+    #right structure
+    AddCustomWall Floor, RightFront, AtriumWindows, false, 27, 0, -75, 48, 54, -75, 80, 0, -75, 1, 1
+    AddCustomWall Floor, RightLeft, AtriumWindows, false, 27, 0, -75, 27, 0, 50, 48, 54, 50, 48, 54, -75, 1, 1
+    AddCustomWall Floor, RightTop, AtriumWindows, false, 48, 54, -75, 48, 54, -33, 80, 54, -33, 1, 1
+    AddCustomWall Floor, RightFront2, AtriumWindows, false, 48, 54, -75, 80, 54, -33, 80, 0, -75, 1, 1
+    AddCustomWall Floor, RightRight, AtriumWindows, false, 80, 0, -75, 80, 54, -33, 80, 15, 50, 80, 0, 50, 1, 1
+    AddCustomWall Floor, RightTop2, AtriumWindows, false, 48, 54, -33, 80, 15, 50, 80, 54, -33, 1, 1
+    AddCustomWall Floor, RightTop3, AtriumWindows, false, 48, 54, -33, 48, 54, 50, 80, 15, 50, 1, 1
+    AddFloor RightFloor, Carpet2, 0, 27, 50, 80, -75, 0, 0, false, false, 1, 1, false
+
+    #right rear structure
+    AddCustomWall Floor, RightFront, AtriumWindows, false, 21.5, 15, 50, 48, 54, 50, 80, 15, 50, 1, 1
+    AddCustomWall Floor, RightTop, AtriumWindows, false, 21.5, 15, 105, 80, 15, 105, 48, 54, 50, 1, 1
+    AddCustomWall Floor, RightBackLeft, AtriumWindows, false, 21.5, 15, 105, 48, 54, 50, 21.5, 15, 50, 1, 1
+    AddCustomWall Floor, RightRight, AtriumWindows, false, 80, 15, 105, 48, 54, 50, 80, 15, 50, 1, 1
+
+    #right room
+    AddCustomWall Floor, RoomFront, AtriumWindows, false, 21.5, 15, 50, 80, 15, 50, 80, 0, 50, 27, 0, 50, 1, 1
+    AddWall RoomRight, AtriumWindows, 0, 80, 105, 80, 50, 15, 15, 0, 0, 0, 0, False
+    AddCustomWall Floor, RoomBack, AtriumWindows, false, 80, 0, 105, 80, 15, 105, 21.5, 15, 105, 27, 0, 105, 1, 1
+    AddFloor RoomFloor, Carpet2, 0, 27, 105, 80, 50, 0, 0, false, false, 1, 1, false
+
+<EndFloor>
+
