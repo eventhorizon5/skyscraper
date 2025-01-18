@@ -59,6 +59,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	this->car = car;
 	Prefix = texture_prefix;
 	Blank = blank_texture;
+	off = false;
 
 	//move object
 	Move(CenterX, voffset, CenterZ);
@@ -213,13 +214,30 @@ void FloorIndicator::Off()
 {
 	//turn off indicator
 
+	if (off == true)
+		return;
+
+	off = true;
 	Update(true);
+}
+
+void FloorIndicator::On()
+{
+	//turn on indicator
+
+	if (off == false)
+		return;
+
+	off = false;
+	Update();
 }
 
 void FloorIndicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
+	else
+		On();
 }
 
 }

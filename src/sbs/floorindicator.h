@@ -43,11 +43,13 @@ public:
 	bool IsEnabled() { return is_enabled; }
 	void Flash(bool enabled);
 	void Off();
+	void On();
 	void Loop();
 
 private:
 	MeshObject* FloorIndicatorMesh; //indicator mesh object
 	bool is_enabled;
+	bool off;
 
 	class Timer; //internal timer class
 
