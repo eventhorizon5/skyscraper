@@ -279,7 +279,17 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 			Simcore->SetBounds(min, max);
 		return sNextLine;
 	}
+	//Lobby parameter
+	if (StartsWithNoCase(LineData, "lobby"))
+	{
+		int data;
+		std::string str = Calc(value);
+		if (!IsNumeric(str, data))
+			return ScriptError("Invalid floor");
 
+		Simcore->Lobby = data;
+		return sNextLine;
+	}
 	//handle end of globals section
 	if (StartsWithNoCase(LineData, "<endglobals>"))
 	{

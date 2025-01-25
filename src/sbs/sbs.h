@@ -194,6 +194,7 @@ public:
 	bool RandomActivity; //random activity is enabled
 	bool Malfunctions; //elevator malfunctions are enabled
 	int InstanceNumber; //SBS engine instance number
+	int Lobby; //lobby level (used or random activity)
 
 	//public functions
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
