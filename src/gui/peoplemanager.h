@@ -46,6 +46,7 @@ class PeopleManager: public wxDialog
 		//(*Declarations(PeopleManager)
 		wxButton* bDelete;
 		wxButton* bGo;
+		wxButton* bLobby;
 		wxButton* bNew;
 		wxButton* bOK;
 		wxButton* bSetFloor;
@@ -60,12 +61,14 @@ class PeopleManager: public wxDialog
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText3;
+		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
 		wxTextCtrl* tDestination;
 		wxTextCtrl* tFloor;
 		wxTextCtrl* tName;
 		wxTextCtrl* tRouteActive;
 		wxTextCtrl* tStatus;
+		wxTextCtrl* txtLobby;
 		//*)
 		void Loop();
 
@@ -85,6 +88,9 @@ class PeopleManager: public wxDialog
 		static const long ID_STATICTEXT5;
 		static const long ID_tRouteActive;
 		static const long ID_bStop;
+		static const long ID_STATICTEXT4;
+		static const long ID_txtLobby;
+		static const long ID_bLobby;
 		static const long ID_STATICLINE1;
 		static const long ID_STATICLINE2;
 		static const long ID_STATICLINE3;
@@ -108,6 +114,7 @@ class PeopleManager: public wxDialog
 		void On_chkRandom_Click(wxCommandEvent& event);
 		void On_chkService_Click(wxCommandEvent& event);
 		void On_bStop_Click(wxCommandEvent& event);
+		void On_bLobby_Click(wxCommandEvent& event);
 		//*)
 		void BuildList(bool restore_selection = false);
 		SBS::SBS *Simcore;
