@@ -135,6 +135,7 @@ public:
 	bool DeleteRoute(int floor, int direction);
 	bool RouteExists(bool direction, int floor);
 	bool CallCancel();
+	bool CallCancelAll();
 	bool Stop(bool emergency = false);
 	void ProcessCallQueue();
 	void Loop();
@@ -188,7 +189,7 @@ public:
 	int AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Vector3 position);
-	bool ReturnToNearestFloor();
+	bool ReturnToNearestFloor(bool parking = true);
 	bool ReturnToBottomFloor();
 	bool IsLeveled();
 	bool Up();

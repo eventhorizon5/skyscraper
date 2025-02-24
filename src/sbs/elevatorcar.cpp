@@ -542,7 +542,7 @@ void ElevatorCar::DumpServicedFloors()
 	Object::Report("");
 }
 
-bool ElevatorCar::AddServicedFloor(int number)
+bool ElevatorCar::AddServicedFloor(int number, bool create_shaft_door)
 {
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
@@ -570,7 +570,7 @@ bool ElevatorCar::AddServicedFloor(int number)
 			std::sort(ServicedFloors.begin(), ServicedFloors.end());
 
 			//add serviced floors to doors, if needed
-			if (Created == true)
+			if (Created == true && create_shaft_door == true)
 			{
 				for (size_t i = 0; i < DoorArray.size(); i++)
 				{
@@ -585,7 +585,7 @@ bool ElevatorCar::AddServicedFloor(int number)
 	return true;
 }
 
-void ElevatorCar::RemoveServicedFloor(int number)
+void ElevatorCar::RemoveServicedFloor(int number, bool remove_shaft_door)
 {
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
@@ -599,7 +599,7 @@ void ElevatorCar::RemoveServicedFloor(int number)
 		ServicedFloors.erase(ServicedFloors.begin() + index);
 
 	//remove serviced floors from doors
-	if (Created == true)
+	if (Created == true && remove_shaft_door == true)
 	{
 		for (size_t i = 0; i < DoorArray.size(); i++)
 		{
@@ -652,18 +652,6 @@ int ElevatorCar::GetServicedFloor(int index)
 	if (index >= 0 && index < (int)ServicedFloors.size())
 		return ServicedFloors[index];
 	return 0;
-}
-
-int ElevatorCar::GetServicedFloorIndex(int floor)
-{
-	//get the index of the specified serviced floor
-
-	for (size_t i = 0; i < ServicedFloors.size(); i++)
-	{
-		if (ServicedFloors[i] == floor)
-			return i;
-	}
-	return -1;
 }
 
 bool ElevatorCar::CheckServicedFloors()
@@ -1934,7 +1922,7 @@ bool ElevatorCar::DoorExists(int number)
 	return false;
 }
 
-bool ElevatorCar::ShaftDoorsExist(int number, int floor)
+bool ElevatorCar::ShaftDoorsExist(int number, int floor, bool include_nonserviced)
 {
 	//return true if shaft doors exist on the specified floor
 
@@ -1949,7 +1937,7 @@ bool ElevatorCar::ShaftDoorsExist(int number, int floor)
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
 		{
-			if (door->ShaftDoorsExist(floor) == true)
+			if (door->ShaftDoorsExist(floor, include_nonserviced) == true)
 				return true;
 		}
 	}
@@ -3609,6 +3597,8 @@ void ElevatorCar::Requested(int floor)
 	else if (e->LimitQueue == true && ((e->QueuePositionDirection == 1 && floor < GetFloor() && e->UpQueue.empty() == false) || (e->QueuePositionDirection == -1 && floor > GetFloor() && e->DownQueue.empty() == false)))
 		KeypadError();
 	else if (e->LimitQueue == true && e->IsMoving == true && floor == GetFloor())
+		KeypadError();
+	else if (GetFloorIndex(floor) == -1)
 		KeypadError();
 	else
 		UpdateKeypadIndicator(message);

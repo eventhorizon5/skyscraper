@@ -109,6 +109,9 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 
 	Real tempposition, temporigin;
 
+	if (!wrapper)
+		return;
+
 	if (wrapper->rotate == true)
 		return;
 
@@ -395,6 +398,9 @@ void DoorComponent::MoveDoors(bool open, bool manual)
 
 void DoorComponent::RotateDoors(bool open)
 {
+	if (!wrapper)
+		return;
+
 	if (wrapper->rotate == false)
 		return;
 
@@ -438,6 +444,9 @@ void DoorComponent::RotateDoors(bool open)
 void DoorComponent::Move()
 {
 	//move elevator doors
+
+	if (!wrapper)
+		return;
 
 	bool DoorDirection = false;
 	Real speed = 0;
@@ -485,6 +494,9 @@ void DoorComponent::Move()
 void DoorComponent::Reset(bool open)
 {
 	//reset door state
+
+	if (!wrapper)
+		return;
 
 	if (wrapper->rotate == true)
 		return;
@@ -653,7 +665,10 @@ void DoorWrapper::Enabled(bool value)
 		return;
 
 	for (size_t i = 0; i < doors.size(); i++)
-		doors[i]->mesh->Enabled(value);
+	{
+		if (doors[i])
+			doors[i]->mesh->Enabled(value);
+	}
 
 	IsEnabled = value;
 }
@@ -663,10 +678,13 @@ void DoorWrapper::MoveDoors(bool open, bool manual)
 	//calls per-door move function
 	for (size_t i = 0; i < doors.size(); i++)
 	{
-		if (rotate == false)
-			doors[i]->MoveDoors(open, manual);
-		else
-			doors[i]->RotateDoors(open);
+		if (doors[i])
+		{
+			if (rotate == false)
+				doors[i]->MoveDoors(open, manual);
+			else
+				doors[i]->RotateDoors(open);
+		}
 	}
 }
 
@@ -676,9 +694,12 @@ bool DoorWrapper::CheckDoorsOpen()
 
 	for (size_t i = 0; i < doors.size(); i++)
 	{
-		//exit if the status is the same on any door
-		if (doors[i]->is_open == Open)
-			return false;
+		if (doors[i])
+		{
+			//exit if the status is the same on any door
+			if (doors[i]->is_open == Open)
+				return false;
+		}
 	}
 
 	//if the status changed, set the new status and return true
@@ -692,9 +713,12 @@ bool DoorWrapper::IsFinished()
 
 	for (size_t i = 0; i < doors.size(); i++)
 	{
-		//exit if any door is not finished
-		if (doors[i]->finished == false)
-			return false;
+		if (doors[i])
+		{
+			//exit if any door is not finished
+			if (doors[i]->finished == false)
+				return false;
+		}
 	}
 	return true;
 }
@@ -705,7 +729,8 @@ void DoorWrapper::ResetFinished()
 
 	for (size_t i = 0; i < doors.size(); i++)
 	{
-		doors[i]->finished = false;
+		if (doors[i])
+			doors[i]->finished = false;
 	}
 }
 
@@ -715,8 +740,11 @@ void DoorWrapper::StopDoors()
 
 	for (size_t i = 0; i < doors.size(); i++)
 	{
-		doors[i]->active_speed = 0;
-		doors[i]->door_section = 0;
+		if (doors[i])
+		{
+			doors[i]->active_speed = 0;
+			doors[i]->door_section = 0;
+		}
 	}
 }
 
@@ -727,7 +755,10 @@ void DoorWrapper::ResetState()
 	Open = false;
 
 	for (size_t i = 0; i < doors.size(); i++)
-		doors[i]->Reset(false);
+	{
+		if (doors[i])
+			doors[i]->Reset(false);
+	}
 }
 
 void DoorWrapper::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)

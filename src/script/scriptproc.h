@@ -81,6 +81,7 @@ public:
 	};
 
 	std::vector<VariableMap> variables; //named user variables
+	std::vector<std::string> nonexistent_files; //missing files list
 
 	bool getfloordata;
 	int line; //line number
@@ -119,7 +120,6 @@ private:
 	std::vector<FunctionData> FunctionStack;
 	bool ReplaceLine;
 	std::string ReplaceLineData;
-	std::vector<std::string> nonexistent_files;
 	bool CalcError;
 	bool show_percent;
 	int progress_marker;

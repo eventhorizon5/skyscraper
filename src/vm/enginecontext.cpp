@@ -189,7 +189,7 @@ bool EngineContext::Run()
 		vm->GetGUI()->RaiseWindow();
 		raised = true;
 
-		processor->ReportMissingFiles();
+		vm->ReportMissingFiles(processor->nonexistent_files);
 	}
 
 	//process internal clock

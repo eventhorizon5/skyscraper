@@ -108,8 +108,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	fps_frame_count = 0;
 	fps_tottime = 0;
 	FPS = 0;
-	FrameRate = 30;
-	FrameLimiter = false;
 	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
 	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
@@ -173,6 +171,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
 	power_state = true;
+	Lobby = 0;
 
 	//create utility object
 	utility = new Utility(this);
@@ -4056,14 +4055,14 @@ void SBS::EnableRandomActivity(bool value)
 		people = people == 0 ? GetTotalFloors() : people;
 		for (int i = 0; i < people; i++)
 		{
-			Person *person = CreatePerson("Random " + ToString(i + 1), 0, false);
+			Person *person = CreatePerson("Random " + ToString(i + 1), Lobby, false);
 
 			//enable random activity on the person
 			person->EnableRandomActivity(true);
 		}
 
 		//create a service person
-		Person *person = CreatePerson("Random " + ToString(people + 1), 0, true);
+		Person *person = CreatePerson("Random " + ToString(people + 1), Lobby, true);
 
 		//enable random activity on the person
 		person->EnableRandomActivity(true);

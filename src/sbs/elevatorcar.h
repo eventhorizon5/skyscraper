@@ -93,13 +93,12 @@ public:
 	Indicator* AddKeypadIndicator(const std::string& sound, const std::string& texture_prefix, const std::string& blank_texture, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real timer_duration);
 	ButtonPanel* CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real spacingX, Real spacingY, Real tw, Real th);
 	void DumpServicedFloors();
-	bool AddServicedFloor(int number);
-	void RemoveServicedFloor(int number);
+	bool AddServicedFloor(int number, bool create_shaft_door = true);
+	void RemoveServicedFloor(int number, bool remove_shaft_door = true);
 	bool IsServicedFloor(int floor, bool report = true);
 	int GetFloorIndex(int floor);
 	int GetServicedFloorCount();
 	int GetServicedFloor(int index);
-	int GetServicedFloorIndex(int floor);
 	bool CheckServicedFloors();
 	void Alarm();
 	void OpenHatch();
@@ -141,7 +140,7 @@ public:
 	bool AreDoorsClosing(int number = 0, bool car_doors = true, bool shaft_doors = true);
 	void SetShaftDoors(int number, Real thickness, Real CenterX, Real CenterZ);
 	bool DoorExists(int number);
-	bool ShaftDoorsExist(int number, int floor);
+	bool ShaftDoorsExist(int number, int floor, bool include_nonserviced = false);
 	Sound* AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, Vector3 direction = Vector3(0, 0, 0));
 	Reverb* AddReverb(const std::string &name, const std::string &type, const Vector3 &position, Real min_distance, Real max_distance);
 	DoorWrapper* AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, Real thickness, const std::string &direction, Real OpenSpeed, Real CloseSpeed, Real x1, Real z1, Real x2, Real z2, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);

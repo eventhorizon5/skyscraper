@@ -97,6 +97,7 @@ public:
 	void ShowPlatform();
 	wxWindow* GetParent();
 	void UpdateProgress();
+	bool ReportMissingFiles(std::vector<std::string> &missing_files);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering

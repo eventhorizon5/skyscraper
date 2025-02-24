@@ -763,6 +763,30 @@ bool Elevator::RouteExists(bool direction, int floor)
 
 bool Elevator::CallCancel()
 {
+	//cancel the last route
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
+	if (Running == false)
+		return ReportError("Elevator not running");
+
+	if (LastQueueFloor[1] == 0)
+	{
+		if (sbs->Verbose)
+			ReportError("CallCancel: no valid routes");
+		return false;
+	}
+
+	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
+	Report("cancelled last call");
+
+	return true;
+}
+
+bool Elevator::CallCancelAll()
+{
 	//cancels all added routes
 
 	//only run if power is enabled
@@ -780,7 +804,8 @@ bool Elevator::CallCancel()
 	}
 
 	Report("cancelled all calls");
-        ResetQueue(true, true);
+	ResetQueue(true, true);
+
 	return true;
 }
 
@@ -2796,7 +2821,7 @@ bool Elevator::EnableInspectionService(bool value)
 		if (IsMoving == true)
 			Stop();
 		else
-			ReturnToNearestFloor();
+			ReturnToNearestFloor(true);
 	}
 
 	return true;
@@ -3839,7 +3864,12 @@ bool Elevator::SelectFloor(int floor)
 	//elevator is on floor
 	if (car->GetFloor() == floor)
 	{
-		if (Direction == 0)
+		if (IsLeveled() == false)
+		{
+			//relevel elevator if needed
+			ReturnToNearestFloor(false);
+		}
+		else if (Direction == 0)
 		{
 			//stopped - play chime and reopen doors
 			if (ReOpen == true)
@@ -3897,7 +3927,7 @@ bool Elevator::Check(Vector3 position)
 	return false;
 }
 
-bool Elevator::ReturnToNearestFloor()
+bool Elevator::ReturnToNearestFloor(bool parking)
 {
 	//return and relevel to nearest floor
 
@@ -3909,7 +3939,8 @@ bool Elevator::ReturnToNearestFloor()
 	{
 		int floor = GetCar(1)->GetNearestServicedFloor();
 		Report("returning to nearest floor");
-		Parking = true; //enable parking mode to prevent arrival notification
+		if (parking == true)
+			Parking = true; //enable parking mode to prevent arrival notification
 
 		if (floor >= GetCar(1)->GetFloor())
 			AddRoute(floor, 1, 2);

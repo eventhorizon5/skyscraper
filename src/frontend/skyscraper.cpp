@@ -432,7 +432,7 @@ bool Skyscraper::Loop()
 		}
 	}
 
-	if (status == 2)
+	if (status == 2 ||  status == -1)
 		UnloadToMenu();
 
 	//ProfileManager::dumpAll();

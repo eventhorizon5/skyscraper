@@ -1367,7 +1367,7 @@ void editelevator::Loop()
 
 		if (set_current_floor == true)
 		{
-			sFloor->SetThumbPosition(car->GetServicedFloorIndex(Simcore->camera->CurrentFloor));
+			sFloor->SetThumbPosition(car->GetFloorIndex(Simcore->camera->CurrentFloor));
 			set_current_floor = false;
 		}
 
@@ -1574,13 +1574,16 @@ void editelevator::SetMainValues()
 	{
 		for (int i = 0; i < Simcore->GetFloorManager()->GetCount(); i++)
 		{
-			Floor *floor = Simcore->GetFloorManager()->Get(i);
+			Floor *floor = Simcore->GetFloorManager()->GetIndex(i);
 			if (floor)
 			{
-				std::string number = ToString(floor->Number);
-				int index = chkServicedFloors->Append(number + " (" + floor->ID + ")");
-				bool is_serviced = car->IsServicedFloor(floor->Number);
-				chkServicedFloors->Check(index, is_serviced);
+				if (car->ShaftDoorsExist(0, floor->Number, true))
+				{
+					std::string number = ToString(floor->Number);
+					int index = chkServicedFloors->Append(number + " (" + floor->ID + ")");
+					bool is_serviced = car->IsServicedFloor(floor->Number);
+					chkServicedFloors->Check(index, is_serviced);
+				}
 			}
 		}
 	}
@@ -1993,7 +1996,7 @@ void editelevator::On_bSelectCurrent_Click(wxCommandEvent& event)
 	{
 		sNumber->SetThumbPosition(Simcore->ElevatorNumber - 1);
 		sCar->SetThumbPosition(Simcore->CarNumber - 1);
-		sFloor->SetThumbPosition(car->GetServicedFloorIndex(Simcore->camera->CurrentFloor));
+		sFloor->SetThumbPosition(car->GetFloorIndex(Simcore->camera->CurrentFloor));
 		set_current_floor = true;
 	}
 }
@@ -2025,9 +2028,9 @@ void editelevator::On_chkServicedFloors_Toggled(wxCommandEvent& event)
 	std::string name = chkServicedFloors->GetString(index).ToStdString();
 
 	if (chkServicedFloors->IsChecked(index) == true)
-		car->AddServicedFloor(ToInt(name));
+		car->AddServicedFloor(ToInt(name), false);
 	else
-		car->RemoveServicedFloor(ToInt(name));
+		car->RemoveServicedFloor(ToInt(name), false);
 }
 
 }

@@ -569,7 +569,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 {
 	//run system
 
-	//return codes are 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
+	//return codes are -1 for fatal error, 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
 
 	//show progress dialog if needed
 	//gui->ShowProgress();
@@ -622,7 +622,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//render graphics
 	result = hal->Render();
 	if (!result)
-		return 0;
+		return -1;
 
 	//handle a building reload
 	HandleReload();
@@ -835,6 +835,12 @@ void VM::UpdateProgress()
 	int final = ((Real)current_percent / (Real)total_percent) * 100;
 
 	gui->UpdateProgress(final);
+}
+
+bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)
+{
+	//report missing files
+	return gui->ReportMissingFiles(missing_files);
 }
 
 }

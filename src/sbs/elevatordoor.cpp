@@ -225,13 +225,7 @@ void ElevatorDoor::AddServicedFloor(int floor)
 	{
 		if (ShaftDoors[i])
 		{
-			if (i == 0 && ShaftDoors[i]->floor > floor)
-			{
-				//insert at bottom
-				ShaftDoors.insert(ShaftDoors.begin(), wrapper);
-				return;
-			}
-			else if (ShaftDoors[i]->floor > floor && ShaftDoors[i - 1]->floor < floor)
+			if (ShaftDoors[i]->floor > floor)
 			{
 				//insert inside
 				ShaftDoors.insert(ShaftDoors.begin() + i, wrapper);
@@ -242,7 +236,6 @@ void ElevatorDoor::AddServicedFloor(int floor)
 
 	//insert at top
 	ShaftDoors.emplace_back(wrapper);
-		return;
 }
 
 void ElevatorDoor::RemoveServicedFloor(int floor)
@@ -255,22 +248,13 @@ void ElevatorDoor::RemoveServicedFloor(int floor)
 		{
 			if (ShaftDoors[i]->floor == floor)
 			{
+				//delete the matching element
 				delete ShaftDoors[i];
 				ShaftDoors.erase(ShaftDoors.begin() + i);
 				return;
 			}
-			if (ShaftDoors[i]->floor > floor && i > 0)
-			{
-				//erase previous element
-				ShaftDoors.erase(ShaftDoors.begin() + i - 1);
-				return;
-			}
 		}
 	}
-
-	//if not found, remove last element
-	if (!ShaftDoors.back())
-		ShaftDoors.pop_back();
 }
 
 void ElevatorDoor::OpenDoorsEmergency(int whichdoors, int floor)
@@ -552,8 +536,11 @@ void ElevatorDoor::StopDoors()
 			Doors->StopDoors();
 		if (WhichDoors == 1 || WhichDoors == 3)
 		{
-			if (ShaftDoors[index])
-				ShaftDoors[index]->StopDoors();
+			if (index >= 0)
+			{
+				if (ShaftDoors[index])
+					ShaftDoors[index]->StopDoors();
+			}
 		}
 
 		DoorIsRunning = false;
@@ -609,7 +596,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		DoorIsRunning = true;
 		door_changed = false;
 
-		index = car->GetFloorIndex(ShaftDoorFloor);
+		index = GetIndex(ShaftDoorFloor);
 		int index2 = GetManualIndex(ShaftDoorFloor);
 
 		if (ShaftDoorsExist(ShaftDoorFloor) == false && index2 == -1)
@@ -644,7 +631,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		if (elevdoors == true)
 			Doors->ResetFinished();
 
-		if (shaftdoors == true)
+		if (shaftdoors == true && index >= 0)
 		{
 			if (ShaftDoors[index])
 				ShaftDoors[index]->ResetFinished();
@@ -701,7 +688,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	if (elevdoors == true)
 		Doors->MoveDoors(open, manual);
 
-	if (shaftdoors == true)
+	if (shaftdoors == true && index >= 0)
 	{
 		if (ShaftDoors[index])
 			ShaftDoors[index]->MoveDoors(open, manual);
@@ -717,7 +704,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		if (Doors->IsFinished() == false)
 			return;
 	}
-	if (shaftdoors == true)
+	if (shaftdoors == true && index >= 0)
 	{
 		if (ShaftDoors[index])
 		{
@@ -1279,7 +1266,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 		return;
 
 	//exit if elevator doesn't service the requested floor
-	int index = car->GetFloorIndex(floor);
+	int index = GetIndex(floor);
 
 	if (index == -1)
 		return;
@@ -1337,7 +1324,7 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	//returns the internal door state
 	if (ShaftDoorsExist(floor))
 	{
-		int index = car->GetFloorIndex(floor);
+		int index = GetIndex(floor);
 
 		if (index > -1)
 		{
@@ -1524,7 +1511,7 @@ Real ElevatorDoor::GetShaftDoorAltitude(int floor)
 {
 	//returns altitude of the shaft door on the specified floor
 
-	int index = car->GetFloorIndex(floor);
+	int index = GetIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1557,18 +1544,31 @@ void ElevatorDoor::MoveSound(const Vector3 &position, bool relative_x, bool rela
 	nudgesound->SetPosition(pos);
 }
 
-bool ElevatorDoor::ShaftDoorsExist(int floor)
+bool ElevatorDoor::ShaftDoorsExist(int floor, bool include_nonserviced)
 {
 	//return true if shaft doors have been created for this door on the specified floor
 
-	int index = car->GetFloorIndex(floor);
+	int index = GetIndex(floor);
 
 	if (index != -1)
 	{
+		//if shaft doors exist on a serviced floor
 		if (ShaftDoors[index])
 		{
 			if (ShaftDoors[index]->doors.size() > 0)
 				return true;
+		}
+	}
+	else if (include_nonserviced == true)
+	{
+		//if shaft doors exist on a non-serviced floor
+		for (size_t i = 0; i < ShaftDoors.size(); i++)
+		{
+			if (ShaftDoors[i])
+			{
+				if (ShaftDoors[i]->floor == floor)
+					return true;
+			}
 		}
 	}
 	return false;
@@ -1584,7 +1584,7 @@ DoorWrapper* ElevatorDoor::GetShaftDoorWrapper(int floor)
 {
 	//return shaft door wrapper object for the specified floor
 
-	int index = car->GetFloorIndex(floor);
+	int index = GetIndex(floor);
 
 	if (index == -1)
 		return 0;
@@ -1900,6 +1900,19 @@ bool ElevatorDoor::GetDoorChanged()
 bool ElevatorDoor::GetPreviousOpen()
 {
 	return previous_open;
+}
+
+int ElevatorDoor::GetIndex(int floor)
+{
+	for (size_t i = 0; i < ShaftDoors.size(); i++)
+	{
+		if (ShaftDoors[i])
+		{
+			if (ShaftDoors[i]->floor == floor)
+				return (int)i;
+		}
+	}
+	return -1;
 }
 
 }
