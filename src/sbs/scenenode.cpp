@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - SceneNode Object
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
