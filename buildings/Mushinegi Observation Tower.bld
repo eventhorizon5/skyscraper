@@ -222,7 +222,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     Height = 10
     InterfloorHeight = 2.24
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Ceiling1, 0.5, -100, -100, 100, 100, %height%, %height%, false, false, 0, 0, False
+    AddFloor Ceiling, Ceiling1, 0.5, -100, -100, 100, 100, %height%, %height%, false, false, 0, 0, True
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 <Floor 8>
