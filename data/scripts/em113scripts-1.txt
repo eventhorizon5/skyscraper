@@ -1,0 +1,35 @@
+<Function tvindo2>
+    Set Tvri1 = TVRI1
+    Set Tvri2 = TVRI2
+    Set Tvri3 = TVRI3
+    Set Tvri4 = TVRI4
+    Set MetroG1 = MetroTV
+    Set MetroG2 = NusantaraTV
+    Set MetroG2a = MagnaTV
+    Set MetroG3 = BNTV
+    Set MetroG4 = GarudaTV
+    Set Scm1 = SCTV
+    Set Scm2 = Indosiar
+    Set Scm3 = Moji
+    Set Scm4 = MentariTV
+    Set Mnc1 = RCTI
+    Set Mnc2 = MNCTV
+    Set Mnc3 = GTV
+    Set Mnc4 = iNews
+    Set Viva1 = ANTV
+    Set Viva2 = tvOne
+    Set Viva3 = VTV
+    Set TransCorp1 = TransTV
+    Set TransCorp2 = Trans7
+    Set TransCorp3 = CNNID
+    Set TransCorp4 = CNBCID
+    Set NTV1 = %MetroG2%
+    Set NTV2 = HarumTV
+    Set NTV3 = GoldTV
+    Set GarudaTV = %MetroG4%
+    Set MDTV = MDTV
+    Set TvClp2 = RTV
+    Set TvClp5 = NET
+    Set TvClp12 = GlobalTV
+    Set TvClp16 = JTV
+<EndFunction>
