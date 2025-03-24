@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Generic Object Class
+	Scalable Building Simulator - Generic Object Classes
 	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
