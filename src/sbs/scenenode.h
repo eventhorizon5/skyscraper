@@ -26,7 +26,7 @@
 
 namespace SBS {
 
-class SBSIMPEXP SceneNode: public ObjectBase
+class SBSIMPEXP SceneNode : public ObjectBase
 {
 public:
 
