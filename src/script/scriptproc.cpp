@@ -22,10 +22,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
 #include "wx/wx.h"
-#endif
 #include <OgreFileSystem.h>
 #include <OgreArchive.h>
 #include <OgreArchiveManager.h>
