@@ -20,8 +20,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/dir.h"
 #include "wx/cmdline.h"
@@ -29,7 +27,6 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/joystick.h"
-#endif
 #include <locale>
 #include <time.h>
 #include <thread>

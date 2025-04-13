@@ -20,10 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
 #include "wx/wx.h"
-#endif
 #include "globals.h"
 #include "skyscraper.h"
 #include "vm.h"

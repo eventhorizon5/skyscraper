@@ -20,11 +20,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/joystick.h"
-#endif
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreViewport.h>
