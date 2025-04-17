@@ -20,8 +20,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/dir.h"
 #include "wx/progdlg.h"
@@ -29,7 +27,6 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
-#endif
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
