@@ -30,6 +30,8 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <OgreOverlaySystem.h>
+#include <OgreImGuiOverlay.h>
+#include <OgreImGuiInputListener.h>
 
 //FMOD
 #include <fmod_errors.h>
@@ -638,12 +640,25 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Report("Initialization complete");
 	Report("");
 
+	ImGuiContext *ctx = ImGui::CreateContext();
+	ImGui::SetCurrentContext(ctx);
+
+	ImGuiIO& io = ImGui::GetIO();
+	//ImFont* font = io.Fonts->AddFontFromFileTTF("data/fonts/nimbus_sans.ttf", 14);
+	//ImGui::PushFont(font);
+	io.Fonts->AddFontDefault();
+	io.Fonts->Build();
+
 	return true;
 }
 
 bool HAL::Render()
 {
 	SBS_PROFILE_MAIN("Render");
+
+	//process imgui
+	Ogre::ImGuiOverlay::NewFrame();
+	ImGui::ShowDemoWindow();
 
 	//render to the frame buffer
 	try
