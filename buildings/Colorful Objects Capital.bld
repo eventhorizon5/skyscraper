@@ -1,6 +1,6 @@
 <Globals>
     Name = Colorful Objects Capital
-    Designer = EM113
+    Designer = EM113, Elevator1512
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -60
