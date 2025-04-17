@@ -593,6 +593,7 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 
 	Vector3 pos = sbs->ToLocal(ray.getOrigin());
 
+	//only report if in verbose mode, and if the camera is outside of this simulator
 	if (sbs->Verbose && hit_only == false)
 	{
 		if (Cameras.size() == 0)
@@ -604,6 +605,7 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
 	Vector3 hit_pos = HitPosition - sbs->GetPosition();
 
+	//report hit position if in verbose mode
 	if (hit == true)
 	{
 		result = pos.distance(hit_pos);
