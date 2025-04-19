@@ -31,8 +31,10 @@
 #include <OgreSGTechniqueResolverListener.h>
 #include <OgreOverlaySystem.h>
 
-//FMOD
-#include <fmod_errors.h>
+#ifndef DISABLE_SOUND
+	//FMOD
+	#include <fmod_errors.h>
+#endif
 
 //OpenXR interfaces
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -87,8 +89,10 @@ HAL::HAL(VM *vm)
 
 HAL::~HAL()
 {
+#ifndef DISABLE_SOUND
 	if (soundsys)
 		soundsys->release();
+#endif
 
 	delete mOverlaySystem;
 
@@ -571,6 +575,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
 	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
+#ifndef DISABLE_SOUND
 	//initialize FMOD (sound)
 	DisableSound = GetConfigBool(configfile, "Skyscraper.Frontend.DisableSound", false);
 	if (DisableSound == false)
@@ -615,6 +620,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		}
 	}
 	else
+#endif
 		Report("Sound Disabled");
 
 	try

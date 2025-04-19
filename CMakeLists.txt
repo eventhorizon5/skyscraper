@@ -57,6 +57,8 @@ find_package(FMOD)
 
 if(NOT FMOD_FOUND)
         set (CMAKE_CXX_FLAGS "-DDISABLE_SOUND ${CMAKE_CXX_FLAGS}")
+	set (FMOD_INCLUDE_DIR "")
+	set (FMOD_LIBRARY "")
 endif()
 
 #find GTK
@@ -131,7 +133,9 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
 	${OGRE_RTShaderSystem_INCLUDE_DIRS}
 	${OGRE_Bites_INCLUDE_DIRS}
+if(NOT FMOD_FOUND)
 	${FMOD_INCLUDE_DIR}
+endif()
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
@@ -217,7 +221,11 @@ if (WIN32)
 	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY} ${OGRE_D3D11_LIB})
 endif ()
 
+if(NOT FMOD_FOUND)
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
+else()
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
+endif()
 
 if (NOT WIN32)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})

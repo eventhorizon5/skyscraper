@@ -21,7 +21,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <fmod.hpp>
+#ifndef DISABLE_SOUND
+	#include <fmod.hpp>
+#endif
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"

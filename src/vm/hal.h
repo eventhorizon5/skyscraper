@@ -28,7 +28,9 @@
 #include <Ogre.h>
 #include <OgreLog.h>
 #include <OgreTrays.h>
-#include <fmod.hpp>
+#ifndef DISABLE_SOUND
+	#include <fmod.hpp>
+#endif
 #include "vm.h"
 
 namespace Ogre {
