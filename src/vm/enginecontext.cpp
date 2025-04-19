@@ -358,8 +358,13 @@ void EngineContext::UnloadSim()
 	started = false;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef __linux__
 	//release free memory to OS on Linux
 	malloc_trim(0);
+#else
+	//freebsd
+#endif
+
 #endif
 }
 
