@@ -64,15 +64,19 @@ public:
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
 	void Unload();
+#ifndef DISABLE_SOUND
 	FMOD::Channel* GetChannel();
+#endif
 	bool GetNearestReverbPosition(Vector3 &position);
 
 private:
 
 	bool IsValid();
 
+#ifndef DISABLE_SOUND
 	//sound channel
 	FMOD::Channel *channel;
+#endif
 
 	//associated sound data
 	SoundData *sound;

@@ -38,6 +38,7 @@ class SBSIMPEXP SoundSystem : public Object
 public:
 
 	SoundSystem(Object *parent, FMOD::System *fmodsystem);
+	SoundSystem(Object *parent);
 	~SoundSystem();
 	void SetListenerPosition(const Vector3 &position);
 	void SetListenerDirection(const Vector3 &front, const Vector3 &top);
@@ -49,19 +50,23 @@ public:
 	bool IsLoaded(std::string filename);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
+#ifndef DISABLE_SOUND
 	FMOD::Channel* Prepare(SoundData *data);
+	FMOD::System* GetFmodSystem();
+#endif
 	SoundData* GetSoundData(std::string filename);
 	SoundData* GetSoundData(int number);
 	int GetPlayingCount();
 	int GetSoundCount();
 	void ShowLoadedSounds();
 	void ShowPlayingSounds();
-	FMOD::System* GetFmodSystem();
 
 private:
 
+#ifndef DISABLE_SOUND
 	//FMOD system
 	FMOD::System *soundsys;
+#endif
 
 	//listener sound data
 	Vector3 listener_position;
@@ -77,7 +82,9 @@ private:
 	//reverbs
 	struct Reverb
 	{
+#ifndef DISABLE_SOUND
 		FMOD::Reverb3D* object;
+#endif
 		Vector3 position;
 	};
 	std::vector<Reverb> reverbs;
@@ -90,13 +97,19 @@ struct SBSIMPEXP SoundData
 	void AddHandle(Sound *handle);
 	void RemoveHandle(Sound *handle);
 	int GetHandleCount() { return (int)handles.size(); }
+#ifndef DISABLE_SOUND
 	void AddChannel(FMOD::Channel *channel);
 	void RemoveChannel(FMOD::Channel *channel);
 	int GetChannelCount() { return (int)channels.size(); }
+#else
+	int GetChannelCount() { return 0; }
+#endif
 	FMOD::Sound* sound; //sound data object
 	std::string filename; //filename of sound file
 	std::vector<Sound*> handles; //associated sound objects
+#ifndef DISABLE_SOUND
 	std::vector<FMOD::Channel*> channels; //associated sound channels
+#endif
 };
 
 }
