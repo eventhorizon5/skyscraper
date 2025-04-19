@@ -665,6 +665,8 @@ bool HAL::Render()
 
 bool HAL::PlaySound(const std::string &filename)
 {
+#ifndef DISABLE_SOUND
+
 	//load new sound
 #if (FMOD_VERSION >> 16 == 4)
 		FMOD_RESULT result = soundsys->createSound(filename.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
@@ -691,17 +693,20 @@ bool HAL::PlaySound(const std::string &filename)
 	channel->setVolume(1.0);
 	channel->setPaused(false);
 
+#endif
 	return true;
 }
 
 void HAL::StopSound()
 {
 	//stop and unload sound
+#ifndef DISABLE_SOUND
 	if (channel)
 		channel->stop();
 	if (sound)
 		sound->release();
 	sound = 0;
+#endif
 }
 
 void HAL::ClearScene()
