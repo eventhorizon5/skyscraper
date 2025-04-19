@@ -53,7 +53,7 @@ find_package(OgreProcedural REQUIRED)
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 
 #find FMOD
-#find_package(FMOD)
+find_package(FMOD)
 
 if(NOT FMOD_FOUND)
         set (CMAKE_CXX_FLAGS "-DDISABLE_SOUND ${CMAKE_CXX_FLAGS}")
