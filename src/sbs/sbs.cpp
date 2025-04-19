@@ -27,7 +27,9 @@
 #include <OgreConfigFile.h>
 #include <OgreTimer.h>
 #include "OgreStringVector.h"
+#ifndef DISABLE_SOUND
 #include <fmod.hpp>
+#endif
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletCollisionsRay.h>
 #include "globals.h"

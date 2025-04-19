@@ -21,7 +21,9 @@
 */
 
 #include "wx/wx.h"
+#ifndef DISABLE_SOUND
 #include <fmod.hpp>
+#endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include <windows.h>
 #endif
@@ -48,46 +50,51 @@ namespace Skyscraper {
 
 EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	this->vm = vm;
-	finish_time = 0;
-	shutdown = false;
-	loading = false;
-	running = false;
-	reloading = false;
-	Reload = false;
-	reload_state = new CameraState;
-	reload_state->floor = 0;
-	reload_state->collisions = false;
-	reload_state->gravity = false;
-	reload_state->freelook = false;
-	this->mSceneManager = mSceneManager;
 	this->fmodsystem = fmodsystem;
-	this->position = position;
-	this->area_min = area_min;
-	this->area_max = area_max;
-	this->rotation = rotation;
-	this->parent = parent;
-	Simcore = 0;
-	processor = 0;
-	raised = false;
-	progress = 0;
-	inside = false;
-	Moved = false;
-	started = false;
-	prepared = false;
+	EngineContext(parent, vm, mSceneManager, position, rotation, area_min, area_max);
+}
 
-	//register this engine, and get it's instance number
-	instance = vm->RegisterEngine(this);
+EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+        this->vm = vm;
+        finish_time = 0;
+        shutdown = false;
+        loading = false;
+        running = false;
+        reloading = false;
+        Reload = false;
+        reload_state = new CameraState;
+        reload_state->floor = 0;
+        reload_state->collisions = false;
+        reload_state->gravity = false;
+        reload_state->freelook = false;
+        this->mSceneManager = mSceneManager;
+        this->position = position;
+        this->area_min = area_min;
+        this->area_max = area_max;
+        this->rotation = rotation;
+        this->parent = parent;
+        Simcore = 0;
+        processor = 0;
+        raised = false;
+        progress = 0;
+        inside = false;
+        Moved = false;
+        started = false;
+        prepared = false;
 
-	Report("\nStarting instance " + ToString(instance) + "...");
+        //register this engine, and get it's instance number
+        instance = vm->RegisterEngine(this);
 
-	//add instance number to reports
-	InstancePrompt = ToString(instance) + ">";
+        Report("\nStarting instance " + ToString(instance) + "...");
 
-	if (parent)
-		parent->AddChild(this);
+        //add instance number to reports
+        InstancePrompt = ToString(instance) + ">";
 
-	StartSim();
+        if (parent)
+                parent->AddChild(this);
+
+        StartSim();
 }
 
 EngineContext::~EngineContext()
@@ -342,9 +349,11 @@ void EngineContext::UnloadSim()
 	}
 	Simcore = 0;
 
+#ifndef DISABLE_SOUND
 	//reset fmod reverb
 	FMOD_REVERB_PROPERTIES prop = FMOD_PRESET_GENERIC;
 	fmodsystem->setReverbProperties(0, &prop);
+#endif
 
 	//unload script processor
 	if (processor)
