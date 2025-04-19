@@ -764,7 +764,11 @@ void VM::ShowPlatform()
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	Platform = "Windows " + Architecture + " " + bits;
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	Platform = "Linux " + Architecture + " " + bits;
+	#ifdef  __FreeBSD__
+		Platform = "FreeBSD " + Architecture + " " + bits;
+	#else
+		Platform = "Linux " + Architecture + " " + bits;
+	#endif
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 	Platform = "MacOS " + Architecture + " " + bits;
 #endif
@@ -808,7 +812,11 @@ void VM::ShowPlatform()
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	struct utsname osInfo{};
 	uname(&osInfo);
-	GetHAL()->Report("Running on Linux " + std::string(osInfo.release), "");
+	#ifdef  __FreeBSD__
+		GetHAL()->Report("Running on FreeBSD " + std::string(osInfo.release), "");
+	#else
+		GetHAL()->Report("Running on Linux " + std::string(osInfo.release), "");
+	#endif
 #endif
 }
 
