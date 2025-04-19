@@ -51,50 +51,12 @@ namespace Skyscraper {
 EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->fmodsystem = fmodsystem;
-	EngineContext(parent, vm, mSceneManager, position, rotation, area_min, area_max);
+	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
 EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-        this->vm = vm;
-        finish_time = 0;
-        shutdown = false;
-        loading = false;
-        running = false;
-        reloading = false;
-        Reload = false;
-        reload_state = new CameraState;
-        reload_state->floor = 0;
-        reload_state->collisions = false;
-        reload_state->gravity = false;
-        reload_state->freelook = false;
-        this->mSceneManager = mSceneManager;
-        this->position = position;
-        this->area_min = area_min;
-        this->area_max = area_max;
-        this->rotation = rotation;
-        this->parent = parent;
-        Simcore = 0;
-        processor = 0;
-        raised = false;
-        progress = 0;
-        inside = false;
-        Moved = false;
-        started = false;
-        prepared = false;
-
-        //register this engine, and get it's instance number
-        instance = vm->RegisterEngine(this);
-
-        Report("\nStarting instance " + ToString(instance) + "...");
-
-        //add instance number to reports
-        InstancePrompt = ToString(instance) + ">";
-
-        if (parent)
-                parent->AddChild(this);
-
-        StartSim();
+	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
 EngineContext::~EngineContext()
@@ -116,6 +78,49 @@ EngineContext::~EngineContext()
 	if (reload_state)
 		delete reload_state;
 	reload_state = 0;
+}
+
+void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+	this->vm = vm;
+	finish_time = 0;
+	shutdown = false;
+	loading = false;
+	running = false;
+	reloading = false;
+	Reload = false;
+	reload_state = new CameraState;
+	reload_state->floor = 0;
+	reload_state->collisions = false;
+	reload_state->gravity = false;
+	reload_state->freelook = false;
+	this->mSceneManager = mSceneManager;
+	this->position = position;
+	this->area_min = area_min;
+	this->area_max = area_max;
+	this->rotation = rotation;
+	this->parent = parent;
+	Simcore = 0;
+	processor = 0;
+	raised = false;
+	progress = 0;
+	inside = false;
+	Moved = false;
+	started = false;
+	prepared = false;
+
+	//register this engine, and get it's instance number
+	instance = vm->RegisterEngine(this);
+
+	Report("\nStarting instance " + ToString(instance) + "...");
+
+	//add instance number to reports
+	InstancePrompt = ToString(instance) + ">";
+
+	if (parent)
+			parent->AddChild(this);
+
+	StartSim();
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
