@@ -118,11 +118,13 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	key_load = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Load", ";")[0];
 	key_enter = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Enter", "E")[0];
 
+#ifndef __FreeBSD__
 	joy_click = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Click", 0);
 	joy_fast = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Fast", 1);
 	joy_strafe = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Strafe", 2);
 	joy_turn = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Turn", 0);
 	joy_forward = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Forward", 1);
+#endif
 
 	//create panel, rendering is done on this, along with keyboard and mouse events
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
