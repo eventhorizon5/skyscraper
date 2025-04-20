@@ -51,7 +51,9 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
   EVT_ACTIVATE(MainScreen::OnActivate)
+#ifndef __FreeBSD__
   EVT_JOYSTICK_EVENTS(MainScreen::OnJoystickEvent)
+#endif
 END_EVENT_TABLE()
 
 MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -66,6 +68,8 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+
+#ifndef __FreeBSD__
 	joystick = new wxJoystick(wxJOYSTICK1);
 	if (joystick->IsOk())
 	{
@@ -74,6 +78,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	}
 	else
 		joy_buttons = -1;
+#endif
 
 	//reset input states
 	boxes = false;
@@ -137,8 +142,10 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 
 MainScreen::~MainScreen()
 {
+#ifndef __FreeBSD__
 	joystick->ReleaseCapture();
 	delete joystick;
+#endif
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
@@ -849,6 +856,7 @@ void MainScreen::EnableFreelook(bool value)
 #endif
 }
 
+#ifndef __FreeBSD__
 void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 {
 	if (event.IsZMove())
@@ -913,5 +921,6 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 	if (joystick->GetButtonState(joy_click))
 		engine->GetVM()->GetHAL()->ClickedObject(true, false, false, false, false, 0.0, true);
 }
+#endif
 
 }

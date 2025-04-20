@@ -296,6 +296,7 @@ bool Skyscraper::OnInit()
 	if (!hal->LoadSystem(vm->data_path, mRenderWindow))
 		return ReportError("Error loading system");
 
+#ifndef __FreeBSD__
 	//set up joystick if available
 	wxJoystick joystick(wxJOYSTICK1);
 	if (!joystick.IsOk())
@@ -306,6 +307,7 @@ bool Skyscraper::OnInit()
 		Report("Joystick detected: " + joystick.GetProductName().ToStdString());
 		Report("");
 	}
+#endif
 
 	vm->ShowPlatform();
 
