@@ -55,7 +55,7 @@ find_package(wxWidgets COMPONENTS core base REQUIRED)
 #find FMOD
 find_package(FMOD)
 
-if(NOT FMOD_FOUND)
+if(NOT FMOD_FOUND AND NOT WIN32)
         set (CMAKE_CXX_FLAGS "-DDISABLE_SOUND ${CMAKE_CXX_FLAGS}")
 	set (FMOD_INCLUDE_DIR "")
 	set (FMOD_LIBRARY "")
@@ -133,13 +133,12 @@ file (GLOB OGREBULLET_DYN_FILES
 	ogrebullet/Dynamics/src/Prefab/*.cpp
 )
 
+if(FMOD_FOUND)
 include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
 	${OGRE_RTShaderSystem_INCLUDE_DIRS}
 	${OGRE_Bites_INCLUDE_DIRS}
-if(NOT FMOD_FOUND)
 	${FMOD_INCLUDE_DIR}
-endif()
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
@@ -161,6 +160,33 @@ endif()
 	ogrebullet/Dynamics/include/Constraints
 	ogrebullet/Dynamics/include/Prefab
 )
+else()
+include_directories( ${OGRE_INCLUDE_DIRS}
+        ${OGRE_Overlay_INCLUDE_DIRS}
+        ${OGRE_RTShaderSystem_INCLUDE_DIRS}
+        ${OGRE_Bites_INCLUDE_DIRS}
+        ${GTK3_INCLUDE_DIRS}
+        ${BULLET_INCLUDE_DIRS}
+        ${Caelum_INCLUDE_DIRS}
+        ${OpenXR_INCLUDE_DIR}
+        ${OgreProcedural_INCLUDE_DIR}
+        src/frontend
+        src/vm
+        src/sbs
+        src/script
+        src/gui
+        src/alloc
+        src/openxr/include
+        src/openxr
+        ogrebullet/Collisions/include
+        ogrebullet/Collisions/include/Debug
+        ogrebullet/Collisions/include/Shapes
+        ogrebullet/Collisions/include/Utils
+        ogrebullet/Dynamics/include
+        ogrebullet/Dynamics/include/Constraints
+        ogrebullet/Dynamics/include/Prefab
+)
+endif()
  
 include(${wxWidgets_USE_FILE})
 
@@ -228,7 +254,7 @@ if (WIN32)
 	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY} ${OGRE_D3D11_LIB})
 endif ()
 
-if(NOT FMOD_FOUND)
+if(FMOD_FOUND)
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
 else()
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
