@@ -82,7 +82,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 	blink = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Blink", 0);
 	blink_active = false;
 	timer_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Timer", 15000);
-	blink_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.BlinkTimer", 1000);
+	blink_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.BlinkTimer", 500);
 
 	SetCase(Direction, false);
 	TrimString(Direction);
