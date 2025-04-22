@@ -48,7 +48,7 @@ public:
 		this->type = type;
 		blink_up = false;
 		blink_down = false;
-		blink_count = indicator->blink;
+		blink_count = 0;
 	}
 	virtual void Notify();
 };
@@ -527,6 +527,7 @@ void DirectionalIndicator::SetLights(int up, int down)
 	{
 		blink_timer->blink_up = UpStatus;
 		blink_timer->blink_down = DownStatus;
+		blink_timer->blink_count = blink;
 		blink_timer->Start(blink_interval);
 		blink_active = true;
 	}
@@ -562,7 +563,10 @@ void DirectionalIndicator::Timer::Notify()
 		blink_count--;
 
 		if (blink_count == 0)
+		{
 			Stop();
+			indicator->blink_active = false;
+		}
 	}
 }
 
