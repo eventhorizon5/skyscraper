@@ -523,7 +523,7 @@ void DirectionalIndicator::SetLights(int up, int down)
 		DownStatus = false;
 
 	//blink indicator if specified
-	if (blink > 0 && blink_active == false)
+	if (blink > 0 && blink_active == false && blink_timer)
 	{
 		blink_timer->blink_up = UpStatus;
 		blink_timer->blink_down = DownStatus;
