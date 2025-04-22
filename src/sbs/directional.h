@@ -33,6 +33,7 @@ public:
 	int elevator; //elevator this indicator is assigned to
 	int car; //elevator car this indicator is assigned to
 	int floor; //floor the indicator is on
+	int blink; //number of times to turn on/off indicator
 	std::string Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
 	std::string UpTextureUnlit; //unlit up texture
 	std::string UpTextureLit; //lit up texture
@@ -65,8 +66,11 @@ private:
 
 	//timer object
 	class Timer; //internal timer class
-	Timer* timer;
+	Timer* timer; //shut-off timer
+	Timer* blink_timer; //blink timer
 	int timer_interval;
+	int blink_interval;
+	bool blink_active;
 };
 
 }

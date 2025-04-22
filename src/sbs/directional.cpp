@@ -38,9 +38,17 @@ class DirectionalIndicator::Timer : public TimerObject
 {
 public:
 	DirectionalIndicator *indicator;
-	Timer(const std::string &name, DirectionalIndicator *parent) : TimerObject(parent, name)
+	int type;
+	bool blink_up, blink_down;
+	int blink_count;
+
+	Timer(const std::string &name, DirectionalIndicator *parent, int type = 0) : TimerObject(parent, name)
 	{
 		indicator = parent;
+		this->type = type;
+		blink_up = false;
+		blink_down = false;
+		blink_count = indicator->blink;
 	}
 	virtual void Notify();
 };
@@ -70,7 +78,11 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 	DirectionalMeshDown = 0;
 	DirectionalMesh = 0;
 	timer = 0;
+	blink_timer = 0;
+	blink = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Blink", 0);
+	blink_active = false;
 	timer_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Timer", 15000);
+	blink_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.BlinkTimer", 1000);
 
 	SetCase(Direction, false);
 	TrimString(Direction);
@@ -89,7 +101,10 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int car
 
 	//create timer
 	if (ActiveDirection == false)
-		timer = new Timer("Shut-off Timer", this);
+	{
+		timer = new Timer("Shut-off Timer", this, 0);
+		blink_timer = new Timer("Blink Timer", this, 1);
+	}
 
 	//move object
 	Move(CenterX, voffset, CenterZ);
@@ -333,6 +348,13 @@ DirectionalIndicator::~DirectionalIndicator()
 	}
 	timer = 0;
 
+	if (blink_timer)
+	{
+		blink_timer->parent_deleting = true;
+		delete blink_timer;
+	}
+	blink_timer = 0;
+
 	if (DirectionalMesh)
 	{
 		DirectionalMesh->parent_deleting = true;
@@ -499,18 +521,49 @@ void DirectionalIndicator::SetLights(int up, int down)
 		DownStatus = true;
 	if (down == 2)
 		DownStatus = false;
+
+	//blink indicator if specified
+	if (blink > 0 && blink_active == false)
+	{
+		blink_timer->blink_up = UpStatus;
+		blink_timer->blink_down = DownStatus;
+		blink_timer->Start(blink_interval);
+		blink_active = true;
+	}
 }
 
 void DirectionalIndicator::Timer::Notify()
 {
 	//when shut-off timer triggers, switch off lights
+	if (type == 0)
+	{
 
-	if (indicator->UpStatus == false && indicator->DownStatus == false)
-		return;
+		if (indicator->UpStatus == false && indicator->DownStatus == false)
+			return;
 
-	//turn off all lights
-	indicator->UpLight(false);
-	indicator->DownLight(false);
+		//turn off all lights
+		indicator->UpLight(false);
+		indicator->DownLight(false);
+	}
+
+	//for blink timer, blink lights up to blink_count
+	if (type == 1)
+	{
+		if (blink_up == true)
+		{
+			//flip up indicator status
+			indicator->UpLight(!indicator->UpStatus);
+		}
+		if (blink_down == true)
+		{
+			//flip down indicator status
+			indicator->DownLight(!indicator->DownStatus);
+		}
+		blink_count--;
+
+		if (blink_count == 0)
+			Stop();
+	}
 }
 
 void DirectionalIndicator::Off()
