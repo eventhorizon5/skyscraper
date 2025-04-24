@@ -31,6 +31,7 @@ class SBSIMPEXP Primitive: public Object
 public:
 
 	bool always_visible;
+	int collider_type; //0 for standard, 1 for no collider
 
 	//functions
 	Primitive(Object *parent, const std::string &name);
