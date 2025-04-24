@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">The CallStation Section</font></strong><br>
+      </p>
+      <hr>
+      <p align="left">The <i>CallStation</i> section allows you to
+        create call stations for your elevators.&nbsp; This is used for
+        both Destination Dispatch and ordinary call buttons, especially
+        to create advanced call button panels.&nbsp; This must be
+        created within a <i>Floor</i> section, in order to specify what
+        floor the call station is on.&nbsp; Call Stations are numbered,
+        starting with 1, this is a global number, not per-floor, even
+        though call stations are created individually on each floor.<br>
+      </p>
+      <p align="left">The section headers and footers are similar to the
+        ones in the <em>Floor</em> section.<br>
+        To specify a single call station, you would type something like:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;CallStation
+          1&gt;</font><br>
+        and end it with:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndCallStation&gt;</font><br>
+        <br>
+        For a range of call stations, you would use something like:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;CallStations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          2 to 10&gt;</font><br>
+        and end with:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndCallStations&gt;</font></p>
+      <p align="left">All parameters in a <i>CallStation</i> section
+        are optional.<br>
+      </p>
+      <p align="left">For Actions, here's the available action command
+        names that can be used for custom controls:<br>
+        <em>(Floor number) (select floor)<br>
+          Off<br>
+        </em> <em>FireOff</em> (set fire service phase 1 to Off for all
+        elevators serviced by this call station)<br>
+        <em>FireOn</em> (set fire service phase 1 to On for all
+        elevators serviced by this call station)<br>
+        <em>FireBypass</em> (set fire service phase 1 to Bypass for all
+        elevators service by this call station)<br>
+        <em>Input1</em> (number 1 on keypad)<br>
+        <em>Input2</em> (number 2 on keypad)<br>
+        <em>Input3</em> (number 3 on keypad)<br>
+        <em>Input4</em> (number 4 on keypad)<br>
+        <em>Input5</em> (number 5 on keypad)<br>
+        <em>Input6</em> (number 6 on keypad)<br>
+        <em>Input7</em> (number 7 on keypad)<br>
+        <em>Input8</em> (number 8 on keypad)<br>
+        <em>Input9</em> (number 9 on keypad)<br>
+        <em>Input0</em> (number 0 on keypad)<br>
+        <em>InputMinus</em> (minus on keypad)<br>
+        <em>InputStar</em> (star on keypad)<br>
+        <em>InputBackspace</em> (extra feature with character "&lt;")<br>
+        <em>Up</em> (call elevator up)<br>
+        <em>Down </em>(call elevator down)</p>
+      <p align="left"><strong>Variables:</strong></p>
+      <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%callstation%</strong></font>
+        - number of the current call station, on the current floor<br>
+        <font size="2" face="Courier New, Courier, mono"><strong>%floor%</strong></font>
+        - the current floor<br>
+      </p>
+      <p align="left"><strong>Parameters</strong>:</p>
+      <p align="left"><strong>1. Name</strong> - sets the name of the
+        call station<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Name
+          = Call Station %callstation%<br>
+        </font></p>
+      <p align="left"><strong>2. Controller</strong> - used to specify
+        the controller this call station will be assigned to.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">Controller</font></font><font
+          size="2" face="Courier New, Courier, mono"> = 1<br>
+        </font></p>
+      <p align="left"><strong><strong>3. TimerDelay</strong></strong> -
+        specifies the key input timer delay, for keypads, in
+        seconds.&nbsp; The default is 2 seconds<strong>.</strong><strong><br>
+        </strong>Example: <font size="2"><font face="Courier New,
+            Courier, mono">TimerDelay = 1</font></font><strong><font
+            size="2" face="Courier New, Courier, mono"><br>
+          </font></strong></p>
+      <p align="left"><strong>4. InvalidInput</strong> - specifies
+        keypad input values that should be treated as invalid.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">InvalidInput</font></font><font
+          size="2" face="Courier New, Courier, mono"> = 13, 23<br>
+        </font></p>
+      <strong></strong><strong></strong>
+      <p align="left"><strong><br>
+          Commands:</strong></p>
+      <p align="left"><strong>1. SetPosition</strong> - sets the
+        position of this call station, relative to the floor it's on.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">SetPosition</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>X, Y, Z<br>
+          </em></font>Example:<font size="2" face="Courier New, Courier,
+          mono"><em></em> SetPosition -3, 4, 0</font></p>
+      <p align="left"><strong>2. CreatePanel</strong> - creates a button
+        panel<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>texturename</em>, <em>rows, columns, direction,
+            buttonwidth, buttonheight, spacingX, spacingY, tw, th<br>
+          </em></font> Example<font size="2" face="Courier New, Courier,
+          mono"><em>: </em><font size="2" face="Courier New, Courier,
+            mono">CreatePanel Wall1, 5, 5, right, 0.15, 0.15, 0.3, 0.45,
+            0, 0</font></font></p>
+      <p align="left">The CreatePanel command creates a button panel for
+        the call station, similar to the elevator car section's
+        CreatePanel command. <em>Rows</em> and <em>Columns</em> define
+        the grid size of the panel. <em>Direction</em> is either
+        "front", "back", "left" or "right", defining which direction the
+        panel faces. <em>SpacingX</em> is the space (percent of a
+        button's width) horizontally between each button, and <em>spacingY</em>
+        is the space (percent of a button's height) vertically between
+        each button. Not all positions need to be used; this is simply
+        to provide a grid layout for the panel. This command also
+        determines the width and height of the panel based on the
+        spacing and button sizes. A simple formula for determining panel
+        width or height is this - for width, it's (columns *
+        buttonwidth) + (spacingX * (columns + 1)); for height, just swap
+        columns with rows and spacingX with spacingY. If a texture is
+        not specified, the back portion of the panel will not be shown.</p>
+      <p align="left"><strong>3. AddControl</strong> - command for
+        creating buttons, switches and knobs on the panel<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddControl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>sound, row, column, width, height, hoffset, voffset,
+            selection_position, command_name(s), texture_name(s)<br>
+          </em></font>Example 1: <font size="2" face="Courier New,
+          Courier, mono">AddControl switch.wav, 2, 2, 1, 1, 0, 0, 1, 7,
+          Button7</font><br>
+      </p>
+      <p align="left">The AddControl command creates a control on the
+        specified button panel (created with CreatePanel). The <em>command_name(s)</em>
+        and <em>texture_name(s)</em> parameters allow you to specify a
+        list of commands, and a list of textures to go along with those
+        commands. A texture needs to be specified for every command; if
+        you specify 3 commands and only 2 textures, you will get an
+        error. The example shows a Destination Dispatch floor button for
+        floor 7.&nbsp; Leave the sound field blank for no sound to be
+        played. The <em>selection_position</em> parameter specifies the
+        starting selection position, which is normally 1.&nbsp; For more
+        examples, see the AddControl command in the Elevator Car
+        section.<br>
+      </p>
+      <p align="left">Available command names for call stations:<br>
+      </p>
+      <p align="left"><em>[floor number]</em> (specify only the floor
+        number to select the floor with the Dispatch Controller)<br>
+      </p>
+      <p align="left"><em></em>When this command is used, actions are
+        created using the specified commands. The resulting names of the
+        actions are the floor name, followed by a colon, then the
+        CallStation name followed by another colon, and then the command
+        name, in order to be unique to each floor and callstation. So
+        the "7" command for Floor 1 Call Station 1 is created as an
+        action named "Floor 1:Call Station 1:7", and you can specify
+        more actions with that name to run multiple actions when that
+        floor is selected.<br>
+      </p>
+      <p align="left"><strong>4. AddIndicator</strong> - creates a
+        destination indicator for this call station<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">AddIndicator</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>sound</em>, <em>texture_prefix,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            blank_texture, direction, CenterX, CenterZ, width, height,
+            voffset, timer_duration<br>
+          </em></font> Example<font size="2" face="Courier New, Courier,
+          mono"><em>: <font face="Courier New, Courier, mono">AddIndicator</font></em><font
+            size="2" face="Courier New, Courier, mono"> mechchime9.wav,
+            Button, Black, right, 0, 0, 0.5, 0.5, 1, 5</font></font></p>
+      <p align="left"> </p>
+      <p align="left">The <i>AddIndicator</i> command creates a
+        destination indicator for the associated call station.&nbsp; <i>Sound</i>
+        is the sound played when displaying the elevator's ID, and if an
+        asterisk is specified, the asterisk is replaced with the
+        elevator's ID (in this case, "A"), so "Sound*.wav" would change
+        to "SoundA.wav".&nbsp; <i>Texture_prefix</i> specifies the base
+        name of the texture used, so if "Button" is specified, an
+        elevator ID of "A" would load the texture "ButtonA".&nbsp; <i>Blank_texture</i>
+        is the texture to use when off.&nbsp; <i>CenterX</i> and <i>CenterZ</i>
+        are relative to the call station center.&nbsp; <i>Timer_duration</i>
+        specifies how long the elevator's ID should be displayed, in
+        seconds.&nbsp; The error text used is both "??" and "XX", so
+        make sure to load textures for those (such as "Button??").&nbsp;
+        The "??" value is displayed when a floor entry is invalid, and
+        the "XX" entry means "error".&nbsp; For error sounds, since the
+        "??" characters sometimes can't be used in filenames, the
+        simulator will expand it to "Invalid", and "XX" to "Error", so
+        as an example the sounds will be "SoundInvalid.wav" and
+        "SoundError.wav", if "Sound*.wav" is used for the sound
+        parameter.<em>&nbsp; </em><br>
+        <em> </em></p>
+    </div>
+  </body>
+</html>

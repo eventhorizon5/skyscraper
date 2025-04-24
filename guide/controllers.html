@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">The Controller Section<br>
+          </font></strong></p>
+      <hr><strong></strong>
+      <p align="left">The <i>Controller</i> section allows you to
+        create dispatch controllers for your elevators.&nbsp;
+        Controllers support both Destination Dispatch routes, and
+        Standard routes.&nbsp; Controllers are numbered, starting with
+        1.&nbsp; When Call Buttons are created, they automatically
+        create controllers.<br>
+      </p>
+      <p align="left">The section headers and footers are similar to the
+        ones in the <em>Floor</em> section.<br>
+        To specify a single controller, you would type something like:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Controller
+          1&gt;</font><br>
+        and end it with:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndController&gt;</font><br>
+        <br>
+        For a range of controllers, you would use something like:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Controllers
+          2 to 10&gt;</font><br>
+        and end with:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndControllers&gt;</font></p>
+      <p align="left">All parameters in a controller section are
+        optional.</p>
+      <p align="left"><strong>Variables:</strong></p>
+      <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%controller%</strong></font>
+        - number of the current controller</p>
+      <p align="left"><strong>Parameters</strong>:</p>
+      <p align="left"><strong>1. Name</strong> - sets the name of the
+        controller<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Name
+          = Dispatch Controller %controller%<br>
+        </font></p>
+      <p align="left"><strong>2. DestinationDispatch</strong> - enables
+        or disables <i>DestinationDispatch</i> for this
+        controller.&nbsp; Right now this is used only by a few elevator
+        functions for checks, and the controller doesn't make much use
+        of it, since it processes routes on a type basis.&nbsp; The
+        default is false.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">DestinationDispatch</font></font><font
+          size="2" face="Courier New, Courier, mono"> = true</font></p>
+      <p align="left"><strong>3. Hybrid</strong> - enables hybrid mode
+        for this controller.&nbsp; When true, allows elevators to both
+        operate in <i>Destination Dispatch</i> and <i>Standard</i>
+        modes.&nbsp; When this is false and <i>DestinationDispatch</i>
+        is enabled, standard elevator floor selections no longer will
+        work.&nbsp; The default is False.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">Hybrid</font></font><font
+          size="2" face="Courier New, Courier, mono"> = false</font></p>
+      <p align="left"><strong>4. Range</strong> - specifies the range of
+        floors that dispatches will handle for a single elevator for
+        Destination Dispatch mode.&nbsp; The default is 5.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">Range</font></font><font
+          size="2" face="Courier New, Courier, mono"> = 5<br>
+        </font></p>
+      <p align="left"><strong>5. MaxPassengers</strong> - the maximum
+        number of requests for a route this controller will handle for a
+        single elevator, before selecting another elevator for the
+        route, in Destination Dispatch mode.&nbsp; The default is 5.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">MaxPassengers</font></font><font
+          size="2" face="Courier New, Courier, mono"> = 10<br>
+        </font></p>
+      <p align="left"><strong>6 Elevators</strong> - list of elevators
+        to assign to the dispatch controller<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">Elevators</font></font><font
+          size="2" face="Courier New, Courier, mono"> = 1, 2, 3, 4<br>
+        </font> Example: <font size="2"><font face="Courier New,
+            Courier, mono">Elevators</font></font><font size="2"
+          face="Courier New, Courier, mono"> = 1 - 4<br>
+        </font><br>
+        <strong>7. Reprocess</strong> - enables or disables the
+        reprocessing of routes if an elevator becomes unavailable.&nbsp;
+        Note that this only affects <i>DestinationDispatch</i>
+        mode.&nbsp; The default is false.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">Reprocess
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            = true</font></font></p>
+    </div>
+  </body>
+</html>

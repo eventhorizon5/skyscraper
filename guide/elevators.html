@@ -1,0 +1,2816 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">The Elevator Section</font></strong><br>
+      </p>
+      <hr>
+      <p align="left">The <em>Elevator</em> section allows you to
+        create elevators for your building. Elevators are numbered,
+        starting with 1.</p>
+      <p align="left">Each elevator is created with a single default
+        car, Car 1. Car-specific parameters and commands are listed in
+        the <em>Car</em> section, but can also be specified in this
+        section, if an elevator only has a single car, or if you're
+        referring to Car 1.</p>
+      <p align="left">The section headers and footers are similar to the
+        ones in the <em>Floor</em> section.<br>
+        To specify a single elevator, you would type something like:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Elevator
+          1&gt;</font><br>
+        and end it with:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndElevator&gt;</font><br>
+        <br>
+        For a range of elevators, you would use something like:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Elevators 2
+          to 10&gt;</font><br>
+        and end with:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndElevators&gt;</font></p>
+      <p align="left">When creating a new elevator car, the required
+        values for each are the <em>Speed</em>, <em>Acceleration</em>,
+        <em>Deceleration</em>, <em>AssignedShaft</em>, and <em>ServicedFloors</em>
+        parameters and the <em>CreateElevator</em> command.</p>
+      <p align="left"><strong>Variables:</strong></p>
+      <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%elevator%</strong></font>
+        - number of the current elevator</p>
+      <p align="left"><strong>Parameters</strong>:</p>
+      <p align="left"><strong>1a. Name</strong> - sets the name of the
+        elevator<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Name
+          = Service Elevator</font></p>
+      <p align="left"><strong>1b. ID</strong> - sets the ID of the
+        elevator, used for Destination Dispatch. The default is the
+        number of the elevator.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">ID</font></font><font
+          size="2" face="Courier New, Courier, mono"> = A</font></p>
+      <strong></strong>
+      <p align="left"><strong>2. Type</strong> - sets the type of the
+        elevator. Available types are "Local" for a standard local
+        passenger elevator (the default), "Express" for an express
+        elevator, "Service" for a service elevator, and "Freight" for a
+        freight elevator.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Type
+          = Express</font></p>
+      <p align="left"><strong>3. Speed, UpSpeed, DownSpeed</strong> -
+        maximum speed of the elevator, for either both up and down
+        movements (Speed), or for each individual movement direction
+        (UpSpeed and DownSpeed), in feet per second<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Speed
+          = 20</font></p>
+      <p align="left"><strong>4a. Acceleration</strong> - acceleration
+        speed of the elevator, in feet per second<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Acceleration
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 0.015</font></p>
+      <p align="left"><strong>4b. AccelJerk</strong> - acceleration jerk
+        rate of the elevator (rate of change of acceleration)<br>
+        Example: <font size="2" face="Courier New, Courier, mono">AccelJerk
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 1.0</font></p>
+      <p align="left"><strong>5a. Deceleration</strong> - deceleration
+        speed of the elevator, in feet per second<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Deceleration
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 0.0075</font></p>
+      <p align="left"><strong>5b. DecelJerk</strong> - deceleration jerk
+        rate of the elevator (rate of change of deceleration)<br>
+        Example: <font size="2" face="Courier New, Courier, mono">DecelJerk
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 1.0</font></p>
+      <p align="left"><strong>6. AssignedShaft</strong> - the shaft
+        number this elevator is in<br>
+        Example: <font size="2" face="Courier New, Courier, mono">AssignedShaft
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 1</font></p>
+      <p align="left"><strong>7. MotorStartSound, MotorUpStartSound,
+          MotorDownStartSound</strong> - the sound file to play when the
+        elevator motor starts moving/speeds up (sets both directions).
+        Default is <em>elevstart.wav</em>. Leave the filename field
+        blank for no sound. The first command specifies both up and down
+        sounds, while the others are for either upwards movement or
+        downwards movement.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">MotorStartSound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = start.wav</font></p>
+      <p align="left"><strong>8. MotorRunSound, MotorUpRunSound,
+          MotorDownRunSound</strong> - the sound file to play while the
+        elevator motor is running (sets both directions). This file is
+        automatically looped by the simulator. Default is <em>elevmove.wav</em>.
+        Leave the filename field blank for no sound. The first command
+        specifies both up and down sounds, while the others are for
+        either upwards movement or downwards movement.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">MotorRunSound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = run.wav</font></p>
+      <p align="left"><strong>9. MotorStopSound, MotorUpStopSound,
+          MotorDownStopSound</strong> - the sound file to play when the
+        elevator motor slows down and stops (sets both directions).
+        Default is <em>elevstop.wav</em>. Leave the filename field
+        blank for no sound. The first command specifies both up and down
+        sounds, while the others are for either upwards movement or
+        downwards movement.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">MotorStopSound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = stop.wav</font></p>
+      <p align="left"><strong>10. MotorIdleSound</strong> - the sound
+        file to play when the elevator motor is idling. There is no
+        default yet. Leave the filename field blank for no sound. <br>
+        Example: <font size="2" face="Courier New, Courier, mono">MotorIdleSound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = idle.wav</font></p>
+      <p align="left"><strong>11. FloorSkipText</strong> - sets the text
+        that will be shown in the floor indicator when passing
+        non-serviced floors. The texture for this must be loaded for it
+        to show (and will start with the related indicator's texture
+        prefix) - of you set this to EX for example, and the indicator's
+        texture prefix is "Button", the texture it'll load will be
+        ButtonEX.jpg. Common values for this are EZ, X, and EX (which
+        stand for Express Zone).<br>
+        Example: <font size="2" face="Courier New, Courier, mono">FloorSkipText
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = EZ </font></p>
+      <p align="left"><strong>12. RecallFloor</strong> - sets the floor
+        the elevator will recall to during fire service phase 1 mode.
+        Default is the lowest serviced floor. <br>
+        Example: <font size="2" face="Courier New, Courier, mono">RecallFloor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 5</font></p>
+      <p align="left"><strong>13. AlternateRecallFloor</strong> - sets
+        the alternate floor the elevator will recall to during fire
+        service phase 1 mode. Default is the highest serviced floor. <br>
+        Example: <font size="2" face="Courier New, Courier, mono">AlternateRecallFloor
+=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          6</font></p>
+      <p align="left"><strong>14. ACP</strong> - enables ACP (Anti-Crime
+        Protection) mode<br>
+        Example: <font size="2" face="Courier New, Courier, mono">ACP =
+          true</font></p>
+      <p align="left"><strong>15. ACPFloor</strong> - sets the floor the
+        elevator will stop at while in ACP mode. Default is the lowest
+        serviced floor. <br>
+        Example: <font size="2" face="Courier New, Courier, mono">ACPFloor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 5</font></p>
+      <p align="left"><strong>16. MotorPosition</strong> - sets the
+        position of the motor sound emitter; if this command is not
+        specified, it'll be placed at the base (altitude + interfloor)
+        of the highest floor in the corresponding shaft. The X and Z
+        values are relative of the elevator center.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">MotorPosition
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>x, y, z</em><br>
+        </font>Example: <font size="2" face="Courier New, Courier,
+          mono">MotorPosition = 0, 100, 0</font></p>
+      <p align="left"><strong>17. QueueResets</strong> - set this to
+        true if you want the elevator to reset the related queue (up or
+        down) after it reaches the last valid entry. If the elevator is
+        moving up for example with this setting on, and you press
+        buttons for floors below you, the elevator will remove those
+        entries after it reaches the highest selected floor. The
+        elevator will only be available for hall calls in the active
+        queue direction.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">QueueResets
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = true</font></p>
+      <p align="left"><strong>18. LimitQueue</strong> - set this to true
+        to only allow floor selections in the same direction as the
+        active elevator queue direction to be placed. For example, if
+        the elevator is moving up, and a button is pressed for a lower
+        floor, this will prevent that from being queued. The elevator
+        will only be available for hall calls in the active queue
+        direction.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">LimitQueue
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = true</font></p>
+      <p align="left"><strong>19. UpPeak</strong> - enables up peak mode
+        for this elevator.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">UpPeak
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = true</font></p>
+      <p align="left"><strong>20. DownPeak</strong> - enables down peak
+        mode for this elevator.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">DownPeak
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = true</font></p>
+      <p align="left"><strong>21. InspectionService</strong> - enables
+        inspection service mode for this elevator.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">InspectionService
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = true</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          InspectionSpeed</strong> - speed multiplier for inspection
+        service (if set to 0.6, would be 60% of elevator speed)<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">InspectionSpeed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>multiplier</em></font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>23.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Parking</strong> - enables automatic elevator parking. If this
+        option is used, the elevator will automatically send itself to
+        the specified parking floor after the number of seconds
+        specified in <em>delay</em>. <br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">Parking
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>floor, delay</em></font></p>
+      <p align="left"><strong>24. LevelingSpeed</strong> - elevator's
+        leveling speed. Default is 0.2<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">LevelingSpeed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>speed</em></font></p>
+      <p align="left"><strong>25. LevelingOffset</strong> - distance in
+        feet from the destination floor that the elevator will switch
+        into leveling mode. Default is 0.5<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">LevelingOffset
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>distance</em></font></p>
+      <p align="left"><strong>26. LevelingOpen</strong> - distance in
+        feet from the destination floor that the elevator will open the
+        doors. Default is 0.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">LevelingOpen
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>distance</em></font></p>
+      <p align="left"><strong>27. NotifyEarly</strong> - changes
+        behavior of arrival notifications (chime, lighting of
+        directional indicator, and floor announcement sound). 0 is the
+        default and notifies when the elevator stops on the floor. 1
+        notifies when the elevator starts the leveling process, and 2
+        notifies when the elevator starts decelerating. A value of 3
+        combines 0 and 2 so that the elevator notifies twice. A value of
+        -1 turns off standard notifications.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">NotifyEarly
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>value</em></font></p>
+      <p align="left"><strong>28. NotifyLate</strong> - if set to true,
+        the elevator car performs an arrival notification (chime,
+        lighting of directional indicator, and floor announcement sound)
+        after the doors open. False is the default.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">NotifyEarly
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>value</em></font></p>
+      <p align="left"><strong>29. DepartureDelay</strong> - sets the
+        time in seconds that the elevator waits before proceeding to the
+        next floor. Default is 0.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">DepartureDelay
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>1</em> </font></p>
+      <p align="left"><strong>30. ArrivalDelay</strong> - sets the time
+        in seconds that the elevator waits before opening the doors
+        after arriving at a floor. The default is 0. Note that a value
+        greater than 0 will switch off the LevelingOpen setting.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">ArrivalDelay
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>0.5</em></font></p>
+      <p align="left"><strong>31. FireService1</strong> - sets the fire
+        service phase 1 mode that the elevator will start with. Default
+        is 0. Values are 0 for off, 1 for on, 2 for bypass.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">FireService1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 2</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          AutoDoors</strong> - if this is set to true, the elevator
+        doors will automatically open if instructed (for example, when
+        arriving at a floor), and will refuse to open if between floors.
+        Set to false for manual elevators. The default is true.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">AutoDoors
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = false</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>33.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          OpenOnStart</strong> - if this is set to true, the elevator
+        doors will automatically open on startup. The default is false.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">OpenOnStart
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = false</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>34.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Interlocks</strong> - if this is set to true, the elevator
+        doors will remain locked while the elevator is moving, will
+        refuse to open unless the elevator is within a landing zone, and
+        the elevator will not move unless the doors are closed. The
+        default is true.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Interlocks
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = false</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>35.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          FloorHold</strong> - if this is set to true, the user must
+        hold down the floor button in order to move to the desired
+        floor. When the button is released, the elevator will
+        immediately stop. This is used to mimic a modern manual elevator
+        (platform lift). The default is false.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">FloorHold
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = true</font></p>
+      <p align="left"><strong>36. MotorEmergencyStopSound</strong> - the
+        sound file to play for the elevator motor when an emergency stop
+        is initiated. Leave the filename field blank to use the normal
+        motor stop sound, if specified. The default is <em>emergstop.wav</em><br>
+        Example: <font size="2" face="Courier New, Courier, mono">MotorEmergencyStopSound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = emergstop.wav</font></p>
+      <p align="left"><strong>37. EmergencyStopSpeed</strong> - the
+        speed multiplier to use for an emergency stop. A value of 3, the
+        default, would mean 3 times the normal deceleration rate.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">EmergencyStopSpeed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = 2.5</font></p>
+      <p align="left"><strong>38. ChimeOnArrival</strong> - if set to
+        true, the elevator will always chime when arriving to a floor.
+        If false (the default), the elevator will only chime when
+        responding to a hall call.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">ChimeOnArrival
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = true</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>39.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          ReOpen</strong> - if this is set to true, if the elevator is
+        idle, the doors will reopen if the same floor is selected. The
+        default is true.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">ReOpen
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = false</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>40.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          HoistwayAccessHold</strong> - if this is set to true, the
+        control switch in Hoistway Access mode needs to be held in the
+        direction position, for the elevator to move. The default is
+        true.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">HoistwayAccessHold
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = false</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>41.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          RunState</strong> - if this is set to false, the elevator
+        starts in a stopped state. The default is true.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">RunState
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = false</font></p>
+      <p align="left"><strong>42. RopePosition</strong> - sets the
+        position of the rope connection with the elevator. All values
+        are relative of the elevator center.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">RopePosition
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = <em>x, y, z</em><br>
+        </font>Example: <font size="2" face="Courier New, Courier,
+          mono">RopePosition = 0, 8, 0</font></p>
+      <p align="left"><strong>43. RopeTexture</strong> - the texture to
+        use for the elevator rope.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">RopeTexture
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = Rope</font></p>
+      <p align="left"><strong>44. CounterweightStartSound</strong> - the
+        sound file to play for the counterweight when starting movement.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">CounterweightStartSound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = weight_start.wav</font></p>
+      <p align="left"><strong>45. CounterweightMoveSound</strong> - the
+        sound file to play for the counterweight during movement.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">CounterweightMoveSound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = weight_move.wav</font></p>
+      <p align="left"><strong>46. CounterweightStopSound</strong> - the
+        sound file to play for the counterweight when stopping movement.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">CounterweightStopSound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          = weight_stop.wav</font></p>
+      <br>
+      <p align="left"><strong>Commands:</strong></p>
+      <p align="left"><strong>1. CreateElevator</strong> - creates an
+        elevator at the specified location<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>relative, x</em>, <em>z</em>, <em>floor<br>
+          </em></font>Example:<font size="2" face="Courier New, Courier,
+          mono"><em></em> CreateElevator false, 0, 10, 0</font></p>
+      <p align="left"><em>Relative </em>determines if the coordinates
+        are relative to the shaft center, or if they're absolute, <em>X</em>
+        and <em>Z </em>are the coordinates to place the center of the
+        elevator at, and <em>Floor</em> is the floor to place the
+        elevator on.</p>
+      <p align="left"><strong>2. CreateCounterweight</strong> - creates
+        an elevator counterweight at the specified location. This should
+        normally be used at the end of the Elevator section, after all
+        cars are created. This command not only creates the
+        counterweight, but also creates the counterweight and elevator
+        ropes. The rope texture is specified in the <em>RopeTexture</em>
+        parameter.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">CreateCounterweight
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>frame_texture, weight_texture, x</em>, <em>z</em>, <em>size_x,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            size_y, size_z, weight_voffset<br>
+          </em></font>Example:<font size="2" face="Courier New, Courier,
+          mono"><em></em> CreateCounterweight CounterweightFrame,
+          Counterweight, 0, 3.5, 2, 6, 0.5, 0.5</font></p>
+      <p align="left"> <em>X</em> and <em>Z </em>are the coordinates
+        to place the center of the counterweight at, relative of the
+        elevator center, <em>size_x, size_y, size_z</em> are the size
+        of the counterweight, and <em>weight_voffset</em> is the
+        vertical offset the weight should be at.</p>
+      <p align="left"><strong>3. AddRails</strong> - creates rails on
+        all relevant floors of a shaft, for either an elevator or
+        counterweight. X and Z are relative of the elevator center.
+        Orientation is either false to create the rails along X, or true
+        to create them along Z. Rail_distance is the distance between
+        the rail and the center of the elevator, and rail_width is the
+        size of the rail. This command must be specified after the
+        MotorPosition parameter.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddRails
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>main_texture, edge_texture, x</em>, <em>z</em>, <em>orientation,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            rail_distance, rail_width<br>
+          </em></font>Example:<font size="2" face="Courier New, Courier,
+          mono"><em></em> AddRails Rails, RailsEdge, 0, 3.5, false, 1 +
+          0.06, 0.1</font></p>
+      <p align="left"></p>
+      <br>
+    </div>
+  </body>
+</html>
