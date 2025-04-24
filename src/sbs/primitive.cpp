@@ -247,7 +247,7 @@ bool Primitive::Attach(const std::string &meshname, const Vector3 &position, con
 		return false;
 
 	bool use_collider = true;
-	if (collider_type == 1)
+	if (collider_type == -1)
 		use_collider = false;
 
 	mesh = new MeshObject(this, GetName(), 0, "", meshname, max_render_distance, scale_multiplier, use_collider);
