@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">The Buildings Section</font></strong><br>
+      </p>
+      <hr>
+      <div align="center">
+        <p align="left">The <em>Buildings</em> section allows you to
+          load additional buildings, into separate simulation engines,
+          and have them all be visible and usable in the same scene.
+          This section is small, and mainly exists to provide clarity in
+          scripts. Additional buildings also have their own script
+          interpreters, so their scripts (and things such as includes)
+          are completely isolated from each other. Note that this
+          section is skipped when reloading the building (Ctrl-R). This
+          section should be placed at the beginning of the script file,
+          so that the progress bar during load can be accurate. When the
+          script is finished loading, the primary building (the one
+          included in the main script) will be automatically cut for
+          each child building (using the section's Cut parameters),
+          making it easy to integrate new buildings into existing spaces
+          with large landscapes, or even city blocks. Nesting of this
+          section is also supported, so that if a child building also
+          has a buildings section, it'll process it, and the parent
+          building will be cut for each child building.<br>
+          <br>
+          The section starts with this header:<br>
+          <font size="2" face="Courier New, Courier, mono">&lt;Buildings&gt;</font></p>
+        <p align="left">and ends with this footer:<br>
+          <font size="2" face="Courier New, Courier, mono">&lt;EndBuildings&gt;</font></p>
+        <p align="left"><strong>Parameters (all are optional):</strong></p>
+        <p align="left"><strong>1. ConcurrentLoads</strong> - if this is
+          set to true, load all buildings simultaneously. Default is
+          false, which loads each building in order.<br>
+          Example: <font size="2" face="Courier New, Courier, mono">ConcurrentLoads
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            = true</font></p>
+        <p align="left"><strong>2. CutLandscape</strong> - if this is
+          set to true, cut the Landscape mesh of buildings, discarding
+          the area outside of the building's set boundaries. Default is
+          true<br>
+          <font size="2" face="Courier New, Courier, mono">CutLandscape
+            = true</font><br>
+        </p>
+        <p align="left"><strong>3. CutBuildings</strong> - if this is
+          set to true, cut the Buildings mesh of buildings, discarding
+          the area outside of the building's set boundaries. Default is
+          true<br>
+          <font size="2" face="Courier New, Courier, mono">CutBuildings
+            = true</font><br>
+        </p>
+        <p align="left"><strong>4. CutExternal</strong> - if this is set
+          to true, cut the External mesh of buildings, discarding the
+          area outside of the building's set boundaries. Default is
+          false, since this may have an unnecessary performance impact<br>
+          <font size="2" face="Courier New, Courier, mono">CutExternal =
+            true</font><br>
+        </p>
+        <p align="left"><strong>5. CutFloors</strong> - if this is set
+          to true, cut the Floors meshes of buildings, discarding the
+          area outside of the building's set boundaries. Default is
+          false, since this may have an unnecessary performance impact<br>
+          <font size="2" face="Courier New, Courier, mono">CutFloors =
+            true</font><br>
+        </p>
+        <p align="left"><strong>Commands:</strong></p>
+        <p align="left"><strong>1. Load</strong> - load a building,
+          creating a new Engine Context (script interpreter and sim
+          engine pair) for it. This command requires a building filename
+          to be specified, and optionally allows the position to be set
+          (which overrides the Position value in that building's Globals
+          section), the rotation (Y axis, which is left/right) in
+          degrees to be set, and the bounds values to be set (which also
+          overrides the building's Bounds value). For the rotation
+          value, if "90" is specified, the building is rotated so that
+          it faces the right. If the value is "270" or "-90", the
+          building faces the left. The Bounds values are used to
+          determine the position limits of what are considered that
+          building, where if a building has a position X value of 200,
+          and the MinX is -100 and MaxX is 100, the global positions of
+          100X to 300X are "inside" that building's space (200 - 100,
+          and 200 + 100). Subfolders are supported, so a filename of
+          "myfolder/mybuilding.bld" will load the building file at
+          "buildings/myfolder/mybuilding.bld".<br>
+          <br>
+          Syntax: <font size="2" face="Courier New, Courier, mono">Load
+            <em>filename</em>[, <em>X, Y, Z, Rotation</em>][, <em>MinX,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              MinY, MinZ, MaxX, MaxY, MaxZ</em>]</font><br>
+          Example 1: <font size="2" face="Courier New, Courier, mono">Load
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Simple.bld</font><br>
+          Example 2: <font size="2" face="Courier New, Courier, mono">Load
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Simple.bld, 200, 0, 200, 0</font><br>
+          Example 3: <font size="2" face="Courier New, Courier, mono">Load
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Simple.bld, 200, 0, 200, 0, -100, 0, -100, 100, 0, 100</font><br>
+          Example 4: <font size="2" face="Courier New, Courier, mono">Load
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            myfolder/mybuilding.bld</font><br>
+          <br>
+          <br>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

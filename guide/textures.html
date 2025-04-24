@@ -1,0 +1,1399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">The Textures Section</font></strong><br>
+      </p>
+      <hr>
+      <p align="left">The Textures section loads textures into the
+        simulation and assigns names to them, for use in the rest of the
+        sections. The section starts with this header:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Textures&gt;</font></p>
+      <p align="left">and ends with this footer:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndTextures&gt;</font></p>
+      <p align="left"><strong>1. Load</strong> - loads a texture<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">Load <em>filename</em>,
+          <em>name</em>, <em>tile_x</em>, <em>tile_y[, force</em></font>]<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Load
+          data\brick1.jpg, Brick, 1, 1</font></p>
+      <p align="left">This example will load the file brick.jpg and name
+        it Brick. The values <em>tile_x</em> and <em>tile_y</em> are
+        per-texture multipliers. For example, if you set <em>tile_x</em>
+        to 2, and you specify a texture width (tw) of 2 during an <em>AddFloor</em>
+        command later, the tiling value will be 4 (2 times 2), and the
+        texture will be repeated 4 times horizontally. The <em>force</em>
+        value is optional, and if set to false, autosizing will always
+        be disabled for this texture; if set to true, autosizing will
+        always be enabled.</p>
+      <p align="left"><strong>2. LoadRange</strong> - loads a numeric
+        range of textures, and the current number is available in the <em>number</em>
+        variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">LoadRange
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>startnumber</em>, <em>endnumber</em>, <em>filename</em>,
+          <em>name</em>, <em>tile_x</em>, <em>tile_y[, force] </em></font><br>
+        Example: <font size="2" face="Courier New, Courier, mono">LoadRange
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          2, 138, data\floorindicators\%number%.jpg, Button%number%, 1,
+          1</font></p>
+      <p align="left">This example will load the file 2.jpg and name it
+        Button2, 3.jpg as Button3, and so on. The values <em>tile_x</em>
+        and <em>tile_y</em> are per-texture multipliers. For example,
+        if you set <em>tile_x</em> to 2, and you specify a texture
+        width (tw) of 2 during an <em>AddFloor</em> command later, the
+        tiling value will be 4 (2 times 2), and the texture will be
+        repeated 4 times horizontally. The <em>force</em> value is
+        optional, and if set to false, autosizing will always be
+        disabled for this texture; if set to true, autosizing will
+        always be enabled.</p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>3.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          LoadAnimated</strong> - loads a set of textures to use as a
+        single animated texture<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">LoadAnimated
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>filename1, filename2, ..., name, duration, tile_x,
+            tile_y[, force]<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">LoadAnimated data/pic1.jpg, data/pic2.jpg,
+          data/pic3.jpg, myanimation, 2, 1, 1</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;">This
+        example will load the files pic1.jpg, pic2.jpg and pic3.jpg and
+        associate them with the texture material "myanimation". When
+        "myanimation" is used, those three images will automatically be
+        displayed in order, in a loop. <em>Duration</em> refers to the
+        length of the animation in seconds. The values <em>tile_x</em>
+        and <em>tile_y</em> are per-texture multipliers. For example,
+        if you set <em>tile_x</em> to 2, and you specify a texture
+        width (tw) of 2 during an <em>AddFloor</em> command later, the
+        tiling value will be 4 (2 times 2), and the texture will be
+        repeated 4 times horizontally. The <em>force</em> value is
+        optional, and if set to false, autosizing will always be
+        disabled for this texture; if set to true, autosizing will
+        always be enabled.</p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>4.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          LoadAlphaBlend</strong> - loads a texture with a specular mask
+        texture and blending texture, used to make things like
+        reflection effects<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">LoadAlphaBlend
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>filename, specular_filename, blend_filename, name,
+            spherical, tile_x, tile_y[, force]<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">LoadAlphaBlend data/windows.jpg,
+          data/windows_spec.png, data/sky.jpg, mywindows, true, 1, 1<br>
+        </font>This example will load the texture windows.jpg normally,
+        and will load windows_spec.png as a specular mask (which needs
+        to be a file that contains an alpha blended image that is used
+        to determine how the blending texture applies to the original
+        texture), and loads a texture to blend as sky.jpg (see
+        Skyscraper's data folder for examples of this). The <em>spherical</em>
+        parameter determines if the texture is spherically mapped (true)
+        or planar mapped (false). The values <em>tile_x</em> and <em>tile_y</em>
+        are per-texture multipliers. For example, if you set <em>tile_x</em>
+        to 2, and you specify a texture width (tw) of 2 during an <em>AddFloor</em>
+        command later, the tiling value will be 4 (2 times 2), and the
+        texture will be repeated 4 times horizontally. The <em>force</em>
+        value is optional, and if set to false, autosizing will always
+        be disabled for this texture; if set to true, autosizing will
+        always be enabled.</p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>5.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          LoadMaterial</strong> - loads a custom OGRE material, used for
+        advanced/specific texture definitions<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">LoadMaterial
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>material_name, name, </em><em><em>tile_x, tile_y[, force]<br>
+            </em></em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">LoadMaterial testmat, mycustommaterial, 1, 1<br>
+        </font>Material definitions (and their associated textures) are
+        stored in Skyscraper's data/materials folder, and are all
+        automatically loaded on startup. The material definitions (the
+        example being testmat.material) contain a material name along
+        with the texture processing parameters. The material name
+        specified in this command needs to match the one in the material
+        definition you want to use; the example file is named "testmat".
+        <em>Name</em> is the standard texture name you want to map it
+        to, to use with other commands. The other commands are the same
+        as in previous commands. For more information on how to make
+        material definition scripts, see the <a
+          href="http://www.ogre3d.org/docs/manual/manual_14.html#Material-Scripts">OGRE
+manual's
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          "Material Scripts" section</a>.</p>
+      <p align="left"><strong>6. AddText</strong> - draws text onto a
+        texture - this only creates a new texture during runtime (in
+        memory), and all changes are lost when the application shuts
+        down<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddText
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>texture_name, name, font_filename, font_size, text, x1,
+            y1, x2, y2, h_align, v_align, ColorR, ColorG, ColorB[, force</em></font><em>]<br>
+        </em>Example: <font size="2" face="Courier New, Courier, mono">AddText
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Black, Button100, nimbus_sans.ttf, 47, 100, -1, -1, -1, -1,
+          center, center, 255, 255, 255</font></p>
+      <p align="left">With this command, <em>texture_name</em> is the
+        name of the previously loaded texture to draw text onto (loaded
+        with either Load or LoadRange). <em>Name</em> is the name to
+        call this new texture. <em>Font_filename</em> is the filename
+        of the font to use - fonts are in Skyscraper's data/fonts
+        directory. <em>X1</em>, <em>y1</em>, <em>x2</em>, and <em>y2</em>
+        are coordinate values mainly used to position the text in a
+        boxed area, with the position of 0, 0 (x 0, y 0) being on the
+        top left.. If any value is -1, the dimension of the texture will
+        be used (so in this example, the loaded texture has a size of
+        128x128 pixels, and so the values are 0, 0, 128, 128). This will
+        place the text in the center of the texture image, but to
+        position it elsewhere, specify the pixel box to place it in. <em>H_align</em>
+        and <em>v_align</em> determine the alignment of the text - for
+        h_align, it can either be "left", "right" or "center", and for
+        v_align either "top", "bottom" or "center". <em>ColorR</em>, <em>ColorG</em>
+        and <em>ColorB</em> determine the color of the text, and the
+        values range from 0 to 255. If all values are 255, the text is
+        white, and if all values are 0, then it's black. The <em>force</em>
+        value is optional, and if set to false, autosizing will always
+        be disabled for this texture; if set to true, autosizing will
+        always be enabled.</p>
+      <p align="left"><strong>7. AddTextRange</strong> - similar to
+        LoadRange, but draws text onto a texture<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddText
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>startnumber, endnumber, texture_name, name, font_filename,
+            font_size, text, x1, y1, x2, y2, h_align, v_align, ColorR,
+            ColorG, ColorB[, force</em></font><em>]<br>
+        </em>Example: <font size="2" face="Courier New, Courier, mono">AddText
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          1, 100, Black, Button%number%, nimbus_sans.ttf, 47, %number%,
+          -1, -1, -1, -1, center, center, 255, 255, 255</font></p>
+      <p align="left"><strong>8. LoadCropped</strong> - loads a cropped
+        image.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">LoadCropped
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>filename, name, x, y, width, height, tile_x, tile_y[,
+            force</em></font><em>]<br>
+        </em>Example: <font size="2" face="Courier New, Courier, mono">LoadCropped
+data\brick1.jpg,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Brick2, 10, 10, 20, 20, 1, 1</font></p>
+      <p align="left">This command is similar to the Load command, but
+        loads only a portion of an image. In the above example, the
+        command loads the file data\brick1.jpg as "Brick2", but only
+        loads the portion of the image starting at pixel 10, 10, with a
+        width of 20 pixels and a heigth of 20 pixels. Pixel 0, 0 is on
+        the top left of the image. The <em>force</em> value is
+        optional, and if set to false, autosizing will always be
+        disabled for this texture; if set to true, autosizing will
+        always be enabled.</p>
+      <p align="left"><strong>9. AddOverlay</strong> - draws an image on
+        top of another image<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddOverlay
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>texture_name, overlay_texture_name, name, x, y, width,
+            height, tile_x, tile_y[, force]</em></font><em><br>
+        </em>Example: <font size="2" face="Courier New, Courier, mono">AddOverlay
+Brick1,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Brick2, NewBrick, 25, 25, 50, 50, 1, 1</font></p>
+      <p align="left">This command allows multiple textures to be
+        combined into a single texture, by drawing one on top of the
+        other. <em>Texture_name</em> specifies the original source
+        texture name to use (all textures must be loaded beforehand), <em>overlay_texture_name</em>
+        specifies the texture to draw on top of the source texture, and
+        <em>name</em> specifies the name of the new texture. <em>X</em>
+        and <em>Y</em> determine the position to place the top-left of
+        the new image at (since position 0, 0 is the top left of the
+        image), and <em>width</em> and <em>height</em> determine the
+        size in pixels of the overlay texture. In the above example, the
+        "Brick2" texture is drawn on top of the "Brick1" texture,
+        starting at pixel position 25, 25, with a width of 50 and a
+        height of 50. The resulting texture is called "NewBrick". The <em>force</em>
+        value is optional, and if set to false, autosizing will always
+        be disabled for this texture; if set to true, autosizing will
+        always be enabled.</p>
+      <p align="left"><strong>10. Rotate</strong> - sets a texture's
+        rotation to a set amount. This can be used with other texture
+        modifiers.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">Rotate
+          <em>name, angle<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">Rotate Brick1, 30</font></p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"
+        align="left">This command sets the texture's rotation value. In
+        the example, the Brick1 texture's rotation is set to 30 degrees
+        (clockwise).</p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>11.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          RotateAnim</strong> - applies rotation animation to a texture.
+        This can be used with other texture modifiers.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">RotateAnim
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>name, speed<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">RotateAnim Brick1, 0.2</font></p>
+      <p align="left">This command sets the texture's animated rotation
+        value. <em>Speed</em> is in rotations per second. In the
+        example, the Brick1 texture's rotation animation is set to 0.2
+        rotations per second.</p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>12.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Scroll</strong> - set's a texture's fixed scrolling value.
+        This can be used with other texture modifiers.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">Scroll
+          <em>name, x_offset, y_offset<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">Scroll Brick1, 0.5, 0.5</font></p>
+      <p align="left">This command sets the texture's scrolling value.
+        In the example, the Brick1 texture is shifted to the right
+        halfway, and shifted up halfway.</p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>13.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          ScrollAnim</strong> - applies scrolling animation to a
+        texture. This can be used with other texture modifiers.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">ScrollAnim
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>name, x_speed, y_speed<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">ScrollAnim Brick1, 1, 1</font></p>
+      <p align="left">The <em>speed</em> values are the number of full
+        scrolls per second. In the example, the Brick1 texture will
+        scroll to the right once per second, and up once per second.</p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>14.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Scale</strong> - sets a texture's scaling factor. This can be
+        used with other texture modifiers.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">Scale
+          <em>name, x_scale, y_scale<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">Scale Brick1, 30</font></p>
+      <p align="left">In the example, the Brick1 texture is scaled to
+        half the size, in both width and height.</p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>15.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Transform</strong> - sets an advanced transformation method on
+        the texture. This can be used with other texture modifiers, and
+        also can be used multiple times to create multiple
+        transformations.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">Transform
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>name, type, wave_type, base, frequency, phase, amplitude<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">Transform Brick1, rotate, sine, 0.2, 0.2, 0.1,
+          1.0</font></p>
+      <p align="left">This command applies an advanced transformation
+        method on the texture. Type is the animation type modified, and
+        can either be <em>scroll_x, scroll_y, rotate, </em><em></em><em>scale_x</em><em></em>,
+        or <em>scale</em><em>_y</em>. <em>Wave_type</em> defines the
+        type of waveform applied to the transformation, which creates a
+        variable speed of the animation. The values are <em>sine</em>
+        (a typical sine wave which smoothly loops between min and max
+        values), <em>triangle</em> (an angled wave which increases
+        &amp; decreases at constant speed, changing instantly at the
+        extremes), <em>square</em> (max for half the wavelength, min
+        for the rest with instant transition between), <em>sawtooth</em>
+        (gradual steady increase from min to max over the period with an
+        instant return to min at the end), <em>inverse_sawtooth</em>
+        (gradual steady decrease from max to min over the period, with
+        an instant return to max at the end), or <em>pwm</em> (Pulse
+        Width Modulation; like square, except the high to low transition
+        is controlled by duty cycle). <em>Base</em> is the base value
+        of the wave (base value, the minimum if amplitude &gt; 0, the
+        maximum if amplitude &lt; 0), <em>frequency</em> is the number
+        of wave iterations per second (speed), <em>phase</em> is the
+        offset of the wave start, and <em>amplitude</em> is the size of
+        the wave.<br>
+      </p>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>16.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          SetCulling</strong> - sets the culling value for a specified
+        texture.&nbsp; This determines which sides of the object the
+        texture should be displayed.<br>
+        Syntax:<font size="2"><font face="Courier New, Courier, mono"><em>
+            </em>SetCulling <i>name</i>, <i>value</i></font></font><font
+          size="2" face="Courier New, Courier, mono"><em><br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">SetCulling Brick1, 0<br>
+        </font></p>
+      <p align="left">Values are 0 for no culling (show both sides), 1
+        to cull anticlockwise (SBS default), or 2 to cull clockwise
+        (Ogre default, used for models).<br>
+        In the example, the Brick1 texture is now showing both sides of
+        the texture.</p>
+      <p></p>
+      <p></p>
+      <br>
+    </div>
+  </body>
+</html>

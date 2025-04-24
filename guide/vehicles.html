@@ -1,0 +1,386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">The Vehicles Section</font></strong><br>
+      </p>
+      <hr>
+      <p align="left">The <em>Vehicles</em> section allows you to
+        create vehicles for your building. Vehicles are numbered,
+        starting with 1.</p>
+      <p align="left">The section headers and footers are similar to the
+        ones in the <em>Floor</em> section.<br>
+        To specify a single vehicle, you would type something like:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Vehicle
+          1&gt;</font><br>
+        and end it with:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndVehicle&gt;</font><br>
+        <br>
+        For a range of vehicles, you would use something like:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Vehicles 2
+          to 10&gt;</font><br>
+        and end with:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndVehicles&gt;</font></p>
+      <p align="left"><strong>Variables:</strong></p>
+      <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%vehicle%</strong></font>
+        - number of the current vehicle</p>
+      <p align="left"><strong>Parameters</strong>:</p>
+      <p align="left"><strong>1. Name </strong> - sets the name of the
+        vehicle.<br>
+        Example: <font size="2" face="Courier New, Courier, mono">Name
+          = Car</font></p>
+      <p align="left"><strong>2. MaxEngineForce</strong> - sets the
+        maximum engine force. Default is 3000<br>
+      </p>
+      <p align="left"><strong>3. SteeringIncrement</strong> - sets the
+        steering increment. Default is 0.04<br>
+      </p>
+      <p align="left"><strong>4. SteeringClamp</strong> - sets the
+        steering clamp, which is the maximum steering value. Default is
+        0.8.<br>
+      </p>
+      <p align="left"><strong>5. WheelFriction</strong> - sets the wheel
+        friction value. Default is 1e30<br>
+      </p>
+      <p align="left"><strong>6. SuspensionStiffness</strong> - sets the
+        suspension stiffness value. Default is 20<br>
+      </p>
+      <p align="left"><strong>7. SuspensionDamping</strong> - sets the
+        suspension damping value. Default is 2.3<br>
+      </p>
+      <p align="left"><strong>8. SuspensionCompression</strong> - sets
+        the suspension compression. Default is 4.4<br>
+      </p>
+      <p align="left"><strong>9. RollInfluence</strong> - sets the roll
+        influence value. Default is 0.1<br>
+      </p>
+      <p align="left"><strong>10. SuspensionRestLength</strong> - sets
+        the suspension rest length. Default is 0.6<br>
+      </p>
+      <p align="left"><strong>11. MaxSuspensionTravelCm</strong> - sets
+        the maximum suspension travel. Default is 500<br>
+      </p>
+      <p align="left"><strong>12. FrictionSlip</strong> - sets the
+        friction slip value. Default is 10.5<br>
+      </p>
+      <p align="left"><strong>13. ChassisShift</strong> - sets the
+        vehicle's chassis offset, in X, Y and Z values.<br>
+        <font size="2" face="Courier New, Courier, mono">ChassisShift =
+          0, 1, 0</font><br>
+      </p>
+      <p align="left"><strong>14. ChassisMesh</strong> - defines the
+        mesh file to use for the chassis<br>
+        <font size="2" face="Courier New, Courier, mono">ChassisMesh =
+          ogrebullet/models/chassis.mesh</font><br>
+      </p>
+      <p align="left"><strong>15. WheelMesh</strong> - defines the mesh
+        file to use for the wheels<br>
+        <font size="2" face="Courier New, Courier, mono">ChassisMesh =
+          ogrebullet/models/wheel.mesh</font><br>
+      </p>
+      <p align="left"><strong>16. ChassisScale</strong> - sets the
+        scaling factor for the chassis mesh<br>
+        <font size="2" face="Courier New, Courier, mono">ChassisScale =
+          4</font><br>
+      </p>
+      <p align="left"><strong>17. WheelScale</strong> - sets the scaling
+        factor for the wheel mesh<br>
+        <font size="2" face="Courier New, Courier, mono">WheelScale = 4</font><br>
+      </p>
+      <p align="left"><strong>Commands:</strong></p>
+      <p align="left"><strong>1. CreateVehicle</strong> - creates the
+        vehicle at the specified location. Use this command after the
+        CreateChassis and AddWheel commands.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">CreateVehicle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>X, Y, Z</em></font><br>
+        Example: <font size="2" face="Courier New, Courier, mono">CreateVehicle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          -50, 0, 0</font><br>
+      </p>
+      <p align="left"><strong>2. CreateChassis</strong> - creates the
+        vehicle's chassis. The parameters are physics options that are
+        used when creating the rigid body<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">CreateChassis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>restitution, friction, mass, linear_dampening,
+            angular_dampening</em></font><br>
+        Example: <font size="2" face="Courier New, Courier, mono">CreateChassis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          0.6, 0.6, 800, 0.2, 0.2</font><br>
+      </p>
+      <p align="left"><strong>3. AddWheel</strong> - adds a wheel to
+        this vehicle. If <em>engine</em> is true, the wheel is powered
+        by the engine. If <em>steerable</em> is true, the wheel is
+        controlled by the steering wheel. The ConnectionPoint values
+        specify the point at which to connect the wheel to the chassis.
+        The Direction and Axle values are optional, and the defaults for
+        those are "0, 01, 0" for the Direction, and "-1, 0, 0" for the
+        Axle.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddWheel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <em>engine, steerable, IsFrontWheel, radius, ConnectionPointX,
+            ConnectionPointY, ConnectionPointZ</em>[, <em>DirectionX,
+            DirectionY, DirectionZ, AxleX, AxleY, AxleZ</em>]</font><br>
+        Example: <font size="2" face="Courier New, Courier, mono">AddWheel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          true, true, true, 0.3, -1, 0, 0</font><br>
+      </p>
+      <br>
+    </div>
+    <div align="center">
+      <div align="center"> </div>
+    </div>
+  </body>
+</html>
