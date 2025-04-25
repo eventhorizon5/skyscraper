@@ -467,6 +467,10 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 bool ScriptProcessor::LoadFromText(const std::string &text)
 {
 	//loads building commands from a string
+
+	if (text.size() == 0)
+		return false;
+
 	std::vector<std::string> textarray;
 	SplitString(textarray, text, '\n');
 
