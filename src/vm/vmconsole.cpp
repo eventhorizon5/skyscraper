@@ -48,13 +48,13 @@ void VMConsoleInput::operator()(int delay)
 		mtx.unlock();
 		consoleresult.ready = true;
 
-		//wait on VMConsole server
+		//wait on console server
 		while (consoleresult.server_ready == false)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 		}
 
-		//wait for VMConsole to complete
+		//wait for console to complete
 		while (consoleresult.threadwait == true)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
@@ -87,14 +87,13 @@ void VMConsole::Process()
 		buffer = consoleresult.textbuffer;
 		mtx.unlock();
 
-		consoleresult.server_ready = true;
-
 		if (buffer == "")
 		{
 			consoleresult.ready = false;
 			return;
 		}
 		consoleresult.threadwait = true;
+		consoleresult.server_ready = true;
 
 		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
 
