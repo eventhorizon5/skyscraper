@@ -69,6 +69,8 @@ class VMConsole;
 //Virtual Manager system
 class VMIMPEXP VM
 {
+	friend class VMConsole;
+
 public:
 	VM();
 	~VM();
@@ -101,6 +103,7 @@ public:
 	void UpdateProgress();
 	bool ReportMissingFiles(std::vector<std::string> &missing_files);
 	void StartConsole();
+	void ProcessConsole();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering

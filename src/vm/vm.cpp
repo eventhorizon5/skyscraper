@@ -581,10 +581,6 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 
 	//return codes are -1 for fatal error, 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
 
-	//if enabled, process console input
-	if (vmconsole)
-		vmconsole->Process();
-
 	//show progress dialog if needed
 	//gui->ShowProgress();
 
@@ -869,6 +865,14 @@ void VM::StartConsole()
 {
 	//create VM console
 	vmconsole = new VMConsole(this);
+}
+
+void VM::ProcessConsole()
+{
+	//if enabled, process console input
+	if (vmconsole)
+		vmconsole->Process();
+
 }
 
 }
