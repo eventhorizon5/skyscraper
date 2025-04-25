@@ -30,8 +30,6 @@
 #include "enginecontext.h"
 #include "vmconsole.h"
 
-using namespace SBS;
-
 namespace Skyscraper {
 
 //Virtual Manager Console
@@ -46,6 +44,10 @@ void VMConsoleInput::operator()(int delay)
 		std::cout << "> ";
 		std::getline(std::cin, consoleresult.textbuffer);
 		consoleresult.ready = true;
+		while (consoleresult.threadwait == true)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		}
 	}
 }
 
@@ -68,6 +70,7 @@ void VMConsole::Process()
 	//process console input
 	if (consoleresult.ready == true)
 	{
+		consoleresult.threadwait = true;
 		vm->GetHAL()->Report(consoleresult.textbuffer, ">");
 
 		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
@@ -80,9 +83,10 @@ void VMConsole::Process()
 		}
 		else
 		{
-			vm->Report("No active engine");
+			vm->Report("No active engine\n");
 		}
 		consoleresult.ready = false;
+		consoleresult.threadwait = false;
 	}
 }
 
