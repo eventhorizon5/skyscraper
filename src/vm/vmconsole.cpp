@@ -40,9 +40,9 @@ void VMConsoleInput::operator()(int delay)
 {
 	while (true)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 		std::cout << "> ";
 		std::getline(std::cin, consoleresult.textbuffer);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		consoleresult.ready = true;
 		while (consoleresult.threadwait == true)
 		{
@@ -71,10 +71,10 @@ void VMConsole::Process()
 	if (consoleresult.ready == true)
 	{
 		consoleresult.threadwait = true;
-		vm->GetHAL()->Report(consoleresult.textbuffer, ">");
+		//vm->GetHAL()->Report(consoleresult.textbuffer, ">");
 
 		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
-		if (processor)
+		if (processor && consoleresult.textbuffer != "")
 		{
 			processor->GetEngine()->GetSystem()->DeleteColliders = true;
 
