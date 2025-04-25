@@ -333,6 +333,10 @@ bool Skyscraper::OnInit()
 	if (hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.VR", false) == true)
 		ShowMenu = false;
 
+	//start console
+	if (hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowConsole", true) == false)
+		vm->StartConsole();
+
 	if (filename != "")
 		return Load(filename);
 

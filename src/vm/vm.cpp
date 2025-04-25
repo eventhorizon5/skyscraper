@@ -67,6 +67,7 @@ VM::VM()
 	first_run = true;
 	Verbose = false;
 	showconsole = false;
+	vmconsole = 0;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -79,9 +80,6 @@ VM::VM()
 
 	//create GUI instance
 	gui = new GUI(this);
-
-	//create VM console
-	vmconsole = new VMConsole(this);
 
 	Report("Started");
 }
@@ -864,6 +862,12 @@ bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)
 {
 	//report missing files
 	return gui->ReportMissingFiles(missing_files);
+}
+
+void VM::StartConsole()
+{
+	//create VM console
+	vmconsole = new VMConsole(this);
 }
 
 }
