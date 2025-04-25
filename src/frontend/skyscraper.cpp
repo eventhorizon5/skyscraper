@@ -401,6 +401,8 @@ bool Skyscraper::Loop()
 	ProfileManager::Reset();
 	ProfileManager::Increment_Frame_Counter();
 
+	vm->ProcessConsole();
+
 	//main menu routine
 	if (StartupRunning == true)
 	{

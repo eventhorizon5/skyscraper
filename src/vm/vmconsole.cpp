@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - VM Console
+	Skyscraper 2.1 - Virtual Manager Console
 	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -25,6 +25,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
+#include "hal.h"
 #include "scriptproc.h"
 #include "enginecontext.h"
 #include "vmconsole.h"
@@ -67,17 +68,21 @@ void VMConsole::Process()
 	//process console input
 	if (consoleresult.ready == true)
 	{
-		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
+		vm->GetHAL()->Report(consoleresult.textbuffer, ">");
 
-		std::cout << "> " + consoleresult.textbuffer;
+		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
 		if (processor)
 		{
 			processor->GetEngine()->GetSystem()->DeleteColliders = true;
 
 			//load new commands into script interpreter, and run
 			processor->LoadFromText(consoleresult.textbuffer);
-			consoleresult.ready = false;
 		}
+		else
+		{
+			vm->Report("No active engine");
+		}
+		consoleresult.ready = false;
 	}
 }
 
