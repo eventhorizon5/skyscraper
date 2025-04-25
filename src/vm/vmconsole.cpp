@@ -22,6 +22,7 @@
 
 #include <thread>
 #include <iostream>
+#include <mutex>
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
@@ -35,14 +36,25 @@ namespace Skyscraper {
 //Virtual Manager Console
 
 VMConsoleResult consoleresult; //console input result
+std::mutex mtx; //io lock mutex
 
 void VMConsoleInput::operator()(int delay)
 {
 	while (true)
 	{
+		mtx.try_lock();
 		std::cout << "> ";
 		std::getline(std::cin, consoleresult.textbuffer);
+		mtx.unlock();
 		consoleresult.ready = true;
+
+		//wait on VMConsole server
+		while (consoleresult.server_ready == false)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		}
+
+		//wait for VMConsole to complete
 		while (consoleresult.threadwait == true)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
@@ -67,22 +79,63 @@ VMConsole::~VMConsole()
 void VMConsole::Process()
 {
 	//process console input
+
 	if (consoleresult.ready == true)
 	{
+		std::string buffer;
+		mtx.try_lock();
+		buffer = consoleresult.textbuffer;
+		mtx.unlock();
+
+		consoleresult.server_ready = true;
+
+		if (buffer == "")
+		{
+			consoleresult.ready = false;
+			return;
+		}
 		consoleresult.threadwait = true;
 
 		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
-		if (processor && consoleresult.textbuffer != "")
+
+		std::string commandline = buffer;
+		int pos = commandline.find(" ", 0);
+		if (pos > 0)
+		{
+			std::string command = commandline.substr(0, pos);
+			SBS::TrimString(command);
+			Ogre::StringVector params;
+			SBS::SplitString(params, commandline.substr(pos), ' ');
+
+			//commands
+			if (command == "shutdown")
+			{
+				if (params.size() != 1)
+					Report ("Incorrect number of parameters");
+
+				if (params[0] == "all")
+					vm->DeleteEngines();
+				else
+				{
+					EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+
+					if (engine)
+						engine->Shutdown();
+				}
+			}
+		}
+		else if (processor)
 		{
 			processor->GetEngine()->GetSystem()->DeleteColliders = true;
 
 			//load new commands into script interpreter, and run
-			processor->LoadFromText(consoleresult.textbuffer);
+			processor->LoadFromText(buffer);
 		}
 		else
 		{
 			Report("No active engine");
 		}
+
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 	}
