@@ -42,7 +42,6 @@ void VMConsoleInput::operator()(int delay)
 	{
 		std::cout << "> ";
 		std::getline(std::cin, consoleresult.textbuffer);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		consoleresult.ready = true;
 		while (consoleresult.threadwait == true)
 		{
@@ -71,7 +70,6 @@ void VMConsole::Process()
 	if (consoleresult.ready == true)
 	{
 		consoleresult.threadwait = true;
-		//vm->GetHAL()->Report(consoleresult.textbuffer, ">");
 
 		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
 		if (processor && consoleresult.textbuffer != "")
@@ -83,11 +81,23 @@ void VMConsole::Process()
 		}
 		else
 		{
-			vm->Report("No active engine\n");
+			Report("No active engine");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 	}
+}
+
+bool VMConsole::Report(const std::string &text)
+{
+	std::cout << std::endl << text << std::endl;
+	return true;
+}
+
+bool VMConsole::ReportError(const std::string &text)
+{
+	Report(text);
+	return false;
 }
 
 }
