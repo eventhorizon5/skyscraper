@@ -42,10 +42,15 @@ void VMConsoleInput::operator()(int delay)
 {
 	while (true)
 	{
-		mtx.try_lock();
-		std::cout << "> ";
-		std::getline(std::cin, consoleresult.textbuffer);
-		mtx.unlock();
+		if (mtx.try_lock())
+		{
+			std::cout << "> ";
+			std::getline(std::cin, consoleresult.textbuffer);
+			mtx.unlock();
+		}
+		else
+			continue;
+
 		consoleresult.ready = true;
 
 		//wait on console server
@@ -83,9 +88,13 @@ void VMConsole::Process()
 	if (consoleresult.ready == true)
 	{
 		std::string buffer;
-		mtx.try_lock();
-		buffer = consoleresult.textbuffer;
-		mtx.unlock();
+		if (mtx.try_lock())
+		{
+			buffer = consoleresult.textbuffer;
+			mtx.unlock();
+		}
+		else
+			return;
 
 		if (buffer == "")
 		{
@@ -101,8 +110,11 @@ void VMConsole::Process()
 		int pos = commandline.find(" ", 0);
 		if (pos > 0)
 		{
+			//get command line
 			std::string command = commandline.substr(0, pos);
 			SBS::TrimString(command);
+
+			//get parameters
 			Ogre::StringVector params;
 			SBS::SplitString(params, commandline.substr(pos), ' ');
 
@@ -142,7 +154,9 @@ void VMConsole::Process()
 
 bool VMConsole::Report(const std::string &text)
 {
-	std::cout << std::endl << text << std::endl;
+	mtx.try_lock();
+	std::cout << text << std::endl;
+	mtx.unlock();
 	return true;
 }
 
