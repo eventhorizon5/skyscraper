@@ -41,7 +41,6 @@
 #include "gui.h"
 #include "profiler.h"
 #include "vmconsole.h"
-#include "scriptproc.h"
 
 using namespace SBS;
 
@@ -81,9 +80,8 @@ VM::VM()
 	//create GUI instance
 	gui = new GUI(this);
 
-	//create VM console instance
-	std::thread con(VMConsole(), 0);
-	con.detach();
+	//create VM console
+	vmconsole = new VMConsole(this);
 
 	Report("Started");
 }
@@ -106,6 +104,11 @@ VM::~VM()
 	if (gui)
 		delete gui;
 	gui = 0;
+
+	//delete VM console
+	if (vmconsole)
+		delete vmconsole;
+	vmconsole = 0;
 }
 
 void VM::SetParent(wxWindow *parent)
@@ -581,20 +584,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//return codes are -1 for fatal error, 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
 
 	//if enabled, process console input
-	if (inputmgr.ready == true)
-	{
-		ScriptProcessor *processor = GetActiveScriptProcessor();
-
-		std::cout << "> " + inputmgr.textbuffer;
-		if (processor)
-		{
-			processor->GetEngine()->GetSystem()->DeleteColliders = true;
-
-			//load new commands into script interpreter, and run
-			processor->LoadFromText(inputmgr.textbuffer);
-			inputmgr.ready = false;
-		}
-	}
+	vmconsole->Process();
 
 	//show progress dialog if needed
 	//gui->ShowProgress();

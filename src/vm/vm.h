@@ -139,6 +139,7 @@ private:
 	HAL *hal; //hardware abstraction layer
 	SkySystem *skysystem;
 	GUI *gui; //GUI subsystem
+	VMConsole *vmconsole; //VM console system
 
 	wxWindow *parent;
 
