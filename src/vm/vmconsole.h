@@ -38,6 +38,8 @@ public:
 	VMConsole(VM *vm);
 	~VMConsole();
 	void Process();
+	bool Report(const std::string &text);
+	bool ReportError(const std::string &text);
 
 private:
 	VM *vm;
