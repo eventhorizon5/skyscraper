@@ -54,7 +54,7 @@ void VMConsoleInput::operator()(int delay)
 		consoleresult.server_ready = false;
 		consoleresult.ready = true;
 
-		//wait on console server
+		//wait for console server to be ready
 		while (consoleresult.server_ready == false)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
@@ -119,7 +119,7 @@ void VMConsole::Process()
 			Ogre::StringVector params;
 			SBS::SplitString(params, commandline.substr(pos), ' ');
 
-			//commands
+			//shutdown command
 			if (command == "shutdown")
 			{
 				if (params.size() != 1)
@@ -133,6 +133,47 @@ void VMConsole::Process()
 
 					if (engine)
 						engine->Shutdown();
+				}
+			}
+
+			//setactive command
+			if (command == "setactive")
+			{
+				if (params.size() != 1)
+					Report("Incorrect number of parameters");
+
+				vm->SetActiveEngine(SBS::ToInt(params[0]));
+			}
+
+			//reload command
+			if (command == "reload")
+			{
+				if (params.size() < 0 || params.size() > 1)
+					Report("Incorrect number of parameters");
+
+				if (params.size() == 0)
+				{
+					EngineContext *engine = vm->GetActiveEngine();
+
+					if (engine)
+						engine->Reload = true;
+				}
+				else if (params[0] == "all")
+				{
+					for (int i = 0; i < vm->GetEngineCount(); i++)
+					{
+						EngineContext *engine = vm->GetEngine(i);
+
+						if (engine)
+							engine->Reload = true;
+					}
+				}
+				else
+				{
+					EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+
+					if (engine)
+						engine->Reload = true;
 				}
 			}
 		}
