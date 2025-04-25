@@ -22,24 +22,62 @@
 
 #include <thread>
 #include <iostream>
+#include "globals.h"
+#include "sbs.h"
 #include "vm.h"
+#include "scriptproc.h"
+#include "enginecontext.h"
 #include "vmconsole.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-VMConsoleInput inputmgr; //console input manager
-
 //Virtual Manager Console
-void VMConsole::operator()(int x)
+
+VMConsoleResult consoleresult; //console input result
+
+void VMConsoleInput::operator()(int delay)
 {
 	while (true)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 		std::cout << "> ";
-		std::cin >> inputmgr.textbuffer;
-		inputmgr.ready = true;
+		std::cin >> consoleresult.textbuffer;
+		consoleresult.ready = true;
+	}
+}
+
+VMConsole::VMConsole(VM *vm)
+{
+	this->vm = vm;
+
+	//create VM console instance
+	std::thread coninput(VMConsoleInput(), 1);
+	coninput.detach();
+}
+
+VMConsole::~VMConsole()
+{
+
+}
+
+void VMConsole::Process()
+{
+	//process console input
+	if (consoleresult.ready == true)
+	{
+		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
+
+		std::cout << "> " + consoleresult.textbuffer;
+		if (processor)
+		{
+			processor->GetEngine()->GetSystem()->DeleteColliders = true;
+
+			//load new commands into script interpreter, and run
+			processor->LoadFromText(consoleresult.textbuffer);
+			consoleresult.ready = false;
+		}
 	}
 }
 

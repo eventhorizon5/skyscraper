@@ -25,17 +25,28 @@
 
 namespace Skyscraper {
 
-struct VMConsoleInput
+struct VMConsoleResult
 {
 	std::string textbuffer;
 	std::atomic<bool> ready;
 };
 
-//Virtual Manager Console
 class VMIMPEXP VMConsole
 {
 public:
-	void operator()(int x);
+	VMConsole(VM *vm);
+	~VMConsole();
+	void Process();
+
+private:
+	VM *vm;
+};
+
+//Virtual Manager Console
+class VMIMPEXP VMConsoleInput
+{
+public:
+	void operator()(int delay);
 private:
 
 };
