@@ -23,6 +23,7 @@
 #ifndef VM_H
 #define VM_H
 
+#include <thread>
 #include <vector>
 
 //DLL Exporting
@@ -63,6 +64,7 @@ class ScriptProcessor;
 class HAL;
 class SkySystem;
 class GUI;
+class VMConsole;
 
 //Virtual Manager system
 class VMIMPEXP VM

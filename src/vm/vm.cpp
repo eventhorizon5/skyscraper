@@ -29,6 +29,7 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include <sys/utsname.h>
 #endif
+#include <iostream>
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
@@ -39,10 +40,14 @@
 #include "sky.h"
 #include "gui.h"
 #include "profiler.h"
+#include "vmconsole.h"
+#include "scriptproc.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
+
+extern VMConsoleInput inputmgr; //console input manager
 
 //Virtual Manager system
 
@@ -75,6 +80,10 @@ VM::VM()
 
 	//create GUI instance
 	gui = new GUI(this);
+
+	//create VM console instance
+	std::thread con(VMConsole(), 0);
+	con.detach();
 
 	Report("Started");
 }
@@ -570,6 +579,22 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//run system
 
 	//return codes are -1 for fatal error, 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
+
+	//if enabled, process console input
+	if (inputmgr.ready == true)
+	{
+		ScriptProcessor *processor = GetActiveScriptProcessor();
+
+		std::cout << "> " + inputmgr.textbuffer;
+		if (processor)
+		{
+			processor->GetEngine()->GetSystem()->DeleteColliders = true;
+
+			//load new commands into script interpreter, and run
+			processor->LoadFromText(inputmgr.textbuffer);
+			inputmgr.ready = false;
+		}
+	}
 
 	//show progress dialog if needed
 	//gui->ShowProgress();
