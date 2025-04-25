@@ -117,7 +117,7 @@ void VMConsole::Process()
 
 			//get parameters
 			Ogre::StringVector params;
-			SBS::SplitString(params, commandline.substr(pos), ' ');
+			SBS::SplitString(params, commandline.substr(pos), ',');
 
 			//shutdown command
 			if (command == "shutdown")
@@ -175,6 +175,15 @@ void VMConsole::Process()
 					if (engine)
 						engine->Reload = true;
 				}
+			}
+
+			//load command
+			if (command == "load")
+			{
+				if (params.size() != 1)
+					Report("Incorrect number of parameters");
+
+				vm->Load(params[0]);
 			}
 		}
 		else if (processor)
