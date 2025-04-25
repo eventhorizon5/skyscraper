@@ -30,6 +30,7 @@ struct VMConsoleResult
 	std::string textbuffer;
 	std::atomic<bool> ready;
 	std::atomic<bool> threadwait;
+	std::atomic<bool> server_ready;
 };
 
 class VMIMPEXP VMConsole
