@@ -51,6 +51,7 @@ void VMConsoleInput::operator()(int delay)
 		else
 			continue;
 
+		consoleresult.server_ready = false;
 		consoleresult.ready = true;
 
 		//wait on console server
