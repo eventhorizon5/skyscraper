@@ -44,17 +44,22 @@ void VMConsoleInput::operator()(int delay)
 	{
 		if (mtx.try_lock())
 		{
+			//output console prompt
 			std::cout << "\n> ";
-			std::cin.clear();
+
+			//get keyboard input
 			std::getline(std::cin, consoleresult.textbuffer);
+
 			mtx.unlock();
 		}
 		else
 		{
+			//if thread can't get lock, sleep and return
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 			continue;
 		}
 
+		//reset states
 		consoleresult.server_ready = false;
 		consoleresult.ready = true;
 		int i = 0;
@@ -66,7 +71,7 @@ void VMConsoleInput::operator()(int delay)
 		while (consoleresult.server_ready == false)
 		{
 			i++;
-			if (i > 500)
+			if (i > 500) //deadlock prevention
 				break;
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 		}
@@ -76,7 +81,7 @@ void VMConsoleInput::operator()(int delay)
 		while (consoleresult.threadwait == true)
 		{
 			i++;
-			if (i > 500)
+			if (i > 500) //deadlock prevention
 				break;
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 		}
@@ -106,17 +111,20 @@ void VMConsole::Process()
 		std::string buffer;
 		if (mtx.try_lock())
 		{
+			//in lock, copy atomic string into new buffer and unlock
 			buffer = consoleresult.textbuffer;
 			mtx.unlock();
 		}
 		else
 		{
+			//if thread can't get lock, sleep and return
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			return;
 		}
 
 		if (buffer == "")
 		{
+			//reset and exit if buffer is empty
 			consoleresult.ready = false;
 			return;
 		}
