@@ -39,7 +39,7 @@ namespace Skyscraper {
 //Virtual Manager Console
 
 VMConsoleResult consoleresult; //console input result
-std::mutex mtx; //io lock mutex
+std::mutex mtx_io; //io lock mutex
 std::string prompt; //console prompt
 std::atomic<bool> shutdown; //set to true to shut down input thread
 
@@ -50,7 +50,7 @@ void VMConsoleInput::operator()(int delay)
 		if (shutdown == true)
 			break;
 
-		if (mtx.try_lock())
+		if (mtx_io.try_lock())
 		{
 			//output console prompt
 			std::string color = GetColors("green");
@@ -60,7 +60,7 @@ void VMConsoleInput::operator()(int delay)
 			//get keyboard input
 			std::getline(std::cin, consoleresult.textbuffer);
 
-			mtx.unlock();
+			mtx_io.unlock();
 		}
 		else
 		{
@@ -122,7 +122,7 @@ void VMConsole::Process()
 	if (consoleresult.ready == true)
 	{
 		std::string buffer;
-		if (mtx.try_lock())
+		if (mtx_io.try_lock())
 		{
 			//in lock, copy atomic string into new buffer and unlock
 			buffer = consoleresult.textbuffer;
@@ -135,7 +135,7 @@ void VMConsole::Process()
 			else
 				prompt = "\n> ";
 
-			mtx.unlock();
+			mtx_io.unlock();
 		}
 		else
 		{
@@ -500,9 +500,9 @@ void VMConsole::Process()
 bool VMConsole::Report(const std::string &text, const std::string &color)
 {
 	//lock mutex, write to console and unlock
-	mtx.try_lock();
+	mtx_io.try_lock();
 	vm->GetHAL()->ConsoleOut(text + "\n", color);
-	mtx.unlock();
+	mtx_io.unlock();
 	return true;
 }
 
