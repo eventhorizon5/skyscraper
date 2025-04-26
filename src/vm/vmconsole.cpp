@@ -269,7 +269,7 @@ void VMConsole::Process()
 		//version command
 		if (command == "version")
 		{
-			Report("Skyscraper Frontend version " + vm->version_frontend);
+			Report("Skyscraper Frontend version " + vm->version_frontend + " " + vm->version_state);
 			Report("VM version " + vm->version);
 			if (processor)
 				Report("SBS version " + processor->GetEngine()->GetSystem()->version);
