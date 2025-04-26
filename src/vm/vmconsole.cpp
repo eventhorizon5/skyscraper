@@ -316,11 +316,11 @@ void VMConsole::Process()
 		if (command == "ps")
 		{
 			int count = vm->GetEngineCount();
-			Report(SBS::ToString(count) + " engines running\n");
+			Report(SBS::ToString(count) + " engines running\n", "magenta");
 			for (int i = 0; i < count; i++)
 			{
 				EngineContext *engine = vm->GetEngine(i);
-				Report(SBS::ToString(i) + ": " + engine->GetFilename());
+				Report(SBS::ToString(i) + ": " + engine->GetFilename(), "yellow");
 			}
 			consoleresult.ready = false;
 			consoleresult.threadwait = false;
@@ -344,8 +344,9 @@ void VMConsole::Process()
 
 			//print simulator time
 			Report("Simulator time: ");
-			int year, month, day;
+			int year, month, day, hour, minute, second;
 			vm->GetSkySystem()->GetDate(year, month, day);
+			vm->GetSkySystem()->GetTime(hour, minute, second);
 
 			std::string month_s, day_s;
 			switch (month)
@@ -394,7 +395,14 @@ void VMConsole::Process()
 					day_s = "Saturday";
 			}
 
-			Report(day_s + ", " + month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year));
+			std::string pm = "am";
+			int hr = hour;
+			if (hour > 12)
+			{
+				pm = "pm";
+				hr -= 12;
+			}
+			Report(day_s + ", " + month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
 			consoleresult.ready = false;
 			consoleresult.threadwait = false;
 			return;
