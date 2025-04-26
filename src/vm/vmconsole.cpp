@@ -469,12 +469,9 @@ void VMConsole::Process()
 
 bool VMConsole::Report(const std::string &text, const std::string &color)
 {
-	std::string mod = GetColors(color);
-	std::string reset = GetColors("reset");
-
 	//lock mutex, write to console and unlock
 	mtx.try_lock();
-	std::cout << mod << text << reset << std::endl;
+	vm->GetHAL()->ConsoleOut(text + "\n", color);
 	mtx.unlock();
 	return true;
 }
@@ -506,7 +503,7 @@ std::string GetColors(const std::string &color)
 	else if (color == "black")
 		mod = "\033[1;30m";
 	else if (color == "reset")
-		mod = "\033[0m\n";
+		mod = "\033[0m";
 
 	return mod;
 }
