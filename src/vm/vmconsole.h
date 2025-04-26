@@ -39,7 +39,7 @@ public:
 	VMConsole(VM *vm);
 	~VMConsole();
 	void Process();
-	bool Report(const std::string &text);
+	bool Report(const std::string &text, const std::string &color = "white");
 	bool ReportError(const std::string &text);
 
 private:
@@ -52,8 +52,9 @@ class VMIMPEXP VMConsoleInput
 public:
 	void operator()(int delay);
 private:
-
 };
+
+std::string GetColors(const std::string &color);
 
 }
 

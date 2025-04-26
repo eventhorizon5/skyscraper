@@ -52,7 +52,9 @@ void VMConsoleInput::operator()(int delay)
 		if (mtx.try_lock())
 		{
 			//output console prompt
-			std::cout << prompt;
+			std::string color = GetColors("green");
+			std::string reset = GetColors("reset");
+			std::cout << color << prompt << reset;
 
 			//get keyboard input
 			std::getline(std::cin, consoleresult.textbuffer);
@@ -103,7 +105,7 @@ VMConsole::VMConsole(VM *vm)
 	std::thread coninput(VMConsoleInput(), 1);
 	coninput.detach();
 
-	Report("\nWelcome to Virtual Manager\n");
+	Report("\nWelcome to Virtual Manager\n", "blue");
 }
 
 VMConsole::~VMConsole()
@@ -465,18 +467,48 @@ void VMConsole::Process()
 	}
 }
 
-bool VMConsole::Report(const std::string &text)
+bool VMConsole::Report(const std::string &text, const std::string &color)
 {
+	std::string mod = GetColors(color);
+	std::string reset = GetColors("reset");
+
+	//lock mutex, write to console and unlock
 	mtx.try_lock();
-	std::cout << text << std::endl;
+	std::cout << mod << text << reset << std::endl;
 	mtx.unlock();
 	return true;
 }
 
 bool VMConsole::ReportError(const std::string &text)
 {
-	Report(text);
+	Report(text, "red");
 	return false;
+}
+
+std::string GetColors(const std::string &color)
+{
+	//get colors
+	std::string mod;
+	if (color == "blue")
+		mod = "\033[1;34m";
+	else if (color == "green")
+		mod = "\033[1;32m";
+	else if (color == "yellow")
+		mod = "\033[1;33m";
+	else if (color == "red")
+		mod = "\033[1;31m";
+	else if (color == "magenta")
+		mod = "\033[1;35m";
+	else if (color == "cyan")
+		mod = "\033[1;36m";
+	else if (color == "white")
+		mod = "\033[1;37m";
+	else if (color == "black")
+		mod = "\033[1;30m";
+	else if (color == "reset")
+		mod = "\033[0m\n";
+
+	return mod;
 }
 
 }
