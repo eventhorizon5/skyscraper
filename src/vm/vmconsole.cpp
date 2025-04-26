@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Virtual Manager Console
+	Skyscraper 2.0 - Virtual Manager Console
 	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
