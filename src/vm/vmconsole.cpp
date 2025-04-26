@@ -37,6 +37,7 @@ namespace Skyscraper {
 
 VMConsoleResult consoleresult; //console input result
 std::mutex mtx; //io lock mutex
+std::string prompt;
 
 void VMConsoleInput::operator()(int delay)
 {
@@ -45,7 +46,8 @@ void VMConsoleInput::operator()(int delay)
 		if (mtx.try_lock())
 		{
 			//output console prompt
-			std::cout << "\n> ";
+			//std::cout << "\n> ";
+			std::cout << prompt;
 
 			//get keyboard input
 			std::getline(std::cin, consoleresult.textbuffer);
@@ -113,6 +115,7 @@ void VMConsole::Process()
 		{
 			//in lock, copy atomic string into new buffer and unlock
 			buffer = consoleresult.textbuffer;
+			prompt = "\n" + SBS::ToString(vm->GetActiveEngine()->GetNumber()) + ">";
 			mtx.unlock();
 		}
 		else
@@ -160,6 +163,9 @@ void VMConsole::Process()
 					if (engine)
 						engine->Shutdown();
 				}
+				consoleresult.ready = false;
+				consoleresult.threadwait = false;
+				return;
 			}
 
 			//setactive command
@@ -169,6 +175,9 @@ void VMConsole::Process()
 					Report("Incorrect number of parameters");
 
 				vm->SetActiveEngine(SBS::ToInt(params[0]));
+				consoleresult.ready = false;
+				consoleresult.threadwait = false;
+				return;
 			}
 
 			//reload command
@@ -201,18 +210,49 @@ void VMConsole::Process()
 					if (engine)
 						engine->Reload = true;
 				}
+				consoleresult.ready = false;
+				consoleresult.threadwait = false;
+				return;
 			}
 
 			//load command
-			if (command == "load")
+			if (command == "vmload")
 			{
 				if (params.size() != 1)
 					Report("Incorrect number of parameters");
 
 				vm->Load(params[0]);
+				consoleresult.ready = false;
+				consoleresult.threadwait = false;
+				return;
+			}
+
+			//switch command
+			if (command == "switch")
+			{
+				if (params.size() != 1)
+					Report("Incorrect number of parameters");
+
+				vm->SetActiveEngine(SBS::ToInt(params[0]), true);
+				consoleresult.ready = false;
+				consoleresult.threadwait = false;
+				return;
+			}
+
+			//setactive command
+			if (command == "setactive")
+			{
+				if (params.size() != 1)
+					Report("Incorrect number of parameters");
+
+				vm->SetActiveEngine(SBS::ToInt(params[0]), false);
+				consoleresult.ready = false;
+				consoleresult.threadwait = false;
+				return;
 			}
 		}
-		else if (processor)
+
+		if (processor)
 		{
 			processor->GetEngine()->GetSystem()->DeleteColliders = true;
 
