@@ -118,7 +118,15 @@ void VMConsole::Process()
 		{
 			//in lock, copy atomic string into new buffer and unlock
 			buffer = consoleresult.textbuffer;
-			prompt = "\n" + SBS::ToString(vm->GetActiveEngine()->GetNumber()) + "> ";
+
+			if (vm->GetActiveEngine())
+			{
+				int number = vm->GetActiveEngine()->GetNumber();
+				prompt = "\n" + SBS::ToString(number) + "> ";
+			}
+			else
+				prompt = "\n> ";
+
 			mtx.unlock();
 		}
 		else
@@ -141,118 +149,163 @@ void VMConsole::Process()
 
 		std::string commandline = buffer;
 		int pos = commandline.find(" ", 0);
+		std::string command;
+		Ogre::StringVector params;
 		if (pos > 0)
 		{
 			//get command line
-			std::string command = commandline.substr(0, pos);
+			command = commandline.substr(0, pos);
 			SBS::TrimString(command);
 
 			//get parameters
-			Ogre::StringVector params;
 			SBS::SplitString(params, commandline.substr(pos), ',');
+		}
+		else
+			command = commandline;
 
-			//shutdown command
-			if (command == "shutdown")
+		//shutdown command
+		if (command == "shutdown")
+		{
+			if (params.size() != 1)
+				Report ("Incorrect number of parameters");
+
+			if (params[0] == "all")
+				vm->DeleteEngines();
+			else
 			{
-				if (params.size() != 1)
-					Report ("Incorrect number of parameters");
+				EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
 
-				if (params[0] == "all")
-					vm->DeleteEngines();
-				else
-				{
-					EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
-
-					if (engine)
-						engine->Shutdown();
-				}
-				consoleresult.ready = false;
-				consoleresult.threadwait = false;
-				return;
+				if (engine)
+					engine->Shutdown();
 			}
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
 
-			//setactive command
-			if (command == "setactive")
+		//setactive command
+		if (command == "setactive")
+		{
+			if (params.size() != 1)
+				Report("Incorrect number of parameters");
+
+			vm->SetActiveEngine(SBS::ToInt(params[0]));
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		//reload command
+		if (command == "reload")
+		{
+			if (params.size() < 0 || params.size() > 1)
+				Report("Incorrect number of parameters");
+
+			if (params.size() == 0)
 			{
-				if (params.size() != 1)
-					Report("Incorrect number of parameters");
+				EngineContext *engine = vm->GetActiveEngine();
 
-				vm->SetActiveEngine(SBS::ToInt(params[0]));
-				consoleresult.ready = false;
-				consoleresult.threadwait = false;
-				return;
+				if (engine)
+					engine->Reload = true;
 			}
-
-			//reload command
-			if (command == "reload")
+			else if (params[0] == "all")
 			{
-				if (params.size() < 0 || params.size() > 1)
-					Report("Incorrect number of parameters");
-
-				if (params.size() == 0)
+				for (int i = 0; i < vm->GetEngineCount(); i++)
 				{
-					EngineContext *engine = vm->GetActiveEngine();
-
-					if (engine)
-						engine->Reload = true;
-				}
-				else if (params[0] == "all")
-				{
-					for (int i = 0; i < vm->GetEngineCount(); i++)
-					{
-						EngineContext *engine = vm->GetEngine(i);
-
-						if (engine)
-							engine->Reload = true;
-					}
-				}
-				else
-				{
-					EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+					EngineContext *engine = vm->GetEngine(i);
 
 					if (engine)
 						engine->Reload = true;
 				}
-				consoleresult.ready = false;
-				consoleresult.threadwait = false;
-				return;
 			}
-
-			//vmload command
-			if (command == "vmload")
+			else
 			{
-				if (params.size() != 1)
-					Report("Incorrect number of parameters");
+				EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
 
-				vm->Load(params[0]);
-				consoleresult.ready = false;
-				consoleresult.threadwait = false;
-				return;
+				if (engine)
+					engine->Reload = true;
 			}
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
 
-			//switch command
-			if (command == "switch")
-			{
-				if (params.size() != 1)
-					Report("Incorrect number of parameters");
+		//vmload command
+		if (command == "vmload")
+		{
+			if (params.size() != 1)
+				Report("Incorrect number of parameters");
 
-				vm->SetActiveEngine(SBS::ToInt(params[0]), true);
-				consoleresult.ready = false;
-				consoleresult.threadwait = false;
-				return;
-			}
+			vm->Load(params[0]);
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
 
-			//setactive command
-			if (command == "setactive")
-			{
-				if (params.size() != 1)
-					Report("Incorrect number of parameters");
+		//switch command
+		if (command == "switch")
+		{
+			if (params.size() != 1)
+				Report("Incorrect number of parameters");
 
-				vm->SetActiveEngine(SBS::ToInt(params[0]), false);
-				consoleresult.ready = false;
-				consoleresult.threadwait = false;
-				return;
-			}
+			vm->SetActiveEngine(SBS::ToInt(params[0]), true);
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		//setactive command
+		if (command == "setactive")
+		{
+			if (params.size() != 1)
+				Report("Incorrect number of parameters");
+
+			vm->SetActiveEngine(SBS::ToInt(params[0]), false);
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		//version command
+		if (command == "version")
+		{
+			Report("Skyscraper Frontend version " + vm->version_frontend);
+			Report("VM version " + vm->version);
+			if (processor)
+				Report("SBS version " + processor->GetEngine()->GetSystem()->version);
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		//arch command
+		if (command == "arch")
+		{
+			Report(vm->Architecture);
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		//platform command
+		if (command == "platform")
+		{
+			Report(vm->Platform);
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		//uname command
+		if (command == "uname")
+		{
+			if (params.size() > 0)
+				Report("VM " + vm->version + " " + vm->version_state);
+			else
+				Report("VM");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
 		}
 
 		if (processor)
@@ -269,6 +322,7 @@ void VMConsole::Process()
 
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
+		return;
 	}
 }
 
