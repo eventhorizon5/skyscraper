@@ -44,25 +44,40 @@ void VMConsoleInput::operator()(int delay)
 	{
 		if (mtx.try_lock())
 		{
-			std::cout << "> ";
+			std::cout << "\n> ";
+			std::cin.clear();
 			std::getline(std::cin, consoleresult.textbuffer);
 			mtx.unlock();
 		}
 		else
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 			continue;
+		}
 
 		consoleresult.server_ready = false;
 		consoleresult.ready = true;
+		int i = 0;
+
+		//TODO:
+		//fix thread synchronization issues
 
 		//wait for console server to be ready
 		while (consoleresult.server_ready == false)
 		{
+			i++;
+			if (i > 500)
+				break;
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 		}
+		i = 0;
 
 		//wait for console to complete
 		while (consoleresult.threadwait == true)
 		{
+			i++;
+			if (i > 500)
+				break;
 			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 		}
 	}
@@ -95,7 +110,10 @@ void VMConsole::Process()
 			mtx.unlock();
 		}
 		else
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			return;
+		}
 
 		if (buffer == "")
 		{
