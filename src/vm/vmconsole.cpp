@@ -37,16 +37,19 @@ namespace Skyscraper {
 
 VMConsoleResult consoleresult; //console input result
 std::mutex mtx; //io lock mutex
-std::string prompt;
+std::string prompt; //console prompt
+std::atomic<bool> shutdown; //set to true to shut down input thread
 
 void VMConsoleInput::operator()(int delay)
 {
 	while (true)
 	{
+		if (shutdown == true)
+			break;
+
 		if (mtx.try_lock())
 		{
 			//output console prompt
-			//std::cout << "\n> ";
 			std::cout << prompt;
 
 			//get keyboard input
@@ -101,7 +104,7 @@ VMConsole::VMConsole(VM *vm)
 
 VMConsole::~VMConsole()
 {
-
+	shutdown = true;
 }
 
 void VMConsole::Process()
@@ -115,7 +118,7 @@ void VMConsole::Process()
 		{
 			//in lock, copy atomic string into new buffer and unlock
 			buffer = consoleresult.textbuffer;
-			prompt = "\n" + SBS::ToString(vm->GetActiveEngine()->GetNumber()) + ">";
+			prompt = "\n" + SBS::ToString(vm->GetActiveEngine()->GetNumber()) + "> ";
 			mtx.unlock();
 		}
 		else
@@ -215,7 +218,7 @@ void VMConsole::Process()
 				return;
 			}
 
-			//load command
+			//vmload command
 			if (command == "vmload")
 			{
 				if (params.size() != 1)
