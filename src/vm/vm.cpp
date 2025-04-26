@@ -269,6 +269,8 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 	//run sim engine instances, and returns the new engine(s) created (if applicable)
 	//to be started by the frontend
 
+	SBS_PROFILE("VM::RunEngines");
+
 	bool result = true;
 	bool isloading = IsEngineLoading();
 
@@ -581,6 +583,8 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//run system
 
 	//return codes are -1 for fatal error, 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
+
+	SBS_PROFILE_MAIN("VM");
 
 	//show progress dialog if needed
 	//gui->ShowProgress();
