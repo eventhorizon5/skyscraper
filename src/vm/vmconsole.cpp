@@ -31,6 +31,7 @@
 #include "sky.h"
 #include "scriptproc.h"
 #include "enginecontext.h"
+#include "profiler.h"
 #include "vmconsole.h"
 
 namespace Skyscraper {
@@ -110,6 +111,7 @@ VMConsole::VMConsole(VM *vm)
 
 VMConsole::~VMConsole()
 {
+	SBS::ProfileManager::CleanupMemory();
 	shutdown = true;
 }
 
@@ -430,6 +432,24 @@ void VMConsole::Process()
 			return;
 		}
 
+		//profile command
+		if (command == "profile")
+		{
+			SBS::enable_profiling = true;
+			SBS::enable_advanced_profiling = false;
+			if (params.size() == 1)
+			{
+				if (params[0] == "-a")
+					SBS::enable_advanced_profiling = true;
+			}
+			std::string output;
+			SBS::ProfileManager::dumpAll(output);
+			Report(output, "green");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
 		//help command
 		if (command == "help" || command == "?")
 		{
@@ -449,6 +469,7 @@ void VMConsole::Process()
 				Report("ps - show engine process list");
 				Report("date - show real and simulator date and time");
 				Report("uptime [engine_number] - show the SBS engine uptime in seconds");
+				Report("profile [-a] - shows function-level profiling statistics");
 				Report("help - print this help guide\n");
 				Report("All other commands will be passed to the active simulator engine, if available");
 				Report("\nPress CTRL-c to quit");
