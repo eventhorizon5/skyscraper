@@ -120,6 +120,7 @@ public:
 	std::string version_state;
 	std::string version_frontend;
 
+	std::string Bits;
 	std::string Platform;
 	std::string Architecture;
 	int macos_major; //macos major version

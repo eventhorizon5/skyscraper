@@ -752,13 +752,12 @@ int get_macos_version(uint32_t &major, uint32_t &minor, bool &osx)
 void VM::ShowPlatform()
 {
 	//set platform name
-	std::string bits;
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-	bits = "32-bit";
+	Bits = "32-bit";
 #endif
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
-	bits = "64-bit";
+	Bits = "64-bit";
 #endif
 
 #if OGRE_CPU == OGRE_CPU_X86
@@ -774,15 +773,15 @@ void VM::ShowPlatform()
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Platform = "Windows " + Architecture + " " + bits;
+	Platform = "Windows " + Architecture + " " + Bits;
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	#ifdef  __FreeBSD__
-		Platform = "FreeBSD " + Architecture + " " + bits;
+		Platform = "FreeBSD " + Architecture + " " + Bits;
 	#else
-		Platform = "Linux " + Architecture + " " + bits;
+		Platform = "Linux " + Architecture + " " + Bits;
 	#endif
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	Platform = "MacOS " + Architecture + " " + bits;
+	Platform = "MacOS " + Architecture + " " + Bits;
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
