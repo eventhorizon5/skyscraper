@@ -101,6 +101,7 @@ public:
 	MainScreen* GetWindow();
 	VM* GetVM();
 	GUI* GetGUI();
+	void StopMenu();
 
 	//main window
 	MainScreen *window;

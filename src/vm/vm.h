@@ -113,6 +113,7 @@ public:
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 	bool Verbose; //verbose mode
 	bool showconsole;
+	bool loadstart; //true if starting an engine load
 
 	std::string version;
 	std::string version_rev;
