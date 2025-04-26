@@ -420,6 +420,12 @@ bool Skyscraper::Loop()
 
 		//have HAL render frame
 		return vm->GetHAL()->Render();
+
+		if (vm->loadstart == true)
+		{
+			StopMenu();
+			vm->loadstart = false;
+		}
 	}
 
 	gui->ShowProgress();
@@ -478,11 +484,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 {
 	//load simulator and data file
 
-	if (StartupRunning == true)
-	{
-		startscreen->DeleteButtons();
-		StartupRunning = false;
-	}
+	StopMenu();
 
 	bool result = vm->Load(filename, parent, position, rotation, area_min, area_max);
 
@@ -490,6 +492,15 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 		UnloadToMenu();
 
 	return result;
+}
+
+void Skyscraper::StopMenu()
+{
+	if (StartupRunning == true)
+	{
+		startscreen->DeleteButtons();
+		StartupRunning = false;
+	}
 }
 
 bool Skyscraper::Start(EngineContext *engine)

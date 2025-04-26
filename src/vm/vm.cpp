@@ -68,6 +68,7 @@ VM::VM()
 	Verbose = false;
 	showconsole = false;
 	vmconsole = 0;
+	loadstart = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -655,6 +656,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	if (filename == "")
 		return false;
 
+	loadstart = true;
 	Report("Loading engine for building file '" + filename + "'...");
 
 	if (GetEngineCount() == 0)
