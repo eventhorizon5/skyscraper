@@ -49,6 +49,8 @@
 #include "malloc.h"
 #endif
 
+#include <iostream>
+
 //simulator interfaces
 #include "globals.h"
 #include "sbs.h"
@@ -946,6 +948,40 @@ void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, b
 	//callback function that receives OGRE log messages
 
 	vm->GetGUI()->WriteToConsole(message);
+}
+
+void HAL::ConsoleOut(const std::string &message, const std::string &color)
+{
+	//console output
+	std::string mod = GetColors(color);
+	std::string reset = GetColors("reset");
+	std::cout << mod << message << reset;
+}
+
+std::string HAL::GetColors(const std::string &color)
+{
+	//get colors
+	std::string mod;
+	if (color == "blue")
+		mod = "\033[1;34m";
+	else if (color == "green")
+		mod = "\033[1;32m";
+	else if (color == "yellow")
+		mod = "\033[1;33m";
+	else if (color == "red")
+		mod = "\033[1;31m";
+	else if (color == "magenta")
+		mod = "\033[1;35m";
+	else if (color == "cyan")
+		mod = "\033[1;36m";
+	else if (color == "white")
+		mod = "\033[1;37m";
+	else if (color == "black")
+		mod = "\033[1;30m";
+	else if (color == "reset")
+		mod = "\033[0m";
+
+	return mod;
 }
 
 }
