@@ -418,14 +418,15 @@ bool Skyscraper::Loop()
 		if (result == false)
 			return false;
 
-		//have HAL render frame
-		return vm->GetHAL()->Render();
-
 		if (vm->loadstart == true)
 		{
-			StopMenu();
+			//StopMenu();
 			vm->loadstart = false;
+			StartupRunning = false;
 		}
+
+		//have HAL render frame
+		return vm->GetHAL()->Render();
 	}
 
 	gui->ShowProgress();
