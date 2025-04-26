@@ -449,7 +449,8 @@ void VMConsole::Process()
 				Report("ps - show engine process list");
 				Report("date - show real and simulator date and time");
 				Report("uptime [engine_number] - show the SBS engine uptime in seconds");
-				Report("help - print this help guide");
+				Report("help - print this help guide\n");
+				Report("All other commands will be passed to the active simulator engine, if available");
 				Report("\nPress CTRL-c to quit");
 			}
 			consoleresult.ready = false;
