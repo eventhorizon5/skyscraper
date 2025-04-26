@@ -39,7 +39,7 @@ public:
 	VMConsole(VM *vm);
 	~VMConsole();
 	void Process();
-	bool Report(const std::string &text, const std::string &color = "white");
+	bool Report(const std::string &text, const std::string &color = "cyan");
 	bool ReportError(const std::string &text);
 
 private:
