@@ -110,7 +110,7 @@ VMConsole::VMConsole(VM *vm)
 		coninput.detach();
 	}
 
-	Report("\nWelcome to Virtual Manager\n", "blue");
+	Report("\nWelcome to Virtual Manager\n", "cyan");
 }
 
 VMConsole::~VMConsole()
