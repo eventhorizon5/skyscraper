@@ -367,46 +367,65 @@ void VMConsole::Process(const std::string &text)
 		{
 			case 1:
 				month_s = "January";
+				break;
 			case 2:
 				month_s = "February";
+				break;
 			case 3:
 				month_s = "March";
+				break;
 			case 4:
 				month_s = "April";
+				break;
 			case 5:
 				month_s = "May";
+				break;
 			case 6:
 				month_s = "June";
+				break;
 			case 7:
 				month_s = "July";
+				break;
 			case 8:
 				month_s = "August";
+				break;
 			case 9:
 				month_s = "September";
+				break;
 			case 10:
 				month_s = "October";
+				break;
 			case 11:
 				month_s = "November";
+				break;
 			case 12:
 				month_s = "December";
+				break;
 		}
 
 		switch (day)
 		{
 			case 0:
 				day_s = "Sunday";
+				break;
 			case 1:
 				day_s = "Monday";
+				break;
 			case 2:
 				day_s = "Tuesday";
+				break;
 			case 3:
 				day_s = "Wednesday";
+				break;
 			case 4:
 				day_s = "Thursday";
+				break;
 			case 5:
 				day_s = "Friday";
+				break;
 			case 6:
 				day_s = "Saturday";
+				break;
 		}
 
 		std::string pm = "am";
