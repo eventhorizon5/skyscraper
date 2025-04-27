@@ -84,6 +84,7 @@ public:
 	bool InRunloop();
 	bool IsRoot();
 	bool InitSim();
+	bool LoadDefault();
 
 private:
 

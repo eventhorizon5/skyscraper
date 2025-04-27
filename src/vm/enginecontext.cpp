@@ -236,6 +236,31 @@ bool EngineContext::InitSim()
 	return true;
 }
 
+bool EngineContext::LoadDefault()
+{
+	//load default simulation
+
+	if (!Simcore || !processor)
+		return false;
+
+	loading = true;
+
+	//initialize simulator
+	InitSim();
+
+	Report("\nLoading default simulation...\n");
+	Simcore->BuildingFilename = "Default";
+
+	//load defaults
+	processor->LoadDefaults();
+
+	//override SBS startup render option, if specified
+	if (vm->RenderOnStartup == true)
+		Simcore->RenderOnStartup = true;
+
+	return true;
+}
+
 bool EngineContext::Load(std::string filename)
 {
 	//load simulator and data file
