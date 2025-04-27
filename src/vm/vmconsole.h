@@ -46,6 +46,7 @@ public:
 
 private:
 	VM *vm;
+	std::string buffer;
 };
 
 //Virtual Manager Console
