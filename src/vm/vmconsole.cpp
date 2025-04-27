@@ -126,12 +126,12 @@ void VMConsole::Process(const std::string &text)
 	if (consoleresult.ready == false && text.size() == 0)
 		return;
 
-	std::string buffer;
 	if (text.size() > 0)
+	{
 		buffer = text;
-	else
-
-	if (consoleresult.ready == true)
+		Report(buffer, "white");
+	}
+	else if (consoleresult.ready == true)
 	{
 		if (mtx_io.try_lock())
 		{
