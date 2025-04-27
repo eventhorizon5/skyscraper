@@ -334,8 +334,8 @@ bool Skyscraper::OnInit()
 		ShowMenu = false;
 
 	//start console
-	if (hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowConsole", true) == false)
-		vm->StartConsole();
+	vm->StartConsole();
+	gui->EnableConsole(true);
 
 	if (filename != "")
 		return Load(filename);
@@ -576,8 +576,6 @@ bool Skyscraper::Start(EngineContext *engine)
 	//run simulation
 	Report("Running simulation...");
 	hal->StopSound();
-
-	gui->EnableConsole(true);
 
 	return true;
 }

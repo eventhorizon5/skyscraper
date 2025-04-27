@@ -286,11 +286,11 @@ void GUI::ShowLoadDialog()
 	loaddialog->Show();
 }
 
-void GUI::WriteToConsole(const std::string &message)
+void GUI::WriteToConsole(const std::string &message, const std::string &color)
 {
 	if (console)
 	{
-		console->Write(message);
+		console->Write(message, color);
 		console->Update();
 	}
 }
@@ -328,6 +328,11 @@ bool GUI::ReportMissingFiles(std::vector<std::string> &missing_files)
 	else
 		return false;
 	return true;
+}
+
+bool GUI::IsConsoleVisible()
+{
+	return (console != 0);
 }
 
 }

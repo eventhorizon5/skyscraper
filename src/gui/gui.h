@@ -64,8 +64,9 @@ public:
 	void ShowDebugPanel();
 	void ShowControlReference();
 	void ShowLoadDialog();
-	void WriteToConsole(const std::string &message);
+	void WriteToConsole(const std::string &message, const std::string &color = "white");
 	bool ReportMissingFiles(std::vector<std::string> &missing_files);
+	bool IsConsoleVisible();
 
 private:
 

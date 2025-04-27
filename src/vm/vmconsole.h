@@ -25,6 +25,8 @@
 
 namespace Skyscraper {
 
+class GUI;
+
 struct VMConsoleResult
 {
 	std::string textbuffer;
@@ -38,7 +40,7 @@ class VMIMPEXP VMConsole
 public:
 	VMConsole(VM *vm);
 	~VMConsole();
-	void Process();
+	void Process(const std::string &text = "");
 	bool Report(const std::string &text, const std::string &color = "cyan");
 	bool ReportError(const std::string &text);
 
