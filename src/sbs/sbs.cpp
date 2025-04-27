@@ -257,6 +257,9 @@ void SBS::Initialize()
 
 	//create camera object
 	this->camera = new Camera(this);
+
+	//report ready status
+	Report("Ready");
 }
 
 SBS::~SBS()

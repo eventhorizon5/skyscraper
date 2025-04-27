@@ -663,6 +663,31 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	loadstart = true;
 	Report("Loading engine for building file '" + filename + "'...");
 
+	//boot SBS
+	EngineContext* engine = Initialize(parent, position, rotation, area_min, area_max);
+
+	//have new engine instance load building
+	bool result = engine->Load(filename);
+
+	//delete engine if load failed, if more than one engine is running
+	if (result == false)
+	{
+		if (GetEngineCount() > 1)
+			DeleteEngine(engine);
+		return false;
+	}
+
+	//override SBS startup render option, if specified
+	if (RenderOnStartup == true)
+		engine->GetSystem()->RenderOnStartup = true;
+
+	return true;
+}
+
+EngineContext* VM::Initialize(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+	//bootstrap simulator
+
 	if (GetEngineCount() == 0)
 	{
 		//set sky name
@@ -685,22 +710,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	if (!GetActiveEngine())
 		active_engine = engine;
 
-	//have instance load building
-	bool result = engine->Load(filename);
-
-	//delete engine if load failed, if more than one engine is running
-	if (result == false)
-	{
-		if (GetEngineCount() > 1)
-			DeleteEngine(engine);
-		return false;
-	}
-
-	//override SBS startup render option, if specified
-	if (RenderOnStartup == true)
-		engine->GetSystem()->RenderOnStartup = true;
-
-	return true;
+	return engine;
 }
 
 void VM::Report(const std::string &message)

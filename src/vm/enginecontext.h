@@ -83,6 +83,7 @@ public:
 	VM* GetVM();
 	bool InRunloop();
 	bool IsRoot();
+	bool InitSim();
 
 private:
 
