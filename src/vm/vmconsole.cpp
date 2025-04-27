@@ -32,6 +32,7 @@
 #include "scriptproc.h"
 #include "enginecontext.h"
 #include "profiler.h"
+#include "gui.h"
 #include "vmconsole.h"
 
 namespace Skyscraper {
@@ -103,8 +104,11 @@ VMConsole::VMConsole(VM *vm)
 	this->vm = vm;
 
 	//create VM console instance
-	std::thread coninput(VMConsoleInput(), 1);
-	coninput.detach();
+	if (vm->GetGUI()->IsConsoleVisible() == false)
+	{
+		std::thread coninput(VMConsoleInput(), 1);
+		coninput.detach();
+	}
 
 	Report("\nWelcome to Virtual Manager\n", "blue");
 }
@@ -472,7 +476,9 @@ void VMConsole::Process()
 				Report("profile [-a] - shows function-level profiling statistics");
 				Report("help - print this help guide\n");
 				Report("All other commands will be passed to the active simulator engine, if available");
-				Report("\nPress CTRL-c to quit");
+
+				if (vm->GetGUI()->IsConsoleVisible() == false)
+					Report("\nPress CTRL-c to quit");
 			}
 			consoleresult.ready = false;
 			consoleresult.threadwait = false;
@@ -500,9 +506,14 @@ void VMConsole::Process()
 bool VMConsole::Report(const std::string &text, const std::string &color)
 {
 	//lock mutex, write to console and unlock
-	mtx_io.try_lock();
-	vm->GetHAL()->ConsoleOut(text + "\n", color);
-	mtx_io.unlock();
+	if (vm->GetGUI()->IsConsoleVisible() == false)
+	{
+		mtx_io.try_lock();
+		vm->GetHAL()->ConsoleOut(text + "\n", color);
+		mtx_io.unlock();
+	}
+	else
+		vm->GetGUI()->WriteToConsole(text);
 	return true;
 }
 

@@ -25,6 +25,8 @@
 
 namespace Skyscraper {
 
+class GUI;
+
 struct VMConsoleResult
 {
 	std::string textbuffer;
