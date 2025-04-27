@@ -116,6 +116,7 @@ public:
 	bool Verbose; //verbose mode
 	bool showconsole;
 	bool loadstart; //true if starting an engine load
+	bool unloaded;
 
 	std::string version;
 	std::string version_rev;
