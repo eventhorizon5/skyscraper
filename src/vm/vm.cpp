@@ -69,6 +69,7 @@ VM::VM()
 	showconsole = false;
 	vmconsole = 0;
 	loadstart = false;
+	unloaded = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -197,6 +198,7 @@ void VM::DeleteEngines()
 	}
 	engines.clear();
 	active_engine = 0;
+	unloaded = true;
 }
 
 EngineContext* VM::FindActiveEngine()

@@ -401,6 +401,13 @@ bool Skyscraper::Loop()
 	ProfileManager::Reset();
 	ProfileManager::Increment_Frame_Counter();
 
+	if (vm->unloaded == true)
+	{
+		UnloadSim();
+		vm->unloaded = false;
+		return true;
+	}
+
 	vm->ProcessConsole();
 
 	//main menu routine
