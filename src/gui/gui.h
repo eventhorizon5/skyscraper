@@ -66,6 +66,7 @@ public:
 	void ShowLoadDialog();
 	void WriteToConsole(const std::string &message);
 	bool ReportMissingFiles(std::vector<std::string> &missing_files);
+	bool IsConsoleVisible();
 
 private:
 

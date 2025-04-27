@@ -330,4 +330,9 @@ bool GUI::ReportMissingFiles(std::vector<std::string> &missing_files)
 	return true;
 }
 
+bool GUI::IsConsoleVisible()
+{
+	return (console != 0);
+}
+
 }
