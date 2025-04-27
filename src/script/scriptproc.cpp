@@ -2043,8 +2043,12 @@ void ScriptProcessor::LoadDefaults()
 	Simcore->SkyName = "noon";
 	//Simcore->camera->EnableCollisions(false);
 	//Simcore->camera->EnableGravity(false);
+}
 
+void ScriptProcessor::Start()
+{
 	IsFinished = true;
-	show_percent = false;}
+	show_percent = false;
+}
 
 }

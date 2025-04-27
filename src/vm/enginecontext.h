@@ -85,6 +85,7 @@ public:
 	bool IsRoot();
 	bool InitSim();
 	bool LoadDefault();
+	void Boot();
 
 private:
 

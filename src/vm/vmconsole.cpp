@@ -492,6 +492,38 @@ void VMConsole::Process(const std::string &text)
 		return;
 	}
 
+	//boot command
+	if (command == "boot")
+	{
+		if (vm->GetEngineCount() == 0)
+		{
+			ReportError("No engine, run vminit");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		if (vm->GetEngineCount() == 1 && params.size() == 0)
+		{
+			vm->GetActiveEngine()->Boot();
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		if (params.size() == 1)
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			if (engine)
+				engine->Boot();
+			else
+				ReportError("Invalid engine");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
 	//help command
 	if (command == "help" || command == "?")
 	{
