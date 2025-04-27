@@ -486,6 +486,7 @@ void VMConsole::Process(const std::string &text)
 	{
 		EngineContext* engine = vm->Initialize();
 		engine->InitSim();
+		engine->LoadDefault();
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;

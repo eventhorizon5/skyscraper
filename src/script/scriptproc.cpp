@@ -34,6 +34,7 @@
 #include "enginecontext.h"
 #include "texture.h"
 #include "floor.h"
+#include "camera.h"
 #include "random.h"
 #include "scriptproc.h"
 #include "section.h"
@@ -2034,5 +2035,16 @@ bool ScriptProcessor::HasRunloop()
 	}
 	return false;
 }
+
+void ScriptProcessor::LoadDefaults()
+{
+	Simcore->BuildingName = "Default";
+	Simcore->BuildingDesigner = "Me";
+	Simcore->SkyName = "noon";
+	//Simcore->camera->EnableCollisions(false);
+	//Simcore->camera->EnableGravity(false);
+
+	IsFinished = true;
+	show_percent = false;}
 
 }
