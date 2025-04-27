@@ -430,6 +430,7 @@ bool Skyscraper::Loop()
 			//StopMenu();
 			vm->loadstart = false;
 			StartupRunning = false;
+			return true;
 		}
 
 		//have HAL render frame
