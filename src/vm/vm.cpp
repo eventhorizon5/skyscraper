@@ -660,7 +660,6 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	if (filename == "")
 		return false;
 
-	loadstart = true;
 	Report("Loading engine for building file '" + filename + "'...");
 
 	//boot SBS
@@ -687,6 +686,8 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 EngineContext* VM::Initialize(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//bootstrap simulator
+
+	loadstart = true;
 
 	if (GetEngineCount() == 0)
 	{
