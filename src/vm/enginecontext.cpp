@@ -230,6 +230,9 @@ bool EngineContext::InitSim()
 
 	Simcore->Initialize();
 
+	//load script processor object
+	processor->Reset();
+
 	return true;
 }
 
@@ -255,10 +258,7 @@ bool EngineContext::Load(std::string filename)
 
 	filename.insert(0, "buildings/");
 
-	//load script processor object and load building
-
-	processor->Reset();
-
+	//load building
 	if (!processor->LoadDataFile(filename))
 	{
 		loading = false;
