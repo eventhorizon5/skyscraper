@@ -51,6 +51,7 @@ public:
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const std::string &text);
 	void LoadDefaults();
+	void Start();
 	bool ReportMissingFiles();
 	void Reset();
 	std::vector<std::string> *GetBuildingData();

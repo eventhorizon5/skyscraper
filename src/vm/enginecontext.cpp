@@ -236,6 +236,12 @@ bool EngineContext::InitSim()
 	return true;
 }
 
+void EngineContext::Boot()
+{
+	//boot simulator
+	processor->Start();
+}
+
 bool EngineContext::LoadDefault()
 {
 	//load default simulation
