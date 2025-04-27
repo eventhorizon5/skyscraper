@@ -269,7 +269,7 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 	//run sim engine instances, and returns the new engine(s) created (if applicable)
 	//to be started by the frontend
 
-	SBS_PROFILE("VM::RunEngines");
+	SBS_PROFILE("RunEngines");
 
 	bool result = true;
 	bool isloading = IsEngineLoading();
