@@ -481,6 +481,16 @@ void VMConsole::Process(const std::string &text)
 		return;
 	}
 
+	//vminit command
+	if (command == "vminit")
+	{
+		EngineContext* engine = vm->Initialize();
+		engine->InitSim();
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
 	//help command
 	if (command == "help" || command == "?")
 	{

@@ -221,6 +221,18 @@ bool EngineContext::Run()
 	return true;
 }
 
+bool EngineContext::InitSim()
+{
+	//initialize simulator
+
+	if (!Simcore || !processor)
+		return false;
+
+	Simcore->Initialize();
+
+	return true;
+}
+
 bool EngineContext::Load(std::string filename)
 {
 	//load simulator and data file
@@ -235,7 +247,7 @@ bool EngineContext::Load(std::string filename)
 	loading = true;
 
 	//initialize simulator
-	Simcore->Initialize();
+	InitSim();
 
 	//load building data file
 	Report("\nLoading building data from " + filename + "...\n");
