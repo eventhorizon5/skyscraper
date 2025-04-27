@@ -335,6 +335,7 @@ bool Skyscraper::OnInit()
 
 	//start console
 	vm->StartConsole();
+	gui->EnableConsole(true);
 
 	if (filename != "")
 		return Load(filename);
@@ -575,8 +576,6 @@ bool Skyscraper::Start(EngineContext *engine)
 	//run simulation
 	Report("Running simulation...");
 	hal->StopSound();
-
-	gui->EnableConsole(true);
 
 	return true;
 }

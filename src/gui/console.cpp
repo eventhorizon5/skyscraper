@@ -113,17 +113,18 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 {
 	Simcore = vm->GetActiveSystem();
 
-	if (!Simcore)
-		return;
+	if (Simcore)
+	{
+		Simcore->DeleteColliders = true;
+		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
 
-	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = vm->GetActiveScriptProcessor();
+		if (!processor)
+			return;
 
-	if (!processor)
-		return;
+		//load new commands into script interpreter, and run
+		processor->LoadFromText(std::string(tCommand->GetValue()));
+	}
 
-	//load new commands into script interpreter, and run
-	processor->LoadFromText(std::string(tCommand->GetValue()));
 	if (chkEcho->GetValue() == true)
 		vm->GetConsole()->Process(tCommand->GetValue().ToStdString());
 	tCommand->Clear();
