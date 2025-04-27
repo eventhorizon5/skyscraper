@@ -119,13 +119,20 @@ VMConsole::~VMConsole()
 	shutdown = true;
 }
 
-void VMConsole::Process()
+void VMConsole::Process(const std::string &text)
 {
 	//process console input
 
+	if (consoleresult.ready == false && text.size() == 0)
+		return;
+
+	std::string buffer;
+	if (text.size() > 0)
+		buffer = text;
+	else
+
 	if (consoleresult.ready == true)
 	{
-		std::string buffer;
 		if (mtx_io.try_lock())
 		{
 			//in lock, copy atomic string into new buffer and unlock
@@ -156,351 +163,351 @@ void VMConsole::Process()
 		}
 		consoleresult.threadwait = true;
 		consoleresult.server_ready = true;
+	}
 
-		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
+	ScriptProcessor *processor = vm->GetActiveScriptProcessor();
 
-		std::string commandline = buffer;
-		int pos = commandline.find(" ", 0);
-		std::string command;
-		Ogre::StringVector params;
-		if (pos > 0)
-		{
-			//get command line
-			command = commandline.substr(0, pos);
-			SBS::TrimString(command);
+	std::string commandline = buffer;
+	int pos = commandline.find(" ", 0);
+	std::string command;
+	Ogre::StringVector params;
+	if (pos > 0)
+	{
+		//get command line
+		command = commandline.substr(0, pos);
+		SBS::TrimString(command);
 
-			//get parameters
-			SBS::SplitString(params, commandline.substr(pos), ',');
-		}
+		//get parameters
+		SBS::SplitString(params, commandline.substr(pos), ',');
+	}
+	else
+		command = commandline;
+
+	//shutdown command
+	if (command == "shutdown")
+	{
+		if (params.size() != 1)
+			Report ("Incorrect number of parameters");
 		else
-			command = commandline;
-
-		//shutdown command
-		if (command == "shutdown")
 		{
-			if (params.size() != 1)
-				Report ("Incorrect number of parameters");
-			else
-			{
-				if (params[0] == "all")
-					vm->DeleteEngines();
-				else
-				{
-					EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
-
-					if (engine)
-						engine->Shutdown();
-				}
-			}
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//setactive command
-		if (command == "setactive")
-		{
-			if (params.size() != 1)
-				Report("Incorrect number of parameters");
-			else
-				vm->SetActiveEngine(SBS::ToInt(params[0]));
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//reload command
-		if (command == "reload")
-		{
-			if (params.size() == 0)
-			{
-				EngineContext *engine = vm->GetActiveEngine();
-
-				if (engine)
-					engine->Reload = true;
-			}
-			else if (params[0] == "all")
-			{
-				for (int i = 0; i < vm->GetEngineCount(); i++)
-				{
-					EngineContext *engine = vm->GetEngine(i);
-
-					if (engine)
-						engine->Reload = true;
-				}
-			}
+			if (params[0] == "all")
+				vm->DeleteEngines();
 			else
 			{
 				EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
 
 				if (engine)
-					engine->Reload = true;
+					engine->Shutdown();
 			}
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
 		}
-
-		//vmload command
-		if (command == "vmload")
-		{
-			if (params.size() != 1)
-				Report("Incorrect number of parameters");
-			else
-				vm->Load(params[0]);
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//switch command
-		if (command == "switch")
-		{
-			if (params.size() != 1)
-				Report("Incorrect number of parameters");
-			else
-				vm->SetActiveEngine(SBS::ToInt(params[0]), true);
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//version command
-		if (command == "version")
-		{
-			Report("Skyscraper Frontend version " + vm->version_frontend + " " + vm->version_state);
-			Report("VM version " + vm->version);
-			if (processor)
-				Report("SBS version " + processor->GetEngine()->GetSystem()->version);
-			else
-				Report("No SBS loaded");
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//arch command
-		if (command == "arch")
-		{
-			Report(vm->Architecture);
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//platform command
-		if (command == "platform")
-		{
-			Report(vm->Platform);
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//uname command
-		if (command == "uname")
-		{
-			if (params.size() > 0)
-				Report("VM " + vm->version + " " + vm->version_state + " (" + vm->Architecture + " " + vm->Bits + ")");
-			else
-				Report("VM");
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//start command
-		if (command == "start")
-		{
-			vm->Load("Ground.bld");
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//ps command
-		if (command == "ps")
-		{
-			int count = vm->GetEngineCount();
-			Report(SBS::ToString(count) + " engines running\n", "magenta");
-			for (int i = 0; i < count; i++)
-			{
-				EngineContext *engine = vm->GetEngine(i);
-				Report(SBS::ToString(i) + ": " + engine->GetFilename(), "yellow");
-			}
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//date command
-		if (command == "date")
-		{
-			//print current date and time
-			time_t timestamp = time(0);
-			struct tm datetime = *localtime(&timestamp);
-			Report(asctime(&datetime));
-
-			if (!vm->GetActiveScriptProcessor())
-			{
-				consoleresult.ready = false;
-				consoleresult.threadwait = false;
-				return;
-			}
-
-			//print simulator time
-			Report("Simulator time: ");
-			int year, month, day, hour, minute, second;
-			vm->GetSkySystem()->GetDate(year, month, day);
-			vm->GetSkySystem()->GetTime(hour, minute, second);
-
-			std::string month_s, day_s;
-			switch (month)
-			{
-				case 1:
-					month_s = "January";
-				case 2:
-					month_s = "February";
-				case 3:
-					month_s = "March";
-				case 4:
-					month_s = "April";
-				case 5:
-					month_s = "May";
-				case 6:
-					month_s = "June";
-				case 7:
-					month_s = "July";
-				case 8:
-					month_s = "August";
-				case 9:
-					month_s = "September";
-				case 10:
-					month_s = "October";
-				case 11:
-					month_s = "November";
-				case 12:
-					month_s = "December";
-			}
-
-			switch (day)
-			{
-				case 0:
-					day_s = "Sunday";
-				case 1:
-					day_s = "Monday";
-				case 2:
-					day_s = "Tuesday";
-				case 3:
-					day_s = "Wednesday";
-				case 4:
-					day_s = "Thursday";
-				case 5:
-					day_s = "Friday";
-				case 6:
-					day_s = "Saturday";
-			}
-
-			std::string pm = "am";
-			int hr = hour;
-			if (hour > 12)
-			{
-				pm = "pm";
-				hr -= 12;
-			}
-			Report(day_s + ", " + month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//uptime command
-		if (command == "uptime")
-		{
-			EngineContext *engine;
-
-			if (params.size() == 0)
-				engine = vm->GetActiveEngine();
-			else
-				engine = vm->GetEngine(SBS::ToInt(params[0]));
-
-			if (engine)
-			{
-				//get running time of SBS instance
-				Real uptime = engine->GetSystem()->running_time;
-
-				Report(SBS::ToString(uptime) + " seconds");
-			}
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//profile command
-		if (command == "profile")
-		{
-			SBS::enable_profiling = true;
-			SBS::enable_advanced_profiling = false;
-			if (params.size() == 1)
-			{
-				if (params[0] == "-a")
-					SBS::enable_advanced_profiling = true;
-			}
-			std::string output;
-			SBS::ProfileManager::dumpAll(output);
-			Report(output, "green");
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-		}
-
-		//help command
-		if (command == "help" || command == "?")
-		{
-			if (params.size() == 0)
-			{
-				Report("Commands:");
-				Report("shutdown engine_number|all - shuts down the specified engine");
-				Report("setactive engine_number - makes the specified engine active");
-				Report("reload [all] - reload the current engine or all engines");
-				Report("vmload filename - load building data file");
-				Report("switch engine_number - switch to the specified engine");
-				Report("version - print versions");
-				Report("arch - print machine architecture");
-				Report("platform - print platform information");
-				Report("uname - print VM name and version");
-				Report("start - start simulator with a ground scene");
-				Report("ps - show engine process list");
-				Report("date - show real and simulator date and time");
-				Report("uptime [engine_number] - show the SBS engine uptime in seconds");
-				Report("profile [-a] - shows function-level profiling statistics");
-				Report("help - print this help guide\n");
-				Report("All other commands will be passed to the active simulator engine, if available");
-
-				if (vm->GetGUI()->IsConsoleVisible() == false)
-					Report("\nPress CTRL-c to quit");
-			}
-			consoleresult.ready = false;
-			consoleresult.threadwait = false;
-			return;
-	}
-
-		if (processor)
-		{
-			processor->GetEngine()->GetSystem()->DeleteColliders = true;
-
-			//load new commands into script interpreter, and run
-			processor->LoadFromText(buffer);
-		}
-		else
-		{
-			Report("No active engine");
-		}
-
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;
 	}
+
+	//setactive command
+	if (command == "setactive")
+	{
+		if (params.size() != 1)
+			Report("Incorrect number of parameters");
+		else
+			vm->SetActiveEngine(SBS::ToInt(params[0]));
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//reload command
+	if (command == "reload")
+	{
+		if (params.size() == 0)
+		{
+			EngineContext *engine = vm->GetActiveEngine();
+
+			if (engine)
+				engine->Reload = true;
+		}
+		else if (params[0] == "all")
+		{
+			for (int i = 0; i < vm->GetEngineCount(); i++)
+			{
+				EngineContext *engine = vm->GetEngine(i);
+
+				if (engine)
+					engine->Reload = true;
+			}
+		}
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+
+			if (engine)
+				engine->Reload = true;
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//vmload command
+	if (command == "vmload")
+	{
+		if (params.size() != 1)
+			Report("Incorrect number of parameters");
+		else
+			vm->Load(params[0]);
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//switch command
+	if (command == "switch")
+	{
+		if (params.size() != 1)
+			Report("Incorrect number of parameters");
+		else
+			vm->SetActiveEngine(SBS::ToInt(params[0]), true);
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//version command
+	if (command == "version")
+	{
+		Report("Skyscraper Frontend version " + vm->version_frontend + " " + vm->version_state);
+		Report("VM version " + vm->version);
+		if (processor)
+			Report("SBS version " + processor->GetEngine()->GetSystem()->version);
+		else
+			Report("No SBS loaded");
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//arch command
+	if (command == "arch")
+	{
+		Report(vm->Architecture);
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//platform command
+	if (command == "platform")
+	{
+		Report(vm->Platform);
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//uname command
+	if (command == "uname")
+	{
+		if (params.size() > 0)
+			Report("VM " + vm->version + " " + vm->version_state + " (" + vm->Architecture + " " + vm->Bits + ")");
+		else
+			Report("VM");
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//start command
+	if (command == "start")
+	{
+		vm->Load("Ground.bld");
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//ps command
+	if (command == "ps")
+	{
+		int count = vm->GetEngineCount();
+		Report(SBS::ToString(count) + " engines running\n", "magenta");
+		for (int i = 0; i < count; i++)
+		{
+			EngineContext *engine = vm->GetEngine(i);
+			Report(SBS::ToString(i) + ": " + engine->GetFilename(), "yellow");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//date command
+	if (command == "date")
+	{
+		//print current date and time
+		time_t timestamp = time(0);
+		struct tm datetime = *localtime(&timestamp);
+		Report(asctime(&datetime));
+
+		if (!vm->GetActiveScriptProcessor())
+		{
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		//print simulator time
+		Report("Simulator time: ");
+		int year, month, day, hour, minute, second;
+		vm->GetSkySystem()->GetDate(year, month, day);
+		vm->GetSkySystem()->GetTime(hour, minute, second);
+
+		std::string month_s, day_s;
+		switch (month)
+		{
+			case 1:
+				month_s = "January";
+			case 2:
+				month_s = "February";
+			case 3:
+				month_s = "March";
+			case 4:
+				month_s = "April";
+			case 5:
+				month_s = "May";
+			case 6:
+				month_s = "June";
+			case 7:
+				month_s = "July";
+			case 8:
+				month_s = "August";
+			case 9:
+				month_s = "September";
+			case 10:
+				month_s = "October";
+			case 11:
+				month_s = "November";
+			case 12:
+				month_s = "December";
+		}
+
+		switch (day)
+		{
+			case 0:
+				day_s = "Sunday";
+			case 1:
+				day_s = "Monday";
+			case 2:
+				day_s = "Tuesday";
+			case 3:
+				day_s = "Wednesday";
+			case 4:
+				day_s = "Thursday";
+			case 5:
+				day_s = "Friday";
+			case 6:
+				day_s = "Saturday";
+		}
+
+		std::string pm = "am";
+		int hr = hour;
+		if (hour > 12)
+		{
+			pm = "pm";
+			hr -= 12;
+		}
+		Report(day_s + ", " + month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//uptime command
+	if (command == "uptime")
+	{
+		EngineContext *engine;
+
+		if (params.size() == 0)
+			engine = vm->GetActiveEngine();
+		else
+			engine = vm->GetEngine(SBS::ToInt(params[0]));
+
+		if (engine)
+		{
+			//get running time of SBS instance
+			Real uptime = engine->GetSystem()->running_time;
+
+			Report(SBS::ToString(uptime) + " seconds");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//profile command
+	if (command == "profile")
+	{
+		SBS::enable_profiling = true;
+		SBS::enable_advanced_profiling = false;
+		if (params.size() == 1)
+		{
+			if (params[0] == "-a")
+				SBS::enable_advanced_profiling = true;
+		}
+		std::string output;
+		SBS::ProfileManager::dumpAll(output);
+		Report(output, "green");
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//help command
+	if (command == "help" || command == "?")
+	{
+		if (params.size() == 0)
+		{
+			Report("Commands:");
+			Report("shutdown engine_number|all - shuts down the specified engine");
+			Report("setactive engine_number - makes the specified engine active");
+			Report("reload [all] - reload the current engine or all engines");
+			Report("vmload filename - load building data file");
+			Report("switch engine_number - switch to the specified engine");
+			Report("version - print versions");
+			Report("arch - print machine architecture");
+			Report("platform - print platform information");
+			Report("uname - print VM name and version");
+			Report("start - start simulator with a ground scene");
+			Report("ps - show engine process list");
+			Report("date - show real and simulator date and time");
+			Report("uptime [engine_number] - show the SBS engine uptime in seconds");
+			Report("profile [-a] - shows function-level profiling statistics");
+			Report("help - print this help guide\n");
+			Report("All other commands will be passed to the active simulator engine, if available");
+
+			if (vm->GetGUI()->IsConsoleVisible() == false)
+				Report("\nPress CTRL-c to quit");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	if (processor)
+	{
+		processor->GetEngine()->GetSystem()->DeleteColliders = true;
+
+		//load new commands into script interpreter, and run
+		processor->LoadFromText(buffer);
+	}
+	else
+	{
+		Report("No active engine");
+	}
+
+	consoleresult.ready = false;
+	consoleresult.threadwait = false;
+	return;
 }
 
 bool VMConsole::Report(const std::string &text, const std::string &color)
