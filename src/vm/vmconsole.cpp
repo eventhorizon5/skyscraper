@@ -513,7 +513,7 @@ bool VMConsole::Report(const std::string &text, const std::string &color)
 		mtx_io.unlock();
 	}
 	else
-		vm->GetGUI()->WriteToConsole(text);
+		vm->GetGUI()->WriteToConsole(text, color);
 	return true;
 }
 
