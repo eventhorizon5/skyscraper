@@ -49,7 +49,7 @@ class Console: public wxFrame
 		wxTextCtrl* tCommand;
 		wxTextCtrl* tConsole;
 		//*)
-		void Write(const std::string &message);
+		void Write(const std::string &message, const std::string &color);
 
 	protected:
 
