@@ -78,9 +78,6 @@ void GUI::Unload()
 	if(dpanel)
 		delete dpanel;
 	dpanel = 0;
-
-	//disable console send button
-	EnableConsole(false);
 }
 
 void GUI::ShowError(const std::string &message)

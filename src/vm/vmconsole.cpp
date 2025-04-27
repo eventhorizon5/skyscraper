@@ -330,11 +330,11 @@ void VMConsole::Process(const std::string &text)
 	if (command == "ps")
 	{
 		int count = vm->GetEngineCount();
-		Report(SBS::ToString(count) + " engines running\n", "magenta");
+		Report(SBS::ToString(count) + " engines running\n", "cyan");
 		for (int i = 0; i < count; i++)
 		{
 			EngineContext *engine = vm->GetEngine(i);
-			Report(SBS::ToString(i) + ": " + engine->GetFilename(), "yellow");
+			Report(SBS::ToString(i) + ": " + engine->GetFilename(), "green");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
