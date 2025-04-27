@@ -544,6 +544,8 @@ void VMConsole::Process(const std::string &text)
 			Report("date - show real and simulator date and time");
 			Report("uptime [engine_number] - show the SBS engine uptime in seconds");
 			Report("profile [-a] - shows function-level profiling statistics");
+			Report("vminit - create and initialize a simulator engine");
+			Report("boot [engine_number] - start a simulator engine");
 			Report("help - print this help guide\n");
 			Report("All other commands will be passed to the active simulator engine, if available");
 
