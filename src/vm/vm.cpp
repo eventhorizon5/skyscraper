@@ -880,4 +880,9 @@ void VM::ProcessConsole()
 
 }
 
+VMConsole* VM::GetConsole()
+{
+	return vmconsole;
+}
+
 }

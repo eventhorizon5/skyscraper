@@ -26,6 +26,7 @@
 #include "debugpanel.h"
 #include "scriptproc.h"
 #include "vm.h"
+#include "vmconsole.h"
 #include "enginecontext.h"
 #include "console.h"
 
@@ -124,7 +125,7 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 	//load new commands into script interpreter, and run
 	processor->LoadFromText(std::string(tCommand->GetValue()));
 	if (chkEcho->GetValue() == true)
-		Write(tCommand->GetValue().ToStdString(), "black");
+		vm->GetConsole()->Report(tCommand->GetValue().ToStdString(), "white");
 	tCommand->Clear();
 }
 
