@@ -534,9 +534,11 @@ bool VMConsole::Report(const std::string &text, const std::string &color)
 	//lock mutex, write to console and unlock
 	if (vm->GetGUI()->IsConsoleVisible() == false)
 	{
-		mtx_io.try_lock();
-		vm->GetHAL()->ConsoleOut(text + "\n", color);
-		mtx_io.unlock();
+		if (mtx_io.try_lock())
+		{
+			vm->GetHAL()->ConsoleOut(text + "\n", color);
+			mtx_io.unlock();
+		}
 	}
 	else
 		vm->GetGUI()->WriteToConsole(text, color);
