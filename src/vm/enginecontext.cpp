@@ -206,11 +206,11 @@ bool EngineContext::Run()
 	if (running == true)
 		Simcore->CalculateFrameRate();
 
+	//run SBS main loop
+	Simcore->Loop(loading);
+
 	if (loading == false)
 	{
-		//run SBS main loop
-		Simcore->Loop();
-
 		//run functions if user enters or leaves this engine
 		if (inside == false && IsInside() == true)
 			OnEnter();
