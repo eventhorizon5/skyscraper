@@ -427,9 +427,8 @@ bool Skyscraper::Loop()
 
 		if (vm->loadstart == true)
 		{
-			//StopMenu();
+			StopMenu();
 			vm->loadstart = false;
-			StartupRunning = false;
 			return true;
 		}
 

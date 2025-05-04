@@ -665,7 +665,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	Report("Loading engine for building file '" + filename + "'...");
 
 	//boot SBS
-	EngineContext* engine = Initialize(parent, position, rotation, area_min, area_max);
+	EngineContext* engine = Initialize(true, parent, position, rotation, area_min, area_max);
 
 	//have new engine instance load building
 	bool result = engine->Load(filename);
@@ -685,7 +685,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	return true;
 }
 
-EngineContext* VM::Initialize(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//bootstrap simulator
 
@@ -697,7 +697,8 @@ EngineContext* VM::Initialize(EngineContext *parent, const Vector3 &position, Re
 		skysystem->SkyName = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
 
 		//clear scene
-		hal->ClearScene();
+		if (clear == true)
+			hal->ClearScene();
 	}
 
 	//clear screen

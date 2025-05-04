@@ -484,7 +484,7 @@ void VMConsole::Process(const std::string &text)
 	//vminit command
 	if (command == "vminit")
 	{
-		EngineContext* engine = vm->Initialize();
+		EngineContext* engine = vm->Initialize(false);
 		engine->InitSim();
 		engine->LoadDefault();
 		consoleresult.ready = false;
