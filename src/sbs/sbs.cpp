@@ -3069,7 +3069,7 @@ int SBS::GetPolygonCount()
 	return PolygonCount;
 }
 
-void SBS::Prepare(bool report)
+void SBS::Prepare(bool report, bool renderonly)
 {
 	//prepare objects for run
 
@@ -3078,7 +3078,7 @@ void SBS::Prepare(bool report)
 		Report("Preparing meshes...");
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
-		meshes[i]->Prepare();
+		meshes[i]->Prepare(false);
 	}
 
 	//process dynamic meshes
@@ -3091,14 +3091,17 @@ void SBS::Prepare(bool report)
 		dynamic_meshes[i]->Prepare();
 	}
 
-	if (report == true)
-		Report("Creating colliders...");
-	for (size_t i = 0; i < meshes.size(); i++)
+	if (renderonly == false)
 	{
-		if (meshes[i]->tricollider == true && meshes[i]->IsPhysical() == false)
-			meshes[i]->CreateCollider();
-		else
-			meshes[i]->CreateBoxCollider();
+		if (report == true)
+			Report("Creating colliders...");
+		for (size_t i = 0; i < meshes.size(); i++)
+		{
+			if (meshes[i]->tricollider == true && meshes[i]->IsPhysical() == false)
+				meshes[i]->CreateCollider();
+			else
+				meshes[i]->CreateBoxCollider();
+		}
 	}
 
 	if (report == true)
