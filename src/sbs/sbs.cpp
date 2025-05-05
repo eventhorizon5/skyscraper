@@ -582,7 +582,7 @@ void SBS::Loop(bool loading)
 	//Main simulator loop
 	SBS_PROFILE("SBS::Loop");
 
-	if (RenderOnStartup == true)
+	if (RenderOnStartup == true && loading == true)
 	{
 		Prepare(false);
 		return;
