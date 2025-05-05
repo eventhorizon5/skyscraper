@@ -592,9 +592,6 @@ private:
 
 	//building power state
 	bool power_state;
-
-	//render on startup prepare counter
-	int render_counter;
 };
 
 }
