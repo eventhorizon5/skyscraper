@@ -29,6 +29,7 @@
 #include <OgreRenderTexture.h>
 #include <OgreViewport.h>
 #include <OgreHardwarePixelBuffer.h>
+#include <OgreImage.h>
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
@@ -68,7 +69,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 
 		//create a new render texture
 		texturename = ToString(sbs->InstanceNumber) + ":" + name;
-		Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
+		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
 		sbs->GetTextureManager()->IncrementTextureCount();
 		renderTexture = texture->getBuffer()->getRenderTarget();
 
@@ -184,6 +185,12 @@ void CameraTexture::EnableOrthographic(bool value)
 		camera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
 	else
 		camera->setProjectionType(Ogre::PT_PERSPECTIVE);
+}
+
+void CameraTexture::GetImage(Ogre::Image &image)
+{
+	//copy texture to image
+	texture->convertToImage(image, false);
 }
 
 }

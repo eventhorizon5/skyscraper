@@ -35,6 +35,7 @@ public:
 	~Map();
 	void Enabled(bool value);
 	bool IsEnabled();
+	void GetImage(Ogre::Image &image);
 
 private:
 
