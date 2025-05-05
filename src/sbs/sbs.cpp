@@ -174,7 +174,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
 	power_state = true;
 	Lobby = 0;
-	render_counter = 0;
 
 	//create utility object
 	utility = new Utility(this);
@@ -585,19 +584,12 @@ void SBS::Loop(bool loading)
 
 	if (RenderOnStartup == true)
 	{
-		render_counter++;
-		if (render_counter < 30)
-			return;
-
 		Prepare(false);
-		render_counter = 0;
 		return;
 	}
 
 	if (loading == true)
 		return;
-
-	render_counter = 0;
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
