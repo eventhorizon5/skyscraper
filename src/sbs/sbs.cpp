@@ -65,6 +65,7 @@
 #include "utility.h"
 #include "geometry.h"
 #include "escalator.h"
+#include "map.h"
 #include "reverb.h"
 
 namespace SBS {
@@ -258,6 +259,9 @@ void SBS::Initialize()
 	//create camera object
 	this->camera = new Camera(this);
 
+	//create map generator object
+	MapGenerator = new Map(this, "Map Generator");
+
 	//report ready status
 	Report("Ready");
 }
@@ -346,6 +350,11 @@ SBS::~SBS()
 		}
 		lights[i] = 0;
 	}
+
+	//delete map generator
+	if (MapGenerator)
+		delete MapGenerator;
+	MapGenerator = 0;
 
 	//delete camera object
 	if (camera)

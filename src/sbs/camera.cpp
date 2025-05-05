@@ -121,8 +121,6 @@ Camera::Camera(Object *parent) : Object(parent)
 	vehicle = 0;
 	old_freelook_mode = false;
 
-	//set up camera and scene nodes
-
 	//set up collider character
 	Real width = cfg_legs_width / 2;
 	if (cfg_body_width > cfg_legs_width)

@@ -113,6 +113,7 @@ namespace SBS {
 	class GeometryController;
 	class CustomObject;
 	class Reverb;
+	class Map;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -592,6 +593,9 @@ private:
 
 	//building power state
 	bool power_state;
+
+	//map generator
+	Map* MapGenerator;
 };
 
 }
