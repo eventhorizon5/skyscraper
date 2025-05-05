@@ -42,6 +42,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	//creates a CameraTexture object
 
 	//if use_rotation is true, the rotation vector is a standard rotation, otherwise that vector represents a point in space to look at
+	//texture quality is 1 for 256x256, 2 for 512x512, and 3 for 1024x1024.
 
 	//set up SBS object
 	SetValues("CameraTexture", name, false);
@@ -49,6 +50,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	FOV = fov;
 	camera = 0;
 	renderTexture = 0;
+	ortho = false;
 
 	unsigned int texture_size = 256;
 	if (quality == 2)
@@ -171,6 +173,17 @@ void CameraTexture::SetToDefaultFOV()
 void CameraTexture::LookAt(const Vector3 &position)
 {
 	GetSceneNode()->LookAt(position);
+}
+
+void CameraTexture::EnableOrthographic(bool value)
+{
+
+	ortho = value;
+
+	if (value == true)
+		camera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
+	else
+		camera->setProjectionType(Ogre::PT_PERSPECTIVE);
 }
 
 }
