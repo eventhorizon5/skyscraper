@@ -89,9 +89,14 @@ void Map::Timer::Notify()
 	}
 	else
 	{
-		parent->Enabled(false);
+		parent->Enabled(true);
 		shot = false;
 	}
+}
+
+void Map::GetImage(Ogre::Image &image)
+{
+	OrthoCamera->GetImage(image);
 }
 
 }

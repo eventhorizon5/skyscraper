@@ -40,6 +40,7 @@ public:
 	void SetToDefaultFOV();
 	void LookAt(const Vector3 &position);
 	void EnableOrthographic(bool value);
+	void GetImage(Ogre::Image &image);
 
 private:
 
@@ -49,6 +50,7 @@ private:
 	Ogre::Camera *camera;
 	std::string texturename;
 	Ogre::RenderTexture *renderTexture;
+	Ogre::TexturePtr texture;
 };
 
 }
