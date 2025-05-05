@@ -286,7 +286,7 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 
 		//process engine run loops, and also prevent other instances from running if
 		//one or more engines are loading
-		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
+		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true || RenderOnStartup == true)
 		{
 			bool run = true;
 			if (i > 0 && ConcurrentLoads == false)
@@ -308,20 +308,25 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 		}
 
 		//start engine if loading is finished
-		if (engines[i]->IsLoadingFinished() == true)
+		if (RenderOnStartup == false)
 		{
-			if (active_engine)
+			if (engines[i]->IsLoadingFinished() == true)
 			{
-				//exit if active engine is still loading
-				if (active_engine->IsLoading() == true && active_engine->IsLoadingFinished() == false)
-					continue;
+				if (active_engine)
+				{
+					//exit if active engine is still loading
+					if (active_engine->IsLoading() == true && active_engine->IsLoadingFinished() == false)
+						continue;
 
-				//exit if active engine is finished, but other buildings are still loading
-				if (active_engine->IsLoadingFinished() == true && isloading == true)
-					continue;
+					//exit if active engine is finished, but other buildings are still loading
+					if (active_engine->IsLoadingFinished() == true && isloading == true)
+						continue;
+				}
+				newengines.emplace_back(engines[i]);
 			}
-			newengines.emplace_back(engines[i]);
 		}
+		else
+			newengines.emplace_back(engines[i]);
 	}
 	return result;
 }
@@ -713,6 +718,9 @@ EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &
 
 	if (!GetActiveEngine())
 		active_engine = engine;
+
+	//set render on startup state
+	RenderOnStartup = hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false);
 
 	return engine;
 }
