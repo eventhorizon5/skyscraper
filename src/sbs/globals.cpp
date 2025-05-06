@@ -309,7 +309,8 @@ std::string ToString(double number)
 	return buffer;
 }
 
-std::string ToString(unsigned int number)
+#if defined(__VISUALC__)
+std::string ToString(size_t number)
 {
 	char buffer[50];
 #if defined(__VISUALC__)
@@ -319,6 +320,7 @@ std::string ToString(unsigned int number)
 #endif
 	return buffer;
 }
+#endif
 
 std::string ToString(unsigned long number)
 {
