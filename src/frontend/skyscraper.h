@@ -129,8 +129,9 @@ private:
 	StartScreen *startscreen;
 };
 
+#ifdef USING_WX
 DECLARE_APP(Skyscraper)
-
+#endif
 }
 
 #endif
