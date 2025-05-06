@@ -51,7 +51,7 @@ find_package(OgreProcedural REQUIRED)
 
 #find wxWidgets
 if (NOT ANDROID)
-	find_package(wxWidgets COMPONENTS core base REQUIRED)
+#	find_package(wxWidgets COMPONENTS core base REQUIRED)
 endif ()
 
 if (wxWidgets_FOUND)
