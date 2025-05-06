@@ -44,8 +44,6 @@ namespace SBS {
 	class SBS;
 }
 
-int main (int argc, char* argv[]);
-
 namespace Skyscraper {
 
 class DebugPanel;
