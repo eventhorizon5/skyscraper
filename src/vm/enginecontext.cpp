@@ -724,4 +724,26 @@ bool EngineContext::IsRoot()
 	return (!GetParent());
 }
 
+void EngineContext::GatherReset()
+{
+	//reset a gather operation
+
+	current_time = vm->GetHAL()->GetCurrentTime();
+}
+
+void EngineContext::Gather()
+{
+	//perform a gather operation
+	//this collects timing information since the last reset
+
+	unsigned long last = current_time;
+
+	//get current time
+	current_time = vm->GetHAL()->GetCurrentTime();
+	if (last == 0)
+		last = current_time;
+
+	time_stat = current_time - last;
+}
+
 }

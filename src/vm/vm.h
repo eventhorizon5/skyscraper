@@ -147,10 +147,9 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
-	void GatherReset();
-	void Gather();
 
 	EngineContext *active_engine;
+	std::vector<EngineContext*> engines;
 	HAL *hal; //hardware abstraction layer
 	SkySystem *skysystem;
 	GUI *gui; //GUI subsystem
@@ -163,15 +162,6 @@ private:
 
 	//shared libraries
 	std::vector<dylib*> dylibs;
-
-	struct ContextWrapper
-	{
-		EngineContext* engine;
-		unsigned long time_stat;
-	};
-	std::vector<ContextWrapper> engines;
-
-	unsigned long current_time, elapsed_time;
 };
 
 }
