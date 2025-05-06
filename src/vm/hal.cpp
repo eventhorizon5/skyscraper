@@ -252,7 +252,9 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 bool HAL::ReportFatalError(const std::string &message, const std::string &prompt)
 {
 	ReportError(message, prompt);
+#ifdef USING_WX
 	vm->GetGUI()->ShowError(message);
+#endif
 	return false;
 }
 
@@ -950,7 +952,9 @@ void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, b
 {
 	//callback function that receives OGRE log messages
 
+#ifdef USING_WX
 	vm->GetGUI()->WriteToConsole(message);
+#endif
 }
 
 void HAL::ConsoleOut(const std::string &message, const std::string &color)
