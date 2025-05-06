@@ -108,6 +108,7 @@ void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSce
 	Moved = false;
 	started = false;
 	prepared = false;
+	NewEngine = true;
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
