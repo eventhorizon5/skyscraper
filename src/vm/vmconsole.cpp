@@ -255,7 +255,7 @@ void VMConsole::Process(const std::string &text)
 		if (params.size() != 1)
 			Report("Incorrect number of parameters");
 		else
-			vm->Load(params[0]);
+			vm->Load(false, params[0]);
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;
@@ -320,7 +320,7 @@ void VMConsole::Process(const std::string &text)
 	//start command
 	if (command == "start")
 	{
-		vm->Load("Ground.bld");
+		vm->Load(false, "Ground.bld");
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;

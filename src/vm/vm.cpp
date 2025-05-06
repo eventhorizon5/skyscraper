@@ -667,7 +667,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	return 1;
 }
 
-bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -678,7 +678,7 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	Report("Loading engine for building file '" + filename + "'...");
 
 	//boot SBS
-	EngineContext* engine = Initialize(true, parent, position, rotation, area_min, area_max);
+	EngineContext* engine = Initialize(clear, parent, position, rotation, area_min, area_max);
 
 	//have new engine instance load building
 	bool result = engine->Load(filename);
