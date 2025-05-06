@@ -1,6 +1,6 @@
 /*
 	Scalable Building Simulator - Map Object
-	The Skyscraper Project - Version 2.1
+	The Skyscraper Project - Version 2.0
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
