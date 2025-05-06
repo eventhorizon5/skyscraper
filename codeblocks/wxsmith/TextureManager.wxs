@@ -12,7 +12,7 @@
 					<object class="sizeritem">
 						<object class="wxListBox" name="ID_TextureList" variable="TextureList" member="yes">
 							<default>-1</default>
-							<size>200,400</size>
+							<size>200,600</size>
 							<style>wxVSCROLL</style>
 							<handler function="On_TextureList_Select" entry="EVT_LISTBOX" />
 						</object>
@@ -249,6 +249,15 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBitmap" name="ID_bmpMain" variable="bmpMain" member="yes">
+									<size>256,256</size>
+									<style>wxBORDER_SIMPLE</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>

@@ -24,6 +24,7 @@
 #include <wx/intl.h>
 #include <wx/string.h>
 //*)
+#include "wx/stdpaths.h"
 
 #include "globals.h"
 #include "sbs.h"
@@ -34,35 +35,36 @@
 namespace Skyscraper {
 
 //(*IdInit(TextureManager)
-const long TextureManager::ID_TextureList = wxNewId();
-const long TextureManager::ID_STATICTEXT7 = wxNewId();
-const long TextureManager::ID_tDependencies = wxNewId();
-const long TextureManager::ID_STATICTEXT4 = wxNewId();
-const long TextureManager::ID_tMaterial = wxNewId();
-const long TextureManager::ID_STATICTEXT1 = wxNewId();
-const long TextureManager::ID_tFilename = wxNewId();
-const long TextureManager::ID_STATICTEXT8 = wxNewId();
-const long TextureManager::ID_tWidth = wxNewId();
-const long TextureManager::ID_STATICTEXT9 = wxNewId();
-const long TextureManager::ID_tHeight = wxNewId();
-const long TextureManager::ID_STATICTEXT11 = wxNewId();
-const long TextureManager::ID_tAlpha = wxNewId();
-const long TextureManager::ID_STATICTEXT12 = wxNewId();
-const long TextureManager::ID_tMipMaps = wxNewId();
-const long TextureManager::ID_STATICTEXT10 = wxNewId();
-const long TextureManager::ID_tMemory = wxNewId();
-const long TextureManager::ID_STATICTEXT5 = wxNewId();
-const long TextureManager::ID_tWidthMult = wxNewId();
-const long TextureManager::ID_STATICTEXT6 = wxNewId();
-const long TextureManager::ID_tHeightMult = wxNewId();
-const long TextureManager::ID_STATICTEXT2 = wxNewId();
-const long TextureManager::ID_chkEnableForce = wxNewId();
-const long TextureManager::ID_STATICTEXT3 = wxNewId();
-const long TextureManager::ID_chkForceMode = wxNewId();
-const long TextureManager::ID_bSave = wxNewId();
-const long TextureManager::ID_bExport = wxNewId();
-const long TextureManager::ID_bUnload = wxNewId();
-const long TextureManager::ID_bOK = wxNewId();
+const wxWindowID TextureManager::ID_TextureList = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT7 = wxNewId();
+const wxWindowID TextureManager::ID_tDependencies = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT4 = wxNewId();
+const wxWindowID TextureManager::ID_tMaterial = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT1 = wxNewId();
+const wxWindowID TextureManager::ID_tFilename = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT8 = wxNewId();
+const wxWindowID TextureManager::ID_tWidth = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT9 = wxNewId();
+const wxWindowID TextureManager::ID_tHeight = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT11 = wxNewId();
+const wxWindowID TextureManager::ID_tAlpha = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT12 = wxNewId();
+const wxWindowID TextureManager::ID_tMipMaps = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT10 = wxNewId();
+const wxWindowID TextureManager::ID_tMemory = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT5 = wxNewId();
+const wxWindowID TextureManager::ID_tWidthMult = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT6 = wxNewId();
+const wxWindowID TextureManager::ID_tHeightMult = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT2 = wxNewId();
+const wxWindowID TextureManager::ID_chkEnableForce = wxNewId();
+const wxWindowID TextureManager::ID_STATICTEXT3 = wxNewId();
+const wxWindowID TextureManager::ID_chkForceMode = wxNewId();
+const wxWindowID TextureManager::ID_bSave = wxNewId();
+const wxWindowID TextureManager::ID_bExport = wxNewId();
+const wxWindowID TextureManager::ID_bUnload = wxNewId();
+const wxWindowID TextureManager::ID_bmpMain = wxNewId();
+const wxWindowID TextureManager::ID_bOK = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(TextureManager,wxDialog)
@@ -83,7 +85,7 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     Create(parent, wxID_ANY, _("Texture Manager"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
     FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
     FlexGridSizer3 = new wxFlexGridSizer(0, 2, 0, 0);
-    TextureList = new wxListBox(this, ID_TextureList, wxDefaultPosition, wxSize(200,400), 0, 0, wxVSCROLL, wxDefaultValidator, _T("ID_TextureList"));
+    TextureList = new wxListBox(this, ID_TextureList, wxDefaultPosition, wxSize(200,600), 0, 0, wxVSCROLL, wxDefaultValidator, _T("ID_TextureList"));
     FlexGridSizer3->Add(TextureList, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
     FlexGridSizer4 = new wxFlexGridSizer(0, 2, 0, 0);
@@ -146,6 +148,8 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     bUnload = new wxButton(this, ID_bUnload, _("Unload"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bUnload"));
     BoxSizer2->Add(bUnload, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(BoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bmpMain = new wxStaticBitmap(this, ID_bmpMain, wxNullBitmap, wxDefaultPosition, wxSize(256,256), wxBORDER_SIMPLE, _T("ID_bmpMain"));
+    FlexGridSizer2->Add(bmpMain, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer3->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
@@ -156,11 +160,11 @@ TextureManager::TextureManager(DebugPanel* parent,wxWindowID id)
     FlexGridSizer1->SetSizeHints(this);
     Center();
 
-    Connect(ID_TextureList,wxEVT_COMMAND_LISTBOX_SELECTED,(wxObjectEventFunction)&TextureManager::On_TextureList_Select);
-    Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bSave_Click);
-    Connect(ID_bExport,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bExport_Click);
-    Connect(ID_bUnload,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bUnload_Click);
-    Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextureManager::On_bOK_Click);
+    Connect(ID_TextureList, wxEVT_COMMAND_LISTBOX_SELECTED, (wxObjectEventFunction)&TextureManager::On_TextureList_Select);
+    Connect(ID_bSave, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&TextureManager::On_bSave_Click);
+    Connect(ID_bExport, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&TextureManager::On_bExport_Click);
+    Connect(ID_bUnload, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&TextureManager::On_bUnload_Click);
+    Connect(ID_bOK, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&TextureManager::On_bOK_Click);
     //*)
 
     lastcount = 0;
@@ -282,6 +286,13 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 				tAlpha->SetValue("true");
 			else
 				tAlpha->SetValue("false");
+
+			wxString path = wxStandardPaths::Get().GetDataDir();
+			wxInitAllImageHandlers();
+			wxImage image;
+			image.LoadFile(path + "\\" + texture.filename);
+			bmpMain->SetBitmap(image);
+			bmpMain->SetSize(256, 256);
 		}
 	}
 }
