@@ -1083,6 +1083,8 @@ void Camera::Sync()
 	if (Cameras.empty())
 		return;
 
+	SBS_PROFILE_MAIN("Camera Sync");
+
 	if (EnableBullet == true)
 		mCharacter->sync();
 
@@ -1137,6 +1139,8 @@ void Camera::MoveCharacter()
 {
 	if (Cameras.empty())
 		return;
+
+	SBS_PROFILE_MAIN("MoveCharacter");
 
 	if (EnableBullet == true)
 		mCharacter->setWalkDirection(accum_movement, 1);

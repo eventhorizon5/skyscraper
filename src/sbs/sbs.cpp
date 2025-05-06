@@ -590,7 +590,7 @@ void SBS::PrintBanner()
 void SBS::Loop(bool loading, bool isready)
 {
 	//Main simulator loop
-	SBS_PROFILE("SBS::Loop");
+	SBS_PROFILE_MAIN("SBS");
 
 	if (RenderOnStartup == true && (loading == true || isready == false))
 		Prepare(false);
@@ -3071,6 +3071,8 @@ int SBS::GetPolygonCount()
 void SBS::Prepare(bool report, bool renderonly)
 {
 	//prepare objects for run
+
+	SBS_PROFILE_MAIN("Prepare");
 
 	//prepare mesh objects
 	if (report == true)
