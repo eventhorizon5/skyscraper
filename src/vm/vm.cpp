@@ -30,6 +30,7 @@
 #include <sys/utsname.h>
 #endif
 #include <iostream>
+#include "dylib.hpp"
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
@@ -82,6 +83,8 @@ VM::VM()
 
 	//create GUI instance
 	gui = new GUI(this);
+
+	//LoadLibrary("test");
 
 	Report("Started");
 }
@@ -928,6 +931,25 @@ void VM::SetRenderOnStartup(bool value)
 bool VM::GetRenderOnStartup()
 {
 	return RenderOnStartup;
+}
+
+dylib* VM::LoadLibrary(const std::string &name)
+{
+	//load shared library/DLL
+
+	try
+	{
+		dylib *newlib = new dylib("./", name);
+		dylibs.emplace_back(newlib);
+		return newlib;
+	}
+	catch(const std::exception& e)
+	{
+		ReportError(e.what());
+	}
+
+	//return 0 on load failure
+	return 0;
 }
 
 }

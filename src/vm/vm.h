@@ -56,6 +56,7 @@ namespace SBS {
 }
 
 class wxWindow;
+class dylib;
 
 namespace Skyscraper {
 
@@ -108,6 +109,7 @@ public:
 	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void SetRenderOnStartup(bool value);
 	bool GetRenderOnStartup();
+	dylib* LoadLibrary(const std::string &name);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -155,6 +157,9 @@ private:
 
 	bool first_run;
 	bool RenderOnStartup; //override SBS engine setting with same name
+
+	//shared libraries
+	std::vector<dylib*> dylibs;
 };
 
 }

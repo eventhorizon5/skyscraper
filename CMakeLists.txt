@@ -38,6 +38,16 @@ if (WIN32)
 	set(CMAKE_CXX_FLAGS "-D_OGREBULLET_DYNAMIC /MP ${CMAKE_CXX_FLAGS}")
 endif ()
 
+include(FetchContent)
+
+FetchContent_Declare(
+    dylib
+    GIT_REPOSITORY "https://github.com/martin-olivier/dylib"
+    GIT_TAG        "v2.2.1"
+)
+
+FetchContent_MakeAvailable(dylib)
+
 find_package(OGRE REQUIRED)
  
 if(NOT OGRE_FOUND)
@@ -262,11 +272,11 @@ endif()
 
 if (NOT WIN32)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(VM GUI SBS ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(VM GUI SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
 	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper VM GUI ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 else ()
-	target_link_libraries(VM SBS OpenXR ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
+	target_link_libraries(VM SBS OpenXR dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
 	target_link_libraries(skyscraper VM SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
  
