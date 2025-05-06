@@ -724,7 +724,9 @@ EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &
 		active_engine = engine;
 
 	//set render on startup state
-	RenderOnStartup = hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false);
+	//bool render_on_start = hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false);
+	//if (render_on_start == false && RenderOnStartup ==
+	//SetRenderOnStartup(hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false));
 
 	return engine;
 }
