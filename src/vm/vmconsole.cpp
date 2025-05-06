@@ -337,7 +337,7 @@ void VMConsole::Process(const std::string &text)
 			Real elapsed_time = 0;
 			if (vm->GetElapsedTime(i) > 0)
 				elapsed_time = Real(vm->GetElapsedTime(i) / Real(vm->time_stat));
-			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t" + engine->GetFilename(), "green");
+			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + engine->GetFilename(), "green");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
