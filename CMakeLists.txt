@@ -60,7 +60,9 @@ set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderS
 find_package(OgreProcedural REQUIRED)
 
 #find wxWidgets
-find_package(wxWidgets COMPONENTS core base REQUIRED)
+if (NOT ANDROID)
+	find_package(wxWidgets COMPONENTS core base REQUIRED)
+endif ()
 
 if (wxWidgets_FOUND)
 	add_compile_definitions(USING_WX)

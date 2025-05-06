@@ -20,7 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifdef __WXWINDOWS__
+#ifdef USING_WX
 #include "wx/wx.h"
 #endif
 #ifndef DISABLE_SOUND
@@ -381,7 +381,7 @@ void EngineContext::StartSim()
 	if (instance == 0)
 	{
 		vm->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
-#ifdef __WXWINDOWS__
+#ifdef USING_WX
 		wxYield(); //this allows the banner to be printed before the sleep() call
 #endif
 		vm->Pause = false;

@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Simulation Frontend (wxWidgets)
+	Skyscraper 2.1 - wxWidgets Frontend
 	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,7 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifdef __WXWINDOWS__
+#ifdef USING_WX
 #include "wx/wx.h"
 #include "wx/dir.h"
 #include "wx/cmdline.h"
