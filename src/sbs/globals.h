@@ -96,6 +96,7 @@ SBSIMPEXP std::string ToString(int number);
 SBSIMPEXP std::string ToString(float number);
 SBSIMPEXP std::string ToString(double number);
 SBSIMPEXP std::string ToString(size_t number);
+SBSIMPEXP std::string ToString(unsigned int number);
 SBSIMPEXP float Log2(float number);
 SBSIMPEXP double Log2(double number);
 SBSIMPEXP float Round(float number, int decimal_places = 0);

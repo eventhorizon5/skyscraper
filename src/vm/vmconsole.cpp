@@ -463,6 +463,17 @@ void VMConsole::Process(const std::string &text)
 		return;
 	}
 
+	//uptime command
+	if (command == "vmuptime")
+	{
+		unsigned long uptime = vm->Uptime() / 1000;
+		Report(SBS::ToString(uptime) + " seconds");
+
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
 	//profile command
 	if (command == "profile")
 	{
@@ -543,6 +554,7 @@ void VMConsole::Process(const std::string &text)
 			Report("ps - show engine process list");
 			Report("date - show real and simulator date and time");
 			Report("uptime [engine_number] - show the SBS engine uptime in seconds");
+			Report("vmuptime - show uptime of VM in seconds");
 			Report("profile [-a] - shows function-level profiling statistics");
 			Report("vminit - create and initialize a simulator engine");
 			Report("boot [engine_number] - start a simulator engine");

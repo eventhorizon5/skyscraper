@@ -108,6 +108,7 @@ public:
 	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void SetRenderOnStartup(bool value);
 	bool GetRenderOnStartup();
+	unsigned int Uptime();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -143,9 +144,10 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
+	void GatherReset();
+	void Gather();
 
 	EngineContext *active_engine;
-	std::vector<EngineContext*> engines;
 	HAL *hal; //hardware abstraction layer
 	SkySystem *skysystem;
 	GUI *gui; //GUI subsystem
@@ -155,6 +157,21 @@ private:
 
 	bool first_run;
 	bool RenderOnStartup; //override SBS engine setting with same name
+<<<<<<< HEAD
+=======
+
+	//shared libraries
+	std::vector<dylib*> dylibs;
+
+	struct ContextWrapper
+	{
+		EngineContext* engine;
+		unsigned long time_stat;
+	};
+	std::vector<ContextWrapper> engines;
+
+	unsigned long current_time, elapsed_time;
+>>>>>>> 3580e472 (-added vmuptime command)
 };
 
 }
