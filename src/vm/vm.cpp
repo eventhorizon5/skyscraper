@@ -960,9 +960,16 @@ void VM::Gather()
 	elapsed_time = current_time - last;
 }
 
-unsigned int VM::Uptime()
+unsigned long VM::Uptime()
 {
 	return hal->GetCurrentTime();
+}
+
+unsigned long VM::GetElapsedTime(int instance)
+{
+	if (instance >= engines.size())
+		return 0;
+	return engines[instance].time_stat;
 }
 
 }
