@@ -23,7 +23,7 @@
 #ifndef MAINSCREEN_H
 #define MAINSCREEN_H
 
-#ifdef __WXWINDOWS__
+#ifdef USING_WX
 #include <wx/frame.h>
 #include <wx/panel.h>
 

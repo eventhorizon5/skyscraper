@@ -81,7 +81,7 @@ VM::VM()
 	skysystem = new SkySystem(this);
 
 	//create GUI instance
-#ifdef __WXWINDOWS__
+#ifdef USING_WX
 	gui = new GUI(this);
 #else
 	gui = 0;

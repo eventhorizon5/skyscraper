@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Simulation Frontend (wxWidgets)
+	Skyscraper 2.1 - wxWidgets Frontend
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,48 +20,14 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifdef __WXWINDOWS__
+#ifdef USING_WX
 
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
 #include <wx/app.h>
 
-namespace Ogre {
-	class SceneNode;
-	class Rectangle2D;
-	class ConfigFile;
-	class OverlaySystem;
-}
-
-namespace FMOD {
-	class System;
-	class Sound;
-	class Channel;
-}
-
-namespace Caelum {
-	class CaelumSystem;
-}
-
-namespace SBS {
-	class SBS;
-}
-
-int main (int argc, char* argv[]);
-
 namespace Skyscraper {
-
-class DebugPanel;
-class MainScreen;
-class EngineContext;
-class Console;
-class LoadDialog;
-class ScriptProcessor;
-class VM;
-class HAL;
-class GUI;
-class StartScreen;
 
 class Skyscraper : public wxApp
 {

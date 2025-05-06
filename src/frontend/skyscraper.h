@@ -23,8 +23,6 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
-#include <wx/app.h>
-
 namespace Ogre {
 	class SceneNode;
 	class Rectangle2D;
@@ -61,7 +59,11 @@ class HAL;
 class GUI;
 class StartScreen;
 
+#ifdef USING_WX
 class Skyscraper : public wxApp
+#else
+class Skyscraper
+#endif
 {
 	friend class MainScreen;
 	friend class VM;
@@ -112,8 +114,9 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 
+#ifdef USING_WX
 	wxCmdLineParser *parser;
-
+#endif
 	Ogre::RenderWindow *mRenderWindow;
 
 	//VM instance
