@@ -190,6 +190,8 @@ void HAL::UnclickedObject()
 void HAL::UpdateOpenXR()
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	SBS_PROFILE_MAIN("UpdateOpenXR");
+
 	//update OpenXR camera transformations
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
