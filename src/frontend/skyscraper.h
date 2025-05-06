@@ -98,11 +98,15 @@ public:
 	void SetFullScreen(bool enabled);
 	void RaiseWindow();
 	void RefreshConsole();
+#ifdef USING_WX
 	virtual void MacOpenFile(const wxString &filename);
+#endif
 	std::string GetDataPath();
 	MainScreen* GetWindow();
 	VM* GetVM();
+#ifdef USING_WX
 	GUI* GetGUI();
+#endif
 	void StopMenu();
 
 	//main window
@@ -123,7 +127,9 @@ private:
 	VM *vm;
 
 	//GUI instance
+#ifdef USING_WX
 	GUI *gui;
+#endif
 
 	//Start Screen instance
 	StartScreen *startscreen;

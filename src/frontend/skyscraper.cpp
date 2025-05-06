@@ -149,7 +149,9 @@ bool Skyscraper::OnInit()
 	ShowMenu = false;
 	mRenderWindow = 0;
 	window = 0;
+#ifdef USING_WX
 	parser = 0;
+#endif
 
 	//create VM instance
 	vm = new VM();
@@ -161,8 +163,6 @@ bool Skyscraper::OnInit()
 
 #ifdef USING_WX
 	gui = vm->GetGUI();
-#else
-	gui = 0;
 #endif
 	startscreen = new StartScreen(this);
 
@@ -292,6 +292,7 @@ bool showconsole = true;
 	HAL *hal = vm->GetHAL();
 	hal->LoadConfiguration(vm->data_path, showconsole);
 
+#ifdef USING_WX
 	//Create main window and set size from INI file defaults
 	window = new MainScreen(this, hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Width", 800), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.Menu.Height", 600));
 	//AllowResize(false);
@@ -299,6 +300,7 @@ bool showconsole = true;
 	window->CenterOnScreen();
 
 	vm->SetParent(window);
+#endif
 
 	//start and initialize abstraction layer
 	if (!hal->Initialize(vm->data_path))
@@ -313,6 +315,7 @@ bool showconsole = true;
 		return ReportError("Error loading system");
 
 #ifndef __FreeBSD__
+#ifdef USING_WX
 	//set up joystick if available
 	wxJoystick joystick(wxJOYSTICK1);
 	if (!joystick.IsOk())
@@ -324,11 +327,12 @@ bool showconsole = true;
 		Report("");
 	}
 #endif
-
+#endif
 	vm->ShowPlatform();
 
 	//autoload a building file if specified
 	std::string filename;
+#ifdef USING_WX
 	if (parser->GetParamCount() > 0)
 	{
 		filename = parser->GetParam(0).ToStdString();
@@ -348,10 +352,15 @@ bool showconsole = true;
 
 	if (hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.VR", false) == true)
 		ShowMenu = false;
+#else
+	ShowMenu = false;
+#endif
 
 	//start console
 	vm->StartConsole();
+#ifdef USING_WX
 	gui->EnableConsole(true);
+#endif
 
 	if (filename != "")
 		return Load(filename);
@@ -382,6 +391,7 @@ int Skyscraper::OnExit()
 	//cleanup sound
 	vm->GetHAL()->StopSound();
 
+#ifdef USING_WX
 	if (window)
 		window->Destroy();
 	window = 0;
@@ -389,16 +399,24 @@ int Skyscraper::OnExit()
 	if (parser)
 		delete parser;
 	parser = 0;
+#endif
 
 	delete startscreen;
 	delete vm;
+
+#ifdef USING_WX
 	return wxApp::OnExit();
+#else
+	return 0;
+#endif
 }
 
 void Skyscraper::UnloadSim()
 {
 	//unload GUI
+#ifdef USING_WX
 	gui->Unload();
+#endif
 
 	//unload sky system
 	vm->GetSkySystem()->UnloadSky();
@@ -452,7 +470,9 @@ bool Skyscraper::Loop()
 		return vm->GetHAL()->Render();
 	}
 
+#ifdef USING_WX
 	gui->ShowProgress();
+#endif
 
 	//run sim engine instances
 	std::vector<EngineContext*> newengines;
@@ -485,15 +505,19 @@ void Skyscraper::StartSound()
 	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusic", true) == false)
 		return;
 
+#ifdef USING_WX
 	if (parser->Found(wxT("no-music")) == true)
 		return;
+#endif
 
 	std::string filename = vm->GetHAL()->GetConfigString(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
 	std::string filename_full = "data/" + filename;
 
+#ifdef USING_WX
 	//check for an intro sound file in the data path location instead
 	if (wxFileExists(vm->data_path + filename_full))
 		filename_full = vm->data_path + filename_full;
+#endif
 
 	//play music
 	vm->GetHAL()->PlaySound(filename_full);
@@ -501,7 +525,11 @@ void Skyscraper::StartSound()
 
 std::string Skyscraper::SelectBuilding()
 {
+#ifdef USING_WX
 	return gui->SelectBuilding(vm->data_path);
+#else
+	return "";
+#endif
 }
 
 bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -545,13 +573,16 @@ bool Skyscraper::Start(EngineContext *engine)
 		//switch to fullscreen mode if specified
 		bool fullscreen = hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.FullScreen", false);
 
+#ifdef USING_WX
 		//override fullscreen setting if specified on the command line
 		if (parser->Found(wxT("fullscreen")) == true)
 			fullscreen = true;
+#endif
 
 		if (fullscreen == true)
 			SetFullScreen(true);
 
+#ifdef USING_WX
 		//resize main window
 		if (FullScreen == false)
 		{
@@ -561,6 +592,7 @@ bool Skyscraper::Start(EngineContext *engine)
 			window->SetClientSize(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenWidth", 1024), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenHeight", 768));
 			window->Center();
 		}
+#endif
 	}
 
 	//start simulation
@@ -568,20 +600,24 @@ bool Skyscraper::Start(EngineContext *engine)
 		return false;
 
 	//close progress dialog if no engines are loading
+#ifdef USING_WX
 	if (vm->IsEngineLoading() == false)
 		gui->CloseProgressDialog();
+#endif
 
 	//load control panel
 	if (engine == vm->GetActiveEngine())
 	{
 		bool panel = vm->GetHAL()->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowControlPanel", true);
 
+#ifdef USING_WX
 		//override if disabled on the command line
 		if (parser->Found(wxT("no-panel")) == true)
 			panel = false;
 
 		if (panel == true)
 			gui->CreateDebugPanel();
+#endif
 	}
 
 	hal->RefreshViewport();
@@ -607,11 +643,13 @@ void Skyscraper::AllowResize(bool value)
 {
 	//changes the window style to either allow or disallow resizing
 
+#ifdef USING_WX
 	if (value)
 		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE | wxMAXIMIZE);
 	else
 		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE);
 	window->Refresh();
+#endif
 }
 
 void Skyscraper::UnloadToMenu()
@@ -628,14 +666,17 @@ void Skyscraper::UnloadToMenu()
 	//cleanup sound
 	vm->GetHAL()->StopSound();
 
+#ifdef USING_WX
 	gui->CloseProgressDialog();
+#endif
 
 	//return to main menu
 	SetFullScreen(false);
+#ifdef USING_WX
 	window->SetClientSize(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Height", 600));
 	window->Center();
 	window->SetCursor(wxNullCursor);
-
+#endif
 	vm->ConcurrentLoads = false;
 	vm->SetRenderOnStartup(false);
 
@@ -647,13 +688,18 @@ void Skyscraper::Quit()
 {
 	//exit app
 
+#ifdef USING_WX
 	gui->EnableTimer(false);
 
 	wxGetApp().Exit();
+#else
+	OnExit();
+#endif
 }
 
 Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
 {
+#ifdef USING_WX
 	std::string name = windowName;
 
 	int width, height;
@@ -677,6 +723,9 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 
 	return vm->GetHAL()->CreateRenderWindow(name, width, height, params);
+#else
+	return 0;
+#endif
 }
 
 void Skyscraper::destroyRenderWindow()
@@ -686,6 +735,7 @@ void Skyscraper::destroyRenderWindow()
 
 const std::string Skyscraper::getOgreHandle() const
 {
+#ifdef USING_WX
 #if defined(__WXMSW__)
 	// Handle for Windows systems
 	return Ogre::StringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
@@ -729,6 +779,9 @@ const std::string Skyscraper::getOgreHandle() const
 #else
 	#error Not supported on this platform!
 #endif
+#else
+	return "";
+#endif
 }
 
 void Skyscraper::SetFullScreen(bool enabled)
@@ -736,7 +789,9 @@ void Skyscraper::SetFullScreen(bool enabled)
 	//enable/disable fullscreen
 
 	FullScreen = enabled;
+#ifdef USING_WX
 	window->ShowFullScreen(FullScreen);
+#endif
 
 #if defined(__WXMSW__)
 	//in Windows, enable double-buffering when switching to fullscreen
@@ -750,10 +805,13 @@ void Skyscraper::SetFullScreen(bool enabled)
 
 void Skyscraper::RaiseWindow()
 {
+#ifdef USING_WX
 	window->Raise();
 	window->SetFocus();
+#endif
 }
 
+#ifdef USING_WX
 void Skyscraper::MacOpenFile(const wxString &filename)
 {
 	//support launching app with a building file, on Mac
@@ -769,6 +827,7 @@ void Skyscraper::MacOpenFile(const wxString &filename)
 
 	Load(file.GetFullName().ToStdString());
 }
+#endif
 
 std::string Skyscraper::GetDataPath()
 {
@@ -785,10 +844,12 @@ VM* Skyscraper::GetVM()
 	return vm;
 }
 
+#ifdef USING_WX
 GUI* Skyscraper::GetGUI()
 {
 	return gui;
 }
+#endif
 
 void Skyscraper::Report(const std::string &message)
 {
