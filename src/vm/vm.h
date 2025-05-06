@@ -106,10 +106,11 @@ public:
 	void ProcessConsole();
 	VMConsole* GetConsole();
 	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	void SetRenderOnStartup(bool value);
+	bool GetRenderOnStartup();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
-	bool RenderOnStartup; //override SBS engine setting with same name
 	bool CheckScript; //if set to true, checks building scripts instead of fully loading them
 	bool Pause; //pause simulator
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
@@ -153,6 +154,7 @@ private:
 	wxWindow *parent;
 
 	bool first_run;
+	bool RenderOnStartup; //override SBS engine setting with same name
 };
 
 }

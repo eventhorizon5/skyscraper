@@ -621,7 +621,7 @@ void Skyscraper::UnloadToMenu()
 	window->SetCursor(wxNullCursor);
 
 	vm->ConcurrentLoads = false;
-	vm->RenderOnStartup = false;
+	vm->SetRenderOnStartup(false);
 
 	StartSound();
 	StartupRunning = true;
