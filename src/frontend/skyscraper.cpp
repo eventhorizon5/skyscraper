@@ -118,32 +118,6 @@ std::string settingsPath() {
 
 #endif
 
-int main (int argc, char* argv[])
-{
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#if OGRE_CPU != OGRE_CPU_ARM
-	//initialize top-level exception handler
-	Skyscraper::InitUnhandledExceptionFilter();
-#endif
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	//force X11 if on Wayland
-	setenv("GDK_BACKEND", "x11", false);
-#endif
-
-#ifdef USING_WX
-	//main wxWidgets entry point
-	wxEntry(argc, argv);
-#endif
-
-	::Skyscraper::Skyscraper *skyscraper = new ::Skyscraper::Skyscraper();
-	skyscraper->OnInit();
-	while (true)
-		skyscraper->Loop();
-	return 0;
-}
-
 namespace Skyscraper {
 
 bool Skyscraper::OnInit()
