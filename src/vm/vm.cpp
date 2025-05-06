@@ -691,10 +691,6 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 		return false;
 	}
 
-	//override SBS startup render option, if specified
-	if (RenderOnStartup == true)
-		engine->GetSystem()->RenderOnStartup = true;
-
 	return true;
 }
 
@@ -913,6 +909,23 @@ void VM::ProcessConsole()
 VMConsole* VM::GetConsole()
 {
 	return vmconsole;
+}
+
+void VM::SetRenderOnStartup(bool value)
+{
+	RenderOnStartup = value;
+
+	//override SBS startup render option, if specified
+	for (int i = 0; i < engines.size(); i++)
+	{
+		if (engines[i])
+			engines[i]->GetSystem()->RenderOnStartup = value;
+	}
+}
+
+bool VM::GetRenderOnStartup()
+{
+	return RenderOnStartup;
 }
 
 }

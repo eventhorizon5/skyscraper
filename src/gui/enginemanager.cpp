@@ -189,7 +189,7 @@ void EngineManager::OnInit()
 	engine = 0;
 
 	chkCLoads->SetValue(panel->GetRoot()->ConcurrentLoads);
-	chkRender->SetValue(panel->GetRoot()->RenderOnStartup);
+	chkRender->SetValue(panel->GetRoot()->GetRenderOnStartup());
 }
 
 void EngineManager::Loop()
@@ -325,7 +325,7 @@ void EngineManager::On_chkCLoads_Click(wxCommandEvent& event)
 
 void EngineManager::On_chkRender_Click(wxCommandEvent& event)
 {
-	panel->GetRoot()->RenderOnStartup = chkRender->GetValue();
+	panel->GetRoot()->SetRenderOnStartup(chkRender->GetValue());
 }
 
 void EngineManager::On_bOk_Click(wxCommandEvent& event)

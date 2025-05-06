@@ -208,7 +208,7 @@ bool EngineContext::Run()
 		Simcore->CalculateFrameRate();
 
 	//run SBS main loop
-	Simcore->Loop(loading);
+	Simcore->Loop(loading, processor->IsFinished);
 
 	if (loading == false)
 	{
@@ -262,7 +262,7 @@ bool EngineContext::LoadDefault()
 	processor->LoadDefaults();
 
 	//override SBS startup render option, if specified
-	if (vm->RenderOnStartup == true)
+	if (vm->GetRenderOnStartup() == true)
 		Simcore->RenderOnStartup = true;
 
 	return true;
@@ -301,7 +301,7 @@ bool EngineContext::Load(std::string filename)
 	vm->GetGUI()->CreateProgressDialog(filename);
 
 	//override SBS startup render option, if specified
-	if (vm->RenderOnStartup == true)
+	if (vm->GetRenderOnStartup() == true)
 		Simcore->RenderOnStartup = true;
 
 	return true;

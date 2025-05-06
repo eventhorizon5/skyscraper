@@ -587,12 +587,12 @@ void SBS::PrintBanner()
 	Report(" conditions. For details, see the file gpl.txt\n");
 }
 
-void SBS::Loop(bool loading)
+void SBS::Loop(bool loading, bool isfinished)
 {
 	//Main simulator loop
 	SBS_PROFILE("SBS::Loop");
 
-	if (RenderOnStartup == true && loading == true)
+	if (RenderOnStartup == true && (loading == true || isfinished == false))
 	{
 		Prepare(false);
 		return;
