@@ -260,6 +260,9 @@ void SBS::Initialize()
 	//create camera object
 	this->camera = new Camera(this);
 
+	//create map generator object
+	MapGenerator = new Map(this, "Map Generator");
+
 	//report ready status
 	Report("Ready");
 }
@@ -551,8 +554,9 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	//attach camera object
 	AttachCamera(cameras);
 
-	//create map generator object
-	MapGenerator = new Map(this, "Map Generator");
+	//enable map generator
+	if (MapGenerator)
+		EnableMap(true);
 
 	//enable random activity if specified
 	if (RandomActivity == true)
@@ -4714,7 +4718,8 @@ Reverb* SBS::GetReverb(int index)
 void SBS::EnableMap(bool value)
 {
 	//enable or disable map generator
-	MapGenerator->Enabled(value);
+	if (MapGenerator)
+		MapGenerator->Enabled(value);
 }
 
 }
