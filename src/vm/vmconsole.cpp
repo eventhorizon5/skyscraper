@@ -334,7 +334,7 @@ void VMConsole::Process(const std::string &text)
 		for (int i = 0; i < count; i++)
 		{
 			EngineContext *engine = vm->GetEngine(i);
-			Report(SBS::ToString(i) + ": " + engine->GetFilename(), "green");
+			Report(SBS::ToString(i) + ":\t" + SBS::ToString(vm->GetElapsedTime(i)) + "\t" + engine->GetFilename(), "green");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;

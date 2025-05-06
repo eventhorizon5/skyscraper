@@ -110,7 +110,8 @@ public:
 	void SetRenderOnStartup(bool value);
 	bool GetRenderOnStartup();
 	dylib* LoadLibrary(const std::string &name);
-	unsigned int Uptime();
+	unsigned long Uptime();
+	unsigned long GetElapsedTime(int instance);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
