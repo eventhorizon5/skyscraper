@@ -293,7 +293,9 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	//map parameter
 	if (StartsWithNoCase(LineData, "map"))
 	{
-		bool enabled = ToBool(value);
+		bool enabled = false;
+		if (StartsWithNoCase(value, "on") == true)
+			enabled = true;
 		Simcore->EnableMap(enabled);
 	}
 	//handle end of globals section
