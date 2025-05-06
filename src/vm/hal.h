@@ -82,6 +82,7 @@ public:
 	bool LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow);
 	void ConsoleOut(const std::string &message, const std::string &color = "white");
 	std::string GetColors(const std::string &color);
+	unsigned long GetCurrentTime();
 
 	bool RTSS;
 	std::string Renderer;
@@ -121,6 +122,9 @@ private:
     //stats
 	OgreBites::TrayManager* mTrayMgr;
 	int show_stats;
+
+	//Ogre timer
+	Ogre::Timer *timer;
 
     VM *vm;
 };

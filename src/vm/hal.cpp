@@ -87,6 +87,7 @@ HAL::HAL(VM *vm)
 	configfile = 0;
 	keyconfigfile = 0;
 	joyconfigfile = 0;
+	timer = new Ogre::Timer();
 }
 
 HAL::~HAL()
@@ -984,6 +985,12 @@ std::string HAL::GetColors(const std::string &color)
 		mod = "\033[0m";
 
 	return mod;
+}
+
+unsigned long HAL::GetCurrentTime()
+{
+	//get current time
+	return timer->getMilliseconds();
 }
 
 }

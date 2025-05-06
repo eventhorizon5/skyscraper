@@ -320,6 +320,17 @@ std::string ToString(size_t number)
 	return buffer;
 }
 
+std::string ToString(unsigned int number)
+{
+	char buffer[50];
+#if defined(__VISUALC__)
+	_snprintf_s(buffer, sizeof(buffer), 13, "%d", number);
+#else
+	snprintf(buffer, sizeof(buffer), "%d", number);
+#endif
+	return buffer;
+}
+
 float Log2(float number)
 {
 	return logf(number) / logf(2.0f);
