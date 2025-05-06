@@ -414,6 +414,7 @@ public:
 	bool GetPower();
 	Reverb* GetReverb(int index);
 	int GetReverbCount();
+	void EnableMap(bool value);
 
 	//Meshes
 	MeshObject* Buildings;

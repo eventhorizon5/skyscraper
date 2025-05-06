@@ -4711,4 +4711,10 @@ Reverb* SBS::GetReverb(int index)
 	return 0;
 }
 
+void SBS::EnableMap(bool value)
+{
+	//enable or disable map generator
+	MapGenerator->Enabled(value);
+}
+
 }
