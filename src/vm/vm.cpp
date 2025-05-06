@@ -941,29 +941,6 @@ bool VM::GetRenderOnStartup()
 	return RenderOnStartup;
 }
 
-void VM::GatherReset()
-{
-	//reset a gather operation
-
-	elapsed_time = 0;
-	current_time = hal->GetCurrentTime();
-}
-
-void VM::Gather()
-{
-	//perform a gather operation
-	//this collects timing information since the last reset
-
-	unsigned long last = current_time;
-
-	//get current time
-	current_time = hal->GetCurrentTime();
-	if (last == 0)
-		last = current_time;
-
-	elapsed_time = current_time - last;
-}
-
 unsigned long VM::Uptime()
 {
 	return hal->GetCurrentTime();

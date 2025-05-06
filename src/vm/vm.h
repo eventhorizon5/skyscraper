@@ -158,15 +158,6 @@ private:
 
 	bool first_run;
 	bool RenderOnStartup; //override SBS engine setting with same name
-
-	struct ContextWrapper
-	{
-		EngineContext* engine;
-		unsigned long time_stat;
-	};
-	std::vector<ContextWrapper> engines;
-
-	unsigned long current_time, elapsed_time;
 };
 
 }
