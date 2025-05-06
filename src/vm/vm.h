@@ -122,6 +122,7 @@ public:
 	bool showconsole;
 	bool loadstart; //true if starting an engine load
 	bool unloaded;
+	unsigned long time_stat, current_time; //frame timing
 
 	std::string version;
 	std::string version_rev;

@@ -612,8 +612,14 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//show progress dialog if needed
 	//gui->ShowProgress();
 
+	//get time for frame statistics
+	unsigned long last = current_time;
+	current_time = hal->GetCurrentTime();
+
 	//run sim engines
 	bool result = RunEngines(newengines);
+
+	time_stat = hal->GetCurrentTime() - last;
 
 	if (newengines.size() > 0)
 		return 3;
