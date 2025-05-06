@@ -30,6 +30,7 @@
 #include "sbs.h"
 #include "texture.h"
 #include "debugpanel.h"
+#include "vm.h"
 #include "texturemanager.h"
 
 namespace Skyscraper {
@@ -288,9 +289,8 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 				tAlpha->SetValue("false");
 
 			wxString path = wxStandardPaths::Get().GetDataDir();
-			wxInitAllImageHandlers();
 			wxImage image;
-			image.LoadFile(path + "\\" + texture.filename);
+			image.LoadFile(panel->GetRoot()->data_path + texture.filename);
 			bmpMain->SetBitmap(image);
 			bmpMain->SetSize(256, 256);
 		}

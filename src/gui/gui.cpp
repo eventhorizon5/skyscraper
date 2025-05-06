@@ -48,6 +48,7 @@ GUI::GUI(VM *parent)
 	dpanel = 0;
 	loaddialog = 0;
 	show_progress = false;
+	wxInitAllImageHandlers();
 }
 
 GUI::~GUI()
