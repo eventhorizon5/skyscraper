@@ -175,6 +175,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
 	power_state = true;
 	Lobby = 0;
+	MapGenerator = 0;
 
 	//create utility object
 	utility = new Utility(this);
@@ -258,9 +259,6 @@ void SBS::Initialize()
 
 	//create camera object
 	this->camera = new Camera(this);
-
-	//create map generator object
-	MapGenerator = new Map(this, "Map Generator");
 
 	//report ready status
 	Report("Ready");
@@ -552,6 +550,9 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 
 	//attach camera object
 	AttachCamera(cameras);
+
+	//create map generator object
+	MapGenerator = new Map(this, "Map Generator");
 
 	//enable random activity if specified
 	if (RandomActivity == true)

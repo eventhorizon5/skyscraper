@@ -322,6 +322,7 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 					if (active_engine->IsLoadingFinished() == true && isloading == true)
 						continue;
 				}
+				engines[i]->NewEngine = false;
 				newengines.emplace_back(engines[i]);
 			}
 		}
