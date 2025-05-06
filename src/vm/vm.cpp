@@ -326,7 +326,14 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 			}
 		}
 		else
-			newengines.emplace_back(engines[i]);
+		{
+			//when RenderOnStartup is true, only add new engines to the list
+			if (engines[i]->NewEngine == true)
+			{
+				newengines.emplace_back(engines[i]);
+				engines[i]->NewEngine = false;
+			}
+		}
 	}
 	return result;
 }
