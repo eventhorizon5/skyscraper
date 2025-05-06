@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Simulation Frontend
+	Skyscraper 2.1 - Simulation Frontend (wxWidgets)
 	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,7 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifdef USING_WX
+#ifdef __WXWINDOWS__
 #include "wx/wx.h"
 #include "wx/dir.h"
 #include "wx/cmdline.h"
@@ -28,7 +28,6 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/joystick.h"
-#endif
 #include <locale>
 #include <time.h>
 #include <thread>
@@ -42,9 +41,7 @@
 #include "sky.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
-#ifdef USING_WX
 #include "mainscreen.h"
-#endif
 #include "profiler.h"
 #include "startscreen.h"
 #include "gitrev.h"
@@ -70,13 +67,11 @@
 
 using namespace SBS;
 
-#ifdef USING_WX
 namespace Skyscraper {
 
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
 
 }
-#endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #if OGRE_CPU != OGRE_CPU_ARM
@@ -132,10 +127,8 @@ int main (int argc, char* argv[])
 	setenv("GDK_BACKEND", "x11", false);
 #endif
 
-#ifdef USING_WX
 	//main wxWidgets entry point
 	wxEntry(argc, argv);
-#endif
 
 	return 0;
 }
@@ -159,14 +152,9 @@ bool Skyscraper::OnInit()
 	vm->version_state = "Alpha";
 	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
-#ifdef USING_WX
 	gui = vm->GetGUI();
-#else
-	gui = 0;
-#endif
 	startscreen = new StartScreen(this);
 
-#ifdef USING_WX
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
 	wxString app_path = wxPathOnly(exefile); //strip off filename
@@ -250,7 +238,6 @@ bool Skyscraper::OnInit()
 
 	//only run idle events on specified windows, to reduce overhead
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
-#endif
 
 	//set up unhandled exception handler (crash report system)
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -266,8 +253,6 @@ bool Skyscraper::OnInit()
 	setlocale(LC_ALL, "C");
 #endif
 
-bool showconsole = true;
-#ifdef USING_WX
 	//show version number and exit if specified
 	if (parser->Found(wxT("version")) == true)
 	{
@@ -283,10 +268,10 @@ bool showconsole = true;
 	if (parser->Found(wxT("check-script")) == true)
 		vm->CheckScript = true;
 
+	bool showconsole = true;
 	//turn off console if specified on command line
 	if (parser->Found(wxT("no-console")) == true)
 		showconsole = false;
-#endif
 
 	//load config files
 	HAL *hal = vm->GetHAL();
@@ -801,3 +786,5 @@ bool Skyscraper::ReportError(const std::string &message)
 }
 
 }
+
+#endif

@@ -20,6 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifdef USING_WX
 #include "wx/wx.h"
 #include "wx/joystick.h"
 #include <OgreRoot.h>
@@ -926,3 +927,5 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 #endif
 
 }
+
+#endif
