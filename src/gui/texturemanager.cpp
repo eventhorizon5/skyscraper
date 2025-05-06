@@ -293,6 +293,7 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 			image.LoadFile(panel->GetRoot()->data_path + texture.filename);
 			bmpMain->SetBitmap(image);
 			bmpMain->SetSize(256, 256);
+			bmpMain->SetScaleMode(wxStaticBitmap::ScaleMode::Scale_AspectFit);
 		}
 	}
 }
