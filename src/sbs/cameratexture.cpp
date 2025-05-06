@@ -178,7 +178,6 @@ void CameraTexture::LookAt(const Vector3 &position)
 
 void CameraTexture::EnableOrthographic(bool value)
 {
-
 	ortho = value;
 
 	if (value == true)
