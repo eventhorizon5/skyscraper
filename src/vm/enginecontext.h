@@ -37,6 +37,7 @@ public:
 	bool Moved; //true if engine has been moved on startup
 	bool started;
 	bool NewEngine; //true if this is a new engine
+	unsigned long current_time, time_stat;
 
 	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -87,6 +88,8 @@ public:
 	bool InitSim();
 	bool LoadDefault();
 	void Boot();
+	void GatherReset();
+	void Gather();
 
 private:
 

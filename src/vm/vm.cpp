@@ -152,9 +152,9 @@ bool VM::DeleteEngine(EngineContext *engine)
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine == engine)
+		if (engines[i] == engine)
 		{
-			engines[i].engine = 0;
+			engines[i] = 0;
 			delete engine;
 			Report("Engine instance " + ToString(i) + " deleted");
 
@@ -193,8 +193,8 @@ void VM::DeleteEngines()
 	Report("Deleting all engines...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
-			delete engines[i].engine;
+		if (engines[i])
+			delete engines[i];
 	}
 	engines.clear();
 	active_engine = 0;
@@ -207,10 +207,10 @@ EngineContext* VM::FindActiveEngine()
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
+		if (engines[i])
 		{
-			if (engines[i].engine->IsCameraActive() == true)
-				return engines[i].engine;
+			if (engines[i]->IsCameraActive() == true)
+				return engines[i];
 		}
 	}
 	return active_engine;
@@ -281,38 +281,38 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (!engines[i].engine)
+		if (!engines[i])
 			continue;
 
 		//process engine run loops, and also prevent other instances from running if
 		//one or more engines are loading
-		if (ConcurrentLoads == true || isloading == false || engines[i].engine->IsLoading() == true || RenderOnStartup == true)
+		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true || RenderOnStartup == true)
 		{
 			bool run = true;
 			if (i > 0 && ConcurrentLoads == false)
 			{
 				//if concurrent loads is off, skip running if previous engine is not finished loading
-				if (engines[i - 1].engine)
+				if (engines[i - 1])
 				{
-					if (engines[i - 1].engine->IsLoading() == true && engines[i - 1].engine->IsLoadingFinished() == false)
+					if (engines[i - 1]->IsLoading() == true && engines[i - 1]->IsLoadingFinished() == false)
 						run = false;
 				}
 			}
 
-			if (engines[i].engine->IsLoadingFinished() == false && run == true)
+			if (engines[i]->IsLoadingFinished() == false && run == true)
 			{
 				//process engine runloop
-				GatherReset();
-				if (engines[i].engine->Run() == false)
+				engines[i]->GatherReset();
+				if (engines[i]->Run() == false)
 					result = false;
-				Gather();
+				engines[i]->Gather();
 			}
 		}
 
 		//start engine if loading is finished
 		if (RenderOnStartup == false)
 		{
-			if (engines[i].engine->IsLoadingFinished() == true)
+			if (engines[i]->IsLoadingFinished() == true)
 			{
 				if (active_engine)
 				{
@@ -324,17 +324,17 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 					if (active_engine->IsLoadingFinished() == true && isloading == true)
 						continue;
 				}
-				engines[i].engine->NewEngine = false;
-				newengines.emplace_back(engines[i].engine);
+				engines[i]->NewEngine = false;
+				newengines.emplace_back(engines[i]);
 			}
 		}
 		else
 		{
 			//when RenderOnStartup is true, only add new engines to the list
-			if (engines[i].engine->NewEngine == true)
+			if (engines[i]->NewEngine == true)
 			{
-				newengines.emplace_back(engines[i].engine);
-				engines[i].engine->NewEngine = false;
+				newengines.emplace_back(engines[i]);
+				engines[i]->NewEngine = false;
 			}
 		}
 	}
@@ -348,9 +348,9 @@ bool VM::IsEngineLoading()
 	bool result = false;
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
+		if (engines[i])
 		{
-			if (engines[i].engine->IsLoading() == true && engines[i].engine->IsLoadingFinished() == false)
+			if (engines[i]->IsLoading() == true && engines[i]->IsLoadingFinished() == false)
 				result = true;
 		}
 	}
@@ -365,14 +365,14 @@ void VM::HandleEngineShutdown()
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
+		if (engines[i])
 		{
 			//delete engine if it's shutdown state is true
-			if (engines[i].engine->GetShutdownState() == true)
+			if (engines[i]->GetShutdownState() == true)
 			{
 				Report("Shutdown requested for engine instance " + ToString(i));
 
-				if (DeleteEngine(engines[i].engine) == true)
+				if (DeleteEngine(engines[i]) == true)
 				{
 					hal->RefreshViewport();
 					i--;
@@ -387,7 +387,7 @@ void VM::HandleEngineShutdown()
 	{
 		for (size_t i = engines.size() - 1; i < engines.size(); --i)
 		{
-			if (!engines[i].engine)
+			if (!engines[i])
 				engines.erase(engines.begin() + i);
 			else
 				break;
@@ -401,9 +401,9 @@ void VM::HandleReload()
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
+		if (engines[i])
 		{
-			if (engines[i].engine->Reload == true)
+			if (engines[i]->Reload == true)
 			{
 				//unload sky system if primary engine
 				if (i == 0)
@@ -412,11 +412,11 @@ void VM::HandleReload()
 				Pause = false;
 				Report("Reloading engine instance " + ToString(i));
 
-				engines[i].engine->DoReload(); //handle engine reload
+				engines[i]->DoReload(); //handle engine reload
 
 				//create sky system if primary engine
 				if (i == 0)
-					skysystem->CreateSky(engines[i].engine);
+					skysystem->CreateSky(engines[i]);
 			}
 		}
 	}
@@ -429,7 +429,7 @@ EngineContext* VM::GetEngine(int number)
 	if (number < 0 || number >= (int)engines.size())
 		return 0;
 
-	return engines[number].engine;
+	return engines[number];
 }
 
 int VM::GetEngineCount()
@@ -440,7 +440,7 @@ int VM::GetEngineCount()
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
+		if (engines[i])
 			count++;
 	}
 	return count;
@@ -473,9 +473,9 @@ void VM::SwitchEngines()
 	Report("Searing for engine to attach to...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine != active_engine && engines[i].engine)
+		if (engines[i] != active_engine && engines[i])
 		{
-			if (engines[i].engine->IsInside() == true && engines[i].engine->IsCameraActive() == false)
+			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
 			{
 				SetActiveEngine((int)i, true);
 				return;
@@ -497,7 +497,7 @@ bool VM::IsValidEngine(EngineContext *engine)
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine == engine)
+		if (engines[i] == engine)
 			return true;
 	}
 	return false;
@@ -512,9 +512,9 @@ bool VM::IsValidSystem(::SBS::SBS *sbs)
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
+		if (engines[i])
 		{
-			if (engines[i].engine->GetSystem() == sbs)
+			if (engines[i]->GetSystem() == sbs)
 				return true;
 		}
 	}
@@ -527,7 +527,7 @@ int VM::GetFreeInstanceNumber()
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (!engines[i].engine)
+		if (!engines[i])
 			return (int)i;
 	}
 	return (int)engines.size();
@@ -540,13 +540,11 @@ int VM::RegisterEngine(EngineContext *engine)
 	int number = GetFreeInstanceNumber();
 
 	if (number < (int)engines.size())
-		engines[number].engine = engine;
+		engines[number] = engine;
 	else
 	{
-		ContextWrapper wrapper;
-		wrapper.time_stat = 0;
-		wrapper.engine = engine;
-		engines.emplace_back(wrapper);
+		engine->time_stat = 0;
+		engines.emplace_back(engine);
 	}
 
 	return number;
@@ -558,8 +556,8 @@ EngineContext* VM::GetFirstValidEngine()
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
-			return engines[i].engine;
+		if (engines[i])
+			return engines[i];
 	}
 	return 0;
 }
@@ -927,8 +925,8 @@ void VM::SetRenderOnStartup(bool value)
 	//override SBS startup render option, if specified
 	for (int i = 0; i < engines.size(); i++)
 	{
-		if (engines[i].engine)
-			engines[i].engine->GetSystem()->RenderOnStartup = value;
+		if (engines[i])
+			engines[i]->GetSystem()->RenderOnStartup = value;
 	}
 }
 
@@ -969,7 +967,7 @@ unsigned long VM::GetElapsedTime(int instance)
 {
 	if (instance >= engines.size())
 		return 0;
-	return engines[instance].time_stat;
+	return engines[instance]->time_stat;
 }
 
 }
