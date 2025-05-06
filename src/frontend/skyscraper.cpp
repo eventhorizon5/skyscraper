@@ -137,6 +137,10 @@ int main (int argc, char* argv[])
 	wxEntry(argc, argv);
 #endif
 
+	::Skyscraper::Skyscraper *skyscraper = new ::Skyscraper::Skyscraper();
+	skyscraper->OnInit();
+	while (true)
+		skyscraper->Loop();
 	return 0;
 }
 
