@@ -165,7 +165,9 @@ bool EngineContext::Run()
 			{
 				ReportError("Error processing building\n");
 				Shutdown();
+			#ifdef USING_WX
 				vm->GetGUI()->CloseProgressDialog();
+			#endif
 				return false;
 			}
 			else if (processor->IsFinished == true)
@@ -487,7 +489,9 @@ bool EngineContext::ReportError(const std::string &message)
 bool EngineContext::ReportFatalError(const std::string &message)
 {
 	ReportError(message);
+#ifdef USING_WX
 	vm->GetGUI()->ShowError(message);
+#endif
 	return false;
 }
 

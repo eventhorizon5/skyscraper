@@ -56,6 +56,7 @@ std::filesystem::path Skyscraper::GetExeDirectory()
     // Windows specific
     wchar_t szPath[MAX_PATH];
     GetModuleFileNameW( NULL, szPath, MAX_PATH );
+	return szPath;
 #elif __APPLE__
 	// Mac specific
     char szPath[PATH_MAX];
@@ -71,12 +72,13 @@ std::filesystem::path Skyscraper::GetExeDirectory()
         return {}; // some error
     szPath[count] = '\0';
 #endif
+	return "";
 }
 
 bool Skyscraper::SetCWD()
 {
 	//set working directory
-	std::string path = GetExeDirectory();
+	std::string path = GetExeDirectory().generic_string();
 	#ifdef __APPLE__
 	{
 		path = path +  "../../../";
