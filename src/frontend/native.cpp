@@ -617,13 +617,13 @@ void Skyscraper::GetKeyStates(EngineContext *engine, OgreBites::Keycode& key, bo
 		//drive functions, when user is inside a vehicle
 		if (camera->Freelook == true && camera->inside_vehicle == true)
 		{
-			if (key == OgreBites::SDLK_LEFT)
+			if (key == OgreBites::SDLK_LEFT || key == '\x61')
 				engine->GetSystem()->camera->Drive(true, false, false, false, down);
-			if (key == OgreBites::SDLK_RIGHT)
+			if (key == OgreBites::SDLK_RIGHT || key == '\x64')
 				engine->GetSystem()->camera->Drive(false, true, false, false, down);
-			if (key == OgreBites::SDLK_DOWN)
+			if (key == OgreBites::SDLK_DOWN || key == '\x73')
 				engine->GetSystem()->camera->Drive(false, false, true, false, down);
-			if (key == OgreBites::SDLK_UP)
+			if (key == OgreBites::SDLK_UP || key == '\x77')
 				engine->GetSystem()->camera->Drive(false, false, false, true, down);
 		}
 	}
