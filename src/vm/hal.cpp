@@ -546,8 +546,11 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		for (int i = 0; i < cameras; i++)
 		{
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-			mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
-			mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			if (mRenderWindow)
+			{
+				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			}
 		}
 	}
 	catch (Ogre::Exception &e)

@@ -104,7 +104,9 @@ VMConsole::VMConsole(VM *vm)
 	this->vm = vm;
 
 	//create VM console instance
+#ifdef USING_WX
 	if (vm->GetGUI()->IsConsoleVisible() == false)
+#endif
 	{
 		std::thread coninput(VMConsoleInput(), 1);
 		coninput.detach();
@@ -592,7 +594,10 @@ void VMConsole::Process(const std::string &text)
 bool VMConsole::Report(const std::string &text, const std::string &color)
 {
 	//lock mutex, write to console and unlock
+
+#ifdef USING_WX
 	if (vm->GetGUI()->IsConsoleVisible() == false)
+#endif
 	{
 		if (mtx_io.try_lock())
 		{
@@ -600,8 +605,10 @@ bool VMConsole::Report(const std::string &text, const std::string &color)
 			mtx_io.unlock();
 		}
 	}
+#ifdef USING_WX
 	else
 		vm->GetGUI()->WriteToConsole(text, color);
+#endif
 	return true;
 }
 
