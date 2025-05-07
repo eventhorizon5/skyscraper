@@ -50,8 +50,10 @@ Map::Map(Object *parent, const std::string &name) : Object(parent)
 	enabled = false;
 
 	//create orthographic camera texture, used for map generation
-	//OrthoCamera = new CameraTexture(this, "MapCamera", 3, 0, Vector3(0, 50000, 0), false, Vector3(270, 0, 0));
-	//OrthoCamera->EnableOrthographic(true);
+#ifdef USING_WX
+	OrthoCamera = new CameraTexture(this, "MapCamera", 3, 0, Vector3(0, 50000, 0), false, Vector3(270, 0, 0));
+	OrthoCamera->EnableOrthographic(true);
+#endif
 
 	//timer = new Timer("Map Timer", this);
 	timer = 0;
