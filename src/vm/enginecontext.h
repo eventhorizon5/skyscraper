@@ -44,7 +44,7 @@ public:
 	~EngineContext();
 	void Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max);
 	ScriptProcessor* GetScriptProcessor();
-	SBS::SBS *GetSystem() { return Simcore; }
+	::SBS::SBS *GetSystem() { return Simcore; }
 	bool IsCameraActive();
 	bool Run();
 	void Shutdown();
@@ -63,8 +63,8 @@ public:
 	void UpdateProgress(int percent);
 	int GetProgress() { return progress; }
 	int GetNumber() { return instance; }
-	SBS::CameraState GetCameraState();
-	void SetCameraState(const SBS::CameraState &state, bool set_floor = true);
+	::SBS::CameraState GetCameraState();
+	void SetCameraState(const ::SBS::CameraState &state, bool set_floor = true);
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
@@ -98,7 +98,7 @@ private:
 	void Init();
 
 	ScriptProcessor* processor; //script processor
-	SBS::SBS *Simcore; //sim engine instance
+	::SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
 	EngineContext *parent; //parent engine
 	unsigned long finish_time;
@@ -113,7 +113,7 @@ private:
 	bool prepared;
 
 	//override information
-	SBS::CameraState *reload_state;
+	::SBS::CameraState *reload_state;
 
 	Ogre::SceneManager* mSceneManager;
 	FMOD::System *fmodsystem;
