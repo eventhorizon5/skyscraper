@@ -325,6 +325,41 @@ bool Skyscraper::keyReleased(const OgreBites::KeyboardEvent& evt)
 	return true;
 }
 
+bool Skyscraper::mouseMoved(const OgreBites::MouseButtonEvent &evt)
+{
+	return true;
+}
+
+bool Skyscraper::mousePressed(const OgreBites::MouseButtonEvent &evt)
+{
+	return true;
+}
+
+bool Skyscraper::mouseReleased(const OgreBites::MouseButtonEvent &evt)
+{
+	return true;
+}
+
+bool Skyscraper::mouseWheelRolled(const OgreBites::MouseButtonEvent &evt)
+{
+	return true;
+}
+
+bool Skyscraper::touchMoved(const OgreBites::TouchFingerEvent &evt)
+{
+	return true;
+}
+
+bool Skyscraper::touchPressed(const OgreBites::TouchFingerEvent &evt)
+{
+	return true;
+}
+
+bool Skyscraper::touchReleased(const OgreBites::TouchFingerEvent &evt)
+{
+	return true;
+}
+
 void Skyscraper::GetKeyStates(EngineContext *engine, OgreBites::Keycode& key, bool down)
 {
 	//get SBS camera
