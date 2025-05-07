@@ -423,15 +423,15 @@ bool Skyscraper::mousePressed(const OgreBites::MouseButtonEvent &evt)
 
 bool Skyscraper::mouseReleased(const OgreBites::MouseButtonEvent &evt)
 {
-	bool left = !(evt.button == '\x01');
-	bool right = !(evt.button != '\x01');
+	bool left = (evt.button == '\x01');
+	bool right = (evt.button != '\x02');
 
-	if (left == false && right == false)
+	if (left == true || right == true)
 	{
 		vm->GetHAL()->UnclickedObject();
 	}
-
-	vm->GetHAL()->ClickedObject(left, false, false, false, right, 1.0, false);
+	else
+		vm->GetHAL()->ClickedObject(!left, false, false, false, !right, 1.0, false);
 
 	return true;
 }
