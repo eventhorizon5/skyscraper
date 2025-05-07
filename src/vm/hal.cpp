@@ -308,7 +308,7 @@ Real HAL::GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real de
 	return ToFloat(result);
 }
 
-bool HAL::Initialize(const std::string &data_path, Ogre::Root *root)
+bool HAL::Initialize(const std::string &data_path, Ogre::Root *root, Ogre::OverlaySystem *overlay)
 {
 	//initialize HAL system
 
@@ -359,7 +359,9 @@ bool HAL::Initialize(const std::string &data_path, Ogre::Root *root)
 	{
 		Report("");
 		Report("Loading Overlay System...");
-		mOverlaySystem = new Ogre::OverlaySystem();
+		mOverlaySystem = overlay;
+		if (!mOverlaySystem)
+			mOverlaySystem = new Ogre::OverlaySystem();
 	}
 	catch (Ogre::Exception &e)
 	{

@@ -301,11 +301,14 @@ bool showconsole = true;
 	OgreBites::ApplicationContext::setup();
 	addInputListener(this);
 
+	//get overlay system if already created
+	Ogre::OverlaySystem *overlay = getOverlaySystem();
+
 	//start and initialize abstraction layer
 #ifdef USING_WX
 	if (!hal->Initialize(vm->data_path))
 #else
-	if (!hal->Initialize(vm->data_path, getRoot()))
+	if (!hal->Initialize(vm->data_path, getRoot(), overlay))
 #endif
 		return ReportError("Error initializing HAL");
 
