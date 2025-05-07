@@ -251,7 +251,8 @@ bool Skyscraper::OnInit()
 	std::string path = GetExeDirectory();
 #ifdef __APPLE__
 	path = path +  "../../../";
-#elif __LINUX__
+#endif
+#ifdef __LINUX__
 	path = path + "../";
 #endif
 	std::filesystem::current_path(path);
