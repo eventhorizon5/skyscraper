@@ -53,7 +53,7 @@ class VMIMPEXP HAL : public Ogre::LogListener
 public:
     HAL(VM *vm);
     ~HAL();
-	bool Initialize(const std::string &data_path);
+	bool Initialize(const std::string &data_path, Ogre::Root *root = 0);
 	bool Render();
 	void ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only);
 	void UnclickedObject();

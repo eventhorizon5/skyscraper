@@ -308,14 +308,17 @@ Real HAL::GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real de
 	return ToFloat(result);
 }
 
-bool HAL::Initialize(const std::string &data_path)
+bool HAL::Initialize(const std::string &data_path, Ogre::Root *root)
 {
 	//initialize HAL system
+
+	mRoot = root;
 
 	//initialize OGRE
 	try
 	{
-		mRoot = Ogre::Root::getSingletonPtr();
+		if (!mRoot)
+			mRoot = Ogre::Root::getSingletonPtr();
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -944,8 +947,10 @@ void HAL::LoadConfiguration(const std::string data_path, bool show_console)
 	vm->showconsole = GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
 
 	//create console window
+#ifdef USING_WX
 	if (vm->showconsole == true)
 		vm->GetGUI()->ShowConsole(false);
+#endif
 }
 
 void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)

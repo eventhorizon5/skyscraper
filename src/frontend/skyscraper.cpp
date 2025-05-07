@@ -28,6 +28,12 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/joystick.h"
+#else
+#include "Ogre.h"
+#include "OgreApplicationContext.h"
+#include "OgreInput.h"
+#include "OgreRTShaderSystem.h"
+#include "OgreCameraMan.h"
 #endif
 #include <locale>
 #include <time.h>
@@ -119,6 +125,17 @@ std::string settingsPath() {
 #endif
 
 namespace Skyscraper {
+
+#ifndef USING_WX
+Skyscraper::Skyscraper() : OgreBites::ApplicationContext("Skyscraper")
+{
+}
+
+void Skyscraper::setup()
+{
+	OnInit();
+}
+#endif
 
 bool Skyscraper::OnInit()
 {
@@ -280,8 +297,16 @@ bool showconsole = true;
 	vm->SetParent(window);
 #endif
 
+	//initialize Ogre
+	OgreBites::ApplicationContext::setup();
+	addInputListener(this);
+
 	//start and initialize abstraction layer
+#ifdef USING_WX
 	if (!hal->Initialize(vm->data_path))
+#else
+	if (!hal->Initialize(vm->data_path, getRoot()))
+#endif
 		return ReportError("Error initializing HAL");
 
 	Report("");
