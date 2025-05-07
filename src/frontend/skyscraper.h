@@ -117,6 +117,13 @@ public:
 	std::filesystem::path GetExeDirectory();
 	bool keyPressed(const OgreBites::KeyboardEvent& evt);
 	bool keyReleased(const OgreBites::KeyboardEvent& evt);
+	bool mouseMoved(const OgreBites::MouseButtonEvent &evt);
+	bool mousePressed(const OgreBites::MouseButtonEvent &evt);
+	bool mouseReleased(const OgreBites::MouseButtonEvent &evt);
+	bool mouseWheelRolled(const OgreBites::MouseButtonEvent &evt)
+	bool touchMoved(const OgreBites::TouchFingerEvent &evt);
+	bool touchPressed(const OgreBites::TouchFingerEvent &evt);
+	bool touchReleased(const OgreBites::TouchFingerEvent &evt);
 #endif
 	std::string GetDataPath();
 	MainScreen* GetWindow();
