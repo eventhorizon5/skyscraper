@@ -29,25 +29,12 @@
 
 using namespace SBS;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#if OGRE_CPU != OGRE_CPU_ARM
-#include "uexception.h"
-#endif
-#endif
-
 #ifndef SW_SHOWNORMAL
 	#define SW_SHOWNORMAL 1
 #endif
 
 int main (int argc, char* argv[])
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#if OGRE_CPU != OGRE_CPU_ARM
-	//initialize top-level exception handler
-	Skyscraper::InitUnhandledExceptionFilter();
-#endif
-#endif
-
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	//force X11 if on Wayland
 	setenv("GDK_BACKEND", "x11", false);

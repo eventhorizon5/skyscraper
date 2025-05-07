@@ -91,10 +91,6 @@ IMPLEMENT_APP_NO_MAIN(Skyscraper)
 #endif
 #endif
 
-#ifndef SW_SHOWNORMAL
-	#define SW_SHOWNORMAL 1
-#endif
-
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 
 //code to get Application Support folder on Mac
@@ -140,6 +136,13 @@ void Skyscraper::setup()
 
 bool Skyscraper::OnInit()
 {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_CPU != OGRE_CPU_ARM
+	//initialize top-level exception handler
+	InitUnhandledExceptionFilter();
+#endif
+#endif
+
 	StartupRunning = false;
 	FullScreen = false;
 	ShowMenu = false;
