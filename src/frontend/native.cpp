@@ -137,7 +137,7 @@ bool Skyscraper::keyPressed(const OgreBites::KeyboardEvent& evt)
 		if (camera->IsOnGround() == true)
 			camera->Jump();
 	}
-	/*else if (key == OgreBites::v)
+	else if (key == '\x76') //V
 	{
 		bool status = camera->GetGravityStatus();
 
@@ -148,7 +148,7 @@ bool Skyscraper::keyPressed(const OgreBites::KeyboardEvent& evt)
 			vm->GetHAL()->Report("Gravity and collision detection on", "");
 		else
 			vm->GetHAL()->Report("Gravity and collision detection off", "");
-	}*/
+	}
 	/*else if (key == OgreBites::ctrl-r)
 	{
 		engine->Reload = true;
@@ -232,19 +232,13 @@ bool Skyscraper::keyPressed(const OgreBites::KeyboardEvent& evt)
 		camera->SetFOVAngle(angle);
 	}
 	//model pick-up
-	/*else if (key == (wxKeyCode)key_pickup)
+	else if (key == '\x63')
 	{
 		if (camera->IsModelAttached() == false)
 			camera->PickUpModel();
 		else
 			camera->DropModel();
-	}*/
-	//load a new additional building
-	/*else if (key == (wxKeyCode)key_load)
-	{
-		frontend->GetGUI()->ShowLoadDialog();
-		return;
-	}*/
+	}
 	else if (key == OgreBites::SDLK_KP_1)
 	{
 		vm->SetActiveEngine(0);
@@ -542,24 +536,24 @@ void Skyscraper::GetKeyStates(EngineContext *engine, OgreBites::Keycode& key, bo
 	{
 		if (camera->Freelook == false)
 		{
-			if (key == OgreBites::SDLK_RIGHT)
+			if (key == OgreBites::SDLK_RIGHT || key == '\x64')
 				turn_right = down;
 
-			if (key == OgreBites::SDLK_LEFT)
+			if (key == OgreBites::SDLK_LEFT || key == '\x61')
 				turn_left = down;
 
-			//if (key == (wxKeyCode)key_straferight)
-				//strafe_right = down;
+			if (key == '\x71') //Q
+				strafe_right = down;
 
-			//if (key == (wxKeyCode)key_strafeleft)
-				//strafe_left = down;
+			if (key == '\x65') //E
+				strafe_left = down;
 		}
 		else
 		{
-			if (key == OgreBites::SDLK_RIGHT)
+			if (key == OgreBites::SDLK_RIGHT || key == '\x64' || key == '\x71')
 				strafe_right = down;
 
-			if (key == OgreBites::SDLK_LEFT)
+			if (key == OgreBites::SDLK_LEFT || key == '\x61' || key == '\x65')
 				strafe_left = down;
 		}
 
@@ -569,23 +563,19 @@ void Skyscraper::GetKeyStates(EngineContext *engine, OgreBites::Keycode& key, bo
 		if (key == OgreBites::SDLK_PAGEDOWN)
 			look_down = down;
 
-		if (key == OgreBites::SDLK_UP)
+		if (key == OgreBites::SDLK_UP || key == '\x77')
 			step_forward = down;
 
-		if (key == OgreBites::SDLK_DOWN)
+		if (key == OgreBites::SDLK_DOWN || key == '\x73')
 			step_backward = down;
 
 		//binoculars
-		/*if (key == (wxKeyCode)key_binoculars)
-		{
+		if (key == '\x62') //B
 			camera->Binoculars(down);
-		}*/
 
 		//crouch
-		/*if (key == (wxKeyCode)key_crouch)
-		{
+		if (key == '\x78') //X
 			camera->Crouch(down);
-		}*/
 
 		//values from old version
 		if (key == OgreBites::SDLK_HOME)
