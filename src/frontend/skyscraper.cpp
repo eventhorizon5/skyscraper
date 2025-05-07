@@ -145,6 +145,25 @@ bool Skyscraper::OnInit()
 	ShowMenu = false;
 	mRenderWindow = 0;
 	window = 0;
+	wireframe = 0;
+
+	//reset input states
+	boxes = false;
+	colliders = false;
+	strafe_left = false;
+	strafe_right = false;
+	float_up = false;
+	float_down = false;
+	spin_up = false;
+	spin_down = false;
+	turn_left = false;
+	turn_right = false;
+	look_up = false;
+	look_down = false;
+	step_forward = false;
+	step_backward = false;
+	freelook = false;
+
 #ifdef USING_WX
 	parser = 0;
 #endif

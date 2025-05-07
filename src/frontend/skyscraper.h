@@ -79,6 +79,7 @@ public:
 	bool FullScreen;
 	bool Verbose;
 	bool ShowMenu; //show main menu
+	int wireframe;
 
 	bool Loop();
 	virtual bool OnInit();
@@ -114,6 +115,7 @@ public:
 	virtual void MacOpenFile(const wxString &filename);
 #else
 	std::filesystem::path GetExeDirectory();
+	bool keyPressed(const OgreBites::KeyboardEvent& evt);
 #endif
 	std::string GetDataPath();
 	MainScreen* GetWindow();
@@ -126,13 +128,28 @@ public:
 	//main window
 	MainScreen *window;
 
+protected:
+	//input system states
+	bool colliders, boxes;
+	bool strafe_left, strafe_right;
+	bool float_up, float_down;
+	bool spin_up, spin_down;
+	bool turn_left, turn_right;
+	bool look_up, look_down;
+	bool step_forward, step_backward;
+	bool freelook;
+
 private:
 
 	void UnloadSim();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-
-#ifdef USING_WX
+#ifndef USING_WX
+	void GetKeyStates(EngineContext *engine, OgreBites::Keycode &key, bool down);
+	void ProcessMovement(EngineContext *engine, bool control = false, bool shift = false, bool angle_only = false);
+	void HandleMouseMovement();
+	void EnableFreelook(bool value);
+#else
 	wxCmdLineParser *parser;
 #endif
 	Ogre::RenderWindow *mRenderWindow;
