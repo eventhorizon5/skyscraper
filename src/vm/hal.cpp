@@ -252,7 +252,9 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 bool HAL::ReportFatalError(const std::string &message, const std::string &prompt)
 {
 	ReportError(message, prompt);
+#ifdef USING_WX
 	vm->GetGUI()->ShowError(message);
+#endif
 	return false;
 }
 
@@ -306,14 +308,17 @@ Real HAL::GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real de
 	return ToFloat(result);
 }
 
-bool HAL::Initialize(const std::string &data_path)
+bool HAL::Initialize(const std::string &data_path, Ogre::Root *root, Ogre::OverlaySystem *overlay)
 {
 	//initialize HAL system
+
+	mRoot = root;
 
 	//initialize OGRE
 	try
 	{
-		mRoot = Ogre::Root::getSingletonPtr();
+		if (!mRoot)
+			mRoot = Ogre::Root::getSingletonPtr();
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -354,7 +359,9 @@ bool HAL::Initialize(const std::string &data_path)
 	{
 		Report("");
 		Report("Loading Overlay System...");
-		mOverlaySystem = new Ogre::OverlaySystem();
+		mOverlaySystem = overlay;
+		if (!mOverlaySystem)
+			mOverlaySystem = new Ogre::OverlaySystem();
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -539,8 +546,11 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		for (int i = 0; i < cameras; i++)
 		{
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-			mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
-			mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			if (mRenderWindow)
+			{
+				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			}
 		}
 	}
 	catch (Ogre::Exception &e)
@@ -942,15 +952,19 @@ void HAL::LoadConfiguration(const std::string data_path, bool show_console)
 	vm->showconsole = GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
 
 	//create console window
+#ifdef USING_WX
 	if (vm->showconsole == true)
 		vm->GetGUI()->ShowConsole(false);
+#endif
 }
 
 void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)
 {
 	//callback function that receives OGRE log messages
 
+#ifdef USING_WX
 	vm->GetGUI()->WriteToConsole(message);
+#endif
 }
 
 void HAL::ConsoleOut(const std::string &message, const std::string &color)

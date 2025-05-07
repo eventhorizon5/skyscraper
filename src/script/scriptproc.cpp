@@ -22,7 +22,9 @@
 
 #include "globals.h"
 #include "sbs.h"
+#ifdef USING_WX
 #include "wx/wx.h"
+#endif
 #include <OgreFileSystem.h>
 #include <OgreArchive.h>
 #include <OgreArchiveManager.h>
@@ -531,8 +533,10 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	//show error dialog
 	if (warning == false)
 	{
+#ifdef USING_WX
 		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
 		dialog.ShowModal();
+#endif
 	}
 	return sError;
 }

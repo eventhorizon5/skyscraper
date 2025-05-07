@@ -60,7 +60,13 @@ set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderS
 find_package(OgreProcedural REQUIRED)
 
 #find wxWidgets
-find_package(wxWidgets COMPONENTS core base REQUIRED)
+if (NOT ANDROID)
+	find_package(wxWidgets COMPONENTS core base REQUIRED)
+endif ()
+
+if (wxWidgets_FOUND)
+	add_compile_definitions(USING_WX)
+endif ()
 
 #find FMOD
 find_package(FMOD)
@@ -98,7 +104,7 @@ else()
         )
 endif()
  
-if(WIN32)
+if(WIN32 AND wxWidgets_FOUND)
 	file(GLOB VM_FILES
 		src/vm/*.cpp
 		src/gui/*.cpp
@@ -109,9 +115,11 @@ else()
 	)
 endif()
 
-file(GLOB GUI_FILES
-	src/gui/*.cpp
-)
+if (NOT WIN32 AND wxWidgets_FOUND)
+	file(GLOB GUI_FILES
+		src/gui/*.cpp
+	)
+endif ()
 
 file(GLOB SCRIPTPROC_FILES
 	src/script/*.cpp
@@ -198,7 +206,9 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 )
 endif()
  
-include(${wxWidgets_USE_FILE})
+if (wxWidgets_FOUND)
+	include(${wxWidgets_USE_FILE})
+endif ()
 
 #ogrebullet libraries
 add_library(OgreBulletCol SHARED ${OGREBULLET_COLL_FILES})
@@ -213,7 +223,7 @@ if (NOT WIN32)
 endif ()
 
 #GUI Library
-if (NOT WIN32)
+if (NOT WIN32 AND wxWidgets_FOUND)
 	add_library(GUI SHARED ${GUI_FILES})
 endif ()
 
@@ -251,6 +261,8 @@ target_precompile_headers(VM PRIVATE src/sbs/globals.h)
 
 if (NOT WIN32)
 	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+endif ()
+if (NOT WIN32 AND wxWidgets_FOUND)
 	target_precompile_headers(GUI PRIVATE src/sbs/globals.h)
 endif ()
 
@@ -270,15 +282,22 @@ else()
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
 endif()
 
-if (NOT WIN32)
+if (NOT WIN32 AND wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(VM GUI SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
 	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper VM GUI ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
-else ()
+elseif (WIN32)
 	target_link_libraries(VM SBS OpenXR dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
 	target_link_libraries(skyscraper VM SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
+
+if (NOT WIN32 AND NOT wxWidgets_FOUND)
+	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
+        target_link_libraries(VM SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+        target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
+endif ()
+
  
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES
@@ -312,9 +331,6 @@ if (APPLE)
 ADD_CUSTOM_COMMAND(TARGET VM
                 POST_BUILD
                 COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
-ADD_CUSTOM_COMMAND(TARGET GUI
-                POST_BUILD
-                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
 ADD_CUSTOM_COMMAND(TARGET SBS
 		POST_BUILD
 		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
@@ -326,6 +342,12 @@ ADD_CUSTOM_COMMAND(TARGET ScriptProc
 ADD_CUSTOM_COMMAND(TARGET skyscraper
 		POST_BUILD
 		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
+endif ()
+
+if (APPLE AND wxWidgets_FOUND)
+ADD_CUSTOM_COMMAND(TARGET GUI
+                POST_BUILD
+                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
 endif ()
 
 if (UNIX AND NOT APPLE)

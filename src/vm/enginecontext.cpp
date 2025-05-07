@@ -20,7 +20,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifdef USING_WX
 #include "wx/wx.h"
+#endif
 #ifndef DISABLE_SOUND
 #include <fmod.hpp>
 #endif
@@ -196,7 +198,9 @@ bool EngineContext::Run()
 	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 	{
+#ifdef USING_WX
 		vm->GetGUI()->RaiseWindow();
+#endif
 		raised = true;
 
 		vm->ReportMissingFiles(processor->nonexistent_files);
@@ -298,7 +302,9 @@ bool EngineContext::Load(std::string filename)
 	}
 
 	//create progress dialog
+#ifdef USING_WX
 	vm->GetGUI()->CreateProgressDialog(filename);
+#endif
 
 	//override SBS startup render option, if specified
 	if (vm->GetRenderOnStartup() == true)
@@ -369,7 +375,9 @@ void EngineContext::StartSim()
 		processor = new ScriptProcessor(this);
 
 	//refresh console to fix banner message on Linux
+#ifdef USING_WX
 	vm->GetGUI()->RefreshConsole();
+#endif
 
 	//override verbose mode if specified
 	if (vm->Verbose == true)
@@ -379,7 +387,9 @@ void EngineContext::StartSim()
 	if (instance == 0)
 	{
 		vm->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
+#ifdef USING_WX
 		wxYield(); //this allows the banner to be printed before the sleep() call
+#endif
 		vm->Pause = false;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);
