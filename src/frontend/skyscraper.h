@@ -124,6 +124,7 @@ public:
 	bool touchMoved(const OgreBites::TouchFingerEvent &evt);
 	bool touchPressed(const OgreBites::TouchFingerEvent &evt);
 	bool touchReleased(const OgreBites::TouchFingerEvent &evt);
+	bool alt_down, ctrl_down, shift_down;
 #endif
 	std::string GetDataPath();
 	MainScreen* GetWindow();

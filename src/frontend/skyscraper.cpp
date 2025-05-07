@@ -169,6 +169,10 @@ bool Skyscraper::OnInit()
 
 #ifdef USING_WX
 	parser = 0;
+#else
+	alt_down = false;
+	ctrl_down = false;
+	shift_down = false;
 #endif
 
 	//create VM instance

@@ -114,7 +114,22 @@ bool Skyscraper::keyPressed(const OgreBites::KeyboardEvent& evt)
 
 	OgreBites::Keycode key = evt.keysym.sym;
 
-    if (key == OgreBites::SDLK_ESCAPE)
+	if (evt.keysym.mod == (unsigned short)64)
+	{
+		//ctrl pressed
+		ctrl_down = true;
+	}
+	else if (evt.keysym.mod == (unsigned short)1)
+	{
+		//shift pressed
+		shift_down = true;
+	}
+	else if (evt.keysym.mod == (unsigned short)256)
+	{
+		//alt pressed
+		alt_down = true;
+	}
+	else if (key == OgreBites::SDLK_ESCAPE)
     {
         //vm->Shutdown = true;
 		Quit();
@@ -287,7 +302,7 @@ bool Skyscraper::keyPressed(const OgreBites::KeyboardEvent& evt)
 
 	GetKeyStates(engine, key, true);
 
-	ProcessMovement(engine, false, false);
+	ProcessMovement(engine, ctrl_down, shift_down);
 
 	return true;
 }
@@ -301,9 +316,25 @@ bool Skyscraper::keyReleased(const OgreBites::KeyboardEvent& evt)
 
 	OgreBites::Keycode key = evt.keysym.sym;
 
+	if (evt.keysym.mod == (unsigned short)64)
+	{
+		//ctrl released
+		ctrl_down = false;
+	}
+	else if (evt.keysym.mod == (unsigned short)1)
+	{
+		//shift released
+		shift_down = false;
+	}
+	else if (evt.keysym.mod == (unsigned short)256)
+	{
+		//alt released
+		alt_down = false;
+	}
+
 	GetKeyStates(engine, key, false);
 
-	ProcessMovement(engine, false, false);
+	ProcessMovement(engine, ctrl_down, shift_down);
 
 	return true;
 }
@@ -511,28 +542,28 @@ void Skyscraper::GetKeyStates(EngineContext *engine, OgreBites::Keycode& key, bo
 		return;
 
 	//alt modifier
-	/*if (event.AltDown())
+	if (alt_down == true)
 	{
 		//strafe movement
-		if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
+		if (key == OgreBites::SDLK_RIGHT || key == '\x64')
 			strafe_right = down;
 
-		else if (key == WXK_LEFT || key == (wxKeyCode)key_left)
+		else if (key == OgreBites::SDLK_LEFT || key == '\x61')
 			strafe_left = down;
 
-		else if (key == WXK_UP || key == (wxKeyCode)key_up)
+		else if (key == OgreBites::SDLK_UP || key == '\x77')
 			float_up = down;
 
-		else if (key == WXK_DOWN || key == (wxKeyCode)key_down)
+		else if (key == OgreBites::SDLK_DOWN || key == '\x73')
 			float_down = down;
 
-		else if (key == WXK_PAGEUP || key == (wxKeyCode)key_lookup)
+		else if (key == OgreBites::SDLK_PAGEUP)
 			spin_up = down;
 
-		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)key_lookdown)
+		else if (key == OgreBites::SDLK_PAGEDOWN)
 			spin_down = down;
 	}
-	else*/
+	else
 	{
 		if (camera->Freelook == false)
 		{
@@ -683,32 +714,6 @@ void Skyscraper::EnableFreelook(bool value)
 		return;
 
 	camera->Freelook = value;
-
-#if defined(__WXMSW__)
-	if (value == true)
-		SetCursor(wxCURSOR_CROSS);
-	else
-		SetCursor(wxNullCursor);
-#else
-
-#ifdef USING_WX
-	//detect for Wayland on Linux
-	bool wayland = false;
-	const char * val = std::getenv("WAYLAND_DISPLAY");
-	if (val != 0)
-		wayland = true;
-
-	if (value == true)
-	{
-		if (wayland == false)
-			wxSetCursor(wxCURSOR_CROSS);
-		else
-			wxSetCursor(wxCURSOR_BLANK); //set to blank for FreeLook to work on Wayland
-	}
-	else
-		wxSetCursor(wxNullCursor);
-#endif
-#endif
 }
 
 void Skyscraper::HandleMouseMovement()
