@@ -81,25 +81,6 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 		joy_buttons = -1;
 #endif
 
-	//reset input states
-	boxes = false;
-	colliders = false;
-	wireframe = 0;
-	strafe_left = false;
-	strafe_right = false;
-	float_up = false;
-	float_down = false;
-	spin_up = false;
-	spin_down = false;
-	turn_left = false;
-	turn_right = false;
-	look_up = false;
-	look_down = false;
-	step_forward = false;
-	step_backward = false;
-
-	freelook = false;
-
 	HAL *hal = frontend->GetVM()->GetHAL();
 
 	key_right = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Right", "D")[0];
@@ -320,6 +301,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 	{
 		if (key == WXK_SPACE)
 		{
+			//jump (spacebar) action
 			if (camera->IsOnGround() == true)
 				camera->Jump();
 		}
@@ -367,22 +349,22 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_F4)
 		{
 			//toggle wireframe mode
-			if (wireframe == 0)
+			if (frontend->wireframe == 0)
 			{
 				frontend->GetVM()->GetSkySystem()->EnableSky(false);
 				camera->SetViewMode(1);
-				wireframe = 1;
+				frontend->wireframe = 1;
 			}
-			else if (wireframe == 1)
+			else if (frontend->wireframe == 1)
 			{
 				camera->SetViewMode(2);
-				wireframe = 2;
+				frontend->wireframe = 2;
 			}
-			else if (wireframe == 2)
+			else if (frontend->wireframe == 2)
 			{
 				frontend->GetVM()->GetSkySystem()->EnableSky(true);
 				camera->SetViewMode(0);
-				wireframe = 0;
+				frontend->wireframe = 0;
 			}
 		}
 
