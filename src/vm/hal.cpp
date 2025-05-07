@@ -228,7 +228,9 @@ void HAL::Report(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
+#ifdef USING_WX
 		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
+#endif
 	}
 }
 
@@ -244,7 +246,9 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
+#ifdef USING_WX
 		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
+#endif
 	}
 	return false;
 }

@@ -87,7 +87,9 @@ IMPLEMENT_APP_NO_MAIN(Skyscraper)
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #if OGRE_CPU != OGRE_CPU_ARM
+#ifdef USING_WX
 #include "uexception.h"
+#endif
 #endif
 #endif
 
@@ -138,8 +140,10 @@ bool Skyscraper::OnInit()
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #if OGRE_CPU != OGRE_CPU_ARM
+#ifdef USING_WX
 	//initialize top-level exception handler
 	InitUnhandledExceptionFilter();
+#endif
 #endif
 #endif
 
@@ -194,7 +198,9 @@ bool Skyscraper::OnInit()
 	//set up unhandled exception handler (crash report system)
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #if OGRE_CPU != OGRE_CPU_ARM
+#ifdef USING_WX
 	UnhandledExceptionSetRoot(this);
+#endif
 #endif
 #endif
 
@@ -474,6 +480,9 @@ void Skyscraper::StartSound()
 	if (wxFileExists(vm->data_path + filename_full))
 		filename_full = vm->data_path + filename_full;
 #endif
+
+	//fix name clash
+	#undef PlaySound
 
 	//play music
 	vm->GetHAL()->PlaySound(filename_full);

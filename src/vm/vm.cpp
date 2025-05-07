@@ -105,9 +105,11 @@ VM::~VM()
 	hal = 0;
 
 	//delete GUI instance
+#ifdef USING_WX
 	if (gui)
 		delete gui;
 	gui = 0;
+#endif
 
 	//delete VM console
 	if (vmconsole)
@@ -900,15 +902,19 @@ void VM::UpdateProgress()
 
 	int final = ((Real)current_percent / (Real)total_percent) * 100;
 
+#ifdef USING_WX
 	if (gui)
 		gui->UpdateProgress(final);
+#endif
 }
 
 bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)
 {
 	//report missing files
+#ifdef USING_WX
 	if (gui)
 		return gui->ReportMissingFiles(missing_files);
+#endif
 	return true;
 }
 

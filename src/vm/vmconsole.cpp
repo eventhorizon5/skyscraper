@@ -565,8 +565,9 @@ void VMConsole::Process(const std::string &text)
 			Report("boot [engine_number] - start a simulator engine");
 			Report("help - print this help guide\n");
 			Report("All other commands will be passed to the active simulator engine, if available");
-
+#ifdef USING_WX
 			if (vm->GetGUI()->IsConsoleVisible() == false)
+#endif
 				Report("\nPress CTRL-c to quit");
 		}
 		consoleresult.ready = false;
