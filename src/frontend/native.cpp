@@ -314,8 +314,85 @@ bool Skyscraper::keyReleased(const OgreBites::KeyboardEvent& evt)
 	return true;
 }
 
-bool Skyscraper::mouseMoved(const OgreBites::MouseButtonEvent &evt)
+bool Skyscraper::mouseMoved(const OgreBites::MouseMotionEvent &evt)
 {
+	//this function runs when the mouse is moved
+
+	if (!vm->GetActiveEngine())
+		return false;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = vm->GetActiveEngine()->GetSystem();
+
+	if (!Simcore)
+		return false;
+
+	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return false;
+
+	//get old mouse coordinates
+	int old_mouse_x = camera->mouse_x;
+	int old_mouse_y = camera->mouse_y;
+
+	//get mouse pointer coordinates
+	camera->mouse_x = evt.x;
+	camera->mouse_y = evt.y;
+
+	//freelook mode
+	if (camera->Freelook == true)
+	{
+		if (freelook == false)
+		{
+			//reset values to prevent movement from getting stuck
+			turn_right = 0;
+			turn_left = 0;
+		}
+
+		freelook = true;
+
+		//get window dimensions
+		Real width = mRenderWindow->getWidth();
+		Real height = mRenderWindow->getHeight();
+
+		//if mouse coordinates changed, and we're in freelook mode, rotate camera
+		if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
+		{
+			//WarpPointer(width * 0.5, height * 0.5);
+
+			Vector3 rotational;
+			rotational.x = -(((Real)camera->mouse_y - (height / 2))) / (height * 2);
+			rotational.y = -((width / 2) - (Real)camera->mouse_x) / (width * 2);
+			rotational.z = 0;
+
+			Real fps_adjust = Simcore->FPS / 60;
+			rotational *= fps_adjust;
+
+			//apply freelook rotation
+			camera->FreelookMove(rotational);
+		}
+		else
+		{
+			//reset rotation by reprocessing keyboard-based rotation
+			ProcessMovement(vm->GetActiveEngine(), false, false, true);
+		}
+	}
+	else
+	{
+		if (freelook == true)
+		{
+			//reset values to prevent movement from getting stuck
+			strafe_right = 0;
+			strafe_left = 0;
+			if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
+				camera->FreelookMove(Vector3::ZERO);
+			ProcessMovement(vm->GetActiveEngine(), false, false, true);
+		}
+		freelook = false;
+	}
+
+	HandleMouseMovement();
 	return true;
 }
 
@@ -325,8 +402,8 @@ bool Skyscraper::mousePressed(const OgreBites::MouseButtonEvent &evt)
 
 	//check if the user clicked on an object, and process it
 	unsigned char button = evt.button;
-	bool left = (button == '1');
-	bool right = (button != '1');
+	bool left = (button == '\x01');
+	bool right = (button != '\x01');
 
 	HAL *hal = vm->GetHAL();
 
@@ -346,8 +423,8 @@ bool Skyscraper::mousePressed(const OgreBites::MouseButtonEvent &evt)
 
 bool Skyscraper::mouseReleased(const OgreBites::MouseButtonEvent &evt)
 {
-	bool left = !(evt.button == '1');
-	bool right = !(evt.button != '1');
+	bool left = !(evt.button == '\x01');
+	bool right = !(evt.button != '\x01');
 
 	if (left == false && right == false)
 	{
@@ -602,6 +679,29 @@ void Skyscraper::EnableFreelook(bool value)
 		wxSetCursor(wxNullCursor);
 #endif
 #endif
+}
+
+void Skyscraper::HandleMouseMovement()
+{
+	EngineContext *engine = vm->GetActiveEngine();
+
+	//if (!engine || IsActive() == false)
+	if (!engine)
+		return;
+
+	if (engine->IsRunning() == false)
+		return;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = engine->GetSystem();
+
+	if (!Simcore)
+		return;
+
+	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return;
 }
 
 }
