@@ -342,8 +342,8 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_F7)
 		{
 			//show colliders
-			Simcore->ShowColliders(!colliders);
-			colliders = !colliders;
+			Simcore->ShowColliders(!frontend->colliders);
+			frontend->colliders = !frontend->colliders;
 		}
 
 		if (key == WXK_F4)
@@ -394,8 +394,8 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_F8)
 		{
 			//show mesh bounding boxes
-			Simcore->ShowBoundingBoxes(!boxes);
-			boxes = !boxes;
+			Simcore->ShowBoundingBoxes(!frontend->boxes);
+			frontend->boxes = !frontend->boxes;
 		}
 
 		if (key == WXK_F9)
@@ -518,59 +518,59 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 	{
 		//strafe movement
 		if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
-			strafe_right = down;
+			frontend->strafe_right = down;
 
 		else if (key == WXK_LEFT || key == (wxKeyCode)key_left)
-			strafe_left = down;
+			frontend->strafe_left = down;
 
 		else if (key == WXK_UP || key == (wxKeyCode)key_up)
-			float_up = down;
+			frontend->float_up = down;
 
 		else if (key == WXK_DOWN || key == (wxKeyCode)key_down)
-			float_down = down;
+			frontend->float_down = down;
 
 		else if (key == WXK_PAGEUP || key == (wxKeyCode)key_lookup)
-			spin_up = down;
+			frontend->spin_up = down;
 
 		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)key_lookdown)
-			spin_down = down;
+			frontend->spin_down = down;
 	}
 	else
 	{
 		if (camera->Freelook == false)
 		{
 			if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
-				turn_right = down;
+				frontend->turn_right = down;
 
 			if (key == WXK_LEFT || key == (wxKeyCode)key_left)
-				turn_left = down;
+				frontend->turn_left = down;
 
 			if (key == (wxKeyCode)key_straferight)
-				strafe_right = down;
+				frontend->strafe_right = down;
 
 			if (key == (wxKeyCode)key_strafeleft)
-				strafe_left = down;
+				frontend->strafe_left = down;
 		}
 		else
 		{
 			if (key == WXK_RIGHT || key == (wxKeyCode)key_right || key == (wxKeyCode)key_straferight)
-				strafe_right = down;
+				frontend->strafe_right = down;
 
 			if (key == WXK_LEFT || key == (wxKeyCode)key_left || key == (wxKeyCode)key_strafeleft)
-				strafe_left = down;
+				frontend->strafe_left = down;
 		}
 
 		if (key == WXK_PAGEUP || key == (wxKeyCode)key_lookup)
-			look_up = down;
+			frontend->look_up = down;
 
 		if (key == WXK_PAGEDOWN || key == (wxKeyCode)key_lookdown)
-			look_down = down;
+			frontend->look_down = down;
 
 		if (key == WXK_UP || key == (wxKeyCode)key_up)
-			step_forward = down;
+			frontend->step_forward = down;
 
 		if (key == WXK_DOWN || key == (wxKeyCode)key_down)
-			step_backward = down;
+			frontend->step_backward = down;
 
 		//binoculars
 		if (key == (wxKeyCode)key_binoculars)
@@ -586,9 +586,9 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 
 		//values from old version
 		if (key == WXK_HOME || key == (wxKeyCode)key_floatup)
-			float_up = down;
+			frontend->float_up = down;
 		if (key == WXK_END || key == (wxKeyCode)key_floatdown)
-			float_down = down;
+			frontend->float_down = down;
 
 		//drive functions, when user is inside a vehicle
 		if (camera->Freelook == true && camera->inside_vehicle == true)
@@ -630,19 +630,19 @@ void MainScreen::ProcessMovement(EngineContext *engine, bool control, bool shift
 		else if (shift == true)
 			camera->speed = speed_fast;
 
-		if (step_forward == true)
+		if (frontend->step_forward == true)
 			step += speed_normal;
-		if (step_backward == true)
+		if (frontend->step_backward == true)
 			step -= speed_normal;
 
-		if (strafe_left == true)
+		if (frontend->strafe_left == true)
 			strafe -= speed_normal;
-		if (strafe_right == true)
+		if (frontend->strafe_right == true)
 			strafe += speed_normal;
 
-		if (float_up == true)
+		if (frontend->float_up == true)
 			floatval += speed_normal;
-		if (float_down == true)
+		if (frontend->float_down == true)
 			floatval -= speed_normal;
 
 		//set camera motion values
@@ -651,19 +651,19 @@ void MainScreen::ProcessMovement(EngineContext *engine, bool control, bool shift
 		camera->Float(floatval);
 	}
 
-	if (spin_up == true)
+	if (frontend->spin_up == true)
 		spin += speed_normal;
-	if (spin_down == true)
+	if (frontend->spin_down == true)
 		spin -= speed_normal;
 
-	if (turn_left == true)
+	if (frontend->turn_left == true)
 		turn -= speed_normal;
-	if (turn_right == true)
+	if (frontend->turn_right == true)
 		turn += speed_normal;
 
-	if (look_up == true)
+	if (frontend->look_up == true)
 		look += speed_normal;
-	if (look_down == true)
+	if (frontend->look_down == true)
 		look -= speed_normal;
 
 	//set camera rotation values
@@ -747,14 +747,14 @@ void MainScreen::HandleMouseMovement()
 	//freelook mode
 	if (camera->Freelook == true)
 	{
-		if (freelook == false)
+		if (frontend->freelook == false)
 		{
 			//reset values to prevent movement from getting stuck
-			turn_right = 0;
-			turn_left = 0;
+			frontend->turn_right = 0;
+			frontend->turn_left = 0;
 		}
 
-		freelook = true;
+		frontend->freelook = true;
 
 		//get window dimensions
 		Real width = GetClientSize().GetWidth();
@@ -784,16 +784,16 @@ void MainScreen::HandleMouseMovement()
 	}
 	else
 	{
-		if (freelook == true)
+		if (frontend->freelook == true)
 		{
 			//reset values to prevent movement from getting stuck
-			strafe_right = 0;
-			strafe_left = 0;
+			frontend->strafe_right = 0;
+			frontend->strafe_left = 0;
 			if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
 				camera->FreelookMove(Vector3::ZERO);
 			ProcessMovement(engine, false, false, true);
 		}
-		freelook = false;
+		frontend->freelook = false;
 	}
 }
 
