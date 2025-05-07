@@ -29,6 +29,7 @@
 #include "wx/stdpaths.h"
 #include "wx/joystick.h"
 #else
+#include <filesystem>
 #include "Ogre.h"
 #include "OgreApplicationContext.h"
 #include "OgreInput.h"
@@ -245,6 +246,15 @@ bool Skyscraper::OnInit()
 
 	//only run idle events on specified windows, to reduce overhead
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
+#else
+	//set working directory
+	std::string path = GetExeDirectory();
+#ifdef __APPLE__
+	path = path +  "../../../";
+#elif __LINUX__
+	path = path + "../";
+#endif
+	std::filesystem::current_path(path);
 #endif
 
 	//set up unhandled exception handler (crash report system)
@@ -360,6 +370,7 @@ bool showconsole = true;
 		ShowMenu = false;
 #else
 	ShowMenu = false;
+
 #endif
 
 	//start console
