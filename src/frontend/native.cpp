@@ -56,7 +56,7 @@ std::filesystem::path Skyscraper::GetExeDirectory()
     // Windows specific
     wchar_t szPath[MAX_PATH];
     GetModuleFileNameW( NULL, szPath, MAX_PATH );
-	return szPath;
+	return std::filesystem::path{szPath}.parent_path() / "";
 #elif __APPLE__
 	// Mac specific
     char szPath[PATH_MAX];
