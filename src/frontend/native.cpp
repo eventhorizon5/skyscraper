@@ -114,6 +114,7 @@ bool Skyscraper::keyPressed(const OgreBites::KeyboardEvent& evt)
 
 	OgreBites::Keycode key = evt.keysym.sym;
 
+	//modifiers
 	if (evt.keysym.mod == (unsigned short)64)
 	{
 		//ctrl pressed
@@ -129,7 +130,9 @@ bool Skyscraper::keyPressed(const OgreBites::KeyboardEvent& evt)
 		//alt pressed
 		alt_down = true;
 	}
-	else if (key == OgreBites::SDLK_ESCAPE)
+
+	//general keys
+	if (key == OgreBites::SDLK_ESCAPE)
     {
         //vm->Shutdown = true;
 		Quit();
@@ -316,21 +319,9 @@ bool Skyscraper::keyReleased(const OgreBites::KeyboardEvent& evt)
 
 	OgreBites::Keycode key = evt.keysym.sym;
 
-	if (evt.keysym.mod == (unsigned short)64)
-	{
-		//ctrl released
-		ctrl_down = false;
-	}
-	else if (evt.keysym.mod == (unsigned short)1)
-	{
-		//shift released
-		shift_down = false;
-	}
-	else if (evt.keysym.mod == (unsigned short)256)
-	{
-		//alt released
-		alt_down = false;
-	}
+	ctrl_down = false;
+	shift_down = false;
+	alt_down = false;
 
 	GetKeyStates(engine, key, false);
 
