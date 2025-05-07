@@ -67,6 +67,19 @@ std::filesystem::path Skyscraper::GetExeDirectory()
 #endif
 }
 
+void Skyscraper::SetCWD()
+{
+	//set working directory
+	std::string path = GetExeDirectory();
+	#ifdef __APPLE__
+		path = path +  "../../../";
+	#endif
+	#ifdef __LINUX__
+		path = path + "../";
+	#endif
+		std::filesystem::current_path(path);
+}
+
 }
 
 #endif

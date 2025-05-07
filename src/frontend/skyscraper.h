@@ -101,6 +101,7 @@ public:
 	void SetFullScreen(bool enabled);
 	void RaiseWindow();
 	void RefreshConsole();
+	void SetCWD();
 #ifdef USING_WX
 	virtual void MacOpenFile(const wxString &filename);
 #else

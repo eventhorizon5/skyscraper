@@ -597,6 +597,8 @@ bool VMConsole::Report(const std::string &text, const std::string &color)
 
 #ifdef USING_WX
 	if (vm->GetGUI()->IsConsoleVisible() == false)
+#else
+	if (true)
 #endif
 	{
 		if (mtx_io.try_lock())
@@ -605,10 +607,8 @@ bool VMConsole::Report(const std::string &text, const std::string &color)
 			mtx_io.unlock();
 		}
 	}
-#ifdef USING_WX
 	else
 		vm->GetGUI()->WriteToConsole(text, color);
-#endif
 	return true;
 }
 
