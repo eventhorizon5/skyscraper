@@ -429,11 +429,10 @@ bool Skyscraper::mouseReleased(const OgreBites::MouseButtonEvent &evt)
 	if (left == true || right == true)
 	{
 		vm->GetHAL()->UnclickedObject();
+		return true;
 	}
-	else
-		vm->GetHAL()->ClickedObject(!left, false, false, false, !right, 1.0, false);
 
-	return true;
+	return false;
 }
 
 bool Skyscraper::mouseWheelRolled(const OgreBites::MouseWheelEvent &evt)
@@ -455,16 +454,57 @@ bool Skyscraper::mouseWheelRolled(const OgreBites::MouseWheelEvent &evt)
 
 bool Skyscraper::touchMoved(const OgreBites::TouchFingerEvent &evt)
 {
+	if (!vm->GetActiveEngine())
+		return false;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = vm->GetActiveEngine()->GetSystem();
+
+	if (!Simcore)
+		return false;
+
+	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return false;
+
+	//get old mouse coordinates
+	int old_mouse_x = camera->mouse_x;
+	int old_mouse_y = camera->mouse_y;
+
+	//get mouse pointer coordinates
+	camera->mouse_x = evt.x;
+	camera->mouse_y = evt.y;
+
+	HandleMouseMovement();
 	return true;
 }
 
 bool Skyscraper::touchPressed(const OgreBites::TouchFingerEvent &evt)
 {
+	//this function is run when a user touches an object
+
+	//check if the user touched on an object, and process it
+
+	HAL *hal = vm->GetHAL();
+
+	//apply content scaling factor, fixes issues for example on Retina displays
+	Real scale = 1.0; //leave at 1.0 due to no wxWidgets available
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	//set scale to 1.0 on MacOS versions earlier than 10.15
+	if (vm->macos_major == 10 && vm->macos_minor < 15)
+		scale = 1.0;
+#endif
+
+	hal->ClickedObject(true, false, false, false, false, scale, false);
+
 	return true;
 }
 
 bool Skyscraper::touchReleased(const OgreBites::TouchFingerEvent &evt)
 {
+	vm->GetHAL()->UnclickedObject();
 	return true;
 }
 
