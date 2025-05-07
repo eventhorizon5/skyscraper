@@ -371,7 +371,9 @@ void EngineContext::StartSim()
 		processor = new ScriptProcessor(this);
 
 	//refresh console to fix banner message on Linux
+#ifdef USING_WX
 	vm->GetGUI()->RefreshConsole();
+#endif
 
 	//override verbose mode if specified
 	if (vm->Verbose == true)
