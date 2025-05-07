@@ -84,7 +84,11 @@ public:
 	virtual bool OnInit();
 	virtual int OnExit();
 
+#ifdef USING_WX
 	Skyscraper() {};
+#else
+	Skyscraper();
+#endif
 	virtual ~Skyscraper() {};
 	void setup();
 
