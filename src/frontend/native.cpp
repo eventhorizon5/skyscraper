@@ -67,7 +67,7 @@ std::filesystem::path Skyscraper::GetExeDirectory()
 #endif
 }
 
-void Skyscraper::SetCWD()
+bool Skyscraper::SetCWD()
 {
 	//set working directory
 	std::string path = GetExeDirectory();
@@ -78,6 +78,8 @@ void Skyscraper::SetCWD()
 		path = path + "../";
 	#endif
 		std::filesystem::current_path(path);
+
+	return true;
 }
 
 }

@@ -302,7 +302,9 @@ bool EngineContext::Load(std::string filename)
 	}
 
 	//create progress dialog
+#ifdef USING_WX
 	vm->GetGUI()->CreateProgressDialog(filename);
+#endif
 
 	//override SBS startup render option, if specified
 	if (vm->GetRenderOnStartup() == true)
