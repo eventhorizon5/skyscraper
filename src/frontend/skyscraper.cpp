@@ -213,7 +213,7 @@ bool showconsole = true;
 	window->CenterOnScreen();
 
 	vm->SetParent(window);
-#endif
+#else
 
 	//initialize Ogre
 	OgreBites::ApplicationContext::setup();
@@ -221,6 +221,7 @@ bool showconsole = true;
 
 	//get overlay system if already created
 	Ogre::OverlaySystem *overlay = getOverlaySystem();
+#endif
 
 	//start and initialize abstraction layer
 #ifdef USING_WX

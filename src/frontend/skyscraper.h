@@ -45,6 +45,10 @@ namespace SBS {
 	class SBS;
 }
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	std::string settingsPath();
+#endif
+
 namespace Skyscraper {
 
 class DebugPanel;
@@ -80,7 +84,7 @@ public:
 	virtual bool OnInit();
 	virtual int OnExit();
 
-	Skyscraper();
+	Skyscraper() {};
 	virtual ~Skyscraper() {};
 	void setup();
 
@@ -101,7 +105,7 @@ public:
 	void SetFullScreen(bool enabled);
 	void RaiseWindow();
 	void RefreshConsole();
-	void SetCWD();
+	bool SetCWD();
 #ifdef USING_WX
 	virtual void MacOpenFile(const wxString &filename);
 #else
