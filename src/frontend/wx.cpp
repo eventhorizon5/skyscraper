@@ -22,6 +22,16 @@
 
 #ifdef USING_WX
 #include "wx/wx.h"
+#include "wx/dir.h"
+#include "wx/cmdline.h"
+#include "wx/filename.h"
+#include "wx/filefn.h"
+#include "wx/stdpaths.h"
+#include "globals.h"
+#include "vm.h"
+#include "hal.h"
+#include "skyscraper.h"
+#include "mainscreen.h"
 
 namespace Skyscraper {
 
@@ -69,7 +79,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 }
 
-Skyscraper::SetCWD()
+bool Skyscraper::SetCWD()
 {
 	//switch current working directory to executable's path, if needed
 	wxString exefile = wxStandardPaths::Get().GetExecutablePath(); //get full path and filename
@@ -154,6 +164,7 @@ Skyscraper::SetCWD()
 
 	//only run idle events on specified windows, to reduce overhead
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
+	return true;
 }
 
 }
