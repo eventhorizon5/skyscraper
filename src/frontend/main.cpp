@@ -54,9 +54,13 @@ int main (int argc, char* argv[])
 	wxEntry(argc, argv);
 #else
 	::Skyscraper::Skyscraper *skyscraper = new ::Skyscraper::Skyscraper();
-	skyscraper->OnInit();
+	skyscraper->initApp();
 	while (true)
+	{
 		skyscraper->Loop();
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+	skyscraper->closeApp();
 	return 0;
 #endif
 }

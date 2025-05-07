@@ -23,12 +23,13 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
-namespace Ogre {
-	class SceneNode;
-	class Rectangle2D;
-	class ConfigFile;
-	class OverlaySystem;
-}
+#ifndef USING_WX
+#include "Ogre.h"
+#include "OgreApplicationContext.h"
+#include "OgreInput.h"
+#include "OgreRTShaderSystem.h"
+#include "OgreCameraMan.h"
+#endif
 
 namespace FMOD {
 	class System;
@@ -60,7 +61,7 @@ class StartScreen;
 #ifdef USING_WX
 class Skyscraper : public wxApp
 #else
-class Skyscraper
+class Skyscraper : public OgreBites::ApplicationContext, public OgreBites::InputListener
 #endif
 {
 	friend class MainScreen;
@@ -78,6 +79,10 @@ public:
 	bool Loop();
 	virtual bool OnInit();
 	virtual int OnExit();
+
+	Skyscraper();
+	virtual ~Skyscraper() {};
+	void setup();
 
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
