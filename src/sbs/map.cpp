@@ -50,8 +50,8 @@ Map::Map(Object *parent, const std::string &name) : Object(parent)
 	enabled = false;
 
 	//create orthographic camera texture, used for map generation
-	OrthoCamera = new CameraTexture(this, "MapCamera", 3, 0, Vector3(0, 50000, 0), false, Vector3(270, 0, 0));
-	OrthoCamera->EnableOrthographic(true);
+	//OrthoCamera = new CameraTexture(this, "MapCamera", 3, 0, Vector3(0, 50000, 0), false, Vector3(270, 0, 0));
+	//OrthoCamera->EnableOrthographic(true);
 
 	//timer = new Timer("Map Timer", this);
 	timer = 0;
@@ -68,7 +68,8 @@ Map::~Map()
 
 void Map::Enabled(bool value)
 {
-	OrthoCamera->Enabled(value);
+	if (OrthoCamera)
+		OrthoCamera->Enabled(value);
 	/*if (value == true)
 		timer->Start(10000, false);
 	else
@@ -97,7 +98,8 @@ void Map::Timer::Notify()
 
 void Map::GetImage(Ogre::Image &image)
 {
-	OrthoCamera->GetImage(image);
+	if (OrthoCamera)
+		OrthoCamera->GetImage(image);
 }
 
 }

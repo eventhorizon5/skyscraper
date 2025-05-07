@@ -903,13 +903,16 @@ void VM::UpdateProgress()
 
 	int final = ((Real)current_percent / (Real)total_percent) * 100;
 
-	gui->UpdateProgress(final);
+	if (gui)
+		gui->UpdateProgress(final);
 }
 
 bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)
 {
 	//report missing files
-	return gui->ReportMissingFiles(missing_files);
+	if (gui)
+		return gui->ReportMissingFiles(missing_files);
+	return true;
 }
 
 void VM::StartConsole()

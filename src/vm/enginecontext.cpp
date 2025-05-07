@@ -198,7 +198,9 @@ bool EngineContext::Run()
 	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 	{
+#ifdef USING_WX
 		vm->GetGUI()->RaiseWindow();
+#endif
 		raised = true;
 
 		vm->ReportMissingFiles(processor->nonexistent_files);
