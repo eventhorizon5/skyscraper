@@ -117,7 +117,7 @@ public:
 	std::filesystem::path GetExeDirectory();
 	bool keyPressed(const OgreBites::KeyboardEvent& evt);
 	bool keyReleased(const OgreBites::KeyboardEvent& evt);
-	bool mouseMoved(const OgreBites::MouseButtonEvent &evt);
+	bool mouseMoved(const OgreBites::MouseMotionEvent &evt);
 	bool mousePressed(const OgreBites::MouseButtonEvent &evt);
 	bool mouseReleased(const OgreBites::MouseButtonEvent &evt);
 	bool mouseWheelRolled(const OgreBites::MouseWheelEvent &evt);
