@@ -298,6 +298,33 @@ bool Skyscraper::keyPressed(const OgreBites::KeyboardEvent& evt)
 	return true;
 }
 
+bool Skyscraper::keyReleased(const OgreBites::KeyboardEvent& evt)
+{
+	EngineContext *engine = vm->GetActiveEngine();
+
+	if (!engine)
+		return false;
+
+	//get SBS instance
+	::SBS::SBS *Simcore = engine->GetSystem();
+
+	if (!Simcore)
+		return false;
+
+	Camera *camera = Simcore->camera;
+
+	if (!camera)
+		return false;
+
+	OgreBites::Keycode key = evt.keysym.sym;
+
+	GetKeyStates(engine, key, false);
+
+	ProcessMovement(engine, false, false);
+
+	return true;
+}
+
 void Skyscraper::GetKeyStates(EngineContext *engine, OgreBites::Keycode& key, bool down)
 {
 	//get SBS camera

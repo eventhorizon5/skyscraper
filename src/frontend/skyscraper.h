@@ -116,6 +116,7 @@ public:
 #else
 	std::filesystem::path GetExeDirectory();
 	bool keyPressed(const OgreBites::KeyboardEvent& evt);
+	bool keyReleased(const OgreBites::KeyboardEvent& evt);
 #endif
 	std::string GetDataPath();
 	MainScreen* GetWindow();
