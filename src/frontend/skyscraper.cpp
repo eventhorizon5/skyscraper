@@ -638,57 +638,6 @@ void Skyscraper::destroyRenderWindow()
 	vm->GetHAL()->DestroyRenderWindow();
 }
 
-const std::string Skyscraper::getOgreHandle() const
-{
-#ifdef USING_WX
-#if defined(__WXMSW__)
-	// Handle for Windows systems
-	return Ogre::StringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
-#elif defined(__WXGTK__)
-	// Handle for GTK-based systems
-
-	// wxWidgets uses several internal GtkWidgets, the GetHandle method
-	// returns a different one than this, but wxWidgets's GLCanvas uses this
-	// one to interact with GLX, so we do the same.
-	// NOTE: this method relies on implementation details in wxGTK and could
-	//      change without any notification from the developers.
-	GtkWidget* privHandle = window->m_wxwindow;
-
-	// prevents flickering
-	//gtk_widget_set_double_buffered(privHandle, false);
-
-	gtk_widget_realize(privHandle);
-
-	// grab the window object
-	GdkWindow* gdkWin = gtk_widget_get_window((GtkWidget*)window->GetHandle());
-	Display* display = GDK_WINDOW_XDISPLAY(gdkWin);
-	Window wid = GDK_WINDOW_XID(gdkWin);
-
-	// screen (returns "display.screen")
-	std::string screenStr = DisplayString(display);
-	screenStr = screenStr.substr(screenStr.find(".") + 1, screenStr.size());
-
-	std::stringstream handleStream;
-	handleStream << (unsigned long)display << ':' << screenStr << ':' << wid;
-
-	// retrieve XVisualInfo
-	// NOTE: '-lGL' linker flag must be specified.
-	int attrlist[] = { GLX_RGBA, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, None };
-	XVisualInfo* vi = glXChooseVisual(display, DefaultScreen(display), attrlist);
-	handleStream << ':' << (unsigned long)vi;
-
-	return std::string(handleStream.str());
-
-#elif defined(__WXMAC__)
-	return Ogre::StringConverter::toString((size_t)window->MacGetTopLevelWindowRef());
-#else
-	#error Not supported on this platform!
-#endif
-#else
-	return "";
-#endif
-}
-
 void Skyscraper::SetFullScreen(bool enabled)
 {
 	//enable/disable fullscreen
