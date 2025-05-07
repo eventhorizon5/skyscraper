@@ -305,17 +305,6 @@ bool Skyscraper::keyReleased(const OgreBites::KeyboardEvent& evt)
 	if (!engine)
 		return false;
 
-	//get SBS instance
-	::SBS::SBS *Simcore = engine->GetSystem();
-
-	if (!Simcore)
-		return false;
-
-	Camera *camera = Simcore->camera;
-
-	if (!camera)
-		return false;
-
 	OgreBites::Keycode key = evt.keysym.sym;
 
 	GetKeyStates(engine, key, false);
@@ -332,17 +321,59 @@ bool Skyscraper::mouseMoved(const OgreBites::MouseButtonEvent &evt)
 
 bool Skyscraper::mousePressed(const OgreBites::MouseButtonEvent &evt)
 {
+	//this function is run when a mouse button is pressed
+
+	//check if the user clicked on an object, and process it
+	unsigned char button = evt.button;
+	bool left = (button == '1');
+	bool right = (button != '1');
+
+	HAL *hal = vm->GetHAL();
+
+	//apply content scaling factor, fixes issues for example on Retina displays
+	Real scale = 1.0; //leave at 1.0 due to no wxWidgets available
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	//set scale to 1.0 on MacOS versions earlier than 10.15
+	if (vm->macos_major == 10 && vm->macos_minor < 15)
+		scale = 1.0;
+#endif
+
+	hal->ClickedObject(left, false, false, false, right, scale, false);
+
 	return true;
 }
 
 bool Skyscraper::mouseReleased(const OgreBites::MouseButtonEvent &evt)
 {
+	bool left = !(evt.button == '1');
+	bool right = !(evt.button != '1');
+
+	if (left == false && right == false)
+	{
+		vm->GetHAL()->UnclickedObject();
+	}
+
+	vm->GetHAL()->ClickedObject(left, false, false, false, right, 1.0, false);
+
 	return true;
 }
 
-bool Skyscraper::mouseWheelRolled(const OgreBites::MouseButtonEvent &evt)
+bool Skyscraper::mouseWheelRolled(const OgreBites::MouseWheelEvent &evt)
 {
-	return true;
+	//enter or exit freelook mode using mouse scroll wheel
+	if (evt.y > 0)
+	{
+		EnableFreelook(true);
+		return true;
+	}
+	else if (evt.y < 0)
+	{
+		EnableFreelook(false);
+		return true;
+	}
+
+	return false;
 }
 
 bool Skyscraper::touchMoved(const OgreBites::TouchFingerEvent &evt)
