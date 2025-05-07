@@ -103,6 +103,8 @@ public:
 	void RefreshConsole();
 #ifdef USING_WX
 	virtual void MacOpenFile(const wxString &filename);
+#else
+	std::filesystem::path GetExeDirectory();
 #endif
 	std::string GetDataPath();
 	MainScreen* GetWindow();
