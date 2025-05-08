@@ -41,3 +41,5 @@ OgreBulletCollisions.lib
 OgreBulletDynamics.exp
 OgreBulletDynamics.lib
 src/sbs/gitrev.h
+
+_deps/
