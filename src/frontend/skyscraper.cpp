@@ -67,14 +67,6 @@
 #include <windows.h>
 #endif
 
-#if defined(__WXGTK__)
-   // NOTE: Find the GTK install config with `pkg-config --cflags gtk+-2.0`
-   #include "gtk/gtk.h"
-   #include "gdk/gdk.h"
-   #include "gdk/gdkx.h"
-   #include "GL/glx.h"
-#endif
-
 using namespace SBS;
 
 #ifdef USING_WX
