@@ -501,7 +501,6 @@ void VMConsole::Process(const std::string &text)
 	if (command == "vminit")
 	{
 		EngineContext* engine = vm->Initialize(false);
-		engine->InitSim();
 		engine->LoadDefault();
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
