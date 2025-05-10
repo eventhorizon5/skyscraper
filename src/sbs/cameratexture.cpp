@@ -192,4 +192,15 @@ void CameraTexture::GetImage(Ogre::Image &image)
 	texture->convertToImage(image, false);
 }
 
+void CameraTexture::SetZoom(Real value)
+{
+	//zoom camera in orthographic mode
+
+	Ogre::Affine3 vmatrix = camera->getViewMatrix();
+	float zoom = 2;
+	vmatrix[0][0] *= zoom;
+	vmatrix[1][1] *= zoom;
+	camera->setCustomViewMatrix(true, vmatrix);
+}
+
 }
