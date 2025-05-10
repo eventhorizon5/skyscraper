@@ -141,17 +141,24 @@ CameraTexture::~CameraTexture()
 
 void CameraTexture::Enabled(bool value)
 {
-	renderTexture->setActive(value);
+	if (renderTexture)
+		renderTexture->setActive(value);
 }
 
 bool CameraTexture::IsEnabled()
 {
-	return renderTexture->isActive();
+	if (renderTexture)
+		return renderTexture->isActive();
+
+	return false;
 }
 
 void CameraTexture::SetFOVAngle(Real angle)
 {
 	//set camera FOV angle
+
+	if (!camera)
+		return;
 
 	if (angle > 0 && angle < 179.63)
 	{
@@ -163,6 +170,8 @@ void CameraTexture::SetFOVAngle(Real angle)
 
 Real CameraTexture::GetFOVAngle()
 {
+	if (!camera)
+		return 0.0;
 	return (float)(camera->getFOVy().valueDegrees() * camera->getAspectRatio());
 }
 
@@ -181,6 +190,9 @@ void CameraTexture::EnableOrthographic(bool value)
 {
 	ortho = value;
 
+	if (!camera)
+		return;
+
 	if (value == true)
 		camera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
 	else
@@ -190,12 +202,17 @@ void CameraTexture::EnableOrthographic(bool value)
 void CameraTexture::GetImage(Ogre::Image &image)
 {
 	//copy texture to image
-	texture->convertToImage(image, false);
+
+	if (texture)
+		texture->convertToImage(image, false);
 }
 
 void CameraTexture::SetZoom(Real value)
 {
 	//zoom camera in orthographic mode
+
+	if (!camera)
+		return;
 
 	Ogre::Affine3 vmatrix = camera->getViewMatrix();
 	zoom = value;
