@@ -94,7 +94,7 @@ find_package(Caelum REQUIRED)
 find_package(OpenXR)
 
 #find SLikeNet
-find_package(SLikeNet REQUIRED)
+#find_package(SLikeNet REQUIRED)
 
 if(WIN32)
 	file(GLOB FRONTEND_FILES
