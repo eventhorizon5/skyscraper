@@ -33,13 +33,14 @@ namespace Skyscraper::Network
 {
     ChatClient::ChatClient()
     {
-		SLNet::RakNetStatistics *stats;
-		SLNet::RakPeerInterface *client = SLNet::RakPeerInterface::GetInstance();
-		SLNet::Packet* packets;
+		client = SLNet::RakPeerInterface::GetInstance();
+		stats = 0;
+		packets = 0;
+
 		unsigned char packetIdentifier;
 		SLNet::SystemAddress clientID = SLNet::UNASSIGNED_SYSTEM_ADDRESS;
 
-		int ClientPort = 3000;
+		int ClientPort = 5121;
 		int ServerPort = 5120;
 		std::string ipaddress = "127.0.0.1";
 
@@ -50,6 +51,9 @@ namespace Skyscraper::Network
 
 		SLNet::ConnectionAttemptResult ConnectionResult = client->Connect(ipaddress.c_str(), static_cast<unsigned short>(ServerPort), "skyscraper", (int) strlen("skyscraper"));
 		RakAssert(ConnectionResult == SLNet::CONNECTION_ATTEMPT_STARTED);
+
+		std::string message;
+
     }
 
     ChatClient::~ChatClient()

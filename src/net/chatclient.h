@@ -25,6 +25,13 @@
 
 #include "netcore.h"
 
+namespace SLNet
+{
+	struct Packet;
+	class RakPeerInterface;
+	struct RakNetStatistics;
+};
+
 namespace Skyscraper::Network
 {
     class VMNETIMPEXP ChatClient
@@ -34,7 +41,9 @@ namespace Skyscraper::Network
 		~ChatClient();
 
 		private:
-
+		SLNet::Packet* packets;
+		SLNet::RakPeerInterface *client;
+		SLNet::RakNetStatistics *stats;
     };
 }
 
