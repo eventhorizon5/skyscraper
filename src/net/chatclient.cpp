@@ -20,13 +20,36 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <string>
+#include "slikenet/peerinterface.h"
+#include "slikenet/statistics.h"
 #include "chatclient.h"
+
+#if LIBCAT_SECURITY==1
+#include "slikenet/SecureHandshake.h"
+#endif
 
 namespace Skyscraper::Network
 {
     ChatClient::ChatClient()
     {
+		SLNet::RakNetStatistics *stats;
+		SLNet::RakPeerInterface *client = SLNet::RakPeerInterface::GetInstance();
+		SLNet::Packet* packets;
+		unsigned char packetIdentifier;
+		SLNet::SystemAddress clientID = SLNet::UNASSIGNED_SYSTEM_ADDRESS;
 
+		int ClientPort = 3000;
+		int ServerPort = 5120;
+		std::string ipaddress = "127.0.0.1";
+
+		SLNet::SocketDescriptor socketDescriptor(static_cast<unsigned short>(ClientPort),0);
+		socketDescriptor.socketFamily=AF_INET;
+		client->Startup(8, &socketDescriptor, 1);
+		client->SetOccasionalPing(true);
+
+		SLNet::ConnectionAttemptResult ConnectionResult = client->Connect(ipaddress.c_str(), static_cast<unsigned short>(ServerPort), "skyscraper", (int) strlen("skyscraper"));
+		RakAssert(ConnectionResult == SLNet::CONNECTION_ATTEMPT_STARTED);
     }
 
     ChatClient::~ChatClient()
