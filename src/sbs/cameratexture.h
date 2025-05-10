@@ -42,6 +42,7 @@ public:
 	void EnableOrthographic(bool value);
 	void GetImage(Ogre::Image &image);
 	void SetZoom(Real value);
+	Real GetZoom();
 
 private:
 
@@ -52,6 +53,8 @@ private:
 	std::string texturename;
 	Ogre::RenderTexture *renderTexture;
 	Ogre::TexturePtr texture;
+
+	Real zoom;
 };
 
 }
