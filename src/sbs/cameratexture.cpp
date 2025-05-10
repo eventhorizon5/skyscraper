@@ -52,6 +52,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	camera = 0;
 	renderTexture = 0;
 	ortho = false;
+	zoom = 1.0;
 
 	unsigned int texture_size = 256;
 	if (quality == 2)
@@ -197,10 +198,15 @@ void CameraTexture::SetZoom(Real value)
 	//zoom camera in orthographic mode
 
 	Ogre::Affine3 vmatrix = camera->getViewMatrix();
-	float zoom = 2;
+	zoom = value;
 	vmatrix[0][0] *= zoom;
 	vmatrix[1][1] *= zoom;
 	camera->setCustomViewMatrix(true, vmatrix);
+}
+
+Real CameraTexture::GetZoom()
+{
+	return zoom;
 }
 
 }
