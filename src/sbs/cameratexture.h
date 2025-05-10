@@ -41,6 +41,7 @@ public:
 	void LookAt(const Vector3 &position);
 	void EnableOrthographic(bool value);
 	void GetImage(Ogre::Image &image);
+	void SetZoom(Real value);
 
 private:
 
