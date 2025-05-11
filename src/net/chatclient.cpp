@@ -35,29 +35,69 @@ namespace Skyscraper::Network
     {
 		client = SLNet::RakPeerInterface::GetInstance();
 		stats = 0;
-		packets = 0;
+		ClientPort = 5121;
+		ServerPort = 5120;
 
-		unsigned char packetIdentifier;
-		SLNet::SystemAddress clientID = SLNet::UNASSIGNED_SYSTEM_ADDRESS;
+		SLNet::SystemAddress ClientAddress = SLNet::UNASSIGNED_SYSTEM_ADDRESS;
 
-		int ClientPort = 5121;
-		int ServerPort = 5120;
-		std::string ipaddress = "127.0.0.1";
-
-		SLNet::SocketDescriptor socketDescriptor(static_cast<unsigned short>(ClientPort),0);
-		socketDescriptor.socketFamily=AF_INET;
-		client->Startup(8, &socketDescriptor, 1);
-		client->SetOccasionalPing(true);
-
-		SLNet::ConnectionAttemptResult ConnectionResult = client->Connect(ipaddress.c_str(), static_cast<unsigned short>(ServerPort), "skyscraper", (int) strlen("skyscraper"));
-		RakAssert(ConnectionResult == SLNet::CONNECTION_ATTEMPT_STARTED);
-
-		std::string message;
-
-    }
+		SLNet::SocketDescriptor desc(static_cast<unsigned short>(ClientPort), 0);
+		desc.socketFamily = AF_INET;
+		Startup(&desc);
+	}
 
     ChatClient::~ChatClient()
     {
 
     }
+
+	void ChatClient::Connect()
+	{
+		std::string ip_address = "127.0.0.1";
+		SLNet::ConnectionAttemptResult ConnectionResult = client->Connect(ip_address.c_str(), static_cast<unsigned short>(ServerPort), "skyscraper", (int) strlen("skyscraper"));
+		RakAssert(ConnectionResult == SLNet::CONNECTION_ATTEMPT_STARTED);
+    }
+
+	void ChatClient::Disconnect()
+	{
+		client->CloseConnection(client->GetSystemAddressFromIndex(0), false);
+	}
+
+	void ChatClient::Shutdown()
+	{
+		client->Shutdown(100);
+	}
+
+	void ChatClient::Startup(SLNet::SocketDescriptor *desc)
+	{
+		bool result = client->Startup(8, desc, 1) == SLNet::RAKNET_STARTED;
+		client->SetOccasionalPing(true);
+	}
+
+	void ChatClient::GetStats()
+	{
+		stats = client->GetStatistics(client->GetSystemAddressFromIndex(0));
+		char message [2048];
+		StatisticsToString(stats, message, 2048, 2);
+	}
+
+	void ChatClient::Ping()
+	{
+		if(client->GetSystemAddressFromIndex(0) != SLNet::UNASSIGNED_SYSTEM_ADDRESS)
+			client->Ping(client->GetSystemAddressFromIndex(0));
+	}
+
+	void ChatClient::Send(const std::string &message)
+	{
+		client->Send(message.c_str(), message.size() + 1, HIGH_PRIORITY, RELIABLE_ORDERED, 0, SLNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	}
+
+	void ChatClient::Receive()
+	{
+		SLNet::Packet* packets;
+		for (packets = client->Receive(); packets; client->DeallocatePacket(packets), packets = client->Receive())
+		{
+			printf("%s\n", packets->data);
+		}
+	}
+
 }

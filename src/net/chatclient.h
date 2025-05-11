@@ -39,11 +39,19 @@ namespace Skyscraper::Network
 		public:
 		ChatClient();
 		~ChatClient();
+		void Connect();
+		void GetStats();
+		void Disconnect();
+		void Shutdown();
+		void Startup(SLNet::SocketDescriptor *desc);
+		void Ping();
+		void Send(const std::string &message);
+		void Receive();
 
 		private:
-		SLNet::Packet* packets;
 		SLNet::RakPeerInterface *client;
 		SLNet::RakNetStatistics *stats;
+		int ClientPort, ServerPort;
     };
 }
 
