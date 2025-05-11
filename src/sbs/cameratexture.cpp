@@ -217,7 +217,7 @@ void CameraTexture::SetZoom(Real value)
 	Ogre::Affine3 vmatrix = camera->getViewMatrix();
 	zoom = value;
 	vmatrix[0][0] *= zoom;
-	vmatrix[1][1] *= zoom;
+	vmatrix[1][2] *= zoom;
 	camera->setCustomViewMatrix(true, vmatrix);
 }
 
