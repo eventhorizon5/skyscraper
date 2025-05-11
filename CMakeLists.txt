@@ -169,6 +169,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
 	${OpenXR_INCLUDE_DIR}
 	${OgreProcedural_INCLUDE_DIR}
+	${SLikeNet_INCLUDES}
 	src/frontend
 	src/vm
 	src/net
@@ -196,6 +197,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ${Caelum_INCLUDE_DIRS}
         ${OpenXR_INCLUDE_DIR}
         ${OgreProcedural_INCLUDE_DIR}
+	${SLikeNet_INCLUDES}
         src/frontend
         src/vm
         src/net
