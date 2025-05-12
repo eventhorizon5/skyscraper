@@ -357,6 +357,21 @@ ADD_CUSTOM_COMMAND(TARGET ScriptProc
 ADD_CUSTOM_COMMAND(TARGET skyscraper
 		POST_BUILD
 		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
+
+
+ADD_CUSTOM_COMMAND(TARGET VM
+                POST_BUILD
+                COMMAND install_name_tool -change libslikenet.0.2.dylib "@rpath/libslikenet.0.2.dylib" libVM.dylib)
+ADD_CUSTOM_COMMAND(TARGET SBS
+                POST_BUILD
+                COMMAND install_name_tool -change libslikenet.0.2.dylib "@rpath/libslikenet.0.2.dylib" libSBS.dylib)
+ADD_CUSTOM_COMMAND(TARGET Network
+                POST_BUILD
+                COMMAND install_name_tool -change libslikenet.0.2.dylib "@rpath/libslikenet.0.2.dylib" libNetwork.dylib)
+
+ADD_CUSTOM_COMMAND(TARGET skyscraper
+                POST_BUILD
+                COMMAND install_name_tool -change libslikenet.0.2.dylib "@rpath/libslikenet.0.2.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
 endif ()
 
 if (APPLE AND wxWidgets_FOUND)
