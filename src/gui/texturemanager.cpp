@@ -290,7 +290,14 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 
 			wxString path = wxStandardPaths::Get().GetDataDir();
 			wxImage image;
-			image.LoadFile(panel->GetRoot()->data_path + texture.filename);
+			if (texture.filename != "")
+				image.LoadFile(panel->GetRoot()->data_path + texture.filename);
+			else
+			{
+				bool result = Simcore->GetTextureManager()->GetTextureImage(tex);
+				if (result)
+					image.LoadFile("temp.jpg");
+			}
 			bmpMain->SetBitmap(image);
 			bmpMain->SetSize(256, 256);
 			bmpMain->SetScaleMode(wxStaticBitmap::ScaleMode::Scale_AspectFit);
