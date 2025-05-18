@@ -106,6 +106,7 @@ public:
 	void SetCulling(const std::string &material_name, int mode = 1);
 	Ogre::MaterialPtr SetCulling(const std::string &material_name, const std::string &name, int mode);
 	size_t GetMemoryUsage();
+	void GetTextureImage(Ogre::TexturePtr texture);
 
 	//override textures
 	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
