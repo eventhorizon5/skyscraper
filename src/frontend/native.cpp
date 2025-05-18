@@ -31,8 +31,9 @@
 #include <mach-o/dyld.h>
 #include <climits>
 
-#elif
+#else
 #include <unistd.h>
+#include <limits.h>
 #endif
 
 #include "globals.h"
