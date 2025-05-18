@@ -294,8 +294,9 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 				image.LoadFile(panel->GetRoot()->data_path + texture.filename);
 			else
 			{
-				Simcore->GetTextureManager()->GetTextureImage(tex);
-				image.LoadFile("temp.jpg");
+				bool result = Simcore->GetTextureManager()->GetTextureImage(tex);
+				if (result)
+					image.LoadFile("temp.jpg");
 			}
 			bmpMain->SetBitmap(image);
 			bmpMain->SetSize(256, 256);
