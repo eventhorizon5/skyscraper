@@ -72,6 +72,7 @@ std::filesystem::path Skyscraper::GetExeDirectory()
     if( count < 0 || count >= PATH_MAX )
         return {}; // some error
     szPath[count] = '\0';
+	return std::filesystem::path{szPath}.parent_path() / "";
 #endif
 	return "";
 }
@@ -80,17 +81,22 @@ bool Skyscraper::SetCWD()
 {
 	//set working directory
 	std::string path = GetExeDirectory().generic_string();
-	#ifdef __APPLE__
+	#ifdef WIN32
+	{
+	}
+	#elseif __APPLE__
 	{
 		path = path +  "../../../";
 		vm->data_path = settingsPath() + "/Skyscraper/"; //Application Support folder
 	}
-	#endif
-	#ifdef __LINUX__
+	#else
 		path = path + "../";
 	#endif
 
-	std::filesystem::current_path(path);
+	if (path != "")
+		std::filesystem::current_path(path);
+	else
+		return false;
 
 	return true;
 }
