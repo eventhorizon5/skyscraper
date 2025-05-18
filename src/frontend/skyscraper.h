@@ -24,6 +24,7 @@
 #define SKYSCRAPER_H
 
 #ifndef USING_WX
+#include <filesystem>
 #include "Ogre.h"
 #include "OgreApplicationContext.h"
 #include "OgreInput.h"
