@@ -47,6 +47,7 @@ Map::Map(Object *parent, const std::string &name) : Object(parent)
 	//set up SBS object
 	SetValues("Map", name, false);
 
+	OrthoCamera = 0;
 	enabled = false;
 
 	//create orthographic camera texture, used for map generation

@@ -481,11 +481,13 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(data_path, "FileSystem", "General", true);
 
 		//add materials group, and autoload
+#ifdef USING_WX
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/materials", "FileSystem", "Materials", true);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
 
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("media/packs/SdkTrays.zip", "Zip", "Trays", true);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+#endif
 	}
 	catch (Ogre::Exception &e)
 	{
