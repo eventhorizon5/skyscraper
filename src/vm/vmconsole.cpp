@@ -607,8 +607,10 @@ bool VMConsole::Report(const std::string &text, const std::string &color)
 			mtx_io.unlock();
 		}
 	}
+#ifdef USING_WX
 	else
 		vm->GetGUI()->WriteToConsole(text, color);
+#endif
 	return true;
 }
 
