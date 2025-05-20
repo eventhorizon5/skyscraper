@@ -67,6 +67,7 @@
 #include "escalator.h"
 #include "map.h"
 #include "reverb.h"
+#include "serializer.h"
 
 namespace SBS {
 
@@ -176,6 +177,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	power_state = true;
 	Lobby = 0;
 	MapGenerator = 0;
+	serializer = new Serializer(this);
 
 	//create utility object
 	utility = new Utility(this);
@@ -356,6 +358,11 @@ SBS::~SBS()
 	if (MapGenerator)
 		delete MapGenerator;
 	MapGenerator = 0;
+
+	//delete serializer
+	if (serializer)
+		delete serializer;
+	serializer = 0;
 
 	//delete camera object
 	if (camera)

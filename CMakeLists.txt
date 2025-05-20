@@ -96,6 +96,9 @@ find_package(OpenXR)
 #find SLikeNet
 #find_package(SLikeNet REQUIRED)
 
+#find Cereal
+find_package(Cereal REQUIRED)
+
 if(WIN32)
 	file(GLOB FRONTEND_FILES
 		src/frontend/*.cpp
@@ -169,6 +172,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
 	${OpenXR_INCLUDE_DIR}
 	${OgreProcedural_INCLUDE_DIR}
+	${Cereal_INCLUDE_DIR}
 	src/frontend
 	src/vm
 	src/net
@@ -196,6 +200,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ${Caelum_INCLUDE_DIRS}
         ${OpenXR_INCLUDE_DIR}
         ${OgreProcedural_INCLUDE_DIR}
+	${Cereal_INCLUDE_DIR}
         src/frontend
         src/vm
         src/net
