@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">General Stuff</font></strong><br>
+      </p>
+      <hr>
+      <p align="left"><strong>1. Comments</strong></p>
+      <p align="left">To add a comment to your file, simply put the #
+        symbol right before your comment. For example:<br>
+        <font size="2" face="Courier New, Courier, mono"># This is a
+          comment</font></p>
+      <p align="left">It's a good idea to use comment markers to add a
+        title header at the top of your building file. The Triton Center
+        file has this header:<br>
+        <font size="2" face="Courier New, Courier, mono">#The Triton
+          Center<br>
+          #Copyright (C)2002-2013 Ryan Thoryk</font></p>
+      <p align="left"><br>
+        <strong>2. Variables</strong></p>
+      <p align="left">Variables are marked with percent signs (%), and
+        most system variables will be described later. Variables can be
+        set using the Set command:<font size="2" face="Courier New,
+          Courier, mono"><br>
+          Set myvariable = 100<br>
+        </font>and then can be used later:<font size="2" face="Courier
+          New, Courier, mono"><br>
+          Height = %myvariable%<br>
+          <br>
+        </font></p>
+      <p align="left"><strong>3. IF/While statements</strong></p>
+      <p align="left">Basic IF and While statements can be made, with
+        the following syntax:<br>
+        <font size="2" face="Courier New, Courier, mono">if[<em>expression</em>]
+          command<br>
+          while[<em>expression</em>] command</font></p>
+      <p align="left">Available signs are = (equals), &gt; (greater
+        than), &lt; (less than), ! (is not), &amp; (and) and | (or).
+        Expressions can also be enclosed in parenthesis. Note that
+        IF/While statements only work with the current line, and do not
+        currently support multiple lines within an IF/While block, an
+        "else" statement, or nesting. A While statement will loop the
+        current line until the expression is false, so be careful with
+        this because it can create an infinite loop if the expression is
+        always true. See the <em>Functions</em> section below for an
+        example of a While statement.</p>
+      <p align="left">For example, to set the height to 9.5 if the floor
+        number is less than 82:<br>
+        <font size="2" face="Courier New, Courier, mono">if[%floor% &lt;
+          82] Height = 9.5</font></p>
+      <p align="left">This example shows a complex expression:<br>
+        <font size="2" face="Courier New, Courier, mono">if[%floor% &lt;
+          82 &amp; (%height% = 3 | %height% = 5)] Height = 9.5</font></p>
+      <p align="left">In the above example, the statement will be true
+        if the <em>floor</em> value is less than 82 and if the <em>height</em>
+        value is either 3 or 5.<br>
+        <br>
+      </p>
+      <p align="left"><strong>4. Inline calculations</strong></p>
+      <p align="left">Values can be calculated inline by using the
+        following math operators: <br>
+        + (plus), - (minus), / (divide), * (multiply), and ^ (power of)</p>
+      <p align="left">They can be used anywhere in the data file. Here's
+        an example of one being used with the Set command:<br>
+        <font size="2" face="Courier New, Courier, mono">Set 1 =
+          %floorheight% + 10</font></p>
+      <p align="left">Parenthesis are also supported, for grouped
+        operations. Here's an example of a complex math expression:<br>
+        <font size="2" face="Courier New, Courier, mono">Set 5 =
+          %height% + (%interfloorheight% * (4 / %altitude%))</font></p>
+      <p align="left"><font size="2" face="Courier New, Courier, mono"><br>
+        </font><strong>5. Object parameters from outside floor sections</strong></p>
+      <p align="left">Information about a certain floor can be obtained
+        elsewhere in the script, by referencing the floor in this
+        manner:</p>
+      <p align="left"><font size="2" face="Courier New, Courier, mono">Floor(<em>number</em>).<em>parameter</em></font></p>
+      <p align="left">Available parameters are <em>Base</em>, <em>Altitude</em>,
+        <em>Height</em>, <em>FullHeight</em> and <em>InterfloorHeight</em>.
+        Note that this function must only be called after the specified
+        floor has been created.<br>
+        If the <em>InterfloorOnTop</em> parameter in the globals
+        section is set to 'false' (the default), then <em>Base</em>
+        (slab height) refers to the floor's altitude plus interfloor
+        height; otherwise it refers to the altitude.</p>
+      <p align="left">Example:<font size="2" face="Courier New, Courier,
+          mono"><br>
+          Set 1 = Floor(5).Altitude</font></p>
+      <p align="left"><strong><font size="2" face="Courier New, Courier,
+            mono"><br>
+          </font>6. Includes</strong></p>
+      <p align="left">Other script files can be included (inserted)
+        anywhere in the current script by using the &lt;Include&gt;
+        command. Scripts can be included multiple times, and included
+        scripts can include other scripts.</p>
+      <p align="left">Syntax:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Include <em>filename</em>&gt;</font></p>
+      <p align="left">To include a file called test.txt that's in the
+        data folder, you would enter:<br>
+        <font size="2" face="Courier New, Courier, mono"><br>
+          &lt;Include data/test.txt&gt;<br>
+        </font></p>
+      <p align="left"><br>
+        <strong>7. Functions</strong></p>
+      <p align="left">Functions can be created to share code between
+        sections of scripts, and also between entire scripts when used
+        in conjunction with includes. An unlimited number of parameters
+        can be specified for each function. If a function is specified
+        with the same name as a previously defined function, the
+        function will be skipped and a warning will be printed. This can
+        only be used outside of any section, such as &lt;Floor&gt;.</p>
+      <p align="left">Syntax:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Function <em>name</em>&gt;<br>
+          <em>(code)</em><br>
+          &lt;EndFunction&gt; </font></p>
+      <p align="left">The above is a function definition, and must be
+        used before the function call. Functions can be called from
+        anywhere in the script, and can also call other functions,
+        resulting in nested functions. To call the function later in
+        your code, use the function name followed by a list of
+        parameters contained within parenthesis, or just parenthesis if
+        you're not passing any parameters:</p>
+      <p align="left">Syntax:<br>
+        <em>name</em>(<em>parameter1</em>, <em>parameter2</em>, ...)<br>
+        or<br>
+        name()<br>
+        <br>
+        The parameters appear as variables inside the function in the
+        form of <font size="2" face="Courier New, Courier, mono">%param#%</font>
+        - so the first parameter passed is <font size="2" face="Courier
+          New, Courier, mono">%param1%</font>, the second is <font
+          size="2" face="Courier New, Courier, mono">%param2%</font>,
+        etc. For an example, I'll create a function called Test with a
+        single SetAutoSize command within it, and call that function:</p>
+    </div>
+    <div align="left">
+      <p><font size="2" face="Courier New, Courier, mono">&lt;Function
+          test&gt;<br>
+          SetAutoSize = %param1%, %param2%<br>
+          &lt;EndFunction&gt;<br>
+          <br>
+          test(false, false)</font></p>
+      <p>In the above example, the command that ends up being performed
+        is "SetAutoSize = false, false". Here is an example of using a
+        While statement to loop a function:</p>
+      <p><font size="2" face="Courier New, Courier, mono">set a = 0<br>
+          &lt;Function testing&gt;<br>
+          set a = %a% + 1<br>
+          print %a%<br>
+          &lt;EndFunction&gt;<br>
+          <br>
+          while [%a% &lt; 5] testing()<br>
+          print finished</font></p>
+      <p>The console output of that ends up being:</p>
+      <p><font size="2" face="Courier New, Courier, mono">1<br>
+          2<br>
+          3<br>
+          4<br>
+          5<br>
+          finished</font></p>
+      <p align="left"><br>
+        <strong>8. Advanced Math Functions</strong></p>
+      <p align="left">Several built-in advanced math functions are
+        provided, mostly for trigonometric calculations.</p>
+      <p align="left">Syntax and descriptions:<br>
+        <br>
+        cos(<em>x</em>) - calculate cosine, x is angle in radians<br>
+        sine(<em>x</em>) - calculate sine, x is angle in radians<br>
+        tan(<em>x</em>) - calculate tangent, x is angle in radians<br>
+        acos(<em>x</em>) - calculate arc cosine, x is a value from -1 to
+        1<br>
+        asin(<em>x</em>) - calculate arc sine, x is a value from -1 to 1<br>
+        atan(<em>x</em>) - calculate arc tangent<br>
+        atan2(<em>y</em>, <em>x</em>) - calculate arc tangent with two
+        values, one for the y-coordinate and one for the x<br>
+        sqrt(<em>x</em>) - calculate square root<br>
+        abs(<em>x</em>) - calculate absolute value<br>
+        exp(<em>x</em>) - calculate exponential function<br>
+        log(<em>x</em>) - calculate natural logarithm<br>
+        log2(<em>x</em>) - calculate binary logarithm<br>
+        log10(<em>x</em>) - calculate common logarithm<br>
+        mod(<em>number</em>, <em>denominator</em>) - calculate modulo
+        (remainder) of a division<br>
+        hypot(<em>x</em>, <em>y</em>) - calculate hypotenuse<br>
+        ceil(<em>number</em>) - calculate ceiling (round up)<br>
+        flr(<em>number</em>) - calculate floor (round down)<br>
+        rnd(<em>limit</em>) - generate random number from 0 to limit<br>
+        round(<em>number, decimals</em>) - round number to nearest
+        value; the <em>decimals</em> parameter is optional<br>
+      </p>
+      <p align="left"><strong><br>
+          9. For loops</strong></p>
+      <p align="left">For loops can be created by specifying an iterator
+        variable, and the range to use, with the following syntax:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;For <i>iterator</i>
+          <i>start</i> To <i>end&gt;</i><br>
+          <i>(code)</i><br>
+          &lt;EndFor&gt;</font></p>
+      <p align="left">The For loop will loop until it completes the
+        "end" value, and can iterate up or down.&nbsp; The value of the
+        iteration is stored in the iterator variable and the variable
+        name must be unique.<br>
+        In the following example, the iterator variable will be printed
+        out on each iteration:<br>
+        <font size="2" face="Courier New, Courier, mono">&lt;For <i>i 1
+            to 3&gt;</i><br>
+          &nbsp;&nbsp;&nbsp; P<i>rint %i%</i><br>
+          &lt;EndFor&gt;</font></p>
+      <p align="left">When the code is run, this is the result:<br>
+        <font size="2" face="Courier New, Courier, mono">1<br>
+          2<br>
+          3<br>
+        </font></p>
+      For loops can be nested, like this:<br>
+      <font size="2" face="Courier New, Courier, mono">&lt;For <i>i 1
+          to 3&gt;</i><br>
+        &nbsp;&nbsp;&nbsp; &lt;For j 1 to 4&gt;<br>
+        &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <i>Print %i%</i> : %j%<br>
+        &nbsp;&nbsp;&nbsp; &lt;EndFor&gt;<br>
+        &lt;EndFor&gt;<br>
+        <br>
+      </font>
+      <p align="left">When the code is run, this is the result:<br>
+        <font size="2" face="Courier New, Courier, mono">1 : 1<br>
+        </font><font size="2" face="Courier New, Courier, mono"><font
+            size="2" face="Courier New, Courier, mono">1 : 2<br>
+          </font></font><font size="2" face="Courier New, Courier, mono"><font
+            size="2" face="Courier New, Courier, mono"><font size="2"
+              face="Courier New, Courier, mono">1 : 3<br>
+            </font></font></font><font size="2" face="Courier New,
+          Courier, mono"><font size="2" face="Courier New, Courier,
+            mono"><font size="2" face="Courier New, Courier, mono"><font
+                size="2" face="Courier New, Courier, mono">1 : 4<br>
+              </font></font></font></font><font size="2" face="Courier
+          New, Courier, mono"><font size="2" face="Courier New, Courier,
+            mono">2 : 1<br>
+          </font></font><font size="2" face="Courier New, Courier, mono"><font
+            size="2" face="Courier New, Courier, mono"><font size="2"
+              face="Courier New, Courier, mono">2 : 2<br>
+            </font></font></font><font size="2" face="Courier New,
+          Courier, mono"><font size="2" face="Courier New, Courier,
+            mono"><font size="2" face="Courier New, Courier, mono"><font
+                size="2" face="Courier New, Courier, mono">2 : 3<br>
+              </font></font></font>2 : 4<br>
+          3 : 1<br>
+        </font><font size="2" face="Courier New, Courier, mono"><font
+            size="2" face="Courier New, Courier, mono">3 : 2</font><br>
+        </font><font size="2" face="Courier New, Courier, mono"><font
+            size="2" face="Courier New, Courier, mono">3 : 3<br>
+          </font></font><font size="2" face="Courier New, Courier, mono">3
+          : 4</font><br>
+      </p>
+      <br>
+    </div>
+  </body>
+</html>

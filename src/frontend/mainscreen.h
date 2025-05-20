@@ -23,6 +23,7 @@
 #ifndef MAINSCREEN_H
 #define MAINSCREEN_H
 
+#ifdef USING_WX
 #include <wx/frame.h>
 #include <wx/panel.h>
 
@@ -46,7 +47,9 @@ public:
 	void OnKeyUp(wxKeyEvent& event);
 	void OnMouseButton(wxMouseEvent& event);
 	void EnableFreelook(bool value);
+#ifndef __FreeBSD__
 	void OnJoystickEvent(wxJoystickEvent& event);
+#endif
 
 	bool Active;
 	bool InLoop;
@@ -58,31 +61,21 @@ private:
 	void ProcessMovement(EngineContext *engine, bool control = false, bool shift = false, bool angle_only = false);
 	void HandleMouseMovement();
 
-	//input system states
-	bool boxes;
-	bool colliders;
-	int wireframe;
-	bool strafe_left, strafe_right;
-	bool float_up, float_down;
-	bool spin_up, spin_down;
-	bool turn_left, turn_right;
-	bool look_up, look_down;
-	bool step_forward, step_backward;
-
+	//input system key mappings
 	char key_right, key_left, key_up, key_down, key_straferight, key_strafeleft, key_lookup, key_lookdown;
 	char key_binoculars, key_crouch, key_floatup, key_floatdown, key_noclip;
 	char key_pickup, key_load, key_enter;
 
-	int joy_click, joy_strafe, joy_fast, joy_turn, joy_forward;
-
-	bool freelook;
-
+#ifndef __FreeBSD__
 	wxJoystick *joystick;
 	int joy_buttons;
+	int joy_click, joy_strafe, joy_fast, joy_turn, joy_forward;
+#endif
 
 	DECLARE_EVENT_TABLE()
 };
 
 }
 
+#endif
 #endif

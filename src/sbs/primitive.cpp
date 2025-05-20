@@ -47,6 +47,7 @@ Primitive::Primitive(Object *parent, const std::string &name) : Object(parent)
 	global = IsGlobal();
 	always_visible = false;
 	mesh = 0;
+	collider_type = 0;
 }
 
 Primitive::~Primitive()
@@ -245,7 +246,11 @@ bool Primitive::Attach(const std::string &meshname, const Vector3 &position, con
 	if (meshname == "")
 		return false;
 
-	mesh = new MeshObject(this, GetName(), 0, "", meshname, max_render_distance, scale_multiplier);
+	bool use_collider = true;
+	if (collider_type == -1)
+		use_collider = false;
+
+	mesh = new MeshObject(this, GetName(), 0, "", meshname, max_render_distance, scale_multiplier, use_collider);
 	mesh->EnablePhysics(enable_physics, restitution, friction, mass); //this also creates a collider
 
 	Enabled(true);

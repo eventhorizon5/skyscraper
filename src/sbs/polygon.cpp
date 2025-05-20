@@ -99,8 +99,8 @@ void Polygon::Move(const Vector3 &position, Real speed)
 Plane Polygon::GetAbsolutePlane()
 {
 	//convert to an absolute plane
-	Plane plane2(this->plane.normal, sbs->ToRemote(mesh->GetPosition()));
-	return Plane(this->plane.normal, -(this->plane.d + plane2.d));
+	Plane plane2(plane.normal, sbs->ToRemote(mesh->GetPosition()));
+	return Plane(plane.normal, -(plane.d + plane2.d));
 }
 
 Vector2 Polygon::GetExtents(int coord)

@@ -29,6 +29,7 @@
 #include <OgreRenderTexture.h>
 #include <OgreViewport.h>
 #include <OgreHardwarePixelBuffer.h>
+#include <OgreImage.h>
 #include "globals.h"
 #include "sbs.h"
 #include "texture.h"
@@ -42,6 +43,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	//creates a CameraTexture object
 
 	//if use_rotation is true, the rotation vector is a standard rotation, otherwise that vector represents a point in space to look at
+	//texture quality is 1 for 256x256, 2 for 512x512, and 3 for 1024x1024.
 
 	//set up SBS object
 	SetValues("CameraTexture", name, false);
@@ -49,6 +51,8 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	FOV = fov;
 	camera = 0;
 	renderTexture = 0;
+	ortho = false;
+	zoom = 1.0;
 
 	unsigned int texture_size = 256;
 	if (quality == 2)
@@ -66,7 +70,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 
 		//create a new render texture
 		texturename = ToString(sbs->InstanceNumber) + ":" + name;
-		Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
+		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
 		sbs->GetTextureManager()->IncrementTextureCount();
 		renderTexture = texture->getBuffer()->getRenderTarget();
 
@@ -137,17 +141,24 @@ CameraTexture::~CameraTexture()
 
 void CameraTexture::Enabled(bool value)
 {
-	renderTexture->setActive(value);
+	if (renderTexture)
+		renderTexture->setActive(value);
 }
 
 bool CameraTexture::IsEnabled()
 {
-	return renderTexture->isActive();
+	if (renderTexture)
+		return renderTexture->isActive();
+
+	return false;
 }
 
 void CameraTexture::SetFOVAngle(Real angle)
 {
 	//set camera FOV angle
+
+	if (!camera)
+		return;
 
 	if (angle > 0 && angle < 179.63)
 	{
@@ -159,6 +170,8 @@ void CameraTexture::SetFOVAngle(Real angle)
 
 Real CameraTexture::GetFOVAngle()
 {
+	if (!camera)
+		return 0.0;
 	return (float)(camera->getFOVy().valueDegrees() * camera->getAspectRatio());
 }
 
@@ -171,6 +184,46 @@ void CameraTexture::SetToDefaultFOV()
 void CameraTexture::LookAt(const Vector3 &position)
 {
 	GetSceneNode()->LookAt(position);
+}
+
+void CameraTexture::EnableOrthographic(bool value)
+{
+	ortho = value;
+
+	if (!camera)
+		return;
+
+	if (value == true)
+		camera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
+	else
+		camera->setProjectionType(Ogre::PT_PERSPECTIVE);
+}
+
+void CameraTexture::GetImage(Ogre::Image &image)
+{
+	//copy texture to image
+
+	if (texture)
+		texture->convertToImage(image, false);
+}
+
+void CameraTexture::SetZoom(Real value)
+{
+	//zoom camera in orthographic mode
+
+	if (!camera)
+		return;
+
+	Ogre::Affine3 vmatrix = camera->getViewMatrix();
+	zoom = value;
+	vmatrix[0][0] *= zoom;
+	vmatrix[1][2] *= zoom;
+	camera->setCustomViewMatrix(true, vmatrix);
+}
+
+Real CameraTexture::GetZoom()
+{
+	return zoom;
 }
 
 }

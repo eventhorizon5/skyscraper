@@ -1,0 +1,718 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">Extended Commands/Functions</font></strong><br>
+      </p>
+      <hr>
+      <p align="left">Extended commands are global commands that use a
+        newer method of specifying objects to use.&nbsp; The previous
+        Global Commands have an older method of specifying Mesh objects,
+        these newer commands allow you to specify raw SBS objects.&nbsp;
+        Some commands are broken out, so that you can specify parameters
+        for an object with separate commands for each type of
+        parameter.&nbsp; This also introduces Levels, which are the
+        floors used in Shafts and Stairwells.<br>
+      </p>
+      <p align="left">In this section, <i>Parent</i> refers to the
+        destination SBS object to use as the object's parent, such as if
+        you create a Light object named "Light1" within Floor 3, the
+        Floor 3 object would be the parent, and the full SBS name would
+        be "Floor 3:Light1".<br>
+      </p>
+      <p align="left">Current examples:<br>
+      </p>
+      <p align="left"><i>Floor 1<br>
+          Elevator 1<br>
+          Elevator 1:Car 1<br>
+          Shaft 1:Level 2<br>
+          Stairwell 5:Level 6<br>
+          DoorManager</i> (used for creating global/external Doors)<br>
+        <i>SBS (creates a global object, available with some commands)</i><i><br>
+        </i></p>
+      <br>
+      <p align="left"> <strong>a. AddLight</strong> - adds a light, the
+        parameters of the light can be changed later.&nbsp; Note that
+        lights only work if Lighting is enabled in the INI file.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">AddLight</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            type</em><em></em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">AddLight</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
+          0<br>
+        </font></p>
+      <p align="left">The example will create "My Light" on floor
+        0.&nbsp; Type is 0 for a point light, 1 for a directional light,
+        and 2 for a spotlight.&nbsp; The related Action commands that
+        lights use are <i>On</i> and <i>Off</i>, these can be used to
+        create a lightswitch for example.<br>
+      </p>
+      <p align="left"> <strong>b. SetLightColor</strong> - sets the
+        color of a light.&nbsp; The default is white.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">SetLightColor</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            ColorR, ColorG, ColorB</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">SetLightColor</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
+          0.5, 0, 1</font><br>
+      </p>
+      <p align="left">The example will set the color of "My Light" to a
+        shade of purple.<br>
+      </p>
+      <p align="left"> <strong>c. SetLightSpecular</strong> - sets the
+        specular color of a light.&nbsp; The default is black.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">SetLightSpecular</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            ColorR, ColorG, ColorB</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">SetLightSpecular</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
+          1, 1, 1</font><br>
+      </p>
+      <p align="left">The example will set the specular color of My
+        Light to white.<br>
+      </p>
+      <p align="left"><br>
+        <strong>d. SetLightAttenuation</strong> - sets the attenuation
+        of the specified light.&nbsp; This has no effect on directional
+        lights.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">SetLightAttenuation</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            range, constant, linear, quadratic</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">SetLightAttenuation</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
+          100000, 1, 0, 0</font><br>
+      </p>
+      <p align="left">The example shows the default for this.&nbsp; <i>Range</i>
+        is the upper range of the light in world units.&nbsp; A <i>constant</i>
+        of 1 means never attenuate, 0 means always attenuate.&nbsp; A <i>linear</i>
+        of 1 means evenly attenuate over the distance.&nbsp; <i>Quadratic</i>
+        adds a curvature to the attenuation formula.<br>
+      </p>
+      <p align="left"> <strong>e. SetSpotlightRange</strong> - sets the
+        range of a spotlight.&nbsp; This is only applicable to
+        spotlights (type 2).<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">SetSpotlightRange</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            inner_angle, outer_angle, falloff</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">SetSpotlightRange</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
+          30, 40, 1</font><br>
+      </p>
+      <p align="left">The example shows the defaults.&nbsp; <i>Inner_angle</i>
+        is the angle covered by the bright inner cone.&nbsp; <i>Outer_angle</i>
+        is the angle covered by the outer cone.&nbsp; <i>Falloff</i> is
+        the rate of falloff between the inner and outer cones, 1 means
+        linear, less means slower, higher means faster.<br>
+      </p>
+      <p align="left"> <strong>f. SetLightDirection</strong> - sets the
+        direction of a light, not applicable to point lights.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">SetLightDirection</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            X, Y, Z</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">SetLightDirection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Floor 0, My Light, 10, 50, 20</font></font><font size="2"
+          face="Courier New, Courier, mono"><br>
+        </font></p>
+      <p align="left"> <strong>g. MoveLight</strong> - moves a light.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">MoveLight</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            X, Y, Z</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">MoveLight</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, My Light,
+          0, 10, 0</font><br>
+      </p>
+      <p align="left">The example will move "My Light" up 10 feet.<br>
+      </p>
+      <p align="left"> <strong>h. AddCameraTexture</strong> - creates a
+        CameraTexture in the specified object.&nbsp; CameraTextures are
+        turned off by default, but can be turned on with Actions, used
+        in conjunction with a trigger object.&nbsp; See the demo
+        building "Simple - CameraTexture".<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">AddCameraTexture</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            quality, fov, position_x, position_y, position_z,
+            use_rotation, rotation_x, rotation_y, rotation_z</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">AddCameraTexture</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, Camera1,
+          1, 71, 10, 10, 0, true, 0, 90, 0</font><br>
+      </p>
+      <p align="left">The example will create Camera1 on Floor 0, with a
+        default FOV.&nbsp; Quality can either be 1, 2, or 3, and
+        determines the resolution of the image.&nbsp; If <i>use_rotation</i>
+        is false, the specified rotation will be a LookAt
+        position.&nbsp; A light will also move with it's parent object,
+        such as if you put a light in an elevator, it'll move as the
+        elevator goes up.<br>
+      </p>
+      <p align="left">The related Action commands that CameraTextures
+        use are <i>Enable</i> and <i>Disable</i>, see the Triton
+        Center building for an example of why this is needed, the
+        framerate drops when the cameratexture is active, so it is only
+        enabled in a small range near the TV screen.<br>
+      </p>
+      <p align="left"><i>Name</i> will create a texture with that name,
+        there can only be one texture with that name in the simulator
+        instance, so make it unique.&nbsp; Once the CameraTexture is
+        created, use another command such as AddWall to create a TV
+        screen, and use the CameraTexture's name as the wall's
+        texture.&nbsp; When the CameraTexture is enabled, you'll see a
+        live video feed on your wall.<br>
+      </p>
+      <p align="left"> <strong>i. AddSlidingDoor</strong> - creates a
+        sliding door object, which is a door with the rotation setting
+        turned off.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            open_sound, close_sound, open_state, texture, side_texture,
+            thickness, face_direction, open_direction, open_speed,
+            close_speed, CenterX, CenterZ, width, height, voffset, tw,
+            th, side_tw, side_th</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">AddSlidingDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, MyDoor,
+          open.wav, close.wav, false, Door, Brick, 0.2, left, right, 10,
+          5, 5, 3.5, 8, 0, 1, 1</font><br>
+      </p>
+      <p align="left">The example will create a sliding door on Floor
+        0.&nbsp; Open_state determines if the door is open on
+        startup.&nbsp; Side_texture defines the texture used on the
+        sides of the door.&nbsp; Face_direction is the direction the
+        door faces, such as "left", "right", "front" or "back".&nbsp;
+        Open_direction is either "up", "down", "left"/"front" or
+        "right"/"back".<br>
+      </p>
+      <p align="left"> <strong>j. AddStdDoor</strong> - creates a
+        standard door object, which is a door with the rotation setting
+        turned on.&nbsp; This command replaces the older <i>AddDoor</i>
+        and related commands.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">AddStdDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            open_sound, close_sound, open_state, texture, side_texture,
+            thickness, face_direction, open_direction, open_speed,
+            close_speed, CenterX, CenterZ, width, height, voffset, tw,
+            th, side_tw, side_th</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">AddStdDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, MyDoor,
+          open.wav, close.wav, false, Door, Brick, 0.2, left, right, 10,
+          10, 5, 5, 3.5, 8, 0, 1, 1, 1, 1</font><br>
+      </p>
+      <p align="left">The example will create a standard door on Floor
+        0.&nbsp; Open_state determines if the door is open on
+        startup.&nbsp; Side_texture defines the texture used on the
+        sides of the door.&nbsp; Face_direction is the direction the
+        door faces, such as "left", "right", "front" or "back".&nbsp;
+        Open_direction is either "left", "right", "front" or "back".<br>
+      </p>
+      <p align="left"> <strong>k. CreateCustomDoor</strong> - starts a
+        manually-created (custom) door.&nbsp; The commands <i>CustomDoorComponent</i>
+        and <i>FinishDoor</i> need to be used after this command.<br>
+        Syntax: <font size="2"><font face="Courier New, Courier, mono">CreateCustomDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> <em>parent, name,
+            open_sound, close_sound, rotate</em></font><br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">CreateCustomDoor</font></font><font
+          size="2" face="Courier New, Courier, mono"> Floor 0, My Custom
+          Door, open.wav, close.wav, false<br>
+        </font></p>
+      <div align="left"> The example will create a sliding door "My
+        Custom Door" on floor 0.<br>
+        <p align="left"> <strong>l. CustomDoorComponent</strong> -
+          creates a door component in the specified custom door.<br>
+          Syntax: <font size="2"><font face="Courier New, Courier,
+              mono">CustomDoorComponent</font></font><font size="2"
+            face="Courier New, Courier, mono"> <em>parent, name,
+              component_name, texture, side_texture, thickness,
+              face_direction, open_direction, OpenClockwise, OpenSpeed,
+              CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th,
+              side_tw, side_th</em></font><br>
+          Example: <font size="2"><font face="Courier New, Courier,
+              mono">CustomDoorComponent</font></font><font size="2"
+            face="Courier New, Courier, mono"> Floor 0, My Custom Door,
+            RightDoor, StairsDoor, Brick, 0.2, front, front, false, 10,
+            10, -5, -5, 0, -5, 8, 0, 0, 0, 0, 0<br>
+          </font></p>
+        <div align="left"> The example will create a custom door
+          component on floor 0's door "My Custom Door" named
+          "RightDoor".&nbsp; Face_direction can either be "left",
+          "right", "front" or "back", open_direction can be "up",
+          "down", "left"/"front", or "right"/"back".&nbsp; OpenClockwise
+          is used when door rotation is on, it determines if the door
+          opens clockwise or not. <strong><br>
+            <br>
+            m. FinishDoor</strong> - finishes a manually-created
+          (custom) door.<br>
+          <p align="left"> Syntax: <font size="2"><font face="Courier
+                New, Courier, mono">FinishDoor</font></font><font
+              size="2" face="Courier New, Courier, mono"> <em>parent,
+                name, open_state</em></font><br>
+            Example: <font size="2"><font face="Courier New, Courier,
+                mono">FinishDoor</font></font><font size="2"
+              face="Courier New, Courier, mono"> Floor 0, My Custom
+              Door, true<br>
+            </font></p>
+          <div align="left"> The example will finish the custom door,
+            and open it on startup.<br>
+            <br>
+            <strong>n. MoveDoor</strong> - changes a door's position<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">MoveDoor</font></font><font
+                size="2" face="Courier New, Courier, mono"> <em>parent,
+                  name, X, Y, Z</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">MoveDoor</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Door, -5, 0, 0<br>
+              </font></p>
+            <strong>o. SetAutoClose</strong> - enables or disables the
+            autoclose timer on a door<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">SetAutoClose</font></font><font
+                size="2" face="Courier New, Courier, mono"> <em>parent,
+                  name, interval</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">SetAutoClose</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Door, 5<br>
+              </font></p>
+            The example will automatically close "My Custom Door" after
+            being open for 5 seconds.&nbsp; Set <i>interval</i> to 0 to
+            turn off the timer.<br>
+            <br>
+            <strong>p. CreatePrim</strong> - creates a new primitive
+            object and shape<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">CreatePrim parent, name, type,
+                  [shape parameters...]</font></font><font size="2"
+                face="Courier New, Courier, mono"><em></em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">CreatePrim Floor 0, MyPrim, Sphere, 2.0, 5.0,
+                  5.0, 16, 16</font></font><font size="2" face="Courier
+                New, Courier, mono"><br>
+              </font></p>
+            The <i>Type</i> parameter determines the type of shape to
+            create, with the shape parameters following it:<br>
+            &nbsp;&nbsp;&nbsp; -Plane, <font size="2"><font
+                face="Courier New, Courier, mono">SizeX, SizeY, </font></font><font
+              size="2"><font face="Courier New, Courier, mono"><font
+                  size="2"><font face="Courier New, Courier, mono">SegmentsX,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    SegmentsY, </font></font>UTile, VTile</font></font><br>
+            &nbsp;&nbsp;&nbsp; -Sphere,<font size="2"><font
+                face="Courier New, Courier, mono"> Radius, UTile, VTile,
+                Rings, Segments</font></font><br>
+            &nbsp;&nbsp;&nbsp; -Cylinder, <font size="2"><font
+                face="Courier New, Courier, mono">Radius, Height, UTile,
+                VTile, SegmentsBase, SegmentsHeight, Capped</font></font><br>
+            &nbsp;&nbsp;&nbsp; -Torus, <font size="2"><font
+                face="Courier New, Courier, mono">Radius, SectionRadius,
+                UTile, VTile</font></font><br>
+            &nbsp;&nbsp;&nbsp; -Cone, <font size="2"><font
+                face="Courier New, Courier, mono">Radius, Height, UTile,
+                VTile, SegmentsBase, SegmentsHeight</font></font><br>
+            &nbsp;&nbsp;&nbsp; -Tube, <font size="2"><font
+                face="Courier New, Courier, mono">InnerRadius,
+                OuterRadius, Height, UTile, VTile, SegmentsBase,
+                SegmentsHeight</font></font><br>
+            &nbsp;&nbsp;&nbsp; -Box, <font size="2"><font face="Courier
+                New, Courier, mono">SizeX, SizeY, SizeZ, UTile, VTile,
+                SegmentsX, SegmentsY, SegmentsZ</font></font><br>
+            &nbsp;&nbsp;&nbsp; -Capsule, <font size="2"><font
+                face="Courier New, Courier, mono">Radius, Height, Rings,
+                UTile, VTile, Segments, SegmentsHeight, Capped</font></font><br>
+            &nbsp;&nbsp;&nbsp; -TorusKnot, <font size="2"><font
+                face="Courier New, Courier, mono">Radius, SectionRadius,
+                UTile, VTile, SegmentsCircle, SegmentsSection, P, Q</font></font><br>
+            &nbsp;&nbsp;&nbsp; -IcoSphere, <font size="2"><font
+                face="Courier New, Courier, mono">Radius, UTile, VTile,
+                Iterations</font></font><br>
+            &nbsp;&nbsp;&nbsp; -RoundedBox, <font size="2"><font
+                face="Courier New, Courier, mono">SizeX, SizeY, SizeZ,
+                ChamferSize, UTile, VTile, SegmentsX, SegmentsY,
+                SegmentsZ, Capped</font></font><br>
+            &nbsp;&nbsp;&nbsp; -Spring, <font size="2"><font
+                face="Courier New, Courier, mono">RadiusCircle,
+                RadiusHelix, Height, Round, UTile, VTile,
+                SegmentsCircle, SegmentsPath, Capped<br>
+              </font></font>&nbsp;&nbsp;&nbsp; -Prism, <font size="2"><font
+                face="Courier New, Courier, mono">Radius, Height, Sides,
+                SegmentsHeight, Capped<br>
+                &nbsp; </font></font><br>
+            The command creates a new prim with an attached shape on the
+            parent object, making it available for use by future
+            commands.<br>
+            The example creates a sphere shape on the prim "MyPrim", on
+            floor 0.<br>
+            <br>
+            <strong><strong>q. PrimCollider</strong> - </strong>determines
+
+
+
+            if a collider should be created for the specified primitive<strong></strong><strong></strong><strong><br>
+            </strong>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">PrimCollider parent, name, value</font></font><font
+                size="2" face="Courier New, Courier, mono"><em></em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">PrimCollider Floor 0, MyPrim</font></font><font
+                size="2" face="Courier New, Courier, mono">, -1</font><br>
+            </p>
+            <p align="left">The example turns off the collider flag for
+              the prim, so that when the PrimAttach command is run, a
+              collider is not created.&nbsp; The values are currently 0
+              for standard collider, and -1 for no collider.<br>
+            </p>
+            <strong></strong> <strong></strong><strong>r. PrimAttach</strong>
+            - attaches the specified primitive to the parent object<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">PrimAttach parent, name, X, Y, Z,
+                  rotation_x, rotation_y, rotation_z</font></font><font
+                size="2" face="Courier New, Courier, mono"><em></em></font><br>
+              Syntax2: <font size="2"><font face="Courier New, Courier,
+                  mono">PrimAttach parent, name, X, Y, Z, rotation_x,
+                  rotation_y, rotation_z, max_render_distance,
+                  scale_multiplier, enable_physics, restitution,
+                  friction, mass</font></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">PrimAttach Floor 0, MyPrim</font></font><font
+                size="2" face="Courier New, Courier, mono">, 0, 5, 0, 0,
+                0, 0</font><br>
+              Example2: <font size="2"><font face="Courier New,
+                  Courier, mono">PrimAttach Floor 0, MyPrim, 0, 5, 0, 0,
+                  0, 0, 0, 1, true, 0.1, 0.5, 0.1 </font></font><br>
+            </p>
+            The example places the prim at the center of floor 0, at a
+            height of 5 feet.&nbsp; The second example creates the prim
+            and enables physics on it.<br>
+            <br>
+            <strong></strong> <strong>s. PrimTexture</strong> - assigns
+            a texture to a primitive<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">PrimTexture parent, name, texture</font></font><font
+                size="2" face="Courier New, Courier, mono"><em></em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">PrimTexture Floor 0, MyPrim, Default</font></font><font
+                size="2" face="Courier New, Courier, mono"><br>
+              </font></p>
+            <strong></strong> The example assigns the system texture
+            "Default" to the prim MyPrim.<br>
+            <br>
+            <strong>t. PrimVisible</strong> - determines if a primitive
+            should always be visible or not.<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">PrimVisible parent, name, value</font></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">PrimVisible</font></font><font size="2"><font
+                  face="Courier New, Courier, mono"> Floor 0, MyPrim,
+                  true</font></font><font size="2" face="Courier New,
+                Courier, mono"><br>
+              </font></p>
+            <strong></strong> The example makes the prim "MyPrim" always
+            visible.<br>
+            <p align="left"> <strong>u. CreateObject</strong> - creates
+              a custom object.&nbsp; The command <i>FinishObject</i>
+              needs to be used after this command.<br>
+              Syntax: <font size="2"><font face="Courier New, Courier,
+                  mono">CreateObject</font></font><font size="2"
+                face="Courier New, Courier, mono"> <em>parent, name, X,
+                  Y, Z, RotationX, RotationY, RotationZ,
+                  max_render_distance, scale_multiplier</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">CreateObject</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Object, 0, 0, 0, 0, 0, 0, 100, 1<br>
+              </font></p>
+            The example will create a custom object "My Custom Object"
+            on floor 0, at the center of the building.<strong><br>
+              <br>
+              v. FinishObject</strong> - finishes a custom object.&nbsp;
+            This needs to be run after the CreateObject command, and
+            after working on the object such as adding walls.<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">FinishObject</font></font><font
+                size="2" face="Courier New, Courier, mono"> <em>parent,
+                  name[, restitution, friction, mass]</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">FinishObject</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Object<br>
+              </font>Example 2: <font size="2"><font face="Courier New,
+                  Courier, mono">FinishObject</font></font><font
+                size="2" face="Courier New, Courier, mono"> Floor 0, My
+                Custom Object, 1, 1, 1<br>
+              </font></p>
+            The first example will finish the custom object "My Custom
+            Object" on floor 0, and set it to non-physical.&nbsp; The
+            second example is the same but enables physics on the object<strong>.</strong><strong><strong><br>
+                <br>
+              </strong></strong><strong><strong>w. ObjectWall</strong> -
+            </strong>adds a wall to the specified custom object.&nbsp;
+            This needs to be run after the CreateObject command.<strong><br>
+            </strong>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">ObjectWall</font></font><font
+                size="2" face="Courier New, Courier, mono"> <em>parent,
+                  name, texture, thickness, x1, z1, x2, z2, height1,
+                  height2, altitude1, altitude2, tw, th</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">ObjectWall</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Object, Brick, 0, -10, 0, 10, 0, 10, 10, 0, 0, 1, 1</font><br>
+            </p>
+            <p align="left"><strong></strong><strong></strong><strong><strong></strong></strong>The
+
+
+
+
+
+
+
+
+              example will create a wall on custom object "My Custom
+              Object" on floor 0.<br>
+              <strong><strong></strong></strong></p>
+            <strong><strong><br>
+              </strong></strong><strong><strong><strong>x. ObjectFloor</strong>
+                - </strong></strong>adds a floor to the specified
+            custom object.&nbsp; This needs to be run after the
+            CreateObject command.<strong><strong><br>
+              </strong> </strong>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">ObjectFloor</font></font><font
+                size="2" face="Courier New, Courier, mono"> <em>parent,
+                  name, texture, thickness, x1, z1, x2, z2, altitude1,
+                  altitude2, reverse_axis, texture_direction, tw, th</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">ObjectFloor</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Object, Brick, 0, -10, -10, 10, 10, 0, 0, false, false,
+                1, 1</font><br>
+            </p>
+            <p align="left"><strong></strong><strong></strong><strong><strong></strong></strong>The
+
+
+
+
+
+
+
+
+              example will create a floor on custom object "My Custom
+              Object" on floor 0.<br>
+            </p>
+            <p align="left"><strong><strong><strong>y. ObjectWallBox</strong>
+                  - </strong></strong>adds a wall box to the specified
+              custom object.&nbsp; This needs to be run after the
+              CreateObject command.<strong><strong><br>
+                </strong> </strong> </p>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">ObjectWallBox</font></font><font
+                size="2" face="Courier New, Courier, mono"> <em>parent,
+                  name, texture, x1, x2, z1, z2, height, voffset, tw,
+                  th, inside, outside, top, bottom, autosize</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">ObjectWallBox</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Object, Brick, -10, 10, -10, 10, 10, 0, 1, 1, true,
+                true, true, true, true</font><br>
+            </p>
+            <p align="left"><strong></strong><strong></strong><strong><strong></strong></strong>The
+
+
+
+
+
+
+
+
+              example will create a box on custom object "My Custom
+              Object" on floor 0.</p>
+            <p align="left"><strong><strong><strong>z. ObjectWallBox</strong>2
+                  - </strong></strong>adds a centered wall box to the
+              specified custom object.&nbsp; This needs to be run after
+              the CreateObject command.<strong><strong><br>
+                </strong> </strong> </p>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">ObjectWallBox</font></font><font
+                size="2" face="Courier New, Courier, mono"> <em>parent,
+                  name, texture, CenterX, CenterZ, WidthX, WidthZ,
+                  height, voffset, tw, th, inside, outside, top, bottom,
+                  autosize</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">ObjectWallBox</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Object, Brick, 0, 0, 10, 10, 10, 0, 1, 1, true, true,
+                true, true, true</font><br>
+            </p>
+            <p align="left"><strong></strong><strong></strong><strong><strong></strong></strong>The
+
+
+
+
+
+
+
+
+              example will create a centered box on custom object "My
+              Custom Object" on floor 0.</p>
+            <strong>aa. ObjectVisible</strong> - determines if the
+            object should always be visible or not.<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">ObjectVisible</font></font><font
+                size="2" face="Courier New, Courier, mono"> <em>parent,
+                  name, value</em></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">ObjectVisible</font></font><font size="2"
+                face="Courier New, Courier, mono"> Floor 0, My Custom
+                Object, true<br>
+              </font></p>
+            <br>
+            <strong>ab. EnablePhysics</strong> - an experimental feature
+            that enables physics on SBS mesh objects<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">EnablePhysics <i>parent,
+                    meshname, value, restitution, friction, mass</i></font></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">EnablePhysics Floor 0, Level 0, true, 0.1, 0.5,
+                  0.1</font></font><font size="2" face="Courier New,
+                Courier, mono"><br>
+              </font></p>
+            <strong></strong> The example turns physics on for Floor 0's
+            mesh, which is a pretty crazy effect.<br>
+            <br>
+            <strong>ac. Rotate</strong> - rotate an object<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">Rotate <i>object, X, Y, Z, speed</i></font></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">Rotate Floor 0:MyPrim, <font face="Courier New,
+                    Courier, mono">0, 1, 0, 1</font></font></font><font
+                size="2" face="Courier New, Courier, mono"><br>
+              </font></p>
+            <i><strong></strong></i><i> Object</i> is similar to the
+            other commands, but the parent and child objects are
+            separated by a colon, this was done to simplify the C++ code
+            for these.<br>
+            The example rotates the prim object "MyPrim" on Floor 0, on
+            the Y axis.&nbsp; This command is mainly provided for
+            runloops.<br>
+            <br>
+            <strong>ad. Move</strong> - move an object<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">Move <i>object, X, Y, Z, speed</i></font></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">Move Floor 0:MyPrim, <font face="Courier New,
+                    Courier, mono">0, 1, 0, 1</font></font></font><font
+                size="2" face="Courier New, Courier, mono"><br>
+              </font></p>
+            <strong></strong> The example causes the prim object
+            "MyPrim" on Floor 0, to move up vertically.&nbsp; This
+            command is mainly provided for runloops.<br>
+            <br>
+            <strong>ae. SetPosition</strong> - set the position of an
+            object<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">SetPosition <i>object, X, Y, Z</i></font></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">SetPosition Floor 0:MyPrim, <font face="Courier
+                    New, Courier, mono">5, 0, 0</font></font></font><font
+                size="2" face="Courier New, Courier, mono"><br>
+              </font></p>
+            <strong></strong> The example sets the position of the prim
+            object "MyPrim" on Floor 0, to "5, 0, 0".&nbsp; This command
+            is mainly provided for runloops.<br>
+            <br>
+            <strong>af. SetPositionY</strong> - set the Y (vertical)
+            position of an object<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">SetPositionY <i>object, value</i></font></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">SetPositionY Floor 0:MyPrim, <font
+                    face="Courier New, Courier, mono">5</font></font></font><font
+                size="2" face="Courier New, Courier, mono"><br>
+              </font></p>
+            <strong></strong> The example sets the vertical position of
+            the prim object "MyPrim" on Floor 0, to 5.&nbsp; This
+            command is mainly provided for runloops.<br>
+            <br>
+            <strong>ag. SetPositionRelative</strong> - set the position
+            of an object relative to it's parent<br>
+            <p align="left"> Syntax: <font size="2"><font face="Courier
+                  New, Courier, mono">SetPositionRelative <i>object, X,
+                    Y, Z</i></font></font><br>
+              Example: <font size="2"><font face="Courier New, Courier,
+                  mono">SetPositionRelative Floor 0:MyPrim, <font
+                    face="Courier New, Courier, mono">5, 0, 0</font></font></font><font
+                size="2" face="Courier New, Courier, mono"><br>
+              </font></p>
+            <strong></strong> The example sets the position of the prim
+            object "MyPrim" on Floor 0, to "5, 0, 0", relative of the
+            parent's (Floor 0) position.&nbsp; This command is mainly
+            provided for runloops.<br>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

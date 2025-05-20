@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">Skyscraper Internals and Development</font></strong><br>
+      </p>
+      <hr><br>
+      <div align="left">
+        <div align="center">Working with the Skyscraper source code can
+          be intimidating at first, but if you're familiar with C++, the
+          code has been formatted to be easy to read and hopefully
+          understand.<br>
+          <br>
+          The following diagram shows a birds-eye view of the simulator,
+          when three sim engines are running.<br>
+        </div>
+        <br>
+        <div align="center"><a href="design.jpg"><img
+              moz-do-not-send="true" src="design.jpg" alt="Skyscraper
+              Design" width="726" height="587" border="0"></a><br>
+          <br>
+          <br>
+          <br>
+          Skyscraper's source code is divided class-wise in order to
+          create layers of abstraction in the code.&nbsp; This makes it
+          relatively easy to create object-related code in C++.&nbsp; In
+          the image above, each major component is in a subfolder in the
+          "src" directory.&nbsp; The SBS engine, as an example, is in
+          the "src/sbs" folder.&nbsp; Skyscraper's frontend is
+          relatively small, and is mainly used as a wxWidgets frontend
+          to the simulator, the ability to add other frontends is
+          possible.<br>
+          <br>
+          <br>
+          <b><font size="+2"><u>Frontend</u><br>
+              <br>
+            </font></b>Skyscraper's frontend is is both a small
+          wxWidgets application and separately (if wxWidgets is not
+          used), a native Ogre frontend for Skyscraper.&nbsp; It is used
+          for the startup screen, initializing the simulator, it's
+          initial objects, and the initial wxWidgets windowing
+          framework.<br>
+          <br>
+          <b><font size="+2"><u>VM (Virtual Manager)</u><u><br>
+              </u><br>
+            </font></b>VM, or Virtual Manager, is a form of
+          meta-simulator, a system designed to manage simulator engine
+          instances.&nbsp; It operates in a similar way to a nanokernel
+          or hypervisor, in that it is a monitor and environment for the
+          simulator engines to run on.&nbsp; VM is responsible for
+          creating simulator engine instances, shutting down engines,
+          running sim engines in parallel, and moving between sim
+          engines.&nbsp; It also manages the client components, such as
+          the GUI and HAL.&nbsp; VM manages Engine Contexts, which are
+          the basic environments that host the sim engines and script
+          processors.<br>
+          <font size="+2"></font><b><font size="+2"></font></b><br>
+          <b><font size="+2"><u>GUI</u><br>
+              <br>
+            </font></b>The GUI component is the majority of the
+          wxWidgets windowing code, used for the simulator's windows and
+          dialogs.&nbsp; This component is a client of the VM (Virtual
+          Manager) component.<br>
+          <br>
+          <u><b><font size="+2">HAL<br>
+                <br>
+              </font></b></u>The HAL (Hardware Abstraction Layer)
+          component is responsible for all hardware library-related
+          functions, such as graphics and sound, currently for the
+          frontend.&nbsp; In the future this will also handle all
+          related functions for SBS, currently SBS does most of the same
+          functionality separately.&nbsp; This component is a client of
+          the VM (Virtual Manager) component.<br>
+          <br>
+          <br>
+          <font size="+2"><u><b>Script Processor</b></u></font><br>
+          <font size="+2"></font><b><font size="+2"></font></b><u><b><font
+                size="+2"></font></b></u><br>
+          The Script Processor component is not only the script
+          interpreter, but also demonstrates how to perform the C++
+          equivalents of script code.&nbsp; The script processor is
+          responsible for translating script commands into C++
+          functions.&nbsp; The language is loosely based on the
+          TrueVision3D graphics engine syntax (Visual Basic).<br>
+          <br>
+          <u><b><font size="+2">OpenXR<br>
+                <br>
+              </font></b></u>The OpenXR component is an experimental
+          Virtual Reality feature.&nbsp; Skyscraper currently supports
+          VR headsets, but doesn't yet support hand controls and some
+          other things like on-screen displays.<br>
+          <br>
+          <u><b><font size="+2">Scalable Building Simulator (SBS)<br>
+                <br>
+              </font></b></u>The Scalable Building Simulator, or SBS, is
+          a simulation engine designed with vertical simulation in
+          mind.&nbsp; SBS was designed to simulate a single building in
+          it's entirety, multiple SBS instances can be run together in
+          parallel to create cities.&nbsp; SBS is a client of the VM
+          (Virtual Manager) component.&nbsp; It runs within an
+          environment called an Engine Context, which is created and
+          managed by the VM system.&nbsp; An engine context is the
+          combination of an instance of SBS and a Script Processor,
+          together in a context.<br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <font size="+2"></font><b><font size="+2"></font></b><u><b><font
+                size="+2"></font></b></u><u><b><font size="+2"></font></b></u><br>
+          <br>
+          <br>
+          <font size="+2"></font><b><font size="+2"></font></b><b><font
+              size="+2"></font></b><br>
+        </div>
+      </div>
+    </div>
+    <div align="center">
+      <div align="center"> </div>
+    </div>
+  </body>
+</html>

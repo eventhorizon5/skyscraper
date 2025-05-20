@@ -309,7 +309,20 @@ std::string ToString(double number)
 	return buffer;
 }
 
+#if defined(__VISUALC__)
 std::string ToString(size_t number)
+{
+	char buffer[50];
+#if defined(__VISUALC__)
+	_snprintf_s(buffer, sizeof(buffer), 13, "%lu", number);
+#else
+	snprintf(buffer, sizeof(buffer), "%lu", number);
+#endif
+	return buffer;
+}
+#endif
+
+std::string ToString(unsigned long number)
 {
 	char buffer[50];
 #if defined(__VISUALC__)

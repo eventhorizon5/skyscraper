@@ -21,8 +21,11 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <fmod.hpp>
-#include <fmod_errors.h>
+#ifndef DISABLE_SOUND
+	#include <fmod.hpp>
+	#include <fmod_errors.h>
+#endif
+
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -36,7 +39,9 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 {
 	SetValues("SoundSystem", "Sound System", true, false);
 
+#ifndef DISABLE_SOUND
 	soundsys = fmodsystem;
+#endif
 
 	listener_position = Vector3::ZERO;
 	listener_velocity = Vector3::ZERO;
@@ -44,8 +49,21 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 	listener_up = Vector3::ZERO;
 	Position = Vector3::ZERO;
 
+#ifndef DISABLE_SOUND
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
+#endif
+}
+
+SoundSystem::SoundSystem(Object *parent) : Object(parent)
+{
+	SetValues("SoundSystem", "Sound System", true, false);
+
+	listener_position = Vector3::ZERO;
+	listener_velocity = Vector3::ZERO;
+	listener_forward = Vector3::ZERO;
+	listener_up = Vector3::ZERO;
+	Position = Vector3::ZERO;
 }
 
 SoundSystem::~SoundSystem()
@@ -59,6 +77,7 @@ SoundSystem::~SoundSystem()
 
 void SoundSystem::Loop()
 {
+#ifndef DISABLE_SOUND
 	//update sound
 	if (enable_advanced_profiling == false)
 		ProfileManager::Start_Profile("Sound");
@@ -79,11 +98,14 @@ void SoundSystem::Loop()
 	soundsys->update();
 
 	ProfileManager::Stop_Profile();
+#endif
 }
 
 void SoundSystem::SetListenerPosition(const Vector3 &position)
 {
 	//set position of sound listener object
+
+#ifndef DISABLE_SOUND
 
 	unsigned int timing;
 	if (sbs->SmoothFrames > 0)
@@ -127,11 +149,14 @@ void SoundSystem::SetListenerPosition(const Vector3 &position)
 
 	//set attributes
 	soundsys->set3DListenerAttributes(0, &pos, &vel, &forward, &up);
+#endif
 }
 
 void SoundSystem::SetListenerDirection(const Vector3 &front, const Vector3 &top)
 {
 	//set direction of sound listener object
+
+	#ifndef DISABLE_SOUND
 
 	listener_forward.x = (float)front.x;
 	listener_forward.y = (float)front.y;
@@ -160,6 +185,7 @@ void SoundSystem::SetListenerDirection(const Vector3 &front, const Vector3 &top)
 
 	//set attributes
 	soundsys->set3DListenerAttributes(0, &pos, &vel, &forward, &up);
+#endif
 }
 
 void SoundSystem::Cleanup(int index)
@@ -197,8 +223,10 @@ unsigned int SoundSystem::GetLength(SoundData *data)
 	if (!data)
 		return 0;
 
-	unsigned int length;
+	unsigned int length = 0;
+#ifndef DISABLE_SOUND
 	data->sound->getLength(&length, FMOD_TIMEUNIT_MS);
+#endif
 	return length;
 }
 
@@ -210,6 +238,7 @@ SoundData* SoundSystem::Load(const std::string &filename)
 	if (filename == "")
 		return 0;
 
+#ifndef DISABLE_SOUND
 	//return existing data element if file is already loaded
 	SoundData *existing = GetSoundData(filename);
 	if (existing)
@@ -244,6 +273,9 @@ SoundData* SoundSystem::Load(const std::string &filename)
 	sounds.emplace_back(data);
 
 	return data;
+#else
+	return 0;
+#endif
 }
 
 bool SoundSystem::IsLoaded(std::string filename)
@@ -261,6 +293,7 @@ bool SoundSystem::IsLoaded(std::string filename)
 	return false;
 }
 
+#ifndef DISABLE_SOUND
 FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 {
 	//prepare a sound for play - this allocates a channel
@@ -282,6 +315,7 @@ FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 
 	return channel;
 }
+#endif
 
 SoundData* SoundSystem::GetSoundData(std::string filename)
 {
@@ -320,8 +354,10 @@ int SoundSystem::GetPlayingCount()
 {
 	//get number of playing channels
 
-	int num;
+	int num = 0;
+#ifndef DISABLE_SOUND
 	soundsys->getChannelsPlaying(&num);
+#endif
 	return num;
 }
 
@@ -332,6 +368,7 @@ int SoundSystem::GetSoundCount()
 
 void SoundSystem::ShowLoadedSounds()
 {
+#ifndef DISABLE_SOUND
 	Object::Report("\n--- Loaded Sounds ---\n");
 	Object::Report("Filename\t----\tSound Objects\t----\tChannels");
 	for (int i = 0; i < GetSoundCount(); i++)
@@ -339,6 +376,7 @@ void SoundSystem::ShowLoadedSounds()
 		Object::Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
 	}
 	Object::Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
+#endif
 }
 
 void SoundSystem::ShowPlayingSounds()
@@ -362,10 +400,12 @@ void SoundSystem::ShowPlayingSounds()
 	Object::Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
 }
 
+#ifndef DISABLE_SOUND
 FMOD::System* SoundSystem::GetFmodSystem()
 {
 	return soundsys;
 }
+#endif
 
 SoundData::SoundData()
 {
@@ -374,9 +414,11 @@ SoundData::SoundData()
 
 SoundData::~SoundData()
 {
+#ifndef DISABLE_SOUND
 	if (sound)
 		sound->release();
 	sound = 0;
+#endif
 }
 
 void SoundData::AddHandle(Sound *handle)
@@ -406,12 +448,15 @@ void SoundData::RemoveHandle(Sound *handle)
 		if (handles[i] == handle)
 		{
 			handles.erase(handles.begin() + i);
+#ifndef DISABLE_SOUND
 			RemoveChannel(handle->GetChannel());
+#endif
 			return;
 		}
 	}
 }
 
+#ifndef DISABLE_SOUND
 void SoundData::AddChannel(FMOD::Channel *channel)
 {
 	//add a sound channel
@@ -443,5 +488,6 @@ void SoundData::RemoveChannel(FMOD::Channel *channel)
 		}
 	}
 }
+#endif
 
 }

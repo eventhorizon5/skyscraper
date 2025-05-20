@@ -2066,6 +2066,15 @@ void TextureManager::SaveTexture(Ogre::TexturePtr texture, const std::string & f
 	image.save(filename);
 }
 
+bool TextureManager::GetTextureImage(Ogre::TexturePtr texture)
+{
+	if (!texture)
+		return false;
+
+	SaveTexture(texture, "temp.jpg");
+	return true;
+}
+
 void TextureManager::IncrementTextureCount()
 {
 	texturecount++;

@@ -21,7 +21,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <fmod.hpp>
+#ifndef DISABLE_SOUND
+	#include <fmod.hpp>
+#endif
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
@@ -49,7 +51,9 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 	Percent = 0;
 	sbs->IncrementSoundCount();
 	sound = 0;
+#ifndef DISABLE_SOUND
 	channel = 0;
+#endif
 	default_speed = 0;
 	doppler_level = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 	position_queued = false;
@@ -91,6 +95,7 @@ Sound::~Sound()
 
 void Sound::OnMove(bool parent)
 {
+#ifndef DISABLE_SOUND
 	Vector3 global_position = sbs->ToGlobal(GetPosition());
 
 	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
@@ -120,6 +125,7 @@ void Sound::OnMove(bool parent)
 		float distanceSquaredToListener = pow(listener.x - reverbPos.x, 2) + pow(listener.y - reverbPos.y, 2) + pow(listener.z - reverbPos.z, 2);
 		channel->setReverbProperties(0, distanceSquaredToListener);
 	}*/
+#endif
 }
 
 void Sound::OnRotate(bool parent)
@@ -132,12 +138,14 @@ void Sound::SetVolume(Real value)
 {
 	//set volume of sound
 
+#ifndef DISABLE_SOUND
 	if (sbs->Verbose)
 		Report("Setting volume to " + ToString(value));
 
 	Volume = (float)value;
 	if (channel)
 		channel->setVolume((float)value);
+#endif
 }
 
 Real Sound::GetVolume()
@@ -151,8 +159,10 @@ void Sound::SetDistances(Real min, Real max)
 	//set minimum and maximum unattenuated distances
 	MinDistance = (float)min;
 	MaxDistance = (float)max;
+#ifndef DISABLE_SOUND
 	if (channel)
 		channel->set3DMinMaxDistance((float)min, (float)max);
+#endif
 }
 
 Real Sound::GetMinimumDistance()
@@ -169,10 +179,12 @@ void Sound::SetDirection(const Vector3 &direction)
 {
 	Direction = direction;
 	Vector3 global_direction = sbs->GetOrientation() * direction;
+#ifndef DISABLE_SOUND
 	FMOD_VECTOR vec = { (float)global_direction.x, (float)global_direction.y, (float)global_direction.z };
 
 	if (channel)
 		channel->set3DConeOrientation(&vec);
+#endif
 }
 
 Vector3 Sound::GetDirection()
@@ -182,13 +194,16 @@ Vector3 Sound::GetDirection()
 
 void Sound::SetConeSettings(Real inside_angle, Real outside_angle, Real outside_volume)
 {
+#ifndef DISABLE_SOUND
 	if (channel)
 		channel->set3DConeSettings((float)inside_angle, (float)outside_angle, (float)outside_volume);
+#endif
 }
 
 void Sound::SetLoopState(bool value)
 {
 	SoundLoop = value;
+#ifndef DISABLE_SOUND
 	if (channel)
 	{
 		if (value == true)
@@ -196,6 +211,7 @@ void Sound::SetLoopState(bool value)
 		else
 			channel->setLoopCount(0);
 	}
+#endif
 }
 
 bool Sound::GetLoopState()
@@ -216,8 +232,10 @@ void Sound::Pause(bool value)
 			Report("Unpause");
 	}
 
+#ifndef DISABLE_SOUND
 	if (channel)
 		channel->setPaused(value);
+#endif
 }
 
 bool Sound::IsPaused()
@@ -225,8 +243,10 @@ bool Sound::IsPaused()
 	bool paused = false;
 	if (!IsValid())
 		return true;
+#ifndef DISABLE_SOUND
 	if (channel)
 		channel->getPaused(&paused);
+#endif
 	return paused;
 }
 
@@ -237,18 +257,22 @@ bool Sound::IsPlaying()
 	if (!IsValid())
 		return false;
 
+#ifndef DISABLE_SOUND
+
 	if (!channel)
 		return false;
 
 	channel->isPlaying(&result);
 	if (result == true && IsPaused() == false)
 		return true;
+#endif
 	return false;
 }
 
 void Sound::SetSpeed(int percent)
 {
 	Speed = percent;
+#ifndef DISABLE_SOUND
 	if (!channel)
 		return;
 
@@ -256,6 +280,7 @@ void Sound::SetSpeed(int percent)
 		Report("Setting speed to " + ToString(percent));
 
 	channel->setFrequency(default_speed * ((float)percent / 100));
+#endif
 }
 
 int Sound::GetSpeed()
@@ -265,15 +290,18 @@ int Sound::GetSpeed()
 
 void Sound::Stop()
 {
+#ifndef DISABLE_SOUND
 	if (sbs->Verbose == true)
 		Report("Stopping");
 
 	if (channel)
 		channel->stop();
+#endif
 }
 
 bool Sound::IsValid()
 {
+#ifndef DISABLE_SOUND
 	if (!channel)
 		return false;
 	bool playing;
@@ -285,6 +313,7 @@ bool Sound::IsValid()
 		channel = 0;
 		return false;
 	}
+#endif
 	return true;
 }
 
@@ -294,6 +323,7 @@ bool Sound::Play(bool reset)
 	if (!system)
 		return false;
 
+#ifndef DISABLE_SOUND
 	if (!sound)
 	{
 		sound = system->GetSoundData(Filename);
@@ -340,6 +370,7 @@ bool Sound::Play(bool reset)
 	if (channel)
 		channel->setPaused(false);
 
+#endif
 	return true;
 }
 
@@ -386,6 +417,8 @@ Real Sound::GetPlayPosition()
 	if (!IsValid())
 		return Percent;
 
+#ifndef DISABLE_SOUND
+
 	if (!channel)
 		return -1;
 
@@ -398,6 +431,7 @@ Real Sound::GetPlayPosition()
 
 	if (length > 0)
 		Percent = (float)position / (float)length;
+#endif
 	return Percent;
 }
 
@@ -407,6 +441,7 @@ void Sound::SetPlayPosition(Real percent)
 
 	Percent = (float)percent;
 
+#ifndef DISABLE_SOUND
 	if (channel)
 	{
 		if (sbs->Verbose)
@@ -420,6 +455,7 @@ void Sound::SetPlayPosition(Real percent)
 
 		position_queued = true;
 	}
+#endif
 }
 
 void Sound::SetDopplerLevel(Real level)
@@ -429,8 +465,10 @@ void Sound::SetDopplerLevel(Real level)
 
 	doppler_level = (float)level;
 
+#ifndef DISABLE_SOUND
 	if (channel)
 		channel->set3DDopplerLevel((float)level);
+#endif
 }
 
 bool Sound::IsLoaded()
@@ -510,14 +548,17 @@ void Sound::Unload()
 	if (sound)
 		sound->RemoveHandle(this);
 	sound = 0;
+#ifndef DISABLE_SOUND
 	channel = 0;
-
+#endif
 }
 
+#ifndef DISABLE_SOUND
 FMOD::Channel* Sound::GetChannel()
 {
 	return channel;
 }
+#endif
 
 bool Sound::GetNearestReverbPosition(Vector3 &position)
 {

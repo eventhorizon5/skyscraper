@@ -39,14 +39,22 @@ public:
 	Real GetFOVAngle();
 	void SetToDefaultFOV();
 	void LookAt(const Vector3 &position);
+	void EnableOrthographic(bool value);
+	void GetImage(Ogre::Image &image);
+	void SetZoom(Real value);
+	Real GetZoom();
 
 private:
 
 	float FOV;
+	bool ortho;
 
 	Ogre::Camera *camera;
 	std::string texturename;
 	Ogre::RenderTexture *renderTexture;
+	Ogre::TexturePtr texture;
+
+	Real zoom;
 };
 
 }

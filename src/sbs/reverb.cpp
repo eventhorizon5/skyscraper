@@ -21,8 +21,10 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <fmod.hpp>
-#include <fmod_errors.h>
+#ifndef DISABLE_SOUND
+	#include <fmod.hpp>
+	#include <fmod_errors.h>
+#endif
 #include "globals.h"
 #include "sbs.h"
 #include "floor.h"
@@ -41,13 +43,16 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 	soundsys = sbs->GetSoundSystem();
 	MaxDistance = max_distance;
 	MinDistance = min_distance;
+#ifndef DISABLE_SOUND
 	reverb = 0;
+#endif
 
 	//convert type to lowercase
 	SetCase(type, false);
 
 	//create reverb object
 
+#ifndef DISABLE_SOUND
 	FMOD_RESULT result = soundsys->GetFmodSystem()->createReverb3D(&reverb);
 	if (result != FMOD_OK)
 	{
@@ -129,15 +134,18 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 
 	sbs->IncrementReverbCount();
 	Report("Reverb '" + name + "' created with type: " + type);
+#endif
 }
 
 Reverb::~Reverb()
 {
 	sbs->DecrementReverbCount();
 
+#ifndef DISABLE_SOUND
 	//release reverb instance
 	if (reverb)
 		reverb->release();
+#endif
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
@@ -160,6 +168,7 @@ void Reverb::OnMove(bool parent)
 {
 	//reposition FMOD reverb on object move
 
+#ifndef DISABLE_SOUND
 	if (!reverb)
 		return;
 
@@ -174,6 +183,7 @@ void Reverb::OnMove(bool parent)
 		std::string fmod_result = FMOD_ErrorString(result);
 		ReportError("Can't set reverb attributes:\n" + fmod_result);
 	}
+#endif
 }
 
 Real Reverb::GetMinimumDistance()
@@ -198,8 +208,10 @@ bool Reverb::ReportError(const std::string &message)
 
 void Reverb::Enable(bool value)
 {
+#ifndef DISABLE_SOUND
 	if (reverb)
 		reverb->setActive(value);
+#endif
 }
 
 }

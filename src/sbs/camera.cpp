@@ -121,8 +121,6 @@ Camera::Camera(Object *parent) : Object(parent)
 	vehicle = 0;
 	old_freelook_mode = false;
 
-	//set up camera and scene nodes
-
 	//set up collider character
 	Real width = cfg_legs_width / 2;
 	if (cfg_body_width > cfg_legs_width)
@@ -593,6 +591,7 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 
 	Vector3 pos = sbs->ToLocal(ray.getOrigin());
 
+	//only report if in verbose mode, and if the camera is outside of this simulator
 	if (sbs->Verbose && hit_only == false)
 	{
 		if (Cameras.size() == 0)
@@ -604,6 +603,7 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
 	Vector3 hit_pos = HitPosition - sbs->GetPosition();
 
+	//report hit position if in verbose mode
 	if (hit == true)
 	{
 		result = pos.distance(hit_pos);
@@ -1083,6 +1083,8 @@ void Camera::Sync()
 	if (Cameras.empty())
 		return;
 
+	SBS_PROFILE_MAIN("Camera Sync");
+
 	if (EnableBullet == true)
 		mCharacter->sync();
 
@@ -1137,6 +1139,8 @@ void Camera::MoveCharacter()
 {
 	if (Cameras.empty())
 		return;
+
+	SBS_PROFILE_MAIN("MoveCharacter");
 
 	if (EnableBullet == true)
 		mCharacter->setWalkDirection(accum_movement, 1);

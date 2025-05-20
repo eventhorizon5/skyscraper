@@ -48,6 +48,7 @@ GUI::GUI(VM *parent)
 	dpanel = 0;
 	loaddialog = 0;
 	show_progress = false;
+	wxInitAllImageHandlers();
 }
 
 GUI::~GUI()
@@ -78,9 +79,6 @@ void GUI::Unload()
 	if(dpanel)
 		delete dpanel;
 	dpanel = 0;
-
-	//disable console send button
-	EnableConsole(false);
 }
 
 void GUI::ShowError(const std::string &message)
@@ -286,11 +284,11 @@ void GUI::ShowLoadDialog()
 	loaddialog->Show();
 }
 
-void GUI::WriteToConsole(const std::string &message)
+void GUI::WriteToConsole(const std::string &message, const std::string &color)
 {
 	if (console)
 	{
-		console->Write(message);
+		console->Write(message, color);
 		console->Update();
 	}
 }
@@ -328,6 +326,11 @@ bool GUI::ReportMissingFiles(std::vector<std::string> &missing_files)
 	else
 		return false;
 	return true;
+}
+
+bool GUI::IsConsoleVisible()
+{
+	return (console != 0);
 }
 
 }

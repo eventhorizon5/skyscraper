@@ -429,7 +429,7 @@ bool Polygon::IntersectRay(const Vector3 &start, const Vector3 &end)
 			Vector3 start2 = start - vertex;
 			normal = start2.crossProduct(start - vertex);
 			if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
-				return false;
+				continue;
 			i1 = i;
 		}
 	}
