@@ -114,7 +114,6 @@ namespace SBS {
 	class CustomObject;
 	class Reverb;
 	class Map;
-	class Serializer;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -598,9 +597,6 @@ private:
 
 	//map generator
 	Map* MapGenerator;
-
-	//serializer
-	Serializer* serializer;
 };
 
 }
