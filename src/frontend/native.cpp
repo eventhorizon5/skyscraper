@@ -84,7 +84,7 @@ bool Skyscraper::SetCWD()
 	#ifdef WIN32
 	{
 	}
-	#elseif __APPLE__
+	#elif defined __APPLE__
 	{
 		path = path +  "../../../";
 		vm->data_path = settingsPath() + "/Skyscraper/"; //Application Support folder
