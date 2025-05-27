@@ -135,6 +135,9 @@ file(GLOB SCRIPTPROC_FILES
 file(GLOB SBS_FILES
 	src/sbs/*.cpp
 	src/sbs/polymesh/*.cpp
+	src/sbs/controllers/*.cpp
+	src/sbs/objects/*.cpp
+	src/sbs/system/*.cpp
 	msvc/SBS.rc
 )
  
@@ -175,6 +178,9 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/net
 	src/sbs
 	src/sbs/polymesh
+	src/sbs/controllers
+	src/sbs/objects
+	src/sbs/system
 	src/script
 	src/gui
 	src/alloc
@@ -202,6 +208,10 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         src/vm
         src/net
         src/sbs
+	src/sbs/polymesh
+	src/sbs/controllers
+	src/sbs/objects
+	src/sbs/system
         src/script
         src/gui
         src/alloc
