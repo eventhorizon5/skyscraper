@@ -134,6 +134,7 @@ file(GLOB SCRIPTPROC_FILES
 
 file(GLOB SBS_FILES
 	src/sbs/*.cpp
+	src/sbs/polymesh/*.cpp
 	msvc/SBS.rc
 )
  
@@ -173,6 +174,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/vm
 	src/net
 	src/sbs
+	src/sbs/polymesh
 	src/script
 	src/gui
 	src/alloc
