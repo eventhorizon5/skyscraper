@@ -290,6 +290,14 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 		Simcore->Lobby = data;
 		return sNextLine;
 	}
+	//map parameter
+	if (StartsWithNoCase(LineData, "map"))
+	{
+		bool enabled = false;
+		if (StartsWithNoCase(value, "on") == true)
+			enabled = true;
+		Simcore->EnableMap(enabled);
+	}
 	//handle end of globals section
 	if (StartsWithNoCase(LineData, "<endglobals>"))
 	{

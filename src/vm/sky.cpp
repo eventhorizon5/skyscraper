@@ -311,6 +311,14 @@ void SkySystem::GetTime(int &hour, int &minute, int &second)
 	second = (int)sec;
 }
 
+void SkySystem::GetDate(int &year, int &month, int &day)
+{
+	Caelum::LongReal julian = mCaelumSystem->getJulianDay(), second;
+	int hour, minute;
+	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, second);
+	second = (int)second;
+}
+
 void SkySystem::EnableSky(bool value)
 {
 	//enable or disable sky system

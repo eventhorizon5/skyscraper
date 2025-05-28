@@ -49,6 +49,7 @@ public:
 	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
 	void GetTime(int &hour, int &minute, int &second);
+	void GetDate(int &year, int &month, int &day);
 
     int SkyMult; //sky time multiplier
 	std::string SkyName;

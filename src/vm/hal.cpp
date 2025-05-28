@@ -33,8 +33,10 @@
 #include <OgreImGuiOverlay.h>
 #include <OgreImGuiInputListener.h>
 
-//FMOD
-#include <fmod_errors.h>
+#ifndef DISABLE_SOUND
+	//FMOD
+	#include <fmod_errors.h>
+#endif
 
 //OpenXR interfaces
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -48,6 +50,8 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include "malloc.h"
 #endif
+
+#include <iostream>
 
 //simulator interfaces
 #include "globals.h"
@@ -85,12 +89,15 @@ HAL::HAL(VM *vm)
 	configfile = 0;
 	keyconfigfile = 0;
 	joyconfigfile = 0;
+	timer = new Ogre::Timer();
 }
 
 HAL::~HAL()
 {
+#ifndef DISABLE_SOUND
 	if (soundsys)
 		soundsys->release();
+#endif
 
 	delete mOverlaySystem;
 
@@ -186,6 +193,8 @@ void HAL::UnclickedObject()
 void HAL::UpdateOpenXR()
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	SBS_PROFILE_MAIN("UpdateOpenXR");
+
 	//update OpenXR camera transformations
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
@@ -221,7 +230,9 @@ void HAL::Report(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
+#ifdef USING_WX
 		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
+#endif
 	}
 }
 
@@ -237,7 +248,9 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 	}
 	catch (Ogre::Exception &e)
 	{
+#ifdef USING_WX
 		vm->GetGUI()->ShowError("VM: Error writing message to log\n" + e.getDescription());
+#endif
 	}
 	return false;
 }
@@ -245,7 +258,9 @@ bool HAL::ReportError(const std::string &message, const std::string &prompt)
 bool HAL::ReportFatalError(const std::string &message, const std::string &prompt)
 {
 	ReportError(message, prompt);
+#ifdef USING_WX
 	vm->GetGUI()->ShowError(message);
+#endif
 	return false;
 }
 
@@ -299,14 +314,17 @@ Real HAL::GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real de
 	return ToFloat(result);
 }
 
-bool HAL::Initialize(const std::string &data_path)
+bool HAL::Initialize(const std::string &data_path, Ogre::Root *root, Ogre::OverlaySystem *overlay)
 {
 	//initialize HAL system
+
+	mRoot = root;
 
 	//initialize OGRE
 	try
 	{
-		mRoot = Ogre::Root::getSingletonPtr();
+		if (!mRoot)
+			mRoot = Ogre::Root::getSingletonPtr();
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -347,7 +365,9 @@ bool HAL::Initialize(const std::string &data_path)
 	{
 		Report("");
 		Report("Loading Overlay System...");
-		mOverlaySystem = new Ogre::OverlaySystem();
+		mOverlaySystem = overlay;
+		if (!mOverlaySystem)
+			mOverlaySystem = new Ogre::OverlaySystem();
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -463,11 +483,13 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(data_path, "FileSystem", "General", true);
 
 		//add materials group, and autoload
+#ifdef USING_WX
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/materials", "FileSystem", "Materials", true);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
 
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("media/packs/SdkTrays.zip", "Zip", "Trays", true);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+#endif
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -532,8 +554,11 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		for (int i = 0; i < cameras; i++)
 		{
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-			mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
-			mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			if (mRenderWindow)
+			{
+				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
+			}
 		}
 	}
 	catch (Ogre::Exception &e)
@@ -573,6 +598,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
 	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
+#ifndef DISABLE_SOUND
 	//initialize FMOD (sound)
 	DisableSound = GetConfigBool(configfile, "Skyscraper.Frontend.DisableSound", false);
 	if (DisableSound == false)
@@ -617,6 +643,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		}
 	}
 	else
+#endif
 		Report("Sound Disabled");
 
 	try
@@ -680,6 +707,8 @@ bool HAL::Render()
 
 bool HAL::PlaySound(const std::string &filename)
 {
+#ifndef DISABLE_SOUND
+
 	//load new sound
 #if (FMOD_VERSION >> 16 == 4)
 		FMOD_RESULT result = soundsys->createSound(filename.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
@@ -706,17 +735,20 @@ bool HAL::PlaySound(const std::string &filename)
 	channel->setVolume(1.0);
 	channel->setPaused(false);
 
+#endif
 	return true;
 }
 
 void HAL::StopSound()
 {
 	//stop and unload sound
+#ifndef DISABLE_SOUND
 	if (channel)
 		channel->stop();
 	if (sound)
 		sound->release();
 	sound = 0;
+#endif
 }
 
 void HAL::ClearScene()
@@ -857,8 +889,12 @@ void HAL::Clear()
 	ReInit();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef __linux__
 	//release free memory to OS on Linux
 	malloc_trim(0);
+#else
+	//freebsd
+#endif
 #endif
 }
 
@@ -937,15 +973,59 @@ void HAL::LoadConfiguration(const std::string data_path, bool show_console)
 	vm->showconsole = GetConfigBool(configfile, "Skyscraper.Frontend.ShowConsole", true);
 
 	//create console window
+#ifdef USING_WX
 	if (vm->showconsole == true)
 		vm->GetGUI()->ShowConsole(false);
+#endif
 }
 
 void HAL::messageLogged(const std::string &message, Ogre::LogMessageLevel lml, bool maskDebug, const std::string &logName, bool &skipThisMessage)
 {
 	//callback function that receives OGRE log messages
 
+#ifdef USING_WX
 	vm->GetGUI()->WriteToConsole(message);
+#endif
+}
+
+void HAL::ConsoleOut(const std::string &message, const std::string &color)
+{
+	//console output
+	std::string mod = GetColors(color);
+	std::string reset = GetColors("reset");
+	std::cout << mod << message << reset;
+}
+
+std::string HAL::GetColors(const std::string &color)
+{
+	//get colors
+	std::string mod;
+	if (color == "blue")
+		mod = "\033[1;34m";
+	else if (color == "green")
+		mod = "\033[1;32m";
+	else if (color == "yellow")
+		mod = "\033[1;33m";
+	else if (color == "red")
+		mod = "\033[1;31m";
+	else if (color == "magenta")
+		mod = "\033[1;35m";
+	else if (color == "cyan")
+		mod = "\033[1;36m";
+	else if (color == "white")
+		mod = "\033[1;37m";
+	else if (color == "black")
+		mod = "\033[1;30m";
+	else if (color == "reset")
+		mod = "\033[0m";
+
+	return mod;
+}
+
+unsigned long HAL::GetCurrentTime()
+{
+	//get current time
+	return timer->getMilliseconds();
 }
 
 }

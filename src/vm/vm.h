@@ -23,6 +23,7 @@
 #ifndef VM_H
 #define VM_H
 
+#include <thread>
 #include <vector>
 
 //DLL Exporting
@@ -55,6 +56,7 @@ namespace SBS {
 }
 
 class wxWindow;
+class dylib;
 
 namespace Skyscraper {
 
@@ -63,10 +65,13 @@ class ScriptProcessor;
 class HAL;
 class SkySystem;
 class GUI;
+class VMConsole;
 
 //Virtual Manager system
 class VMIMPEXP VM
 {
+	friend class VMConsole;
+
 public:
 	VM();
 	~VM();
@@ -93,26 +98,38 @@ public:
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
-	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool Load(bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void ShowPlatform();
 	wxWindow* GetParent();
 	void UpdateProgress();
 	bool ReportMissingFiles(std::vector<std::string> &missing_files);
+	void StartConsole();
+	void ProcessConsole();
+	VMConsole* GetConsole();
+	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	void SetRenderOnStartup(bool value);
+	bool GetRenderOnStartup();
+	dylib* LoadLibrary(const std::string &name);
+	unsigned long Uptime();
+	unsigned long GetElapsedTime(int instance);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
-	bool RenderOnStartup; //override SBS engine setting with same name
 	bool CheckScript; //if set to true, checks building scripts instead of fully loading them
 	bool Pause; //pause simulator
 	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 	bool Verbose; //verbose mode
 	bool showconsole;
+	bool loadstart; //true if starting an engine load
+	bool unloaded;
+	unsigned long time_stat, current_time; //frame timing
 
 	std::string version;
 	std::string version_rev;
 	std::string version_state;
 	std::string version_frontend;
 
+	std::string Bits;
 	std::string Platform;
 	std::string Architecture;
 	int macos_major; //macos major version
@@ -137,10 +154,15 @@ private:
 	HAL *hal; //hardware abstraction layer
 	SkySystem *skysystem;
 	GUI *gui; //GUI subsystem
+	VMConsole *vmconsole; //VM console system
 
 	wxWindow *parent;
 
 	bool first_run;
+	bool RenderOnStartup; //override SBS engine setting with same name
+
+	//shared libraries
+	std::vector<dylib*> dylibs;
 };
 
 }

@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Model Object
+	Scalable Building Simulator - Camera Texture Object
 	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
@@ -21,44 +21,40 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_PRIMITIVE_H
-#define _SBS_PRIMITIVE_H
+#ifndef _SBS_CAMERATEXTURE_H
+#define _SBS_CAMERATEXTURE_H
 
 namespace SBS {
 
-class SBSIMPEXP Primitive: public Object
+class SBSIMPEXP CameraTexture : public Object
 {
 public:
 
-	bool always_visible;
-
 	//functions
-	Primitive(Object *parent, const std::string &name);
-	~Primitive();
-	bool IsEnabled();
+	CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
+	~CameraTexture();
 	void Enabled(bool value);
-	bool IsKey();
-	int GetKeyID();
-	void SetKey(int keyid);
-	bool IsPhysical();
-	void Loop();
-	void PickUp();
-	void Drop();
-	bool IsPickedUp();
-	MeshObject* GetMeshObject() { return mesh; }
-	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
-	bool Attach(const std::string &meshname, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution= 0, Real friction = 0, Real mass = 0);
-	void SetTexture(const std::string &texture);
+	bool IsEnabled();
+	void SetFOVAngle(Real angle);
+	Real GetFOVAngle();
+	void SetToDefaultFOV();
+	void LookAt(const Vector3 &position);
+	void EnableOrthographic(bool value);
+	void GetImage(Ogre::Image &image);
+	void SetZoom(Real value);
+	Real GetZoom();
 
 private:
-	void RemoveFromParent();
-	void AddToParent();
 
-	MeshObject* mesh;
-	Vector3 Offset;
-	bool is_key;
-	int KeyID;
-	bool global;
+	float FOV;
+	bool ortho;
+
+	Ogre::Camera *camera;
+	std::string texturename;
+	Ogre::RenderTexture *renderTexture;
+	Ogre::TexturePtr texture;
+
+	Real zoom;
 };
 
 }

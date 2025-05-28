@@ -28,7 +28,9 @@
 #include <Ogre.h>
 #include <OgreLog.h>
 #include <OgreTrays.h>
-#include <fmod.hpp>
+#ifndef DISABLE_SOUND
+	#include <fmod.hpp>
+#endif
 #include "vm.h"
 
 namespace Ogre {
@@ -51,7 +53,7 @@ class VMIMPEXP HAL : public Ogre::LogListener
 public:
     HAL(VM *vm);
     ~HAL();
-	bool Initialize(const std::string &data_path);
+	bool Initialize(const std::string &data_path, Ogre::Root *root = 0, Ogre::OverlaySystem *overlay = 0);
 	bool Render();
 	void ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only);
 	void UnclickedObject();
@@ -78,6 +80,9 @@ public:
 	bool ReportFatalError(const std::string &message, const std::string &prompt);
 	void LoadConfiguration(const std::string data_path, bool show_console);
 	bool LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow);
+	void ConsoleOut(const std::string &message, const std::string &color = "white");
+	std::string GetColors(const std::string &color);
+	unsigned long GetCurrentTime();
 
 	bool RTSS;
 	std::string Renderer;
@@ -117,6 +122,9 @@ private:
     //stats
 	OgreBites::TrayManager* mTrayMgr;
 	int show_stats;
+
+	//Ogre timer
+	Ogre::Timer *timer;
 
     VM *vm;
 };

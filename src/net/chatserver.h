@@ -1,7 +1,6 @@
 /*
-	Scalable Building Simulator - Camera Texture Object
-	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Skyscraper 2.1 - Chat Server
+	Copyright (C)2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -21,34 +20,22 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_CAMERATEXTURE_H
-#define _SBS_CAMERATEXTURE_H
+#ifndef CHATSERVER_H
+#define CHATSERVER_H
 
-namespace SBS {
+#include "netcore.h"
 
-class SBSIMPEXP CameraTexture : public Object
+namespace Skyscraper::Network
 {
-public:
+    class VMNETIMPEXP ChatServer
+    {
+		public:
+		ChatServer();
+		~ChatServer();
 
-	//functions
-	CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
-	~CameraTexture();
-	void Enabled(bool value);
-	bool IsEnabled();
-	void SetFOVAngle(Real angle);
-	Real GetFOVAngle();
-	void SetToDefaultFOV();
-	void LookAt(const Vector3 &position);
-
-private:
-
-	float FOV;
-
-	Ogre::Camera *camera;
-	std::string texturename;
-	Ogre::RenderTexture *renderTexture;
-};
-
+		private:
+		
+    };
 }
 
 #endif

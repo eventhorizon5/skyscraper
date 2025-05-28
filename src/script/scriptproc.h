@@ -50,6 +50,8 @@ public:
 	bool Run();
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const std::string &text);
+	void LoadDefaults();
+	void Start();
 	bool ReportMissingFiles();
 	void Reset();
 	std::vector<std::string> *GetBuildingData();
@@ -89,7 +91,7 @@ public:
 
 private:
 
-	SBS::SBS *Simcore;
+	::SBS::SBS *Simcore;
 	EngineContext *engine;
 
 	ConfigHandler *config;
@@ -112,7 +114,7 @@ private:
 		std::vector<std::string> Params;
 	};
 
-	SBS::Wall *wall;
+	::SBS::Wall *wall;
 	int startpos;
 	std::vector<std::string> BuildingData;
 	std::vector<std::string> BuildingDataOrig;
@@ -130,7 +132,7 @@ private:
 	int ScriptError();
 	int ScriptWarning(std::string message);
 	std::string Calc(const std::string &expression);
-	void StoreCommand(SBS::Object *object);
+	void StoreCommand(::SBS::Object *object);
 	bool FunctionProc();
 	void CheckFile(const std::string &filename);
 	void GetLineInformation(bool CheckFunctionCall, int &LineNumber, std::string &FunctionName, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile);
