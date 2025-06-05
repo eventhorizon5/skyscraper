@@ -473,11 +473,13 @@ void Skyscraper::StartSound()
 		filename_full = vm->data_path + filename_full;
 #endif
 
+	Real volume = vm->GetHAL()->GetConfigFloat(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusicVolume", 1.0);
+
 	//fix name clash
 	#undef PlaySound
 
 	//play music
-	vm->GetHAL()->PlaySound(filename_full);
+	vm->GetHAL()->PlaySound(filename_full, volume);
 }
 
 std::string Skyscraper::SelectBuilding()
