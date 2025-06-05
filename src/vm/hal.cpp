@@ -690,7 +690,7 @@ bool HAL::Render()
 	return true;
 }
 
-bool HAL::PlaySound(const std::string &filename)
+bool HAL::PlaySound(const std::string &filename, Real volume)
 {
 #ifndef DISABLE_SOUND
 
@@ -717,7 +717,7 @@ bool HAL::PlaySound(const std::string &filename)
 	}
 
 	channel->setLoopCount(-1);
-	channel->setVolume(1.0);
+	channel->setVolume(volume);
 	channel->setPaused(false);
 
 #endif
