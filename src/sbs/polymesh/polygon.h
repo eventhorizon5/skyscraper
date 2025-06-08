@@ -63,7 +63,7 @@ public:
 	bool IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal);
 	bool IntersectRay(const Vector3 &start, const Vector3 &end);
 	bool IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal);
-	void Move(const Vector3 &position, Real speed = 1.0);
+	void Move(const Vector3 &vector, Real speed = 1.0);
 	Plane GetAbsolutePlane();
 	Vector2 GetExtents(int coord);
 	void ChangeHeight(Real newheight);

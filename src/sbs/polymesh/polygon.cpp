@@ -78,7 +78,7 @@ void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)
 	tv = t_vector;
 }
 
-void Polygon::Move(const Vector3 &position, Real speed)
+void Polygon::Move(const Vector3 &vector, Real speed)
 {
 	bool dynamic = mesh->UsingDynamicBuffers();
 
@@ -87,7 +87,7 @@ void Polygon::Move(const Vector3 &position, Real speed)
 		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
 			Polygon::Geometry &data = geometry[i][j];
-			data.vertex += sbs->ToRemote(position * speed);
+			data.vertex += sbs->ToRemote(vector * speed);
 		}
 	}
 
