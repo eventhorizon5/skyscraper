@@ -239,6 +239,10 @@ void Wall::Move(const Vector3 &vector, Real speed)
 {
 	//move a wall object
 
+	//move base object
+	Object::Move(vector, speed);
+
+	//move polygons
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
 		polygons[i]->Move(vector, speed);
