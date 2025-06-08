@@ -235,13 +235,13 @@ bool Wall::IntersectsWall(Vector3 start, Vector3 end, Vector3 &isect, bool conve
 	return false;
 }
 
-void Wall::Move(const Vector3 &position, Real speed)
+void Wall::Move(const Vector3 &vector, Real speed)
 {
 	//move a wall object
 
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
-		polygons[i]->Move(position, speed);
+		polygons[i]->Move(vector, speed);
 	}
 
 	//prepare mesh

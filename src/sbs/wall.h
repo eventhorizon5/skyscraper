@@ -51,7 +51,7 @@ public:
 	int FindPolygon(const std::string &name);
 	//void GetGeometry(int index, PolygonSet &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectsWall(Vector3 start, Vector3 end, Vector3 &isect, bool convert = true);
-	void Move(const Vector3 &position, Real speed = 1.0);
+	void Move(const Vector3 &vector, Real speed = 1.0);
 	MeshObject* GetMesh();
 	void SetParentArray(std::vector<Wall*> &array);
 	Vector3 GetPoint(const Vector3 &start, const Vector3 &end);
