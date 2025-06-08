@@ -211,7 +211,7 @@ Wall* MeshObject::CreateWallObject(const std::string &name)
 
 	Wall *wall = new Wall(this);
 	wall->SetParentArray(Walls);
-	wall->SetValues("Wall", name, false, false);
+	wall->SetValues("Wall", name, false, true);
 	Walls.emplace_back(wall);
 	return wall;
 }
