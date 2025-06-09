@@ -158,6 +158,38 @@ std::string GUI::SelectBuilding(const std::string &data_path)
 	return filename;
 }
 
+std::string GUI::SelectBuildingNative(const std::string &data_path)
+{
+	//choose a building from a script file, using a native file selection dialog
+	std::string filename = "";
+	srand (time (0));
+
+	//set building file
+	//wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxFD_OPEN);
+	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxFD_OPEN);
+	int result = Selector->ShowModal();
+	if (result == wxID_CANCEL)
+	{
+		//delete dialog
+		delete Selector;
+		Selector = 0;
+		//quit
+		return "";
+	}
+
+#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+	filename = Selector->GetFilename().mb_str().data();
+#else
+	filename = Selector->GetFilename();
+#endif
+
+	//delete dialog
+	delete Selector;
+	Selector = 0;
+
+	return filename;
+}
+
 void GUI::CreateDebugPanel()
 {
 	if (!dpanel)
