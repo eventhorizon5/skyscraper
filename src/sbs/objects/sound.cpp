@@ -321,10 +321,7 @@ bool Sound::IsValid()
 bool Sound::Play(bool reset)
 {
 	//exit if sound is disabled
-	if (!system)
-		return false;
-
-	if (enabled == false)
+	if (!system || !enabled)
 		return false;
 
 #ifndef DISABLE_SOUND
@@ -389,7 +386,7 @@ void Sound::Reset()
 bool Sound::Load(const std::string &filename, bool force)
 {
 	//exit if sound is disabled
-	if (!system)
+	if (!system || !enabled)
 		return false;
 
 	//exit if filename is the same
@@ -625,9 +622,14 @@ void Sound::Enabled(bool value)
 	//enable or disable this sound object
 
 	if (value == false)
-		Unload();
+		Stop();
 
 	enabled = value;
+}
+
+bool Sound::IsEnabled()
+{
+	return enabled;
 }
 
 }

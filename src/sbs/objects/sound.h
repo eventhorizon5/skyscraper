@@ -65,6 +65,7 @@ public:
 	void OnRotate(bool parent);
 	void Unload();
 	void Enabled(bool value);
+	bool IsEnabled();
 #ifndef DISABLE_SOUND
 	FMOD::Channel* GetChannel();
 #endif
