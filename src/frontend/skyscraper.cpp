@@ -393,6 +393,7 @@ bool Skyscraper::Loop()
 	{
 		UnloadSim();
 		vm->unloaded = false;
+		vm->loadstart = false;
 		return true;
 	}
 
