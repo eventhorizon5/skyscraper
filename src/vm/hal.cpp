@@ -871,6 +871,9 @@ void HAL::Clear()
 	//free unused hardware buffers
 	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
+	//reset FMOD reverb
+	soundsys->setReverbProperties(0, 0);
+
 	ReInit();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
