@@ -485,7 +485,11 @@ void Skyscraper::StartSound()
 std::string Skyscraper::SelectBuilding()
 {
 #ifdef USING_WX
-	return gui->SelectBuilding(vm->data_path);
+
+	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.SelectBuildingNative", false) == false)
+		return gui->SelectBuilding(vm->data_path);
+	else
+		return gui->SelectBuildingNative(vm->data_path);
 #else
 	return "";
 #endif
