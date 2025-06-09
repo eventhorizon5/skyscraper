@@ -871,8 +871,10 @@ void HAL::Clear()
 	//free unused hardware buffers
 	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
+#ifndef DISABLE_SOUND
 	//reset FMOD reverb
 	soundsys->setReverbProperties(0, 0);
+#endif
 
 	ReInit();
 
