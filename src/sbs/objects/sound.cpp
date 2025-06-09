@@ -58,6 +58,7 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 	doppler_level = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 	position_queued = false;
 	SetVelocity = false;
+	enabled = true;
 
 	if (sbs->Verbose)
 		Report("Created sound");
@@ -321,6 +322,9 @@ bool Sound::Play(bool reset)
 {
 	//exit if sound is disabled
 	if (!system)
+		return false;
+
+	if (enabled == false)
 		return false;
 
 #ifndef DISABLE_SOUND
@@ -614,6 +618,16 @@ bool Sound::GetNearestReverbPosition(Vector3 &position)
 	}
 
 	return result;
+}
+
+void Sound::Enabled(bool value)
+{
+	//enable or disable this sound object
+
+	if (value == false)
+		Unload();
+
+	enabled = value;
 }
 
 }
