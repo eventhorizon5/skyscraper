@@ -382,11 +382,14 @@ void SoundSystem::ShowLoadedSounds()
 #endif
 }
 
-void SoundSystem::ShowPlayingSounds()
+void SoundSystem::ShowPlayingSounds(bool verbose)
 {
-	Object::Report("");
-	Object::Report("--- Playing Sounds ---");
-	Object::Report("");
+	if (verbose == true)
+	{
+		Object::Report("");
+		Object::Report("--- Playing Sounds ---");
+		Object::Report("");
+	}
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		bool first = true;
@@ -402,7 +405,15 @@ void SoundSystem::ShowPlayingSounds()
 			}
 		}
 	}
-	Object::Report("");
+	if (verbose == true)
+	{
+		Object::Report("");
+		ShowPlayingTotal();
+	}
+}
+
+void SoundSystem::ShowPlayingTotal()
+{
 	Object::Report("Total playing sounds: " + ToString(GetPlayingCount()));
 }
 

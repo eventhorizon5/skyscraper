@@ -524,7 +524,7 @@ void SoundManager::On_bEnabled_Click(wxCommandEvent& event)
 
 void SoundManager::On_bListPlayingAll_Click(wxCommandEvent& event)
 {
-	//panel->GetRoot()->ListPlayingSounds();
+	panel->GetRoot()->ListPlayingSounds();
 }
 
 }
