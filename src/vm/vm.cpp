@@ -35,6 +35,7 @@
 #include "vm.h"
 #include "camera.h"
 #include "scenenode.h"
+#include "soundsystem.h"
 #include "enginecontext.h"
 #include "hal.h"
 #include "sky.h"
@@ -964,6 +965,24 @@ unsigned long VM::GetElapsedTime(int instance)
 	if (instance >= engines.size())
 		return 0;
 	return engines[instance]->time_stat;
+}
+
+void VM::ListPlayingSounds()
+{
+	//list playing sounds in all engines
+
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		::SBS::SBS* Simcore = engines[i]->GetSystem();
+		
+		if (Simcore)
+		{
+			Report("Engine " + ToString(i) + ":");
+			Simcore->GetSoundSystem()->ShowPlayingSounds(false);
+			if (i == engines.size() - 1)
+				Simcore->GetSoundSystem()->ShowPlayingTotal();
+		}
+	}
 }
 
 }

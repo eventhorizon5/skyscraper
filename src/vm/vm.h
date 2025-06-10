@@ -110,6 +110,7 @@ public:
 	bool GetRenderOnStartup();
 	unsigned long Uptime();
 	unsigned long GetElapsedTime(int instance);
+	void ListPlayingSounds();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
