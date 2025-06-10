@@ -369,19 +369,24 @@ int SoundSystem::GetSoundCount()
 void SoundSystem::ShowLoadedSounds()
 {
 #ifndef DISABLE_SOUND
-	Object::Report("\n--- Loaded Sounds ---\n");
+	Object::Report("");
+	Object::Report("--- Loaded Sounds ---");
+	Object::Report("");
 	Object::Report("Filename\t----\tSound Objects\t----\tChannels");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		Object::Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
 	}
-	Object::Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
+	Object::Report("");
+	Object::Report("Total loaded sounds: " + ToString(GetSoundCount()));
 #endif
 }
 
 void SoundSystem::ShowPlayingSounds()
 {
-	Object::Report("\n--- Playing Sounds ---\n");
+	Object::Report("");
+	Object::Report("--- Playing Sounds ---");
+	Object::Report("");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		bool first = true;
@@ -397,7 +402,8 @@ void SoundSystem::ShowPlayingSounds()
 			}
 		}
 	}
-	Object::Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
+	Object::Report("");
+	Object::Report("Total playing sounds: " + ToString(GetPlayingCount()));
 }
 
 #ifndef DISABLE_SOUND
