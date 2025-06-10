@@ -78,6 +78,7 @@ const wxWindowID SoundManager::ID_bUnload = wxNewId();
 const wxWindowID SoundManager::ID_bCleanup = wxNewId();
 const wxWindowID SoundManager::ID_bOK = wxNewId();
 const wxWindowID SoundManager::ID_bListPlaying = wxNewId();
+const wxWindowID SoundManager::ID_bListPlayingAll = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(SoundManager,wxDialog)
@@ -207,6 +208,8 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	BoxSizer1->Add(bOK, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bListPlaying = new wxButton(this, ID_bListPlaying, _("List Playing Sounds"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bListPlaying"));
 	BoxSizer1->Add(bListPlaying, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bListPlayingAll = new wxButton(this, ID_bListPlayingAll, _("List Playing (All Engines)"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bListPlayingAll"));
+	BoxSizer1->Add(bListPlayingAll, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
@@ -224,6 +227,7 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	Connect(ID_bCleanup, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bCleanup_Click);
 	Connect(ID_bOK, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bOK_Click);
 	Connect(ID_bListPlaying, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bListPlaying_Click);
+	Connect(ID_bListPlayingAll, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bListPlayingAll_Click);
 	//*)
 	panel = parent;
 	Simcore = 0;
@@ -516,6 +520,11 @@ void SoundManager::On_bEnabled_Click(wxCommandEvent& event)
 
 	bool enabled = handle->IsEnabled();
 	handle->Enabled(!enabled);
+}
+
+void SoundManager::On_bListPlayingAll_Click(wxCommandEvent& event)
+{
+	//panel->GetRoot()->ListPlayingSounds();
 }
 
 }
