@@ -10,25 +10,29 @@ https://github.com/eventhorizon5/skyscraper
 
 https://sourceforge.net/projects/skyscraper/
 
+<img src="https://www.skyscrapersim.net/content/triton-sunset.jpg"/>
+
 ## Contents
 
-### 1. Legal Notices
+### Legal Notices
 
-### 2. Introduction
+### Introduction
 
-### 3. Release Notes
+### Screenshots
 
-### 4. Building and Installing
+### Release Notes
 
-### 5. Usage
+### Building and Installing
 
-### 6. Detailed Release Notes
+### Usage
 
-### 7. Contact
+### Detailed Release Notes
+
+### Contact
 
 <br>
 
-## 1. Legal Notices
+## Legal Notices
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -49,7 +53,7 @@ For more information, see the LICENSE file.
 This software utilizes the FMOD sound system
 FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2015.
 
-## 2. Introduction
+## Introduction
 
 Skyscraper is a 3D virtual building simulator written in C++ using the OGRE
 (previously Crystal Space) graphics engine.  The goal of the Skyscraper project is to create a
@@ -61,7 +65,15 @@ in scripted text files that are loaded and generated in realtime by the simulato
 graphical building designer application is planned to assist in creating building data
 files.
 
-## 3. Release Notes
+## Screenshots
+
+<img src="https://www.skyscrapersim.net/content/glass_elevators.jpg"/>
+
+<img src="https://www.skyscrapersim.net/content/series1_fixturesetdemo.jpg"/>
+
+<img src="https://www.skyscrapersim.net/content/glasstower3.jpg"/>
+
+## Release Notes
 
 This release is the eleventh development release of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
@@ -76,13 +88,13 @@ For third-party texture credits, see the file "license-info.txt" in the "data" f
 
 See the bottom of this document for detailed release notes.
 
-## 4. Building and installing
+## Building and installing
 
 Skyscraper uses the Cmake build system, and also includes Visual C++ project files.
 
 See the compiling.txt file for information on how to build from source.
 
-## 5. Usage
+## Usage
 
 To use Skyscraper, run the program, and a main menu screen will appear with a button for each
 available building (and one button for loading user buildings).
@@ -192,11 +204,11 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 -doors, controls/buttons, and call buttons can be locked/unlocked by holding down both the Ctrl and Shift keys while clicking on the side to lock, if you have the associated key
 
-## 6. Detailed Release Notes
+## Detailed Release Notes
 
 (in progress)
 
-## 7. Copyright and Contact
+## Copyright and Contact
 
 Copyright (C)2003-2025 Ryan Thoryk
 
