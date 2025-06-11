@@ -4,7 +4,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Skyscraper"
-!define PRODUCT_VERSION "2.0 Alpha 11"
+!define PRODUCT_VERSION "2.0"
 !define PRODUCT_PUBLISHER "Ryan Thoryk"
 !define PRODUCT_WEB_SITE "https://www.skyscrapersim.net"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Skyscraper.exe"
@@ -22,10 +22,10 @@ SetCompressor lzma
 VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "The Skyscraper Project"
-VIAddVersionKey LegalCopyright "Copyright 2003-2023 Ryan Thoryk"
-VIAddVersionKey FileVersion "1.11.0.0"
-VIAddVersionKey ProductVersion "1.11.0.0"
-VIProductVersion 1.11.0.0
+VIAddVersionKey LegalCopyright "Copyright 2003-2025 Ryan Thoryk"
+VIAddVersionKey FileVersion "2.0.0.0"
+VIAddVersionKey ProductVersion "2.0.0.0"
+VIProductVersion 2.0.0.0
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -72,7 +72,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "skyscraper20alpha11-x64.exe"
+OutFile "skyscraper-2.0-x64.exe"
 InstallDir "$PROGRAMFILES64\Skyscraper"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -83,16 +83,22 @@ Section "Application" SEC01
   SetOverwrite ifnewer
   File "${LOCAL_FILES}\Skyscraper.exe"
   File "${LOCAL_FILES}\SBS.dll"
+  File "${LOCAL_FILES}\VM.dll"
+  File "${LOCAL_FILES}\OpenXR.dll"
   File "${LOCAL_FILES}\Skyscraper.pdb"
   File "${LOCAL_FILES}\SBS.pdb"
+  File "${LOCAL_FILES}\VM.pdb"
+  File "${LOCAL_FILES}\OpenXR.pdb"
   File "${LOCAL_FILES}\OgreBulletCollisions.dll"
   File "${LOCAL_FILES}\OgreBulletDynamics.dll"
+  File "${LOCAL_FILES}\OgreBulletCollisions.pdb"
+  File "${LOCAL_FILES}\OgreBulletDynamics.pdb"
   File "${LOCAL_FILES}\skyscraper.ini"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
   CreateShortCut "$DESKTOP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
-  File "${LOCAL_FILES}\readme.txt"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Release Notes.lnk" "write.exe" '"$INSTDIR\readme.txt"'
+  File "${LOCAL_FILES}\README.md"
+;  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Release Notes.lnk" "write.exe" '"$INSTDIR\readme.txt"'
   File "${LOCAL_FILES}\designguide.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Building Design Guide.lnk" "$INSTDIR\designguide.html"
   File "${LOCAL_FILES}\changelog.txt"
@@ -143,11 +149,12 @@ SectionEnd
 
 Section /o "Source Code" SEC02
   SetOutPath "$INSTDIR"
+  File "${LOCAL_FILES}\CMakeLists.txt"
   File "${LOCAL_FILES}\skyscraper.ico"
   File "${LOCAL_FILES}\LICENSE"
   File "${LOCAL_FILES}\Doxyfile"
   File "${LOCAL_FILES}\CMakeLists.txt"
-  File "${LOCAL_FILES}\compiling.txt"
+  File "${LOCAL_FILES}\compiling.md"
   File "${LOCAL_FILES}\*.patch"
   SetOutPath "$INSTDIR\ogrebullet"
   File /r "${LOCAL_FILES}\ogrebullet\*.*"
@@ -157,8 +164,6 @@ Section /o "Source Code" SEC02
   File "${LOCAL_FILES}\codeblocks\*.*"
   SetOutPath "$INSTDIR\codeblocks\wxsmith"
   File "${LOCAL_FILES}\codeblocks\wxsmith\*.*"
-  SetOutPath "$INSTDIR\msvc"
-  File "${LOCAL_FILES}\msvc\*.*"
   SetOutPath "$INSTDIR\tools"
   File /r "${LOCAL_FILES}\tools\*.*"
 SectionEnd
@@ -188,9 +193,9 @@ Section "Required libraries" SEC03
   File "${LOCAL_FILES}\wxmsw32u_core_vc_custom.dll"
   File "${LOCAL_FILES}\D3DX9_43.dll"
   File "${LOCAL_FILES}\D3DCompiler_47.dll"
-  File "${LOCAL_FILES}\msvcp140.dll"
-  File "${LOCAL_FILES}\vcruntime140.dll"
-  File "${LOCAL_FILES}\vcruntime140_1.dll"
+;  File "${LOCAL_FILES}\msvcp140.dll"
+;  File "${LOCAL_FILES}\vcruntime140.dll"
+;  File "${LOCAL_FILES}\vcruntime140_1.dll"
 ;  File "${LOCAL_FILES}\dbghelp.dll"
   File "${LOCAL_FILES}\vc_redist.x64.exe"
   File "${LOCAL_FILES}\*.pdb"
