@@ -12,25 +12,6 @@ https://sourceforge.net/projects/skyscraper/
 
 <img src="https://www.skyscrapersim.net/content/triton-sunset.jpg"/>
 
-## Contents
-
-### Legal Notices
-
-### Introduction
-
-### Screenshots
-
-### Release Notes
-
-### Building and Installing
-
-### Usage
-
-### Detailed Release Notes
-
-### Contact
-
-<br>
 
 ## Legal Notices
 
@@ -75,12 +56,12 @@ files.
 
 ## Release Notes
 
-This release is the eleventh development release of the 2.0 series (which is a complete rewrite of
-the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
+This release is the first stable release of the 2.0 series, which is a complete rewrite of
+the original 1.0 version.
 
-This software utilizes the OGRE rendering engine library (version 13), the Bullet physics engine with some custom patches, the FMOD sound system, the wxWidgets library (version 3.2 or later), and the Caleum sky system addon for OGRE.
+This software utilizes the OGRE rendering engine library (version 14), the Bullet physics engine with some custom patches, OgreBullet, the FMOD sound system, the wxWidgets library (version 3.2 or later), OgreProcedural, and the Caleum sky system addon.
 
-Skyscraper currently only supports OpenGL.
+Skyscraper currently only supports OpenGL.  DirectX 11 support is in development.
 
 See the changelog for a detailed list of new features, fixes, and other changes in this release.
 
@@ -90,9 +71,9 @@ See the bottom of this document for detailed release notes.
 
 ## Building and installing
 
-Skyscraper uses the Cmake build system, and also includes Visual C++ project files.
+Skyscraper uses the Cmake build system
 
-See the compiling.txt file for information on how to build from source.
+See the compiling.md file for information on how to build from source.
 
 ## Usage
 
