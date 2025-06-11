@@ -39,12 +39,9 @@ FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2015.
 Skyscraper is a 3D virtual building simulator written in C++ using the OGRE
 (previously Crystal Space) graphics engine.  The goal of the Skyscraper project is to create a
 fully-featured, modular, multiplatform 3D realtime building simulation engine, including
-gaming support (single and network multiplayer). Everything possible is planned to be simulated,
-including elevators, stairs, interfloor areas, ductwork, and more, all in first-person 3D.
-The simulator core is called the Scalable Building Simulator, or SBS. Buildings are stored
-in scripted text files that are loaded and generated in realtime by the simulator. A
-graphical building designer application is planned to assist in creating building data
-files.
+gaming support (single and network multiplayer).  The simulator core is called the Scalable Building Simulator,
+or SBS. Buildings are stored in scripted text files that are loaded and generated in realtime by the simulator. A
+graphical building designer is planned to assist in creating building data files.
 
 ## Screenshots
 
@@ -56,7 +53,7 @@ files.
 
 ## Release Notes
 
-This release is the first stable release of the 2.0 series, which is a complete rewrite of
+This release is a beta release of the 2.0 series, which is a complete rewrite of
 the original 1.0 version.
 
 This software utilizes the OGRE rendering engine library (version 14), the Bullet physics engine with some custom patches, OgreBullet, the FMOD sound system, the wxWidgets library (version 3.2 or later), OgreProcedural, and the Caleum sky system addon.
@@ -189,11 +186,7 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 (in progress)
 
-## Copyright and Contact
-
-Copyright (C)2003-2025 Ryan Thoryk
-
-Licensed under the GPL2 License
+## Contact
 
 Bug-Reports, suggestions, and requests should be posted to GitHub
 
