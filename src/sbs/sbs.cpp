@@ -554,10 +554,6 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	//attach camera object
 	AttachCamera(cameras);
 
-	//enable map generator
-	if (MapGenerator)
-		EnableMap(true);
-
 	//enable random activity if specified
 	if (RandomActivity == true)
 		EnableRandomActivity(true);
