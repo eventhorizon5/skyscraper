@@ -81,7 +81,13 @@ find_package(Bullet REQUIRED)
 find_package(Caelum REQUIRED)
 
 #find OpenXR
-find_package(OpenXR)
+if(WIN32)
+	find_package(OpenXR)
+
+	if (OpenXR_FOUND)
+		add_compile_definitions(USING_OPENXR)
+	endif ()
+endif()
 
 if(WIN32)
 	file(GLOB FRONTEND_FILES

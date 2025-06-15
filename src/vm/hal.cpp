@@ -37,10 +37,7 @@
 #endif
 
 //OpenXR interfaces
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#include "OgreOpenXRRenderWindow.h"
-#endif
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 #include "OgreOpenXRRenderWindow.h"
 #endif
 
@@ -190,7 +187,7 @@ void HAL::UnclickedObject()
 
 void HAL::UpdateOpenXR()
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 	SBS_PROFILE_MAIN("UpdateOpenXR");
 
 	//update OpenXR camera transformations
@@ -896,7 +893,7 @@ Ogre::SceneManager* HAL::GetSceneManager()
 Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params)
 {
 	//create the render window
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
