@@ -249,12 +249,11 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -80, 105, 80, 305, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -80, 105, 80, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
-    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerFront, MainWalls, 0, -80, 105, -15, 105, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerFront2, MainWalls, 0, 15, 105, 80, 105, %height%, %height%, 0, 0, 0, 0, False
-
+    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 0, true
+    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 0, true
+    AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, true
+    AddWall TowerFront, MainWalls, 0, -80, 105, -15, 105, %height%, %height%, 0, 0, 0, 0, true
+    AddWall TowerFront2, MainWalls, 0, 15, 105, 80, 105, %height%, %height%, 0, 0, 0, 0, true
 <EndFloors>
 
 <Floors 50 to 51>
@@ -401,4 +400,5 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddInterfloorWall Left, MainWalls, 0, -25, 105, -25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Back, MainWalls, 0, -25, 180, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Right, MainWalls, 0, 25, 105, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddWall FrontWindows, AtriumWindows, 0, -15, 105, 15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
 <EndFloors>
