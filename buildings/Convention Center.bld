@@ -490,10 +490,10 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 
 # Central Atrium
 <Floor 0>
-    Cut -25, 10, 105, 25, %height% + 1, 180, false, true
+    CutAll -25, 10, 105, 25, %height% + 5, 180, false, true
 <EndFloor>
 <Floors 1 to 100>
-    Cut -25, -5, 105, 25, %height% + 5, 180, false, true
+    CutAll -25, -5, 105, 25, %height% + 5, 180, false, true
     AddInterfloorWall Left, MainWalls, 0, -25, 105, -25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Back, MainWalls, 0, -25, 180, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Right, MainWalls, 0, 25, 105, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
