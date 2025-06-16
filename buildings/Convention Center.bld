@@ -243,7 +243,7 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 
     #left rear room
     AddWall RoomLeft, AtriumWindows, 0, -80, 50, -80, 105, 15, 15, 0, 0, 0, 0, True
-    AddCustomWall External, RoomBack, AtriumWindows, True, -80, 15, 105, -80, 0, 105, -27, 0, 105, -21.5, 15, 105, 1, 1
+    #AddCustomWall External, RoomBack, AtriumWindows, True, -80, 15, 105, -80, 0, 105, -27, 0, 105, -21.5, 15, 105, 1, 1
     AddCustomWall External, RoomFront, AtriumWindows, True, -80, 15, 50, -21.5, 15, 50, -27, 0, 50, -80, 0, 50, 1, 1
     AddFloor RoomFloor, Carpet2, 0, -80, 105, -27, 50, 0, 0, false, false, 1, 1, True
 
@@ -264,23 +264,33 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor RightFloor, Carpet2, 0, 27, 50, 80, -75, 0, 0, false, false, 1, 1, True
 
     #right rear structure
-    AddCustomWall External, RightFront, AtriumWindows, True, 21.5, 15, 50, 48, 54, 50, 80, 15, 50, 1, 1
+    #AddCustomWall External, RightFront, AtriumWindows, True, 21.5, 15, 50, 48, 54, 50, 80, 15, 50, 1, 1
     AddCustomWall External, RightTop, AtriumWindows, True, 21.5, 15, 105, 80, 15, 105, 48, 54, 50, 1, 1
     AddCustomWall External, RightBackLeft, AtriumWindows, True, 21.5, 15, 105, 48, 54, 50, 21.5, 15, 50, 1, 1
     AddCustomWall External, RightRight, AtriumWindows, True, 80, 15, 105, 48, 54, 50, 80, 15, 50, 1, 1
 
     #right room
-    AddCustomWall External, RoomFront, AtriumWindows, True, 21.5, 15, 50, 80, 15, 50, 80, 0, 50, 27, 0, 50, 1, 1
+    #AddCustomWall External, RoomFront, AtriumWindows, True, 21.5, 15, 50, 80, 15, 50, 80, 0, 50, 27, 0, 50, 1, 1
+    AddCustomWall External, RoomFront, AtriumWindows, True, 27, 0, 50, 48, 54, 50, 21.5, 15, 50, 1, 1
     AddWall RoomRight, AtriumWindows, 0, 80, 105, 80, 50, 15, 15, 0, 0, 0, 0, True
-    AddCustomWall External, RoomBack, AtriumWindows, True, 80, 0, 105, 80, 15, 105, 21.5, 15, 105, 27, 0, 105, 1, 1
+    #AddCustomWall External, RoomBack, AtriumWindows, True, 80, 0, 105, 80, 15, 105, 21.5, 15, 105, 27, 0, 105, 1, 1
     AddFloor RoomFloor, Carpet2, 0, 27, 105, 80, 50, 0, 0, false, false, 1, 1, True
 
     #tower
     AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, True
     AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, True
-    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 0, True
-    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 0, True
-    AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, True
+    SetAutoSize = true, false
+    TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
+    AddWall TowerLeft, MainWindows, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 4, True
+    TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
+    AddWall TowerRight, MainWindows, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 4, True
+    TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
+    AddWall TowerBack, MainWindows, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 4, True
+    TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
+    AddWall TowerFront1, MainWindows, 0, -80, 105, -15, 105, %height% - 15, %height% - 15, 15, 15, 0, 3, True
+    TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
+    AddWall TowerFront2, MainWindows, 0, 15, 105, 80, 105, %height% - 15, %height% - 15, 15, 15, 0, 3, True
+    SetAutoSize = true, true
 
 <EndFloor>
 
@@ -537,8 +547,10 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 
     AddWall FrontWindows, AtriumWindows, 0, -15, 105, 15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
     SetAutoSize = true, false
-    AddWall InteriorLeft, MainWindowsInt, 0, -25, 105, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, true
-    AddWall InteriorBack, MainWindowsInt, 0, -25, 180, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, true
-    AddWall InteriorRight, MainWindowsInt, 0, 25, 105, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, true
+    Set vtile = 1
+    if [%floor% = 1] Set vtile = 4
+    AddWall InteriorLeft, MainWindowsInt, 0, -25, 105, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    AddWall InteriorBack, MainWindowsInt, 0, -25, 180, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    AddWall InteriorRight, MainWindowsInt, 0, 25, 105, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     SetAutoSize = true, true
 <EndFloors>
