@@ -28,6 +28,7 @@
 
 <Textures>
     Load data/brick1.jpg, Brick, 0.269, 0.25
+    LoadAlphaBlend data/windows11h_black.jpg, data/windows11ispec.png, data/sky3l.jpg, MainWindows, true, 0.05, 1
     Load data/cinderblocks.jpg, MainWalls, 0.25, 0.25
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/misc/grid_win.png, GridWindow, 0.2, 0.2
@@ -303,11 +304,14 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -80, 105, 80, 305, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -80, 105, 80, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
-    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
-    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
-    AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
-    AddWall TowerFront, MainWalls, 0, -80, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
-    AddWall TowerFront2, MainWalls, 0, 15, 105, 80, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
+    
+    SetAutoSize = true, false
+    AddWall TowerLeft, MainWindows, 0, -80, 105, -80, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
+    AddWall TowerRight, MainWindows, 0, 80, 105, 80, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
+    AddWall TowerBack, MainWindows, 0, -80, 305, 80, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
+    AddWall TowerFront, MainWindows, 0, -80, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
+    AddWall TowerFront2, MainWindows, 0, 15, 105, 80, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
+    SetAutoSize = true, true
 <EndFloors>
 
 <Floors 50 to 51>
@@ -322,11 +326,13 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor Tower Ceiling, Marble, 0, -75, 105, 75, 305, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -75, 105, 75, 305, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -75, 105, 75, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
-    AddWall TowerLeft, MainWalls, 0, -75, 105, -75, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerRight, MainWalls, 0, 75, 105, 75, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerBack, MainWalls, 0, -75, 305, 75, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerFront, MainWalls, 0, -75, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerFront2, MainWalls, 0, 15, 105, 75, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, false
+    AddWall TowerLeft, MainWindows, 0, -75, 105, -75, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerRight, MainWindows, 0, 75, 105, 75, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerBack, MainWindows, 0, -75, 305, 75, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerFront, MainWindows, 0, -75, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerFront2, MainWindows, 0, 15, 105, 75, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 <Floors 52 to 53>
@@ -341,11 +347,13 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor Tower Ceiling, Marble, 0, -70, 105, 70, 305, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -70, 105, 70, 305, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -70, 105, 70, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
-    AddWall TowerLeft, MainWalls, 0, -70, 105, -70, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerRight, MainWalls, 0, 70, 105, 70, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerBack, MainWalls, 0, -70, 305, 70, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerFront, MainWalls, 0, -70, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerFront2, MainWalls, 0, 15, 105, 70, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, false
+    AddWall TowerLeft, MainWindows, 0, -70, 105, -70, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerRight, MainWindows, 0, 70, 105, 70, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerBack, MainWindows, 0, -70, 305, 70, 305, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerFront, MainWindows, 0, -70, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerFront2, MainWindows, 0, 15, 105, 70, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 <Floors 54 to 99>
@@ -360,11 +368,13 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor Tower Ceiling, Marble, 0, -65, 105, 65, 255, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -65, 105, 65, 255, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -65, 105, 65, 255, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
-    AddWall TowerLeft, MainWalls, 0, -65, 105, -65, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerRight, MainWalls, 0, 65, 105, 65, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerBack, MainWalls, 0, -65, 255, 65, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerFront, MainWalls, 0, -65, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerFront2, MainWalls, 0, 15, 105, 65, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, false
+    AddWall TowerLeft, MainWindows, 0, -65, 105, -65, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerRight, MainWindows, 0, 65, 105, 65, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerBack, MainWindows, 0, -65, 255, 65, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerFront, MainWindows, 0, -65, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerFront2, MainWindows, 0, 15, 105, 65, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 <Floors 100 to 101>
@@ -379,10 +389,12 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor Tower Ceiling, Marble, 0, -60, 105, 60, 255, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -60, 105, 60, 255, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -60, 105, 60, 255, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
-    AddWall TowerLeft, MainWalls, 0, -60, 105, -60, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerRight, MainWalls, 0, 60, 105, 60, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerBack, MainWalls, 0, -60, 255, 60, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerFront, MainWalls, 0, -60, 105, 60, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, false
+    AddWall TowerLeft, MainWindows, 0, -60, 105, -60, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerRight, MainWindows, 0, 60, 105, 60, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerBack, MainWindows, 0, -60, 255, 60, 255, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerFront, MainWindows, 0, -60, 105, 60, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 <Floors 102 to 111>
@@ -397,10 +409,12 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor Tower Ceiling, Marble, 0, -55, 105, 55, 205, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -55, 105, 55, 205, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -55, 105, 55, 205, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
-    AddWall TowerLeft, MainWalls, 0, -55, 105, -55, 205, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerRight, MainWalls, 0, 55, 105, 55, 205, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerBack, MainWalls, 0, -55, 205, 55, 205, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
-    AddWall TowerFront, MainWalls, 0, -55, 105, 55, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, false
+    AddWall TowerLeft, MainWindows, 0, -55, 105, -55, 205, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerRight, MainWindows, 0, 55, 105, 55, 205, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerBack, MainWindows, 0, -55, 205, 55, 205, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    AddWall TowerFront, MainWindows, 0, -55, 105, 55, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 <Floor 112>
