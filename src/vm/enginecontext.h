@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Engine Context
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -36,11 +36,15 @@ public:
 	bool Reload;
 	bool Moved; //true if engine has been moved on startup
 	bool started;
+	bool NewEngine; //true if this is a new engine
+	unsigned long current_time, time_stat;
 
 	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~EngineContext();
+	void Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max);
 	ScriptProcessor* GetScriptProcessor();
-	SBS::SBS *GetSystem() { return Simcore; }
+	::SBS::SBS *GetSystem() { return Simcore; }
 	bool IsCameraActive();
 	bool Run();
 	void Shutdown();
@@ -59,8 +63,8 @@ public:
 	void UpdateProgress(int percent);
 	int GetProgress() { return progress; }
 	int GetNumber() { return instance; }
-	SBS::CameraState GetCameraState();
-	void SetCameraState(const SBS::CameraState &state, bool set_floor = true);
+	::SBS::CameraState GetCameraState();
+	void SetCameraState(const ::SBS::CameraState &state, bool set_floor = true);
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
@@ -81,14 +85,20 @@ public:
 	VM* GetVM();
 	bool InRunloop();
 	bool IsRoot();
+	bool InitSim();
+	bool LoadDefault();
+	void Boot();
+	void GatherReset();
+	void Gather();
 
 private:
 
 	void StartSim();
 	void UnloadSim();
+	void Init();
 
 	ScriptProcessor* processor; //script processor
-	SBS::SBS *Simcore; //sim engine instance
+	::SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
 	EngineContext *parent; //parent engine
 	unsigned long finish_time;
@@ -103,7 +113,7 @@ private:
 	bool prepared;
 
 	//override information
-	SBS::CameraState *reload_state;
+	::SBS::CameraState *reload_state;
 
 	Ogre::SceneManager* mSceneManager;
 	FMOD::System *fmodsystem;

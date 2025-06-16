@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - File I/O and Script Processing Routines
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -22,8 +22,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
+#ifdef USING_WX
 #include "wx/wx.h"
 #endif
 #include <OgreFileSystem.h>
@@ -37,6 +36,7 @@
 #include "enginecontext.h"
 #include "texture.h"
 #include "floor.h"
+#include "camera.h"
 #include "random.h"
 #include "scriptproc.h"
 #include "section.h"
@@ -470,6 +470,10 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 bool ScriptProcessor::LoadFromText(const std::string &text)
 {
 	//loads building commands from a string
+
+	if (text.size() == 0)
+		return false;
+
 	std::vector<std::string> textarray;
 	SplitString(textarray, text, '\n');
 
@@ -529,8 +533,10 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	//show error dialog
 	if (warning == false)
 	{
+#ifdef USING_WX
 		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
 		dialog.ShowModal();
+#endif
 	}
 	return sError;
 }
@@ -2042,6 +2048,21 @@ bool ScriptProcessor::HasRunloop()
 		}
 	}
 	return false;
+}
+
+void ScriptProcessor::LoadDefaults()
+{
+	Simcore->BuildingName = "Default";
+	Simcore->BuildingDesigner = "Me";
+	Simcore->SkyName = "noon";
+	//Simcore->camera->EnableCollisions(false);
+	//Simcore->camera->EnableGravity(false);
+}
+
+void ScriptProcessor::Start()
+{
+	IsFinished = true;
+	show_percent = false;
 }
 
 }

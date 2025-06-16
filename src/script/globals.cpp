@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Script Processor - Globals Section
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -289,6 +289,14 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 
 		Simcore->Lobby = data;
 		return sNextLine;
+	}
+	//map parameter
+	if (StartsWithNoCase(LineData, "map"))
+	{
+		bool enabled = false;
+		if (StartsWithNoCase(value, "on") == true)
+			enabled = true;
+		Simcore->EnableMap(enabled);
 	}
 	//handle end of globals section
 	if (StartsWithNoCase(LineData, "<endglobals>"))

@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Texture Manager Dialog
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -29,6 +29,7 @@
 #include <wx/dialog.h>
 #include <wx/listbox.h>
 #include <wx/sizer.h>
+#include <wx/statbmp.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 //*)
@@ -50,6 +51,7 @@ class TextureManager: public wxDialog
         wxCheckBox* chkEnableForce;
         wxCheckBox* chkForceMode;
         wxListBox* TextureList;
+        wxStaticBitmap* bmpMain;
         wxStaticText* StaticText10;
         wxStaticText* StaticText11;
         wxStaticText* StaticText12;
@@ -78,35 +80,36 @@ class TextureManager: public wxDialog
     protected:
 
         //(*Identifiers(TextureManager)
-        static const long ID_TextureList;
-        static const long ID_STATICTEXT7;
-        static const long ID_tDependencies;
-        static const long ID_STATICTEXT4;
-        static const long ID_tMaterial;
-        static const long ID_STATICTEXT1;
-        static const long ID_tFilename;
-        static const long ID_STATICTEXT8;
-        static const long ID_tWidth;
-        static const long ID_STATICTEXT9;
-        static const long ID_tHeight;
-        static const long ID_STATICTEXT11;
-        static const long ID_tAlpha;
-        static const long ID_STATICTEXT12;
-        static const long ID_tMipMaps;
-        static const long ID_STATICTEXT10;
-        static const long ID_tMemory;
-        static const long ID_STATICTEXT5;
-        static const long ID_tWidthMult;
-        static const long ID_STATICTEXT6;
-        static const long ID_tHeightMult;
-        static const long ID_STATICTEXT2;
-        static const long ID_chkEnableForce;
-        static const long ID_STATICTEXT3;
-        static const long ID_chkForceMode;
-        static const long ID_bSave;
-        static const long ID_bExport;
-        static const long ID_bUnload;
-        static const long ID_bOK;
+        static const wxWindowID ID_TextureList;
+        static const wxWindowID ID_STATICTEXT7;
+        static const wxWindowID ID_tDependencies;
+        static const wxWindowID ID_STATICTEXT4;
+        static const wxWindowID ID_tMaterial;
+        static const wxWindowID ID_STATICTEXT1;
+        static const wxWindowID ID_tFilename;
+        static const wxWindowID ID_STATICTEXT8;
+        static const wxWindowID ID_tWidth;
+        static const wxWindowID ID_STATICTEXT9;
+        static const wxWindowID ID_tHeight;
+        static const wxWindowID ID_STATICTEXT11;
+        static const wxWindowID ID_tAlpha;
+        static const wxWindowID ID_STATICTEXT12;
+        static const wxWindowID ID_tMipMaps;
+        static const wxWindowID ID_STATICTEXT10;
+        static const wxWindowID ID_tMemory;
+        static const wxWindowID ID_STATICTEXT5;
+        static const wxWindowID ID_tWidthMult;
+        static const wxWindowID ID_STATICTEXT6;
+        static const wxWindowID ID_tHeightMult;
+        static const wxWindowID ID_STATICTEXT2;
+        static const wxWindowID ID_chkEnableForce;
+        static const wxWindowID ID_STATICTEXT3;
+        static const wxWindowID ID_chkForceMode;
+        static const wxWindowID ID_bSave;
+        static const wxWindowID ID_bExport;
+        static const wxWindowID ID_bUnload;
+        static const wxWindowID ID_bmpMain;
+        static const wxWindowID ID_bOK;
         //*)
 
     private:

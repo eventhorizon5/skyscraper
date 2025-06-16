@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - GUI Manager
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -20,8 +20,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/dir.h"
 #include "wx/progdlg.h"
@@ -29,7 +27,6 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
-#endif
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
@@ -51,6 +48,7 @@ GUI::GUI(VM *parent)
 	dpanel = 0;
 	loaddialog = 0;
 	show_progress = false;
+	wxInitAllImageHandlers();
 }
 
 GUI::~GUI()
@@ -81,9 +79,6 @@ void GUI::Unload()
 	if(dpanel)
 		delete dpanel;
 	dpanel = 0;
-
-	//disable console send button
-	EnableConsole(false);
 }
 
 void GUI::ShowError(const std::string &message)
@@ -159,6 +154,38 @@ std::string GUI::SelectBuilding(const std::string &data_path)
 		filename = Selector.GetStringSelection();
 		filename += ".bld";
 	}
+
+	return filename;
+}
+
+std::string GUI::SelectBuildingNative(const std::string &data_path)
+{
+	//choose a building from a script file, using a native file selection dialog
+	std::string filename = "";
+	srand (time (0));
+
+	//set building file
+	//wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxFD_OPEN);
+	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxFD_OPEN);
+	int result = Selector->ShowModal();
+	if (result == wxID_CANCEL)
+	{
+		//delete dialog
+		delete Selector;
+		Selector = 0;
+		//quit
+		return "";
+	}
+
+#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+	filename = Selector->GetFilename().mb_str().data();
+#else
+	filename = Selector->GetFilename();
+#endif
+
+	//delete dialog
+	delete Selector;
+	Selector = 0;
 
 	return filename;
 }
@@ -289,11 +316,11 @@ void GUI::ShowLoadDialog()
 	loaddialog->Show();
 }
 
-void GUI::WriteToConsole(const std::string &message)
+void GUI::WriteToConsole(const std::string &message, const std::string &color)
 {
 	if (console)
 	{
-		console->Write(message);
+		console->Write(message, color);
 		console->Update();
 	}
 }
@@ -331,6 +358,11 @@ bool GUI::ReportMissingFiles(std::vector<std::string> &missing_files)
 	else
 		return false;
 	return true;
+}
+
+bool GUI::IsConsoleVisible()
+{
+	return (console != 0);
 }
 
 }

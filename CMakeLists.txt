@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.6)
  
 project(Skyscraper)
 
@@ -38,6 +38,16 @@ if (WIN32)
 	set(CMAKE_CXX_FLAGS "-D_OGREBULLET_DYNAMIC /MP ${CMAKE_CXX_FLAGS}")
 endif ()
 
+include(FetchContent)
+
+FetchContent_Declare(
+    dylib
+    GIT_REPOSITORY "https://github.com/martin-olivier/dylib"
+    GIT_TAG        "v2.2.1"
+)
+
+FetchContent_MakeAvailable(dylib)
+
 find_package(OGRE REQUIRED)
  
 if(NOT OGRE_FOUND)
@@ -50,10 +60,22 @@ set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderS
 find_package(OgreProcedural REQUIRED)
 
 #find wxWidgets
-find_package(wxWidgets COMPONENTS core base REQUIRED)
+if (NOT ANDROID)
+	find_package(wxWidgets COMPONENTS core base REQUIRED)
+endif ()
+
+if (wxWidgets_FOUND)
+	add_compile_definitions(USING_WX)
+endif ()
 
 #find FMOD
-find_package(FMOD REQUIRED)
+find_package(FMOD)
+
+if(NOT FMOD_FOUND AND NOT WIN32)
+        set (CMAKE_CXX_FLAGS "-DDISABLE_SOUND ${CMAKE_CXX_FLAGS}")
+	set (FMOD_INCLUDE_DIR "")
+	set (FMOD_LIBRARY "")
+endif()
 
 #find GTK
 if(NOT APPLE)
@@ -69,7 +91,16 @@ find_package(Bullet REQUIRED)
 find_package(Caelum REQUIRED)
 
 #find OpenXR
-find_package(OpenXR)
+if(WIN32)
+	find_package(OpenXR)
+
+	if (OpenXR_FOUND)
+		add_compile_definitions(USING_OPENXR)
+	endif ()
+endif()
+
+#find SLikeNet
+#find_package(SLikeNet REQUIRED)
 
 if(WIN32)
 	file(GLOB FRONTEND_FILES
@@ -82,7 +113,7 @@ else()
         )
 endif()
  
-if(WIN32)
+if(WIN32 AND wxWidgets_FOUND)
 	file(GLOB VM_FILES
 		src/vm/*.cpp
 		src/gui/*.cpp
@@ -93,8 +124,14 @@ else()
 	)
 endif()
 
-file(GLOB GUI_FILES
-	src/gui/*.cpp
+if (NOT WIN32 AND wxWidgets_FOUND)
+	file(GLOB GUI_FILES
+		src/gui/*.cpp
+	)
+endif ()
+
+file(GLOB NETWORK_FILES
+	src/net/*.cpp
 )
 
 file(GLOB SCRIPTPROC_FILES
@@ -103,6 +140,10 @@ file(GLOB SCRIPTPROC_FILES
 
 file(GLOB SBS_FILES
 	src/sbs/*.cpp
+	src/sbs/polymesh/*.cpp
+	src/sbs/controllers/*.cpp
+	src/sbs/objects/*.cpp
+	src/sbs/system/*.cpp
 	msvc/SBS.rc
 )
  
@@ -127,6 +168,7 @@ file (GLOB OGREBULLET_DYN_FILES
 	ogrebullet/Dynamics/src/Prefab/*.cpp
 )
 
+if(FMOD_FOUND)
 include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
 	${OGRE_RTShaderSystem_INCLUDE_DIRS}
@@ -139,7 +181,12 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${OgreProcedural_INCLUDE_DIR}
 	src/frontend
 	src/vm
+	src/net
 	src/sbs
+	src/sbs/polymesh
+	src/sbs/controllers
+	src/sbs/objects
+	src/sbs/system
 	src/script
 	src/gui
 	src/alloc
@@ -153,8 +200,42 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	ogrebullet/Dynamics/include/Constraints
 	ogrebullet/Dynamics/include/Prefab
 )
+else()
+include_directories( ${OGRE_INCLUDE_DIRS}
+        ${OGRE_Overlay_INCLUDE_DIRS}
+        ${OGRE_RTShaderSystem_INCLUDE_DIRS}
+        ${OGRE_Bites_INCLUDE_DIRS}
+        ${GTK3_INCLUDE_DIRS}
+        ${BULLET_INCLUDE_DIRS}
+        ${Caelum_INCLUDE_DIRS}
+        ${OpenXR_INCLUDE_DIR}
+        ${OgreProcedural_INCLUDE_DIR}
+        src/frontend
+        src/vm
+        src/net
+        src/sbs
+	src/sbs/polymesh
+	src/sbs/controllers
+	src/sbs/objects
+	src/sbs/system
+        src/script
+        src/gui
+        src/alloc
+        src/openxr/include
+        src/openxr
+        ogrebullet/Collisions/include
+        ogrebullet/Collisions/include/Debug
+        ogrebullet/Collisions/include/Shapes
+        ogrebullet/Collisions/include/Utils
+        ogrebullet/Dynamics/include
+        ogrebullet/Dynamics/include/Constraints
+        ogrebullet/Dynamics/include/Prefab
+)
+endif()
  
-include(${wxWidgets_USE_FILE})
+if (wxWidgets_FOUND)
+	include(${wxWidgets_USE_FILE})
+endif ()
 
 #ogrebullet libraries
 add_library(OgreBulletCol SHARED ${OGREBULLET_COLL_FILES})
@@ -169,9 +250,12 @@ if (NOT WIN32)
 endif ()
 
 #GUI Library
-if (NOT WIN32)
+if (NOT WIN32 AND wxWidgets_FOUND)
 	add_library(GUI SHARED ${GUI_FILES})
 endif ()
+
+#Network library
+add_library(Network SHARED ${NETWORK_FILES})
 
 #Alloc Library
 add_library(Alloc SHARED ${ALLOC_FILES})
@@ -196,6 +280,7 @@ else ()
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
 	target_compile_options(SBS PRIVATE -DSBS_DLL "/MD")
+	target_compile_options(Network PRIVATE -DVMNET_EXPORTS "/MD")
 	target_compile_options(VM PRIVATE -DVM_EXPORTS "/MD")
 	target_compile_options(skyscraper PRIVATE "/MD")
 endif ()
@@ -207,6 +292,8 @@ target_precompile_headers(VM PRIVATE src/sbs/globals.h)
 
 if (NOT WIN32)
 	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+endif ()
+if (NOT WIN32 AND wxWidgets_FOUND)
 	target_precompile_headers(GUI PRIVATE src/sbs/globals.h)
 endif ()
 
@@ -220,17 +307,28 @@ if (WIN32)
 	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY} ${OGRE_D3D11_LIB})
 endif ()
 
+if(FMOD_FOUND)
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
+else()
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
+endif()
 
-if (NOT WIN32)
+if (NOT WIN32 AND wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(VM GUI SBS ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(VM GUI Network SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
 	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper VM GUI ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
-else ()
-	target_link_libraries(VM SBS OpenXR ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
+elseif (WIN32)
+	target_link_libraries(VM SBS Network OpenXR dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
 	target_link_libraries(skyscraper VM SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
+
+if (NOT WIN32 AND NOT wxWidgets_FOUND)
+	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
+        target_link_libraries(VM SBS Network dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+        target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
+endif ()
+
  
 if (APPLE)
 set_target_properties(skyscraper PROPERTIES
@@ -264,9 +362,6 @@ if (APPLE)
 ADD_CUSTOM_COMMAND(TARGET VM
                 POST_BUILD
                 COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
-ADD_CUSTOM_COMMAND(TARGET GUI
-                POST_BUILD
-                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
 ADD_CUSTOM_COMMAND(TARGET SBS
 		POST_BUILD
 		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
@@ -278,6 +373,12 @@ ADD_CUSTOM_COMMAND(TARGET ScriptProc
 ADD_CUSTOM_COMMAND(TARGET skyscraper
 		POST_BUILD
 		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
+endif ()
+
+if (APPLE AND wxWidgets_FOUND)
+ADD_CUSTOM_COMMAND(TARGET GUI
+                POST_BUILD
+                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
 endif ()
 
 if (UNIX AND NOT APPLE)

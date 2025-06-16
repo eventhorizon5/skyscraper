@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - CameraTexture Control
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -48,8 +48,10 @@ class CameraTextureControl: public wxDialog
 		wxButton* bSetLookAt;
 		wxButton* bSetPosition;
 		wxButton* bSetRotation;
+		wxButton* bSetZoom;
 		wxCheckBox* chkEnabled;
 		wxListBox* CameraList;
+		wxStaticText* StaticText1;
 		wxStaticText* lblFOV;
 		wxStaticText* lblPositionX;
 		wxStaticText* lblPositionY;
@@ -64,6 +66,7 @@ class CameraTextureControl: public wxDialog
 		wxTextCtrl* txtRotationX;
 		wxTextCtrl* txtRotationY;
 		wxTextCtrl* txtRotationZ;
+		wxTextCtrl* txtZoom;
 		//*)
 		void Loop();
 
@@ -90,6 +93,9 @@ class CameraTextureControl: public wxDialog
 		static const long ID_lblFOV;
 		static const long ID_txtFOV;
 		static const long ID_bSetFOV;
+		static const long ID_STATICTEXT1;
+		static const long ID_txtZoom;
+		static const long ID_bSetZoom;
 		static const long ID_bOK;
 		//*)
 
@@ -102,6 +108,7 @@ class CameraTextureControl: public wxDialog
 		void On_bSetRotation_Click(wxCommandEvent& event);
 		void On_bSetFOV_Click(wxCommandEvent& event);
 		void On_bSetLookAt_Click(wxCommandEvent& event);
+		void On_bSetZoom_Click(wxCommandEvent& event);
 		//*)
 		void BuildList(bool restore_selection = false);
 		SBS::SBS *Simcore;

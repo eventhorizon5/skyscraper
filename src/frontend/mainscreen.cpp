@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Main Screen
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -20,11 +20,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
+#ifdef USING_WX
 #include "wx/wx.h"
 #include "wx/joystick.h"
-#endif
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreViewport.h>
@@ -54,7 +52,9 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
   EVT_ACTIVATE(MainScreen::OnActivate)
+#ifndef __FreeBSD__
   EVT_JOYSTICK_EVENTS(MainScreen::OnJoystickEvent)
+#endif
 END_EVENT_TABLE()
 
 MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -69,6 +69,8 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+
+#ifndef __FreeBSD__
 	joystick = new wxJoystick(wxJOYSTICK1);
 	if (joystick->IsOk())
 	{
@@ -77,25 +79,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	}
 	else
 		joy_buttons = -1;
-
-	//reset input states
-	boxes = false;
-	colliders = false;
-	wireframe = 0;
-	strafe_left = false;
-	strafe_right = false;
-	float_up = false;
-	float_down = false;
-	spin_up = false;
-	spin_down = false;
-	turn_left = false;
-	turn_right = false;
-	look_up = false;
-	look_down = false;
-	step_forward = false;
-	step_backward = false;
-
-	freelook = false;
+#endif
 
 	HAL *hal = frontend->GetVM()->GetHAL();
 
@@ -116,11 +100,13 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	key_load = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Load", ";")[0];
 	key_enter = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Enter", "E")[0];
 
+#ifndef __FreeBSD__
 	joy_click = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Click", 0);
 	joy_fast = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Fast", 1);
 	joy_strafe = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Strafe", 2);
 	joy_turn = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Turn", 0);
 	joy_forward = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Forward", 1);
+#endif
 
 	//create panel, rendering is done on this, along with keyboard and mouse events
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
@@ -140,8 +126,10 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 
 MainScreen::~MainScreen()
 {
+#ifndef __FreeBSD__
 	joystick->ReleaseCapture();
 	delete joystick;
+#endif
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
@@ -313,6 +301,7 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 	{
 		if (key == WXK_SPACE)
 		{
+			//jump (spacebar) action
 			if (camera->IsOnGround() == true)
 				camera->Jump();
 		}
@@ -353,29 +342,29 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_F7)
 		{
 			//show colliders
-			Simcore->ShowColliders(!colliders);
-			colliders = !colliders;
+			Simcore->ShowColliders(!frontend->colliders);
+			frontend->colliders = !frontend->colliders;
 		}
 
 		if (key == WXK_F4)
 		{
 			//toggle wireframe mode
-			if (wireframe == 0)
+			if (frontend->wireframe == 0)
 			{
 				frontend->GetVM()->GetSkySystem()->EnableSky(false);
 				camera->SetViewMode(1);
-				wireframe = 1;
+				frontend->wireframe = 1;
 			}
-			else if (wireframe == 1)
+			else if (frontend->wireframe == 1)
 			{
 				camera->SetViewMode(2);
-				wireframe = 2;
+				frontend->wireframe = 2;
 			}
-			else if (wireframe == 2)
+			else if (frontend->wireframe == 2)
 			{
 				frontend->GetVM()->GetSkySystem()->EnableSky(true);
 				camera->SetViewMode(0);
-				wireframe = 0;
+				frontend->wireframe = 0;
 			}
 		}
 
@@ -405,8 +394,8 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 		if (key == WXK_F8)
 		{
 			//show mesh bounding boxes
-			Simcore->ShowBoundingBoxes(!boxes);
-			boxes = !boxes;
+			Simcore->ShowBoundingBoxes(!frontend->boxes);
+			frontend->boxes = !frontend->boxes;
 		}
 
 		if (key == WXK_F9)
@@ -529,59 +518,59 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 	{
 		//strafe movement
 		if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
-			strafe_right = down;
+			frontend->strafe_right = down;
 
 		else if (key == WXK_LEFT || key == (wxKeyCode)key_left)
-			strafe_left = down;
+			frontend->strafe_left = down;
 
 		else if (key == WXK_UP || key == (wxKeyCode)key_up)
-			float_up = down;
+			frontend->float_up = down;
 
 		else if (key == WXK_DOWN || key == (wxKeyCode)key_down)
-			float_down = down;
+			frontend->float_down = down;
 
 		else if (key == WXK_PAGEUP || key == (wxKeyCode)key_lookup)
-			spin_up = down;
+			frontend->spin_up = down;
 
 		else if (key == WXK_PAGEDOWN || key == (wxKeyCode)key_lookdown)
-			spin_down = down;
+			frontend->spin_down = down;
 	}
 	else
 	{
 		if (camera->Freelook == false)
 		{
 			if (key == WXK_RIGHT || key == (wxKeyCode)key_right)
-				turn_right = down;
+				frontend->turn_right = down;
 
 			if (key == WXK_LEFT || key == (wxKeyCode)key_left)
-				turn_left = down;
+				frontend->turn_left = down;
 
 			if (key == (wxKeyCode)key_straferight)
-				strafe_right = down;
+				frontend->strafe_right = down;
 
 			if (key == (wxKeyCode)key_strafeleft)
-				strafe_left = down;
+				frontend->strafe_left = down;
 		}
 		else
 		{
 			if (key == WXK_RIGHT || key == (wxKeyCode)key_right || key == (wxKeyCode)key_straferight)
-				strafe_right = down;
+				frontend->strafe_right = down;
 
 			if (key == WXK_LEFT || key == (wxKeyCode)key_left || key == (wxKeyCode)key_strafeleft)
-				strafe_left = down;
+				frontend->strafe_left = down;
 		}
 
 		if (key == WXK_PAGEUP || key == (wxKeyCode)key_lookup)
-			look_up = down;
+			frontend->look_up = down;
 
 		if (key == WXK_PAGEDOWN || key == (wxKeyCode)key_lookdown)
-			look_down = down;
+			frontend->look_down = down;
 
 		if (key == WXK_UP || key == (wxKeyCode)key_up)
-			step_forward = down;
+			frontend->step_forward = down;
 
 		if (key == WXK_DOWN || key == (wxKeyCode)key_down)
-			step_backward = down;
+			frontend->step_backward = down;
 
 		//binoculars
 		if (key == (wxKeyCode)key_binoculars)
@@ -597,9 +586,9 @@ void MainScreen::GetKeyStates(EngineContext *engine, wxKeyEvent& event, bool dow
 
 		//values from old version
 		if (key == WXK_HOME || key == (wxKeyCode)key_floatup)
-			float_up = down;
+			frontend->float_up = down;
 		if (key == WXK_END || key == (wxKeyCode)key_floatdown)
-			float_down = down;
+			frontend->float_down = down;
 
 		//drive functions, when user is inside a vehicle
 		if (camera->Freelook == true && camera->inside_vehicle == true)
@@ -641,19 +630,19 @@ void MainScreen::ProcessMovement(EngineContext *engine, bool control, bool shift
 		else if (shift == true)
 			camera->speed = speed_fast;
 
-		if (step_forward == true)
+		if (frontend->step_forward == true)
 			step += speed_normal;
-		if (step_backward == true)
+		if (frontend->step_backward == true)
 			step -= speed_normal;
 
-		if (strafe_left == true)
+		if (frontend->strafe_left == true)
 			strafe -= speed_normal;
-		if (strafe_right == true)
+		if (frontend->strafe_right == true)
 			strafe += speed_normal;
 
-		if (float_up == true)
+		if (frontend->float_up == true)
 			floatval += speed_normal;
-		if (float_down == true)
+		if (frontend->float_down == true)
 			floatval -= speed_normal;
 
 		//set camera motion values
@@ -662,19 +651,19 @@ void MainScreen::ProcessMovement(EngineContext *engine, bool control, bool shift
 		camera->Float(floatval);
 	}
 
-	if (spin_up == true)
+	if (frontend->spin_up == true)
 		spin += speed_normal;
-	if (spin_down == true)
+	if (frontend->spin_down == true)
 		spin -= speed_normal;
 
-	if (turn_left == true)
+	if (frontend->turn_left == true)
 		turn -= speed_normal;
-	if (turn_right == true)
+	if (frontend->turn_right == true)
 		turn += speed_normal;
 
-	if (look_up == true)
+	if (frontend->look_up == true)
 		look += speed_normal;
-	if (look_down == true)
+	if (frontend->look_down == true)
 		look -= speed_normal;
 
 	//set camera rotation values
@@ -758,14 +747,14 @@ void MainScreen::HandleMouseMovement()
 	//freelook mode
 	if (camera->Freelook == true)
 	{
-		if (freelook == false)
+		if (frontend->freelook == false)
 		{
 			//reset values to prevent movement from getting stuck
-			turn_right = 0;
-			turn_left = 0;
+			frontend->turn_right = 0;
+			frontend->turn_left = 0;
 		}
 
-		freelook = true;
+		frontend->freelook = true;
 
 		//get window dimensions
 		Real width = GetClientSize().GetWidth();
@@ -795,16 +784,16 @@ void MainScreen::HandleMouseMovement()
 	}
 	else
 	{
-		if (freelook == true)
+		if (frontend->freelook == true)
 		{
 			//reset values to prevent movement from getting stuck
-			strafe_right = 0;
-			strafe_left = 0;
+			frontend->strafe_right = 0;
+			frontend->strafe_left = 0;
 			if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
 				camera->FreelookMove(Vector3::ZERO);
 			ProcessMovement(engine, false, false, true);
 		}
-		freelook = false;
+		frontend->freelook = false;
 	}
 }
 
@@ -852,6 +841,7 @@ void MainScreen::EnableFreelook(bool value)
 #endif
 }
 
+#ifndef __FreeBSD__
 void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 {
 	if (event.IsZMove())
@@ -916,5 +906,8 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 	if (joystick->GetButtonState(joy_click))
 		engine->GetVM()->GetHAL()->ClickedObject(true, false, false, false, false, 0.0, true);
 }
+#endif
 
 }
+
+#endif

@@ -9,10 +9,14 @@
 
 #include <windows.h>
 #include "stackwalker.h"
-#include "textwindow.h"
-#include "skyscraper.h"
+#include "globals.h"
+#include "sbs.h"
 #include "vm.h"
+#include "skyscraper.h"
+#include "enginecontext.h"
+#include "scriptproc.h"
 #include "hal.h"
+#include "textwindow.h"
 
 namespace Skyscraper {
 

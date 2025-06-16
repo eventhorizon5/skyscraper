@@ -1470,6 +1470,11 @@ SetAutoSize = true, true
     AddCustomWall floor, Right Complex Floor, Carpet1, 150, Floor(%floor%).Altitude, 82.4, 158, Floor(%floor%).Altitude, 82.4, 158, Floor(%floor%).Altitude, -37.6, 150, Floor(%floor%).Altitude, -37.6, 0, 0
     AddCustomWall floor, Right Complex Floor Back, Carpet1, 55.8, Floor(%floor%).Altitude, 82.4, 85.6, Floor(%floor%).Altitude, 82.4, 87.05, Floor(%floor%).Altitude, 27.7, 0, 0
     AddCustomWall floor, Right Complex Floor Left, Carpet1, 40.64, Floor(%floor%).Altitude, 46.08, 87.05, Floor(%floor%).Altitude, 27.7, 85.6, Floor(%floor%).Altitude, -14.2, 77.6, Floor(%floor%).Altitude, -7.84, 58.08, Floor(%floor%).Altitude, 21.44, 37.28, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 43.52, 37.92, Floor(%floor%).Altitude, 43.52, 40.64, Floor(%floor%).Altitude, 46.08, 0, 0
+
+    AddCustomWall floor, Right Complex Ceiling, Backing2, 85.6, Floor(%floor%).Altitude - 2.5, -107.5, 85.6, Floor(%floor%).Altitude - 2.5, 82.4, 150, Floor(%floor%).Altitude - 2.5, 82.4, 150, Floor(%floor%).Altitude - 2.5, -107.5, 0, 0
+    AddCustomWall floor, Right Complex Ceiling, Backing2, 150, Floor(%floor%).Altitude - 2.5, 82.4, 158, Floor(%floor%).Altitude - 2.5, 82.4, 158, Floor(%floor%).Altitude - 2.5, -37.6, 150, Floor(%floor%).Altitude - 2.5, -37.6, 0, 0
+    AddCustomWall floor, Right Complex Ceiling Back, Backing2, 55.8, Floor(%floor%).Altitude - 2.5, 82.4, 85.6, Floor(%floor%).Altitude - 2.5, 82.4, 87.05, Floor(%floor%).Altitude - 2.5, 27.7, 0, 0
+    AddCustomWall floor, Right Complex Ceiling Left, Backing2, 40.64, Floor(%floor%).Altitude - 2.5, 46.08, 87.05, Floor(%floor%).Altitude - 2.5, 27.7, 85.6, Floor(%floor%).Altitude - 2.5, -14.2, 77.6, Floor(%floor%).Altitude - 2.5, -7.84, 58.08, Floor(%floor%).Altitude - 2.5, 21.44, 37.28, Floor(%floor%).Altitude - 2.5, 36.64, 34.24, Floor(%floor%).Altitude - 2.5, 36.64, 34.24, Floor(%floor%).Altitude - 2.5, 43.52, 37.92, Floor(%floor%).Altitude - 2.5, 43.52, 40.64, Floor(%floor%).Altitude - 2.5, 46.08, 0, 0
 <EndFloor>
 
 <Floor 4>
@@ -1479,6 +1484,11 @@ SetAutoSize = true, true
     AddCustomWall floor, Right Complex Floor, Carpet1, 150, Floor(%floor%).Altitude, 94.4, 158, Floor(%floor%).Altitude, 94.4, 158, Floor(%floor%).Altitude, -49.6, 150, Floor(%floor%).Altitude, -49.6, 0, 0
     AddCustomWall floor, Right Complex Floor Back, Carpet1, 49.6, Floor(%floor%).Altitude, 94.4, 85.6, Floor(%floor%).Altitude, 94.4, 87.05, Floor(%floor%).Altitude, 27.7, 0, 0
     AddCustomWall floor, Right Complex Floor Left, Carpet1, 40.64, Floor(%floor%).Altitude, 46.08, 87.05, Floor(%floor%).Altitude, 27.7, 85.6, Floor(%floor%).Altitude, -14.2, 77.6, Floor(%floor%).Altitude, -7.84, 58.08, Floor(%floor%).Altitude, 21.44, 37.28, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 43.52, 37.92, Floor(%floor%).Altitude, 43.52, 40.64, Floor(%floor%).Altitude, 46.08, 0, 0
+
+    AddCustomWall floor, Right Complex Ceiling, Backing2, 85.6, Floor(%floor%).Altitude - 2.5, -95, 85.6, Floor(%floor%).Altitude - 2.5, 94.4, 150, Floor(%floor%).Altitude - 2.5, 94.4, 150, Floor(%floor%).Altitude - 2.5, -95, 0, 0
+    AddCustomWall floor, Right Complex Ceiling, Backing2, 150, Floor(%floor%).Altitude - 2.5, 94.4, 158, Floor(%floor%).Altitude - 2.5, 94.4, 158, Floor(%floor%).Altitude - 2.5, -49.6, 150, Floor(%floor%).Altitude - 2.5, -49.6, 0, 0
+    AddCustomWall floor, Right Complex Ceiling Back, Backing2, 49.6, Floor(%floor%).Altitude - 2.5, 94.4, 85.6, Floor(%floor%).Altitude - 2.5, 94.4, 87.05, Floor(%floor%).Altitude - 2.5, 27.7, 0, 0
+    AddCustomWall floor, Right Complex Ceiling Left, Backing2, 40.64, Floor(%floor%).Altitude - 2.5, 46.08, 87.05, Floor(%floor%).Altitude - 2.5, 27.7, 85.6, Floor(%floor%).Altitude - 2.5, -14.2, 77.6, Floor(%floor%).Altitude - 2.5, -7.84, 58.08, Floor(%floor%).Altitude - 2.5, 21.44, 37.28, Floor(%floor%).Altitude - 2.5, 36.64, 34.24, Floor(%floor%).Altitude - 2.5, 36.64, 34.24, Floor(%floor%).Altitude - 2.5, 43.52, 37.92, Floor(%floor%).Altitude - 2.5, 43.52, 40.64, Floor(%floor%).Altitude - 2.5, 46.08, 0, 0
 <EndFloor>
 
 <Floor 5>

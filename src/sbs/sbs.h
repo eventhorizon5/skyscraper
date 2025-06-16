@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -113,6 +113,7 @@ namespace SBS {
 	class GeometryController;
 	class CustomObject;
 	class Reverb;
+	class Map;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -205,7 +206,7 @@ public:
 	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
 	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false);
 	void CalculateFrameRate();
-	void Loop();
+	void Loop(bool loading, bool isready);
 	Wall* CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	Wall* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th);
@@ -301,7 +302,7 @@ public:
 	int GetPolygonCount();
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
-	void Prepare(bool report = true);
+	void Prepare(bool report = true, bool renderonly = false);
 	Light* AddLight(const std::string &name, int type);
 	MeshObject* FindMeshObject(const std::string &name);
 	Model* AddModel(const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
@@ -413,6 +414,7 @@ public:
 	bool GetPower();
 	Reverb* GetReverb(int index);
 	int GetReverbCount();
+	void EnableMap(bool value);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -592,6 +594,9 @@ private:
 
 	//building power state
 	bool power_state;
+
+	//map generator
+	Map* MapGenerator;
 };
 
 }

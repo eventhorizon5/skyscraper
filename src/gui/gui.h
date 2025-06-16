@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - GUI Manager
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -48,6 +48,7 @@ public:
 	void Unload();
 	void ShowProgress();
 	std::string SelectBuilding(const std::string &data_path);
+	std::string SelectBuildingNative(const std::string &data_path);
 	void Resize();
 	void CreateDebugPanel();
 	void EnableConsole(bool value);
@@ -64,8 +65,9 @@ public:
 	void ShowDebugPanel();
 	void ShowControlReference();
 	void ShowLoadDialog();
-	void WriteToConsole(const std::string &message);
+	void WriteToConsole(const std::string &message, const std::string &color = "white");
 	bool ReportMissingFiles(std::vector<std::string> &missing_files);
+	bool IsConsoleVisible();
 
 private:
 

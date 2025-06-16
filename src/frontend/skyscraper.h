@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Simulation Frontend
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -23,14 +23,14 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
-#include <wx/app.h>
-
-namespace Ogre {
-	class SceneNode;
-	class Rectangle2D;
-	class ConfigFile;
-	class OverlaySystem;
-}
+#ifndef USING_WX
+#include <filesystem>
+#include "Ogre.h"
+#include "OgreApplicationContext.h"
+#include "OgreInput.h"
+#include "OgreRTShaderSystem.h"
+#include "OgreCameraMan.h"
+#endif
 
 namespace FMOD {
 	class System;
@@ -46,7 +46,9 @@ namespace SBS {
 	class SBS;
 }
 
-int main (int argc, char* argv[]);
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	std::string settingsPath();
+#endif
 
 namespace Skyscraper {
 
@@ -61,7 +63,11 @@ class HAL;
 class GUI;
 class StartScreen;
 
+#ifdef USING_WX
 class Skyscraper : public wxApp
+#else
+class Skyscraper : public OgreBites::ApplicationContext, public OgreBites::InputListener
+#endif
 {
 	friend class MainScreen;
 	friend class VM;
@@ -74,10 +80,19 @@ public:
 	bool FullScreen;
 	bool Verbose;
 	bool ShowMenu; //show main menu
+	int wireframe;
 
 	bool Loop();
 	virtual bool OnInit();
 	virtual int OnExit();
+
+#ifdef USING_WX
+	Skyscraper() {};
+#else
+	Skyscraper();
+#endif
+	virtual ~Skyscraper() {};
+	void setup();
 
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
@@ -96,37 +111,74 @@ public:
 	void SetFullScreen(bool enabled);
 	void RaiseWindow();
 	void RefreshConsole();
+	bool SetCWD();
+#ifdef USING_WX
 	virtual void MacOpenFile(const wxString &filename);
+#else
+	std::filesystem::path GetExeDirectory();
+	bool keyPressed(const OgreBites::KeyboardEvent& evt);
+	bool keyReleased(const OgreBites::KeyboardEvent& evt);
+	bool mouseMoved(const OgreBites::MouseMotionEvent &evt);
+	bool mousePressed(const OgreBites::MouseButtonEvent &evt);
+	bool mouseReleased(const OgreBites::MouseButtonEvent &evt);
+	bool mouseWheelRolled(const OgreBites::MouseWheelEvent &evt);
+	bool touchMoved(const OgreBites::TouchFingerEvent &evt);
+	bool touchPressed(const OgreBites::TouchFingerEvent &evt);
+	bool touchReleased(const OgreBites::TouchFingerEvent &evt);
+	bool alt_down, ctrl_down, shift_down;
+#endif
 	std::string GetDataPath();
 	MainScreen* GetWindow();
 	VM* GetVM();
+#ifdef USING_WX
 	GUI* GetGUI();
+#endif
+	void StopMenu();
 
 	//main window
 	MainScreen *window;
+
+protected:
+	//input system states
+	bool colliders, boxes;
+	bool strafe_left, strafe_right;
+	bool float_up, float_down;
+	bool spin_up, spin_down;
+	bool turn_left, turn_right;
+	bool look_up, look_down;
+	bool step_forward, step_backward;
+	bool freelook;
 
 private:
 
 	void UnloadSim();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-
+#ifndef USING_WX
+	void GetKeyStates(EngineContext *engine, OgreBites::Keycode &key, bool down);
+	void ProcessMovement(EngineContext *engine, bool control = false, bool shift = false, bool angle_only = false);
+	void HandleMouseMovement();
+	void EnableFreelook(bool value);
+#else
 	wxCmdLineParser *parser;
-
+#endif
 	Ogre::RenderWindow *mRenderWindow;
 
 	//VM instance
 	VM *vm;
 
 	//GUI instance
+#ifdef USING_WX
 	GUI *gui;
+#endif
 
 	//Start Screen instance
 	StartScreen *startscreen;
 };
 
+#ifdef USING_WX
 DECLARE_APP(Skyscraper)
-
+#endif
 }
 
 #endif

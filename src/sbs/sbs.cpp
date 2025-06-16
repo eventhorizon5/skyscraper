@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -27,7 +27,9 @@
 #include <OgreConfigFile.h>
 #include <OgreTimer.h>
 #include "OgreStringVector.h"
+#ifndef DISABLE_SOUND
 #include <fmod.hpp>
+#endif
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletCollisionsRay.h>
 #include "globals.h"
@@ -63,6 +65,7 @@
 #include "utility.h"
 #include "geometry.h"
 #include "escalator.h"
+#include "map.h"
 #include "reverb.h"
 
 namespace SBS {
@@ -172,6 +175,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Malfunctions = GetConfigBool("Skyscraper.SBS.Malfunctions", false);
 	power_state = true;
 	Lobby = 0;
+	MapGenerator = 0;
 
 	//create utility object
 	utility = new Utility(this);
@@ -255,6 +259,12 @@ void SBS::Initialize()
 
 	//create camera object
 	this->camera = new Camera(this);
+
+	//create map generator object
+	MapGenerator = new Map(this, "Map Generator");
+
+	//report ready status
+	Report("Ready");
 }
 
 SBS::~SBS()
@@ -341,6 +351,11 @@ SBS::~SBS()
 		}
 		lights[i] = 0;
 	}
+
+	//delete map generator
+	if (MapGenerator)
+		delete MapGenerator;
+	MapGenerator = 0;
 
 	//delete camera object
 	if (camera)
@@ -566,16 +581,22 @@ void SBS::PrintBanner()
 {
 	Report("");
 	Report(" Scalable Building Simulator " + version + " " + version_state);
-	Report(" Copyright (C)2004-2024 Ryan Thoryk");
+	Report(" Copyright (C)2004-2025 Ryan Thoryk");
 	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report(" software, and you are welcome to redistribute it under certain");
 	Report(" conditions. For details, see the file gpl.txt\n");
 }
 
-void SBS::Loop()
+void SBS::Loop(bool loading, bool isready)
 {
 	//Main simulator loop
-	SBS_PROFILE("SBS::Loop");
+	SBS_PROFILE_MAIN("SBS");
+
+	if (RenderOnStartup == true && (loading == true || isready == false))
+		Prepare(false);
+
+	if (loading == true)
+		return;
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
@@ -3047,16 +3068,18 @@ int SBS::GetPolygonCount()
 	return PolygonCount;
 }
 
-void SBS::Prepare(bool report)
+void SBS::Prepare(bool report, bool renderonly)
 {
 	//prepare objects for run
+
+	SBS_PROFILE_MAIN("Prepare");
 
 	//prepare mesh objects
 	if (report == true)
 		Report("Preparing meshes...");
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
-		meshes[i]->Prepare();
+		meshes[i]->Prepare(false);
 	}
 
 	//process dynamic meshes
@@ -3069,14 +3092,17 @@ void SBS::Prepare(bool report)
 		dynamic_meshes[i]->Prepare();
 	}
 
-	if (report == true)
-		Report("Creating colliders...");
-	for (size_t i = 0; i < meshes.size(); i++)
+	if (renderonly == false)
 	{
-		if (meshes[i]->tricollider == true && meshes[i]->IsPhysical() == false)
-			meshes[i]->CreateCollider();
-		else
-			meshes[i]->CreateBoxCollider();
+		if (report == true)
+			Report("Creating colliders...");
+		for (size_t i = 0; i < meshes.size(); i++)
+		{
+			if (meshes[i]->tricollider == true && meshes[i]->IsPhysical() == false)
+				meshes[i]->CreateCollider();
+			else
+				meshes[i]->CreateBoxCollider();
+		}
 	}
 
 	if (report == true)
@@ -4683,6 +4709,13 @@ Reverb* SBS::GetReverb(int index)
 	if (index >= 0 && index < (int)reverbs.size())
 		return reverbs[index];
 	return 0;
+}
+
+void SBS::EnableMap(bool value)
+{
+	//enable or disable map generator
+	if (MapGenerator)
+		MapGenerator->Enabled(value);
 }
 
 }

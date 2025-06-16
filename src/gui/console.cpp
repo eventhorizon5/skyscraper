@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Script Console
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -26,6 +26,7 @@
 #include "debugpanel.h"
 #include "scriptproc.h"
 #include "vm.h"
+#include "vmconsole.h"
 #include "enginecontext.h"
 #include "console.h"
 
@@ -71,6 +72,8 @@ Console::Console(VM *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	FlexGridSizer3->AddGrowableCol(0);
 	FlexGridSizer3->AddGrowableRow(0);
 	tConsole = new wxTextCtrl(Panel1, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY|wxTE_DONTWRAP|wxVSCROLL|wxHSCROLL, wxDefaultValidator, _T("ID_tConsole"));
+	tConsole->SetForegroundColour(wxColour(255,255,255));
+	tConsole->SetBackgroundColour(wxColour(0,0,0));
 	FlexGridSizer3->Add(tConsole, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(1, 2, 0, 0);
 	FlexGridSizer2->AddGrowableCol(0);
@@ -110,19 +113,20 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 {
 	Simcore = vm->GetActiveSystem();
 
-	if (!Simcore)
-		return;
+	if (Simcore)
+	{
+		Simcore->DeleteColliders = true;
+		ScriptProcessor *processor = vm->GetActiveScriptProcessor();
 
-	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = vm->GetActiveScriptProcessor();
+		if (!processor)
+			return;
 
-	if (!processor)
-		return;
+		//load new commands into script interpreter, and run
+		processor->LoadFromText(std::string(tCommand->GetValue()));
+	}
 
-	//load new commands into script interpreter, and run
-	processor->LoadFromText(std::string(tCommand->GetValue()));
 	if (chkEcho->GetValue() == true)
-		Write(tCommand->GetValue().ToStdString());
+		vm->GetConsole()->Process(tCommand->GetValue().ToStdString());
 	tCommand->Clear();
 }
 
@@ -136,7 +140,7 @@ void Console::On_Close(wxCloseEvent& event)
 	this->Hide();
 }
 
-void Console::Write(const std::string &message)
+void Console::Write(const std::string &message, const std::string &color)
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//due to hangs, don't allow Windows to write to the console from multiple threads
@@ -145,6 +149,23 @@ void Console::Write(const std::string &message)
 #else
 	mtx.lock();
 #endif
+
+	if (color == "black")
+		tConsole->SetDefaultStyle(wxTextAttr(*wxBLACK));
+	else if (color == "blue")
+		tConsole->SetDefaultStyle(wxTextAttr(*wxBLUE));
+	else if (color == "cyan")
+		tConsole->SetDefaultStyle(wxTextAttr(*wxCYAN));
+	else if (color == "green")
+		tConsole->SetDefaultStyle(wxTextAttr(*wxGREEN));
+	else if (color == "yellow")
+		tConsole->SetDefaultStyle(wxTextAttr(*wxYELLOW));
+	else if (color == "gray")
+		tConsole->SetDefaultStyle(wxTextAttr(*wxLIGHT_GREY));
+	else if (color == "red")
+		tConsole->SetDefaultStyle(wxTextAttr(*wxRED));
+	else if (color == "white")
+		tConsole->SetDefaultStyle(wxTextAttr(*wxWHITE));
 	tConsole->AppendText(message + wxT("\n"));
 	tConsole->SetInsertionPointEnd();
 	mtx.unlock();
