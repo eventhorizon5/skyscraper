@@ -332,3 +332,27 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     AddWall TowerFront, MainWalls, 0, -55, 105, 55, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
+<Floor 113>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Spire
+    Height = 40
+    InterfloorHeight = 2.24
+
+    #spire
+    AddCustomWall floor, SpireMain, MainWalls, false, -55, 0, 145, 55, 0, 145, 25, 40, 130, -25, 40, 130, 1, 1
+    AddCustomWall floor, SpireSide, MainWalls, false, -55, 0, 145, -55, 40, 130, -55, 0, 130, 1, 1
+    AddCustomWall floor, SpireSide2, MainWalls, false, 55, 0, 145, 55, 40, 130, 55, 0, 130, 1, 1
+<EndFloor>
+
+<Floor 114>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Roof
+    Height = 40
+    InterfloorHeight = 2.24
+
+    AddFloor Tower Roof, Brick, 0, -55, 105, 55, 130, 0, 0, false, false, 1, 1, false
+
+<EndFloor>
+
