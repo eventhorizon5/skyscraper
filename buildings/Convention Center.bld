@@ -19,6 +19,7 @@
 <Globals>
     Name = Convention Center
     Designer = Event Horizon
+    Version = 0.1
     CameraFloor = 0
     CameraPosition = 0, 90
     CameraRotation = 0, 0, 0
@@ -103,6 +104,7 @@
 
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
+Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 
 <Floor -1>
     ID = LL
@@ -245,10 +247,13 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     #tower
     AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, false
     AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, false
+    AddInterfloorFloor TowerIFloor, Brick, 0, -80, 105, 80, 305, 0.1, 0.1, false, false, 0, 0
+    AddInterfloorFloor TowerICeiling, Brick, 0, -80, 105, 80, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerFront, MainWalls, 0, -80, 105, 80, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -80, 105, -15, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront2, MainWalls, 0, 15, 105, 80, 105, %height%, %height%, 0, 0, 0, 0, False
 
 <EndFloors>
 
@@ -262,10 +267,13 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     #tower
     AddFloor Tower Floor, Marble, 0, -75, 105, 75, 305, 0, 0, false, false, 1, 1, false
     AddFloor Tower Ceiling, Marble, 0, -75, 105, 75, 305, %height%, %height%, false, false, 1, 1, false
+    AddInterfloorFloor TowerIFloor, Brick, 0, -75, 105, 75, 305, 0.1, 0.1, false, false, 0, 0
+    AddInterfloorFloor TowerICeiling, Brick, 0, -75, 105, 75, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     AddWall TowerLeft, MainWalls, 0, -75, 105, -75, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerRight, MainWalls, 0, 75, 105, 75, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerBack, MainWalls, 0, -75, 305, 75, 305, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerFront, MainWalls, 0, -75, 105, 75, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -75, 105, -15, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront2, MainWalls, 0, 15, 105, 75, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 <Floors 52 to 53>
@@ -278,10 +286,13 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     #tower
     AddFloor Tower Floor, Marble, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
     AddFloor Tower Ceiling, Marble, 0, -70, 105, 70, 305, %height%, %height%, false, false, 1, 1, false
+    AddInterfloorFloor TowerIFloor, Brick, 0, -70, 105, 70, 305, 0.1, 0.1, false, false, 0, 0
+    AddInterfloorFloor TowerICeiling, Brick, 0, -70, 105, 70, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     AddWall TowerLeft, MainWalls, 0, -70, 105, -70, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerRight, MainWalls, 0, 70, 105, 70, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerBack, MainWalls, 0, -70, 305, 70, 305, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerFront, MainWalls, 0, -70, 105, 70, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -70, 105, -15, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront2, MainWalls, 0, 15, 105, 70, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 <Floors 54 to 99>
@@ -294,10 +305,13 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     #tower
     AddFloor Tower Floor, Marble, 0, -65, 105, 65, 255, 0, 0, false, false, 1, 1, false
     AddFloor Tower Ceiling, Marble, 0, -65, 105, 65, 255, %height%, %height%, false, false, 1, 1, false
+    AddInterfloorFloor TowerIFloor, Brick, 0, -65, 105, 65, 255, 0.1, 0.1, false, false, 0, 0
+    AddInterfloorFloor TowerICeiling, Brick, 0, -65, 105, 65, 255, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     AddWall TowerLeft, MainWalls, 0, -65, 105, -65, 255, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerRight, MainWalls, 0, 65, 105, 65, 255, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerBack, MainWalls, 0, -65, 255, 65, 255, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerFront, MainWalls, 0, -65, 105, 65, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -65, 105, -15, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront2, MainWalls, 0, 15, 105, 65, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 <Floors 100 to 101>
@@ -310,49 +324,81 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     #tower
     AddFloor Tower Floor, Marble, 0, -60, 105, 60, 255, 0, 0, false, false, 1, 1, false
     AddFloor Tower Ceiling, Marble, 0, -60, 105, 60, 255, %height%, %height%, false, false, 1, 1, false
+    AddInterfloorFloor TowerIFloor, Brick, 0, -60, 105, 60, 255, 0.1, 0.1, false, false, 0, 0
+    AddInterfloorFloor TowerICeiling, Brick, 0, -60, 105, 60, 255, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     AddWall TowerLeft, MainWalls, 0, -60, 105, -60, 255, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerRight, MainWalls, 0, 60, 105, 60, 255, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerBack, MainWalls, 0, -60, 255, 60, 255, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerFront, MainWalls, 0, -60, 105, 60, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
-<Floors 102 to 112>
+<Floors 102 to 111>
     ID = %floor%
     Name = Floor %floor%
-    Type = Hotel
+    Type = Service
     Height = 10
     InterfloorHeight = 2.24
 
     #tower
     AddFloor Tower Floor, Marble, 0, -55, 105, 55, 205, 0, 0, false, false, 1, 1, false
     AddFloor Tower Ceiling, Marble, 0, -55, 105, 55, 205, %height%, %height%, false, false, 1, 1, false
+    AddInterfloorFloor TowerIFloor, Brick, 0, -55, 105, 55, 205, 0.1, 0.1, false, false, 0, 0
+    AddInterfloorFloor TowerICeiling, Brick, 0, -55, 105, 55, 205, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     AddWall TowerLeft, MainWalls, 0, -55, 105, -55, 205, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerRight, MainWalls, 0, 55, 105, 55, 205, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerBack, MainWalls, 0, -55, 205, 55, 205, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerFront, MainWalls, 0, -55, 105, 55, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
+<Floor 112>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Spire
+    Height = 50
+    InterfloorHeight = 2.24
+    Group = 112, 113
+
+    AddFloor Tower Floor, Marble, 0, -55, 105, 55, 205, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -15, 105, 15, 155, %height%, %height%, false, false, 1, 1, false
+
+    #spire
+    AddCustomWall floor, SpireMain, MainWalls, false, -55, 0, 205, 55, 0, 205, 15, %interfloorheight% + 100, 155, -15, %interfloorheight% + 100, 155, 1, 1
+    AddCustomWall floor, SpireSide, MainWalls, false, -55, 0, 205, -15, %interfloorheight% + 100, 155, -15, %interfloorheight% + 100, 105, -55, 0, 105, 1, 1
+    AddCustomWall floor, SpireSide2, MainWalls, false, 55, 0, 205, 15, %interfloorheight% +  100, 155, 15, %interfloorheight% + 100, 105, 55, 0, 105, 1, 1
+    AddCustomWall floor, SpireFront1, MainWalls, false, -55, 0, 105, -15, %interfloorheight% + 100, 105, -15, 0, 105, 1, 1
+    AddCustomWall floor, SpireFront1, MainWalls, false, 15, %interfloorheight% + 100, 105, 55, 0, 105, 15, 0, 105, 1, 1
+    AddCustomWall floor, SpireFrontMain, Brick, false, 0, %interfloorheight% + 100, 105, 15, %interfloorheight% + 100, 105, 15, 0, 105, 0, %interfloorheight% + 100, 105, 1, 1
+    AddCustomWall floor, SpireFrontMain, Brick, false, 0, %interfloorheight% + 100, 105, -15, %interfloorheight% + 100, 105, -15, 0, 105, 1, 1
+    AddCustomWall floor, SpireWindowsFront, AtriumWindows, false, 0, %interfloorheight% + 100, 105, 15, 0, 105, -15, 0, 105, 1, 1
+<EndFloor>
+
 <Floor 113>
     ID = %floor%
     Name = Floor %floor%
     Type = Spire
-    Height = 100
-    InterfloorHeight = 2.24
-
-    #spire
-    AddCustomWall floor, SpireMain, MainWalls, false, -55, 0, 205, 55, 0, 205, 25, 100, 155, -25, 100, 155, 1, 1
-    AddCustomWall floor, SpireSide, MainWalls, false, -55, 0, 205, -55, 100, 155, -55, 0, 155, 1, 1
-    AddCustomWall floor, SpireSide2, MainWalls, false, 55, 0, 205, 55, 100, 155, 55, 0, 155, 1, 1
+    Height = 50
+    InterfloorHeight = 0
+    Group = 112, 113
 <EndFloor>
 
 <Floor 114>
     ID = %floor%
     Name = Floor %floor%
-    Type = Roof
+    Type = Rooftop Observatory
     Height = 40
-    InterfloorHeight = 2.24
+    InterfloorHeight = 0
 
-    AddFloor Tower Roof, Brick, 0, -55, 105, 55, 155, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Roof, Brick, 0, -15, 105, 15, 155, 0, 0, false, false, 1, 1, false
 
 <EndFloor>
 
+# Central Atrium
+<Floor 0>
+    Cut -25, 10, 105, 25, %height% + 1, 180, false, true
+<EndFloor>
+<Floors 1 to 100>
+    Cut -25, -5, 105, 25, %height% + 5, 180, false, true
+    AddInterfloorWall Left, MainWalls, 0, -25, 105, -25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Back, MainWalls, 0, -25, 180, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Right, MainWalls, 0, 25, 105, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+<EndFloors>
