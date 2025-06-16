@@ -172,7 +172,7 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
 
 <Floor 1>
     ID = A
-    Name = Atrium
+    Name = Front Atrium
     Type = Atrium
     Height = 66
     InterfloorHeight = 0
@@ -227,15 +227,15 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     AddFloor RoomFloor, Carpet2, 0, 27, 105, 80, 50, 0, 0, false, false, 1, 1, false
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 205, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 205, %height%, %height%, false, false, 1, 1, false
-    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 205, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 205, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerBack, MainWalls, 0, -80, 205, 80, 205, %height%, %height%, 0, 0, 0, 0, False
+    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, False
 
 <EndFloor>
 
-<Floors 2 to 50>
+<Floors 2 to 49>
     ID = %floor%
     Name = Floor %floor%
     Type = Hotel
@@ -243,16 +243,16 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     InterfloorHeight = 2.24
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 205, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 205, %height%, %height%, false, false, 1, 1, false
-    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 205, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 205, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerBack, MainWalls, 0, -80, 205, 80, 205, %height%, %height%, 0, 0, 0, 0, False
+    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerFront, MainWalls, 0, -80, 105, 80, 105, %height%, %height%, 0, 0, 0, 0, False
 
 <EndFloors>
 
-<Floors 51 to 52>
+<Floors 50 to 51>
     ID = %floor%
     Name = Floor %floor%
     Type = Hotel
@@ -260,15 +260,15 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     InterfloorHeight = 2.24
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -75, 105, 75, 175, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -75, 105, 75, 175, %height%, %height%, false, false, 1, 1, false
-    AddWall TowerLeft, MainWalls, 0, -75, 105, -75, 175, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerRight, MainWalls, 0, 75, 105, 75, 175, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerBack, MainWalls, 0, -75, 175, 75, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddFloor Tower Floor, Marble, 0, -75, 105, 75, 305, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -75, 105, 75, 305, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -75, 105, -75, 305, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 75, 105, 75, 305, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -75, 305, 75, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerFront, MainWalls, 0, -75, 105, 75, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
-<Floors 53 to 54>
+<Floors 52 to 53>
     ID = %floor%
     Name = Floor %floor%
     Type = Hotel
@@ -276,15 +276,15 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     InterfloorHeight = 2.24
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -70, 105, 70, 175, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -70, 105, 70, 175, %height%, %height%, false, false, 1, 1, false
-    AddWall TowerLeft, MainWalls, 0, -70, 105, -70, 175, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerRight, MainWalls, 0, 70, 105, 70, 175, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerBack, MainWalls, 0, -70, 175, 70, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddFloor Tower Floor, Marble, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -70, 105, 70, 305, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -70, 105, -70, 305, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 70, 105, 70, 305, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -70, 305, 70, 305, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerFront, MainWalls, 0, -70, 105, 70, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
-<Floors 55 to 100>
+<Floors 54 to 99>
     ID = %floor%
     Name = Floor %floor%
     Type = Hotel
@@ -292,15 +292,15 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     InterfloorHeight = 2.24
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -65, 105, 65, 175, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -65, 105, 65, 175, %height%, %height%, false, false, 1, 1, false
-    AddWall TowerLeft, MainWalls, 0, -65, 105, -65, 175, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerRight, MainWalls, 0, 65, 105, 65, 175, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerBack, MainWalls, 0, -65, 175, 65, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddFloor Tower Floor, Marble, 0, -65, 105, 65, 255, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -65, 105, 65, 255, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -65, 105, -65, 255, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 65, 105, 65, 255, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -65, 255, 65, 255, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerFront, MainWalls, 0, -65, 105, 65, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
-<Floors 101 to 102>
+<Floors 100 to 101>
     ID = %floor%
     Name = Floor %floor%
     Type = Hotel
@@ -308,15 +308,15 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     InterfloorHeight = 2.24
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -60, 105, 60, 145, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -60, 105, 60, 145, %height%, %height%, false, false, 1, 1, false
-    AddWall TowerLeft, MainWalls, 0, -60, 105, -60, 145, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerRight, MainWalls, 0, 60, 105, 60, 145, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerBack, MainWalls, 0, -60, 145, 60, 145, %height%, %height%, 0, 0, 0, 0, False
+    AddFloor Tower Floor, Marble, 0, -60, 105, 60, 255, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -60, 105, 60, 255, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -60, 105, -60, 255, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 60, 105, 60, 255, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -60, 255, 60, 255, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerFront, MainWalls, 0, -60, 105, 60, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
-<Floors 103 to 112>
+<Floors 102 to 112>
     ID = %floor%
     Name = Floor %floor%
     Type = Hotel
@@ -324,11 +324,11 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     InterfloorHeight = 2.24
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -55, 105, 55, 145, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -55, 105, 55, 145, %height%, %height%, false, false, 1, 1, false
-    AddWall TowerLeft, MainWalls, 0, -55, 105, -55, 145, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerRight, MainWalls, 0, 55, 105, 55, 145, %height%, %height%, 0, 0, 0, 0, False
-    AddWall TowerBack, MainWalls, 0, -55, 145, 55, 145, %height%, %height%, 0, 0, 0, 0, False
+    AddFloor Tower Floor, Marble, 0, -55, 105, 55, 205, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -55, 105, 55, 205, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -55, 105, -55, 205, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 55, 105, 55, 205, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -55, 205, 55, 205, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerFront, MainWalls, 0, -55, 105, 55, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
@@ -336,13 +336,13 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     ID = %floor%
     Name = Floor %floor%
     Type = Spire
-    Height = 40
+    Height = 100
     InterfloorHeight = 2.24
 
     #spire
-    AddCustomWall floor, SpireMain, MainWalls, false, -55, 0, 145, 55, 0, 145, 25, 40, 130, -25, 40, 130, 1, 1
-    AddCustomWall floor, SpireSide, MainWalls, false, -55, 0, 145, -55, 40, 130, -55, 0, 130, 1, 1
-    AddCustomWall floor, SpireSide2, MainWalls, false, 55, 0, 145, 55, 40, 130, 55, 0, 130, 1, 1
+    AddCustomWall floor, SpireMain, MainWalls, false, -55, 0, 205, 55, 0, 205, 25, 100, 155, -25, 100, 155, 1, 1
+    AddCustomWall floor, SpireSide, MainWalls, false, -55, 0, 205, -55, 100, 155, -55, 0, 155, 1, 1
+    AddCustomWall floor, SpireSide2, MainWalls, false, 55, 0, 205, 55, 100, 155, 55, 0, 155, 1, 1
 <EndFloor>
 
 <Floor 114>
@@ -352,7 +352,7 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     Height = 40
     InterfloorHeight = 2.24
 
-    AddFloor Tower Roof, Brick, 0, -55, 105, 55, 130, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Roof, Brick, 0, -55, 105, 55, 155, 0, 0, false, false, 1, 1, false
 
 <EndFloor>
 
