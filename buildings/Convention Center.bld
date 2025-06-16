@@ -317,6 +317,7 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddWall TowerFront, MainWindowsInt, 0, -80, 105, -15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
     AddWall TowerFront2, MainWindowsInt, 0, 15, 105, 80, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
+
     SetAutoSize = true, true
 <EndFloors>
 
@@ -497,5 +498,11 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddInterfloorWall Left, MainWalls, 0, -25, 105, -25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Back, MainWalls, 0, -25, 180, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Right, MainWalls, 0, 25, 105, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+
     AddWall FrontWindows, AtriumWindows, 0, -15, 105, 15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
+    SetAutoSize = true, false
+    AddWall InteriorLeft, MainWindowsInt, 0, -25, 105, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, true
+    AddWall InteriorBack, MainWindowsInt, 0, -25, 180, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, true
+    AddWall InteriorRight, MainWindowsInt, 0, 25, 105, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, true
+    SetAutoSize = true, true
 <EndFloors>
