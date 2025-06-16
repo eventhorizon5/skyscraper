@@ -235,7 +235,7 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
 
 <EndFloor>
 
-<Floors 2 to 112>
+<Floors 2 to 50>
     ID = %floor%
     Name = Floor %floor%
     Type = Hotel
@@ -248,6 +248,87 @@ Cut Landscape, -80, -1, -75, 80, 1, 105, false, true
     AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 205, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerRight, MainWalls, 0, 80, 105, 80, 205, %height%, %height%, 0, 0, 0, 0, False
     AddWall TowerBack, MainWalls, 0, -80, 205, 80, 205, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -80, 105, 80, 105, %height%, %height%, 0, 0, 0, 0, False
 
+<EndFloors>
+
+<Floors 51 to 52>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Hotel
+    Height = 10
+    InterfloorHeight = 2.24
+
+    #tower
+    AddFloor Tower Floor, Marble, 0, -75, 105, 75, 175, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -75, 105, 75, 175, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -75, 105, -75, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 75, 105, 75, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -75, 175, 75, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -75, 105, 75, 105, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+<Floors 53 to 54>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Hotel
+    Height = 10
+    InterfloorHeight = 2.24
+
+    #tower
+    AddFloor Tower Floor, Marble, 0, -70, 105, 70, 175, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -70, 105, 70, 175, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -70, 105, -70, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 70, 105, 70, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -70, 175, 70, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -70, 105, 70, 105, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+<Floors 55 to 100>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Hotel
+    Height = 10
+    InterfloorHeight = 2.24
+
+    #tower
+    AddFloor Tower Floor, Marble, 0, -65, 105, 65, 175, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -65, 105, 65, 175, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -65, 105, -65, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 65, 105, 65, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -65, 175, 65, 175, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -65, 105, 65, 105, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+<Floors 101 to 102>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Hotel
+    Height = 10
+    InterfloorHeight = 2.24
+
+    #tower
+    AddFloor Tower Floor, Marble, 0, -60, 105, 60, 145, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -60, 105, 60, 145, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -60, 105, -60, 145, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 60, 105, 60, 145, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -60, 145, 60, 145, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -60, 105, 60, 105, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+<Floors 103 to 112>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Hotel
+    Height = 10
+    InterfloorHeight = 2.24
+
+    #tower
+    AddFloor Tower Floor, Marble, 0, -55, 105, 55, 145, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -55, 105, 55, 145, %height%, %height%, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -55, 105, -55, 145, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerRight, MainWalls, 0, 55, 105, 55, 145, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerBack, MainWalls, 0, -55, 145, 55, 145, %height%, %height%, 0, 0, 0, 0, False
+    AddWall TowerFront, MainWalls, 0, -55, 105, 55, 105, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
