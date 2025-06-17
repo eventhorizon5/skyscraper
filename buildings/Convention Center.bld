@@ -94,6 +94,9 @@
     Load data/cutston2.jpg, Gravelb, 0.5, 0.5
     Load data/cutston3.jpg, Gravel2, 0.25, 0.25
     Load data/cutston3.jpg, Gravel2b, 0.5, 0.5
+    Load data/cutston2.jpg, ColumnTex, 0.5, 0.5
+    Load data/otis4_weavefloor.jpg, ElevFloor, 1, 1
+    Load data/floor065b.jpg, ElevFloor2, 1, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -127,11 +130,12 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Height = 10
     InterfloorHeight = 0
     Altitude = 0
+    Group = -1 - 100
 
     DrawWalls = true, true ,false, false, false, false
-    AddCustomFloor floor, Floor, Marble, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
-    AddCustomFloor floor, Floor, Marble, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
-    AddCustomFloor floor, Floor, Marble, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
+    AddCustomFloor floor, Floor, Carpet2, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
+    AddCustomFloor floor, Floor, Carpet2, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
+    AddCustomFloor floor, Floor, Carpet2, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
 
     AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, True
     AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, True
@@ -152,14 +156,16 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Basement
     Height = 10
     InterfloorHeight = 2.24
+    Group = -3 - 0
 <EndFloor>
 
 <Floor -3>
     ID = LL3
-    Name = Lower Level 2
+    Name = Lower Level 3
     Type = Basement
     Height = 10
     InterfloorHeight = 2.24
+    Group = -3 - 0
 <EndFloor>
 
 <Floor -4>
@@ -171,8 +177,8 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 <EndFloor>
 
 <Floors -1 to -4>
-    AddFloor TowerFloor, Marble, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
-    AddFloor TowerFloor, Marble, 0, -70, 105, 70, 305, %height% - 0.01, %height% - 0.01, false, false, 1, 1, false
+    AddFloor TowerFloor, Carpet2, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
+    AddFloor TowerFloor, Carpet2, 0, -70, 105, 70, 305, %height% - 0.01, %height% - 0.01, false, false, 1, 1, false
     AddWall TowerLeft, MainWalls, 0, -70, 105, -70, 305, %height%, %height%, 0, 0, 0, 0, True
     AddWall TowerRight, MainWalls, 0, 70, 105, 70, 305, %height%, %height%, 0, 0, 0, 0, True
     AddWall TowerBack, MainWalls, 0, -70, 305, 70, 305, %height%, %height%, 0, 0, 0, 0, True
@@ -182,9 +188,9 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 
 <Floor -2>
     DrawWalls = true, true ,false, false, false, false
-    AddCustomFloor floor, Floor, Marble, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
-    AddCustomFloor floor, Floor, Marble, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
-    AddCustomFloor floor, Floor, Marble, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
+    AddCustomFloor floor, Floor, Carpet2, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
+    AddCustomFloor floor, Floor, Carpet2, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
+    AddCustomFloor floor, Floor, Carpet2, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
 
     AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, False
     AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, False
@@ -206,6 +212,7 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Lobby
     Height = 30
     InterfloorHeight = 2.24
+    Group = -1 - 100
 
     DrawWalls = true, true, false, false, false, false
     AddCustomFloor floor, Floor, Marble, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
@@ -262,6 +269,7 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Atrium
     Height = 15
     InterfloorHeight = 0
+    Group = -1 - 100
 
     #Atrium
     AddCustomWall External, AtriumLeft, AtriumWindows, True, -27, 0, 105, -3, 66, 105, -3, 66, -57, -27, 0, -75, 1, 1
@@ -314,8 +322,8 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor RoomFloor, Carpet2, 0, 27, 105, 80, 50, 0, 0, false, false, 1, 1, True
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, True
-    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, True
+    AddFloor Tower Floor, Carpet2, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, True
+    AddFloor Tower Ceiling, Carpet2, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, True
     SetAutoSize = true, false
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
     AddWall TowerLeft, MainWindows, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 3, True
@@ -328,13 +336,12 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
     AddWall TowerFront2, MainWindows, 0, 15, 105, 80, 105, %height% - 15, %height% - 15, 15, 15, 0, 1, True
     SetAutoSize = true, true
-
 <EndFloor>
 
 <Floors -2 to -4>
     #tower
-    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, True
-    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, True
+    AddFloor Tower Floor, Carpet2, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, True
+    AddFloor Tower Ceiling, Carpet2, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, True
     AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 0, True
     AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 0, True
     AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, True
@@ -346,10 +353,11 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Hotel
     Height = 10
     InterfloorHeight = 2.24
+    Group = -1 - 100
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, false
+    AddFloor Tower Floor, Carpet2, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Carpet2, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -80, 105, 80, 305, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -80, 105, 80, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     
@@ -384,10 +392,11 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Hotel
     Height = 10
     InterfloorHeight = 2.24
+    Group = -1 - 100
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -75, 105, 75, 305, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -75, 105, 75, 305, %height%, %height%, false, false, 1, 1, false
+    AddFloor Tower Floor, Carpet2, 0, -75, 105, 75, 305, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Carpet2, 0, -75, 105, 75, 305, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -75, 105, 75, 305, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -75, 105, 75, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     SetAutoSize = true, false
@@ -416,10 +425,11 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Hotel
     Height = 10
     InterfloorHeight = 2.24
+    Group = -1 - 100
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -70, 105, 70, 305, %height%, %height%, false, false, 1, 1, false
+    AddFloor Tower Floor, Carpet2, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Carpet2, 0, -70, 105, 70, 305, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -70, 105, 70, 305, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -70, 105, 70, 305, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     SetAutoSize = true, false
@@ -448,10 +458,11 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Hotel
     Height = 10
     InterfloorHeight = 2.24
+    Group = -1 - 100
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -65, 105, 65, 255, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -65, 105, 65, 255, %height%, %height%, false, false, 1, 1, false
+    AddFloor Tower Floor, Carpet2, 0, -65, 105, 65, 255, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Carpet2, 0, -65, 105, 65, 255, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -65, 105, 65, 255, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -65, 105, 65, 255, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     SetAutoSize = true, false
@@ -480,10 +491,11 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Hotel
     Height = 10
     InterfloorHeight = 2.24
+    Group = -1 - 100
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -60, 105, 60, 255, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -60, 105, 60, 255, %height%, %height%, false, false, 1, 1, false
+    AddFloor Tower Floor, Carpet2, 0, -60, 105, 60, 255, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Carpet2, 0, -60, 105, 60, 255, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -60, 105, 60, 255, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -60, 105, 60, 255, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     SetAutoSize = true, false
@@ -512,8 +524,8 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     InterfloorHeight = 2.24
 
     #tower
-    AddFloor Tower Floor, Marble, 0, -55, 105, 55, 205, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -55, 105, 55, 205, %height%, %height%, false, false, 1, 1, false
+    AddFloor Tower Floor, Carpet2, 0, -55, 105, 55, 205, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Carpet2, 0, -55, 105, 55, 205, %height%, %height%, false, false, 1, 1, false
     AddInterfloorFloor TowerIFloor, Brick, 0, -55, 105, 55, 205, 0.1, 0.1, false, false, 0, 0
     AddInterfloorFloor TowerICeiling, Brick, 0, -55, 105, 55, 205, %interfloorheight% - 0.1, %interfloorheight% - 0.1, false, false, 0, 0
     SetAutoSize = true, false
@@ -522,13 +534,16 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
     AddWall TowerRight, MainWindows, 0, 55, 105, 55, 205, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
-    AddWall TowerBack, MainWindows, 0, -55, 205, 55, 205, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall TowerBack, MainWindows, 0, -55, 205, -25, 205, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
+    AddWall TowerBack2, MainWindows, 0, 25, 205, 55, 205, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
     AddWall TowerFront, MainWindows, 0, -55, 105, 55, 105, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     AddWall TowerLeft, MainWindows, 0, -55, 105, -55, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
     AddWall TowerRight, MainWindows, 0, 55, 105, 55, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
-    AddWall TowerBack, MainWindows, 0, -55, 205, 55, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
+    AddWall TowerBack, MainWindows, 0, -55, 205, -25, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
+    AddWall TowerBack2, MainWindows, 0, 25, 205, 55, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
     AddWall TowerFront, MainWindows, 0, -55, 105, -15, 105, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
     AddWall TowerFront2, MainWindows, 0, 15, 105, 55, 105, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
     SetAutoSize = true, true
@@ -542,8 +557,8 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     InterfloorHeight = 2.24
     Group = 112, 113
 
-    AddFloor Tower Floor, Marble, 0, -55, 105, 55, 205, 0, 0, false, false, 1, 1, false
-    AddFloor Tower Ceiling, Marble, 0, -15, 105, 15, 155, %height%, %height%, false, false, 1, 1, false
+    AddFloor Tower Floor, Carpet2, 0, -55, 105, 55, 205, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Carpet2, 0, -15, 105, 15, 155, %height%, %height%, false, false, 1, 1, false
 
     #spire
     AddCustomWall external, SpireMain, MainWalls, true, -55, 0, 205, 55, 0, 205, 15, %interfloorheight% + 100, 155, -15, %interfloorheight% + 100, 155, 1, 1
@@ -595,16 +610,87 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     SetAutoSize = true, false
     Set vtile = 1
     if [%floor% = 1] Set vtile = 3
-    AddWall InteriorLeft, MainWindowsInt, 0, -25, 120, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% > 65] AddWall InteriorLeft, MainWindowsInt, 0, -25, 121.3, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% < 66] AddWall InteriorLeft1, MainWindowsInt, 0, -25, 158.6, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% < 66] AddWall InteriorLeft2, MainWindowsInt, 0, -25, 105, -25, 121.3, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     AddWall InteriorBack, MainWindowsInt, 0, -25, 180, -18.7, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     AddWall InteriorBack2, MainWindowsInt, 0, 18.7, 180, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
-    AddWall InteriorRight, MainWindowsInt, 0, 25, 120, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% > 32] AddWall InteriorRight, MainWindowsInt, 0, 25, 120, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% < 33] AddWall InteriorRight, MainWindowsInt, 0, 25, 158.6, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% < 33] AddWall InteriorRight, MainWindowsInt, 0, 25, 105, 25, 121.3, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 49 & %floor% < 60] AddWall InteriorFront, MainWindowsInt, 0, -25, 115, 25, 115, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 59 & %floor% < 70] AddWall InteriorFront, MainWindowsInt, 0, -25, 120, 25, 120, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 69 & %floor% < 80] AddWall InteriorFront, MainWindowsInt, 0, -25, 125, 25, 125, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 79 & %floor% < 90] AddWall InteriorFront, MainWindowsInt, 0, -25, 130, 25, 130, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 89 & %floor% < 100] AddWall InteriorFront, MainWindowsInt, 0, -25, 135, 25, 135, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if[%floor% > 49 & %floor% < 60] AddWall InteriorFront, MainWalls, 0, -25, 115, 25, 115, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+    if[%floor% > 59 & %floor% < 70] AddWall InteriorFront, MainWalls, 0, -25, 120, 25, 120, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+    if[%floor% > 69 & %floor% < 80] AddWall InteriorFront, MainWalls, 0, -25, 125, 25, 125, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+    if[%floor% > 79 & %floor% < 90] AddWall InteriorFront, MainWalls, 0, -25, 130, 25, 130, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+    if[%floor% > 89 & %floor% < 100] AddWall InteriorFront, MainWalls, 0, -25, 135, 25, 135, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
     SetAutoSize = true, true
+<EndFloors>
+
+# Extension Covers
+<Floor 49>
+    AddFloor Extension, MainWalls, 0, -25, 105, 25, 115, %fullheight%, %fullheight%, false, false, 1, 1, true
+<EndFloor>
+<Floor 59>
+    AddFloor Extension, MainWalls, 0, -25, 115, 25, 120, %fullheight%, %fullheight%, false, false, 1, 1, true
+<EndFloor>
+<Floor 69>
+    AddFloor Extension, MainWalls, 0, -25, 120, 25, 125, %fullheight%, %fullheight%, false, false, 1, 1, true
+<EndFloor>
+<Floor 79>
+    AddFloor Extension, MainWalls, 0, -25, 125, 25, 130, %fullheight%, %fullheight%, false, false, 1, 1, true
+<EndFloor>
+<Floor 89>
+    AddFloor Extension, MainWalls, 0, -25, 130, 25, 135, %fullheight%, %fullheight%, false, false, 1, 1, true
+<EndFloor>
+
+# Tower Atrium Ceiling
+<Floor 100>
+    AddFloor Atrium Ceiling, MainWalls, 0, -25, 135, 25, 180, %fullheight%, %fullheight%, false, false, 1, 1, true
+<EndFloor>
+
+# Central Core
+<Floors -4 to 111>
+    AddWall CoreFront1, MainWalls, 0, -25, 191, -4, 191, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreFront2, MainWalls, 0, 4, 191, 25, 191, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreFront3, MainWalls, 0, -4, 196.25 - 0.33, 4, 196.25 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, -25, 191, -25, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft2, MainWalls, 0, -4, 191, -4, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, 25, 191, 25, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight2, MainWalls, 0, 4, 191, 4, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, -25, 205, 25, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+<EndFloors>
+
+# Glass Elevator Shaft Mechanical
+<Floors 101 to 102>
+    AddWall CoreFront1, MainWalls, 0, -18.5, 170.5, 18.5, 170.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, -18.5, 170.5, -18.5, 180, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, 18.5, 170.5, 18.5, 180, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, -18.5, 180, 18.5, 180, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+<EndFloors>
+<Floors 33 to 34>
+    AddWall CoreFront1, MainWalls, 0, 17, 121.5, 26.4, 121.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, 17, 121.5, 17, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, 26.4, 121.5, 26.4, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, 17, 158.5, 26.4, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+<EndFloors>
+<Floors 66 to 67>
+    AddWall CoreFront1, MainWalls, 0, -26.4, 121.5, -17, 121.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, -26.4, 121.5, -26.4, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, -17, 121.5, -17, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, -26.4, 158.5, -17, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+<EndFloors>
+
+# Tower Express Shaft
+<Floors 0 to 113>
+    AddWall CoreFront1, MainWalls, 0, 38 - 8, 166, 38 + 8, 166, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, 38 - 8, 166, 38 - 8, 174.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, 38 + 8, 166, 38 + 8, 174.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, 38 - 8, 174.5, 38 + 8, 174.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
 <EndFloors>
 
 #Glass Elevator Shaft 1
@@ -629,7 +715,7 @@ ShaftShowOutside 3 = 0 - 100
 ShowFullShaft 3 = true
 
 #Service elevator shaft
-AddShaft 4, 0, 195, 0, 111
+AddShaft 4, 0, 200, 0, 111
 ShaftCut 4, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 
 #Tower express elevator shaft
@@ -663,11 +749,31 @@ ShaftCut 5, -8, -4.125 + 0.33, 8, 4.125, 0, 5
     if[%floor% = 0] Set 2 = -6
     if[%floor% < 102] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %1%, %1%, %2%, %2%, 0, 0
     if[%floor% < 34] AddShaftWall 2, Shaft1BackOutside, Gravel2, 0, 4.25 - 0.33, -18.64, 4.25 - 0.33, 18.64, %1%, %1%, %2%, %2%, 0, 0
-    if[%floor% < 67] AddShaftWall 3, Shaft1BackOutside, Gravel2, 0, -4.25 + 0.33, -18.64, -4.25 + 0.33, 18.64, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 67] AddShaftWall 3, Shaft1BackOutside, Gravel, 0, -4.25 + 0.33, -18.64, -4.25 + 0.33, 18.64, %1%, %1%, %2%, %2%, 0, 0
     DrawWalls = false, true, false, false, false, false
     if[%floor% < 102] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
     if[%floor% < 34] AddShaftWall 2, Shaft1BackInside, Gravel, 0, 4.25, -18.64, 4.25, 18.64, %1%, %1%, %2%, %2%, 0, 0
-    if[%floor% < 67] AddShaftWall 3, Shaft1BackInside, Gravel, 0, -4.25, -18.64, -4.25, 18.64, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 67] AddShaftWall 3, Shaft1BackInside, Gravel2, 0, -4.25, -18.64, -4.25, 18.64, %1%, %1%, %2%, %2%, 0, 0
+<EndFloors>
+
+# Glass Elevator Shaft Columns
+<Floors 0 to 100>
+    ColumnWallBox2 Column1, ColumnTex, -16, 179, 3, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column2, ColumnTex, -6, 179, 6, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column3, ColumnTex, 6, 179, 6, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column4, ColumnTex, 16, 179, 3, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+<EndFloors>
+<Floors 0 to 32>
+    ColumnWallBox2 Column1, ColumnTex, 25, 157, 1.5, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column2, ColumnTex, 25, 157 - 10 - 0.5, 1.5, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column3, ColumnTex, 25, 134.5, 1.5, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column4, ColumnTex, 25, 123.3, 1.5, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+<EndFloors>
+<Floors 0 to 65>
+    ColumnWallBox2 Column1, ColumnTex, -25, 157, 1.5, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column2, ColumnTex, -25, 157 - 10 - 0.5, 1.5, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column3, ColumnTex, -25, 134.5, 1.5, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column4, ColumnTex, -25, 123.3, 1.5, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
 <EndFloors>
 
 #reset drawwalls
@@ -890,7 +996,7 @@ DrawWalls = true, true, false, false, false, false
     AddControl 1, switch.wav, 1, 1, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 1, 6, cancel, 1, 1
 
-    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 4, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 100, 1, 1
     Set row = 3
     Set iterator = 99
     <For i 1 to 9>
@@ -1308,3 +1414,27 @@ DrawWalls = true, true, false, false, false, false
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
 <EndElevator>
+
+#Escalators
+<Floor 0>
+    CutAll -7, -1, 120, -3, 10, 140, false, true
+    CutAll 3, -1, 120, 7, 10, 140, false, true
+<EndFloor>
+<Floor -1>
+    CutAll -12, -1, 120, -3, %fullheight% + 1, 140, false, true
+    CutAll 3, -1, 120, 12, %fullheight% + 1, 140, false, true
+    AddEscalator Escalator 1, 1, 1, , Brick, Brick, front, 5, 130, 4, 1, 1.5, 16, -0.01, 1, 1
+    AddEscalator Escalator 1, -1, 1, , Brick, Brick, front, -5, 130, 4, 1, 1.5, 16, -0.01, 1, 1
+<EndFloor>
+<Floor -2>
+    CutAll -12, -1, 120, -3, %fullheight% + 1, 140, false, true
+    CutAll 3, -1, 120, 12, %fullheight% + 1, 140, false, true
+    AddEscalator Escalator 1, 1, 1, , Brick, Brick, back, 10, 130, 4, 1, 1.5, 14, -0.01, 1, 1
+    AddEscalator Escalator 1, -1, 1, , Brick, Brick, back, -10, 130, 4, 1, 1.5, 14, -0.01, 1, 1
+<EndFloor>
+<Floor -3>
+    CutAll -12, 1, 120, -3, %fullheight% + 1, 140, false, true
+    CutAll 3, 1, 120, 12, %fullheight% + 1, 140, false, true
+    AddEscalator Escalator 1, 1, 1, , Brick, Brick, front, 5, 130, 4, 1, 1.5, 14, -0.01, 1, 1
+    AddEscalator Escalator 1, -1, 1, , Brick, Brick, front, -5, 130, 4, 1, 1.5, 14, -0.01, 1, 1
+<EndFloor>
