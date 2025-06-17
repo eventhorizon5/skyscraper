@@ -604,7 +604,7 @@ ShaftShowFloors 3 = 0 - 100
 ShaftShowOutside 3 = 0 - 100
 ShowFullShaft 3 = true
 
-<Floors 0 to 100>
+<Floors 0 to 102>
     SetAutoSize = true, true
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
@@ -613,8 +613,8 @@ ShowFullShaft 3 = true
     if[%floor% = 0] AddShaftWall 1, Shaft1BaseLeft, Gravel2, 0, -18.64, -4.25 + 0.33, -18.64, 4.25, 6, 6, -6, -6, 0, 0
     if[%floor% = 0] AddShaftWall 1, Shaft1BaseRight, Gravel2, 0, 18.64, -4.25 + 0.33, 18.64, 4.25, 6, 6, -6, -6, 0, 0
     if[%floor% = 0] AddShaftWall 1, Shaft1BaseFront, Gravel2, 0, -18.64, -4.25 + 0.33, 18.64, -4.25 + 0.33, 6, 6, -6, -6, 0, 0
-    if[%floor% = 99] AddShaftFloor 1, Shaft1Top, Brick, 0, -18.64, 3.25, 18.64, 4.25 + 1, %fullheight%, %fullheight%, 0, 0
-    if[%floor% = 100] AddShaftFloor 1, Shaft1Top, Gravel, 0, -18.64, 3.25, 18.64, 4.25 + 1, 10, 10, 0, 0
+    if[%floor% = 100] AddShaftFloor 1, Shaft1Top, Brick, 0, -18.64, 3.25, 18.64, 4.25 + 1, %fullheight%, %fullheight%, 0, 0
+    if[%floor% = 102] AddShaftFloor 1, Shaft1Top, Gravel, 0, -18.64, 3.25, 18.64, 4.25 + 1, 10, 10, 0, 0
     SetAutoSize = false, false
     if[%floor%  = 0] AddShaftWall 1, Shaft1BaseLeftRailing, Railing, 0, -18.64, -4.25 + 0.33, -18.64, 4.25 - 1, 3.5, 3.5, 0, 0, 2, 0
     if[%floor% = 0] AddShaftWall 1, Shaft1BaseRightRailing, Railing, 0, 18.64, -4.25 + 0.33, 18.64, 4.25 - 1, 3.5, 3.5, 0, 0, 2, 0
@@ -629,9 +629,9 @@ ShowFullShaft 3 = true
     if[%floor% = 0] Set 1 = %fullheight% + 6
     if[%floor% > 0] Set 2 = 0
     if[%floor% = 0] Set 2 = -6
-    if[%floor% < 100] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 102] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %1%, %1%, %2%, %2%, 0, 0
     DrawWalls = false, true, false, false, false, false
-    if[%floor% < 100] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 102] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
 <EndFloors>
 
 #reset drawwalls
@@ -645,7 +645,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.1
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
+    ServicedFloors = 0 - 4, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
     AssignedShaft = 1
     AutoEnable = false
     CreateElevator true, -12, 0.33 + 1, 0
@@ -659,7 +659,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.1
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
+    ServicedFloors = 0 - 4, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
     AssignedShaft = 1
     AutoEnable = false
     CreateElevator true, 0, 0.33 + 1, 1
@@ -673,7 +673,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.1
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
+    ServicedFloors = 0 - 4, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
     AssignedShaft = 1
     AutoEnable = false
     CreateElevator true, 12, 0.33 + 1, 100
