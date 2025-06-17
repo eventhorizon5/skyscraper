@@ -23,7 +23,7 @@
     CameraFloor = 0
     CameraPosition = 0, 90
     CameraRotation = 0, 0, 0
-    Bounds = -80, 0, -75, 80, 0, 305
+    Bounds = -180, 0, -75, 180, 0, 405
 <EndGlobals>
 
 <Textures>
@@ -126,24 +126,24 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Type = Basement
     Height = 10
     InterfloorHeight = 0
-    Altitude = -10
+    Altitude = 0
 
     DrawWalls = true, true ,false, false, false, false
     AddCustomFloor floor, Floor, Marble, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
     AddCustomFloor floor, Floor, Marble, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
     AddCustomFloor floor, Floor, Marble, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
 
-    AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Left, MainWalls, 0, -80, -75, -80, 75, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Left2, MainWalls, 0, -80, 75, -50, 105, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Right, MainWalls, 0, 80, -75, 80, 75, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Right2, MainWalls, 0, 80, 75, 50, 105, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Back, MainWalls, 0, -50, 105, 50, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Left, MainWalls, 0, -80, -75, -80, 75, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Left2, MainWalls, 0, -80, 75, -50, 105, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Right, MainWalls, 0, 80, -75, 80, 75, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Right2, MainWalls, 0, 80, 75, 50, 105, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Back, MainWalls, 0, -50, 105, 50, 105, %height%, %height%, 0, 0, 0, 0, True
 
-    AddWall Front3, MainWalls, 0, -27, -75, -3, -57, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Front4, MainWalls, 0, -3, -57, 3, -57, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Front5, MainWalls, 0, 3, -57, 27, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front3, MainWalls, 0, -27, -75, -3, -57, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Front4, MainWalls, 0, -3, -57, 3, -57, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Front5, MainWalls, 0, 3, -57, 27, -75, %height%, %height%, 0, 0, 0, 0, True
 <EndFloor>
 
 <Floor -2>
@@ -171,8 +171,8 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 <EndFloor>
 
 <Floors -1 to -4>
-    AddFloor TowerFloor, Brick, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
-    AddFloor TowerFloor, Brick, 0, -70, 105, 70, 305, %height% - 0.01, %height% - 0.01, false, false, 1, 1, false
+    AddFloor TowerFloor, Marble, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
+    AddFloor TowerFloor, Marble, 0, -70, 105, 70, 305, %height% - 0.01, %height% - 0.01, false, false, 1, 1, false
     AddWall TowerLeft, MainWalls, 0, -70, 105, -70, 305, %height%, %height%, 0, 0, 0, 0, True
     AddWall TowerRight, MainWalls, 0, 70, 105, 70, 305, %height%, %height%, 0, 0, 0, 0, True
     AddWall TowerBack, MainWalls, 0, -70, 305, 70, 305, %height%, %height%, 0, 0, 0, 0, True
