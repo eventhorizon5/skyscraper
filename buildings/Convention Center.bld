@@ -328,7 +328,6 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
     AddWall TowerFront2, MainWindows, 0, 15, 105, 80, 105, %height% - 15, %height% - 15, 15, 15, 0, 1, True
     SetAutoSize = true, true
-
 <EndFloor>
 
 <Floors -2 to -4>
@@ -522,13 +521,16 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
     AddWall TowerRight, MainWindows, 0, 55, 105, 55, 205, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
-    AddWall TowerBack, MainWindows, 0, -55, 205, 55, 205, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall TowerBack, MainWindows, 0, -55, 205, -25, 205, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
+    AddWall TowerBack2, MainWindows, 0, 25, 205, 55, 205, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
     AddWall TowerFront, MainWindows, 0, -55, 105, 55, 105, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     AddWall TowerLeft, MainWindows, 0, -55, 105, -55, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
     AddWall TowerRight, MainWindows, 0, 55, 105, 55, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
-    AddWall TowerBack, MainWindows, 0, -55, 205, 55, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
+    AddWall TowerBack, MainWindows, 0, -55, 205, -25, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
+    AddWall TowerBack2, MainWindows, 0, 25, 205, 55, 205, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
     AddWall TowerFront, MainWindows, 0, -55, 105, -15, 105, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
     AddWall TowerFront2, MainWindows, 0, 15, 105, 55, 105, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, true
     SetAutoSize = true, true
@@ -604,7 +606,52 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     if[%floor% > 69 & %floor% < 80] AddWall InteriorFront, MainWindowsInt, 0, -25, 125, 25, 125, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 79 & %floor% < 90] AddWall InteriorFront, MainWindowsInt, 0, -25, 130, 25, 130, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 89 & %floor% < 100] AddWall InteriorFront, MainWindowsInt, 0, -25, 135, 25, 135, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
-    SetAutoSize = true, true
+    if[%floor% > 49 & %floor% < 60] AddWall InteriorFront, MainWalls, 0, -25, 115, 25, 115, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+    if[%floor% > 59 & %floor% < 70] AddWall InteriorFront, MainWalls, 0, -25, 120, 25, 120, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+    if[%floor% > 69 & %floor% < 80] AddWall InteriorFront, MainWalls, 0, -25, 125, 25, 125, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+    if[%floor% > 79 & %floor% < 90] AddWall InteriorFront, MainWalls, 0, -25, 130, 25, 130, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+    if[%floor% > 89 & %floor% < 100] AddWall InteriorFront, MainWalls, 0, -25, 135, 25, 135, %interfloorheight%, %interfloorheight%, 0, 0, 0, %vtile%, true
+   SetAutoSize = true, true
+<EndFloors>
+
+# Central Core
+<Floors -4 to 111>
+    AddWall CoreFront1, MainWalls, 0, -25, 191, -4, 191, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreFront2, MainWalls, 0, 4, 191, 25, 191, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreFront3, MainWalls, 0, -4, 196.25 - 0.33, 4, 196.25 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, -25, 191, -25, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft2, MainWalls, 0, -4, 191, -4, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, 25, 191, 25, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight2, MainWalls, 0, 4, 191, 4, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, -25, 205, 25, 205, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+<EndFloors>
+
+# Glass Elevator Shaft Mechanical
+<Floors 101 to 102>
+    AddWall CoreFront1, MainWalls, 0, -18.5, 170.5, 18.5, 170.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, -18.5, 170.5, -18.5, 180, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, 18.5, 170.5, 18.5, 180, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, -18.5, 180, 18.5, 180, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+<EndFloors>
+<Floors 33 to 34>
+    AddWall CoreFront1, MainWalls, 0, 17, 121.5, 26.4, 121.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, 17, 121.5, 17, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, 26.4, 121.5, 26.4, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, 17, 158.5, 26.4, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+<EndFloors>
+<Floors 66 to 67>
+    AddWall CoreFront1, MainWalls, 0, -26.4, 121.5, -17, 121.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, -26.4, 121.5, -26.4, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, -17, 121.5, -17, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, -26.4, 158.5, -17, 158.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+<EndFloors>
+
+# Tower Express Shaft
+<Floors 0 to 113>
+    AddWall CoreFront1, MainWalls, 0, 38 - 8, 166, 38 + 8, 166, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreLeft, MainWalls, 0, 38 - 8, 166, 38 - 8, 174.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreRight, MainWalls, 0, 38 + 8, 166, 38 + 8, 174.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
+    AddWall CoreBack, MainWalls, 0, 38 - 8, 174.5, 38 + 8, 174.5, %fullheight%, %fullheight%, 0, 0, 0, 0, true
 <EndFloors>
 
 #Glass Elevator Shaft 1
@@ -629,7 +676,7 @@ ShaftShowOutside 3 = 0 - 100
 ShowFullShaft 3 = true
 
 #Service elevator shaft
-AddShaft 4, 0, 195, 0, 111
+AddShaft 4, 0, 200, 0, 111
 ShaftCut 4, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 
 #Tower express elevator shaft
