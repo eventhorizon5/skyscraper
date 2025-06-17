@@ -106,10 +106,14 @@
     AddText BlackLit, ButtonLitG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddTextRange 1, 9, Black, ButtonB%number%, nimbus_sans.ttf, 47, B%number%, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddTextRange 1, 9, BlackLit, ButtonLitB%number%, nimbus_sans.ttf, 47, B%number%, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddTextRange 1, 5, Black, ButtonU%number%, nimbus_sans.ttf, 47, U%number%, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddTextRange 1, 5, BlackLit, ButtonLitU%number%, nimbus_sans.ttf, 47, U%number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonA, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitA, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 114, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 114, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 4, Black, ButtonLL%number%, nimbus_sans.ttf, 47, LL%number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 4, BlackLit, ButtonLitLL%number%, nimbus_sans.ttf, 47, LL%number%, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
@@ -640,7 +644,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.1
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0 - 100
+    ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
     AssignedShaft = 1
     AutoEnable = false
     CreateElevator true, -12.43, 0.33 + 1, 0
@@ -654,7 +658,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.1
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0 - 100
+    ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
     AssignedShaft = 1
     AutoEnable = false
     CreateElevator true, 0, 0.33 + 1, 1
@@ -668,7 +672,21 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.1
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0 - 100
+    ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
+    AssignedShaft = 1
+    AutoEnable = false
+    CreateElevator true, 12.43, 0.33 + 1, 100
+<EndElevator>
+
+<Elevator 4>
+    Name = Glass Elevator 4
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
     AssignedShaft = 1
     AutoEnable = false
     CreateElevator true, 12.43, 0.33 + 1, 100
@@ -745,17 +763,39 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 10, 3, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddControl 1, switch.wav, 2, 1, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
-    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 3, cancel, 1, 1
-    AddFloorButton 1, Button135, ButtonLit135, 4, 2, 134, 1, 1
-    AddFloorButton 1, ButtonA, ButtonLitA, 5, 2, 1, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 6, 2, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 1, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 3, close, 1, 1
-    AddControl 1, switch.wav, 9, 1, 1, 1, 0, 0, run, stop, RunKey, StopKey
-    AddControl 1, switch.wav, 9, 2, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
-    AddControlButton 1, ButtonAlarm, 9, 3, alarm, 1, 1
+    CreatePanel ElevPanel, 13, 5, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddControl 1, switch.wav, 1, 1, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 1, 5, cancel, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 100, 1, 1
+    AddFloorButton 1, Button99, ButtonLit99, 3, 4, 99, 1, 1
+    AddFloorButton 1, Button98, ButtonLit98, 3, 3, 98, 1, 1
+    AddFloorButton 1, Button97, ButtonLit97, 3, 2, 97, 1, 1
+    AddFloorButton 1, Button96, ButtonLit96, 4, 4, 96, 1, 1
+    AddFloorButton 1, Button95, ButtonLit95, 4, 3, 95, 1, 1
+    AddFloorButton 1, Button94, ButtonLit94, 4, 2, 94, 1, 1
+    AddFloorButton 1, Button93, ButtonLit93, 5, 4, 93, 1, 1
+    AddFloorButton 1, Button92, ButtonLit92, 5, 3, 92, 1, 1
+    AddFloorButton 1, Button91, ButtonLit91, 5, 2, 91, 1, 1
+    AddFloorButton 1, Button90, ButtonLit90, 6, 4, 90, 1, 1
+    AddFloorButton 1, Button80, ButtonLit80, 6, 3, 80, 1, 1
+    AddFloorButton 1, Button70, ButtonLit70, 6, 2, 70, 1, 1
+    AddFloorButton 1, Button60, ButtonLit60, 7, 4, 60, 1, 1
+    AddFloorButton 1, Button50, ButtonLit50, 7, 3, 50, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 7, 2, 40, 1, 1
+    AddFloorButton 1, Button30, ButtonLit30, 8, 4, 30, 1, 1
+    AddFloorButton 1, Button20, ButtonLit20, 8, 3, 20, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 8, 2, 10, 1, 1
+    AddFloorButton 1, Button5, ButtonLit5, 9, 4, 5, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 9, 3, 4, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 9, 2, 3, 1, 1
+    AddFloorButton 1, Button2, ButtonLit2, 10, 4, 2, 1, 1
+    AddFloorButton 1, ButtonA, ButtonLitA, 10, 3, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 10, 2, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 11, 4, open, 1, 1
+    AddControlButton 1, ButtonClose, 11, 2, close, 1, 1
+    AddControl 1, switch.wav, 12, 1, 1, 1, 0, 0, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 12, 5, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
+    AddControlButton 1, ButtonAlarm, 13, 3, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.24 - 0.1, 1.962, 0.7, 0.5, 6.5
