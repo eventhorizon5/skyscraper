@@ -867,7 +867,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevators 1 to 3>
     #panel
-    CreatePanel ElevPanel, 15, 6, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 16, 6, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddControl 1, switch.wav, 1, 1, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 1, 6, cancel, 1, 1
 
@@ -885,16 +885,16 @@ DrawWalls = true, true, false, false, false, false
         Set iterator = %iterator% - 1
         Set row = %row% + 1
     <EndFor>
-    AddFloorButton 1, Button4, ButtonLit4, 11, 5, 4, 1, 1
-    AddFloorButton 1, Button3, ButtonLit3, 11, 4, 3, 1, 1
-    AddFloorButton 1, Button2, ButtonLit2, 11, 3, 2, 1, 1
-    AddFloorButton 1, ButtonA, ButtonLitA, 11, 2, 1, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 12, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 13, 5, open, 1, 1
-    AddControlButton 1, ButtonClose, 13, 2, close, 1, 1
-    AddControl 1, switch.wav, 14, 2, 1, 1, 0, 0, run, stop, RunKey, StopKey
-    AddControl 1, switch.wav, 14, 5, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
-    AddControlButton 1, ButtonAlarm, 14, 3, alarm, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 12, 5, 4, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 12, 4, 3, 1, 1
+    AddFloorButton 1, Button2, ButtonLit2, 12, 3, 2, 1, 1
+    AddFloorButton 1, ButtonA, ButtonLitA, 12, 2, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 13, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 14, 5, open, 1, 1
+    AddControlButton 1, ButtonClose, 14, 2, close, 1, 1
+    AddControl 1, switch.wav, 15, 2, 1, 1, 0, 0, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 15, 5, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
+    AddControlButton 1, ButtonAlarm, 15, 3, alarm, 1, 1
 <EndElevators>
 
 <Elevators 4 to 6>
