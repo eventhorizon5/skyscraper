@@ -1415,7 +1415,7 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevator>
 
-#Escalators
+# Tower Escalators
 <Floor 0>
     CutAll -7, -1, 120, -3, 10, 140, false, true
     CutAll 3, -1, 120, 7, 10, 140, false, true
@@ -1437,4 +1437,16 @@ DrawWalls = true, true, false, false, false, false
     CutAll 3, 1, 120, 12, %fullheight% + 1, 140, false, true
     AddEscalator Escalator 1, 1, 1, , Brick, Brick, front, 5, 130, 4, 1, 1.5, 14, -0.01, 1, 1
     AddEscalator Escalator 1, -1, 1, , Brick, Brick, front, -5, 130, 4, 1, 1.5, 14, -0.01, 1, 1
+<EndFloor>
+
+# Atrium Escalators
+<Floor 0>
+    CutAll -7, -1, -10, -3, 10, 10, false, true
+    CutAll 3, -1, -10, 7, 10, 10, false, true
+<EndFloor>
+<Floor -1>
+    CutAll -12, 1, -10, -3, %fullheight% + 1, 10, false, true
+    CutAll 3, 1, -10, 12, %fullheight% + 1, 10, false, true
+    AddEscalator Escalator 1, 1, 1, , Brick, Brick, front, 5, 0, 4, 1, 1.5, 16, -0.01, 1, 1
+    AddEscalator Escalator 1, -1, 1, , Brick, Brick, front, -5, 0, 4, 1, 1.5, 16, -0.01, 1, 1
 <EndFloor>
