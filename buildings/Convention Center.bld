@@ -113,34 +113,33 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     ID = LL1
     Name = Lower Level 1
     Type = Basement
-    Height = 15
+    Height = 10
     InterfloorHeight = 0
-    Altitude = 0
+    Altitude = -10
 
     DrawWalls = true, true ,false, false, false, false
     AddCustomFloor floor, Floor, Marble, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
     AddCustomFloor floor, Floor, Marble, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
     AddCustomFloor floor, Floor, Marble, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
 
-    AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, True
-    AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, True
-    AddWall Left, MainWalls, 0, -80, -75, -80, 75, %height%, %height%, 0, 0, 0, 0, True
-    AddWall Left2, MainWalls, 0, -80, 75, -50, 105, %height%, %height%, 0, 0, 0, 0, True
-    AddWall Right, MainWalls, 0, 80, -75, 80, 75, %height%, %height%, 0, 0, 0, 0, True
-    AddWall Right2, MainWalls, 0, 80, 75, 50, 105, %height%, %height%, 0, 0, 0, 0, True
-    AddWall Back, MainWalls, 0, -50, 105, 50, 105, %height%, %height%, 0, 0, 0, 0, True
+    AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWalls, 0, -80, -75, -80, 75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left2, MainWalls, 0, -80, 75, -50, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right, MainWalls, 0, 80, -75, 80, 75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right2, MainWalls, 0, 80, 75, 50, 105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWalls, 0, -50, 105, 50, 105, %height%, %height%, 0, 0, 0, 0, False
 
-    AddWall Front3, MainWalls, 0, -27, -75, -3, -57, %height%, %height%, 0, 0, 0, 0, True
-    AddWall Front4, MainWalls, 0, -3, -57, 3, -57, %height%, %height%, 0, 0, 0, 0, True
-    AddWall Front5, MainWalls, 0, 3, -57, 27, -75, %height%, %height%, 0, 0, 0, 0, True
-
+    AddWall Front3, MainWalls, 0, -27, -75, -3, -57, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front4, MainWalls, 0, -3, -57, 3, -57, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front5, MainWalls, 0, 3, -57, 27, -75, %height%, %height%, 0, 0, 0, 0, False
 <EndFloor>
 
 <Floor -2>
     ID = LL2
     Name = Lower Level 2
     Type = Basement
-    Height = 15
+    Height = 10
     InterfloorHeight = 2.24
 <EndFloor>
 
@@ -148,7 +147,7 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     ID = LL3
     Name = Lower Level 2
     Type = Basement
-    Height = 15
+    Height = 10
     InterfloorHeight = 2.24
 <EndFloor>
 
@@ -159,6 +158,16 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     Height = 15
     InterfloorHeight = 2.24
 <EndFloor>
+
+<Floors -1 to -4>
+    AddFloor TowerFloor, Brick, 0, -70, 105, 70, 305, 0, 0, false, false, 1, 1, false
+    AddFloor TowerFloor, Brick, 0, -70, 105, 70, 305, %height% - 0.01, %height% - 0.01, false, false, 1, 1, false
+    AddWall TowerLeft, MainWalls, 0, -70, 105, -70, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerRight, MainWalls, 0, 70, 105, 70, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerBack, MainWalls, 0, -70, 305, 70, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerFront, MainWalls, 0, -70, 105, -15, 105, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerFront2, MainWalls, 0, 15, 105, 70, 105, %height%, %height%, 0, 0, 0, 0, True
+<EndFloors>
 
 <Floor -2>
     DrawWalls = true, true ,false, false, false, false
@@ -181,8 +190,8 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 <EndFloor>
 
 <Floor 0>
-    ID = 1
-    Name = Ground
+    ID = C
+    Name = Conference Level
     Type = Lobby
     Height = 30
     InterfloorHeight = 2.24
@@ -191,11 +200,11 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddCustomFloor floor, Floor, Marble, -80, 75, -50, 105, 50, 105, 80, 75, 80, -57, -80, -57, 0, 1, 1
     AddCustomFloor floor, Floor, Marble, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
     AddCustomFloor floor, Floor, Marble, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
-    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 205, 0, 0, false, false, 1, 1, false
+    AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, false
 
     AddCustomFloor floor, CeilingLeft, Marble, -80, 105, -27, 105, -27, -75, -80, -75, %height% - 0.1, 1, 1
     AddCustomFloor floor, CeilingRight, Marble, 27, 105, 80, 105, 80, -75, 27, -75, %height% - 0.1, 1, 1
-    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 205, %height% - 0.1, %height% - 0.1, false, false, 1, 1, false
+    AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height% - 0.1, %height% - 0.1, false, false, 1, 1, false
 
     AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, True
     AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, True
@@ -207,9 +216,9 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddWall Right, MainWalls, 0, 80, -75, 80, 75, %height%, %height%, 0, 0, 0, 0, True
     AddWall Right2, MainWalls, 0, 80, 75, 50, 105, %height%, %height%, 0, 0, 0, 0, True
     AddWall Back, MainWalls, 0, -50, 105, 50, 105, %height%, %height%, 0, 0, 0, 0, True
-    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 205, %height%, %height%, 0, 0, 0, 0, True
-    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 205, %height%, %height%, 0, 0, 0, 0, True
-    AddWall TowerBack, MainWalls, 0, -80, 205, 80, 205, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerLeft, MainWalls, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerRight, MainWalls, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, True
 
     AddWall InnerLeft, MainWalls, 0, -27, 105, -27, -75, %height%, %height%, 0, 0, 0, 0, false
     AddWall InnerRight, MainWalls, 0, 27, 105, 27, -75, %height%, %height%, 0, 0, 0, 0, False
@@ -223,17 +232,17 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     ID = A
     Name = Front Atrium
     Type = Atrium
-    Height = 66
+    Height = 15
     InterfloorHeight = 0
 
     #Atrium
-    AddCustomWall External, AtriumLeft, AtriumWindows, True, -27, 0, 105, -3, %height%, 105, -3, %height%, -57, -27, 0, -75, 1, 1
-    AddCustomWall External, AtriumRight, AtriumWindows, True, 27, 0, 105, 3, %height%, 105, 3, %height%, -57, 27, 0, -75, 1, 1
-    AddCustomWall External, AtriumBack, AtriumWindows, True, -27, 0, 105, -3, %height%, 105, 3, %height%, 105, 27, 0, 105, 1, 1
-    AddWall Center, StainedGlass, 0, -3, -57, 3, -57, %height%, %height%, 0, 0, 0, 0, True
-    AddCustomWall External, FrontLeft, StainedGlass, True, -27, 0, -75, -3, %height%, -57, -3, 0, -57, 1, 1
-    AddCustomWall External, FrontRight, StainedGlass, True, 27, 0, -75, 3, %height%, -57, 3, 0, -57, 1, 1
-    AddFloor AtriumTop, AtriumWindows, 0, -3, -57, 3, 105, %height%, %height%, false, false, 1, 1, True
+    AddCustomWall External, AtriumLeft, AtriumWindows, True, -27, 0, 105, -3, 66, 105, -3, 66, -57, -27, 0, -75, 1, 1
+    AddCustomWall External, AtriumRight, AtriumWindows, True, 27, 0, 105, 3, 66, 105, 3, 66, -57, 27, 0, -75, 1, 1
+    AddCustomWall External, AtriumBack, AtriumWindows, True, -27, 0, 105, -3, 66, 105, 3, 66, 105, 27, 0, 105, 1, 1
+    AddWall Center, StainedGlass, 0, -3, -57, 3, -57, 66, 66, 0, 0, 0, 0, True
+    AddCustomWall External, FrontLeft, StainedGlass, True, -27, 0, -75, -3, 66, -57, -3, 0, -57, 1, 1
+    AddCustomWall External, FrontRight, StainedGlass, True, 27, 0, -75, 3, 66, -57, 3, 0, -57, 1, 1
+    AddFloor AtriumTop, AtriumWindows, 0, -3, -57, 3, 105, 66, 66, false, false, 1, 1, True
 
     #left structure
     AddCustomWall External, Left, AtriumWindows, True, -51, 27, -75, -80, 0, 51, -27, 0, 51, 1, 1
@@ -248,10 +257,10 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor RoomFloor, Carpet2, 0, -80, 105, -27, 50, 0, 0, false, false, 1, 1, True
 
     #left rear structure
-    AddCustomWall External, Back, AtriumWindows, True, -80, 15, 105, -51, %height%, 78, -21.5, 15, 105, 1, 1
-    AddCustomWall External, Left, AtriumWindows, True, -80, 15, 50, -80, 15, 105, -51, %height%, 78, 1, 1
-    AddCustomWall External, Front, AtriumWindows, True, -80, 15, 50, -21.5, 15, 50, -51, %height%, 78, 1, 1
-    AddCustomWall External, Right, AtriumWindows, True, -21.5, 15, 105, -51, %height%, 78, -21.5, 15, 50, 1, 1
+    AddCustomWall External, Back, AtriumWindows, True, -80, 15, 105, -51, 66, 78, -21.5, 15, 105, 1, 1
+    AddCustomWall External, Left, AtriumWindows, True, -80, 15, 50, -80, 15, 105, -51, 66, 78, 1, 1
+    AddCustomWall External, Front, AtriumWindows, True, -80, 15, 50, -21.5, 15, 50, -51, 66, 78, 1, 1
+    AddCustomWall External, Right, AtriumWindows, True, -21.5, 15, 105, -51, 66, 78, -21.5, 15, 50, 1, 1
 
     #right structure
     AddCustomWall External, RightFront, AtriumWindows, True, 27, 0, -75, 48, 54, -75, 80, 0, -75, 1, 1
@@ -281,15 +290,15 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height%, %height%, false, false, 1, 1, True
     SetAutoSize = true, false
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
-    AddWall TowerLeft, MainWindows, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 4, True
+    AddWall TowerLeft, MainWindows, 0, -80, 105, -80, 305, %height%, %height%, 0, 0, 0, 3, True
     TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
-    AddWall TowerRight, MainWindows, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 4, True
+    AddWall TowerRight, MainWindows, 0, 80, 105, 80, 305, %height%, %height%, 0, 0, 0, 3, True
     TextureOverride MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows, MainWindows
-    AddWall TowerBack, MainWindows, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 4, True
+    AddWall TowerBack, MainWindows, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 3, True
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
-    AddWall TowerFront1, MainWindows, 0, -80, 105, -15, 105, %height% - 15, %height% - 15, 15, 15, 0, 3, True
+    AddWall TowerFront1, MainWindows, 0, -80, 105, -15, 105, %height% - 15, %height% - 15, 15, 15, 0, 1, True
     TextureOverride MainWindows, MainWindowsInt, MainWindows, MainWindows, MainWindows, MainWindows
-    AddWall TowerFront2, MainWindows, 0, 15, 105, 80, 105, %height% - 15, %height% - 15, 15, 15, 0, 3, True
+    AddWall TowerFront2, MainWindows, 0, 15, 105, 80, 105, %height% - 15, %height% - 15, 15, 15, 0, 1, True
     SetAutoSize = true, true
 
 <EndFloor>
@@ -548,7 +557,7 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddWall FrontWindows, AtriumWindows, 0, -15, 105, 15, 105, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, true
     SetAutoSize = true, false
     Set vtile = 1
-    if [%floor% = 1] Set vtile = 4
+    if [%floor% = 1] Set vtile = 3
     AddWall InteriorLeft, MainWindowsInt, 0, -25, 105, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     AddWall InteriorBack, MainWindowsInt, 0, -25, 180, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     AddWall InteriorRight, MainWindowsInt, 0, 25, 105, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
