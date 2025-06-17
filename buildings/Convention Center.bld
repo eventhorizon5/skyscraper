@@ -592,14 +592,14 @@ ShowFullShaft 1 = true
 
 #Glass Elevator Shaft 2
 AddShaft 2, 25 - 4.25 + 1, 140, 0, 34
-ShaftCut 2, -4.25 + 0.33, -18.64, 4.25 - 1 - 0.33, 18.64, 0, 5
+ShaftCut 2, -4.25 - 0.33, -18.64, 4.25 + 0.33, 18.64, 0, 5
 ShaftShowFloors 2 = 0 - 100
 ShaftShowOutside 2 = 0 - 100
 ShowFullShaft 2 = true
 
 #Glass Elevator Shaft 3
 AddShaft 3, -25 + 4.25 - 1, 140, 0, 67
-ShaftCut 3, -4.25 + 0.33, -18.64, 4.25 - 1 - 0.33, 18.64, 0, 5
+ShaftCut 3, -4.25 - 0.33, -18.64, 4.25 + 0.33, 18.64, 0, 5
 ShaftShowFloors 3 = 0 - 100
 ShaftShowOutside 3 = 0 - 100
 ShowFullShaft 3 = true
@@ -630,8 +630,12 @@ ShowFullShaft 3 = true
     if[%floor% > 0] Set 2 = 0
     if[%floor% = 0] Set 2 = -6
     if[%floor% < 102] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 34] AddShaftWall 2, Shaft1BackOutside, Gravel2, 0, 4.25 - 0.33, -18.64, 4.25 - 0.33, 18.64, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 67] AddShaftWall 3, Shaft1BackOutside, Gravel2, 0, -4.25 + 0.33, -18.64, -4.25 + 0.33, 18.64, %1%, %1%, %2%, %2%, 0, 0
     DrawWalls = false, true, false, false, false, false
     if[%floor% < 102] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 34] AddShaftWall 2, Shaft1BackInside, Gravel, 0, 4.25, -18.64, 4.25, 18.64, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 67] AddShaftWall 3, Shaft1BackInside, Gravel, 0, -4.25, -18.64, -4.25, 18.64, %1%, %1%, %2%, %2%, 0, 0
 <EndFloors>
 
 #reset drawwalls
@@ -690,7 +694,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 1, 5 - 32
     AssignedShaft = 2
     AutoEnable = false
-    CreateElevator true, 0.33 + 1, -12, 0
+    CreateElevator true, -0.33 + 1, -12, 0
     Rotate Elevator 4, 0, 90, 0, 1
 <EndElevator>
 
@@ -705,7 +709,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 1, 5 - 32
     AssignedShaft = 2
     AutoEnable = false
-    CreateElevator true, 0.33 + 1, 0, 0
+    CreateElevator true, -0.33 + 1, 0, 0
     Rotate Elevator 5, 0, 90, 0, 1
 <EndElevator>
 
@@ -720,7 +724,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 1, 5 - 32
     AssignedShaft = 2
     AutoEnable = false
-    CreateElevator true, 0.33 + 1, 12, 0
+    CreateElevator true, -0.33 + 1, 12, 0
     Rotate Elevator 6, 0, 90, 0, 1
 <EndElevator>
 
@@ -735,7 +739,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 1, 33 - 65
     AssignedShaft = 3
     AutoEnable = false
-    CreateElevator true, 0.33 + 1, -12, 0
+    CreateElevator true, 0.33 - 1, -12, 0
     Rotate Elevator 7, 0, 270, 0, 1
 <EndElevator>
 
@@ -750,7 +754,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 1, 33 - 65
     AssignedShaft = 3
     AutoEnable = false
-    CreateElevator true, 0.33 + 1, 0, 0
+    CreateElevator true, 0.33 - 1, 0, 0
     Rotate Elevator 8, 0, 270, 0, 1
 <EndElevator>
 
@@ -765,7 +769,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 1, 33 - 65
     AssignedShaft = 3
     AutoEnable = false
-    CreateElevator true, 0.33 + 1, 12, 0
+    CreateElevator true, 0.33 - 1, 12, 0
     Rotate Elevator 9, 0, 270, 0, 1
 <EndElevator>
 
