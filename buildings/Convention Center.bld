@@ -658,7 +658,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
     AssignedShaft = 1
     AutoEnable = false
-    CreateElevator true, -4, 0.33 + 1, 1
+    CreateElevator true, 0, 0.33 + 1, 1
 <EndElevator>
 
 <Elevator 3>
@@ -672,7 +672,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
     AssignedShaft = 1
     AutoEnable = false
-    CreateElevator true, 4, 0.33 + 1, 100
+    CreateElevator true, 12, 0.33 + 1, 100
 <EndElevator>
 
 <Elevator 4>
@@ -683,13 +683,89 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.1
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 1, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90 - 100
-    AssignedShaft = 1
+    ServicedFloors = 0, 1, 2, 10, 20, 30
+    AssignedShaft = 2
     AutoEnable = false
-    CreateElevator true, 12, 0.33 + 1, 100
+    CreateElevator true, 0.33 + 1, -12, 0
+    Rotate Elevator 4, 0, 90, 0, 1
 <EndElevator>
 
-<Elevators 1 to 4>
+<Elevator 5>
+    Name = Glass Elevator 5
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 2, 10, 20, 30
+    AssignedShaft = 2
+    AutoEnable = false
+    CreateElevator true, 0.33 + 1, 0, 0
+    Rotate Elevator 5, 0, 90, 0, 1
+<EndElevator>
+
+<Elevator 6>
+    Name = Glass Elevator 6
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 2, 10, 20, 30
+    AssignedShaft = 2
+    AutoEnable = false
+    CreateElevator true, 0.33 + 1, 12, 0
+    Rotate Elevator 6, 0, 90, 0, 1
+<EndElevator>
+
+<Elevator 7>
+    Name = Glass Elevator 7
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 2, 10, 20, 30
+    AssignedShaft = 3
+    AutoEnable = false
+    CreateElevator true, 0.33 + 1, -12, 0
+    Rotate Elevator 7, 0, 270, 0, 1
+<EndElevator>
+
+<Elevator 8>
+    Name = Glass Elevator 8
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 2, 10, 20, 30
+    AssignedShaft = 3
+    AutoEnable = false
+    CreateElevator true, 0.33 + 1, 0, 0
+    Rotate Elevator 8, 0, 270, 0, 1
+<EndElevator>
+
+<Elevator 9>
+    Name = Glass Elevator 9
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 2, 10, 20, 30
+    AssignedShaft = 3
+    AutoEnable = false
+    CreateElevator true, 0.33 + 1, 12, 0
+    Rotate Elevator 9, 0, 270, 0, 1
+<EndElevator>
+
+<Elevators 1 to 9>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
