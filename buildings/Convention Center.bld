@@ -605,10 +605,14 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     SetAutoSize = true, false
     Set vtile = 1
     if [%floor% = 1] Set vtile = 3
-    AddWall InteriorLeft, MainWindowsInt, 0, -25, 120, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% > 65] AddWall InteriorLeft, MainWindowsInt, 0, -25, 121.3, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% < 66] AddWall InteriorLeft1, MainWindowsInt, 0, -25, 158.6, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% < 66] AddWall InteriorLeft2, MainWindowsInt, 0, -25, 105, -25, 121.3, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     AddWall InteriorBack, MainWindowsInt, 0, -25, 180, -18.7, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     AddWall InteriorBack2, MainWindowsInt, 0, 18.7, 180, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
-    AddWall InteriorRight, MainWindowsInt, 0, 25, 120, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% > 32] AddWall InteriorRight, MainWindowsInt, 0, 25, 120, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% < 33] AddWall InteriorRight, MainWindowsInt, 0, 25, 158.6, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if [%floor% < 33] AddWall InteriorRight, MainWindowsInt, 0, 25, 105, 25, 121.3, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 49 & %floor% < 60] AddWall InteriorFront, MainWindowsInt, 0, -25, 115, 25, 115, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 59 & %floor% < 70] AddWall InteriorFront, MainWindowsInt, 0, -25, 120, 25, 120, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     if[%floor% > 69 & %floor% < 80] AddWall InteriorFront, MainWindowsInt, 0, -25, 125, 25, 125, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
