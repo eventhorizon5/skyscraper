@@ -87,6 +87,13 @@
     Load data/misc/granite.jpg, Granite, 0.2, 0.2
     Load data/misc/glass_block_blue.png, AtriumWindows, 0.25, 0.25
     Load data/misc/glass_stained.png, StainedGlass, 0.15, 0.15
+    Load data/cutston3.jpg, Backing, 0.111, 0.111
+    Load data/track1.jpg, Track, 1, 1
+    Load data/cutston2.jpg, Backing2, 0.1, 0.1
+    Load data/cutston2.jpg, Gravel, 0.25, 0.25
+    Load data/cutston2.jpg, Gravelb, 0.5, 0.5
+    Load data/cutston3.jpg, Gravel2, 0.25, 0.25
+    Load data/cutston3.jpg, Gravel2b, 0.5, 0.5
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -567,3 +574,194 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddWall InteriorRight, MainWindowsInt, 0, 25, 105, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     SetAutoSize = true, true
 <EndFloors>
+
+#Glass Elevator Shaft
+AddShaft 1, 2, 0, 180 - 4.25 - 1, 0, 102
+ShaftCut 1, -18.64, -4.25 + 0.33, 18.64, 4.25 + 1 - 0.33, 0, 5
+ShaftShowFloors 1 = 0 - 100
+ShaftShowOutside 1 = 0 - 100
+ShowFullShaft 1 = true
+
+<Floors 0 to 100>
+    SetAutoSize = true, true
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -18.64, -4.25, 18.64, 4.25 + 1, -6, -6, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseLeft, Gravel2, 0, -18.64, -4.25 + 0.33, -18.64, 4.25, 6, 6, -6, -6, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseRight, Gravel2, 0, 18.64, -4.25 + 0.33, 18.64, 4.25, 6, 6, -6, -6, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseFront, Gravel2, 0, -18.64, -4.25 + 0.33, 18.64, -4.25 + 0.33, 6, 6, -6, -6, 0, 0
+    if[%floor% = 99] AddShaftFloor 1, Shaft1Top, Brick, 0, -18.64, 3.25, 18.64, 4.25 + 1, %fullheight%, %fullheight%, 0, 0
+    if[%floor% = 100] AddShaftFloor 1, Shaft1Top, Gravel, 0, -18.64, 3.25, 18.64, 4.25 + 1, 10, 10, 0, 0
+    SetAutoSize = false, false
+    if[%floor%  = 0] AddShaftWall 1, Shaft1BaseLeftRailing, Railing, 0, -18.64, -4.25 + 0.33, -18.64, 4.25 - 1, 3.5, 3.5, 0, 0, 2, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseRightRailing, Railing, 0, 18.64, -4.25 + 0.33, 18.64, 4.25 - 1, 3.5, 3.5, 0, 0, 2, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseFrontRailing, Railing, 0, -18.64, -4.25 + 0.33, 18.64, -4.25 + 0.33, 3.5, 3.5, 0, 0, 9, 0
+    SetAutoSize = true, false
+    DrawWalls = true, true, true, true, false, false
+    WallOrientation = right
+    #AddShaftWall 1, Shaft1Right, Brick, 0.33, 4, -4.25, 4, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 1
+    SetAutoSize = true, true
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% > 0] Set 1 = %fullheight%
+    if[%floor% = 0] Set 1 = %fullheight% + 6
+    if[%floor% > 0] Set 2 = 0
+    if[%floor% = 0] Set 2 = -6
+    if[%floor% < 100] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %1%, %1%, %2%, %2%, 0, 0
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% < 100] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    #if[%floor% < 99] AddWall Shaft1BackInside, Gravel, 0, -0.24 + -18.64, -41.05 + 4.25 + 1, -0.24 + 18.64, -41.05 + 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0, false
+    DrawWalls = true, true, false, false, false, false
+    if[%floor% > 99] AddShaftWall 1, Shaft1Back1, Gravel, 0, -18.64, 4.25 - 1, 18.64, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% > 99] AddShaftWall 1, Shaft1Back2, Gravel, 0, -18.64, 4.25 - 1, -18.64, 4.25, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% > 99] AddShaftWall 1, Shaft1Back3, Gravel, 0, 18.64, 4.25 - 1, 18.64, 4.25, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back4, Gravel, 0, -18.64, 4.25 - 1, -18.64 + 3, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back5, Gravel, 0, -18.64 + 12.42 - 3, 4.25 - 1, -18.64 + 12.42 + 3, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back6, Gravel, 0, 18.64 - 12.42 - 3, 4.25 - 1, 18.64 - 12.42 + 3, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back7, Gravel, 0, 18.64 - 3, 4.25 - 1, 18.64, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back8, Gravel, 0, 18.64, 4.25 - 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back9, Gravel, 0, -18.64, 4.25 - 1, -18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back10, Gravel, 0, -18.64 + 3, 4.25 - 1, -18.64 + 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back11, Gravel, 0, -18.64 + 12.42 - 3, 4.25 - 1, -18.64 + 12.42 - 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back12, Gravel, 0, -18.64 + 12.42 + 3, 4.25 - 1, -18.64 + 12.42 + 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back13, Gravel, 0, 18.64 - 12.42 - 3, 4.25 - 1, 18.64 - 12.42 - 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back14, Gravel, 0, 18.64 - 12.42 + 3, 4.25 - 1, 18.64 - 12.42 + 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 99] AddShaftWall 1, Shaft1Back15, Gravel, 0, 18.64 - 3, 4.25 - 1, 18.64 - 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+<EndFloors>
+
+#reset drawwalls
+DrawWalls = true, true, false, false, false, false
+
+<Elevator 1>
+    Name = Glass Elevator 1
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0 - 100
+    AssignedShaft = 1
+    AutoEnable = false
+    CreateElevator true, -12.43, 0.33 + 1, 0
+<EndElevator>
+
+<Elevator 2>
+    Name = Glass Elevator 2
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0 - 100
+    AssignedShaft = 1
+    AutoEnable = false
+    CreateElevator true, 0, 0.33 + 1, 1
+<EndElevator>
+
+<Elevator 3>
+    Name = Glass Elevator 3
+    Type = Express
+    Speed = 20
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0 - 100
+    AssignedShaft = 1
+    AutoEnable = false
+    CreateElevator true, 12.43, 0.33 + 1, 100
+<EndElevator>
+
+<Elevators 1 to 3>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    SetAutoSize = true, true
+    TextureOverride ElevExt, ElevFloor2, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor2, 0.2, -2.24 - 0.2, 1, 2.24 + 0.2, 3.125, 0, 0, 0.2, 0.2
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall elevator, ElevatorFloor, ElevFloor2, -2.24, 0, 1, -2.7, 0, -0.37 + 1, -3.34, 0, -2.32 + 1, -2.7, 0, -4.36 + 1, -1, 0, -5.53 + 1, 1.08, 0, -5.55 + 1, 2.75, 0, -4.34 + 1, 3.4, 0, -2.33 + 1, 2.73, 0, -0.36 + 1, 2.24, 0, 1, 0.2, 0.2
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall elevator, ElevatorFloor, ElevExt, -2.24, 0, 1, -2.7, 0, -0.37 + 1, -3.34, 0, -2.32 + 1, -2.7, 0, -4.36 + 1, -1, 0, -5.53 + 1, 1.08, 0, -5.55 + 1, 2.75, 0, -4.34 + 1, 3.4, 0, -2.33 + 1, 2.73, 0, -0.36 + 1, 2.24, 0, 1, 1, 1
+    SetAutoSize = false, false
+
+    #ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, true, true, true, true, true
+    SetAutoSize = false, false
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -2.24 - 0.2, 1, 2.24 + 0.2, 3.125, 8, 8, 1, 1 #ceiling
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall elevator, ElevatorCeiling, ElevCeiling, -2.24, 8, 1, -2.7, 8, -0.37 + 1, -3.34, 8, -2.32 + 1, -2.7, 8, -4.36 + 1, -1, 8, -5.53 + 1, 1.08, 8, -5.55 + 1, 2.75, 8, -4.34 + 1, 3.4, 8, -2.33 + 1, 2.73, 8, -0.36 + 1, 2.24, 8, 1, 2, 2
+    DrawWalls = true, false, false, false, false, false
+    SetAutoSize = true, true
+    AddCustomWall elevator, ElevatorCeiling, ElevExt, -2.24, 8, 1, -2.7, 8, -0.37 + 1, -3.34, 8, -2.32 + 1, -2.7, 8, -4.36 + 1, -1, 8, -5.53 + 1, 1.08, 8, -5.55 + 1, 2.75, 8, -4.34 + 1, 3.4, 8, -2.33 + 1, 2.73, 8, -0.36 + 1, 2.24, 8, 1, 1, 1
+    SetAutoSize = false, false
+
+    #right wall
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevPanelMain, 0, 2.24, 1, 2.7, -0.37 + 1, 8, 8, 0, 0, 1, 1
+
+    #front and left walls
+    WallOrientation = left
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevPanelMain, 0, -2.24, 1, -2.7, -0.37 + 1, 8, 8, 0, 0, 1, 1
+
+    #Glass Windows
+    AddWall W1, ElevWallGlass, 0, -2.7, -0.37 + 1, -3.34, -2.32 + 1, 8, 8, 0, 0, 0.25, 1
+    AddWall W2, ElevWallGlass, 0, -3.34, -2.32 + 1, -2.7, -4.36 + 1, 8, 8, 0, 0, 0.25, 1
+    AddWall W3, ElevWallGlass, 0, -2.7, -4.36 + 1, -1, -5.53 + 1, 8, 8, 0, 0, 0.25, 1
+    AddWall W4, ElevWallGlass, 0, -1, -5.53 + 1, 1.08, -5.55 + 1, 8, 8, 0, 0, 0.25, 1
+    AddWall W5, ElevWallGlass, 0, 1.08, -5.55 + 1, 2.75, -4.34 + 1, 8, 8, 0, 0, 0.25, 1
+    AddWall W6, ElevWallGlass, 0, 2.75, -4.34 + 1, 3.4, -2.33 + 1, 8, 8, 0, 0, 0.25, 1
+    AddWall W7, ElevWallGlass, 0, 3.4, -2.33 + 1, 2.73, -0.36 + 1, 8, 8, 0, 0, 0.25, 1
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, true, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevPanelMain, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -2.24, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, true, false, false
+    WallOrientation = right
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel Side, ElevPanelMain, 0.2, -2.24, 1, -2.24, 3.125, 8, 8, 0, 0, 0, 0 #left panel
+    WallOrientation = left
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel Side, ElevPanelMain, 0.2, 2.24, 1, 2.24, 3.125, 8, 8, 0, 0, 0, 0 #right panel
+    DrawWalls = true, true, true, true, false, false
+    WallOrientation = right
+    TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 2.24, 3.125, 8, 8, 0, 0, 0, 0 #right panel
+
+    #doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    SetAutoSize = true, true
+
+    #panel
+    CreatePanel ElevPanel, 10, 3, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddControl 1, switch.wav, 2, 1, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 3, cancel, 1, 1
+    AddFloorButton 1, Button135, ButtonLit135, 4, 2, 134, 1, 1
+    AddFloorButton 1, ButtonA, ButtonLitA, 5, 2, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 2, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 8, 1, open, 1, 1
+    AddControlButton 1, ButtonClose, 8, 3, close, 1, 1
+    AddControl 1, switch.wav, 9, 1, 1, 1, 0, 0, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 9, 2, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
+    AddControlButton 1, ButtonAlarm, 9, 3, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator left, 2.24 - 0.1, 1.962, 0.7, 0.5, 6.5
+
+    #floor signs
+    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, 3.426 + 0.365, 0.3, 0.3, 5.5
+    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, 3.426 + 0.365, 0.3, 0.3, 5.5
+
+<EndElevators>
