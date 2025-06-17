@@ -212,12 +212,18 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddCustomFloor floor, Floor, Marble, -80, -75, -80, -57, -3, -57, -27, -75, 0, 1, 1
     AddCustomFloor floor, Floor, Marble, 80, -75, 27, -75, 3, -57, 80, -57, 0, 1, 1
     AddFloor Tower Floor, Marble, 0, -80, 105, 80, 305, 0, 0, false, false, 1, 1, false
+    AddFloor ExtFloor 1, Marble, 0, -180, 105, -80, 305, 0, 0, false, false, 1, 1, false
+    AddFloor ExtFloor 2, Marble, 0, 80, 105, 180, 305, 0, 0, false, false, 1, 1, false
+    AddFloor ExtFloor 3, Marble, 0, -80, 305, 80, 405, 0, 0, false, false, 1, 1, false
 
     AddCustomFloor floor, CeilingLeft, Marble, -80, 105, -27, 105, -27, -75, -80, -75, %height% - 0.1, 1, 1
     AddCustomFloor floor, CeilingRight, Marble, 27, 105, 80, 105, 80, -75, 27, -75, %height% - 0.1, 1, 1
     AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height% - 0.1, %height% - 0.1, false, false, 1, 1, false
     AddCustomFloor floor, Side1, Marble, 80, 105, 80, 50, 50, 105, 0, 1, 1
     AddCustomFloor floor, Side2, Marble, -80, 105, -80, 50, -50, 105, 0, 1, 1
+    AddFloor ExtCeiling 1, Marble, 0, -180, 105, -80, 305, %height%, %height%, false, false, 1, 1, false
+    AddFloor ExtCeiling 2, Marble, 0, 80, 105, 180, 305, %height%, %height%, false, false, 1, 1, false
+    AddFloor ExtCeiling 3, Marble, 0, -80, 305, 80, 405, %height%, %height%, false, false, 1, 1, false
 
     AddWall Front1, MainWalls, 0, -80, -75, -27, -75, %height%, %height%, 0, 0, 0, 0, True
     AddWall Front2, MainWalls, 0, 27, -75, 80, -75, %height%, %height%, 0, 0, 0, 0, True
@@ -231,9 +237,16 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddWall Back, AtriumWindows, 0, -27, 105, 27, 105, %height%, %height%, 0, 0, 0, 0, True
     AddWall Back2, MainWalls, 0, -27, 105, -50, 105, %height%, %height%, 0, 0, 0, 0, True
     AddWall Back3, MainWalls, 0, 27, 105, 50, 105, %height%, %height%, 0, 0, 0, 0, True
-    AddWall TowerLeft, MainWalls, 0, -80, 50, -80, 305, %height%, %height%, 0, 0, 0, 0, True
-    AddWall TowerRight, MainWalls, 0, 80, 50, 80, 305, %height%, %height%, 0, 0, 0, 0, True
-    AddWall TowerBack, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerLeft, MainWalls, 0, -80, 75, -80, 405, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerLeft2, MainWalls, 0, -180, 105, -180, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerRight, MainWalls, 0, 80, 75, 80, 405, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerRight2, MainWalls, 0, 180, 105, 180, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerBack, MainWalls, 0, -80, 405, 80, 405, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerBack2, MainWalls, 0, 80, 305, 180, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerBack3, MainWalls, 0, -80, 305, 80, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerFront, MainWalls, 0, 80, 105, 180, 105, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerBack3, MainWalls, 0, -80, 305, -180, 305, %height%, %height%, 0, 0, 0, 0, True
+    AddWall TowerFront2, MainWalls, 0, -80, 105, -180, 105, %height%, %height%, 0, 0, 0, 0, True
 
     AddWall InnerLeft, MainWalls, 0, -27, 105, -27, -75, %height%, %height%, 0, 0, 0, 0, false
     AddWall InnerRight, MainWalls, 0, 27, 105, 27, -75, %height%, %height%, 0, 0, 0, 0, False
