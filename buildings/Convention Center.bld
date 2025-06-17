@@ -581,7 +581,12 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     CutAll -25, 10, 105, 25, %height% + 5, 180, false, true
 <EndFloor>
 <Floors 1 to 100>
-    CutAll -25, -5, 105, 25, %height% + 5, 180, false, true
+    if[%floor% < 50] CutAll -25, -5, 105, 25, %height% + 5, 180, false, true
+    if[%floor% < 60] CutAll -25, -5, 115, 25, %height% + 5, 180, false, true
+    if[%floor% < 70] CutAll -25, -5, 120, 25, %height% + 5, 180, false, true
+    if[%floor% < 80] CutAll -25, -5, 125, 25, %height% + 5, 180, false, true
+    if[%floor% < 90] CutAll -25, -5, 130, 25, %height% + 5, 180, false, true
+    CutAll -25, -5, 135, 25, %height% + 5, 180, false, true
     AddInterfloorWall Left, MainWalls, 0, -25, 105, -25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Back, MainWalls, 0, -25, 180, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Right, MainWalls, 0, 25, 105, 25, 180, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
@@ -590,9 +595,15 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     SetAutoSize = true, false
     Set vtile = 1
     if [%floor% = 1] Set vtile = 3
-    AddWall InteriorLeft, MainWindowsInt, 0, -25, 105, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
-    AddWall InteriorBack, MainWindowsInt, 0, -25, 180, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
-    AddWall InteriorRight, MainWindowsInt, 0, 25, 105, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    AddWall InteriorLeft, MainWindowsInt, 0, -25, 120, -25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    AddWall InteriorBack, MainWindowsInt, 0, -25, 180, -18.7, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    AddWall InteriorBack2, MainWindowsInt, 0, 18.7, 180, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    AddWall InteriorRight, MainWindowsInt, 0, 25, 120, 25, 180, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if[%floor% > 49 & %floor% < 60] AddWall InteriorFront, MainWindowsInt, 0, -25, 115, 25, 115, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if[%floor% > 59 & %floor% < 70] AddWall InteriorFront, MainWindowsInt, 0, -25, 120, 25, 120, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if[%floor% > 69 & %floor% < 80] AddWall InteriorFront, MainWindowsInt, 0, -25, 125, 25, 125, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if[%floor% > 79 & %floor% < 90] AddWall InteriorFront, MainWindowsInt, 0, -25, 130, 25, 130, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
+    if[%floor% > 89 & %floor% < 100] AddWall InteriorFront, MainWindowsInt, 0, -25, 135, 25, 135, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, %vtile%, true
     SetAutoSize = true, true
 <EndFloors>
 
