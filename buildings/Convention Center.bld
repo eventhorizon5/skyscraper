@@ -579,12 +579,26 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     SetAutoSize = true, true
 <EndFloors>
 
-#Glass Elevator Shaft
-AddShaft 1, 2, 0, 180 - 4.25 - 1, 0, 102
+#Glass Elevator Shaft 1
+AddShaft 1, 0, 180 - 4.25 - 1, 0, 102
 ShaftCut 1, -18.64, -4.25 + 0.33, 18.64, 4.25 + 1 - 0.33, 0, 5
 ShaftShowFloors 1 = 0 - 100
 ShaftShowOutside 1 = 0 - 100
 ShowFullShaft 1 = true
+
+#Glass Elevator Shaft 2
+AddShaft 2, 25 - 4.25 + 1, 140, 0, 34
+ShaftCut 2, -4.25 + 0.33, -18.64, 4.25 - 1 - 0.33, 18.64, 0, 5
+ShaftShowFloors 2 = 0 - 100
+ShaftShowOutside 2 = 0 - 100
+ShowFullShaft 2 = true
+
+#Glass Elevator Shaft 3
+AddShaft 3, -25 + 4.25 - 1, 140, 0, 67
+ShaftCut 3, -4.25 + 0.33, -18.64, 4.25 - 1 - 0.33, 18.64, 0, 5
+ShaftShowFloors 3 = 0 - 100
+ShaftShowOutside 3 = 0 - 100
+ShowFullShaft 3 = true
 
 <Floors 0 to 100>
     SetAutoSize = true, true
