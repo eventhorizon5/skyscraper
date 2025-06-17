@@ -993,7 +993,7 @@ DrawWalls = true, true, false, false, false, false
     AddControl 1, switch.wav, 1, 1, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 1, 6, cancel, 1, 1
 
-    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 4, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 100, 1, 1
     Set row = 3
     Set iterator = 99
     <For i 1 to 9>
