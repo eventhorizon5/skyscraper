@@ -94,6 +94,7 @@
     Load data/cutston2.jpg, Gravelb, 0.5, 0.5
     Load data/cutston3.jpg, Gravel2, 0.25, 0.25
     Load data/cutston3.jpg, Gravel2b, 0.5, 0.5
+    Load data/cutston2.jpg, ColumnTex, 0.5, 0.5
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -739,11 +740,31 @@ ShaftCut 5, -8, -4.125 + 0.33, 8, 4.125, 0, 5
     if[%floor% = 0] Set 2 = -6
     if[%floor% < 102] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %1%, %1%, %2%, %2%, 0, 0
     if[%floor% < 34] AddShaftWall 2, Shaft1BackOutside, Gravel2, 0, 4.25 - 0.33, -18.64, 4.25 - 0.33, 18.64, %1%, %1%, %2%, %2%, 0, 0
-    if[%floor% < 67] AddShaftWall 3, Shaft1BackOutside, Gravel2, 0, -4.25 + 0.33, -18.64, -4.25 + 0.33, 18.64, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 67] AddShaftWall 3, Shaft1BackOutside, Gravel, 0, -4.25 + 0.33, -18.64, -4.25 + 0.33, 18.64, %1%, %1%, %2%, %2%, 0, 0
     DrawWalls = false, true, false, false, false, false
     if[%floor% < 102] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
     if[%floor% < 34] AddShaftWall 2, Shaft1BackInside, Gravel, 0, 4.25, -18.64, 4.25, 18.64, %1%, %1%, %2%, %2%, 0, 0
-    if[%floor% < 67] AddShaftWall 3, Shaft1BackInside, Gravel, 0, -4.25, -18.64, -4.25, 18.64, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 67] AddShaftWall 3, Shaft1BackInside, Gravel2, 0, -4.25, -18.64, -4.25, 18.64, %1%, %1%, %2%, %2%, 0, 0
+<EndFloors>
+
+# Glass Elevator Shaft Columns
+<Floors 0 to 100>
+    ColumnWallBox2 Column1, ColumnTex, -16, 179, 3, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column2, ColumnTex, -6, 179, 6, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column3, ColumnTex, 6, 179, 6, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column4, ColumnTex, 16, 179, 3, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+<EndFloors>
+<Floors 0 to 32>
+    ColumnWallBox2 Column1, ColumnTex, 25, 157, 1.5, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column2, ColumnTex, 25, 157 - 10 - 0.5, 1.5, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column3, ColumnTex, 25, 134.5, 1.5, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column4, ColumnTex, 25, 123.3, 1.5, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+<EndFloors>
+<Floors 0 to 65>
+    ColumnWallBox2 Column1, ColumnTex, -25, 157, 1.5, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column2, ColumnTex, -25, 157 - 10 - 0.5, 1.5, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column3, ColumnTex, -25, 134.5, 1.5, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 Column4, ColumnTex, -25, 123.3, 1.5, 1.5, %fullheight%, 0, 0, 0, false, true, false, false
 <EndFloors>
 
 #reset drawwalls
