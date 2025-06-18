@@ -1458,8 +1458,18 @@ DrawWalls = true, true, false, false, false, false
     CutAll -24, 0, -60, -16, 8, -70, true, false
     CutAll 14, 0, -60, 6, 8, -70, true, false
     CutAll 24, 0, -60, 16, 8, -70, true, false
-    AddRevolvingDoor , MainWindowsInt, 0.2, false, 4, 0.2, 45, -10, -62.5, 10, 8, 0, 1, 1, false
-    AddRevolvingDoor , MainWindowsInt, 0.2, false, 4, 0.2, 45, 10, -62.5, 10, 8, 0, 1, 1, false
-    AddRevolvingDoor , MainWindowsInt, 0.2, false, 4, 0.2, 45, -20, -70, 10, 8, 0, 1, 1, false
-    AddRevolvingDoor , MainWindowsInt, 0.2, false, 4, 0.2, 45, 20, -70, 10, 8, 0, 1, 1, false
+    AddRevolvingDoor G1, true, , MainWindowsInt, 0.2, false, 4, 0.2, 45, -10, -62.5, 10, 8, 0, 1, 1, false
+    AddRevolvingDoor G2, true, , MainWindowsInt, 0.2, false, 4, 0.2, 45, 10, -62.5, 10, 8, 0, 1, 1, false
+    AddRevolvingDoor G3, true, , MainWindowsInt, 0.2, false, 4, 0.2, 45, -20, -70, 10, 8, 0, 1, 1, false
+    AddRevolvingDoor G4, true, , MainWindowsInt, 0.2, false, 4, 0.2, 45, 20, -70, 10, 8, 0, 1, 1, false
+<EndFloor>
+
+# Tower atrium revolving doors
+<Floor 0>
+    CutAll -20, %interfloorheight%, 104, -10, 8 + %interfloorheight%, 106, true, false
+    CutAll -5, %interfloorheight%, 104, 5, 8 + %interfloorheight%, 106, true, false
+    CutAll 10, %interfloorheight%, 104, 20, 8 + %interfloorheight%, 106, true, false
+    AddRevolvingDoor A1, true, , MainWindowsInt, 0.2, false, 4, 0.2, 45, -15, 105, 10, 8, 0, 1, 1, false
+    AddRevolvingDoor A2, true, , MainWindowsInt, 0.2, false, 4, 0.2, 45, 0, 105, 10, 8, 0, 1, 1, false
+    AddRevolvingDoor A3, true, , MainWindowsInt, 0.2, false, 4, 0.2, 45, 15, 105, 10, 8, 0, 1, 1, false
 <EndFloor>
