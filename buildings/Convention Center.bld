@@ -19,7 +19,7 @@
 <Globals>
     Name = Horizon Hotel and Convention Center
     Designer = Event Horizon
-    Version = 0.1
+    Version = 0.2
     CameraFloor = 0
     CameraPosition = 0, 90
     CameraRotation = 0, 0, 0
