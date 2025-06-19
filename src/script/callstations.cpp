@@ -135,6 +135,15 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		station->TimerDelay = num;
 		return sNextLine;
 	}
+	//ShowDirection parameter
+	if (StartsWithNoCase(LineData, "showdirection"))
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		station->ShowDirection = ToBool(value);
+		return sNextLine;
+	}
 
 	//commands
 
