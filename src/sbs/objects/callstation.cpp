@@ -70,6 +70,7 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 	controller = 0;
 	indicator = 0;
 	TimerDelay = 2;
+	ShowDirection = true;
 
 	//create timer
 	timer = new Timer("Input Timeout Timer", this);
@@ -410,38 +411,41 @@ void CallStation::ReportElevator(Elevator *elevator)
 {
 	//report which elevator is assigned, on indicator
 
-	//update indicator with direction of elevator
-	std::string Direction = this->GetPanel()->Direction;
-	Vector3 ButtonPos = this->GetPanel()->GetPosition();
-	Vector3 ShaftPos  = elevator->GetPosition();
+	if (ShowDirection == true)
+	{
+		//update indicator with direction of elevator
+		std::string Direction = this->GetPanel()->Direction;
+		Vector3 ButtonPos = this->GetPanel()->GetPosition();
+		Vector3 ShaftPos = elevator->GetPosition();
 
-	if (Direction == "front")
-	{
-		if (ButtonPos.x > ShaftPos.x)
-			return UpdateIndicator((ButtonPos.z < ShaftPos.z ? "<" : "[]") + elevator->ID);
-		else
-			return UpdateIndicator(elevator->ID + (ButtonPos.z < ShaftPos.z ? ">" : "[]"));
-	}
-	else if (Direction == "back")
-	{
-		if (ButtonPos.x < ShaftPos.x)
-			return UpdateIndicator((ButtonPos.z > ShaftPos.z ? "<" : "[]") + elevator->ID);
-		else
-			return UpdateIndicator(elevator->ID + (ButtonPos.z > ShaftPos.z ? ">" : "[]"));
-	}
-	else if (Direction == "left")
-	{
-		if (ButtonPos.z < ShaftPos.z)
-			return UpdateIndicator((ButtonPos.x < ShaftPos.x ? "<" : "[]") + elevator->ID);
-		else
-			return UpdateIndicator(elevator->ID + (ButtonPos.x < ShaftPos.x ? ">" : "[]"));
-	}
-	else if (Direction == "right")
-	{
-		if (ButtonPos.z > ShaftPos.z)
-			return UpdateIndicator((ButtonPos.x > ShaftPos.x ? "<" : "[]") + elevator->ID);
-		else
-			return UpdateIndicator(elevator->ID + (ButtonPos.x > ShaftPos.x ? ">" : "[]"));
+		if (Direction == "front")
+		{
+			if (ButtonPos.x > ShaftPos.x)
+				return UpdateIndicator((ButtonPos.z < ShaftPos.z ? "<" : "[]") + elevator->ID);
+			else
+				return UpdateIndicator(elevator->ID + (ButtonPos.z < ShaftPos.z ? ">" : "[]"));
+		}
+		else if (Direction == "back")
+		{
+			if (ButtonPos.x < ShaftPos.x)
+				return UpdateIndicator((ButtonPos.z > ShaftPos.z ? "<" : "[]") + elevator->ID);
+			else
+				return UpdateIndicator(elevator->ID + (ButtonPos.z > ShaftPos.z ? ">" : "[]"));
+		}
+		else if (Direction == "left")
+		{
+			if (ButtonPos.z < ShaftPos.z)
+				return UpdateIndicator((ButtonPos.x < ShaftPos.x ? "<" : "[]") + elevator->ID);
+			else
+				return UpdateIndicator(elevator->ID + (ButtonPos.x < ShaftPos.x ? ">" : "[]"));
+		}
+		else if (Direction == "right")
+		{
+			if (ButtonPos.z > ShaftPos.z)
+				return UpdateIndicator((ButtonPos.x > ShaftPos.x ? "<" : "[]") + elevator->ID);
+			else
+				return UpdateIndicator(elevator->ID + (ButtonPos.x > ShaftPos.x ? ">" : "[]"));
+		}
 	}
 
 	//otherwise update indicator with just elevator ID
