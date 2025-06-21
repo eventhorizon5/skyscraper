@@ -907,7 +907,7 @@ FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, c
 
 	if (relative == false)
 	{
-		FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
+		FloorIndicator *ind = new FloorIndicator(this, FloorIndicatorArray.size(), elevator, car, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
 		FloorIndicatorArray.emplace_back(ind);
 		return ind;
 	}
@@ -916,7 +916,7 @@ FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, c
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicator *ind = new FloorIndicator(this, elevator, car, texture_prefix, blank_texture, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
+			FloorIndicator *ind = new FloorIndicator(this, FloorIndicatorArray.size(), elevator, car, texture_prefix, blank_texture, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
 			FloorIndicatorArray.emplace_back(ind);
 			return ind;
 		}

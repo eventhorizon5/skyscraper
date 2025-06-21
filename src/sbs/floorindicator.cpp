@@ -47,7 +47,7 @@ public:
 	virtual void Notify();
 };
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
+FloorIndicator::FloorIndicator(Object *parent, int index, int elevator, int car, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
 {
 	//creates a new floor indicator at the specified position
 
@@ -64,7 +64,12 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
-	std::string name = "Floor Indicator " + ToString(elevator);
+	std::string ext = ":" + ToString(index + 1);
+	std::string name;
+	if (index == 0)
+		name = "Floor Indicator " + ToString(elevator);
+	else
+		name = "Floor Indicator " + ToString(elevator) + ext;
 	SetName(name);
 
 	FloorIndicatorMesh = new MeshObject(this, name, 0, "", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
