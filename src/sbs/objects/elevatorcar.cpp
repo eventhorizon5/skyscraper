@@ -505,7 +505,7 @@ FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix
 {
 	//Creates a floor indicator at the specified location
 
-	FloorIndicator* indicator = new FloorIndicator(this, parent->Number, Number, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicator* indicator = new FloorIndicator(this, FloorIndicatorArray.size(), parent->Number, Number, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray.emplace_back(indicator);
 	return indicator;
 }
