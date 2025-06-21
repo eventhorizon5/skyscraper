@@ -6,9 +6,17 @@ Version 2.1
 -started Serializer object (the change was reverted, but is active in a local branch for the time being)
 -Fix looping on intro2.ogg
 -Moved SBS source files into subdirectories
+-new Convention Center building
+-added Convention Center to City Demo
 
 Version 2.0
 -------------------------
+-Added some support for making OpenXR optional on Windows
+-Don't automatically enable map generator on startup
+-Added new Inno Setup installer
+-Updated readme for 2.0 release information, and cleanups
+-Added Skyscraper logo images to guide folder
+-Added sound manager button to list playing sounds in all engines
 -Fix soundsystem stats reporting
 -Added sound manager button to list playing sounds in all engines
 -Added Skyscraper logo images to guide folder
