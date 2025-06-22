@@ -95,6 +95,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
 	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
 	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
+	last_fov = FOV;
 	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0);
 	object_number = 0;
 	object_line = 0;
@@ -1197,9 +1198,12 @@ void Camera::Binoculars(bool value)
 		return;
 
 	if (value == true)
+	{
+		last_fov = GetFOVAngle();
 		SetFOVAngle(BinocularsFOV);
-	else
-		SetToDefaultFOV();
+		return;
+	}
+	SetFOVAngle(last_fov);
 }
 
 bool Camera::IsMeshVisible(MeshObject *mesh)

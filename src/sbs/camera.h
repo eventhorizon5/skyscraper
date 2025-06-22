@@ -203,6 +203,7 @@ private:
 	int lastfloor;
 	bool lastfloorset;
 	Real FOV; //default FOV angle
+	Real last_fov;
 	Vector3 Rotation;
 	bool Collisions; //collision detection status
 	bool RotationStopped;
