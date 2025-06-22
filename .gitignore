@@ -37,6 +37,7 @@ ogrebullet/Debug
 *.dir/
 x64/
 Skyscraper.exe
+Thumbs.db
 
 # Misc.
 skyscraper.log
