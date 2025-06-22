@@ -752,6 +752,8 @@ void MainScreen::HandleMouseMovement()
 			//reset values to prevent movement from getting stuck
 			frontend->turn_right = 0;
 			frontend->turn_left = 0;
+
+			EnableFreelook(true);
 		}
 
 		frontend->freelook = true;
