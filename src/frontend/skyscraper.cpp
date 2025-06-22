@@ -239,6 +239,7 @@ bool showconsole = true;
 	//AllowResize(false);
 	window->ShowWindow();
 	window->CenterOnScreen();
+	window->Maximize(hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Maximized", false));
 
 	vm->SetParent(window);
 #else
