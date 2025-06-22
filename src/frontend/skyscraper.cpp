@@ -141,6 +141,7 @@ bool Skyscraper::OnInit()
 
 	StartupRunning = false;
 	FullScreen = false;
+	Maximized = false;
 	ShowMenu = false;
 	mRenderWindow = 0;
 	window = 0;
@@ -162,6 +163,9 @@ bool Skyscraper::OnInit()
 	step_forward = false;
 	step_backward = false;
 	freelook = false;
+
+	//reset loop states
+	startscreen_loaded = false;
 
 #ifdef USING_WX
 	parser = 0;
@@ -404,6 +408,19 @@ bool Skyscraper::Loop()
 	{
 		bool result = false;
 
+		if (startscreen_loaded == false)
+		{
+#ifdef USING_WX
+			Maximized = window->IsMaximized();
+			if (Maximized == true)
+				window->Maximize(false);
+
+			window->SetClientSize(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Height", 600));
+			window->Center();
+			window->SetCursor(wxNullCursor);
+#endif
+		}
+
 		result = startscreen->DrawBackground();
 
 		if (result == false)
@@ -420,6 +437,16 @@ bool Skyscraper::Loop()
 			vm->loadstart = false;
 			return true;
 		}
+
+		if (startscreen_loaded == false)
+		{
+#ifdef USING_WX
+			if (Maximized == true)
+				window->Maximize();
+#endif
+		}
+
+		startscreen_loaded = true;
 
 		//have HAL render frame
 		return vm->GetHAL()->Render();
@@ -516,6 +543,7 @@ void Skyscraper::StopMenu()
 	{
 		startscreen->DeleteButtons();
 		StartupRunning = false;
+		startscreen_loaded = false;
 	}
 }
 
@@ -547,14 +575,19 @@ bool Skyscraper::Start(EngineContext *engine)
 			SetFullScreen(true);
 
 #ifdef USING_WX
+		Maximized = window->IsMaximized();
+
 		//resize main window
 		if (FullScreen == false)
 		{
 #if !defined(__WXMAC__)
 			window->SetBackgroundColour(*wxBLACK);
 #endif
-			window->SetClientSize(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenWidth", 1024), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenHeight", 768));
-			window->Center();
+			if (Maximized == false)
+			{
+				window->SetClientSize(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenWidth", 1024), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenHeight", 768));
+				window->Center();
+			}
 		}
 #endif
 	}
@@ -623,11 +656,7 @@ void Skyscraper::UnloadToMenu()
 
 	//return to main menu
 	SetFullScreen(false);
-#ifdef USING_WX
-	window->SetClientSize(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Height", 600));
-	window->Center();
-	window->SetCursor(wxNullCursor);
-#endif
+
 	vm->ConcurrentLoads = false;
 	vm->SetRenderOnStartup(false);
 
