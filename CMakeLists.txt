@@ -104,10 +104,12 @@ if(WIN32 AND wxWidgets_FOUND)
 	file(GLOB VM_FILES
 		src/vm/*.cpp
 		src/gui/*.cpp
+		msvc/VM.rc
 	)
 else()
 	file(GLOB VM_FILES
 		src/vm/*.cpp
+		msvc/VM.rc
 	)
 endif()
 
@@ -128,6 +130,7 @@ file(GLOB SBS_FILES
  
 file(GLOB OPENXR_FILES
 	src/openxr/src/*.cpp
+	msvc/OpenXR.rc
 )
 
 file(GLOB OGREBULLET_COLL_FILES
