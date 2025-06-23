@@ -2699,6 +2699,8 @@ bool SBS::DeleteObject(Object *object)
 		deleted = true;
 	else if (type == "Reverb")
 		deleted = true;
+	else if (type == "CameraTexture")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
