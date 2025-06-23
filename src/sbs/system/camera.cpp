@@ -121,6 +121,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	inside_vehicle = false;
 	vehicle = 0;
 	old_freelook_mode = false;
+	BinocularsState = false;
 
 	//set up collider character
 	Real width = cfg_legs_width / 2;
@@ -1197,13 +1198,18 @@ void Camera::Binoculars(bool value)
 	if (Cameras.empty())
 		return;
 
+	if (value == BinocularsState)
+		return;
+
 	if (value == true)
 	{
 		last_fov = GetFOVAngle();
 		SetFOVAngle(BinocularsFOV);
-		return;
 	}
-	SetFOVAngle(last_fov);
+	else
+		SetFOVAngle(last_fov);
+
+	BinocularsState = value;
 }
 
 bool Camera::IsMeshVisible(MeshObject *mesh)
