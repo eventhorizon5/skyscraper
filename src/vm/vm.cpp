@@ -701,6 +701,10 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	//boot SBS
 	EngineContext* engine = Initialize(clear, parent, position, rotation, area_min, area_max);
 
+	//exit if init failed
+	if (!engine)
+		return false;
+
 	//have new engine instance load building
 	bool result = engine->Load(filename);
 
@@ -732,7 +736,15 @@ EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &
 	}
 
 	//clear screen
-	hal->GetRenderWindow()->update();
+	try
+	{
+		hal->GetRenderWindow()->update();
+	}
+	catch (...)
+	{
+		ReportFatalError("Error updating render window");
+		return 0;
+	}
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
