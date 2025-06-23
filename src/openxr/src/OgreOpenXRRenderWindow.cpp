@@ -141,6 +141,8 @@ namespace Ogre {
     XRPosition[1] = Ogre::Vector3::ZERO;
     XROrientation[0] = Ogre::Quaternion::ZERO;
     XROrientation[1] = Ogre::Quaternion::ZERO;
+    LogManager::getSingleton().logMessage("\nOpenXR Interface loaded\nOriginal work produced by Glastonbridge Software Limited, MIT license");
+    LogManager::getSingleton().logMessage("OpenXR: Initializing...");
   }
 
   OpenXRRenderWindow::~OpenXRRenderWindow() {
