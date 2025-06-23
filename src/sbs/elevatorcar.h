@@ -224,6 +224,7 @@ public:
 	void SetControls(const std::string &action_name);
 	void FlashIndicators(bool value);
 	CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
+	void RemoveCameraTexture(CameraTexture* camtex);
 	bool RespondingToCall(int floor, int direction);
 	int RespondingToCall(int floor);
 	bool AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);

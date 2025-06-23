@@ -1254,4 +1254,17 @@ CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int q
 	return cameratexture;
 }
 
+void Stairwell::Level::RemoveCameraTexture(CameraTexture* camtex)
+{
+	//remove a cameratexture reference (does not delete the object itself)
+	for (size_t i = 0; i < CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i] == camtex)
+		{
+			CameraTextureArray.erase(CameraTextureArray.begin() + i);
+			return;
+		}
+	}
+}
+
 }
