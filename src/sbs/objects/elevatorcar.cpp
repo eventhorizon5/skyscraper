@@ -3526,6 +3526,19 @@ CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int qualit
 	return cameratexture;
 }
 
+void ElevatorCar::RemoveCameraTexture(CameraTexture* camtex)
+{
+	//remove a cameratexture reference (does not delete the object itself)
+	for (size_t i = 0; i < CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i] == camtex)
+		{
+			CameraTextureArray.erase(CameraTextureArray.begin() + i);
+			return;
+		}
+	}
+}
+
 bool ElevatorCar::RespondingToCall(int floor, int direction)
 {
 	//returns true if the car is responding to a call on the specified floor

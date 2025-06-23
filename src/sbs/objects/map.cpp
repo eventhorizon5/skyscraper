@@ -52,7 +52,7 @@ Map::Map(Object *parent, const std::string &name) : Object(parent)
 
 	//create orthographic camera texture, used for map generation
 #ifdef USING_WX
-	OrthoCamera = new CameraTexture(this, "MapCamera", 3, 0, Vector3(0, 50000, 0), false, Vector3(270, 0, 0));
+	OrthoCamera = new CameraTexture(this, "MapCamera", 3, 0, Vector3(0, 50000, 0), false, Vector3(270, 0, 0), true);
 	OrthoCamera->EnableOrthographic(true);
 #endif
 
