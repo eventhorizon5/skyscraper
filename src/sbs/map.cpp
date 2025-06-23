@@ -45,7 +45,7 @@ public:
 Map::Map(Object *parent, const std::string &name) : Object(parent)
 {
 	//set up SBS object
-	SetValues("Map", name, false);
+	SetValues("Map", name, true);
 
 	OrthoCamera = 0;
 	enabled = false;
