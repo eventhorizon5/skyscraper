@@ -1263,9 +1263,9 @@ DrawWalls = true, true, false, false, false, false
     AddFloorButton 2, Button5, ButtonLit5, 12, 4, 5, 1, 1
     AddFloorButton 2, Button4, ButtonLit4, 12, 3, 4, 1, 1
     AddFloorButton 2, Button3, ButtonLit3, 12, 2, 3, 1, 1
-    AddFloorButton 2, Button2, ButtonLit2, 12, 6, 2, 1, 1
-    AddFloorButton 2, ButtonA, ButtonLitA, 13, 5, 1, 1, 1
-    AddFloorButton 2, ButtonL, ButtonLitL, 13, 4, 0, 1, 1
+    AddFloorButton 2, Button2, ButtonLit2, 13, 5, 2, 1, 1
+    AddFloorButton 2, ButtonA, ButtonLitA, 13, 4, 1, 1, 1
+    AddFloorButton 2, ButtonL, ButtonLitL, 13, 3, 0, 1, 1
     AddControlButton 2, ButtonOpen, 16, 6, open, 1, 1
     AddControlButton 2, ButtonClose, 16, 4, close, 1, 1
     AddControlButton 2, ButtonAlarm, 16, 2, alarm, 1, 1
