@@ -215,6 +215,7 @@ private:
 	bool use_startdirection;
 	Quaternion prev_orientation;
 	Vector3 prev_position;
+	bool BinocularsState; //binoculars enabled status
 
 	//Models
 	Model*	AttachedModel;
