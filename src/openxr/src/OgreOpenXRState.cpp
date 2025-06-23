@@ -11,6 +11,7 @@
     https://github.com/glastonbridge/OgreOpenXRRenderWindow
 */
 
+#include "Ogre.h"
 #include "OgreOpenXRState.h"
 
 #include "OgreOpenXRInstance.h"
@@ -44,7 +45,7 @@ namespace Ogre {
         break;
       }
       else if (result == XR_ERROR_FORM_FACTOR_UNAVAILABLE) {
-        DEBUG_PRINT("No headset detected.  Trying again in one second...");
+        LogManager::getSingleton().logMessage("OpenXR: No headset detected.  Trying again in one second...");
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(1s);
       }
