@@ -42,6 +42,7 @@ namespace Ogre {
     while (true) {
       XrResult result = xrGetSystem(m_xrInstance->getHandle().Get(), &systemInfo, &_systemId);
       if (SUCCEEDED(result)) {
+        LogManager::getSingleton().logMessage("OpenXR: Headset detected");
         break;
       }
       else if (result == XR_ERROR_FORM_FACTOR_UNAVAILABLE) {
