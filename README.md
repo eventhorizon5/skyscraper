@@ -184,9 +184,118 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 -doors, controls/buttons, and call buttons can be locked/unlocked by holding down both the Ctrl and Shift keys while clicking on the side to lock, if you have the associated key
 
-## Detailed Release Notes
+## Detailed Release Notes (changes from Alpha 11)
 
-(in progress)
+-destination dispatch was added, along with dispatch controllers and call stations
+
+-lots of Mac fixes have been made, with a custom data directory now being available in the Application Support folder
+
+-the Door System feature was introduced, to make possible things like sliding doors.  The door system consolidates the door backend code into shared code.
+
+-Ogre has been upgraded to 14
+
+-experimental Virtual Reality support using OpenXR has been introduced, this currently has been tested with Meta Quest 2 headsets, and can be turned on via the INI file
+
+-the Sound Manager dialog has been added
+
+-Call Buttons have been removed, and replaced with the more advanced Call Stations
+
+-the script guide (now the Users Guide, designguide.html) has been revamped
+
+-lots of code reorganizations have taken place, introducing new components such as VM (Virtual Manager), etc.
+
+-Virtual Manager (VM) was introduced, which provides a Unix-like management environment for sim engines.
+
+-development has moved to Git, and the GitRev system has been created to version-stamp the builds
+
+-generic indicators were introduced
+
+-experimental DirectX 11 support has been added, mainly used for VR mode and Windows/ARM builds
+
+-the camera "RestrictRotation" feature is now enabled by default.
+
+-the Texture Manager dialog has been introduced
+
+-internally, the geometry tables have been moved from the Mesh object to the Polygon object
+
+-For loops have been introduced
+
+-new Simple City demo
+
+-in-cab elevator keypad support has been added by MultiMonorail, you can test this in the "Simple - Keypad" building
+
+-joystick support has been added
+
+-the OgreProcedural library was added, adding support for geometry primitives
+
+-the "Simple - Runloop" building and "Simple - Hydraulic" were introduced
+
+-added support for script runloops
+
+-cross-engine mouseclicks are now supported
+
+-malfunctions were introduced
+
+-building power management was added
+
+-FreeBSD support has been added
+
+-reverb objects are now supported
+
+-the Moving Walkway Control dialog was added
+
+-the City Simulation building was added
+
+-a serviced floor manager has been added to the Elevator Editor
+
+-regular call cancel support has been brought back
+
+-virtual people can now be assigned a lobby level to start at
+
+-the Virtual Manager Console (VMConsole) was introduced
+
+-directional indicators can now blink
+
+-the RenderOnStartup feature has been reintroduced
+
+-maps, demonstrated in the "Simple - Map" building, have been added
+
+-an alternate native frontend has been introduced, that doesn't rely on wxWidgets
+
+-walls are now fully movable objects
+
+-the original file selection dialog has been brought back, and can be enabled via the INI file
+
+-sounds can now be disabled in the Sound Manager
+
+-lots of fixes
+
+
+## New commands/parameters introduced:
+
+AddSlidingDoor (create sliding doors)
+AddStdDoor (create standard doors)
+CreateCustomDoor
+CustomDoorComponent (used with CreateCustomDoor)
+FinishDoor (used with CreateCustomDoor)
+MoveDoor
+SetAutoClose
+MusicUp (elevator car)
+MusicDown (elevator car)
+MusicAlwaysOn (elevator car)
+MessageOnMove (elevator car)
+For loops
+MessageOnStart (elevator)
+AddElevatorIDSigns (for destination dispatch)
+EnablePhysics
+Lobby
+PrimCollider
+ShowDirection (callstations)
+
+## New actions introduced:
+Door actions: Open, Close, AutoClose
+Revolving Door actions: On, Off
+Elevator actions: InsUpOn, InsUpOff, InsDownOn, InsDownOff
 
 ## Contact
 
