@@ -274,27 +274,47 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 ## New commands/parameters introduced:
 
 AddSlidingDoor (create sliding doors)
+
 AddStdDoor (create standard doors)
+
 CreateCustomDoor
+
 CustomDoorComponent (used with CreateCustomDoor)
+
 FinishDoor (used with CreateCustomDoor)
+
 MoveDoor
+
 SetAutoClose
+
 MusicUp (elevator car)
+
 MusicDown (elevator car)
+
 MusicAlwaysOn (elevator car)
+
 MessageOnMove (elevator car)
+
 For loops
+
 MessageOnStart (elevator)
+
 AddElevatorIDSigns (for destination dispatch)
+
 EnablePhysics
+
 Lobby
+
 PrimCollider
+
 ShowDirection (callstations)
 
 ## New actions introduced:
+
 Door actions: Open, Close, AutoClose
+
 Revolving Door actions: On, Off
+
 Elevator actions: InsUpOn, InsUpOff, InsDownOn, InsDownOff
 
 ## Contact
