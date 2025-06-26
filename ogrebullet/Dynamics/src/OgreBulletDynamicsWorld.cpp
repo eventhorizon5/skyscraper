@@ -84,9 +84,6 @@ namespace OgreBulletDynamics
         //btSequentialImpulseConstraintSolver3
         mConstraintsolver = new btSequentialImpulseConstraintSolver();
 
-        //print banner
-        LogManager::getSingleton().logMessage("\nOgreBullet initializing...\n(C)2007 tuan.kuranes@gmail.com\n");
-
         //only if init is true, otherwise you have to create mWorld manually later on
         if (init) {
             mWorld = new btDiscreteDynamicsWorld(mDispatcher, mBroadphase, mConstraintsolver, &mDefaultCollisionConfiguration);
@@ -95,6 +92,8 @@ namespace OgreBulletDynamics
 
 			//btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher *>(mWorld->getDispatcher());
 			//btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+            //print banner
+            LogManager::getSingleton().logMessage("DynamicsWorld initialized\n");
 		}
 
     }
