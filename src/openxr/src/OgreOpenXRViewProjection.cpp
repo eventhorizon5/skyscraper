@@ -1,6 +1,7 @@
 /*
     Skyscraper 2.1 - OpenXR View Projection
     Portions Copyright (C)2024 Ryan Thoryk
+    MIT license - see LICENSE file
     https://www.skyscrapersim.net
     https://sourceforge.net/projects/skyscraper/
     Contact - ryan@skyscrapersim.net
