@@ -55,7 +55,7 @@ graphical building designer is planned to assist in creating building data files
 
 ## Release Notes
 
-This release is a beta release of the 2.0 series, which is a complete rewrite of
+This release is of the 2.0 series, which is a complete rewrite of
 the original 1.0 version.
 
 This software utilizes the OGRE rendering engine library (version 14), the Bullet physics engine with some custom patches, OgreBullet, the FMOD sound system, the wxWidgets library (version 3.2 or later), OgreProcedural, and the Caleum sky system addon.
@@ -184,7 +184,7 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 -doors, controls/buttons, and call buttons can be locked/unlocked by holding down both the Ctrl and Shift keys while clicking on the side to lock, if you have the associated key
 
-## Detailed Release Notes (changes from Alpha 11)
+## Detailed Release Notes (changes from 2.0 Alpha 11)
 
 -destination dispatch was added, along with dispatch controllers and call stations
 
