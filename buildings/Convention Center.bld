@@ -734,6 +734,10 @@ ShaftCut 4, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 AddShaft 5, 38, 170, 1, 112
 ShaftCut 5, -8, -4.125 + 0.33, 8, 4.125, 0, 5
 
+#Core shaft
+AddShaft 6, 9, 200, 0, 111
+ShaftCut 6, -4, -4.125 + 0.33, 4, 4.125, 0, 5
+
 <Floors 0 to 102>
     SetAutoSize = true, true
     FloorOrientation = top
@@ -1004,14 +1008,14 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevators 1 to 3>
     #panel
-    CreatePanel ElevPanel, 16, 6, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 15, 6, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddControl 1, switch.wav, 1, 1, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 1, 6, cancel, 1, 1
 
     AddFloorButton 1, Button100, ButtonLit100, 2, 2, 100, 1, 1
     Set row = 3
     Set iterator = 99
-    <For i 1 to 9>
+    <For i 1 to 8>
         AddFloorButton 1, Button%iterator%, ButtonLit%iterator%, %row%, 5, %iterator%, 1, 1
         Set iterator = %iterator% - 1
         AddFloorButton 1, Button%iterator%, ButtonLit%iterator%, %row%, 4, %iterator%, 1, 1
@@ -1022,16 +1026,18 @@ DrawWalls = true, true, false, false, false, false
         Set iterator = %iterator% - 1
         Set row = %row% + 1
     <EndFor>
-    AddFloorButton 1, Button4, ButtonLit4, 12, 5, 4, 1, 1
-    AddFloorButton 1, Button3, ButtonLit3, 12, 4, 3, 1, 1
-    AddFloorButton 1, Button2, ButtonLit2, 12, 3, 2, 1, 1
-    AddFloorButton 1, ButtonA, ButtonLitA, 12, 2, 1, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 13, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 14, 5, open, 1, 1
-    AddControlButton 1, ButtonClose, 14, 2, close, 1, 1
-    AddControl 1, switch.wav, 15, 2, 1, 1, 0, 0, run, stop, RunKey, StopKey
-    AddControl 1, switch.wav, 15, 5, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
-    AddControlButton 1, ButtonAlarm, 15, 3, alarm, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 11, 5, 67, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 11, 4, 66, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 11, 3, 4, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 11, 2, 3, 1, 1
+    AddFloorButton 1, Button2, ButtonLit2, 12, 5, 2, 1, 1
+    AddFloorButton 1, ButtonA, ButtonLitA, 12, 4, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 12, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 13, 5, open, 1, 1
+    AddControlButton 1, ButtonClose, 13, 2, close, 1, 1
+    AddControl 1, switch.wav, 14, 2, 1, 1, 0, 0, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 14, 5, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
+    AddControlButton 1, ButtonAlarm, 14, 3, alarm, 1, 1
 <EndElevators>
 
 <Elevators 4 to 6>
