@@ -189,7 +189,7 @@ public:
 	int AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Vector3 position);
-	bool ReturnToNearestFloor(bool parking = true);
+	bool ReturnToNearestFloor(bool parking = true, int car = 1);
 	bool ReturnToBottomFloor();
 	bool IsLeveled();
 	bool Up();
