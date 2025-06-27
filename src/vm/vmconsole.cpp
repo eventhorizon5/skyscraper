@@ -121,14 +121,14 @@ VMConsole::~VMConsole()
 	shutdown = true;
 }
 
-void VMConsole::Process(const std::string &text)
+void VMConsole::Process(const std::string &text, bool echo)
 {
 	//process console input
 
 	if (consoleresult.ready == false && text.size() == 0)
 		return;
 
-	if (text.size() > 0)
+	if (text.size() > 0 && echo == true)
 	{
 		buffer = text;
 		Report(buffer, "white");

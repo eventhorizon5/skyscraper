@@ -111,8 +111,7 @@ Console::~Console()
 
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
-	//if (chkEcho->GetValue() == true)
-		vm->GetConsole()->Process(tCommand->GetValue().ToStdString());
+	vm->GetConsole()->Process(tCommand->GetValue().ToStdString(), chkEcho->GetValue());
 	tCommand->Clear();
 }
 
