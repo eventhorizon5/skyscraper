@@ -224,7 +224,7 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
     AddFloor ExtFloor 2, Marble, 0, 80, 105, 180, 305, 0, 0, false, false, 1, 1, false
     AddFloor ExtFloor 3, Marble, 0, -80, 305, 80, 405, 0, 0, false, false, 1, 1, false
 
-    AddCustomFloor floor, CeilingLeft, Marble, -80, 105, -27, 105, -27, -75, -80, -75, %height% - 0.1, 1, 1
+    AddCustomFloor floor, CeilingLeft, Marble, -80, 105, -27, 105, -27, 45, -80, 45, %height% - 0.1, 1, 1
     AddCustomFloor floor, CeilingRight, Marble, 27, 105, 80, 105, 80, -75, 27, -75, %height% - 0.1, 1, 1
     AddFloor Tower Ceiling, Marble, 0, -80, 105, 80, 305, %height% - 0.1, %height% - 0.1, false, false, 1, 1, false
     AddCustomFloor floor, Side1, Marble, 80, 105, 80, 50, 50, 105, 0, 1, 1
