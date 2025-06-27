@@ -64,12 +64,10 @@ FloorIndicator::FloorIndicator(Object *parent, int index, int elevator, int car,
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
-	std::string ext = ":" + ToString(index + 1);
-	std::string name;
-	if (index == 0)
-		name = "Floor Indicator " + ToString(elevator);
-	else
-		name = "Floor Indicator " + ToString(elevator) + ext;
+	std::string ext;
+	if (index > 0)
+		ext = ":" + ToString(index + 1);
+	std::string name = "Floor Indicator " + ToString(elevator) + ext;
 	SetName(name);
 
 	FloorIndicatorMesh = new MeshObject(this, name, 0, "", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
