@@ -55,8 +55,7 @@ graphical building designer is planned to assist in creating building data files
 
 ## Release Notes
 
-This release is a beta release of the 2.0 series, which is a complete rewrite of
-the original 1.0 version.
+This release is an alpha release of the 2.1 series.  Skyscraper 2.0 is a complete rewrite of the original 1.0 version.
 
 This software utilizes the OGRE rendering engine library (version 14), the Bullet physics engine with some custom patches, OgreBullet, the FMOD sound system, the wxWidgets library (version 3.2 or later), OgreProcedural, and the Caleum sky system addon.
 
