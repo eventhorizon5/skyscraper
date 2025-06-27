@@ -3867,7 +3867,7 @@ bool Elevator::SelectFloor(int floor)
 		if (IsLeveled() == false)
 		{
 			//relevel elevator if needed
-			ReturnToNearestFloor(false);
+			ReturnToNearestFloor(false, car->Number);
 		}
 		else if (Direction == 0)
 		{
@@ -3927,7 +3927,7 @@ bool Elevator::Check(Vector3 position)
 	return false;
 }
 
-bool Elevator::ReturnToNearestFloor(bool parking)
+bool Elevator::ReturnToNearestFloor(bool parking, int car)
 {
 	//return and relevel to nearest floor
 
@@ -3935,14 +3935,17 @@ bool Elevator::ReturnToNearestFloor(bool parking)
 	if (sbs->GetPower() == false)
 		return false;
 
+	if (!GetCar(car))
+		return false;
+
 	if (IsIdle() == true && InServiceMode() == false)
 	{
-		int floor = GetCar(1)->GetNearestServicedFloor();
+		int floor = GetCar(car)->GetNearestServicedFloor();
 		Report("returning to nearest floor");
 		if (parking == true)
 			Parking = true; //enable parking mode to prevent arrival notification
 
-		if (floor >= GetCar(1)->GetFloor())
+		if (floor >= GetCar(car)->GetFloor())
 			AddRoute(floor, 1, 2);
 		else
 			AddRoute(floor, -1, 2);
