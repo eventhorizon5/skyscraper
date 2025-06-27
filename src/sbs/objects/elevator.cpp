@@ -3941,7 +3941,7 @@ bool Elevator::ReturnToNearestFloor(bool parking, int car)
 	if (IsIdle() == true && InServiceMode() == false)
 	{
 		int floor = GetCar(car)->GetNearestServicedFloor();
-		Report("returning to nearest floor");
+		Report("returning to nearest floor for car " + ToString(car));
 		if (parking == true)
 			Parking = true; //enable parking mode to prevent arrival notification
 
