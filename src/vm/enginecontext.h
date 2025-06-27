@@ -90,6 +90,7 @@ public:
 	void Boot();
 	void GatherReset();
 	void Gather();
+	void ResetPrepare();
 
 private:
 

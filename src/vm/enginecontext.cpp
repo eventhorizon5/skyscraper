@@ -760,4 +760,9 @@ void EngineContext::Gather()
 	time_stat = current_time - last;
 }
 
+void EngineContext::ResetPrepare()
+{
+	prepared = false;
+}
+
 }
