@@ -47,12 +47,12 @@ BEGIN
             VALUE "Comments", "https://www.skyscrapersim.net\0"
             VALUE "CompanyName", "TLI Networks\0"
             VALUE "FileDescription", "Virtual Manager\0"
-            VALUE "FileVersion", "2.1.0.0\0"
+            VALUE "FileVersion", "2.0.0.0\0"
             VALUE "InternalName", "VM\0"
             VALUE "LegalCopyright", "©2005-2025 Ryan Thoryk, released under the GPL\0"
             VALUE "OriginalFilename", "VM.dll\0"
             VALUE "ProductName", "Virtual Manager\0"
-            VALUE "ProductVersion", "2.1.0.0\0"
+            VALUE "ProductVersion", "2.0.0.0\0"
         END
     END
     BLOCK "VarFileInfo"
