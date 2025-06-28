@@ -12,7 +12,7 @@ https://sourceforge.net/projects/skyscraper/
 
 [Documentation](https://www.skyscrapersim.net/guide)
 
-<img src="https://www.skyscrapersim.net/content/triton-sunset.jpg"/>
+<img src="https://www.skyscrapersim.net/content/city_sm.png"/>
 
 
 ## Legal Notices
