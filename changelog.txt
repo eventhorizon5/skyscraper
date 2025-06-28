@@ -11,6 +11,28 @@ Version 2.1
 
 Version 2.0
 -------------------------
+-Update .gitignore (pr #72)
+-Handle maximized window properly (pr #72)
+-Add preference to start Skyscraper maximized (pr #72)
+-Binoculars: Return to the previous FOV instead of the default (pr #72)
+-Make sure cross-hair cursor is enabled if freelook was enabled outside of frontend (pr #72)
+-Store and check binoculars enabled status to prevent an issue where enabling binoculars twice in a row (holding the B key) would cause the FOV to become stuck
+-The map generator is now a permanent object
+-Added support for deleting CameraTexture objects
+-Properly delete CameraTexture objects from parents, and make the Map texture permanent
+-Have OpenXR component report messages through Ogre, for console display
+-OpenXR: Report headset detected
+-Show a proper error message when an error occurs during a renderwindow update call
+-Add file details to VM and OpenXR DLLs (Windows)
+-Clarified OpenXR licensing and included license file
+-README update with more release notes
+-Added OgreBullet init banner and copyright
+-Updated OgreBullet initialization reporting
+-Fixed an issue with the Console that would cause commands to be repeated
+-SBS: Fixed a crash in GetFloorNumber(); object pointers should not be accessed directly without a safety check first
+-Have the script processor reset the prepared state of the simulator instance. This fixes an issue where creating objects using the console would result in the objects not being visible
+-SBS: Have elevators select the current car during a relevel operation instead of only the first one, to open the correct doors in double-decker setups (issue #49)
+-SBS: Report active car number when returning to the nearest floor
 -Added some support for making OpenXR optional on Windows
 -Don't automatically enable map generator on startup
 -Added new Inno Setup installer
