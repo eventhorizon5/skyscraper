@@ -340,7 +340,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 			if (vm->GetElapsedTime(i) > 0)
 				elapsed_time = Real(vm->GetElapsedTime(i) / Real(vm->time_stat));
 			unsigned long runtime = engine->GetSystem()->GetRunTime();
-			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + engine->GetFilename() + "\t" + SBS::ToString(runtime), "green");
+			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + SBS::ToString(runtime / 1000) + "\t\t" + engine->GetFilename(), "green");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
