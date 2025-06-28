@@ -2,7 +2,7 @@
 
 <img src="https://www.skyscrapersim.net/guide/guide/skyscraper128.png"/>
 
-Skyscraper, also known as SkyscraperSim, is a 3D, first-person virtual building and elevator simulator, written in C++
+Skyscraper, also known as SkyscraperSim, is a 3D, first-person virtual building, city and elevator simulator, written in C++
 
 https://www.skyscrapersim.net
 
