@@ -339,7 +339,8 @@ void VMConsole::Process(const std::string &text, bool echo)
 			Real elapsed_time = 0;
 			if (vm->GetElapsedTime(i) > 0)
 				elapsed_time = Real(vm->GetElapsedTime(i) / Real(vm->time_stat));
-			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + engine->GetFilename(), "green");
+			unsigned long runtime = engine->GetSystem()->GetRunTime();
+			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + engine->GetFilename() + "\t" + SBS::ToString(runtime), "green");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
@@ -364,12 +365,15 @@ void VMConsole::Process(const std::string &text, bool echo)
 		//print simulator time
 		Report("Simulator time: ");
 		int year, month, day, hour, minute, second;
-		vm->GetSkySystem()->GetDate(year, month, day);
-		vm->GetSkySystem()->GetTime(hour, minute, second);
-
-		std::string month_s;
-		switch (month)
+		SkySystem* sky = vm->GetSkySystem();
+		if (sky->GetCaelumSystem())
 		{
+			sky->GetDate(year, month, day);
+			sky->GetTime(hour, minute, second);
+
+			std::string month_s;
+			switch (month)
+			{
 			case 1:
 				month_s = "January";
 				break;
@@ -406,16 +410,20 @@ void VMConsole::Process(const std::string &text, bool echo)
 			case 12:
 				month_s = "December";
 				break;
-		}
+			}
 
-		std::string pm = "am";
-		int hr = hour;
-		if (hour > 12)
-		{
-			pm = "pm";
-			hr -= 12;
+			std::string pm = "am";
+			int hr = hour;
+			if (hour > 12)
+			{
+				pm = "pm";
+				hr -= 12;
+			}
+			Report(month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
 		}
-		Report(month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
+		else
+			Report("No sky system loaded");
+
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;
