@@ -367,7 +367,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 		vm->GetSkySystem()->GetDate(year, month, day);
 		vm->GetSkySystem()->GetTime(hour, minute, second);
 
-		std::string month_s, day_s;
+		std::string month_s;
 		switch (month)
 		{
 			case 1:
@@ -408,31 +408,6 @@ void VMConsole::Process(const std::string &text, bool echo)
 				break;
 		}
 
-		switch (day)
-		{
-			case 0:
-				day_s = "Sunday";
-				break;
-			case 1:
-				day_s = "Monday";
-				break;
-			case 2:
-				day_s = "Tuesday";
-				break;
-			case 3:
-				day_s = "Wednesday";
-				break;
-			case 4:
-				day_s = "Thursday";
-				break;
-			case 5:
-				day_s = "Friday";
-				break;
-			case 6:
-				day_s = "Saturday";
-				break;
-		}
-
 		std::string pm = "am";
 		int hr = hour;
 		if (hour > 12)
@@ -440,7 +415,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 			pm = "pm";
 			hr -= 12;
 		}
-		Report(day_s + ", " + month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
+		Report(month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;
