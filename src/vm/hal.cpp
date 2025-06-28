@@ -84,6 +84,7 @@ HAL::HAL(VM *vm)
 	configfile = 0;
 	keyconfigfile = 0;
 	joyconfigfile = 0;
+	DX11 = false;
 	timer = new Ogre::Timer();
 }
 
@@ -538,6 +539,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			//shaderGenerator->setShaderCachePath("shaders/");
 		}
 	}
+
+	if (renderer == "Direct3D11 Rendering Subsystem")
+		DX11 = true;
 
 	try
 	{

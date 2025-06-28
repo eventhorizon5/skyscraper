@@ -88,6 +88,7 @@ public:
 	bool getfloordata;
 	int line; //line number
 	std::string LineData; //line text
+	bool NoModels; //if true, disable models for DirectX11 support
 
 private:
 
