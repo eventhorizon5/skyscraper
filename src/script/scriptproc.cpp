@@ -68,6 +68,7 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	controller_section = new ControllerSection(this);
 	callstation_section = new CallStationSection(this);
 
+	NoModels = false;
 	Reset();
 }
 

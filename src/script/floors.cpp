@@ -1622,6 +1622,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	//AddModel command
 	if (StartsWithNoCase(LineData, "addmodel"))
 	{
+		if (parent->NoModels == true)
+			return sNextLine;
+
 		//get data
 		int params = SplitData(LineData, 9);
 
@@ -1684,6 +1687,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	//AddStairsModel command
 	if (StartsWithNoCase(LineData, "addstairsmodel"))
 	{
+		if (parent->NoModels == true)
+			return sNextLine;
+
 		//get data
 		int params = SplitData(LineData, 15);
 
@@ -1760,6 +1766,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	//AddShaftModel command
 	if (StartsWithNoCase(LineData, "addshaftmodel"))
 	{
+		if (parent->NoModels == true)
+			return sNextLine;
+
 		//get data
 		int params = SplitData(LineData, 14);
 

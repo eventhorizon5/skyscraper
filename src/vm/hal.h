@@ -91,6 +91,7 @@ public:
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
 	std::vector<Ogre::Viewport*> mViewports;
+	bool DX11;
 
 	//config files
 	Ogre::ConfigFile *configfile;
