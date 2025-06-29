@@ -31,7 +31,7 @@
 #endif
 #include "globals.h"
 #include "sbs.h"
-#include "vm.h"		vm->GetHAL()->RegisterThread();
+#include "vm.h"
 #include "hal.h"
 #include "gui.h"
 #include "camera.h"
@@ -133,6 +133,7 @@ void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSce
 
 	//enable runloop thread
 	ex = std::thread{&EngineContext::Run, this};
+	vm->GetHAL()->RegisterThread();
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
