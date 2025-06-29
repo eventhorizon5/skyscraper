@@ -70,7 +70,6 @@ HAL::HAL(VM *vm)
     this->vm = vm;
 	mOverlaySystem = 0;
 	mRoot = 0;
-	mRenderWindow = 0;
 	mSceneMgr = 0;
 	sound = 0;
 	channel = 0;
@@ -437,7 +436,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 {
 	//load HAL system resources
 
-	mRenderWindow = renderwindow;
+	mRenderWindows.emplace_back(renderwindow);
 
 	//get renderer info
 	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
@@ -553,9 +552,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		for (int i = 0; i < cameras; i++)
 		{
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-			if (mRenderWindow)
+			for (size_t i = 0; i < mRenderWindows.size(); i++)
 			{
-				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				mViewports.emplace_back(mRenderWindows[i]->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
 				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 			}
 		}
@@ -647,7 +646,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 
 	try
 	{
-		mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindow);
+		mTrayMgr = new OgreBites::TrayManager("InterfaceName", mRenderWindows[0]);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -821,7 +820,7 @@ void HAL::ReInit()
 	//reinit tray manager
 	try
 	{
-		mTrayMgr = new OgreBites::TrayManager("Tray", mRenderWindow);
+		mTrayMgr = new OgreBites::TrayManager("Tray", mRenderWindows[0]);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -841,9 +840,12 @@ FMOD::System* HAL::GetSoundSystem()
 	return soundsys;
 }
 
-Ogre::RenderWindow* HAL::GetRenderWindow()
+Ogre::RenderWindow* HAL::GetRenderWindow(int index)
 {
-	return mRenderWindow;
+	if (index < 0 || index >= mRenderWindows.size())
+		return 0;
+
+	return mRenderWindows[index];
 }
 
 void HAL::Clear()
@@ -901,12 +903,15 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-		mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
+		Ogre::RenderWindow* mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
 		mRenderWindow->create(name, width, height, false, &params);
+		mRenderWindows.emplace_back(win2);
+		mRenderWindows.emplace_back(mRenderWindow);
 	}
 	else
 #endif
-		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+		Ogre::RenderWindow* mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+		mRenderWindows.emplace_back(mRenderWindow);
 
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();
@@ -916,11 +921,13 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 
 void HAL::DestroyRenderWindow()
 {
-	if (mRenderWindow)
-	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
-
-	mRenderWindow->destroy();
-	mRenderWindow = 0;
+	for (size_t i = 0; i < mRenderWindows.size(); i++)
+	{
+		if (mRenderWindows[i])
+			Ogre::Root::getSingleton().detachRenderTarget(mRenderWindows[i]);
+		mRenderWindows[i]->destroy();
+	}
+	mRenderWindows.clear();
 }
 
 void HAL::RefreshViewport()

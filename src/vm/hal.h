@@ -67,7 +67,7 @@ public:
 	void ToggleStats();
 	void EnableStats(bool value);
 	FMOD::System* GetSoundSystem();
-	Ogre::RenderWindow* GetRenderWindow();
+	Ogre::RenderWindow* GetRenderWindow(int index = 0);
 	void Clear();
 	Ogre::SceneManager* GetSceneManager();
 	Ogre::RenderWindow* CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params);
@@ -89,7 +89,7 @@ public:
 	bool DisableSound;
 	std::vector<Ogre::Camera*> mCameras;
 	Ogre::Root* mRoot;
-	Ogre::RenderWindow* mRenderWindow;
+	std::vector<Ogre::RenderWindow*> mRenderWindows;
 	std::vector<Ogre::Viewport*> mViewports;
 	bool DX11;
 
