@@ -133,7 +133,6 @@ void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSce
 
 	//enable runloop thread
 	ex = std::thread{&EngineContext::Run, this};
-	vm->GetHAL()->RegisterThread();
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
