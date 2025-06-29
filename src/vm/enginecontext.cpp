@@ -166,22 +166,22 @@ void EngineContext::Shutdown()
 
 void EngineContext::Run()
 {
+	//register thread with HAL
+	try
+	{
+		vm->GetHAL()->RegisterThread();
+		vm->newthread = true;
+	}
+	catch (Ogre::Exception& e)
+	{
+		ReportFatalError("Error registering thread - details:\n" + e.getDescription());
+		return; //exit thread
+	}
+
 	while (true)
 	{
 		if (!Simcore)
 			continue;
-
-		//register thread with HAL
-		try
-		{
-			vm->GetHAL()->RegisterThread();
-			vm->newthread = true;
-		}
-		catch (Ogre::Exception& e)
-		{
-			ReportFatalError("Error registering thread - details:\n" + e.getDescription());
-			return; //exit thread
-		}
 
 		//run script processor
 		if (processor)
@@ -209,7 +209,7 @@ void EngineContext::Run()
 				}
 
 				if (Simcore->RenderOnStartup == false)
-					continue;
+					goto main;
 			}
 			else if (processor->IsFinished == true && result == true)
 			{
@@ -229,6 +229,7 @@ void EngineContext::Run()
 		else
 			continue;
 
+main:
 		//force window raise on startup, and report on missing files, if any
 		if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 		{
@@ -256,6 +257,9 @@ void EngineContext::Run()
 			if (inside == true && IsInside() == false)
 				OnExit();
 		}
+
+		//thread sleep
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		//FIXME: needs thread exit code
 	}
