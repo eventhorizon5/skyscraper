@@ -806,8 +806,6 @@ void EngineContext::ResetPrepare()
 	prepared = false;
 }
 
-}
-
 void EngineContext::ThreadWait()
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));

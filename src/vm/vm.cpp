@@ -950,7 +950,7 @@ void VM::ProcessLoad()
         if (loadinfo.need_process == true)
         {
                 load_lock.lock();
-                Load(loadinfo.filename, loadinfo.parent, loadinfo.position, loadinfo.rotation, loadinfo.area_min, loadinfo.area_max);
+                Load(false, loadinfo.filename, loadinfo.parent, loadinfo.position, loadinfo.rotation, loadinfo.area_min, loadinfo.area_max);
                 loadinfo.need_process = false;
                 load_lock.unlock();
         }
