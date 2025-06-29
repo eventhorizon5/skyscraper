@@ -436,7 +436,8 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 {
 	//load HAL system resources
 
-	mRenderWindows.emplace_back(renderwindow);
+	if (mRenderWindows.empty() == true)
+		mRenderWindows.emplace_back(renderwindow);
 
 	//get renderer info
 	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
@@ -554,7 +555,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
 			for (size_t j = 0; j < mRenderWindows.size(); j++)
 			{
-				mViewports.emplace_back(mRenderWindows[j]->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				mViewports.emplace_back(mRenderWindows[j]->addViewport(mCameras[i], (cameras - 1) - i, j, 0, 1, 1));
 				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 			}
 		}
