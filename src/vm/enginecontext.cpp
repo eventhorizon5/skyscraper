@@ -376,6 +376,9 @@ void EngineContext::StartSim()
 	if (!processor)
 		processor = new ScriptProcessor(this);
 
+	//if using DirectX11, turn off models in script processor due to shader crashes
+	processor->NoModels = vm->GetHAL()->DX11;
+
 	//refresh console to fix banner message on Linux
 #ifdef USING_WX
 	vm->GetGUI()->RefreshConsole();
@@ -758,6 +761,11 @@ void EngineContext::Gather()
 		last = current_time;
 
 	time_stat = current_time - last;
+}
+
+void EngineContext::ResetPrepare()
+{
+	prepared = false;
 }
 
 }

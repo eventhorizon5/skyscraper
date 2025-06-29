@@ -121,14 +121,14 @@ VMConsole::~VMConsole()
 	shutdown = true;
 }
 
-void VMConsole::Process(const std::string &text)
+void VMConsole::Process(const std::string &text, bool echo)
 {
 	//process console input
 
 	if (consoleresult.ready == false && text.size() == 0)
 		return;
 
-	if (text.size() > 0)
+	if (text.size() > 0 && echo == true)
 	{
 		buffer = text;
 		Report(buffer, "white");
@@ -339,7 +339,8 @@ void VMConsole::Process(const std::string &text)
 			Real elapsed_time = 0;
 			if (vm->GetElapsedTime(i) > 0)
 				elapsed_time = Real(vm->GetElapsedTime(i) / Real(vm->time_stat));
-			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + engine->GetFilename(), "green");
+			unsigned long runtime = engine->GetSystem()->GetRunTime();
+			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + SBS::ToString(runtime / 1000) + "\t\t" + engine->GetFilename(), "green");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
@@ -364,12 +365,15 @@ void VMConsole::Process(const std::string &text)
 		//print simulator time
 		Report("Simulator time: ");
 		int year, month, day, hour, minute, second;
-		vm->GetSkySystem()->GetDate(year, month, day);
-		vm->GetSkySystem()->GetTime(hour, minute, second);
-
-		std::string month_s, day_s;
-		switch (month)
+		SkySystem* sky = vm->GetSkySystem();
+		if (sky->GetCaelumSystem())
 		{
+			sky->GetDate(year, month, day);
+			sky->GetTime(hour, minute, second);
+
+			std::string month_s;
+			switch (month)
+			{
 			case 1:
 				month_s = "January";
 				break;
@@ -406,41 +410,20 @@ void VMConsole::Process(const std::string &text)
 			case 12:
 				month_s = "December";
 				break;
-		}
+			}
 
-		switch (day)
-		{
-			case 0:
-				day_s = "Sunday";
-				break;
-			case 1:
-				day_s = "Monday";
-				break;
-			case 2:
-				day_s = "Tuesday";
-				break;
-			case 3:
-				day_s = "Wednesday";
-				break;
-			case 4:
-				day_s = "Thursday";
-				break;
-			case 5:
-				day_s = "Friday";
-				break;
-			case 6:
-				day_s = "Saturday";
-				break;
+			std::string pm = "am";
+			int hr = hour;
+			if (hour > 12)
+			{
+				pm = "pm";
+				hr -= 12;
+			}
+			Report(month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
 		}
+		else
+			Report("No sky system loaded");
 
-		std::string pm = "am";
-		int hr = hour;
-		if (hour > 12)
-		{
-			pm = "pm";
-			hr -= 12;
-		}
-		Report(day_s + ", " + month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;
@@ -607,8 +590,10 @@ bool VMConsole::Report(const std::string &text, const std::string &color)
 			mtx_io.unlock();
 		}
 	}
+#ifdef USING_WX
 	else
 		vm->GetGUI()->WriteToConsole(text, color);
+#endif
 	return true;
 }
 

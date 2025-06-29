@@ -554,10 +554,6 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	//attach camera object
 	AttachCamera(cameras);
 
-	//enable map generator
-	if (MapGenerator)
-		EnableMap(true);
-
 	//enable random activity if specified
 	if (RandomActivity == true)
 		EnableRandomActivity(true);
@@ -1592,8 +1588,11 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 		return 0;
 
 	//check to see if altitude is below bottom floor
-	if (altitude < GetFloor(-Basements)->Altitude)
-		return -Basements;
+	if (GetFloor(-Basements))
+	{
+		if (altitude < GetFloor(-Basements)->Altitude)
+			return -Basements;
+	}
 
 	//if checklastfloor is specified, compare altitude with lastfloor
 	if (checklastfloor == true && GetFloor(lastfloor))
@@ -2702,6 +2701,8 @@ bool SBS::DeleteObject(Object *object)
 	else if (type == "CustomObject")
 		deleted = true;
 	else if (type == "Reverb")
+		deleted = true;
+	else if (type == "CameraTexture")
 		deleted = true;
 
 	//delete object

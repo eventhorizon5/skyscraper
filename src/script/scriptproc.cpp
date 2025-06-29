@@ -68,6 +68,7 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	controller_section = new ControllerSection(this);
 	callstation_section = new CallStationSection(this);
 
+	NoModels = false;
 	Reset();
 }
 
@@ -157,6 +158,8 @@ bool ScriptProcessor::Run()
 
 	if (line < (int)BuildingData.size() && line >= 0)
 	{
+		if (InRunloop() == false)
+			engine->ResetPrepare(); //reset prepare flag
 		LineData = BuildingData[line];
 		TrimString(LineData);
 

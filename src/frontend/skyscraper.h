@@ -24,6 +24,7 @@
 #define SKYSCRAPER_H
 
 #ifndef USING_WX
+#include <filesystem>
 #include "Ogre.h"
 #include "OgreApplicationContext.h"
 #include "OgreInput.h"
@@ -77,6 +78,7 @@ public:
 	bool StartupRunning;
 	bool IntroMusic;
 	bool FullScreen;
+	bool Maximized;
 	bool Verbose;
 	bool ShowMenu; //show main menu
 	int wireframe;
@@ -149,6 +151,8 @@ protected:
 	bool freelook;
 
 private:
+	//loop states
+	bool startscreen_loaded;
 
 	void UnloadSim();
 	void Report(const std::string &message);

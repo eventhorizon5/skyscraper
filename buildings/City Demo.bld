@@ -9,6 +9,7 @@
     Load Observation Tower.bld, -440.5, 0, 0, 0
     Load Glass Tower.bld, 0, 0, 871.5, 0
     Load Sears Tower.bld, 550, 0, 50, -90
+    Load Convention Center.bld, -416, 0, -350, 270
 
     #add some Simple buildings, with modified boundaries
     Load Simple.bld, 225, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25

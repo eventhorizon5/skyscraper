@@ -1435,6 +1435,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	//AddModel command
 	if (StartsWithNoCase(LineData, "addmodel"))
 	{
+		if (parent->NoModels == true)
+			return sNextLine;
+
 		//get data
 		int params = SplitData(LineData, 9);
 

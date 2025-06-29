@@ -277,6 +277,32 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText13" member="yes">
+											<label>Enabled:</label>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tEnabled" variable="tEnabled" member="yes">
+											<style>wxTE_CENTRE</style>
+										</object>
+										<flag>wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bEnabled" variable="bEnabled" member="yes">
+											<label>Set</label>
+											<size>50,-1</size>
+											<handler function="On_bEnabled_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT11" variable="StaticText11" member="yes">
 											<label>Speed:</label>
 										</object>
@@ -420,6 +446,15 @@
 						<object class="wxButton" name="ID_bListPlaying" variable="bListPlaying" member="yes">
 							<label>List Playing Sounds</label>
 							<handler function="On_bListPlaying_Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_bListPlayingAll" variable="bListPlayingAll" member="yes">
+							<label>List Playing (All Engines)</label>
+							<handler function="On_bListPlayingAll_Click" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>

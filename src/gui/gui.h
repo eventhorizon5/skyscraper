@@ -48,6 +48,7 @@ public:
 	void Unload();
 	void ShowProgress();
 	std::string SelectBuilding(const std::string &data_path);
+	std::string SelectBuildingNative(const std::string &data_path);
 	void Resize();
 	void CreateDebugPanel();
 	void EnableConsole(bool value);

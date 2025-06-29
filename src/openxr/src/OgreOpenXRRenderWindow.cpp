@@ -1,6 +1,7 @@
 /*
     Skyscraper 2.1 - OpenXR Render Window
     Portions Copyright (C)2024 Ryan Thoryk
+    MIT license - see LICENSE file
     https://www.skyscrapersim.net
     https://sourceforge.net/projects/skyscraper/
     Contact - ryan@skyscrapersim.net
@@ -141,6 +142,8 @@ namespace Ogre {
     XRPosition[1] = Ogre::Vector3::ZERO;
     XROrientation[0] = Ogre::Quaternion::ZERO;
     XROrientation[1] = Ogre::Quaternion::ZERO;
+    LogManager::getSingleton().logMessage("\nOpenXR Interface loaded\nOriginal work produced by Glastonbridge Software Limited, MIT license");
+    LogManager::getSingleton().logMessage("OpenXR: Initializing...");
   }
 
   OpenXRRenderWindow::~OpenXRRenderWindow() {

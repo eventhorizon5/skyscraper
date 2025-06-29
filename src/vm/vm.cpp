@@ -36,6 +36,7 @@
 #include "vm.h"
 #include "camera.h"
 #include "scenenode.h"
+#include "soundsystem.h"
 #include "enginecontext.h"
 #include "hal.h"
 #include "sky.h"
@@ -700,6 +701,10 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	//boot SBS
 	EngineContext* engine = Initialize(clear, parent, position, rotation, area_min, area_max);
 
+	//exit if init failed
+	if (!engine)
+		return false;
+
 	//have new engine instance load building
 	bool result = engine->Load(filename);
 
@@ -731,7 +736,15 @@ EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &
 	}
 
 	//clear screen
-	hal->GetRenderWindow()->update();
+	try
+	{
+		hal->GetRenderWindow()->update();
+	}
+	catch (...)
+	{
+		ReportFatalError("Error updating render window");
+		return 0;
+	}
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
@@ -744,8 +757,6 @@ EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &
 		active_engine = engine;
 
 	//set render on startup state
-	//bool render_on_start = hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false);
-	//if (render_on_start == false && RenderOnStartup ==
 	//SetRenderOnStartup(hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false));
 
 	return engine;
@@ -986,6 +997,24 @@ unsigned long VM::GetElapsedTime(int instance)
 	if (instance >= engines.size())
 		return 0;
 	return engines[instance]->time_stat;
+}
+
+void VM::ListPlayingSounds()
+{
+	//list playing sounds in all engines
+
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		::SBS::SBS* Simcore = engines[i]->GetSystem();
+		
+		if (Simcore)
+		{
+			Report("Engine " + ToString(i) + ":");
+			Simcore->GetSoundSystem()->ShowPlayingSounds(false);
+			if (i == engines.size() - 1)
+				Simcore->GetSoundSystem()->ShowPlayingTotal();
+		}
+	}
 }
 
 }

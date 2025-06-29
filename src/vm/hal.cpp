@@ -37,10 +37,7 @@
 #endif
 
 //OpenXR interfaces
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#include "OgreOpenXRRenderWindow.h"
-#endif
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 #include "OgreOpenXRRenderWindow.h"
 #endif
 
@@ -87,6 +84,7 @@ HAL::HAL(VM *vm)
 	configfile = 0;
 	keyconfigfile = 0;
 	joyconfigfile = 0;
+	DX11 = false;
 	timer = new Ogre::Timer();
 }
 
@@ -190,7 +188,7 @@ void HAL::UnclickedObject()
 
 void HAL::UpdateOpenXR()
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 	SBS_PROFILE_MAIN("UpdateOpenXR");
 
 	//update OpenXR camera transformations
@@ -481,11 +479,13 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(data_path, "FileSystem", "General", true);
 
 		//add materials group, and autoload
+#ifdef USING_WX
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/materials", "FileSystem", "Materials", true);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
 
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("media/packs/SdkTrays.zip", "Zip", "Trays", true);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Trays");
+#endif
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -539,6 +539,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			//shaderGenerator->setShaderCachePath("shaders/");
 		}
 	}
+
+	if (renderer == "Direct3D11 Rendering Subsystem")
+		DX11 = true;
 
 	try
 	{
@@ -688,7 +691,7 @@ bool HAL::Render()
 	return true;
 }
 
-bool HAL::PlaySound(const std::string &filename)
+bool HAL::PlaySound(const std::string &filename, Real volume)
 {
 #ifndef DISABLE_SOUND
 
@@ -715,7 +718,7 @@ bool HAL::PlaySound(const std::string &filename)
 	}
 
 	channel->setLoopCount(-1);
-	channel->setVolume(1.0);
+	channel->setVolume(volume);
 	channel->setPaused(false);
 
 #endif
@@ -869,6 +872,11 @@ void HAL::Clear()
 	//free unused hardware buffers
 	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
+#ifndef DISABLE_SOUND
+	//reset FMOD reverb
+	soundsys->setReverbProperties(0, 0);
+#endif
+
 	ReInit();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -889,7 +897,7 @@ Ogre::SceneManager* HAL::GetSceneManager()
 Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params)
 {
 	//create the render window
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);

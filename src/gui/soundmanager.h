@@ -43,7 +43,9 @@ class SoundManager: public wxDialog
 
 		//(*Declarations(SoundManager)
 		wxButton* bCleanup;
+		wxButton* bEnabled;
 		wxButton* bListPlaying;
+		wxButton* bListPlayingAll;
 		wxButton* bMove;
 		wxButton* bOK;
 		wxButton* bPlay;
@@ -59,6 +61,7 @@ class SoundManager: public wxDialog
 		wxStaticText* StaticText10;
 		wxStaticText* StaticText11;
 		wxStaticText* StaticText12;
+		wxStaticText* StaticText13;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText3;
@@ -69,6 +72,7 @@ class SoundManager: public wxDialog
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText9;
 		wxStaticText* lblStats;
+		wxTextCtrl* tEnabled;
 		wxTextCtrl* tLength;
 		wxTextCtrl* tLoop;
 		wxTextCtrl* tName;
@@ -85,43 +89,47 @@ class SoundManager: public wxDialog
 	protected:
 
 		//(*Identifiers(SoundManager)
-		static const long ID_STATICTEXT1;
-		static const long ID_SoundList;
-		static const long ID_STATICTEXT2;
-		static const long ID_HandleList;
-		static const long ID_lblStats;
-		static const long ID_STATICTEXT4;
-		static const long ID_tName;
-		static const long ID_STATICTEXT3;
-		static const long ID_tParent;
-		static const long ID_STATICTEXT5;
-		static const long ID_tLength;
-		static const long ID_STATICTEXT6;
-		static const long ID_tPlaying;
-		static const long ID_STATICTEXT7;
-		static const long ID_tPosition;
-		static const long ID_bMove;
-		static const long ID_STATICTEXT8;
-		static const long ID_tVolume;
-		static const long ID_bSetVolume;
-		static const long ID_STATICTEXT9;
-		static const long ID_tLoop;
-		static const long ID_bSetLoop;
-		static const long ID_STATICTEXT10;
-		static const long ID_tPaused;
-		static const long ID_bSetPause;
-		static const long ID_STATICTEXT11;
-		static const long ID_tSpeed;
-		static const long ID_bSetSpeed;
-		static const long ID_STATICTEXT12;
-		static const long ID_tPlayPosition;
-		static const long ID_bPlay;
-		static const long ID_bStop;
-		static const long ID_bReset;
-		static const long ID_bUnload;
-		static const long ID_bCleanup;
-		static const long ID_bOK;
-		static const long ID_bListPlaying;
+		static const wxWindowID ID_STATICTEXT1;
+		static const wxWindowID ID_SoundList;
+		static const wxWindowID ID_STATICTEXT2;
+		static const wxWindowID ID_HandleList;
+		static const wxWindowID ID_lblStats;
+		static const wxWindowID ID_STATICTEXT4;
+		static const wxWindowID ID_tName;
+		static const wxWindowID ID_STATICTEXT3;
+		static const wxWindowID ID_tParent;
+		static const wxWindowID ID_STATICTEXT5;
+		static const wxWindowID ID_tLength;
+		static const wxWindowID ID_STATICTEXT6;
+		static const wxWindowID ID_tPlaying;
+		static const wxWindowID ID_STATICTEXT7;
+		static const wxWindowID ID_tPosition;
+		static const wxWindowID ID_bMove;
+		static const wxWindowID ID_STATICTEXT8;
+		static const wxWindowID ID_tVolume;
+		static const wxWindowID ID_bSetVolume;
+		static const wxWindowID ID_STATICTEXT9;
+		static const wxWindowID ID_tLoop;
+		static const wxWindowID ID_bSetLoop;
+		static const wxWindowID ID_STATICTEXT10;
+		static const wxWindowID ID_tPaused;
+		static const wxWindowID ID_bSetPause;
+		static const wxWindowID ID_STATICTEXT13;
+		static const wxWindowID ID_tEnabled;
+		static const wxWindowID ID_bEnabled;
+		static const wxWindowID ID_STATICTEXT11;
+		static const wxWindowID ID_tSpeed;
+		static const wxWindowID ID_bSetSpeed;
+		static const wxWindowID ID_STATICTEXT12;
+		static const wxWindowID ID_tPlayPosition;
+		static const wxWindowID ID_bPlay;
+		static const wxWindowID ID_bStop;
+		static const wxWindowID ID_bReset;
+		static const wxWindowID ID_bUnload;
+		static const wxWindowID ID_bCleanup;
+		static const wxWindowID ID_bOK;
+		static const wxWindowID ID_bListPlaying;
+		static const wxWindowID ID_bListPlayingAll;
 		//*)
 
 	private:
@@ -139,6 +147,8 @@ class SoundManager: public wxDialog
 		void On_bUnload_Click(wxCommandEvent& event);
 		void On_bCleanup_Click(wxCommandEvent& event);
 		void On_bMove_Click(wxCommandEvent& event);
+		void On_bEnabled_Click(wxCommandEvent& event);
+		void On_bListPlayingAll_Click(wxCommandEvent& event);
 		//*)
 		void BuildSoundList();
 		void BuildHandleList();

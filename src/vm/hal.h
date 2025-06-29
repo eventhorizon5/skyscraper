@@ -61,7 +61,7 @@ public:
 	std::string GetConfigString(Ogre::ConfigFile *file, const std::string &key, const std::string &default_value);
 	bool GetConfigBool(Ogre::ConfigFile *file, const std::string &key, bool default_value);
 	Real GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real default_value);
-	bool PlaySound(const std::string &filename);
+	bool PlaySound(const std::string &filename, Real volume = 1.0);
 	void StopSound();
 	void ClearScene();
 	void ToggleStats();
@@ -91,6 +91,7 @@ public:
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
 	std::vector<Ogre::Viewport*> mViewports;
+	bool DX11;
 
 	//config files
 	Ogre::ConfigFile *configfile;

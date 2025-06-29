@@ -1,6 +1,7 @@
 /*
     Skyscraper 2.1 - OpenXR State
     Portions Copyright (C)2024 Ryan Thoryk
+    MIT license - see LICENSE file
     https://www.skyscrapersim.net
     https://sourceforge.net/projects/skyscraper/
     Contact - ryan@skyscrapersim.net
@@ -11,6 +12,7 @@
     https://github.com/glastonbridge/OgreOpenXRRenderWindow
 */
 
+#include "Ogre.h"
 #include "OgreOpenXRState.h"
 
 #include "OgreOpenXRInstance.h"
@@ -41,10 +43,11 @@ namespace Ogre {
     while (true) {
       XrResult result = xrGetSystem(m_xrInstance->getHandle().Get(), &systemInfo, &_systemId);
       if (SUCCEEDED(result)) {
+        LogManager::getSingleton().logMessage("OpenXR: Headset detected");
         break;
       }
       else if (result == XR_ERROR_FORM_FACTOR_UNAVAILABLE) {
-        DEBUG_PRINT("No headset detected.  Trying again in one second...");
+        LogManager::getSingleton().logMessage("OpenXR: No headset detected.  Trying again in one second...");
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(1s);
       }
