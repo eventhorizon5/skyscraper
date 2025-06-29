@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Script Processor - Elevator Car Section
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -2168,6 +2168,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	//AddModel command
 	if (StartsWithNoCase(LineData, "addmodel"))
 	{
+		if (parent->NoModels == true)
+			return sNextLine;
+
 		//get data
 		int params = SplitData(LineData, 9);
 

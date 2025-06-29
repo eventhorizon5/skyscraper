@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Edit Elevator Form
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -1367,7 +1367,7 @@ void editelevator::Loop()
 
 		if (set_current_floor == true)
 		{
-			sFloor->SetThumbPosition(car->GetServicedFloorIndex(Simcore->camera->CurrentFloor));
+			sFloor->SetThumbPosition(car->GetFloorIndex(Simcore->camera->CurrentFloor));
 			set_current_floor = false;
 		}
 
@@ -1996,7 +1996,7 @@ void editelevator::On_bSelectCurrent_Click(wxCommandEvent& event)
 	{
 		sNumber->SetThumbPosition(Simcore->ElevatorNumber - 1);
 		sCar->SetThumbPosition(Simcore->CarNumber - 1);
-		sFloor->SetThumbPosition(car->GetServicedFloorIndex(Simcore->camera->CurrentFloor));
+		sFloor->SetThumbPosition(car->GetFloorIndex(Simcore->camera->CurrentFloor));
 		set_current_floor = true;
 	}
 }

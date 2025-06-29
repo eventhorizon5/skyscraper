@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Nanokernel
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -29,22 +29,27 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include <sys/utsname.h>
 #endif
+#include <iostream>
+#include "dylib.hpp"
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
 #include "camera.h"
 #include "scenenode.h"
+#include "soundsystem.h"
 #include "enginecontext.h"
 #include "hal.h"
 #include "sky.h"
 #include "gui.h"
 #include "profiler.h"
+#include "vmconsole.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
 std::mutex load_lock;
+extern VMConsoleInput inputmgr; //console input manager
 
 //Virtual Manager system
 
@@ -66,6 +71,9 @@ VM::VM()
 	Verbose = false;
 	showconsole = false;
 	newthread = false;
+	vmconsole = 0;
+	loadstart = false;
+	unloaded = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -86,7 +94,13 @@ VM::VM()
 	skysystem = new SkySystem(this);
 
 	//create GUI instance
+#ifdef USING_WX
 	gui = new GUI(this);
+#else
+	gui = 0;
+#endif
+
+	//LoadLibrary("test");
 
 	Report("Started");
 }
@@ -106,9 +120,16 @@ VM::~VM()
 	hal = 0;
 
 	//delete GUI instance
+#ifdef USING_WX
 	if (gui)
 		delete gui;
 	gui = 0;
+#endif
+
+	//delete VM console
+	if (vmconsole)
+		delete vmconsole;
+	vmconsole = 0;
 }
 
 void VM::SetParent(wxWindow *parent)
@@ -198,6 +219,7 @@ void VM::DeleteEngines()
 	}
 	engines.clear();
 	active_engine = 0;
+	unloaded = true;
 }
 
 EngineContext* VM::FindActiveEngine()
@@ -270,6 +292,8 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 	//run sim engine instances, and returns the new engine(s) created (if applicable)
 	//to be started by the frontend
 
+	SBS_PROFILE_MAIN("Engines");
+
 	bool result = true;
 	bool isloading = IsEngineLoading();
 
@@ -283,7 +307,7 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 
 		//process engine run loops, and also prevent other instances from running if
 		//one or more engines are loading
-		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
+		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true || RenderOnStartup == true)
 		{
 			bool run = true;
 			if (i > 0 && ConcurrentLoads == false)
@@ -298,25 +322,41 @@ bool VM::RunEngines(std::vector<EngineContext*> &newengines)
 
 			if (engines[i]->IsLoadingFinished() == false && run == true)
 			{
+				//process engine runloop
+				//engines[i]->GatherReset();
 				//if (engines[i]->Run() == false) //FIXME
 					//result = false;
+				engines[i]->Gather();
 			}
 		}
 
 		//start engine if loading is finished
-		if (engines[i]->IsLoadingFinished() == true)
+		if (RenderOnStartup == false)
 		{
-			if (active_engine)
+			if (engines[i]->IsLoadingFinished() == true)
 			{
-				//exit if active engine is still loading
-				if (active_engine->IsLoading() == true && active_engine->IsLoadingFinished() == false)
-					continue;
+				if (active_engine)
+				{
+					//exit if active engine is still loading
+					if (active_engine->IsLoading() == true && active_engine->IsLoadingFinished() == false)
+						continue;
 
-				//exit if active engine is finished, but other buildings are still loading
-				if (active_engine->IsLoadingFinished() == true && isloading == true)
-					continue;
+					//exit if active engine is finished, but other buildings are still loading
+					if (active_engine->IsLoadingFinished() == true && isloading == true)
+						continue;
+				}
+				engines[i]->NewEngine = false;
+				newengines.emplace_back(engines[i]);
 			}
-			newengines.emplace_back(engines[i]);
+		}
+		else
+		{
+			//when RenderOnStartup is true, only add new engines to the list
+			if (engines[i]->NewEngine == true)
+			{
+				newengines.emplace_back(engines[i]);
+				engines[i]->NewEngine = false;
+			}
 		}
 	}
 	return result;
@@ -523,7 +563,10 @@ int VM::RegisterEngine(EngineContext *engine)
 	if (number < (int)engines.size())
 		engines[number] = engine;
 	else
+	{
+		engine->time_stat = 0;
 		engines.emplace_back(engine);
+	}
 
 	return number;
 }
@@ -582,6 +625,8 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 
 	//return codes are -1 for fatal error, 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
 
+	SBS_PROFILE_MAIN("VM");
+
 	//show progress dialog if needed
 	//gui->ShowProgress();
 
@@ -597,8 +642,14 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//run thread 0 runloop
 	Run0();
 
+	//get time for frame statistics
+	unsigned long last = current_time;
+	current_time = hal->GetCurrentTime();
+
 	//run sim engines
 	bool result = RunEngines(newengines);
+
+	time_stat = hal->GetCurrentTime() - last;
 
 	if (newengines.size() > 0)
 		return 3;
@@ -660,7 +711,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	return 1;
 }
 
-bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -670,17 +721,53 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 
 	Report("Loading engine for building file '" + filename + "'...");
 
+	//boot SBS
+	EngineContext* engine = Initialize(clear, parent, position, rotation, area_min, area_max);
+
+	//exit if init failed
+	if (!engine)
+		return false;
+
+	//have new engine instance load building
+	bool result = engine->Load(filename);
+
+	//delete engine if load failed, if more than one engine is running
+	if (result == false)
+	{
+		if (GetEngineCount() > 1)
+			DeleteEngine(engine);
+		return false;
+	}
+
+	return true;
+}
+
+EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+	//bootstrap simulator
+
+	loadstart = true;
+
 	if (GetEngineCount() == 0)
 	{
 		//set sky name
 		skysystem->SkyName = hal->GetConfigString(hal->configfile, "Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
 
 		//clear scene
-		hal->ClearScene();
+		if (clear == true)
+			hal->ClearScene();
 	}
 
 	//clear screen
-	hal->GetRenderWindow()->update();
+	try
+	{
+		hal->GetRenderWindow()->update();
+	}
+	catch (...)
+	{
+		ReportFatalError("Error updating render window");
+		return 0;
+	}
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
@@ -692,22 +779,10 @@ bool VM::Load(const std::string &filename, EngineContext *parent, const Vector3 
 	if (!GetActiveEngine())
 		active_engine = engine;
 
-	//have instance load building
-	bool result = engine->Load(filename);
+	//set render on startup state
+	//SetRenderOnStartup(hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false));
 
-	//delete engine if load failed, if more than one engine is running
-	if (result == false)
-	{
-		if (GetEngineCount() > 1)
-			DeleteEngine(engine);
-		return false;
-	}
-
-	//override SBS startup render option, if specified
-	if (RenderOnStartup == true)
-		engine->GetSystem()->RenderOnStartup = true;
-
-	return true;
+	return engine;
 }
 
 void VM::Report(const std::string &message)
@@ -763,13 +838,12 @@ int get_macos_version(uint32_t &major, uint32_t &minor, bool &osx)
 void VM::ShowPlatform()
 {
 	//set platform name
-	std::string bits;
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-	bits = "32-bit";
+	Bits = "32-bit";
 #endif
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
-	bits = "64-bit";
+	Bits = "64-bit";
 #endif
 
 #if OGRE_CPU == OGRE_CPU_X86
@@ -785,11 +859,15 @@ void VM::ShowPlatform()
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Platform = "Windows " + Architecture + " " + bits;
+	Platform = "Windows " + Architecture + " " + Bits;
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	Platform = "Linux " + Architecture + " " + bits;
+	#ifdef  __FreeBSD__
+		Platform = "FreeBSD " + Architecture + " " + Bits;
+	#else
+		Platform = "Linux " + Architecture + " " + Bits;
+	#endif
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	Platform = "MacOS " + Architecture + " " + bits;
+	Platform = "MacOS " + Architecture + " " + Bits;
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
@@ -831,7 +909,11 @@ void VM::ShowPlatform()
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	struct utsname osInfo{};
 	uname(&osInfo);
-	GetHAL()->Report("Running on Linux " + std::string(osInfo.release), "");
+	#ifdef  __FreeBSD__
+		GetHAL()->Report("Running on FreeBSD " + std::string(osInfo.release), "");
+	#else
+		GetHAL()->Report("Running on Linux " + std::string(osInfo.release), "");
+	#endif
 #endif
 }
 
@@ -899,7 +981,105 @@ void VM::UpdateProgress()
 
 	int final = ((Real)current_percent / (Real)total_percent) * 100;
 
-	gui->UpdateProgress(final);
+#ifdef USING_WX
+	if (gui)
+		gui->UpdateProgress(final);
+#endif
+}
+
+bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)
+{
+	//report missing files
+#ifdef USING_WX
+	if (gui)
+		return gui->ReportMissingFiles(missing_files);
+#endif
+	return true;
+}
+
+void VM::StartConsole()
+{
+	//create VM console
+	vmconsole = new VMConsole(this);
+}
+
+void VM::ProcessConsole()
+{
+	//if enabled, process console input
+	if (vmconsole)
+		vmconsole->Process();
+
+}
+
+VMConsole* VM::GetConsole()
+{
+	return vmconsole;
+}
+
+void VM::SetRenderOnStartup(bool value)
+{
+	RenderOnStartup = value;
+
+	//override SBS startup render option, if specified
+	for (int i = 0; i < engines.size(); i++)
+	{
+		if (engines[i])
+			engines[i]->GetSystem()->RenderOnStartup = value;
+	}
+}
+
+bool VM::GetRenderOnStartup()
+{
+	return RenderOnStartup;
+}
+
+dylib* VM::LoadLibrary(const std::string &name)
+{
+	//load shared library/DLL
+
+	try
+	{
+		dylib *newlib = new dylib("./", name);
+		dylibs.emplace_back(newlib);
+		return newlib;
+	}
+	catch(const std::exception& e)
+	{
+		ReportError(e.what());
+	}
+
+	//return 0 on load failure
+	return 0;
+}
+
+unsigned long VM::Uptime()
+{
+	return hal->GetCurrentTime();
+}
+
+unsigned long VM::GetElapsedTime(int instance)
+{
+	if (instance >= engines.size())
+		return 0;
+	return engines[instance]->time_stat;
+}
+
+void VM::ListPlayingSounds()
+{
+	//list playing sounds in all engines
+
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		::SBS::SBS* Simcore = engines[i]->GetSystem();
+		
+		if (Simcore)
+		{
+			Report("Engine " + ToString(i) + ":");
+			Simcore->GetSoundSystem()->ShowPlayingSounds(false);
+			if (i == engines.size() - 1)
+				Simcore->GetSoundSystem()->ShowPlayingTotal();
+		}
+	}
 }
 
 }

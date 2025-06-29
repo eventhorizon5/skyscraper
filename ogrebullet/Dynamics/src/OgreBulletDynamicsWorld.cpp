@@ -92,6 +92,8 @@ namespace OgreBulletDynamics
 
 			//btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher *>(mWorld->getDispatcher());
 			//btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+            //print banner
+            LogManager::getSingleton().logMessage("DynamicsWorld initialized\n");
 		}
 
     }

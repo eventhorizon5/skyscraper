@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Sky System
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -309,6 +309,14 @@ void SkySystem::GetTime(int &hour, int &minute, int &second)
 	int year, month, day;
 	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, sec);
 	second = (int)sec;
+}
+
+void SkySystem::GetDate(int &year, int &month, int &day)
+{
+	Caelum::LongReal julian = mCaelumSystem->getJulianDay(), second;
+	int hour, minute;
+	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, second);
+	second = (int)second;
 }
 
 void SkySystem::EnableSky(bool value)

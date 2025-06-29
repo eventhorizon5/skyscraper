@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Hardware Abstraction Layer
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -28,7 +28,9 @@
 #include <Ogre.h>
 #include <OgreLog.h>
 #include <OgreTrays.h>
-#include <fmod.hpp>
+#ifndef DISABLE_SOUND
+	#include <fmod.hpp>
+#endif
 #include "vm.h"
 
 namespace Ogre {
@@ -51,7 +53,7 @@ class VMIMPEXP HAL : public Ogre::LogListener
 public:
     HAL(VM *vm);
     ~HAL();
-	bool Initialize(const std::string &data_path);
+	bool Initialize(const std::string &data_path, Ogre::Root *root = 0, Ogre::OverlaySystem *overlay = 0);
 	bool Render();
 	void ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, Real scale, bool center_only);
 	void UnclickedObject();
@@ -59,7 +61,7 @@ public:
 	std::string GetConfigString(Ogre::ConfigFile *file, const std::string &key, const std::string &default_value);
 	bool GetConfigBool(Ogre::ConfigFile *file, const std::string &key, bool default_value);
 	Real GetConfigFloat(Ogre::ConfigFile *file, const std::string &key, Real default_value);
-	bool PlaySound(const std::string &filename);
+	bool PlaySound(const std::string &filename, Real volume = 1.0);
 	void StopSound();
 	void ClearScene();
 	void ToggleStats();
@@ -83,6 +85,9 @@ public:
 	void RegisterThread();
 	void UnregisterThread();
 	void ProcessLog();
+	void ConsoleOut(const std::string &message, const std::string &color = "white");
+	std::string GetColors(const std::string &color);
+	unsigned long GetCurrentTime();
 
 	bool RTSS;
 	std::string Renderer;
@@ -91,6 +96,7 @@ public:
 	Ogre::Root* mRoot;
 	Ogre::RenderWindow* mRenderWindow;
 	std::vector<Ogre::Viewport*> mViewports;
+	bool DX11;
 
 	//config files
 	Ogre::ConfigFile *configfile;
@@ -129,6 +135,9 @@ private:
     //stats
 	OgreBites::TrayManager* mTrayMgr;
 	int show_stats;
+
+	//Ogre timer
+	Ogre::Timer *timer;
 
     VM *vm;
 };

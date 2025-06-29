@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - File I/O and Script Processing Routines
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -22,8 +22,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
+#ifdef USING_WX
 #include "wx/wx.h"
 #endif
 #include <OgreFileSystem.h>
@@ -37,6 +36,7 @@
 #include "enginecontext.h"
 #include "texture.h"
 #include "floor.h"
+#include "camera.h"
 #include "random.h"
 #include "scriptproc.h"
 #include "section.h"
@@ -68,6 +68,7 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	controller_section = new ControllerSection(this);
 	callstation_section = new CallStationSection(this);
 
+	NoModels = false;
 	Reset();
 }
 
@@ -157,6 +158,8 @@ bool ScriptProcessor::Run()
 
 	if (line < (int)BuildingData.size() && line >= 0)
 	{
+		if (InRunloop() == false)
+			engine->ResetPrepare(); //reset prepare flag
 		LineData = BuildingData[line];
 		TrimString(LineData);
 
@@ -470,6 +473,10 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 bool ScriptProcessor::LoadFromText(const std::string &text)
 {
 	//loads building commands from a string
+
+	if (text.size() == 0)
+		return false;
+
 	std::vector<std::string> textarray;
 	SplitString(textarray, text, '\n');
 
@@ -529,8 +536,10 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	//show error dialog
 	if (warning == false)
 	{
+#ifdef USING_WX
 		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
 		dialog.ShowModal();
+#endif
 	}
 	return sError;
 }
@@ -646,42 +655,6 @@ int ScriptProcessor::ScriptError()
 int ScriptProcessor::ScriptWarning(std::string message)
 {
 	return ScriptError(message, true);
-}
-
-bool ScriptProcessor::ReportMissingFiles()
-{
-	//report on missing files
-	//returns true if any files are missing
-
-	//FIXME
-	/*if (nonexistent_files.size() > 0)
-	{
-		sort(nonexistent_files.begin(), nonexistent_files.end());
-		for (size_t i = 0; i < nonexistent_files.size(); i++)
-			Simcore->Report("Missing file: " + nonexistent_files[i]);
-
-		//create text window
-		TextWindow *twindow = new TextWindow(NULL, -1);
-		twindow->SetMinSize(wxSize(350, 250));
-		twindow->tMain->SetMinSize(wxSize(350, 250));
-		twindow->Fit();
-		twindow->Center();
-		twindow->SetTitle(wxT("Missing Files"));
-		twindow->Show(true);
-		wxString message;
-		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
-		for (size_t i = 0; i < nonexistent_files.size(); i++)
-		{
-			message.Append(nonexistent_files[i]);
-			message.Append(wxT("\n"));
-		}
-		twindow->tMain->WriteText(message);
-		twindow->tMain->SetInsertionPoint(0);
-		return true;
-	}
-	else
-		return false;*/
-	return true;
 }
 
 std::string ScriptProcessor::Calc(const std::string &expression)
@@ -2078,6 +2051,21 @@ bool ScriptProcessor::HasRunloop()
 		}
 	}
 	return false;
+}
+
+void ScriptProcessor::LoadDefaults()
+{
+	Simcore->BuildingName = "Default";
+	Simcore->BuildingDesigner = "Me";
+	Simcore->SkyName = "noon";
+	//Simcore->camera->EnableCollisions(false);
+	//Simcore->camera->EnableGravity(false);
+}
+
+void ScriptProcessor::Start()
+{
+	IsFinished = true;
+	show_percent = false;
 }
 
 }

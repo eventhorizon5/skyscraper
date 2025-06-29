@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - People Manager Dialog
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -46,6 +46,9 @@ const long PeopleManager::ID_bGo = wxNewId();
 const long PeopleManager::ID_STATICTEXT5 = wxNewId();
 const long PeopleManager::ID_tRouteActive = wxNewId();
 const long PeopleManager::ID_bStop = wxNewId();
+const long PeopleManager::ID_STATICTEXT4 = wxNewId();
+const long PeopleManager::ID_txtLobby = wxNewId();
+const long PeopleManager::ID_bLobby = wxNewId();
 const long PeopleManager::ID_STATICLINE1 = wxNewId();
 const long PeopleManager::ID_STATICLINE2 = wxNewId();
 const long PeopleManager::ID_STATICLINE3 = wxNewId();
@@ -111,6 +114,13 @@ PeopleManager::PeopleManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	FlexGridSizer2->Add(tRouteActive, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bStop = new wxButton(this, ID_bStop, _("Stop"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bStop"));
 	FlexGridSizer2->Add(bStop, 1, wxBOTTOM|wxLEFT|wxEXPAND, 5);
+	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Lobby:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+	FlexGridSizer2->Add(StaticText4, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	txtLobby = new wxTextCtrl(this, ID_txtLobby, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtLobby"));
+	txtLobby->SetMinSize(wxSize(90,-1));
+	FlexGridSizer2->Add(txtLobby, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bLobby = new wxButton(this, ID_bLobby, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bLobby"));
+	FlexGridSizer2->Add(bLobby, 1, wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticLine1 = new wxStaticLine(this, ID_STATICLINE1, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE1"));
 	FlexGridSizer2->Add(StaticLine1, 1, wxTOP|wxEXPAND, 5);
 	StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
@@ -141,7 +151,6 @@ PeopleManager::PeopleManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	BoxSizer4->Add(bOK, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer4, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
-	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
 
@@ -149,6 +158,7 @@ PeopleManager::PeopleManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	Connect(ID_bSetFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&PeopleManager::On_bSetFloor_Click);
 	Connect(ID_bGo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&PeopleManager::On_bGo_Click);
 	Connect(ID_bStop,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&PeopleManager::On_bStop_Click);
+	Connect(ID_bLobby,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&PeopleManager::On_bLobby_Click);
 	Connect(ID_chkRandom,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&PeopleManager::On_chkRandom_Click);
 	Connect(ID_chkService,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&PeopleManager::On_chkService_Click);
 	Connect(ID_bNew,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&PeopleManager::On_bNew_Click);
@@ -178,6 +188,7 @@ void PeopleManager::Loop()
 	{
 		//if active engine has changed, refresh values
 		Simcore = panel->GetSystem();
+		txtLobby->SetValue(SBS::ToString(Simcore->Lobby));
 	}
 
 	if (!Simcore)
@@ -336,5 +347,9 @@ void PeopleManager::BuildList(bool restore_selection)
 	}
 }
 
+void PeopleManager::On_bLobby_Click(wxCommandEvent& event)
+{
+	Simcore->Lobby = atoi(tDestination->GetValue());
 }
 
+}

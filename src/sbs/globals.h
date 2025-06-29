@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Global Functions
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -95,7 +95,10 @@ SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const std::stri
 SBSIMPEXP std::string ToString(int number);
 SBSIMPEXP std::string ToString(float number);
 SBSIMPEXP std::string ToString(double number);
+#if defined(__VISUALC__)
 SBSIMPEXP std::string ToString(size_t number);
+#endif
+SBSIMPEXP std::string ToString(unsigned long number);
 SBSIMPEXP float Log2(float number);
 SBSIMPEXP double Log2(double number);
 SBSIMPEXP float Round(float number, int decimal_places = 0);

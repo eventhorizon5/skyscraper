@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Sky System
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -49,6 +49,7 @@ public:
 	void SetDateTimeNow();
 	void SetDateTime(double julian_date_time);
 	void GetTime(int &hour, int &minute, int &second);
+	void GetDate(int &year, int &month, int &day);
 
     int SkyMult; //sky time multiplier
 	std::string SkyName;

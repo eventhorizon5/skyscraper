@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Startup Screen
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -20,8 +20,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
+#ifdef USING_WX
 #include "wx/wx.h"
 #endif
 #include "globals.h"
@@ -299,7 +298,11 @@ bool StartScreen::DrawImage(const std::string &filename, buttondata *button, Rea
 	if (material != "")
 	{
 		//apply content scaling factor, fixes issues for example on Retina displays
+#ifdef USING_WX
 		Real scale = frontend->GetWindow()->GetContentScaleFactor();
+#else
+		Real scale = 1.0;
+#endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 		//set scale to 1.0 on MacOS versions earlier than 10.15
@@ -395,6 +398,7 @@ bool StartScreen::GetMenuInput()
 	if (!buttons || buttoncount == 0)
 		return false;
 
+#ifdef USING_WX
 	MainScreen *window = frontend->GetWindow();
 
 	//get mouse coordinates
@@ -442,7 +446,7 @@ bool StartScreen::GetMenuInput()
         	}
         }
 	}
-
+#endif
 	return true;
 }
 

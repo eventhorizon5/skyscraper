@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Load Building Dialog
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -272,7 +272,7 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	vm->CutExternal = chkCutExternal->GetValue();
 	vm->CutFloors = chkCutFloors->GetValue();
 
-	vm->Load(filename, vm->GetActiveEngine(), position, rotation, min, max);
+	vm->Load(false, filename, vm->GetActiveEngine(), position, rotation, min, max);
 
 	this->Close();
 }

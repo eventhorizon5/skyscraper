@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Script Processor - Call Stations Section
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -133,6 +133,15 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		if (!IsNumeric(str, num))
 			return ScriptError("Invalid value");
 		station->TimerDelay = num;
+		return sNextLine;
+	}
+	//ShowDirection parameter
+	if (StartsWithNoCase(LineData, "showdirection"))
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		station->ShowDirection = ToBool(value);
 		return sNextLine;
 	}
 

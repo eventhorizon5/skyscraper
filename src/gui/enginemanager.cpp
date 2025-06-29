@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Engine Manager Dialog
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -189,7 +189,7 @@ void EngineManager::OnInit()
 	engine = 0;
 
 	chkCLoads->SetValue(panel->GetRoot()->ConcurrentLoads);
-	chkRender->SetValue(panel->GetRoot()->RenderOnStartup);
+	chkRender->SetValue(panel->GetRoot()->GetRenderOnStartup());
 }
 
 void EngineManager::Loop()
@@ -325,7 +325,7 @@ void EngineManager::On_chkCLoads_Click(wxCommandEvent& event)
 
 void EngineManager::On_chkRender_Click(wxCommandEvent& event)
 {
-	panel->GetRoot()->RenderOnStartup = chkRender->GetValue();
+	panel->GetRoot()->SetRenderOnStartup(chkRender->GetValue());
 }
 
 void EngineManager::On_bOk_Click(wxCommandEvent& event)

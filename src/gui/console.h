@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Script Console
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -49,7 +49,7 @@ class Console: public wxFrame
 		wxTextCtrl* tCommand;
 		wxTextCtrl* tConsole;
 		//*)
-		void Write(const std::string &message);
+		void Write(const std::string &message, const std::string &color);
 
 	protected:
 

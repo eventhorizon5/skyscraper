@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Skyscraper Building Design Guide</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">Predefined Functions</font></strong><br>
+      </p>
+      <hr><strong></strong>
+      <p align="left">There are a number of script functions provided by
+        the simulator. Currently there's only a single script for
+        elevator doors - see the Simple building (noted at the bottom of
+        this page) for an example. These functions can be used by
+        putting this line in your script:</p>
+      <p align="left"><font size="2" face="Courier New, Courier, mono">&lt;Include
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          data/scripts/elevator_doors.txt&gt;</font></p>
+      <p align="left">You'll then be able to use some predefined door
+        functions:</p>
+      <p align="left"><strong>1. elevdoor_single</strong> - creates a
+        single-slide elevator door.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_single(<em>door_number,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            texture, side_texture, thickness, CenterX, CenterZ, width,
+            height, door_direction, movement_direction, speed,
+            is_shaft_door</em>)</font></p>
+      <p align="left"><em>Door_Direction</em> is either "left", "right",
+        "front" or "back" and is the direction the doors face (torwards
+        the outside of the elevator). <em>Movement_direction</em> is
+        the direction the door should move.</p>
+      <p align="left"><strong>2. elevdoor_center</strong> - creates a
+        center-open elevator door.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_center(<em>door_number,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            texture, side_texture, thickness, CenterX, CenterZ, width,
+            height, door_direction, speed, is_shaft_door</em>)</font></p>
+      <p align="left"><strong>3. elevdoor_center_classic</strong> -
+        creates a center-open elevator door with a partially open
+        interior door.<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_center_classic(<em>door_number,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            texture, side_texture, thickness, CenterX, CenterZ, width,
+            height, door_direction, speed, is_shaft_door</em>)</font></p>
+      <p align="left"><strong>4. elevdoor_dualspeed_left</strong> -
+        creates a dual-speed door that opens to the left<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_dualspeed_left(<em>door_number,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            texture, side_texture, thickness, CenterX, CenterZ, width,
+            height, door_direction, speed, is_shaft_door</em>)</font></p>
+      <p align="left"><strong>5. </strong><strong>elevdoor_dualspeed_right</strong>
+        - creates a dual-speed door that opens to the right<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_dualspeed_right(<em>door_number,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            texture, side_texture, thickness, CenterX, CenterZ, width,
+            height, door_direction, speed, is_shaft_door</em>)</font></p>
+      <p align="left"><strong>6. </strong><strong>elevdoor_center_dualspeed</strong>
+        - creates a dual-speed center-open door<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">elevdoor_center_dualspeed(<em>door_number,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            texture, side_texture, thickness, CenterX, CenterZ, width,
+            height, door_direction, speed, is_shaft_door</em>)</font></p>
+      <p align="left">&nbsp;</p>
+    </div>
+  </body>
+</html>

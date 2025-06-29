@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Engine Context
-	Copyright (C)2003-2024 Ryan Thoryk
+	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -20,11 +20,12 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
+#ifdef USING_WX
 #include "wx/wx.h"
 #endif
+#ifndef DISABLE_SOUND
 #include <fmod.hpp>
+#endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include <windows.h>
 #endif
@@ -51,49 +52,19 @@ namespace Skyscraper {
 
 EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	this->vm = vm;
-	finish_time = 0;
-	shutdown = false;
-	loading = false;
-	running = false;
-	reloading = false;
-	Reload = false;
-	reload_state = new CameraState;
-	reload_state->floor = 0;
-	reload_state->collisions = false;
-	reload_state->gravity = false;
-	reload_state->freelook = false;
-	this->mSceneManager = mSceneManager;
 	this->fmodsystem = fmodsystem;
-	this->position = position;
-	this->area_min = area_min;
-	this->area_max = area_max;
-	this->rotation = rotation;
-	this->parent = parent;
-	Simcore = 0;
-	processor = 0;
-	raised = false;
-	progress = 0;
-	inside = false;
-	Moved = false;
-	started = false;
-	prepared = false;
-
-	//register this engine, and get it's instance number
-	instance = vm->RegisterEngine(this);
-
-	Report("\nStarting instance " + ToString(instance) + "...");
-
-	//add instance number to reports
-	InstancePrompt = ToString(instance) + ">";
-
-	if (parent)
-		parent->AddChild(this);
-
-	StartSim();
+	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
 
 	//enable runloop thread
-	ex = std::thread{&EngineContext::Run, this};
+        ex = std::thread{&EngineContext::Run, this};
+}
+
+EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
+
+	//enable runloop thread
+        ex = std::thread{&EngineContext::Run, this};
 }
 
 EngineContext::~EngineContext()
@@ -121,6 +92,50 @@ EngineContext::~EngineContext()
 	if (reload_state)
 		delete reload_state;
 	reload_state = 0;
+}
+
+void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+{
+	this->vm = vm;
+	finish_time = 0;
+	shutdown = false;
+	loading = false;
+	running = false;
+	reloading = false;
+	Reload = false;
+	reload_state = new CameraState;
+	reload_state->floor = 0;
+	reload_state->collisions = false;
+	reload_state->gravity = false;
+	reload_state->freelook = false;
+	this->mSceneManager = mSceneManager;
+	this->position = position;
+	this->area_min = area_min;
+	this->area_max = area_max;
+	this->rotation = rotation;
+	this->parent = parent;
+	Simcore = 0;
+	processor = 0;
+	raised = false;
+	progress = 0;
+	inside = false;
+	Moved = false;
+	started = false;
+	prepared = false;
+	NewEngine = true;
+
+	//register this engine, and get it's instance number
+	instance = vm->RegisterEngine(this);
+
+	Report("\nStarting instance " + ToString(instance) + "...");
+
+	//add instance number to reports
+	InstancePrompt = ToString(instance) + ">";
+
+	if (parent)
+			parent->AddChild(this);
+
+	StartSim();
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
@@ -178,7 +193,9 @@ void EngineContext::Run()
 			{
 				ReportError("Error processing building\n");
 				Shutdown();
+			#ifdef USING_WX
 				vm->GetGUI()->CloseProgressDialog();
+			#endif
 				return false;
 			}
 			else if (processor->IsFinished == true)
@@ -211,10 +228,12 @@ void EngineContext::Run()
 	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 	{
+#ifdef USING_WX
 		vm->GetGUI()->RaiseWindow();
+#endif
 		raised = true;
 
-		processor->ReportMissingFiles();
+		vm->ReportMissingFiles(processor->nonexistent_files);
 	}
 
 	//process internal clock
@@ -222,11 +241,11 @@ void EngineContext::Run()
 	if (running == true)
 		Simcore->CalculateFrameRate();
 
+	//run SBS main loop
+	Simcore->Loop(loading, processor->IsFinished);
+
 	if (loading == false)
 	{
-		//run SBS main loop
-		Simcore->Loop();
-
 		//run functions if user enters or leaves this engine
 		if (inside == false && IsInside() == true)
 			OnEnter();
@@ -235,6 +254,52 @@ void EngineContext::Run()
 	}
 
 	return true;*/
+}
+
+bool EngineContext::InitSim()
+{
+	//initialize simulator
+
+	if (!Simcore || !processor)
+		return false;
+
+	Simcore->Initialize();
+
+	//load script processor object
+	processor->Reset();
+
+	return true;
+}
+
+void EngineContext::Boot()
+{
+	//boot simulator
+	processor->Start();
+}
+
+bool EngineContext::LoadDefault()
+{
+	//load default simulation
+
+	if (!Simcore || !processor)
+		return false;
+
+	loading = true;
+
+	//initialize simulator
+	InitSim();
+
+	Report("\nLoading default simulation...\n");
+	Simcore->BuildingFilename = "Default";
+
+	//load defaults
+	processor->LoadDefaults();
+
+	//override SBS startup render option, if specified
+	if (vm->GetRenderOnStartup() == true)
+		Simcore->RenderOnStartup = true;
+
+	return true;
 }
 
 bool EngineContext::Load(std::string filename)
@@ -251,7 +316,7 @@ bool EngineContext::Load(std::string filename)
 	loading = true;
 
 	//initialize simulator
-	Simcore->Initialize();
+	InitSim();
 
 	//load building data file
 	Report("\nLoading building data from " + filename + "...\n");
@@ -259,10 +324,7 @@ bool EngineContext::Load(std::string filename)
 
 	filename.insert(0, "buildings/");
 
-	//load script processor object and load building
-
-	processor->Reset();
-
+	//load building
 	if (!processor->LoadDataFile(filename))
 	{
 		loading = false;
@@ -270,10 +332,12 @@ bool EngineContext::Load(std::string filename)
 	}
 
 	//create progress dialog
+#ifdef USING_WX
 	vm->GetGUI()->CreateProgressDialog(filename);
+#endif
 
 	//override SBS startup render option, if specified
-	if (vm->RenderOnStartup == true)
+	if (vm->GetRenderOnStartup() == true)
 		Simcore->RenderOnStartup = true;
 
 	return true;
@@ -340,8 +404,13 @@ void EngineContext::StartSim()
 	if (!processor)
 		processor = new ScriptProcessor(this);
 
+	//if using DirectX11, turn off models in script processor due to shader crashes
+	processor->NoModels = vm->GetHAL()->DX11;
+
 	//refresh console to fix banner message on Linux
+#ifdef USING_WX
 	vm->GetGUI()->RefreshConsole();
+#endif
 
 	//override verbose mode if specified
 	if (vm->Verbose == true)
@@ -351,7 +420,9 @@ void EngineContext::StartSim()
 	if (instance == 0)
 	{
 		vm->Pause = true; //briefly pause frontend to prevent debug panel calls to engine
+#ifdef USING_WX
 		wxYield(); //this allows the banner to be printed before the sleep() call
+#endif
 		vm->Pause = false;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);
@@ -370,9 +441,11 @@ void EngineContext::UnloadSim()
 	}
 	Simcore = 0;
 
+#ifndef DISABLE_SOUND
 	//reset fmod reverb
 	FMOD_REVERB_PROPERTIES prop = FMOD_PRESET_GENERIC;
 	fmodsystem->setReverbProperties(0, &prop);
+#endif
 
 	//unload script processor
 	if (processor)
@@ -386,8 +459,13 @@ void EngineContext::UnloadSim()
 	started = false;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef __linux__
 	//release free memory to OS on Linux
 	malloc_trim(0);
+#else
+	//freebsd
+#endif
+
 #endif
 }
 
@@ -442,7 +520,9 @@ bool EngineContext::ReportError(const std::string &message)
 bool EngineContext::ReportFatalError(const std::string &message)
 {
 	ReportError(message);
+#ifdef USING_WX
 	vm->GetGUI()->ShowError(message);
+#endif
 	return false;
 }
 
@@ -697,6 +777,35 @@ void EngineContext::Run0()
 		return;
 
 	Simcore->Run0();
+}
+
+void EngineContext::GatherReset()
+{
+	//reset a gather operation
+
+	current_time = vm->GetHAL()->GetCurrentTime();
+}
+
+void EngineContext::Gather()
+{
+	//perform a gather operation
+	//this collects timing information since the last reset
+
+	unsigned long last = current_time;
+
+	//get current time
+	current_time = vm->GetHAL()->GetCurrentTime();
+	if (last == 0)
+		last = current_time;
+
+	time_stat = current_time - last;
+}
+
+void EngineContext::ResetPrepare()
+{
+	prepared = false;
+}
+
 }
 
 void EngineContext::ThreadWait()

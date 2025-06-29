@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - CameraTexture Control
-	Copyright (C)2004-2024 Ryan Thoryk
+	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -53,6 +53,9 @@ const long CameraTextureControl::ID_bSetLookAt = wxNewId();
 const long CameraTextureControl::ID_lblFOV = wxNewId();
 const long CameraTextureControl::ID_txtFOV = wxNewId();
 const long CameraTextureControl::ID_bSetFOV = wxNewId();
+const long CameraTextureControl::ID_STATICTEXT1 = wxNewId();
+const long CameraTextureControl::ID_txtZoom = wxNewId();
+const long CameraTextureControl::ID_bSetZoom = wxNewId();
 const long CameraTextureControl::ID_bOK = wxNewId();
 //*)
 
@@ -67,6 +70,9 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	wxBoxSizer* BoxSizer1;
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer3;
+	wxFlexGridSizer* FlexGridSizer10;
+	wxFlexGridSizer* FlexGridSizer11;
+	wxFlexGridSizer* FlexGridSizer12;
 	wxFlexGridSizer* FlexGridSizer1;
 	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* FlexGridSizer3;
@@ -141,7 +147,7 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	FlexGridSizer6->Add(BoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer2->Add(FlexGridSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer3->Add(StaticBoxSizer2, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("FOV"));
+	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("FOV and Zoom"));
 	FlexGridSizer8 = new wxFlexGridSizer(0, 1, 0, 0);
 	lblFOV = new wxStaticText(this, ID_lblFOV, _("FOV"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_lblFOV"));
 	FlexGridSizer8->Add(lblFOV, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -153,6 +159,19 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	bSetFOV = new wxButton(this, ID_bSetFOV, _("Set FOV"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSetFOV"));
 	FlexGridSizer8->Add(bSetFOV, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3->Add(FlexGridSizer8, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer10 = new wxFlexGridSizer(0, 1, 0, 0);
+	FlexGridSizer11 = new wxFlexGridSizer(0, 1, 0, 0);
+	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Zoom"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT1"));
+	FlexGridSizer11->Add(StaticText1, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer12 = new wxFlexGridSizer(0, 3, 0, 0);
+	txtZoom = new wxTextCtrl(this, ID_txtZoom, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_txtZoom"));
+	txtZoom->SetMinSize(wxSize(90,-1));
+	FlexGridSizer12->Add(txtZoom, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer11->Add(FlexGridSizer12, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetZoom = new wxButton(this, ID_bSetZoom, _("Set Zoom"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSetZoom"));
+	FlexGridSizer11->Add(bSetZoom, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer10->Add(FlexGridSizer11, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer3->Add(FlexGridSizer10, 1, wxEXPAND, 5);
 	FlexGridSizer3->Add(StaticBoxSizer3, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -161,7 +180,6 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	BoxSizer1->Add(bOK, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer1, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
-	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 
 	Connect(ID_chkEnabled,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&CameraTextureControl::On_chkEnabled_Click);
@@ -169,6 +187,7 @@ CameraTextureControl::CameraTextureControl(DebugPanel* parent,wxWindowID id)
 	Connect(ID_bSetRotation,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraTextureControl::On_bSetRotation_Click);
 	Connect(ID_bSetLookAt,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraTextureControl::On_bSetLookAt_Click);
 	Connect(ID_bSetFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraTextureControl::On_bSetFOV_Click);
+	Connect(ID_bSetZoom,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraTextureControl::On_bSetZoom_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraTextureControl::On_bOK_Click);
 	//*)
 
@@ -217,6 +236,7 @@ void CameraTextureControl::Loop()
 			txtRotationZ->SetValue(SBS::ToString(camera->GetRotation().z));
 
 			txtFOV->SetValue(SBS::ToString(camera->GetFOVAngle()));
+			txtZoom->SetValue(SBS::ToString(camera->GetZoom()));
 		}
 	}
 	else
@@ -261,6 +281,7 @@ void CameraTextureControl::BuildList(bool restore_selection)
 			txtRotationY->SetValue(wxT(""));
 			txtRotationZ->SetValue(wxT(""));
 			txtFOV->SetValue(wxT(""));
+			txtZoom->SetValue(wxT(""));
 			chkEnabled->SetValue(false);
 		}
 	}
@@ -304,6 +325,14 @@ void CameraTextureControl::On_bSetLookAt_Click(wxCommandEvent& event)
 	if (camera)
 	{
 		camera->LookAt(Vector3(atof(txtRotationX->GetValue()), atof(txtRotationY->GetValue()), atof(txtRotationZ->GetValue())));
+	}
+}
+
+void CameraTextureControl::On_bSetZoom_Click(wxCommandEvent& event)
+{
+	if (camera)
+	{
+		camera->SetZoom(atof(txtZoom->GetValue()));
 	}
 }
 
