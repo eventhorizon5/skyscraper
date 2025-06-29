@@ -29,6 +29,7 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include <windows.h>
 #endif
+#include <sstream>
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
@@ -133,6 +134,11 @@ void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSce
 
 	//enable runloop thread
 	ex = std::thread{&EngineContext::Run, this};
+
+	//get id of thread
+	std::ostringstream ss;
+	ss << ex.get_id();
+	id = ss.str();
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
@@ -808,6 +814,12 @@ void EngineContext::ResetPrepare()
 void EngineContext::ThreadWait()
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+}
+
+std::string EngineContext::GetThreadID()
+{
+	//return ID of this engine context's runloop thread
+	return id;
 }
 
 }

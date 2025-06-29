@@ -48,6 +48,8 @@ const long EngineManager::ID_STATICTEXT1 = wxNewId();
 const long EngineManager::ID_tActive = wxNewId();
 const long EngineManager::ID_STATICTEXT2 = wxNewId();
 const long EngineManager::ID_tState = wxNewId();
+const long EngineManager::ID_STATICTEXT6 = wxNewId();
+const long EngineManager::ID_tID = wxNewId();
 const long EngineManager::ID_STATICLINE2 = wxNewId();
 const long EngineManager::ID_CLoads = wxNewId();
 const long EngineManager::ID_chkRender = wxNewId();
@@ -115,6 +117,11 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	tState = new wxTextCtrl(this, ID_tState, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tState"));
 	tState->SetMinSize(wxSize(125,-1));
 	FlexGridSizer2->Add(tState, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("Thread ID:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
+	FlexGridSizer2->Add(StaticText6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tID = new wxTextCtrl(this, ID_tID, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tID"));
+	tID->SetMinSize(wxSize(125,-1));
+	FlexGridSizer2->Add(tID, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(FlexGridSizer2, 1, wxBOTTOM|wxEXPAND, 5);
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
@@ -152,6 +159,7 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	BoxSizer9->Add(bOk, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer9, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
+	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
 
@@ -261,6 +269,9 @@ void EngineManager::Loop()
 			tState->SetValue("Loading");
 		else if (engine->IsRunning() == true)
 			tState->SetValue("Running");
+
+		//display runloop thread id
+		tID->SetValue(engine->GetThreadID());
 	}
 	else
 	{

@@ -59,9 +59,11 @@ class EngineManager: public wxDialog
 		wxStaticText* StaticText3;
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
+		wxStaticText* StaticText6;
 		wxTextCtrl* tActive;
 		wxTextCtrl* tBoundsMax;
 		wxTextCtrl* tBoundsMin;
+		wxTextCtrl* tID;
 		wxTextCtrl* tPosition;
 		wxTextCtrl* tState;
 		//*)
@@ -81,6 +83,8 @@ class EngineManager: public wxDialog
 		static const long ID_tActive;
 		static const long ID_STATICTEXT2;
 		static const long ID_tState;
+		static const long ID_STATICTEXT6;
+		static const long ID_tID;
 		static const long ID_STATICLINE2;
 		static const long ID_CLoads;
 		static const long ID_chkRender;

@@ -92,6 +92,7 @@ public:
 	void GatherReset();
 	void Gather();
 	void ResetPrepare();
+	std::string GetThreadID();
 
 private:
 
@@ -131,6 +132,7 @@ private:
 	//threading
 	std::thread ex;
 	bool ShutdownLoop;
+	std::string id;
 
 	//VM instance
 	VM *vm;
