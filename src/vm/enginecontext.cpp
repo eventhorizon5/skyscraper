@@ -209,7 +209,7 @@ void EngineContext::Run()
 				}
 
 				if (Simcore->RenderOnStartup == false)
-					goto main;
+					continue;
 			}
 			else if (processor->IsFinished == true && result == true)
 			{
@@ -229,7 +229,6 @@ void EngineContext::Run()
 		else
 			continue;
 
-main:
 		//force window raise on startup, and report on missing files, if any
 		if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 		{
