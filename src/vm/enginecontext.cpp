@@ -54,17 +54,11 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 {
 	this->fmodsystem = fmodsystem;
 	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
-
-	//enable runloop thread
-	ex = std::thread{&EngineContext::Run, this};
 }
 
 EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
-
-	//enable runloop thread
-	ex = std::thread{&EngineContext::Run, this};
 }
 
 EngineContext::~EngineContext()
@@ -136,6 +130,9 @@ void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSce
 			parent->AddChild(this);
 
 	StartSim();
+
+	//enable runloop thread
+	ex = std::thread{&EngineContext::Run, this};
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
