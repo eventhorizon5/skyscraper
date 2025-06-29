@@ -40,9 +40,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 {
 	//Process Textures
 
-	//handle end of textures section
-
-	/*TextureManager* texturemanager = Simcore->GetTextureManager();
+	TextureManager *texturemanager = Simcore->GetTextureManager();
 
 	//Load command
 	if (StartsWithNoCase(LineData, "load "))
@@ -527,8 +525,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
-	return sContinue;*/
-	return sNextLine;
+	return sContinue;
 }
 
 }
