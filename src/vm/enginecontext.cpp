@@ -31,7 +31,7 @@
 #endif
 #include "globals.h"
 #include "sbs.h"
-#include "vm.h"
+#include "vm.h"		vm->GetHAL()->RegisterThread();
 #include "hal.h"
 #include "gui.h"
 #include "camera.h"
@@ -56,7 +56,7 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
 
 	//enable runloop thread
-        ex = std::thread{&EngineContext::Run, this};
+	ex = std::thread{&EngineContext::Run, this};
 }
 
 EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
@@ -64,7 +64,7 @@ EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* 
 	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
 
 	//enable runloop thread
-        ex = std::thread{&EngineContext::Run, this};
+	ex = std::thread{&EngineContext::Run, this};
 }
 
 EngineContext::~EngineContext()
