@@ -160,97 +160,99 @@ void EngineContext::Shutdown()
 
 void EngineContext::Run()
 {
-	if (!Simcore)
-		return;
-
-	//register thread with HAL
-	try
+	while (true)
 	{
-		vm->GetHAL()->RegisterThread();
-		vm->newthread = true;
-	}
-	catch (Ogre::Exception& e)
-	{
-		ReportFatalError("Error registering thread - details:\n" + e.getDescription());
-	}
+		if (!Simcore)
+			continue;
 
-	return; //FIXME, needs thread implementation
-
-	//run script processor
-	/*if (processor)
-	{
-		bool in_main = InRunloop();
-		bool result = processor->Run();
-
-		if (loading == true)
+		//register thread with HAL
+		try
 		{
-			prepared = false;
-
-			if (result == false)
-			{
-				ReportError("Error processing building\n");
-				Shutdown();
-			#ifdef USING_WX
-				vm->GetGUI()->CloseProgressDialog();
-			#endif
-				return false;
-			}
-			else if (processor->IsFinished == true)
-			{
-				//building has finished loading
-				finish_time = Simcore->GetCurrentTime();
-			}
-
-			if (Simcore->RenderOnStartup == false)
-				return false;
+			vm->GetHAL()->RegisterThread();
+			vm->newthread = true;
 		}
-		else if (processor->IsFinished == true && result == true)
+		catch (Ogre::Exception& e)
 		{
-			if (InRunloop() == false && prepared == false)
-			{
-				Simcore->Prepare(false);
-				Simcore->DeleteColliders = false;
-				Simcore->Init(); //initialize any new objects
-				prepared = true;
-			}
-			else
-			{
-				loading = false;
-			}
+			ReportFatalError("Error registering thread - details:\n" + e.getDescription());
+			return; //exit thread
 		}
-	}
-	else
-		return false;
 
-	//force window raise on startup, and report on missing files, if any
-	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
-	{
+		//run script processor
+		if (processor)
+		{
+			bool in_main = InRunloop();
+			bool result = processor->Run();
+
+			if (loading == true)
+			{
+				prepared = false;
+
+				if (result == false)
+				{
+					ReportError("Error processing building\n");
+					Shutdown();
 #ifdef USING_WX
-		vm->GetGUI()->RaiseWindow();
+					vm->GetGUI()->CloseProgressDialog();
 #endif
-		raised = true;
+					continue;
+				}
+				else if (processor->IsFinished == true)
+				{
+					//building has finished loading
+					finish_time = Simcore->GetCurrentTime();
+				}
 
-		vm->ReportMissingFiles(processor->nonexistent_files);
+				if (Simcore->RenderOnStartup == false)
+					continue;
+			}
+			else if (processor->IsFinished == true && result == true)
+			{
+				if (InRunloop() == false && prepared == false)
+				{
+					Simcore->Prepare(false);
+					Simcore->DeleteColliders = false;
+					Simcore->Init(); //initialize any new objects
+					prepared = true;
+				}
+				else
+				{
+					loading = false;
+				}
+			}
+		}
+		else
+			continue;
+
+		//force window raise on startup, and report on missing files, if any
+		if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
+		{
+#ifdef USING_WX
+			vm->GetGUI()->RaiseWindow();
+#endif
+			raised = true;
+
+			vm->ReportMissingFiles(processor->nonexistent_files);
+		}
+
+		//process internal clock
+		Simcore->AdvanceClock();
+		if (running == true)
+			Simcore->CalculateFrameRate();
+
+		//run SBS main loop
+		Simcore->Loop(loading, processor->IsFinished);
+
+		if (loading == false)
+		{
+			//run functions if user enters or leaves this engine
+			if (inside == false && IsInside() == true)
+				OnEnter();
+			if (inside == true && IsInside() == false)
+				OnExit();
+		}
+
+		//FIXME: needs thread exit code
 	}
-
-	//process internal clock
-	Simcore->AdvanceClock();
-	if (running == true)
-		Simcore->CalculateFrameRate();
-
-	//run SBS main loop
-	Simcore->Loop(loading, processor->IsFinished);
-
-	if (loading == false)
-	{
-		//run functions if user enters or leaves this engine
-		if (inside == false && IsInside() == true)
-			OnEnter();
-		if (inside == true && IsInside() == false)
-			OnExit();
-	}
-
-	return true;*/
 }
 
 bool EngineContext::InitSim()
