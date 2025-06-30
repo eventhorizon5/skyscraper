@@ -514,6 +514,11 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddAction CamStart, Camera1, Enable
     AddTrigger CamEnable, , -4, 0, 20, 4, 10, 35, CamStop, CamStart
 
+    #add a map trigger
+    AddAction MapStop, MapGenerator:MapCamera, Disable
+    AddAction MapStart, MapGenerator:MapCamera, Enable
+    AddTrigger MapEnable, , -4, 0, 20, 4, 10, 35, MapStop, MapStart
+
     SetAutoSize = true, true
 <EndFloor>
 
