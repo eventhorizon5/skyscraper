@@ -9505,3 +9505,6 @@ AddFloorAutoArea -76.5, Floor(-7).Altitude, 100, -16, 0, 220
     AddSound Music, intro2.ogg, 0, 10, 7, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
 <EndFloor>
 
+#set zoom of Map camera
+SetCameraZoom MapGenerator, MapCamera, 1.5
+

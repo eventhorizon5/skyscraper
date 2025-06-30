@@ -2257,6 +2257,35 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//SetCameraZoom command
+	if (StartsWithNoCase(LineData, "setcamerazoom"))
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//get SBS object
+		Object* object = Simcore->GetObjectOfParent(tempdata[0], tempdata[1], "CameraTexture", false);
+		if (!object)
+			return ScriptError("Object not found: parent " + tempdata[0] + ", name " + tempdata[1]);
+
+		::SBS::CameraTexture* camtex = static_cast<::SBS::CameraTexture*>(object);
+
+		if (!camtex)
+			return ScriptError("Invalid camera texture " + tempdata[1] + " in " + tempdata[0]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//zoom camera
+		camtex->SetZoom(ToFloat(tempdata[2]));
+
+		return sNextLine;
+	}
+
 	//AddSlidingDoor command
 	if (StartsWithNoCase(LineData, "addslidingdoor"))
 	{
