@@ -9500,7 +9500,7 @@ AddFloorAutoArea -76.5, Floor(-7).Altitude, 100, -16, 0, 220
     MoveLight Elevator %elevator%, ElevLight, 0, 6, 0
 <EndElevators>
 
-#20th Anniversary Music
+#C++ version 20th Anniversary Music
 <Floor 135>
     AddSound Music, intro2.ogg, 0, 10, 7, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
 <EndFloor>
