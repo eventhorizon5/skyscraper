@@ -86,7 +86,7 @@ public:
 	int GetEngineCount();
 	int GetEngineListSize() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
-	void SetActiveEngine(int number, bool switch_engines = false);
+	void SetActiveEngine(int number, bool switch_engines = false, bool force = false);
 	bool IsEngineLoading();
 	bool IsValidEngine(EngineContext *engine);
 	bool IsValidSystem(::SBS::SBS *sbs);

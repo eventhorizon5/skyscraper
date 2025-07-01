@@ -174,7 +174,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 				if (count > 0)
 				{
 					int number = GetFirstValidEngine()->GetNumber();
-					SetActiveEngine(number);
+					SetActiveEngine(number, false, true);
 				}
 			}
 			else if (active_engine)
@@ -223,7 +223,7 @@ EngineContext* VM::FindActiveEngine()
 	return active_engine;
 }
 
-void VM::SetActiveEngine(int number, bool switch_engines)
+void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 {
 	//set an engine instance to be active
 
@@ -240,7 +240,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		return;
 
 	//don't switch to engine if it's loading
-	if (engine->IsLoading() == true)
+	if (engine->IsLoading() == true && force == false)
 		return;
 
 	CameraState state;
