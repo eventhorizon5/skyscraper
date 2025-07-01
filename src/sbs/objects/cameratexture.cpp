@@ -231,13 +231,22 @@ void CameraTexture::SetZoom(Real value)
 {
 	//zoom camera in orthographic mode
 
-	if (!camera)
+	if (!camera || value <= 0)
 		return;
 
+	//get current camera view matrix
 	Ogre::Affine3 vmatrix = camera->getViewMatrix();
+
+	//remove old zoom factor
+	vmatrix[0][0] /= zoom;
+	vmatrix[1][2] /= zoom;
+
+	//apply new zoom factor
 	zoom = value;
 	vmatrix[0][0] *= zoom;
 	vmatrix[1][2] *= zoom;
+
+	//set camera view matrix with zoom applied
 	camera->setCustomViewMatrix(true, vmatrix);
 }
 
