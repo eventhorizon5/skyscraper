@@ -506,13 +506,13 @@ bool EngineContext::IsLoadingFinished()
 	return (loading == true && processor->IsFinished == true);
 }
 
-void EngineContext::UpdateProgress(int percent)
+bool EngineContext::UpdateProgress(int percent)
 {
 	//update progress bar
 
 	progress = percent;
 
-	vm->UpdateProgress();
+	return vm->UpdateProgress();
 }
 
 CameraState EngineContext::GetCameraState()

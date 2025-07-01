@@ -898,7 +898,7 @@ wxWindow* VM::GetParent()
 	return parent;
 }
 
-void VM::UpdateProgress()
+bool VM::UpdateProgress()
 {
 	//update progress based on total sim engine status
 
@@ -915,8 +915,9 @@ void VM::UpdateProgress()
 
 #ifdef USING_WX
 	if (gui)
-		gui->UpdateProgress(final);
+		return gui->UpdateProgress(final);
 #endif
+	return true;
 }
 
 bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)

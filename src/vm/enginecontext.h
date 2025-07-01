@@ -60,7 +60,7 @@ public:
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
 	bool IsLoadingFinished();
-	void UpdateProgress(int percent);
+	bool UpdateProgress(int percent);
 	int GetProgress() { return progress; }
 	int GetNumber() { return instance; }
 	::SBS::CameraState GetCameraState();
