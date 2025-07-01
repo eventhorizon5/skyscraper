@@ -201,7 +201,7 @@ bool ScriptProcessor::Run()
 
 		//handle cancel if requested
 		if (status == false)
-			return false;
+			goto Error;
 
 		//process user variables
 		ProcessUserVariables();
