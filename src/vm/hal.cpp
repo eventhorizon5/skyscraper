@@ -911,13 +911,18 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 	}
 	else
 #endif
+	{
 		Ogre::RenderWindow* mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 		mRenderWindows.emplace_back(mRenderWindow);
+	}
 
-	mRenderWindow->setActive(true);
-	mRenderWindow->windowMovedOrResized();
+	for (size_t i = 0; i < mRenderWindows.size(); i++)
+	{
+		mRenderWindows[i]->setActive(true);
+		mRenderWindows[i]->windowMovedOrResized();
+	}
 
-	return mRenderWindow;
+	return mRenderWindows[0];
 }
 
 void HAL::DestroyRenderWindow()
