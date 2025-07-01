@@ -137,7 +137,7 @@ private:
 	bool FunctionProc();
 	void CheckFile(const std::string &filename);
 	void GetLineInformation(bool CheckFunctionCall, int &LineNumber, std::string &FunctionName, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile);
-	void ProcessFunctionParameters();
+	bool ProcessFunctionParameters();
 	void ProcessUserVariables();
 	int ProcessSections();
 	int ProcessFloorObjects();
