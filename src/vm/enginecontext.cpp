@@ -161,6 +161,11 @@ bool EngineContext::Run()
 		{
 			prepared = false;
 
+			#ifdef USING_WX
+			if (vm->GetGUI()->ProgressCancelled() == true)
+				result = false;
+			#endif
+
 			if (result == false)
 			{
 				ReportError("Error processing building\n");

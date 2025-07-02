@@ -277,6 +277,14 @@ bool GUI::UpdateProgress(int percent)
 	return progdialog->Update(percent);
 }
 
+bool GUI::ProgressCancelled()
+{
+	if (!progdialog)
+		return false;
+
+	return progdialog->WasCancelled();
+}
+
 void GUI::RefreshConsole()
 {
 	if (console)
