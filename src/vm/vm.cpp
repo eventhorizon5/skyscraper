@@ -485,7 +485,7 @@ void VM::SwitchEngines()
 	}
 
 	//otherwise search for a valid engine to attach to
-	Report("Searing for engine to attach to...");
+	Report("Searching for engine to attach to...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] != active_engine && engines[i])
