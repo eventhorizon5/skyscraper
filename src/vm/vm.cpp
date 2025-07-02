@@ -177,7 +177,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 				if (count > 0)
 				{
 					int number = GetFirstValidEngine()->GetNumber();
-					SetActiveEngine(number);
+					SetActiveEngine(number, false, true);
 				}
 			}
 			else if (active_engine)
@@ -226,7 +226,7 @@ EngineContext* VM::FindActiveEngine()
 	return active_engine;
 }
 
-void VM::SetActiveEngine(int number, bool switch_engines)
+void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 {
 	//set an engine instance to be active
 
@@ -243,7 +243,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		return;
 
 	//don't switch to engine if it's loading
-	if (engine->IsLoading() == true)
+	if (engine->IsLoading() == true && force == false)
 		return;
 
 	CameraState state;
@@ -901,7 +901,7 @@ wxWindow* VM::GetParent()
 	return parent;
 }
 
-void VM::UpdateProgress()
+bool VM::UpdateProgress()
 {
 	//update progress based on total sim engine status
 
@@ -918,8 +918,9 @@ void VM::UpdateProgress()
 
 #ifdef USING_WX
 	if (gui)
-		gui->UpdateProgress(final);
+		return gui->UpdateProgress(final);
 #endif
+	return true;
 }
 
 bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)

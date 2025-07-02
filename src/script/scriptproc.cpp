@@ -146,6 +146,7 @@ bool ScriptProcessor::Run()
 {
 	//building loader/script interpreter
 
+	bool status = false;
 	int returncode = sContinue;
 	IsFinished = false;
 
@@ -196,7 +197,11 @@ bool ScriptProcessor::Run()
 		}
 
 		//process function parameters
-		ProcessFunctionParameters();
+		status = ProcessFunctionParameters();
+
+		//handle cancel if requested
+		if (status == false)
+			goto Error;
 
 		//process user variables
 		ProcessUserVariables();
@@ -1120,7 +1125,7 @@ ScriptProcessor::ElevatorCarSection* ScriptProcessor::GetElevatorCarSection()
 	return elevatorcar_section;
 }
 
-void ScriptProcessor::ProcessFunctionParameters()
+bool ScriptProcessor::ProcessFunctionParameters()
 {
 	//////////////////////////////
 	//Function parameter variables
@@ -1187,9 +1192,10 @@ void ScriptProcessor::ProcessFunctionParameters()
 		{
 			progress_marker = marker;
 			engine->Report(percent_s + "%");
-			engine->UpdateProgress(percent);
+			return engine->UpdateProgress(percent);
 		}
 	}
+	return true;
 }
 
 void ScriptProcessor::ProcessUserVariables()
