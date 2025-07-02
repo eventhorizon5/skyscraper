@@ -166,7 +166,8 @@ bool EngineContext::Run()
 				ReportError("Error processing building\n");
 				Shutdown();
 			#ifdef USING_WX
-				vm->GetGUI()->CloseProgressDialog();
+				if (vm->GetEngineCount(true) == 1)
+					vm->GetGUI()->CloseProgressDialog();
 			#endif
 				return false;
 			}

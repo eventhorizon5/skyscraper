@@ -439,7 +439,7 @@ EngineContext* VM::GetEngine(int number)
 	return engines[number];
 }
 
-int VM::GetEngineCount()
+int VM::GetEngineCount(bool loading_only)
 {
 	//get number of valid engines
 
@@ -448,7 +448,15 @@ int VM::GetEngineCount()
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
-			count++;
+		{
+			if (loading_only == true)
+			{
+				if (engines[i]->IsLoading() == true)
+					count++;
+			}
+			else
+				count++;
+		}
 	}
 	return count;
 }
