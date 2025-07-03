@@ -84,6 +84,8 @@ EngineContext::~EngineContext()
 
 void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
+	//initialize this engine context
+
 	this->vm = vm;
 	finish_time = 0;
 	shutdown = false;
@@ -133,6 +135,8 @@ ScriptProcessor* EngineContext::GetScriptProcessor()
 
 bool EngineContext::IsCameraActive()
 {
+	//returns true if camera is active in this simulator
+
 	if (!Simcore)
 		return false;
 
@@ -148,6 +152,8 @@ void EngineContext::Shutdown()
 
 bool EngineContext::Run()
 {
+	//run simulator
+
 	if (!Simcore)
 		return false;
 
@@ -360,6 +366,8 @@ std::string EngineContext::GetFilename()
 
 void EngineContext::StartSim()
 {
+	//create simulator and script interpreter objects
+
 	//exit if already started
 	if (started == true)
 		return;
@@ -412,6 +420,8 @@ void EngineContext::StartSim()
 
 void EngineContext::UnloadSim()
 {
+	//unload simulator
+
 	if (Simcore)
 	{
 		delete Simcore;
@@ -449,6 +459,8 @@ void EngineContext::UnloadSim()
 
 bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
 {
+	//start simulator
+
 	if (!Simcore)
 		return false;
 
@@ -506,6 +518,8 @@ bool EngineContext::ReportFatalError(const std::string &message)
 
 bool EngineContext::IsLoadingFinished()
 {
+	//returns true if this engine has finished loading
+
 	if (!processor)
 		return false;
 
@@ -523,11 +537,15 @@ bool EngineContext::UpdateProgress(int percent)
 
 CameraState EngineContext::GetCameraState()
 {
+	//get camera state data
+
 	return Simcore->camera->GetCameraState();
 }
 
 void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
 {
+	//set camera state data
+
 	Simcore->camera->SetCameraState(state, set_floor);
 }
 
@@ -602,6 +620,8 @@ Vector3 EngineContext::GetCameraPosition()
 
 void EngineContext::OnEnter()
 {
+	//this function is run on engine entry
+
 	//switch to this engine on entry
 
 	inside = true;
@@ -619,6 +639,8 @@ void EngineContext::OnEnter()
 
 void EngineContext::OnExit()
 {
+	//this function is run on engine exit
+
 	inside = false;
 }
 
@@ -735,6 +757,8 @@ VM* EngineContext::GetVM()
 
 bool EngineContext::InRunloop()
 {
+	//returns true if the script processor is in a runloop
+
 	if (processor)
 		return processor->InRunloop();
 	return false;
@@ -771,6 +795,8 @@ void EngineContext::Gather()
 
 void EngineContext::ResetPrepare()
 {
+	//reset prepared state
+
 	prepared = false;
 }
 

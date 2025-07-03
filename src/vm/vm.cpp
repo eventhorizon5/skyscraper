@@ -976,11 +976,15 @@ bool VM::GetRenderOnStartup()
 
 unsigned long VM::Uptime()
 {
+	//get uptime of VM in milliseconds
+
 	return hal->GetCurrentTime();
 }
 
 unsigned long VM::GetElapsedTime(int instance)
 {
+	//get elapsed time (execution time) of the specified engine instance
+
 	if (instance >= engines.size())
 		return 0;
 	return engines[instance]->time_stat;
