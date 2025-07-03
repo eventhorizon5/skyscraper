@@ -60,12 +60,13 @@ class EngineManager: public wxDialog
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText6;
+		wxStaticText* StaticText7;
 		wxTextCtrl* tActive;
 		wxTextCtrl* tBoundsMax;
 		wxTextCtrl* tBoundsMin;
-		wxTextCtrl* tID;
 		wxTextCtrl* tPosition;
 		wxTextCtrl* tState;
+		wxTextCtrl* tThread;
 		wxTextCtrl* tUptime;
 		//*)
 		void Loop();
@@ -86,6 +87,8 @@ class EngineManager: public wxDialog
 		static const wxWindowID ID_tState;
 		static const wxWindowID ID_STATICTEXT6;
 		static const wxWindowID ID_tUptime;
+		static const wxWindowID ID_STATICTEXT7;
+		static const wxWindowID ID_tThread;
 		static const wxWindowID ID_STATICLINE2;
 		static const wxWindowID ID_CLoads;
 		static const wxWindowID ID_chkRender;

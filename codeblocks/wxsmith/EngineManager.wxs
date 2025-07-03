@@ -137,6 +137,23 @@
 												<border>5</border>
 												<option>1</option>
 											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText7" member="yes">
+													<label>Thread ID:</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_tThread" variable="tThread" member="yes">
+													<minsize>125,-1</minsize>
+													<style>wxTE_READONLY|wxTE_CENTRE</style>
+												</object>
+												<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
 										</object>
 										<flag>wxBOTTOM|wxEXPAND</flag>
 										<border>5</border>

@@ -50,6 +50,8 @@ const wxWindowID EngineManager::ID_STATICTEXT2 = wxNewId();
 const wxWindowID EngineManager::ID_tState = wxNewId();
 const wxWindowID EngineManager::ID_STATICTEXT6 = wxNewId();
 const wxWindowID EngineManager::ID_tUptime = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT7 = wxNewId();
+const wxWindowID EngineManager::ID_tThread = wxNewId();
 const wxWindowID EngineManager::ID_STATICLINE2 = wxNewId();
 const wxWindowID EngineManager::ID_CLoads = wxNewId();
 const wxWindowID EngineManager::ID_chkRender = wxNewId();
@@ -122,6 +124,11 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	tUptime = new wxTextCtrl(this, ID_tUptime, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tUptime"));
 	tUptime->SetMinSize(wxSize(125,-1));
 	FlexGridSizer2->Add(tUptime, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Thread ID:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
+	FlexGridSizer2->Add(StaticText7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tThread = new wxTextCtrl(this, ID_tThread, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tThread"));
+	tThread->SetMinSize(wxSize(125,-1));
+	FlexGridSizer2->Add(tThread, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(FlexGridSizer2, 1, wxBOTTOM|wxEXPAND, 5);
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
@@ -159,7 +166,6 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	BoxSizer9->Add(bOk, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer9, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
-	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
 
@@ -272,6 +278,9 @@ void EngineManager::Loop()
 
 		//set engine uptime
 		tUptime->SetValue(SBS::ToString(engine->GetSystem()->GetRunTime() / 1000));
+
+		//set thread id
+		tThread->SetValue(engine->GetThreadID());
 	}
 	else
 	{
