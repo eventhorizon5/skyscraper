@@ -263,18 +263,26 @@ void GUI::CloseProgressDialog()
 void GUI::ShowProgressDialog()
 {
 	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent());
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent(), wxPD_AUTO_HIDE|wxPD_APP_MODAL|wxPD_CAN_ABORT|wxPD_ELAPSED_TIME|wxPD_ESTIMATED_TIME);
 
 	show_progress = false;
 }
 
-void GUI::UpdateProgress(int percent)
+bool GUI::UpdateProgress(int percent)
 {
 	//update progress dialog with the specified percent
 	if (!progdialog)
-		return;
+		return true;
 
-	progdialog->Update(percent);
+	return progdialog->Update(percent);
+}
+
+bool GUI::ProgressCancelled()
+{
+	if (!progdialog)
+		return false;
+
+	return progdialog->WasCancelled();
 }
 
 void GUI::RefreshConsole()

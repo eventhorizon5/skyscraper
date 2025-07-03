@@ -84,10 +84,10 @@ public:
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	void DeleteEngines();
-	int GetEngineCount();
+	int GetEngineCount(bool loading_only = false);
 	int GetEngineListSize() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
-	void SetActiveEngine(int number, bool switch_engines = false);
+	void SetActiveEngine(int number, bool switch_engines = false, bool force = false);
 	bool IsEngineLoading();
 	bool IsValidEngine(EngineContext *engine);
 	bool IsValidSystem(::SBS::SBS *sbs);
@@ -103,7 +103,7 @@ public:
 	void ShowPlatform();
 	wxWindow* GetParent();
 	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	void UpdateProgress();
+	bool UpdateProgress();
 	bool ReportMissingFiles(std::vector<std::string> &missing_files);
 	void StartConsole();
 	void ProcessConsole();

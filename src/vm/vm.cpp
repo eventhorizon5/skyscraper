@@ -188,7 +188,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 				if (count > 0)
 				{
 					int number = GetFirstValidEngine()->GetNumber();
-					SetActiveEngine(number);
+					SetActiveEngine(number, false, true);
 				}
 			}
 			else if (active_engine)
@@ -237,7 +237,7 @@ EngineContext* VM::FindActiveEngine()
 	return active_engine;
 }
 
-void VM::SetActiveEngine(int number, bool switch_engines)
+void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 {
 	//set an engine instance to be active
 
@@ -254,7 +254,7 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		return;
 
 	//don't switch to engine if it's loading
-	if (engine->IsLoading() == true)
+	if (engine->IsLoading() == true && force == false)
 		return;
 
 	CameraState state;
@@ -453,7 +453,7 @@ EngineContext* VM::GetEngine(int number)
 	return engines[number];
 }
 
-int VM::GetEngineCount()
+int VM::GetEngineCount(bool loading_only)
 {
 	//get number of valid engines
 
@@ -462,7 +462,15 @@ int VM::GetEngineCount()
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
-			count++;
+		{
+			if (loading_only == true)
+			{
+				if (engines[i]->IsLoading() == true)
+					count++;
+			}
+			else
+				count++;
+		}
 	}
 	return count;
 }
@@ -491,7 +499,7 @@ void VM::SwitchEngines()
 	}
 
 	//otherwise search for a valid engine to attach to
-	Report("Searing for engine to attach to...");
+	Report("Searching for engine to attach to...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] != active_engine && engines[i])
@@ -966,7 +974,7 @@ void VM::Run0()
 	}
 }
 
-void VM::UpdateProgress()
+bool VM::UpdateProgress()
 {
 	//update progress based on total sim engine status
 
@@ -983,8 +991,9 @@ void VM::UpdateProgress()
 
 #ifdef USING_WX
 	if (gui)
-		gui->UpdateProgress(final);
+		return gui->UpdateProgress(final);
 #endif
+	return true;
 }
 
 bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)
