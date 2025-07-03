@@ -59,6 +59,7 @@ public:
 	void CreateProgressDialog(const std::string &message);
 	void CloseProgressDialog();
 	bool UpdateProgress(int percent);
+	bool ProgressCancelled();
 	void ShowError(const std::string &message);
     void ShowMessage(const std::string &message);
 	void RefreshConsole();

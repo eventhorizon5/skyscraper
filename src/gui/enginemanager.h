@@ -59,37 +59,41 @@ class EngineManager: public wxDialog
 		wxStaticText* StaticText3;
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
+		wxStaticText* StaticText6;
 		wxTextCtrl* tActive;
 		wxTextCtrl* tBoundsMax;
 		wxTextCtrl* tBoundsMin;
 		wxTextCtrl* tPosition;
 		wxTextCtrl* tState;
+		wxTextCtrl* tUptime;
 		//*)
 		void Loop();
 
 	protected:
 
 		//(*Identifiers(EngineManager)
-		static const long ID_EngineList;
-		static const long ID_STATICTEXT4;
-		static const long ID_tPosition;
-		static const long ID_STATICTEXT3;
-		static const long ID_tBoundsMin;
-		static const long ID_STATICTEXT5;
-		static const long ID_tBoundsMax;
-		static const long ID_STATICTEXT1;
-		static const long ID_tActive;
-		static const long ID_STATICTEXT2;
-		static const long ID_tState;
-		static const long ID_STATICLINE2;
-		static const long ID_CLoads;
-		static const long ID_chkRender;
-		static const long ID_bSetActive;
-		static const long ID_bReload;
-		static const long ID_bMove;
-		static const long ID_bLoad;
-		static const long ID_bShutdown;
-		static const long ID_bOk;
+		static const wxWindowID ID_EngineList;
+		static const wxWindowID ID_STATICTEXT4;
+		static const wxWindowID ID_tPosition;
+		static const wxWindowID ID_STATICTEXT3;
+		static const wxWindowID ID_tBoundsMin;
+		static const wxWindowID ID_STATICTEXT5;
+		static const wxWindowID ID_tBoundsMax;
+		static const wxWindowID ID_STATICTEXT1;
+		static const wxWindowID ID_tActive;
+		static const wxWindowID ID_STATICTEXT2;
+		static const wxWindowID ID_tState;
+		static const wxWindowID ID_STATICTEXT6;
+		static const wxWindowID ID_tUptime;
+		static const wxWindowID ID_STATICLINE2;
+		static const wxWindowID ID_CLoads;
+		static const wxWindowID ID_chkRender;
+		static const wxWindowID ID_bSetActive;
+		static const wxWindowID ID_bReload;
+		static const wxWindowID ID_bMove;
+		static const wxWindowID ID_bLoad;
+		static const wxWindowID ID_bShutdown;
+		static const wxWindowID ID_bOk;
 		//*)
 		void OnInit();
 
