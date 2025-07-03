@@ -903,11 +903,11 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 #if USING_OPENXR
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
-		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-		Ogre::RenderWindow* mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
-		mRenderWindow->create(name, width, height, false, &params);
-		mRenderWindows.emplace_back(win2);
-		mRenderWindows.emplace_back(mRenderWindow);
+		Ogre::RenderWindow* native_window = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+		Ogre::RenderWindow* xr_window = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
+		xr_window->create(name, width, height, false, &params);
+		mRenderWindows.emplace_back(native_window);
+		mRenderWindows.emplace_back(xr_window);
 	}
 	else
 #endif
