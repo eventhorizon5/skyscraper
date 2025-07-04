@@ -319,6 +319,14 @@ Nextline:
 			show_percent = false;
 		}
 	}
+	else
+	{
+		//free text texture memory
+		Simcore->GetTextureManager()->FreeTextureBoxes();
+
+		IsFinished = true;
+		show_percent = false;
+	}
 
 	return true;
 
