@@ -1,5 +1,6 @@
 Version 2.0
 -------------------------
+-Report on the number of joystick buttons on startup
 -GUI: Have progress dialog show elapsed and estimated times
 -Engine Manager: added uptime display
 -VM: properly handle cancel functionality for additional engines
