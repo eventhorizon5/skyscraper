@@ -171,6 +171,8 @@ void HAL::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, 
 
 void HAL::UnclickedObject()
 {
+	//unclick the clicked object
+
 	EngineContext *engine = vm->GetActiveEngine();
 
 	if (!engine)
@@ -696,6 +698,7 @@ bool HAL::Render()
 
 bool HAL::PlaySound(const std::string &filename, Real volume)
 {
+	//play a sound
 #ifndef DISABLE_SOUND
 
 	//load new sound
