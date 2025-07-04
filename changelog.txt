@@ -1,5 +1,19 @@
 Version 2.0
 -------------------------
+-GUI: Have progress dialog show elapsed and estimated times
+-Engine Manager: added uptime display
+-VM: properly handle cancel functionality for additional engines
+-VM: Only close progress dialog when loading engine count reaches 1
+-VM: if an engine fails loading, switch to the next available engine even if it's in a loading state
+-Allow building loads to be cancelled from the progress dialog
+-Added the new 2.1 intro music as alternate music
+-ScriptProc: adjusted the map zoom levels in the Triton Center and "Simple - Map" buildings
+-ScriptProc: Added SetCameraZoom command
+-Triton Center: added a map screen to the Lobby service area
+-Triton Center: added the new intro music in the grand ballroom
+-Disable models on Direct3D11 renderer, allowing buildings that contain models to load
+-VMConsole: added engine runtime to ps function
+-VMConsole: don't show the simulator time if no sky system is loaded
 -Update .gitignore (pr #72)
 -Handle maximized window properly (pr #72)
 -Add preference to start Skyscraper maximized (pr #72)
