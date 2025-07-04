@@ -282,6 +282,7 @@ bool showconsole = true;
 	{
 		Report("");
 		Report("Joystick detected: " + joystick.GetProductName().ToStdString());
+		Report("Joystick buttons: " + ToString(joystick.GetNumberButtons()));
 		Report("");
 	}
 #endif
