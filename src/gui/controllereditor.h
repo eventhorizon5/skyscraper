@@ -128,12 +128,14 @@ class ControllerEditor: public wxDialog
         void BuildList(bool restore_selection = false);
         void BuildElevatorList(bool restore_selection = false);
         void BuildStationList(bool restore_selection = false);
+        void BuildRouteList(bool restore_selection = false);
 
         SBS::SBS* Simcore;
         DebugPanel* panel;
         int lastcount;
         int lastcount_elev;
         int lastcount_station;
+        int lastcount_route;
         SBS::DispatchController* controller;
 
         DECLARE_EVENT_TABLE()

@@ -1446,4 +1446,31 @@ bool DispatchController::ServesFloor(int floor)
 	return false;
 }
 
+int DispatchController::GetRouteCount()
+{
+	//return number of routes
+
+	return (int)Routes.size();
+}
+
+bool DispatchController::GetRoute(int number, DispatchController::Route &route)
+{
+	//get details on a specific route
+
+	route.assigned_elevator = 0;
+	route.destination = false;
+	route.destination_floor = 0;
+	route.direction = 0;
+	route.processed = false;
+	route.requests = 0;
+	route.starting_floor = 0;
+	route.station = 0;
+
+	if (number < 0 || number >= Routes.size())
+		return false;
+
+	route = Routes[number];
+	return true;
+}
+
 }

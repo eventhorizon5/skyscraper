@@ -193,6 +193,7 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     lastcount = 0;
     lastcount_elev = 0;
     lastcount_station = 0;
+    lastcount_route = 0;
     Simcore = 0;
     panel = parent;
     controller = 0;
@@ -246,6 +247,7 @@ void ControllerEditor::Loop()
 
     BuildElevatorList();
     BuildStationList();
+    BuildRouteList();
 }
 
 void ControllerEditor::BuildList(bool restore_selection)
@@ -348,6 +350,41 @@ void ControllerEditor::BuildStationList(bool restore_selection)
                 lCallStations->SetSelection(0);
             else
                 lCallStations->SetSelection(old_selection);
+        }
+        else
+        {
+            //clear values
+        }
+    }
+}
+
+void ControllerEditor::BuildRouteList(bool restore_selection)
+{
+    if (!controller)
+        return;
+
+    int count = controller->GetRouteCount();
+
+    if (count != lastcount_route)
+    {
+        lastcount_route = count;
+        int old_selection = lRoutes->GetSelection();
+        lRoutes->Clear();
+
+        for (int i = 0; i < count; i++)
+        {
+            ::SBS::DispatchController::Route route;
+            bool result = controller->GetRoute(i, route);
+            if (result == true)
+                lRoutes->Append(SBS::ToString(i + 1));
+        }
+
+        if (count > 0)
+        {
+            if (restore_selection == false)
+                lRoutes->SetSelection(0);
+            else
+                lRoutes->SetSelection(old_selection);
         }
         else
         {
