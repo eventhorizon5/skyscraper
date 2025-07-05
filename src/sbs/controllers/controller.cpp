@@ -1108,6 +1108,23 @@ std::vector<CallStation*> DispatchController::GetCallStations(int floor)
 	return stationlist;
 }
 
+int DispatchController::GetCallStationCount()
+{
+	//returns number of registered call stations
+
+	return (int)CallStations.size();
+}
+
+CallStation* DispatchController::GetCallStation(int number)
+{
+	//returns a specific registered call station
+
+	if (number < 0 || number > CallStations.size() - 1)
+		return 0;
+
+	return CallStations[number];
+}
+
 int DispatchController::GetElevatorArrived(int starting_floor, int destination_floor)
 {
 	//return the number of the elevator that has arrived, for the specified route
@@ -1344,6 +1361,13 @@ int DispatchController::GetElevator(int index)
 	if (index < 0 || index > Elevators.size() - 1)
 		return 0;
 	return Elevators[index].number;
+}
+
+int DispatchController::GetElevatorCount()
+{
+	//return the number of elevators handled by this controller
+
+	return (int)Elevators.size();
 }
 
 bool DispatchController::SameElevators(const std::vector<int> &elevators)

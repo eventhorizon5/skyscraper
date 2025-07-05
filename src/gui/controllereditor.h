@@ -29,6 +29,7 @@
 #include <wx/listbox.h>
 #include <wx/sizer.h>
 #include <wx/slider.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 //*)
@@ -44,12 +45,19 @@ class ControllerEditor: public wxDialog
         void Loop();
 
         //(*Declarations(ControllerEditor)
+        wxButton* bAddElevator;
+        wxButton* bCall;
+        wxButton* bRemoveElevator;
+        wxButton* bResetArrival;
         wxButton* bSetReprocess;
         wxListBox* lCallStations;
         wxListBox* lControllers;
         wxListBox* lElevators;
         wxListBox* lRoutes;
         wxSlider* sFireService;
+        wxStaticLine* StaticLine1;
+        wxStaticLine* StaticLine2;
+        wxStaticLine* StaticLine3;
         wxStaticText* StaticText1;
         wxStaticText* StaticText2;
         wxStaticText* StaticText3;
@@ -59,8 +67,10 @@ class ControllerEditor: public wxDialog
         wxStaticText* StaticText7;
         wxStaticText* StaticText8;
         wxStaticText* StaticText9;
+        wxTextCtrl* tAddElevator;
         wxTextCtrl* tBottomFloor;
         wxTextCtrl* tDD;
+        wxTextCtrl* tDirection;
         wxTextCtrl* tHybrid;
         wxTextCtrl* tMaxPassengers;
         wxTextCtrl* tRange;
@@ -92,6 +102,15 @@ class ControllerEditor: public wxDialog
         static const wxWindowID ID_tBottomFloor;
         static const wxWindowID ID_STATICTEXT9;
         static const wxWindowID ID_tTopFloor;
+        static const wxWindowID ID_tAddElevator;
+        static const wxWindowID ID_bAddElevator;
+        static const wxWindowID ID_bRemoveElevator;
+        static const wxWindowID ID_STATICLINE1;
+        static const wxWindowID ID_STATICLINE2;
+        static const wxWindowID ID_STATICLINE3;
+        static const wxWindowID ID_bResetArrival;
+        static const wxWindowID ID_tDirection;
+        static const wxWindowID ID_bCall;
         static const wxWindowID ID_lElevators;
         static const wxWindowID ID_lCallStations;
         static const wxWindowID ID_lRoutes;
@@ -100,13 +119,21 @@ class ControllerEditor: public wxDialog
     private:
 
         //(*Handlers(ControllerEditor)
+        void On_bAddElevator_Click(wxCommandEvent& event);
+        void On_bRemoveElevator_Click(wxCommandEvent& event);
+        void On_bResetArrival_Click(wxCommandEvent& event);
+        void On_bCall_Click(wxCommandEvent& event);
         //*)
 
         void BuildList(bool restore_selection = false);
+        void BuildElevatorList(bool restore_selection = false);
+        void BuildStationList(bool restore_selection = false);
 
         SBS::SBS* Simcore;
         DebugPanel* panel;
         int lastcount;
+        int lastcount_elev;
+        int lastcount_station;
         SBS::DispatchController* controller;
 
         DECLARE_EVENT_TABLE()

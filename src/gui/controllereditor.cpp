@@ -28,6 +28,8 @@
 #include "globals.h"
 #include "sbs.h"
 #include "debugpanel.h"
+#include "elevator.h"
+#include "callstation.h"
 #include "controller.h"
 #include "controllereditor.h"
 
@@ -55,6 +57,15 @@ const wxWindowID ControllerEditor::ID_STATICTEXT8 = wxNewId();
 const wxWindowID ControllerEditor::ID_tBottomFloor = wxNewId();
 const wxWindowID ControllerEditor::ID_STATICTEXT9 = wxNewId();
 const wxWindowID ControllerEditor::ID_tTopFloor = wxNewId();
+const wxWindowID ControllerEditor::ID_tAddElevator = wxNewId();
+const wxWindowID ControllerEditor::ID_bAddElevator = wxNewId();
+const wxWindowID ControllerEditor::ID_bRemoveElevator = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICLINE1 = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICLINE2 = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICLINE3 = wxNewId();
+const wxWindowID ControllerEditor::ID_bResetArrival = wxNewId();
+const wxWindowID ControllerEditor::ID_tDirection = wxNewId();
+const wxWindowID ControllerEditor::ID_bCall = wxNewId();
 const wxWindowID ControllerEditor::ID_lElevators = wxNewId();
 const wxWindowID ControllerEditor::ID_lCallStations = wxNewId();
 const wxWindowID ControllerEditor::ID_lRoutes = wxNewId();
@@ -71,6 +82,7 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     wxFlexGridSizer* FlexGridSizer1;
     wxFlexGridSizer* FlexGridSizer2;
     wxFlexGridSizer* FlexGridSizer3;
+    wxFlexGridSizer* FlexGridSizer4;
     wxStaticBoxSizer* StaticBoxSizer1;
     wxStaticBoxSizer* StaticBoxSizer2;
     wxStaticBoxSizer* StaticBoxSizer3;
@@ -81,7 +93,7 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     FlexGridSizer2 = new wxFlexGridSizer(0, 4, 0, 0);
     StaticBoxSizer1 = new wxStaticBoxSizer(wxVERTICAL, this, _("Controllers"));
     lControllers = new wxListBox(this, ID_lControllers, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lControllers"));
-    StaticBoxSizer1->Add(lControllers, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer1->Add(lControllers, 1, wxALL|wxEXPAND, 5);
     FlexGridSizer3 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("DD Status:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     FlexGridSizer3->Add(StaticText1, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -131,23 +143,56 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer1->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Elevators"));
+    StaticBoxSizer2 = new wxStaticBoxSizer(wxVERTICAL, this, _("Elevators"));
+    FlexGridSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
+    FlexGridSizer4->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tAddElevator = new wxTextCtrl(this, ID_tAddElevator, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tAddElevator"));
+    FlexGridSizer4->Add(tAddElevator, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bAddElevator = new wxButton(this, ID_bAddElevator, _("Add Elevator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddElevator"));
+    FlexGridSizer4->Add(bAddElevator, 1, wxALL|wxEXPAND, 5);
+    FlexGridSizer4->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bRemoveElevator = new wxButton(this, ID_bRemoveElevator, _("Remove Elevator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bRemoveElevator"));
+    FlexGridSizer4->Add(bRemoveElevator, 1, wxALL|wxEXPAND, 5);
+    StaticLine1 = new wxStaticLine(this, ID_STATICLINE1, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE1"));
+    FlexGridSizer4->Add(StaticLine1, 1, wxEXPAND, 5);
+    StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
+    FlexGridSizer4->Add(StaticLine2, 1, wxEXPAND, 5);
+    StaticLine3 = new wxStaticLine(this, ID_STATICLINE3, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE3"));
+    FlexGridSizer4->Add(StaticLine3, 1, wxEXPAND, 5);
+    FlexGridSizer4->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bResetArrival = new wxButton(this, ID_bResetArrival, _("Reset Arrival"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bResetArrival"));
+    FlexGridSizer4->Add(bResetArrival, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tDirection = new wxTextCtrl(this, ID_tDirection, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tDirection"));
+    FlexGridSizer4->Add(tDirection, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bCall = new wxButton(this, ID_bCall, _("Call Elevator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCall"));
+    FlexGridSizer4->Add(bCall, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer2->Add(FlexGridSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     lElevators = new wxListBox(this, ID_lElevators, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lElevators"));
-    StaticBoxSizer2->Add(lElevators, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer2->Add(lElevators, 1, wxALL|wxEXPAND, 5);
     FlexGridSizer2->Add(StaticBoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Call Stations"));
     lCallStations = new wxListBox(this, ID_lCallStations, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lCallStations"));
-    StaticBoxSizer3->Add(lCallStations, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer3->Add(lCallStations, 1, wxALL|wxEXPAND, 5);
     FlexGridSizer2->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer4 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Routes"));
     lRoutes = new wxListBox(this, ID_lRoutes, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lRoutes"));
-    StaticBoxSizer4->Add(lRoutes, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer4->Add(lRoutes, 1, wxALL|wxEXPAND, 5);
     FlexGridSizer2->Add(StaticBoxSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
+
+    Connect(ID_bAddElevator, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bAddElevator_Click);
+    Connect(ID_bRemoveElevator, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bRemoveElevator_Click);
+    Connect(ID_bResetArrival, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bResetArrival_Click);
+    Connect(ID_bCall, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bCall_Click);
     //*)
     lastcount = 0;
+    lastcount_elev = 0;
+    lastcount_station = 0;
     Simcore = 0;
     panel = parent;
     controller = 0;
@@ -198,6 +243,9 @@ void ControllerEditor::Loop()
 
     if (!controller)
         return;
+
+    BuildElevatorList();
+    BuildStationList();
 }
 
 void ControllerEditor::BuildList(bool restore_selection)
@@ -238,6 +286,107 @@ void ControllerEditor::BuildList(bool restore_selection)
             tTopFloor->SetValue(wxT(""));
         }
     }
+}
+
+void ControllerEditor::BuildElevatorList(bool restore_selection)
+{
+    if (!controller)
+        return;
+
+    int count = controller->GetElevatorCount();
+
+    if (count != lastcount_elev)
+    {
+        lastcount_elev = count;
+        int old_selection = lElevators->GetSelection();
+        lElevators->Clear();
+
+        for (int i = 0; i < count; i++)
+        {
+            ::SBS::Elevator* elevator = Simcore->GetElevator(controller->GetElevator(i));
+            if (elevator)
+                lElevators->Append(SBS::ToString(i + 1) + wxT(": ") + elevator->GetName());
+        }
+
+        if (count > 0)
+        {
+            if (restore_selection == false)
+                lElevators->SetSelection(0);
+            else
+                lElevators->SetSelection(old_selection);
+        }
+        else
+        {
+            //clear values
+        }
+    }
+}
+
+void ControllerEditor::BuildStationList(bool restore_selection)
+{
+    if (!controller)
+        return;
+
+    int count = controller->GetCallStationCount();
+
+    if (count != lastcount_station)
+    {
+        lastcount_station = count;
+        int old_selection = lCallStations->GetSelection();
+        lCallStations->Clear();
+
+        for (int i = 0; i < count; i++)
+        {
+            ::SBS::CallStation* station = controller->GetCallStation(i);
+            if (station)
+                lCallStations->Append(SBS::ToString(i + 1) + wxT(": ") + station->GetName());
+        }
+
+        if (count > 0)
+        {
+            if (restore_selection == false)
+                lCallStations->SetSelection(0);
+            else
+                lCallStations->SetSelection(old_selection);
+        }
+        else
+        {
+            //clear values
+        }
+    }
+}
+
+void ControllerEditor::On_bAddElevator_Click(wxCommandEvent& event)
+{
+    if (!controller)
+        return;
+
+    controller->AddElevator(SBS::ToInt(tAddElevator->GetValue().ToStdString()));
+}
+
+
+void ControllerEditor::On_bRemoveElevator_Click(wxCommandEvent& event)
+{
+    if (!controller)
+        return;
+
+    controller->RemoveElevator(SBS::ToInt(tAddElevator->GetValue().ToStdString()));
+}
+
+void ControllerEditor::On_bResetArrival_Click(wxCommandEvent& event)
+{
+    if (!controller)
+        return;
+
+    controller->ResetArrival(SBS::ToInt(tAddElevator->GetValue().ToStdString()));
+}
+
+void ControllerEditor::On_bCall_Click(wxCommandEvent& event)
+{
+    if (!controller)
+        return;
+
+    //controller->CallElevator(SBS::ToInt(tAddElevator->GetValue().ToStdString()));
 }
 
 }
