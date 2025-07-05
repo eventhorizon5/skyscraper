@@ -62,6 +62,7 @@ class TextureManager;
 class EscalatorControl;
 class WalkwayControl;
 class RevolvingDoorControl;
+class ControllerEditor;
 
 class DebugPanel: public wxFrame
 {
@@ -125,6 +126,7 @@ class DebugPanel: public wxFrame
 		static const wxWindowID ID_bFloorInfo;
 		static const wxWindowID ID_bSoundManager;
 		static const wxWindowID ID_bMovingWalkway;
+		static const wxWindowID ID_bControllerEditor;
 		static const wxWindowID ID_PANEL1;
 		//*)
 		void EnableTimer(bool value);
@@ -180,6 +182,7 @@ class DebugPanel: public wxFrame
 		void On_chkPower_Click(wxCommandEvent& event);
 		void On_bMovingWalkway_Click(wxCommandEvent& event);
 		void On_bRevolvingDoor_Click(wxCommandEvent& event);
+		void On_bControllerEditor_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -195,6 +198,7 @@ class DebugPanel: public wxFrame
 		wxButton* bCameraTexture;
 		wxButton* bConsole;
 		wxButton* bControlReference;
+		wxButton* bControllerEditor;
 		wxButton* bEditElevator;
 		wxButton* bEngineManager;
 		wxButton* bEscalator;
@@ -265,6 +269,7 @@ class DebugPanel: public wxFrame
 		EscalatorControl *esc;
 		WalkwayControl *walk;
 		RevolvingDoorControl* revdoor;
+		ControllerEditor* ceditor;
 
 		DECLARE_EVENT_TABLE()
 };

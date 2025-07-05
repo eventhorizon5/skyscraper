@@ -54,6 +54,7 @@
 #include "escalatorcontrol.h"
 #include "walkwaycontrol.h"
 #include "revdoorcontrol.h"
+#include "controllereditor.h"
 
 namespace Skyscraper {
 
@@ -111,6 +112,7 @@ const wxWindowID DebugPanel::ID_bTextures = wxNewId();
 const wxWindowID DebugPanel::ID_bFloorInfo = wxNewId();
 const wxWindowID DebugPanel::ID_bSoundManager = wxNewId();
 const wxWindowID DebugPanel::ID_bMovingWalkway = wxNewId();
+const wxWindowID DebugPanel::ID_bControllerEditor = wxNewId();
 const wxWindowID DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -261,7 +263,8 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bSoundManager, 1, wxEXPAND, 5);
 	bMovingWalkway = new wxButton(Panel1, ID_bMovingWalkway, _("Moving Walkway Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMovingWalkway"));
 	BoxSizer10->Add(bMovingWalkway, 1, wxEXPAND, 5);
-	BoxSizer10->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bControllerEditor = new wxButton(Panel1, ID_bControllerEditor, _("Controller Editor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bControllerEditor"));
+	BoxSizer10->Add(bControllerEditor, 1, wxEXPAND, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -299,6 +302,7 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_bFloorInfo, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
 	Connect(ID_bSoundManager, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bSoundManager_Click);
 	Connect(ID_bMovingWalkway, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bMovingWalkway_Click);
+	Connect(ID_bControllerEditor, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bControllerEditor_Click);
 	//*)
 	Simcore = 0;
 	vm = root;
@@ -320,6 +324,7 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	esc = 0;
 	walk = 0;
 	revdoor = 0;
+	ceditor = 0;
 
 	OnInit();
 }
@@ -386,6 +391,9 @@ DebugPanel::~DebugPanel()
 	if (revdoor)
 		revdoor->Destroy();
 	revdoor = 0;
+	if (ceditor)
+		ceditor->Destroy();
+	ceditor = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -607,6 +615,11 @@ void DebugPanel::Loop()
 	{
 		if (revdoor->IsShown() == true)
 			revdoor->Loop();
+	}
+	if (ceditor)
+	{
+		if (ceditor->IsShown() == true)
+			ceditor->Loop();
 	}
 }
 
@@ -884,6 +897,16 @@ void DebugPanel::On_bRevolvingDoor_Click(wxCommandEvent& event)
 	revdoor->CenterOnScreen();
 	revdoor->Show();
 	revdoor->Raise();
+}
+
+void DebugPanel::On_bControllerEditor_Click(wxCommandEvent& event)
+{
+	if (!ceditor)
+		ceditor = new ControllerEditor(this, -1);
+
+	ceditor->CenterOnScreen();
+	ceditor->Show();
+	ceditor->Raise();
 }
 
 }
