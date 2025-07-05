@@ -104,7 +104,7 @@ private:
 		std::vector<Call> calls;
 	};
 
-	std::vector<ElevMap> Elevators; //controller object array
+	std::vector<ElevMap> Elevators;
 
 	struct Route
 	{
