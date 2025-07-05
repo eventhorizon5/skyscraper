@@ -173,7 +173,7 @@ void DispatchController::CheckArrivals()
 	}
 }
 
-void DispatchController::RemoveRoute(Route &route)
+void DispatchController::RemoveRoute(const Route &route)
 {
 	//remove a destination dispatch route
 
