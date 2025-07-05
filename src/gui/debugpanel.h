@@ -61,6 +61,8 @@ class SoundManager;
 class TextureManager;
 class EscalatorControl;
 class WalkwayControl;
+class RevolvingDoorControl;
+class ControllerEditor;
 
 class DebugPanel: public wxFrame
 {
@@ -71,59 +73,61 @@ class DebugPanel: public wxFrame
 		virtual ~DebugPanel();
 
 		//(*Identifiers(DebugPanel)
-		static const long ID_STATICTEXT1;
-		static const long ID_STATICTEXT12;
-		static const long ID_STATICTEXT2;
-		static const long ID_STATICTEXT8;
-		static const long ID_STATICTEXT13;
-		static const long ID_STATICTEXT3;
-		static const long ID_STATICTEXT4;
-		static const long ID_STATICTEXT5;
-		static const long ID_STATICTEXT10;
-		static const long ID_STATICTEXT9;
-		static const long ID_STATICTEXT6;
-		static const long ID_t_camerafloor;
-		static const long ID_t_floorname;
-		static const long ID_t_camerap;
-		static const long ID_t_rotation;
-		static const long ID_t_global;
-		static const long ID_t_elevnumber;
-		static const long ID_t_elevfloor;
-		static const long ID_t_object;
-		static const long ID_t_clickposition;
-		static const long ID_t_collision;
-		static const long ID_STATICTEXT7;
-		static const long ID_STATICTEXT11;
-		static const long ID_chkCollisionDetection;
-		static const long ID_chkGravity;
-		static const long ID_chkProcessElevators;
-		static const long ID_chkAutoShafts;
-		static const long ID_chkAutoStairs;
-		static const long ID_chkRandom;
-		static const long ID_chkMalfunctions;
-		static const long ID_chkPower;
-		static const long ID_CHECKBOX1;
-		static const long ID_bFloorList;
-		static const long ID_bMeshControl;
-		static const long ID_bCameraControl;
-		static const long ID_bEditElevator;
-		static const long ID_bControlReference;
-		static const long ID_bStats;
-		static const long ID_bEngineManager;
-		static const long ID_bConsole;
-		static const long ID_bCameraTexture;
-		static const long ID_bEscalator;
-		static const long ID_bObjectInfo;
-		static const long ID_bActionViewer;
-		static const long ID_bPeopleManager;
-		static const long ID_bSkyControl;
-		static const long ID_bProfiler;
-		static const long ID_bKeys;
-		static const long ID_bTextures;
-		static const long ID_bFloorInfo;
-		static const long ID_bSoundManager;
-		static const long ID_bMovingWalkway;
-		static const long ID_PANEL1;
+		static const wxWindowID ID_STATICTEXT1;
+		static const wxWindowID ID_STATICTEXT12;
+		static const wxWindowID ID_STATICTEXT2;
+		static const wxWindowID ID_STATICTEXT8;
+		static const wxWindowID ID_STATICTEXT13;
+		static const wxWindowID ID_STATICTEXT3;
+		static const wxWindowID ID_STATICTEXT4;
+		static const wxWindowID ID_STATICTEXT5;
+		static const wxWindowID ID_STATICTEXT10;
+		static const wxWindowID ID_STATICTEXT9;
+		static const wxWindowID ID_STATICTEXT6;
+		static const wxWindowID ID_t_camerafloor;
+		static const wxWindowID ID_t_floorname;
+		static const wxWindowID ID_t_camerap;
+		static const wxWindowID ID_t_rotation;
+		static const wxWindowID ID_t_global;
+		static const wxWindowID ID_t_elevnumber;
+		static const wxWindowID ID_t_elevfloor;
+		static const wxWindowID ID_t_object;
+		static const wxWindowID ID_t_clickposition;
+		static const wxWindowID ID_t_collision;
+		static const wxWindowID ID_STATICTEXT7;
+		static const wxWindowID ID_STATICTEXT11;
+		static const wxWindowID ID_chkCollisionDetection;
+		static const wxWindowID ID_chkGravity;
+		static const wxWindowID ID_chkProcessElevators;
+		static const wxWindowID ID_chkAutoShafts;
+		static const wxWindowID ID_chkAutoStairs;
+		static const wxWindowID ID_chkRandom;
+		static const wxWindowID ID_chkMalfunctions;
+		static const wxWindowID ID_chkPower;
+		static const wxWindowID ID_CHECKBOX1;
+		static const wxWindowID ID_bFloorList;
+		static const wxWindowID ID_bMeshControl;
+		static const wxWindowID ID_bCameraControl;
+		static const wxWindowID ID_bEditElevator;
+		static const wxWindowID ID_bControlReference;
+		static const wxWindowID ID_bStats;
+		static const wxWindowID ID_bEngineManager;
+		static const wxWindowID ID_bConsole;
+		static const wxWindowID ID_bCameraTexture;
+		static const wxWindowID ID_bEscalator;
+		static const wxWindowID ID_bRevolvingDoor;
+		static const wxWindowID ID_bObjectInfo;
+		static const wxWindowID ID_bActionViewer;
+		static const wxWindowID ID_bPeopleManager;
+		static const wxWindowID ID_bSkyControl;
+		static const wxWindowID ID_bProfiler;
+		static const wxWindowID ID_bKeys;
+		static const wxWindowID ID_bTextures;
+		static const wxWindowID ID_bFloorInfo;
+		static const wxWindowID ID_bSoundManager;
+		static const wxWindowID ID_bMovingWalkway;
+		static const wxWindowID ID_bControllerEditor;
+		static const wxWindowID ID_PANEL1;
 		//*)
 		void EnableTimer(bool value);
 		void Loop();
@@ -177,6 +181,8 @@ class DebugPanel: public wxFrame
 		void On_bEscalator_Click(wxCommandEvent& event);
 		void On_chkPower_Click(wxCommandEvent& event);
 		void On_bMovingWalkway_Click(wxCommandEvent& event);
+		void On_bRevolvingDoor_Click(wxCommandEvent& event);
+		void On_bControllerEditor_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -192,6 +198,7 @@ class DebugPanel: public wxFrame
 		wxButton* bCameraTexture;
 		wxButton* bConsole;
 		wxButton* bControlReference;
+		wxButton* bControllerEditor;
 		wxButton* bEditElevator;
 		wxButton* bEngineManager;
 		wxButton* bEscalator;
@@ -203,6 +210,7 @@ class DebugPanel: public wxFrame
 		wxButton* bObjectInfo;
 		wxButton* bPeopleManager;
 		wxButton* bProfiler;
+		wxButton* bRevolvingDoor;
 		wxButton* bSkyControl;
 		wxButton* bSoundManager;
 		wxButton* bStats;
@@ -260,6 +268,8 @@ class DebugPanel: public wxFrame
 		TextureManager *tmanager;
 		EscalatorControl *esc;
 		WalkwayControl *walk;
+		RevolvingDoorControl* revdoor;
+		ControllerEditor* ceditor;
 
 		DECLARE_EVENT_TABLE()
 };

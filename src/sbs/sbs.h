@@ -355,6 +355,7 @@ public:
 	void ListVisibleMeshes();
 	int GetEscalatorCount();
 	int GetMovingWalkwayCount();
+	int GetRevolvingDoorCount();
 	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	void EnableMalfunctions(bool value);
@@ -410,6 +411,9 @@ public:
 	void RegisterMovingWalkway(MovingWalkway *walkway);
 	void UnregisterMovingWalkway(MovingWalkway *walkway);
 	MovingWalkway* GetMovingWalkway(int index);
+	void RegisterRevolvingDoor(RevolvingDoor* door);
+	void UnregisterRevolvingDoor(RevolvingDoor* door);
+	RevolvingDoor* GetRevolvingDoor(int index);
 	void SetPower(bool value);
 	bool GetPower();
 	Reverb* GetReverb(int index);
@@ -478,6 +482,9 @@ private:
 
 	//moving walkways
 	std::vector<MovingWalkway*> MovingWalkwayArray;
+
+	//revolving doors
+	std::vector<RevolvingDoor*> RevolvingDoorArray;
 
 	//private functions
 	void PrintBanner();

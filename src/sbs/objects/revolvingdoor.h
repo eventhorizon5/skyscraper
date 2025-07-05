@@ -49,6 +49,7 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void Run(bool value);
+	bool GetRun();
 
 private:
 	MeshObject* DoorMesh; //door mesh
