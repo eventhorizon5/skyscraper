@@ -4023,8 +4023,14 @@ int SBS::GetEscalatorCount()
 
 int SBS::GetMovingWalkwayCount()
 {
-	//return total number of allocated sounds
+	//return total number of moving walkways
 	return (int)MovingWalkwayArray.size();
+}
+
+int SBS::GetRevolvingDoorCount()
+{
+	//return total number of revolving doors
+	return (int)RevolvingDoorArray.size();
 }
 
 bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
@@ -4687,6 +4693,33 @@ MovingWalkway* SBS::GetMovingWalkway(int index)
 {
 	if (index >= 0 && index < MovingWalkwayArray.size())
 		return MovingWalkwayArray[index];
+	return 0;
+}
+
+void SBS::RegisterRevolvingDoor(RevolvingDoor* door)
+{
+	//add revolving door to index
+	RevolvingDoorArray.emplace_back(door);
+}
+
+void SBS::UnregisterRevolvingDoor(RevolvingDoor* door)
+{
+	//remove revolving door from index
+
+	for (size_t i = 0; i < RevolvingDoorArray.size(); i++)
+	{
+		if (RevolvingDoorArray[i] == door)
+		{
+			RevolvingDoorArray.erase(RevolvingDoorArray.begin() + i);
+			return;
+		}
+	}
+}
+
+RevolvingDoor* SBS::GetRevolvingDoor(int index)
+{
+	if (index >= 0 && index < RevolvingDoorArray.size())
+		return RevolvingDoorArray[index];
 	return 0;
 }
 

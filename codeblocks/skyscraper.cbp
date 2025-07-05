@@ -160,6 +160,7 @@
 					<wxDialog wxs="wxsmith/TextureManager.wxs" src="../src/gui/texturemanager.cpp" hdr="../src/gui/texturemanager.h" fwddecl="0" i18n="1" name="TextureManager" language="CPP" />
 					<wxDialog wxs="wxsmith/EscalatorControl.wxs" src="../src/gui/escalatorcontrol.cpp" hdr="../src/gui/escalatorcontrol.h" fwddecl="0" i18n="1" name="EscalatorControl" language="CPP" />
 					<wxDialog wxs="wxsmith/WalkwayControl.wxs" src="../src/gui/walkwaycontrol.cpp" hdr="../src/gui/walkwaycontrol.h" fwddecl="0" i18n="1" name="WalkwayControl" language="CPP" />
+					<wxDialog wxs="wxsmith/RevolvingDoorControl.wxs" src="../src/gui/revdoorcontrol.cpp" hdr="../src/gui/revdoorcontrol.h" fwddecl="0" i18n="1" name="RevolvingDoorControl" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>
