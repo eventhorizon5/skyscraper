@@ -39,7 +39,7 @@ class ControllerEditor: public wxDialog
 {
     public:
 
-        ControllerEditor(wxWindow* parent,wxWindowID id=wxID_ANY);
+        ControllerEditor(DebugPanel* parent,wxWindowID id=wxID_ANY);
         virtual ~ControllerEditor();
         void Loop();
 
@@ -103,11 +103,11 @@ class ControllerEditor: public wxDialog
         //*)
 
         void BuildList(bool restore_selection = false);
-        void UpdateRunState();
 
         SBS::SBS* Simcore;
         DebugPanel* panel;
         int lastcount;
+        SBS::DispatchController* controller;
 
         DECLARE_EVENT_TABLE()
 };

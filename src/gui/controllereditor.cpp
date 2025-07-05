@@ -28,6 +28,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "debugpanel.h"
+#include "controller.h"
 #include "controllereditor.h"
 
 namespace Skyscraper
@@ -64,7 +65,7 @@ BEGIN_EVENT_TABLE(ControllerEditor,wxDialog)
     //*)
 END_EVENT_TABLE()
 
-ControllerEditor::ControllerEditor(wxWindow* parent,wxWindowID id)
+ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
 {
     //(*Initialize(ControllerEditor)
     wxFlexGridSizer* FlexGridSizer1;
@@ -146,6 +147,10 @@ ControllerEditor::ControllerEditor(wxWindow* parent,wxWindowID id)
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
     //*)
+    lastcount = 0;
+    Simcore = 0;
+    panel = parent;
+    controller = 0;
 }
 
 ControllerEditor::~ControllerEditor()
@@ -156,7 +161,71 @@ ControllerEditor::~ControllerEditor()
 
 void ControllerEditor::Loop()
 {
+    if (Simcore != panel->GetSystem())
+    {
+        //if active engine has changed, refresh values
+        Simcore = panel->GetSystem();
+    }
 
+    if (!Simcore)
+        return;
+
+    BuildList();
+
+    int selection = lControllers->GetSelection();
+
+    if (selection >= 0)
+    {
+        SBS::DispatchController* newcontroller = Simcore->GetController(selection);
+
+        //if a new controller has been selected, update values
+        if (newcontroller && controller != newcontroller)
+        {
+            controller = Simcore->GetController(selection);
+            //txtName->SetValue(door->GetName());
+            //txtParent->SetValue(door->GetParent()->GetName());
+            //tRun->SetValue(door->GetRun());
+        }
+    }
+    else
+        controller = 0;
+
+    if (!controller)
+        return;
+}
+
+void ControllerEditor::BuildList(bool restore_selection)
+{
+    int count = Simcore->GetControllerCount();
+
+    if (count != lastcount)
+    {
+        lastcount = count;
+        int old_selection = lControllers->GetSelection();
+        lControllers->Clear();
+
+        for (int i = 0; i < count; i++)
+        {
+            ::SBS::DispatchController* controller = Simcore->GetController(i + 1);
+            if (controller)
+                lControllers->Append(SBS::ToString(i + 1) + wxT(": ") + controller->GetName());
+        }
+
+        if (count > 0)
+        {
+            if (restore_selection == false)
+                lControllers->SetSelection(0);
+            else
+                lControllers->SetSelection(old_selection);
+        }
+        else
+        {
+            //clear values
+            //txtName->SetValue(wxT(""));
+            //txtParent->SetValue(wxT(""));
+            //tRun->SetValue(false);
+        }
+    }
 }
 
 }
