@@ -182,9 +182,15 @@ void ControllerEditor::Loop()
         if (newcontroller && controller != newcontroller)
         {
             controller = Simcore->GetController(selection);
-            //txtName->SetValue(door->GetName());
-            //txtParent->SetValue(door->GetParent()->GetName());
-            //tRun->SetValue(door->GetRun());
+            tDD->SetValue(SBS::BoolToString(controller->DestinationDispatch));
+            tHybrid->SetValue(SBS::BoolToString(controller->Hybrid));
+            tRange->SetValue(SBS::ToString(controller->Range));
+            tMaxPassengers->SetValue(SBS::ToString(controller->MaxPassengers));
+            tReprocess->SetValue(SBS::BoolToString(controller->Reprocess));
+            sFireService->SetValue(0);
+            tRecallFloor->SetValue(SBS::ToString(controller->GetRecallFloor()));
+            tBottomFloor->SetValue(SBS::ToString(controller->GetBottomFloor()));
+            tTopFloor->SetValue(SBS::ToString(controller->GetTopFloor()));
         }
     }
     else
@@ -221,9 +227,15 @@ void ControllerEditor::BuildList(bool restore_selection)
         else
         {
             //clear values
-            //txtName->SetValue(wxT(""));
-            //txtParent->SetValue(wxT(""));
-            //tRun->SetValue(false);
+            tDD->SetValue(wxT(""));
+            tHybrid->SetValue(wxT(""));
+            tRange->SetValue(wxT(""));
+            tMaxPassengers->SetValue(wxT(""));
+            tReprocess->SetValue(wxT(""));
+            sFireService->SetValue(0);
+            tRecallFloor->SetValue(wxT(""));
+            tBottomFloor->SetValue(wxT(""));
+            tTopFloor->SetValue(wxT(""));
         }
     }
 }
