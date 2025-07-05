@@ -243,6 +243,7 @@ void GUI::CreateProgressDialog(const std::string &message)
 		msg += "\n";
 		msg += message;
 		progdialog->Update(progdialog->GetValue(), msg);
+		progdialog->Fit();
 	}
 
 	//stop control panel timer
@@ -274,7 +275,9 @@ bool GUI::UpdateProgress(int percent)
 	if (!progdialog)
 		return true;
 
-	return progdialog->Update(percent);
+	bool result = progdialog->Update(percent);
+	progdialog->Fit();
+	return result;
 }
 
 bool GUI::ProgressCancelled()
