@@ -586,7 +586,7 @@ CallStation* Floor::AddCallButtons(int controller, const std::string &sound_file
 			return 0;
 	}
 
-	CallStation *station = AddCallStation(0);
+	CallStation *station = AddCallStation(sbs->callstation_index++);
 	station->SetController(controller);
 	station->CreateCallButtons(sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, direction, BackWidth, BackHeight, ShowBack, tw, th);
 
