@@ -218,9 +218,9 @@ void ControllerEditor::Loop()
 
     BuildList();
 
-    int selection = lControllers->GetSelection();
+    int selection = lControllers->GetSelection() + 1;
 
-    if (selection >= 0)
+    if (selection > 0)
     {
         SBS::DispatchController* newcontroller = Simcore->GetController(selection);
 
