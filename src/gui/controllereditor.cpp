@@ -38,9 +38,7 @@ namespace Skyscraper
 
 //(*IdInit(ControllerEditor)
 const wxWindowID ControllerEditor::ID_lControllers = wxNewId();
-const wxWindowID ControllerEditor::ID_STATICTEXT1 = wxNewId();
 const wxWindowID ControllerEditor::ID_tDD = wxNewId();
-const wxWindowID ControllerEditor::ID_STATICTEXT2 = wxNewId();
 const wxWindowID ControllerEditor::ID_tHybrid = wxNewId();
 const wxWindowID ControllerEditor::ID_STATICTEXT3 = wxNewId();
 const wxWindowID ControllerEditor::ID_tRange = wxNewId();
@@ -69,6 +67,20 @@ const wxWindowID ControllerEditor::ID_bCallUp = wxNewId();
 const wxWindowID ControllerEditor::ID_bCall = wxNewId();
 const wxWindowID ControllerEditor::ID_lCallStations = wxNewId();
 const wxWindowID ControllerEditor::ID_lRoutes = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT10 = wxNewId();
+const wxWindowID ControllerEditor::ID_tStartingFloor = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT11 = wxNewId();
+const wxWindowID ControllerEditor::ID_tDestFloor = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT12 = wxNewId();
+const wxWindowID ControllerEditor::ID_tDirection = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT13 = wxNewId();
+const wxWindowID ControllerEditor::ID_tRequests = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT14 = wxNewId();
+const wxWindowID ControllerEditor::ID_tProcessed = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT15 = wxNewId();
+const wxWindowID ControllerEditor::ID_tRouteElevator = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT16 = wxNewId();
+const wxWindowID ControllerEditor::ID_tDestination = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(ControllerEditor,wxDialog)
@@ -83,6 +95,7 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     wxFlexGridSizer* FlexGridSizer2;
     wxFlexGridSizer* FlexGridSizer3;
     wxFlexGridSizer* FlexGridSizer4;
+    wxFlexGridSizer* FlexGridSizer5;
     wxStaticBoxSizer* StaticBoxSizer1;
     wxStaticBoxSizer* StaticBoxSizer2;
     wxStaticBoxSizer* StaticBoxSizer3;
@@ -95,30 +108,28 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     lControllers = new wxListBox(this, ID_lControllers, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lControllers"));
     StaticBoxSizer1->Add(lControllers, 1, wxALL|wxEXPAND, 5);
     FlexGridSizer3 = new wxFlexGridSizer(0, 3, 0, 0);
-    StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("DD Status:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
-    FlexGridSizer3->Add(StaticText1, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    tDD = new wxTextCtrl(this, ID_tDD, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tDD"));
-    FlexGridSizer3->Add(tDD, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tDD = new wxToggleButton(this, ID_tDD, _("Destination Dispatch"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tDD"));
+    FlexGridSizer3->Add(tDD, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Hybrid:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-    FlexGridSizer3->Add(StaticText2, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    tHybrid = new wxTextCtrl(this, ID_tHybrid, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tHybrid"));
-    FlexGridSizer3->Add(tHybrid, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tHybrid = new wxToggleButton(this, ID_tHybrid, _("Hybrid"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tHybrid"));
+    FlexGridSizer3->Add(tHybrid, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Range:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
     FlexGridSizer3->Add(StaticText3, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tRange = new wxTextCtrl(this, ID_tRange, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tRange"));
-    FlexGridSizer3->Add(tRange, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(tRange, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Max Passengers:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
     FlexGridSizer3->Add(StaticText4, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tMaxPassengers = new wxTextCtrl(this, ID_tMaxPassengers, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tMaxPassengers"));
-    FlexGridSizer3->Add(tMaxPassengers, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(tMaxPassengers, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("Reprocess:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
     FlexGridSizer3->Add(StaticText5, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tReprocess = new wxTextCtrl(this, ID_tReprocess, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tReprocess"));
-    FlexGridSizer3->Add(tReprocess, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(tReprocess, 1, wxEXPAND, 5);
     bSetReprocess = new wxButton(this, ID_bSetReprocess, _("Set"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSetReprocess"));
     FlexGridSizer3->Add(bSetReprocess, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("Fire Service:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
@@ -129,17 +140,17 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Recall Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
     FlexGridSizer3->Add(StaticText7, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tRecallFloor = new wxTextCtrl(this, ID_tRecallFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tRecallFloor"));
-    FlexGridSizer3->Add(tRecallFloor, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(tRecallFloor, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText8 = new wxStaticText(this, ID_STATICTEXT8, _("Bottom Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
     FlexGridSizer3->Add(StaticText8, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tBottomFloor = new wxTextCtrl(this, ID_tBottomFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tBottomFloor"));
-    FlexGridSizer3->Add(tBottomFloor, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(tBottomFloor, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText9 = new wxStaticText(this, ID_STATICTEXT9, _("Top Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
     FlexGridSizer3->Add(StaticText9, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tTopFloor = new wxTextCtrl(this, ID_tTopFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tTopFloor"));
-    FlexGridSizer3->Add(tTopFloor, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(tTopFloor, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer1->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -180,9 +191,39 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     lCallStations = new wxListBox(this, ID_lCallStations, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lCallStations"));
     StaticBoxSizer3->Add(lCallStations, 1, wxALL|wxEXPAND, 5);
     FlexGridSizer2->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    StaticBoxSizer4 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Routes"));
+    StaticBoxSizer4 = new wxStaticBoxSizer(wxVERTICAL, this, _("Routes"));
     lRoutes = new wxListBox(this, ID_lRoutes, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lRoutes"));
     StaticBoxSizer4->Add(lRoutes, 1, wxALL|wxEXPAND, 5);
+    FlexGridSizer5 = new wxFlexGridSizer(0, 2, 0, 0);
+    StaticText10 = new wxStaticText(this, ID_STATICTEXT10, _("Starting Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
+    FlexGridSizer5->Add(StaticText10, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tStartingFloor = new wxTextCtrl(this, ID_tStartingFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tStartingFloor"));
+    FlexGridSizer5->Add(tStartingFloor, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText11 = new wxStaticText(this, ID_STATICTEXT11, _("Destination Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
+    FlexGridSizer5->Add(StaticText11, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tDestFloor = new wxTextCtrl(this, ID_tDestFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tDestFloor"));
+    FlexGridSizer5->Add(tDestFloor, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText12 = new wxStaticText(this, ID_STATICTEXT12, _("Direction:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT12"));
+    FlexGridSizer5->Add(StaticText12, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tDirection = new wxTextCtrl(this, ID_tDirection, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tDirection"));
+    FlexGridSizer5->Add(tDirection, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText13 = new wxStaticText(this, ID_STATICTEXT13, _("Requests:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT13"));
+    FlexGridSizer5->Add(StaticText13, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tRequests = new wxTextCtrl(this, ID_tRequests, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tRequests"));
+    FlexGridSizer5->Add(tRequests, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText14 = new wxStaticText(this, ID_STATICTEXT14, _("Processed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT14"));
+    FlexGridSizer5->Add(StaticText14, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tProcessed = new wxTextCtrl(this, ID_tProcessed, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tProcessed"));
+    FlexGridSizer5->Add(tProcessed, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText15 = new wxStaticText(this, ID_STATICTEXT15, _("Assigned Elevator:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT15"));
+    FlexGridSizer5->Add(StaticText15, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tRouteElevator = new wxTextCtrl(this, ID_tRouteElevator, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tRouteElevator"));
+    FlexGridSizer5->Add(tRouteElevator, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText16 = new wxStaticText(this, ID_STATICTEXT16, _("Destination:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT16"));
+    FlexGridSizer5->Add(StaticText16, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tDestination = new wxTextCtrl(this, ID_tDestination, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tDestination"));
+    FlexGridSizer5->Add(tDestination, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer4->Add(FlexGridSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(FlexGridSizer1);
@@ -232,8 +273,8 @@ void ControllerEditor::Loop()
         if (newcontroller && controller != newcontroller)
         {
             controller = Simcore->GetController(selection);
-            tDD->SetValue(SBS::BoolToString(controller->DestinationDispatch));
-            tHybrid->SetValue(SBS::BoolToString(controller->Hybrid));
+            tDD->SetValue(controller->DestinationDispatch);
+            tHybrid->SetValue(controller->Hybrid);
             tRange->SetValue(SBS::ToString(controller->Range));
             tMaxPassengers->SetValue(SBS::ToString(controller->MaxPassengers));
             tReprocess->SetValue(SBS::BoolToString(controller->Reprocess));
@@ -252,6 +293,25 @@ void ControllerEditor::Loop()
     BuildElevatorList();
     BuildStationList();
     BuildRouteList();
+
+    selection = lRoutes->GetSelection();
+
+    if (selection >= 0)
+    {
+        SBS::DispatchController::Route route;
+        bool result = controller->GetRoute(selection, route);
+
+        if (result == true)
+        {
+            tStartingFloor->SetValue(SBS::ToString(route.starting_floor));
+            tDestFloor->SetValue(SBS::ToString(route.destination_floor));
+            tDirection->SetValue(SBS::BoolToString(route.direction));
+            tRequests->SetValue(SBS::ToString(route.requests));
+            tProcessed->SetValue(SBS::BoolToString(route.processed));
+            tRouteElevator->SetValue(SBS::ToString(route.assigned_elevator));
+            tDestination->SetValue(SBS::ToString(route.destination));
+        }
+    }
 }
 
 void ControllerEditor::BuildList(bool restore_selection)
@@ -393,6 +453,13 @@ void ControllerEditor::BuildRouteList(bool restore_selection)
         else
         {
             //clear values
+            tStartingFloor->SetValue(wxT(""));
+            tDestFloor->SetValue(wxT(""));
+            tDirection->SetValue(wxT(""));
+            tRequests->SetValue(wxT(""));
+            tProcessed->SetValue(wxT(""));
+            tRouteElevator->SetValue(wxT(""));
+            tDestination->SetValue(wxT(""));
         }
     }
 }

@@ -32,6 +32,7 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/tglbtn.h>
 //*)
 
 namespace Skyscraper {
@@ -59,8 +60,13 @@ class ControllerEditor: public wxDialog
         wxStaticLine* StaticLine1;
         wxStaticLine* StaticLine2;
         wxStaticLine* StaticLine3;
-        wxStaticText* StaticText1;
-        wxStaticText* StaticText2;
+        wxStaticText* StaticText10;
+        wxStaticText* StaticText11;
+        wxStaticText* StaticText12;
+        wxStaticText* StaticText13;
+        wxStaticText* StaticText14;
+        wxStaticText* StaticText15;
+        wxStaticText* StaticText16;
         wxStaticText* StaticText3;
         wxStaticText* StaticText4;
         wxStaticText* StaticText5;
@@ -70,22 +76,27 @@ class ControllerEditor: public wxDialog
         wxStaticText* StaticText9;
         wxTextCtrl* tAddElevator;
         wxTextCtrl* tBottomFloor;
-        wxTextCtrl* tDD;
-        wxTextCtrl* tHybrid;
+        wxTextCtrl* tDestFloor;
+        wxTextCtrl* tDestination;
+        wxTextCtrl* tDirection;
         wxTextCtrl* tMaxPassengers;
+        wxTextCtrl* tProcessed;
         wxTextCtrl* tRange;
         wxTextCtrl* tRecallFloor;
         wxTextCtrl* tReprocess;
+        wxTextCtrl* tRequests;
+        wxTextCtrl* tRouteElevator;
+        wxTextCtrl* tStartingFloor;
         wxTextCtrl* tTopFloor;
+        wxToggleButton* tDD;
+        wxToggleButton* tHybrid;
         //*)
 
     protected:
 
         //(*Identifiers(ControllerEditor)
         static const wxWindowID ID_lControllers;
-        static const wxWindowID ID_STATICTEXT1;
         static const wxWindowID ID_tDD;
-        static const wxWindowID ID_STATICTEXT2;
         static const wxWindowID ID_tHybrid;
         static const wxWindowID ID_STATICTEXT3;
         static const wxWindowID ID_tRange;
@@ -114,6 +125,20 @@ class ControllerEditor: public wxDialog
         static const wxWindowID ID_bCall;
         static const wxWindowID ID_lCallStations;
         static const wxWindowID ID_lRoutes;
+        static const wxWindowID ID_STATICTEXT10;
+        static const wxWindowID ID_tStartingFloor;
+        static const wxWindowID ID_STATICTEXT11;
+        static const wxWindowID ID_tDestFloor;
+        static const wxWindowID ID_STATICTEXT12;
+        static const wxWindowID ID_tDirection;
+        static const wxWindowID ID_STATICTEXT13;
+        static const wxWindowID ID_tRequests;
+        static const wxWindowID ID_STATICTEXT14;
+        static const wxWindowID ID_tProcessed;
+        static const wxWindowID ID_STATICTEXT15;
+        static const wxWindowID ID_tRouteElevator;
+        static const wxWindowID ID_STATICTEXT16;
+        static const wxWindowID ID_tDestination;
         //*)
 
     private:
