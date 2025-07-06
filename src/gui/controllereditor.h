@@ -47,6 +47,7 @@ class ControllerEditor: public wxDialog
         //(*Declarations(ControllerEditor)
         wxButton* bAddElevator;
         wxButton* bCall;
+        wxButton* bCallUp;
         wxButton* bRemoveElevator;
         wxButton* bResetArrival;
         wxButton* bSetReprocess;
@@ -70,7 +71,6 @@ class ControllerEditor: public wxDialog
         wxTextCtrl* tAddElevator;
         wxTextCtrl* tBottomFloor;
         wxTextCtrl* tDD;
-        wxTextCtrl* tDirection;
         wxTextCtrl* tHybrid;
         wxTextCtrl* tMaxPassengers;
         wxTextCtrl* tRange;
@@ -102,16 +102,16 @@ class ControllerEditor: public wxDialog
         static const wxWindowID ID_tBottomFloor;
         static const wxWindowID ID_STATICTEXT9;
         static const wxWindowID ID_tTopFloor;
+        static const wxWindowID ID_lElevators;
+        static const wxWindowID ID_bRemoveElevator;
+        static const wxWindowID ID_bResetArrival;
         static const wxWindowID ID_tAddElevator;
         static const wxWindowID ID_bAddElevator;
-        static const wxWindowID ID_bRemoveElevator;
         static const wxWindowID ID_STATICLINE1;
         static const wxWindowID ID_STATICLINE2;
         static const wxWindowID ID_STATICLINE3;
-        static const wxWindowID ID_bResetArrival;
-        static const wxWindowID ID_tDirection;
+        static const wxWindowID ID_bCallUp;
         static const wxWindowID ID_bCall;
-        static const wxWindowID ID_lElevators;
         static const wxWindowID ID_lCallStations;
         static const wxWindowID ID_lRoutes;
         //*)
@@ -123,6 +123,7 @@ class ControllerEditor: public wxDialog
         void On_bRemoveElevator_Click(wxCommandEvent& event);
         void On_bResetArrival_Click(wxCommandEvent& event);
         void On_bCall_Click(wxCommandEvent& event);
+        void On_bCallUp_Click(wxCommandEvent& event);
         //*)
 
         void BuildList(bool restore_selection = false);

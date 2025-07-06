@@ -86,6 +86,7 @@ public:
 	CallStation* GetCallStation(int number);
 	int GetRouteCount();
 	bool GetRoute(int number, Route &route);
+	bool RemoveElevatorIndex(int index);
 
 private:
 

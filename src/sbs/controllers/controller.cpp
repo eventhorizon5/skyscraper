@@ -654,6 +654,31 @@ bool DispatchController::RemoveElevator(int elevator)
 	return false;
 }
 
+bool DispatchController::RemoveElevatorIndex(int index)
+{
+	//remove an elevator from this controller, by index
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
+	if (index < 0 || index >= Elevators.size())
+		return false;
+
+	int elev_num = Elevators[index].number;
+	Report("Elevator " + ToString(elev_num) + " removed from dispatch controller " + ToString(Number));
+
+	if (sbs->GetElevator(elev_num))
+		sbs->GetElevator(elev_num)->RemoveController(Number);
+
+	Elevators.erase(Elevators.begin() + index);
+
+	//process floor range
+	GetFloorRange();
+
+	return true;
+}
+
 bool DispatchController::ServicesElevator(int elevator)
 {
 	//return true if this controller services the specified elevator
