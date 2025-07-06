@@ -66,6 +66,8 @@ const wxWindowID ControllerEditor::ID_STATICLINE3 = wxNewId();
 const wxWindowID ControllerEditor::ID_bCallUp = wxNewId();
 const wxWindowID ControllerEditor::ID_bCall = wxNewId();
 const wxWindowID ControllerEditor::ID_lCallStations = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT1 = wxNewId();
+const wxWindowID ControllerEditor::ID_tStationFloor = wxNewId();
 const wxWindowID ControllerEditor::ID_lRoutes = wxNewId();
 const wxWindowID ControllerEditor::ID_STATICTEXT10 = wxNewId();
 const wxWindowID ControllerEditor::ID_tStartingFloor = wxNewId();
@@ -96,6 +98,7 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     wxFlexGridSizer* FlexGridSizer3;
     wxFlexGridSizer* FlexGridSizer4;
     wxFlexGridSizer* FlexGridSizer5;
+    wxFlexGridSizer* FlexGridSizer6;
     wxStaticBoxSizer* StaticBoxSizer1;
     wxStaticBoxSizer* StaticBoxSizer2;
     wxStaticBoxSizer* StaticBoxSizer3;
@@ -187,9 +190,15 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     FlexGridSizer4->Add(bCall, 1, wxALL|wxEXPAND, 5);
     StaticBoxSizer2->Add(FlexGridSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Call Stations"));
+    StaticBoxSizer3 = new wxStaticBoxSizer(wxVERTICAL, this, _("Call Stations"));
     lCallStations = new wxListBox(this, ID_lCallStations, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lCallStations"));
     StaticBoxSizer3->Add(lCallStations, 1, wxALL|wxEXPAND, 5);
+    FlexGridSizer6 = new wxFlexGridSizer(0, 3, 0, 0);
+    StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+    FlexGridSizer6->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tStationFloor = new wxTextCtrl(this, ID_tStationFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tStationFloor"));
+    FlexGridSizer6->Add(tStationFloor, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer3->Add(FlexGridSizer6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer4 = new wxStaticBoxSizer(wxVERTICAL, this, _("Routes"));
     lRoutes = new wxListBox(this, ID_lRoutes, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lRoutes"));
@@ -292,6 +301,19 @@ void ControllerEditor::Loop()
 
     BuildElevatorList();
     BuildStationList();
+
+    selection = lCallStations->GetSelection();
+
+    if (selection >= 0)
+    {
+        SBS::CallStation* station = controller->GetCallStation(selection);
+
+        if (station)
+        {
+            tStationFloor->SetValue(SBS::ToString(station->GetFloor()));
+        }
+    }
+
     BuildRouteList();
 
     selection = lRoutes->GetSelection();
