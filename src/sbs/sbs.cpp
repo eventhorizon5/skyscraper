@@ -176,6 +176,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	power_state = true;
 	Lobby = 0;
 	MapGenerator = 0;
+	callstation_index = 1;
 
 	//create utility object
 	utility = new Utility(this);
