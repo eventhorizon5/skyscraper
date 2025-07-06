@@ -167,6 +167,7 @@ class ControllerEditor: public wxDialog
         int lastcount_station;
         int lastcount_route;
         SBS::DispatchController* controller;
+        bool full_update;
 
         DECLARE_EVENT_TABLE()
 };

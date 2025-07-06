@@ -251,6 +251,7 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     Simcore = 0;
     panel = parent;
     controller = 0;
+    full_update = false;
 }
 
 ControllerEditor::~ControllerEditor()
@@ -291,7 +292,10 @@ void ControllerEditor::Loop()
             tRecallFloor->SetValue(SBS::ToString(controller->GetRecallFloor()));
             tBottomFloor->SetValue(SBS::ToString(controller->GetBottomFloor()));
             tTopFloor->SetValue(SBS::ToString(controller->GetTopFloor()));
+            full_update = true;
         }
+        else
+            full_update = false;
     }
     else
         controller = 0;
@@ -383,7 +387,7 @@ void ControllerEditor::BuildElevatorList(bool restore_selection)
 
     int count = controller->GetElevatorCount();
 
-    if (count != lastcount_elev)
+    if (count != lastcount_elev || full_update == true)
     {
         lastcount_elev = count;
         int old_selection = lElevators->GetSelection();
@@ -417,7 +421,7 @@ void ControllerEditor::BuildStationList(bool restore_selection)
 
     int count = controller->GetCallStationCount();
 
-    if (count != lastcount_station)
+    if (count != lastcount_station || full_update == true)
     {
         lastcount_station = count;
         int old_selection = lCallStations->GetSelection();
@@ -451,7 +455,7 @@ void ControllerEditor::BuildRouteList(bool restore_selection)
 
     int count = controller->GetRouteCount();
 
-    if (count != lastcount_route)
+    if (count != lastcount_route || full_update == true)
     {
         lastcount_route = count;
         int old_selection = lRoutes->GetSelection();
