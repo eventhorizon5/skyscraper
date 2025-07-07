@@ -13,11 +13,42 @@
 
     #add some Simple buildings, with modified boundaries
     Load Simple.bld, 225, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
-    Load Simple.bld, 0, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
-    Load Simple.bld, 75, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
-    Load Simple.bld, -75, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
-    Load Simple.bld, -150, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
-    Load Simple.bld, -225, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Animated.bld, 0, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Basements.bld, 75, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Callstation.bld, -75, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - CameraTexture.bld, -150, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Custom Models.bld, -225, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+
+    Load Simple - Custom Objects.bld, 225, 0, -700, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Destination Dispatch.bld, 0, 0, -700, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Destination Dispatch Keypad.bld, 75, 0, -700, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Double Decker.bld, -75, 0, -700, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Double Decker DD.bld, -150, 0, -700, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Escalator.bld, -225, 0, -700, 180, -37.5, 0, -25, 37.5, 0, 25
+
+    Load Simple - Glass Elevator.bld, 225, 0, -800, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Hoistway Access.bld, 0, 0, -800, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Hydraulic.bld, 75, 0, -800, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Keypad.bld, -75, 0, -800, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Manual.bld, -150, 0, -800, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Manual Modern.bld, -225, 0, -800, 180, -37.5, 0, -25, 37.5, 0, 25
+
+    Load Simple - Manual Switch.bld, 225, 0, -900, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Map.bld, 0, 0, -900, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Moving Walkway.bld, 75, 0, -900, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Multiple Doors.bld, -75, 0, -900, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Old Elevator.bld, -150, 0, -900, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Primitives.bld, -225, 0, -900, 180, -37.5, 0, -25, 37.5, 0, 25
+
+    Load Simple - Revolving Door.bld, 225, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Runloop.bld, 0, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Sliding Doors Demo.bld, 75, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Split Level.bld, -75, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Teleporter.bld, -150, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Top Box.bld, -225, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
+
+    Load Simple - Vehicles.bld, 225, 0, -700, 180, -37.5, 0, -25, 37.5, 0, 25
+
 
     #you can also specify the bounds values separately, which is mainly useful
     #for buildings that don't have a Bounds parameter specified, or if you
