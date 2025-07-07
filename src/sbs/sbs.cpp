@@ -4724,4 +4724,12 @@ void SBS::EnableMap(bool value)
 		MapGenerator->Enabled(value);
 }
 
+int SBS::GetTextureCount()
+{
+	if (GetTextureManager())
+		return GetTextureManager()->GetMaterialCount();
+
+	return 0;
+}
+
 }

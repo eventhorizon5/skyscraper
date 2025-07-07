@@ -1008,4 +1008,35 @@ void VM::ListPlayingSounds()
 	}
 }
 
+int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, int &objects, int &walls, int &polygons)
+{
+	meshes = 0;
+	textures = 0;
+	actions = 0;
+	sounds = 0;
+	objects = 0;
+	walls = 0;
+	polygons = 0;
+	int total = 0;
+
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		::SBS::SBS* Simcore = engines[i]->GetSystem();
+
+		if (Simcore)
+		{
+			++total;
+			meshes += Simcore->GetMeshCount();
+			textures += Simcore->GetTextureCount();
+			actions += Simcore->GetActionCount();
+			sounds += Simcore->GetSoundCount();
+			objects += Simcore->GetObjectCount();
+			walls += Simcore->GetWallCount();
+			polygons += Simcore->GetPolygonCount();
+		}
+	}
+
+	return total;
+}
+
 }

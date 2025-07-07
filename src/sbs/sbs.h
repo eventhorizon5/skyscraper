@@ -416,6 +416,7 @@ public:
 	Reverb* GetReverb(int index);
 	int GetReverbCount();
 	void EnableMap(bool value);
+	int GetTextureCount();
 
 	//Meshes
 	MeshObject* Buildings;

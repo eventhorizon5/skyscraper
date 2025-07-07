@@ -26,7 +26,6 @@
 //*)
 #include "globals.h"
 #include "sbs.h"
-#include "texture.h"
 #include "vm.h"
 #include "hal.h"
 #include "debugpanel.h"
@@ -281,8 +280,9 @@ void Stats::Loop()
 
 	if (chkGlobal->GetValue() == false)
 	{
+		//per-engine stats
 		tMeshes->SetValue(ToString(Simcore->GetMeshCount()));
-		tTextures->SetValue(ToString(Simcore->GetTextureManager()->GetMaterialCount()));
+		tTextures->SetValue(ToString(Simcore->GetTextureCount()));
 		tActions->SetValue(ToString(Simcore->GetActionCount()));
 		tSounds->SetValue(ToString(Simcore->GetSoundCount()));
 		tInStairwell->SetValue(BoolToString(Simcore->InStairwell));
@@ -300,7 +300,18 @@ void Stats::Loop()
 	}
 	else
 	{
+		//global stats
 		tRunningTime->SetValue(ToString(panel->GetRoot()->Uptime() / 1000));
+
+		int meshes, textures, actions, sounds, objects, walls, polygons;
+		int total = panel->GetRoot()->GetGlobalStats(meshes, textures, actions, sounds, objects, walls, polygons);
+		tMeshes->SetValue(ToString(meshes));
+		tTextures->SetValue(ToString(textures));
+		tActions->SetValue(ToString(actions));
+		tSounds->SetValue(ToString(sounds));
+		tObjects->SetValue(ToString(objects));
+		tWalls->SetValue(ToString(walls));
+		tPolygons->SetValue(ToString(polygons));
 	}
 }
 
