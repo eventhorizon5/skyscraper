@@ -512,9 +512,12 @@ void Skyscraper::StartSound()
 	vm->GetHAL()->PlaySound(filename_full, volume);
 }
 
-std::string Skyscraper::SelectBuilding()
+std::string Skyscraper::SelectBuilding(bool native_dialog)
 {
 #ifdef USING_WX
+
+	if (native_dialog == true)
+		return gui->SelectBuildingNative(vm->data_path);
 
 	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.SelectBuildingNative", false) == false)
 		return gui->SelectBuilding(vm->data_path);

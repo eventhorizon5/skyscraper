@@ -419,32 +419,43 @@ bool StartScreen::GetMenuInput()
 			Real mouse_x_rel = (w * 2) - 1;
 			Real mouse_y_rel = (h * 2) - 1;
 
-        	//change button status based on mouse position and button press status
-        	if (mouse_x_rel > button->x && mouse_x_rel < button->x + button->size_x && mouse_y_rel > button->y && mouse_y_rel < button->y + button->size_y)
-        	{
-        		if (button->drawn_selected == false && wxGetMouseState().LeftIsDown() == false)
-        		{
-        			if (button->drawn_pressed == true)
-        			{
-        				//user clicked on button
-        				button->drawn_selected = true;
-        				Click(i);
-					return true;
+			//change button status based on mouse position and button press status
+			if (mouse_x_rel > button->x && mouse_x_rel < button->x + button->size_x && mouse_y_rel > button->y && mouse_y_rel < button->y + button->size_y)
+			{
+				if (button->drawn_selected == false && wxGetMouseState().LeftIsDown() == false)
+				{
+					if (button->drawn_pressed == true)
+					{
+						//user clicked on button
+						button->drawn_selected = true;
+						RightClick(i);
+						return true;
         			}
         			button->drawn_selected = true;
         		}
-        		if (button->drawn_pressed == false && wxGetMouseState().LeftIsDown() == true)
-        		{
-        			button->drawn_pressed = true;
-        			button->drawn_selected = false;
-        		}
-        	}
-        	else if (button->drawn_selected == true || button->drawn_pressed == true)
-        	{
-        		button->drawn_selected = false;
-        		button->drawn_pressed = false;
-        	}
-        }
+				if (button->drawn_selected == false && wxGetMouseState().RightIsDown() == false)
+				{
+					if (button->drawn_pressed == true)
+					{
+						//user clicked on button
+						button->drawn_selected = true;
+						Click(i);
+						return true;
+					}
+					button->drawn_selected = true;
+				}
+				if (button->drawn_pressed == false && (wxGetMouseState().LeftIsDown() == true || wxGetMouseState().RightIsDown() == true))
+				{
+					button->drawn_pressed = true;
+					button->drawn_selected = false;
+				}
+			}
+			else if (button->drawn_selected == true || button->drawn_pressed == true)
+			{
+				button->drawn_selected = false;
+				button->drawn_pressed = false;
+			}
+		}
 	}
 #endif
 	return true;
@@ -475,6 +486,28 @@ void StartScreen::Click(int index)
 		//show file selection dialog
 		filename = frontend->SelectBuilding();
 	}
+
+	if (filename != "")
+	{
+		frontend->Load(filename);
+	}
+}
+
+void StartScreen::RightClick(int index)
+{
+	//user clicked a button
+
+	std::string number = ToString(index + 1);
+	std::string filename = "";
+
+	HAL *hal = vm->GetHAL();
+
+	if (index == 0) {}
+	if (index == 1) {}
+	if (index == 2) {}
+	if (index == 3) {}
+	if (index > 3)
+		filename = frontend->SelectBuilding(true);
 
 	if (filename != "")
 	{
