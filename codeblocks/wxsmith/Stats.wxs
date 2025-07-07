@@ -466,7 +466,7 @@
 						<object class="wxCheckBox" name="ID_chkGlobal" variable="chkGlobal" member="yes">
 							<label>Global Stats</label>
 						</object>
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>

@@ -228,7 +228,7 @@ Stats::Stats(DebugPanel* parent,wxWindowID id)
 	BoxSizer1->Add(bOK, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkGlobal = new wxCheckBox(this, ID_chkGlobal, _("Global Stats"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkGlobal"));
 	chkGlobal->SetValue(false);
-	BoxSizer1->Add(chkGlobal, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1->Add(chkGlobal, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
