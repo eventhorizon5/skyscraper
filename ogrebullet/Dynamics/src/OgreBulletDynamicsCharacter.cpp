@@ -154,11 +154,11 @@ namespace OgreBulletDynamics
     }
     void CharacterController::setGravity(Ogre::Real gravity)
     {
-    	m_character->setGravity(gravity);
+	m_character->setGravity(btVector3(0, -gravity, 0));
     }
     Ogre::Real CharacterController::getGravity()
     {
-    	return m_character->getGravity();
+	return -m_character->getGravity().length();
     }
     void CharacterController::setMaxSlope(Ogre::Real radians)
     {
