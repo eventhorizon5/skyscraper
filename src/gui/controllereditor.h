@@ -167,6 +167,8 @@ class ControllerEditor: public wxDialog
         void On_bCallUp_Click(wxCommandEvent& event);
         void On_bPressUp_Click(wxCommandEvent& event);
         void On_bPressDown_Click(wxCommandEvent& event);
+        void On_tDD_Toggle(wxCommandEvent& event);
+        void On_tHybrid_Toggle(wxCommandEvent& event);
         //*)
 
         void BuildList(bool restore_selection = false);

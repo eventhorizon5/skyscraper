@@ -258,6 +258,8 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
 
+    Connect(ID_tDD, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_tDD_Toggle);
+    Connect(ID_tHybrid, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_tHybrid_Toggle);
     Connect(ID_bRemoveElevator, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bRemoveElevator_Click);
     Connect(ID_bResetArrival, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bResetArrival_Click);
     Connect(ID_bAddElevator, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bAddElevator_Click);
@@ -583,6 +585,24 @@ void ControllerEditor::On_bPressDown_Click(wxCommandEvent& event)
 
     if (station)
         station->Call(false);
+}
+
+void ControllerEditor::On_tDD_Toggle(wxCommandEvent& event)
+{
+    //change destination dispatch status on controller
+    if (!controller)
+        return;
+
+    controller->DestinationDispatch = tDD->GetValue();
+}
+
+void ControllerEditor::On_tHybrid_Toggle(wxCommandEvent& event)
+{
+    //change hybrid status on controller
+    if (!controller)
+        return;
+
+    controller->Hybrid = tHybrid->GetValue();
 }
 
 }

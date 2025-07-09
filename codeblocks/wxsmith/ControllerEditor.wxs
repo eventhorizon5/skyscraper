@@ -32,6 +32,7 @@
 									<object class="sizeritem">
 										<object class="wxToggleButton" name="ID_tDD" variable="tDD" member="yes">
 											<label>Destination Dispatch</label>
+											<handler function="On_tDD_Toggle" entry="EVT_TOGGLEBUTTON" />
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
@@ -50,6 +51,7 @@
 									<object class="sizeritem">
 										<object class="wxToggleButton" name="ID_tHybrid" variable="tHybrid" member="yes">
 											<label>Hybrid</label>
+											<handler function="On_tHybrid_Toggle" entry="EVT_TOGGLEBUTTON" />
 										</object>
 										<flag>wxEXPAND</flag>
 										<border>5</border>
