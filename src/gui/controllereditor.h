@@ -67,7 +67,9 @@ class ControllerEditor: public wxDialog
         wxStaticText* StaticText14;
         wxStaticText* StaticText15;
         wxStaticText* StaticText16;
+        wxStaticText* StaticText17;
         wxStaticText* StaticText1;
+        wxStaticText* StaticText2;
         wxStaticText* StaticText3;
         wxStaticText* StaticText4;
         wxStaticText* StaticText5;
@@ -80,6 +82,7 @@ class ControllerEditor: public wxDialog
         wxTextCtrl* tDestFloor;
         wxTextCtrl* tDestination;
         wxTextCtrl* tDirection;
+        wxTextCtrl* tDownStatus;
         wxTextCtrl* tMaxPassengers;
         wxTextCtrl* tProcessed;
         wxTextCtrl* tRange;
@@ -90,6 +93,7 @@ class ControllerEditor: public wxDialog
         wxTextCtrl* tStartingFloor;
         wxTextCtrl* tStationFloor;
         wxTextCtrl* tTopFloor;
+        wxTextCtrl* tUpStatus;
         wxToggleButton* tDD;
         wxToggleButton* tHybrid;
         //*)
@@ -128,6 +132,10 @@ class ControllerEditor: public wxDialog
         static const wxWindowID ID_lCallStations;
         static const wxWindowID ID_STATICTEXT1;
         static const wxWindowID ID_tStationFloor;
+        static const wxWindowID ID_STATICTEXT2;
+        static const wxWindowID ID_tUpStatus;
+        static const wxWindowID ID_STATICTEXT17;
+        static const wxWindowID ID_tDownStatus;
         static const wxWindowID ID_lRoutes;
         static const wxWindowID ID_STATICTEXT10;
         static const wxWindowID ID_tStartingFloor;

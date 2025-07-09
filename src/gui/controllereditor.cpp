@@ -68,6 +68,10 @@ const wxWindowID ControllerEditor::ID_bCall = wxNewId();
 const wxWindowID ControllerEditor::ID_lCallStations = wxNewId();
 const wxWindowID ControllerEditor::ID_STATICTEXT1 = wxNewId();
 const wxWindowID ControllerEditor::ID_tStationFloor = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT2 = wxNewId();
+const wxWindowID ControllerEditor::ID_tUpStatus = wxNewId();
+const wxWindowID ControllerEditor::ID_STATICTEXT17 = wxNewId();
+const wxWindowID ControllerEditor::ID_tDownStatus = wxNewId();
 const wxWindowID ControllerEditor::ID_lRoutes = wxNewId();
 const wxWindowID ControllerEditor::ID_STATICTEXT10 = wxNewId();
 const wxWindowID ControllerEditor::ID_tStartingFloor = wxNewId();
@@ -111,11 +115,11 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     lControllers = new wxListBox(this, ID_lControllers, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lControllers"));
     StaticBoxSizer1->Add(lControllers, 1, wxALL|wxEXPAND, 5);
     FlexGridSizer3 = new wxFlexGridSizer(0, 3, 0, 0);
-    FlexGridSizer3->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tDD = new wxToggleButton(this, ID_tDD, _("Destination Dispatch"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tDD"));
     FlexGridSizer3->Add(tDD, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    FlexGridSizer3->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tHybrid = new wxToggleButton(this, ID_tHybrid, _("Hybrid"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tHybrid"));
     FlexGridSizer3->Add(tHybrid, 1, wxEXPAND, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -193,11 +197,19 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     StaticBoxSizer3 = new wxStaticBoxSizer(wxVERTICAL, this, _("Call Stations"));
     lCallStations = new wxListBox(this, ID_lCallStations, wxDefaultPosition, wxSize(200,200), 0, 0, 0, wxDefaultValidator, _T("ID_lCallStations"));
     StaticBoxSizer3->Add(lCallStations, 1, wxALL|wxEXPAND, 5);
-    FlexGridSizer6 = new wxFlexGridSizer(0, 3, 0, 0);
+    FlexGridSizer6 = new wxFlexGridSizer(0, 2, 0, 0);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     FlexGridSizer6->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    tStationFloor = new wxTextCtrl(this, ID_tStationFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tStationFloor"));
+    tStationFloor = new wxTextCtrl(this, ID_tStationFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tStationFloor"));
     FlexGridSizer6->Add(tStationFloor, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Up Status:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+    FlexGridSizer6->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tUpStatus = new wxTextCtrl(this, ID_tUpStatus, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tUpStatus"));
+    FlexGridSizer6->Add(tUpStatus, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText17 = new wxStaticText(this, ID_STATICTEXT17, _("Down Status:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT17"));
+    FlexGridSizer6->Add(StaticText17, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    tDownStatus = new wxTextCtrl(this, ID_tDownStatus, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tDownStatus"));
+    FlexGridSizer6->Add(tDownStatus, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer3->Add(FlexGridSizer6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer4 = new wxStaticBoxSizer(wxVERTICAL, this, _("Routes"));
@@ -315,6 +327,8 @@ void ControllerEditor::Loop()
         if (station)
         {
             tStationFloor->SetValue(SBS::ToString(station->GetFloor()));
+            tUpStatus->SetValue(SBS::BoolToString(station->GetUpStatus()));
+            tDownStatus->SetValue(SBS::BoolToString(station->GetDownStatus()));
         }
     }
 
