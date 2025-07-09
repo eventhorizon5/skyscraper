@@ -72,6 +72,8 @@ const wxWindowID ControllerEditor::ID_STATICTEXT2 = wxNewId();
 const wxWindowID ControllerEditor::ID_tUpStatus = wxNewId();
 const wxWindowID ControllerEditor::ID_STATICTEXT17 = wxNewId();
 const wxWindowID ControllerEditor::ID_tDownStatus = wxNewId();
+const wxWindowID ControllerEditor::ID_bPressUp = wxNewId();
+const wxWindowID ControllerEditor::ID_bPressDown = wxNewId();
 const wxWindowID ControllerEditor::ID_lRoutes = wxNewId();
 const wxWindowID ControllerEditor::ID_STATICTEXT10 = wxNewId();
 const wxWindowID ControllerEditor::ID_tStartingFloor = wxNewId();
@@ -210,6 +212,12 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     FlexGridSizer6->Add(StaticText17, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     tDownStatus = new wxTextCtrl(this, ID_tDownStatus, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tDownStatus"));
     FlexGridSizer6->Add(tDownStatus, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer6->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bPressUp = new wxButton(this, ID_bPressUp, _("Press Up"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bPressUp"));
+    FlexGridSizer6->Add(bPressUp, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer6->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bPressDown = new wxButton(this, ID_bPressDown, _("Press Down"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bPressDown"));
+    FlexGridSizer6->Add(bPressDown, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer3->Add(FlexGridSizer6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticBoxSizer4 = new wxStaticBoxSizer(wxVERTICAL, this, _("Routes"));
@@ -255,6 +263,8 @@ ControllerEditor::ControllerEditor(DebugPanel* parent,wxWindowID id)
     Connect(ID_bAddElevator, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bAddElevator_Click);
     Connect(ID_bCallUp, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bCallUp_Click);
     Connect(ID_bCall, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bCall_Click);
+    Connect(ID_bPressUp, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bPressUp_Click);
+    Connect(ID_bPressDown, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ControllerEditor::On_bPressDown_Click);
     //*)
     lastcount = 0;
     lastcount_elev = 0;
@@ -549,6 +559,30 @@ void ControllerEditor::On_bCallUp_Click(wxCommandEvent& event)
     ::SBS::CallStation* station = controller->GetCallStation(lCallStations->GetSelection());
 
     controller->CallElevator(station, true);
+}
+
+void ControllerEditor::On_bPressUp_Click(wxCommandEvent& event)
+{
+    //press up
+    if (!controller)
+        return;
+
+    ::SBS::CallStation* station = controller->GetCallStation(lCallStations->GetSelection());
+
+    if (station)
+        station->Call(true);
+}
+
+void ControllerEditor::On_bPressDown_Click(wxCommandEvent& event)
+{
+    //press down
+    if (!controller)
+        return;
+
+    ::SBS::CallStation* station = controller->GetCallStation(lCallStations->GetSelection());
+
+    if (station)
+        station->Call(false);
 }
 
 }

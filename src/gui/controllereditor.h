@@ -49,6 +49,8 @@ class ControllerEditor: public wxDialog
         wxButton* bAddElevator;
         wxButton* bCall;
         wxButton* bCallUp;
+        wxButton* bPressDown;
+        wxButton* bPressUp;
         wxButton* bRemoveElevator;
         wxButton* bResetArrival;
         wxButton* bSetReprocess;
@@ -136,6 +138,8 @@ class ControllerEditor: public wxDialog
         static const wxWindowID ID_tUpStatus;
         static const wxWindowID ID_STATICTEXT17;
         static const wxWindowID ID_tDownStatus;
+        static const wxWindowID ID_bPressUp;
+        static const wxWindowID ID_bPressDown;
         static const wxWindowID ID_lRoutes;
         static const wxWindowID ID_STATICTEXT10;
         static const wxWindowID ID_tStartingFloor;
@@ -161,6 +165,8 @@ class ControllerEditor: public wxDialog
         void On_bResetArrival_Click(wxCommandEvent& event);
         void On_bCall_Click(wxCommandEvent& event);
         void On_bCallUp_Click(wxCommandEvent& event);
+        void On_bPressUp_Click(wxCommandEvent& event);
+        void On_bPressDown_Click(wxCommandEvent& event);
         //*)
 
         void BuildList(bool restore_selection = false);
