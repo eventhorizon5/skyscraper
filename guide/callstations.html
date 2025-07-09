@@ -16,8 +16,8 @@
         to create advanced call button panels.&nbsp; This must be
         created within a <i>Floor</i> section, in order to specify what
         floor the call station is on.&nbsp; Call Stations are numbered,
-        starting with 1, this is a global number, not per-floor, even
-        though call stations are created individually on each floor.<br>
+        starting with 1, this is a per-floor number, since call stations
+        are created individually on each floor.<br>
       </p>
       <p align="left">The section headers and footers are similar to the
         ones in the <em>Floor</em> section.<br>
@@ -29,6 +29,7 @@
         <br>
         For a range of call stations, you would use something like:<br>
         <font size="2" face="Courier New, Courier, mono">&lt;CallStations
+
 
 
 
@@ -193,6 +194,7 @@
 
 
 
+
           <em>texturename</em>, <em>rows, columns, direction,
             buttonwidth, buttonheight, spacingX, spacingY, tw, th<br>
           </em></font> Example<font size="2" face="Courier New, Courier,
@@ -218,6 +220,7 @@
       <p align="left"><strong>3. AddControl</strong> - command for
         creating buttons, switches and knobs on the panel<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddControl
+
 
 
 
@@ -296,6 +299,7 @@
         destination indicator for this call station<br>
         Syntax: <font size="2"><font face="Courier New, Courier, mono">AddIndicator</font></font><font
           size="2" face="Courier New, Courier, mono"> <em>sound</em>, <em>texture_prefix,
+
 
 
 
