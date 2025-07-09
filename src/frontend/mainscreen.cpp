@@ -877,27 +877,28 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 
 	int CenterX = (MaxX + MinX) / 2;
 	int CenterY = (MaxY + MinY) / 2;
+	int range = (MaxX - MinX) / 8;
 
 	if (joystick->GetButtonState(joy_fast))
 		speed = speed_fast;
 
-	if (joystick->GetPosition(joy_forward) < CenterY)
+	if (joystick->GetPosition(joy_forward) < (CenterY - range))
 		step += speed;
-	if (joystick->GetPosition(joy_forward) > CenterY)
+	if (joystick->GetPosition(joy_forward) > (CenterY + range))
 		step -= speed;
 
 	if (joystick->GetButtonState(joy_strafe))
 	{
-		if (joystick->GetPosition(joy_turn) > CenterX)
+		if (joystick->GetPosition(joy_turn) > (CenterX + range))
 			strafe += speed;
-		if (joystick->GetPosition(joy_turn) < CenterX)
+		if (joystick->GetPosition(joy_turn) < (CenterX - range))
 			strafe -= speed;
 	}
 	else
 	{
-		if (joystick->GetPosition(joy_turn) > CenterX)
+		if (joystick->GetPosition(joy_turn) > (CenterX + range))
 			turn += speed;
-		if (joystick->GetPosition(joy_turn) < CenterX)
+		if (joystick->GetPosition(joy_turn) < (CenterX - range))
 			turn -= speed;
 	}
 
