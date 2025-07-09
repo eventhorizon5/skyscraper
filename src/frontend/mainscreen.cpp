@@ -104,6 +104,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	joy_click = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Click", 0);
 	joy_fast = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Fast", 1);
 	joy_strafe = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Strafe", 2);
+	joy_jump = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Jump", 3);
 	joy_turn = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Turn", 0);
 	joy_forward = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Forward", 1);
 #endif
@@ -908,6 +909,9 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 
 	if (joystick->GetButtonState(joy_click))
 		engine->GetVM()->GetHAL()->ClickedObject(true, false, false, false, false, 0.0, true);
+
+	if (joystick->GetButtonState(joy_jump))
+		camera->Jump();
 }
 #endif
 

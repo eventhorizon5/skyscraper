@@ -69,7 +69,7 @@ private:
 #ifndef __FreeBSD__
 	wxJoystick *joystick;
 	int joy_buttons;
-	int joy_click, joy_strafe, joy_fast, joy_turn, joy_forward;
+	int joy_click, joy_strafe, joy_fast, joy_turn, joy_forward, joy_jump;
 #endif
 
 	DECLARE_EVENT_TABLE()
