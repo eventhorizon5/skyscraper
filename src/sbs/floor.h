@@ -186,6 +186,8 @@ private:
 
 	//Moving walkways
 	std::vector<MovingWalkway*> MovingWalkwayArray;
+
+	int callstation_index;
 };
 
 }
