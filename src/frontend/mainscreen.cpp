@@ -910,7 +910,7 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 	if (joystick->GetButtonState(joy_click))
 		engine->GetVM()->GetHAL()->ClickedObject(true, false, false, false, false, 0.0, true);
 
-	if (joystick->GetButtonState(joy_jump))
+	if (joystick->GetButtonState(joy_jump) && camera->IsOnGround() == true)
 		camera->Jump();
 }
 #endif
