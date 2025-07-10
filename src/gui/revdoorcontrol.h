@@ -46,12 +46,15 @@ class RevolvingDoorControl: public wxDialog
 
         //(*Declarations(RevolvingDoorControl)
         wxButton* bOK;
+        wxButton* bSet;
         wxListBox* ListBox1;
         wxStaticText* StaticText1;
         wxStaticText* StaticText2;
+        wxStaticText* StaticText3;
         wxStaticText* txtState;
         wxTextCtrl* txtName;
         wxTextCtrl* txtParent;
+        wxTextCtrl* txtSpeed;
         wxToggleButton* tRun;
         //*)
 
@@ -65,6 +68,9 @@ class RevolvingDoorControl: public wxDialog
         static const wxWindowID ID_txtParent;
         static const wxWindowID ID_txtState;
         static const wxWindowID ID_tRun;
+        static const wxWindowID ID_STATICTEXT3;
+        static const wxWindowID ID_txtSpeed;
+        static const wxWindowID ID_bSet;
         static const wxWindowID ID_bOK;
         //*)
 
@@ -75,6 +81,7 @@ class RevolvingDoorControl: public wxDialog
         void On_bOK_Click(wxCommandEvent& event);
         void On_Slider1_Scroll(wxCommandEvent& event);
         void On_tRun_Toggle(wxCommandEvent& event);
+        void On_bSet_Click(wxCommandEvent& event);
         //*)
         void BuildList(bool restore_selection = false);
         void UpdateRunState();

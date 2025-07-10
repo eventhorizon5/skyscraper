@@ -40,6 +40,9 @@ const wxWindowID RevolvingDoorControl::ID_STATICTEXT2 = wxNewId();
 const wxWindowID RevolvingDoorControl::ID_txtParent = wxNewId();
 const wxWindowID RevolvingDoorControl::ID_txtState = wxNewId();
 const wxWindowID RevolvingDoorControl::ID_tRun = wxNewId();
+const wxWindowID RevolvingDoorControl::ID_STATICTEXT3 = wxNewId();
+const wxWindowID RevolvingDoorControl::ID_txtSpeed = wxNewId();
+const wxWindowID RevolvingDoorControl::ID_bSet = wxNewId();
 const wxWindowID RevolvingDoorControl::ID_bOK = wxNewId();
 //*)
 
@@ -51,12 +54,12 @@ END_EVENT_TABLE()
 RevolvingDoorControl::RevolvingDoorControl(DebugPanel* parent, wxWindowID id)
 {
     //(*Initialize(RevolvingDoorControl)
-    wxBoxSizer* BoxSizer1;
     wxFlexGridSizer* FlexGridSizer1;
     wxFlexGridSizer* FlexGridSizer2;
     wxFlexGridSizer* FlexGridSizer3;
     wxFlexGridSizer* FlexGridSizer4;
     wxFlexGridSizer* FlexGridSizer5;
+    wxFlexGridSizer* FlexGridSizer6;
 
     Create(parent, id, _("Revolving Door Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
     FlexGridSizer1 = new wxFlexGridSizer(0, 3, 0, 0);
@@ -80,8 +83,14 @@ RevolvingDoorControl::RevolvingDoorControl(DebugPanel* parent, wxWindowID id)
     tRun = new wxToggleButton(this, ID_tRun, _("Run"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tRun"));
     FlexGridSizer5->Add(tRun, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer4->Add(FlexGridSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
-    FlexGridSizer4->Add(BoxSizer1, 1, wxALL|wxEXPAND, 5);
+    FlexGridSizer6 = new wxFlexGridSizer(0, 3, 0, 0);
+    StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Speed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
+    FlexGridSizer6->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    txtSpeed = new wxTextCtrl(this, ID_txtSpeed, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtSpeed"));
+    FlexGridSizer6->Add(txtSpeed, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    bSet = new wxButton(this, ID_bSet, _("Set"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSet"));
+    FlexGridSizer6->Add(bSet, 1, wxALL, 5);
+    FlexGridSizer4->Add(FlexGridSizer6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
     FlexGridSizer4->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(FlexGridSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -90,6 +99,7 @@ RevolvingDoorControl::RevolvingDoorControl(DebugPanel* parent, wxWindowID id)
     FlexGridSizer1->SetSizeHints(this);
 
     Connect(ID_tRun, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, (wxObjectEventFunction)&RevolvingDoorControl::On_tRun_Toggle);
+    Connect(ID_bSet, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&RevolvingDoorControl::On_bSet_Click);
     Connect(ID_bOK, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&RevolvingDoorControl::On_bOK_Click);
     //*)
 
@@ -136,6 +146,7 @@ void RevolvingDoorControl::Loop()
 			txtName->SetValue(door->GetName());
 			txtParent->SetValue(door->GetParent()->GetName());
 			tRun->SetValue(door->GetRun());
+			txtSpeed->SetValue(SBS::ToString(door->Speed));
 		}
 	}
 	else
@@ -175,6 +186,7 @@ void RevolvingDoorControl::BuildList(bool restore_selection)
 			txtName->SetValue(wxT(""));
 			txtParent->SetValue(wxT(""));
 			tRun->SetValue(false);
+			txtSpeed->SetValue(wxT(""));
 		}
 	}
 }
@@ -183,6 +195,12 @@ void RevolvingDoorControl::On_tRun_Toggle(wxCommandEvent& event)
 {
 	if (door)
 		door->Run(tRun->GetValue());
+}
+
+void RevolvingDoorControl::On_bSet_Click(wxCommandEvent& event)
+{
+	if (door)
+		door->Speed = SBS::ToFloat(txtSpeed->GetValue().ToStdString());
 }
 
 }
