@@ -946,15 +946,14 @@ void Camera::InterpolateMovement(Real delta)
 	}
 }
 
-void Camera::SetGravity(Real gravity, bool save_value, bool camera_only)
+void Camera::SetGravity(Real gravity, bool save_value)
 {
 	if (save_value == true)
 		Gravity = gravity;
 
 	if (EnableBullet == true && !Cameras.empty())
 	{
-		if (camera_only == false)
-			sbs->mWorld->setGravity(Vector3(0, sbs->ToRemote(-gravity), 0));
+		sbs->mWorld->setGravity(Vector3(0, sbs->ToRemote(-gravity), 0));
 		mCharacter->setGravity(sbs->ToRemote(gravity));
 	}
 }
@@ -1383,7 +1382,7 @@ bool Camera::Attach(std::vector<Ogre::Camera*>& cameras, bool init_state)
 	//move camera to start location
 	if (FirstAttach == false)
 	{
-		SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719), true, false); // 9.806 m/s/s
+		SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719), true); // 9.806 m/s/s
 
 		if (init_state == true)
 		{
