@@ -208,6 +208,8 @@ void RevolvingDoor::MoveDoor()
 			rotation += Speed * sbs->delta;
 		else if (run == false)
 			brake = !brake;
+		else if (rotation > Speed)
+			rotation -= Speed * sbs->delta;
 	}
 	else if ((Clockwise == false && brake == false) || (Clockwise == true && brake == true))
 	{
@@ -215,6 +217,8 @@ void RevolvingDoor::MoveDoor()
 			rotation -= Speed * sbs->delta;
 		else if (run == false)
 			brake = !brake;
+		else if (rotation < -Speed)
+			rotation += Speed * sbs->delta;
 	}
 
 	if (brake == true)
