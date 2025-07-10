@@ -1043,6 +1043,9 @@ int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, in
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
+		if (!engines[i])
+			continue;
+
 		::SBS::SBS* Simcore = engines[i]->GetSystem();
 
 		if (Simcore)
