@@ -1018,6 +1018,9 @@ void VM::ListPlayingSounds()
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
+		if (!engines[i])
+			continue;
+
 		::SBS::SBS* Simcore = engines[i]->GetSystem();
 		
 		if (Simcore)
