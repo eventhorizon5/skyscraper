@@ -139,7 +139,7 @@ public:
 	void Turn(Real speed = 1.0);
 	void Spin(Real speed = 1.0);
 	void InterpolateMovement(Real delta);
-	void SetGravity(Real gravity, bool save_value = true, bool camera_only = true);
+	void SetGravity(Real gravity, bool save_value = true);
 	Real GetGravity();
 	void EnableGravity(bool value);
 	bool GetGravityStatus();
