@@ -8,9 +8,28 @@ Version 2.1
 -Moved SBS source files into subdirectories
 -new Convention Center building
 -added Convention Center to City Demo
+-Added most Simple demo buildings to City Demo
 
 Version 2.0
 -------------------------
+-SBS: remove the camera_only parameter to the SetGravity() function; the DynanamicsWorld gravity should always be set.
+-SBS: add support for slowing down revolving doors
+-VM: objects need to be checked before use, this fixes a potential crash in the ListPlayingSounds() function
+-Texture Manager: show mipmaps as "unlimited" for textures that return the MIP_UNLIMITED value
+-VM: fixed a crash in GetGlobalStats() function
+-Added C++ reference to the guide
+-SBS: name callstations on a per-floor basis
+-Have joystick only have camera jump if on ground
+-Assign joystick button 4 to Jump function
+-Add a joystick centering range, fixes joystick centering issues
+-updated Bullet to 2.89
+-Stats: Added a global stats checkbox
+-Frontend: right-clicking on the "Other Building" button now opens the original (native) file selection dialog
+-Updated doxygen config for 2.0
+-Remade menu screen, and switched Sears Tower with City Demo
+-SBS: Name call stations properly
+-Updated the DD version of Triton Center, for the new map and grand ballroom music
+-GUI: resize the progress dialog when updating
 -Report on the number of joystick buttons on startup
 -GUI: Have progress dialog show elapsed and estimated times
 -Engine Manager: added uptime display
