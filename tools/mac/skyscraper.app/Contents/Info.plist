@@ -9,9 +9,9 @@
     <key>CFBundleInfoDictionaryVersion</key>	<string>6.0</string>
     <key>CFBundlePackageType</key>	<string>APPL</string>
     <key>CFBundleSignature</key>	<string>????</string>
-    <key>CFBundleVersion</key>		<string>1.12.0</string>
-    <key>CFBundleShortVersionString</key>	<string>1.12.0</string>
-    <key>CFBundleIdentifier</key>	<string>com.skyscrapersim.skyscraper</string>
+    <key>CFBundleVersion</key>		<string>2.1.0</string>
+    <key>CFBundleShortVersionString</key>	<string>2.1.0</string>
+    <key>CFBundleIdentifier</key>	<string>net.skyscrapersim.skyscraper</string>
     <key>CFBundleIconFile</key>		<string>skyscraper.icns</string>
     <key>NSPrincipalClass</key>		<string>NSApplication</string>
 
