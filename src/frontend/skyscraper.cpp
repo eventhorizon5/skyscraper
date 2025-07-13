@@ -180,7 +180,7 @@ bool Skyscraper::OnInit()
 
 	vm->version = "2.0";
 	vm->version_rev = ToString(GIT_REV);
-	vm->version_state = "RC3";
+	vm->version_state = "RC4";
 	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
 #ifdef USING_WX
