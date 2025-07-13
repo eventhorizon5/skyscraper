@@ -268,14 +268,14 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 
 		//transform matrix into texel map
 		size_t index = 0;
-		Vector3 texel_temp;
+		Vector3 texel;
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
 			for (size_t j = 0; j < vertices[i].size(); j++)
 			{
-				texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
-				texels[index].x = texel_temp.x;
-				texels[index].y = texel_temp.y;
+				texel = tex_matrix * (vertices[i][j] - tex_vector);
+				texels[index].x = texel.x;
+				texels[index].y = texel.y;
 				index++;
 			}
 		}
