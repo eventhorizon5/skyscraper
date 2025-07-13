@@ -550,6 +550,9 @@ void Object::RegisterLoop(Object *object)
 {
 	//register a child object dynamic runloop
 
+	if (!object)
+		return;
+
 	for (size_t i = 0; i < runloops.size(); i++)
 	{
 		if (runloops[i] == object)
@@ -562,6 +565,9 @@ void Object::RegisterLoop(Object *object)
 void Object::UnregisterLoop(Object *object)
 {
 	//unregister a child object dynamic runloop
+
+	if (!object)
+		return;
 
 	if (runloops.empty())
 		return;
