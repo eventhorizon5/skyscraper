@@ -9,9 +9,21 @@ Version 2.1
 -new Convention Center building
 -added Convention Center to City Demo
 -Added most Simple demo buildings to City Demo
+-SBS: Move() functions should allow local space moves instead of just parent space
+-SBS: add relative parameter to SetRotation()
+-GUI: added relative movement/rotation checkbox for objects
 
 Version 2.0
 -------------------------
+-VMConsole: add build number to uname command
+-SBS: Use GetDerivedOrientation() function instead of an ogre call
+-SBS: replaced SetPositionRelative() functions with a relative parameter to SetPosition()
+-VM: moved version code from frontend into VM
+-SBS: added safety checks to Object
+-PolyMesh: GetTexels() should return array size, and prevent a potential buffer overrun
+-GUI: center progress dialog when updating
+-Removed outdated design document
+-Removed Bullet patch
 -SBS: remove the camera_only parameter to the SetGravity() function; the DynanamicsWorld gravity should always be set.
 -SBS: add support for slowing down revolving doors
 -VM: objects need to be checked before use, this fixes a potential crash in the ListPlayingSounds() function
