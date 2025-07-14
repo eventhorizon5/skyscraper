@@ -40,6 +40,8 @@
 
 namespace Skyscraper {
 
+std::mutex gui_mtx;
+
 GUI::GUI(VM *parent)
 {
 	this->vm = parent;
@@ -84,15 +86,19 @@ void GUI::Unload()
 void GUI::ShowError(const std::string &message)
 {
 	//show error dialog
+	gui_mtx.lock();
 	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_ERROR);
 	dialog.ShowModal();
+	gui_mtx.unlock();
 }
 
 void GUI::ShowMessage(const std::string &message)
 {
 	//show message dialog
+	gui_mtx.lock();
 	wxMessageDialog dialog(0, message, _("Skyscraper"), wxOK | wxICON_INFORMATION);
 	dialog.ShowModal();
+	gui_mtx.unlock();
 }
 
 void GUI::ShowProgress()
@@ -106,6 +112,7 @@ std::string GUI::SelectBuilding(const std::string &data_path)
 {
 	//choose a building from a script file
 
+	gui_mtx.lock();
 	std::string filename = "";
 
 	//get listing of building files
@@ -155,12 +162,15 @@ std::string GUI::SelectBuilding(const std::string &data_path)
 		filename += ".bld";
 	}
 
+	gui_mtx.unlock();
+
 	return filename;
 }
 
 std::string GUI::SelectBuildingNative(const std::string &data_path)
 {
 	//choose a building from a script file, using a native file selection dialog
+	gui_mtx.lock();
 	std::string filename = "";
 	srand (time (0));
 
@@ -186,33 +196,41 @@ std::string GUI::SelectBuildingNative(const std::string &data_path)
 	//delete dialog
 	delete Selector;
 	Selector = 0;
+	gui_mtx.unlock();
 
 	return filename;
 }
 
 void GUI::CreateDebugPanel()
 {
+	gui_mtx.lock();
 	if (!dpanel)
 		dpanel = new DebugPanel(vm, vm->GetParent(), -1);
 	dpanel->Show(true);
 	HAL *hal = vm->GetHAL();
 	dpanel->SetPosition(wxPoint(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ControlPanelX", 10), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
+	gui_mtx.unlock();
 }
 
 void GUI::EnableConsole(bool value)
 {
+	gui_mtx.lock();
 	if (console)
 		console->bSend->Enable(value);
+	gui_mtx.unlock();
 }
 
 void GUI::EnableTimer(bool value)
 {
+	gui_mtx.lock();
 	if(dpanel)
 		dpanel->EnableTimer(value);
+	gui_mtx.unlock();
 }
 
 void GUI::ShowConsole(bool send_button)
 {
+	gui_mtx.lock();
 	if (!console)
 		console = new Console(vm, vm->GetParent(), -1);
 	console->Show();
@@ -220,6 +238,7 @@ void GUI::ShowConsole(bool send_button)
 	HAL *hal = vm->GetHAL();
 	console->SetPosition(wxPoint(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ConsoleX", 10), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ConsoleY", 25)));
 	console->bSend->Enable(send_button);
+	gui_mtx.unlock();
 }
 
 void GUI::CreateProgressDialog(const std::string &message)
@@ -239,12 +258,14 @@ void GUI::CreateProgressDialog(const std::string &message)
 	}
 	else
 	{
+		gui_mtx.lock();
 		wxString msg = progdialog->GetMessage();
 		msg += "\n";
 		msg += message;
 		progdialog->Update(progdialog->GetValue(), msg);
 		progdialog->Fit();
 		progdialog->Center();
+		gui_mtx.unlock();
 	}
 
 	//stop control panel timer
@@ -254,9 +275,11 @@ void GUI::CreateProgressDialog(const std::string &message)
 void GUI::CloseProgressDialog()
 {
 	//close progress dialog
+	gui_mtx.lock();
 	if (progdialog)
 		progdialog->Destroy();
 	progdialog = 0;
+	gui_mtx.unlock();
 
 	//start control panel timer
 	EnableTimer(true);
@@ -264,10 +287,12 @@ void GUI::CloseProgressDialog()
 
 void GUI::ShowProgressDialog()
 {
+	gui_mtx.lock();
 	if (!progdialog)
 		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent(), wxPD_AUTO_HIDE|wxPD_APP_MODAL|wxPD_CAN_ABORT|wxPD_ELAPSED_TIME|wxPD_ESTIMATED_TIME);
 
 	show_progress = false;
+	gui_mtx.unlock();
 }
 
 bool GUI::UpdateProgress(int percent)
@@ -276,9 +301,11 @@ bool GUI::UpdateProgress(int percent)
 	if (!progdialog)
 		return true;
 
+	gui_mtx.lock();
 	bool result = progdialog->Update(percent);
 	progdialog->Fit();
 	progdialog->Center();
+	gui_mtx.unlock();
 	return result;
 }
 
@@ -287,22 +314,29 @@ bool GUI::ProgressCancelled()
 	if (!progdialog)
 		return false;
 
-	return progdialog->WasCancelled();
+	gui_mtx.lock();
+	bool cancelled = progdialog->WasCancelled();
+	gui_mtx.unlock();
+	return cancelled;
 }
 
 void GUI::RefreshConsole()
 {
 	if (console)
 	{
+		gui_mtx.lock();
 		console->Refresh();
 		console->Update();
+		gui_mtx.unlock();
 	}
 }
 
 void GUI::RaiseWindow()
 {
+	gui_mtx.lock();
 	vm->GetParent()->Raise();
     vm->GetParent()->SetFocus();
+	gui_mtx.unlock();
 }
 
 void GUI::ShowDebugPanel()
@@ -311,9 +345,11 @@ void GUI::ShowDebugPanel()
 		return;
 
 	//show control panel if closed
+	gui_mtx.lock();
 	dpanel = new DebugPanel(vm, vm->GetParent(), -1);
 	dpanel->Show(true);
 	dpanel->SetPosition(wxPoint(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.ControlPanelX", 10), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.ControlPanelY", 25)));
+	gui_mtx.unlock();
 }
 
 void GUI::ShowControlReference()
@@ -323,18 +359,22 @@ void GUI::ShowControlReference()
 
 void GUI::ShowLoadDialog()
 {
+	gui_mtx.lock();
 	if (!loaddialog)
 		loaddialog = new LoadDialog(dpanel, vm->GetParent(), -1);
 	loaddialog->CenterOnScreen();
 	loaddialog->Show();
+	gui_mtx.unlock();
 }
 
 void GUI::WriteToConsole(const std::string &message, const std::string &color)
 {
 	if (console)
 	{
+		gui_mtx.lock();
 		console->Write(message, color);
 		console->Update();
+		gui_mtx.unlock();
 	}
 }
 
@@ -350,6 +390,7 @@ bool GUI::ReportMissingFiles(std::vector<std::string> &missing_files)
 			vm->GetHAL()->Report("Missing file: " + missing_files[i], "gui:");
 
 		//create text window
+		gui_mtx.lock();
 		TextWindow *twindow = new TextWindow(NULL, -1);
 		twindow->SetMinSize(wxSize(350, 250));
 		twindow->tMain->SetMinSize(wxSize(350, 250));
@@ -366,6 +407,7 @@ bool GUI::ReportMissingFiles(std::vector<std::string> &missing_files)
 		}
 		twindow->tMain->WriteText(message);
 		twindow->tMain->SetInsertionPoint(0);
+		gui_mtx.unlock();
 		return true;
 	}
 	else
