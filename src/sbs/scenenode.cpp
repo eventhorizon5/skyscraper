@@ -98,30 +98,27 @@ void SceneNode::ShowBoundingBox(bool value)
 		node->showBoundingBox(value);
 }
 
-void SceneNode::SetPosition(const Vector3 &position)
+void SceneNode::SetPosition(const Vector3 &position, bool relative)
 {
 	//set position of scene node
 
 	if (!node)
 		return;
 
-	if (IsRoot() == false)
-		node->_setDerivedPosition(sbs->ToRemote(sbs->ToGlobal(position)));
+	if (relative == false)
+	{
+		//set absolute position
+		if (IsRoot() == false)
+			node->_setDerivedPosition(sbs->ToRemote(sbs->ToGlobal(position)));
+		else
+			node->_setDerivedPosition(sbs->ToRemote(position));
+	}
 	else
-		node->_setDerivedPosition(sbs->ToRemote(position));
-	Update();
-}
-
-void SceneNode::SetPositionRelative(const Vector3 &position)
-{
-	//set position of scene node
-	//position is relative of parent scene node
-
-	if (!node)
-		return;
-
-	Vector3 pos = sbs->ToRemote(position);
-	node->setPosition(pos);
+	{
+		//set relative position
+		Vector3 pos = sbs->ToRemote(position);
+		node->setPosition(pos);
+	}
 	Update();
 }
 

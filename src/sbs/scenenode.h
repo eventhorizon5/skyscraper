@@ -36,8 +36,7 @@ public:
 	void AddChild(SceneNode *scenenode);
 	void RemoveChild(SceneNode *scenenode);
 	void ShowBoundingBox(bool value);
-	void SetPosition(const Vector3 &position);
-	void SetPositionRelative(const Vector3 &position);
+	void SetPosition(const Vector3 &position, bool relative = false);
 	Vector3 GetPosition(bool relative = false);
 	void SetRotation(const Vector3 &rotation);
 	Vector3 GetRotation();

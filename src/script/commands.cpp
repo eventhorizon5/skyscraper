@@ -3911,7 +3911,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//rotate object
-		obj->SetPositionRelative(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		obj->SetPosition(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), true);
 
 		return sNextLine;
 	}

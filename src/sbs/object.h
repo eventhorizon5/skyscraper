@@ -79,10 +79,8 @@ public:
 	void ShowBoundingBox(bool value);
 	virtual void Move(const Vector3 &vector, Real speed = 1.0);
 	virtual void Move(Real X, Real Y, Real Z, Real speed = 1.0);
-	virtual void SetPosition(const Vector3 &position);
-	void SetPositionRelative(const Vector3 &position);
-	virtual void SetPosition(Real X, Real Y, Real Z);
-	void SetPositionRelative(Real X, Real Y, Real Z);
+	virtual void SetPosition(const Vector3 &position, bool relative = false);
+	virtual void SetPosition(Real X, Real Y, Real Z, bool relative = false);
 	virtual void SetPositionY(Real value);
 	virtual Vector3 GetPosition(bool relative = false);
 	virtual void Rotate(const Vector3 &vector, Real speed = 1.0);
