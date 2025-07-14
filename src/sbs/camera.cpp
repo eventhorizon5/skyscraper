@@ -335,7 +335,7 @@ bool Camera::Move(Vector3 vector, Real speed, bool flip)
 	Quaternion orientation;
 
 	if (EnableBullet == true)
-		orientation = GetSceneNode()->GetRawSceneNode()->_getDerivedOrientation();
+		orientation = GetSceneNode()->GetDerivedOrientation();
 	else
 		orientation = Cameras[0]->getOrientation();
 
