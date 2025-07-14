@@ -35,46 +35,47 @@
 namespace Skyscraper {
 
 //(*IdInit(MoveObject)
-const long MoveObject::ID_STATICTEXT1 = wxNewId();
-const long MoveObject::ID_lblPosition = wxNewId();
-const long MoveObject::ID_STATICTEXT3 = wxNewId();
-const long MoveObject::ID_STATICTEXT4 = wxNewId();
-const long MoveObject::ID_STATICTEXT2 = wxNewId();
-const long MoveObject::ID_lblRotation = wxNewId();
-const long MoveObject::ID_STATICLINE2 = wxNewId();
-const long MoveObject::ID_rPosition = wxNewId();
-const long MoveObject::ID_rRotation = wxNewId();
-const long MoveObject::ID_STATICTEXT28 = wxNewId();
-const long MoveObject::ID_txtMoveSpeed = wxNewId();
-const long MoveObject::ID_bZPlus = wxNewId();
-const long MoveObject::ID_bYPlus = wxNewId();
-const long MoveObject::ID_bXNeg = wxNewId();
-const long MoveObject::ID_chkHold = wxNewId();
-const long MoveObject::ID_bXPlus = wxNewId();
-const long MoveObject::ID_bZNeg = wxNewId();
-const long MoveObject::ID_bYNeg = wxNewId();
-const long MoveObject::ID_STATICTEXT16 = wxNewId();
-const long MoveObject::ID_STATICTEXT21 = wxNewId();
-const long MoveObject::ID_txtPositionX = wxNewId();
-const long MoveObject::ID_bPositionX = wxNewId();
-const long MoveObject::ID_STATICTEXT22 = wxNewId();
-const long MoveObject::ID_txtPositionY = wxNewId();
-const long MoveObject::ID_bPositionY = wxNewId();
-const long MoveObject::ID_STATICTEXT23 = wxNewId();
-const long MoveObject::ID_txtPositionZ = wxNewId();
-const long MoveObject::ID_bPositionZ = wxNewId();
-const long MoveObject::ID_STATICLINE1 = wxNewId();
-const long MoveObject::ID_STATICTEXT27 = wxNewId();
-const long MoveObject::ID_STATICTEXT24 = wxNewId();
-const long MoveObject::ID_txtRotationX = wxNewId();
-const long MoveObject::ID_bRotationX = wxNewId();
-const long MoveObject::ID_STATICTEXT25 = wxNewId();
-const long MoveObject::ID_txtRotationY = wxNewId();
-const long MoveObject::ID_bRotationY = wxNewId();
-const long MoveObject::ID_STATICTEXT26 = wxNewId();
-const long MoveObject::ID_txtRotationZ = wxNewId();
-const long MoveObject::ID_bRotationZ = wxNewId();
-const long MoveObject::ID_STATICLINE3 = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT1 = wxNewId();
+const wxWindowID MoveObject::ID_lblPosition = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT3 = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT4 = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT2 = wxNewId();
+const wxWindowID MoveObject::ID_lblRotation = wxNewId();
+const wxWindowID MoveObject::ID_STATICLINE2 = wxNewId();
+const wxWindowID MoveObject::ID_rPosition = wxNewId();
+const wxWindowID MoveObject::ID_rRotation = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT28 = wxNewId();
+const wxWindowID MoveObject::ID_txtMoveSpeed = wxNewId();
+const wxWindowID MoveObject::ID_chkRelative = wxNewId();
+const wxWindowID MoveObject::ID_bZPlus = wxNewId();
+const wxWindowID MoveObject::ID_bYPlus = wxNewId();
+const wxWindowID MoveObject::ID_bXNeg = wxNewId();
+const wxWindowID MoveObject::ID_chkHold = wxNewId();
+const wxWindowID MoveObject::ID_bXPlus = wxNewId();
+const wxWindowID MoveObject::ID_bZNeg = wxNewId();
+const wxWindowID MoveObject::ID_bYNeg = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT16 = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT21 = wxNewId();
+const wxWindowID MoveObject::ID_txtPositionX = wxNewId();
+const wxWindowID MoveObject::ID_bPositionX = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT22 = wxNewId();
+const wxWindowID MoveObject::ID_txtPositionY = wxNewId();
+const wxWindowID MoveObject::ID_bPositionY = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT23 = wxNewId();
+const wxWindowID MoveObject::ID_txtPositionZ = wxNewId();
+const wxWindowID MoveObject::ID_bPositionZ = wxNewId();
+const wxWindowID MoveObject::ID_STATICLINE1 = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT27 = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT24 = wxNewId();
+const wxWindowID MoveObject::ID_txtRotationX = wxNewId();
+const wxWindowID MoveObject::ID_bRotationX = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT25 = wxNewId();
+const wxWindowID MoveObject::ID_txtRotationY = wxNewId();
+const wxWindowID MoveObject::ID_bRotationY = wxNewId();
+const wxWindowID MoveObject::ID_STATICTEXT26 = wxNewId();
+const wxWindowID MoveObject::ID_txtRotationZ = wxNewId();
+const wxWindowID MoveObject::ID_bRotationZ = wxNewId();
+const wxWindowID MoveObject::ID_STATICLINE3 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(MoveObject,wxDialog)
@@ -89,6 +90,7 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	wxFlexGridSizer* FlexGridSizer12;
 	wxFlexGridSizer* FlexGridSizer14;
 	wxFlexGridSizer* FlexGridSizer1;
+	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* FlexGridSizer4;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxFlexGridSizer* FlexGridSizer6;
@@ -106,15 +108,15 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	GridSizer1 = new wxGridSizer(0, 2, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT1"));
 	GridSizer1->Add(StaticText1, 1, wxALL|wxEXPAND, 5);
-	lblPosition = new wxStaticText(this, ID_lblPosition, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblPosition"));
+	lblPosition = new wxStaticText(this, ID_lblPosition, _T("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblPosition"));
 	GridSizer1->Add(lblPosition, 1, wxALL|wxEXPAND, 5);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Relative Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT3"));
 	GridSizer1->Add(StaticText3, 1, wxALL|wxEXPAND, 5);
-	lblRelPosition = new wxStaticText(this, ID_STATICTEXT4, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT4"));
+	lblRelPosition = new wxStaticText(this, ID_STATICTEXT4, _T("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT4"));
 	GridSizer1->Add(lblRelPosition, 1, wxALL|wxEXPAND, 5);
 	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Rotation:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT2"));
 	GridSizer1->Add(StaticText2, 1, wxALL|wxEXPAND, 5);
-	lblRotation = new wxStaticText(this, ID_lblRotation, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblRotation"));
+	lblRotation = new wxStaticText(this, ID_lblRotation, _T("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblRotation"));
 	GridSizer1->Add(lblRotation, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer5->Add(GridSizer1, 1, wxEXPAND, 5);
 	StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
@@ -126,12 +128,17 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	rRotation = new wxRadioButton(this, ID_rRotation, _("Rotation"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_rRotation"));
 	FlexGridSizer11->Add(rRotation, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer5->Add(FlexGridSizer11, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer14 = new wxFlexGridSizer(0, 2, 0, 0);
+	FlexGridSizer14 = new wxFlexGridSizer(0, 1, 0, 0);
+	FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText20 = new wxStaticText(this, ID_STATICTEXT28, _("Speed"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT28"));
-	FlexGridSizer14->Add(StaticText20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtMoveSpeed = new wxTextCtrl(this, ID_txtMoveSpeed, _("1.0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtMoveSpeed"));
+	FlexGridSizer2->Add(StaticText20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	txtMoveSpeed = new wxTextCtrl(this, ID_txtMoveSpeed, _T("1.0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtMoveSpeed"));
 	txtMoveSpeed->SetMinSize(wxSize(90,-1));
-	FlexGridSizer14->Add(txtMoveSpeed, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtMoveSpeed, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer14->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkRelative = new wxCheckBox(this, ID_chkRelative, _("Relative"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRelative"));
+	chkRelative->SetValue(true);
+	FlexGridSizer14->Add(chkRelative, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer5->Add(FlexGridSizer14, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer12 = new wxFlexGridSizer(0, 3, 0, 0);
 	FlexGridSizer12->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -161,21 +168,21 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	FlexGridSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText22 = new wxStaticText(this, ID_STATICTEXT21, _("X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT21"));
 	FlexGridSizer4->Add(StaticText22, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtPositionX = new wxTextCtrl(this, ID_txtPositionX, _("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionX"));
+	txtPositionX = new wxTextCtrl(this, ID_txtPositionX, _T("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionX"));
 	txtPositionX->SetMinSize(wxSize(90,-1));
 	FlexGridSizer4->Add(txtPositionX, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bPositionX = new wxButton(this, ID_bPositionX, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bPositionX"));
 	FlexGridSizer4->Add(bPositionX, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText23 = new wxStaticText(this, ID_STATICTEXT22, _("Y:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT22"));
 	FlexGridSizer4->Add(StaticText23, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtPositionY = new wxTextCtrl(this, ID_txtPositionY, _("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionY"));
+	txtPositionY = new wxTextCtrl(this, ID_txtPositionY, _T("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionY"));
 	txtPositionY->SetMinSize(wxSize(90,-1));
 	FlexGridSizer4->Add(txtPositionY, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bPositionY = new wxButton(this, ID_bPositionY, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bPositionY"));
 	FlexGridSizer4->Add(bPositionY, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText24 = new wxStaticText(this, ID_STATICTEXT23, _("Z:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT23"));
 	FlexGridSizer4->Add(StaticText24, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtPositionZ = new wxTextCtrl(this, ID_txtPositionZ, _("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionZ"));
+	txtPositionZ = new wxTextCtrl(this, ID_txtPositionZ, _T("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtPositionZ"));
 	txtPositionZ->SetMinSize(wxSize(90,-1));
 	FlexGridSizer4->Add(txtPositionZ, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bPositionZ = new wxButton(this, ID_bPositionZ, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bPositionZ"));
@@ -188,21 +195,21 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	FlexGridSizer7 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText25 = new wxStaticText(this, ID_STATICTEXT24, _("X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT24"));
 	FlexGridSizer7->Add(StaticText25, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtRotationX = new wxTextCtrl(this, ID_txtRotationX, _("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationX"));
+	txtRotationX = new wxTextCtrl(this, ID_txtRotationX, _T("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationX"));
 	txtRotationX->SetMinSize(wxSize(90,-1));
 	FlexGridSizer7->Add(txtRotationX, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bRotationX = new wxButton(this, ID_bRotationX, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bRotationX"));
 	FlexGridSizer7->Add(bRotationX, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText26 = new wxStaticText(this, ID_STATICTEXT25, _("Y:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT25"));
 	FlexGridSizer7->Add(StaticText26, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtRotationY = new wxTextCtrl(this, ID_txtRotationY, _("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationY"));
+	txtRotationY = new wxTextCtrl(this, ID_txtRotationY, _T("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationY"));
 	txtRotationY->SetMinSize(wxSize(90,-1));
 	FlexGridSizer7->Add(txtRotationY, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bRotationY = new wxButton(this, ID_bRotationY, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bRotationY"));
 	FlexGridSizer7->Add(bRotationY, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText27 = new wxStaticText(this, ID_STATICTEXT26, _("Z:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT26"));
 	FlexGridSizer7->Add(StaticText27, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	txtRotationZ = new wxTextCtrl(this, ID_txtRotationZ, _("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationZ"));
+	txtRotationZ = new wxTextCtrl(this, ID_txtRotationZ, _T("0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtRotationZ"));
 	txtRotationZ->SetMinSize(wxSize(90,-1));
 	FlexGridSizer7->Add(txtRotationZ, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bRotationZ = new wxButton(this, ID_bRotationZ, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bRotationZ"));
@@ -214,25 +221,24 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	FlexGridSizer9->Add(StaticBoxSizer4, 1, wxTOP|wxBOTTOM|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer9, 1, wxALIGN_RIGHT|wxALIGN_TOP, 5);
 	SetSizer(FlexGridSizer1);
-	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
 
-	Connect(ID_rPosition,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&MoveObject::On_rPosition_Select);
-	Connect(ID_rRotation,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&MoveObject::On_rRotation_Select);
-	Connect(ID_bZPlus,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bZPlus_Click);
-	Connect(ID_bYPlus,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bYPlus_Click);
-	Connect(ID_bXNeg,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bXNeg_Click);
-	Connect(ID_chkHold,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MoveObject::On_chkHold_Click);
-	Connect(ID_bXPlus,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bXPlus_Click);
-	Connect(ID_bZNeg,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bZNeg_Click);
-	Connect(ID_bYNeg,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bYNeg_Click);
-	Connect(ID_bPositionX,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bPositionX_Click);
-	Connect(ID_bPositionY,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bPositionY_Click);
-	Connect(ID_bPositionZ,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bPositionZ_Click);
-	Connect(ID_bRotationX,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bRotationX_Click);
-	Connect(ID_bRotationY,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bRotationY_Click);
-	Connect(ID_bRotationZ,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bRotationZ_Click);
+	Connect(ID_rPosition, wxEVT_COMMAND_RADIOBUTTON_SELECTED, (wxObjectEventFunction)&MoveObject::On_rPosition_Select);
+	Connect(ID_rRotation, wxEVT_COMMAND_RADIOBUTTON_SELECTED, (wxObjectEventFunction)&MoveObject::On_rRotation_Select);
+	Connect(ID_bZPlus, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bZPlus_Click);
+	Connect(ID_bYPlus, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bYPlus_Click);
+	Connect(ID_bXNeg, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bXNeg_Click);
+	Connect(ID_chkHold, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MoveObject::On_chkHold_Click);
+	Connect(ID_bXPlus, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bXPlus_Click);
+	Connect(ID_bZNeg, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bZNeg_Click);
+	Connect(ID_bYNeg, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bYNeg_Click);
+	Connect(ID_bPositionX, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bPositionX_Click);
+	Connect(ID_bPositionY, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bPositionY_Click);
+	Connect(ID_bPositionZ, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bPositionZ_Click);
+	Connect(ID_bRotationX, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bRotationX_Click);
+	Connect(ID_bRotationY, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bRotationY_Click);
+	Connect(ID_bRotationZ, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MoveObject::On_bRotationZ_Click);
 	//*)
 	object_num = object_number;
 	object = 0;
@@ -311,19 +317,22 @@ void MoveObject::On_rRotation_Select(wxCommandEvent& event)
 
 void MoveObject::On_bZPlus_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
+
+	Vector3 vector = Vector3(0, 0, 1);
+	Real speed = atof(txtMoveSpeed->GetValue());
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
+		hold_vector += Vector3(0, 0, speed);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(0, 0, 1) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bYPlus_Click(wxCommandEvent& event)
@@ -331,16 +340,19 @@ void MoveObject::On_bYPlus_Click(wxCommandEvent& event)
 	if (!Simcore)
 		return;
 
+	Vector3 vector = Vector3(0, 1, 0);
+	Real speed = atof(txtMoveSpeed->GetValue());
+
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
+		hold_vector += Vector3(0, speed, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(0, 1, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bXNeg_Click(wxCommandEvent& event)
@@ -348,16 +360,19 @@ void MoveObject::On_bXNeg_Click(wxCommandEvent& event)
 	if (!Simcore)
 		return;
 
+	Vector3 vector = Vector3(-1, 0, 0);
+	Real speed = atof(txtMoveSpeed->GetValue());
+
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
+		hold_vector -= Vector3(speed, 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(-1, 0, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bXPlus_Click(wxCommandEvent& event)
@@ -365,16 +380,19 @@ void MoveObject::On_bXPlus_Click(wxCommandEvent& event)
 	if (!Simcore)
 		return;
 
+	Vector3 vector = Vector3(1, 0, 0);
+	Real speed = atof(txtMoveSpeed->GetValue());
+
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
+		hold_vector += Vector3(speed, 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(1, 0, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bZNeg_Click(wxCommandEvent& event)
@@ -382,16 +400,19 @@ void MoveObject::On_bZNeg_Click(wxCommandEvent& event)
 	if (!Simcore)
 		return;
 
+	Vector3 vector = Vector3(0, 0, -1);
+	Real speed = atof(txtMoveSpeed->GetValue());
+
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
+		hold_vector -= Vector3(0, 0, speed);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(0, 0, -1) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bYNeg_Click(wxCommandEvent& event)
@@ -399,52 +420,55 @@ void MoveObject::On_bYNeg_Click(wxCommandEvent& event)
 	if (!Simcore)
 		return;
 
+	Vector3 vector = Vector3(0, -1, 0);
+	Real speed = atof(txtMoveSpeed->GetValue());
+
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
+		hold_vector -= Vector3(0, speed, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(0, -1, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bPositionX_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Vector3(atof(txtPositionX->GetValue()), 0.0, 0.0), false, true, false, false);
+		Simcore->MoveObject(object, Vector3(atof(txtPositionX->GetValue()), 0.0, 0.0), chkRelative->GetValue(), true, false, false);
 }
 
 void MoveObject::On_bPositionY_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Vector3(0.0, atof(txtPositionY->GetValue()), 0.0), false, false, true, false);
+		Simcore->MoveObject(object, Vector3(0.0, atof(txtPositionY->GetValue()), 0.0), chkRelative->GetValue(), false, true, false);
 }
 
 void MoveObject::On_bPositionZ_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Vector3(0.0, 0.0, atof(txtPositionZ->GetValue())), false, false, false, true);
+		Simcore->MoveObject(object, Vector3(0.0, 0.0, atof(txtPositionZ->GetValue())), chkRelative->GetValue(), false, false, true);
 }
 
 void MoveObject::On_bRotationX_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Vector3(atof(txtRotationX->GetValue()), 0.0, 0.0), 0, false, true, false, false);
+		Simcore->RotateObject(object, Vector3(atof(txtRotationX->GetValue()), 0.0, 0.0), 0, chkRelative->GetValue(), true, false, false);
 }
 
 void MoveObject::On_bRotationY_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Vector3(0.0, atof(txtRotationY->GetValue()), 0.0), 0, false, false, true, false);
+		Simcore->RotateObject(object, Vector3(0.0, atof(txtRotationY->GetValue()), 0.0), 0, chkRelative->GetValue(), false, true, false);
 }
 
 void MoveObject::On_bRotationZ_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Vector3(0.0, 0.0, atof(txtRotationZ->GetValue())), 0, false, false, false, true);
+		Simcore->RotateObject(object, Vector3(0.0, 0.0, atof(txtRotationZ->GetValue())), 0, chkRelative->GetValue(), false, false, true);
 }
 
 void MoveObject::On_chkHold_Click(wxCommandEvent& event)
