@@ -311,7 +311,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 	if (command == "uname")
 	{
 		if (params.size() > 0)
-			Report("VM " + vm->version + " " + vm->version_state + " (" + vm->Architecture + " " + vm->Bits + ")");
+			Report("VM " + vm->version + " " + vm->version_state + " (" + vm->Architecture + " " + vm->Bits + "), build " + vm->version_rev);
 		else
 			Report("VM");
 		consoleresult.ready = false;
