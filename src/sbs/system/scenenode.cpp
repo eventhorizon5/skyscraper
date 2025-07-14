@@ -234,15 +234,20 @@ void SceneNode::SetOrientation(const Quaternion &q, bool relative)
 	Update();
 }
 
-void SceneNode::Move(const Vector3 &vector, Real speed)
+void SceneNode::Move(const Vector3 &vector, Real speed, bool local)
 {
 	//move this scene node
+	//if local is true, transform based on local space instead of parent space
 
 	if (!node)
 		return;
 
 	Vector3 v = vector * speed;
-	node->translate(sbs->ToRemote(v));
+	//by default, move based on parent transformation
+	if (local == false)
+		node->translate(sbs->ToRemote(v), Ogre::Node::TS_PARENT);
+	else
+		node->translate(sbs->ToRemote(v), Ogre::Node::TS_LOCAL);
 
 	Update();
 }

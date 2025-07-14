@@ -256,7 +256,7 @@ void Object::ShowBoundingBox(bool value)
 		node->ShowBoundingBox(value);
 }
 
-void Object::Move(const Vector3 &vector, Real speed)
+void Object::Move(const Vector3 &vector, Real speed, bool local)
 {
 	//move an object
 
@@ -265,16 +265,16 @@ void Object::Move(const Vector3 &vector, Real speed)
 	if (!node)
 		return;
 
-	node->Move(vector, speed);
+	node->Move(vector, speed, local);
 
 	//notify about movement
 	NotifyMove();
 }
 
-void Object::Move(Real X, Real Y, Real Z, Real speed)
+void Object::Move(Real X, Real Y, Real Z, Real speed, bool local)
 {
 	Vector3 pos (X, Y, Z);
-	Move(pos, speed);
+	Move(pos, speed, local);
 }
 
 void Object::SetPosition(const Vector3 &position)

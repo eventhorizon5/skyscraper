@@ -77,8 +77,8 @@ public:
 	void RemoveChild(Object *object);
 	SceneNode* GetSceneNode();
 	void ShowBoundingBox(bool value);
-	virtual void Move(const Vector3 &vector, Real speed = 1.0);
-	virtual void Move(Real X, Real Y, Real Z, Real speed = 1.0);
+	virtual void Move(const Vector3 &vector, Real speed = 1.0, bool local = false);
+	virtual void Move(Real X, Real Y, Real Z, Real speed = 1.0, bool local = false);
 	virtual void SetPosition(const Vector3 &position);
 	void SetPositionRelative(const Vector3 &position);
 	virtual void SetPosition(Real X, Real Y, Real Z);

@@ -44,7 +44,7 @@ public:
 	void Update();
 	Quaternion GetOrientation(bool relative = false);
 	void SetOrientation(const Quaternion &q, bool relative = false);
-	void Move(const Vector3 &vector, Real speed = 1.0);
+	void Move(const Vector3 &vector, Real speed = 1.0, bool local = false);
 	void DetachAllObjects();
 	void AttachObject(Ogre::MovableObject *object);
 	void DetachObject(Ogre::MovableObject *object);
