@@ -54,7 +54,6 @@
 #endif
 #include "profiler.h"
 #include "startscreen.h"
-#include "gitrev.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #include <sysdir.h>  // for sysdir_start_search_path_enumeration
@@ -178,11 +177,6 @@ bool Skyscraper::OnInit()
 	//create VM instance
 	vm = new VM();
 
-	vm->version = "2.0";
-	vm->version_rev = ToString(GIT_REV);
-	vm->version_state = "RC4";
-	vm->version_frontend = vm->version + ".0." + vm->version_rev;
-
 #ifdef USING_WX
 	gui = vm->GetGUI();
 #endif
@@ -212,7 +206,7 @@ bool showconsole = true;
 	//show version number and exit if specified
 	if (parser->Found(wxT("version")) == true)
 	{
-		printf("Skyscraper version %s\n", vm->version_frontend.c_str());
+		printf("Skyscraper version %s\n", vm->version_full.c_str());
 		return false;
 	}
 

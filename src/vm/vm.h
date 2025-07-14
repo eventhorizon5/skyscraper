@@ -127,7 +127,7 @@ public:
 	std::string version;
 	std::string version_rev;
 	std::string version_state;
-	std::string version_frontend;
+	std::string version_full;
 
 	std::string Bits;
 	std::string Platform;

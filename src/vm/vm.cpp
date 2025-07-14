@@ -41,6 +41,7 @@
 #include "sky.h"
 #include "gui.h"
 #include "profiler.h"
+#include "gitrev.h"
 #include "vmconsole.h"
 
 using namespace SBS;
@@ -74,6 +75,11 @@ VM::VM()
 
 	macos_major = 0;
 	macos_minor = 0;
+
+	version = "2.0";
+	version_rev = ToString(GIT_REV);
+	version_state = "RC4";
+	version_full = version + ".0." + version_rev;
 
 	//create HAL instance
 	hal = new HAL(this);
