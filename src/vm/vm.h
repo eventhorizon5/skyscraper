@@ -115,6 +115,7 @@ public:
 	unsigned long Uptime();
 	unsigned long GetElapsedTime(int instance);
 	void ListPlayingSounds();
+	int GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, int &objects, int &walls, int &polygons);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering

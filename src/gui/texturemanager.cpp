@@ -280,7 +280,10 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 		{
 			tWidth->SetValue(SBS::ToString((int)tex->getWidth()));
 			tHeight->SetValue(SBS::ToString((int)tex->getHeight()));
-			tMipMaps->SetValue(SBS::ToString((int)tex->getNumMipmaps()));
+			if (tex->getNumMipmaps() == Ogre::MIP_UNLIMITED)
+				tMipMaps->SetValue("Unlimited");
+			else
+				tMipMaps->SetValue(SBS::ToString((int)tex->getNumMipmaps()));
 			tMemory->SetValue(SBS::ToString((int)tex->getSize()));
 
 			if (tex->hasAlpha() == true)

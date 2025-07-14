@@ -177,7 +177,8 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 		converted_vertices = vertices;
 
 	//texture mapping
-	Vector2 *table = GetTexels(tex_matrix, tex_vector, converted_vertices, tw, th);
+	size_t texel_count;
+	Vector2 *table = GetTexels(tex_matrix, tex_vector, converted_vertices, tw, th, texel_count);
 
 	//triangulate mesh
 	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
@@ -213,6 +214,9 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 
 			geometry[i][j].vertex = converted_vertices[i][j];
 			geometry[i][j].normal = normal;
+
+			if (k >= texel_count)
+				return ReportError("PolyMesh: invalid texel index");
 			geometry[i][j].texel = table[k];
 			k++;
 		}
@@ -249,28 +253,29 @@ bool PolyMesh::CreateMesh(const std::string &name, const std::string &material, 
 	return true;
 }
 
-Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th)
+Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th, size_t &texel_count)
 {
 	//return texel array for specified texture transformation matrix and vector
+
+	texel_count = 0;
 
 	if (sbs->TexelOverride == false)
 	{
 		//create array for texel map
-		size_t texel_count = 0;
 		for (size_t i = 0; i < vertices.size(); i++)
 			texel_count += vertices[i].size();
 		Vector2 *texels = new Vector2[texel_count];
 
 		//transform matrix into texel map
 		size_t index = 0;
-		Vector3 texel_temp;
+		Vector3 texel;
 		for (size_t i = 0; i < vertices.size(); i++)
 		{
 			for (size_t j = 0; j < vertices[i].size(); j++)
 			{
-				texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
-				texels[index].x = texel_temp.x;
-				texels[index].y = texel_temp.y;
+				texel = tex_matrix * (vertices[i][j] - tex_vector);
+				texels[index].x = texel.x;
+				texels[index].y = texel.y;
 				index++;
 			}
 		}
@@ -278,6 +283,7 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 	}
 	else
 	{
+		texel_count = 4;
 		Vector2 *texels = new Vector2[4];
 		texels[0].x = 0;
 		texels[0].y = 0;

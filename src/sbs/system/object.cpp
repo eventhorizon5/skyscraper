@@ -188,6 +188,9 @@ int Object::GetNumber()
 
 void Object::AddChild(Object *object)
 {
+	if (!object)
+		return;
+
 	//add a child object to the internal array
 	children.emplace_back(object);
 
@@ -204,6 +207,9 @@ void Object::AddChild(Object *object)
 
 void Object::RemoveChild(Object *object)
 {
+	if (!object)
+		return;
+
 	//remove a child object in the internal array
 	if (GetChildrenCount() > 0)
 	{
@@ -544,6 +550,9 @@ void Object::RegisterLoop(Object *object)
 {
 	//register a child object dynamic runloop
 
+	if (!object)
+		return;
+
 	for (size_t i = 0; i < runloops.size(); i++)
 	{
 		if (runloops[i] == object)
@@ -556,6 +565,9 @@ void Object::RegisterLoop(Object *object)
 void Object::UnregisterLoop(Object *object)
 {
 	//unregister a child object dynamic runloop
+
+	if (!object)
+		return;
 
 	if (runloops.empty())
 		return;
@@ -582,7 +594,8 @@ void Object::LoopChildren()
 
 	for (size_t i = 0; i < runloops.size(); i++)
 	{
-		runloops[i]->Loop();
+		if (runloops[i])
+			runloops[i]->Loop();
 	}
 }
 

@@ -92,6 +92,7 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	EnabledGroup = false;
 	EnabledGroup_Floor = 0;
 	AltitudeSet = false;
+	callstation_index = 1;
 
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
@@ -586,7 +587,7 @@ CallStation* Floor::AddCallButtons(int controller, const std::string &sound_file
 			return 0;
 	}
 
-	CallStation *station = AddCallStation(0);
+	CallStation *station = AddCallStation(callstation_index++);
 	station->SetController(controller);
 	station->CreateCallButtons(sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, direction, BackWidth, BackHeight, ShowBack, tw, th);
 

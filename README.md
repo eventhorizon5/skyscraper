@@ -267,6 +267,12 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 -sounds can now be disabled in the Sound Manager
 
+-building loads can now be cancelled via the progress dialog
+
+-the progress dialog now shows the elapsed and estimated building load times
+
+-the Triton Center building now has a map screen in the lobby service area, and the new Skyscraper 2.1 intro music in the 135th floor Grand Ballroom
+
 -lots of fixes
 
 

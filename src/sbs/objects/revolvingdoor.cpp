@@ -51,6 +51,9 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	brake = false;
 	this->run = false;
 
+	//register with engine
+	sbs->RegisterRevolvingDoor(this);
+
 	//set speed to default value if invalid
 	if (Speed <= 0)
 		Speed = sbs->GetConfigFloat("Skyscraper.SBS.RevolvingDoorSpeed", 75.0);
@@ -131,6 +134,8 @@ RevolvingDoor::~RevolvingDoor()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
+		sbs->UnregisterRevolvingDoor(this);
+
 		if (parent_deleting == false)
 		{
 			std::string type = GetParent()->GetType();
@@ -203,6 +208,8 @@ void RevolvingDoor::MoveDoor()
 			rotation += Speed * sbs->delta;
 		else if (run == false)
 			brake = !brake;
+		else if (rotation > Speed)
+			rotation -= Speed * sbs->delta;
 	}
 	else if ((Clockwise == false && brake == false) || (Clockwise == true && brake == true))
 	{
@@ -210,6 +217,8 @@ void RevolvingDoor::MoveDoor()
 			rotation -= Speed * sbs->delta;
 		else if (run == false)
 			brake = !brake;
+		else if (rotation < -Speed)
+			rotation += Speed * sbs->delta;
 	}
 
 	if (brake == true)
@@ -256,6 +265,13 @@ void RevolvingDoor::Run(bool value)
 		OnHit();
 	else
 		brake = true;
+}
+
+bool RevolvingDoor::GetRun()
+{
+	//get run state of revolving door
+
+	return run;
 }
 
 }
