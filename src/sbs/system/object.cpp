@@ -335,7 +335,7 @@ Vector3 Object::GetPosition(bool relative)
 	return node->GetPosition(relative);
 }
 
-void Object::SetRotation(const Vector3 &rotation)
+void Object::SetRotation(const Vector3 &rotation, bool relative)
 {
 	//rotate object
 
@@ -344,30 +344,30 @@ void Object::SetRotation(const Vector3 &rotation)
 	if (!node)
 		return;
 
-	node->SetRotation(rotation);
+	node->SetRotation(rotation, relative);
 
 	//notify about rotation
 	NotifyRotate();
 }
 
-void Object::SetRotation(Real X, Real Y, Real Z)
+void Object::SetRotation(Real X, Real Y, Real Z, bool relative)
 {
 	Vector3 rot (X, Y, Z);
-	SetRotation(rot);
+	SetRotation(rot, relative);
 }
 
-void Object::Rotate(const Vector3 &vector, Real speed)
+void Object::Rotate(const Vector3 &vector, Real speed, bool relative)
 {
 	//rotates object in a relative amount
 
 	Vector3 rot = GetRotation() + (vector * speed);
-	SetRotation(rot);
+	SetRotation(rot, relative);
 }
 
-void Object::Rotate(Real X, Real Y, Real Z, Real speed)
+void Object::Rotate(Real X, Real Y, Real Z, Real speed, bool relative)
 {
 	Vector3 rot (X, Y, Z);
-	Rotate(rot, speed);
+	Rotate(rot, speed, relative);
 }
 
 Vector3 Object::GetRotation()

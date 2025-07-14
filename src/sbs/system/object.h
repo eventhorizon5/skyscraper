@@ -85,10 +85,10 @@ public:
 	void SetPositionRelative(Real X, Real Y, Real Z);
 	virtual void SetPositionY(Real value);
 	virtual Vector3 GetPosition(bool relative = false);
-	virtual void Rotate(const Vector3 &vector, Real speed = 1.0);
-	virtual void Rotate(Real X, Real Y, Real Z, Real speed = 1.0);
-	virtual void SetRotation(const Vector3 &rotation);
-	virtual void SetRotation(Real X, Real Y, Real Z);
+	virtual void Rotate(const Vector3 &vector, Real speed = 1.0, bool relative = true);
+	virtual void Rotate(Real X, Real Y, Real Z, Real speed = 1.0, bool relative = true);
+	virtual void SetRotation(const Vector3 &rotation, bool relative = true);
+	virtual void SetRotation(Real X, Real Y, Real Z, bool relative = true);
 	virtual Vector3 GetRotation();
 	Quaternion GetOrientation(bool relative = false);
 	void SetOrientation(const Quaternion &q, bool relative = false);
