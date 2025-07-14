@@ -342,7 +342,7 @@ bool HAL::Initialize(const std::string &data_path, Ogre::Root *root, Ogre::Overl
 			}
 
 			//report on system startup
-			Report("Skyscraper version " + vm->version_frontend + " starting...\n", "");
+			Report("Skyscraper version " + vm->version_full + " starting...\n", "");
 
 			//load OGRE
 			Report("Loading OGRE...");
