@@ -3086,15 +3086,15 @@ Real ElevatorCar::SetHeight()
 
 		//position sounds at top of elevator car
 		Vector3 top = Vector3(0, Height, 0);
-		idlesound->SetPositionRelative(top);
-		alarm->SetPositionRelative(top);
-		floorbeep->SetPositionRelative(top);
-		announcesnd->SetPositionRelative(top);
+		idlesound->SetPosition(top, true);
+		alarm->SetPosition(top, true);
+		floorbeep->SetPosition(top, true);
+		announcesnd->SetPosition(top, true);
 
 		//set default music position to elevator height
 		if (MusicPosition == Vector3(0, 0, 0) && Height > 0)
 			MusicPosition = top;
-		musicsound->SetPositionRelative(MusicPosition);
+		musicsound->SetPosition(MusicPosition, true);
 	}
 
 	return Height;

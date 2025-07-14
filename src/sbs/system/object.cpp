@@ -277,43 +277,23 @@ void Object::Move(Real X, Real Y, Real Z, Real speed, bool local)
 	Move(pos, speed, local);
 }
 
-void Object::SetPosition(const Vector3 &position)
+void Object::SetPosition(const Vector3 &position, bool relative)
 {
 	//set position of object
 
 	if (!node)
 		return;
 
-	node->SetPosition(position);
+	node->SetPosition(position, relative);
 
 	//notify about movement
 	NotifyMove();
 }
 
-void Object::SetPositionRelative(const Vector3 &position)
-{
-	//set position of object
-	//position is relative of parent object
-
-	if (!node)
-		return;
-
-	node->SetPositionRelative(position);
-
-	//notify about movement
-	NotifyMove();
-}
-
-void Object::SetPosition(Real X, Real Y, Real Z)
+void Object::SetPosition(Real X, Real Y, Real Z, bool relative)
 {
 	Vector3 pos (X, Y, Z);
-	SetPosition(pos);
-}
-
-void Object::SetPositionRelative(Real X, Real Y, Real Z)
-{
-	Vector3 pos (X, Y, Z);
-	SetPositionRelative(pos);
+	SetPosition(pos, relative);
 }
 
 void Object::SetPositionY(Real value)
