@@ -278,8 +278,8 @@ void VMConsole::Process(const std::string &text, bool echo)
 	//version command
 	if (command == "version")
 	{
-		Report("Skyscraper Frontend version " + vm->version_frontend + " " + vm->version_state);
-		Report("VM version " + vm->version);
+		Report("Skyscraper Frontend version " + vm->version + " " + vm->version_state);
+		Report("VM version " + vm->version_frontend);
 		if (processor)
 			Report("SBS version " + processor->GetEngine()->GetSystem()->version);
 		else
