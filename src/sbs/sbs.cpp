@@ -1413,14 +1413,20 @@ void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &va
 		std::string NewName = name;
 		if (DrawMainP == true)
 			NewName.append(":0");
-		wallobject->AddPolygon(NewName, texture, varray1, tw, th, true);
+		std::string final_texture = texture;
+		if (texturemanager->TextureOverride == true)
+			final_texture = texturemanager->mainnegtex;
+		wallobject->AddPolygon(NewName, final_texture, varray1, tw, th, true);
 	}
 	if (DrawMainP == true)
 	{
 		std::string NewName = name;
 		if (DrawMainN == true)
 			NewName.append(":1");
-		wallobject->AddPolygon(NewName, texture, varray2, tw, th, true);
+		std::string final_texture = texture;
+		if (texturemanager->TextureOverride == true)
+			final_texture = texturemanager->mainpostex;
+		wallobject->AddPolygon(NewName, final_texture, varray2, tw, th, true);
 	}
 }
 
