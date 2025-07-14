@@ -39,7 +39,7 @@ public:
 	void SetPosition(const Vector3 &position);
 	void SetPositionRelative(const Vector3 &position);
 	Vector3 GetPosition(bool relative = false);
-	void SetRotation(const Vector3 &rotation);
+	void SetRotation(const Vector3 &rotation, bool relative = true);
 	Vector3 GetRotation();
 	void Update();
 	Quaternion GetOrientation(bool relative = false);

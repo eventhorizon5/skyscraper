@@ -145,7 +145,7 @@ Vector3 SceneNode::GetPosition(bool relative)
 	return sbs->ToLocal(node->getPosition());
 }
 
-void SceneNode::SetRotation(const Vector3 &rotation)
+void SceneNode::SetRotation(const Vector3 &rotation, bool relative)
 {
 	//set rotation of scene node in degrees
 	//this sets the rotation of all three vectors
@@ -173,7 +173,7 @@ void SceneNode::SetRotation(const Vector3 &rotation)
 	Quaternion z(Degree(Rotation.z), Vector3::UNIT_Z);
 	Quaternion rot = x * y * z;
 
-	SetOrientation(rot, true);
+	SetOrientation(rot, relative);
 }
 
 Vector3 SceneNode::GetRotation()
