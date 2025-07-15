@@ -1303,7 +1303,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		if (!Simcore->Mount(tempdata[0], tempdata[1]))
+		if (!Simcore->GetUtility()->Mount(tempdata[0], tempdata[1]))
 			return ScriptError();
 
 		return sNextLine;

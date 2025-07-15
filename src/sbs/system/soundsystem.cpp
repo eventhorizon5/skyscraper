@@ -252,8 +252,8 @@ SoundData* SoundSystem::Load(const std::string &filename)
 	//load new sound
 	std::string full_filename1 = "data/";
 	full_filename1.append(filename);
-	std::string processed = sbs->VerifyFile(full_filename1);
-	std::string full_filename = sbs->GetFilesystemPath(processed);
+	std::string processed = sbs->GetUtility()->VerifyFile(full_filename1);
+	std::string full_filename = sbs->GetUtility()->GetFilesystemPath(processed);
 
 #if (FMOD_VERSION >> 16 == 4)
 	FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &data->sound);

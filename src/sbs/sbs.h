@@ -218,7 +218,6 @@ public:
 	void EnableExternal(bool value);
 	void EnableSkybox(bool value);
 	int GetFloorNumber(Real altitude, int lastfloor = 0, bool checklastfloor = false);
-	Real GetDistance(Real x1, Real x2, Real z1, Real z2);
 	Shaft* CreateShaft(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	Stairwell* CreateStairwell(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	Elevator* NewElevator(int number);
@@ -252,7 +251,6 @@ public:
 	bool UnregisterTimerCallback(TimerObject *timer);
 	void ProcessTimers();
 	int GetTimerCallbackCount();
-	bool Mount(const std::string &filename, const std::string &path);
 	void AddFloorAutoArea(Vector3 start, Vector3 end);
 	int GetMeshCount();
 	Sound* AddSound(const std::string &name, const std::string &filename, const Vector3 &position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, const Vector3 &direction = Vector3(0, 0, 0));
@@ -293,9 +291,6 @@ public:
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	void RemoveController(DispatchController *controller);
-	std::string VerifyFile(const std::string &filename);
-	std::string VerifyFile(std::string filename, bool &result, bool skip_cache);
-	bool FileExists(const std::string &filename);
 	int GetWallCount();
 	int GetPolygonCount();
 	void AddMeshHandle(MeshObject* handle);
@@ -319,9 +314,7 @@ public:
 	unsigned long GetRunTime();
 	unsigned long GetElapsedTime();
 	unsigned long GetAverageTime();
-	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void ShowColliders(bool value);
-	void CacheFilename(const std::string &filename, const std::string &result);
 	void SetLighting(Real red = 1.0, Real green = 1.0, Real blue = 1.0);
 	void ResetLighting();
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
@@ -395,7 +388,6 @@ public:
 	void UnregisterCameraTexture(CameraTexture *camtex);
 	int GetCameraTextureCount();
 	CameraTexture* GetCameraTexture(int number);
-	std::string GetFilesystemPath(std::string filename);
 	Utility* GetUtility();
 	GeometryController* GetGeometry();
 	void MemoryReport();
@@ -557,13 +549,6 @@ private:
 	//config file
 	Ogre::ConfigFile *configfile;
 
-	struct VerifyResult
-	{
-		std::string filename;
-		std::string result;
-	};
-	std::vector<VerifyResult> verify_results;
-
 	//keys
 	struct Key
 	{
@@ -575,9 +560,6 @@ private:
 
 	//index of all controls used for action deletion callback
 	std::vector<Control*> control_index;
-
-	//file listing cache
-	Ogre::StringVectorPtr filesystem_listing;
 
 	//sim engine area trigger
 	Trigger *area_trigger;

@@ -236,10 +236,10 @@ void SBS::Initialize()
 	*/
 
 	//mount sign texture packs
-	Mount("signs-sans.zip", "signs/sans");
-	Mount("signs-sans_bold.zip", "signs/sans_bold");
-	Mount("signs-sans_cond.zip", "signs/sans_cond");
-	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
+	GetUtility()->Mount("signs-sans.zip", "signs/sans");
+	GetUtility()->Mount("signs-sans_bold.zip", "signs/sans_bold");
+	GetUtility()->Mount("signs-sans_cond.zip", "signs/sans_cond");
+	GetUtility()->Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
 
 	//create object meshes
 	Buildings = new MeshObject(this, "Buildings");
@@ -501,7 +501,6 @@ SBS::~SBS()
 	mWorld = 0;
 
 	ObjectArray.clear();
-	verify_results.clear();
 
 	if (utility)
 		delete utility;
@@ -1520,7 +1519,7 @@ void SBS::CreateSky()
 	if (InstanceNumber > 0)
 		return;
 
-	Mount("sky-" + SkyName + ".zip", "sky");
+	GetUtility()->Mount("sky-" + SkyName + ".zip", "sky");
 
 	//load textures
 	SetLighting();
@@ -1647,19 +1646,6 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 		if ((i == Floors - 1) && (altitude > GetFloor(i)->Altitude))
 			return i;
 	}
-	return 0;
-}
-
-Real SBS::GetDistance(Real x1, Real x2, Real z1, Real z2)
-{
-	//returns the distance between 2 2D vectors
-
-	if (z1 == z2)
-		return std::abs(x1 - x2);
-	if (x1 == x2)
-		return std::abs(z1 - z2);
-	if ((x1 != x2) && (z2 != x2))
-		return sqrt(pow(std::abs(x1 - x2), 2) + pow(std::abs(z1 - z2), 2)); //calculate diagonals
 	return 0;
 }
 
@@ -2164,25 +2150,6 @@ int SBS::GetTimerCallbackCount()
 	return (int)timercallbacks.size();
 }
 
-bool SBS::Mount(const std::string &filename, const std::string &path)
-{
-	//mounts a zip file into the virtual filesystem
-
-	std::string newfile = "data/" + filename;
-	std::string file = VerifyFile(newfile);
-
-	Report("Mounting " + file + " as path " + path);
-	try
-	{
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(file, "Zip", path, true);
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error mounting file " + file + "\n" + e.getDescription());
-	}
-	return true;
-}
-
 void SBS::AddFloorAutoArea(Vector3 start, Vector3 end)
 {
 	//adds an auto area that enables/disables floors
@@ -2359,81 +2326,32 @@ void SBS::DecrementReverbCount()
 
 Real SBS::ToLocal(Real remote_value)
 {
-	//convert remote (OGRE) vertex positions to local (SBS) positions
-
-	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
-	//this means that all Z values that use this function must be inverted.
-
-	return remote_value * UnitScale;
+	GetUtility()->ToLocal(remote_value);
 }
 
 Vector2 SBS::ToLocal(const Vector2& remote_value)
 {
-	//convert remote (OGRE) vertex positions to local (SBS) positions
-
-	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
-	//this means that all Z values that use this function must be inverted.
-
-	return remote_value * UnitScale;
+	GetUtility()->ToLocal(remote_value);
 }
 
 Vector3 SBS::ToLocal(const Vector3& remote_value, bool rescale, bool flip_z)
 {
-	//convert remote (OGRE) vertex positions to local (SBS) positions
-	//also convert Z value to OGRE's right-hand coordinate system
-
-	Vector3 newvalue;
-	newvalue.x = remote_value.x;
-	newvalue.y = remote_value.y;
-
-	if (flip_z == true)
-		newvalue.z = -remote_value.z; //flip z value for OGRE's right-hand coordinate system
-	else
-		newvalue.z = remote_value.z;
-
-	if (rescale == true)
-		return newvalue * UnitScale;
-	else
-		return newvalue;
+	GetUtility()->ToLocal(remote_value, rescale, flip_z);
 }
 
 Real SBS::ToRemote(Real local_value)
 {
-	//convert local (SBS) vertex positions to remote (OGRE) positions
-
-	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
-	//this means that all Z values that use this function must be inverted.
-
-	return local_value / UnitScale;
+	return GetUtility()->ToRemote(local_value);
 }
 
 Vector2 SBS::ToRemote(const Vector2& local_value)
 {
-	//convert local (SBS) vertex positions to remote (OGRE) positions
-
-	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
-	//this means that all Z values that use this function must be inverted.
-
-	return local_value / UnitScale;
+	return GetUtility()->ToRemote(local_value);
 }
 
 Vector3 SBS::ToRemote(const Vector3& local_value, bool rescale, bool flip_z)
 {
-	//convert local (SBS) vertex positions to remote (OGRE) positions
-
-	Vector3 newvalue;
-	newvalue.x = local_value.x;
-	newvalue.y = local_value.y;
-
-	if (flip_z == true)
-		newvalue.z = -local_value.z; //flip z value for OGRE's right-hand coordinate system
-	else
-		newvalue.z = local_value.z;
-
-	if (rescale == true)
-		return (newvalue / UnitScale);
-	else
-		return newvalue;
+	return GetUtility()->ToRemote(local_value, rescale, flip_z);
 }
 
 int SBS::GetObjectCount()
@@ -2906,155 +2824,6 @@ void SBS::RemoveController(DispatchController *controller)
 	controller_manager->Remove(controller);
 }
 
-std::string SBS::VerifyFile(const std::string &filename)
-{
-	bool result = false;
-	return VerifyFile(filename, result, false);
-}
-
-std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
-{
-	//verify a filename
-	//if it exists, return the same filename
-	//otherwise search the related folder and find a matching filename with a different
-	//case (fixes case-sensitivity issues mainly on Linux)
-	//returns the original string if not found
-	//"result" will return if the file exists or not, but only accurately if skip_cache is true
-
-	TrimString(filename);
-	ReplaceAll(filename, "\\", "/");
-	result = false;
-
-	//check for a cached result
-	if (skip_cache == false)
-	{
-		for (size_t i = 0; i < verify_results.size(); i++)
-		{
-			if (verify_results[i].filename == filename)
-				return verify_results[i].result;
-		}
-	}
-
-	//get filesystem archive
-	Ogre::Archive *filesystem = 0;
-	Ogre::ArchiveManager::ArchiveMapIterator it = Ogre::ArchiveManager::getSingleton().getArchiveIterator();
-	while(it.hasMoreElements())
-	{
-		const std::string& key = it.peekNextKey();
-		filesystem = it.getNext();
-
-		if (!filesystem)
-			return "";
-
-		//check for a mount point
-		Ogre::StringVectorPtr listing;
-		std::string shortname;
-		std::string group = GetMountPath(filename, shortname);
-
-		if (group == "General")
-		{
-			//for the General group, check the native filesystem
-
-			if (filesystem->exists(filename) == true)
-			{
-				//if exact filename exists, cache and exit
-				CacheFilename(filename, filename);
-				result = true;
-				return filename;
-			}
-
-			//otherwise get listing of files to check
-			if (!filesystem_listing)
-				filesystem_listing = filesystem->list();
-			listing = filesystem_listing;
-		}
-		else
-		{
-			//for other groups, check resource mount points
-
-			if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
-			{
-				//if exact filename exists, cache and exit
-				CacheFilename(filename, filename);
-				result = true;
-				return filename;
-			}
-
-			//otherwise get listing of files to check
-			listing = Ogre::ResourceGroupManager::getSingleton().listResourceNames(group);
-		}
-
-		//go through file listing, to find a match with a different case
-		for (size_t i = 0; i < listing->size(); i++)
-		{
-			std::string check = listing->at(i);
-			std::string checkoriginal = SetCaseCopy(check, false);
-			std::string checkfile = SetCaseCopy(filename, false);
-			if (checkoriginal == checkfile)
-			{
-				//if match is found, cache and exit
-				CacheFilename(filename, check);
-				result = true;
-				return check;
-			}
-		}
-	}
-
-	//if no match is found, cache original name and exit
-	CacheFilename(filename, filename);
-	return filename;
-}
-
-std::string SBS::GetFilesystemPath(std::string filename)
-{
-	//returns the filesystem path for the specified file
-	//the filename needs to be processed by VerifyFile first
-
-	TrimString(filename);
-	ReplaceAll(filename, "\\", "/");
-
-	//get filesystem archive
-	Ogre::Archive *filesystem = 0;
-	Ogre::ArchiveManager::ArchiveMapIterator it = Ogre::ArchiveManager::getSingleton().getArchiveIterator();
-	while(it.hasMoreElements())
-	{
-		const std::string& key = it.peekNextKey();
-		filesystem = it.getNext();
-
-		if (!filesystem)
-			return "";
-
-		//check for a mount point
-		std::string shortname;
-		std::string group = GetMountPath(filename, shortname);
-
-		if (group == "General")
-		{
-			//for the General group, check the native filesystem
-
-			if (filesystem->exists(filename) == true)
-			{
-				std::string path = key;
-				if (key == ".")
-					path = "";
-				return std::string(path + filename);
-			}
-		}
-	}
-
-	return "";
-}
-
-bool SBS::FileExists(const std::string &filename)
-{
-	//check to see if the specified file exists
-
-	bool result;
-	VerifyFile(filename, result, true);
-
-	return result;
-}
-
 int SBS::GetWallCount()
 {
 	//return total number of registered walls
@@ -3325,26 +3094,6 @@ void SBS::CalculateAverageTime()
 	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
 }
 
-std::string SBS::GetMountPath(std::string filename, std::string &newfilename)
-{
-	//get mountpoint (resource group) path of given file
-	//if not found, return "General"
-
-	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
-	ReplaceAll(filename, "\\", "/");
-	newfilename = filename;
-
-	for (size_t i = 0; i < list.size(); i++)
-	{
-		if (StartsWith(filename, list[i] + "/") == true)
-		{
-			newfilename = filename.substr(list[i].size() + 1);
-			return list[i];
-		}
-	}
-	return "General";
-}
-
 void SBS::ShowColliders(bool value)
 {
 	try
@@ -3357,15 +3106,6 @@ void SBS::ShowColliders(bool value)
 	{
 		ReportError("Error enabling/disabling collider shapes\n" + e.getDescription());
 	}
-}
-
-void SBS::CacheFilename(const std::string &filename, const std::string &result)
-{
-	//caches filename information for VerifyFile function
-	VerifyResult verify;
-	verify.filename = filename;
-	verify.result = result;
-	verify_results.emplace_back(verify);
 }
 
 void SBS::SetLighting(Real red, Real green, Real blue)
