@@ -639,11 +639,13 @@ Wall* Stairwell::Level::AddStairs(const std::string &name, const std::string &ri
 	std::string Direction = direction;
 	SetCase(Direction, false);
 
+	PolyMesh *polymesh = sbs->GetPolyMesh();
+
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
-		sbs->GetPolyMesh()->SetWallOrientation("right");
+		polymesh->SetWallOrientation("right");
 	if (Direction == "left" || Direction == "front")
-		sbs->GetPolyMesh()->SetWallOrientation("left");
+		polymesh->SetWallOrientation("left");
 
 	for (int i = 1; i <= num_stairs; i++)
 	{
@@ -664,14 +666,14 @@ Wall* Stairwell::Level::AddStairs(const std::string &name, const std::string &ri
 			pos = CenterX + ((treadsize * (num_stairs - 1)) / 2) - (treadsize * i);
 			buffer = base + "-riser";
 			if (i != num_stairs)
-				sbs->GetPolyMesh()->DrawWalls(true, true, true, true, false, true);
+				polymesh->DrawWalls(true, true, true, true, false, true);
 			else
-				sbs->GetPolyMesh()->DrawWalls(true, true, false, false, false, false);
+				polymesh->DrawWalls(true, true, false, false, false, false);
 			AddWall(wall, buffer, riser_texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
-				sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+				polymesh->DrawWalls(false, true, false, false, false, false);
 				AddFloor(wall, buffer, tread_texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
@@ -680,14 +682,14 @@ Wall* Stairwell::Level::AddStairs(const std::string &name, const std::string &ri
 			pos = CenterX - ((treadsize * (num_stairs - 1)) / 2) + (treadsize * i);
 			buffer = base + "-riser";
 			if (i != num_stairs)
-				sbs->GetPolyMesh()->DrawWalls(true, true, true, true, false, true);
+				polymesh->DrawWalls(true, true, true, true, false, true);
 			else
-				sbs->GetPolyMesh()->DrawWalls(true, true, false, false, false, false);
+				polymesh->DrawWalls(true, true, false, false, false, false);
 			AddWall(wall, buffer, riser_texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
-				sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+				polymesh->DrawWalls(false, true, false, false, false, false);
 				AddFloor(wall, buffer, tread_texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
@@ -696,14 +698,14 @@ Wall* Stairwell::Level::AddStairs(const std::string &name, const std::string &ri
 			pos = CenterZ + ((treadsize * (num_stairs - 1)) / 2) - (treadsize * i);
 			buffer = base + "-riser";
 			if (i != num_stairs)
-				sbs->GetPolyMesh()->DrawWalls(true, true, true, true, false, true);
+				polymesh->DrawWalls(true, true, true, true, false, true);
 			else
-				sbs->GetPolyMesh()->DrawWalls(true, true, false, false, false, false);
+				polymesh->DrawWalls(true, true, false, false, false, false);
 			AddWall(wall, buffer, riser_texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
-				sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+				polymesh->DrawWalls(false, true, false, false, false, false);
 				AddFloor(wall, buffer, tread_texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
@@ -712,19 +714,19 @@ Wall* Stairwell::Level::AddStairs(const std::string &name, const std::string &ri
 			pos = CenterZ - ((treadsize * (num_stairs - 1)) / 2) + (treadsize * i);
 			buffer = base + "-riser";
 			if (i != num_stairs)
-				sbs->GetPolyMesh()->DrawWalls(true, true, true, true, false, true);
+				polymesh->DrawWalls(true, true, true, true, false, true);
 			else
-				sbs->GetPolyMesh()->DrawWalls(true, true, false, false, false, false);
+				polymesh->DrawWalls(true, true, false, false, false, false);
 			AddWall(wall, buffer, riser_texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
-				sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+				polymesh->DrawWalls(false, true, false, false, false, false);
 				AddFloor(wall, buffer, tread_texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 	}
-	sbs->GetPolyMesh()->ResetWalls(true);
+	polymesh->ResetWalls(true);
 	sbs->GetTextureManager()->ResetTextureMapping();
 
 	return wall;
