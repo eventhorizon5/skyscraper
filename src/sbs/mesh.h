@@ -114,6 +114,7 @@ private:
 	Real restitution, friction, mass;
 	bool prepared;
 	bool wrapper_selfcreate;
+
 	bool LoadFromFile(const std::string &filename);
 	bool LoadColliderModel(Ogre::MeshPtr &collidermesh);
 
