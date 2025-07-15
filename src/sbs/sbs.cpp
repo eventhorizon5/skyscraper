@@ -1889,18 +1889,6 @@ int SBS::GetDrawWallsCount()
 	return sides;
 }
 
-Real SBS::MetersToFeet(Real meters)
-{
-	//converts meters to feet
-	return meters * 3.2808399;
-}
-
-Real SBS::FeetToMeters(Real feet)
-{
-	//converts feet to meters
-	return feet / 3.2808399;
-}
-
 Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th)
 {
 	//Adds a wall with the specified dimensions, to the specified mesh object

@@ -570,4 +570,16 @@ Wall* Utility::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, co
 	return 0;
 }
 
+Real Utility::MetersToFeet(Real meters)
+{
+	//converts meters to feet
+	return meters * 3.2808399;
+}
+
+Real Utility::FeetToMeters(Real feet)
+{
+	//converts feet to meters
+	return feet / 3.2808399;
+}
+
 }
