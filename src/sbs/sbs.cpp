@@ -2326,17 +2326,17 @@ void SBS::DecrementReverbCount()
 
 Real SBS::ToLocal(Real remote_value)
 {
-	GetUtility()->ToLocal(remote_value);
+	return GetUtility()->ToLocal(remote_value);
 }
 
 Vector2 SBS::ToLocal(const Vector2& remote_value)
 {
-	GetUtility()->ToLocal(remote_value);
+	return GetUtility()->ToLocal(remote_value);
 }
 
 Vector3 SBS::ToLocal(const Vector3& remote_value, bool rescale, bool flip_z)
 {
-	GetUtility()->ToLocal(remote_value, rescale, flip_z);
+	return GetUtility()->ToLocal(remote_value, rescale, flip_z);
 }
 
 Real SBS::ToRemote(Real local_value)
