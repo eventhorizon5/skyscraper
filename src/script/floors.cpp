@@ -1121,7 +1121,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 0; i <= 14; i++)
+		for (int i = 0; i <= 16; i++)
 		{
 			if (i == 1)
 				i = 5; //skip non-numeric parameters
@@ -1154,7 +1154,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			int direction = ToInt(tempdata[6]);
 			GetDirectionStrings(direction, face_direction, open_direction);
 
-			Door* door = level->AddDoor("", tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), 0, 0);
+			Door* door = level->AddDoor("", tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 
 			if (door)
 				door->SetLocked(config->lockvalue, config->keyvalue);
