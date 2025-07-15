@@ -123,7 +123,7 @@ TextureManager::~TextureManager()
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//first verify the filename
-	std::string filename2 = sbs->VerifyFile(filename);
+	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
 
 	//load texture
 	bool has_alpha = false;
@@ -164,7 +164,7 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 	for (size_t i = 0; i < filenames.size(); i++)
 	{
 		TrimString(filenames[i]);
-		filenames2.emplace_back(sbs->VerifyFile(filenames[i]));
+		filenames2.emplace_back(sbs->GetUtility()->VerifyFile(filenames[i]));
 	}
 
 	bool has_alpha = false;
@@ -221,9 +221,9 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//first verify the filenames
-	std::string filename2 = sbs->VerifyFile(filename);
-	std::string specular_filename2 = sbs->VerifyFile(specular_filename);
-	std::string blend_filename2 = sbs->VerifyFile(blend_filename);
+	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
+	std::string specular_filename2 = sbs->GetUtility()->VerifyFile(specular_filename);
+	std::string blend_filename2 = sbs->GetUtility()->VerifyFile(blend_filename);
 
 	//load texture
 	bool has_alpha = false, has_alpha2 = false;
@@ -380,7 +380,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	bool use_alpha_color = false;
 
 	//first verify the filename
-	std::string filename2 = sbs->VerifyFile(filename);
+	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
 
 	//load texture
 	bool has_alpha = false;
@@ -671,7 +671,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	std::string Origname = TrimStringCopy(origname);
 	std::string Text = TrimStringCopy(text);
 
-	std::string font_filename2 = sbs->VerifyFile(font_filename);
+	std::string font_filename2 = sbs->GetUtility()->VerifyFile(font_filename);
 
 	//load font
 	Ogre::FontPtr font;
@@ -807,7 +807,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	if (sbs->Verbose)
 		Report("AddTextToTexture: created texture '" + Name + "'");
 
-	sbs->CacheFilename(Name, Name);
+	sbs->GetUtility()->CacheFilename(Name, Name);
 	return true;
 }
 
@@ -2113,7 +2113,7 @@ Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mi
 		use_alpha_color = true;
 
 	//load the texture
-	std::string path = sbs->GetMountPath(filename2, filename2);
+	std::string path = sbs->GetUtility()->GetMountPath(filename2, filename2);
 	Ogre::TexturePtr mTex;
 	std::string texturename;
 	has_alpha = false;

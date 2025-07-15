@@ -33,6 +33,7 @@
 #include "dylib.hpp"
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "vm.h"
 #include "camera.h"
 #include "scenenode.h"
@@ -42,6 +43,7 @@
 #include "sky.h"
 #include "gui.h"
 #include "profiler.h"
+#include "gitrev.h"
 #include "vmconsole.h"
 
 using namespace SBS;
@@ -75,6 +77,11 @@ VM::VM()
 
 	macos_major = 0;
 	macos_minor = 0;
+
+	version = "2.1";
+	version_rev = ToString(GIT_REV);
+	version_state = "Alpha";
+	version_full = version + ".0." + version_rev;
 
 	//create HAL instance
 	hal = new HAL(this);
@@ -998,11 +1005,15 @@ dylib* VM::LoadLibrary(const std::string &name)
 
 unsigned long VM::Uptime()
 {
+	//get uptime of VM in milliseconds
+
 	return hal->GetCurrentTime();
 }
 
 unsigned long VM::GetElapsedTime(int instance)
 {
+	//get elapsed time (execution time) of the specified engine instance
+
 	if (instance >= engines.size())
 		return 0;
 	return engines[instance]->time_stat;
@@ -1014,6 +1025,9 @@ void VM::ListPlayingSounds()
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
+		if (!engines[i])
+			continue;
+
 		::SBS::SBS* Simcore = engines[i]->GetSystem();
 		
 		if (Simcore)
@@ -1024,6 +1038,40 @@ void VM::ListPlayingSounds()
 				Simcore->GetSoundSystem()->ShowPlayingTotal();
 		}
 	}
+}
+
+int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, int &objects, int &walls, int &polygons)
+{
+	meshes = 0;
+	textures = 0;
+	actions = 0;
+	sounds = 0;
+	objects = 0;
+	walls = 0;
+	polygons = 0;
+	int total = 0;
+
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		if (!engines[i])
+			continue;
+
+		::SBS::SBS* Simcore = engines[i]->GetSystem();
+
+		if (Simcore)
+		{
+			++total;
+			meshes += Simcore->GetMeshCount();
+			textures += Simcore->GetTextureCount();
+			actions += Simcore->GetActionCount();
+			sounds += Simcore->GetSoundCount();
+			objects += Simcore->GetObjectCount();
+			walls += Simcore->GetPolyMesh()->GetWallCount();
+			polygons += Simcore->GetPolyMesh()->GetPolygonCount();
+		}
+	}
+
+	return total;
 }
 
 }

@@ -243,6 +243,8 @@ void GUI::CreateProgressDialog(const std::string &message)
 		msg += "\n";
 		msg += message;
 		progdialog->Update(progdialog->GetValue(), msg);
+		progdialog->Fit();
+		progdialog->Center();
 	}
 
 	//stop control panel timer
@@ -263,7 +265,7 @@ void GUI::CloseProgressDialog()
 void GUI::ShowProgressDialog()
 {
 	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent(), wxPD_AUTO_HIDE|wxPD_APP_MODAL|wxPD_CAN_ABORT);
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent(), wxPD_AUTO_HIDE|wxPD_APP_MODAL|wxPD_CAN_ABORT|wxPD_ELAPSED_TIME|wxPD_ESTIMATED_TIME);
 
 	show_progress = false;
 }
@@ -274,7 +276,10 @@ bool GUI::UpdateProgress(int percent)
 	if (!progdialog)
 		return true;
 
-	return progdialog->Update(percent);
+	bool result = progdialog->Update(percent);
+	progdialog->Fit();
+	progdialog->Center();
+	return result;
 }
 
 bool GUI::ProgressCancelled()

@@ -546,15 +546,15 @@ bool MeshObject::LoadFromFile(const std::string &filename)
 
 	std::string filename1 = "data/";
 	filename1.append(filename);
-	std::string filename2 = sbs->VerifyFile(filename1);
-	std::string path = sbs->GetMountPath(filename2, filename2);
+	std::string filename2 = sbs->GetUtility()->VerifyFile(filename1);
+	std::string path = sbs->GetUtility()->GetMountPath(filename2, filename2);
 	std::string matname;
 
 	//load material file
 	try
 	{
 		matname = filename2.substr(0, filename2.length() - 5) + ".material";
-		std::string matname2 = sbs->VerifyFile(matname);
+		std::string matname2 = sbs->GetUtility()->VerifyFile(matname);
 		Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
 		Report("Loading material script " + matname2);
 		Ogre::MaterialManager::getSingleton().parseScript(stream, path);
@@ -618,8 +618,8 @@ bool MeshObject::LoadColliderModel(Ogre::MeshPtr &collidermesh)
 
 	std::string filename1 = "data/";
 	filename1.append(Filename);
-	std::string filename2 = sbs->VerifyFile(filename1);
-	std::string path = sbs->GetMountPath(filename2, filename2);
+	std::string filename2 = sbs->GetUtility()->VerifyFile(filename1);
+	std::string path = sbs->GetUtility()->GetMountPath(filename2, filename2);
 
 	//load collider model if physics is disabled
 	if (is_physical == false)
@@ -629,7 +629,7 @@ bool MeshObject::LoadColliderModel(Ogre::MeshPtr &collidermesh)
 		try
 		{
 			std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider.mesh";
-			colname2 = sbs->VerifyFile(colname);
+			colname2 = sbs->GetUtility()->VerifyFile(colname);
 			collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
 		}
 		catch (Ogre::Exception &e)

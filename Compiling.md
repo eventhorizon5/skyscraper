@@ -19,24 +19,18 @@ If building on a system with an ARM CPU (such as a Raspberry Pi), leave out the 
 Step 1 - build and install Bullet
 ----------
 
-#### Get Bullet source (my custom-patched version):
+#### Get Bullet source:
 
-    wget https://www.skyscrapersim.net/downloads/dev/other_apps/bullet.tar.bz2
-
-#### Extract Bullet:
-
-    tar xfvj bullet.tar.bz2
+    git clone https://github.com/eventhorizon5/bullet3.git bullet3
 
 #### Build and install Bullet:
 
-    cd bullet-svn
-    cmake . -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release
+    cd bullet3
+    cmake . -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release
     make -j4
     sudo make install
     make clean
     cd
-
-If you want to play around with the Bullet demos, remove the "-DBUILD_DEMOS=OFF" portion when running cmake above and then build it.
 
 
 Step 2 - install the FMOD sound system
@@ -189,23 +183,17 @@ Step 1 - build and install OGRE
 
 Step 2 - build and install Bullet
 ----------
-#### Get Bullet source (my custom-patched version):
+#### Get Bullet source:
 
-    wget https://www.skyscrapersim.net/downloads/dev/other_apps/bullet.tar.bz2
-
-#### Extract Bullet:
-
-    tar xfvj bullet.tar.bz2
+    git clone https://github.com/eventhorizon5/bullet3.git bullet
 
 #### Build and install Bullet:
 
-    cd bullet-svn
-    cmake . -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64"
+    cd bullet3
+    cmake . -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64"
     make
     sudo make install
     cd
-
-If you want to play around with the Bullet demos, remove the "-DBUILD_DEMOS=OFF" portion when running cmake above and then build it.
 
 Step 3 - install the FMOD sound system
 ----------

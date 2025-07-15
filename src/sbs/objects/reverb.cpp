@@ -27,6 +27,7 @@
 #endif
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "floor.h"
 #include "elevatorcar.h"
 #include "soundsystem.h"
@@ -116,7 +117,7 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 
 	//set reverb position
 	FMOD_VECTOR fmod_pos;
-	Vector3 global_pos = sbs->ToGlobal(position);
+	Vector3 global_pos = sbs->GetUtility()->ToGlobal(position);
 	fmod_pos.x = global_pos.x;
 	fmod_pos.y = global_pos.y;
 	fmod_pos.z = global_pos.z;
@@ -172,7 +173,7 @@ void Reverb::OnMove(bool parent)
 	if (!reverb)
 		return;
 
-	Vector3 global_position = sbs->ToGlobal(GetPosition());
+	Vector3 global_position = sbs->GetUtility()->ToGlobal(GetPosition());
 
 	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
 

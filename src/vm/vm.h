@@ -113,6 +113,7 @@ public:
 	unsigned long Uptime();
 	unsigned long GetElapsedTime(int instance);
 	void ListPlayingSounds();
+	int GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, int &objects, int &walls, int &polygons);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -128,7 +129,7 @@ public:
 	std::string version;
 	std::string version_rev;
 	std::string version_state;
-	std::string version_frontend;
+	std::string version_full;
 
 	std::string Bits;
 	std::string Platform;

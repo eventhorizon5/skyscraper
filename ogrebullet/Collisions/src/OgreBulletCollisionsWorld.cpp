@@ -61,7 +61,7 @@ mDebugDrawer(0)
 	mBroadphase = new btDbvtBroadphase();
 
     //print banner
-    LogManager::getSingleton().logMessage("\nOgreBullet - (C)2007 tuan.kuranes@gmail.com");
+    LogManager::getSingleton().logMessage("\nOgreBullet Loading...");
 
 	// if not called by a inherited class
 	if (init)

@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "manager.h"
 #include "mesh.h"
 #include "floor.h"
@@ -51,6 +52,9 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	brake = false;
 	this->run = false;
 
+	//register with engine
+	sbs->RegisterRevolvingDoor(this);
+
 	//set speed to default value if invalid
 	if (Speed <= 0)
 		Speed = sbs->GetConfigFloat("Skyscraper.SBS.RevolvingDoorSpeed", 75.0);
@@ -71,7 +75,7 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 		sound = new Sound(this, "DoorSound", true);
 
 	//create door
-	sbs->DrawWalls(true, true, true, true, true, true);
+	sbs->GetPolyMesh()->DrawWalls(true, true, true, true, true, true);
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 
 	Wall *wall = DoorMesh->CreateWallObject(name);
@@ -81,26 +85,26 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	if (Segments == 3)
 	{
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->AddWallMain(wall, name, texture, thickness, -width, -width, 0, 0, height, height, 0, 0, tw, th, false);
-		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, width, -width, height, height, 0, 0, tw, th, false);
+		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, -width, -width, 0, 0, height, height, 0, 0, tw, th, false);
+		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, 0, width, -width, height, height, 0, 0, tw, th, false);
 		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
+		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
 	}
 	else
 	{
 		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->AddWallMain(wall, name, texture, thickness, -width, 0, 0, 0, height, height, 0, 0, tw, th, false);
+		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, -width, 0, 0, 0, height, height, 0, 0, tw, th, false);
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->AddWallMain(wall, name, texture, thickness, 0, 0, width, 0, height, height, 0, 0, tw, th, false);
+		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, 0, width, 0, height, height, 0, 0, tw, th, false);
 		if (Segments == 4)
 		{
 			sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-			sbs->AddWallMain(wall, name, texture, thickness, 0, -width, 0, 0, height, height, 0, 0, tw, th, false);
+			sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, -width, 0, 0, height, height, 0, 0, tw, th, false);
 			sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-			sbs->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
+			sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
 		}
 	}
-	sbs->ResetWalls();
+	sbs->GetPolyMesh()->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();
 
 	Rotate(GetRotation().x, rotation, GetRotation().z);
@@ -131,6 +135,8 @@ RevolvingDoor::~RevolvingDoor()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
+		sbs->UnregisterRevolvingDoor(this);
+
 		if (parent_deleting == false)
 		{
 			std::string type = GetParent()->GetType();
@@ -203,6 +209,8 @@ void RevolvingDoor::MoveDoor()
 			rotation += Speed * sbs->delta;
 		else if (run == false)
 			brake = !brake;
+		else if (rotation > Speed)
+			rotation -= Speed * sbs->delta;
 	}
 	else if ((Clockwise == false && brake == false) || (Clockwise == true && brake == true))
 	{
@@ -210,6 +218,8 @@ void RevolvingDoor::MoveDoor()
 			rotation -= Speed * sbs->delta;
 		else if (run == false)
 			brake = !brake;
+		else if (rotation < -Speed)
+			rotation += Speed * sbs->delta;
 	}
 
 	if (brake == true)
@@ -256,6 +266,13 @@ void RevolvingDoor::Run(bool value)
 		OnHit();
 	else
 		brake = true;
+}
+
+bool RevolvingDoor::GetRun()
+{
+	//get run state of revolving door
+
+	return run;
 }
 
 }

@@ -188,6 +188,9 @@ int Object::GetNumber()
 
 void Object::AddChild(Object *object)
 {
+	if (!object)
+		return;
+
 	//add a child object to the internal array
 	children.emplace_back(object);
 
@@ -204,6 +207,9 @@ void Object::AddChild(Object *object)
 
 void Object::RemoveChild(Object *object)
 {
+	if (!object)
+		return;
+
 	//remove a child object in the internal array
 	if (GetChildrenCount() > 0)
 	{
@@ -250,7 +256,7 @@ void Object::ShowBoundingBox(bool value)
 		node->ShowBoundingBox(value);
 }
 
-void Object::Move(const Vector3 &vector, Real speed)
+void Object::Move(const Vector3 &vector, Real speed, bool local)
 {
 	//move an object
 
@@ -259,55 +265,35 @@ void Object::Move(const Vector3 &vector, Real speed)
 	if (!node)
 		return;
 
-	node->Move(vector, speed);
+	node->Move(vector, speed, local);
 
 	//notify about movement
 	NotifyMove();
 }
 
-void Object::Move(Real X, Real Y, Real Z, Real speed)
+void Object::Move(Real X, Real Y, Real Z, Real speed, bool local)
 {
 	Vector3 pos (X, Y, Z);
-	Move(pos, speed);
+	Move(pos, speed, local);
 }
 
-void Object::SetPosition(const Vector3 &position)
+void Object::SetPosition(const Vector3 &position, bool relative)
 {
 	//set position of object
 
 	if (!node)
 		return;
 
-	node->SetPosition(position);
+	node->SetPosition(position, relative);
 
 	//notify about movement
 	NotifyMove();
 }
 
-void Object::SetPositionRelative(const Vector3 &position)
-{
-	//set position of object
-	//position is relative of parent object
-
-	if (!node)
-		return;
-
-	node->SetPositionRelative(position);
-
-	//notify about movement
-	NotifyMove();
-}
-
-void Object::SetPosition(Real X, Real Y, Real Z)
+void Object::SetPosition(Real X, Real Y, Real Z, bool relative)
 {
 	Vector3 pos (X, Y, Z);
-	SetPosition(pos);
-}
-
-void Object::SetPositionRelative(Real X, Real Y, Real Z)
-{
-	Vector3 pos (X, Y, Z);
-	SetPositionRelative(pos);
+	SetPosition(pos, relative);
 }
 
 void Object::SetPositionY(Real value)
@@ -329,7 +315,7 @@ Vector3 Object::GetPosition(bool relative)
 	return node->GetPosition(relative);
 }
 
-void Object::SetRotation(const Vector3 &rotation)
+void Object::SetRotation(const Vector3 &rotation, bool relative)
 {
 	//rotate object
 
@@ -338,30 +324,30 @@ void Object::SetRotation(const Vector3 &rotation)
 	if (!node)
 		return;
 
-	node->SetRotation(rotation);
+	node->SetRotation(rotation, relative);
 
 	//notify about rotation
 	NotifyRotate();
 }
 
-void Object::SetRotation(Real X, Real Y, Real Z)
+void Object::SetRotation(Real X, Real Y, Real Z, bool relative)
 {
 	Vector3 rot (X, Y, Z);
-	SetRotation(rot);
+	SetRotation(rot, relative);
 }
 
-void Object::Rotate(const Vector3 &vector, Real speed)
+void Object::Rotate(const Vector3 &vector, Real speed, bool relative)
 {
 	//rotates object in a relative amount
 
 	Vector3 rot = GetRotation() + (vector * speed);
-	SetRotation(rot);
+	SetRotation(rot, relative);
 }
 
-void Object::Rotate(Real X, Real Y, Real Z, Real speed)
+void Object::Rotate(Real X, Real Y, Real Z, Real speed, bool relative)
 {
 	Vector3 rot (X, Y, Z);
-	Rotate(rot, speed);
+	Rotate(rot, speed, relative);
 }
 
 Vector3 Object::GetRotation()
@@ -544,6 +530,9 @@ void Object::RegisterLoop(Object *object)
 {
 	//register a child object dynamic runloop
 
+	if (!object)
+		return;
+
 	for (size_t i = 0; i < runloops.size(); i++)
 	{
 		if (runloops[i] == object)
@@ -556,6 +545,9 @@ void Object::RegisterLoop(Object *object)
 void Object::UnregisterLoop(Object *object)
 {
 	//unregister a child object dynamic runloop
+
+	if (!object)
+		return;
 
 	if (runloops.empty())
 		return;
@@ -582,7 +574,8 @@ void Object::LoopChildren()
 
 	for (size_t i = 0; i < runloops.size(); i++)
 	{
-		runloops[i]->Loop();
+		if (runloops[i])
+			runloops[i]->Loop();
 	}
 }
 

@@ -488,7 +488,7 @@ Wall* ElevatorCar::AddWall(const std::string &name, const std::string &texture, 
 	//Adds a wall with the specified dimensions
 
 	Wall *wall = Mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
 
@@ -497,7 +497,7 @@ Wall* ElevatorCar::AddFloor(const std::string &name, const std::string &texture,
 	//Adds a floor with the specified dimensions and vertical offset
 
 	Wall *wall = Mesh->CreateWallObject(name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
@@ -1888,15 +1888,15 @@ bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::strin
 			SetCase(tmpdirection, false);
 
 			if (tmpdirection == "front" || tmpdirection == "left")
-				sbs->DrawWalls(true, false, false, false, false, false);
+				sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
 			else
-				sbs->DrawWalls(false, true, false, false, false, false);
+				sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
 				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
 			else
 				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
-			sbs->ResetWalls();
+			sbs->GetPolyMesh()->ResetWalls();
 		}
 	}
 	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
@@ -3086,15 +3086,15 @@ Real ElevatorCar::SetHeight()
 
 		//position sounds at top of elevator car
 		Vector3 top = Vector3(0, Height, 0);
-		idlesound->SetPositionRelative(top);
-		alarm->SetPositionRelative(top);
-		floorbeep->SetPositionRelative(top);
-		announcesnd->SetPositionRelative(top);
+		idlesound->SetPosition(top, true);
+		alarm->SetPosition(top, true);
+		floorbeep->SetPosition(top, true);
+		announcesnd->SetPosition(top, true);
 
 		//set default music position to elevator height
 		if (MusicPosition == Vector3(0, 0, 0) && Height > 0)
 			MusicPosition = top;
-		musicsound->SetPositionRelative(MusicPosition);
+		musicsound->SetPosition(MusicPosition, true);
 	}
 
 	return Height;
@@ -3818,15 +3818,15 @@ bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::
 			SetCase(tmpdirection, false);
 
 			if (tmpdirection == "front" || tmpdirection == "left")
-				sbs->DrawWalls(true, false, false, false, false, false);
+				sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
 			else
-				sbs->DrawWalls(false, true, false, false, false, false);
+				sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
 				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
 			else
 				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
-			sbs->ResetWalls();
+			sbs->GetPolyMesh()->ResetWalls();
 		}
 	}
 	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);

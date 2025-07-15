@@ -116,20 +116,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	ElevatorSync = false;
 	ElevatorNumber = 1;
 	CarNumber = 1;
-	wall_orientation = 1;
-	floor_orientation = 2;
-	DrawMainN = true;
-	DrawMainP = true;
-	DrawSideN = false;
-	DrawSideP = false;
-	DrawTop = false;
-	DrawBottom = false;
-	DrawMainNOld = true;
-	DrawMainPOld = true;
-	DrawSideNOld = false;
-	DrawSidePOld = false;
-	DrawTopOld = false;
-	DrawBottomOld = false;
 	delta = 0.01;
 	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
 	remaining_delta = 0;
@@ -143,8 +129,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
 	FastDelete = false;
-	WallCount = 0;
-	PolygonCount = 0;
 	SkyBox = 0;
 	Landscape = 0;
 	External = 0;
@@ -179,6 +163,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 
 	//create utility object
 	utility = new Utility(this);
+
+	//create polymesh (geometry processor) object
+	polymesh = new PolyMesh(this);
 
 	//create geometry controller object
 	geometry = new GeometryController(this);
@@ -236,10 +223,10 @@ void SBS::Initialize()
 	*/
 
 	//mount sign texture packs
-	Mount("signs-sans.zip", "signs/sans");
-	Mount("signs-sans_bold.zip", "signs/sans_bold");
-	Mount("signs-sans_cond.zip", "signs/sans_cond");
-	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
+	GetUtility()->Mount("signs-sans.zip", "signs/sans");
+	GetUtility()->Mount("signs-sans_bold.zip", "signs/sans_bold");
+	GetUtility()->Mount("signs-sans_cond.zip", "signs/sans_cond");
+	GetUtility()->Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
 
 	//create object meshes
 	Buildings = new MeshObject(this, "Buildings");
@@ -501,11 +488,14 @@ SBS::~SBS()
 	mWorld = 0;
 
 	ObjectArray.clear();
-	verify_results.clear();
 
 	if (utility)
 		delete utility;
 	utility = 0;
+
+	if (polymesh)
+		delete polymesh;
+	polymesh = 0;
 
 	if (geometry)
 		delete geometry;
@@ -686,791 +676,6 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
-{
-	//Adds a wall with the specified dimensions
-
-	//exit if coordinates are invalid
-	if (x1 == x2 && z1 == z2)
-		return ReportError("Invalid coordinates for wall '" + name + "'");
-
-	if (height_in1 == 0.0f && height_in2 == 0.0)
-		return ReportError("No wall height specified for wall '" + name + "'");
-
-	//determine axis of wall
-	int axis = 0;
-	if (std::abs(x1 - x2) > (std::abs(z1 - z2) + 0.00001))
-		//x axis
-		axis = 1;
-	else
-		//z axis
-		axis = 2;
-
-	//convert to clockwise coordinates if on x-axis, or counterclockwise if on z-axis
-	if ((x1 > x2 && axis == 1) || (z1 < z2 && axis == 2))
-	{
-		//reverse coordinates
-		std::swap(x1, x2);
-		std::swap(z1, z2);
-		std::swap(altitude1, altitude2);
-		std::swap(height_in1, height_in2);
-	}
-
-	//map coordinates
-	Vector3 v1 (x1, altitude1 + height_in1, z1); //left top
-	Vector3 v2 (x2, altitude2 + height_in2, z2); //right top
-	Vector3 v3 (x2, altitude2, z2); //right base
-	Vector3 v4 (x1, altitude1, z1); //left base
-
-	Vector3 v5 = v1;
-	Vector3 v6 = v2;
-	Vector3 v7 = v3;
-	Vector3 v8 = v4;
-
-	//exit if outside of the engine boundaries
-	if (area_trigger)
-	{
-		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
-		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
-		if (area_trigger->IsOutside(v1x, v2x) == true)
-			return false;
-	}
-
-	//expand to specified thickness
-	if (axis == 1)
-	{
-		//x axis
-		if (wall_orientation == 0)
-		{
-			//left
-			v5.z += thickness;
-			v6.z += thickness;
-			v7.z += thickness;
-			v8.z += thickness;
-		}
-		if (wall_orientation == 1)
-		{
-			//center
-			Real half = thickness / 2;
-			v1.z -= half;
-			v2.z -= half;
-			v3.z -= half;
-			v4.z -= half;
-			v5.z += half;
-			v6.z += half;
-			v7.z += half;
-			v8.z += half;
-		}
-		if (wall_orientation == 2)
-		{
-			//right
-			v1.z -= thickness;
-			v2.z -= thickness;
-			v3.z -= thickness;
-			v4.z -= thickness;
-		}
-	}
-	else
-	{
-		//z axis
-		if (wall_orientation == 0)
-		{
-			//left
-			v5.x += thickness;
-			v6.x += thickness;
-			v7.x += thickness;
-			v8.x += thickness;
-		}
-		if (wall_orientation == 1)
-		{
-			//center
-			Real half = thickness / 2;
-			v1.x -= half;
-			v2.x -= half;
-			v3.x -= half;
-			v4.x -= half;
-			v5.x += half;
-			v6.x += half;
-			v7.x += half;
-			v8.x += half;
-		}
-		if (wall_orientation == 2)
-		{
-			//right
-			v1.x -= thickness;
-			v2.x -= thickness;
-			v3.x -= thickness;
-			v4.x -= thickness;
-		}
-	}
-
-	//create polygons and set names
-	std::string NewName, texture2 = texture;
-	Real tw2 = tw, th2 = th;
-
-	bool FlipTexture = texturemanager->FlipTexture;
-	bool TextureOverride = texturemanager->TextureOverride;
-
-	if (FlipTexture == true)
-		texturemanager->ProcessTextureFlip(tw, th);
-
-	if (DrawMainN == true)
-	{
-		if (FlipTexture == true)
-		{
-			tw2 = texturemanager->widthscale[0];
-			th2 = texturemanager->heightscale[0];
-		}
-		if (TextureOverride == true)
-			texture2 = texturemanager->mainnegtex;
-
-		NewName = name;
-		if (GetDrawWallsCount() > 1)
-			NewName.append(":front");
-		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //front wall
-	}
-
-	if (DrawMainP == true)
-	{
-		if (FlipTexture == true)
-		{
-			tw2 = texturemanager->widthscale[1];
-			th2 = texturemanager->heightscale[1];
-		}
-		if (TextureOverride == true)
-			texture2 = texturemanager->mainpostex;
-
-		NewName = name;
-		NewName.append(":back");
-		wallobject->AddQuad(NewName, texture2, v6, v5, v8, v7, tw2, th2, autosize); //back wall
-	}
-
-	if (thickness != 0.0)
-	{
-		if (DrawSideN == true)
-		{
-			if (FlipTexture == true)
-			{
-				tw2 = texturemanager->widthscale[2];
-				th2 = texturemanager->heightscale[2];
-			}
-			if (TextureOverride == true)
-				texture2 = texturemanager->sidenegtex;
-
-			NewName = name;
-			NewName.append(":left");
-			if (axis == 1)
-				wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //left wall
-			else
-				wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //left wall
-		}
-
-		if (DrawSideP == true)
-		{
-			if (FlipTexture == true)
-			{
-				tw2 = texturemanager->widthscale[3];
-				th2 = texturemanager->heightscale[3];
-			}
-			if (TextureOverride == true)
-				texture2 = texturemanager->sidepostex;
-
-			NewName = name;
-			NewName.append(":right");
-			if (axis == 1)
-				wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //right wall
-			else
-				wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //right wall
-		}
-
-		if (DrawTop == true)
-		{
-			if (FlipTexture == true)
-			{
-				tw2 = texturemanager->widthscale[4];
-				th2 = texturemanager->heightscale[4];
-			}
-			if (TextureOverride == true)
-				texture2 = texturemanager->toptex;
-
-			NewName = name;
-			NewName.append(":top");
-			wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //top wall
-		}
-
-		if (DrawBottom == true)
-		{
-			if (FlipTexture == true)
-			{
-				tw2 = texturemanager->widthscale[5];
-				th2 = texturemanager->heightscale[5];
-			}
-			if (TextureOverride == true)
-				texture2 = texturemanager->bottomtex;
-
-			NewName = name;
-			NewName.append(":bottom");
-			wallobject->AddQuad(NewName, texture2, v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
-		}
-	}
-
-	return true;
-}
-
-bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
-{
-	//Adds a floor with the specified dimensions and vertical offset
-
-	//direction determines the direction of slope (for different altitude values):
-	//false - left/right from altitude1 to altitude2, or legacy (broken) "ReverseAxis = false" behavior if legacy_behavior is true
-	//true - back/forwards from altitude1 to altitude2, or legacy (broken) "ReverseAxis = true" behavior if legacy_behavior is true
-
-	//exit if coordinates are invalid
-	if (x1 == x2 || z1 == z2)
-		return ReportError("Invalid coordinates for floor '" + name + "'");
-
-	//convert to clockwise coordinates
-
-	//determine axis of floor
-	int axis = 0;
-	if (std::abs(x1 - x2) > (std::abs(z1 - z2) + 0.00001))
-		//x axis
-		axis = 1;
-	else
-		//z axis
-		axis = 2;
-
-	if (legacy_behavior == false)
-	{
-		//current behavior
-
-		if (x1 > x2)
-		{
-			std::swap(x1, x2);
-
-			if (reverse_axis == true)
-				std::swap(altitude1, altitude2);
-		}
-		if (z1 > z2)
-		{
-			std::swap(z1, z2);
-
-			if (reverse_axis == false)
-				std::swap(altitude1, altitude2);
-		}
-	}
-	else
-	{
-		//legacy (broken) behavior, for compatibility with previous versions
-
-		if ((x1 > x2 && axis == 1) || (z1 > z2 && axis == 2))
-		{
-			//reverse coordinates if the difference between x or z coordinates is greater
-			std::swap(x1, x2);
-			std::swap(z1, z2);
-			std::swap(altitude1, altitude2);
-		}
-	}
-
-	//map coordinates
-	Vector3 v1, v2, v3, v4;
-
-	if (reverse_axis == false)
-	{
-		v1 = Vector3(x1, altitude1, z1); //bottom left
-		v2 = Vector3(x2, altitude1, z1); //bottom right
-		v3 = Vector3(x2, altitude2, z2); //top right
-		v4 = Vector3(x1, altitude2, z2); //top left
-	}
-	else
-	{
-		if (legacy_behavior == true)
-		{
-			v1 = Vector3(x1, altitude1, z1); //bottom left
-			v2 = Vector3(x1, altitude1, z2); //top left
-			v3 = Vector3(x2, altitude2, z2); //top right
-			v4 = Vector3(x2, altitude2, z1); //bottom right
-		}
-		else
-		{
-			v1 = Vector3(x2, altitude2, z1); //bottom right
-			v2 = Vector3(x2, altitude2, z2); //top right
-			v3 = Vector3(x1, altitude1, z2); //top left
-			v4 = Vector3(x1, altitude1, z1); //bottom left
-		}
-	}
-
-	Vector3 v5 = v1;
-	Vector3 v6 = v2;
-	Vector3 v7 = v3;
-	Vector3 v8 = v4;
-
-	//exit if outside of the engine boundaries
-	if (area_trigger)
-	{
-		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
-		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
-		if (area_trigger->IsOutside(v1x, v2x) == true)
-			return false;
-	}
-
-	//expand to specified thickness
-	if (floor_orientation == 0)
-	{
-		//bottom
-		v5.y += thickness;
-		v6.y += thickness;
-		v7.y += thickness;
-		v8.y += thickness;
-	}
-	if (floor_orientation == 1)
-	{
-		//center
-		Real half = thickness / 2;
-		v1.y -= half;
-		v2.y -= half;
-		v3.y -= half;
-		v4.y -= half;
-		v5.y += half;
-		v6.y += half;
-		v7.y += half;
-		v8.y += half;
-	}
-	if (floor_orientation == 2)
-	{
-		//top
-		v1.y -= thickness;
-		v2.y -= thickness;
-		v3.y -= thickness;
-		v4.y -= thickness;
-	}
-
-	//create polygons and set names
-	std::string NewName, texture2 = texture;
-	Real tw2 = tw, th2 = th;
-
-	bool FlipTexture = texturemanager->FlipTexture;
-	bool TextureOverride = texturemanager->TextureOverride;
-
-	if (FlipTexture == true)
-		texturemanager->ProcessTextureFlip(tw, th);
-
-	//turn on rotation if set
-	bool old_planarrotate = texturemanager->GetPlanarRotate();
-	texturemanager->SetPlanarRotate(texture_direction);
-
-	if (DrawMainN == true)
-	{
-		if (FlipTexture == true)
-		{
-			tw2 = texturemanager->widthscale[0];
-			th2 = texturemanager->heightscale[0];
-		}
-		if (TextureOverride == true)
-			texture2 = texturemanager->mainnegtex;
-
-		NewName = name;
-		if (GetDrawWallsCount() > 1)
-			NewName.append(":front");
-		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //bottom wall
-	}
-
-	if (DrawMainP == true)
-	{
-		if (FlipTexture == true)
-		{
-			tw2 = texturemanager->widthscale[1];
-			th2 = texturemanager->heightscale[1];
-		}
-		if (TextureOverride == true)
-			texture2 = texturemanager->mainpostex;
-
-		NewName = name;
-		NewName.append(":back");
-		wallobject->AddQuad(NewName, texture2, v8, v7, v6, v5, tw2, th2, autosize); //top wall
-	}
-
-	if (thickness != 0.0)
-	{
-		if (DrawSideN == true)
-		{
-			if (FlipTexture == true)
-			{
-				tw2 = texturemanager->widthscale[2];
-				th2 = texturemanager->heightscale[2];
-			}
-			if (TextureOverride == true)
-				texture2 = texturemanager->sidenegtex;
-
-			NewName = name;
-			NewName.append(":left");
-			wallobject->AddQuad(NewName, texture2, v8, v5, v1, v4, tw2, th2, autosize); //left wall
-		}
-
-		if (DrawSideP == true)
-		{
-			if (FlipTexture == true)
-			{
-				tw2 = texturemanager->widthscale[3];
-				th2 = texturemanager->heightscale[3];
-			}
-			if (TextureOverride == true)
-				texture2 = texturemanager->sidepostex;
-
-			NewName = name;
-			NewName.append(":right");
-			wallobject->AddQuad(NewName, texture2, v6, v7, v3, v2, tw2, th2, autosize); //right wall
-		}
-
-		if (DrawTop == true)
-		{
-			if (FlipTexture == true)
-			{
-				tw2 = texturemanager->widthscale[4];
-				th2 = texturemanager->heightscale[4];
-			}
-			if (TextureOverride == true)
-				texture2 = texturemanager->toptex;
-
-			NewName = name;
-			NewName.append(":top");
-			wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //front wall
-		}
-
-		if (DrawBottom == true)
-		{
-			if (FlipTexture == true)
-			{
-				tw2 = texturemanager->widthscale[5];
-				th2 = texturemanager->heightscale[5];
-			}
-			if (TextureOverride == true)
-				texture2 = texturemanager->bottomtex;
-
-			NewName = name;
-			NewName.append(":bottom");
-			wallobject->AddQuad(NewName, texture2, v7, v8, v4, v3, tw2, th2, autosize); //back wall
-		}
-	}
-
-	texturemanager->SetPlanarRotate(old_planarrotate);
-
-	return true;
-}
-
-Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize)
-{
-	//create 4 walls
-
-	if (!mesh)
-		return 0;
-
-	//exit if coordinates are invalid
-	if (x1 == x2 && z1 == z2)
-	{
-		ReportError("Invalid coordinates for wall '" + name + "'");
-		return 0;
-	}
-
-	//create wall object
-	Wall *wall = mesh->CreateWallObject(name);
-
-	bool x_thickness = false, z_thickness = false;
-	std::string NewName, texture2 = texture;
-
-	if (x1 != x2)
-		x_thickness = true;
-	if (z1 != z2)
-		z_thickness = true;
-
-	//swap values if the first is greater than the second
-	if (x1 > x2)
-		std::swap(x1, x2);
-
-	if (z1 > z2)
-		std::swap(z1, z2);
-
-	bool TextureOverride = texturemanager->TextureOverride;
-
-	if (inside == true)
-	{
-		//generate a box visible from the inside
-
-		NewName = name;
-		NewName.append(":inside");
-
-		if (x_thickness == true)
-		{
-			if (TextureOverride == true)
-				texture2 = texturemanager->mainnegtex;
-
-			wall->AddQuad( //front
-					NewName,
-					texture2,
-					Vector3(x1, voffset, z1),
-					Vector3(x2, voffset, z1),
-					Vector3(x2, voffset + height_in, z1),
-					Vector3(x1, voffset + height_in, z1), tw, th, autosize);
-
-			if (TextureOverride == true)
-				texture2 = texturemanager->mainpostex;
-
-			wall->AddQuad( //back
-					NewName,
-					texture2,
-					Vector3(x2, voffset, z2),
-					Vector3(x1, voffset, z2),
-					Vector3(x1, voffset + height_in, z2),
-					Vector3(x2, voffset + height_in, z2), tw, th, autosize);
-		}
-		if (z_thickness == true)
-		{
-			if (TextureOverride == true)
-				texture2 = texturemanager->sidepostex;
-
-			wall->AddQuad( //right
-					NewName,
-					texture2,
-					Vector3(x2, voffset, z1),
-					Vector3(x2, voffset, z2),
-					Vector3(x2, voffset + height_in, z2),
-					Vector3(x2, voffset + height_in, z1), tw, th, autosize);
-
-			if (TextureOverride == true)
-				texture2 = texturemanager->sidenegtex;
-
-			wall->AddQuad( //left
-					NewName,
-					texture2,
-					Vector3(x1, voffset, z2),
-					Vector3(x1, voffset, z1),
-					Vector3(x1, voffset + height_in, z1),
-					Vector3(x1, voffset + height_in, z2), tw, th, autosize);
-		}
-		if (x_thickness == true && z_thickness == true)
-		{
-			if (bottom == true)
-			{
-				if (TextureOverride == true)
-					texture2 = texturemanager->bottomtex;
-
-				wall->AddQuad( //bottom
-						NewName,
-						texture2,
-						Vector3(x1, voffset, z2),
-						Vector3(x2, voffset, z2),
-						Vector3(x2, voffset, z1),
-						Vector3(x1, voffset, z1), tw, th, autosize);
-			}
-
-			if (top == true)
-			{
-				if (TextureOverride == true)
-					texture2 = texturemanager->toptex;
-
-				wall->AddQuad( //top
-						NewName,
-						texture2,
-						Vector3(x1, voffset + height_in, z1),
-						Vector3(x2, voffset + height_in, z1),
-						Vector3(x2, voffset + height_in, z2),
-						Vector3(x1, voffset + height_in, z2), tw, th, autosize);
-			}
-		}
-	}
-
-	if (outside == true)
-	{
-		NewName = name;
-		NewName.append(":outside");
-
-		if (x_thickness == true)
-		{
-			if (TextureOverride == true)
-				texture2 = texturemanager->mainnegtex;
-
-			wall->AddQuad( //front
-					NewName,
-					texture2,
-					Vector3(x1, voffset + height_in, z1),
-					Vector3(x2, voffset + height_in, z1),
-					Vector3(x2, voffset, z1),
-					Vector3(x1, voffset, z1), tw, th, autosize);
-
-			if (TextureOverride == true)
-				texture2 = texturemanager->mainpostex;
-
-			wall->AddQuad( //back
-					NewName,
-					texture2,
-					Vector3(x2, voffset + height_in, z2),
-					Vector3(x1, voffset + height_in, z2),
-					Vector3(x1, voffset, z2),
-					Vector3(x2, voffset, z2), tw, th, autosize);
-		}
-		if (z_thickness == true)
-		{
-			if (TextureOverride == true)
-				texture2 = texturemanager->sidepostex;
-
-			wall->AddQuad( //right
-					NewName,
-					texture2,
-					Vector3(x2, voffset + height_in, z1),
-					Vector3(x2, voffset + height_in, z2),
-					Vector3(x2, voffset, z2),
-					Vector3(x2, voffset, z1), tw, th, autosize);
-
-			if (TextureOverride == true)
-				texture2 = texturemanager->sidenegtex;
-
-			wall->AddQuad( //left
-					NewName,
-					texture2,
-					Vector3(x1, voffset + height_in, z2),
-					Vector3(x1, voffset + height_in, z1),
-					Vector3(x1, voffset, z1),
-					Vector3(x1, voffset, z2), tw, th, autosize);
-		}
-		if (x_thickness == true && z_thickness == true)
-		{
-			if (bottom == true)
-			{
-				if (TextureOverride == true)
-					texture2 = texturemanager->bottomtex;
-
-				wall->AddQuad( //bottom
-						NewName,
-						texture2,
-						Vector3(x1, voffset, z1),
-						Vector3(x2, voffset, z1),
-						Vector3(x2, voffset, z2),
-						Vector3(x1, voffset, z2), tw, th, autosize);
-			}
-			if (top == true)
-			{
-				if (TextureOverride == true)
-					texture2 = texturemanager->toptex;
-
-				wall->AddQuad( //top
-						NewName,
-						texture2,
-						Vector3(x1, voffset + height_in, z2),
-						Vector3(x2, voffset + height_in, z2),
-						Vector3(x2, voffset + height_in, z1),
-						Vector3(x1, voffset + height_in, z1), tw, th, autosize);
-			}
-		}
-	}
-	return wall;
-}
-
-Wall* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize)
-{
-	//create 4 walls from a central point
-
-	Real x1 = CenterX - (WidthX / 2);
-	Real x2 = CenterX + (WidthX / 2);
-	Real z1 = CenterZ - (LengthZ / 2);
-	Real z2 = CenterZ + (LengthZ / 2);
-
-	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
-}
-
-void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th)
-{
-	//creates a polygon in the specified wall object
-
-	if (!wallobject)
-		return;
-
-	PolyArray varray1 = varray;
-	PolyArray varray2;
-
-	//get number of stored vertices
-	size_t num = varray.size();
-
-	//create a second array with reversed vertices
-	varray2.reserve(num);
-	for (size_t i = num - 1; i < num; --i)
-		varray2.emplace_back(varray1[i]);
-
-	//create 2 polygons (front and back) from the vertex array
-
-	//get polygon native direction
-	Vector3 direction = utility->GetPolygonDirection(varray1);
-
-	//if the polygon is facing right, down or to the back, reverse faces
-	//to keep the vertices clockwise
-	if (direction.x == 1 || direction.y == -1 || direction.z == 1)
-		std::swap(varray1, varray2);
-
-	std::string name = wallobject->GetName();
-
-	//add the polygons
-	if (DrawMainN == true)
-	{
-		std::string NewName = name;
-		if (DrawMainP == true)
-			NewName.append(":0");
-		wallobject->AddPolygon(NewName, texture, varray1, tw, th, true);
-	}
-	if (DrawMainP == true)
-	{
-		std::string NewName = name;
-		if (DrawMainN == true)
-			NewName.append(":1");
-		wallobject->AddPolygon(NewName, texture, varray2, tw, th, true);
-	}
-}
-
-Wall* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, PolyArray &varray, Real tw, Real th)
-{
-	//Adds a wall from a specified array of 3D vectors
-
-	if (!mesh)
-		return 0;
-
-	//create wall object
-	Wall *wall = mesh->CreateWallObject(name);
-
-	//create polygon in wall object
-	AddPolygon(wall, texture, varray, tw, th);
-
-	return wall;
-}
-
-Wall* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Vector2> &varray, Real altitude, Real tw, Real th)
-{
-	//Same as AddCustomWall, with only one altitude value value
-	PolyArray varray3;
-
-	//set up 3D vertex array
-	varray3.reserve(varray.size());
-	for (size_t i = 0; i < varray.size(); i++)
-	{
-		varray3.emplace_back(Vector3(varray[i].x, altitude, varray[i].y));
-	}
-
-	//pass data on to AddCustomWall function
-	return AddCustomWall(mesh, name, texture, varray3, tw, th);
-}
-
-Wall* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th)
-{
-	//Adds a triangular wall with the specified dimensions
-	PolyArray varray;
-
-	//set up temporary vertex array
-	varray.reserve(3);
-	varray.emplace_back(Vector3(x1, y1, z1));
-	varray.emplace_back(Vector3(x2, y2, z2));
-	varray.emplace_back(Vector3(x3, y3, z3));
-
-	//pass data on to AddCustomWall function
-	return AddCustomWall(mesh, name, texture, varray, tw, th);
-}
-
 void SBS::EnableBuildings(bool value)
 {
 	//turns buildings on/off
@@ -1514,7 +719,7 @@ void SBS::CreateSky()
 	if (InstanceNumber > 0)
 		return;
 
-	Mount("sky-" + SkyName + ".zip", "sky");
+	GetUtility()->Mount("sky-" + SkyName + ".zip", "sky");
 
 	//load textures
 	SetLighting();
@@ -1644,19 +849,6 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 	return 0;
 }
 
-Real SBS::GetDistance(Real x1, Real x2, Real z1, Real z2)
-{
-	//returns the distance between 2 2D vectors
-
-	if (z1 == z2)
-		return std::abs(x1 - x2);
-	if (x1 == x2)
-		return std::abs(z1 - z2);
-	if ((x1 != x2) && (z2 != x2))
-		return sqrt(pow(std::abs(x1 - x2), 2) + pow(std::abs(z1 - z2), 2)); //calculate diagonals
-	return 0;
-}
-
 Shaft* SBS::CreateShaft(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor)
 {
 	//create a shaft object
@@ -1775,211 +967,6 @@ DispatchController* SBS::GetController(int number)
 	//return pointer to controller object
 
 	return controller_manager->Get(number);
-}
-
-bool SBS::SetWallOrientation(std::string direction)
-{
-	//changes internal wall orientation parameter.
-	//direction can either be "left" (negative), "center" (0), or "right" (positive).
-	//default on startup is 1, or center.
-	//the parameter is used to determine the location of the wall's
-	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
-
-	SetCase(direction, false);
-
-	if (direction == "left")
-		wall_orientation = 0;
-	else if (direction == "center")
-		wall_orientation = 1;
-	else if (direction == "right")
-		wall_orientation = 2;
-	else
-		return ReportError("SetWallOrientation: Invalid wall orientation");
-	return true;
-}
-
-int SBS::GetWallOrientation()
-{
-	return wall_orientation;
-}
-
-bool SBS::SetFloorOrientation(std::string direction)
-{
-	//changes internal floor orientation parameter.
-	//direction can either be "bottom" (negative), "center" (0), or "top" (positive).
-	//default on startup is 2, or top.
-	//the parameter is used to determine the location of the floor's
-	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
-
-	SetCase(direction, false);
-
-	if (direction == "bottom")
-		floor_orientation = 0;
-	else if (direction == "center")
-		floor_orientation = 1;
-	else if (direction == "top")
-		floor_orientation = 2;
-	else
-		return ReportError("SetFloorOrientation: Invalid floor orientation");
-	return true;
-}
-
-int SBS::GetFloorOrientation()
-{
-	return floor_orientation;
-}
-
-void SBS::DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom)
-{
-	//sets which walls should be drawn
-
-	//first backup old parameters
-	DrawMainNOld = DrawMainN;
-	DrawMainPOld = DrawMainP;
-	DrawSideNOld = DrawSideN;
-	DrawSidePOld = DrawSideP;
-	DrawTopOld = DrawTop;
-	DrawBottomOld = DrawBottom;
-
-	//now set new parameters
-	DrawMainN = MainN;
-	DrawMainP = MainP;
-	DrawSideN = SideN;
-	DrawSideP = SideP;
-	DrawTop = Top;
-	DrawBottom = Bottom;
-}
-
-void SBS::ResetWalls(bool ToDefaults)
-{
-	//if ToDefaults is true, this resets the DrawWalls data to the defaults.
-	//if ToDefaults is false, this reverts the DrawWalls data to the previous settings.
-
-	if (ToDefaults == true)
-		DrawWalls(true, true, false, false, false, false);
-	else
-		DrawWalls(DrawMainNOld, DrawMainPOld, DrawSideNOld, DrawSidePOld, DrawTopOld, DrawBottomOld);
-}
-
-int SBS::GetDrawWallsCount()
-{
-	//gets the number of wall polygons enabled
-
-	int sides = 0;
-
-	if (DrawMainN == true)
-		sides++;
-	if (DrawMainP == true)
-		sides++;
-	if (DrawSideN == true)
-		sides++;
-	if (DrawSideP == true)
-		sides++;
-	if (DrawTop == true)
-		sides++;
-	if (DrawBottom == true)
-		sides++;
-
-	return sides;
-}
-
-Real SBS::MetersToFeet(Real meters)
-{
-	//converts meters to feet
-	return meters * 3.2808399;
-}
-
-Real SBS::FeetToMeters(Real feet)
-{
-	//converts feet to meters
-	return feet / 3.2808399;
-}
-
-Wall* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th)
-{
-	//Adds a wall with the specified dimensions, to the specified mesh object
-
-	if (!mesh)
-		return 0;
-
-	Wall *wall = mesh->CreateWallObject(name);
-
-	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
-	return wall;
-}
-
-Wall* SBS::AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
-{
-	//Adds a floor with the specified dimensions and vertical offset, to the specified mesh object
-
-	if (!mesh)
-		return 0;
-
-	Wall *wall = mesh->CreateWallObject(name);
-
-	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
-	return wall;
-}
-
-Wall* SBS::AddGround(const std::string &name, const std::string &texture, Real x1, Real z1, Real x2, Real z2, Real altitude, int tile_x, int tile_z)
-{
-	//Adds ground based on a tiled-floor layout, with the specified dimensions and vertical offset
-	//this does not support thickness
-
-	Vector3 v1, v2, v3, v4;
-
-	Real minx, minz, maxx, maxz;
-
-	//get min and max values
-	if (x1 < x2)
-	{
-		minx = x1;
-		maxx = x2;
-	}
-	else
-	{
-		minx = x2;
-		maxx = x1;
-	}
-	if (z1 < z2)
-	{
-		minz = z1;
-		maxz = z2;
-	}
-	else
-	{
-		minz = z2;
-		maxz = z1;
-	}
-
-	Wall *wall = Landscape->CreateWallObject(name);
-
-	Report("Creating ground...");
-
-	//create polygon tiles
-	for (Real i = minx; i < maxx; i += tile_x)
-	{
-		Real sizex, sizez;
-
-		if (i + tile_x > maxx)
-			sizex = maxx - i;
-		else
-			sizex = (Real)tile_x;
-
-		for (Real j = minz; j < maxz; j += tile_z)
-		{
-			if (j + tile_z > maxz)
-				sizez = maxz - i;
-			else
-				sizez = (Real)tile_z;
-
-			DrawWalls(true, true, false, false, false, false);
-			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, false, 1, 1, false);
-			ResetWalls(false);
-		}
-	}
-	Report("Finished ground");
-	return wall;
 }
 
 void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber, int stairsnumber)
@@ -2170,25 +1157,6 @@ int SBS::GetTimerCallbackCount()
 	return (int)timercallbacks.size();
 }
 
-bool SBS::Mount(const std::string &filename, const std::string &path)
-{
-	//mounts a zip file into the virtual filesystem
-
-	std::string newfile = "data/" + filename;
-	std::string file = VerifyFile(newfile);
-
-	Report("Mounting " + file + " as path " + path);
-	try
-	{
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(file, "Zip", path, true);
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error mounting file " + file + "\n" + e.getDescription());
-	}
-	return true;
-}
-
 void SBS::AddFloorAutoArea(Vector3 start, Vector3 end)
 {
 	//adds an auto area that enables/disables floors
@@ -2365,81 +1333,32 @@ void SBS::DecrementReverbCount()
 
 Real SBS::ToLocal(Real remote_value)
 {
-	//convert remote (OGRE) vertex positions to local (SBS) positions
-
-	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
-	//this means that all Z values that use this function must be inverted.
-
-	return remote_value * UnitScale;
+	return GetUtility()->ToLocal(remote_value);
 }
 
 Vector2 SBS::ToLocal(const Vector2& remote_value)
 {
-	//convert remote (OGRE) vertex positions to local (SBS) positions
-
-	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
-	//this means that all Z values that use this function must be inverted.
-
-	return remote_value * UnitScale;
+	return GetUtility()->ToLocal(remote_value);
 }
 
 Vector3 SBS::ToLocal(const Vector3& remote_value, bool rescale, bool flip_z)
 {
-	//convert remote (OGRE) vertex positions to local (SBS) positions
-	//also convert Z value to OGRE's right-hand coordinate system
-
-	Vector3 newvalue;
-	newvalue.x = remote_value.x;
-	newvalue.y = remote_value.y;
-
-	if (flip_z == true)
-		newvalue.z = -remote_value.z; //flip z value for OGRE's right-hand coordinate system
-	else
-		newvalue.z = remote_value.z;
-
-	if (rescale == true)
-		return newvalue * UnitScale;
-	else
-		return newvalue;
+	return GetUtility()->ToLocal(remote_value, rescale, flip_z);
 }
 
 Real SBS::ToRemote(Real local_value)
 {
-	//convert local (SBS) vertex positions to remote (OGRE) positions
-
-	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
-	//this means that all Z values that use this function must be inverted.
-
-	return local_value / UnitScale;
+	return GetUtility()->ToRemote(local_value);
 }
 
 Vector2 SBS::ToRemote(const Vector2& local_value)
 {
-	//convert local (SBS) vertex positions to remote (OGRE) positions
-
-	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
-	//this means that all Z values that use this function must be inverted.
-
-	return local_value / UnitScale;
+	return GetUtility()->ToRemote(local_value);
 }
 
 Vector3 SBS::ToRemote(const Vector3& local_value, bool rescale, bool flip_z)
 {
-	//convert local (SBS) vertex positions to remote (OGRE) positions
-
-	Vector3 newvalue;
-	newvalue.x = local_value.x;
-	newvalue.y = local_value.y;
-
-	if (flip_z == true)
-		newvalue.z = -local_value.z; //flip z value for OGRE's right-hand coordinate system
-	else
-		newvalue.z = local_value.z;
-
-	if (rescale == true)
-		return (newvalue / UnitScale);
-	else
-		return newvalue;
+	return GetUtility()->ToRemote(local_value, rescale, flip_z);
 }
 
 int SBS::GetObjectCount()
@@ -2912,167 +1831,6 @@ void SBS::RemoveController(DispatchController *controller)
 	controller_manager->Remove(controller);
 }
 
-std::string SBS::VerifyFile(const std::string &filename)
-{
-	bool result = false;
-	return VerifyFile(filename, result, false);
-}
-
-std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
-{
-	//verify a filename
-	//if it exists, return the same filename
-	//otherwise search the related folder and find a matching filename with a different
-	//case (fixes case-sensitivity issues mainly on Linux)
-	//returns the original string if not found
-	//"result" will return if the file exists or not, but only accurately if skip_cache is true
-
-	TrimString(filename);
-	ReplaceAll(filename, "\\", "/");
-	result = false;
-
-	//check for a cached result
-	if (skip_cache == false)
-	{
-		for (size_t i = 0; i < verify_results.size(); i++)
-		{
-			if (verify_results[i].filename == filename)
-				return verify_results[i].result;
-		}
-	}
-
-	//get filesystem archive
-	Ogre::Archive *filesystem = 0;
-	Ogre::ArchiveManager::ArchiveMapIterator it = Ogre::ArchiveManager::getSingleton().getArchiveIterator();
-	while(it.hasMoreElements())
-	{
-		const std::string& key = it.peekNextKey();
-		filesystem = it.getNext();
-
-		if (!filesystem)
-			return "";
-
-		//check for a mount point
-		Ogre::StringVectorPtr listing;
-		std::string shortname;
-		std::string group = GetMountPath(filename, shortname);
-
-		if (group == "General")
-		{
-			//for the General group, check the native filesystem
-
-			if (filesystem->exists(filename) == true)
-			{
-				//if exact filename exists, cache and exit
-				CacheFilename(filename, filename);
-				result = true;
-				return filename;
-			}
-
-			//otherwise get listing of files to check
-			if (!filesystem_listing)
-				filesystem_listing = filesystem->list();
-			listing = filesystem_listing;
-		}
-		else
-		{
-			//for other groups, check resource mount points
-
-			if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
-			{
-				//if exact filename exists, cache and exit
-				CacheFilename(filename, filename);
-				result = true;
-				return filename;
-			}
-
-			//otherwise get listing of files to check
-			listing = Ogre::ResourceGroupManager::getSingleton().listResourceNames(group);
-		}
-
-		//go through file listing, to find a match with a different case
-		for (size_t i = 0; i < listing->size(); i++)
-		{
-			std::string check = listing->at(i);
-			std::string checkoriginal = SetCaseCopy(check, false);
-			std::string checkfile = SetCaseCopy(filename, false);
-			if (checkoriginal == checkfile)
-			{
-				//if match is found, cache and exit
-				CacheFilename(filename, check);
-				result = true;
-				return check;
-			}
-		}
-	}
-
-	//if no match is found, cache original name and exit
-	CacheFilename(filename, filename);
-	return filename;
-}
-
-std::string SBS::GetFilesystemPath(std::string filename)
-{
-	//returns the filesystem path for the specified file
-	//the filename needs to be processed by VerifyFile first
-
-	TrimString(filename);
-	ReplaceAll(filename, "\\", "/");
-
-	//get filesystem archive
-	Ogre::Archive *filesystem = 0;
-	Ogre::ArchiveManager::ArchiveMapIterator it = Ogre::ArchiveManager::getSingleton().getArchiveIterator();
-	while(it.hasMoreElements())
-	{
-		const std::string& key = it.peekNextKey();
-		filesystem = it.getNext();
-
-		if (!filesystem)
-			return "";
-
-		//check for a mount point
-		std::string shortname;
-		std::string group = GetMountPath(filename, shortname);
-
-		if (group == "General")
-		{
-			//for the General group, check the native filesystem
-
-			if (filesystem->exists(filename) == true)
-			{
-				std::string path = key;
-				if (key == ".")
-					path = "";
-				return std::string(path + filename);
-			}
-		}
-	}
-
-	return "";
-}
-
-bool SBS::FileExists(const std::string &filename)
-{
-	//check to see if the specified file exists
-
-	bool result;
-	VerifyFile(filename, result, true);
-
-	return result;
-}
-
-int SBS::GetWallCount()
-{
-	//return total number of registered walls
-	return WallCount;
-}
-
-int SBS::GetPolygonCount()
-{
-	//return total number of registered walls
-	return PolygonCount;
-}
-
 void SBS::Prepare(bool report, bool renderonly)
 {
 	//prepare objects for run
@@ -3331,26 +2089,6 @@ void SBS::CalculateAverageTime()
 	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
 }
 
-std::string SBS::GetMountPath(std::string filename, std::string &newfilename)
-{
-	//get mountpoint (resource group) path of given file
-	//if not found, return "General"
-
-	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
-	ReplaceAll(filename, "\\", "/");
-	newfilename = filename;
-
-	for (size_t i = 0; i < list.size(); i++)
-	{
-		if (StartsWith(filename, list[i] + "/") == true)
-		{
-			newfilename = filename.substr(list[i].size() + 1);
-			return list[i];
-		}
-	}
-	return "General";
-}
-
 void SBS::ShowColliders(bool value)
 {
 	try
@@ -3363,15 +2101,6 @@ void SBS::ShowColliders(bool value)
 	{
 		ReportError("Error enabling/disabling collider shapes\n" + e.getDescription());
 	}
-}
-
-void SBS::CacheFilename(const std::string &filename, const std::string &result)
-{
-	//caches filename information for VerifyFile function
-	VerifyResult verify;
-	verify.filename = filename;
-	verify.result = result;
-	verify_results.emplace_back(verify);
 }
 
 void SBS::SetLighting(Real red, Real green, Real blue)
@@ -4023,8 +2752,14 @@ int SBS::GetEscalatorCount()
 
 int SBS::GetMovingWalkwayCount()
 {
-	//return total number of allocated sounds
+	//return total number of moving walkways
 	return (int)MovingWalkwayArray.size();
+}
+
+int SBS::GetRevolvingDoorCount()
+{
+	//return total number of revolving doors
+	return (int)RevolvingDoorArray.size();
 }
 
 bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
@@ -4033,7 +2768,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	//note that the ray's origin and direction need to be in engine-relative values
 
 	//create a new ray that has absolute positioning, for engine offsets
-	Ray ray2 (ToRemote(ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
+	Ray ray2 (ToRemote(GetUtility()->ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
 
 	//get a collision callback from Bullet
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray2, mWorld, max_distance);
@@ -4070,7 +2805,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	Vector3 isect;
 	Real distance = 2000000000.;
 	Vector3 normal = Vector3::ZERO;
-	wall = mesh->GetPolyMesh()->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
+	wall = GetPolyMesh()->FindWallIntersect(mesh, ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
 }
@@ -4405,34 +3140,6 @@ void SBS::ResetState()
 	camera->ResetState();
 }
 
-Vector3 SBS::ToGlobal(const Vector3 &position)
-{
-	//convert an engine-relative position to a global (scene) position
-
-	return (GetOrientation().Inverse() * position) + GetPosition();
-}
-
-Vector3 SBS::FromGlobal(const Vector3 &position)
-{
-	//convert a global (scene) position to an engine-relative position
-
-	return (GetOrientation() * (position - GetPosition()));
-}
-
-Quaternion SBS::ToGlobal(const Quaternion &orientation)
-{
-	//convert an engine-relative orientation (rotation) to a global (scene) orientation
-
-	return (GetOrientation() * orientation);
-}
-
-Quaternion SBS::FromGlobal(const Quaternion &orientation)
-{
-	//convert a global (scene) orientation (rotation) to an engine-relative orientation
-
-	return (GetOrientation().Inverse() * orientation);
-}
-
 Light* SBS::GetLight(std::string name)
 {
 	//get a light by name
@@ -4690,6 +3397,33 @@ MovingWalkway* SBS::GetMovingWalkway(int index)
 	return 0;
 }
 
+void SBS::RegisterRevolvingDoor(RevolvingDoor* door)
+{
+	//add revolving door to index
+	RevolvingDoorArray.emplace_back(door);
+}
+
+void SBS::UnregisterRevolvingDoor(RevolvingDoor* door)
+{
+	//remove revolving door from index
+
+	for (size_t i = 0; i < RevolvingDoorArray.size(); i++)
+	{
+		if (RevolvingDoorArray[i] == door)
+		{
+			RevolvingDoorArray.erase(RevolvingDoorArray.begin() + i);
+			return;
+		}
+	}
+}
+
+RevolvingDoor* SBS::GetRevolvingDoor(int index)
+{
+	if (index >= 0 && index < RevolvingDoorArray.size())
+		return RevolvingDoorArray[index];
+	return 0;
+}
+
 void SBS::SetPower(bool value)
 {
 	//set building power state
@@ -4721,6 +3455,30 @@ void SBS::EnableMap(bool value)
 	//enable or disable map generator
 	if (MapGenerator)
 		MapGenerator->Enabled(value);
+}
+
+int SBS::GetTextureCount()
+{
+	if (GetTextureManager())
+		return GetTextureManager()->GetMaterialCount();
+
+	return 0;
+}
+
+PolyMesh* SBS::GetPolyMesh()
+{
+	//return pointer to the PolyMesh geometry processor
+	return polymesh;
+}
+
+Trigger* SBS::GetAreaTrigger()
+{
+	return area_trigger;
+}
+
+MeshObject* SBS::GetLandscapeMesh()
+{
+	return Landscape;
 }
 
 }

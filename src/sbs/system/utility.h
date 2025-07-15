@@ -38,6 +38,26 @@ public:
 	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
+	Real MetersToFeet(Real meters); //converts meters to feet
+	Real FeetToMeters(Real feet); //converts feet to meters
+	Vector3 ToGlobal(const Vector3 &position);
+	Vector3 FromGlobal(const Vector3 &position);
+	Quaternion ToGlobal(const Quaternion &orientation);
+	Quaternion FromGlobal(const Quaternion &orientation);
+	std::string VerifyFile(const std::string &filename);
+	std::string VerifyFile(std::string filename, bool &result, bool skip_cache);
+	bool FileExists(const std::string &filename);
+	Real ToLocal(Real remote_value);
+	Vector2 ToLocal(const Vector2& remote_value);
+	Vector3 ToLocal(const Vector3& remote_value, bool rescale = true, bool flip_z = true);
+	Real ToRemote(Real local_value);
+	Vector2 ToRemote(const Vector2& local_value);
+	Vector3 ToRemote(const Vector3& local_value, bool rescale = true, bool flip_z = true);
+	bool Mount(const std::string &filename, const std::string &path);
+	Real GetDistance(Real x1, Real x2, Real z1, Real z2);
+	std::string GetFilesystemPath(std::string filename);
+	std::string GetMountPath(std::string filename, std::string &newfilename);
+	void CacheFilename(const std::string &filename, const std::string &result);
 
 private:
 
@@ -50,6 +70,16 @@ private:
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
 	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
+
+	struct VerifyResult
+	{
+		std::string filename;
+		std::string result;
+	};
+	std::vector<VerifyResult> verify_results;
+
+	//file listing cache
+	Ogre::StringVectorPtr filesystem_listing;
 };
 
 }

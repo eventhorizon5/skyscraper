@@ -54,7 +54,6 @@
 #endif
 #include "profiler.h"
 #include "startscreen.h"
-#include "gitrev.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #include <sysdir.h>  // for sysdir_start_search_path_enumeration
@@ -178,11 +177,6 @@ bool Skyscraper::OnInit()
 	//create VM instance
 	vm = new VM();
 
-	vm->version = "2.1";
-	vm->version_rev = ToString(GIT_REV);
-	vm->version_state = "Alpha";
-	vm->version_frontend = vm->version + ".0." + vm->version_rev;
-
 #ifdef USING_WX
 	gui = vm->GetGUI();
 #endif
@@ -212,7 +206,7 @@ bool showconsole = true;
 	//show version number and exit if specified
 	if (parser->Found(wxT("version")) == true)
 	{
-		printf("Skyscraper version %s\n", vm->version_frontend.c_str());
+		printf("Skyscraper version %s\n", vm->version_full.c_str());
 		return false;
 	}
 
@@ -282,6 +276,7 @@ bool showconsole = true;
 	{
 		Report("");
 		Report("Joystick detected: " + joystick.GetProductName().ToStdString());
+		Report("Joystick buttons: " + ToString(joystick.GetNumberButtons()));
 		Report("");
 	}
 #endif
@@ -511,9 +506,12 @@ void Skyscraper::StartSound()
 	vm->GetHAL()->PlaySound(filename_full, volume);
 }
 
-std::string Skyscraper::SelectBuilding()
+std::string Skyscraper::SelectBuilding(bool native_dialog)
 {
 #ifdef USING_WX
+
+	if (native_dialog == true)
+		return gui->SelectBuildingNative(vm->data_path);
 
 	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.SelectBuildingNative", false) == false)
 		return gui->SelectBuilding(vm->data_path);

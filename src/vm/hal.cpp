@@ -169,6 +169,8 @@ void HAL::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, 
 
 void HAL::UnclickedObject()
 {
+	//unclick the clicked object
+
 	EngineContext *engine = vm->GetActiveEngine();
 
 	if (!engine)
@@ -339,7 +341,7 @@ bool HAL::Initialize(const std::string &data_path, Ogre::Root *root, Ogre::Overl
 			}
 
 			//report on system startup
-			Report("Skyscraper version " + vm->version_frontend + " starting...\n", "");
+			Report("Skyscraper version " + vm->version_full + " starting...\n", "");
 
 			//load OGRE
 			Report("Loading OGRE...");
@@ -693,6 +695,7 @@ bool HAL::Render()
 
 bool HAL::PlaySound(const std::string &filename, Real volume)
 {
+	//play a sound
 #ifndef DISABLE_SOUND
 
 	//load new sound

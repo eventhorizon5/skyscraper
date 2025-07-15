@@ -38,6 +38,18 @@ public:
 	int MaxPassengers; //maximum passengers per route
 	bool Reprocess; //if true, reprocess routes instead of dropping them when an elevator becomes unavailable
 
+	struct Route
+	{
+		int starting_floor;
+		int destination_floor; //used for destination dispatch mode
+		int direction; //used for standard mode
+		int requests;
+		bool processed;
+		int assigned_elevator;
+		CallStation* station;
+		bool destination; //true if a destination dispatch route
+	};
+
 	//functions
 	DispatchController(Object *parent, int number);
 	~DispatchController();
@@ -66,17 +78,21 @@ public:
 	int GetTopFloor();
 	bool ServesFloor(int floor);
 	int GetElevator(int index);
+	int GetElevatorCount();
 	bool SameElevators(const std::vector<int> &elevators);
 	bool GetCallStatus(int elevator, int floor, bool &up, bool &down);
 	std::vector<CallStation*> GetCallStations(int floor);
+	int GetCallStationCount();
+	CallStation* GetCallStation(int number);
+	int GetRouteCount();
+	bool GetRoute(int number, Route &route);
+	bool RemoveElevatorIndex(int index);
 
 private:
 
-	struct Route;
-
 	int FindClosestElevator(bool &busy, bool destination, int starting_floor, int destination_floor, int direction = 0);
 	void DispatchElevator(bool destination, int number, int destination_floor, int direction, bool call);
-	void RemoveRoute(Route &route);
+	void RemoveRoute(const Route &route);
 	void ProcessRoutes();
 	void GetFloorRange();
 	bool ElevatorUnavailable(int elevator);
@@ -104,19 +120,7 @@ private:
 		std::vector<Call> calls;
 	};
 
-	std::vector<ElevMap> Elevators; //controller object array
-
-	struct Route
-	{
-		int starting_floor;
-		int destination_floor; //used for destination dispatch mode
-		int direction; //used for standard mode
-		int requests;
-		bool processed;
-		int assigned_elevator;
-		CallStation* station;
-		bool destination; //true if a destination dispatch route
-	};
+	std::vector<ElevMap> Elevators;
 
 	std::vector<Route> Routes; //destination dispatch requests
 

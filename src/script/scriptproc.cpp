@@ -22,6 +22,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #ifdef USING_WX
 #include "wx/wx.h"
 #endif
@@ -331,7 +332,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 {
 	//loads a building data file into the runtime buffer
 	int location = insert_line;
-	std::string Filename = Simcore->VerifyFile(filename);
+	std::string Filename = Simcore->GetUtility()->VerifyFile(filename);
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
@@ -344,7 +345,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	}
 
 	//make sure file exists
-	if (Simcore->FileExists(Filename) == false)
+	if (Simcore->GetUtility()->FileExists(Filename) == false)
 	{
 		if (insert == false)
 			engine->ReportFatalError("Error loading building file:\nFile '" + Filename + "' does not exist");
@@ -370,7 +371,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 
 		//check for a mount point
 		std::string shortname;
-		std::string group = Simcore->GetMountPath(Filename, shortname);
+		std::string group = Simcore->GetUtility()->GetMountPath(Filename, shortname);
 
 		if (group == "General")
 		{
@@ -1051,7 +1052,7 @@ void ScriptProcessor::CheckFile(const std::string &filename)
 	if (loc > 0)
 		return;
 
-	if (Simcore->FileExists(file) == false)
+	if (Simcore->GetUtility()->FileExists(file) == false)
 	{
 		bool exists = false;
 		for (size_t i = 0; i < nonexistent_files.size(); i++)
@@ -1306,7 +1307,7 @@ int ScriptProcessor::ProcessSections()
 		BuildingData.erase(BuildingData.begin() + line);
 
 		//insert file at current line
-		std::string filename = Simcore->VerifyFile(includefile);
+		std::string filename = Simcore->GetUtility()->VerifyFile(includefile);
 		bool result = LoadDataFile(filename, true, line);
 		if (result == false)
 			return sError;
