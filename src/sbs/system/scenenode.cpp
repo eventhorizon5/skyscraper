@@ -25,6 +25,7 @@
 #include <OgreSceneNode.h>
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "scenenode.h"
 
 namespace SBS {
@@ -109,7 +110,7 @@ void SceneNode::SetPosition(const Vector3 &position, bool relative)
 	{
 		//set absolute position
 		if (IsRoot() == false)
-			node->_setDerivedPosition(sbs->ToRemote(sbs->ToGlobal(position)));
+			node->_setDerivedPosition(sbs->ToRemote(sbs->GetUtility()->ToGlobal(position)));
 		else
 			node->_setDerivedPosition(sbs->ToRemote(position));
 	}
@@ -134,7 +135,7 @@ Vector3 SceneNode::GetPosition(bool relative)
 	{
 		Vector3 pos = GetDerivedPosition();
 		if (IsRoot() == false)
-			return sbs->FromGlobal(pos);
+			return sbs->GetUtility()->FromGlobal(pos);
 		else
 			return pos;
 	}
@@ -200,7 +201,7 @@ Quaternion SceneNode::GetOrientation(bool relative)
 		if (relative == false)
 		{
 			if (IsRoot() == false)
-				return sbs->FromGlobal(GetDerivedOrientation());
+				return sbs->GetUtility()->FromGlobal(GetDerivedOrientation());
 			else
 				return GetDerivedOrientation();
 		}
@@ -221,7 +222,7 @@ void SceneNode::SetOrientation(const Quaternion &q, bool relative)
 	if (relative == false)
 	{
 		if (IsRoot() == false)
-			node->_setDerivedOrientation(sbs->ToGlobal(q));
+			node->_setDerivedOrientation(sbs->GetUtility()->ToGlobal(q));
 		else
 			node->_setDerivedOrientation(q);
 	}

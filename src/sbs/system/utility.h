@@ -40,6 +40,10 @@ public:
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
 	Real MetersToFeet(Real meters); //converts meters to feet
 	Real FeetToMeters(Real feet); //converts feet to meters
+	Vector3 ToGlobal(const Vector3 &position);
+	Vector3 FromGlobal(const Vector3 &position);
+	Quaternion ToGlobal(const Quaternion &orientation);
+	Quaternion FromGlobal(const Quaternion &orientation);
 
 private:
 

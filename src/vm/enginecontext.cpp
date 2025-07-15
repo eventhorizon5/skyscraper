@@ -31,6 +31,7 @@
 #endif
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "vm.h"
 #include "hal.h"
 #include "gui.h"
@@ -570,7 +571,7 @@ bool EngineContext::IsInside(const Vector3 &position)
 	if (!Simcore)
 		return false;
 
-	return Simcore->IsInside(Simcore->FromGlobal(position));
+	return Simcore->IsInside(Simcore->GetUtility()->FromGlobal(position));
 }
 
 void EngineContext::DetachCamera(bool reset_building)
@@ -615,7 +616,7 @@ Vector3 EngineContext::GetCameraPosition()
 {
 	//get this engine's camera position, in global positioning
 
-	return Simcore->ToGlobal(Simcore->camera->GetPosition());
+	return Simcore->GetUtility()->ToGlobal(Simcore->camera->GetPosition());
 }
 
 void EngineContext::OnEnter()
@@ -662,16 +663,16 @@ void EngineContext::CutForEngine(EngineContext *engine)
 		return;
 
 	//get global positions of engine's boundaries, in 4 points representing a rectangle
-	a = newsimcore->ToGlobal(Vector3(min.x, min.y, min.z));
-	b = newsimcore->ToGlobal(Vector3(min.x, min.y, max.z));
-	c = newsimcore->ToGlobal(Vector3(max.x, max.y, max.z));
-	d = newsimcore->ToGlobal(Vector3(max.x, max.y, min.z));
+	a = newsimcore->GetUtility()->ToGlobal(Vector3(min.x, min.y, min.z));
+	b = newsimcore->GetUtility()->ToGlobal(Vector3(min.x, min.y, max.z));
+	c = newsimcore->GetUtility()->ToGlobal(Vector3(max.x, max.y, max.z));
+	d = newsimcore->GetUtility()->ToGlobal(Vector3(max.x, max.y, min.z));
 
 	//convert global positions to this engine's relative positions
-	a = Simcore->FromGlobal(a);
-	b = Simcore->FromGlobal(b);
-	c = Simcore->FromGlobal(c);
-	d = Simcore->FromGlobal(d);
+	a = Simcore->GetUtility()->FromGlobal(a);
+	b = Simcore->GetUtility()->FromGlobal(b);
+	c = Simcore->GetUtility()->FromGlobal(c);
+	d = Simcore->GetUtility()->FromGlobal(d);
 
 	//get new cutting bounds (get min/max values)
 	newmin.x = Min(a.x, b.x, c.x, d.x);

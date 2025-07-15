@@ -376,10 +376,6 @@ public:
 	void SetBounds(const Vector3 &area_min, const Vector3 &area_max);
 	bool HasBounds();
 	void ResetState();
-	Vector3 ToGlobal(const Vector3 &position);
-	Vector3 FromGlobal(const Vector3 &position);
-	Quaternion ToGlobal(const Quaternion &orientation);
-	Quaternion FromGlobal(const Quaternion &orientation);
 	Light* GetLight(std::string name);
 	Model* GetModel(std::string name);
 	Primitive* GetPrimitive(std::string name);

@@ -4033,7 +4033,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	//note that the ray's origin and direction need to be in engine-relative values
 
 	//create a new ray that has absolute positioning, for engine offsets
-	Ray ray2 (ToRemote(ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
+	Ray ray2 (ToRemote(GetUtility()->ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
 
 	//get a collision callback from Bullet
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray2, mWorld, max_distance);
@@ -4403,34 +4403,6 @@ void SBS::ResetState()
 
 	//reset camera state
 	camera->ResetState();
-}
-
-Vector3 SBS::ToGlobal(const Vector3 &position)
-{
-	//convert an engine-relative position to a global (scene) position
-
-	return (GetOrientation().Inverse() * position) + GetPosition();
-}
-
-Vector3 SBS::FromGlobal(const Vector3 &position)
-{
-	//convert a global (scene) position to an engine-relative position
-
-	return (GetOrientation() * (position - GetPosition()));
-}
-
-Quaternion SBS::ToGlobal(const Quaternion &orientation)
-{
-	//convert an engine-relative orientation (rotation) to a global (scene) orientation
-
-	return (GetOrientation() * orientation);
-}
-
-Quaternion SBS::FromGlobal(const Quaternion &orientation)
-{
-	//convert a global (scene) orientation (rotation) to an engine-relative orientation
-
-	return (GetOrientation().Inverse() * orientation);
 }
 
 Light* SBS::GetLight(std::string name)

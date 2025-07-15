@@ -582,4 +582,32 @@ Real Utility::FeetToMeters(Real feet)
 	return feet / 3.2808399;
 }
 
+Vector3 Utility::ToGlobal(const Vector3 &position)
+{
+	//convert an engine-relative position to a global (scene) position
+
+	return (sbs->GetOrientation().Inverse() * position) + sbs->GetPosition();
+}
+
+Vector3 Utility::FromGlobal(const Vector3 &position)
+{
+	//convert a global (scene) position to an engine-relative position
+
+	return (sbs->GetOrientation() * (position - sbs->GetPosition()));
+}
+
+Quaternion Utility::ToGlobal(const Quaternion &orientation)
+{
+	//convert an engine-relative orientation (rotation) to a global (scene) orientation
+
+	return (sbs->GetOrientation() * orientation);
+}
+
+Quaternion Utility::FromGlobal(const Quaternion &orientation)
+{
+	//convert a global (scene) orientation (rotation) to an engine-relative orientation
+
+	return (sbs->GetOrientation().Inverse() * orientation);
+}
+
 }

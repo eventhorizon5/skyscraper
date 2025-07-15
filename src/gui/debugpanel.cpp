@@ -26,6 +26,7 @@
 //*)
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
@@ -496,7 +497,7 @@ void DebugPanel::Loop()
 	if (floor)
 		t_floorname->SetLabel(floor->Name);
 
-	Vector3 globalpos = Simcore->ToGlobal(Simcore->camera->GetPosition());
+	Vector3 globalpos = Simcore->GetUtility()->ToGlobal(Simcore->camera->GetPosition());
 
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));

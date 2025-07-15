@@ -26,6 +26,7 @@
 #endif
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "floor.h"
 #include "elevatorcar.h"
 #include "reverb.h"
@@ -97,7 +98,7 @@ Sound::~Sound()
 void Sound::OnMove(bool parent)
 {
 #ifndef DISABLE_SOUND
-	Vector3 global_position = sbs->ToGlobal(GetPosition());
+	Vector3 global_position = sbs->GetUtility()->ToGlobal(GetPosition());
 
 	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
 	FMOD_VECTOR vel = { 0, 0, 0 };

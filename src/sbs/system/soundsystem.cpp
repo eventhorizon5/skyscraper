@@ -28,6 +28,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "camera.h"
 #include "sound.h"
 #include "profiler.h"
@@ -123,7 +124,7 @@ void SoundSystem::SetListenerPosition(const Vector3 &position)
 
 	Position = position;
 
-	Vector3 global_position = sbs->ToGlobal(position);
+	Vector3 global_position = sbs->GetUtility()->ToGlobal(position);
 
 	listener_position.x = (float)global_position.x;
 	listener_position.y = (float)global_position.y;
