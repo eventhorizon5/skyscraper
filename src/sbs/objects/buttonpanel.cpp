@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "mesh.h"
 #include "texture.h"
 #include "elevatorcar.h"
@@ -70,25 +71,25 @@ ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, 
 		sbs->GetTextureManager()->ResetTextureMapping(true);
 		if (Direction == "front")
 		{
-			sbs->DrawWalls(true, false, false, false, false, false);
+			sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
 			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "back")
 		{
-			sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
 			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "left")
 		{
-			sbs->DrawWalls(true, false, false, false, false, false);
+			sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
 			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "right")
 		{
-			sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
 			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th, autosize);
 		}
-		sbs->ResetWalls();
+		sbs->GetPolyMesh()->ResetWalls();
 		sbs->GetTextureManager()->ResetTextureMapping();
 	}
 
@@ -271,7 +272,7 @@ bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, R
 	//Adds a wall with the specified dimensions
 
 	Wall *wall = mesh->CreateWallObject(name);
-	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, autosize);
+	return sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, autosize);
 }
 
 void ButtonPanel::ChangeLight(int floor, bool value)

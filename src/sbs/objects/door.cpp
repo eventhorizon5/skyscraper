@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "manager.h"
 #include "mesh.h"
 #include "floor.h"
@@ -371,18 +372,18 @@ DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	//add main walls
-	sbs->DrawWalls(true, true, false, false, false, false);
+	sbs->GetPolyMesh()->DrawWalls(true, true, false, false, false, false);
 	Wall *wall;
 	wall = component->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
-	sbs->ResetWalls();
+	sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	sbs->GetPolyMesh()->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();
 
 	//add side walls
-	sbs->DrawWalls(false, false, true, true, true, true);
+	sbs->GetPolyMesh()->DrawWalls(false, false, true, true, true, true);
 	wall = component->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
-	sbs->ResetWalls();
+	sbs->GetPolyMesh()->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	sbs->GetPolyMesh()->ResetWalls();
 
 	//store extents
 	if (x1 < x2)

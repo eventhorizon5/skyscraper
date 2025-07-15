@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "mesh.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -94,22 +95,22 @@ FloorIndicator::FloorIndicator(Object *parent, int index, int elevator, int car,
 	if (tmpdirection == "front" || tmpdirection == "back")
 	{
 		if (tmpdirection == "front")
-			sbs->DrawWalls(true, false, false, false, false, false);
+			sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
 		else
-			sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(wall, "Floor Indicator", texture, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
+		sbs->GetPolyMesh()->AddWallMain(wall, "Floor Indicator", texture, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
 	}
 	else if (tmpdirection == "left" || tmpdirection == "right")
 	{
 		if (tmpdirection == "left")
-			sbs->DrawWalls(true, false, false, false, false, false);
+			sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
 		else
-			sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(wall, "Floor Indicator", texture, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
+		sbs->GetPolyMesh()->AddWallMain(wall, "Floor Indicator", texture, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
-	sbs->ResetWalls();
+	sbs->GetPolyMesh()->ResetWalls();
 
 	flash_timer = new Timer("Flash Timer", this);
 

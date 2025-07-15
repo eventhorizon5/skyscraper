@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "dynamicmesh.h"
 #include "triangle.h"
 #include "mesh.h"
@@ -54,7 +55,7 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 
 	mesh->ResetPrepare();
 
-	sbs->PolygonCount++;
+	sbs->GetPolyMesh()->PolygonCount++;
 
 	//register texture usage
 	if (material != "")
@@ -68,7 +69,7 @@ Polygon::~Polygon()
 
 	mesh->ResetPrepare();
 
-	sbs->PolygonCount--;
+	sbs->GetPolyMesh()->PolygonCount--;
 }
 
 void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)

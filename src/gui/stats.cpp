@@ -26,6 +26,7 @@
 //*)
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "vm.h"
 #include "hal.h"
 #include "debugpanel.h"
@@ -290,8 +291,8 @@ void Stats::Loop()
 		tInShaft->SetValue(BoolToString(Simcore->InShaft));
 		tRunningTime->SetValue(TruncateNumber(Simcore->running_time, 2));
 		tObjects->SetValue(ToString(Simcore->GetObjectCount()));
-		tWalls->SetValue(ToString(Simcore->GetWallCount()));
-		tPolygons->SetValue(ToString(Simcore->GetPolygonCount()));
+		tWalls->SetValue(ToString(Simcore->GetPolyMesh()->GetWallCount()));
+		tPolygons->SetValue(ToString(Simcore->GetPolyMesh()->GetPolygonCount()));
 		tFloors->SetValue(ToString(Simcore->Floors));
 		tBasements->SetValue(ToString(Simcore->Basements));
 		tElevators->SetValue(ToString(Simcore->GetElevatorCount()));

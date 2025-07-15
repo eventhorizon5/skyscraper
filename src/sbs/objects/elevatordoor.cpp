@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -843,17 +844,17 @@ DoorComponent* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::s
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 
 	//add main walls
-	sbs->DrawWalls(true, true, false, false, false, false);
+	sbs->GetPolyMesh()->DrawWalls(true, true, false, false, false, false);
 	Wall *wall;
 	wall = door->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
-	sbs->ResetWalls();
+	sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	sbs->GetPolyMesh()->ResetWalls();
 
 	//add side walls
-	sbs->DrawWalls(false, false, true, true, true, true);
+	sbs->GetPolyMesh()->DrawWalls(false, false, true, true, true, true);
 	wall = door->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
-	sbs->ResetWalls();
+	sbs->GetPolyMesh()->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	sbs->GetPolyMesh()->ResetWalls();
 
 	//store extents
 	if (x1 < x2)
@@ -1068,8 +1069,8 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		{
 			name1 = "Door" + ToString(car->Number) + GetNumberText() + ":F1";
 			name2 = "Door" + ToString(car->Number) + GetNumberText() + ":F2";
-			sbs->CreateWallBox(car->Mesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(car->Mesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			sbs->GetPolyMesh()->CreateWallBox(car->Mesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->GetPolyMesh()->CreateWallBox(car->Mesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 		else
 		{
@@ -1081,8 +1082,8 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 			Vector3 position (car->GetPosition() - shaft->GetPosition());
 			name1 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":F1";
 			name2 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":F2";
-			sbs->CreateWallBox(mesh, name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(mesh, name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			sbs->GetPolyMesh()->CreateWallBox(mesh, name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->GetPolyMesh()->CreateWallBox(mesh, name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 
 		sbs->GetTextureManager()->ResetTextureMapping();

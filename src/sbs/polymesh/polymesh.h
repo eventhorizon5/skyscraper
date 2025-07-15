@@ -41,6 +41,9 @@ public:
 		std::vector<Triangle> triangles; //triangle data, in A B C values
 	};
 
+	int WallCount; //wall object count
+	int PolygonCount; //wall polygon object count
+
 	//functions
 
 	PolyMesh(Object *parent);
@@ -50,8 +53,48 @@ public:
 	Wall* FindWallIntersect(MeshObject *mesh, const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall = 0);
 	Vector2* GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th, size_t &texel_count);
 	Vector2 GetExtents(int coord, bool flip_z = false);
+	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
+	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false);
+	Wall* CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
+	Wall* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
+	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th);
+	Wall* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, PolyArray &varray, Real tw, Real th);
+	Wall* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Vector2> &varray, Real altitude, Real tw, Real th);
+	void AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th);
+	bool SetWallOrientation(std::string direction);
+	int GetWallOrientation();
+	bool SetFloorOrientation(std::string direction);
+	int GetFloorOrientation();
+	void DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom);
+	void ResetWalls(bool ToDefaults = false);
+	int GetDrawWallsCount();
+	Wall* AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th);
+	Wall* AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
+	Wall* AddGround(const std::string &name, const std::string &texture, Real x1, Real z1, Real x2, Real z2, Real altitude, int tile_x, int tile_z);
+	int GetWallCount();
+	int GetPolygonCount();
 
 private:
+
+	//orientations
+	int wall_orientation;
+	int floor_orientation;
+
+	//wall/floor sides
+	bool DrawMainN; //or top, if floor
+	bool DrawMainP; //or bottom, if floor
+	bool DrawSideN;
+	bool DrawSideP;
+	bool DrawTop; //or back, if floor
+	bool DrawBottom; //or front, if floor
+
+	//old wall/floor sides
+	bool DrawMainNOld; //or top, if floor
+	bool DrawMainPOld; //or bottom, if floor
+	bool DrawSideNOld;
+	bool DrawSidePOld;
+	bool DrawTopOld; //or back, if floor
+	bool DrawBottomOld; //or front, if floor
 
 };
 

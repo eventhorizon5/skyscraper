@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "floor.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
@@ -469,8 +470,8 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
 	sbs->GetTextureManager()->SetAutoSize(false, false);
 
-	Wall *frame = sbs->CreateWallBox(WeightMesh, "Counterweight Frame", frame_texture, -size.x / 2, size.x / 2, -size.z / 2, size.z / 2, size.y, 0, 1, 1, true, true, false, false, false);
-	Wall *counterweight = sbs->CreateWallBox(WeightMesh, "Counterweight", weight_texture, (-size.x / 2) + 0.01, (size.x / 2) - 0.01, (-size.z / 2) + 0.01, (size.z / 2) - 0.01, size.y / 2, weight_voffset, 1, 1);
+	Wall *frame = sbs->GetPolyMesh()->CreateWallBox(WeightMesh, "Counterweight Frame", frame_texture, -size.x / 2, size.x / 2, -size.z / 2, size.z / 2, size.y, 0, 1, 1, true, true, false, false, false);
+	Wall *counterweight = sbs->GetPolyMesh()->CreateWallBox(WeightMesh, "Counterweight", weight_texture, (-size.x / 2) + 0.01, (size.x / 2) - 0.01, (-size.z / 2) + 0.01, (size.z / 2) - 0.01, size.y / 2, weight_voffset, 1, 1);
 
 	Floor *topfloor, *carfloor, *topcarfloor, *bottomfloor;
 	topfloor = sbs->GetFloor(GetTopFloor());
@@ -488,16 +489,16 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 	Real counterweight_rope_height = MotorPosition.y - (WeightMesh->GetPosition().y + (size.y - 0.5));
 	Wall *c_rope;
 	if (size.x > size.z)
-		c_rope = sbs->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
+		c_rope = sbs->GetPolyMesh()->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
 	else
-		c_rope = sbs->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
+		c_rope = sbs->GetPolyMesh()->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
 
 	Real rope_height = MotorPosition.y - RopeMesh->GetPosition().y;
 	Wall *rope;
 	if (size.x > size.z)
-		rope = sbs->AddWall(RopeMesh, "Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, rope_height, rope_height, 0, 0, 1, 1);
+		rope = sbs->GetPolyMesh()->AddWall(RopeMesh, "Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, rope_height, rope_height, 0, 0, 1, 1);
 	else
-		rope = sbs->AddWall(RopeMesh, "Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, rope_height, rope_height, 0, 0, 1, 1);
+		rope = sbs->GetPolyMesh()->AddWall(RopeMesh, "Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, rope_height, rope_height, 0, 0, 1, 1);
 
 	counterweightsound = new Sound(WeightMesh, "Counterweight Sound", true);
 
@@ -525,29 +526,31 @@ bool Elevator::AddRails(const std::string &main_texture, const std::string &edge
 	MeshObject *mesh = GetShaft()->GetLevel(GetShaft()->startfloor)->GetMeshObject();
 	Real height = MotorPosition.y - sbs->GetFloor(GetShaft()->startfloor)->Altitude;
 
+	PolyMesh *polymesh = sbs->GetPolyMesh();
+
 	if (orientation == false)
 	{
 		//left side
-		sbs->CreateWallBox2(mesh, "Rails L1", edge_texture, -rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
-		sbs->CreateWallBox2(mesh, "Rails L2", main_texture, -rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
-		sbs->CreateWallBox2(mesh, "Rails L3", main_texture, -rail_distance + x + offset.x - (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails L1", edge_texture, -rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails L2", main_texture, -rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails L3", main_texture, -rail_distance + x + offset.x - (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
 
 		//right side
-		sbs->CreateWallBox2(mesh, "Rails R1", edge_texture, rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
-		sbs->CreateWallBox2(mesh, "Rails R2", main_texture, rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
-		sbs->CreateWallBox2(mesh, "Rails R3", main_texture, rail_distance + x + offset.x + (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails R1", edge_texture, rail_distance + x + offset.x - (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails R2", main_texture, rail_distance + x + offset.x + (rail_width / 4), z + offset.z, rail_width / 2, rail_width / 8, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails R3", main_texture, rail_distance + x + offset.x + (rail_width / 2), z + offset.z, rail_width / 8, rail_width, height, 0, 1, 1);
 	}
 	else
 	{
 		//front side
-		sbs->CreateWallBox2(mesh, "Rails F1", edge_texture, x + offset.x, -rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
-		sbs->CreateWallBox2(mesh, "Rails F2", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
-		sbs->CreateWallBox2(mesh, "Rails F3", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails F1", edge_texture, x + offset.x, -rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails F2", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails F3", main_texture, x + offset.x, -rail_distance + z + offset.z - (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
 
 		//back side
-		sbs->CreateWallBox2(mesh, "Rails B1", edge_texture, x + offset.x, rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
-		sbs->CreateWallBox2(mesh, "Rails B2", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
-		sbs->CreateWallBox2(mesh, "Rails B3", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails B1", edge_texture, x + offset.x, rail_distance + z + offset.z - (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails B2", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 4), rail_width / 8, rail_width / 2, height, 0, 1, 1);
+		polymesh->CreateWallBox2(mesh, "Rails B3", main_texture, x + offset.x, rail_distance + z + offset.z + (rail_width / 2), rail_width, rail_width / 8, height, 0, 1, 1);
 	}
 
 	return true;

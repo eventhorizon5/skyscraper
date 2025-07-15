@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "mesh.h"
 #include "polygon.h"
 #include "polymesh.h"
@@ -40,7 +41,7 @@ Wall::Wall(MeshObject* wrapper) : Object(wrapper)
 	meshwrapper = wrapper;
 	parent_array = 0;
 
-	sbs->WallCount++;
+	sbs->GetPolyMesh()->WallCount++;
 }
 
 Wall::~Wall()
@@ -59,7 +60,7 @@ Wall::~Wall()
 		}
 	}
 
-	sbs->WallCount--;
+	sbs->GetPolyMesh()->WallCount--;
 
 	//delete polygons
 	DeletePolygons(!sbs->FastDelete);

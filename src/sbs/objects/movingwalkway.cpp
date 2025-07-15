@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "camera.h"
 #include "mesh.h"
 #include "floor.h"
@@ -200,9 +201,9 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
-		sbs->SetWallOrientation("right");
+		sbs->GetPolyMesh()->SetWallOrientation("right");
 	if (Direction == "left" || Direction == "front")
-		sbs->SetWallOrientation("left");
+		sbs->GetPolyMesh()->SetWallOrientation("left");
 
 	for (int i = 1; i <= num_steps; i++)
 	{
@@ -214,30 +215,30 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 
 		Real thickness = treadsize;
 
-		sbs->DrawWalls(false, true, false, false, false, false);
+		sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
 
 		if (Direction == "right")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->AddFloorMain(wall, base, texture, 0, 0, -(width / 2), treadsize, width / 2, 0, 0, false, false, tw, th, true);
+			sbs->GetPolyMesh()->AddFloorMain(wall, base, texture, 0, 0, -(width / 2), treadsize, width / 2, 0, 0, false, false, tw, th, true);
 			Steps[i - 1]->Move(Vector3(pos, 0, 0));
 		}
 		if (Direction == "left")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->AddFloorMain(wall, base, texture, 0, -treadsize, -(width / 2), 0, width / 2, 0, 0, false, false, tw, th, true);
+			sbs->GetPolyMesh()->AddFloorMain(wall, base, texture, 0, -treadsize, -(width / 2), 0, width / 2, 0, 0, false, false, tw, th, true);
 			Steps[i - 1]->Move(Vector3(pos, 0, 0));
 		}
 		if (Direction == "back")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->AddFloorMain(wall, base, texture, 0, -(width / 2), 0, width / 2, treadsize, 0, 0, false, false, tw, th, true);
+			sbs->GetPolyMesh()->AddFloorMain(wall, base, texture, 0, -(width / 2), 0, width / 2, treadsize, 0, 0, false, false, tw, th, true);
 			Steps[i - 1]->Move(Vector3(0, 0, pos));
 		}
 		if (Direction == "front")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->AddFloorMain(wall, base, texture, 0, -(width / 2), -treadsize, width / 2, 0, 0, 0, false, false, tw, th, true);
+			sbs->GetPolyMesh()->AddFloorMain(wall, base, texture, 0, -(width / 2), -treadsize, width / 2, 0, 0, 0, false, false, tw, th, true);
 			Steps[i - 1]->Move(Vector3(0, 0, pos));
 		}
 		Steps[i - 1]->vector = Vector3::ZERO;
@@ -250,7 +251,7 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 		Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 	}
 
-	sbs->ResetWalls(true);
+	sbs->GetPolyMesh()->ResetWalls(true);
 	sbs->GetTextureManager()->ResetTextureMapping();
 }
 

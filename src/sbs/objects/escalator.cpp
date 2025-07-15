@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "camera.h"
 #include "mesh.h"
 #include "floor.h"
@@ -247,9 +248,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
-		sbs->SetWallOrientation("right");
+		sbs->GetPolyMesh()->SetWallOrientation("right");
 	if (Direction == "left" || Direction == "front")
-		sbs->SetWallOrientation("left");
+		sbs->GetPolyMesh()->SetWallOrientation("left");
+
+	PolyMesh *polymesh = sbs->GetPolyMesh();
 
 	for (int i = 1; i <= num_steps; i++)
 	{
@@ -264,11 +267,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 		if (Direction == "right")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", riser_texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
+			polymesh->DrawWalls(true, true, true, true, false, true);
+			polymesh->AddWallMain(wall, base + "-riser", riser_texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
 
-			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", tread_texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
+			polymesh->DrawWalls(false, true, false, false, false, false);
+			polymesh->AddFloorMain(wall, base + "-tread", tread_texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
 
 			if (i < (buffer_zone_steps + 1))
 				Steps[i - 1]->Move(Vector3(pos, -risersize, 0));
@@ -288,11 +291,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 		if (Direction == "left")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", riser_texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
+			polymesh->DrawWalls(true, true, true, true, false, true);
+			polymesh->AddWallMain(wall, base + "-riser", riser_texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
 
-			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", tread_texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
+			polymesh->DrawWalls(false, true, false, false, false, false);
+			polymesh->AddFloorMain(wall, base + "-tread", tread_texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
 
 			if (i < (buffer_zone_steps + 1))
 				Steps[i - 1]->Move(Vector3(pos, -risersize, 0));
@@ -312,11 +315,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 		if (Direction == "back")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", riser_texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
+			polymesh->DrawWalls(true, true, true, true, false, true);
+			polymesh->AddWallMain(wall, base + "-riser", riser_texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
 
-			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", tread_texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
+			polymesh->DrawWalls(false, true, false, false, false, false);
+			polymesh->AddFloorMain(wall, base + "-tread", tread_texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
 
 			if (i < (buffer_zone_steps + 1))
 				Steps[i - 1]->Move(Vector3(0, -risersize, pos));
@@ -336,11 +339,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 		if (Direction == "front")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", riser_texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
+			polymesh->DrawWalls(true, true, true, true, false, true);
+			polymesh->AddWallMain(wall, base + "-riser", riser_texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
 
-			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", tread_texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
+			polymesh->DrawWalls(false, true, false, false, false, false);
+			polymesh->AddFloorMain(wall, base + "-tread", tread_texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
 
 			if (i < (buffer_zone_steps + 1))
 				Steps[i - 1]->Move(Vector3(0, -risersize, pos));
@@ -358,7 +361,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 	}
-	sbs->ResetWalls(true);
+	polymesh->ResetWalls(true);
 	sbs->GetTextureManager()->ResetTextureMapping();
 }
 

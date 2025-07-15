@@ -33,6 +33,7 @@
 #include "dylib.hpp"
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "vm.h"
 #include "camera.h"
 #include "scenenode.h"
@@ -1065,8 +1066,8 @@ int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, in
 			actions += Simcore->GetActionCount();
 			sounds += Simcore->GetSoundCount();
 			objects += Simcore->GetObjectCount();
-			walls += Simcore->GetWallCount();
-			polygons += Simcore->GetPolygonCount();
+			walls += Simcore->GetPolyMesh()->GetWallCount();
+			polygons += Simcore->GetPolyMesh()->GetPolygonCount();
 		}
 	}
 

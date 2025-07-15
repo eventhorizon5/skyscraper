@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "manager.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
@@ -323,14 +324,14 @@ Wall* Floor::AddFloor(const std::string &name, const std::string &texture, Real 
 	if (isexternal == false)
 	{
 		wall = Level->CreateWallObject(name);
-		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase(true) + voffset1, GetBase(true) + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+		sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase(true) + voffset1, GetBase(true) + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	}
 	else
 	{
 		if (sbs->External)
 		{
 			wall = sbs->External->CreateWallObject(name);
-			sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+			sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 		}
 	}
 	return wall;
@@ -341,7 +342,7 @@ Wall* Floor::AddInterfloorFloor(const std::string &name, const std::string &text
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
 	Wall *wall = Interfloor->CreateWallObject(name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
@@ -353,14 +354,14 @@ Wall* Floor::AddWall(const std::string &name, const std::string &texture, Real t
 	if (isexternal == false)
 	{
 		wall = Level->CreateWallObject(name);
-		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase(true) + voffset1, GetBase(true) + voffset2, tw, th, true);
+		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase(true) + voffset1, GetBase(true) + voffset2, tw, th, true);
 	}
 	else
 	{
 		if (sbs->External)
 		{
 			wall = sbs->External->CreateWallObject(name);
-			sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
+			sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 		}
 	}
 	return wall;
@@ -371,7 +372,7 @@ Wall* Floor::AddInterfloorWall(const std::string &name, const std::string &textu
 	//Adds an interfloor wall with the specified dimensions
 
 	Wall *wall = Interfloor->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, voffset1, voffset2, tw, th, true);
+	sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
 
@@ -892,14 +893,14 @@ Wall* Floor::ColumnWallBox(const std::string &name, const std::string &texture, 
 {
 	//create columnframe wall box
 
-	return sbs->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
+	return sbs->GetPolyMesh()->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
 Wall* Floor::ColumnWallBox2(const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box from a central location
 
-	return sbs->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
+	return sbs->GetPolyMesh()->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
 FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
@@ -1025,17 +1026,17 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 		return;
 	}
 
-	if (sbs->GetWallOrientation() == 0)
+	if (sbs->GetPolyMesh()->GetWallOrientation() == 0)
 	{
 		depth1 = 0;
 		depth2 = thickness;
 	}
-	if (sbs->GetWallOrientation() == 1)
+	if (sbs->GetPolyMesh()->GetWallOrientation() == 1)
 	{
 		depth1 = thickness / 2;
 		depth2 = thickness / 2;
 	}
-	if (sbs->GetWallOrientation() == 2)
+	if (sbs->GetPolyMesh()->GetWallOrientation() == 2)
 	{
 		depth1 = thickness;
 		depth2 = 0;
@@ -1065,21 +1066,21 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 		CutAll(Vector3(x1, voffset, z1), Vector3(x2, voffset + height, z2), true, false);
 
 	//create walls
-	sbs->DrawWalls(false, true, false, false, false, false);
+	sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, isexternal);
 	else
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, isexternal);
-	sbs->ResetWalls();
+	sbs->GetPolyMesh()->ResetWalls();
 
-	sbs->DrawWalls(true, false, false, false, false, false);
+	sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 	else
 		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 
 	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, isexternal);
-	sbs->ResetWalls();
+	sbs->GetPolyMesh()->ResetWalls();
 }
 
 Sound* Floor::AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Vector3 direction)

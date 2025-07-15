@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -806,7 +807,7 @@ bool Shaft::Level::AddWall(Wall *wall, const std::string &name, const std::strin
 	/*if (IsValidFloor(floor) == false)
 		return ReportError("AddWall: Floor " + ToString(floor) + " out of range");*/
 
-	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	return sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
 Wall* Shaft::Level::AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
@@ -842,7 +843,7 @@ bool Shaft::Level::AddFloor(Wall *wall, const std::string &name, const std::stri
 	if (altitude + voffset2 > parent->top)
 		parent->top = altitude + voffset2;
 
-	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	return sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
 void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
