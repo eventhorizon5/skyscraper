@@ -180,6 +180,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	//create utility object
 	utility = new Utility(this);
 
+	//create polymesh (geometry processor) object
+	polymesh = new PolyMesh(this);
+
 	//create geometry controller object
 	geometry = new GeometryController(this);
 
@@ -3810,7 +3813,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	Vector3 isect;
 	Real distance = 2000000000.;
 	Vector3 normal = Vector3::ZERO;
-	wall = mesh->GetPolyMesh()->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
+	wall = GetPolyMesh()->FindWallIntersect(mesh, ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
 }
@@ -4468,6 +4471,12 @@ int SBS::GetTextureCount()
 		return GetTextureManager()->GetMaterialCount();
 
 	return 0;
+}
+
+PolyMesh* SBS::GetPolyMesh()
+{
+	//return pointer to the PolyMesh geometry processor
+	return polymesh;
 }
 
 }

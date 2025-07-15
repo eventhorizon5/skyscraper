@@ -406,6 +406,7 @@ public:
 	int GetReverbCount();
 	void EnableMap(bool value);
 	int GetTextureCount();
+	PolyMesh* GetPolyMesh();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -575,6 +576,9 @@ private:
 
 	//geometry controller
 	GeometryController* geometry;
+
+	//geometry processor
+	PolyMesh* polymesh;
 
 	//building power state
 	bool power_state;
