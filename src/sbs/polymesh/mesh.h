@@ -74,7 +74,6 @@ public:
 	void GetBounds();
 	void ChangeHeight(Real newheight);
 	void EnableShadows(bool value);
-	PolyMesh* GetPolyMesh();
 	bool IsPrepared();
 	void ResetPrepare();
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
@@ -117,7 +116,6 @@ private:
 	bool LoadFromFile(const std::string &filename);
 	bool LoadColliderModel(Ogre::MeshPtr &collidermesh);
 
-	PolyMesh *polymesh;
 	Ogre::MeshPtr collidermesh;
 	size_t size;
 };

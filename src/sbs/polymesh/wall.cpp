@@ -39,9 +39,10 @@ Wall::Wall(MeshObject* wrapper) : Object(wrapper)
 {
 	//wall object constructor
 	meshwrapper = wrapper;
+	polymesh = sbs->GetPolyMesh();
 	parent_array = 0;
 
-	sbs->GetPolyMesh()->WallCount++;
+	polymesh->WallCount++;
 }
 
 Wall::~Wall()
@@ -60,7 +61,7 @@ Wall::~Wall()
 		}
 	}
 
-	sbs->GetPolyMesh()->WallCount--;
+	polymesh->WallCount--;
 
 	//delete polygons
 	DeletePolygons(!sbs->FastDelete);
@@ -90,7 +91,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	std::vector<std::vector<Polygon::Geometry> > geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!sbs->GetPolyMesh()->CreateMesh(meshwrapper, name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
+	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -117,7 +118,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	std::vector<std::vector<Polygon::Geometry> > geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!sbs->GetPolyMesh()->CreateMesh(meshwrapper, name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
+	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -274,7 +275,7 @@ Vector3 Wall::GetPoint(const Vector3 &start, const Vector3 &end)
 	Real distance = 2000000000.;
 	Vector3 normal = Vector3::ZERO;
 
-	Wall *result = sbs->GetPolyMesh()->FindWallIntersect(meshwrapper, sbs->ToRemote(start), sbs->ToRemote(end), isect, distance, normal, this);
+	Wall *result = polymesh->FindWallIntersect(meshwrapper, sbs->ToRemote(start), sbs->ToRemote(end), isect, distance, normal, this);
 
 	if (result)
 		return sbs->ToLocal(isect);
