@@ -114,6 +114,7 @@ namespace SBS {
 	class CustomObject;
 	class Reverb;
 	class Map;
+	class RouteController;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
