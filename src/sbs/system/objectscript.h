@@ -35,6 +35,8 @@ public:
 
 private:
 
+	asIScriptEngine *engine;
+
 };
 
 }

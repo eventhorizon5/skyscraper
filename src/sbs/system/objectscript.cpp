@@ -21,6 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <angelscript.h>
 #include "globals.h"
 #include "sbs.h"
 #include "objectscript.h"
@@ -29,7 +30,13 @@ namespace SBS {
 
 ObjectScript::ObjectScript(Object *parent) : ObjectBase(parent)
 {
+	engine = asCreateScriptEngine();
 
+	//register callback
+	int r = engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL); assert( r >= 0 );
+	//register string type
+	RegisterStdString(engine);
+	r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL); assert( r >= 0 );
 }
 
 ObjectScript::~ObjectScript()
