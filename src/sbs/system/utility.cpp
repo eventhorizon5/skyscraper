@@ -32,6 +32,8 @@ namespace SBS {
 
 Utility::Utility(Object *parent) : ObjectBase(parent)
 {
+	UnitScale = sbs->GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
+
 	ResetDoorwayWalls();
 
 	temppoly.reserve(32);
@@ -40,6 +42,9 @@ Utility::Utility(Object *parent) : ObjectBase(parent)
 	temppoly4.reserve(32);
 	temppoly5.reserve(32);
 	worker.reserve(32);
+
+	if (UnitScale <= 0)
+		UnitScale = 1;
 }
 
 Utility::~Utility()
@@ -768,7 +773,7 @@ Real Utility::ToLocal(Real remote_value)
 	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
 	//this means that all Z values that use this function must be inverted.
 
-	return remote_value * sbs->UnitScale;
+	return remote_value * UnitScale;
 }
 
 Vector2 Utility::ToLocal(const Vector2& remote_value)
@@ -778,7 +783,7 @@ Vector2 Utility::ToLocal(const Vector2& remote_value)
 	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
 	//this means that all Z values that use this function must be inverted.
 
-	return remote_value * sbs->UnitScale;
+	return remote_value * UnitScale;
 }
 
 Vector3 Utility::ToLocal(const Vector3& remote_value, bool rescale, bool flip_z)
@@ -796,7 +801,7 @@ Vector3 Utility::ToLocal(const Vector3& remote_value, bool rescale, bool flip_z)
 		newvalue.z = remote_value.z;
 
 	if (rescale == true)
-		return newvalue * sbs->UnitScale;
+		return newvalue * UnitScale;
 	else
 		return newvalue;
 }
@@ -808,7 +813,7 @@ Real Utility::ToRemote(Real local_value)
 	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
 	//this means that all Z values that use this function must be inverted.
 
-	return local_value / sbs->UnitScale;
+	return local_value / UnitScale;
 }
 
 Vector2 Utility::ToRemote(const Vector2& local_value)
@@ -818,7 +823,7 @@ Vector2 Utility::ToRemote(const Vector2& local_value)
 	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
 	//this means that all Z values that use this function must be inverted.
 
-	return local_value / sbs->UnitScale;
+	return local_value / UnitScale;
 }
 
 Vector3 Utility::ToRemote(const Vector3& local_value, bool rescale, bool flip_z)
@@ -835,7 +840,7 @@ Vector3 Utility::ToRemote(const Vector3& local_value, bool rescale, bool flip_z)
 		newvalue.z = local_value.z;
 
 	if (rescale == true)
-		return (newvalue / sbs->UnitScale);
+		return (newvalue / UnitScale);
 	else
 		return newvalue;
 }

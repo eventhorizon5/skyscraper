@@ -26,6 +26,9 @@ namespace SBS {
 class SBSIMPEXP Utility : public ObjectBase
 {
 public:
+
+	Real UnitScale; //scale of 3D positions; this value equals 1 3D unit
+
 	Utility(Object *parent);
 	~Utility();
 	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
