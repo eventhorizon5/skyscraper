@@ -1000,6 +1000,7 @@ void VM::ListPlayingSounds()
 {
 	//list playing sounds in all engines
 
+	Report("Listing playing sounds in all engines");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (!engines[i])
@@ -1009,7 +1010,6 @@ void VM::ListPlayingSounds()
 		
 		if (Simcore)
 		{
-			Report("Engine " + ToString(i) + ":");
 			Simcore->GetSoundSystem()->ShowPlayingSounds(false);
 			if (i == engines.size() - 1)
 				Simcore->GetSoundSystem()->ShowPlayingTotal();
