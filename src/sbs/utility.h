@@ -21,6 +21,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_UTILITY_H
+#define _SBS_UTILITY_H
+
 namespace SBS {
 
 class SBSIMPEXP Utility : public ObjectBase
@@ -53,3 +56,5 @@ private:
 };
 
 }
+
+#endif
