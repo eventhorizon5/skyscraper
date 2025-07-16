@@ -27,25 +27,44 @@
           system, and press OK.&nbsp; Skyscraper will then start.<br>
           The other options can be ignored for now.<br>
           <br>
-          Choose OpenGL or OpenGL3 unless you have a specific need for
-          another rendering system.&nbsp; The options are:<br>
+          Choose <i>OpenGL</i> or <i>OpenGL3+</i> unless you have a
+          specific need for another rendering system.&nbsp; The options
+          are:<br>
           <br>
-          <i>DirectX9</i>: old DirectX renderer, has some issues.<br>
+          <i>DirectX9</i>: old DirectX renderer, has some issues,
+          Windows x86 only.<br>
           <br>
           <i>DirectX11</i>: new DirectX renderer, somewhat working, used
           mainly for VR support and when DirectX11 is needed.<br>
           Note that models are not supported yet with this renderer, due
           to shader issues.<br>
+          Available on Windows 10+, both on x86 and ARM devices.<br>
           <br>
-          <i>OpenGL</i>: Skyscraper's default, no shader support<br>
+          <i>OpenGL</i>: Skyscraper's default, cross-platform, no shader
+          support<br>
           <br>
-          <i>OpenGL 3+</i>: Skyscraper's newer renderer, uses RTSS
-          shaders, doesn't support clouds in the Caelum sky system<br>
+          <i>OpenGL 3+</i>: Skyscraper's newer renderer, cross-platform,
+          uses RTSS shaders, doesn't support clouds in the Caelum sky
+          system<br>
           <br>
           <i>OpenGL ES2</i>: not currently used, intended to be there
-          for future ports to mobile devices<br>
+          for future ports to mobile devices, cross-platform<br>
           <br>
           <i>Metal</i>:&nbsp; experimental Mac renderer, not working<br>
+          <br>
+          Vulkan: experimental Vulkan support (cross-platform
+          replacement for OpenGL), not working<br>
+          <br>
+          <br>
+          For the cross-platform renderers, Skyscraper currently
+          supports the following platforms:<br>
+          <br>
+          <i>Windows 10+ x86</i><i><br>
+          </i><i>Windows 11 ARM</i><i><br>
+          </i><i>Windows 7</i><i><br>
+          </i><i>MacOS x86/ARM</i><i><br>
+          </i><i>Linux</i><i><br>
+          </i><i>FreeBSD</i><br>
           <br>
           <br>
         </div>
