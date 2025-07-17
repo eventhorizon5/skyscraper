@@ -434,12 +434,12 @@ bool HAL::Initialize(const std::string &data_path, Ogre::Root *root, Ogre::Overl
 	return true;
 }
 
-bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow)
+bool HAL::LoadSystem(const std::string &data_path, std::vector<Ogre::RenderWindow*> &renderwindows)
 {
 	//load HAL system resources
 
 	if (mRenderWindows.empty() == true)
-		mRenderWindows.emplace_back(renderwindow);
+		mRenderWindows = renderwindows;
 
 	//get renderer info
 	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
@@ -900,7 +900,7 @@ Ogre::SceneManager* HAL::GetSceneManager()
 	return mSceneMgr;
 }
 
-Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params)
+std::vector<Ogre::RenderWindow*> HAL::CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params)
 {
 	//create the render window
 #if USING_OPENXR
@@ -925,7 +925,7 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 		mRenderWindows[i]->windowMovedOrResized();
 	}
 
-	return mRenderWindows[0];
+	return mRenderWindows;
 }
 
 void HAL::DestroyRenderWindow()

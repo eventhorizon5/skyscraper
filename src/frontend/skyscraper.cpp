@@ -142,7 +142,6 @@ bool Skyscraper::OnInit()
 	FullScreen = false;
 	Maximized = false;
 	ShowMenu = false;
-	mRenderWindow = 0;
 	window = 0;
 	wireframe = 0;
 
@@ -257,13 +256,13 @@ bool showconsole = true;
 	Report("");
 	Report("Creating render window...");
 #ifdef USING_WX
-	mRenderWindow = CreateRenderWindow(0, "SkyscraperVR");
+	mRenderWindows = CreateRenderWindow(0, "SkyscraperVR");
 #else
-	mRenderWindow = getRenderWindow();
+	mRenderWindows.emplace_back(getRenderWindow());
 #endif
 
 	//load system
-	if (!hal->LoadSystem(vm->data_path, mRenderWindow))
+	if (!hal->LoadSystem(vm->data_path, mRenderWindows))
 		return ReportError("Error loading system");
 
 #ifndef __FreeBSD__

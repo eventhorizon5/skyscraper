@@ -56,7 +56,7 @@ void Skyscraper::AllowResize(bool value)
 #endif
 }
 
-Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
+std::vector<Ogre::RenderWindow*> Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
 {
 #ifdef USING_WX
 	std::string name = windowName;

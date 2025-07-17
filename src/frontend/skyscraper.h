@@ -95,7 +95,7 @@ public:
 	virtual ~Skyscraper() {};
 	void setup();
 
-	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
+	std::vector<Ogre::RenderWindow*> CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
 	void ShowError(const std::string &message);
@@ -165,7 +165,7 @@ private:
 #else
 	wxCmdLineParser *parser;
 #endif
-	Ogre::RenderWindow *mRenderWindow;
+	std::vector<Ogre::RenderWindow*> mRenderWindows;
 
 	//VM instance
 	VM *vm;
