@@ -66,6 +66,9 @@ private:
 	//mesh wrapper
 	MeshObject* meshwrapper;
 
+	//polymesh system
+	PolyMesh* polymesh;
+
 	//polygon array
 	std::vector<Polygon*> polygons;
 

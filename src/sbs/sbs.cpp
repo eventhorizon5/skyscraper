@@ -125,7 +125,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	DeleteColliders = false;
 	soundcount = 0;
 	reverbcount = 0;
-	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
 	FastDelete = false;
@@ -181,9 +180,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	soundsystem = 0;
 	area_trigger = 0;
 	texturemanager = 0;
-
-	if (UnitScale <= 0)
-		UnitScale = 1;
 
 	//Print SBS banner
 	PrintBanner();
@@ -3479,6 +3475,13 @@ Trigger* SBS::GetAreaTrigger()
 MeshObject* SBS::GetLandscapeMesh()
 {
 	return Landscape;
+}
+
+Real SBS::GetUnitScale()
+{
+	//get unit scaling factor
+
+	return utility->UnitScale;
 }
 
 }

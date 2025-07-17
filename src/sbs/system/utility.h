@@ -21,11 +21,17 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_UTILITY_H
+#define _SBS_UTILITY_H
+
 namespace SBS {
 
 class SBSIMPEXP Utility : public ObjectBase
 {
 public:
+
+	Real UnitScale; //scale of 3D positions; this value equals 1 3D unit
+
 	Utility(Object *parent);
 	~Utility();
 	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
@@ -83,3 +89,5 @@ private:
 };
 
 }
+
+#endif

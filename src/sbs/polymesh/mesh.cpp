@@ -49,9 +49,6 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 	//set up SBS object
 	SetValues("Mesh", name, true);
 
-	//create an instance of the geometry processor
-	polymesh = new PolyMesh(this);
-
 	//initialize mesh object
 	enabled = true;
 	mBody = 0;
@@ -142,8 +139,6 @@ MeshObject::~MeshObject()
 	if (Bounds)
 		delete Bounds;
 	Bounds = 0;
-
-	delete polymesh;
 }
 
 void MeshObject::GetBounds()
@@ -671,11 +666,6 @@ void MeshObject::EnableShadows(bool value)
 	//enable shadows
 
 	MeshWrapper->EnableShadows(value);
-}
-
-PolyMesh* MeshObject::GetPolyMesh()
-{
-	return polymesh;
 }
 
 bool MeshObject::IsPrepared()

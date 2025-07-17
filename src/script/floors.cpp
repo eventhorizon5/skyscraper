@@ -910,7 +910,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 8);
 
-		if (params < 10 || params == 11 || params > 14)
+		if (params < 10 || params == 11 || params == 15 || params == 16 || params > 17)
 			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
@@ -950,8 +950,16 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				if (!IsNumeric(tempdata[i]))
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}
+			compat = 4;
 		}
-
+		if (params == 17)
+		{
+			for (int i = 4; i <= 15; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+		}
 		//check to see if file exists
 		if (compat != 1)
 		{
@@ -987,8 +995,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			door = floor->AddDoor("", tempdata[0], tempdata[1], false, tempdata[2], tempdata[2], ToFloat(tempdata[3]), face_direction, open_direction, true, 0, 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), 0, 0);
 		if (compat == 3)
 			door = floor->AddDoor("", tempdata[0], tempdata[1], false, tempdata[2], tempdata[2], ToFloat(tempdata[3]), face_direction, open_direction, true, ToFloat(tempdata[5]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), 0, 0);
-		if (compat == 0)
+		if (compat == 4)
 			door = floor->AddDoor("", tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), 0, 0);
+		if (compat == 0)
+			door = floor->AddDoor(tempdata[16], tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
 		if (door)
 			door->SetLocked(config->lockvalue, config->keyvalue);
@@ -1003,7 +1013,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 14);
 
-		if (params < 11 || params == 12 || params > 15)
+		if (params < 11 || params == 12 || params == 16 || params == 17 || params > 18)
 			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
@@ -1051,8 +1061,18 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				if (!IsNumeric(tempdata[i]))
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}
+			compat = 4;
 		}
-
+		if (params == 18)
+		{
+			for (int i = 0; i <= 16; i++)
+			{
+				if (i == 1)
+					i = 5; //skip non-numeric parameters
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+		}
 		//check to see if file exists
 		if (compat != 1)
 		{
@@ -1098,8 +1118,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				door = level->AddDoor("", tempdata[1], tempdata[2], false, tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, 0, 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), 0, 0);
 			if (compat == 3)
 				door = level->AddDoor("", tempdata[1], tempdata[2], false, tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), 0, 0);
-			if (compat == 0)
+			if (compat == 4)
 				door = level->AddDoor("", tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), 0, 0);
+			if (compat == 0)
+				door = level->AddDoor(tempdata[17], tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 
 			if (door)
 				door->SetLocked(config->lockvalue, config->keyvalue);
@@ -1117,11 +1139,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 16);
 
-		if (params != 17)
+		if (params != 17 && params != 18)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 0; i <= 14; i++)
+		for (int i = 0; i <= 16; i++)
 		{
 			if (i == 1)
 				i = 5; //skip non-numeric parameters
@@ -1154,7 +1176,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			int direction = ToInt(tempdata[6]);
 			GetDirectionStrings(direction, face_direction, open_direction);
 
-			Door* door = level->AddDoor("", tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), 0, 0);
+			Door* door;
+			if (params == 17)
+				door = level->AddDoor("", tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
+			else
+				door = level->AddDoor(tempdata[17], tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 
 			if (door)
 				door->SetLocked(config->lockvalue, config->keyvalue);
@@ -1172,14 +1198,25 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 16);
 
-		if (params != 14)
+		if (params != 14 && params != 17)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 4; i <= 13; i++)
+		if (params == 14)
 		{
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
+			for (int i = 4; i <= 13; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
+		}
+		else
+		{
+			for (int i = 4; i <= 15; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
 		}
 
 		//check to see if file exists
@@ -1197,7 +1234,11 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		GetDirectionStrings(direction, face_direction, open_direction);
 
 		//create door
-		Door* door = floor->AddDoor("", tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), 0, 0, true);
+		Door* door;
+		if (params == 14)
+			door = floor->AddDoor("", tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), 0, 0, true);
+		else
+			door = floor->AddDoor(tempdata[16], tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), true);
 
 		if (door)
 			door->SetLocked(config->lockvalue, config->keyvalue);

@@ -40,7 +40,6 @@
 #include "wall.h"
 #include "profiler.h"
 #include "scenenode.h"
-#include "manager.h"
 #include "vehicle.h"
 #include "camera.h"
 
